@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>
 /// Detects mouse or finger touch drags on an actor. A touch must go down over the actor
-/// and a drag won't start until it is moved outside the <see cref="TapSquareSize" /> tap
+/// and a drag won't start until it is moved outside the <see cref="TapSquareSize"/> tap
 /// square. Any touch (not just the first) will trigger this listener. While pressed, other
 /// touch downs are ignored.
 /// </summary>

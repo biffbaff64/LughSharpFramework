@@ -213,7 +213,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// If true, <see cref="DrawDebug(ShapeRenderer)" /> will be called for this actor.
+    /// If true, <see cref="DrawDebug(ShapeRenderer)"/> will be called for this actor.
     /// </summary>
     public bool DebugActive
     {
@@ -243,15 +243,15 @@ public class Actor : IActor, IComparable< Actor >
     /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
     /// draw method is convenient to draw a rotated and scaled TextureRegion.
     /// <para>
-    /// <see cref="IBatch.Begin" /> has already been called on the batch. If <see cref="IBatch.End()" />
-    /// is called to draw without the batch then <see cref="IBatch.Begin" /> must be called before
+    /// <see cref="IBatch.Begin"/> has already been called on the batch. If <see cref="IBatch.End()"/>
+    /// is called to draw without the batch then <see cref="IBatch.Begin"/> must be called before
     /// the method returns.
     /// </para>
     /// <para>
     /// <b>The default implementation does nothing. Child classes should override and implement.</b>
     /// </para>
     /// </summary>
-    /// <param name="batch"> The <see cref="IBatch" /> to use. </param>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
     /// <param name="parentAlpha">
     /// The parent alpha, to be multiplied with this actor's alpha,
     /// allowing the parent's alpha to affect all children.
@@ -318,14 +318,14 @@ public class Actor : IActor, IComparable< Actor >
     /// </li>
     /// <li>
     /// The second phase notifies listeners on each actor starting at this actor and, if
-    /// <see cref="Event.Bubbles()" /> is true, propagating upward to the root.
+    /// <see cref="Event.Bubbles()"/> is true, propagating upward to the root.
     /// </li>
     /// </para>
     /// <para>
     /// If the event is stopped at any time, it will not propagate to the next actor.
     /// </para>
     /// </summary>
-    /// <param name="ev"> The <see cref="Event" /> to fire. </param>
+    /// <param name="ev"> The <see cref="Event"/> to fire. </param>
     /// <returns> True if the event was cancelled. </returns>
     public virtual bool Fire( Event? ev )
     {
@@ -427,7 +427,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     /// <param name="ev"> The event. </param>
     /// <param name="capture">
-    /// true for <see cref="CaptureListeners" />, false for <see cref="Listeners" />.
+    /// true for <see cref="CaptureListeners"/>, false for <see cref="Listeners"/>.
     /// </param>
     /// <returns></returns>
     public virtual bool Notify( Event ev, bool capture )
@@ -744,7 +744,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Returns true if this actor is the <see cref="Stage.KeyboardFocus" /> keyboard focus actor.
+    /// Returns true if this actor is the <see cref="Stage.KeyboardFocus"/> keyboard focus actor.
     /// </summary>
     public bool HasKeyboardFocus()
     {
@@ -752,7 +752,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Returns true if this actor is the <see cref="Stage.ScrollFocus" /> actor.
+    /// Returns true if this actor is the <see cref="Stage.ScrollFocus"/> actor.
     /// </summary>
     public bool HasScrollFocus()
     {
@@ -783,7 +783,7 @@ public class Actor : IActor, IComparable< Actor >
 
     /// <summary>
     /// Returns true if this actor is a listener actor for touch focus.
-    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)" />
+    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>
     /// </summary>
     public bool IsTouchFocusListener()
     {
@@ -804,7 +804,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Returns the X position of the specified <see cref="Alignment" />.
+    /// Returns the X position of the specified <see cref="Alignment"/>.
     /// </summary>
     public float GetX( int alignment )
     {
@@ -823,7 +823,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Sets the x position using the specified <see cref="Alignment" />.
+    /// Sets the x position using the specified <see cref="Alignment"/>.
     /// Note this may set the position to non-integer coordinates.
     /// </summary>
     public void SetXWithAlignment( float x, int alignment )
@@ -845,7 +845,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Sets the y position using the specified <see cref="Alignment" />.
+    /// Sets the y position using the specified <see cref="Alignment"/>.
     /// Note this may set the position to non-integer
     /// coordinates.
     /// </summary>
@@ -868,7 +868,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Returns the Y position of the specified <see cref="Alignment" />.
+    /// Returns the Y position of the specified <see cref="Alignment"/>.
     /// </summary>
     public float GetY( int alignment )
     {
@@ -900,7 +900,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Sets the position using the specified <see cref="Alignment" /> alignment.
+    /// Sets the position using the specified <see cref="Alignment"/> alignment.
     /// Note this may set the position to non-integer coordinates.
     /// </summary>
     public void SetPosition( float x, float y, int alignment )
@@ -1042,7 +1042,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Sets the origin position to the specified <see cref="Alignment" /> alignment.
+    /// Sets the origin position to the specified <see cref="Alignment"/> alignment.
     /// </summary>
     public virtual void SetOrigin( int alignment )
     {
@@ -1075,7 +1075,7 @@ public class Actor : IActor, IComparable< Actor >
 
     /// <summary>
     /// Sets the X and Y scale to the the same value as specified
-    /// in <paramref name="scaleXY" />.
+    /// in <paramref name="scaleXY"/>.
     /// </summary>
     public void SetScale( float scaleXY )
     {
@@ -1169,7 +1169,7 @@ public class Actor : IActor, IComparable< Actor >
 
     /// <summary>
     /// Sets the z-index of this actor. The z-index is the index into the parent's
-    /// <see cref="Group.Children" /> children, where a lower index is below a
+    /// <see cref="Group.Children"/> children, where a lower index is below a
     /// higher index. Setting a z-index higher than the number of children will move
     /// the child to the front. Setting a z-index less than zero is invalid.
     /// </summary>
@@ -1206,7 +1206,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// Returns the z-index of this actor, or -1 if the actor is not in a group.
     /// </summary>
-    /// <see cref="SetZIndex(int)" />
+    /// <see cref="SetZIndex(int)"/>
     /// <returns></returns>
     public int GetZIndex()
     {
@@ -1219,7 +1219,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Calls <see cref="ClipBegin(float, float, float, float)" /> to clip this actor's bounds.
+    /// Calls <see cref="ClipBegin(float, float, float, float)"/> to clip this actor's bounds.
     /// </summary>
     public bool ClipBegin()
     {
@@ -1230,10 +1230,10 @@ public class Actor : IActor, IComparable< Actor >
     /// Clips the specified screen aligned rectangle, specified relative to the
     /// transform matrix of the stage's Batch. The transform matrix and the stage's
     /// camera must not have rotational components. Calling this method must be
-    /// followed by a call to <see cref="ClipEnd()" /> if true is returned.
+    /// followed by a call to <see cref="ClipEnd()"/> if true is returned.
     /// </summary>
     /// <returns>false if the clipping area is zero and no drawing should occur.</returns>
-    /// <see cref="ScissorStack" />
+    /// <see cref="ScissorStack"/>
     public bool ClipBegin( float x, float y, float width, float height )
     {
         if ( ( width <= 0 ) || ( height <= 0 ) )
@@ -1273,7 +1273,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Ends clipping begun by <see cref="ClipBegin(float, float, float, float)" />.
+    /// Ends clipping begun by <see cref="ClipBegin(float, float, float, float)"/>.
     /// </summary>
     public void ClipEnd()
     {
@@ -1284,7 +1284,7 @@ public class Actor : IActor, IComparable< Actor >
     /// Transforms the specified point in screen coordinates to the actor's
     /// local coordinate system.
     /// </summary>
-    /// <see cref="Stage.ScreenToStageCoordinates(Vector2)" />
+    /// <see cref="Stage.ScreenToStageCoordinates(Vector2)"/>
     public virtual Vector2 ScreenToLocalCoordinates( Vector2 screenCoords )
     {
         return Stage == null
@@ -1354,7 +1354,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// Transforms the specified point in the actor's coordinates to be in screen coordinates.
     /// </summary>
-    /// <see cref="Stage.StageToScreenCoordinates(Vector2)" />
+    /// <see cref="Stage.StageToScreenCoordinates(Vector2)"/>
     public virtual Vector2 LocalToScreenCoordinates( Vector2 localCoords )
     {
         return Stage == null
@@ -1456,7 +1456,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Draws this actor's debug lines if <see cref="DebugActive" /> is true.
+    /// Draws this actor's debug lines if <see cref="DebugActive"/> is true.
     /// </summary>
     public virtual void DrawDebug( ShapeRenderer shapes )
     {
@@ -1464,7 +1464,7 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Draws a rectangle for the bounds of this actor if <see cref="DebugActive" /> is true.
+    /// Draws a rectangle for the bounds of this actor if <see cref="DebugActive"/> is true.
     /// </summary>
     protected virtual void DrawDebugBounds( ShapeRenderer shapes )
     {

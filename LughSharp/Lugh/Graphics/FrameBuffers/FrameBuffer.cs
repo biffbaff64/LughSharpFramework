@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Graphics.FrameBuffers;
 /// Encapsulates OpenGL frame buffer objects. This is a simple helper class which should
 /// cover most FBO uses. It will automatically create a texture for the color attachment and a
 /// renderbuffer for the depth buffer.
-/// You can get a hold of the texture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture" />.
+/// You can get a hold of the texture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture"/>.
 /// <para>
 /// FrameBuffers are managed. In case of an OpenGL context loss, which only happens on Android
 /// when a user switches to another application or receives an incoming call, the framebuffer

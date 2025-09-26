@@ -388,7 +388,7 @@ public class PixelFormatUtils
     #region Get String methods
 
     /// <summary>
-    /// Converts a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXXX</c> format to its string representation.
+    /// Converts a <c>Gdx2DPixmap.</c> format to its string representation.
     /// </summary>
     /// <param name="format">The pixmap format to convert.</param>
     /// <returns>A string representing the given pixmap format.</returns>

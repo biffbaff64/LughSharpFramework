@@ -76,13 +76,13 @@ public static class DictionaryExtension
     }
 
     /// <summary>
-    /// Gets an entry from the Dictionary referenced by <paramref name="self" />.
+    /// Gets an entry from the Dictionary referenced by <paramref name="self"/>.
     /// </summary>
     /// <param name="self"> This Dictionary. </param>
     /// <param name="key"> The key index to use to get the entry. </param>
     /// <typeparam name="TK"> The Dictionarys Key type. </typeparam>
     /// <typeparam name="TV"> The Dictionarys Value type. </typeparam>
-    /// <returns> The value associated with <paramref name="key" />. </returns>
+    /// <returns> The value associated with <paramref name="key"/>. </returns>
     public static TV? Get< TK, TV >( this Dictionary< TK, TV > self, TK key ) where TK : notnull
     {
         if ( key == null )
@@ -109,7 +109,7 @@ public static class DictionaryExtension
     }
 
     /// <summary>
-    /// Puts all values in <paramref name="map" /> into <paramref name="self" />.
+    /// Puts all values in <paramref name="map"/> into <paramref name="self"/>.
     /// </summary>
     public static void PutAll< TK, TV >( this Dictionary< TK, TV > self, Dictionary< TK, TV > map ) where TK : notnull
     {

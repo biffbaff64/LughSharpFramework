@@ -37,10 +37,10 @@ namespace LughSharp.Lugh.Graphics;
 /// </para>
 /// <para>
 /// By default all methods use blending. You can disable blending by setting it
-/// to <see cref="BlendTypes.None" />, which may reduce blitting time by ~30%.
+/// to <see cref="BlendTypes.None"/>, which may reduce blitting time by ~30%.
 /// </para>
 /// <para>
-/// The <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" /> method
+/// The <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)"/> method
 /// will scale and stretch the source image to a target image. In this case either nearest
 /// neighbour or bilinear filtering can be used.
 /// </para>
@@ -92,8 +92,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Sets the type of <see cref="BlendTypes" /> to be used for all operations.
-    /// Default is <see cref="BlendTypes.SourceOver" />.
+    /// Sets the type of <see cref="BlendTypes"/> to be used for all operations.
+    /// Default is <see cref="BlendTypes.SourceOver"/>.
     /// </summary>
     public BlendTypes Blending { get; set; } = BlendTypes.SourceOver;
 
@@ -301,8 +301,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Sets the type of interpolation <see cref="BlendTypes" /> to be used in
-    /// conjunction with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" />.
+    /// Sets the type of interpolation <see cref="BlendTypes"/> to be used in
+    /// conjunction with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)"/>.
     /// </summary>
     public Filter FilterValue
     {
@@ -320,7 +320,7 @@ public class Pixmap : IDisposable
 
     /// <summary>
     /// Downloads an image from http(s) url and passes it as a Pixmap to the
-    /// specified <see cref="IDownloadPixmapResponseListener" />.
+    /// specified <see cref="IDownloadPixmapResponseListener"/>.
     /// </summary>
     /// <param name="url">http url to download the image from.</param>
     /// <param name="responseListener"> The listener to call once the image is available as a Pixmap</param>
@@ -464,7 +464,7 @@ public class Pixmap : IDisposable
     /// Draws an area from another Pixmap to this Pixmap. This will automatically
     /// scale and stretch the source image to the specified target rectangle.
     /// <para>
-    /// Use <see cref="Pixmap.Filter" /> property to specify the type of filtering to
+    /// Use <see cref="Pixmap.Filter"/> property to specify the type of filtering to
     /// be used (NearestNeighbour or Bilinear).
     /// </para>
     /// </summary>
@@ -625,7 +625,7 @@ public class Pixmap : IDisposable
     /// </summary>
     /// <param name="file">The target file where the pixmap will be saved.</param>
     /// <param name="pixmap">The pixmap to be saved.</param>
-    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="file" /> or <paramref name="pixmap" /> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="file"/> or <paramref name="pixmap"/> is null.</exception>
     /// <exception cref="GdxRuntimeException">Thrown if an error occurs while saving the pixmap.</exception>
     public static void SaveToFile( FileInfo file, Pixmap pixmap )
     {
@@ -711,7 +711,7 @@ public class Pixmap : IDisposable
 // ========================================================================
 
     /// <summary>
-    /// Response listener for <see cref="Pixmap.DownloadFromUrl(String, IDownloadPixmapResponseListener)" />
+    /// Response listener for <see cref="Pixmap.DownloadFromUrl(String, IDownloadPixmapResponseListener)"/>
     /// </summary>
     [PublicAPI]
     public interface IDownloadPixmapResponseListener
@@ -775,7 +775,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Blending functions to be set with <see cref="Pixmap.Blending" />.
+    /// Blending functions to be set with <see cref="Pixmap.Blending"/>.
     /// </summary>
     [PublicAPI]
     public enum BlendTypes : int
@@ -787,7 +787,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Filters to be used with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" />.
+    /// Filters to be used with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)"/>.
     /// </summary>
     [PublicAPI]
     public enum Filter : int

@@ -84,9 +84,6 @@ public static class TextureDataFactory
             // Other supported image file formats, PNG, BMP
             case var _:
                 var pixmap = new Pixmap( file );
-                
-                pixmap.DebugPrint();
-
                 data = new FileTextureData( file, pixmap, format, useMipMaps );
 
                 break;

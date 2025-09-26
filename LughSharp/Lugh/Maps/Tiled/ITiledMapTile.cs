@@ -45,12 +45,12 @@ public interface ITiledMapTile
     int ID { get; set; }
 
     /// <summary>
-    /// The <see cref="Blendmode" /> to use when rendering a tile.
+    /// The <see cref="Blendmode"/> to use when rendering a tile.
     /// </summary>
     Blendmode BlendMode { get; set; }
 
     /// <summary>
-    /// The <see cref="TextureRegion" /> to display.
+    /// The <see cref="TextureRegion"/> to display.
     /// </summary>
     TextureRegion TextureRegion { get; set; }
 

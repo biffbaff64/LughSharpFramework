@@ -37,12 +37,12 @@ namespace LughSharp.Lugh.Utils;
 public static class ScreenUtils
 {
     /// <summary>
-    /// Returns the current framebuffer contents as a <see cref="TextureRegion" /> with
+    /// Returns the current framebuffer contents as a <see cref="TextureRegion"/> with
     /// a width and height equal to the current screen size.
     /// <para>
-    /// The base <see cref="Texture" /> always has <see cref="MathUtils.NextPowerOfTwo" />
+    /// The base <see cref="Texture"/> always has <see cref="MathUtils.NextPowerOfTwo"/>
     /// dimensions and RGBA8888 <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>. It can be
-    /// accessed via <see cref="TextureRegion.Texture" />. The texture is not managed and
+    /// accessed via <see cref="TextureRegion.Texture"/>. The texture is not managed and
     /// has to be reloaded manually on a context loss.
     /// </para>
     /// <para>
@@ -99,11 +99,11 @@ public static class ScreenUtils
 
     /// <summary>
     /// Returns a portion of the current framebuffer contents specified by x, y,
-    /// width and height as a <see cref="TextureRegion" /> with the same dimensions.
+    /// width and height as a <see cref="TextureRegion"/> with the same dimensions.
     /// <para>
-    /// The base <see cref="Texture" /> always has <see cref="MathUtils.NextPowerOfTwo" />
+    /// The base <see cref="Texture"/> always has <see cref="MathUtils.NextPowerOfTwo"/>
     /// dimensions and RGBA8888 <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>. It can be
-    /// accessed via <see cref="TextureRegion.Texture" />.
+    /// accessed via <see cref="TextureRegion.Texture"/>.
     /// </para>
     /// <para>
     /// This texture is not managed and has to be reloaded manually on a context loss.
@@ -137,7 +137,7 @@ public static class ScreenUtils
         return textureRegion;
     }
 
-    /// <inheritdoc cref="Pixmap.CreateFromFrameBuffer" />
+    /// <inheritdoc cref="Pixmap.CreateFromFrameBuffer"/>
     public static Pixmap GetFrameBufferPixmap( int x, int y, int w, int h )
     {
         return Pixmap.CreateFromFrameBuffer( x, y, w, h );

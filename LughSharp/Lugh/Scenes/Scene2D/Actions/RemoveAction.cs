@@ -30,7 +30,7 @@ public class RemoveAction : Action
 
     /// <summary>
     /// Updates the action based on time.
-    /// Typically this is called each frame by <see cref="Scene2D.Action.Actor" />.
+    /// Typically this is called each frame by <see cref="Scene2D.Action.Actor"/>.
     /// </summary>
     /// <param name="delta">Time in seconds since the last frame.</param>
     /// <returns>

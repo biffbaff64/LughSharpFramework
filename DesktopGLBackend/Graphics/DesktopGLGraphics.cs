@@ -36,7 +36,7 @@ namespace DesktopGLBackend.Graphics;
 /// Represents the graphics system for the DesktopGL backend, handling rendering,
 /// window management,  display modes, and various graphical operations.
 /// <para>
-/// Inherits from <see cref="GraphicsDevice" /> and implements <see cref="IDisposable" />.
+/// Inherits from <see cref="GraphicsDevice"/> and implements <see cref="IDisposable"/>.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -63,7 +63,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
     /// <summary>
     /// Creates a new GLGraphics instance for Desktop backends, using the
-    /// given <see cref="DesktopGLWindow" /> as the main window.
+    /// given <see cref="DesktopGLWindow"/> as the main window.
     /// </summary>
     public DesktopGLGraphics( DesktopGLWindow glWindow )
     {
@@ -327,7 +327,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// time per frame.
     /// </summary>
     /// <param name="cursor">
-    /// The mouse cursor as a <see cref="ICursor" />
+    /// The mouse cursor as a <see cref="ICursor"/>
     /// </param>
     public override void SetCursor( ICursor cursor )
     {
@@ -337,7 +337,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     }
 
     /// <summary>
-    /// Sets one of the predefined <see cref="ICursor.SystemCursor" />s.
+    /// Sets one of the predefined <see cref="ICursor.SystemCursor"/>s.
     /// </summary>
     /// <param name="systemCursor">The system cursor to use.</param>
     public override void SetSystemCursor( ICursor.SystemCursor systemCursor )

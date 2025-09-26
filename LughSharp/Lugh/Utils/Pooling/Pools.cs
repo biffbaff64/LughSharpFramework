@@ -27,7 +27,7 @@ using System.Collections.Concurrent;
 namespace LughSharp.Lugh.Utils.Pooling;
 
 /// <summary>
-/// Stores a map of <see cref="Pool{T}" />s by type for convenient static access.
+/// Stores a map of <see cref="Pool{T}"/>s by type for convenient static access.
 /// </summary>
 [PublicAPI]
 public static class Pools

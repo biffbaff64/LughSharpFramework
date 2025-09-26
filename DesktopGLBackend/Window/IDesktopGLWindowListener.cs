@@ -33,12 +33,12 @@ public interface IDesktopGLWindowListener
 {
     /// <summary>
     /// Called after the Glfw window is created. Before this callback is received, it's
-    /// to use any <see cref="DesktopGLWindow" /> member functions which, for their part,
+    /// to use any <see cref="DesktopGLWindow"/> member functions which, for their part,
     /// involve calling Glfw functions.
     /// <para>
     /// For the main window, this is an immediate callback from inside
     /// <see
-    /// cref="DesktopGLApplication(IApplicationListener,DesktopGLApplicationConfiguration)" />
+    /// cref="DesktopGLApplication(IApplicationListener,DesktopGLApplicationConfiguration)"/>
     /// </para>
     /// </summary>
     /// <param name="window">the window instance.</param>
@@ -47,7 +47,7 @@ public interface IDesktopGLWindowListener
     /// <summary>
     /// Called when the window is iconified (i.e. its minimize button was clicked),
     /// or when restored from the iconified state. When a window becomes iconified, its
-    /// <see cref="IApplicationListener" /> will be paused, and when restored it will
+    /// <see cref="IApplicationListener"/> will be paused, and when restored it will
     /// be resumed.
     /// </summary>
     /// <param name="isIconified">
@@ -65,7 +65,7 @@ public interface IDesktopGLWindowListener
 
     /// <summary>
     /// Called when the window lost focus to another window. The window's
-    /// <see cref="IApplicationListener" /> will continue to be called.
+    /// <see cref="IApplicationListener"/> will continue to be called.
     /// </summary>
     void FocusLost();
 
@@ -89,7 +89,7 @@ public interface IDesktopGLWindowListener
 
     /// <summary>
     /// Called when the window content is damaged and needs to be refreshed.
-    /// When this occurs, <see cref="DesktopGLGraphics.RequestRendering" /> is automatically called.
+    /// When this occurs, <see cref="DesktopGLGraphics.RequestRendering"/> is automatically called.
     /// </summary>
     void RefreshRequested();
 }

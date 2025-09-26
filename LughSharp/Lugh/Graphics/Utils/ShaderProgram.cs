@@ -324,7 +324,7 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram" />
+    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
     /// must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
@@ -335,7 +335,7 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram" />
+    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
     /// must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>

@@ -32,13 +32,13 @@ using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-/// Packs <see cref="Pixmap" />s into one or more <see cref="Page" /> to generate
+/// Packs <see cref="Pixmap"/>s into one or more <see cref="Page"/> to generate
 /// an atlas of pixmap instances. Provides means to directly convert the pixmap
-/// atlas to a <see cref="TextureAtlas" />. The packer supports padding and border
+/// atlas to a <see cref="TextureAtlas"/>. The packer supports padding and border
 /// pixel duplication, specified during construction. The packer supports incremental
 /// inserts and updates of TextureAtlases generated with this class.
 /// <para>
-/// How bin packing is performed can be customized via <see cref="IPackStrategy" />.
+/// How bin packing is performed can be customized via <see cref="IPackStrategy"/>.
 /// </para>
 /// <para>
 /// All methods can be called from any thread unless otherwise noted.
@@ -119,7 +119,7 @@ public class PixmapPacker : IDisposable
     /// <summary>
     /// Creates a new ImagePacker which will insert all supplied pixmaps into
     /// one or more <tt>pageWidth</tt> by <tt>pageHeight</tt> pixmaps using the
-    /// <see cref="GuillotineStrategy" /> strategy.
+    /// <see cref="GuillotineStrategy"/> strategy.
     /// </summary>
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
@@ -155,7 +155,7 @@ public class PixmapPacker : IDisposable
     /// If TRUE, duplicate the border pixels of the inserted images to avoid
     /// seams when rendering with bi-linear filtering on.
     /// </param>
-    /// <param name="packStrategy"> The <see cref="IPackStrategy" /> to use. </param>
+    /// <param name="packStrategy"> The <see cref="IPackStrategy"/> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
                          int pageFormat,
@@ -183,7 +183,7 @@ public class PixmapPacker : IDisposable
     /// </param>
     /// <param name="stripWhitespaceX"> strip whitespace in x axis </param>
     /// <param name="stripWhitespaceY"> strip whitespace in y axis </param>
-    /// <param name="packStrategy"> The <see cref="IPackStrategy" /> to use. </param>
+    /// <param name="packStrategy"> The <see cref="IPackStrategy"/> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
                          int pageFormat,
@@ -239,7 +239,7 @@ public class PixmapPacker : IDisposable
 
     /// <summary>
     /// Inserts the pixmap. If name was not null, you can later retrieve
-    /// the image's position in the output image via <see cref="GetRect(string)" />".
+    /// the image's position in the output image via <see cref="GetRect(string)"/>.
     /// </summary>
     /// <param name="name"> If null, the image cannot be looked up by name. </param>
     /// <param name="image"></param>
@@ -509,7 +509,7 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Generates a new <see cref="TextureAtlas" /> from the pixmaps inserted
+    /// Generates a new <see cref="TextureAtlas"/> from the pixmaps inserted
     /// so far. After calling this method, disposing the packer will no longer
     /// dispose the page pixmaps.
     /// </summary>
@@ -523,9 +523,9 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Updates the <see cref="TextureAtlas" />, adding any new <see cref="Pixmap" /> instances
+    /// Updates the <see cref="TextureAtlas"/>, adding any new <see cref="Pixmap"/> instances
     /// packed since the last call to this method. This can be used to insert Pixmap instances
-    /// on a separate thread via <see cref="Pack(String, Pixmap)" /> and update the TextureAtlas
+    /// on a separate thread via <see cref="Pack(String, Pixmap)"/> and update the TextureAtlas
     /// on the rendering thread.
     /// <para>
     /// This method must be called on the rendering thread.
@@ -542,9 +542,9 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Updates the <see cref="TextureAtlas" />, adding any new <see cref="Pixmap" />
+    /// Updates the <see cref="TextureAtlas"/>, adding any new <see cref="Pixmap"/>
     /// instances packed since the last call to this method. This can be used to
-    /// insert Pixmap instances on a separate thread via <see cref="Pack(String, Pixmap)" />
+    /// insert Pixmap instances on a separate thread via <see cref="Pack(String, Pixmap)"/>
     /// and update the TextureAtlas on the rendering thread. This method must be
     /// called on the rendering thread. After calling this method, disposing the
     /// packer will no longer dispose the page pixmaps.
@@ -614,7 +614,7 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Calls <see cref="UpdatePageTextures(TextureFilterMode, TextureFilterMode, bool)" />
+    /// Calls <see cref="UpdatePageTextures(TextureFilterMode, TextureFilterMode, bool)"/>
     /// for each page and adds a region to the specified array for each page texture.
     /// </summary>
     public void UpdateTextureRegions( List< TextureRegion > regions,
@@ -636,7 +636,7 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Calls <see cref="Page.UpdateTexture(TextureFilterMode, TextureFilterMode, bool)" />"
+    /// Calls <see cref="Page.UpdateTexture(TextureFilterMode, TextureFilterMode, bool)"/>
     /// for each page.
     /// </summary>
     public void UpdatePageTextures( TextureFilterMode minFilter, TextureFilterMode magFilter, bool useMipMaps )
@@ -842,7 +842,7 @@ public class PixmapPacker : IDisposable
 
         /// <summary>
         /// Creates a new page filled with the color provided by the
-        /// <see cref="PixmapPacker.TransparentColor" />"
+        /// <see cref="PixmapPacker.TransparentColor"/>
         /// </summary>
         public Page( PixmapPacker packer )
         {

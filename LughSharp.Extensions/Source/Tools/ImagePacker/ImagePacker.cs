@@ -35,7 +35,7 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// <li>load and optionally sort the images you want to add by size (e.g. area),</li>
 /// <li>then insert each image via a call to <see cref="InsertImage(String, Bitmap)"/>.</li>
 /// <para>
-/// When you are done with inserting images you can reference the property <see cref="Image" />
+/// When you are done with inserting images you can reference the property <see cref="Image"/>
 /// for the actual Image that holds the packed images. Additionally you can get a Dictionary
 /// where a) the keys are the names you specified when inserting and b) the values are the
 /// rectangles within the packed image where that specific image is located. All things are

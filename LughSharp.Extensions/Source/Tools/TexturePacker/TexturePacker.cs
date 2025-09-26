@@ -342,6 +342,11 @@ public partial class TexturePacker
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
             ProgressListener.End();
+            
+            // ---------- Handle writing of the texture atlas ----------
+
+            #if TEXTURE_ATLAS_WRITING
+
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
             ProgressListener.Total = pages.Count;
@@ -369,6 +374,10 @@ public partial class TexturePacker
             {
                 return;
             }
+
+            #endif // TEXTURE_ATLAS_WRITING
+            
+            // ---------- End of writing of the texture atlas ----------
         }
 
         ProgressListener.End();

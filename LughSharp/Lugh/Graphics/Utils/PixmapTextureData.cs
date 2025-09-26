@@ -53,13 +53,13 @@ public class PixmapTextureData : ITextureData
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 
     /// <returns>
-    /// whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
-    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
+    /// whether the caller of <see cref="ITextureData.FetchPixmap"/> should dispose the
+    /// Pixmap returned by <see cref="ITextureData.FetchPixmap"/>
     /// </returns>
     public bool ShouldDisposePixmap() => DisposePixmap;
 
     /// <inheritdoc />
-    public Pixmap ConsumePixmap() => Pixmap;
+    public Pixmap FetchPixmap() => Pixmap;
 
     public int Width
     {
@@ -80,7 +80,7 @@ public class PixmapTextureData : ITextureData
 
     // ========================================================================
 
-    public void ConsumeCustomData( int target )
+    public void UploadCustomData( int target )
     {
         throw new GdxRuntimeException( "This TextureData implementation does not upload data itself" );
     }

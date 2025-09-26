@@ -35,8 +35,8 @@ public class Environment : AttributesGroup
     public IShadowMap? ShadowMap { get; set; }
 
     /// <summary>
-    /// Adds one or more Lights, extended from <see cref="BaseLight" />, to the
-    /// attributes list in <see cref="AttributesGroup" /> .
+    /// Adds one or more Lights, extended from <see cref="BaseLight"/>, to the
+    /// attributes list in <see cref="AttributesGroup"/> .
     /// </summary>
     /// <param name="lights"></param>
     /// <returns></returns>

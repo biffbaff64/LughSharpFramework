@@ -350,7 +350,7 @@ public class ParticleEmitter
 
     /// <summary>
     /// Updates and draws the particles. This is slightly more efficient
-    /// than calling {@link #update(float)} and <see cref="Draw(IBatch)" />"
+    /// than calling {@link #update(float)} and <see cref="Draw(IBatch)"/>
     /// separately.
     /// </summary>
     public void Draw( IBatch batch, float delta )
@@ -1104,7 +1104,7 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Ignores the <see cref="Continuous" /> setting until the
+    /// Ignores the <see cref="Continuous"/> setting until the
     /// emitter is started again. This allows the emitter to stop smoothly.
     /// </summary>
     public void AllowCompletion()
@@ -2163,7 +2163,7 @@ public class ParticleEmitter
     #region properties
 
     /// <summary>
-    /// Set whether to automatically return the <see cref="IBatch" />'s blend
+    /// Set whether to automatically return the <see cref="IBatch"/>'s blend
     /// function to the alpha-blending default (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     /// when done drawing. Is true by default. If set to false, the IBatch's blend
     /// function is left as it was for drawing this ParticleEmitter, which prevents

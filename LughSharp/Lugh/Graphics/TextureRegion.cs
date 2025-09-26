@@ -140,7 +140,7 @@ public class TextureRegion
     // ========================================================================
 
     /// <summary>
-    /// Non-Virtual version of <see cref="SetRegion( float, float, float, float )" />,
+    /// Non-Virtual version of <see cref="SetRegion( float, float, float, float )"/>,
     /// enabling this to be called from constructors.
     /// </summary>
     private void SafeSetRegion( float u, float v, float u2, float v2 )

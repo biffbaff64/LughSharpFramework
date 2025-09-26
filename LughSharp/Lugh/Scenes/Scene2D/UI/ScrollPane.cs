@@ -101,7 +101,7 @@ public partial class ScrollPane : WidgetGroup
     }
 
     /// <summary>
-    /// Shows or hides the scrollbars for when using <see cref="SetFadeScrollBars(bool)" />"
+    /// Shows or hides the scrollbars for when using <see cref="SetFadeScrollBars(bool)"/>
     /// </summary>
     public void SetScrollbarsVisible( bool visible )
     {
@@ -164,7 +164,7 @@ public partial class ScrollPane : WidgetGroup
 
     /// <summary>
     /// Returns the scroll pane's style. Modifying the returned style may
-    /// not have an effect until <see cref="SetStyle(ScrollPaneStyle)" /> is called.
+    /// not have an effect until <see cref="SetStyle(ScrollPaneStyle)"/> is called.
     /// </summary>
     public ScrollPaneStyle GetStyle()
     {
@@ -827,7 +827,7 @@ public partial class ScrollPane : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the <see cref="Actor" /> embedded in this scroll pane.
+    /// Sets the <see cref="Actor"/> embedded in this scroll pane.
     /// </summary>
     /// <param name="actor"> May be null to remove zsany current actor. </param>
     public void SetActor( Actor? actor )
@@ -1231,7 +1231,7 @@ public partial class ScrollPane : WidgetGroup
     /// When false (the default), the widget is clipped so it is not drawn
     /// under the scrollbars. When true, the widget is clipped to the entire
     /// scroll pane bounds and the scrollbars are drawn on top of the widget.
-    /// If <see cref="SetFadeScrollBars(bool)" /> is true, the scroll bars are
+    /// If <see cref="SetFadeScrollBars(bool)"/> is true, the scroll bars are
     /// always drawn on top.
     /// </summary>
     public void setScrollbarsOnTop( bool scrollbarsOnTop )
@@ -1508,19 +1508,19 @@ public partial class ScrollPane : WidgetGroup
     public bool Clamp { get; set; } = true;
 
     /// If true, the scroll knobs are sized based on
-    /// <see cref="MaxX()" />
+    /// <see cref="MaxX()"/>
     /// " or
-    /// <see cref="MaxY()" />
+    /// <see cref="MaxY()"/>
     /// . If false, the scroll knobs are sized based on
-    /// <see cref="ISceneDrawable.MinWidth" />
+    /// <see cref="ISceneDrawable.MinWidth"/>
     /// or
-    /// <see cref="ISceneDrawable.MinHeight" />
+    /// <see cref="ISceneDrawable.MinHeight"/>
     /// ".
     /// Default is true.
     public bool VariableSizeKnobs { get; set; } = true;
 
     /// <summary>
-    /// When true (default) and flick scrolling begins, <see cref="TouchFocusCancel" />"
+    /// When true (default) and flick scrolling begins, <see cref="TouchFocusCancel"/>
     /// is called. This causes any widgets inside the scrollpane that have received
     /// touchDown to receive touchUp when flick scrolling begins.
     /// </summary>

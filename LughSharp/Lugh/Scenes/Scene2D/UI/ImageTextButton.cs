@@ -162,7 +162,7 @@ public class ImageTextButton : Button
 
     /// <summary>
     /// Sets the image drawable based on the current button state. The default
-    /// implementation sets the image drawable using <see cref="GetImageDrawable()" />.
+    /// implementation sets the image drawable using <see cref="GetImageDrawable()"/>.
     /// </summary>
     public virtual void UpdateImage()
     {
@@ -313,7 +313,7 @@ public class ImageTextButton : Button
     }
 
     /// <summary>
-    /// The style for an image text button, see <see cref="ImageTextButton" />.
+    /// The style for an image text button, see <see cref="ImageTextButton"/>.
     /// </summary>
     [PublicAPI]
     public class ImageTextButtonStyle : TextButton.TextButtonStyle

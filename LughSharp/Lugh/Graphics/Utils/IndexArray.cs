@@ -69,8 +69,8 @@ public class IndexArray : IIndexData
     /// Sets the indices of this IndexArray, discarding the old indices. The count must
     /// equal the number of indices to be copied to this IndexArray.
     /// <para>
-    /// This can be called in between calls to <see cref="Bind()" /> and
-    /// <see cref="Unbind()" />. The index data will be updated instantly.
+    /// This can be called in between calls to <see cref="Bind()"/> and
+    /// <see cref="Unbind()"/>. The index data will be updated instantly.
     /// </para>
     /// </summary>
     /// <param name="indices"> the vertex data </param>
@@ -123,8 +123,8 @@ public class IndexArray : IIndexData
 
     /// <summary>
     /// Returns the underlying Buffer. If you modify the buffer contents
-    /// they wil be uploaded on the call to <see cref="Bind()" />.
-    /// If you need immediate uploading use <see cref="SetIndices(short[], int, int)" />.
+    /// they wil be uploaded on the call to <see cref="Bind()"/>.
+    /// If you need immediate uploading use <see cref="SetIndices(short[], int, int)"/>.
     /// </summary>
     /// <returns> the underlying short buffer. </returns>
     public virtual Buffer< short > GetBuffer( bool forWriting )

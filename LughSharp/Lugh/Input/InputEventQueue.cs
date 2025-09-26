@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Input;
 
 /// <summary>
-/// Queues events that are later passed to an <see cref="IInputProcessor" />.
+/// Queues events that are later passed to an <see cref="IInputProcessor"/>.
 /// </summary>
 [PublicAPI]
 public class InputEventQueue

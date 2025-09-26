@@ -300,7 +300,7 @@ public class AttributesGroup : IComparer< Attribute >
 
     /// <summary>
     /// Returns a hash code based on only the attribute values, which might be different
-    /// compared to <see cref="GetHashCode()" /> because the latter might include other
+    /// compared to <see cref="GetHashCode()"/> because the latter might include other
     /// properties as well, i.e. the material id.
     /// </summary>
     public int AttributesHash()

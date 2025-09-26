@@ -30,14 +30,14 @@ public interface IInputProcessor
     /// <summary>
     /// Called when a key is pressed.
     /// </summary>
-    /// <param name="keycode">One of the constants in <see cref="IInput.Keys" /></param>
+    /// <param name="keycode">One of the constants in <see cref="IInput.Keys"/></param>
     /// <returns>TRUE if the input was processed.</returns>
     bool KeyDown( int keycode );
 
     /// <summary>
     /// Called when a key is released.
     /// </summary>
-    /// <param name="keycode">One of the constants in <see cref="IInput.Keys" /></param>
+    /// <param name="keycode">One of the constants in <see cref="IInput.Keys"/></param>
     /// <returns>TRUE if the input was processed.</returns>
     bool KeyUp( int keycode );
 

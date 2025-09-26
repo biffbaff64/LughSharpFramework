@@ -51,7 +51,7 @@ public class Group : Actor, ICullable
     /// <summary>
     /// When true (the default), the Batch is transformed so children are drawn
     /// in their parent's coordinate system. This has a performance impact because
-    /// <see cref="IBatch.Flush()" /> must be done before and after the transform.
+    /// <see cref="IBatch.Flush()"/> must be done before and after the transform.
     /// If the actors in a group are not rotated or scaled, then the transform for
     /// the group can be set to false. In this case, each child's position will be
     /// offset by the group's position for drawing, causing the children to appear
@@ -81,8 +81,8 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Draws the group and its children.
     /// <para>
-    /// The default implementation calls <see cref="ApplyTransform(IBatch, Matrix4)" /> if needed,
-    /// then <see cref="DrawChildren(IBatch, float)" />, then <see cref="ResetTransform(IBatch)" />
+    /// The default implementation calls <see cref="ApplyTransform(IBatch, Matrix4)"/> if needed,
+    /// then <see cref="DrawChildren(IBatch, float)"/>, then <see cref="ResetTransform(IBatch)"/>
     /// if needed.
     /// </para>
     /// </summary>
@@ -106,15 +106,15 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Draws all children.
     /// <para>
-    /// <see cref="ApplyTransform(IBatch, Matrix4)" /> should be called before and
-    /// <see cref="ResetTransform(IBatch)" /> after this method if <see cref="Transform" />
+    /// <see cref="ApplyTransform(IBatch, Matrix4)"/> should be called before and
+    /// <see cref="ResetTransform(IBatch)"/> after this method if <see cref="Transform"/>
     /// is true.
     /// </para>
     /// <para>
-    /// If <see cref="Transform" /> is false these methods don't need to be called,
+    /// If <see cref="Transform"/> is false these methods don't need to be called,
     /// children positions are temporarily offset by the group position when drawn.
     /// This method avoids drawing children completely outside the
-    /// <see cref="CullingArea" /> culling area, if set.
+    /// <see cref="CullingArea"/> culling area, if set.
     /// </para>
     /// </summary>
     protected void DrawChildren( IBatch batch, float parentAlpha )
@@ -246,9 +246,9 @@ public class Group : Actor, ICullable
     }
 
     /// <summary>
-    /// Draws this actor's debug lines if <see cref="Actor.DebugActive" /> is
-    /// true and, regardless of <see cref="Actor.DebugActive" />, calls
-    /// <see cref="Actor.DrawDebug(ShapeRenderer)" /> on each child.
+    /// Draws this actor's debug lines if <see cref="Actor.DebugActive"/> is
+    /// true and, regardless of <see cref="Actor.DebugActive"/>, calls
+    /// <see cref="Actor.DrawDebug(ShapeRenderer)"/> on each child.
     /// </summary>
     public override void DrawDebug( ShapeRenderer shapes )
     {
@@ -268,14 +268,14 @@ public class Group : Actor, ICullable
     }
 
     /// <summary>
-    /// Draws all children. <see cref="ApplyTransform(IBatch, Matrix4)" /> should be
-    /// called before and <see cref="ResetTransform(IBatch)" /> after this method if
-    /// <see cref="Transform" /> is true.
+    /// Draws all children. <see cref="ApplyTransform(IBatch, Matrix4)"/> should be
+    /// called before and <see cref="ResetTransform(IBatch)"/> after this method if
+    /// <see cref="Transform"/> is true.
     /// <para>
-    /// If <see cref="Transform" /> is false these methods don't need to be called,
+    /// If <see cref="Transform"/> is false these methods don't need to be called,
     /// children positions are temporarily offset by the group position when drawn.
     /// This method avoids drawing children completely outside the
-    /// <see cref="CullingArea" /> culling area, if set.
+    /// <see cref="CullingArea"/> culling area, if set.
     /// </para>
     /// </summary>
     protected void DrawDebugChildren( ShapeRenderer shapes )
@@ -391,9 +391,9 @@ public class Group : Actor, ICullable
 
     /// <summary>
     /// Set the batch's transformation matrix, often with the result of
-    /// <see cref="ComputeTransform()" />. Note this causes the batch to
+    /// <see cref="ComputeTransform()"/>. Note this causes the batch to
     /// be flushed.
-    /// <see cref="ResetTransform(IBatch)" /> will restore the transform
+    /// <see cref="ResetTransform(IBatch)"/> will restore the transform
     /// to what it was before this call.
     /// </summary>
     protected void ApplyTransform( IBatch batch, Matrix4 transform )
@@ -405,7 +405,7 @@ public class Group : Actor, ICullable
 
     /// <summary>
     /// Restores the batch transform to what it was before
-    /// <see cref="ApplyTransform(IBatch, Matrix4)" />.
+    /// <see cref="ApplyTransform(IBatch, Matrix4)"/>.
     /// Note this causes the batch to be flushed.
     /// </summary>
     protected void ResetTransform( IBatch batch )
@@ -415,10 +415,10 @@ public class Group : Actor, ICullable
 
     /// <summary>
     /// Set the shape renderer transformation matrix, often with the result of
-    /// <see cref="ComputeTransform()" />.
+    /// <see cref="ComputeTransform()"/>.
     /// <para>
     /// Note this causes the shape renderer to be flushed.
-    /// <see cref="ResetTransform(ShapeRenderer)" /> will restore the transform
+    /// <see cref="ResetTransform(ShapeRenderer)"/> will restore the transform
     /// to what it was before this call.
     /// </para>
     /// </summary>
@@ -432,7 +432,7 @@ public class Group : Actor, ICullable
 
     /// <summary>
     /// Restores the shape renderer transform to what it was before
-    /// <see cref="ApplyTransform(IBatch, Matrix4)" />.
+    /// <see cref="ApplyTransform(IBatch, Matrix4)"/>.
     /// Note this causes the shape renderer to be flushed.
     /// </summary>
     protected void ResetTransform( ShapeRenderer shapes )
@@ -623,8 +623,8 @@ public class Group : Actor, ICullable
 
     /// <summary>
     /// Removes an actor from this group. If the actor will not be used again and
-    /// has actions, they should be <see cref="Actor.ClearActions()" />  cleared so
-    /// the actions will be returned to their <see cref="Action.Pool" />, if
+    /// has actions, they should be <see cref="Actor.ClearActions()"/>  cleared so
+    /// the actions will be returned to their <see cref="Action.Pool"/>, if
     /// any. This is not done automatically.
     /// </summary>
     /// <param name="index"> The group index of the actor to remove. </param>
@@ -807,7 +807,7 @@ public class Group : Actor, ICullable
     }
 
     /// <summary>
-    /// If true, <see cref="DrawDebug(ShapeRenderer)" /> will be called for this
+    /// If true, <see cref="DrawDebug(ShapeRenderer)"/> will be called for this
     /// group and, optionally, all children recursively.
     /// </summary>
     public void SetDebug( bool enabled, bool recursively )

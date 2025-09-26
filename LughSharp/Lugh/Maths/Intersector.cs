@@ -640,7 +640,7 @@ public class Intersector
     /// The scalar parameter on the first ray describing the point where the
     /// intersection happens.
     /// May be negative.
-    /// In case the rays are collinear, <see cref="float.PositiveInfinity" />
+    /// In case the rays are collinear, <see cref="float.PositiveInfinity"/>
     /// will be returned.
     /// </returns>
     public static float IntersectRayRay( Vector2 start1, Vector2 direction1, Vector2 start2, Vector2 direction2 )
@@ -661,7 +661,7 @@ public class Intersector
     }
 
     /// <summary>
-    /// Intersects a <see cref="Ray" /> and a <see cref="Maths.Plane" />. The intersection
+    /// Intersects a <see cref="Ray"/> and a <see cref="Maths.Plane"/>. The intersection
     /// point is stored in intersection in case an intersection is present.
     /// </summary>
     /// <param name="ray"></param>
@@ -736,7 +736,7 @@ public class Intersector
     }
 
     /// <summary>
-    /// Returns true if the three <see cref="Maths.Plane" />s intersect, setting the point
+    /// Returns true if the three <see cref="Maths.Plane"/>s intersect, setting the point
     /// of intersection in <tt>intersection</tt>, if any.
     /// </summary>
     /// <param name="a"></param>
@@ -767,7 +767,7 @@ public class Intersector
     }
 
     /// <summary>
-    /// Intersect a <see cref="Ray" /> and a triangle, returning the intersection
+    /// Intersect a <see cref="Ray"/> and a triangle, returning the intersection
     /// point in intersection.
     /// </summary>
     /// <param name="ray"></param>
@@ -875,8 +875,8 @@ public class Intersector
     }
 
     /// <summary>
-    /// Intersects a <see cref="Ray" /> and a <see cref="BoundingBox" />, returning
-    /// the intersection point in <paramref name="intersection" />.
+    /// Intersects a <see cref="Ray"/> and a <see cref="BoundingBox"/>, returning
+    /// the intersection point in <paramref name="intersection"/>.
     /// <para>
     /// This intersection is defined as the point on the ray closest to the origin
     /// which is within the specified bounds.
@@ -1058,7 +1058,7 @@ public class Intersector
     }
 
     /// <summary>
-    /// Quick check whether the given <see cref="Ray" /> and <see cref="BoundingBox" /> intersect.
+    /// Quick check whether the given <see cref="Ray"/> and <see cref="BoundingBox"/> intersect.
     /// </summary>
     /// <returns> Whether the ray and the bounding box intersect. </returns>
     public static bool IntersectRayBoundsFast( Ray ray, BoundingBox box )
@@ -1110,8 +1110,8 @@ public class Intersector
     }
 
     /// <summary>
-    /// Quick check whether the given <see cref="Ray" /> and Oriented
-    /// <see cref="BoundingBox" /> intersect.
+    /// Quick check whether the given <see cref="Ray"/> and Oriented
+    /// <see cref="BoundingBox"/> intersect.
     /// </summary>
     /// <param name="ray"></param>
     /// <param name="bounds"></param>
@@ -1414,7 +1414,7 @@ public class Intersector
     }
 
     /// <summary>
-    /// Quick check whether the given <see cref="BoundingBox" /> and <see cref="Maths.Plane" /> intersect.
+    /// Quick check whether the given <see cref="BoundingBox"/> and <see cref="Maths.Plane"/> intersect.
     /// </summary>
     /// <returns> Whether the bounding box and the plane intersect. </returns>
     public static bool IntersectBoundsPlaneFast( BoundingBox box, Plane plane )
@@ -1517,7 +1517,7 @@ public class Intersector
     }
 
     /// <summary>
-    /// Check whether the given line and <see cref="Polygon" /> intersect.
+    /// Check whether the given line and <see cref="Polygon"/> intersect.
     /// </summary>
     /// <param name="p1"> The first point of the line </param>
     /// <param name="p2"> The second point of the line </param>
@@ -1617,7 +1617,7 @@ public class Intersector
     }
 
     /// <summary>
-    /// Check whether the given line segment and <see cref="Polygon" /> intersect.
+    /// Check whether the given line segment and <see cref="Polygon"/> intersect.
     /// </summary>
     /// <param name="p1"> The first point of the segment </param>
     /// <param name="p2"> The second point of the segment </param>
@@ -1841,18 +1841,18 @@ public class Intersector
     /// Check whether polygons defined by the given vertex arrays overlap
     /// (clockwise or counter-clockwise wound doesn't matter). If they do,
     /// optionally obtain a Minimum Translation Vector indicating the minimum
-    /// magnitude vector required to push the polygon defined by <paramref name="verts1" />
-    /// out of the collision with the polygon defined by <paramref name="verts2" />.
+    /// magnitude vector required to push the polygon defined by <paramref name="verts1"/>
+    /// out of the collision with the polygon defined by <paramref name="verts2"/>.
     /// </summary>
     /// <param name="verts1">Vertices of the first polygon.</param>
-    /// <param name="offset1">The offset of the <paramref name="verts1" /> array.</param>
-    /// <param name="count1">The amount that is added to the <paramref name="offset1" />.</param>
+    /// <param name="offset1">The offset of the <paramref name="verts1"/> array.</param>
+    /// <param name="count1">The amount that is added to the <paramref name="offset1"/>.</param>
     /// <param name="verts2">Vertices of the second polygon.</param>
-    /// <param name="offset2">The offset of the <paramref name="verts2" /> array.</param>
-    /// <param name="count2">The amount that is added to the <paramref name="offset2" />.</param>
+    /// <param name="offset2">The offset of the <paramref name="verts2"/> array.</param>
+    /// <param name="count2">The amount that is added to the <paramref name="offset2"/>.</param>
     /// <param name="mtv">
     /// A Minimum Translation Vector to fill in the case of a collision,
-    /// or <see langword="null" /> (optional).
+    /// or <see langword="null"/> (optional).
     /// </param>
     /// <returns>Whether polygons overlap.</returns>
     public static bool OverlapConvexPolygons( float[] verts1,
@@ -2021,26 +2021,26 @@ public class Intersector
 
     /// <summary>
     /// Splits the triangle by the plane. The result is stored in the
-    /// <paramref name="split" /> instance.
+    /// <paramref name="split"/> instance.
     /// </summary>
     /// <remarks>
     /// <para>
     /// Depending on where the triangle is relative to the plane, the result can be:
     /// </para>
     /// <para>
-    /// i) Triangle is fully in front/behind: <see cref="SplitTriangle.Front" /> or
-    /// <see cref="SplitTriangle.Back" /> will contain the original triangle, and
-    /// <see cref="SplitTriangle.Total" /> will be one.
+    /// i) Triangle is fully in front/behind: <see cref="SplitTriangle.Front"/> or
+    /// <see cref="SplitTriangle.Back"/> will contain the original triangle, and
+    /// <see cref="SplitTriangle.Total"/> will be one.
     /// </para>
     /// <para>
-    /// ii) Triangle has two vertices in front, one behind: <see cref="SplitTriangle.Front" />
-    /// contains 2 triangles, <see cref="SplitTriangle.Back" /> contains 1 triangle, and
-    /// <see cref="SplitTriangle.Total" /> will be 3.
+    /// ii) Triangle has two vertices in front, one behind: <see cref="SplitTriangle.Front"/>
+    /// contains 2 triangles, <see cref="SplitTriangle.Back"/> contains 1 triangle, and
+    /// <see cref="SplitTriangle.Total"/> will be 3.
     /// </para>
     /// <para>
-    /// iii) Triangle has one vertex in front, two behind: <see cref="SplitTriangle.Front" />
-    /// contains 1 triangle, <see cref="SplitTriangle.Back" /> contains 2 triangles, and
-    /// <see cref="SplitTriangle.Total" /> will be 3.
+    /// iii) Triangle has one vertex in front, two behind: <see cref="SplitTriangle.Front"/>
+    /// contains 1 triangle, <see cref="SplitTriangle.Back"/> contains 2 triangles, and
+    /// <see cref="SplitTriangle.Total"/> will be 3.
     /// </para>
     /// <para>
     /// The input triangle should have the form: x, y, z, x2, y2, z2, x3, y3, z3. You can
@@ -2051,7 +2051,7 @@ public class Intersector
     /// </remarks>
     /// <param name="triangle"></param>
     /// <param name="plane"></param>
-    /// <param name="split">Output <see cref="SplitTriangle" /> to store the result of the split.</param>
+    /// <param name="split">Output <see cref="SplitTriangle"/> to store the result of the split.</param>
     public static void DoSplitTriangle( float[] triangle, Plane plane, SplitTriangle split )
     {
         var stride = triangle.Length / 3;

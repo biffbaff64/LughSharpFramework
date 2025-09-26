@@ -685,7 +685,7 @@ public class Vector2 : IVector< Vector2 >
     /// <param name="left">The first vector to add.</param>
     /// <param name="right">The second vector to add.</param>
     /// <returns>The summed vector.</returns>
-    /// <remarks>The <see cref="op_Addition" /> method defines the addition operation for <see cref="Vector2" /> objects.</remarks>
+    /// <remarks>The <see cref="op_Addition"/> method defines the addition operation for <see cref="Vector2"/> objects.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector2 operator +( Vector2 left, Vector2 right )
     {
@@ -695,8 +695,8 @@ public class Vector2 : IVector< Vector2 >
     /// <summary>Divides the first vector by the second.</summary>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
-    /// <returns>The vector that results from dividing <paramref name="left" /> by <paramref name="right" />.</returns>
-    /// <remarks>The <see cref="Vector2.op_Division" /> method defines the division operation for <see cref="Vector2" /> objects.</remarks>
+    /// <returns>The vector that results from dividing <paramref name="left"/> by <paramref name="right"/>.</returns>
+    /// <remarks>The <see cref="Vector2.op_Division"/> method defines the division operation for <see cref="Vector2"/> objects.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector2 operator /( Vector2 left, Vector2 right )
     {
@@ -707,7 +707,7 @@ public class Vector2 : IVector< Vector2 >
     /// <param name="value1">The vector.</param>
     /// <param name="value2">The scalar value.</param>
     /// <returns>The result of the division.</returns>
-    /// <remarks>The <see cref="Vector2.op_Division" /> method defines the division operation for <see cref="Vector2" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2.op_Division"/> method defines the division operation for <see cref="Vector2"/> objects.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector2 operator /( Vector2 value1, float value2 )
     {
@@ -717,8 +717,8 @@ public class Vector2 : IVector< Vector2 >
     /// <summary>Returns a value that indicates whether each pair of elements in two specified vectors is equal.</summary>
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
-    /// <returns><see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are equal; otherwise, <see langword="false" />.</returns>
-    /// <remarks>Two <see cref="Vector2" /> objects are equal if each value in <paramref name="left" /> is equal to the corresponding value in <paramref name="right" />.</remarks>
+    /// <returns><see langword="true"/> if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>Two <see cref="Vector2"/> objects are equal if each value in <paramref name="left"/> is equal to the corresponding value in <paramref name="right"/>.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static bool operator ==( Vector2 left, Vector2 right )
     {
@@ -729,7 +729,7 @@ public class Vector2 : IVector< Vector2 >
     /// <summary>Returns a value that indicates whether two specified vectors are not equal.</summary>
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
-    /// <returns><see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are not equal; otherwise, <see langword="false" />.</returns>
+    /// <returns><see langword="true"/> if <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, <see langword="false"/>.</returns>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static bool operator !=( Vector2 left, Vector2 right )
     {
@@ -740,7 +740,7 @@ public class Vector2 : IVector< Vector2 >
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The element-wise product vector.</returns>
-    /// <remarks>The <see cref="Vector2.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2.op_Multiply"/> method defines the multiplication operation for <see cref="Vector2"/> objects.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector2 operator *( Vector2 left, Vector2 right )
     {
@@ -751,7 +751,7 @@ public class Vector2 : IVector< Vector2 >
     /// <param name="left">The vector.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    /// <remarks>The <see cref="Vector2.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2.op_Multiply"/> method defines the multiplication operation for <see cref="Vector2"/> objects.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector2 operator *( Vector2 left, float right )
     {
@@ -762,7 +762,7 @@ public class Vector2 : IVector< Vector2 >
     /// <param name="left">The vector.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    /// <remarks>The <see cref="Vector2.op_Multiply" /> method defines the multiplication operation for <see cref="Vector2" /> objects.</remarks>
+    /// <remarks>The <see cref="Vector2.op_Multiply"/> method defines the multiplication operation for <see cref="Vector2"/> objects.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector2 operator *( float left, Vector2 right )
     {
@@ -772,8 +772,8 @@ public class Vector2 : IVector< Vector2 >
     /// <summary>Subtracts the second vector from the first.</summary>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
-    /// <returns>The vector that results from subtracting <paramref name="right" /> from <paramref name="left" />.</returns>
-    /// <remarks>The <see cref="op_Subtraction" /> method defines the subtraction operation for <see cref="Vector2" /> objects.</remarks>
+    /// <returns>The vector that results from subtracting <paramref name="right"/> from <paramref name="left"/>.</returns>
+    /// <remarks>The <see cref="op_Subtraction"/> method defines the subtraction operation for <see cref="Vector2"/> objects.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector2 operator -( Vector2 left, Vector2 right )
     {
@@ -783,7 +783,7 @@ public class Vector2 : IVector< Vector2 >
     /// <summary>Negates the specified vector.</summary>
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
-    /// <remarks>The <see cref="op_UnaryNegation" /> method defines the unary negation operation for <see cref="Vector2" /> objects.</remarks>
+    /// <remarks>The <see cref="op_UnaryNegation"/> method defines the unary negation operation for <see cref="Vector2"/> objects.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector2 operator -( Vector2 value )
     {

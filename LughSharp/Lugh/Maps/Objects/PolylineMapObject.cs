@@ -45,7 +45,7 @@ public class PolylineMapObject : MapObject
     }
 
     /// <summary>
-    /// Creates a new PolylineMapObject using the supplied <see cref="Polyline" />
+    /// Creates a new PolylineMapObject using the supplied <see cref="Polyline"/>
     /// </summary>
     /// <param name="polyline"> the polyline </param>
     public PolylineMapObject( Polyline polyline )

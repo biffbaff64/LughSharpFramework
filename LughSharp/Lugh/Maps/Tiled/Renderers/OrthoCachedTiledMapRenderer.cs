@@ -518,10 +518,10 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     /// <para>
     /// The amount of tiles cached is computed using <tt>(view size + max tile size) * overCache</tt>,
     /// meaning the max tile size increases the amount cached and possibly
-    /// <see cref="OverCache" /> can be reduced.
+    /// <see cref="OverCache"/> can be reduced.
     /// </para>
     /// <para>
-    /// If the view size and <see cref="OverCache" /> are configured so the size of the
+    /// If the view size and <see cref="OverCache"/> are configured so the size of the
     /// cached tiles is always larger than the largest tile size, this setting is not needed.
     /// </para>
     /// </summary>

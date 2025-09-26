@@ -48,7 +48,7 @@ public interface IPreferences
     /// </summary>
     /// <param name="key"> A string holding the ID or Key of this preference. </param>
     /// <param name="val"> The state or value of this preference. </param>
-    /// <returns> The current <see cref="IPreferences" /> instance. </returns>
+    /// <returns> The current <see cref="IPreferences"/> instance. </returns>
     IPreferences PutBool( string key, bool val );
 
     /// <summary>
@@ -58,7 +58,7 @@ public interface IPreferences
     /// </summary>
     /// <param name="key"> A string holding the ID or Key of this preference. </param>
     /// <param name="val"> The state or value of this preference. </param>
-    /// <returns> The current <see cref="IPreferences" /> instance. </returns>
+    /// <returns> The current <see cref="IPreferences"/> instance. </returns>
     IPreferences PutInteger( string key, int val );
 
     /// <summary>
@@ -68,7 +68,7 @@ public interface IPreferences
     /// </summary>
     /// <param name="key"> A string holding the ID or Key of this preference. </param>
     /// <param name="val"> The state or value of this preference. </param>
-    /// <returns> The current <see cref="IPreferences" /> instance. </returns>
+    /// <returns> The current <see cref="IPreferences"/> instance. </returns>
     IPreferences PutLong( string key, long val );
 
     /// <summary>
@@ -78,7 +78,7 @@ public interface IPreferences
     /// </summary>
     /// <param name="key"> A string holding the ID or Key of this preference. </param>
     /// <param name="val"> The state or value of this preference. </param>
-    /// <returns> The current <see cref="IPreferences" /> instance. </returns>
+    /// <returns> The current <see cref="IPreferences"/> instance. </returns>
     IPreferences PutFloat( string key, float val );
 
     /// <summary>
@@ -88,78 +88,78 @@ public interface IPreferences
     /// </summary>
     /// <param name="key"> A string holding the ID or Key of this preference. </param>
     /// <param name="val"> The state or value of this preference. </param>
-    /// <returns> The current <see cref="IPreferences" /> instance. </returns>
+    /// <returns> The current <see cref="IPreferences"/> instance. </returns>
     IPreferences PutString( string key, string val );
 
     /// <summary>
-    /// Calls <see cref="PutBool" />, <see cref="PutInteger" />, <see cref="PutLong" />,
-    /// <see cref="PutFloat" /> or <see cref="PutString" /> for each preference listed in
-    /// <paramref name="vals" />.
+    /// Calls <see cref="PutBool"/>, <see cref="PutInteger"/>, <see cref="PutLong"/>,
+    /// <see cref="PutFloat"/> or <see cref="PutString"/> for each preference listed in
+    /// <paramref name="vals"/>.
     /// </summary>
-    /// <returns> The current <see cref="IPreferences" /> instance. </returns>
+    /// <returns> The current <see cref="IPreferences"/> instance. </returns>
     IPreferences PutAll( Dictionary< string, object > vals );
 
     // ------------------------------------------------------------------------
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as a BOOL.
+    /// Gets the preference specified by <paramref name="key"/> as a BOOL.
     /// If the preference is not found, the default value of false will
     /// be returned.
     /// </summary>
     bool GetBool( string key );
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as an INT.
+    /// Gets the preference specified by <paramref name="key"/> as an INT.
     /// If the preference is not found, the default value of zero will
     /// be returned.
     /// </summary>
     int GetInteger( string key );
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as a LONG.
+    /// Gets the preference specified by <paramref name="key"/> as a LONG.
     /// If the preference is not found, the default value of zero will
     /// be returned.
     /// </summary>
     long GetLong( string key );
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as a FLOAT.
+    /// Gets the preference specified by <paramref name="key"/> as a FLOAT.
     /// If the preference is not found, the default value of zero will
     /// be returned.
     /// </summary>
     float GetFloat( string key );
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as a BOOL.
-    /// If the preference is not found, the <paramref name="defValue" /> will
+    /// Gets the preference specified by <paramref name="key"/> as a BOOL.
+    /// If the preference is not found, the <paramref name="defValue"/> will
     /// be returned.
     /// </summary>
     bool GetBool( string key, bool defValue );
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as an INT.
-    /// If the preference is not found, the <paramref name="defValue" /> will
+    /// Gets the preference specified by <paramref name="key"/> as an INT.
+    /// If the preference is not found, the <paramref name="defValue"/> will
     /// be returned.
     /// </summary>
     int GetInteger( string key, int defValue );
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as a LONG.
-    /// If the preference is not found, the <paramref name="defValue" /> will
+    /// Gets the preference specified by <paramref name="key"/> as a LONG.
+    /// If the preference is not found, the <paramref name="defValue"/> will
     /// be returned.
     /// </summary>
     long GetLong( string key, long defValue );
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as a FLOAT.
-    /// If the preference is not found, the <paramref name="defValue" /> will
+    /// Gets the preference specified by <paramref name="key"/> as a FLOAT.
+    /// If the preference is not found, the <paramref name="defValue"/> will
     /// be returned.
     /// </summary>
     float GetFloat( string key, float defValue );
 
     /// <summary>
-    /// Gets the preference specified by <paramref name="key" /> as a STRING.
-    /// If the preference is not found, the <paramref name="defValue" /> will
+    /// Gets the preference specified by <paramref name="key"/> as a STRING.
+    /// If the preference is not found, the <paramref name="defValue"/> will
     /// be returned.
     /// </summary>
     string GetString( string key, string defValue );
@@ -179,12 +179,12 @@ public interface IPreferences
     bool Contains( string key );
 
     /// <summary>
-    /// Clears ALL preferences. Does not call <see cref="Flush()" />.
+    /// Clears ALL preferences. Does not call <see cref="Flush()"/>.
     /// </summary>
     void Clear();
 
     /// <summary>
-    /// Removes the preference identified by <paramref name="key" /> from the list.
+    /// Removes the preference identified by <paramref name="key"/> from the list.
     /// </summary>
     void Remove( string key );
 

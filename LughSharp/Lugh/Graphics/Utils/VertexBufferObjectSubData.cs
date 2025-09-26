@@ -25,13 +25,13 @@
 namespace LughSharp.Lugh.Graphics.Utils;
 
 /// <summary>
-/// A <see cref="IVertexData" /> implementation based on OpenGL vertex buffer objects.
-/// If the OpenGL ES context was lost you can call <see cref="Invalidate()" /> to
+/// A <see cref="IVertexData"/> implementation based on OpenGL vertex buffer objects.
+/// If the OpenGL ES context was lost you can call <see cref="Invalidate()"/> to
 /// recreate a new OpenGL vertex buffer object.
 /// <para>
 /// The data is bound via GLVertexAttribPointer() according to the attribute aliases
-/// specified via <see cref="VertexAttributes" /> in the constructor. VertexBufferObjects
-/// must be disposed via the <see cref="Dispose()" /> method when no longer needed.
+/// specified via <see cref="VertexAttributes"/> in the constructor. VertexBufferObjects
+/// must be disposed via the <see cref="Dispose()"/> method when no longer needed.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -58,7 +58,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// </summary>
     /// <param name="isStatic"> whether the vertex data is static. </param>
     /// <param name="numVertices"> the maximum number of vertices </param>
-    /// <param name="attributes"> the <see cref="VertexAttributes" />.  </param>
+    /// <param name="attributes"> the <see cref="VertexAttributes"/>.  </param>
     public VertexBufferObjectSubData( bool isStatic, int numVertices, params VertexAttribute[] attributes )
         : this( isStatic, numVertices, new VertexAttributes( attributes ) )
     {
@@ -69,7 +69,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// </summary>
     /// <param name="isStatic"> whether the vertex data is static. </param>
     /// <param name="numVertices"> the maximum number of vertices </param>
-    /// <param name="attributes"> the <see cref="VertexAttributes" />. </param>
+    /// <param name="attributes"> the <see cref="VertexAttributes"/>. </param>
     public VertexBufferObjectSubData( bool isStatic, int numVertices, VertexAttributes attributes )
     {
         _isStatic  = isStatic;
@@ -101,7 +101,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// Sets the vertices of this VertexData, discarding the old vertex data. The
     /// count must equal the number of floats per vertex times the number of vertices
     /// to be copied to this VertexData. The order of the vertex attributes must be
-    /// the same as specified at construction time via <see cref="VertexAttributes" />.
+    /// the same as specified at construction time via <see cref="VertexAttributes"/>.
     /// <para>
     /// This can be called in between calls to bind and unbind. The vertex data will
     /// be updated instantly.
@@ -165,7 +165,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// <summary>
     /// Returns the underlying Buffer and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
-    /// uploading use <see cref="IVertexData.SetVertices" />; Any modifications made
+    /// uploading use <see cref="IVertexData.SetVertices"/>; Any modifications made
     /// to the Buffer after the call to bind will not automatically be uploaded.
     /// </summary>
     /// <returns> the underlying Buffer holding the vertex data. </returns>

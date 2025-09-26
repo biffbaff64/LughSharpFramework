@@ -192,7 +192,7 @@ public interface INet
         private          bool                          _followRedirects = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HttpRequest" /> class.
+        /// Initializes a new instance of the <see cref="HttpRequest"/> class.
         /// </summary>
         /// <param name="httpMethod"> The HTTP method for the request. </param>
         public HttpRequest( string? httpMethod = null )

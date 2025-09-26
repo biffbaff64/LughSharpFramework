@@ -33,13 +33,13 @@ public interface IVertexData : IDisposable
     /// <returns> the number of vertices this VertedData can store </returns>
     public int NumMaxVertices { get; }
 
-    /// <returns> the <see cref="VertexAttributes" /> as specified during construction. </returns>
+    /// <returns> the <see cref="VertexAttributes"/> as specified during construction. </returns>
     public VertexAttributes Attributes { get; set; }
 
     /// <summary>
     /// Returns the underlying Buffer and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
-    /// uploading use <see cref="SetVertices" />; Any modifications made to the Buffer
+    /// uploading use <see cref="SetVertices"/>; Any modifications made to the Buffer
     /// after* the call to bind will not automatically be uploaded.
     /// </summary>
     /// <returns> the underlying Buffer holding the vertex data.  </returns>
@@ -49,7 +49,7 @@ public interface IVertexData : IDisposable
     /// Sets the vertices of this VertexData, discarding the old vertex data. The
     /// count must equal the number of floats per vertex times the number of vertices
     /// to be copied to this VertexData. The order of the vertex attributes must be
-    /// the same as specified at construction time via <see cref="VertexAttributes" />.
+    /// the same as specified at construction time via <see cref="VertexAttributes"/>.
     /// <para>
     /// This can be called in between calls to bind and unbind. The vertex data will
     /// be updated instantly.

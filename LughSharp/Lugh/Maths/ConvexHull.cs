@@ -135,7 +135,7 @@ public class ConvexHull
     }
 
     /// <summary>
-    /// Computes a hull the same as <see cref="ComputePolygon(float[], int, int, bool)" />
+    /// Computes a hull the same as <see cref="ComputePolygon(float[], int, int, bool)"/>
     /// but returns indices of the specified points.
     /// </summary>
 

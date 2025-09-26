@@ -866,7 +866,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
     /// </summary>
     /// <param name="capacityInBytes">The desired capacity of the ByteBuffer in bytes.</param>
     /// <returns>A new ByteBuffer instance.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="capacityInBytes" /> is negative.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="capacityInBytes"/> is negative.</exception>
     public static Buffer< byte > Allocate( int capacityInBytes )
     {
         if ( capacityInBytes < 0 )

@@ -29,11 +29,11 @@ using Color = LughSharp.Lugh.Graphics.Color;
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Drawable for a <see cref="NinePatch" />.
+/// Drawable for a <see cref="NinePatch"/>.
 /// <para>
 /// The drawable sizes are set when the ninepatch is set, but they are separate
-/// values. Eg, <see cref="ISceneDrawable.LeftWidth" /> could be set to more than
-/// <see cref="NinePatch.LeftWidth" /> in order to provide more space on the left
+/// values. Eg, <see cref="ISceneDrawable.LeftWidth"/> could be set to more than
+/// <see cref="NinePatch.LeftWidth"/> in order to provide more space on the left
 /// than actually exists in the ninepatch.
 /// </para>
 /// The min size is set to the ninepatch total size by default. It could be set
@@ -53,7 +53,7 @@ public class NinePatchSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
     }
 
     /// <summary>
-    /// Creates a new NinePatchDrawable, initialised with the supplied <see cref="NinePatch" />.
+    /// Creates a new NinePatchDrawable, initialised with the supplied <see cref="NinePatch"/>.
     /// </summary>
     /// <param name="patch"></param>
     public NinePatchSceneDrawable( NinePatch patch )
@@ -62,7 +62,7 @@ public class NinePatchSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
     }
 
     /// <summary>
-    /// Creates a new NinePatchDrawable, initialised with the <see cref="NinePatch" />
+    /// Creates a new NinePatchDrawable, initialised with the <see cref="NinePatch"/>
     /// from another NinePatchDrawable.
     /// </summary>
     /// <param name="drawable"></param>
@@ -81,9 +81,9 @@ public class NinePatchSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
     }
 
     /// <summary>
-    /// Draw the <see cref="NinePatch" />
+    /// Draw the <see cref="NinePatch"/>
     /// </summary>
-    /// <param name="batch"> The <see cref="IBatch" /> to use. </param>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
     /// <param name="region"></param>
     /// <param name="origin"></param>
     /// <param name="scale"></param>

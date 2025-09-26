@@ -27,7 +27,7 @@ using System.Collections;
 namespace LughSharp.Lugh.Maps;
 
 /// <summary>
-/// Ordered list of <see cref="MapLayer" /> instances owned by a <see cref="Map" />.
+/// Ordered list of <see cref="MapLayer"/> instances owned by a <see cref="Map"/>.
 /// </summary>
 [PublicAPI]
 public class MapLayers : IEnumerable< MapLayer >
@@ -47,7 +47,7 @@ public class MapLayers : IEnumerable< MapLayer >
     }
 
     /// <summary>
-    /// Returns the <see cref="MapLayer" /> at the specified index.
+    /// Returns the <see cref="MapLayer"/> at the specified index.
     /// </summary>
     public MapLayer Get( int index )
     {
@@ -102,7 +102,7 @@ public class MapLayers : IEnumerable< MapLayer >
     }
 
     /// <summary>
-    /// Removes the <see cref="MapLayer" /> at the specified index.
+    /// Removes the <see cref="MapLayer"/> at the specified index.
     /// </summary>
     public virtual void Remove( int index )
     {
@@ -110,7 +110,7 @@ public class MapLayers : IEnumerable< MapLayer >
     }
 
     /// <summary>
-    /// Removes the requested <see cref="MapLayer" />
+    /// Removes the requested <see cref="MapLayer"/>
     /// </summary>
     public virtual void Remove( MapLayer layer )
     {

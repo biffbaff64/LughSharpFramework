@@ -307,7 +307,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// Sets the color of the specified characters. This may only be called
-    /// after <see cref="SetText(string, float, float)" /> and is reset every
+    /// after <see cref="SetText(string, float, float)"/> and is reset every
     /// time setText is called.
     /// </summary>
     public void SetColors( Color tint, int start, int end )
@@ -317,7 +317,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// Sets the color of the specified characters. This may only be called
-    /// after <see cref="SetText(string, float, float)" /> and is reset every
+    /// after <see cref="SetText(string, float, float)"/> and is reset every
     /// time setText is called.
     /// </summary>
     public void SetColors( float color, int start, int end )
@@ -378,7 +378,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// A convenience method for setting the cache color. The color can also
-    /// be set by modifying <see cref="GetColor()" />.
+    /// be set by modifying <see cref="GetColor()"/>.
     /// </summary>
     public void SetColor( Color col )
     {
@@ -736,7 +736,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
+    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)"/>
     /// </summary>
     public GlyphLayout SetText( string str, float x, float y )
     {
@@ -747,7 +747,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
+    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)"/>
     /// </summary>
     public GlyphLayout SetText( string str, float x, float y, float targetWidth, int halign, bool wrap )
     {
@@ -758,7 +758,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
+    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)"/>
     /// </summary>
     public GlyphLayout SetText( string str,
                                 float x,
@@ -777,7 +777,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
+    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)"/>
     /// </summary>
     public void SetText( GlyphLayout layout, float x, float y )
     {
@@ -800,12 +800,12 @@ public class BitmapFontCache
     /// <param name="x"> The x position for the left most character. </param>
     /// <param name="y">
     /// The y position for the top of most capital letters in the font
-    /// (the <see cref="BitmapFont.BitmapFontData.CapHeight" />).
+    /// (the <see cref="BitmapFont.BitmapFontData.CapHeight"/>).
     /// </param>
     /// <param name="start"> The first character of the string to draw. </param>
     /// <param name="end"> The last character of the string to draw (exclusive). </param>
     /// <param name="targetWidth"> The width of the area the text will be drawn, for wrapping or truncation. </param>
-    /// <param name="halign"> Horizontal alignment of the text, see <see cref="Alignment" />. </param>
+    /// <param name="halign"> Horizontal alignment of the text, see <see cref="Alignment"/>. </param>
     /// <param name="wrap"> If true, the text will be wrapped within targetWidth. </param>
     /// <param name="truncate">
     /// If not null, the text will be truncated within targetWidth with this string appended.

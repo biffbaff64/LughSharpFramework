@@ -58,7 +58,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     }
 
     /// <summary>
-    /// Creates a new SnapshotArray from the supplied <see cref="ArrayList{T}" />
+    /// Creates a new SnapshotArray from the supplied <see cref="ArrayList{T}"/>
     /// </summary>
     public SnapshotArrayList( ArrayList< T > arrayList )
     {
@@ -73,7 +73,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     }
 
     /// <summary>
-    /// Creates a new SnapshotArray, with <see cref="ArrayList{T}.Ordered" /> and
+    /// Creates a new SnapshotArray, with <see cref="ArrayList{T}.Ordered"/> and
     /// array capacity set to the supplied values.
     /// </summary>
     /// <param name="ordered"> Default value is TRUE. </param>
@@ -85,9 +85,9 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     }
 
     /// <summary>
-    /// Creates a new SnapshotArray from the supplied <paramref name="array" />,
-    /// copying <paramref name="count" /> elements from <paramref name="startIndex" />
-    /// onwards. <see cref="ArrayList{T}.Ordered" /> will be set to the supplied value.
+    /// Creates a new SnapshotArray from the supplied <paramref name="array"/>,
+    /// copying <paramref name="count"/> elements from <paramref name="startIndex"/>
+    /// onwards. <see cref="ArrayList{T}.Ordered"/> will be set to the supplied value.
     /// </summary>
     /// <param name="ordered"> Whether this array is ordered or not. </param>
     /// <param name="array"> The array to copy from. </param>
@@ -129,7 +129,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     /// </summary>
     /// <returns>
     /// Returns the backing array, which is guaranteed to not be modified
-    /// before <see cref="End()" />
+    /// before <see cref="End()"/>
     /// </returns>
     public T[] Begin()
     {
@@ -143,7 +143,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     }
 
     /// <summary>
-    /// Releases the guarantee that the array returned by <see cref="Begin()" />
+    /// Releases the guarantee that the array returned by <see cref="Begin()"/>
     /// won't be modified.
     /// </summary>
     public void End()
@@ -255,7 +255,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     }
 
     /// <summary>
-    /// Returns the item at the specified <paramref name="index" />.
+    /// Returns the item at the specified <paramref name="index"/>.
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">
     /// Thrown if the specified index is &gt;= the array size.
@@ -323,8 +323,8 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     }
 
     /// <summary>
-    /// Swap the array elements at <paramref name="firstIndex" />
-    /// and <paramref name="secondIndex" />.
+    /// Swap the array elements at <paramref name="firstIndex"/>
+    /// and <paramref name="secondIndex"/>.
     /// </summary>
     /// <param name="firstIndex"> The position of element 1. </param>
     /// <param name="secondIndex"> The position of element 2. </param>
@@ -336,7 +336,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     }
 
     /// <summary>
-    /// Removes the first occurance of <paramref name="value" /> from the array.
+    /// Removes the first occurance of <paramref name="value"/> from the array.
     /// </summary>
     /// <param name="value"> The value to remove. </param>
     /// <returns> TRUE if successful. </returns>

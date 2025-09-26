@@ -34,8 +34,8 @@ namespace LughSharp.Lugh.Graphics.Utils;
 /// OpenGL texture capabilities like texture compression, cubemapping, mipmapping,
 /// etc.
 /// <para>
-/// For example, KTXTextureData can be used for <see cref="Texture" /> or
-/// <see cref="Cubemap" />.
+/// For example, KTXTextureData can be used for <see cref="Texture"/> or
+/// <see cref="Cubemap"/>.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -85,13 +85,13 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
     /// <summary>
     /// Uploads the pixel data for the 6 faces of the cube to the OpenGL ES texture.
-    /// The caller must bind an OpenGL ES texture. A call to <see cref="ICubemapData.Prepare" />
+    /// The caller must bind an OpenGL ES texture. A call to <see cref="ICubemapData.Prepare"/>
     /// must preceed a call to this method. Any internal data structures created
-    /// in <see cref="ICubemapData.Prepare" /> should be disposed of here.
+    /// in <see cref="ICubemapData.Prepare"/> should be disposed of here.
     /// </summary>
     public void ConsumeCubemapData()
     {
-        ConsumeCustomData( IGL.GL_TEXTURE_CUBE_MAP );
+        UploadCustomData( IGL.GL_TEXTURE_CUBE_MAP );
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     public bool IsManaged => false;
 
     /// <summary>
-    /// Returns the <see cref="ITextureData.TextureDataType" />.
+    /// Returns the <see cref="ITextureData.TextureDataType"/>.
     /// </summary>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
@@ -112,7 +112,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     }
 
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="ICubemapData.ConsumeCubemapData" />.
+    /// Prepares the TextureData for a call to <see cref="ICubemapData.ConsumeCubemapData"/>.
     /// This method can be called from a non OpenGL thread and should thus not
     /// interact with OpenGL.
     /// </summary>
@@ -242,22 +242,22 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     }
 
     /// <summary>
-    /// Returns the <see cref="Pixmap" /> for upload by Texture.
+    /// Returns the <see cref="Pixmap"/> for upload by Texture.
     /// <para>
-    /// A call to <see cref="ITextureData.Prepare" /> must precede a call to this method. Any
-    /// internal data structures created in <see cref="ITextureData.Prepare" /> should be
+    /// A call to <see cref="ITextureData.Prepare"/> must precede a call to this method. Any
+    /// internal data structures created in <see cref="ITextureData.Prepare"/> should be
     /// disposed of here.
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public Pixmap ConsumePixmap()
+    public Pixmap FetchPixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     /// <returns>
-    /// whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
-    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
+    /// whether the caller of <see cref="ITextureData.FetchPixmap"/> should dispose the
+    /// Pixmap returned by <see cref="ITextureData.FetchPixmap"/>
     /// </returns>
     public bool ShouldDisposePixmap()
     {
@@ -266,14 +266,14 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
     /// <summary>
     /// Uploads the pixel data to the OpenGL ES texture. The caller must bind an
-    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare" /> must preceed a call
+    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare"/> must preceed a call
     /// to this method.
     /// <para>
-    /// Any internal data structures created in <see cref="ITextureData.Prepare" /> should be
+    /// Any internal data structures created in <see cref="ITextureData.Prepare"/> should be
     /// disposed of here.
     /// </para>
     /// </summary>
-    public void ConsumeCustomData( int target )
+    public void UploadCustomData( int target )
     {
         if ( _compressedData == null )
         {

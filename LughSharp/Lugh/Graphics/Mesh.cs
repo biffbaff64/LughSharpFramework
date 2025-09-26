@@ -33,7 +33,7 @@ public class Mesh : IDisposable
     public bool       IsInstanced { get; set; } = false;
 
     /// <summary>
-    /// Whether to bind the underlying <see cref="VertexArray" /> or <see cref="VertexBufferObject" />
+    /// Whether to bind the underlying <see cref="VertexArray"/> or <see cref="VertexBufferObject"/>
     /// automatically on a call to one of the render methods. Default setting is <c>TRUE</c>
     /// </summary>
     /// <param name="value"> whether to autobind meshes.  </param>
@@ -75,7 +75,7 @@ public class Mesh : IDisposable
     /// <param name="maxVertices"> the maximum number of vertices this mesh can hold </param>
     /// <param name="maxIndices"> the maximum number of indices this mesh can hold </param>
     /// <param name="attributes">
-    /// the <see cref="VertexAttribute" />s. Each vertex attribute defines one property
+    /// the <see cref="VertexAttribute"/>s. Each vertex attribute defines one property
     /// of a vertex such as position, normal or texture coordinate
     /// </param>
     public Mesh( bool isStatic, int maxVertices, int maxIndices, params VertexAttribute[] attributes )
@@ -94,7 +94,7 @@ public class Mesh : IDisposable
     /// <param name="maxVertices">the maximum number of vertices this mesh can hold</param>
     /// <param name="maxIndices">the maximum number of indices this mesh can hold</param>
     /// <param name="attributes">
-    /// the <see cref="VertexAttributes" />. Each vertex attribute defines one property
+    /// the <see cref="VertexAttributes"/>. Each vertex attribute defines one property
     /// of a vertex such as position, normal or texture coordinate
     /// </param>
     public Mesh( bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
@@ -119,7 +119,7 @@ public class Mesh : IDisposable
     /// <param name="maxVertices"> the maximum number of vertices this mesh can hold </param>
     /// <param name="maxIndices"> the maximum number of indices this mesh can hold </param>
     /// <param name="attributes">
-    /// the <see cref="VertexAttributes" />. Each vertex attribute defines one property
+    /// the <see cref="VertexAttributes"/>. Each vertex attribute defines one property
     /// of a vertex such as position, normal or texture coordinate
     /// </param>
     public Mesh( bool staticVertices,
@@ -138,12 +138,12 @@ public class Mesh : IDisposable
     /// <summary>
     /// Creates a new Mesh with the given attributes.
     /// </summary>
-    /// <param name="type">the <see cref="VertexDataType" /> to be used, VBO or VA.</param>
+    /// <param name="type">the <see cref="VertexDataType"/> to be used, VBO or VA.</param>
     /// <param name="isStatic">whether this mesh is static or not. Allows for internal optimizations.</param>
     /// <param name="maxVertices">the maximum number of vertices this mesh can hold</param>
     /// <param name="maxIndices">the maximum number of indices this mesh can hold</param>
     /// <param name="attributes">
-    /// the <see cref="VertexAttribute" />s. Each vertex attribute defines one property
+    /// the <see cref="VertexAttribute"/>s. Each vertex attribute defines one property
     /// of a vertex such as position, normal or texture coordinate
     /// </param>
     public Mesh( VertexDataType? type,
@@ -158,13 +158,13 @@ public class Mesh : IDisposable
     /// <summary>
     /// Creates a new Mesh with the given attributes.
     /// </summary>
-    /// <param name="type">the <see cref="VertexDataType" /> to be used, VBO or VA.</param>
+    /// <param name="type">the <see cref="VertexDataType"/> to be used, VBO or VA.</param>
     /// <param name="isStatic">
     /// whether this mesh is static or not. Allows for internal optimizations.
     /// </param>
     /// <param name="maxVertices">the maximum number of vertices this mesh can hold</param>
     /// <param name="maxIndices">the maximum number of indices this mesh can hold</param>
-    /// <param name="attributes">the <see cref="VertexAttributes" />.</param>
+    /// <param name="attributes">the <see cref="VertexAttributes"/>.</param>
     public Mesh( VertexDataType? type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
 //        Logger.Debug( $"\ntype: {type},\n" +
@@ -278,7 +278,7 @@ public class Mesh : IDisposable
     /// <param name="isStatic">Indicates whether the instance data should be static or dynamic.</param>
     /// <param name="maxInstances">The maximum number of instances to render.</param>
     /// <param name="attributes">Specifies the vertex attributes for the instance data.</param>
-    /// <returns>The current <see cref="Mesh" /> instance with instanced rendering enabled.</returns>
+    /// <returns>The current <see cref="Mesh"/> instance with instanced rendering enabled.</returns>
     public Mesh EnableInstancedRendering( bool isStatic, int maxInstances, params VertexAttribute[] attributes )
     {
         if ( !IsInstanced )
@@ -393,7 +393,7 @@ public class Mesh : IDisposable
     /// </param>
     /// <param name="count">
     /// the number of floats to update. Default is zero which dictates that count will be
-    /// overridden with the value of <paramref name="source" />.Length.
+    /// overridden with the value of <paramref name="source"/>.Length.
     /// </param>
     public Mesh UpdateInstanceData( int targetOffset, float[] source, int sourceOffset = 0, int count = 0 )
     {
@@ -417,7 +417,7 @@ public class Mesh : IDisposable
     /// </param>
     /// <param name="count">
     /// the number of floats to update. Default is zero which dictates that count will be
-    /// overridden with the value of <paramref name="source" />.Limit.
+    /// overridden with the value of <paramref name="source"/>.Limit.
     /// </param>
     public Mesh UpdateInstanceData( int targetOffset, Buffer< float > source, int sourceOffset = 0, int count = 0 )
     {
@@ -634,8 +634,8 @@ public class Mesh : IDisposable
     #region bind/unbind
 
     /// <summary>
-    /// Binds the underlying <see cref="VertexBufferObject" /> and
-    /// <see cref="IndexBufferObject" /> if indices where given.
+    /// Binds the underlying <see cref="VertexBufferObject"/> and
+    /// <see cref="IndexBufferObject"/> if indices where given.
     /// Use this with OpenGL ES 2.0 and when auto-bind is disabled.
     /// </summary>
     public void Bind( in ShaderProgram shader )
@@ -644,7 +644,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Binds the underlying <see cref="VertexBufferObject" /> and <see cref="IndexBufferObject" />
+    /// Binds the underlying <see cref="VertexBufferObject"/> and <see cref="IndexBufferObject"/>
     /// if indices where given. Use this when auto-bind is disabled.
     /// </summary>
     /// <param name="shader"> the shader (does not bind the shader) </param>
@@ -665,7 +665,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Unbinds the underlying <see cref="VertexBufferObject" /> and <see cref="IndexBufferObject" />
+    /// Unbinds the underlying <see cref="VertexBufferObject"/> and <see cref="IndexBufferObject"/>
     /// is indices were given. Use this when auto-bind is disabled.
     /// </summary>
     /// <param name="shader"> the shader (does not unbind the shader)  </param>
@@ -675,7 +675,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Unbinds the underlying <see cref="VertexBufferObject" /> and <see cref="IndexBufferObject" />
+    /// Unbinds the underlying <see cref="VertexBufferObject"/> and <see cref="IndexBufferObject"/>
     /// is indices were given. Use this when auto-bind is disabled.
     /// </summary>
     /// <param name="shader"> the shader (does not unbind the shader) </param>
@@ -712,11 +712,11 @@ public class Mesh : IDisposable
     /// If no indices are set then NumVertices / #vertices per primitive are rendered.
     /// <para>
     /// This method will automatically bind each vertex attribute as specified at
-    /// construction time via <see cref="VertexAttributes" /> to the respective shader
+    /// construction time via <see cref="VertexAttributes"/> to the respective shader
     /// attributes. The binding is based on the alias defined for each VertexAttribute.
     /// </para>
     /// <para>
-    /// This method must only be called after the <see cref="ShaderProgram.Bind()" />
+    /// This method must only be called after the <see cref="ShaderProgram.Bind()"/>
     /// method has been called!
     /// </para>
     /// </summary>
@@ -734,11 +734,11 @@ public class Mesh : IDisposable
     /// vertices per primitive primitives are rendered.
     /// <para>
     /// This method will automatically bind each vertex attribute as specified at
-    /// construction time via <see cref="VertexAttributes" /> to the respective shader
+    /// construction time via <see cref="VertexAttributes"/> to the respective shader
     /// attributes. The binding is based on the alias defined for each VertexAttribute.
     /// </para>
     /// <para>
-    /// This method must only be called after the <see cref="ShaderProgram.Bind()" />
+    /// This method must only be called after the <see cref="ShaderProgram.Bind()"/>
     /// method has been called!
     /// </para>
     /// </summary>
@@ -758,11 +758,11 @@ public class Mesh : IDisposable
     /// vertices per primitive primitives are rendered.
     /// <para>
     /// This method will automatically bind each vertex attribute as specified at
-    /// construction time via <see cref="VertexAttributes" /> to the respective shader
+    /// construction time via <see cref="VertexAttributes"/> to the respective shader
     /// attributes. The binding is based on the alias defined for each VertexAttribute.
     /// </para>
     /// <para>
-    /// This method must only be called after the <see cref="ShaderProgram.Bind()" />
+    /// This method must only be called after the <see cref="ShaderProgram.Bind()"/>
     /// method has been called!
     /// </para>
     /// </summary>
@@ -870,7 +870,7 @@ public class Mesh : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Returns the first <see cref="VertexAttribute" /> having the given <see cref="VertexConstants.Usage" />.
+    /// Returns the first <see cref="VertexAttribute"/> having the given <see cref="VertexConstants.Usage"/>.
     /// </summary>
     /// <param name="usage"> the Usage. </param>
     /// <returns> the VertexAttribute or null if no attribute with that usage was found.  </returns>
@@ -901,8 +901,8 @@ public class Mesh : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Calculates the <see cref="BoundingBox" /> of the vertices contained in this mesh.
-    /// In case no vertices are defined yet a <see cref="GdxRuntimeException" /> is thrown.
+    /// Calculates the <see cref="BoundingBox"/> of the vertices contained in this mesh.
+    /// In case no vertices are defined yet a <see cref="GdxRuntimeException"/> is thrown.
     /// This method creates a new BoundingBox instance.
     /// </summary>
     /// <returns> the bounding box.  </returns>
@@ -916,8 +916,8 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Calculates the <see cref="BoundingBox" /> of the vertices contained in this mesh.
-    /// In case no vertices are defined yet a <see cref="GdxRuntimeException" /> is thrown.
+    /// Calculates the <see cref="BoundingBox"/> of the vertices contained in this mesh.
+    /// In case no vertices are defined yet a <see cref="GdxRuntimeException"/> is thrown.
     /// </summary>
     /// <param name="bbox"> the bounding box to store the result in.  </param>
     public void CalculateBoundingBox( BoundingBox bbox )
@@ -976,7 +976,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Calculate the <see cref="BoundingBox" /> of the specified part.
+    /// Calculate the <see cref="BoundingBox"/> of the specified part.
     /// </summary>
     /// <param name="box"> the bounding box to store the result in. </param>
     /// <param name="offset"> the start index of the part. </param>
@@ -988,7 +988,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Calculate the <see cref="BoundingBox" /> of the specified part.
+    /// Calculate the <see cref="BoundingBox"/> of the specified part.
     /// </summary>
     /// <param name="box"> the bounding box to store the result in. </param>
     /// <param name="offset"> the start index of the part. </param>
@@ -1001,7 +1001,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Extends the specified <see cref="BoundingBox" /> with the specified part.
+    /// Extends the specified <see cref="BoundingBox"/> with the specified part.
     /// </summary>
     /// <param name="box"> the bounding box to store the result in. </param>
     /// <param name="offset"> the start index of the part. </param>
@@ -1013,7 +1013,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Extends the specified <see cref="BoundingBox" /> with the specified part.
+    /// Extends the specified <see cref="BoundingBox"/> with the specified part.
     /// </summary>
     /// <param name="box"> the bounding box to store the result in. </param>
     /// <param name="offset"> the start of the part. </param>
@@ -1824,7 +1824,7 @@ public class Mesh : IDisposable
     /// <param name="maxVertices">The maximum number of vertices the buffer can hold.</param>
     /// <param name="vertexAttributes">The attributes of the vertices stored in the buffer.</param>
     /// <returns>
-    /// A new instance of <see cref="VertexBufferObjectWithVAO" /> configured with the specified parameters.
+    /// A new instance of <see cref="VertexBufferObjectWithVAO"/> configured with the specified parameters.
     /// </returns>
     private static VertexBufferObjectWithVAO MakeVertexBuffer( bool isStatic, int maxVertices, VertexAttributes vertexAttributes )
     {

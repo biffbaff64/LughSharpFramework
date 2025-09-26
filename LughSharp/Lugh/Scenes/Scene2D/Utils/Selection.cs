@@ -30,10 +30,10 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Manages selected objects. Optionally fires a <see cref="ChangeListener.ChangeEvent" />
+/// Manages selected objects. Optionally fires a <see cref="ChangeListener.ChangeEvent"/>
 /// on an actor.
 /// <para>
-/// Selection changes can be vetoed via <see cref="ChangeListener.ChangeEvent.Cancel()" />.
+/// Selection changes can be vetoed via <see cref="ChangeListener.ChangeEvent.Cancel()"/>.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -50,7 +50,7 @@ public class Selection< T > : IDisableable, IDisposable
 
     /// <summary>
     /// <param name="value">
-    /// An actor to fire a <see cref="ChangeListener.ChangeEvent" /> on when the
+    /// An actor to fire a <see cref="ChangeListener.ChangeEvent"/> on when the
     /// selection changes, or null.
     /// </param>
     /// </summary>
@@ -409,7 +409,7 @@ public class Selection< T > : IDisableable, IDisposable
 
     /// <summary>
     /// Fires a change event on the selection's actor, if any. Called internally when
-    /// the selection changes, depending on <see cref="ProgrammaticChangeEvents" />.
+    /// the selection changes, depending on <see cref="ProgrammaticChangeEvents"/>.
     /// </summary>
     /// <returns> true if the change should be undone. </returns>
     public virtual bool FireChangeEvent()

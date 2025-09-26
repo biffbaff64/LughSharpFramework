@@ -37,15 +37,15 @@ public interface IFiles
     /// </exception>
     FileInfo GetFileHandle( string path, PathTypes type );
 
-    /// <inheritdoc cref="PathTypes.Classpath" />
+    /// <inheritdoc cref="PathTypes.Classpath"/>
     FileInfo Classpath( string path );
 
-    /// <inheritdoc cref="PathTypes.Absolute" />
+    /// <inheritdoc cref="PathTypes.Absolute"/>
     FileInfo Absolute( string path );
 
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.Assembly" />
+    /// <inheritdoc cref="PathTypes.Assembly"/>
     FileInfo Assembly( string path );
 
     /// <summary>
@@ -63,7 +63,7 @@ public interface IFiles
 
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.Internal" />
+    /// <inheritdoc cref="PathTypes.Internal"/>
     FileInfo Internal( string path );
 
     /// <summary>
@@ -81,7 +81,7 @@ public interface IFiles
 
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.External" />
+    /// <inheritdoc cref="PathTypes.External"/>
     FileInfo External( string path );
 
     /// <summary>
@@ -98,7 +98,7 @@ public interface IFiles
 
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.Local" />
+    /// <inheritdoc cref="PathTypes.Local"/>
     FileInfo Local( string path );
 
     /// <summary>

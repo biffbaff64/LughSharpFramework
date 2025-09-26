@@ -41,7 +41,17 @@ public enum AssetLoaderType : int
 [PublicAPI]
 public abstract class AssetLoader
 {
-    // ========================================================================
+    /// <summary>
+    /// <see cref="IFileHandleResolver"/> used to map from plain
+    /// asset names to File Handle instances
+    /// </summary>
+    public IFileHandleResolver Resolver { get; }
+
+    /// <summary>
+    /// Indicates whether the child loader class is Async or Sync.
+    /// </summary>
+    public AssetLoaderType LoaderType { get; set; }
+
     // ========================================================================
 
     /// <summary>
@@ -54,22 +64,11 @@ public abstract class AssetLoader
     }
 
     /// <summary>
-    /// <see cref="IFileHandleResolver" /> used to map from plain
-    /// asset names to File Handle instances
-    /// </summary>
-    public IFileHandleResolver Resolver { get; }
-
-    /// <summary>
-    /// Indicates whether the child loader class is Async or Sync.
-    /// </summary>
-    public AssetLoaderType LoaderType { get; set; }
-
-    /// <summary>
     /// Resolves the specified filename.
     /// </summary>
     /// <param name="fileName"> The filename to resolve. </param>
     /// <returns>
-    /// A handle to the file, as resolved by the <see cref="IFileHandleResolver" />
+    /// A handle to the file, as resolved by the <see cref="IFileHandleResolver"/>
     /// set on the loader.
     /// </returns>
     public FileInfo Resolve( string fileName )
@@ -88,3 +87,6 @@ public abstract class AssetLoader
                                                                    FileInfo file,
                                                                    TP? p ) where TP : AssetLoaderParameters;
 }
+
+// ============================================================================
+// ============================================================================

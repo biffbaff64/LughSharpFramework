@@ -81,7 +81,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    /// Construct a Cubemap with the specified <see cref="Pixmap" />s for the sides,
+    /// Construct a Cubemap with the specified <see cref="Pixmap"/>s for the sides,
     /// optionally generating mipmaps.
     /// </summary>
     public Cubemap( Pixmap? positiveX,
@@ -101,7 +101,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    /// Construct a Cubemap with <see cref="Pixmap" />s for each side of the specified size.
+    /// Construct a Cubemap with <see cref="Pixmap"/>s for each side of the specified size.
     /// </summary>
     public Cubemap( int width, int height, int depth, int format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
@@ -114,7 +114,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    /// Construct a Cubemap with the specified <see cref="ITextureData" />'s for the sides
+    /// Construct a Cubemap with the specified <see cref="ITextureData"/>'s for the sides
     /// </summary>
     public Cubemap( ITextureData? positiveX,
                     ITextureData? negativeX,
@@ -140,7 +140,7 @@ public class Cubemap : GLTexture, IManaged
     public bool IsManaged => Data.IsManaged;
 
     /// <summary>
-    /// Sets the sides of this cubemap to the specified <see cref="ICubemapData" />.
+    /// Sets the sides of this cubemap to the specified <see cref="ICubemapData"/>.
     /// </summary>
     public void Load( ICubemapData data )
     {
@@ -162,7 +162,7 @@ public class Cubemap : GLTexture, IManaged
 
     /// <summary>
     /// Used internally to reload after context loss. Creates a new GL handle then
-    /// calls <see cref="Load(ICubemapData?)" />.
+    /// calls <see cref="Load(ICubemapData?)"/>.
     /// </summary>
     public override void Reload()
     {
@@ -266,7 +266,7 @@ public class Cubemap : GLTexture, IManaged
                     AssetManager.Unload( fileName );
 
                     cubemap.GLTextureHandle = GL.GenTexture();
-                    AssetManager.Load( fileName, typeof( Cubemap ), parameter );
+                    AssetManager.Load< Cubemap >( fileName, parameter );
                 }
             }
 
@@ -428,8 +428,8 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        /// Sets the supplied <see cref="Vector3" /> to the contents of
-        /// <see cref="Up" /> and returns it to the caller.
+        /// Sets the supplied <see cref="Vector3"/> to the contents of
+        /// <see cref="Up"/> and returns it to the caller.
         /// </summary>
         public Vector3 GetUp( Vector3 vec3 )
         {
@@ -437,8 +437,8 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        /// Sets the supplied <see cref="Vector3" /> to the contents of
-        /// <see cref="Direction" /> and returns it to the caller.
+        /// Sets the supplied <see cref="Vector3"/> to the contents of
+        /// <see cref="Direction"/> and returns it to the caller.
         /// </summary>
         public Vector3 GetDirection( Vector3 vec3 )
         {
@@ -446,7 +446,7 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        /// Returns an array of all <see cref="CubemapSide" /> values.
+        /// Returns an array of all <see cref="CubemapSide"/> values.
         /// </summary>
         public static CubemapSide[] Values()
         {
@@ -454,10 +454,10 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        /// Returns the <see cref="CubemapSide" /> with the specified name.
+        /// Returns the <see cref="CubemapSide"/> with the specified name.
         /// </summary>
         /// <param name="name">The name of the cubemap side.</param>
-        /// <returns>The <see cref="CubemapSide" /> with the specified name.</returns>
+        /// <returns>The <see cref="CubemapSide"/> with the specified name.</returns>
         /// <exception cref="ArgumentException">Thrown if no cubemap side with the specified name exists.</exception>
         public static CubemapSide ValueOf( string name )
         {

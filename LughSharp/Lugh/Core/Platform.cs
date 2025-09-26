@@ -148,7 +148,7 @@ public static class Platform
 
     /// <summary>
     /// The target platform for the app.
-    /// Must be one of the enum <see cref="ApplicationType" />
+    /// Must be one of the enum <see cref="ApplicationType"/>
     /// </summary>
     /// <exception cref="GdxRuntimeException"></exception>
     public static ApplicationType TargetPlatform
@@ -182,7 +182,7 @@ public static class Platform
 
     /// <summary>
     /// The target family group (mobile, console, desktop etc).
-    /// Must be one of the enum <see cref="Family" />.
+    /// Must be one of the enum <see cref="Family"/>.
     /// </summary>
     /// <exception cref="GdxRuntimeException"></exception>
     public static Family FamilyGroup

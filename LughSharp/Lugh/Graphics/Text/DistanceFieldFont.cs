@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Graphics.Text;
 /// Distance Field Fonts wiki article
 /// </a>
 /// for usage. Initialize
-/// the SpriteBatch with the <see cref="CreateDistanceFieldShader()" /> shader.
+/// the SpriteBatch with the <see cref="CreateDistanceFieldShader()"/> shader.
 /// <para>
 /// Attention: The batch is flushed before and after each string is rendered.
 /// </para>

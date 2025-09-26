@@ -34,8 +34,8 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 /// Attach the listener to the actor which will cause scrolling when dragged, usually the
 /// scroll pane or the scroll pane's actor.
 /// <para>
-/// If <see cref="ScrollPane.SetFlickScroll(bool)" /> is true, the scroll pane must have
-/// <see cref="ScrollPane.CancelTouchFocus" /> false. When a drag starts that should drag
+/// If <see cref="ScrollPane.SetFlickScroll(bool)"/> is true, the scroll pane must have
+/// <see cref="ScrollPane.CancelTouchFocus"/> false. When a drag starts that should drag
 /// rather than flick scroll, cancel the scroll pane's touch focus using:-
 /// <code>
 /// Stage.CancelTouchFocus(scrollPane);
@@ -45,7 +45,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 /// it would also lose touch focus. Instead it can be attached to the scroll pane's actor.
 /// </para>
 /// <para>
-/// If using drag and drop, <see cref="DragAndDrop.CancelTouchFocus" /> must be false.
+/// If using drag and drop, <see cref="DragAndDrop.CancelTouchFocus"/> must be false.
 /// </para>
 /// </summary>
 [PublicAPI]

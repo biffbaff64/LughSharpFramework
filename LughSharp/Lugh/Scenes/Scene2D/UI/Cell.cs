@@ -27,7 +27,7 @@ using LughSharp.Lugh.Files;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A Cell for use with <see cref="Table" />s.
+/// A Cell for use with <see cref="Table"/>s.
 /// </summary>
 [PublicAPI]
 public class Cell : IResetable
@@ -115,7 +115,7 @@ public class Cell : IResetable
 
     /// <summary>
     /// Reset state so the cell can be reused, setting all constraints to
-    /// their <see cref="GetCellDefaults()" /> values.
+    /// their <see cref="GetCellDefaults()"/> values.
     /// </summary>
     public void Reset()
     {
@@ -164,7 +164,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Returns <b>true</b> if this Cells <see cref="Actor" /> is not null.
+    /// Returns <b>true</b> if this Cells <see cref="Actor"/> is not null.
     /// </summary>
     public bool HasActor()
     {
@@ -175,7 +175,7 @@ public class Cell : IResetable
     /// Sets the MinWidth, PrefWidth, MaxWidth, MinHeight, PrefHeight,
     /// and MaxHeight to the specified value.
     /// </summary>
-    /// <param name="size">The <see cref="Value" /> to use.</param>
+    /// <param name="size">The <see cref="Value"/> to use.</param>
     /// <returns> This Cell for chaining. </returns>
     /// <exception cref="ArgumentNullException">If parameter <tt>size</tt> is null.</exception>
     public Cell Size( Value size )
@@ -343,11 +343,11 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Convenience method which sets the <see cref="MinWidth" /> property
+    /// Convenience method which sets the <see cref="MinWidth"/> property
     /// and then returns this Cell for chaining.
     /// </summary>
     /// <param name="minWidth">
-    /// The new value for MinWidth, passed as a <see cref="Value" />
+    /// The new value for MinWidth, passed as a <see cref="Value"/>
     /// </param>
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinWidth( Value minWidth )
@@ -360,11 +360,11 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Convenience method which sets the <see cref="MinHeight" /> property
+    /// Convenience method which sets the <see cref="MinHeight"/> property
     /// and then returns this Cell for chaining.
     /// </summary>
     /// <param name="minHeight">
-    /// The new value for MinHeight, passed as a <see cref="Value" />
+    /// The new value for MinHeight, passed as a <see cref="Value"/>
     /// </param>
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinHeight( Value minHeight )
@@ -377,7 +377,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Convenience method which sets the <see cref="MinWidth" /> property
+    /// Convenience method which sets the <see cref="MinWidth"/> property
     /// and then returns this Cell for chaining.
     /// </summary>
     /// <param name="minWidth">
@@ -392,7 +392,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Convenience method which sets the <see cref="MinHeight" /> property
+    /// Convenience method which sets the <see cref="MinHeight"/> property
     /// and then returns this Cell for chaining.
     /// </summary>
     /// <param name="minHeight">
@@ -411,8 +411,8 @@ public class Cell : IResetable
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth" />
-    /// and <see cref="PrefHeight" /> properties directly, as this Cell is returned
+    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
+    /// and <see cref="PrefHeight"/> properties directly, as this Cell is returned
     /// for chaining purposes.
     /// </remarks>
     public Cell SetPrefSize( Value size )
@@ -430,8 +430,8 @@ public class Cell : IResetable
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth" />
-    /// and <see cref="PrefHeight" /> properties directly, as this Cell is returned
+    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
+    /// and <see cref="PrefHeight"/> properties directly, as this Cell is returned
     /// for chaining purposes.
     /// </remarks>
     public Cell SetPrefSize( Value width, Value height )
@@ -446,11 +446,11 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the <see cref="PrefWidth" /> for this Cell.
+    /// Sets the <see cref="PrefWidth"/> for this Cell.
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth" />
+    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
     /// property directly, as this Cell is returned for chaining purposes.
     /// </remarks>
     public Cell SetPrefWidth( Value prefWidth )
@@ -463,11 +463,11 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the <see cref="PrefHeight" /> for this Cell.
+    /// Sets the <see cref="PrefHeight"/> for this Cell.
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefHeight" />
+    /// A method is required for this, instead of accessing the <see cref="PrefHeight"/>
     /// property directly, as this Cell is returned for chaining purposes.
     /// </remarks>
     public Cell SetPrefHeight( Value prefHeight )
@@ -486,8 +486,8 @@ public class Cell : IResetable
     /// <param name="height"> The new height. </param>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth" />
-    /// and <see cref="PrefHeight" /> properties directly, as this Cell is returned
+    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
+    /// and <see cref="PrefHeight"/> properties directly, as this Cell is returned
     /// for chaining purposes.
     /// </remarks>
     public Cell SetPrefSize( float width, float height )
@@ -503,8 +503,8 @@ public class Cell : IResetable
     /// <param name="size"> The new size, which applies to both width and height. </param>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth" />
-    /// and <see cref="PrefHeight" /> properties directly, as this Cell is returned
+    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
+    /// and <see cref="PrefHeight"/> properties directly, as this Cell is returned
     /// for chaining purposes.
     /// </remarks>
     public Cell SetPrefSize( float size )
@@ -515,7 +515,7 @@ public class Cell : IResetable
     }
 
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth" />
+    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
     /// property directly, as this Cell is returned for chaining purposes.
     /// </remarks>
     /// <returns> This Cell for chaining. </returns>
@@ -527,7 +527,7 @@ public class Cell : IResetable
     }
 
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefHeight" />
+    /// A method is required for this, instead of accessing the <see cref="PrefHeight"/>
     /// property directly, as this Cell is returned for chaining purposes.
     /// </remarks>
     /// <returns> This Cell for chaining. </returns>
@@ -933,7 +933,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets <see cref="FillX" /> and <see cref="FillY" /> to <see cref="ONEF" />
+    /// Sets <see cref="FillX"/> and <see cref="FillY"/> to <see cref="ONEF"/>
     /// </summary>
     /// <returns> This Cell for chaining </returns>
     public Cell SetFill( float fx = ONEF, float fy = ONEF )
@@ -953,8 +953,8 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets <see cref="FillX" /> to <see cref="ONEF" />.
-    /// Leaves <see cref="FillY" /> unchanged.
+    /// Sets <see cref="FillX"/> to <see cref="ONEF"/>.
+    /// Leaves <see cref="FillY"/> unchanged.
     /// </summary>
     /// <returns> This Cell for chaining </returns>
     public Cell SetFillX( float fx = ONEF )
@@ -965,8 +965,8 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets <see cref="FillY" /> to <see cref="ONEF" />.
-    /// Leaves <see cref="FillX" /> unchanged.
+    /// Sets <see cref="FillY"/> to <see cref="ONEF"/>.
+    /// Leaves <see cref="FillX"/> unchanged.
     /// </summary>
     /// <returns> This Cell for chaining </returns>
     public Cell SetFillY( float fy = ONEF )
@@ -977,10 +977,10 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the cell. Set to <see cref="Lugh.Utils.Alignment.CENTER" />,
-    /// <see cref="Lugh.Utils.Alignment.TOP" />, <see cref="Lugh.Utils.Alignment.BOTTOM" />,
-    /// <see cref="Lugh.Utils.Alignment.LEFT" />,
-    /// <see cref="Lugh.Utils.Alignment.RIGHT" />, or any combination of those.
+    /// Sets the alignment of the actor within the cell. Set to <see cref="Lugh.Utils.Alignment.CENTER"/>,
+    /// <see cref="Lugh.Utils.Alignment.TOP"/>, <see cref="Lugh.Utils.Alignment.BOTTOM"/>,
+    /// <see cref="Lugh.Utils.Alignment.LEFT"/>,
+    /// <see cref="Lugh.Utils.Alignment.RIGHT"/>, or any combination of those.
     /// </summary>
     public Cell SetAlignment( int align )
     {
@@ -990,7 +990,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the cell to <see cref="Lugh.Utils.Alignment.CENTER" />.
+    /// Sets the alignment of the actor within the cell to <see cref="Lugh.Utils.Alignment.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public Cell Center()
@@ -1001,7 +1001,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.TOP" /> and clears <see cref="Lugh.Utils.Alignment.BOTTOM" /> for
+    /// Adds <see cref="Lugh.Utils.Alignment.TOP"/> and clears <see cref="Lugh.Utils.Alignment.BOTTOM"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Top()
@@ -1019,7 +1019,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.LEFT" /> and clears <see cref="Lugh.Utils.Alignment.RIGHT" /> for
+    /// Adds <see cref="Lugh.Utils.Alignment.LEFT"/> and clears <see cref="Lugh.Utils.Alignment.RIGHT"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Left()
@@ -1037,7 +1037,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.BOTTOM" /> and clears <see cref="Lugh.Utils.Alignment.TOP" /> for
+    /// Adds <see cref="Lugh.Utils.Alignment.BOTTOM"/> and clears <see cref="Lugh.Utils.Alignment.TOP"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Bottom()
@@ -1055,7 +1055,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT" /> and clears <see cref="Lugh.Utils.Alignment.LEFT" /> for
+    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT"/> and clears <see cref="Lugh.Utils.Alignment.LEFT"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Right()
@@ -1135,8 +1135,8 @@ public class Cell : IResetable
     /// <summary>
     /// Expand this Cell in X and Y.
     /// </summary>
-    /// <param name="x"> The value to expand in X. Default is <see cref="ONEI" />. </param>
-    /// <param name="y"> The value to expand in Y. Default is <see cref="ONEI" />. </param>
+    /// <param name="x"> The value to expand in X. Default is <see cref="ONEI"/>. </param>
+    /// <param name="y"> The value to expand in Y. Default is <see cref="ONEI"/>. </param>
     /// <returns> This Cell for chaining. </returns>
     public Cell Expand( int x = ONEI, int y = ONEI )
     {
@@ -1196,7 +1196,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the bounds for this Cells <see cref="Actor" />.
+    /// Sets the bounds for this Cells <see cref="Actor"/>.
     /// </summary>
     public void SetActorBounds( float x, float y, float width, float height )
     {
@@ -1284,12 +1284,12 @@ public class Cell : IResetable
     // ========================================================================
 
     /// <summary>
-    /// Gets the X-padding for this Cell, by adding together <see cref="PadLeft" />
-    /// and <see cref="PadRight" />.
+    /// Gets the X-padding for this Cell, by adding together <see cref="PadLeft"/>
+    /// and <see cref="PadRight"/>.
     /// </summary>
     /// <returns> The X-padding value. </returns>
     /// <exception cref="GdxRuntimeException">
-    /// If either <see cref="PadLeft" /> or <see cref="PadRight" /> is null.
+    /// If either <see cref="PadLeft"/> or <see cref="PadRight"/> is null.
     /// </exception>
     public float GetPadX()
     {
@@ -1302,12 +1302,12 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Gets the Y-padding for this Cell, by adding together <see cref="PadTop" />
-    /// and <see cref="PadBottom" />.
+    /// Gets the Y-padding for this Cell, by adding together <see cref="PadTop"/>
+    /// and <see cref="PadBottom"/>.
     /// </summary>
     /// <returns> The Y-padding value. </returns>
     /// <exception cref="GdxRuntimeException">
-    /// If either <see cref="PadTop" /> or <see cref="PadBottom" /> is null.
+    /// If either <see cref="PadTop"/> or <see cref="PadBottom"/> is null.
     /// </exception>
     public float GetPadY()
     {

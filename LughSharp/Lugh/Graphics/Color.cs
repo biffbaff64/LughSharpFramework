@@ -587,7 +587,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// </para>
     /// </summary>
     /// <returns> The resulting float. </returns>
-    /// <seealso cref="NumberUtils.UIntToFloatColor" />
+    /// <seealso cref="NumberUtils.UIntToFloatColor"/>
     public float ToFloatBitsRGBA()
     {
         var r = ( uint )( 255f * R ) << 24;
@@ -654,7 +654,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color" /> as a 32-bit uint in the following format:-
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the following format:-
     /// <li>Bits  0 - 4  : Blue component</li>
     /// <li>Bits  5 - 10 : Green component</li>
     /// <li>Bits 11 - 15 : Red component</li>
@@ -724,7 +724,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color" /> as a 32-bit uint in the
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 4  : Blue component</li>
     /// <li>Bits  5 - 10 : Green component</li>
@@ -740,7 +740,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color" /> as a 16-bit uint in the
+    /// Returns the given <see cref="Color"/> as a 16-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 3  : Alpha component</li>
     /// <li>Bits  4 - 7  : Blue component</li>
@@ -758,7 +758,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color" /> as a 32-bit uint in the
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 7  : Blue component</li>
     /// <li>Bits  8 - 15 : Green component</li>
@@ -774,7 +774,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color" /> as a 32-bit uint in the
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 7  : Alpha component</li>
     /// <li>Bits  8 - 15 : Blue component</li>
@@ -858,7 +858,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// </para>
     /// </summary>
     /// <returns> The resulting float. </returns>
-    /// <seealso cref="NumberUtils.UIntToFloatColor(uint)" />
+    /// <seealso cref="NumberUtils.UIntToFloatColor(uint)"/>
     public float ToFloatBitsABGR()
     {
         var a = ( uint )( 255f * A ) << 24;
@@ -1012,7 +1012,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color" /> as a 32-bit uint in the
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 7  : Blue component</li>
     /// <li>Bits  8 - 15 : Green component</li>
@@ -1189,9 +1189,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // ========================================================================
 
     /// <summary>
-    /// Determines whether two <see cref="Color" /> objects are equal.
+    /// Determines whether two <see cref="Color"/> objects are equal.
     /// </summary>
-    /// <param name="c1"> The first <see cref="Color" /> object to compare, or <b>null</b>. </param>
+    /// <param name="c1"> The first <see cref="Color"/> object to compare, or <b>null</b>. </param>
     /// <param name="c2"> The second object to compare, or <b>null</b>. </param>
     /// <returns> <b>true</b> if the two objects are equal; otherwise, <b>false</b>. </returns>
     public static bool operator ==( Color? c1, object? c2 )
@@ -1205,9 +1205,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Determines whether two <see cref="Color" /> objects are not equal.
+    /// Determines whether two <see cref="Color"/> objects are not equal.
     /// </summary>
-    /// <param name="c1"> The first <see cref="Color" /> object to compare, or null. </param>
+    /// <param name="c1"> The first <see cref="Color"/> object to compare, or null. </param>
     /// <param name="c2"> The second object to compare, or null. </param>
     /// <returns><b>true</b> if the two objects are not equal; otherwise, <b>false</b>.</returns>
     public static bool operator !=( Color? c1, object? c2 )

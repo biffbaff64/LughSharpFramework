@@ -133,7 +133,7 @@ public class EarClippingTriangulator
     }
 
     /// <summary>
-    /// Returns <see cref="CONCAVE" /> or <see cref="CONVEX" />.
+    /// Returns <see cref="CONCAVE"/> or <see cref="CONVEX"/>.
     /// </summary>
     private int ClassifyVertex( int index )
     {

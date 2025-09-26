@@ -38,7 +38,7 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     public DesktopGLGraphics.DesktopGLMonitor? MaximizedMonitor { get; set; }
 
     /// <summary>
-    /// Sets the <see cref="IDesktopGLWindowListener" /> which will be informed about
+    /// Sets the <see cref="IDesktopGLWindowListener"/> which will be informed about
     /// iconficiation, focus loss and window close events.
     /// </summary>
     public IDesktopGLWindowListener? WindowListener { get; set; }
@@ -46,7 +46,7 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     /// <summary>
     /// Sets the app to use fullscreen mode.
     /// <para>
-    /// Use the static methods like <see cref="GetDisplayMode" />
+    /// Use the static methods like <see cref="GetDisplayMode"/>
     /// on this class to enumerate connected monitors and their fullscreen display modes.
     /// </para>
     /// </summary>

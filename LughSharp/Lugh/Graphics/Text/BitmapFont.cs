@@ -28,18 +28,18 @@ using LughSharp.Lugh.Utils.Collections;
 namespace LughSharp.Lugh.Graphics.Text;
 
 /// <summary>
-/// Renders bitmap fonts. The font consists of 2 files: an image file or <see cref="TextureRegion" />
+/// Renders bitmap fonts. The font consists of 2 files: an image file or <see cref="TextureRegion"/>
 /// containing the glyphs and a file in the <b>AngleCode BMFont</b> text format that describes where
 /// each glyph is on the image.
 /// <para>
-/// Text is drawn using a <see cref="IBatch" />. Text can be cached in a <see cref="BitmapFontCache" />
+/// Text is drawn using a <see cref="IBatch"/>. Text can be cached in a <see cref="BitmapFontCache"/>
 /// for faster rendering of static text, which saves needing to compute the location of each glyph
 /// each frame.
 /// </para>
 /// <para>
-/// The texture for a BitmapFont loaded from a file is managed. <see cref="Dispose()" /> must be
+/// The texture for a BitmapFont loaded from a file is managed. <see cref="Dispose()"/> must be
 /// called to free the texture when no longer needed. A BitmapFont which has loaded using a
-/// <see cref="TextureRegion" /> is managed if the region's texture is managed. Disposing the
+/// <see cref="TextureRegion"/> is managed if the region's texture is managed. Disposing the
 /// BitmapFont disposes the region's texture, which may not be desirable if the texture is still
 /// being used elsewhere.
 /// </para>
@@ -55,7 +55,7 @@ public partial class BitmapFont
     public BitmapFontCache? Cache { get; set; }
 
     /// <summary>
-    /// The underlying <see cref="BitmapFontData" /> for this BitmapFont.
+    /// The underlying <see cref="BitmapFontData"/> for this BitmapFont.
     /// </summary>
     public BitmapFontData Data { get; set; }
 
@@ -184,8 +184,8 @@ public partial class BitmapFont
     }
 
     /// <summary>
-    /// Constructs a new BitmapFont from the given <see cref="BitmapFontData" /> and
-    /// <see cref="TextureRegion" />. If the TextureRegion is null, the image path(s)
+    /// Constructs a new BitmapFont from the given <see cref="BitmapFontData"/> and
+    /// <see cref="TextureRegion"/>. If the TextureRegion is null, the image path(s)
     /// will be read from the BitmapFontData.
     /// <para>
     /// The dispose() method will not dispose the texture of the region(s) if the region is != null.
@@ -209,8 +209,8 @@ public partial class BitmapFont
     }
 
     /// <summary>
-    /// Constructs a new BitmapFont from the given <see cref="BitmapFontData" /> and array
-    /// of <see cref="TextureRegion" />. If the TextureRegion is null or empty, the image
+    /// Constructs a new BitmapFont from the given <see cref="BitmapFontData"/> and array
+    /// of <see cref="TextureRegion"/>. If the TextureRegion is null or empty, the image
     /// path(s) will be read from the BitmapFontData. The dispose() method will not dispose
     /// the texture of the region(s) if the regions array is != null and not empty.
     /// </summary>
@@ -264,7 +264,7 @@ public partial class BitmapFont
     }
 
     /// <summary>
-    /// Returns the <see cref="BitmapFontData.ScaleX" /> value.
+    /// Returns the <see cref="BitmapFontData.ScaleX"/> value.
     /// </summary>
     public float GetScaleX()
     {
@@ -272,7 +272,7 @@ public partial class BitmapFont
     }
 
     /// <summary>
-    /// Returns the <see cref="BitmapFontData.ScaleY" /> value.
+    /// Returns the <see cref="BitmapFontData.ScaleY"/> value.
     /// </summary>
     public float GetScaleY()
     {
@@ -282,7 +282,7 @@ public partial class BitmapFont
     // ========================================================================
 
     /// <summary>
-    /// Helper method, allowing a call to <see cref="Load(BitmapFontData)" />,
+    /// Helper method, allowing a call to <see cref="Load(BitmapFontData)"/>,
     /// which is a <b>virtual</b> method, from constructors.
     /// </summary>
     private void InitialLoad( BitmapFontData data )
@@ -355,7 +355,7 @@ public partial class BitmapFont
     /// Returns the first texture region. This is included for backwards compatibility,
     /// and for convenience since most fonts only use one texture page.
     /// <para>
-    /// For multi-page fonts, use <see cref="GetRegions()" />.
+    /// For multi-page fonts, use <see cref="GetRegions()"/>.
     /// </para>
     /// </summary>
     /// <returns>the first texture region</returns>
@@ -609,7 +609,7 @@ public partial class BitmapFont
     /// <summary>
     /// Draws text at the specified position.
     /// </summary>
-    /// <param name="batch"> The <see cref="IBatch" /> to use. </param>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
     /// <param name="str"> The text message to draw. </param>
     /// <param name="x"> X coordinate. </param>
     /// <param name="y"> Y coordinate. </param>

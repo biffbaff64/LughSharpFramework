@@ -40,7 +40,7 @@ public interface IAction
     Actor? Target { get; set; }
 
     /// <summary>
-    /// The <see cref="Actor" /> this Action is attached to.
+    /// The <see cref="Actor"/> this Action is attached to.
     /// </summary>
     Actor? Actor
     {
@@ -64,7 +64,7 @@ public interface IAction
     /// action to be pooled and reused. State required to be set for every usage of this action
     /// or computed during the action does not need to be reset.
     /// <para>
-    /// The default implementation should call <see cref="Action.Restart" />
+    /// The default implementation should call <see cref="Action.Restart"/>
     /// </para>
     /// <para>
     /// If a subclass has optional state, it must override this method, call super, and reset
@@ -75,7 +75,7 @@ public interface IAction
 
     /// <summary>
     /// Updates the action based on time.
-    /// Typically this is called each frame by <see cref="Action.Actor" />.
+    /// Typically this is called each frame by <see cref="Action.Actor"/>.
     /// </summary>
     /// <param name="delta">Time in seconds since the last frame.</param>
     /// <returns>

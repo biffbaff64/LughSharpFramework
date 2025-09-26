@@ -30,7 +30,7 @@ using Color = LughSharp.Lugh.Graphics.Color;
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Drawable for a <see cref="Sprite" />.
+/// Drawable for a <see cref="Sprite"/>.
 /// </summary>
 [PublicAPI]
 public class SpriteSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
@@ -55,7 +55,7 @@ public class SpriteSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
     }
 
     /// <summary>
-    /// The <see cref="Sprite" /> component of this <see cref="ISceneDrawable" />.
+    /// The <see cref="Sprite"/> component of this <see cref="ISceneDrawable"/>.
     /// </summary>
     public Sprite? Sprite
     {

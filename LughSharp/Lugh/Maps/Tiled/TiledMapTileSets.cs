@@ -27,7 +27,7 @@ using System.Collections;
 namespace LughSharp.Lugh.Maps.Tiled;
 
 /// <summary>
-/// A Collection of <see cref="TiledMapTileSet" /> objects.
+/// A Collection of <see cref="TiledMapTileSet"/> objects.
 /// </summary>
 [PublicAPI]
 public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
@@ -52,7 +52,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     /// Returns an enumerator that iterates through a collection.
     /// </summary>
     /// <returns>
-    /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used
+    /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used
     /// to iterate through the collection.
     /// </returns>
     IEnumerator IEnumerable.GetEnumerator()
@@ -61,7 +61,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     }
 
     /// <summary>
-    /// Returns the desired <see cref="TiledMapTileSet" /> from this collection
+    /// Returns the desired <see cref="TiledMapTileSet"/> from this collection
     /// at the specified index.
     /// </summary>
     public virtual TiledMapTileSet GetTileSet( int index )
@@ -72,7 +72,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     /// <summary>
     /// Gets the named tileset.
     /// </summary>
-    /// <param name="name"> Name of the <see cref="TiledMapTileSet" /> to retrieve.</param>
+    /// <param name="name"> Name of the <see cref="TiledMapTileSet"/> to retrieve.</param>
     /// <returns> tileset with matching name, null if it doesn't exist  </returns>
     public virtual TiledMapTileSet? GetTileSet( string name )
     {
@@ -125,7 +125,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     /// earlier version of any given gid.
     /// </para>
     /// </summary>
-    /// <param name="id"> id of the <see cref="ITiledMapTile" /> to get. </param>
+    /// <param name="id"> id of the <see cref="ITiledMapTile"/> to get. </param>
     /// <returns> tile with matching id, null if it doesn't exist  </returns>
     public virtual ITiledMapTile? GetTile( int id )
     {

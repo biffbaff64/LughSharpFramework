@@ -28,8 +28,8 @@ namespace LughSharp.Lugh.Graphics.Utils;
 /// An IndexBufferObject wraps OpenGL's index buffer functionality to be used in conjunction
 /// with VBOs.
 /// <para>
-/// You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()" />
-/// or <see cref="Unbind()" /> in this case but rather use <see cref="GetBuffer(bool)" /> to use the
+/// You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()"/>
+/// or <see cref="Unbind()"/> in this case but rather use <see cref="GetBuffer(bool)"/> to use the
 /// buffer directly with glDrawElements. You must also create the IndexBufferObject with the
 /// second constructor and specify isDirect as true as glDrawElements in conjunction with vertex arrays needs
 /// direct buffers.
@@ -56,8 +56,8 @@ public class IndexBufferObject : IIndexData
     // ========================================================================
 
     /// <summary>
-    /// Constructs a new IndexBufferObject, setting <see cref="_usage" /> to
-    /// <see cref="IGL.GL_STATIC_DRAW" /> and <see cref="maxIndices" /> to the
+    /// Constructs a new IndexBufferObject, setting <see cref="_usage"/> to
+    /// <see cref="IGL.GL_STATIC_DRAW"/> and <see cref="maxIndices"/> to the
     /// given value.
     /// </summary>
     public IndexBufferObject( int maxIndices )

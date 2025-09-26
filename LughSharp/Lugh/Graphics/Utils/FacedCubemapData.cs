@@ -57,7 +57,7 @@ public class FacedCubemapData : ICubemapData
     }
 
     /// <summary>
-    /// Construct a Cubemap with the specified <see cref="Pixmap" />s for the sides, optionally generating mipmaps.
+    /// Construct a Cubemap with the specified <see cref="Pixmap"/>s for the sides, optionally generating mipmaps.
     /// </summary>
     public FacedCubemapData( Pixmap? positiveX,
                              Pixmap? negativeX,
@@ -76,7 +76,7 @@ public class FacedCubemapData : ICubemapData
     }
 
     /// <summary>
-    /// Construct a Cubemap with <see cref="Pixmap" />s for each side of the specified size.
+    /// Construct a Cubemap with <see cref="Pixmap"/>s for each side of the specified size.
     /// </summary>
     public FacedCubemapData( int width, int height, int depth, int format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
@@ -89,7 +89,7 @@ public class FacedCubemapData : ICubemapData
     }
 
     /// <summary>
-    /// Construct a Cubemap with the specified <see cref="ITextureData" />'s for the sides
+    /// Construct a Cubemap with the specified <see cref="ITextureData"/>'s for the sides
     /// </summary>
     public FacedCubemapData( ITextureData? positiveX,
                              ITextureData? negativeX,
@@ -108,9 +108,9 @@ public class FacedCubemapData : ICubemapData
 
     /// <summary>
     /// Uploads the pixel data for the 6 faces of the cube to the OpenGL ES texture.
-    /// The caller must bind an OpenGL ES texture. A call to <see cref="ICubemapData.Prepare" />
+    /// The caller must bind an OpenGL ES texture. A call to <see cref="ICubemapData.Prepare"/>
     /// must preceed a call to this method. Any internal data structures created
-    /// in <see cref="ICubemapData.Prepare" /> should be disposed of here.
+    /// in <see cref="ICubemapData.Prepare"/> should be disposed of here.
     /// </summary>
     public void ConsumeCubemapData()
     {
@@ -123,11 +123,11 @@ public class FacedCubemapData : ICubemapData
         {
             if ( _data[ i ]!.TextureDataType == ITextureData.TextureType.Custom )
             {
-                _data[ i ]!.ConsumeCustomData( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+                _data[ i ]!.UploadCustomData( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
             }
             else
             {
-                var pixmap        = _data[ i ]!.ConsumePixmap()!;
+                var pixmap        = _data[ i ]!.FetchPixmap()!;
                 var disposePixmap = _data[ i ]!.ShouldDisposePixmap();
 
                 if ( _data[ i ]!.PixelFormat != pixmap.GetColorFormat() )
@@ -272,7 +272,7 @@ public class FacedCubemapData : ICubemapData
     public bool IsPrepared => false;
 
     /// <summary>
-    /// Prepares the ITextureData for a call to <see cref="ICubemapData.ConsumeCubemapData" />.
+    /// Prepares the ITextureData for a call to <see cref="ICubemapData.ConsumeCubemapData"/>.
     /// This method can be called from a non OpenGL thread and should thus not
     /// interact with OpenGL.
     /// </summary>
@@ -293,13 +293,13 @@ public class FacedCubemapData : ICubemapData
     }
 
     /// <summary>
-    /// Loads the texture specified using the <see cref="FileInfo" /> and sets it
+    /// Loads the texture specified using the <see cref="FileInfo"/> and sets it
     /// to specified side, overwriting any previous data set to that side. Note that
-    /// you need to reload through <see cref="Cubemap.Load(ICubemapData)" /> any cubemap
+    /// you need to reload through <see cref="Cubemap.Load(ICubemapData)"/> any cubemap
     /// using this data for the change to be taken in account.
     /// </summary>
-    /// <param name="side"> The <see cref="Cubemap.CubemapSide" /> </param>
-    /// <param name="file"> The texture <see cref="FileInfo" /> </param>
+    /// <param name="side"> The <see cref="Cubemap.CubemapSide"/> </param>
+    /// <param name="file"> The texture <see cref="FileInfo"/> </param>
     public void Load( Cubemap.CubemapSide side, FileInfo file )
     {
         if ( _data == null )
@@ -312,13 +312,13 @@ public class FacedCubemapData : ICubemapData
     }
 
     /// <summary>
-    /// Sets the specified side of this cubemap to the specified <see cref="Pixmap" />,
+    /// Sets the specified side of this cubemap to the specified <see cref="Pixmap"/>,
     /// overwriting any previous data set to that side. Note that you need to reload
-    /// through <see cref="Cubemap.Load(ICubemapData)" /> any cubemap using this data
+    /// through <see cref="Cubemap.Load(ICubemapData)"/> any cubemap using this data
     /// for the change to be taken in account.
     /// </summary>
-    /// <param name="side"> The <see cref="Cubemap.CubemapSide" /> </param>
-    /// <param name="pixmap"> The <see cref="Pixmap" /> </param>
+    /// <param name="side"> The <see cref="Cubemap.CubemapSide"/> </param>
+    /// <param name="pixmap"> The <see cref="Pixmap"/> </param>
     public void Load( Cubemap.CubemapSide side, Pixmap? pixmap )
     {
         if ( _data == null )
@@ -331,7 +331,7 @@ public class FacedCubemapData : ICubemapData
     }
 
     /// <summary>
-    /// Returns The <see cref="ITextureData" /> for the specified side.
+    /// Returns The <see cref="ITextureData"/> for the specified side.
     /// The return value can be null if the cubemap is incomplete.
     /// </summary>
     public ITextureData? TextureData( Cubemap.CubemapSide side )

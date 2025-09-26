@@ -36,7 +36,7 @@ using Platform = LughSharp.Lugh.Core.Platform;
 namespace DesktopGLBackend.Window;
 
 /// <summary>
-/// Wrapper/Manager class for a <see cref="GLFW.Window" />.
+/// Wrapper/Manager class for a <see cref="GLFW.Window"/>.
 /// </summary>
 [PublicAPI]
 public partial class DesktopGLWindow : IDisposable
@@ -115,9 +115,9 @@ public partial class DesktopGLWindow : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Creates a new DesktopGLWindow instance, using the given <see cref="IApplicationListener" />,
-    /// <see cref="DesktopGLApplicationConfiguration" />, and attaching it to the given
-    /// <see cref="DesktopGLApplication" />.
+    /// Creates a new DesktopGLWindow instance, using the given <see cref="IApplicationListener"/>,
+    /// <see cref="DesktopGLApplicationConfiguration"/>, and attaching it to the given
+    /// <see cref="DesktopGLApplication"/>.
     /// </summary>
     public DesktopGLWindow( IApplicationListener listener,
                             DesktopGLApplicationConfiguration config,
@@ -217,9 +217,9 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Post a <see cref="IRunnable.Runnable" /> to this window's event queue. Use this if
-    /// you access statics like <see cref="Engine.Graphics" /> in your runnable instead
-    /// of <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" />".
+    /// Post a <see cref="IRunnable.Runnable"/> to this window's event queue. Use this if
+    /// you access statics like <see cref="Engine.Graphics"/> in your runnable instead
+    /// of <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)"/>.
     /// </summary>
     public void PostRunnable( IRunnable.Runnable runnable )
     {
@@ -255,7 +255,7 @@ public partial class DesktopGLWindow : IDisposable
 
     /// <summary>
     /// Returns <b>true</b> if this window should close. It establishes this
-    /// via <see cref="Glfw.WindowShouldClose(GLFW.Window)" />
+    /// via <see cref="Glfw.WindowShouldClose(GLFW.Window)"/>
     /// </summary>
     /// <returns></returns>
     public bool ShouldClose()
@@ -277,7 +277,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public int PositionY => ( int )GetPosition().Y;
 
-    /// <inheritdoc cref="Glfw.SetWindowPos(GLFW.Window,int,int)" />
+    /// <inheritdoc cref="Glfw.SetWindowPos(GLFW.Window,int,int)"/>
     public void SetPosition( int x, int y )
     {
         Glfw.SetWindowPos( GlfwWindow, x, y );
@@ -298,7 +298,7 @@ public partial class DesktopGLWindow : IDisposable
 
     /// <summary>
     /// Sets the visibility of the window.
-    /// Invisible windows will still call their <see cref="IApplicationListener" />
+    /// Invisible windows will still call their <see cref="IApplicationListener"/>
     /// </summary>
     public void SetVisible( bool visible )
     {
@@ -313,7 +313,7 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Closes this window and pauses and disposes the associated <see cref="IApplicationListener" />.
+    /// Closes this window and pauses and disposes the associated <see cref="IApplicationListener"/>.
     /// This function sets the value of the close flag of the specified window. This can be used to
     /// override the user's attempt to close the window, or to signal that it should be closed.
     /// </summary>
@@ -324,7 +324,7 @@ public partial class DesktopGLWindow : IDisposable
 
     /// <summary>
     /// Minimizes (iconifies) the window. Iconified windows do not call their
-    /// <see cref="IApplicationListener" /> until the window is restored.
+    /// <see cref="IApplicationListener"/> until the window is restored.
     /// </summary>
     public void IconifyWindow()
     {
@@ -337,7 +337,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     /// <param name="images">
     /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888" />
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888"/>
     /// is preferred so the images will not have to be copied and converted.
     /// <b>
     /// The chosen image
@@ -453,7 +453,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <param name="window"> The applicable window. </param>
     /// <param name="images">
     /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888" />
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888"/>
     /// is preferred so the images will not have to be copied and converted.
     /// <b>
     /// The chosen image
@@ -502,7 +502,7 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Initialises the <see cref="IApplicationListener" />.
+    /// Initialises the <see cref="IApplicationListener"/>.
     /// </summary>
     private void InitialiseListener()
     {

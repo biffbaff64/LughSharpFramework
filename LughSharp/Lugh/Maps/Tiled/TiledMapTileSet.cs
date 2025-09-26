@@ -27,7 +27,7 @@ using System.Collections;
 namespace LughSharp.Lugh.Maps.Tiled;
 
 /// <summary>
-/// A set of <see cref="ITiledMapTile" /> instances used to compose a TiledMapLayer
+/// A set of <see cref="ITiledMapTile"/> instances used to compose a TiledMapLayer
 /// </summary>
 [PublicAPI]
 public class TiledMapTileSet : IEnumerable< ITiledMapTile >
@@ -58,7 +58,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// <summary>
     /// A Property Set for this tileset.
     /// </summary>
-    /// <inheritdoc cref="MapProperties" />
+    /// <inheritdoc cref="MapProperties"/>
     public MapProperties Properties { get; private set; }
 
     /// <inheritdoc />
@@ -74,9 +74,9 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     }
 
     /// <summary>
-    /// Gets the <see cref="ITiledMapTile" /> that has the given id.
+    /// Gets the <see cref="ITiledMapTile"/> that has the given id.
     /// </summary>
-    /// <param name="id"> the id of the <see cref="ITiledMapTile" /> to retrieve. </param>
+    /// <param name="id"> the id of the <see cref="ITiledMapTile"/> to retrieve. </param>
     /// <returns> tile matching ID, null if it doesn't exist  </returns>
     public ITiledMapTile? GetTile( int id )
     {
@@ -86,8 +86,8 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// <summary>
     /// Adds or replaces tile with the given ID.
     /// </summary>
-    /// <param name="id"> the id of the <see cref="ITiledMapTile" /> to add or replace. </param>
-    /// <param name="tile"> the <see cref="ITiledMapTile" /> to add or replace. </param>
+    /// <param name="id"> the id of the <see cref="ITiledMapTile"/> to add or replace. </param>
+    /// <param name="tile"> the <see cref="ITiledMapTile"/> to add or replace. </param>
     public void PutTile( int id, ITiledMapTile tile )
     {
         _tiles[ id ] = tile;

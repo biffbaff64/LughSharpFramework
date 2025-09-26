@@ -42,7 +42,7 @@ public class PerspectiveCamera : Camera
     }
 
     /// <summary>
-    /// Constructs a new <see cref="PerspectiveCamera" /> with the given field
+    /// Constructs a new <see cref="PerspectiveCamera"/> with the given field
     /// of view and viewport size. The aspect ratio is derived from the viewport size.
     /// </summary>
     /// <param name="fieldOfViewY">
@@ -51,7 +51,7 @@ public class PerspectiveCamera : Camera
     /// </param>
     /// <param name="viewportWidth">Viewport width in pixels.</param>
     /// <param name="viewportHeight">Viewport height in pixels.</param>
-    /// <remarks>Call <see cref="Update" /> immediately after this constructor.</remarks>
+    /// <remarks>Call <see cref="Update"/> immediately after this constructor.</remarks>
     public PerspectiveCamera( float fieldOfViewY, float viewportWidth, float viewportHeight )
     {
         FieldOfView    = fieldOfViewY;
@@ -61,7 +61,7 @@ public class PerspectiveCamera : Camera
 
     /// <summary>
     /// Updates the camera.
-    /// Also updates the frustrum if <paramref name="updateFrustrum" /> is true.
+    /// Also updates the frustrum if <paramref name="updateFrustrum"/> is true.
     /// </summary>
     public override void Update( bool updateFrustrum = true )
     {

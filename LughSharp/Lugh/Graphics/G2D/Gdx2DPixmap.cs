@@ -51,6 +51,12 @@ public partial class Gdx2DPixmap : Image, IDisposable
 //        Default = RGBA8888,
 //    };
 
+    // ========================================================================
+
+    public const int GDX_2D_IGNORE = 0;
+    
+    // ========================================================================
+    
     public const int GDX_2D_FORMAT_ALPHA           = 1;
     public const int GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
     public const int GDX_2D_FORMAT_RGB888          = 3;
@@ -88,8 +94,8 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
     /// <summary>
     /// Creates a new Gdx2DPixmap instance using data from the supplied buffer.
-    /// <paramref name="len" /> bytes are copied from <paramref name="buffer" />, starting
-    /// at position specified by <paramref name="offset" />.
+    /// <paramref name="len"/> bytes are copied from <paramref name="buffer"/>, starting
+    /// at position specified by <paramref name="offset"/>.
     /// </summary>
     /// <param name="buffer"> The source byte buffer. </param>
     /// <param name="offset"> The position in buffer to start copying data from. </param>
@@ -177,7 +183,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// </summary>
     /// <param name="width"> Width in pixels. </param>
     /// <param name="height"> Height in pixels. </param>
-    /// <param name="format"> The requested GDX_2D_FORMAT_xxx color format. </param>
+    /// <param name="format"> The requested Gdx2DPixmap color format. </param>
     /// <exception cref="GdxRuntimeException"></exception>
     public Gdx2DPixmap( int width, int height, int format )
     {
@@ -270,8 +276,8 @@ public partial class Gdx2DPixmap : Image, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Loads the data in the supplied byte array into a <see cref="PixmapDescriptor" />.
-    /// This method also calls the <see cref="PNGDecoder.AnalysePNG(byte[], bool)" />
+    /// Loads the data in the supplied byte array into a <see cref="PixmapDescriptor"/>.
+    /// This method also calls the <see cref="PNGDecoder.AnalysePNG(byte[], bool)"/>
     /// method, with verbose set to false, to extract PNG properties for later use.
     /// </summary>
     /// <param name="buffer"></param>
@@ -306,8 +312,6 @@ public partial class Gdx2DPixmap : Image, IDisposable
             Pixels        = new byte[ bufLength ],
         };
 
-        pixmapDef.DebugPrint();
-
         Array.Copy( buffer, PNGDecoder.IDAT_DATA_OFFSET,
                     pixmapDef.Pixels, 0, PNGDecoder.IDATchunk.ChunkSize );
 
@@ -320,7 +324,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Converts this Pixmaps <see cref="ColorType" /> to the requested format.
+    /// Converts this Pixmaps <see cref="ColorType"/> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
     public void ConvertPixelFormatTo( int requestedFormat )

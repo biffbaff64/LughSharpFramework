@@ -55,7 +55,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// </summary>
     /// <param name="isStatic"> whether the vertex data is static. </param>
     /// <param name="numVertices"> the maximum number of vertices </param>
-    /// <param name="attributes"> the <see cref="VertexAttribute" />s. </param>
+    /// <param name="attributes"> the <see cref="VertexAttribute"/>s. </param>
     public VertexBufferObjectWithVAO( bool isStatic, int numVertices, params VertexAttribute[] attributes )
         : this( isStatic, numVertices, new VertexAttributes( attributes ) )
     {
@@ -66,7 +66,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// </summary>
     /// <param name="isStatic"> whether the vertex data is static. </param>
     /// <param name="numVertices"> the maximum number of vertices </param>
-    /// <param name="attributes"> the <see cref="VertexAttributes" />. </param>
+    /// <param name="attributes"> the <see cref="VertexAttributes"/>. </param>
     public VertexBufferObjectWithVAO( bool isStatic, int numVertices, VertexAttributes attributes )
     {
         _isStatic   = isStatic;
@@ -154,7 +154,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// Sets the vertices of this VertexData, discarding the old vertex data. The
     /// count must equal the number of floats per vertex times the number of vertices
     /// to be copied to this VertexData. The order of the vertex attributes must be
-    /// the same as specified at construction time via <see cref="VertexAttributes" />.
+    /// the same as specified at construction time via <see cref="VertexAttributes"/>.
     /// <para>
     /// This can be called in between calls to bind and unbind. The vertex data will
     /// be updated instantly.
@@ -204,7 +204,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// uploaded on the next call to <see cref="Bind"/>.
     /// </para>
     /// <para>
-    /// If you need immediate uploading use <see cref="IVertexData.SetVertices" />.
+    /// If you need immediate uploading use <see cref="IVertexData.SetVertices"/>.
     /// </para>
     /// <para>
     /// Any modifications made to the Buffer after the call to <see cref="Bind"/> will not automatically

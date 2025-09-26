@@ -27,12 +27,6 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class PNGDecoder
 {
-    public static readonly byte[] StandardPNGSignature =
-    [
-        // DO NOT CHANGE THESE VALUES!
-        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
-    ];
-
     public const int SIGNATURE_LENGTH       = 8;
     public const int IHDR_START             = 8;
     public const int IHDR_SIZE              = 4;
@@ -51,6 +45,12 @@ public class PNGDecoder
 
     public const bool SHOW_OUTPUT = true;
     public const bool NO_OUTPUT   = false;
+
+    public static readonly byte[] StandardPNGSignature =
+    [
+        // DO NOT CHANGE THESE VALUES!
+        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
+    ];
 
     // ------------------------------------------------------------------------
     // Offsets into PNG data starting at IHDR_DATA_OFFSET
@@ -101,9 +101,38 @@ public class PNGDecoder
     // ========================================================================
 
     /// <summary>
+    /// Analyzes the specified <see cref="Texture"/> image to extract metadata, including
+    /// details such as dimensions, bit depth, color type, and interlace method, while
+    /// optionally displaying the results.
+    /// The extracted details are logged for debugging purposes if the <paramref name="verbose"/>
+    /// is set to true.
+    /// This method will return, after logging a warning, if the provided texture is null
+    /// or if the texture has no image data.
+    /// </summary>
+    /// <param name="texture">The <see cref="Texture"/> image to analyze.</param>
+    /// <param name="verbose">Specifies whether to display the analysis results in the output.</param>
+    public static void AnalysePNG( Texture? texture, bool verbose = false )
+    {
+        Logger.Checkpoint();
+
+        if ( texture == null )
+        {
+            Logger.Warning( "Unable to perform analysis, texture is null" );
+
+            return;
+        }
+
+        var data = ImageUtils.GetAsPNG( texture );
+
+        AnalysePNG( data, verbose );
+    }
+
+    /// <summary>
     /// Analyzes the specified PNG file to extract metadata, including details such
     /// as dimensions, bit depth, color type, and interlace method, while optionally
     /// displaying the results.
+    /// The extracted details are logged for debugging purposes if the <paramref name="verbose"/>
+    /// is set to true.
     /// </summary>
     /// <param name="filename">The file path of the PNG image to analyze.</param>
     /// <param name="verbose">Specifies whether to display the analysis results in the output.</param>
@@ -121,6 +150,28 @@ public class PNGDecoder
     /// Analyzes PNG image data to extract metadata such as width, height, bit depth, color type,
     /// compression method, filter method, interlace method, and other structural components of
     /// the PNG format.
+    /// The extracted details are logged for debugging purposes if the <paramref name="verbose"/>
+    /// is set to true.
+    /// Once completed, the PNG data is written to the specified file path as a valid PNG image file. 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="pngData"></param>
+    /// <param name="verbose"></param>
+    public static void AnalyseAndWritePNG( string path, byte[] pngData, bool verbose = false )
+    {
+        Logger.Checkpoint();
+
+        AnalysePNG( pngData, verbose );
+
+        WritePNGToFile( pngData, path );
+    }
+
+    /// <summary>
+    /// Analyzes PNG image data to extract metadata such as width, height, bit depth, color type,
+    /// compression method, filter method, interlace method, and other structural components of
+    /// the PNG format.
+    /// The extracted details are logged for debugging purposes if the <paramref name="verbose"/>
+    /// is set to true.
     /// </summary>
     /// <param name="pngData">A byte array containing the PNG file data to be analyzed.</param>
     /// <param name="verbose">
@@ -150,7 +201,25 @@ public class PNGDecoder
         if ( !PngSignature.Signature.SequenceEqual( StandardPNGSignature ) )
         {
             Logger.Warning( "Not a valid PNG file, Signature is incorrect" );
+            
+            StringBuilder sb = new();
+            
+            for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
+            {
+                sb.Append( $"[{PngSignature.Signature[i]:X2}]" );
+            }
+            
+            Logger.Debug( sb.ToString() );
 
+            sb.Clear();
+            
+            for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
+            {
+                sb.Append( $"[{StandardPNGSignature[i]:X2}]" );
+            }
+            
+            Logger.Debug( sb.ToString() );
+            
             return;
         }
 
@@ -566,7 +635,7 @@ public class PNGDecoder
     /// Returns a string representation of the Color Type for this PNG, which is held at
     /// offset 25 into the 41-byte Signature/IHDR/IDAT Png file header.
     /// </summary>
-    /// <seealso cref="AnalysePNG(byte[], bool)" />
+    /// <seealso cref="AnalysePNG(byte[], bool)"/>
     public static string ColorTypeName( int colortype )
     {
         return colortype switch
@@ -712,6 +781,23 @@ public class PNGDecoder
                 WriteBigEndian( s, BitConverter.ToInt32( crc32.Hash.Reverse().ToArray(), 0 ) );
             }
         }
+    }
+
+    public static void WritePNGToFile( byte[] pngData, string filename )
+    {
+        if ( pngData == null || pngData.Length == 0 )
+        {
+            throw new ArgumentException( "PNG data is null or empty." );
+        }
+
+        if ( string.IsNullOrWhiteSpace( filename ) )
+        {
+            throw new ArgumentException( "Filename is null or empty." );
+        }
+
+        Logger.Debug( $"Writing PNG data to file: {filename}" );
+        
+        File.WriteAllBytes( filename, pngData );
     }
 
     /// <summary>

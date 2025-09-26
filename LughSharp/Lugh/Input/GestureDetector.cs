@@ -25,9 +25,9 @@
 namespace LughSharp.Lugh.Input;
 
 /// <summary>
-/// <see cref="IInputProcessor" />" implementation that detects gestures
+/// <see cref="IInputProcessor"/> implementation that detects gestures
 /// (tap, long press, fling, pan, zoom, pinch) and hands them to a
-/// <see cref="IGestureListener" />.
+/// <see cref="IGestureListener"/>.
 /// </summary>
 [PublicAPI]
 public class GestureDetector : InputAdapter
@@ -77,7 +77,7 @@ public class GestureDetector : InputAdapter
     /// </summary>
     /// <param name="halfTapSquareSize">
     /// half width in pixels of the square around an initial touch event, see
-    /// <see cref="IGestureListener.Tap(float, float, int, int)" />.
+    /// <see cref="IGestureListener.Tap(float, float, int, int)"/>.
     /// </param>
     /// <param name="tapCountInterval">
     /// time in seconds that must pass for two touch down/up sequences to
@@ -85,11 +85,11 @@ public class GestureDetector : InputAdapter
     /// </param>
     /// <param name="longPressDuration">
     /// time in seconds that must pass for the detector to fire a
-    /// <see cref="IGestureListener.LongPress(float, float)" /> event.
+    /// <see cref="IGestureListener.LongPress(float, float)"/> event.
     /// </param>
     /// <param name="maxFlingDelay">
     /// no fling event is fired when the time in seconds the finger was dragged is
-    /// larger than this, see <see cref="IGestureListener.Fling(float, float, int)" />
+    /// larger than this, see <see cref="IGestureListener.Fling(float, float, int)"/>
     /// </param>
     /// <param name="listener"></param>
     public GestureDetector( float halfTapSquareSize,
@@ -111,11 +111,11 @@ public class GestureDetector : InputAdapter
     /// </summary>
     /// <param name="halfTapRectangleWidth">
     /// half width in pixels of the rectangle around an initial touch event,
-    /// see <see cref="IGestureListener.Tap(float, float, int, int)" />.
+    /// see <see cref="IGestureListener.Tap(float, float, int, int)"/>.
     /// </param>
     /// <param name="halfTapRectangleHeight">
     /// half height in pixels of the rectangle around an initial touch event,
-    /// see <see cref="IGestureListener.Tap(float, float, int, int)" />.
+    /// see <see cref="IGestureListener.Tap(float, float, int, int)"/>.
     /// </param>
     /// <param name="tapCountInterval">
     /// time in seconds that must pass for two touch down/up sequences to be
@@ -123,11 +123,11 @@ public class GestureDetector : InputAdapter
     /// </param>
     /// <param name="longPressDuration">
     /// time in seconds that must pass for the detector to fire a
-    /// <see cref="IGestureListener.LongPress(float, float)" /> event.
+    /// <see cref="IGestureListener.LongPress(float, float)"/> event.
     /// </param>
     /// <param name="maxFlingDelay">
     /// no fling event is fired when the time in seconds the finger was dragged
-    /// is larger than this, see <see cref="IGestureListener.Fling(float, float, int)" />
+    /// is larger than this, see <see cref="IGestureListener.Fling(float, float, int)"/>
     /// </param>
     /// <param name="listener"></param>
     public GestureDetector( float halfTapRectangleWidth,
@@ -494,7 +494,7 @@ public class GestureDetector : InputAdapter
     }
 
     /// <summary>
-    /// Register an instance of this class with a <see cref="GestureDetector" /> to receive
+    /// Register an instance of this class with a <see cref="GestureDetector"/> to receive
     /// gestures such as taps, long presses, flings, panning or pinch zooming. Each method
     /// returns a bool indicating if the event should be handed to the next listener (false
     /// to hand it to the next listener, true otherwise).
@@ -508,7 +508,7 @@ public class GestureDetector : InputAdapter
         /// Called when a tap occured. A tap happens if a touch went down on the
         /// screen and was lifted again without moving outside of the tap square.
         /// The tap square is a rectangular area around the initial touch position
-        /// as specified on construction time of the <see cref="GestureDetector" />.
+        /// as specified on construction time of the <see cref="GestureDetector"/>.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -568,7 +568,7 @@ public class GestureDetector : InputAdapter
     }
 
     /// <summary>
-    /// Derrive from this if you only want to implement a subset of <see cref="IGestureListener" />.
+    /// Derrive from this if you only want to implement a subset of <see cref="IGestureListener"/>.
     /// </summary>
     [PublicAPI]
     public class GestureAdapter : IGestureListener

@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 public class Animation< T >
 {
     /// <summary>
-    /// Defines possible playback modes for an <see cref="Animation{T}" />.
+    /// Defines possible playback modes for an <see cref="Animation{T}"/>.
     /// </summary>
     public enum AnimMode
     {
@@ -59,7 +59,7 @@ public class Animation< T >
     /// <param name="frameDuration">the time between frames in seconds.</param>
     /// <param name="keyFrames">
     /// The objects representing the frames.
-    /// If this Array is type-aware, <see cref="KeyFrames" /> can return the
+    /// If this Array is type-aware, <see cref="KeyFrames"/> can return the
     /// correct type of array. Otherwise, it returns an object[].
     /// </param>
     public Animation( float frameDuration, List< T > keyFrames )
@@ -75,7 +75,7 @@ public class Animation< T >
     /// <param name="frameDuration"> the time between frames in seconds.</param>
     /// <param name="keyFrames">
     /// The objects representing the frames. If this Array is type-aware,
-    /// <see cref="KeyFrames" /> can return the correct type of array.
+    /// <see cref="KeyFrames"/> can return the correct type of array.
     /// Otherwise, it returns an object[].
     /// </param>
     /// <param name="playMode"> The required animation playback mode. </param>
@@ -155,7 +155,7 @@ public class Animation< T >
     /// Returns a frame based on the so called state time. This is the amount
     /// of seconds an object has spent in the state this Animation instance
     /// represents, e.g. running, jumping and so on using the mode specified by
-    /// <see cref="PlayMode" /> property.
+    /// <see cref="PlayMode"/> property.
     /// </summary>
     /// <param name="stateTime"> </param>
     /// <returns> the frame of animation for the given state time.</returns>

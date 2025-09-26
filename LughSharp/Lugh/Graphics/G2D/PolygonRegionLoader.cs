@@ -29,7 +29,7 @@ using LughSharp.Lugh.Assets.Loaders.Resolvers;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-/// loads <see cref="PolygonRegion" />s.
+/// loads <see cref="PolygonRegion"/>s.
 /// </summary>
 [PublicAPI]
 public class PolygonRegionLoader( IFileHandleResolver resolver )
@@ -58,10 +58,10 @@ public class PolygonRegionLoader( IFileHandleResolver resolver )
     }
 
     /// <summary>
-    /// If the PSH file contains a line starting with <see cref="PolygonRegionParameters.TexturePrefix" />,
-    /// an <see cref="AssetDescriptor" /> for the file referenced on that line will be added to the returned
+    /// If the PSH file contains a line starting with <see cref="PolygonRegionParameters.TexturePrefix"/>,
+    /// an <see cref="AssetDescriptor"/> for the file referenced on that line will be added to the returned
     /// Array. Otherwise a sibling of the given file with the same name and the first found extension
-    /// in <see cref="PolygonRegionParameters.TextureExtensions" />" will be used. If no suitable file is
+    /// in <see cref="PolygonRegionParameters.TextureExtensions"/> will be used. If no suitable file is
     /// found, the returned Array will be empty.
     /// </summary>
     public override List< AssetDescriptor > GetDependencies< TP >( string fileName,

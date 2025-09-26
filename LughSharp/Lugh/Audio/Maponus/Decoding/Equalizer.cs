@@ -65,7 +65,7 @@ public class Equalizer
     }
 
     /// <summary>
-    /// Creates a new Equalizer instance, using the supplied <see cref="EQFunction" /> function.
+    /// Creates a new Equalizer instance, using the supplied <see cref="EQFunction"/> function.
     /// </summary>
     public Equalizer( EQFunction eq )
     {
@@ -106,8 +106,8 @@ public class Equalizer
     }
 
     /// <summary>
-    /// Property to enable setting the equalizer bands based on a specified <see cref="EQFunction" />.
-    /// The provided <see cref="EQFunction" /> determines the configuration of all equalizer bands,
+    /// Property to enable setting the equalizer bands based on a specified <see cref="EQFunction"/>.
+    /// The provided <see cref="EQFunction"/> determines the configuration of all equalizer bands,
     /// with values being computed for each band using the `GetBand(int band)` method of the supplied function.
     /// When set, all bands of the equalizer are reset and re-initialized in accordance with this function.
     /// </summary>

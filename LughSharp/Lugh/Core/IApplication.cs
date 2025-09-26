@@ -71,7 +71,7 @@ namespace LughSharp.Lugh.Core;
 public interface IApplication
 {
     /// <summary>
-    /// What <see cref="Platform.ApplicationType" /> the application has.
+    /// What <see cref="Platform.ApplicationType"/> the application has.
     /// </summary>
     Platform.ApplicationType AppType { get; set; }
 
@@ -86,7 +86,7 @@ public interface IApplication
     int GetVersion();
 
     /// <summary>
-    /// Returns the <see cref="IPreferences" /> instance of this Application. It can be
+    /// Returns the <see cref="IPreferences"/> instance of this Application. It can be
     /// used to store application settings across runs.
     /// </summary>
     /// <param name="name"> the name of the preferences, must be useable as a file name. </param>
@@ -94,26 +94,26 @@ public interface IApplication
     IPreferences GetPreferences( string name );
 
     /// <summary>
-    /// Adds a new <see cref="ILifecycleListener" /> to the application. This can be
+    /// Adds a new <see cref="ILifecycleListener"/> to the application. This can be
     /// used by extensions to hook into the lifecycle more easily.
-    /// The <see cref="IApplicationListener" /> methods are sufficient for application
+    /// The <see cref="IApplicationListener"/> methods are sufficient for application
     /// level development.
     /// </summary>
     void AddLifecycleListener( ILifecycleListener listener );
 
     /// <summary>
-    /// Removes the specified <see cref="ILifecycleListener" />
+    /// Removes the specified <see cref="ILifecycleListener"/>
     /// </summary>
     void RemoveLifecycleListener( ILifecycleListener listener );
 
     /// <summary>
-    /// Posts a <see cref="IRunnable" /> to the event queue.
+    /// Posts a <see cref="IRunnable"/> to the event queue.
     /// </summary>
     void PostRunnable( IRunnable.Runnable runnable );
 
     /// <summary>
     /// Schedule an exit from the application. On android, this will cause a call to
-    /// <see cref="IApplicationListener.Pause()" /> and <see cref="IDisposable.Dispose()" />
+    /// <see cref="IApplicationListener.Pause()"/> and <see cref="IDisposable.Dispose()"/>
     /// some time in the future.
     /// <para>
     /// It will not immediately finish your application.

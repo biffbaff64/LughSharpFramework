@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>
-/// Listener for <see cref="ChangeEvent" />s.
+/// Listener for <see cref="ChangeEvent"/>s.
 /// </summary>
 [PublicAPI]
 public class ChangeListener : IEventListener
@@ -49,7 +49,7 @@ public class ChangeListener : IEventListener
     }
 
     /// <summary>
-    /// Handles any <see cref="ChangeEvent" />s generated.
+    /// Handles any <see cref="ChangeEvent"/>s generated.
     /// </summary>
     /// <param name="ev"> The change event. </param>
     /// <param name="actor">

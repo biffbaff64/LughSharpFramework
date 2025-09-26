@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>
 /// Detects tap, long press, fling, pan, zoom, and pinch gestures on an actor.
-/// If there is only a need to detect tap, use <see cref="ClickListener" />.
+/// If there is only a need to detect tap, use <see cref="ClickListener"/>.
 /// </summary>
 [PublicAPI]
 public class ActorGestureListener : IEventListener
@@ -51,7 +51,7 @@ public class ActorGestureListener : IEventListener
     /// </summary>
     /// <param name="halfTapSquareSize">
     /// Half width in pixels of the square around an initial touch event, see
-    /// <see cref="ActorGestureDetector.Tap(float, float, int, int)" />.
+    /// <see cref="ActorGestureDetector.Tap(float, float, int, int)"/>.
     /// </param>
     /// <param name="tapCountInterval">
     /// Time in seconds that must pass for two touch down/up sequences to be detected
@@ -59,11 +59,11 @@ public class ActorGestureListener : IEventListener
     /// </param>
     /// <param name="longPressDuration">
     /// Time in seconds that must pass for the detector to fire a
-    /// <see cref="ActorGestureDetector.LongPress(float, float)" /> event.
+    /// <see cref="ActorGestureDetector.LongPress(float, float)"/> event.
     /// </param>
     /// <param name="maxFlingDelay">
     /// No fling event is fired when the time in seconds the finger was dragged is larger
-    /// than this, see <see cref="ActorGestureDetector.Fling(float, float, int)" />.
+    /// than this, see <see cref="ActorGestureDetector.Fling(float, float, int)"/>.
     /// </param>
     public ActorGestureListener( float halfTapSquareSize = DEFAULT_HALF_TAP_SQUARE_SIZE,
                                  float tapCountInterval = DEFAULT_TAP_COUNT_INTERVAL,

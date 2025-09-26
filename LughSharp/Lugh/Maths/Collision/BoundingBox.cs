@@ -86,7 +86,7 @@ public class BoundingBox
 
     /// <summary>
     /// Returns whether this bounding box is valid.
-    /// This means that <see cref="Max" /> is greater than or equal to <see cref="Min" />.
+    /// This means that <see cref="Max"/> is greater than or equal to <see cref="Min"/>.
     /// </summary>
     /// <returns> True in case the bounding box is valid, false otherwise  </returns>
     public bool Valid => ( Min.X <= Max.X ) && ( Min.Y <= Max.Y ) && ( Min.Z <= Max.Z );
@@ -162,7 +162,7 @@ public class BoundingBox
     /// Vector3. The modified vector is returned but can be thrown away.
     /// </summary>
     /// <param name="vec3">
-    /// The <see cref="Vector3" /> to receive the center of the bounding box.
+    /// The <see cref="Vector3"/> to receive the center of the bounding box.
     /// </param>
     /// <returns>The vector specified with the vec3 argument.</returns>
     public Vector3 GetCenter( Vector3 vec3 )
@@ -245,7 +245,7 @@ public class BoundingBox
     /// <summary>
     /// </summary>
     /// <param name="vec3">
-    /// The <see cref="Vector3" /> to receive the dimensions of this bounding box on all three axis.
+    /// The <see cref="Vector3"/> to receive the dimensions of this bounding box on all three axis.
     /// </param>
     /// <returns> The vector specified with the vec3 argument</returns>
     public Vector3 GetDimensions( in Vector3 vec3 )
@@ -254,9 +254,9 @@ public class BoundingBox
     }
 
     /// <summary>
-    /// Gets the minimum values into a <see cref="Vector3" />.
+    /// Gets the minimum values into a <see cref="Vector3"/>.
     /// </summary>
-    /// <param name="vec3"> The <see cref="Vector3" /> to receive the minimum values.</param>
+    /// <param name="vec3"> The <see cref="Vector3"/> to receive the minimum values.</param>
     /// <returns> The vector specified with the out argument</returns>
     public Vector3 GetMin( in Vector3 vec3 )
     {
@@ -264,9 +264,9 @@ public class BoundingBox
     }
 
     /// <summary>
-    /// Gets the maximum values into a <see cref="Vector3" />.
+    /// Gets the maximum values into a <see cref="Vector3"/>.
     /// </summary>
-    /// <param name="vec3">The <see cref="Vector3" /> to receive the maximum values.</param>
+    /// <param name="vec3">The <see cref="Vector3"/> to receive the maximum values.</param>
     /// <returns> The vector specified with the out argument</returns>
     public Vector3 GetMax( in Vector3 vec3 )
     {
@@ -289,7 +289,7 @@ public class BoundingBox
     }
 
     /// <summary>
-    /// Extends the bounding box to incorporate the given <see cref="Vector3" />.
+    /// Extends the bounding box to incorporate the given <see cref="Vector3"/>.
     /// </summary>
     /// <param name="point"> The vector</param>
     /// <returns> This bounding box for chaining.</returns>

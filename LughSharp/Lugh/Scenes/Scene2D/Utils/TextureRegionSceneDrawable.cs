@@ -30,7 +30,7 @@ using Color = LughSharp.Lugh.Graphics.Color;
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Drawable for a <see cref="TextureRegion" />.
+/// Drawable for a <see cref="TextureRegion"/>.
 /// </summary>
 [PublicAPI]
 public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
@@ -48,8 +48,8 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
     }
 
     /// <summary>
-    /// Creates a new TextureRegionDrawable, initialised with a new <see cref="TextureRegion" />
-    /// from the supplied <see cref="Texture" />
+    /// Creates a new TextureRegionDrawable, initialised with a new <see cref="TextureRegion"/>
+    /// from the supplied <see cref="Texture"/>
     /// </summary>
     public TextureRegionSceneDrawable( Texture texture )
         : this( new TextureRegion( texture ) )
@@ -57,7 +57,7 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
     }
 
     /// <summary>
-    /// Creates a new TextureRegionDrawable, initialised with the supplied <see cref="TextureRegion" />
+    /// Creates a new TextureRegionDrawable, initialised with the supplied <see cref="TextureRegion"/>
     /// </summary>
     public TextureRegionSceneDrawable( TextureRegion region )
     {
@@ -65,7 +65,7 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
     }
 
     /// <summary>
-    /// Creates a new TextureRegionDrawable using the <see cref="TextureRegion" /> from
+    /// Creates a new TextureRegionDrawable using the <see cref="TextureRegion"/> from
     /// the given TextureRegionDrawable.
     /// </summary>
     /// <param name="drawable"></param>
@@ -75,7 +75,7 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
     }
 
     /// <summary>
-    /// The <see cref="TextureRegion" /> component of this <see cref="ISceneDrawable" />
+    /// The <see cref="TextureRegion"/> component of this <see cref="ISceneDrawable"/>
     /// </summary>
     protected TextureRegion? Region
     {

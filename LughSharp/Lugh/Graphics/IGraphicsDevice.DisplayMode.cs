@@ -27,8 +27,8 @@ namespace LughSharp.Lugh.Graphics;
 public partial interface IGraphicsDevice
 {
     /// <summary>
-    /// Describes a fullscreen display mode, having the properties <see cref="Width" />,
-    /// <see cref="Height" />, <see cref="RefreshRate" />, and <see cref="BitsPerPixel" />.
+    /// Describes a fullscreen display mode, having the properties <see cref="Width"/>,
+    /// <see cref="Height"/>, <see cref="RefreshRate"/>, and <see cref="BitsPerPixel"/>.
     /// <para>
     /// Display modes represent different configurations for fullscreen rendering,
     /// allowing you to choose between resolutions, refresh rates, and color depths

@@ -43,7 +43,7 @@ public class TextureAtlas : IDisposable
 
     /// <summary>
     /// Creates a new TextureAtlas.
-    /// Loads the specified pack file using <see cref="PathTypes.Internal" />,
+    /// Loads the specified pack file using <see cref="PathTypes.Internal"/>,
     /// using the parent directory of the pack file to find the page images.
     /// </summary>
     public TextureAtlas( string internalPackFile )
@@ -115,7 +115,7 @@ public class TextureAtlas : IDisposable
     }
 
     /// <summary>
-    /// Adds the textures and regions from the specified <see cref="TextureAtlasData" />
+    /// Adds the textures and regions from the specified <see cref="TextureAtlasData"/>
     /// </summary>
     public void Load( TextureAtlasData data )
     {

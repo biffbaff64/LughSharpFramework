@@ -56,7 +56,7 @@ public class PooledLinkedList< T >
     }
 
     /// <summary>
-    /// Creates, and returns, a new <see cref="Item{T}" />
+    /// Creates, and returns, a new <see cref="Item{T}"/>
     /// </summary>
     public Item< T > GetNewObject()
     {

@@ -25,11 +25,11 @@
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// A single vertex attribute defined by its <see cref="Usage" />, its number of components and
+/// A single vertex attribute defined by its <see cref="Usage"/>, its number of components and
 /// its shader alias. The Usage is used for uniquely identifying the vertex attribute from among
-/// its <see cref="VertexAttributes" /> siblings. The number of components  defines how many
+/// its <see cref="VertexAttributes"/> siblings. The number of components  defines how many
 /// components the attribute has. The alias defines to which shader attribute this attribute
-/// should bind. The alias is used by a <see cref="Mesh" /> when drawing with a <see cref="ShaderProgram" />.
+/// should bind. The alias is used by a <see cref="Mesh"/> when drawing with a <see cref="ShaderProgram"/>.
 /// The alias can be changed at any time.
 /// </summary>
 [PublicAPI]
@@ -45,7 +45,7 @@ public class VertexAttribute
     private readonly int _usageIndex;
 
     /// <summary>
-    /// The alias for the attribute used in a <see cref="ShaderProgram" />
+    /// The alias for the attribute used in a <see cref="ShaderProgram"/>
     /// </summary>
     public readonly string Alias;
 
@@ -61,8 +61,8 @@ public class VertexAttribute
     public readonly int NumComponents;
 
     /// <summary>
-    /// the OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT" />
-    /// or <see cref="IGL.GL_UNSIGNED_BYTE" />
+    /// the OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT"/>
+    /// or <see cref="IGL.GL_UNSIGNED_BYTE"/>
     /// </summary>
     public readonly int ComponentType;
 
@@ -72,7 +72,7 @@ public class VertexAttribute
     public readonly int Unit;
 
     /// <summary>
-    /// The attribute <see cref="Usage" />, used for identification.
+    /// The attribute <see cref="Usage"/>, used for identification.
     /// </summary>
     public readonly int Usage;
 
@@ -83,7 +83,7 @@ public class VertexAttribute
     /// Constructs a new VertexAttribute. The GL data type is automatically selected based on the usage.
     /// </summary>
     /// <param name="usage">
-    /// The attribute <see cref="Usage" />, used to select the <see cref="Type" /> and for identification.
+    /// The attribute <see cref="Usage"/>, used to select the <see cref="Type"/> and for identification.
     /// </param>
     /// <param name="numComponents"> the number of components of this attribute, must be between 1 and 4. </param>
     /// <param name="alias">
@@ -104,14 +104,14 @@ public class VertexAttribute
     /// Constructs a new VertexAttribute.
     /// </summary>
     /// <param name="usage">
-    /// The attribute <see cref="Usage" />, used for identification.
+    /// The attribute <see cref="Usage"/>, used for identification.
     /// </param>
     /// <param name="numComponents">
     /// The number of components of this attribute, must be between 1 and 4.
     /// </param>
     /// <param name="type">
-    /// The OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT" /> or <see cref="IGL.GL_UNSIGNED_BYTE" />.
-    /// Since <see cref="Mesh" /> stores vertex data in 32bit floats, the total size of this attribute
+    /// The OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT"/> or <see cref="IGL.GL_UNSIGNED_BYTE"/>.
+    /// Since <see cref="Mesh"/> stores vertex data in 32bit floats, the total size of this attribute
     /// (type size times number of components) must be a multiple of four bytes.
     /// </param>
     /// <param name="normalized">
@@ -136,8 +136,8 @@ public class VertexAttribute
     }
 
     /// <returns>
-    /// A copy of this VertexAttribute with the same parameters. The <see cref="Offset" /> is not copied
-    /// and must be recalculated, as is typically done by the <see cref="VertexAttributes" /> that owns
+    /// A copy of this VertexAttribute with the same parameters. The <see cref="Offset"/> is not copied
+    /// and must be recalculated, as is typically done by the <see cref="VertexAttributes"/> that owns
     /// the VertexAttribute.
     /// </returns>
     public VertexAttribute Copy()
@@ -215,7 +215,7 @@ public class VertexAttribute
     /// for this attribute, commonly used in shaders.
     /// </param>
     /// <returns>
-    /// A new instance of the <see cref="VertexAttribute" /> class configured
+    /// A new instance of the <see cref="VertexAttribute"/> class configured
     /// for texture coordinates with 2 components.
     /// </returns>
     public static VertexAttribute TexCoords( int unit )
@@ -254,7 +254,7 @@ public class VertexAttribute
     /// The attribute uses the NORMAL usage type, with 3 components, and a predefined alias.
     /// </summary>
     /// <returns>
-    /// A new instance of <see cref="VertexAttribute" /> configured for normals.
+    /// A new instance of <see cref="VertexAttribute"/> configured for normals.
     /// </returns>
     public static VertexAttribute Normal()
     {
@@ -281,7 +281,7 @@ public class VertexAttribute
     /// is assigned the alias defined by the shader's binormal attribute name.
     /// </summary>
     /// <returns>
-    /// A new instance of <see cref="VertexAttribute" /> with usage set to binormal,
+    /// A new instance of <see cref="VertexAttribute"/> with usage set to binormal,
     /// 3 components, and the appropriate shader alias.
     /// </returns>
     public static VertexAttribute Binormal()
@@ -298,7 +298,7 @@ public class VertexAttribute
     /// It determines which specific set of bone weights this attribute represents in the shader program.
     /// </param>
     /// <returns>
-    /// A new instance of <see cref="VertexAttribute" /> configured for bone weight usage.
+    /// A new instance of <see cref="VertexAttribute"/> configured for bone weight usage.
     /// </returns>
     public static VertexAttribute BoneWeight( int unit )
     {
@@ -352,10 +352,10 @@ public class VertexAttribute
     }
 
     /// <summary>
-    /// Checks whether the specified <see cref="VertexAttribute" /> object is equal to the current instance.
+    /// Checks whether the specified <see cref="VertexAttribute"/> object is equal to the current instance.
     /// </summary>
     /// <param name="other">
-    /// The <see cref="VertexAttribute" /> object to compare with the current instance.
+    /// The <see cref="VertexAttribute"/> object to compare with the current instance.
     /// </param>
     /// <returns>
     /// true if the specified object is equal to the current instance; otherwise, false.

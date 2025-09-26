@@ -63,10 +63,10 @@ public class DragAndDrop
     public int         Button          { get; set; }
 
     /// <summary>
-    /// When true (default), the touch focus (<see cref="Stage.CancelTouchFocus()" />) is
-    /// cancelled if <see cref="DragAndDrop.DragSource.DragStart(InputEvent, float, float, int)" />"
+    /// When true (default), the touch focus (<see cref="Stage.CancelTouchFocus()"/>) is
+    /// cancelled if <see cref="DragAndDrop.DragSource.DragStart(InputEvent, float, float, int)"/>
     /// returns non-null. This ensures the DragAndDrop is the only touch focus listener, eg when
-    /// the source is inside a <see cref="ScrollPane" /> with flick scroll enabled.
+    /// the source is inside a <see cref="ScrollPane"/> with flick scroll enabled.
     /// </summary>
     public bool CancelTouchFocus { get; set; } = true;
 
@@ -168,7 +168,7 @@ public class DragAndDrop
     }
 
     /// <summary>
-    /// Returns true if a drag is in progress and the <see cref="DragTime" />"
+    /// Returns true if a drag is in progress and the <see cref="DragTime"/>
     /// has elapsed since the drag started.
     /// </summary>
     public bool IsDragValid()
@@ -180,7 +180,7 @@ public class DragAndDrop
     // ========================================================================
 
     /// <summary>
-    /// Class which extends the <see cref="DragListener" /> for drag &amp; drop operations.
+    /// Class which extends the <see cref="DragListener"/> for drag &amp; drop operations.
     /// </summary>
     public class DragListenerImpl : DragListener
     {
@@ -486,7 +486,7 @@ public class DragAndDrop
         /// Called when the payload is no longer over the target, whether because the touch
         /// was moved or a drop occurred.
         /// <para>
-        /// This is called even if <see cref="Drag(DragSource, Payload, float, float, int)" />
+        /// This is called even if <see cref="Drag(DragSource, Payload, float, float, int)"/>
         /// returned false.
         /// </para>
         /// </summary>
@@ -498,7 +498,7 @@ public class DragAndDrop
         /// Called when the payload is dropped on the target. The coordinates are in the
         /// target's local coordinate system.
         /// <para>
-        /// This is not called if <see cref="Drag(DragSource, Payload, float, float, int)" />
+        /// This is not called if <see cref="Drag(DragSource, Payload, float, float, int)"/>
         /// returned false.
         /// </para>
         /// </summary>

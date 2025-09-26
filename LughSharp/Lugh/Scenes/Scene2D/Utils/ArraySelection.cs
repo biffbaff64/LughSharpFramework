@@ -127,7 +127,7 @@ public class ArraySelection< T > : Selection< T >
 
     /// <summary>
     /// Removes objects from the selection that are no longer in the items
-    /// array. If <see cref="Selection{T}.Required" /> is true and there is
+    /// array. If <see cref="Selection{T}.Required"/> is true and there is
     /// no selected item, the first item is selected.
     /// </summary>
     public virtual void Validate()

@@ -118,8 +118,8 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// perfect with respect to the current screen resolution.
     /// The defaultShader specifies the shader to use. Note that the names for uniforms
     /// for this default shader are different than the ones expect for shaders set with
-    /// <see cref="Shader" />.
-    /// See <see cref="CreateDefaultShader()" />.
+    /// <see cref="Shader"/>.
+    /// See <see cref="CreateDefaultShader()"/>.
     /// </summary>
     /// <param name="size">
     /// The max number of sprites in a single batch. Max of <see cref="MAX_SPRITES"/>.
@@ -263,7 +263,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// Flushes all batched text, textures and sprites to the screen.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    /// Thrown if this method is called BEFORE a call to <see cref="Begin" />
+    /// Thrown if this method is called BEFORE a call to <see cref="Begin"/>
     /// </exception>
     public void End()
     {
@@ -640,7 +640,7 @@ public partial class SpriteBatch : IBatch, IDisposable
 
     /// <summary>
     /// Fetches the location of the CombinedMatrix uniform in the shader and
-    /// stores it in <see cref="_combinedMatrixLocation" /> for subsequent use.
+    /// stores it in <see cref="_combinedMatrixLocation"/> for subsequent use.
     /// </summary>
     private void GetCombinedMatrixUniformLocation()
     {
@@ -712,7 +712,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <summary>
     /// Performs validation checks for Draw methods.
     /// Throws an exception if the supplied Texture is null, or not supported.
-    /// Throws an exception if <see cref="Begin" /> was not called before entering
+    /// Throws an exception if <see cref="Begin"/> was not called before entering
     /// the draw method.
     /// </summary>
     /// <param name="texture"> The Texture to check for null. </param>
@@ -1224,7 +1224,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     }
 
     /// <summary>
-    /// Draw the given <see cref="Texture" /> at the given X and Y coordinates.
+    /// Draw the given <see cref="Texture"/> at the given X and Y coordinates.
     /// </summary>
     /// <param name="texture"> The texture. </param>
     /// <param name="x"> X coordinate in pixels. </param>

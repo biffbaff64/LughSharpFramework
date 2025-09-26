@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
 /// A general purpose class containing named colors that can be changed at will.
-/// For example, the markup language defined by the <see cref="BitmapFontCache" /> class
+/// For example, the markup language defined by the <see cref="BitmapFontCache"/> class
 /// uses this class to retrieve colors and the user can define his own colors.
 /// </summary>
 [PublicAPI]
@@ -43,7 +43,7 @@ public static class Colors
     /// </summary>
     /// <param name="name">The name of the color.</param>
     /// <returns>
-    /// The <see cref="Color" /> associated with the specified <paramref name="name" />,
+    /// The <see cref="Color"/> associated with the specified <paramref name="name"/>,
     /// or <c>null</c> if no mapping was found.
     /// </returns>
     public static Color? Get( string name )

@@ -69,7 +69,7 @@ public static class GLUtils
 
     /// <summary>
     /// Checks if there is a current OpenGL context bound to the calling thread.
-    /// Throws a <see cref="GdxRuntimeException" /> if no OpenGL context is active.
+    /// Throws a <see cref="GdxRuntimeException"/> if no OpenGL context is active.
     /// </summary>
     /// <exception cref="GdxRuntimeException">
     /// Thrown when no OpenGL context is currently bound to the thread.

@@ -29,7 +29,7 @@ using Color = LughSharp.Lugh.Graphics.Color;
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Draws a <see cref="TextureRegion" /> repeatedly to fill the area,
+/// Draws a <see cref="TextureRegion"/> repeatedly to fill the area,
 /// instead of stretching it.
 /// </summary>
 [PublicAPI]
@@ -38,7 +38,7 @@ public class TiledSceneDrawable : TextureRegionSceneDrawable
     // ========================================================================
 
     /// <summary>
-    /// Creates a new TiledDrawable, using the given <see cref="TextureRegion" />
+    /// Creates a new TiledDrawable, using the given <see cref="TextureRegion"/>
     /// </summary>
     public TiledSceneDrawable( TextureRegion region )
         : base( region )
@@ -46,7 +46,7 @@ public class TiledSceneDrawable : TextureRegionSceneDrawable
     }
 
     /// <summary>
-    /// Creates a new TiledDrawable, using the given <see cref="TextureRegionSceneDrawable" />
+    /// Creates a new TiledDrawable, using the given <see cref="TextureRegionSceneDrawable"/>
     /// </summary>
     public TiledSceneDrawable( TextureRegionSceneDrawable drawable )
         : base( drawable )

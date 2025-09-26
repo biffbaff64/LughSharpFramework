@@ -28,13 +28,13 @@ using LughSharp.Lugh.Audio;
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-/// <see cref="AssetLoader" /> to load <see cref="ISound" /> instances.
+/// <see cref="AssetLoader"/> to load <see cref="ISound"/> instances.
 /// </summary>
 [PublicAPI]
 public class SoundLoader : AsynchronousAssetLoader, IDisposable
 {
     /// <summary>
-    /// Creates a new SoundLoader using the provided <see cref="IFileHandleResolver" />
+    /// Creates a new SoundLoader using the provided <see cref="IFileHandleResolver"/>
     /// </summary>
     /// <param name="resolver"></param>
     public SoundLoader( IFileHandleResolver resolver ) : base( resolver )
@@ -43,7 +43,7 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
     }
 
     /// <summary>
-    /// The <see cref="ISound" /> instance currently loaded by this <see cref="SoundLoader" />.
+    /// The <see cref="ISound"/> instance currently loaded by this <see cref="SoundLoader"/>.
     /// </summary>
     public ISound? LoadedSound { get; set; }
 
@@ -68,9 +68,9 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
     /// Loads the non-OpenGL part of the asset and injects any dependencies of
     /// the asset into the AssetManager.
     /// </summary>
-    /// <param name="manager"> The <see cref="AssetManager" /> to use. </param>
-    /// <param name="file"> A <see cref="FileInfo" /> object holding file information. </param>
-    /// <param name="parameter"> <see cref="SoundLoaderParameters" /> to use. </param>
+    /// <param name="manager"> The <see cref="AssetManager"/> to use. </param>
+    /// <param name="file"> A <see cref="FileInfo"/> object holding file information. </param>
+    /// <param name="parameter"> <see cref="SoundLoaderParameters"/> to use. </param>
     public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         LoadedSound = Api.Audio.NewSound( file );
@@ -118,3 +118,6 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
     {
     }
 }
+
+// ============================================================================
+// ============================================================================

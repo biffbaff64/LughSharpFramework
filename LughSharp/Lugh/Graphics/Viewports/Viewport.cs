@@ -31,9 +31,9 @@ using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 namespace LughSharp.Lugh.Graphics.Viewports;
 
 /// <summary>
-/// Manages a <see cref="Camera" /> and determines how world coordinates
+/// Manages a <see cref="Camera"/> and determines how world coordinates
 /// are mapped to and from the screen.
-/// Extending classes should initialise <see cref="Camera" /> to avoid
+/// Extending classes should initialise <see cref="Camera"/> to avoid
 /// causing exceptions.
 /// </summary>
 [PublicAPI]
@@ -66,7 +66,7 @@ public abstract class Viewport
     // ========================================================================
 
     /// <summary>
-    /// Creates a new viewport using the supplied <see cref="OrthographicCamera" />.
+    /// Creates a new viewport using the supplied <see cref="OrthographicCamera"/>.
     /// </summary>
     /// <param name="camera"> The camera to use. </param>
     protected Viewport( Camera camera )
@@ -78,15 +78,15 @@ public abstract class Viewport
 
     /// <summary>
     /// Configures this viewport's screen bounds using the specified screen
-    /// size and calls <see cref="Apply(bool)" />. Typically called
-    /// from <see cref="IApplicationListener.Resize" /> or
-    /// <see cref="IScreen.Resize(int, int)" />.
+    /// size and calls <see cref="Apply(bool)"/>. Typically called
+    /// from <see cref="IApplicationListener.Resize"/> or
+    /// <see cref="IScreen.Resize(int, int)"/>.
     /// </summary>
     /// <param name="screenWidth"></param>
     /// <param name="screenHeight"></param>
     /// <param name="centerCamera"></param>
     /// <remarks>
-    /// The default implementation only calls <see cref="Apply(bool)" />.
+    /// The default implementation only calls <see cref="Apply(bool)"/>.
     /// </remarks>
     public virtual void Update( int screenWidth, int screenHeight, bool centerCamera = false )
     {
@@ -123,7 +123,7 @@ public abstract class Viewport
     /// Transforms the specified screen coordinate to world coordinates.
     /// </summary>
     /// <returns> The vector that was passed in, transformed to world coordinates.</returns>
-    /// <see cref="Camera.Unproject(Vector3)" />
+    /// <see cref="Camera.Unproject(Vector3)"/>
     public virtual Vector2 Unproject( Vector2 screenCoords )
     {
         if ( Camera == null )
@@ -149,7 +149,7 @@ public abstract class Viewport
     /// Transforms the specified world coordinate to screen coordinates.
     /// </summary>
     /// <returns> The vector that was passed in, transformed to screen coordinates.</returns>
-    /// <see cref="Camera.Project(Vector3) " />
+    /// <see cref="Camera.Project(Vector3) "/>
     public virtual Vector2 Project( Vector2 worldCoords )
     {
         if ( Camera == null )
@@ -169,7 +169,7 @@ public abstract class Viewport
     /// Transforms the specified screen coordinate to world coordinates.
     /// </summary>
     /// <returns> The vector that was passed in, transformed to world coordinates.</returns>
-    /// <see cref="Camera.Unproject(Vector3)" />
+    /// <see cref="Camera.Unproject(Vector3)"/>
     public virtual Vector3 Unproject( Vector3 screenCoords )
     {
         if ( Camera == null )
@@ -186,7 +186,7 @@ public abstract class Viewport
     /// Transforms the specified world coordinate to screen coordinates.
     /// </summary>
     /// <returns> The vector that was passed in, transformed to screen coordinates. </returns>
-    /// <see cref="Camera.Project(Vector3) " />
+    /// <see cref="Camera.Project(Vector3) "/>
     public virtual Vector3 Project( Vector3 worldCoords )
     {
         if ( Camera == null )
@@ -202,7 +202,7 @@ public abstract class Viewport
     /// <summary>
     /// Creates a picking Ray from the coordinates given in screen coordinates.
     /// </summary>
-    /// <see cref="Camera.GetPickRay(float, float, float, float, float, float)" />
+    /// <see cref="Camera.GetPickRay(float, float, float, float, float, float)"/>
     public virtual Ray GetPickRay( float screenX, float screenY )
     {
         if ( Camera == null )
@@ -215,7 +215,7 @@ public abstract class Viewport
 
     /// <summary>
     /// Calculates a scissor rectangle in OpenGL window coordinates.
-    /// <see cref="ScissorStack" />.CalculateScissors methods for more details.
+    /// <see cref="ScissorStack"/>.CalculateScissors methods for more details.
     /// </summary>
     public virtual void CalculateScissors( Matrix4 batchTransform, Rectangle area, Rectangle scissor )
     {
@@ -265,7 +265,7 @@ public abstract class Viewport
 
     /// <summary>
     /// Sets the viewport's position in screen coordinates.
-    /// This is typically set by <see cref="Update(int, int, bool)" />.
+    /// This is typically set by <see cref="Update(int, int, bool)"/>.
     /// </summary>
     public void SetScreenPosition( int screenX, int screenY )
     {
@@ -275,7 +275,7 @@ public abstract class Viewport
 
     /// <summary>
     /// Sets the viewport's size in screen coordinates.
-    /// This is typically set by <see cref="Update(int, int, bool)" />.
+    /// This is typically set by <see cref="Update(int, int, bool)"/>.
     /// </summary>
     public void SetScreenSize( int screenWidth, int screenHeight )
     {
@@ -285,7 +285,7 @@ public abstract class Viewport
 
     /// <summary>
     /// Sets the viewport's bounds in screen coordinates.
-    /// This is typically set by <see cref="Update(int, int, bool)" />.
+    /// This is typically set by <see cref="Update(int, int, bool)"/>.
     /// </summary>
     public void SetScreenBounds( int screenX, int screenY, int screenWidth, int screenHeight )
     {

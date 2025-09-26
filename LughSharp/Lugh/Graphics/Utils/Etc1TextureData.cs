@@ -102,7 +102,7 @@ public class Etc1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public Pixmap ConsumePixmap()
+    public Pixmap FetchPixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
@@ -114,7 +114,7 @@ public class Etc1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public unsafe void ConsumeCustomData( int target )
+    public unsafe void UploadCustomData( int target )
     {
         if ( !IsPrepared )
         {

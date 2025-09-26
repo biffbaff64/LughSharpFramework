@@ -54,7 +54,7 @@ public class InputEvent : Event
 
         /// <summary>
         /// The mouse pointer or an active touch have entered
-        /// (i.e., <see cref="Actor.Hit(float, float, bool)" />) an actor.
+        /// (i.e., <see cref="Actor.Hit(float, float, bool)"/>) an actor.
         /// </summary>
         Enter,
 
@@ -142,14 +142,14 @@ public class InputEvent : Event
     public Actor? RelatedActor { get; set; }
 
     /// <summary>
-    /// Returns true if this event is a touchUp triggered by <see cref="Stage.CancelTouchFocus()" />.
+    /// Returns true if this event is a touchUp triggered by <see cref="Stage.CancelTouchFocus()"/>.
     /// </summary>
     public bool TouchFocusCancel
         => MathUtils.IsEqual( StageX, int.MinValue )
            || MathUtils.IsEqual( StageY, int.MinValue );
 
     /// <summary>
-    /// If false, <see cref="Event.SetHandled" /> will not add the listener
+    /// If false, <see cref="Event.SetHandled"/> will not add the listener
     /// to the stage's touch focus when a touch down event is handled.
     /// Default is true.
     /// </summary>

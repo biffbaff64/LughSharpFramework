@@ -27,11 +27,11 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A button with a child <see cref="UI.Image" /> to display an image. This is useful when
+/// A button with a child <see cref="UI.Image"/> to display an image. This is useful when
 /// the button must be larger than the image and the image centered on the button. If
 /// the image is the size of the button, a Button without any children can be used,
-/// where the <see cref="Button.ButtonStyle.Up" />, <see cref="Button.ButtonStyle.Down" />,
-/// and <see cref="Button.ButtonStyle.Checked" /> nine patches define the image.
+/// where the <see cref="Button.ButtonStyle.Up"/>, <see cref="Button.ButtonStyle.Down"/>,
+/// and <see cref="Button.ButtonStyle.Checked"/> nine patches define the image.
 /// </summary>
 [PublicAPI]
 public class ImageButton : Button
@@ -40,8 +40,8 @@ public class ImageButton : Button
     // ========================================================================
 
     /// <summary>
-    /// Creates a new ImageButton using the supplied <see cref="Skin" />. The
-    /// skin should contain an <see cref="ImageButtonStyle" />.
+    /// Creates a new ImageButton using the supplied <see cref="Skin"/>. The
+    /// skin should contain an <see cref="ImageButtonStyle"/>.
     /// </summary>
     /// <param name="skin"></param>
     public ImageButton( Skin skin )
@@ -181,7 +181,7 @@ public class ImageButton : Button
 
     /// <summary>
     /// Sets the image drawable based on the current button state. The default implementation
-    /// sets the image drawable using <see cref="GetImageDrawable()" />.
+    /// sets the image drawable using <see cref="GetImageDrawable()"/>.
     /// </summary>
     protected void UpdateImage()
     {
@@ -190,11 +190,11 @@ public class ImageButton : Button
 
     /// <summary>
     /// Draws the group and its children. The default implementation calls
-    /// <see cref="Group.ApplyTransform(LughSharp.Lugh.Graphics.G2D.IBatch,Matrix4)" /> if needed, then
-    /// <see cref="Button.DrawChildren(IBatch, float)" />, followed by
-    /// <see cref="Button.ResetTransform(IBatch)" /> if needed.
+    /// <see cref="Group.ApplyTransform(LughSharp.Lugh.Graphics.G2D.IBatch,Matrix4)"/> if needed, then
+    /// <see cref="Button.DrawChildren(IBatch, float)"/>, followed by
+    /// <see cref="Button.ResetTransform(IBatch)"/> if needed.
     /// </summary>
-    /// <param name="batch"> The <see cref="IBatch" /> </param>
+    /// <param name="batch"> The <see cref="IBatch"/> </param>
     /// <param name="parentAlpha"></param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
@@ -246,8 +246,8 @@ public class ImageButton : Button
         }
 
         /// <summary>
-        /// Creates a new ImageButtonStyle instance, using the supplied <see cref="ISceneDrawable" />
-        /// images for <see cref="ImageUp" />, <see cref="ImageDown" /> and <see cref="ImageChecked" />.
+        /// Creates a new ImageButtonStyle instance, using the supplied <see cref="ISceneDrawable"/>
+        /// images for <see cref="ImageUp"/>, <see cref="ImageDown"/> and <see cref="ImageChecked"/>.
         /// </summary>
         public ImageButtonStyle( ISceneDrawable? up,
                                  ISceneDrawable? down,
@@ -263,7 +263,7 @@ public class ImageButton : Button
         }
 
         /// <summary>
-        /// Creates a new ImageButtonStyle instance, using the given <see cref="ImageButtonStyle" />
+        /// Creates a new ImageButtonStyle instance, using the given <see cref="ImageButtonStyle"/>
         /// </summary>
         public ImageButtonStyle( ImageButtonStyle style )
             : base( style )
@@ -280,7 +280,7 @@ public class ImageButton : Button
 
         /// <summary>
         /// Creates a new ImageButtonStyle instance, using the supplied
-        /// <see cref="ButtonStyle" />.
+        /// <see cref="ButtonStyle"/>.
         /// </summary>
         public ImageButtonStyle( ButtonStyle style )
             : base( style )

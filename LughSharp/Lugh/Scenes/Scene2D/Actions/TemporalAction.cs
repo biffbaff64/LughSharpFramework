@@ -55,7 +55,7 @@ public abstract class TemporalAction : Action
     public IInterpolation? Interpolation { get; set; }
 
     /// <summary>
-    /// Returns true after <see cref="Act(float)" /> has been called where time >= duration.
+    /// Returns true after <see cref="Act(float)"/> has been called where time >= duration.
     /// </summary>
     public bool IsComplete { get; private set; }
 
@@ -106,15 +106,15 @@ public abstract class TemporalAction : Action
     }
 
     /// <summary>
-    /// Called the first time <see cref="Act(float)" /> is called. This is a good place
-    /// to query the <see cref="Actor" />'s starting state.
+    /// Called the first time <see cref="Act(float)"/> is called. This is a good place
+    /// to query the <see cref="Actor"/>'s starting state.
     /// </summary>
     protected virtual void Begin()
     {
     }
 
     /// <summary>
-    /// Called the last time <see cref="Act(float)" /> is called.
+    /// Called the last time <see cref="Act(float)"/> is called.
     /// </summary>
     protected virtual void End()
     {
@@ -125,7 +125,7 @@ public abstract class TemporalAction : Action
     /// </summary>
     /// <param name="percent">
     /// The percentage of completion for this action, growing from 0 to 1 over the
-    /// duration. If <see cref="Reverse" /> is true, this will shrink from 1 to 0.
+    /// duration. If <see cref="Reverse"/> is true, this will shrink from 1 to 0.
     /// </param>
     protected abstract void Update( float percent );
 

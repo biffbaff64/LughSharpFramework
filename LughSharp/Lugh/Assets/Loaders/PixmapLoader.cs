@@ -28,16 +28,16 @@ using LughSharp.Lugh.Graphics;
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-/// <see cref="AssetLoader" /> for <see cref="Pixmap" /> instances.
+/// <see cref="AssetLoader"/> for <see cref="Pixmap"/> instances.
 /// The Pixmap is loaded asynchronously.
 /// </summary>
 [PublicAPI]
-public class PixmapLoader : AsynchronousAssetLoader
+public class PixmapLoader : AsynchronousAssetLoader, IDisposable
 {
     private Pixmap? _pixmap;
 
     /// <summary>
-    /// Creates a new PixmapLoader using the provided <see cref="IFileHandleResolver" />
+    /// Creates a new PixmapLoader using the provided <see cref="IFileHandleResolver"/>
     /// </summary>
     /// <param name="resolver"> The resolver to use. </param>
     public PixmapLoader( IFileHandleResolver resolver ) : base( resolver )
@@ -82,6 +82,8 @@ public class PixmapLoader : AsynchronousAssetLoader
     public void Dispose()
     {
         Dispose( true );
+            
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>
@@ -111,3 +113,6 @@ public class PixmapLoader : AsynchronousAssetLoader
     {
     }
 }
+
+// ============================================================================
+// ============================================================================

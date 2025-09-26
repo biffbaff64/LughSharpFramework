@@ -29,7 +29,7 @@ public class Plane
 {
     /// <summary>
     /// Enum specifying on which side a point lies respective to the plane and
-    /// it's normal. <see cref="PlaneSide.Front" /> is the side to which the
+    /// it's normal. <see cref="PlaneSide.Front"/> is the side to which the
     /// normal points.
     /// </summary>
     public enum PlaneSide

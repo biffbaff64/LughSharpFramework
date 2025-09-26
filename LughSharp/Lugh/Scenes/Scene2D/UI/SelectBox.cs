@@ -38,7 +38,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// from a list. When inactive, the selected value is displayed. When activated, it shows
 /// the list of values that may be selected.
 /// <para>
-/// <see cref="ChangeListener.ChangeEvent" /> is fired when the selectbox selection changes.
+/// <see cref="ChangeListener.ChangeEvent"/> is fired when the selectbox selection changes.
 /// </para>
 /// <para>
 /// The preferred size of the select box is determined by the maximum text bounds of the items and the size of the
@@ -391,11 +391,11 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Sets the alignment of the selected item in the select box. See <see cref="GetList()" />
-    /// and <see cref="SetAlignment(int)" /> to set the alignment in the list shown when the
+    /// Sets the alignment of the selected item in the select box. See <see cref="GetList()"/>
+    /// and <see cref="SetAlignment(int)"/> to set the alignment in the list shown when the
     /// select box is open.
     /// </summary>
-    /// <param name="alignment"> See <see cref="Alignment" />. </param>
+    /// <param name="alignment"> See <see cref="Alignment"/>. </param>
     public void SetAlignment( int alignment )
     {
         _alignment = alignment;
@@ -412,7 +412,7 @@ public class SelectBox< T > : Widget, IDisableable
 
     /// <summary>
     /// Returns the first selected item, or null. For multiple selections
-    /// use <see cref="GetSelection()" />.
+    /// use <see cref="GetSelection()"/>.
     /// </summary>
     public T? GetSelected()
     {
@@ -468,7 +468,7 @@ public class SelectBox< T > : Widget, IDisableable
 
     /// <summary>
     /// Returns the pref width of the select box if the widest item was selected,
-    /// for use when <see cref="SetSelectedPrefWidth(bool)" /> is true.
+    /// for use when <see cref="SetSelectedPrefWidth(bool)"/> is true.
     /// </summary>
     public float GetMaxSelectedPrefWidth()
     {
@@ -955,7 +955,7 @@ public class SelectBox< T > : Widget, IDisableable
     // ========================================================================
 
     /// <summary>
-    /// The Style for a <see cref="SelectBox{T}" />.
+    /// The Style for a <see cref="SelectBox{T}"/>.
     /// </summary>
     [PublicAPI]
     public class SelectBoxStyle

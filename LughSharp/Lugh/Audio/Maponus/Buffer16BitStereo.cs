@@ -65,7 +65,7 @@ public class Buffer16BitStereo : AudioBase
     public int BytesLeft => _end - _offset;
 
     /// <summary>
-    /// Initialisation method. Called from constructor as the method <see cref="ClearBuffer" />
+    /// Initialisation method. Called from constructor as the method <see cref="ClearBuffer"/>
     /// is virtual and cannot by called from constructors.
     /// </summary>
     private void OnStart()
@@ -130,7 +130,7 @@ public class Buffer16BitStereo : AudioBase
     /// <param name="channel">The channel.</param>
     /// <param name="samples">An array of sample values.</param>
     /// <remarks>
-    /// The <paramref name="samples" /> parameter must have a length equal to
+    /// The <paramref name="samples"/> parameter must have a length equal to
     /// or greater than 32.
     /// </remarks>
     public override void AppendSamples( int channel, float[] samples )

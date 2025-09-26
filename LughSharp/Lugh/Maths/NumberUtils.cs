@@ -322,7 +322,7 @@ public abstract class NumberUtils
     /// Returns the value of the specified number as a <tt>byte</tt>
     /// which may involve rounding or truncation.
     /// <para>
-    /// This implementation returns the result of <see cref="IntValue" /> cast
+    /// This implementation returns the result of <see cref="IntValue"/> cast
     /// to a <tt>byte</tt>.
     /// </para>
     /// </summary>
@@ -339,7 +339,7 @@ public abstract class NumberUtils
     /// Returns the value of the specified number as a <tt>short</tt>
     /// which may involve rounding or truncation.
     /// <para>
-    /// This implementation returns the result of <see cref="IntValue" />
+    /// This implementation returns the result of <see cref="IntValue"/>
     /// cast to a <tt>short</tt>.
     /// </para>
     /// </summary>

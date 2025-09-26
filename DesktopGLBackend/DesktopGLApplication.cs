@@ -87,10 +87,10 @@ public class DesktopGLApplication : IApplication, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Creates a new Desktop Gl Application using the provided <see cref="DesktopGLApplicationConfiguration" />.
+    /// Creates a new Desktop Gl Application using the provided <see cref="DesktopGLApplicationConfiguration"/>.
     /// </summary>
-    /// <param name="listener"> The <see cref="IApplicationListener" /> to use. </param>
-    /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration" /> to use.</param>
+    /// <param name="listener"> The <see cref="IApplicationListener"/> to use. </param>
+    /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration"/> to use.</param>
     public DesktopGLApplication( IApplicationListener listener, DesktopGLApplicationConfiguration config )
     {
         // ====================================================================
@@ -140,9 +140,9 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// <summary>
     /// The entry point for running code using this framework. At this point at least one
     /// window will have been created, Glfw will have been set up, and the framework properly
-    /// initialised. This passes control to <see cref="Loop()" /> and stays there until the
-    /// app is finished. At this point <see cref="CleanupWindows" /> is called, followed by
-    /// <see cref="Cleanup" />.
+    /// initialised. This passes control to <see cref="Loop()"/> and stays there until the
+    /// app is finished. At this point <see cref="CleanupWindows"/> is called, followed by
+    /// <see cref="Cleanup"/>.
     /// </summary>
     public void Run()
     {
@@ -351,7 +351,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     }
 
     /// <summary>
-    /// Initialise the main Window <see cref="WindowHint" />s.
+    /// Initialise the main Window <see cref="WindowHint"/>s.
     /// </summary>
     /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration"/> to use. </param>
     private void SetWindowHints( DesktopGLApplicationConfiguration config )
@@ -566,12 +566,12 @@ public class DesktopGLApplication : IApplication, IDisposable
     #region window creation handlers
 
     /// <summary>
-    /// Creates a new <see cref="DesktopGLWindow" /> using the provided listener and
-    /// <see cref="DesktopGLApplicationConfiguration" />.
+    /// Creates a new <see cref="DesktopGLWindow"/> using the provided listener and
+    /// <see cref="DesktopGLApplicationConfiguration"/>.
     /// <para>
-    /// This function only instantiates a <see cref="DesktopGLWindow" /> and
+    /// This function only instantiates a <see cref="DesktopGLWindow"/> and
     /// returns immediately. The actual window creation is postponed with
-    /// <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" /> until after all
+    /// <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)"/> until after all
     /// existing windows are updated.
     /// </para>
     /// </summary>
@@ -585,7 +585,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     }
 
     /// <summary>
-    /// Creates a new <see cref="DesktopGLWindow" /> using the
+    /// Creates a new <see cref="DesktopGLWindow"/> using the
     /// </summary>
     /// <param name="config"></param>
     /// <param name="listener"></param>

@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
 /// Adds a listener to the actor for a specific event type and does not complete
-/// until <see cref="Handle" /> returns true.
+/// until <see cref="Handle"/> returns true.
 /// </summary>
 [PublicAPI]
 public abstract class EventAction< T > : Action, IEventListener where T : Event
@@ -46,7 +46,7 @@ public abstract class EventAction< T > : Action, IEventListener where T : Event
     /// Called when the specific type of event occurs on the actor.
     /// </summary>
     /// <returns>
-    /// true if the event should be considered handled by <see cref="Event.SetHandled" />
+    /// true if the event should be considered handled by <see cref="Event.SetHandled"/>
     /// and this EventAction considered complete.
     /// </returns>
     public bool Handle( Event ev )
@@ -79,7 +79,7 @@ public abstract class EventAction< T > : Action, IEventListener where T : Event
 
     /// <summary>
     /// Updates the action based on time.
-    /// Typically this is called each frame by <see cref="Actor" />.
+    /// Typically this is called each frame by <see cref="Actor"/>.
     /// </summary>
     /// <param name="delta">Time in seconds since the last frame.</param>
     /// <returns>

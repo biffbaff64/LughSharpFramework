@@ -135,7 +135,7 @@ public class CheckBox : TextButton
     // ========================================================================
 
     /// <summary>
-    /// The style for a select box, see <see cref="CheckBox" />.
+    /// The style for a select box, see <see cref="CheckBox"/>.
     /// </summary>
     [PublicAPI]
     public class CheckBoxStyle : TextButtonStyle

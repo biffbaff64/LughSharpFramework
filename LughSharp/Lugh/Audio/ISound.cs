@@ -50,7 +50,7 @@ public interface ISound : IDisposable
 
     /// <summary>
     /// Plays the sound, looping. If the sound is already playing, it will be played
-    /// again, concurrently. You need to stop the sound via a call to <see cref="Stop(long)" />
+    /// again, concurrently. You need to stop the sound via a call to <see cref="Stop(long)"/>
     /// using the returned id.
     /// </summary>
     /// <param name="volume"> the volume in the range [0, 1] </param>
@@ -59,7 +59,7 @@ public interface ISound : IDisposable
 
     /// <summary>
     /// Plays the sound, looping. If the sound is already playing, it will be played again,
-    /// concurrently. You need to stop the sound via a call to <see cref="Stop(long)" />
+    /// concurrently. You need to stop the sound via a call to <see cref="Stop(long)"/>
     /// using the returned id.
     /// </summary>
     /// <param name="volume"> the volume in the range [0,1] </param>
@@ -89,22 +89,22 @@ public interface ISound : IDisposable
     void Resume();
 
     /// <summary>
-    /// Stops the sound instance with the given id as returned by <see cref="Play(float)" /> or
-    /// <see cref="Play(float,float,float)" />. If the sound is no longer playing, this has no effect.
+    /// Stops the sound instance with the given id as returned by <see cref="Play(float)"/> or
+    /// <see cref="Play(float,float,float)"/>. If the sound is no longer playing, this has no effect.
     /// </summary>
     /// <param name="soundId"> the sound id  </param>
     void Stop( long soundId );
 
     /// <summary>
-    /// Pauses the sound instance with the given id as returned by <see cref="Play(float)" />
-    /// or <see cref="Play(float,float,float)" />. If the sound is no longer playing, this has no effect.
+    /// Pauses the sound instance with the given id as returned by <see cref="Play(float)"/>
+    /// or <see cref="Play(float,float,float)"/>. If the sound is no longer playing, this has no effect.
     /// </summary>
     /// <param name="soundId"> the sound id  </param>
     void Pause( long soundId );
 
     /// <summary>
-    /// Resumes the sound instance with the given id as returned by <see cref="Play(float)" />
-    /// or <see cref="Play(float,float,float)" />. If the sound is not paused, this has no effect.
+    /// Resumes the sound instance with the given id as returned by <see cref="Play(float)"/>
+    /// or <see cref="Play(float,float,float)"/>. If the sound is not paused, this has no effect.
     /// </summary>
     /// <param name="soundId"> the sound id  </param>
     void Resume( long soundId );
@@ -119,7 +119,7 @@ public interface ISound : IDisposable
 
     /// <summary>
     /// Changes the pitch multiplier of the sound instance with the given id as returned
-    /// by <see cref="Play(float)" /> or <see cref="Play(float,float,float)" />.
+    /// by <see cref="Play(float)"/> or <see cref="Play(float,float,float)"/>.
     /// If the sound is no longer playing, this has no effect.
     /// </summary>
     /// <param name="soundId"> the sound id </param>
@@ -131,7 +131,7 @@ public interface ISound : IDisposable
 
     /// <summary>
     /// Changes the volume of the sound instance with the given id as returned by
-    /// <see cref="Play(float)" /> or <see cref="Play(float,float,float)" />. If the
+    /// <see cref="Play(float)"/> or <see cref="Play(float,float,float)"/>. If the
     /// sound is no longer playing, this has no effect.
     /// </summary>
     /// <param name="soundId"> the sound id </param>
@@ -140,7 +140,7 @@ public interface ISound : IDisposable
 
     /// <summary>
     /// Sets the panning and volume of the sound instance with the given id as returned
-    /// by <see cref="Play(float)" /> or <see cref="Play(float,float,float)" />.
+    /// by <see cref="Play(float)"/> or <see cref="Play(float,float,float)"/>.
     /// If the sound is no longer playing, this has no effect. Note that panning only works
     /// for mono sounds, not for stereo sounds!
     /// </summary>

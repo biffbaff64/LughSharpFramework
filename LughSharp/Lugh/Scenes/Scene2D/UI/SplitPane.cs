@@ -350,11 +350,11 @@ public class SplitPane : WidgetGroup
     }
 
     /// <summary>
-    /// Called during layout to clamp the <see cref="_splitAmount" /> within the set limits.
-    /// By default it imposes the limits of the <see cref="GetMinSplitAmount()" />",
-    /// <see cref="GetMaxSplitAmount()" />", and min sizes of the children.
+    /// Called during layout to clamp the <see cref="_splitAmount"/> within the set limits.
+    /// By default it imposes the limits of the <see cref="GetMinSplitAmount()"/>,
+    /// <see cref="GetMaxSplitAmount()"/>, and min sizes of the children.
     /// This method is internally called in response to layout, so it should not call
-    /// <see cref="WidgetGroup.Invalidate()" />.
+    /// <see cref="WidgetGroup.Invalidate()"/>.
     /// </summary>
     protected void ClampSplitAmount()
     {

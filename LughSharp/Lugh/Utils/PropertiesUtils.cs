@@ -26,8 +26,8 @@ namespace LughSharp.Lugh.Utils;
 
 /// <summary>
 /// A helper class that allows you to load and store key/value pairs of an
-/// <see cref="Dictionary{TK,TV}" /> with the same line-oriented syntax supported
-/// by <see cref="IPreferences" />
+/// <see cref="Dictionary{TK,TV}"/> with the same line-oriented syntax supported
+/// by <see cref="IPreferences"/>
 /// </summary>
 [PublicAPI]
 public static class PropertiesUtils
@@ -43,7 +43,7 @@ public static class PropertiesUtils
     // ========================================================================
 
     /// <summary>
-    /// Loads properties from the specified <see cref="StreamReader" /> into the provided dictionary.
+    /// Loads properties from the specified <see cref="StreamReader"/> into the provided dictionary.
     /// </summary>
     /// <param name="properties">The dictionary to load properties into.</param>
     /// <param name="reader">The reader to read the properties from.</param>
@@ -290,7 +290,7 @@ public static class PropertiesUtils
     }
 
     /// <summary>
-    /// Stores the properties from the dictionary to the specified <see cref="StreamWriter" />.
+    /// Stores the properties from the dictionary to the specified <see cref="StreamWriter"/>.
     /// </summary>
     /// <param name="properties">The dictionary containing properties to store.</param>
     /// <param name="writer">The writer to write the properties to.</param>
@@ -410,7 +410,7 @@ public static class PropertiesUtils
     }
 
     /// <summary>
-    /// Writes a comment to the specified <see cref="StreamWriter" />.
+    /// Writes a comment to the specified <see cref="StreamWriter"/>.
     /// </summary>
     /// <param name="writer">The writer to write the comment to.</param>
     /// <param name="comment">The comment to write.</param>

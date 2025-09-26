@@ -26,8 +26,8 @@ namespace LughSharp.Lugh.Utils;
 
 /// <summary>
 /// Node record holding a value and its index.
-/// To change the contents of <see cref="Value" /> use <see cref="BinaryHeap{T}.Add(T, float)" />
-/// if the node is NOT in the heap, otherwise use <see cref="BinaryHeap{T}.SetValue(T, float)" />.
+/// To change the contents of <see cref="Value"/> use <see cref="BinaryHeap{T}.Add(T, float)"/>
+/// if the node is NOT in the heap, otherwise use <see cref="BinaryHeap{T}.SetValue(T, float)"/>.
 /// </summary>
 [PublicAPI]
 public record BinaryHeapNode
@@ -40,7 +40,7 @@ public record BinaryHeapNode
 /// A binary heap that stores nodes which each have a float value and are sorted either
 /// lowest first or highest first.
 /// <para>
-/// The <see cref="BinaryHeapNode" /> class can be extended to store additional information.
+/// The <see cref="BinaryHeapNode"/> class can be extended to store additional information.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -113,7 +113,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// <summary>
     /// Returns true if the heap contains the specified node.
     /// </summary>
-    /// <param name="node"> The <see cref="BinaryHeapNode" /> to look for. </param>
+    /// <param name="node"> The <see cref="BinaryHeapNode"/> to look for. </param>
     /// <param name="identity">
     /// If true, == comparison will be used. If false an Equals() comparison will be used.
     /// </param>
@@ -216,7 +216,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// Reset all elements in the heap to null.
     /// <para>
     /// If the heap does not exist, it will be created first with
-    /// capacity set to <see cref="DEFAULT_HEAP_CAPACITY" />
+    /// capacity set to <see cref="DEFAULT_HEAP_CAPACITY"/>
     /// </para>
     /// </summary>
     public void Clear()

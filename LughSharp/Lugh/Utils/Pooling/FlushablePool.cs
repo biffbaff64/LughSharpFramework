@@ -25,9 +25,9 @@
 namespace LughSharp.Lugh.Utils.Pooling;
 
 /// <summary>
-/// A <see cref="Pool{T}" /> which keeps track of the items obtained by calling
-/// (see <see cref="Obtain()" />), which can be freed all at once using the
-/// <see cref="Flush()" /> method.
+/// A <see cref="Pool{T}"/> which keeps track of the items obtained by calling
+/// (see <see cref="Obtain()"/>), which can be freed all at once using the
+/// <see cref="Flush()"/> method.
 /// </summary>
 [PublicAPI]
 public abstract class FlushablePool< T > //: Pool< T > where T : notnull

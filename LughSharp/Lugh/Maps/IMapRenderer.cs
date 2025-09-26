@@ -35,7 +35,7 @@ public interface IMapRenderer
     /// The viewbounds are taken from the camera's position and viewport size as
     /// well as the scale. This method will only work if the camera's direction
     /// vector is (0,0,-1) and its up vector is (0, 1, 0), which are the defaults.
-    /// <param name="camera">The <see cref="OrthographicCamera" /> to use.</param>
+    /// <param name="camera">The <see cref="OrthographicCamera"/> to use.</param>
     /// </summary>
     public void SetView( OrthographicCamera camera );
 

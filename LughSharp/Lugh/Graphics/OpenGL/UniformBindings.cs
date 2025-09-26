@@ -310,7 +310,7 @@ public unsafe partial class GLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     public void Uniform1iv( GLint location, GLsizei count, GLint* value )

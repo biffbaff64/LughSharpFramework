@@ -59,21 +59,26 @@ public class FileTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int format, bool useMipMaps )
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, bool useMipMaps )
+        : this( file, preloadedPixmap, preloadedPixmap.GetColorFormat(), useMipMaps )
+    {
+    }
+
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int desiredFormat, bool useMipMaps )
     {
         Logger.Checkpoint();
         
         File        = file;
         _pixmap     = preloadedPixmap;
-        PixelFormat = format;
+        PixelFormat = desiredFormat;
         UseMipMaps  = useMipMaps;
         Width       = _pixmap.Width;
         Height      = _pixmap.Height;
 
         // If the pixmap format doesn't match our desired format, convert it
-        if ( _pixmap.GetColorFormat() != format )
+        if ( _pixmap.GetColorFormat() != desiredFormat )
         {
-            _pixmap.Gdx2DPixmap?.ConvertPixelFormatTo( format );
+            _pixmap.Gdx2DPixmap?.ConvertPixelFormatTo( desiredFormat );
         }
 
         IsOwned = false;
@@ -82,12 +87,12 @@ public class FileTextureData : ITextureData
     /// <inheritdoc />
     public virtual bool IsManaged => true;
 
-    /// <returns> the <see cref="ITextureData.TextureDataType" /></returns>
+    /// <returns> the <see cref="ITextureData.TextureDataType"/></returns>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
-    /// <see cref="ITextureData.ConsumeCustomData" />. This method can be called from a non
+    /// Prepares the TextureData for a call to <see cref="ITextureData.FetchPixmap"/> or
+    /// <see cref="ITextureData.UploadCustomData"/>. This method can be called from a non
     /// OpenGL thread and should thus not interact with OpenGL.
     /// </summary>
     public void Prepare()
@@ -129,28 +134,28 @@ public class FileTextureData : ITextureData
     }
 
     /// <summary>
-    /// Returns the <see cref="Pixmap" /> for upload by Texture.
+    /// Returns the <see cref="Pixmap"/> for upload by Texture.
     /// <para>
-    /// A call to <see cref="ITextureData.Prepare" /> must precede a call to this method.
-    /// Any internal data structures created in <see cref="ITextureData.Prepare" />
+    /// A call to <see cref="ITextureData.Prepare"/> must precede a call to this method.
+    /// Any internal data structures created in <see cref="ITextureData.Prepare"/>
     /// should be disposed of here.
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public virtual Pixmap ConsumePixmap()
+    public virtual Pixmap FetchPixmap()
     {
         Logger.Checkpoint();
         
         if ( !IsPrepared )
         {
-            throw new GdxRuntimeException( "Call prepare() before calling ConsumePixmap()" );
+            throw new GdxRuntimeException( "Call prepare() before calling FetchPixmap()" );
         }
 
         var pixmap = _pixmap;
 
         if ( pixmap == null )
         {
-            throw new GdxRuntimeException( "ConsumePixmap() resulted in a null Pixmap!" );
+            throw new GdxRuntimeException( "FetchPixmap() resulted in a null Pixmap!" );
         }
 
         // Transfer ownership to caller and clear internal reference
@@ -161,8 +166,8 @@ public class FileTextureData : ITextureData
     }
 
     /// <returns>
-    /// whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
-    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
+    /// whether the caller of <see cref="ITextureData.FetchPixmap"/> should dispose the
+    /// Pixmap returned by <see cref="ITextureData.FetchPixmap"/>
     /// </returns>
     public virtual bool ShouldDisposePixmap()
     {
@@ -171,14 +176,14 @@ public class FileTextureData : ITextureData
 
     /// <summary>
     /// Uploads the pixel data to the OpenGL ES texture. The caller must bind an
-    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare" /> must preceed a call
+    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare"/> must preceed a call
     /// to this method.
     /// <para>
-    /// Any internal data struct.ures created in <see cref="ITextureData.Prepare" /> should be
+    /// Any internal data struct.ures created in <see cref="ITextureData.Prepare"/> should be
     /// disposed of here.
     /// </para>
     /// </summary>
-    public virtual void ConsumeCustomData( int target )
+    public virtual void UploadCustomData( int target )
     {
         throw new GdxRuntimeException( "This TextureData implementation does not upload data itself" );
     }

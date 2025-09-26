@@ -37,11 +37,11 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// <summary>
 /// A list box displays textual items and highlights the currently selected item.
 /// <para>
-/// <see cref="ChangeListener.ChangeEvent" /> is fired when the list selection changes.
+/// <see cref="ChangeListener.ChangeEvent"/> is fired when the list selection changes.
 /// </para>
 /// <para>
 /// The preferred size of the list is determined by the text bounds of the items
-/// and the size of the <see cref="Selection{T}" />.
+/// and the size of the <see cref="Selection{T}"/>.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -57,8 +57,8 @@ public class ListBox< T > : Widget
     // ========================================================================
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="Skin" />.
-    /// The <see cref="ListStyle" /> embedded in the Skin will be used.
+    /// Creates a new ListBox, using the supplied <see cref="Skin"/>.
+    /// The <see cref="ListStyle"/> embedded in the Skin will be used.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
     public ListBox( Skin skin )
@@ -67,8 +67,8 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="Skin" />. The
-    /// <see cref="ListStyle" /> to use will be extracted from the supplied
+    /// Creates a new ListBox, using the supplied <see cref="Skin"/>. The
+    /// <see cref="ListStyle"/> to use will be extracted from the supplied
     /// skin using the name provided.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
@@ -79,7 +79,7 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="ListStyle" />
+    /// Creates a new ListBox, using the supplied <see cref="ListStyle"/>
     /// </summary>
     /// <param name="style"> The ListStyle to use. </param>
     public ListBox( ListStyle style )
@@ -119,7 +119,7 @@ public class ListBox< T > : Widget
 
     /// <summary>
     /// Returns the list's style. Modifying the returned style may not have an
-    /// effect until <see cref="SetStyle(ListStyle)" />" is called.
+    /// effect until <see cref="SetStyle(ListStyle)"/> is called.
     /// </summary>
     public ListStyle? Style { get; set; }
 
@@ -415,8 +415,8 @@ public class ListBox< T > : Widget
 
     /// <summary>
     /// Sets the items visible in the list, clearing the selection if it is no longer valid. If a
-    /// selection is <see cref="ArraySelection{T}.Required()" />", the first item is selected. This
-    /// can safely be called with a (modified) array returned from <see cref="Items" />"
+    /// selection is <see cref="ArraySelection{T}.Required()"/>, the first item is selected. This
+    /// can safely be called with a (modified) array returned from <see cref="Items"/>
     /// </summary>
     public void SetItems( List< T > newItems )
     {
@@ -666,7 +666,7 @@ public class ListBox< T > : Widget
     // ========================================================================
 
     /// <summary>
-    /// The style for a list, see <see cref="ListBox{T}" />.
+    /// The style for a list, see <see cref="ListBox{T}"/>.
     /// </summary>
     [PublicAPI]
     public class ListStyle

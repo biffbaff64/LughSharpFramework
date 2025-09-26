@@ -56,8 +56,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     // ========================================================================
 
     /// <summary>
-    /// Construct a new Tree using the supplied <see cref="Skin" />
-    /// and a default <see cref="TreeStyle" /> from that skin.
+    /// Construct a new Tree using the supplied <see cref="Skin"/>
+    /// and a default <see cref="TreeStyle"/> from that skin.
     /// </summary>
     public Tree( Skin skin ) : this( skin.Get< TreeStyle >() )
     {
@@ -454,7 +454,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
     /// <summary>
     /// Returns the drawable for the expand icon. The default implementation returns
-    /// <see cref="Tree{T,V}.TreeStyle.PlusOver" /> or <see cref="Tree{T,V}.TreeStyle.MinusOver" />
+    /// <see cref="Tree{T,V}.TreeStyle.PlusOver"/> or <see cref="Tree{T,V}.TreeStyle.MinusOver"/>
     /// on the desktop if the node is the over node, the mouse is left of iconX, and
     /// clicking would expand the node.
     /// </summary>
@@ -586,7 +586,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     /// <summary>
     /// Updates the order of the actors in the tree for all root nodes and all
     /// child nodes.
-    /// This is useful after changing the order of <see cref="RootNodes" />.
+    /// This is useful after changing the order of <see cref="RootNodes"/>.
     /// </summary>
     public void UpdateRootNodes()
     {
@@ -793,7 +793,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 // ========================================================================
 
     /// <summary>
-    /// The style for a <see cref="Tree{TN,TV}" />.
+    /// The style for a <see cref="Tree{TN,TV}"/>.
     /// </summary>
     [PublicAPI]
     public class TreeStyle
@@ -831,7 +831,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     // ========================================================================
 
     /// <summary>
-    /// A <see cref="Tree{TNode,TValue}" /> node which has an actor and value.
+    /// A <see cref="Tree{TNode,TValue}"/> node which has an actor and value.
     /// <para>
     /// A subclass can be used so the generic type parameters don't need
     /// to be specified repeatedly.
@@ -865,7 +865,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         public bool            IsExpanded { get; private set; }
 
         /// <summary>
-        /// If the children order is changed, <see cref="UpdateChildren()" /> must
+        /// If the children order is changed, <see cref="UpdateChildren()"/> must
         /// be called to ensure the node's actors are in the correct order. That
         /// is not necessary if this node is not in the tree or is not expanded,
         /// because then the child node's actors are not in the tree.
@@ -1000,7 +1000,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Inserts the supplied node into the <see cref="NodeChildren" /> list.
+        /// Inserts the supplied node into the <see cref="NodeChildren"/> list.
         /// </summary>
         /// <param name="childIndex"></param>
         /// <param name="node"></param>
@@ -1045,7 +1045,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Return the current count of actors held in <see cref="NodeChildren" />.
+        /// Return the current count of actors held in <see cref="NodeChildren"/>.
         /// If this node is not expanded, a count of 1 is returned by default.
         /// </summary>
         public int CountActors()
@@ -1155,7 +1155,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
         /// <summary>
         /// Updates the order of the actors in the tree for this node and all child nodes.
-        /// This is useful after changing the order. of <see cref="NodeChildren" />.
+        /// This is useful after changing the order. of <see cref="NodeChildren"/>.
         /// </summary>
         public void UpdateChildren()
         {

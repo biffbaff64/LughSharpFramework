@@ -30,9 +30,9 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// optimize them for processing by the GPU.
 /// <para>
 /// To Draw something with a PolygonSpriteBatch one has to first call the
-/// <see cref="PolygonSpriteBatch.Begin(bool)" /> method which will setup appropriate
+/// <see cref="PolygonSpriteBatch.Begin(bool)"/> method which will setup appropriate
 /// render states. When you are done with drawing you have to call
-/// <see cref="PolygonSpriteBatch.End()" /> which will actually Draw the things
+/// <see cref="PolygonSpriteBatch.End()"/> which will actually Draw the things
 /// you specified.
 /// </para>
 /// <para>
@@ -53,7 +53,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// <para>
 /// A PolygonSpriteBatch works with OpenGL ES 1.x and 2.0. In the case of a 2.0 context
 /// it will use its own custom shader to Draw all provided sprites. You can set your own
-/// custom shader via <see cref="Shader" />.
+/// custom shader via <see cref="Shader"/>.
 /// </para>
 /// <para>
 /// A PolygonSpriteBatch has to be disposed if it is no longer used.
@@ -119,7 +119,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     /// <para>
     /// The defaultShader specifies the shader to use. Note that the names for uniforms for
     /// this default shader are different than the ones expect for shaders set with
-    /// <see cref="Shader" />.
+    /// <see cref="Shader"/>.
     /// </para>
     /// </summary>
     /// <param name="maxVertices"> The max number of vertices in a single batch. Max of 32767.</param>
@@ -266,7 +266,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     }
 
     /// <summary>
-    /// Draws the supplied <see cref="PolygonRegion" /> at the given corrdinates.
+    /// Draws the supplied <see cref="PolygonRegion"/> at the given corrdinates.
     /// </summary>
     /// <param name="region"> The Polygon Region to draw </param>
     /// <param name="x"> X coordinate </param>

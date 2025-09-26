@@ -28,11 +28,11 @@ using LughSharp.Lugh.Graphics;
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-/// <see cref="AssetLoader" /> for <see cref="Cubemap" /> instances. The pixel data
+/// <see cref="AssetLoader"/> for <see cref="Cubemap"/> instances. The pixel data
 /// is loaded asynchronously. The texture is then created on the rendering thread,
 /// synchronously.
 /// <para>
-/// Passing a <see cref="CubemapParameter" /> to one of the <see cref="AssetManager"/>"
+/// Passing a <see cref="CubemapParameter"/> to one of the <see cref="AssetManager"/>
 /// load methods allows one to specify parameters as can be passed to the various Cubemap
 /// constructors, e.g. filtering and so on.
 /// </para>
@@ -149,3 +149,6 @@ public class CubemapLoader : AsynchronousAssetLoader
         public Cubemap? Cubemap { get; set; } = null;
     }
 }
+
+// ============================================================================
+// ============================================================================

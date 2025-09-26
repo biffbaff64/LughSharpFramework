@@ -81,8 +81,8 @@ public class Stage : InputAdapter, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Creates a stage with a <see cref="ScalingViewport" /> set to
-    /// <see cref="Scaling.Stretch" />. The stage will use its own <see cref="IBatch" />
+    /// Creates a stage with a <see cref="ScalingViewport"/> set to
+    /// <see cref="Scaling.Stretch"/>. The stage will use its own <see cref="IBatch"/>
     /// which will be disposed when the stage is disposed.
     /// </summary>
     public Stage()
@@ -96,7 +96,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// Creates a stage with the specified viewport. The stage will use its own
-    /// <see cref="IBatch" /> which will be disposed when the stage is disposed.
+    /// <see cref="IBatch"/> which will be disposed when the stage is disposed.
     /// </summary>
     public Stage( Viewport viewport ) : this( viewport, new SpriteBatch() )
     {
@@ -104,13 +104,13 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Creates a stage with the specified <see cref="Viewport" /> and <see cref="IBatch" />.
+    /// Creates a stage with the specified <see cref="Viewport"/> and <see cref="IBatch"/>.
     /// This can be used to specify an existing batch or to customize which batch implementation
     /// is used.
     /// </summary>
     /// <param name="viewport"> The viewport for this stage. </param>
     /// <param name="batch">
-    /// Will not be disposed if <see cref="Dispose()" /> is called,
+    /// Will not be disposed if <see cref="Dispose()"/> is called,
     /// handle disposal yourself.
     /// </param>
     public Stage( Viewport? viewport, IBatch? batch )
@@ -138,7 +138,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     /// <param name="value"> May be null. </param>
     /// <returns>
-    /// true if the unfocus and focus events were not cancelled by a <see cref="FocusListener" />.
+    /// true if the unfocus and focus events were not cancelled by a <see cref="FocusListener"/>.
     /// </returns>
     public Actor? KeyboardFocus
     {
@@ -201,7 +201,7 @@ public class Stage : InputAdapter, IDisposable
     /// <param name="value"> May be null. </param>
     /// <returns>
     /// true if the unfocus and focus events were not cancelled
-    /// by a <see cref="FocusListener" />.
+    /// by a <see cref="FocusListener"/>.
     /// </returns>
     public Actor? ScrollFocus
     {
@@ -277,14 +277,14 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Returns the root's child actors.
     /// </summary>
-    /// <see cref="Group.Children " />
+    /// <see cref="Group.Children "/>
     public SnapshotArrayList< Actor > Actors => Root.Children;
 
     /// <summary>
-    /// If true, any actions executed during a call to <see cref="Act()" />)
-    /// will result in a call to <see cref="IGraphicsDevice.RequestRendering()" />.
+    /// If true, any actions executed during a call to <see cref="Act()"/>)
+    /// will result in a call to <see cref="IGraphicsDevice.RequestRendering()"/>.
     /// Widgets that animate or otherwise require additional rendering may check
-    /// this setting before calling <see cref="IGraphicsDevice.RequestRendering()" />.
+    /// this setting before calling <see cref="IGraphicsDevice.RequestRendering()"/>.
     /// Default is true.
     /// </summary>
     public bool ActionsRequestRendering { get; set; } = true;
@@ -296,7 +296,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// If true, debug lines are shown for actors even when
-    /// <see cref="Actor.IsVisible" /> is false.
+    /// <see cref="Actor.IsVisible"/> is false.
     /// </summary>
     public bool DebugInvisibleActors { get; set; }
 
@@ -328,7 +328,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// If true, debug is enabled only for the actor under the mouse.
-    /// Can be combined with <see cref="DebugAll" />.
+    /// Can be combined with <see cref="DebugAll"/>.
     /// </summary>
     public bool DebugUnderMouse
     {
@@ -354,7 +354,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// If true, debug is enabled only for the parent of the actor under
-    /// the mouse. Can be combined with <see cref="DebugAll" />.
+    /// the mouse. Can be combined with <see cref="DebugAll"/>.
     /// </summary>
     public bool DebugParentUnderMouse
     {
@@ -395,7 +395,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// Draw the stage. If the Viewport camera has not been set, or the
-    /// root <see cref="Group" /> is invisible, the stage will not draw.
+    /// root <see cref="Group"/> is invisible, the stage will not draw.
     /// </summary>
     public virtual void Draw()
     {
@@ -420,7 +420,7 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Calls <see cref="Act(float)" /> with GdxApi.Graphics.GetDeltaTime(),
+    /// Calls <see cref="Act(float)"/> with GdxApi.Graphics.GetDeltaTime(),
     /// limited to a minimum of 30fps.
     /// </summary>
     public virtual void Act()
@@ -429,7 +429,7 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Calls the <see cref="Actor.Act(float)" /> method on each actor in the
+    /// Calls the <see cref="Actor.Act(float)"/> method on each actor in the
     /// stage. Typically called each frame. This method also fires enter and exit
     /// events.
     /// </summary>
@@ -555,7 +555,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// Applies a touch down event to the stage and returns true if an actor in
-    /// the scene <see cref="Handle" /> the event.
+    /// the scene <see cref="Handle"/> the event.
     /// </summary>
     public override bool TouchDown( int screenX, int screenY, int pointer, int button )
     {
@@ -607,7 +607,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// Applies a touch moved event to the stage and returns true if an actor in the scene
-    /// <see cref="Event.SetHandled" /> handled the event. Only <see cref="InputListener" />
+    /// <see cref="Event.SetHandled"/> handled the event. Only <see cref="InputListener"/>
     /// listeners that returned true for touchDown will receive this event.
     /// </summary>
     public override bool TouchDragged( int screenX, int screenY, int pointer )
@@ -674,8 +674,8 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// Applies a touch up event to the stage and returns true if an actor in the
-    /// scene <see cref="Event.SetHandled" /> handled the event.
-    /// Only <see cref="InputListener" /> listeners that returned true for
+    /// scene <see cref="Event.SetHandled"/> handled the event.
+    /// Only <see cref="InputListener"/> listeners that returned true for
     /// touchDown will receive this event.
     /// </summary>
     public override bool TouchUp( int screenX, int screenY, int pointer, int button )
@@ -743,7 +743,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// Applies a mouse moved event to the stage and returns true if an actor
-    /// in the scene <see cref="Event.SetHandled" /> the event. This event only
+    /// in the scene <see cref="Event.SetHandled"/> the event. This event only
     /// occurs on the desktop.
     /// </summary>
     public override bool MouseMoved( int screenX, int screenY )
@@ -787,7 +787,7 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// Applies a mouse scroll event to the stage and returns true if an actor
-    /// in the scene <see cref="Event.SetHandled" /> the event. This event only
+    /// in the scene <see cref="Event.SetHandled"/> the event. This event only
     /// occurs on the desktop.
     /// </summary>
     public override bool Scrolled( float amountX, float amountY )
@@ -819,8 +819,8 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// Applies a key down event to the actor that has
-    /// <see cref="Stage.KeyboardFocus" />, if any, and returns
-    /// true if the event was handled in <see cref="Event.SetHandled" />.
+    /// <see cref="Stage.KeyboardFocus"/>, if any, and returns
+    /// true if the event was handled in <see cref="Event.SetHandled"/>.
     /// </summary>
     public override bool KeyDown( int keyCode )
     {
@@ -844,8 +844,8 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Applies a key up event to the actor that has <see cref="Stage.KeyboardFocus" />,
-    /// if any, and returns true if the event was <see cref="Event.SetHandled" />.
+    /// Applies a key up event to the actor that has <see cref="Stage.KeyboardFocus"/>,
+    /// if any, and returns true if the event was <see cref="Event.SetHandled"/>.
     /// </summary>
     public override bool KeyUp( int keyCode )
     {
@@ -869,8 +869,8 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Applies a key typed event to the actor that has <see cref="Stage.KeyboardFocus" />,
-    /// if any, and returns true if the event was <see cref="Event.SetHandled" />.
+    /// Applies a key typed event to the actor that has <see cref="Stage.KeyboardFocus"/>,
+    /// if any, and returns true if the event was <see cref="Event.SetHandled"/>.
     /// </summary>
     public override bool KeyTyped( char character )
     {
@@ -896,9 +896,9 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Adds the listener to be notified for all touchDragged and touchUp events for
     /// the specified pointer and button. Touch focus is added automatically when true
-    /// is returned from <see cref="InputListener.TouchDown(InputEvent, float, float, int, int)" />
-    /// The specified actors will be used as the <see cref="Event.ListenerActor" /> and
-    /// <see cref="Event.TargetActor" /> for the touchDragged and touchUp events.
+    /// is returned from <see cref="InputListener.TouchDown(InputEvent, float, float, int, int)"/>
+    /// The specified actors will be used as the <see cref="Event.ListenerActor"/> and
+    /// <see cref="Event.TargetActor"/> for the touchDragged and touchUp events.
     /// </summary>
     public void AddTouchFocus( IEventListener listener,
                                Actor? listenerActor,
@@ -952,7 +952,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Cancels touch focus for all listeners with the specified listener actor.
     /// </summary>
-    /// <see cref="CancelTouchFocus() " />
+    /// <see cref="CancelTouchFocus() "/>
     public void CancelTouchFocus( Actor listenerActor )
     {
         // Cancel all current touch focuses for the specified listener, allowing
@@ -1011,8 +1011,8 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Removes all touch focus listeners, sending a touchUp event to each listener.
     /// Listeners typically expect to receive a touchUp event when they have touch
-    /// focus. The location of the touchUp is <see cref="int.MinValue" />. Listeners can use
-    /// <see cref="InputEvent.TouchFocusCancel()" /> to ignore this event if needed.
+    /// focus. The location of the touchUp is <see cref="int.MinValue"/>. Listeners can use
+    /// <see cref="InputEvent.TouchFocusCancel()"/> to ignore this event if needed.
     /// </summary>
     public void CancelTouchFocus()
     {
@@ -1022,7 +1022,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Cancels touch focus for all listeners except the specified listener.
     /// </summary>
-    /// <see cref="CancelTouchFocus() " />
+    /// <see cref="CancelTouchFocus() "/>
     public void CancelTouchFocusExcept( IEventListener? exceptListener, Actor? exceptActor )
     {
         var inputEvent = Pools.Obtain< InputEvent >();
@@ -1078,7 +1078,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Adds an actor to the root of the stage.
     /// </summary>
-    /// <see cref="Group.AddActor " />
+    /// <see cref="Group.AddActor "/>
     public virtual void AddActor( Actor actor )
     {
         Root.AddActor( actor );
@@ -1087,7 +1087,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Adds an action to the root of the stage.
     /// </summary>
-    /// <see cref="Group.AddAction(Action) " />
+    /// <see cref="Group.AddAction(Action) "/>
     public virtual void AddAction( Action action )
     {
         Root.AddAction( action );
@@ -1096,7 +1096,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Adds a listener to the root.
     /// </summary>
-    /// <see cref="Actor.AddListener(IEventListener) " />
+    /// <see cref="Actor.AddListener(IEventListener) "/>
     public bool AddListener( IEventListener listener )
     {
         return Root.AddListener( listener );
@@ -1105,7 +1105,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Removes a listener from the root.
     /// </summary>
-    /// <see cref="Actor.RemoveListener(IEventListener) " />
+    /// <see cref="Actor.RemoveListener(IEventListener) "/>
     public bool RemoveListener( IEventListener listener )
     {
         return Root.RemoveListener( listener );
@@ -1114,7 +1114,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Adds a capture listener to the root.
     /// </summary>
-    /// <see cref="Actor.AddCaptureListener(IEventListener) " />
+    /// <see cref="Actor.AddCaptureListener(IEventListener) "/>
     public bool AddCaptureListener( IEventListener listener )
     {
         return Root.AddCaptureListener( listener );
@@ -1123,7 +1123,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Removes a listener from the root.
     /// </summary>
-    /// <see cref="Actor.RemoveCaptureListener(IEventListener) " />
+    /// <see cref="Actor.RemoveCaptureListener(IEventListener) "/>
     public bool RemoveCaptureListener( IEventListener listener )
     {
         return Root.RemoveCaptureListener( listener );
@@ -1168,15 +1168,15 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Returns the <see cref="Actor" /> at the specified location in stage coordinates.
+    /// Returns the <see cref="Actor"/> at the specified location in stage coordinates.
     /// Hit testing is performed in the order the actors were inserted into the stage, last
     /// inserted actors being tested first. To get stage coordinates from screen coordinates,
-    /// use <see cref="ScreenToStageCoordinates(Vector2)" />.
+    /// use <see cref="ScreenToStageCoordinates(Vector2)"/>.
     /// </summary>
     /// <param name="stageX"> X Coordinate of hit. </param>
     /// <param name="stageY"> Y Coordinate of hit. </param>
     /// <param name="touchable">
-    /// If true, the hit detection will respect the <see cref="Actor.Touchable" />.
+    /// If true, the hit detection will respect the <see cref="Actor.Touchable"/>.
     /// </param>
     /// <returns> May be null if no actor was hit.  </returns>
     public virtual Actor? Hit( float stageX, float stageY, bool touchable )
@@ -1217,10 +1217,10 @@ public class Stage : InputAdapter, IDisposable
     /// Transforms the coordinates to screen coordinates. The coordinates can be
     /// anywhere in the stage since the transform matrix describes how to convert
     /// them.
-    /// The transform matrix is typically obtained from <see cref="IBatch.TransformMatrix" />
-    /// during <see cref="Actor.Draw(IBatch, float)" />.
+    /// The transform matrix is typically obtained from <see cref="IBatch.TransformMatrix"/>
+    /// during <see cref="Actor.Draw(IBatch, float)"/>.
     /// </summary>
-    /// <see cref="Actor.LocalToStageCoordinates(Vector2)" />
+    /// <see cref="Actor.LocalToStageCoordinates(Vector2)"/>
     public virtual Vector2 ToScreenCoordinates( Vector2 coords, Matrix4 transformMatrix )
     {
         return Viewport.ToScreenCoordinates( coords, transformMatrix );
@@ -1247,11 +1247,11 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// If not <see cref="Table.DebugType.None" />, debug is enabled only for the first
+    /// If not <see cref="Table.DebugType.None"/>, debug is enabled only for the first
     /// ascendant of the actor under the mouse that is a table.
-    /// Can be combined with <see cref="DebugAll" />.
+    /// Can be combined with <see cref="DebugAll"/>.
     /// </summary>
-    /// <param name="debugTableUnderMouse">May be null for <see cref="Table.DebugType.None" />.</param>
+    /// <param name="debugTableUnderMouse">May be null for <see cref="Table.DebugType.None"/>.</param>
     public virtual void SetDebugTableUnderMouse( Table.DebugType debugTableUnderMouse )
     {
         if ( Enum.IsDefined( typeof( Table.DebugType ), debugTableUnderMouse ) )
@@ -1279,7 +1279,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// If true, debug is enabled only for the first ascendant of the actor
     /// under the mouse that is a table.
-    /// Can be combined with <see cref="DebugAll" />.
+    /// Can be combined with <see cref="DebugAll"/>.
     /// </summary>
     public virtual void SetDebugTableUnderMouse( bool debugTableUnderMouse )
     {

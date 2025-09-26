@@ -35,7 +35,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// The preferred size of the touchpad is determined by the background.
 /// </para>
 /// <para>
-/// A <see cref="ChangeListener.ChangeEvent" /> is fired when the touchpad knob is moved.
+/// A <see cref="ChangeListener.ChangeEvent"/> is fired when the touchpad knob is moved.
 /// Cancelling the event will move the knob to where it was previously.
 /// </para>
 /// </summary>
@@ -79,7 +79,7 @@ public class Touchpad : Widget
     }
 
     /// <summary>
-    /// Constructs a new Touchpad using the supplied <see cref="TouchpadStyle" />
+    /// Constructs a new Touchpad using the supplied <see cref="TouchpadStyle"/>
     /// and deadzone radius.
     /// </summary>
     /// <param name="deadzoneRadius">

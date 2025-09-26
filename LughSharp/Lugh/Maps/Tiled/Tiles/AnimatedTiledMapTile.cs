@@ -29,7 +29,7 @@ using Blendmode = LughSharp.Lugh.Maps.Tiled.ITiledMapTile.Blendmode;
 namespace LughSharp.Lugh.Maps.Tiled.Tiles;
 
 /// <summary>
-/// Represents an animating <see cref="ITiledMapTile" />.
+/// Represents an animating <see cref="ITiledMapTile"/>.
 /// </summary>
 [PublicAPI]
 public class AnimatedTiledMapTile : ITiledMapTile
@@ -52,7 +52,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     /// </summary>
     /// <param name="interval">The interval between each individual frame tile.</param>
     /// <param name="frameTiles">
-    /// An array of <see cref="StaticTiledMapTile" />s that make up the animation.
+    /// An array of <see cref="StaticTiledMapTile"/>s that make up the animation.
     /// </param>
     public AnimatedTiledMapTile( float interval, List< StaticTiledMapTile > frameTiles )
     {
@@ -75,7 +75,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     /// The intervals between each individual frame tile in milliseconds.
     /// </param>
     /// <param name="frameTiles">
-    /// An array of <see cref="StaticTiledMapTile" /> that make up the animation.
+    /// An array of <see cref="StaticTiledMapTile"/> that make up the animation.
     /// </param>
     public AnimatedTiledMapTile( List< int > intervals, List< StaticTiledMapTile > frameTiles )
     {

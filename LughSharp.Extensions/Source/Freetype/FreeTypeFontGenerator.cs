@@ -175,7 +175,7 @@ public class FreeTypeFontGenerator : IDisposable
     }
 
     /// <summary>
-    /// Generates a new <see cref="BitmapFont" />. The size is expressed in pixels. Throws
+    /// Generates a new <see cref="BitmapFont"/>. The size is expressed in pixels. Throws
     /// a GdxRuntimeException if the font could not be generated. Using big sizes might
     /// cause such an exception.
     /// </summary>
@@ -212,8 +212,8 @@ public class FreeTypeFontGenerator : IDisposable
     }
 
     /// <summary>
-    /// Called by generateFont to create a new <see cref="BitmapFont" /> instance. This allows
-    /// injecting a customized <see cref="BitmapFont" />, eg for a RTL font.
+    /// Called by generateFont to create a new <see cref="BitmapFont"/> instance. This allows
+    /// injecting a customized <see cref="BitmapFont"/>, eg for a RTL font.
     /// </summary>
     protected static BitmapFont NewBitmapFont( BitmapFont.BitmapFontData data, List< TextureRegion > pageRegions, bool integer )
     {
@@ -269,7 +269,7 @@ public class FreeTypeFontGenerator : IDisposable
 
     /// <summary>
     /// Returns null if glyph was not found in the font. If there is nothing to render, for example
-    /// with various space characters, then <see cref="GlyphAndBitmap.Bitmap" /> will be null.
+    /// with various space characters, then <see cref="GlyphAndBitmap.Bitmap"/> will be null.
     /// </summary>
     public GlyphAndBitmap? GenerateGlyphAndBitmap( int c, int size, bool flip )
     {
@@ -340,8 +340,8 @@ public class FreeTypeFontGenerator : IDisposable
     }
 
     /// <summary>
-    /// Generates a new <see cref="BitmapFont.BitmapFontData" /> instance, expert usage only.
-    /// Throws a <see cref="GdxRuntimeException" /> if something went wrong.
+    /// Generates a new <see cref="BitmapFont.BitmapFontData"/> instance, expert usage only.
+    /// Throws a <see cref="GdxRuntimeException"/> if something went wrong.
     /// </summary>
     /// <param name="size"> the size in pixels. </param>
     public FreeTypeBitmapFontData GenerateData( int size )
@@ -875,9 +875,9 @@ public class FreeTypeFontGenerator : IDisposable
 
     /// <summary>
     /// Sets the maximum size that will be used when generating texture atlases for glyphs
-    /// with <see cref="GenerateData(int)" />. The default is 1024.
-    /// By specifying <see cref="NO_MAXIMUM" />, the texture atlas will scale as needed.
-    /// The power-of-two square texture size will be capped to the given <see cref="texSize" />.
+    /// with <see cref="GenerateData(int)"/>. The default is 1024.
+    /// By specifying <see cref="NO_MAXIMUM"/>, the texture atlas will scale as needed.
+    /// The power-of-two square texture size will be capped to the given <see cref="texSize"/>.
     /// It is recommended that a power-of-two value be used here.
     /// Multiple pages may be used to fit all the generated glyphs.
     /// </summary>
@@ -985,10 +985,10 @@ public class FreeTypeFontGenerator : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// <see cref="BitmapFont.BitmapFontData" /> used for fonts generated via the
-    /// <see cref="FreeTypeFontGenerator" />. The texture storing the glyphs is held in
-    /// memory, thus the <see cref="BitmapFont.BitmapFontData.ImagePaths" /> and
-    /// <see cref="BitmapFont.BitmapFontData.FontFile" /> methods will return null.
+    /// <see cref="BitmapFont.BitmapFontData"/> used for fonts generated via the
+    /// <see cref="FreeTypeFontGenerator"/>. The texture storing the glyphs is held in
+    /// memory, thus the <see cref="BitmapFont.BitmapFontData.ImagePaths"/> and
+    /// <see cref="BitmapFont.BitmapFontData.FontFile"/> methods will return null.
     /// </summary>
     [PublicAPI]
     public class FreeTypeBitmapFontData : BitmapFont.BitmapFontData, IDisposable
@@ -1104,14 +1104,14 @@ public class FreeTypeFontGenerator : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Parameter container class that helps configure how <see cref="FreeTypeBitmapFontData" />
-    /// and <see cref="BitmapFont" /> instances are generated.
+    /// Parameter container class that helps configure how <see cref="FreeTypeBitmapFontData"/>
+    /// and <see cref="BitmapFont"/> instances are generated.
     /// <para>
     /// The packer field is for advanced usage, where it is necessary to pack multiple BitmapFonts
     /// (i.e. styles, sizes, families) into a single Texture atlas. If no packer is specified, the
     /// generator will use its own PixmapPacker to pack the glyphs into a power-of-two sized texture,
-    /// and the resulting <see cref="FreeTypeBitmapFontData" /> will have a valid <see cref="TextureRegion" />
-    /// which can be used to construct a new <see cref="BitmapFont" />.
+    /// and the resulting <see cref="FreeTypeBitmapFontData"/> will have a valid <see cref="TextureRegion"/>
+    /// which can be used to construct a new <see cref="BitmapFont"/>.
     /// </para>
     /// </summary>
     [PublicAPI]
@@ -1206,7 +1206,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         /// <summary>
         /// The characters the font should contain.
-        /// If '\0' is not included then <see cref="BitmapFont.BitmapFontData.MissingGlyph" />
+        /// If '\0' is not included then <see cref="BitmapFont.BitmapFontData.MissingGlyph"/>
         /// is not set.
         /// </summary>
         public string Characters { get; set; } = DefaultChars;
@@ -1247,7 +1247,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// no longer needed. The FreeTypeBitmapFontData must be Disposed (separately from the
         /// generator) when the font is no longer needed. The FreeTypeFontParameter should not
         /// be modified after creating a font. If a PixmapPacker is not specified, the font
-        /// glyph page textures will use <see cref="FreeTypeFontGenerator.GetMaxTextureSize()" />.
+        /// glyph page textures will use <see cref="FreeTypeFontGenerator.GetMaxTextureSize()"/>.
         /// </summary>
         public bool Incremental { get; set; }
     }

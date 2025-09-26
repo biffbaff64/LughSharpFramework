@@ -36,7 +36,7 @@ namespace LughSharp.Lugh.Maps;
 public interface IImageResolver
 {
     /// <summary>
-    /// Returns the <see cref="TextureRegion" /> for the given name,
+    /// Returns the <see cref="TextureRegion"/> for the given name,
     /// or null if texture doesn't exist.
     /// </summary>
     public TextureRegion? GetImage( string name );
@@ -66,7 +66,7 @@ public interface IImageResolver
         /// </summary>
         /// <param name="name">The name of the image to retrieve.</param>
         /// <returns>
-        /// A <see cref="TextureRegion" /> object representing the texture region of the specified image.
+        /// A <see cref="TextureRegion"/> object representing the texture region of the specified image.
         /// </returns>
         /// <exception cref="KeyNotFoundException">
         /// Thrown if the specified image name is not found in the dictionary.
@@ -88,7 +88,7 @@ public interface IImageResolver
     }
 
     /// <summary>
-    /// Image Resolver for TextureRegions fetched via an <see cref="AssetManager" />
+    /// Image Resolver for TextureRegions fetched via an <see cref="AssetManager"/>
     /// </summary>
     [PublicAPI]
     public class AssetManagerImageResolver : IImageResolver
@@ -110,7 +110,7 @@ public interface IImageResolver
         /// </summary>
         /// <param name="name">The name of the image to retrieve.</param>
         /// <returns>
-        /// A <see cref="TextureRegion" /> object representing the texture region of the specified image.
+        /// A <see cref="TextureRegion"/> object representing the texture region of the specified image.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown if the specified image name is null or empty.

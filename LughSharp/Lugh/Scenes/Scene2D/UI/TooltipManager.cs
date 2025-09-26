@@ -184,7 +184,7 @@ public class TooltipManager< T > where T : Actor
     }
 
     /// <summary>
-    /// Shows all tooltips on hover without a delay for <see cref="ResetTime" /> seconds.
+    /// Shows all tooltips on hover without a delay for <see cref="ResetTime"/> seconds.
     /// </summary>
     public void ShowInstantly()
     {
@@ -218,8 +218,8 @@ public class TooltipManager< T > where T : Actor
     public float OffsetY { get; set; } = 19;
 
     /// <summary>
-    /// The maximum width of a <see cref="TextTooltip" />. The label will wrap if needed.
-    /// Default is <see cref="int.MaxValue" />.
+    /// The maximum width of a <see cref="TextTooltip"/>. The label will wrap if needed.
+    /// Default is <see cref="int.MaxValue"/>.
     /// </summary>
     public float MaxWidth { get; set; } = int.MaxValue;
 
@@ -231,18 +231,18 @@ public class TooltipManager< T > where T : Actor
 
     /// <summary>
     /// Seconds from when an actor is hovered to when the tooltip is shown. Default is 2.
-    /// Call <see cref="HideAll()" /> after changing to reset internal state.
+    /// Call <see cref="HideAll()"/> after changing to reset internal state.
     /// </summary>
     public float InitialTime { get; set; } = 2;
 
     /// <summary>
-    /// Once a tooltip is shown, this is used instead of <see cref="InitialTime" />.
+    /// Once a tooltip is shown, this is used instead of <see cref="InitialTime"/>.
     /// Default is 0.
     /// </summary>
     public float SubsequentTime { get; set; } = 0;
 
     /// <summary>
-    /// Seconds to use <see cref="SubsequentTime" />. Default is 1.5f.
+    /// Seconds to use <see cref="SubsequentTime"/>. Default is 1.5f.
     /// </summary>
     public float ResetTime { get; set; } = 1.5f;
 

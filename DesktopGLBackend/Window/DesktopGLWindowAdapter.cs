@@ -25,7 +25,7 @@
 namespace DesktopGLBackend.Window;
 
 /// <summary>
-/// Convenience implementation of <see cref="IDesktopGLWindowListener" />.
+/// Convenience implementation of <see cref="IDesktopGLWindowListener"/>.
 /// Derive from this class and only override the methods you are interested in.
 /// </summary>
 [PublicAPI]

@@ -36,7 +36,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// starts out as an empty progress bar and gradually becomes filled in as the task
 /// or variable value progresses.
 /// <para>
-/// A <see cref="ChangeListener.ChangeEvent" /> is fired when the progress bar knob is moved. Cancelling
+/// A <see cref="ChangeListener.ChangeEvent"/> is fired when the progress bar knob is moved. Cancelling
 /// the event will move the knob to where it was previously.
 /// </para>
 /// <para>
@@ -81,8 +81,8 @@ public class ProgressBar : Widget, IDisableable
     /// <summary>
     /// Creates a new progress bar. If horizontal, its width is determined by the
     /// prefWidth parameter, and its height is determined by the maximum of the height
-    /// of either the progress bar <see cref="NinePatch" /> or progress bar handle
-    /// <see cref="TextureRegion" />. The min and max values determine the range the
+    /// of either the progress bar <see cref="NinePatch"/> or progress bar handle
+    /// <see cref="TextureRegion"/>. The min and max values determine the range the
     /// values of this progress bar can take on, the stepSize parameter specifies the
     /// distance between individual values.
     /// <para>
@@ -94,7 +94,7 @@ public class ProgressBar : Widget, IDisableable
     /// <param name="max"> the maximum value </param>
     /// <param name="stepSize"> the step size between values </param>
     /// <param name="vertical"></param>
-    /// <param name="style"> the <see cref="ProgressBarStyle" />  </param>
+    /// <param name="style"> the <see cref="ProgressBarStyle"/>  </param>
     public ProgressBar( float min, float max, float stepSize, bool vertical, ProgressBarStyle style )
     {
         if ( min > max )
@@ -399,7 +399,7 @@ public class ProgressBar : Widget, IDisableable
 
     /// <summary>
     /// Sets the progress bar position, rounded to the nearest step size and
-    /// clamped to the minimum and maximum values. <see cref="Clamp(float)" />
+    /// clamped to the minimum and maximum values. <see cref="Clamp(float)"/>
     /// can be overridden to allow values outside of the progress bar's min/max
     /// range.
     /// </summary>
@@ -517,7 +517,7 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    /// If > 0, changes to the progress bar value via <see cref="Value" />
+    /// If > 0, changes to the progress bar value via <see cref="Value"/>
     /// will happen over this duration in seconds.
     /// </summary>
     /// <param name="duration"></param>
@@ -527,7 +527,7 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    /// If <see cref="SetAnimateDuration(float)" /> animating the progress bar value,
+    /// If <see cref="SetAnimateDuration(float)"/> animating the progress bar value,
     /// this returns the value current displayed.
     /// </summary>
     public float GetVisualValue()
@@ -613,7 +613,7 @@ public class ProgressBar : Widget, IDisableable
     // ========================================================================
 
     /// <summary>
-    /// The style for a progress bar, see <see cref="ProgressBar" />.
+    /// The style for a progress bar, see <see cref="ProgressBar"/>.
     /// </summary>
     [PublicAPI]
     public class ProgressBarStyle

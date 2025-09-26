@@ -134,8 +134,8 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 
     /// <summary>
     /// Makes the frame buffer current so everything gets drawn to it,
-    /// must be followed by call to either <see cref="NextSide()" /> or
-    /// <see cref="BindSide(Cubemap.CubemapSide)" /> to activate the side
+    /// must be followed by call to either <see cref="NextSide()"/> or
+    /// <see cref="BindSide(Cubemap.CubemapSide)"/> to activate the side
     /// to render onto.
     /// </summary>
     protected override void Bind()
@@ -147,9 +147,9 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 
     /// Bind the next side of cubemap and return false if no more side.
     /// Should be called in between a call to
-    /// <see cref="GLFrameBuffer{T}.Begin" />
+    /// <see cref="GLFrameBuffer{T}.Begin"/>
     /// and
-    /// <see cref="GLFrameBuffer{T}.End()" />
+    /// <see cref="GLFrameBuffer{T}.End()"/>
     /// to cycle to each side of the
     /// cubemap to render on.
     public bool NextSide()
@@ -173,8 +173,8 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 
     /// <summary>
     /// Bind the side, making it active to render on. Should be called
-    /// in between a call to <see cref="GLFrameBuffer{T}.Begin()" /> and
-    /// <see cref="GLFrameBuffer{T}.End()" />.
+    /// in between a call to <see cref="GLFrameBuffer{T}.Begin()"/> and
+    /// <see cref="GLFrameBuffer{T}.End()"/>.
     /// </summary>
     /// <param name="side"> The side to bind </param>
     protected void BindSide( Cubemap.CubemapSide? side )

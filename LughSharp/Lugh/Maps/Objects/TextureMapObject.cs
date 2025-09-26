@@ -44,7 +44,7 @@ public class TextureMapObject : MapObject
     /// <summary>
     /// Creates a new texture map object with the given region
     /// </summary>
-    /// <param name="textureRegion">the <see cref="TextureRegion" /> to use.</param>
+    /// <param name="textureRegion">the <see cref="TextureRegion"/> to use.</param>
     public TextureMapObject( TextureRegion? textureRegion )
     {
         TextureRegion = textureRegion;

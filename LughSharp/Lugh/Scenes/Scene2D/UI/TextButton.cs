@@ -38,9 +38,9 @@ public class TextButton : Button
     // ========================================================================
 
     /// <summary>
-    /// Creates a new TextButton using the supplied <see cref="Skin" />, and
+    /// Creates a new TextButton using the supplied <see cref="Skin"/>, and
     /// setting its text property to the supplied text.
-    /// The default <see cref="TextButtonStyle" /> will be used.
+    /// The default <see cref="TextButtonStyle"/> will be used.
     /// </summary>
     public TextButton( string? text, Skin skin )
         : this( text, skin.Get< TextButtonStyle >() )
@@ -49,9 +49,9 @@ public class TextButton : Button
     }
 
     /// <summary>
-    /// Creates a new TextButton using the supplied <see cref="Skin" />, and
+    /// Creates a new TextButton using the supplied <see cref="Skin"/>, and
     /// setting its text property to the supplied text.
-    /// A <see cref="TextButtonStyle" /> identified by <tt>styleName</tt> will be used.
+    /// A <see cref="TextButtonStyle"/> identified by <tt>styleName</tt> will be used.
     /// </summary>
     public TextButton( string? text, Skin skin, string styleName )
         : this( text, skin.Get< TextButtonStyle >( styleName ) )
@@ -61,7 +61,7 @@ public class TextButton : Button
 
     /// <summary>
     /// Creates a new TextButton, setting its text property to the supplied text.
-    /// The supplied <see cref="TextButtonStyle" /> will be used.
+    /// The supplied <see cref="TextButtonStyle"/> will be used.
     /// </summary>
     public TextButton( string? text, TextButtonStyle style )
     {
@@ -76,7 +76,7 @@ public class TextButton : Button
     }
 
     /// <summary>
-    /// Property: The <see cref="TextButtonStyle" /> for this TextButton.
+    /// Property: The <see cref="TextButtonStyle"/> for this TextButton.
     /// </summary>
     /// <exception cref="ArgumentException">
     /// Thrown if an attempt to set Style to null is made.
@@ -108,7 +108,7 @@ public class TextButton : Button
     }
 
     /// <summary>
-    /// A Text<see cref="Label" /> which is used to store the text for this button.
+    /// A Text<see cref="Label"/> which is used to store the text for this button.
     /// </summary>
     public Label? Label
     {
@@ -253,7 +253,7 @@ public class TextButton : Button
     // ========================================================================
 
     /// <summary>
-    /// The style for a text button, see <see cref="TextButton" />.
+    /// The style for a text button, see <see cref="TextButton"/>.
     /// </summary>
     [PublicAPI]
     public class TextButtonStyle : ButtonStyle

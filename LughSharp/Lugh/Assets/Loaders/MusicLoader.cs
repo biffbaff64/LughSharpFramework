@@ -28,7 +28,7 @@ using LughSharp.Lugh.Audio;
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-/// <see cref="AssetLoader" /> for <see cref="IMusic" /> instances.
+/// <see cref="AssetLoader"/> for <see cref="IMusic"/> instances.
 /// The Music instance is loaded synchronously.
 /// </summary>
 [PublicAPI]
@@ -37,7 +37,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Creates a new Music loader using the provided <see cref="IFileHandleResolver" />
+    /// Creates a new Music loader using the provided <see cref="IFileHandleResolver"/>
     /// </summary>
     public MusicLoader( IFileHandleResolver resolver )
         : base( resolver )
@@ -91,3 +91,6 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

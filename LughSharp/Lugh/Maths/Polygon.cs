@@ -174,7 +174,7 @@ public class Polygon : IShape2D
 
     /// <summary>
     /// Sets the polygon's world vertices to be recalculated when getting
-    /// the <see cref="TransformedVertices" /> Property.
+    /// the <see cref="TransformedVertices"/> Property.
     /// </summary>
 
     // ReSharper disable once ConvertToAutoPropertyWhenPossible
@@ -189,7 +189,7 @@ public class Polygon : IShape2D
     /// Note the returned Rectangle is cached in this polygon, and will
     /// be reused if this Polygon is changed.
     /// </summary>
-    /// <returns> this polygon's bounding box <see cref="Rectangle" />  </returns>
+    /// <returns> this polygon's bounding box <see cref="Rectangle"/>  </returns>
     public Rectangle BoundingRectangle
     {
         get

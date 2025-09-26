@@ -271,7 +271,7 @@ public class NinePatch
     /// Construct a nine patch from the given nine texture regions. The provided
     /// patches must be consistently sized (e.g., any left edge textures must have
     /// the same width, etc). Patches may be <tt>null</tt>. Patch indices are
-    /// specified via the public members <see cref="TopLeft" />, <see cref="TopCenter" />,
+    /// specified via the public members <see cref="TopLeft"/>, <see cref="TopCenter"/>,
     /// etc.
     /// </summary>
     public NinePatch( params TextureRegion[] patches )

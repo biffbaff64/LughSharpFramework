@@ -28,9 +28,9 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// A Batch is used to draw 2D rectangles that reference a texture (region). The class will
 /// batch the drawing commands and optimize them for processing by the GPU.
 /// <para>
-/// To draw something with a Batch one has to first call the <see cref="IBatch.Begin" />
+/// To draw something with a Batch one has to first call the <see cref="IBatch.Begin"/>
 /// method which will setup appropriate render states. When you are done with drawing you
-/// have to call <see cref="IBatch.End()" /> which will actually draw the things you specified.
+/// have to call <see cref="IBatch.End()"/> which will actually draw the things you specified.
 /// </para>
 /// <para>
 /// All drawing commands of the Batch operate in screen coordinates. The screen coordinate
@@ -49,7 +49,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// </para>
 /// <para>
 /// A Batch works with OpenGL ES 2.0. It will use its own custom shader to draw all provided
-/// sprites. You can set your own custom shader via the <see cref="Shader" /> property.
+/// sprites. You can set your own custom shader via the <see cref="Shader"/> property.
 /// </para>
 /// <para>
 /// A Batch has to be disposed if it is no longer used.
@@ -137,13 +137,13 @@ public interface IBatch
 
     /// <summary>
     /// Returns the current projection matrix.
-    /// Changing this within <see cref="Begin" /> / <see cref="End()" /> results in undefined behaviour.
+    /// Changing this within <see cref="Begin"/> / <see cref="End()"/> results in undefined behaviour.
     /// </summary>
     Matrix4 ProjectionMatrix { get; }
 
     /// <summary>
     /// Returns the current transform matrix.
-    /// Changing this within <see cref="Begin" /> / <see cref="End()" /> results in undefined behaviour.
+    /// Changing this within <see cref="Begin"/> / <see cref="End()"/> results in undefined behaviour.
     /// </summary>
     Matrix4 TransformMatrix { get; }
 
@@ -160,7 +160,7 @@ public interface IBatch
     /// </para>
     /// <para>
     /// This method will flush the batch before setting the new shader.
-    /// It can be called inbetween <see cref="Begin" /> and <see cref="End()" />.
+    /// It can be called inbetween <see cref="Begin"/> and <see cref="End()"/>.
     /// </para>
     /// </summary>
     ShaderProgram? Shader { get; set; }
@@ -177,14 +177,14 @@ public interface IBatch
     /// and texturing. If you have more texture units enabled than the first one you have to disable
     /// them before calling this. Uses a screen coordinate system by default where everything is
     /// given in pixels. You can specify your own projection and modelview matrices via
-    /// <see cref="SetProjectionMatrix(Matrix4)" /> and <see cref="SetTransformMatrix(Matrix4)" />.
+    /// <see cref="SetProjectionMatrix(Matrix4)"/> and <see cref="SetTransformMatrix(Matrix4)"/>.
     /// </summary>
     /// <param name="depthMaskEnabled"> Enable or Disable DepthMask. Defaults to false. </param>
     void Begin( bool depthMaskEnabled = false );
 
     /// <summary>
     /// Finishes off rendering. Enables depth writes, disables blending and texturing.
-    /// Must always be called after a call to <see cref="Begin" />
+    /// Must always be called after a call to <see cref="Begin"/>
     /// </summary>
     void End();
 
@@ -195,7 +195,7 @@ public interface IBatch
     /// and height, from region.Width and region.Height, in pixels. The rectangle is offset by origin.X,
     /// origin.Y relative to the origin. Scale specifies the scaling factor by which the rectangle
     /// should be scaled around originX, originY. Rotation specifies the angle of counter clockwise
-    /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture" />
+    /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture"/>
     /// given by srcX, srcY and srcWidth, srcHeight is used.
     /// <para>
     /// These coordinates and sizes are given in texels. FlipX and FlipY specify whether the texture
@@ -229,7 +229,7 @@ public interface IBatch
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
-    /// in pixels. The portion of the <see cref="Texture" /> given by srcX, srcY and srcWidth,
+    /// in pixels. The portion of the <see cref="Texture"/> given by srcX, srcY and srcWidth,
     /// srcHeight is used. These coordinates and sizes are given in texels. FlipX and flipY
     /// specify whether the texture portion should be flipped horizontally or vertically.
     /// </summary>
@@ -250,7 +250,7 @@ public interface IBatch
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
-    /// in pixels. The portion of the <see cref="Texture" /> given by srcX, srcY and srcWidth,
+    /// in pixels. The portion of the <see cref="Texture"/> given by srcX, srcY and srcWidth,
     /// srcHeight are used. These coordinates and sizes are given in texels.
     /// </summary>
     /// <param name="texture"></param>
@@ -263,9 +263,9 @@ public interface IBatch
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
-    /// in pixels. The portion of the <see cref="Texture" /> given by u, v and u2, v2 are used.
+    /// in pixels. The portion of the <see cref="Texture"/> given by u, v and u2, v2 are used.
     /// These coordinates and sizes are given in texture size percentage. The rectangle will
-    /// have the given tint <see cref="Color" />.
+    /// have the given tint <see cref="Color"/>.
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="region">
@@ -294,7 +294,7 @@ public interface IBatch
 
     /// <summary>
     /// Draws a rectangle using the given vertices. There must be 4 vertices, each made
-    /// up of 5 elements in this order: x, y, color, u, v. The <see cref="Color" />
+    /// up of 5 elements in this order: x, y, color, u, v. The <see cref="Color"/>
     /// from the Batch is not applied.
     /// </summary>
     void Draw( Texture texture, float[] spriteVertices, int offset, int count );
@@ -362,13 +362,13 @@ public interface IBatch
 
     /// <summary>
     /// Disables blending for drawing sprites. Calling this within <see cref="Begin"/>
-    /// or <see cref="End()" /> will flush the batch.
+    /// or <see cref="End()"/> will flush the batch.
     /// </summary>
     void DisableBlending();
 
     /// <summary>
     /// Enables blending for drawing sprites.
-    /// Calling this within <see cref="Begin" /> / <see cref="End()" /> will flush the batch.
+    /// Calling this within <see cref="Begin"/> / <see cref="End()"/> will flush the batch.
     /// </summary>
     void EnableBlending();
 
@@ -400,7 +400,7 @@ public interface IBatch
 
     /// <summary>
     /// Sets the projection matrix to be used by this Batch.
-    /// If this is called inside a <see cref="Begin" /> / <see cref="End()" /> block,
+    /// If this is called inside a <see cref="Begin"/> / <see cref="End()"/> block,
     /// the current batch is flushed to the gpu.
     /// </summary>
     void SetProjectionMatrix( Matrix4 projection );

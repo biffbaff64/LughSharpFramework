@@ -136,7 +136,7 @@ public class SkinLoader : AsynchronousAssetLoader
     public class SkinLoaderParameters : AssetLoaderParameters
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SkinLoaderParameters" />
+        /// Initializes a new instance of the <see cref="SkinLoaderParameters"/>
         /// class with default values.
         /// </summary>
         public SkinLoaderParameters() : this( null, null )
@@ -144,7 +144,7 @@ public class SkinLoader : AsynchronousAssetLoader
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SkinLoaderParameters" />
+        /// Initializes a new instance of the <see cref="SkinLoaderParameters"/>
         /// class with the specified resources.
         /// </summary>
         /// <param name="resources">The resources to be used by the skin.</param>
@@ -153,7 +153,7 @@ public class SkinLoader : AsynchronousAssetLoader
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SkinLoaderParameters" /> class
+        /// Initializes a new instance of the <see cref="SkinLoaderParameters"/> class
         /// with the specified texture atlas path and resources.
         /// </summary>
         /// <param name="textureAtlasPath">The file path of the texture atlas to be used by the skin.</param>
@@ -175,3 +175,6 @@ public class SkinLoader : AsynchronousAssetLoader
         public string? TextureAtlasPath { get; set; }
     }
 }
+
+// ============================================================================
+// ============================================================================

@@ -29,17 +29,17 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 /// <summary>
 /// Detects mouse over, mouse or finger touch presses, and clicks on an actor.
 /// A touch must go down over the actor and is considered pressed as long as
-/// it is over the actor or within the <see cref="TapSquareSize" />.
+/// it is over the actor or within the <see cref="TapSquareSize"/>.
 /// This behavior makes it easier to press buttons on a touch interface when
 /// the initial touch happens near the edge of the actor. Double clicks can be
-/// detected using <see cref="TapCount" />. Any touch (not just the first) will
+/// detected using <see cref="TapCount"/>. Any touch (not just the first) will
 /// trigger this listener. While pressed, other touch downs are ignored.
 /// </summary>
 [PublicAPI]
 public class ClickListener : InputListener
 {
     /// <summary>
-    /// Time in seconds <see cref="VisualPressed" /> reports true after
+    /// Time in seconds <see cref="VisualPressed"/> reports true after
     /// a press resulting in a click is released.
     /// </summary>
     public const float VISUAL_PRESSED_DURATION = 0.1f;
@@ -55,7 +55,7 @@ public class ClickListener : InputListener
     /// <summary>
     /// Creates a new ClickListener.
     /// Sets the button to listen for, all other buttons are ignored.
-    /// Default is <see cref="IInput.Buttons.LEFT" />. Use -1 for any button.
+    /// Default is <see cref="IInput.Buttons.LEFT"/>. Use -1 for any button.
     /// </summary>
     public ClickListener( int button = IInput.Buttons.LEFT )
     {
@@ -120,7 +120,7 @@ public class ClickListener : InputListener
 
     /// <summary>
     /// Sets the button to listen for, all other buttons are ignored.
-    /// Default is <see cref="IInput.Buttons.LEFT" />.
+    /// Default is <see cref="IInput.Buttons.LEFT"/>.
     /// Use -1 for any button.
     /// </summary>
     public long TapCountInterval

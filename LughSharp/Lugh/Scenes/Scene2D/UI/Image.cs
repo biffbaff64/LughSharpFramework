@@ -28,9 +28,9 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// Displays a <see cref="ISceneDrawable" />, scaled various way within the widgets
+/// Displays a <see cref="ISceneDrawable"/>, scaled various way within the widgets
 /// bounds. The preferred size is the min size of the drawable. Only when using
-/// a <see cref="TextureRegionSceneDrawable" /> will the actor's scale, rotation, and
+/// a <see cref="TextureRegionSceneDrawable"/> will the actor's scale, rotation, and
 /// origin be used when drawing.
 /// </summary>
 [PublicAPI]
@@ -233,7 +233,7 @@ public class Image : Widget
     }
 
     /// <summary>
-    /// Sets the <see cref="ISceneDrawable" /> for this Image.
+    /// Sets the <see cref="ISceneDrawable"/> for this Image.
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="drawableName"></param>
@@ -244,7 +244,7 @@ public class Image : Widget
 
     /// <summary>
     /// Sets a new drawable for the image. The image's pref size is the drawable's min size.
-    /// If using the image actor's size rather than the pref size, <see cref="Widget.Pack" />
+    /// If using the image actor's size rather than the pref size, <see cref="Widget.Pack"/>
     /// can be used to size the image to its pref size.
     /// </summary>
     /// <param name="drawable"> May be null. </param>
@@ -271,7 +271,7 @@ public class Image : Widget
     }
 
     /// <summary>
-    /// Sets the <see cref="Scaling" />Mode for this Image.
+    /// Sets the <see cref="Scaling"/>Mode for this Image.
     /// </summary>
     public void SetScaling( Scaling scale )
     {

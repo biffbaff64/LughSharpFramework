@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Graphics.FrameBuffers;
 /// Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper
 /// class which should cover most FBO uses. It will automatically create a
 /// gltexture for the color attachment and a renderbuffer for the depth buffer.
-/// You can get a hold of the gltexture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture()" />.
+/// You can get a hold of the gltexture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture()"/>.
 /// This class will only work with OpenGL ES 2.0.
 /// <para>
 /// FrameBuffers are managed. In case of an OpenGL context loss, which only
@@ -76,7 +76,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     // ========================================================================
 
     /// <summary>
-    /// Creates a new GLFrameBuffer. No <see cref="GLFrameBufferBuilder{TU}" /> specifications
+    /// Creates a new GLFrameBuffer. No <see cref="GLFrameBufferBuilder{TU}"/> specifications
     /// are provided for construction so information will need to be provided.
     /// </summary>
     protected GLFrameBuffer()
@@ -135,7 +135,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     // ========================================================================
 
     /// <summary>
-    /// Wrapper to allow calling of virtual method <see cref="Build" />
+    /// Wrapper to allow calling of virtual method <see cref="Build"/>
     /// from constructors.
     /// </summary>
     protected void BuildBuffer()
@@ -547,7 +547,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 
     /// <summary>
     /// Sets viewport to the dimensions of framebuffer.
-    /// Called by <see cref="Begin()" />.
+    /// Called by <see cref="Begin()"/>.
     /// </summary>
     public void SetFrameBufferViewport()
     {

@@ -53,7 +53,7 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Causes the contents to be clipped if they exceed the table's bounds.
-    /// Enabling clipping sets <see cref="Group.Transform" /> to true.
+    /// Enabling clipping sets <see cref="Group.Transform"/> to true.
     /// </summary>
     public bool Clip
     {
@@ -127,7 +127,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Creates a table with a skin, which is required to use <see cref="AssetDescriptor" />
+    /// Creates a table with a skin, which is required to use <see cref="AssetDescriptor"/>
     /// </summary>
     public Table( Skin? skin )
     {
@@ -215,7 +215,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Sets the background drawable from the skin and adjusts the table's padding
     /// to match the background. This may only be called if a skin has been set
-    /// with <see cref="Table" /> or <see cref="Skin" />.
+    /// with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
     protected void SetBackground( string drawableName )
     {
@@ -421,7 +421,7 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Adds a new cell with a label. This may only be called if a skin
-    /// has been set with <see cref="Table" /> or <see cref="Skin" />
+    /// has been set with <see cref="Table"/> or <see cref="Skin"/>
     /// </summary>
     public Cell Add( string? text )
     {
@@ -437,7 +437,7 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Adds a new cell with a label. This may only be called if a skin
-    /// has been set with <see cref="Table" /> or <see cref="Skin" />
+    /// has been set with <see cref="Table"/> or <see cref="Skin"/>
     /// </summary>
     public Cell Add( string text, string labelStyleName )
     {
@@ -451,7 +451,7 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Adds a new cell with a label. This may only be called if a skin
-    /// has been set with <see cref="Table" /> or <see cref="Skin" />.
+    /// has been set with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
     public Cell Add( string? text, string fontName, Color color )
     {
@@ -465,7 +465,7 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Adds a new cell with a label. This may only be called if a skin
-    /// has been set with <see cref="Table" /> or <see cref="Skin" />.
+    /// has been set with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
     public Cell Add( string? text, string fontName, string colorName )
     {
@@ -478,7 +478,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Adds a new cell to the table with the specified actors in a <see cref="Stack" />.
+    /// Adds a new cell to the table with the specified actors in a <see cref="Stack"/>.
     /// </summary>
     /// <param name="actors"> May be null or empty to add a stack without any actors. </param>
     public Cell Stack( params Actor[]? actors )
@@ -551,7 +551,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Removes all actors and cells from the table (same as <see cref="ClearChildren" />)
+    /// Removes all actors and cells from the table (same as <see cref="ClearChildren"/>)
     /// and additionally resets all table properties and cell, column, and row defaults.
     /// </summary>
     public void Reset()
@@ -919,8 +919,8 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Alignment of the logical table within the table actor.
-    /// Set to <see cref="Alignment.CENTER" />, <see cref="Alignment.TOP" />, <see cref="Alignment.BOTTOM" />,
-    /// <see cref="Alignment.LEFT" />, <see cref="Alignment.RIGHT" />, or any combination of those.
+    /// Set to <see cref="Alignment.CENTER"/>, <see cref="Alignment.TOP"/>, <see cref="Alignment.BOTTOM"/>,
+    /// <see cref="Alignment.LEFT"/>, <see cref="Alignment.RIGHT"/>, or any combination of those.
     /// </summary>
     /// <param name="align"></param>
     /// <returns></returns>
@@ -933,7 +933,7 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Sets the alignment of the logical table within the table actor to
-    /// <see cref="Alignment.CENTER" />. This clears any other alignment.
+    /// <see cref="Alignment.CENTER"/>. This clears any other alignment.
     /// </summary>
     /// <returns></returns>
     public Table Center()
@@ -944,7 +944,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Alignment.TOP" /> and clears <see cref="Alignment.BOTTOM" /> for
+    /// Adds <see cref="Alignment.TOP"/> and clears <see cref="Alignment.BOTTOM"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
     /// <returns></returns>
@@ -957,7 +957,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Alignment.LEFT" /> and clears <see cref="Alignment.RIGHT" /> for
+    /// Adds <see cref="Alignment.LEFT"/> and clears <see cref="Alignment.RIGHT"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
     /// <returns></returns>
@@ -970,7 +970,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Alignment.BOTTOM" /> and clears <see cref="Alignment.TOP" /> for the
+    /// Adds <see cref="Alignment.BOTTOM"/> and clears <see cref="Alignment.TOP"/> for the
     /// alignment of the logical table within the table actor.
     /// </summary>
     public Table AddBottomAlignment()
@@ -982,7 +982,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Alignment.RIGHT" /> and clears <see cref="Alignment.LEFT" /> for
+    /// Adds <see cref="Alignment.RIGHT"/> and clears <see cref="Alignment.LEFT"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
     public Table AddRightAlignment()
@@ -1034,7 +1034,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Returns <see cref="_padLeft" /> plus <see cref="_padRight" />.
+    /// Returns <see cref="_padLeft"/> plus <see cref="_padRight"/>.
     /// </summary>
     /// <returns></returns>
     public float GetPadX()
@@ -1043,7 +1043,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Returns <see cref="_padTop" /> plus <see cref="_padBottom" />.
+    /// Returns <see cref="_padTop"/> plus <see cref="_padBottom"/>.
     /// </summary>
     /// <returns></returns>
     public float GetPadY()

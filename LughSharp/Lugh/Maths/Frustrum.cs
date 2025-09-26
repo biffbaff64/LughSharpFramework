@@ -101,8 +101,8 @@ public class Frustrum
 
     /// <summary>
     /// Updates the clipping plane's based on the given inverse combined
-    /// projection and view matrix, e.g. from an <see cref="OrthographicCamera" />
-    /// or <see cref="PerspectiveCamera" />.
+    /// projection and view matrix, e.g. from an <see cref="OrthographicCamera"/>
+    /// or <see cref="PerspectiveCamera"/>.
     /// </summary>
     /// <param name="inverseProjectionView">The combined projection and view matrices.</param>
     public virtual void Update( Matrix4 inverseProjectionView )

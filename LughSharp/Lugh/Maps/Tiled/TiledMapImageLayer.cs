@@ -38,7 +38,7 @@ public class TiledMapImageLayer : MapLayer
     /// Creates a new TiledMapImageLayer, using the supplied TextureRegion as its
     /// background, and the given X and Y as the coordinates of the image in the map,
     /// </summary>
-    /// <param name="region"> The <see cref="TextureRegion" />. </param>
+    /// <param name="region"> The <see cref="TextureRegion"/>. </param>
     /// <param name="x"> Textureregion Layer X coordinate. </param>
     /// <param name="y"> Textureregion Layer X coordinate. </param>
     public TiledMapImageLayer( TextureRegion? region, float x, float y )

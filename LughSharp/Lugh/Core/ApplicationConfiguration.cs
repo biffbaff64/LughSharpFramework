@@ -67,7 +67,7 @@ public class ApplicationConfiguration
 
     /// <summary>
     /// The maximum number of threads to use for network requests.
-    /// Default is <see cref="int.MaxValue" />.
+    /// Default is <see cref="int.MaxValue"/>.
     /// </summary>
     public int MaxNetThreads { get; set; } = int.MaxValue;
 
@@ -105,7 +105,7 @@ public class ApplicationConfiguration
     /// <summary>
     /// Sets whether to use VSync.
     /// <para>
-    /// This setting can be changed anytime at runtime via <see cref="IGraphicsDevice.SetVSync(bool)" />.
+    /// This setting can be changed anytime at runtime via <see cref="IGraphicsDevice.SetVSync(bool)"/>.
     /// </para>
     /// <para>
     /// For multi-window applications, only one (the main) window should enable vsync. Otherwise,
@@ -287,9 +287,9 @@ public class ApplicationConfiguration
     }
 
     /// <summary>
-    /// Sets the directory where <see cref="IPreferences" /> will be stored, as well as
+    /// Sets the directory where <see cref="IPreferences"/> will be stored, as well as
     /// the file type to be used to store them. Defaults to "$USER_HOME/.prefs/"
-    /// and <see cref="PathTypes" />.
+    /// and <see cref="PathTypes"/>.
     /// </summary>
     public void SetPreferencesConfig( string preferencesDirectory, PathTypes preferencesFileType )
     {
@@ -298,8 +298,8 @@ public class ApplicationConfiguration
     }
 
     /// <summary>
-    /// Sets the correct values for <see cref="GLContextMajorVersion" /> and
-    /// <see cref="GLContextMinorVersion" />.
+    /// Sets the correct values for <see cref="GLContextMajorVersion"/> and
+    /// <see cref="GLContextMinorVersion"/>.
     /// </summary>
     public void SetGLContextVersion( int major, int minor )
     {
@@ -324,7 +324,7 @@ public class ApplicationConfiguration
     }
 
     /// <summary>
-    /// Return the available <see cref="IGraphicsDevice.DisplayMode" />s of the primary monitor
+    /// Return the available <see cref="IGraphicsDevice.DisplayMode"/>s of the primary monitor
     /// </summary>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
@@ -332,7 +332,7 @@ public class ApplicationConfiguration
     }
 
     /// <summary>
-    /// Returns a list of the available <see cref="IGraphicsDevice.DisplayMode" />s of the given monitor.
+    /// Returns a list of the available <see cref="IGraphicsDevice.DisplayMode"/>s of the given monitor.
     /// </summary>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
     {
@@ -428,7 +428,7 @@ public class ApplicationConfiguration
     /// </summary>
     /// <param name="fileType"> The type of file handle the paths are relative to. </param>
     /// <param name="filePaths">
-    /// One or more image paths, relative to the given <see cref="PathTypes" />. Must be JPEG,
+    /// One or more image paths, relative to the given <see cref="PathTypes"/>. Must be JPEG,
     /// PNG, or BMP format. The one closest to the system's desired size will be scaled.
     /// Good sizes include 16x16, 32x32 and 48x48.
     /// </param>

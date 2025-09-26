@@ -68,8 +68,8 @@
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
-        <None Include="lib\net8.0\gdx2d.dll" Pack="true" PackagePath="lib\net8.0\" />
-        <None Include="lib\net8.0\freetype.dll" Pack="true" PackagePath="lib\net8.0\" />
+        <None Include="lib\net8.0\gdx2d.dll" Pack="true" PackagePath="lib\net8.0\"/>
+        <None Include="lib\net8.0\freetype.dll" Pack="true" PackagePath="lib\net8.0\"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -104,11 +104,11 @@
     </ItemGroup>
 
 <!--    <ItemGroup>-->
-<!--        <None Remove="lib\net8.0\freetype.dll" />-->
+<!--        <None Remove="lib\net8.0\freetype.dll"/>-->
 <!--        <Content Include="lib\net8.0\freetype.dll">-->
 <!--          <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
 <!--        </Content>-->
-<!--        <None Remove="lib\net8.0\gdx2d.dll" />-->
+<!--        <None Remove="lib\net8.0\gdx2d.dll"/>-->
 <!--        <Content Include="lib\net8.0\gdx2d.dll">-->
 <!--          <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
 <!--        </Content>-->
@@ -119,6 +119,10 @@
             <Pack>true</Pack>
             <PackagePath>runtimes</PackagePath>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Lugh\Graphics\Drawing\" />
     </ItemGroup>
 
 </Project>

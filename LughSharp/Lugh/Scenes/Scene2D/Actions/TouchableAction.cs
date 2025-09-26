@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// Sets an <see cref="Actor" />s Touchability.
+/// Sets an <see cref="Actor"/>s Touchability.
 /// </summary>
 [PublicAPI]
 public class TouchableAction : Action

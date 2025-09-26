@@ -25,13 +25,13 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// This is a near duplicate of <see cref="TimSort{T}" />, modified for use with arrays
-/// of objects that implement <see cref="IComparable" />, instead of using explicit
+/// This is a near duplicate of <see cref="TimSort{T}"/>, modified for use with arrays
+/// of objects that implement <see cref="IComparable"/>, instead of using explicit
 /// comparators.
 /// <para>
 /// If you are using an optimizing VM, you may find that ComparableTimSort offers no
 /// performance benefit over TimSort in conjunction with a comparator that simply
-/// returns <see cref="IComparable.CompareTo" />. If this is the case, you are better
+/// returns <see cref="IComparable.CompareTo"/>. If this is the case, you are better
 /// off deleting ComparableTimSort to eliminate the code duplication.
 /// </para>
 /// </summary>
@@ -46,7 +46,7 @@ public class ComparableTimSort< T >
     /// This constant should be a power of two. It was 64 in Tim Peter's C implementation,
     /// but 32 was empirically determined to work better in this implementation. In the
     /// unlikely event that you set this constant to be a number that's not a power of two,
-    /// you'll need to change the <see cref="MinRunLength" /> computation.
+    /// you'll need to change the <see cref="MinRunLength"/> computation.
     /// </para>
     /// <para>
     /// If you decrease this constant, you must change the stackLen computation in the
@@ -458,7 +458,7 @@ public class ComparableTimSort< T >
 
     /// <summary>
     /// Returns the minimum acceptable run length for an array of the specified length.
-    /// Natural runs shorter than this will be extended with <see cref="BinarySort" />.
+    /// Natural runs shorter than this will be extended with <see cref="BinarySort"/>.
     /// <para>
     /// Roughly speaking, the computation is:
     /// </para>

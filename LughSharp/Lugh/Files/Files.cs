@@ -72,7 +72,7 @@ public class Files : IFiles
     // Class path
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Classpath" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Classpath"/> file handle.
     /// </summary>
     public virtual FileInfo Classpath( string path )
     {
@@ -141,7 +141,7 @@ public class Files : IFiles
     // Internal storage
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Internal" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Internal"/> file handle.
     /// </summary>
     public virtual FileInfo Internal( string path )
     {
@@ -215,7 +215,7 @@ public class Files : IFiles
     // Absolute path
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Absolute" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Absolute"/> file handle.
     /// </summary>
     public virtual FileInfo Absolute( string path )
     {
@@ -245,7 +245,7 @@ public class Files : IFiles
     // External storage
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.External" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.External"/> file handle.
     /// </summary>
     public virtual FileInfo External( string path )
     {
@@ -318,7 +318,7 @@ public class Files : IFiles
     // Assembly path
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Assembly" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Assembly"/> file handle.
     /// </summary>
     public virtual FileInfo Assembly( string path )
     {
@@ -384,7 +384,7 @@ public class Files : IFiles
     // Local storage
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Local" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Local"/> file handle.
     /// </summary>
     public virtual FileInfo Local( string path )
     {

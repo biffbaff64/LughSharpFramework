@@ -48,8 +48,8 @@ namespace LughSharp.Lugh.Utils.Collections;
 public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 {
     /// <summary>
-    /// Used by <see cref="GetHashIndex" /> to bit shift the upper bits of a <b>long</b>
-    /// into a usable range (&gt;= 0 and &lt;= <see cref="Mask" />).
+    /// Used by <see cref="GetHashIndex"/> to bit shift the upper bits of a <b>long</b>
+    /// into a usable range (&gt;= 0 and &lt;= <see cref="Mask"/>).
     /// <para>
     /// The shift can be negative, which is convenient to match the number of bits in
     /// mask: if mask is a 7-bit number, a shift of -7 shifts the upper 7 bits into the
@@ -57,8 +57,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// with an int will still move the upper bits of an int to the lower bits.
     /// </para>
     /// <para>
-    /// <see cref="Mask" /> can also be used to mask the low bits of a number, which may
-    /// be faster for some hashcodes if <see cref="GetHashIndex" /> is overridden.
+    /// <see cref="Mask"/> can also be used to mask the low bits of a number, which may
+    /// be faster for some hashcodes if <see cref="GetHashIndex"/> is overridden.
     /// </para>
     /// </summary>
     protected int Shift { get; set; }
@@ -66,7 +66,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <summary>
     /// A bitmask used to confine hashcodes to the size of the table. Must be all
     /// 1 bits in its low positions, ie a power of two minus 1.
-    /// If <see cref="GetHashIndex" /> is overriden, this can be used instead of <see cref="Shift" />
+    /// If <see cref="GetHashIndex"/> is overriden, this can be used instead of <see cref="Shift"/>
     /// to isolate usable bits of a hash.
     /// </summary>
     protected int Mask { get; set; }
@@ -77,7 +77,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     public int Size { get; set; }
 
     /// <summary>
-    /// When true, <see cref="IEnumerator{T}" /> for collections will allocate a new
+    /// When true, <see cref="IEnumerator{T}"/> for collections will allocate a new
     /// iterator for each invocation. When false, the iterator is reused and nested
     /// use will throw an exception.
     /// <para> Default is false. </para>
@@ -108,7 +108,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ObjectMap{TK, TV}" /> class
+    /// Initializes a new instance of the <see cref="ObjectMap{TK, TV}"/> class
     /// with the specified initial capacity and load factor.
     /// </summary>
     /// <param name="initialCapacity">The initial capacity of the map. Defaults to 51.</param>
@@ -182,7 +182,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     // ========================================================================
 
     /// <summary>
-    /// Returns an index between 0 and <see cref="Mask" /> for the specified <c>item</c>.
+    /// Returns an index between 0 and <see cref="Mask"/> for the specified <c>item</c>.
     /// Uses Fibonacci hashing to distribute hash codes, then selects the appropriate bits.
     /// </summary>
     /// <param name="item">The item to calculate the index for.</param>
@@ -292,17 +292,17 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     }
 
     /// <summary>
-    /// Copies all key-value pairs from the specified <paramref name="map" />
+    /// Copies all key-value pairs from the specified <paramref name="map"/>
     /// into the current collection.
     /// </summary>
     /// <param name="map">The source map containing the key-value pairs to copy.</param>
     /// <remarks>
     /// <para>
     /// This method ensures that the current collection has sufficient capacity
-    /// to accommodate the key-value pairs from the <paramref name="map" />. Then,
+    /// to accommodate the key-value pairs from the <paramref name="map"/>. Then,
     /// it iterates through the key table, copying each non-null key along with
-    /// its associated value from the <paramref name="map" /> into the current
-    /// collection using the <see cref="Put" /> method.
+    /// its associated value from the <paramref name="map"/> into the current
+    /// collection using the <see cref="Put"/> method.
     /// </para>
     /// </remarks>
     /// <typeparam name="TK">The type of the keys in the collection.</typeparam>
@@ -323,16 +323,16 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     }
 
     /// <summary>
-    /// Retrieves the value associated with the specified <paramref name="key" />
+    /// Retrieves the value associated with the specified <paramref name="key"/>
     /// from the collection.
     /// </summary>
     /// <param name="key">The key to look up.</param>
     /// <returns>
-    /// The value associated with the <paramref name="key" /> if found; otherwise null.
+    /// The value associated with the <paramref name="key"/> if found; otherwise null.
     /// </returns>
     /// <remarks>
-    /// This method searches the collection for the given <paramref name="key" />
-    /// using the <see cref="LocateKey" /> method. If the key is found, the associated
+    /// This method searches the collection for the given <paramref name="key"/>
+    /// using the <see cref="LocateKey"/> method. If the key is found, the associated
     /// value is returned; otherwise, <c>null</c> is returned.
     /// </remarks>
     /// <typeparam name="TT">The type of the key to look up.</typeparam>
@@ -346,20 +346,20 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     }
 
     /// <summary>
-    /// Retrieves the value associated with the specified <paramref name="key" /> from the collection,
-    /// or returns the provided <paramref name="defaultValue" /> if the key is not found.
+    /// Retrieves the value associated with the specified <paramref name="key"/> from the collection,
+    /// or returns the provided <paramref name="defaultValue"/> if the key is not found.
     /// </summary>
     /// <param name="key">The key to look up.</param>
     /// <param name="defaultValue">The value to return if the key is not found.</param>
     /// <returns>
-    /// The value associated with the <paramref name="key" /> if found; otherwise, the
-    /// <paramref name="defaultValue" /> is returned.
+    /// The value associated with the <paramref name="key"/> if found; otherwise, the
+    /// <paramref name="defaultValue"/> is returned.
     /// </returns>
     /// <remarks>
     /// <para>
-    /// This method searches the collection for the given <paramref name="key" /> using
-    /// the <see cref="LocateKey" /> method. If the key is found, the associated value is
-    /// returned; otherwise, the provided <paramref name="defaultValue" /> is returned.
+    /// This method searches the collection for the given <paramref name="key"/> using
+    /// the <see cref="LocateKey"/> method. If the key is found, the associated value is
+    /// returned; otherwise, the provided <paramref name="defaultValue"/> is returned.
     /// </para>
     /// </remarks>
     /// <typeparam name="TK">The type of the keys in the collection.</typeparam>
@@ -1072,7 +1072,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         // ====================================================================
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MapIterator" /> class.
+        /// Initializes a new instance of the <see cref="MapIterator"/> class.
         /// </summary>
         /// <param name="map">The map to iterate over.</param>
         protected MapIterator( ObjectMap< TK, TV > map )
@@ -1225,7 +1225,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     public class Values : MapIterator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Values" /> class.
+        /// Initializes a new instance of the <see cref="Values"/> class.
         /// </summary>
         /// <param name="map">The map to iterate over.</param>
         public Values( ObjectMap< TK, TV > map )
@@ -1301,7 +1301,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     public class Keys : MapIterator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Keys" /> class.
+        /// Initializes a new instance of the <see cref="Keys"/> class.
         /// </summary>
         /// <param name="map">The map to iterate over.</param>
         public Keys( ObjectMap< TK, TV > map )

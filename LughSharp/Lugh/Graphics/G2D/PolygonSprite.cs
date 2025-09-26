@@ -70,7 +70,7 @@ public class PolygonSprite
     /// Sets the x position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
     /// after those operations. If both position and size are to be changed, it
-    /// is better to use <see cref="SetBounds(float, float, float, float)" />.
+    /// is better to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
     public float X
     {
@@ -82,7 +82,7 @@ public class PolygonSprite
     /// Sets the y position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
     /// after those operations. If both position and size are to be changed, it
-    /// is better to use <see cref="SetBounds(float, float, float, float)" />.
+    /// is better to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
     public float Y
     {
@@ -92,8 +92,8 @@ public class PolygonSprite
 
     /// <summary>
     /// Returns the color of this sprite. Modifying the returned color
-    /// will have unexpected effects unless <see cref="SetColor(LughSharp.Lugh.Graphics.Color)" /> or
-    /// <see cref="SetColor(float, float, float, float)" /> is subsequently
+    /// will have unexpected effects unless <see cref="SetColor(LughSharp.Lugh.Graphics.Color)"/> or
+    /// <see cref="SetColor(float, float, float, float)"/> is subsequently
     /// called before drawing this sprite.
     /// </summary>
     public Color Color { get; } = new( 1f, 1f, 1f, 1f );
@@ -137,7 +137,7 @@ public class PolygonSprite
     /// are applied. If origin, rotation, or scale are changed, it is slightly
     /// more efficient to set the size after those operations. If both position
     /// and size are to be changed, it is better to use
-    /// <see cref="SetBounds(float, float, float, float)" />
+    /// <see cref="SetBounds(float, float, float, float)"/>
     /// </summary>
     public void SetSize( float width, float height )
     {
@@ -151,7 +151,7 @@ public class PolygonSprite
     /// Sets the position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
     /// after those operations. If both position and size are to be changed,
-    /// it is better to use <see cref="SetBounds(float, float, float, float)" />
+    /// it is better to use <see cref="SetBounds(float, float, float, float)"/>
     /// </summary>
     public void SetPosition( float x, float y )
     {
@@ -332,7 +332,7 @@ public class PolygonSprite
     }
 
     /// <summary>
-    /// Returns the bounding axis aligned <see cref="Rectangle" /> that bounds
+    /// Returns the bounding axis aligned <see cref="Rectangle"/> that bounds
     /// this sprite. The rectangles x and y coordinates describe its bottom left
     /// corner. If you change the position or size of the sprite, you have to fetch
     /// the triangle again for it to be recomputed.
@@ -403,8 +403,8 @@ public class PolygonSprite
 
     /// <summary>
     /// Returns the actual color used in the vertices of this sprite. Modifying the
-    /// returned color will have unexpected effects unless <see cref="SetColor(LughSharp.Lugh.Graphics.Color)" />
-    /// or <see cref="SetColor(float, float, float, float)" /> is subsequently called
+    /// returned color will have unexpected effects unless <see cref="SetColor(LughSharp.Lugh.Graphics.Color)"/>
+    /// or <see cref="SetColor(float, float, float, float)"/> is subsequently called
     /// before drawing this sprite.
     /// </summary>
     public Color GetPackedColor()

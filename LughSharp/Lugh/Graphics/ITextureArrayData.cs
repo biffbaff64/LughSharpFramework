@@ -25,9 +25,9 @@
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// Used by a <see cref="GLTextureArray" /> to load the pixel data. The TextureArray will
-/// request the TextureArrayData to prepare itself through <see cref="Prepare()" /> and
-/// upload its data using <see cref="ConsumeTextureArrayData()" />. These are the first
+/// Used by a <see cref="GLTextureArray"/> to load the pixel data. The TextureArray will
+/// request the TextureArrayData to prepare itself through <see cref="Prepare()"/> and
+/// upload its data using <see cref="ConsumeTextureArrayData()"/>. These are the first
 /// methods to be called by TextureArray.
 /// <para>
 /// After that the TextureArray will invoke the other methods to find out about the size
@@ -35,10 +35,10 @@ namespace LughSharp.Lugh.Graphics;
 /// pixel data if the OpenGL ES context is lost.
 /// </para>
 /// <para>
-/// Before a call to <see cref="ConsumeTextureArrayData()" />, TextureArray will
+/// Before a call to <see cref="ConsumeTextureArrayData()"/>, TextureArray will
 /// bind the OpenGL ES texture.
 /// </para>
-/// Look at <see cref="FileTextureArrayData" /> for example implementation of this interface.
+/// Look at <see cref="FileTextureArrayData"/> for example implementation of this interface.
 /// </summary>
 [PublicAPI]
 public interface ITextureArrayData
@@ -79,7 +79,7 @@ public interface ITextureArrayData
     int GLDataType { get; }
 
     /// <summary>
-    /// Prepares the TextureArrayData for a call to <see cref="ConsumeTextureArrayData()" />.
+    /// Prepares the TextureArrayData for a call to <see cref="ConsumeTextureArrayData()"/>.
     /// This method can be called from a non OpenGL thread and should thus not interact
     /// with OpenGL.
     /// </summary>
@@ -87,10 +87,10 @@ public interface ITextureArrayData
 
     /// <summary>
     /// Uploads the pixel data of the TextureArray layers of the TextureArray to the OpenGL
-    /// ES texture. The caller must bind an OpenGL ES texture. A call to <see cref="Prepare()" />
+    /// ES texture. The caller must bind an OpenGL ES texture. A call to <see cref="Prepare()"/>
     /// must preceed a call to this method.
     /// <para>
-    /// Any internal data structures created in <see cref="Prepare()" /> should be disposed of here.
+    /// Any internal data structures created in <see cref="Prepare()"/> should be disposed of here.
     /// </para>
     /// </summary>
     void ConsumeTextureArrayData();

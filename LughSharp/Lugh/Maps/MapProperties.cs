@@ -48,7 +48,7 @@ public class MapProperties
 
     /// <summary>
     /// Gets the property matching the specified key. If the fetched property
-    /// is null the provided <paramref name="defaultValue" /> is returned instead.
+    /// is null the provided <paramref name="defaultValue"/> is returned instead.
     /// </summary>
     /// <param name="key"> The Key. </param>
     /// <param name="defaultValue"> The default value. </param>

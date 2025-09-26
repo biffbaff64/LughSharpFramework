@@ -31,7 +31,7 @@ namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 /// </summary>
 /// <remarks>
 /// This exception is used to signal errors that occur specifically during the decoding of MPEG audio streams.
-/// It extends from the <see cref="Mp3SharpException" /> class and adds additional context with an error code.
+/// It extends from the <see cref="Mp3SharpException"/> class and adds additional context with an error code.
 /// </remarks>
 [Serializable]
 [PublicAPI]
@@ -40,7 +40,7 @@ public class DecoderException : Mp3SharpException
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DecoderException" /> class with a specified
+    /// Initializes a new instance of the <see cref="DecoderException"/> class with a specified
     /// error message and a reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="message">The error message that explains the reason for the exception.</param>
@@ -55,7 +55,7 @@ public class DecoderException : Mp3SharpException
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DecoderException" /> class with a specified
+    /// Initializes a new instance of the <see cref="DecoderException"/> class with a specified
     /// error code and a reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="errorcode">The error code that explains the reason for the exception.</param>
@@ -70,7 +70,7 @@ public class DecoderException : Mp3SharpException
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DecoderException" /> class with serialized data.
+    /// Initializes a new instance of the <see cref="DecoderException"/> class with serialized data.
     /// </summary>
     /// <param name="info">The object that holds the serialized object data.</param>
     /// <param name="context">The contextual information about the source or destination.</param>
@@ -85,7 +85,7 @@ public class DecoderException : Mp3SharpException
     public int ErrorCode { get; set; }
 
     /// <summary>
-    /// Sets the <see cref="SerializationInfo" /> with information about the exception.
+    /// Sets the <see cref="SerializationInfo"/> with information about the exception.
     /// </summary>
     /// <param name="info">The object that holds the serialized object data.</param>
     /// <param name="context">The contextual information about the source or destination.</param>

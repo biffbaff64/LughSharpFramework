@@ -43,7 +43,7 @@ namespace LughSharp.Lugh.Assets;
 public partial class AssetManager
 {
     /// <summary>
-    /// Returns the <see cref="IFileHandleResolver" /> which this
+    /// Returns the <see cref="IFileHandleResolver"/> which this
     /// AssetManager was loaded with.
     /// </summary>
     /// <returns>the file handle resolver which this AssetManager uses.</returns>
@@ -348,7 +348,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    /// Sets an <see cref="IAssetErrorListener" /> to be invoked in case loading an asset failed.
+    /// Sets an <see cref="IAssetErrorListener"/> to be invoked in case loading an asset failed.
     /// </summary>
     public void SetErrorListener( IAssetErrorListener listener )
     {
@@ -558,7 +558,7 @@ public partial class AssetManager
     /// <param name="outArray">The list to which the retrieved assets will be added.</param>
     /// <returns>The list containing all assets of the specified type.</returns>
     /// <exception cref="ArgumentNullException">
-    /// Thrown if the <paramref name="type" /> or <paramref name="outArray" /> is null.
+    /// Thrown if the <paramref name="type"/> or <paramref name="outArray"/> is null.
     /// </exception>
     /// <exception cref="GdxRuntimeException">Thrown if no assets of the specified type are found.</exception>
     public List< T > GetAll< T >( Type? type, List< T > outArray )
@@ -637,8 +637,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    /// Handles a runtime/loading error in <see cref="Update()" /> by optionally
-    /// invoking the <see cref="IAssetErrorListener" />.
+    /// Handles a runtime/loading error in <see cref="Update()"/> by optionally
+    /// invoking the <see cref="IAssetErrorListener"/>.
     /// </summary>
     /// <param name="t"></param>
     public void HandleTaskError( Exception t )
@@ -780,7 +780,7 @@ public partial class AssetManager
     /// </summary>
     /// <param name="parentAssetFilename">The file name of the parent asset.</param>
     /// <param name="dependendAssetDescs">The list of dependent asset descriptors to inject.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="parentAssetFilename" /> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="parentAssetFilename"/> is null.</exception>
     public void InjectDependencies( string parentAssetFilename, List< AssetDescriptor > dependendAssetDescs )
     {
         ArgumentNullException.ThrowIfNull( parentAssetFilename );
@@ -977,9 +977,43 @@ public partial class AssetManager
     /// <summary>
     /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
-    /// <param name="desc">the <see cref="AssetDescriptor" /></param>
+    /// <param name="fileName">
+    /// The file name (interpretation depends on <see cref="AssetLoader"/>)
+    /// </param>
+    /// <typeparam name="T"> the type of the asset. </typeparam>
+    public void Load< T >( string fileName )
+    {
+        Logger.Checkpoint();
+        
+        lock ( this )
+        {
+            Load( fileName, typeof( T ), null  );
+        }
+    }
+
+    /// <summary>
+    /// Adds the given asset to the loading queue of the AssetManager.
+    /// </summary>
+    /// <param name="fileName">
+    /// the file name (interpretation depends on <see cref="AssetLoader"/>)
+    /// </param>
+    /// <typeparam name="T">the type of the asset.</typeparam>
+    /// <param name="parameters"></param>
+    public void Load< T >( string? fileName, AssetLoaderParameters? parameters )
+    {
+        Logger.Checkpoint();
+
+        Load( fileName, typeof( T ), parameters );
+    }
+
+    /// <summary>
+    /// Adds the given asset to the loading queue of the AssetManager.
+    /// </summary>
+    /// <param name="desc">the <see cref="AssetDescriptor"/></param>
     public void Load( AssetDescriptor desc )
     {
+        Logger.Checkpoint();
+
         ArgumentNullException.ThrowIfNull( desc );
 
         lock ( this )
@@ -992,27 +1026,14 @@ public partial class AssetManager
     /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
     /// <param name="fileName">
-    /// The file name (interpretation depends on <see cref="AssetLoader" />)
-    /// </param>
-    /// <param name="type"> the type of the asset. </param>
-    public void Load( string fileName, Type? type )
-    {
-        lock ( this )
-        {
-            Load( fileName, type, null );
-        }
-    }
-
-    /// <summary>
-    /// Adds the given asset to the loading queue of the AssetManager.
-    /// </summary>
-    /// <param name="fileName">
-    /// the file name (interpretation depends on <see cref="AssetLoader" />)
+    /// the file name (interpretation depends on <see cref="AssetLoader"/>)
     /// </param>
     /// <param name="type">the type of the asset.</param>
     /// <param name="parameters"></param>
     public void Load( string? fileName, Type? type, AssetLoaderParameters? parameters )
     {
+        Logger.Checkpoint();
+
         ArgumentNullException.ThrowIfNull( fileName );
         ArgumentNullException.ThrowIfNull( type );
 
@@ -1070,7 +1091,7 @@ public partial class AssetManager
 
     /// <summary>
     /// Returns true when all assets are loaded. Can be called from any thread but
-    /// note <see cref="Update()" /> or related methods must be called to process tasks.
+    /// note <see cref="Update()"/> or related methods must be called to process tasks.
     /// </summary>
     public bool IsFinished()
     {
@@ -1133,7 +1154,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    /// Sets a new <see cref="AssetLoader" /> for the given type.
+    /// Sets a new <see cref="AssetLoader"/> for the given type.
     /// </summary>
     /// <param name="type"> the type of the asset </param>
     /// <param name="loader"> the loader </param>
@@ -1254,8 +1275,6 @@ public partial class AssetManager
     /// </exception>
     private void AddTask( AssetDescriptor assetDesc )
     {
-        Logger.Checkpoint();
-
         var loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
 
         if ( loader == null )
@@ -1263,11 +1282,7 @@ public partial class AssetManager
             throw new GdxRuntimeException( $"No loader for type: {assetDesc.AssetType}" );
         }
 
-        Logger.Checkpoint();
-
         _tasks.Enqueue( new AssetLoadingTask( this, assetDesc, loader ) );
-
-        Logger.Checkpoint();
 
         _peakTasks++;
     }
@@ -1315,7 +1330,7 @@ public partial class AssetManager
 
     /// <summary>
     /// Loads the next asset task from the load queue. If the asset is already loaded,
-    /// increment the loaded count for use in <see cref="GetProgress" />.
+    /// increment the loaded count for use in <see cref="GetProgress"/>.
     /// </summary>
     private bool LoadNextTask()
     {

@@ -108,7 +108,7 @@ public partial interface IGraphicsDevice
     /// Disabling continuous rendering can be useful for saving power when
     /// the application doesn't need to be constantly redrawing (e.g., in
     /// non-interactive scenes). Rendering can then be triggered manually
-    /// using <see cref="RequestRendering" />.
+    /// using <see cref="RequestRendering"/>.
     /// </para>
     /// </summary>
     bool ContinuousRendering { get; }
@@ -243,28 +243,28 @@ public partial interface IGraphicsDevice
     /// Returns an array of all supported display modes for the current monitor.
     /// Display modes describe available screen resolutions, refresh rates, and bit depths.
     /// </summary>
-    /// <returns>An array of <see cref="DisplayMode" /> objects representing supported display modes.</returns>
+    /// <returns>An array of <see cref="DisplayMode"/> objects representing supported display modes.</returns>
     DisplayMode[] GetDisplayModes();
 
     /// <summary>
     /// Gets the current display mode of the primary monitor.
     /// </summary>
-    /// <returns>The current <see cref="DisplayMode" /> of the primary monitor.</returns>
+    /// <returns>The current <see cref="DisplayMode"/> of the primary monitor.</returns>
     DisplayMode GetDisplayMode();
 
     /// <summary>
     /// Returns an array of all supported display modes for the specified monitor.
     /// Display modes describe available screen resolutions, refresh rates, and bit depths.
     /// </summary>
-    /// <param name="monitor">The <see cref="GLFW.Monitor" /> to query for display modes.</param>
-    /// <returns>An array of <see cref="DisplayMode" /> objects representing supported display modes for the specified monitor.</returns>
+    /// <param name="monitor">The <see cref="GLFW.Monitor"/> to query for display modes.</param>
+    /// <returns>An array of <see cref="DisplayMode"/> objects representing supported display modes for the specified monitor.</returns>
     DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
 
     /// <summary>
     /// Gets the current display mode of the specified monitor.
     /// </summary>
-    /// <param name="monitor">The <see cref="GLFW.Monitor" /> to query for the display mode.</param>
-    /// <returns>The current <see cref="DisplayMode" /> of the specified monitor.</returns>
+    /// <param name="monitor">The <see cref="GLFW.Monitor"/> to query for the display mode.</param>
+    /// <returns>The current <see cref="DisplayMode"/> of the specified monitor.</returns>
     DisplayMode GetDisplayMode( GLFW.Monitor monitor );
 
     /// <summary>
@@ -279,7 +279,7 @@ public partial interface IGraphicsDevice
     /// <summary>
     /// Sets the application to fullscreen mode using the specified display mode.
     /// </summary>
-    /// <param name="displayMode">The <see cref="DisplayMode" /> to use for fullscreen mode.</param>
+    /// <param name="displayMode">The <see cref="DisplayMode"/> to use for fullscreen mode.</param>
     /// <returns><c>true</c> if the display mode was successfully set, <c>false</c> otherwise.</returns>
     bool SetFullscreenMode( DisplayMode displayMode );
 
@@ -336,23 +336,23 @@ public partial interface IGraphicsDevice
     /// Requests a rendering frame to be performed.
     /// <para>
     /// This method is typically used when continuous rendering is disabled
-    /// (<see cref="ContinuousRendering" /> is <c>false</c>) to manually trigger
+    /// (<see cref="ContinuousRendering"/> is <c>false</c>) to manually trigger
     /// rendering updates on demand (e.g., in response to user input or game events).
     /// </para>
     /// </summary>
     void RequestRendering();
 
     /// <summary>
-    /// Create a new cursor represented by the <see cref="Pixmap" />. The Pixmap must be
+    /// Create a new cursor represented by the <see cref="Pixmap"/>. The Pixmap must be
     /// in RGBA8888 format, Width &amp; height must be powers-of-two greater than zero (not
     /// necessarily equal) and of a certain minimum size (32x32 is a safe bet), and alpha
     /// transparency must be single-bit (i.e., 0x00 or 0xFF only).
     /// <para>
     /// This function returns a Cursor object that can be set as the system cursor
-    /// by calling <see cref="SetCursor(ICursor)" />.
+    /// by calling <see cref="SetCursor(ICursor)"/>.
     /// </para>
     /// </summary>
-    /// <param name="pixmap"> the mouse cursor image as a <see cref="Pixmap" />. </param>
+    /// <param name="pixmap"> the mouse cursor image as a <see cref="Pixmap"/>. </param>
     /// <param name="xHotspot">
     /// The x location of the hotspot pixel within the cursor image (origin top-left corner)
     /// </param>
@@ -360,7 +360,7 @@ public partial interface IGraphicsDevice
     /// The y location of the hotspot pixel within the cursor image (origin top-left corner)
     /// </param>
     /// <returns>
-    /// a cursor object that can be used by calling <see cref="SetCursor(ICursor)" /> or null
+    /// a cursor object that can be used by calling <see cref="SetCursor(ICursor)"/> or null
     /// if not supported
     /// </returns>
     ICursor NewCursor( Pixmap pixmap, int xHotspot, int yHotspot );
@@ -374,11 +374,11 @@ public partial interface IGraphicsDevice
     /// It is recommended to call this function in the main render thread, and maximum one time per frame.
     /// </para>
     /// </summary>
-    /// <param name="cursor">The mouse cursor as a <see cref="ICursor" /></param>
+    /// <param name="cursor">The mouse cursor as a <see cref="ICursor"/></param>
     void SetCursor( ICursor cursor );
 
     /// <summary>
-    /// Sets one of the predefined <see cref="ICursor.SystemCursor" />s.
+    /// Sets one of the predefined <see cref="ICursor.SystemCursor"/>s.
     /// This allows you to set standard system cursors like arrow, crosshair, hand, etc.
     /// </summary>
     /// <param name="systemCursor"> The system cursor to use. </param>

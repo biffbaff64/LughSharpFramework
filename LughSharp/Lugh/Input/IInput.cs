@@ -97,7 +97,7 @@ public interface IInput
     }
 
     /// <summary>
-    /// The currently set <see cref="IInputProcessor" />.
+    /// The currently set <see cref="IInputProcessor"/>.
     /// </summary>
     IInputProcessor? InputProcessor { get; set; }
 
@@ -611,7 +611,7 @@ public interface IInput
     /// Checks to see if the provided keycode applies to a key that is a member of the
     /// 'Override Key' group of keys.
     /// </summary>
-    /// <param name="keycode"> The <see cref="Keys" /> code. </param>
+    /// <param name="keycode"> The <see cref="Keys"/> code. </param>
     /// <returns> True if the key is an Override Key, otherwise false. </returns>
     bool IsOverrideKey( int keycode );
 

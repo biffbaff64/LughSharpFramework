@@ -52,10 +52,10 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// by OpenGL to represent a texture object in memory. It is used to reference and
     /// manipulate a specific texture in OpenGL operations.
     /// <para>
-    /// The handle is typically created using a function like <see cref="IGLBindings.GenTextures(int)" />.
+    /// The handle is typically created using a function like <see cref="IGLBindings.GenTextures(int)"/>.
     /// Once created, this handle is used in various OpenGL functions to bind, modify,
     /// or delete the texture. The handle remains valid until explicitly deleted using
-    /// a function like <see cref="IGLBindings.DeleteTextures(uint[])" />
+    /// a function like <see cref="IGLBindings.DeleteTextures(uint[])"/>
     /// </para>
     /// </summary>
     public uint GLTextureHandle { get; set; }
@@ -168,7 +168,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
     /// <summary>
     /// Used internally to reload after context loss. Creates a new GL handle then
-    /// calls <see cref="Texture.Load" />.
+    /// calls <see cref="Texture.Load"/>.
     /// </summary>
     public abstract void Reload();
 
@@ -210,7 +210,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Sets the <see cref="TextureWrapMode" /> for this texture on the u and v axis.
+    /// Sets the <see cref="TextureWrapMode"/> for this texture on the u and v axis.
     /// Assumes the texture is bound and active!
     /// </summary>
     /// <param name="u"> The u wrap. </param>
@@ -234,7 +234,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Sets the <see cref="TextureWrapMode" /> for this texture on the u and v axis.
+    /// Sets the <see cref="TextureWrapMode"/> for this texture on the u and v axis.
     /// This will bind this texture!
     /// </summary>
     /// <param name="u">the u wrap</param>
@@ -251,7 +251,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Sets the <see cref="TextureFilterMode" /> for this texture for minification and
+    /// Sets the <see cref="TextureFilterMode"/> for this texture for minification and
     /// magnification. Assumes the texture is bound and active!
     /// </summary>
     /// <param name="minFilter"> the minification filter </param>
@@ -276,7 +276,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Sets the <see cref="TextureFilterMode" /> for this texture for minification and
+    /// Sets the <see cref="TextureFilterMode"/> for this texture for minification and
     /// magnification. This will bind this texture.
     /// </summary>
     /// <param name="minFilter"> The minification filter. </param>
@@ -398,12 +398,12 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
         if ( data.TextureDataType == ITextureData.TextureType.Custom )
         {
-            data.ConsumeCustomData( target );
+            data.UploadCustomData( target );
 
             return;
         }
 
-        var pixmap = data.ConsumePixmap();
+        var pixmap = data.FetchPixmap();
 
         Guard.ThrowIfNull( pixmap );
         
@@ -411,7 +411,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
         if ( pixmap?.PixelData == null )
         {
-            Logger.Warning( "ConsumePixmap() resulted in a null Pixmap!" );
+            Logger.Warning( "FetchPixmap() resulted in a null Pixmap!" );
 
             return;
         }

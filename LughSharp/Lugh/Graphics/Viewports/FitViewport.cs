@@ -27,7 +27,7 @@ using LughSharp.Lugh.Graphics.Cameras;
 namespace LughSharp.Lugh.Graphics.Viewports;
 
 /// <summary>
-/// A ScalingViewport that uses <see cref="Scaling.Fit" /> so it keeps the aspect
+/// A ScalingViewport that uses <see cref="Scaling.Fit"/> so it keeps the aspect
 /// ratio by scaling the world up to fit the screen, adding black bars (letterboxing)
 /// for the remaining space.
 /// </summary>
@@ -35,7 +35,7 @@ namespace LughSharp.Lugh.Graphics.Viewports;
 public class FitViewport : ScalingViewport
 {
     /// <summary>
-    /// Creates a new viewport using a new <see cref="OrthographicCamera" />.
+    /// Creates a new viewport using a new <see cref="OrthographicCamera"/>.
     /// </summary>
     /// <param name="worldWidth"> World width in pixels. </param>
     /// <param name="worldHeight"> World height in pixels. </param>
@@ -45,7 +45,7 @@ public class FitViewport : ScalingViewport
     }
 
     /// <summary>
-    /// Creates a new viewport using the supplied <see cref="OrthographicCamera" />.
+    /// Creates a new viewport using the supplied <see cref="OrthographicCamera"/>.
     /// </summary>
     /// <param name="worldWidth"> World width in pixels. </param>
     /// <param name="worldHeight"> World height in pixels. </param>

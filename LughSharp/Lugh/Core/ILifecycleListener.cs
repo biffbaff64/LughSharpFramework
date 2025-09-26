@@ -37,12 +37,12 @@ namespace LughSharp.Lugh.Core;
 public interface ILifecycleListener : IDisposable
 {
     /// <summary>
-    /// Called when the <see cref="IApplication" /> is about to be paused.
+    /// Called when the <see cref="IApplication"/> is about to be paused.
     /// </summary>
     void Pause();
 
     /// <summary>
-    /// Called when the <see cref="IApplication" /> is about to be resumed.
+    /// Called when the <see cref="IApplication"/> is about to be resumed.
     /// </summary>
     void Resume();
 }

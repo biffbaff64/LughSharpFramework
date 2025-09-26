@@ -97,8 +97,8 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Constructs a new <see cref="Ellipse" /> from the position and radius of
-    /// a <see cref="Circle" /> (since circles are special cases of ellipses).
+    /// Constructs a new <see cref="Ellipse"/> from the position and radius of
+    /// a <see cref="Circle"/> (since circles are special cases of ellipses).
     /// </summary>
     /// <param name="circle"> The circle to take the values of  </param>
     public Ellipse( Circle circle )
@@ -169,7 +169,7 @@ public class Ellipse : IShape2D
 
     /// <summary>
     /// Sets the position and size of this ellipse, based on the supplied
-    /// <see cref="Circle" />.
+    /// <see cref="Circle"/>.
     /// </summary>
     /// <param name="circle"> The Circle to copy position and size from. </param>
     public void Set( Circle circle )
@@ -194,7 +194,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Sets the x and y-coordinates of ellipse center from a <see cref="Vector2" />.
+    /// Sets the x and y-coordinates of ellipse center from a <see cref="Vector2"/>.
     /// </summary>
     /// <param name="position"> The position vector </param>
     /// <returns> this ellipse for chaining  </returns>
@@ -235,8 +235,8 @@ public class Ellipse : IShape2D
     }
 
     /// <returns>
-    /// The area of this <see cref="Ellipse" /> as <see cref="MathUtils.PI" />
-    /// <see cref="Ellipse.Width" /> * <see cref="Ellipse.Height" />
+    /// The area of this <see cref="Ellipse"/> as <see cref="MathUtils.PI"/>
+    /// <see cref="Ellipse.Width"/> * <see cref="Ellipse.Height"/>
     /// </returns>
     public float Area()
     {
@@ -244,7 +244,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Approximates the circumference of this <see cref="Ellipse" />. Oddly enough,
+    /// Approximates the circumference of this <see cref="Ellipse"/>. Oddly enough,
     /// the circumference of an ellipse is actually difficult to compute exactly.
     /// </summary>
     /// <returns>

@@ -28,19 +28,19 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Graphics.Text;
 
 /// <summary>
-/// Stores <see cref="GlyphRun" /> runs of glyphs for a piece of text. The text may contain
+/// Stores <see cref="GlyphRun"/> runs of glyphs for a piece of text. The text may contain
 /// newlines and color markup tags.
 /// <para>
-/// Where wrapping occurs is determined by <see cref="BitmapFont.BitmapFontData.GetWrapIndex" />.
-/// Additionally, when <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true wrapping
+/// Where wrapping occurs is determined by <see cref="BitmapFont.BitmapFontData.GetWrapIndex"/>.
+/// Additionally, when <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true wrapping
 /// can occur at color start or end tags.
 /// </para>
 /// <para>
 /// When wrapping occurs, whitespace is removed before and after the wrap position.
-/// Whitespace is determined by <see cref="BitmapFont.BitmapFontData.IsWhitespace(char)" />.
+/// Whitespace is determined by <see cref="BitmapFont.BitmapFontData.IsWhitespace(char)"/>.
 /// </para>
 /// <para>
-/// Glyphs positions are determined by <see cref="BitmapFont.BitmapFontData.GetGlyphs" />.
+/// Glyphs positions are determined by <see cref="BitmapFont.BitmapFontData.GetGlyphs"/>.
 /// </para>
 /// <para>
 /// This class is not thread safe, even if synchronized externally, and must only
@@ -72,7 +72,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont" /> and text.
+    /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont"/> and text.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
@@ -82,14 +82,14 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont" />, text message,
-    /// <see cref="Color" />, target width, horizontal alignment, and wrap.
+    /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont"/>, text message,
+    /// <see cref="Color"/>, target width, horizontal alignment, and wrap.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
     /// <param name="color">
-    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
-    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
+    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
+    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
@@ -107,8 +107,8 @@ public class GlyphLayout : IResetable
     /// <param name="start"></param>
     /// <param name="end"></param>
     /// <param name="color">
-    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
-    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
+    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
+    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
@@ -144,7 +144,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)" />
+    /// Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)"/>
     /// with the whole string, the font's current color, and with no alignment or wrapping.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -155,14 +155,14 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)" />
+    /// Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)"/>
     /// with the whole string and no truncation.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
     /// <param name="color">
-    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
-    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
+    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
+    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
@@ -180,12 +180,12 @@ public class GlyphLayout : IResetable
     /// <param name="start"></param>
     /// <param name="end"></param>
     /// <param name="color">
-    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
-    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
+    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
+    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="halign">
-    /// Horizontal alignment of the text, see also <see cref="Alignment" />.
+    /// Horizontal alignment of the text, see also <see cref="Alignment"/>.
     /// </param>
     /// <param name="targetWidth">
     /// The width used for alignment, line wrapping, and truncation. May be zero if
@@ -856,7 +856,7 @@ public class GlyphLayout : IResetable
     /// </summary>
     /// <param name="fontData"></param>
     /// <param name="run"></param>
-    /// <seealso cref="GlyphRun.XAdvances" />
+    /// <seealso cref="GlyphRun.XAdvances"/>
     private void AdjustLastGlyph( BitmapFont.BitmapFontData fontData, GlyphRun run )
     {
         var last = run.Glyphs.Peek();

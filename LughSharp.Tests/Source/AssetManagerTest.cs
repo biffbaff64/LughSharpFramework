@@ -59,9 +59,9 @@ public class AssetManagerTest
         var file2 = Path.Combine( IOUtils.AssetsRoot, "PackedImages/Objects/rover_wheel.png" );
         var file3 = Path.Combine( IOUtils.AssetsRoot, "PackedImages/Objects/red7logo_small.png" );
 
-        _assetManager.Load( file1, typeof( Texture ) );
-        _assetManager.Load( file2, typeof( Texture ) );
-        _assetManager.Load( file3, typeof( Texture ) );
+        _assetManager.Load< Texture >( file1 );
+        _assetManager.Load< Texture >( file2 );
+        _assetManager.Load< Texture >( file3 );
         _assetManager.FinishLoading();
 
         if ( !_assetManager.Contains( file1 ) )

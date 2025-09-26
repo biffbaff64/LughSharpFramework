@@ -1094,11 +1094,11 @@ public class Quaternion
     /// Get the angle in radians of the rotation this quaternion represents.
     /// Does not normalize the quaternion.
     /// <para>
-    /// Use <see cref="GetAxisAngleRad(Vector3)" /> to get both the axis and
+    /// Use <see cref="GetAxisAngleRad(Vector3)"/> to get both the axis and
     /// the angle of this rotation.
     /// </para>
     /// <para>
-    /// Use <see cref="GetAngleAroundRad(Vector3)" /> to get the angle around
+    /// Use <see cref="GetAngleAroundRad(Vector3)"/> to get the angle around
     /// a specific axis.
     /// </para>
     /// </summary>
@@ -1110,10 +1110,10 @@ public class Quaternion
 
     /// <summary>
     /// Get the angle in degrees of the rotation this quaternion represents.
-    /// Use <see cref="GetAxisAngle(Vector3)" />" to get both the axis
+    /// Use <see cref="GetAxisAngle(Vector3)"/> to get both the axis
     /// and the angle of this rotation.
     /// <para>
-    /// Use <see cref="GetAngleAround(Vector3)" /> to get the angle around a specific axis.
+    /// Use <see cref="GetAngleAround(Vector3)"/> to get the angle around a specific axis.
     /// </para>
     /// </summary>
     /// <returns> the angle in degrees of the rotation </returns>

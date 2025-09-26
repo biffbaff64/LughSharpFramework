@@ -74,7 +74,7 @@ public abstract class Action : IAction, IResetable
     // ========================================================================
     // ========================================================================
 
-    /// <inheritdoc cref="IAction.Reset()" />
+    /// <inheritdoc cref="IAction.Reset()"/>
     public virtual void Reset()
     {
         Actor  = null;

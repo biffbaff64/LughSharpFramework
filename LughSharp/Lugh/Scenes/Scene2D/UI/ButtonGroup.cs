@@ -29,7 +29,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// buttons. This enables "radio button" functionality and more. A button may only
 /// be in one group at a time.
 /// <para>
-/// The <see cref="CanCheck(T, bool)" /> method can be overridden to control
+/// The <see cref="CanCheck(T, bool)"/> method can be overridden to control
 /// if a button check or uncheck is allowed.
 /// </para>
 /// </summary>
@@ -122,7 +122,7 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    /// Sets the first <see cref="TextButton" /> with the specified text to checked.
+    /// Sets the first <see cref="TextButton"/> with the specified text to checked.
     /// </summary>
     public void SetChecked( string text )
     {
@@ -194,8 +194,8 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    /// Sets all buttons' <see cref="Button.IsChecked" /> to false, regardless
-    /// of <see cref="SetMinCheckCount(int)" />.
+    /// Sets all buttons' <see cref="Button.IsChecked"/> to false, regardless
+    /// of <see cref="SetMinCheckCount(int)"/>.
     /// </summary>
     public void UncheckAll()
     {

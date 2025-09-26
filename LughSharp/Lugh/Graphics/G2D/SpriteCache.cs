@@ -33,20 +33,20 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// This information is stored in video memory and does not have to be sent to the
 /// GPU each time it is drawn.
 /// <para>
-/// To cache Sprites or Textures, first call <see cref="BeginCache()" />, then call
+/// To cache Sprites or Textures, first call <see cref="BeginCache()"/>, then call
 /// the appropriate add method to define the images. To complete the cache,
-/// call <see cref="EndCache" /> and store the returned cache ID.
+/// call <see cref="EndCache"/> and store the returned cache ID.
 /// </para>
 /// <para>
-/// To draw with SpriteCache, first call <see cref="Begin()" />, then call
-/// <see cref="Draw(int)" /> with a cache ID. When SpriteCache _drawing is complete,
-/// call <see cref="End()" />.
+/// To draw with SpriteCache, first call <see cref="Begin()"/>, then call
+/// <see cref="Draw(int)"/> with a cache ID. When SpriteCache _drawing is complete,
+/// call <see cref="End()"/>.
 /// </para>
 /// <para>
 /// By default, SpriteCache draws using screen coordinates and uses an x-axis
 /// pointing to the right, an y-axis pointing upwards and the origin is the bottom
 /// left corner of the screen. The default transformation and projection matrices
-/// can be changed. If the screen is <see cref="IApplicationListener.Resize" />,
+/// can be changed. If the screen is <see cref="IApplicationListener.Resize"/>,
 /// the SpriteCache's matrices must be updated. For example:
 /// </para>
 /// <code>
@@ -55,7 +55,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// <para>
 /// Note that SpriteCache does not manage blending. You will need to enable blending
 /// (<tt>GdxApi.GL.GLEnable(IGL.GL_Blend);</tt>) and set the blend func as needed before
-/// or between calls to <see cref="Draw(int)" />.
+/// or between calls to <see cref="Draw(int)"/>.
 /// </para>
 /// <para>
 /// SpriteCache is managed. If the OpenGL context is lost and the restored, all OpenGL
@@ -196,7 +196,7 @@ public class SpriteCache
 
     /// <summary>
     /// Sets the color used to tint images when they are added to the
-    /// SpriteCache. Default is <see cref="Lugh.Graphics.Color.White" />
+    /// SpriteCache. Default is <see cref="Lugh.Graphics.Color.White"/>
     /// </summary>
     public void SetColor( Color tint )
     {
@@ -206,7 +206,7 @@ public class SpriteCache
 
     /// <summary>
     /// </summary>
-    /// <see cref="SetColor(LughSharp.Lugh.Graphics.Color)" />
+    /// <see cref="SetColor(LughSharp.Lugh.Graphics.Color)"/>
     public void SetColor( float r, float g, float b, float a )
     {
         Color.Set( r, g, b, a );
@@ -215,7 +215,7 @@ public class SpriteCache
 
     /// <summary>
     /// Starts the definition of a new cache, allowing the add and
-    /// <see cref="EndCache()" /> methods to be called.
+    /// <see cref="EndCache()"/> methods to be called.
     /// </summary>
     public void BeginCache()
     {
@@ -236,10 +236,10 @@ public class SpriteCache
 
     /// <summary>
     /// Starts the redefinition of an existing cache, allowing the add and
-    /// <see cref="EndCache()" /> methods to be called. If this is not the
+    /// <see cref="EndCache()"/> methods to be called. If this is not the
     /// last cache created, it cannot have more entries added to it than when
-    /// it was first created. To do that, use <see cref="Clear()" /> and then
-    /// <see cref="Begin()" />.
+    /// it was first created. To do that, use <see cref="Clear()"/> and then
+    /// <see cref="Begin()"/>.
     /// </summary>
     public void BeginCache( int cacheID )
     {
@@ -268,7 +268,7 @@ public class SpriteCache
 
     /// <summary>
     /// Ends the definition of a cache, returning the cache ID to be
-    /// used with <see cref="Draw(int)" />.
+    /// used with <see cref="Draw(int)"/>.
     /// </summary>
     public int EndCache()
     {

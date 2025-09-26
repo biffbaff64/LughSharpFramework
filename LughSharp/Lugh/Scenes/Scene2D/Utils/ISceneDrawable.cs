@@ -41,7 +41,7 @@ public interface ISceneDrawable
 
     /// <summary>
     /// Draws this drawable at the specified bounds. The drawable should be tinted
-    /// with <see cref="IBatch.Color" />, possibly by mixing its own color.
+    /// with <see cref="IBatch.Color"/>, possibly by mixing its own color.
     /// </summary>
     void Draw( IBatch batch, float x, float y, float width, float height );
 }

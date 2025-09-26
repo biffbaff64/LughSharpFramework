@@ -33,14 +33,14 @@ namespace LughSharp.Lugh.Assets;
 public interface IAssetManager
 {
     /// <summary>
-    /// Returns the <see cref="IFileHandleResolver" /> which this
+    /// Returns the <see cref="IFileHandleResolver"/> which this
     /// AssetManager was loaded with.
     /// </summary>
     /// <returns>the file handle resolver which this AssetManager uses.</returns>
     IFileHandleResolver FileHandleResolver { get; set; }
 
     /// <summary>
-    /// Sets an <see cref="IAssetErrorListener" /> to be invoked in case loading an asset failed.
+    /// Sets an <see cref="IAssetErrorListener"/> to be invoked in case loading an asset failed.
     /// </summary>
     IAssetErrorListener? Listener { get; set; }
 
@@ -83,7 +83,7 @@ public interface IAssetManager
     /// </summary>
     /// <param name="parentAssetFilename">The file name of the parent asset.</param>
     /// <param name="dependendAssetDescs">The list of dependent asset descriptors to inject.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="parentAssetFilename" /> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="parentAssetFilename"/> is null.</exception>
     void InjectDependencies( string parentAssetFilename, List< AssetDescriptor > dependendAssetDescs );
 
     /// <summary>
@@ -200,7 +200,7 @@ public interface IAssetManager
     /// <param name="outArray">The list to which the retrieved assets will be added.</param>
     /// <returns>The list containing all assets of the specified type.</returns>
     /// <exception cref="ArgumentNullException">
-    /// Thrown if the <paramref name="type" /> or <paramref name="outArray" /> is null.
+    /// Thrown if the <paramref name="type"/> or <paramref name="outArray"/> is null.
     /// </exception>
     /// <exception cref="GdxRuntimeException">Thrown if no assets of the specified type are found.</exception>
     List< T > GetAll< T >( Type? type, List< T > outArray );
@@ -234,8 +234,8 @@ public interface IAssetManager
     void TaskFailed( AssetDescriptor assetDesc, Exception ex );
 
     /// <summary>
-    /// Handles a runtime/loading error in <see cref="AssetManager.Update()" /> by optionally
-    /// invoking the <see cref="IAssetErrorListener" />.
+    /// Handles a runtime/loading error in <see cref="AssetManager.Update()"/> by optionally
+    /// invoking the <see cref="IAssetErrorListener"/>.
     /// </summary>
     /// <param name="t"></param>
     void HandleTaskError( Exception? t );
@@ -253,14 +253,14 @@ public interface IAssetManager
     /// <summary>
     /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
-    /// <param name="desc">the <see cref="AssetDescriptor" /></param>
+    /// <param name="desc">the <see cref="AssetDescriptor"/></param>
     void AddToLoadqueue( AssetDescriptor desc );
 
     /// <summary>
     /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
     /// <param name="fileName">
-    /// the file name (interpretation depends on <see cref="AssetLoader" />)
+    /// the file name (interpretation depends on <see cref="AssetLoader"/>)
     /// </param>
     /// <param name="type">the type of the asset.</param>
     /// <param name="parameters"></param>
@@ -279,7 +279,7 @@ public interface IAssetManager
 
     /// <summary>
     /// Returns true when all assets are loaded. Can be called from any thread but
-    /// note <see cref="AssetManager.Update()" /> or related methods must be called to process tasks.
+    /// note <see cref="AssetManager.Update()"/> or related methods must be called to process tasks.
     /// </summary>
     bool IsFinished();
 
@@ -303,7 +303,7 @@ public interface IAssetManager
     object FinishLoadingAsset( string fileName );
 
     /// <summary>
-    /// Sets a new <see cref="AssetLoader" /> for the given type.
+    /// Sets a new <see cref="AssetLoader"/> for the given type.
     /// </summary>
     /// <param name="type"> the type of the asset </param>
     /// <param name="loader"> the loader</param>

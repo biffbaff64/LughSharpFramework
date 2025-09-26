@@ -63,7 +63,7 @@ public interface IVector< T > where T : IVector< T >
     /// </summary>
     /// <param name="limit2"> squared desired maximum length for this vector </param>
     /// <returns> this vector for chaining </returns>
-    /// <see cref="Len2() " />
+    /// <see cref="Len2() "/>
     T Limit2( float limit2 );
 
     /// <summary>
@@ -141,7 +141,7 @@ public interface IVector< T > where T : IVector< T >
     float Distance( T v );
 
     /// <summary>
-    /// This method is faster than <see cref="Distance" /> because it
+    /// This method is faster than <see cref="Distance"/> because it
     /// avoids calculating a square root. It is useful for comparisons, but not for
     /// getting accurate distances, as the return value is the square of the actual
     /// distance.

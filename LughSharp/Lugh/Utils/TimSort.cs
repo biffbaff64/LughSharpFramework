@@ -72,7 +72,7 @@ public class TimSort< T >
     /// This constant should be a power of two. It was 64 in Tim Peter's C implementation,
     /// but 32 was empirically determined to work better in this implementation. In the
     /// unlikely event that you set this constant to be a number that's not a power of two,
-    /// you'll need to change the <see cref="MinRunLength" /> computation.
+    /// you'll need to change the <see cref="MinRunLength"/> computation.
     /// </para>
     /// <para>
     /// If you decrease this constant, you must change the stackLen computation in the
@@ -104,7 +104,7 @@ public class TimSort< T >
 
     /// <summary>
     /// This controls when we get into 'galloping mode'. It is initialized to
-    /// <see cref="MIN_GALLOP" />. The mergeLo and mergeHi methods nudge it higher
+    /// <see cref="MIN_GALLOP"/>. The mergeLo and mergeHi methods nudge it higher
     /// for random data, and lower for highly structured data.
     /// </summary>
     private int _minGallop = MIN_GALLOP;
@@ -525,7 +525,7 @@ public class TimSort< T >
 
     /// <summary>
     /// Returns the minimum acceptable run length for an array of the specified length.
-    /// Natural runs shorter than this will be extended with <see cref="BinarySort" />.
+    /// Natural runs shorter than this will be extended with <see cref="BinarySort"/>.
     /// <para>
     /// Roughly speaking, the computation is:
     /// </para>

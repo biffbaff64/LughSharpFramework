@@ -433,7 +433,7 @@ public class Matrix3
     /// The 2D vector to be transformed. This vector contains the X and Y coordinates
     /// to be multiplied by the matrix.
     /// </param>
-    /// <returns>A new <see cref="Vector2" /> instance representing the transformed vector.</returns>
+    /// <returns>A new <see cref="Vector2"/> instance representing the transformed vector.</returns>
     public Vector2 Transform( Vector2 vector )
     {
         return new Vector2( ( M00 * vector.X ) + ( M01 * vector.Y ) + M02,
@@ -698,7 +698,7 @@ public class Matrix3
     /// Scale this matrix using the x and y components of the vector
     /// but leave the rest of the matrix alone.
     /// </summary>
-    /// <param name="scale"> The <see cref="Vector3" /> to use to scale this matrix. </param>
+    /// <param name="scale"> The <see cref="Vector3"/> to use to scale this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
     public Matrix3 Scale( Vector2 scale )
     {
@@ -713,7 +713,7 @@ public class Matrix3
     /// leave the rest of the matrix alone.
     /// </summary>
     /// <param name="scale">
-    /// The <see cref="Vector3" /> to use to scale this matrix.
+    /// The <see cref="Vector3"/> to use to scale this matrix.
     /// The z component will be ignored.
     /// </param>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>

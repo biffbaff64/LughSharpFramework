@@ -320,7 +320,7 @@ public partial class TextureAtlasData
 
         /// <summary>
         /// May be null if this page isn't associated with a file. In that
-        /// case, <see cref="Texture" /> must be set.
+        /// case, <see cref="Texture"/> must be set.
         /// </summary>
         public FileInfo? TextureFile { get; set; }
 

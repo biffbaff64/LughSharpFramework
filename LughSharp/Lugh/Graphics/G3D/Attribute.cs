@@ -26,7 +26,7 @@ namespace LughSharp.Lugh.Graphics.G3D;
 
 /// <summary>
 /// Extend this class to implement a material attribute. Register the attribute type by
-/// statically calling the <see cref="Register(string)" /> method, whose return value should
+/// statically calling the <see cref="Register(string)"/> method, whose return value should
 /// be used to instantiate the attribute. A class can implement multiple types
 /// </summary>
 public abstract class Attribute : IComparable< Attribute >
@@ -96,7 +96,7 @@ public abstract class Attribute : IComparable< Attribute >
     /// <summary>
     /// Call this method to register a custom attribute type. If the alias already
     /// exists, then that ID will be reused. The alias should be unambiguous and will
-    /// by default be returned by the call to <see cref="ToString()" />.
+    /// by default be returned by the call to <see cref="ToString()"/>.
     /// </summary>
     /// <param name="alias">
     /// The alias of the type to register, must be different for each dirrect type,

@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A group with a single child that sizes and positions the child using constraints.
-/// This provides layout similar to a <see cref="Table" /> with a single cell but is
+/// This provides layout similar to a <see cref="Table"/> with a single cell but is
 /// more lightweight.
 /// </summary>
 [PublicAPI]
@@ -74,8 +74,8 @@ public class Container< T > : WidgetGroup where T : Actor
 
     /// <summary>
     /// Sets the background drawable and, if adjustPadding is true, sets the container's
-    /// padding to <see cref="ISceneDrawable.BottomHeight" /> , <see cref="ISceneDrawable.TopHeight" />,
-    /// <see cref="ISceneDrawable.LeftWidth" />, and <see cref="ISceneDrawable.RightWidth" />.
+    /// padding to <see cref="ISceneDrawable.BottomHeight"/> , <see cref="ISceneDrawable.TopHeight"/>,
+    /// <see cref="ISceneDrawable.LeftWidth"/>, and <see cref="ISceneDrawable.RightWidth"/>.
     /// </summary>
     /// <param name="background"> If null, the background will be cleared and padding removed. </param>
     /// <param name="adjustPadding"></param>
@@ -430,7 +430,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     /// <summary>
     /// Causes the contents to be clipped if they exceed the container bounds.
-    /// Enabling clipping will set <see cref="Group.Transform" /> to true.
+    /// Enabling clipping will set <see cref="Group.Transform"/> to true.
     /// </summary>
     public void SetClip( bool enabled )
     {
@@ -1057,9 +1057,9 @@ public class Container< T > : WidgetGroup where T : Actor
 
     /// <summary>
     /// Sets the alignment of the actor within the container.
-    /// Set to <see cref="Alignment.CENTER" />, <see cref="Alignment.TOP" />,
-    /// <see cref="Alignment.BOTTOM" />, <see cref="Alignment.LEFT" />,
-    /// <see cref="Alignment.RIGHT" />, or any combination of those.
+    /// Set to <see cref="Alignment.CENTER"/>, <see cref="Alignment.TOP"/>,
+    /// <see cref="Alignment.BOTTOM"/>, <see cref="Alignment.LEFT"/>,
+    /// <see cref="Alignment.RIGHT"/>, or any combination of those.
     /// </summary>
     public Container< T > SetAlignment( int align )
     {
@@ -1069,7 +1069,7 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the container to <see cref="Alignment.CENTER" />.
+    /// Sets the alignment of the actor within the container to <see cref="Alignment.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public Container< T > AlignCenter()
@@ -1080,7 +1080,7 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets <see cref="Alignment.TOP" /> and clears <see cref="Alignment.BOTTOM" /> for
+    /// Sets <see cref="Alignment.TOP"/> and clears <see cref="Alignment.BOTTOM"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignTop()
@@ -1092,7 +1092,7 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets <see cref="Alignment.LEFT" /> and clears <see cref="Alignment.RIGHT" /> for
+    /// Sets <see cref="Alignment.LEFT"/> and clears <see cref="Alignment.RIGHT"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignLeft()
@@ -1104,7 +1104,7 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets <see cref="Alignment.BOTTOM" /> and clears <see cref="Alignment.TOP" /> for
+    /// Sets <see cref="Alignment.BOTTOM"/> and clears <see cref="Alignment.TOP"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignBottom()
@@ -1116,7 +1116,7 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets <see cref="Alignment.RIGHT" /> and clears <see cref="Alignment.LEFT" /> for the
+    /// Sets <see cref="Alignment.RIGHT"/> and clears <see cref="Alignment.LEFT"/> for the
     /// alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignRight()

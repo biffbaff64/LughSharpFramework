@@ -28,20 +28,20 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A group that lays out its children top to bottom vertically, with optional wrapping.
-/// <see cref="Group.Children" /> can be sorted to change the order of the actors (eg
-/// <see cref="Actor.SetZIndex(int)" />). This can be easier than using <see cref="Table" />
+/// <see cref="Group.Children"/> can be sorted to change the order of the actors (eg
+/// <see cref="Actor.SetZIndex(int)"/>). This can be easier than using <see cref="Table"/>
 /// when actors need to be inserted into or removed from the middle of the group.
 /// <para>
-/// <see cref="Invalidate()" /> must be called after changing the children order.
+/// <see cref="Invalidate()"/> must be called after changing the children order.
 /// </para>
 /// <para>
 /// The preferred width is the largest preferred width of any child. The preferred height
 /// is the sum of the children's preferred heights plus spacing. The preferred size is
-/// slightly different when <see cref="Wrapping" /> is enabled. The min size is the
+/// slightly different when <see cref="Wrapping"/> is enabled. The min size is the
 /// preferred size and the max size is 0.
 /// </para>
 /// <para>
-/// Widgets are sized using their <see cref="ILayout.PrefHeight" />, so widgets which return
+/// Widgets are sized using their <see cref="ILayout.PrefHeight"/>, so widgets which return
 /// 0 as their preferred height will be given a height of 0.
 /// </para>
 /// </summary>
@@ -566,7 +566,7 @@ public class VerticalGroup : WidgetGroup
 
     /// <summary>
     /// Sets the alignment of all widgets within the vertical group to
-    /// <see cref="Lugh.Utils.Alignment.CENTER" />. This clears any other alignment.
+    /// <see cref="Lugh.Utils.Alignment.CENTER"/>. This clears any other alignment.
     /// </summary>
     public VerticalGroup AlignCenter()
     {
@@ -576,7 +576,7 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.TOP" /> and clears <see cref="Lugh.Utils.Alignment.BOTTOM" /> for the
+    /// Sets <see cref="Lugh.Utils.Alignment.TOP"/> and clears <see cref="Lugh.Utils.Alignment.BOTTOM"/> for the
     /// alignment of all widgets within the vertical group.
     /// </summary>
     public VerticalGroup AlignTop()
@@ -588,7 +588,7 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.LEFT" /> and clears <see cref="Lugh.Utils.Alignment.RIGHT" /> for the
+    /// Adds <see cref="Lugh.Utils.Alignment.LEFT"/> and clears <see cref="Lugh.Utils.Alignment.RIGHT"/> for the
     /// alignment of all widgets within the vertical group.
     /// </summary>
     public VerticalGroup AlignLeft()
@@ -600,7 +600,7 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.BOTTOM" /> and clears <see cref="Lugh.Utils.Alignment.TOP" /> for the
+    /// Sets <see cref="Lugh.Utils.Alignment.BOTTOM"/> and clears <see cref="Lugh.Utils.Alignment.TOP"/> for the
     /// alignment of all widgets within the vertical group.
     /// </summary>
     public VerticalGroup AlignBottom()
@@ -612,7 +612,7 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT" /> and clears <see cref="Lugh.Utils.Alignment.LEFT" /> for the
+    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT"/> and clears <see cref="Lugh.Utils.Alignment.LEFT"/> for the
     /// alignment of all widgets within the vertical group.
     /// </summary>
     public VerticalGroup AlignRight()
@@ -635,11 +635,11 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the vertical alignment of each column of widgets when <see cref="Wrapping" />
+    /// Sets the vertical alignment of each column of widgets when <see cref="Wrapping"/>
     /// is enabled and sets the horizontal alignment of widgets within each column. Set
-    /// to <see cref="Lugh.Utils.Alignment.CENTER" />, <see cref="Lugh.Utils.Alignment.TOP" />,
-    /// <see cref="Lugh.Utils.Alignment.BOTTOM" />,
-    /// <see cref="Lugh.Utils.Alignment.LEFT" />, <see cref="Lugh.Utils.Alignment.RIGHT" />, or any combination of those.
+    /// to <see cref="Lugh.Utils.Alignment.CENTER"/>, <see cref="Lugh.Utils.Alignment.TOP"/>,
+    /// <see cref="Lugh.Utils.Alignment.BOTTOM"/>,
+    /// <see cref="Lugh.Utils.Alignment.LEFT"/>, <see cref="Lugh.Utils.Alignment.RIGHT"/>, or any combination of those.
     /// </summary>
     public VerticalGroup ColumnAlign( int columnAlign )
     {
@@ -649,7 +649,7 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the alignment of widgets within each column to <see cref="Lugh.Utils.Alignment.CENTER" />.
+    /// Sets the alignment of widgets within each column to <see cref="Lugh.Utils.Alignment.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public virtual VerticalGroup ColumnCenter()
@@ -660,8 +660,8 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.TOP" /> and clears <see cref="Lugh.Utils.Alignment.BOTTOM" /> for the
-    /// alignment of each column of widgets when <see cref="Wrapping" /> is enabled.
+    /// Adds <see cref="Lugh.Utils.Alignment.TOP"/> and clears <see cref="Lugh.Utils.Alignment.BOTTOM"/> for the
+    /// alignment of each column of widgets when <see cref="Wrapping"/> is enabled.
     /// </summary>
     public virtual VerticalGroup ColumnTop()
     {
@@ -672,7 +672,7 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.LEFT" /> and clears <see cref="Lugh.Utils.Alignment.RIGHT" /> for the
+    /// Adds <see cref="Lugh.Utils.Alignment.LEFT"/> and clears <see cref="Lugh.Utils.Alignment.RIGHT"/> for the
     /// alignment of widgets within each column.
     /// </summary>
     public virtual VerticalGroup ColumnLeft()
@@ -684,8 +684,8 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.BOTTOM" /> and clears <see cref="Lugh.Utils.Alignment.TOP" /> for the
-    /// alignment of each column of widgets when <see cref="Wrapping" />
+    /// Adds <see cref="Lugh.Utils.Alignment.BOTTOM"/> and clears <see cref="Lugh.Utils.Alignment.TOP"/> for the
+    /// alignment of each column of widgets when <see cref="Wrapping"/>
     /// wrapping} is enabled.
     /// </summary>
     public virtual VerticalGroup ColumnBottom()
@@ -697,7 +697,7 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT" /> and clears <see cref="Lugh.Utils.Alignment.LEFT" />
+    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT"/> and clears <see cref="Lugh.Utils.Alignment.LEFT"/>
     /// for the alignment of widgets within each column.
     /// </summary>
     public virtual VerticalGroup ColumnRight()
@@ -758,9 +758,9 @@ public class VerticalGroup : WidgetGroup
 
     /// <summary>
     /// Sets the alignment of all widgets within the vertical group. Set to
-    /// <see cref="Lugh.Utils.Alignment.CENTER" />, <see cref="Lugh.Utils.Alignment.TOP" />,
-    /// <see cref="Lugh.Utils.Alignment.BOTTOM" />,
-    /// <see cref="Lugh.Utils.Alignment.LEFT" />, <see cref="Lugh.Utils.Alignment.RIGHT" />, or any combination of those.
+    /// <see cref="Lugh.Utils.Alignment.CENTER"/>, <see cref="Lugh.Utils.Alignment.TOP"/>,
+    /// <see cref="Lugh.Utils.Alignment.BOTTOM"/>,
+    /// <see cref="Lugh.Utils.Alignment.LEFT"/>, <see cref="Lugh.Utils.Alignment.RIGHT"/>, or any combination of those.
     /// </summary>
     public int Alignment { get; set; } = Lugh.Utils.Alignment.TOP;
 

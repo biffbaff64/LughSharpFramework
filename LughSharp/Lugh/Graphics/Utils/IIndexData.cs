@@ -43,8 +43,8 @@ public interface IIndexData : IDisposable
     /// The count must equal the number of indices to be copied to this IndexBufferObject.
     /// </para>
     /// <para>
-    /// This can be called in between calls to <see cref="Bind()" /> and
-    /// <see cref="Unbind()" />. The index data will be updated instantly.
+    /// This can be called in between calls to <see cref="Bind()"/> and
+    /// <see cref="Unbind()"/>. The index data will be updated instantly.
     /// </para>
     /// </summary>
     /// <param name="indices"> the index data </param>
@@ -55,9 +55,9 @@ public interface IIndexData : IDisposable
     /// <summary>
     /// Copies the specified indices to the indices of this IndexBufferObject,
     /// discarding the old indices. Copying start at the current
-    /// <see cref="Buffer{T}.Position()" /> of the specified buffer and copied
-    /// the <see cref="Buffer{T}.Remaining()" /> amount of indices. This can be
-    /// called in between calls to <see cref="Bind()" /> and <see cref="Unbind()" />.
+    /// <see cref="Buffer{T}.Position()"/> of the specified buffer and copied
+    /// the <see cref="Buffer{T}.Remaining()"/> amount of indices. This can be
+    /// called in between calls to <see cref="Bind()"/> and <see cref="Unbind()"/>.
     /// The index data will be updated instantly.
     /// </summary>
     /// <param name="indices"> the index data to copy  </param>
@@ -74,8 +74,8 @@ public interface IIndexData : IDisposable
 
     /// <summary>
     /// Returns the underlying Buffer{T}. If you modify the buffer contents they
-    /// wil be uploaded on the call to <see cref="Bind()" />. If you need immediate
-    /// uploading use <see cref="SetIndices(short[], int, int)" />.
+    /// wil be uploaded on the call to <see cref="Bind()"/>. If you need immediate
+    /// uploading use <see cref="SetIndices(short[], int, int)"/>.
     /// </summary>
     /// <returns> the underlying short buffer. </returns>
     Buffer< short > GetBuffer( bool forWriting );

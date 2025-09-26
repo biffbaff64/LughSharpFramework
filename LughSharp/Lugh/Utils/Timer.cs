@@ -49,7 +49,7 @@ public class Timer
 
     /// <summary>
     /// Timer instance singleton for general application wide usage.
-    /// Static methods on <see cref="Timer" /> make convenient use of this instance.
+    /// Static methods on <see cref="Timer"/> make convenient use of this instance.
     /// </summary>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
@@ -280,7 +280,7 @@ public class Timer
     }
 
     /// <summary>
-    /// Schedules a <see cref="Task" /> on <see cref="Instance" />
+    /// Schedules a <see cref="Task"/> on <see cref="Instance"/>
     /// </summary>
     public static Task Post( Task task )
     {
@@ -288,7 +288,7 @@ public class Timer
     }
 
     /// <summary>
-    /// Schedules a <see cref="Task" /> on <see cref="Instance" />
+    /// Schedules a <see cref="Task"/> on <see cref="Instance"/>
     /// </summary>
     public static Task Schedule( Task task, float delaySeconds )
     {
@@ -296,7 +296,7 @@ public class Timer
     }
 
     /// <summary>
-    /// Schedules a <see cref="Task" /> on <see cref="Instance" />
+    /// Schedules a <see cref="Task"/> on <see cref="Instance"/>
     /// </summary>
     public static Task Schedule( Task task, float delaySeconds, float intervalSeconds )
     {
@@ -304,7 +304,7 @@ public class Timer
     }
 
     /// <summary>
-    /// Schedules a <see cref="Task" /> on <see cref="Instance" />
+    /// Schedules a <see cref="Task"/> on <see cref="Instance"/>
     /// </summary>
     public static Task Schedule( Task task, float delaySeconds, float intervalSeconds, int repeatCount )
     {
@@ -316,7 +316,7 @@ public class Timer
     // ========================================================================
 
     /// <summary>
-    /// A <see cref="IRunnable" /> that can be scheduled on a <see cref="Utils.Timer" />
+    /// A <see cref="IRunnable"/> that can be scheduled on a <see cref="Utils.Timer"/>
     /// </summary>
     [PublicAPI]
     public abstract class Task

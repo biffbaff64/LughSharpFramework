@@ -52,7 +52,7 @@ public class RandomXS128 : Random
     /// random number generator to a value very likely to be distinct from any other
     /// invocation of this constructor.
     /// <para>
-    /// This implementation creates a <see cref="System.Random" /> instance to generate the initial seed.
+    /// This implementation creates a <see cref="System.Random"/> instance to generate the initial seed.
     /// </para>
     /// </summary>
     public RandomXS128() : base( new Random().Next() )
@@ -87,7 +87,7 @@ public class RandomXS128 : Random
     /// </summary>
     /// <param name="value">
     /// a nonzero seed for this generator (if zero, the generator will be seeded
-    /// with <see cref="long.MinValue" />).
+    /// with <see cref="long.MinValue"/>).
     /// </param>
     public long Seed
     {
@@ -130,7 +130,7 @@ public class RandomXS128 : Random
     /// Returns the next pseudo-random, uniformly distributed int value from
     /// this random number generator's sequence.
     /// <para>
-    /// This implementation uses <see cref="NextLong()" /> internally.
+    /// This implementation uses <see cref="NextLong()"/> internally.
     /// </para>
     /// </summary>
     public int NextInt()
@@ -143,7 +143,7 @@ public class RandomXS128 : Random
     /// (inclusive) and the specified value (exclusive), drawn from this
     /// random number generator's sequence.
     /// <para>
-    /// This implementation uses <see cref="NextLong()" /> internally.
+    /// This implementation uses <see cref="NextLong()"/> internally.
     /// </para>
     /// </summary>
     /// <param name="n"> the positive bound on the random number to be returned. </param>
@@ -162,7 +162,7 @@ public class RandomXS128 : Random
     /// the value guarantees that the result is uniform, provided that the
     /// sequence of 64-bit values produced by this generator is.
     /// <para>
-    /// This implementation uses <see cref="NextLong()" /> internally.
+    /// This implementation uses <see cref="NextLong()"/> internally.
     /// </para>
     /// </summary>
     /// <param name="n"> the positive bound on the random number to be returned.</param>
@@ -192,7 +192,7 @@ public class RandomXS128 : Random
     /// Returns a pseudo-random, uniformly distributed double value between
     /// 0.0 and 1.0 from this random number generator's sequence.
     /// <para>
-    /// This implementation uses <see cref="NextLong()" /> internally.
+    /// This implementation uses <see cref="NextLong()"/> internally.
     /// </para>
     /// </summary>
     public override double NextDouble()
@@ -204,7 +204,7 @@ public class RandomXS128 : Random
     /// Returns a pseudo-random, uniformly distributed {@code float} value
     /// between 0.0 and 1.0 from this random number generator's sequence.
     /// <para>
-    /// This implementation uses <see cref="NextLong()" /> internally.
+    /// This implementation uses <see cref="NextLong()"/> internally.
     /// </para>
     /// </summary>
     public float NextFloat()
@@ -216,7 +216,7 @@ public class RandomXS128 : Random
     /// Returns a pseudo-random, uniformly distributed bool value from
     /// this random number generator's sequence.
     /// <para>
-    /// This implementation uses <see cref="NextLong()" /> internally.
+    /// This implementation uses <see cref="NextLong()"/> internally.
     /// </para>
     /// </summary>
     public bool Nextbool()
@@ -229,7 +229,7 @@ public class RandomXS128 : Random
     /// The number of random bytes produced is equal to the length of the byte
     /// array.
     /// <para>
-    /// This implementation uses <see cref="NextLong()" /> internally.
+    /// This implementation uses <see cref="NextLong()"/> internally.
     /// </para>
     /// </summary>
     public void NextBytes( in sbyte[] bytes )

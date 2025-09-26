@@ -42,7 +42,7 @@ public class LayoutAction : Action
 
     /// <summary>
     /// Updates the action based on time.
-    /// Typically this is called each frame by <see cref="Actor" />.
+    /// Typically this is called each frame by <see cref="Actor"/>.
     /// </summary>
     /// <param name="delta">Time in seconds since the last frame.</param>
     /// <returns>

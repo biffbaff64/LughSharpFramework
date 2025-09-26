@@ -79,7 +79,7 @@ public partial class Decoder
 
     /// <summary>
     /// Gets or sets the Equalizer.
-    /// If set to null, it defaults to <see cref="Equalizer.PassThruEq" />. When set, it
+    /// If set to null, it defaults to <see cref="Equalizer.PassThruEq"/>. When set, it
     /// updates the associated filters with the new equalizer's band factors.
     /// </summary>
     public virtual Equalizer? Equalizer
@@ -126,7 +126,7 @@ public partial class Decoder
     /// <summary>
     /// Gets or sets the scale factor. This property determines the scaling applied
     /// to a particular element or calculation.
-    /// By default, it is set to <see cref="DEFAULT_SCALE_FACTOR" />.
+    /// By default, it is set to <see cref="DEFAULT_SCALE_FACTOR"/>.
     /// </summary>
     public float ScaleFactor { get; set; } = DEFAULT_SCALE_FACTOR;
 
@@ -163,10 +163,10 @@ public partial class Decoder
     /// modifications to the default parameters from unintended side effects.
     /// </remarks>
     /// <value>
-    /// A clone of the default <see cref="Parameters" /> object for the decoder.
+    /// A clone of the default <see cref="Parameters"/> object for the decoder.
     /// </value>
     /// <exception cref="InvalidCastException">
-    /// Thrown if the cloning process does not return an object of type <see cref="Parameters" />.
+    /// Thrown if the cloning process does not return an object of type <see cref="Parameters"/>.
     /// </exception>
     public static Parameters DefaultParams => ( Parameters )_decoderDefaultParams.Clone();
 
@@ -202,11 +202,11 @@ public partial class Decoder
     }
 
     /// <summary>
-    /// Creates a new <see cref="DecoderException" /> with the specified error code.
+    /// Creates a new <see cref="DecoderException"/> with the specified error code.
     /// </summary>
     /// <param name="errorcode">The error code representing the specific decoder error.</param>
     /// <returns>
-    /// A new instance of <see cref="DecoderException" /> initialized with the specified error code.
+    /// A new instance of <see cref="DecoderException"/> initialized with the specified error code.
     /// </returns>
     /// <remarks>
     /// This method can be overridden in derived classes to provide custom exception handling
@@ -218,7 +218,7 @@ public partial class Decoder
     }
 
     /// <summary>
-    /// Creates a new <see cref="DecoderException" /> with the specified error code
+    /// Creates a new <see cref="DecoderException"/> with the specified error code
     /// and a nested exception.
     /// </summary>
     /// <param name="errorcode">The error code representing the specific decoder error.</param>
@@ -226,7 +226,7 @@ public partial class Decoder
     /// The exception that caused the decoder error, if any. This parameter can be null.
     /// </param>
     /// <returns>
-    /// A new instance of <see cref="DecoderException" /> initialized with the specified error
+    /// A new instance of <see cref="DecoderException"/> initialized with the specified error
     /// code and nested exception.
     /// </returns>
     /// <remarks>
@@ -244,7 +244,7 @@ public partial class Decoder
     /// <param name="header">The header information of the audio frame.</param>
     /// <param name="stream">The bitstream containing the audio data.</param>
     /// <param name="layer">The MPEG layer of the audio frame (1, 2, or 3).</param>
-    /// <returns>An <see cref="IFrameDecoder" /> instance corresponding to the specified MPEG layer.</returns>
+    /// <returns>An <see cref="IFrameDecoder"/> instance corresponding to the specified MPEG layer.</returns>
     /// <exception cref="DecoderException">
     /// Thrown when the specified layer is not supported or if the decoder cannot be retrieved.
     /// </exception>

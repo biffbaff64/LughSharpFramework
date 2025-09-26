@@ -216,7 +216,7 @@ public class Matrix4
     }
 
     /// <summary>
-    /// Constructs a rotation matrix from the given <see cref="Quaternion" />.
+    /// Constructs a rotation matrix from the given <see cref="Quaternion"/>.
     /// </summary>
     /// <param name="quaternion">The quaternion to be copied. (The quaternion is not modified)</param>
     public Matrix4( Quaternion quaternion )
@@ -1647,9 +1647,9 @@ public class Matrix4
     /// <summary>
     /// Gets the rotation of this matrix.
     /// </summary>
-    /// <param name="rotation"> The <see cref="Quaternion" /> to receive the rotation </param>
+    /// <param name="rotation"> The <see cref="Quaternion"/> to receive the rotation </param>
     /// <param name="normalizeAxes"> True to normalize the axes, necessary when the matrix might also include scaling. </param>
-    /// <returns> The provided <see cref="Quaternion" /> for chaining.  </returns>
+    /// <returns> The provided <see cref="Quaternion"/> for chaining.  </returns>
     public Quaternion GetRotation( Quaternion rotation, bool normalizeAxes )
     {
         return rotation.SetFromMatrix( normalizeAxes, this );
@@ -1658,8 +1658,8 @@ public class Matrix4
     /// <summary>
     /// Gets the rotation of this matrix.
     /// </summary>
-    /// <param name="rotation"> The <see cref="Quaternion" /> to receive the rotation </param>
-    /// <returns> The provided <see cref="Quaternion" /> for chaining.  </returns>
+    /// <param name="rotation"> The <see cref="Quaternion"/> to receive the rotation </param>
+    /// <returns> The provided <see cref="Quaternion"/> for chaining.  </returns>
     public Quaternion GetRotation( Quaternion rotation )
     {
         return rotation.SetFromMatrix( this );
@@ -1749,8 +1749,8 @@ public class Matrix4
     /// <summary>
     /// Multiplies the matrix mata with matrix matb, storing the result in mata.
     /// The arrays are assumed to hold 4x4 column major matrices as you can get
-    /// from <see cref="Val" />.
-    /// This is the same as <see cref="Matrix4.Mul(Matrix4)" />.
+    /// from <see cref="Val"/>.
+    /// This is the same as <see cref="Matrix4.Mul(Matrix4)"/>.
     /// </summary>
     /// <param name="mata"> the first matrix. </param>
     /// <param name="matb"> the second matrix.  </param>
@@ -1862,10 +1862,10 @@ public class Matrix4
 
     /// <summary>
     /// Multiplies the vector with the given matrix. The matrix array is assumed
-    /// to hold a 4x4 column major matrix as you can get from <see cref="Val" />.
+    /// to hold a 4x4 column major matrix as you can get from <see cref="Val"/>.
     /// The vector array is assumed to hold a 3-component vector, with x being the
     /// first element, y being the second and z being the last component. The result
-    /// is stored in the vector array. This is the same as <see cref="Vector3.Mul(Matrix4)" />.
+    /// is stored in the vector array. This is the same as <see cref="Vector3.Mul(Matrix4)"/>.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vec"> the vector.  </param>
@@ -1883,10 +1883,10 @@ public class Matrix4
     /// <summary>
     /// Multiplies the vector with the given matrix, performing a division by w. The
     /// matrix array is assumed to hold a 4x4 column major matrix as you can get from
-    /// <see cref="Val" />. The vector array is assumed to hold a 3-component
+    /// <see cref="Val"/>. The vector array is assumed to hold a 3-component
     /// vector, with x being the first element, y being the second and z being the last
     /// component. The result is stored in the vector array. This is the same as
-    /// <see cref="Vector3.Prj(Matrix4)" />.
+    /// <see cref="Vector3.Prj(Matrix4)"/>.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vec"> the vector.  </param>
@@ -1920,10 +1920,10 @@ public class Matrix4
     /// <summary>
     /// Multiplies the vector with the top most 3x3 sub-matrix of the given matrix.
     /// The matrix array is assumed to hold a 4x4 column major matrix as you can get
-    /// from <see cref="Val" />. The vector array is assumed to hold a
+    /// from <see cref="Val"/>. The vector array is assumed to hold a
     /// 3-component vector, with x being the first element, y being the second and z
     /// being the last component. The result is stored in the vector array. This is the
-    /// same as <see cref="Vector3.Rot(Matrix4)" />.
+    /// same as <see cref="Vector3.Rot(Matrix4)"/>.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vec"> the vector.  </param>
@@ -1939,7 +1939,7 @@ public class Matrix4
 
     /// <summary>
     /// Computes the inverse of the given matrix. The matrix array is assumed to
-    /// hold a 4x4 column major matrix as you can get from <see cref="Val" />.
+    /// hold a 4x4 column major matrix as you can get from <see cref="Val"/>.
     /// </summary>
     /// <param name="values"> the matrix values. </param>
     /// <returns> false in case the inverse could not be calculated, true otherwise.  </returns>
@@ -2089,7 +2089,7 @@ public class Matrix4
 
     /// <summary>
     /// Computes the determinante of the given matrix. The matrix array is assumed
-    /// to hold a 4x4 column major matrix as you can get from <see cref="Val" />.
+    /// to hold a 4x4 column major matrix as you can get from <see cref="Val"/>.
     /// </summary>
     /// <param name="values"> the matrix values. </param>
     /// <returns> the determinante.  </returns>
@@ -2456,11 +2456,11 @@ public class Matrix4
 
     /// <summary>
     /// Multiplies the vectors with the given matrix. The matrix array is assumed to hold a 4x4
-    /// column major matrix as you can get from <see cref="Val" />. The vectors array is assumed
+    /// column major matrix as you can get from <see cref="Val"/>. The vectors array is assumed
     /// to hold 3-component vectors. Offset specifies the offset into the array where the x-component
     /// of the first vector is located. The numVecs parameter specifies the number of vectors stored
     /// in the vectors array. The stride parameter specifies the number of floats between subsequent
-    /// vectors and must be >= 3. This is the same as <see cref="Vector3.Mul(Matrix4)" /> applied to
+    /// vectors and must be >= 3. This is the same as <see cref="Vector3.Mul(Matrix4)"/> applied to
     /// multiple vectors.
     /// </summary>
     /// <param name="mat"> the matrix </param>
@@ -2486,12 +2486,12 @@ public class Matrix4
     /// <summary>
     /// Multiplies the vectors with the given matrix, performing a division by w.
     /// The matrix array is assumed to hold a 4x4 column major matrix as you can
-    /// get from <see cref="Val" />. The vectors array is assumed to hold
+    /// get from <see cref="Val"/>. The vectors array is assumed to hold
     /// 3-component vectors. Offset specifies the offset into the array where the
     /// x-component of the first vector is located. The numVecs parameter specifies
     /// the number of vectors stored in the vectors array. The stride parameter
     /// specifies the number of floats between subsequent vectors and must be >= 3.
-    /// This is the same as <see cref="Vector3.Prj(Matrix4)" /> applied to multiple
+    /// This is the same as <see cref="Vector3.Prj(Matrix4)"/> applied to multiple
     /// vectors.
     /// </summary>
     /// <param name="mat"> the matrix </param>
@@ -2531,12 +2531,12 @@ public class Matrix4
     /// <summary>
     /// Multiplies the vectors with the top most 3x3 sub-matrix of the given matrix.
     /// The matrix array is assumed to hold a 4x4 column major matrix as you can get
-    /// from <see cref="Val" />. The vectors array is assumed to hold
+    /// from <see cref="Val"/>. The vectors array is assumed to hold
     /// 3-component vectors. Offset specifies the offset into the array where the
     /// x-component of the first vector is located. The numVecs parameter specifies
     /// the number of vectors stored in the vectors array. The stride parameter
     /// specifies the number of floats between subsequent vectors and must be >= 3.
-    /// This is the same as <see cref="Vector3.Rot(Matrix4)" /> applied to multiple vectors.
+    /// This is the same as <see cref="Vector3.Rot(Matrix4)"/> applied to multiple vectors.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vecs"> the vectors </param>

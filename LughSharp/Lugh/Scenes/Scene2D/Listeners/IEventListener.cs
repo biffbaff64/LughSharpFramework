@@ -28,8 +28,8 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 /// Low level interface for receiving events.
 /// Typically there is a listener class for each specific event class.
 /// </summary>
-/// <see cref="InputListener" />
-/// <see cref="InputEvent" />
+/// <see cref="InputListener"/>
+/// <see cref="InputEvent"/>
 public interface IEventListener
 {
     /// <summary>

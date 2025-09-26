@@ -40,7 +40,7 @@ public class VertexAttributes
     private readonly VertexAttribute[] _attributes;
 
     /// <summary>
-    /// cache of the value calculated by <see cref="Mask" />.
+    /// cache of the value calculated by <see cref="Mask"/>.
     /// </summary>
     private long _mask = -1;
 
@@ -76,8 +76,8 @@ public class VertexAttributes
     public int Size => _attributes.Length;
 
     /// <summary>
-    /// Calculates a mask based on the contained <see cref="VertexAttribute" />
-    /// instances. The mask is a bit-wise or of each attributes <see cref="VertexAttribute.Usage" />.
+    /// Calculates a mask based on the contained <see cref="VertexAttribute"/>
+    /// instances. The mask is a bit-wise or of each attributes <see cref="VertexAttribute.Usage"/>.
     /// </summary>
     /// <returns> the mask  </returns>
     protected long Mask
@@ -101,7 +101,7 @@ public class VertexAttributes
     }
 
     /// <summary>
-    /// Calculates the mask based on <see cref="Mask" /> and packs
+    /// Calculates the mask based on <see cref="Mask"/> and packs
     /// the attributes count into the last 32 bits.
     /// </summary>
     /// <returns>
@@ -251,15 +251,15 @@ public class VertexAttributes
     }
 
     /// <summary>
-    /// Compares the current <see cref="VertexAttributes" /> instance to another <see cref="VertexAttributes" />
+    /// Compares the current <see cref="VertexAttributes"/> instance to another <see cref="VertexAttributes"/>
     /// instance to determine their relative order based on the number of attributes, mask values, and individual
     /// attribute properties.
     /// </summary>
-    /// <param name="o">The <see cref="VertexAttributes" /> instance to compare with the current instance.</param>
+    /// <param name="o">The <see cref="VertexAttributes"/> instance to compare with the current instance.</param>
     /// <returns>
     /// A signed integer that indicates the relative order of the objects being compared. Returns a value less
-    /// than zero if this instance precedes <paramref name="o" /> in the sort order, zero if they are equivalent,
-    /// and a value greater than zero if this instance follows <paramref name="o" /> in the sort order.
+    /// than zero if this instance precedes <paramref name="o"/> in the sort order, zero if they are equivalent,
+    /// and a value greater than zero if this instance follows <paramref name="o"/> in the sort order.
     /// </returns>
     public int CompareTo( VertexAttributes o )
     {

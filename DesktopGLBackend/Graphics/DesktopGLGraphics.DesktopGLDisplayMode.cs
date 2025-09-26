@@ -29,13 +29,13 @@ namespace DesktopGLBackend.Graphics;
 public partial class DesktopGLGraphics
 {
     /// <summary>
-    /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
+    /// Describes a Display Mode for a <see cref="GLFW.Monitor"/>
     /// </summary>
     [PublicAPI]
     public class DesktopGLDisplayMode : IGraphicsDevice.DisplayMode
     {
         /// <summary>
-        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphicsDevice.DisplayMode" /> applies to.
+        /// The <see cref="GLFW.Monitor"/> this <see cref="IGraphicsDevice.DisplayMode"/> applies to.
         /// </summary>
         public GLFW.Monitor MonitorHandle { get; set; }
 

@@ -46,7 +46,7 @@ public class DesktopGLPreferences : IPreferences
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DesktopGLPreferences" /> class.
+    /// Initializes a new instance of the <see cref="DesktopGLPreferences"/> class.
     /// </summary>
     /// <param name="filename"> The name of the preferences file. </param>
     public DesktopGLPreferences( string filename )
@@ -135,7 +135,7 @@ public class DesktopGLPreferences : IPreferences
     /// Adds or updates multiple entries in the preferences.
     /// </summary>
     /// <param name="vals"> The dictionary of key-value pairs to add or update. </param>
-    /// <returns> The current <see cref="IPreferences" /> instance. </returns>
+    /// <returns> The current <see cref="IPreferences"/> instance. </returns>
     public IPreferences PutAll( Dictionary< string, object > vals )
     {
         foreach ( var entry in vals )

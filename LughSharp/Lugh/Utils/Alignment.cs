@@ -111,7 +111,7 @@ public sealed class Alignment
 
     // ========================================================================
 
-    /// <inheritdoc cref="Object.ToString" />
+    /// <inheritdoc cref="Object.ToString"/>
     public static string ToString( int position )
     {
         var buffer = new StringBuilder( "[" );

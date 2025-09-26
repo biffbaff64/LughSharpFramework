@@ -28,21 +28,21 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A group that lays out its children side by side horizontally, with optional
-/// wrapping. This can be easier than using <see cref="Table" /> when actors need
+/// wrapping. This can be easier than using <see cref="Table"/> when actors need
 /// to be inserted into or removed from the middle of the group.
 /// <para>
-/// <see cref="Group.Children" /> can be sorted to change the order of the actors
-/// <see cref="Actor.SetZIndex(int)" />. <see cref="Invalidate()" /> must be called
+/// <see cref="Group.Children"/> can be sorted to change the order of the actors
+/// <see cref="Actor.SetZIndex(int)"/>. <see cref="Invalidate()"/> must be called
 /// after changing the children order.
 /// </para>
 /// <para>
 /// The preferred width is the sum of the children's preferred widths plus spacing.
 /// The preferred height is the largest preferred height of any child. The preferred
-/// size is slightly different when <see cref="Wrap" />" is enabled. The min size
+/// size is slightly different when <see cref="Wrap"/> is enabled. The min size
 /// is the preferred size and the max size is 0.
 /// </para>
 /// <para>
-/// Widgets are sized using their <see cref="ILayout.PrefWidth" />", so widgets
+/// Widgets are sized using their <see cref="ILayout.PrefWidth"/>, so widgets
 /// which return 0 as their preferred width will be given a width of 0 (eg, a label
 /// with {@link Label#setWrap(bool) word wrap} enabled).
 /// </para>
@@ -726,9 +726,9 @@ public class HorizontalGroup : WidgetGroup
     /// <summary>
     /// Sets the alignment of all widgets within the horizontal group.
     /// <para>
-    /// Set to <see cref="Lugh.Utils.Alignment.CENTER" />, <see cref="Lugh.Utils.Alignment.LEFT" />,
-    /// <see cref="Lugh.Utils.Alignment.RIGHT" />, <see cref="Lugh.Utils.Alignment.TOP" />,
-    /// <see cref="Lugh.Utils.Alignment.BOTTOM" />, or any combination of those.
+    /// Set to <see cref="Lugh.Utils.Alignment.CENTER"/>, <see cref="Lugh.Utils.Alignment.LEFT"/>,
+    /// <see cref="Lugh.Utils.Alignment.RIGHT"/>, <see cref="Lugh.Utils.Alignment.TOP"/>,
+    /// <see cref="Lugh.Utils.Alignment.BOTTOM"/>, or any combination of those.
     /// </para>
     /// </summary>
     public HorizontalGroup SetAlign( int align )
@@ -740,7 +740,7 @@ public class HorizontalGroup : WidgetGroup
 
     /// <summary>
     /// Sets the alignment of all widgets within the horizontal group to
-    /// <see cref="Lugh.Utils.Alignment.CENTER" />. This clears any other alignment.
+    /// <see cref="Lugh.Utils.Alignment.CENTER"/>. This clears any other alignment.
     /// </summary>
     public HorizontalGroup AlignCenter()
     {
@@ -750,7 +750,7 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.TOP" /> and clears <see cref="Lugh.Utils.Alignment.BOTTOM" /> for
+    /// Sets <see cref="Lugh.Utils.Alignment.TOP"/> and clears <see cref="Lugh.Utils.Alignment.BOTTOM"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignTop()
@@ -762,7 +762,7 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.BOTTOM" /> and clears <see cref="Lugh.Utils.Alignment.TOP" /> for
+    /// Sets <see cref="Lugh.Utils.Alignment.BOTTOM"/> and clears <see cref="Lugh.Utils.Alignment.TOP"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignBottom()
@@ -774,7 +774,7 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.LEFT" /> and clears <see cref="Lugh.Utils.Alignment.RIGHT" /> for
+    /// Sets <see cref="Lugh.Utils.Alignment.LEFT"/> and clears <see cref="Lugh.Utils.Alignment.RIGHT"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignLeft()
@@ -786,7 +786,7 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT" /> and clears <see cref="Lugh.Utils.Alignment.LEFT" /> for
+    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT"/> and clears <see cref="Lugh.Utils.Alignment.LEFT"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignRight()
@@ -798,13 +798,13 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the horizontal alignment of each row of widgets when <see cref="Wrap" />
+    /// Sets the horizontal alignment of each row of widgets when <see cref="Wrap"/>
     /// is enabled and sets the vertical alignment of widgets within each row.
     /// </summary>
     /// <param name="rowAlign">
-    /// Set to <see cref="Lugh.Utils.Alignment.CENTER" />, <see cref="Lugh.Utils.Alignment.LEFT" />,
-    /// <see cref="Lugh.Utils.Alignment.RIGHT" />,
-    /// <see cref="Lugh.Utils.Alignment.TOP" />, <see cref="Lugh.Utils.Alignment.BOTTOM" /> or any combination of those.
+    /// Set to <see cref="Lugh.Utils.Alignment.CENTER"/>, <see cref="Lugh.Utils.Alignment.LEFT"/>,
+    /// <see cref="Lugh.Utils.Alignment.RIGHT"/>,
+    /// <see cref="Lugh.Utils.Alignment.TOP"/>, <see cref="Lugh.Utils.Alignment.BOTTOM"/> or any combination of those.
     /// </param>
     /// <returns></returns>
     public HorizontalGroup RowAlign( int rowAlign )
@@ -815,7 +815,7 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the alignment of widgets within each row to <see cref="Lugh.Utils.Alignment.CENTER" />.
+    /// Sets the alignment of widgets within each row to <see cref="Lugh.Utils.Alignment.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public HorizontalGroup RowCenter()
@@ -826,7 +826,7 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.TOP" /> and clears <see cref="Lugh.Utils.Alignment.BOTTOM" /> for
+    /// Sets <see cref="Lugh.Utils.Alignment.TOP"/> and clears <see cref="Lugh.Utils.Alignment.BOTTOM"/> for
     /// the alignment of widgets within each row.
     /// </summary>
     public HorizontalGroup RowTop()
@@ -838,8 +838,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.LEFT" /> and clears <see cref="Lugh.Utils.Alignment.RIGHT" /> for
-    /// the alignment of each row of widgets when <see cref="Wrap" /> is enabled.
+    /// Adds <see cref="Lugh.Utils.Alignment.LEFT"/> and clears <see cref="Lugh.Utils.Alignment.RIGHT"/> for
+    /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
     /// </summary>
     public HorizontalGroup RowLeft()
     {
@@ -850,7 +850,7 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.BOTTOM" /> and clears <see cref="Lugh.Utils.Alignment.TOP" /> for
+    /// Sets <see cref="Lugh.Utils.Alignment.BOTTOM"/> and clears <see cref="Lugh.Utils.Alignment.TOP"/> for
     /// the alignment of widgets within each row.
     /// </summary>
     public HorizontalGroup RowBottom()
@@ -862,8 +862,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT" /> and clears <see cref="Lugh.Utils.Alignment.LEFT" /> for
-    /// the alignment of each row of widgets when <see cref="Wrap" /> is enabled.
+    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT"/> and clears <see cref="Lugh.Utils.Alignment.LEFT"/> for
+    /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
     /// </summary>
     public HorizontalGroup RowRight()
     {

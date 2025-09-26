@@ -108,8 +108,8 @@ public class Engine
     public float DeltaTime => Graphics.DeltaTime;
 
     /// <summary>
-    /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings" />
-    /// interface. Initially initialised as an instance of <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings" />, it can be
+    /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings"/>
+    /// interface. Initially initialised as an instance of <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings"/>, it can be
     /// modified to reference any class inheriting from IGLBindings.
     /// The property will check internally for null, and initialise itself to reference
     /// GLBindings by default if that is the case.
@@ -143,7 +143,7 @@ public class Engine
     }
 
     /// <summary>
-    /// Enables <see cref="DevMode" /> if the environment variable "DEV_MODE" is
+    /// Enables <see cref="DevMode"/> if the environment variable "DEV_MODE" is
     /// available and is set to "TRUE" or "true".
     /// </summary>
     /// <returns> This class for chaining. </returns>
@@ -162,7 +162,7 @@ public class Engine
     }
 
     /// <summary>
-    /// Enables <see cref="GodMode" /> if the environment variable "GOD_MODE" is
+    /// Enables <see cref="GodMode"/> if the environment variable "GOD_MODE" is
     /// available and is set to "TRUE" or "true".
     /// </summary>
     /// <returns> This class for chaining. </returns>
@@ -187,7 +187,7 @@ public class Engine
 
     /// <summary>
     /// Checks for OpenGL errors after a given stage of rendering or processing.
-    /// Throws an <see cref="InvalidOperationException" /> if an OpenGL error is detected.
+    /// Throws an <see cref="InvalidOperationException"/> if an OpenGL error is detected.
     /// </summary>
     /// <param name="stage">The description of the stage at which the error occurred.</param>
     /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>

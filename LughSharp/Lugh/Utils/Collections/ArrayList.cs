@@ -241,8 +241,8 @@ public class ArrayList< T >
     }
 
     /// <summary>
-    /// Inserts room for <paramref name="count" /> elements into the array
-    /// starting at position <paramref name="index" />.
+    /// Inserts room for <paramref name="count"/> elements into the array
+    /// starting at position <paramref name="index"/>.
     /// </summary>
     public virtual void InsertRange( int index, int count )
     {
@@ -266,8 +266,8 @@ public class ArrayList< T >
     }
 
     /// <summary>
-    /// Swaps the elements at positions <paramref name="first" /> and
-    /// <paramref name="second" />
+    /// Swaps the elements at positions <paramref name="first"/> and
+    /// <paramref name="second"/>
     /// </summary>
     /// <param name="first"> Array index of the first element. </param>
     /// <param name="second"> Array index of the second element. </param>
@@ -721,7 +721,7 @@ public class ArrayList< T >
     }
 
     /// <summary>
-    /// Returns the <see cref="Items" /> backing array as a one-dimensional array
+    /// Returns the <see cref="Items"/> backing array as a one-dimensional array
     /// </summary>
     /// <returns> The new array. </returns>
     [MustUseReturnValue]
@@ -733,10 +733,10 @@ public class ArrayList< T >
     }
 
     /// <summary>
-    /// Returns the <see cref="Items" /> backing array as a one-dimensional array
+    /// Returns the <see cref="Items"/> backing array as a one-dimensional array
     /// of the specified Type.
     /// </summary>
-    /// <param name="type"> The <see cref="Type" /> of the array to create. </param>
+    /// <param name="type"> The <see cref="Type"/> of the array to create. </param>
     /// <returns> The new array. </returns>
     [MustUseReturnValue]
     public virtual T[] ToArray( Type type )

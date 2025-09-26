@@ -44,7 +44,7 @@ public partial interface IGLBindings
 
     /// <summary>
     /// Returns a Tuple holding the version of OpenGL being used, obtained by
-    /// calling <see cref="GetString" /> with the parameter IGL.GL_VERSION.
+    /// calling <see cref="GetString"/> with the parameter IGL.GL_VERSION.
     /// </summary>
     ( int major, int minor ) GetOpenGLVersion();
 
@@ -61,7 +61,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="cap">
     /// Specifies a symbolic constant indicating a  capability to be disabled. Refer to
-    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible values.
+    /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible values.
     /// </param>
     void Disable( int cap );
 
@@ -70,16 +70,16 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="cap">
     /// Specifies a symbolic constant indicating a  capability to be enabled. Refer to
-    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible values.
+    /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible values.
     /// </param>
     void Enable( int cap );
 
     /// <summary>
-    /// Wrapper method for <see cref="Enable" /> and <see cref="Disable" />.
+    /// Wrapper method for <see cref="Enable"/> and <see cref="Disable"/>.
     /// </summary>
     /// <param name="cap">
     /// Specifies a symbolic constant indicating a  capability to be enabled or disabled. Refer to
-    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible values.
+    /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible values.
     /// </param>
     /// <param name="enable"> True or false as appropriate. </param>
     void EnableOrDisable( int cap, GLboolean enable );
@@ -89,7 +89,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="cap">
     /// Specifies a symbolic constant indicating a  capability. Refer to
-    /// <see href="https://docs.gl/gl4/glIsEnabled" /> for a list of possible capabilities.
+    /// <see href="https://docs.gl/gl4/glIsEnabled"/> for a list of possible capabilities.
     /// </param>
     bool IsEnabled( int cap );
 
@@ -98,21 +98,21 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
-    /// <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />, or <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, and <see cref="GL_TEXTURE_WRAP_R" /> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR" /> or
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" /> is also acceptable.
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, and <see cref="GL_TEXTURE_WRAP_R"/> are
+    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
     /// <param name="param">Specifies the value of pname.</param>
     void TexParameterf( int target, int pname, GLfloat param );
@@ -122,21 +122,21 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
-    /// <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />, or <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, and <see cref="GL_TEXTURE_WRAP_R" /> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR" /> or
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" /> is also acceptable.
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, and <see cref="GL_TEXTURE_WRAP_R"/> are
+    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
     unsafe void TexParameterfv( int target, int pname, GLfloat* parameters );
@@ -146,21 +146,21 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
-    /// <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />, or <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, and <see cref="GL_TEXTURE_WRAP_R" /> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR" /> or
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" /> is also acceptable.
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, and <see cref="GL_TEXTURE_WRAP_R"/> are
+    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
     void TexParameterfv( int target, int pname, GLfloat[] parameters );
@@ -170,21 +170,21 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
-    /// <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />, or <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, and <see cref="GL_TEXTURE_WRAP_R" /> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR" /> or
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" /> is also acceptable.
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, and <see cref="GL_TEXTURE_WRAP_R"/> are
+    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
     /// <param name="param">Specifies the value of pname.</param>
     void TexParameteri( int target, int pname, int param );
@@ -194,21 +194,21 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
-    /// <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />, or <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, and <see cref="GL_TEXTURE_WRAP_R" /> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR" /> or
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" /> is also acceptable.
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, and <see cref="GL_TEXTURE_WRAP_R"/> are
+    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
     unsafe void TexParameteriv( int target, int pname, int* parameters );
@@ -218,21 +218,21 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
-    /// <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />, or <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, and <see cref="GL_TEXTURE_WRAP_R" /> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR" /> or
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" /> is also acceptable.
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, and <see cref="GL_TEXTURE_WRAP_R"/> are
+    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
     void TexParameteriv( int target, int pname, int[] parameters );
@@ -242,8 +242,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="mode">
     /// Specifies whether front- or back-facing facets are candidates for culling. Symbolic constants
-    /// <see cref="GL_FRONT" />, <see cref="GL_BACK" />, and <see cref="GL_FRONT_AND_BACK" /> are accepted.
-    /// The initial value is <see cref="GL_BACK" />.
+    /// <see cref="GL_FRONT"/>, <see cref="GL_BACK"/>, and <see cref="GL_FRONT_AND_BACK"/> are accepted.
+    /// The initial value is <see cref="GL_BACK"/>.
     /// </param>
     void CullFace( int mode );
 
@@ -251,8 +251,8 @@ public partial interface IGLBindings
     /// Define front- and back-facing polygons
     /// </summary>
     /// <param name="mode">
-    /// Specifies the orientation of front-facing polygons. Symbolic constants <see cref="GL_CW" /> and
-    /// <see cref="GL_CCW" /> are accepted. The initial value is <see cref="GL_CCW" />.
+    /// Specifies the orientation of front-facing polygons. Symbolic constants <see cref="GL_CW"/> and
+    /// <see cref="GL_CCW"/> are accepted. The initial value is <see cref="GL_CCW"/>.
     /// </param>
     void FrontFace( int mode );
 
@@ -261,12 +261,12 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies a symbolic constant indicating the behavior to be controlled.
-    /// <see cref="GL_LINE_SMOOTH_HINT" />, <see cref="GL_POLYGON_SMOOTH_HINT" />,
-    /// <see cref="GL_TEXTURE_COMPRESSION_HINT" />, and <see cref="GL_FRAGMENT_SHADER_DERIVATIVE_HINT" /> are accepted.
+    /// <see cref="GL_LINE_SMOOTH_HINT"/>, <see cref="GL_POLYGON_SMOOTH_HINT"/>,
+    /// <see cref="GL_TEXTURE_COMPRESSION_HINT"/>, and <see cref="GL_FRAGMENT_SHADER_DERIVATIVE_HINT"/> are accepted.
     /// </param>
     /// <param name="mode">
-    /// Specifies a symbolic constant indicating the desired behavior. <see cref="GL_FASTEST" />,
-    /// <see cref="GL_NICEST" />, and <see cref="GL_DONT_CARE" /> are accepted.
+    /// Specifies a symbolic constant indicating the desired behavior. <see cref="GL_FASTEST"/>,
+    /// <see cref="GL_NICEST"/>, and <see cref="GL_DONT_CARE"/> are accepted.
     /// </param>
     void Hint( int target, int mode );
 
@@ -286,12 +286,12 @@ public partial interface IGLBindings
     /// Select a polygon rasterization mode
     /// </summary>
     /// <param name="face">
-    /// Specifies the polygons that mode applies to. Must be <see cref="GL_FRONT_AND_BACK" /> for both
+    /// Specifies the polygons that mode applies to. Must be <see cref="GL_FRONT_AND_BACK"/> for both
     /// front- and back-facing polygons.
     /// </param>
     /// <param name="mode">
-    /// Specifies how polygons will be rasterized. Accepted values are <see cref="GL_POINT" />,
-    /// <see cref="GL_LINE" />, and <see cref="GL_FILL" />. The initial value is <see cref="GL_FILL" /> for both front- and
+    /// Specifies how polygons will be rasterized. Accepted values are <see cref="GL_POINT"/>,
+    /// <see cref="GL_LINE"/>, and <see cref="GL_FILL"/>. The initial value is <see cref="GL_FILL"/> for both front- and
     /// back-facing polygons.
     /// </param>
     void PolygonMode( int face, int mode );
@@ -309,8 +309,8 @@ public partial interface IGLBindings
     /// Specify a one-dimensional texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" /> or
-    /// <see cref="GL_PROXY_TEXTURE_1D" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/> or
+    /// <see cref="GL_PROXY_TEXTURE_1D"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -318,7 +318,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
-    /// <see href="https://docs.gl/gl4/glTexImage1D" /> for a list of possible values.
+    /// <see href="https://docs.gl/gl4/glTexImage1D"/> for a list of possible values.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support texture images that are at
@@ -327,21 +327,21 @@ public partial interface IGLBindings
     /// <param name="border">This value must be 0.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_BGRA" />, <see cref="GL_RED_INTEGER" />, <see cref="GL_RG_INTEGER" />, <see cref="GL_RGB_INTEGER" />,
-    /// <see cref="GL_BGR_INTEGER" />, <see cref="GL_RGBA_INTEGER" />, <see cref="GL_BGRA_INTEGER" />,
-    /// <see cref="GL_STENCIL_INDEX" />, <see cref="GL_DEPTH_COMPONENT" />, <see cref="GL_DEPTH_STENCIL" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_BGRA"/>, <see cref="GL_RED_INTEGER"/>, <see cref="GL_RG_INTEGER"/>, <see cref="GL_RGB_INTEGER"/>,
+    /// <see cref="GL_BGR_INTEGER"/>, <see cref="GL_RGBA_INTEGER"/>, <see cref="GL_BGRA_INTEGER"/>,
+    /// <see cref="GL_STENCIL_INDEX"/>, <see cref="GL_DEPTH_COMPONENT"/>, <see cref="GL_DEPTH_STENCIL"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     void TexImage1D( int target, int level, int internalFormat, int width, int border, int format, int type, IntPtr pixels );
@@ -350,8 +350,8 @@ public partial interface IGLBindings
     /// Specify a one-dimensional texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" /> or
-    /// <see cref="GL_PROXY_TEXTURE_1D" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/> or
+    /// <see cref="GL_PROXY_TEXTURE_1D"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -359,7 +359,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
-    /// <see href="https://docs.gl/gl4/glTexImage1D" /> for a list of possible values.
+    /// <see href="https://docs.gl/gl4/glTexImage1D"/> for a list of possible values.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support texture images that are at
@@ -368,25 +368,25 @@ public partial interface IGLBindings
     /// <param name="border">This value must be 0.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_BGRA" />, <see cref="GL_RED_INTEGER" />, <see cref="GL_RG_INTEGER" />, <see cref="GL_RGB_INTEGER" />,
-    /// <see cref="GL_BGR_INTEGER" />, <see cref="GL_RGBA_INTEGER" />, <see cref="GL_BGRA_INTEGER" />,
-    /// <see cref="GL_STENCIL_INDEX" />, <see cref="GL_DEPTH_COMPONENT" />, <see cref="GL_DEPTH_STENCIL" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_BGRA"/>, <see cref="GL_RED_INTEGER"/>, <see cref="GL_RG_INTEGER"/>, <see cref="GL_RGB_INTEGER"/>,
+    /// <see cref="GL_BGR_INTEGER"/>, <see cref="GL_RGBA_INTEGER"/>, <see cref="GL_BGRA_INTEGER"/>,
+    /// <see cref="GL_STENCIL_INDEX"/>, <see cref="GL_DEPTH_COMPONENT"/>, <see cref="GL_DEPTH_STENCIL"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">
     /// Specifies the pixel data as an array of values. Make sure to match the generic type with the
-    /// <paramref name="type" /> parameter.
+    /// <paramref name="type"/> parameter.
     /// </param>
     void TexImage1D< T >( int target, int level, int internalFormat, int width, int border, int format, int type, T[] pixels )
         where T : unmanaged;
@@ -395,27 +395,27 @@ public partial interface IGLBindings
     /// Specify a two-dimensional texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D" />, <see cref="GL_PROXY_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_PROXY_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_RECTANGLE" />, <see cref="GL_PROXY_TEXTURE_RECTANGLE" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, or
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D"/>, <see cref="GL_PROXY_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>, <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, or
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
-    /// reduction image. If <paramref name="target" /> is <see cref="GL_TEXTURE_RECTANGLE" /> or
-    /// <see cref="GL_PROXY_TEXTURE_RECTANGLE" />, <paramref name="level" /> must be 0.
+    /// reduction image. If <paramref name="target"/> is <see cref="GL_TEXTURE_RECTANGLE"/> or
+    /// <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>, <paramref name="level"/> must be 0.
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
-    /// <see href="https://docs.gl/gl4/glTexImage2D" /> for the list of possible values.
+    /// <see href="https://docs.gl/gl4/glTexImage2D"/> for the list of possible values.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support texture images that are at
@@ -423,27 +423,27 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="height">
     /// Specifies the height of the texture image, or the number of layers in a texture array, in the case
-    /// of the <see cref="GL_TEXTURE_1D_ARRAY" /> and <see cref="GL_PROXY_TEXTURE_1D_ARRAY" /> targets. ALl implementations
+    /// of the <see cref="GL_TEXTURE_1D_ARRAY"/> and <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/> targets. ALl implementations
     /// support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.
     /// </param>
     /// <param name="border">This value must be 0.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_BGRA" />, <see cref="GL_RED_INTEGER" />, <see cref="GL_RG_INTEGER" />, <see cref="GL_RGB_INTEGER" />,
-    /// <see cref="GL_BGR_INTEGER" />, <see cref="GL_RGBA_INTEGER" />, <see cref="GL_BGRA_INTEGER" />,
-    /// <see cref="GL_STENCIL_INDEX" />, <see cref="GL_DEPTH_COMPONENT" />, <see cref="GL_DEPTH_STENCIL" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_BGRA"/>, <see cref="GL_RED_INTEGER"/>, <see cref="GL_RG_INTEGER"/>, <see cref="GL_RGB_INTEGER"/>,
+    /// <see cref="GL_BGR_INTEGER"/>, <see cref="GL_RGBA_INTEGER"/>, <see cref="GL_BGRA_INTEGER"/>,
+    /// <see cref="GL_STENCIL_INDEX"/>, <see cref="GL_DEPTH_COMPONENT"/>, <see cref="GL_DEPTH_STENCIL"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     /// <param name="enabled"></param>
@@ -462,27 +462,27 @@ public partial interface IGLBindings
     /// Specify a two-dimensional texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_PROXY_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_RECTANGLE" />, <see cref="GL_PROXY_TEXTURE_RECTANGLE" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, or
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>, <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, or
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
-    /// reduction image. If <paramref name="target" /> is <see cref="GL_TEXTURE_RECTANGLE" /> or
-    /// <see cref="GL_PROXY_TEXTURE_RECTANGLE" />, <paramref name="level" /> must be 0.
+    /// reduction image. If <paramref name="target"/> is <see cref="GL_TEXTURE_RECTANGLE"/> or
+    /// <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>, <paramref name="level"/> must be 0.
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
-    /// <see href="https://docs.gl/gl4/glTexImage2D" /> for the list of possible values.
+    /// <see href="https://docs.gl/gl4/glTexImage2D"/> for the list of possible values.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support texture images that are at
@@ -490,31 +490,31 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="height">
     /// Specifies the height of the texture image, or the number of layers in a texture array, in the case
-    /// of the <see cref="GL_TEXTURE_1D_ARRAY" /> and <see cref="GL_PROXY_TEXTURE_1D_ARRAY" /> targets. ALl implementations
+    /// of the <see cref="GL_TEXTURE_1D_ARRAY"/> and <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/> targets. ALl implementations
     /// support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.
     /// </param>
     /// <param name="border">This value must be 0.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_BGRA" />, <see cref="GL_RED_INTEGER" />, <see cref="GL_RG_INTEGER" />, <see cref="GL_RGB_INTEGER" />,
-    /// <see cref="GL_BGR_INTEGER" />, <see cref="GL_RGBA_INTEGER" />, <see cref="GL_BGRA_INTEGER" />,
-    /// <see cref="GL_STENCIL_INDEX" />, <see cref="GL_DEPTH_COMPONENT" />, <see cref="GL_DEPTH_STENCIL" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_BGRA"/>, <see cref="GL_RED_INTEGER"/>, <see cref="GL_RG_INTEGER"/>, <see cref="GL_RGB_INTEGER"/>,
+    /// <see cref="GL_BGR_INTEGER"/>, <see cref="GL_RGBA_INTEGER"/>, <see cref="GL_BGRA_INTEGER"/>,
+    /// <see cref="GL_STENCIL_INDEX"/>, <see cref="GL_DEPTH_COMPONENT"/>, <see cref="GL_DEPTH_STENCIL"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">
-    /// Specifies the pixel data as an array of values. Make sure to match the <paramref name="format" />
-    /// and <paramref name="type" /> parameters.
+    /// Specifies the pixel data as an array of values. Make sure to match the <paramref name="format"/>
+    /// and <paramref name="type"/> parameters.
     /// </param>
     /// <param name="enabled"></param>
     void TexImage2D< T >( int target,
@@ -541,11 +541,11 @@ public partial interface IGLBindings
     /// Specify which color buffers are to be drawn into.
     /// </summary>
     /// <param name="buf">
-    /// Specifies up to four color buffers to be drawn into. Must be one of <see cref="GL_NONE" />,
-    /// <see cref="GL_FRONT_LEFT" />, <see cref="GL_FRONT_RIGHT" />, <see cref="GL_BACK_LEFT" />,
-    /// <see cref="GL_BACK_RIGHT" />, <see cref="GL_FRONT" />, <see cref="GL_BACK" />, <see cref="GL_LEFT" />,
-    /// <see cref="GL_RIGHT" />, <see cref="GL_FRONT_AND_BACK" />. The initial value is <see cref="GL_FRONT" /> for single
-    /// buffered contexts, and <see cref="GL_BACK" /> for double buffered contexts.
+    /// Specifies up to four color buffers to be drawn into. Must be one of <see cref="GL_NONE"/>,
+    /// <see cref="GL_FRONT_LEFT"/>, <see cref="GL_FRONT_RIGHT"/>, <see cref="GL_BACK_LEFT"/>,
+    /// <see cref="GL_BACK_RIGHT"/>, <see cref="GL_FRONT"/>, <see cref="GL_BACK"/>, <see cref="GL_LEFT"/>,
+    /// <see cref="GL_RIGHT"/>, <see cref="GL_FRONT_AND_BACK"/>. The initial value is <see cref="GL_FRONT"/> for single
+    /// buffered contexts, and <see cref="GL_BACK"/> for double buffered contexts.
     /// </param>
     void DrawBuffer( int buf );
 
@@ -554,7 +554,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="mask">
     /// Bitwise OR of masks that indicate the buffers to be cleared. The three masks are
-    /// <see cref="GL_COLOR_BUFFER_BIT" />, <see cref="GL_DEPTH_BUFFER_BIT" />, and <see cref="GL_STENCIL_BUFFER_BIT" />.
+    /// <see cref="GL_COLOR_BUFFER_BIT"/>, <see cref="GL_DEPTH_BUFFER_BIT"/>, and <see cref="GL_STENCIL_BUFFER_BIT"/>.
     /// </param>
     void Clear( uint mask );
 
@@ -601,7 +601,7 @@ public partial interface IGLBindings
     /// Enable or disable writing into the depth buffer.
     /// </summary>
     /// <param name="flag">
-    /// Specifies whether depth buffer writing is enabled or disabled. If flag is <see langword="false" />,
+    /// Specifies whether depth buffer writing is enabled or disabled. If flag is <see langword="false"/>,
     /// depth buffer writing is disabled. Otherwise, it is enabled. Initially, depth buffer writing is enabled.
     /// </param>
     void DepthMask( GLboolean flag );
@@ -621,21 +621,21 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="sfactor">
     /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial
-    /// value is <see cref="GL_ONE" />. Allowed values are <see cref="GL_ZERO" />, <see cref="GL_ONE" />,
-    /// <see cref="GL_SRC_COLOR" />, <see cref="GL_ONE_MINUS_SRC_COLOR" />, <see cref="GL_DST_COLOR" />,
-    /// <see cref="GL_ONE_MINUS_DST_COLOR" />, <see cref="GL_SRC_ALPHA" />, <see cref="GL_ONE_MINUS_SRC_ALPHA" />,
-    /// <see cref="GL_DST_ALPHA" />, <see cref="GL_ONE_MINUS_DST_ALPHA" />, <see cref="GL_CONSTANT_COLOR" />,
-    /// <see cref="GL_ONE_MINUS_CONSTANT_COLOR" />, <see cref="GL_CONSTANT_ALPHA" />, and
-    /// <see cref="GL_ONE_MINUS_CONSTANT_ALPHA" />
+    /// value is <see cref="GL_ONE"/>. Allowed values are <see cref="GL_ZERO"/>, <see cref="GL_ONE"/>,
+    /// <see cref="GL_SRC_COLOR"/>, <see cref="GL_ONE_MINUS_SRC_COLOR"/>, <see cref="GL_DST_COLOR"/>,
+    /// <see cref="GL_ONE_MINUS_DST_COLOR"/>, <see cref="GL_SRC_ALPHA"/>, <see cref="GL_ONE_MINUS_SRC_ALPHA"/>,
+    /// <see cref="GL_DST_ALPHA"/>, <see cref="GL_ONE_MINUS_DST_ALPHA"/>, <see cref="GL_CONSTANT_COLOR"/>,
+    /// <see cref="GL_ONE_MINUS_CONSTANT_COLOR"/>, <see cref="GL_CONSTANT_ALPHA"/>, and
+    /// <see cref="GL_ONE_MINUS_CONSTANT_ALPHA"/>
     /// </param>
     /// <param name="dfactor">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The
-    /// initial value is <see cref="GL_ZERO" />. Allowed values are <see cref="GL_ZERO" />, <see cref="GL_ONE" />,
-    /// <see cref="GL_SRC_COLOR" />, <see cref="GL_ONE_MINUS_SRC_COLOR" />, <see cref="GL_DST_COLOR" />,
-    /// <see cref="GL_ONE_MINUS_DST_COLOR" />, <see cref="GL_SRC_ALPHA" />, <see cref="GL_ONE_MINUS_SRC_ALPHA" />,
-    /// <see cref="GL_DST_ALPHA" />, <see cref="GL_ONE_MINUS_DST_ALPHA" />, <see cref="GL_CONSTANT_COLOR" />,
-    /// <see cref="GL_ONE_MINUS_CONSTANT_COLOR" />, <see cref="GL_CONSTANT_ALPHA" />, and
-    /// <see cref="GL_ONE_MINUS_CONSTANT_ALPHA" />.
+    /// initial value is <see cref="GL_ZERO"/>. Allowed values are <see cref="GL_ZERO"/>, <see cref="GL_ONE"/>,
+    /// <see cref="GL_SRC_COLOR"/>, <see cref="GL_ONE_MINUS_SRC_COLOR"/>, <see cref="GL_DST_COLOR"/>,
+    /// <see cref="GL_ONE_MINUS_DST_COLOR"/>, <see cref="GL_SRC_ALPHA"/>, <see cref="GL_ONE_MINUS_SRC_ALPHA"/>,
+    /// <see cref="GL_DST_ALPHA"/>, <see cref="GL_ONE_MINUS_DST_ALPHA"/>, <see cref="GL_CONSTANT_COLOR"/>,
+    /// <see cref="GL_ONE_MINUS_CONSTANT_COLOR"/>, <see cref="GL_CONSTANT_ALPHA"/>, and
+    /// <see cref="GL_ONE_MINUS_CONSTANT_ALPHA"/>.
     /// </param>
     void BlendFunc( int sfactor, int dfactor );
 
@@ -644,11 +644,11 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="opcode">
     /// Specifies a symbolic constant that selects a logical operation. The following symbols are
-    /// accepted: <see cref="GL_CLEAR" />, <see cref="GL_SET" />, <see cref="GL_COPY" />, <see cref="GL_COPY_INVERTED" />,
-    /// <see cref="GL_NOOP" />, <see cref="GL_INVERT" />, <see cref="GL_AND" />, <see cref="GL_NAND" />,
-    /// <see cref="GL_OR" />, <see cref="GL_NOR" />, <see cref="GL_XOR" />, <see cref="GL_EQUIV" />,
-    /// <see cref="GL_AND_REVERSE" />, <see cref="GL_AND_INVERTED" />, <see cref="GL_OR_REVERSE" />, and
-    /// <see cref="GL_OR_INVERTED" />. The initial value is <see cref="GL_COPY" />.
+    /// accepted: <see cref="GL_CLEAR"/>, <see cref="GL_SET"/>, <see cref="GL_COPY"/>, <see cref="GL_COPY_INVERTED"/>,
+    /// <see cref="GL_NOOP"/>, <see cref="GL_INVERT"/>, <see cref="GL_AND"/>, <see cref="GL_NAND"/>,
+    /// <see cref="GL_OR"/>, <see cref="GL_NOR"/>, <see cref="GL_XOR"/>, <see cref="GL_EQUIV"/>,
+    /// <see cref="GL_AND_REVERSE"/>, <see cref="GL_AND_INVERTED"/>, <see cref="GL_OR_REVERSE"/>, and
+    /// <see cref="GL_OR_INVERTED"/>. The initial value is <see cref="GL_COPY"/>.
     /// </param>
     void LogicOp( int opcode );
 
@@ -656,13 +656,13 @@ public partial interface IGLBindings
     /// Set front and back function and reference value for stencil testing.
     /// </summary>
     /// <param name="func">
-    /// Specifies the test function. Eight symbolic constants are accepted: <see cref="GL_NEVER" />,
-    /// <see cref="GL_LESS" />, <see cref="GL_LEQUAL" />, <see cref="GL_GREATER" />, <see cref="GL_GEQUAL" />,
-    /// <see cref="GL_EQUAL" />, <see cref="GL_NOTEQUAL" />, and <see cref="GL_ALWAYS" />. The initial value is
-    /// <see cref="GL_ALWAYS" />.
+    /// Specifies the test function. Eight symbolic constants are accepted: <see cref="GL_NEVER"/>,
+    /// <see cref="GL_LESS"/>, <see cref="GL_LEQUAL"/>, <see cref="GL_GREATER"/>, <see cref="GL_GEQUAL"/>,
+    /// <see cref="GL_EQUAL"/>, <see cref="GL_NOTEQUAL"/>, and <see cref="GL_ALWAYS"/>. The initial value is
+    /// <see cref="GL_ALWAYS"/>.
     /// </param>
     /// <param name="ref">
-    /// Specifies the reference value for the stencil test. <paramref name="ref" /> is clamped to the range
+    /// Specifies the reference value for the stencil test. <paramref name="ref"/> is clamped to the range
     /// [0,(2^n) - 1], where n is the number of bitplanes in the stencil buffer. The initial value is 0.
     /// </param>
     /// <param name="mask">
@@ -676,19 +676,19 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="fail">
     /// Specifies the action to take when the stencil test fails. Eight symbolic constants are accepted:
-    /// <see cref="GL_KEEP" />, <see cref="GL_ZERO" />, <see cref="GL_REPLACE" />, <see cref="GL_INCR" />,
-    /// <see cref="GL_INCR_WRAP" />, <see cref="GL_DECR" />, <see cref="GL_DECR_WRAP" />, and <see cref="GL_INVERT" />. The
-    /// initial value is <see cref="GL_KEEP" />.
+    /// <see cref="GL_KEEP"/>, <see cref="GL_ZERO"/>, <see cref="GL_REPLACE"/>, <see cref="GL_INCR"/>,
+    /// <see cref="GL_INCR_WRAP"/>, <see cref="GL_DECR"/>, <see cref="GL_DECR_WRAP"/>, and <see cref="GL_INVERT"/>. The
+    /// initial value is <see cref="GL_KEEP"/>.
     /// </param>
     /// <param name="zfail">
     /// Specifies the stencil action when the stencil test passes, but the depth test fails.
-    /// <paramref name="zfail" /> accepts the same symbolic constants as <paramref name="fail" />. The initial value is
-    /// <see cref="GL_KEEP" />.
+    /// <paramref name="zfail"/> accepts the same symbolic constants as <paramref name="fail"/>. The initial value is
+    /// <see cref="GL_KEEP"/>.
     /// </param>
     /// <param name="zpass">
     /// Specifies the stencil action when both the stencil test and the depth test pass, or when the
-    /// stencil test passes and either there is no depth buffer or depth testing is not enabled. <paramref name="zpass" />
-    /// accepts the same symbolic constants as <paramref name="fail" />. The initial value is <see cref="GL_KEEP" />.
+    /// stencil test passes and either there is no depth buffer or depth testing is not enabled. <paramref name="zpass"/>
+    /// accepts the same symbolic constants as <paramref name="fail"/>. The initial value is <see cref="GL_KEEP"/>.
     /// </param>
     void StencilOp( int fail, int zfail, int zpass );
 
@@ -696,10 +696,10 @@ public partial interface IGLBindings
     /// Specify the value used for depth buffer comparisons.
     /// </summary>
     /// <param name="func">
-    /// Specifies the depth comparison function. Symbolic constants <see cref="GL_NEVER" />,
-    /// <see cref="GL_LESS" />, <see cref="GL_EQUAL" />, <see cref="GL_LEQUAL" />, <see cref="GL_GREATER" />,
-    /// <see cref="GL_NOTEQUAL" />, <see cref="GL_GEQUAL" />, and <see cref="GL_ALWAYS" /> are accepted. The initial value
-    /// is <see cref="GL_LESS" />.
+    /// Specifies the depth comparison function. Symbolic constants <see cref="GL_NEVER"/>,
+    /// <see cref="GL_LESS"/>, <see cref="GL_EQUAL"/>, <see cref="GL_LEQUAL"/>, <see cref="GL_GREATER"/>,
+    /// <see cref="GL_NOTEQUAL"/>, <see cref="GL_GEQUAL"/>, and <see cref="GL_ALWAYS"/> are accepted. The initial value
+    /// is <see cref="GL_LESS"/>.
     /// </param>
     void DepthFunc( int func );
 
@@ -708,15 +708,15 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="pname">
     /// Specifies the symbolic name of the parameter to be set. The following values affect the packing of
-    /// pixel data into memory: <see cref="GL_PACK_SWAP_BYTES" />, <see cref="GL_PACK_LSB_FIRST" />,
-    /// <see cref="GL_PACK_ROW_LENGTH" />, <see cref="GL_PACK_IMAGE_HEIGHT" />, <see cref="GL_PACK_SKIP_PIXELS" />,
-    /// <see cref="GL_PACK_SKIP_ROWS" />, <see cref="GL_PACK_SKIP_IMAGES" />, and <see cref="GL_PACK_ALIGNMENT" />. The
-    /// following values affect the unpacking of pixel data from memory: <see cref="GL_UNPACK_SWAP_BYTES" />,
-    /// <see cref="GL_UNPACK_LSB_FIRST" />, <see cref="GL_UNPACK_ROW_LENGTH" />, <see cref="GL_UNPACK_IMAGE_HEIGHT" />,
-    /// <see cref="GL_UNPACK_SKIP_PIXELS" />, <see cref="GL_UNPACK_SKIP_ROWS" />, <see cref="GL_UNPACK_SKIP_IMAGES" />, and
-    /// <see cref="GL_UNPACK_ALIGNMENT" />.
+    /// pixel data into memory: <see cref="GL_PACK_SWAP_BYTES"/>, <see cref="GL_PACK_LSB_FIRST"/>,
+    /// <see cref="GL_PACK_ROW_LENGTH"/>, <see cref="GL_PACK_IMAGE_HEIGHT"/>, <see cref="GL_PACK_SKIP_PIXELS"/>,
+    /// <see cref="GL_PACK_SKIP_ROWS"/>, <see cref="GL_PACK_SKIP_IMAGES"/>, and <see cref="GL_PACK_ALIGNMENT"/>. The
+    /// following values affect the unpacking of pixel data from memory: <see cref="GL_UNPACK_SWAP_BYTES"/>,
+    /// <see cref="GL_UNPACK_LSB_FIRST"/>, <see cref="GL_UNPACK_ROW_LENGTH"/>, <see cref="GL_UNPACK_IMAGE_HEIGHT"/>,
+    /// <see cref="GL_UNPACK_SKIP_PIXELS"/>, <see cref="GL_UNPACK_SKIP_ROWS"/>, <see cref="GL_UNPACK_SKIP_IMAGES"/>, and
+    /// <see cref="GL_UNPACK_ALIGNMENT"/>.
     /// </param>
-    /// <param name="param">Specifies the value that <paramref name="pname" /> is set to.</param>
+    /// <param name="param">Specifies the value that <paramref name="pname"/> is set to.</param>
     void PixelStoref( int pname, float param );
 
     /// <summary>
@@ -724,15 +724,15 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="pname">
     /// Specifies the symbolic name of the parameter to be set. The following values affect the packing of
-    /// pixel data into memory: <see cref="GL_PACK_SWAP_BYTES" />, <see cref="GL_PACK_LSB_FIRST" />,
-    /// <see cref="GL_PACK_ROW_LENGTH" />, <see cref="GL_PACK_IMAGE_HEIGHT" />, <see cref="GL_PACK_SKIP_PIXELS" />,
-    /// <see cref="GL_PACK_SKIP_ROWS" />, <see cref="GL_PACK_SKIP_IMAGES" />, and <see cref="GL_PACK_ALIGNMENT" />. The
-    /// following values affect the unpacking of pixel data from memory: <see cref="GL_UNPACK_SWAP_BYTES" />,
-    /// <see cref="GL_UNPACK_LSB_FIRST" />, <see cref="GL_UNPACK_ROW_LENGTH" />, <see cref="GL_UNPACK_IMAGE_HEIGHT" />,
-    /// <see cref="GL_UNPACK_SKIP_PIXELS" />, <see cref="GL_UNPACK_SKIP_ROWS" />, <see cref="GL_UNPACK_SKIP_IMAGES" />, and
-    /// <see cref="GL_UNPACK_ALIGNMENT" />.
+    /// pixel data into memory: <see cref="GL_PACK_SWAP_BYTES"/>, <see cref="GL_PACK_LSB_FIRST"/>,
+    /// <see cref="GL_PACK_ROW_LENGTH"/>, <see cref="GL_PACK_IMAGE_HEIGHT"/>, <see cref="GL_PACK_SKIP_PIXELS"/>,
+    /// <see cref="GL_PACK_SKIP_ROWS"/>, <see cref="GL_PACK_SKIP_IMAGES"/>, and <see cref="GL_PACK_ALIGNMENT"/>. The
+    /// following values affect the unpacking of pixel data from memory: <see cref="GL_UNPACK_SWAP_BYTES"/>,
+    /// <see cref="GL_UNPACK_LSB_FIRST"/>, <see cref="GL_UNPACK_ROW_LENGTH"/>, <see cref="GL_UNPACK_IMAGE_HEIGHT"/>,
+    /// <see cref="GL_UNPACK_SKIP_PIXELS"/>, <see cref="GL_UNPACK_SKIP_ROWS"/>, <see cref="GL_UNPACK_SKIP_IMAGES"/>, and
+    /// <see cref="GL_UNPACK_ALIGNMENT"/>.
     /// </param>
-    /// <param name="param">Specifies the value that <paramref name="pname" /> is set to.</param>
+    /// <param name="param">Specifies the value that <paramref name="pname"/> is set to.</param>
     void PixelStorei( int pname, int param );
 
     void PixelStorei( PixelStoreParameter pname, int param );
@@ -741,10 +741,10 @@ public partial interface IGLBindings
     /// Select a color buffer source for pixels.
     /// </summary>
     /// <param name="src">
-    /// Specifies a color buffer. Accepted values are <see cref="GL_FRONT_LEFT" />,
-    /// <see cref="GL_FRONT_RIGHT" />, <see cref="GL_BACK_LEFT" />, <see cref="GL_BACK_RIGHT" />, <see cref="GL_FRONT" />,
-    /// <see cref="GL_BACK" />, <see cref="GL_LEFT" />, <see cref="GL_RIGHT" />, and the constants
-    /// <see cref="GL_COLOR_ATTACHMENT0" /> through <see cref="GL_COLOR_ATTACHMENT31" />.
+    /// Specifies a color buffer. Accepted values are <see cref="GL_FRONT_LEFT"/>,
+    /// <see cref="GL_FRONT_RIGHT"/>, <see cref="GL_BACK_LEFT"/>, <see cref="GL_BACK_RIGHT"/>, <see cref="GL_FRONT"/>,
+    /// <see cref="GL_BACK"/>, <see cref="GL_LEFT"/>, <see cref="GL_RIGHT"/>, and the constants
+    /// <see cref="GL_COLOR_ATTACHMENT0"/> through <see cref="GL_COLOR_ATTACHMENT31"/>.
     /// </param>
     void ReadBuffer( int src );
 
@@ -769,22 +769,22 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_STENCIL_INDEX" />, <see cref="GL_DEPTH_COMPONENT" />, <see cref="GL_DEPTH_STENCIL" />,
-    /// <see cref="GL_RED" />, <see cref="GL_GREEN" />, <see cref="GL_BLUE" />, <see cref="GL_RGB" />,
-    /// <see cref="GL_BGR" />, <see cref="GL_RGBA" />, and <see cref="GL_BGRA" />.
+    /// <see cref="GL_STENCIL_INDEX"/>, <see cref="GL_DEPTH_COMPONENT"/>, <see cref="GL_DEPTH_STENCIL"/>,
+    /// <see cref="GL_RED"/>, <see cref="GL_GREEN"/>, <see cref="GL_BLUE"/>, <see cref="GL_RGB"/>,
+    /// <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>, and <see cref="GL_BGRA"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_24_8" />, <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV" />, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_24_8"/>, <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV"/>, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV"/>.
     /// </param>
     /// <param name="pixels">A pointer to somewhere in memory where the pixel data will be returned.</param>
     void ReadPixels( int x, int y, int width, int height, int format, int type, IntPtr pixels );
@@ -810,26 +810,26 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_STENCIL_INDEX" />, <see cref="GL_DEPTH_COMPONENT" />, <see cref="GL_DEPTH_STENCIL" />,
-    /// <see cref="GL_RED" />, <see cref="GL_GREEN" />, <see cref="GL_BLUE" />, <see cref="GL_RGB" />,
-    /// <see cref="GL_BGR" />, <see cref="GL_RGBA" />, and <see cref="GL_BGRA" />.
+    /// <see cref="GL_STENCIL_INDEX"/>, <see cref="GL_DEPTH_COMPONENT"/>, <see cref="GL_DEPTH_STENCIL"/>,
+    /// <see cref="GL_RED"/>, <see cref="GL_GREEN"/>, <see cref="GL_BLUE"/>, <see cref="GL_RGB"/>,
+    /// <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>, and <see cref="GL_BGRA"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_24_8" />, <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV" />, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_24_8"/>, <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV"/>, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV"/>.
     /// </param>
     /// <param name="pixels">
-    /// A <see langword="ref" /> to an array of <typeparamref name="T" />s where the pixel data will be
-    /// returned. Make sure to match the type of the data with the type in <paramref name="type" />.
+    /// A <see langword="ref"/> to an array of <typeparamref name="T"/>s where the pixel data will be
+    /// returned. Make sure to match the type of the data with the type in <paramref name="type"/>.
     /// </param>
     void ReadPixels< T >( int x, int y, int width, int height, int format, int type, ref T[] pixels ) where T : unmanaged;
 
@@ -837,7 +837,7 @@ public partial interface IGLBindings
     /// Return the boolean value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">A pointer to where the boolean value or values will be returned.</param>
@@ -847,11 +847,11 @@ public partial interface IGLBindings
     /// Return the boolean value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">
-    /// A <see langword="ref" /> to an array of <see langword="bool" />s where the boolean value or values
+    /// A <see langword="ref"/> to an array of <see langword="bool"/>s where the boolean value or values
     /// will be returned.
     /// </param>
     void GetBooleanv( int pname, ref bool[] data );
@@ -867,7 +867,7 @@ public partial interface IGLBindings
     /// Return the double value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">A pointer to where the double value or values will be returned.</param>
@@ -877,11 +877,11 @@ public partial interface IGLBindings
     /// Return the double value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">
-    /// A <see langword="ref" /> to an array of <see langword="double" />s where the double value or values
+    /// A <see langword="ref"/> to an array of <see langword="double"/>s where the double value or values
     /// will be returned.
     /// </param>
     void GetDoublev( int pname, ref double[] data );
@@ -890,9 +890,9 @@ public partial interface IGLBindings
     /// Return error information.
     /// </summary>
     /// <returns>
-    /// One of <see cref="GL_NO_ERROR" />, <see cref="GL_INVALID_ENUM" />, <see cref="GL_INVALID_VALUE" />,
-    /// <see cref="GL_INVALID_OPERATION" />, <see cref="GL_INVALID_FRAMEBUFFER_OPERATION" />,
-    /// <see cref="GL_OUT_OF_MEMORY" />, <see cref="GL_STACK_UNDERFLOW" />, or <see cref="GL_STACK_OVERFLOW" />.
+    /// One of <see cref="GL_NO_ERROR"/>, <see cref="GL_INVALID_ENUM"/>, <see cref="GL_INVALID_VALUE"/>,
+    /// <see cref="GL_INVALID_OPERATION"/>, <see cref="GL_INVALID_FRAMEBUFFER_OPERATION"/>,
+    /// <see cref="GL_OUT_OF_MEMORY"/>, <see cref="GL_STACK_UNDERFLOW"/>, or <see cref="GL_STACK_OVERFLOW"/>.
     /// </returns>
     int GetError();
 
@@ -900,7 +900,7 @@ public partial interface IGLBindings
     /// Return the float value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">A pointer to where the float value or values will be returned.</param>
@@ -910,7 +910,7 @@ public partial interface IGLBindings
     /// Return the float value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data"></param>
@@ -920,7 +920,7 @@ public partial interface IGLBindings
     /// Return the integer value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">A pointer to where the integer value or values will be returned.</param>
@@ -930,11 +930,11 @@ public partial interface IGLBindings
     /// Return the integer value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">
-    /// A <see langword="ref" /> to an array of <see langword="int" />s where the integer value or values
+    /// A <see langword="ref"/> to an array of <see langword="int"/>s where the integer value or values
     /// will be returned.
     /// </param>
     void GetIntegerv( int pname, ref int[] data );
@@ -953,22 +953,22 @@ public partial interface IGLBindings
     /// Return a string describing the current  connection.
     /// </summary>
     /// <param name="name">
-    /// Specifies a symbolic constant, one of <see cref="GL_VENDOR" />, <see cref="GL_RENDERER" />,
-    /// <see cref="GL_VERSION" />, or <see cref="GL_SHADING_LANGUAGE_VERSION" />. Additionally,
-    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.GetStringi" />
-    /// accepts <see cref="GL_EXTENSIONS" />.
+    /// Specifies a symbolic constant, one of <see cref="GL_VENDOR"/>, <see cref="GL_RENDERER"/>,
+    /// <see cref="GL_VERSION"/>, or <see cref="GL_SHADING_LANGUAGE_VERSION"/>. Additionally,
+    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.GetStringi"/>
+    /// accepts <see cref="GL_EXTENSIONS"/>.
     /// </param>
-    /// <returns>The requested string as a <see cref="byte" /> pointer.</returns>
+    /// <returns>The requested string as a <see cref="byte"/> pointer.</returns>
     unsafe byte* GetString( int name );
 
     /// <summary>
     /// Return a string describing the current  connection.
     /// </summary>
     /// <param name="name">
-    /// Specifies a symbolic constant, one of <see cref="GL_VENDOR" />, <see cref="GL_RENDERER" />,
-    /// <see cref="GL_VERSION" />, or <see cref="GL_SHADING_LANGUAGE_VERSION" />. Additionally,
-    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.GetStringi" />
-    /// accepts <see cref="GL_EXTENSIONS" />.
+    /// Specifies a symbolic constant, one of <see cref="GL_VENDOR"/>, <see cref="GL_RENDERER"/>,
+    /// <see cref="GL_VERSION"/>, or <see cref="GL_SHADING_LANGUAGE_VERSION"/>. Additionally,
+    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.GetStringi"/>
+    /// accepts <see cref="GL_EXTENSIONS"/>.
     /// </param>
     /// <returns>The requested string as a managed string.</returns>
     string GetStringSafe( int name );
@@ -977,13 +977,13 @@ public partial interface IGLBindings
     /// Return a texture image.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target to which the texture is bound for. <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_RECTANGLE" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> and
-    /// <see cref="GL_TEXTURE_CUBE_MAP" /> are accepted.
+    /// Specifies the target to which the texture is bound for. <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_RECTANGLE"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> and
+    /// <see cref="GL_TEXTURE_CUBE_MAP"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n
@@ -991,25 +991,25 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="format">
     /// Specifies a pixel format for the returned data. The supported formats are
-    /// <see cref="GL_STENCIL" />, <see cref="GL_DEPTH_COMPONENT" />, <see cref="GL_DEPTH_STENCIL" />,
-    /// <see cref="GL_RED" />, <see cref="GL_GREEN" />, <see cref="GL_BLUE" />, <see cref="GL_RG" />, <see cref="GL_RGB" />
-    /// , <see cref="GL_RGBA" />, <see cref="GL_BGR" />, <see cref="GL_BGRA" />, <see cref="GL_RED_INTEGER" />,
-    /// <see cref="GL_GREEN_INTEGER" />, <see cref="GL_BLUE_INTEGER" />, <see cref="GL_RG_INTEGER" />,
-    /// <see cref="GL_RGB_INTEGER" />, <see cref="GL_RGBA_INTEGER" />, <see cref="GL_BGR_INTEGER" /> and
-    /// <see cref="GL_BGRA_INTEGER" />.
+    /// <see cref="GL_STENCIL"/>, <see cref="GL_DEPTH_COMPONENT"/>, <see cref="GL_DEPTH_STENCIL"/>,
+    /// <see cref="GL_RED"/>, <see cref="GL_GREEN"/>, <see cref="GL_BLUE"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>
+    /// , <see cref="GL_RGBA"/>, <see cref="GL_BGR"/>, <see cref="GL_BGRA"/>, <see cref="GL_RED_INTEGER"/>,
+    /// <see cref="GL_GREEN_INTEGER"/>, <see cref="GL_BLUE_INTEGER"/>, <see cref="GL_RG_INTEGER"/>,
+    /// <see cref="GL_RGB_INTEGER"/>, <see cref="GL_RGBA_INTEGER"/>, <see cref="GL_BGR_INTEGER"/> and
+    /// <see cref="GL_BGRA_INTEGER"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_24_8" />, <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV" />, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_24_8"/>, <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV"/>, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV"/>.
     /// </param>
     /// <param name="pixels">A pointer to a memory location where the pixel data will be returned.</param>
     void GetTexImage( int target, int level, int format, int type, IntPtr pixels );
@@ -1018,13 +1018,13 @@ public partial interface IGLBindings
     /// Return a texture image.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target to which the texture is bound for. <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_RECTANGLE" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> and
-    /// <see cref="GL_TEXTURE_CUBE_MAP" /> are accepted.
+    /// Specifies the target to which the texture is bound for. <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_RECTANGLE"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> and
+    /// <see cref="GL_TEXTURE_CUBE_MAP"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n
@@ -1032,28 +1032,28 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="format">
     /// Specifies a pixel format for the returned data. The supported formats are
-    /// <see cref="GL_STENCIL" />, <see cref="GL_DEPTH_COMPONENT" />, <see cref="GL_DEPTH_STENCIL" />,
-    /// <see cref="GL_RED" />, <see cref="GL_GREEN" />, <see cref="GL_BLUE" />, <see cref="GL_RG" />, <see cref="GL_RGB" />
-    /// , <see cref="GL_RGBA" />, <see cref="GL_BGR" />, <see cref="GL_BGRA" />, <see cref="GL_RED_INTEGER" />,
-    /// <see cref="GL_GREEN_INTEGER" />, <see cref="GL_BLUE_INTEGER" />, <see cref="GL_RG_INTEGER" />,
-    /// <see cref="GL_RGB_INTEGER" />, <see cref="GL_RGBA_INTEGER" />, <see cref="GL_BGR_INTEGER" /> and
-    /// <see cref="GL_BGRA_INTEGER" />.
+    /// <see cref="GL_STENCIL"/>, <see cref="GL_DEPTH_COMPONENT"/>, <see cref="GL_DEPTH_STENCIL"/>,
+    /// <see cref="GL_RED"/>, <see cref="GL_GREEN"/>, <see cref="GL_BLUE"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>
+    /// , <see cref="GL_RGBA"/>, <see cref="GL_BGR"/>, <see cref="GL_BGRA"/>, <see cref="GL_RED_INTEGER"/>,
+    /// <see cref="GL_GREEN_INTEGER"/>, <see cref="GL_BLUE_INTEGER"/>, <see cref="GL_RG_INTEGER"/>,
+    /// <see cref="GL_RGB_INTEGER"/>, <see cref="GL_RGBA_INTEGER"/>, <see cref="GL_BGR_INTEGER"/> and
+    /// <see cref="GL_BGRA_INTEGER"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_24_8" />, <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV" />, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_24_8"/>, <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV"/>, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV"/>.
     /// </param>
     /// <param name="pixels">
-    /// A <see langword="ref" /> to an array of <typeparamref name="T" />s where the pixel data will be
+    /// A <see langword="ref"/> to an array of <typeparamref name="T"/>s where the pixel data will be
     /// returned.
     /// </param>
     void GetTexImage< T >( int target, int level, int format, int type, ref T[] pixels ) where T : unmanaged;
@@ -1062,24 +1062,24 @@ public partial interface IGLBindings
     /// Return texture parameter (float) values.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> and <see cref="GL_TEXTURE_RECTANGLE" /> are accepted.
+    /// Specifies the target texture. <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> and <see cref="GL_TEXTURE_RECTANGLE"/> are accepted.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a texture parameter. <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />,
-    /// <see cref="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_BORDER_COLOR" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_IMMUTABLE_FORMAT" />,
-    /// <see cref="GL_TEXTURE_IMMUTABLE_LEVELS" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_MAX_LOD" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" />, <see cref="GL_TEXTURE_TARGET" />, <see cref="GL_TEXTURE_VIEW_MIN_LAYER" />,
-    /// <see cref="GL_TEXTURE_VIEW_MIN_LEVEL" />, <see cref="GL_TEXTURE_VIEW_NUM_LAYERS" />,
-    /// <see cref="GL_TEXTURE_VIEW_NUM_LEVELS" />, <see cref="GL_TEXTURE_WRAP_R" />, <see cref="GL_TEXTURE_WRAP_S" />, and
-    /// <see cref="GL_TEXTURE_WRAP_T" /> are accepted.
+    /// Specifies the symbolic name of a texture parameter. <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>,
+    /// <see cref="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_BORDER_COLOR"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_IMMUTABLE_FORMAT"/>,
+    /// <see cref="GL_TEXTURE_IMMUTABLE_LEVELS"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_MAX_LOD"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/>, <see cref="GL_TEXTURE_TARGET"/>, <see cref="GL_TEXTURE_VIEW_MIN_LAYER"/>,
+    /// <see cref="GL_TEXTURE_VIEW_MIN_LEVEL"/>, <see cref="GL_TEXTURE_VIEW_NUM_LAYERS"/>,
+    /// <see cref="GL_TEXTURE_VIEW_NUM_LEVELS"/>, <see cref="GL_TEXTURE_WRAP_R"/>, <see cref="GL_TEXTURE_WRAP_S"/>, and
+    /// <see cref="GL_TEXTURE_WRAP_T"/> are accepted.
     /// </param>
     /// <param name="parameters">A pointer to a float array where the values will be returned.</param>
     unsafe void GetTexParameterfv( int target, int pname, float* parameters );
@@ -1088,50 +1088,50 @@ public partial interface IGLBindings
     /// Return texture parameter (float) values.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> and <see cref="GL_TEXTURE_RECTANGLE" /> are accepted.
+    /// Specifies the target texture. <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> and <see cref="GL_TEXTURE_RECTANGLE"/> are accepted.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a texture parameter. <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />,
-    /// <see cref="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_BORDER_COLOR" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_IMMUTABLE_FORMAT" />,
-    /// <see cref="GL_TEXTURE_IMMUTABLE_LEVELS" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_MAX_LOD" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" />, <see cref="GL_TEXTURE_TARGET" />, <see cref="GL_TEXTURE_VIEW_MIN_LAYER" />,
-    /// <see cref="GL_TEXTURE_VIEW_MIN_LEVEL" />, <see cref="GL_TEXTURE_VIEW_NUM_LAYERS" />,
-    /// <see cref="GL_TEXTURE_VIEW_NUM_LEVELS" />, <see cref="GL_TEXTURE_WRAP_R" />, <see cref="GL_TEXTURE_WRAP_S" />, and
-    /// <see cref="GL_TEXTURE_WRAP_T" /> are accepted.
+    /// Specifies the symbolic name of a texture parameter. <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>,
+    /// <see cref="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_BORDER_COLOR"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_IMMUTABLE_FORMAT"/>,
+    /// <see cref="GL_TEXTURE_IMMUTABLE_LEVELS"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_MAX_LOD"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/>, <see cref="GL_TEXTURE_TARGET"/>, <see cref="GL_TEXTURE_VIEW_MIN_LAYER"/>,
+    /// <see cref="GL_TEXTURE_VIEW_MIN_LEVEL"/>, <see cref="GL_TEXTURE_VIEW_NUM_LAYERS"/>,
+    /// <see cref="GL_TEXTURE_VIEW_NUM_LEVELS"/>, <see cref="GL_TEXTURE_WRAP_R"/>, <see cref="GL_TEXTURE_WRAP_S"/>, and
+    /// <see cref="GL_TEXTURE_WRAP_T"/> are accepted.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to a float array where the values will be returned.</param>
+    /// <param name="parameters">A <see langword="ref"/> to a float array where the values will be returned.</param>
     void GetTexParameterfv( int target, int pname, ref float[] parameters );
 
     /// <summary>
     /// Return texture parameter (integer) values.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> and <see cref="GL_TEXTURE_RECTANGLE" /> are accepted.
+    /// Specifies the target texture. <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> and <see cref="GL_TEXTURE_RECTANGLE"/> are accepted.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a texture parameter. <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />,
-    /// <see cref="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_BORDER_COLOR" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_IMMUTABLE_FORMAT" />,
-    /// <see cref="GL_TEXTURE_IMMUTABLE_LEVELS" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_MAX_LOD" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" />, <see cref="GL_TEXTURE_TARGET" />, <see cref="GL_TEXTURE_VIEW_MIN_LAYER" />,
-    /// <see cref="GL_TEXTURE_VIEW_MIN_LEVEL" />, <see cref="GL_TEXTURE_VIEW_NUM_LAYERS" />,
-    /// <see cref="GL_TEXTURE_VIEW_NUM_LEVELS" />, <see cref="GL_TEXTURE_WRAP_R" />, <see cref="GL_TEXTURE_WRAP_S" />, and
-    /// <see cref="GL_TEXTURE_WRAP_T" /> are accepted.
+    /// Specifies the symbolic name of a texture parameter. <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>,
+    /// <see cref="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_BORDER_COLOR"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_IMMUTABLE_FORMAT"/>,
+    /// <see cref="GL_TEXTURE_IMMUTABLE_LEVELS"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_MAX_LOD"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/>, <see cref="GL_TEXTURE_TARGET"/>, <see cref="GL_TEXTURE_VIEW_MIN_LAYER"/>,
+    /// <see cref="GL_TEXTURE_VIEW_MIN_LEVEL"/>, <see cref="GL_TEXTURE_VIEW_NUM_LAYERS"/>,
+    /// <see cref="GL_TEXTURE_VIEW_NUM_LEVELS"/>, <see cref="GL_TEXTURE_WRAP_R"/>, <see cref="GL_TEXTURE_WRAP_S"/>, and
+    /// <see cref="GL_TEXTURE_WRAP_T"/> are accepted.
     /// </param>
     /// <param name="parameters">A pointer to an integer array where the values will be returned.</param>
     unsafe void GetTexParameteriv( int target, int pname, int* parameters );
@@ -1140,26 +1140,26 @@ public partial interface IGLBindings
     /// Return texture parameter (integer) values.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> and <see cref="GL_TEXTURE_RECTANGLE" /> are accepted.
+    /// Specifies the target texture. <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> and <see cref="GL_TEXTURE_RECTANGLE"/> are accepted.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a texture parameter. <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />,
-    /// <see cref="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_BORDER_COLOR" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_IMMUTABLE_FORMAT" />,
-    /// <see cref="GL_TEXTURE_IMMUTABLE_LEVELS" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_MAX_LOD" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA" />, <see cref="GL_TEXTURE_TARGET" />, <see cref="GL_TEXTURE_VIEW_MIN_LAYER" />,
-    /// <see cref="GL_TEXTURE_VIEW_MIN_LEVEL" />, <see cref="GL_TEXTURE_VIEW_NUM_LAYERS" />,
-    /// <see cref="GL_TEXTURE_VIEW_NUM_LEVELS" />, <see cref="GL_TEXTURE_WRAP_R" />, <see cref="GL_TEXTURE_WRAP_S" />, and
-    /// <see cref="GL_TEXTURE_WRAP_T" /> are accepted.
+    /// Specifies the symbolic name of a texture parameter. <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>,
+    /// <see cref="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_BORDER_COLOR"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_IMMUTABLE_FORMAT"/>,
+    /// <see cref="GL_TEXTURE_IMMUTABLE_LEVELS"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_MAX_LOD"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/>, <see cref="GL_TEXTURE_TARGET"/>, <see cref="GL_TEXTURE_VIEW_MIN_LAYER"/>,
+    /// <see cref="GL_TEXTURE_VIEW_MIN_LEVEL"/>, <see cref="GL_TEXTURE_VIEW_NUM_LAYERS"/>,
+    /// <see cref="GL_TEXTURE_VIEW_NUM_LEVELS"/>, <see cref="GL_TEXTURE_WRAP_R"/>, <see cref="GL_TEXTURE_WRAP_S"/>, and
+    /// <see cref="GL_TEXTURE_WRAP_T"/> are accepted.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an integer array where the values will be returned.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an integer array where the values will be returned.</param>
     void GetTexParameteriv( int target, int pname, ref int[] parameters );
 
     void GetTexParameteriv( int target, int pname, out int data );
@@ -1168,17 +1168,17 @@ public partial interface IGLBindings
     /// Return texture parameter (float) values for a specific level of detail.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_RECTANGLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />, <see cref="GL_PROXY_TEXTURE_1D" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D" />, <see cref="GL_PROXY_TEXTURE_3D" />, <see cref="GL_PROXY_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />, <see cref="GL_PROXY_TEXTURE_RECTANGLE" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP" /> or <see cref="GL_TEXTURE_BUFFER" /> are accepted.
+    /// Specifies the target texture. <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>, <see cref="GL_PROXY_TEXTURE_1D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D"/>, <see cref="GL_PROXY_TEXTURE_3D"/>, <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>, <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP"/> or <see cref="GL_TEXTURE_BUFFER"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1192,41 +1192,41 @@ public partial interface IGLBindings
     /// Return texture parameter (float) values for a specific level of detail.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_RECTANGLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />, <see cref="GL_PROXY_TEXTURE_1D" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D" />, <see cref="GL_PROXY_TEXTURE_3D" />, <see cref="GL_PROXY_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />, <see cref="GL_PROXY_TEXTURE_RECTANGLE" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP" /> or <see cref="GL_TEXTURE_BUFFER" /> are accepted.
+    /// Specifies the target texture. <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>, <see cref="GL_PROXY_TEXTURE_1D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D"/>, <see cref="GL_PROXY_TEXTURE_3D"/>, <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>, <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP"/> or <see cref="GL_TEXTURE_BUFFER"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
     /// <param name="pname"></param>
-    /// <param name="parameters">A <see langword="ref" /> to a float array where the values will be returned.</param>
+    /// <param name="parameters">A <see langword="ref"/> to a float array where the values will be returned.</param>
     void GetTexLevelParameterfv( int target, int level, int pname, ref float[] parameters );
 
     /// <summary>
     /// Return texture parameter (integer) values for a specific level of detail.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_RECTANGLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />, <see cref="GL_PROXY_TEXTURE_1D" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D" />, <see cref="GL_PROXY_TEXTURE_3D" />, <see cref="GL_PROXY_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />, <see cref="GL_PROXY_TEXTURE_RECTANGLE" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP" /> or <see cref="GL_TEXTURE_BUFFER" /> are accepted.
+    /// Specifies the target texture. <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>, <see cref="GL_PROXY_TEXTURE_1D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D"/>, <see cref="GL_PROXY_TEXTURE_3D"/>, <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>, <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP"/> or <see cref="GL_TEXTURE_BUFFER"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1240,24 +1240,24 @@ public partial interface IGLBindings
     /// Return texture parameter (integer) values for a specific level of detail.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_RECTANGLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />, <see cref="GL_PROXY_TEXTURE_1D" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D" />, <see cref="GL_PROXY_TEXTURE_3D" />, <see cref="GL_PROXY_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />, <see cref="GL_PROXY_TEXTURE_RECTANGLE" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP" /> or <see cref="GL_TEXTURE_BUFFER" /> are accepted.
+    /// Specifies the target texture. <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>, <see cref="GL_PROXY_TEXTURE_1D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D"/>, <see cref="GL_PROXY_TEXTURE_3D"/>, <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>, <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP"/> or <see cref="GL_TEXTURE_BUFFER"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
     /// <param name="pname"></param>
-    /// <param name="parameters">A <see langword="ref" /> to an integer array where the values will be returned.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an integer array where the values will be returned.</param>
     void GetTexLevelParameteriv( int target, int level, int pname, ref int[] parameters );
 
     void GetTexLevelParameteriv( TextureTarget target, int level, TextureParameter pname, out int data );
@@ -1288,10 +1288,10 @@ public partial interface IGLBindings
     /// Render primitives from array data.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />, <see cref="GL_PATCHES" /> are
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>, <see cref="GL_PATCHES"/> are
     /// accepted.
     /// </param>
     /// <param name="first">Specifies the starting index in the enabled arrays.</param>
@@ -1302,16 +1302,16 @@ public partial interface IGLBindings
     /// Render primitives from array data.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />, <see cref="GL_PATCHES" /> are
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>, <see cref="GL_PATCHES"/> are
     /// accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in indices. Must be one of <see cref="GL_UNSIGNED_BYTE" />,
-    /// <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in indices. Must be one of <see cref="GL_UNSIGNED_BYTE"/>,
+    /// <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
     void DrawElements( int mode, int count, int type, IntPtr indices );
@@ -1320,20 +1320,20 @@ public partial interface IGLBindings
     /// Render primitives from array data.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />, <see cref="GL_PATCHES" /> are
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>, <see cref="GL_PATCHES"/> are
     /// accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in indices. Must be one of <see cref="GL_UNSIGNED_BYTE" />,
-    /// <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in indices. Must be one of <see cref="GL_UNSIGNED_BYTE"/>,
+    /// <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">
     /// Specifies an array of indices to be rendererd. Make sure to match the type
-    /// <typeparamref name="T" /> with the type specified by <paramref name="type" />.
+    /// <typeparamref name="T"/> with the type specified by <paramref name="type"/>.
     /// </param>
     void DrawElements< T >( int mode, int count, int type, T[] indices ) where T : unmanaged, IUnsignedNumber< T >;
 
@@ -1353,14 +1353,14 @@ public partial interface IGLBindings
     /// <summary>
     /// Copy pixels into a 1D texture image.
     /// </summary>
-    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" />.</param>
+    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/>.</param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the internal format of the texture. Refer to
-    /// <see href="https://docs.gl/gl4/glCopyTexImage1D" /> for a list of supported formats.
+    /// <see href="https://docs.gl/gl4/glCopyTexImage1D"/> for a list of supported formats.
     /// </param>
     /// <param name="x">
     /// Specify the window coordinates of the lower left corner of the rectangular region of pixels to be
@@ -1378,10 +1378,10 @@ public partial interface IGLBindings
     /// Copy pixels into a 2D texture image.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" /> or <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/> or <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1389,7 +1389,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the internal format of the texture. Refer to
-    /// <see href="https://docs.gl/gl4/glCopyTexImage2D" /> for a list of supported formats.
+    /// <see href="https://docs.gl/gl4/glCopyTexImage2D"/> for a list of supported formats.
     /// </param>
     /// <param name="x">
     /// Specify the window coordinates of the lower left corner of the rectangular region of pixels to be
@@ -1407,7 +1407,7 @@ public partial interface IGLBindings
     /// <summary>
     /// Copy a one-dimensional texture subimage.
     /// </summary>
-    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" />.</param>
+    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/>.</param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
@@ -1428,11 +1428,11 @@ public partial interface IGLBindings
     /// Copy a two-dimensional texture subimage.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> or <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> or <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1455,7 +1455,7 @@ public partial interface IGLBindings
     /// <summary>
     /// Specify a one-dimensional texture subimage.
     /// </summary>
-    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" />.</param>
+    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/>.</param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
@@ -1464,19 +1464,19 @@ public partial interface IGLBindings
     /// <param name="width">Specifies the width of the texture subimage.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_DEPTH_COMPONENT" /> and <see cref="GL_STENCIL_INDEX" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_DEPTH_COMPONENT"/> and <see cref="GL_STENCIL_INDEX"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" /> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     void TexSubImage1D( int target, int level, int xoffset, int width, int format, int type, IntPtr pixels );
@@ -1484,7 +1484,7 @@ public partial interface IGLBindings
     /// <summary>
     /// Specify a one-dimensional texture subimage.
     /// </summary>
-    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" />.</param>
+    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/>.</param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
@@ -1493,23 +1493,23 @@ public partial interface IGLBindings
     /// <param name="width">Specifies the width of the texture subimage.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_DEPTH_COMPONENT" /> and <see cref="GL_STENCIL_INDEX" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_DEPTH_COMPONENT"/> and <see cref="GL_STENCIL_INDEX"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" /> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">
-    /// Specifies an array of <typeparamref name="T" />s containing the image data. Make sure to match
-    /// this with the type specified in <paramref name="type" />.
+    /// Specifies an array of <typeparamref name="T"/>s containing the image data. Make sure to match
+    /// this with the type specified in <paramref name="type"/>.
     /// </param>
     void TexSubImage1D< T >( int target, int level, int xoffset, int width, int format, int type, T[] pixels )
         where T : unmanaged;
@@ -1518,11 +1518,11 @@ public partial interface IGLBindings
     /// Specify a two-dimensional texture subimage.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be one of <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> or
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />.
+    /// Specifies the target texture. Must be one of <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> or
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1534,19 +1534,19 @@ public partial interface IGLBindings
     /// <param name="height">Specifies the height of the texture subimage.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_DEPTH_COMPONENT" /> and <see cref="GL_STENCIL_INDEX" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_DEPTH_COMPONENT"/> and <see cref="GL_STENCIL_INDEX"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" /> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     void TexSubImage2D( int target,
@@ -1563,11 +1563,11 @@ public partial interface IGLBindings
     /// Specify a two-dimensional texture subimage.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be one of <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> or
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />.
+    /// Specifies the target texture. Must be one of <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> or
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1579,23 +1579,23 @@ public partial interface IGLBindings
     /// <param name="height">Specifies the height of the texture subimage.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_DEPTH_COMPONENT" /> and <see cref="GL_STENCIL_INDEX" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_DEPTH_COMPONENT"/> and <see cref="GL_STENCIL_INDEX"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" /> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">
-    /// Specifies an array of <typeparamref name="T" />s containing the image data. Make sure to match
-    /// this with the type specified in <paramref name="type" />.
+    /// Specifies an array of <typeparamref name="T"/>s containing the image data. Make sure to match
+    /// this with the type specified in <paramref name="type"/>.
     /// </param>
     void TexSubImage2D< T >( int target,
                              int level,
@@ -1611,11 +1611,11 @@ public partial interface IGLBindings
     /// Bind a named texture to a texturing target.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target to which the texture is bound. Must be one of <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />, <see cref="GL_TEXTURE_RECTANGLE" />, <see cref="GL_TEXTURE_CUBE_MAP" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" /> or <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />.
+    /// Specifies the target to which the texture is bound. Must be one of <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>, <see cref="GL_TEXTURE_RECTANGLE"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/> or <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>.
     /// </param>
     /// <param name="texture">Specifies the name of a texture.</param>
     void BindTexture( int target, uint texture );
@@ -1660,8 +1660,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="texture">Specifies a value that may be the name of a texture.</param>
     /// <returns>
-    /// <see langword="true" /> if <paramref name="texture" /> is currently the name of a texture. Otherwise,
-    /// <see langword="false" /> is returned.
+    /// <see langword="true"/> if <paramref name="texture"/> is currently the name of a texture. Otherwise,
+    /// <see langword="false"/> is returned.
     /// </returns>
     bool IsGLTexture( uint texture );
 
@@ -1669,16 +1669,16 @@ public partial interface IGLBindings
     /// Render primitives from array data.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_TRIANGLE_STRIP" />,
-    /// <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />, <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLES_ADJACENCY" />, and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_TRIANGLE_STRIP"/>,
+    /// <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
-    /// <param name="start">Specifies the minimum array index contained in <paramref name="indices" />.</param>
-    /// <param name="end">Specifies the maximum array index contained in <paramref name="indices" />.</param>
+    /// <param name="start">Specifies the minimum array index contained in <paramref name="indices"/>.</param>
+    /// <param name="end">Specifies the maximum array index contained in <paramref name="indices"/>.</param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
-    /// <param name="type">Specifies the type of the values in <paramref name="indices" />.</param>
+    /// <param name="type">Specifies the type of the values in <paramref name="indices"/>.</param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
     void DrawRangeElements( int mode, uint start, uint end, int count, int type, IntPtr indices );
 
@@ -1686,19 +1686,19 @@ public partial interface IGLBindings
     /// Render primitives from array data.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_TRIANGLE_STRIP" />,
-    /// <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />, <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLES_ADJACENCY" />, and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_TRIANGLE_STRIP"/>,
+    /// <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
-    /// <param name="start">Specifies the minimum array index contained in <paramref name="indices" />.</param>
-    /// <param name="end">Specifies the maximum array index contained in <paramref name="indices" />.</param>
+    /// <param name="start">Specifies the minimum array index contained in <paramref name="indices"/>.</param>
+    /// <param name="end">Specifies the maximum array index contained in <paramref name="indices"/>.</param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
-    /// <param name="type">Specifies the type of the values in <paramref name="indices" />.</param>
+    /// <param name="type">Specifies the type of the values in <paramref name="indices"/>.</param>
     /// <param name="indices">
-    /// An array of indices to render. Make sure to match the type <typeparamref name="T" /> with the
-    /// type specified for <paramref name="type" />.
+    /// An array of indices to render. Make sure to match the type <typeparamref name="T"/> with the
+    /// type specified for <paramref name="type"/>.
     /// </param>
     void DrawRangeElements< T >( int mode, uint start, uint end, int count, int type, T[] indices )
         where T : unmanaged, IUnsignedNumber< T >;
@@ -1707,8 +1707,8 @@ public partial interface IGLBindings
     /// Specify a three-dimensional texture image.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" />,
-    /// <see cref="GL_PROXY_TEXTURE_3D" />, <see cref="GL_TEXTURE_2D_ARRAY" /> or <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_3D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/> or <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1716,7 +1716,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
-    /// <see href="https://docs.gl/gl4/glTexImage3D" /> for the list of possible values.
+    /// <see href="https://docs.gl/gl4/glTexImage3D"/> for the list of possible values.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support 3D texture images that are at
@@ -1734,21 +1734,21 @@ public partial interface IGLBindings
     /// <param name="border">This value must be 0.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_BGRA" />, <see cref="GL_RED_INTEGER" />, <see cref="GL_RG_INTEGER" />, <see cref="GL_RGB_INTEGER" />,
-    /// <see cref="GL_BGR_INTEGER" />, <see cref="GL_RGBA_INTEGER" />, <see cref="GL_BGRA_INTEGER" />,
-    /// <see cref="GL_STENCIL_INDEX" />, <see cref="GL_DEPTH_COMPONENT" /> or <see cref="GL_DEPTH_STENCIL" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_BGRA"/>, <see cref="GL_RED_INTEGER"/>, <see cref="GL_RG_INTEGER"/>, <see cref="GL_RGB_INTEGER"/>,
+    /// <see cref="GL_BGR_INTEGER"/>, <see cref="GL_RGBA_INTEGER"/>, <see cref="GL_BGRA_INTEGER"/>,
+    /// <see cref="GL_STENCIL_INDEX"/>, <see cref="GL_DEPTH_COMPONENT"/> or <see cref="GL_DEPTH_STENCIL"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     void TexImage3D( int target,
@@ -1766,8 +1766,8 @@ public partial interface IGLBindings
     /// Specify a three-dimensional texture image.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" />,
-    /// <see cref="GL_PROXY_TEXTURE_3D" />, <see cref="GL_TEXTURE_2D_ARRAY" /> or <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_3D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/> or <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1775,7 +1775,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
-    /// <see href="https://docs.gl/gl4/glTexImage3D" /> for the list of possible values.
+    /// <see href="https://docs.gl/gl4/glTexImage3D"/> for the list of possible values.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support 3D texture images that are at
@@ -1793,25 +1793,25 @@ public partial interface IGLBindings
     /// <param name="border">This value must be 0.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_BGRA" />, <see cref="GL_RED_INTEGER" />, <see cref="GL_RG_INTEGER" />, <see cref="GL_RGB_INTEGER" />,
-    /// <see cref="GL_BGR_INTEGER" />, <see cref="GL_RGBA_INTEGER" />, <see cref="GL_BGRA_INTEGER" />,
-    /// <see cref="GL_STENCIL_INDEX" />, <see cref="GL_DEPTH_COMPONENT" /> or <see cref="GL_DEPTH_STENCIL" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_BGRA"/>, <see cref="GL_RED_INTEGER"/>, <see cref="GL_RG_INTEGER"/>, <see cref="GL_RGB_INTEGER"/>,
+    /// <see cref="GL_BGR_INTEGER"/>, <see cref="GL_RGBA_INTEGER"/>, <see cref="GL_BGRA_INTEGER"/>,
+    /// <see cref="GL_STENCIL_INDEX"/>, <see cref="GL_DEPTH_COMPONENT"/> or <see cref="GL_DEPTH_STENCIL"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">
-    /// Specifies an array of <typeparamref name="T" /> containing the image data. Make sure to match the
-    /// <paramref name="type" /> parameter with <typeparamref name="T" />.
+    /// Specifies an array of <typeparamref name="T"/> containing the image data. Make sure to match the
+    /// <paramref name="type"/> parameter with <typeparamref name="T"/>.
     /// </param>
     void TexImage3D< T >( int target,
                           int level,
@@ -1828,8 +1828,8 @@ public partial interface IGLBindings
     /// Specify a three-dimensional texture subimage.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" /> or
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/> or
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1843,19 +1843,19 @@ public partial interface IGLBindings
     /// <param name="depth">Specifies the depth of the texture subimage.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_DEPTH_COMPONENT" /> and <see cref="GL_STENCIL_INDEX" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_DEPTH_COMPONENT"/> and <see cref="GL_STENCIL_INDEX"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     void TexSubImage3D( int target,
@@ -1874,8 +1874,8 @@ public partial interface IGLBindings
     /// Specify a three-dimensional texture subimage.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" /> or
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/> or
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1889,23 +1889,23 @@ public partial interface IGLBindings
     /// <param name="depth">Specifies the depth of the texture subimage.</param>
     /// <param name="format">
     /// Specifies the format of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_RED" />, <see cref="GL_RG" />, <see cref="GL_RGB" />, <see cref="GL_BGR" />, <see cref="GL_RGBA" />,
-    /// <see cref="GL_DEPTH_COMPONENT" /> and <see cref="GL_STENCIL_INDEX" />.
+    /// <see cref="GL_RED"/>, <see cref="GL_RG"/>, <see cref="GL_RGB"/>, <see cref="GL_BGR"/>, <see cref="GL_RGBA"/>,
+    /// <see cref="GL_DEPTH_COMPONENT"/> and <see cref="GL_STENCIL_INDEX"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the pixel data. The following symbolic values are accepted:
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_SHORT" />,
-    /// <see cref="GL_UNSIGNED_INT" />, <see cref="GL_INT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_UNSIGNED_BYTE_3_3_2" />, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_6_5" />, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4" />, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV" />,
-    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1" />, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_8_8_8_8" />, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_SHORT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_INT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_UNSIGNED_BYTE_3_3_2"/>, <see cref="GL_UNSIGNED_BYTE_2_3_3_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_6_5"/>, <see cref="GL_UNSIGNED_SHORT_5_6_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_4_4_4_4"/>, <see cref="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>,
+    /// <see cref="GL_UNSIGNED_SHORT_5_5_5_1"/>, <see cref="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_8_8_8_8"/>, <see cref="GL_UNSIGNED_INT_8_8_8_8_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">
-    /// Specifies an array of <typeparamref name="T" /> containing the image data. Make sure to match the
-    /// <paramref name="type" /> parameter with <typeparamref name="T" />.
+    /// Specifies an array of <typeparamref name="T"/> containing the image data. Make sure to match the
+    /// <paramref name="type"/> parameter with <typeparamref name="T"/>.
     /// </param>
     void TexSubImage3D< T >( int target,
                              int level,
@@ -1923,8 +1923,8 @@ public partial interface IGLBindings
     /// Copy a three-dimensional texture subimage.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" /> or
-    /// <see cref="GL_TEXTURE_2D_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/> or
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1958,9 +1958,9 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="texture">
     /// Specifies which texture unit to make active. The number of texture units is implementation
-    /// dependent, but must be at least 80. <paramref name="texture" /> must be one of <see cref="GL_TEXTURE0" />+i, where
-    /// i ranges from 0 to the value of <see cref="GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS" /> minus one. The initial value is
-    /// <see cref="GL_TEXTURE0" />.
+    /// dependent, but must be at least 80. <paramref name="texture"/> must be one of <see cref="GL_TEXTURE0"/>+i, where
+    /// i ranges from 0 to the value of <see cref="GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS"/> minus one. The initial value is
+    /// <see cref="GL_TEXTURE0"/>.
     /// </param>
     void ActiveTexture( TextureUnit texture );
 
@@ -1975,7 +1975,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="invert">
     /// Specify a single boolean value representing if the coverage masks should be inverted. The intial
-    /// value is <see langword="false" />.
+    /// value is <see langword="false"/>.
     /// </param>
     void SampleCoverage( float value, bool invert );
 
@@ -1983,8 +1983,8 @@ public partial interface IGLBindings
     /// Specify a three-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" />,
-    /// <see cref="GL_PROXY_TEXTURE_3D" />, <see cref="GL_TEXTURE_2D_ARRAY" /> or <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_3D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/> or <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1992,8 +1992,8 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
-    /// <see cref="GL_COMPRESSED_RED" />, <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />,
-    /// <see cref="GL_COMPRESSED_RGBA" />, <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
+    /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support 3D texture images that are at
@@ -2010,7 +2010,7 @@ public partial interface IGLBindings
     /// <param name="border">This value must be 0.</param>
     /// <param name="imageSize">
     /// Specifies the number of unsigned bytes of image data starting at the address specified by
-    /// <paramref name="data" />.
+    /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     void CompressedTexImage3D( int target,
@@ -2027,8 +2027,8 @@ public partial interface IGLBindings
     /// Specify a three-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" />,
-    /// <see cref="GL_PROXY_TEXTURE_3D" />, <see cref="GL_TEXTURE_2D_ARRAY" /> or <see cref="GL_PROXY_TEXTURE_2D_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_3D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/> or <see cref="GL_PROXY_TEXTURE_2D_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2036,8 +2036,8 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
-    /// <see cref="GL_COMPRESSED_RED" />, <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />,
-    /// <see cref="GL_COMPRESSED_RGBA" />, <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
+    /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support 3D texture images that are at
@@ -2066,12 +2066,12 @@ public partial interface IGLBindings
     /// Specify a two-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_PROXY_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> or
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> or
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2079,8 +2079,8 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
-    /// <see cref="GL_COMPRESSED_RED" />, <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />,
-    /// <see cref="GL_COMPRESSED_RGBA" />, <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
+    /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support 2D texture images that are at
@@ -2093,7 +2093,7 @@ public partial interface IGLBindings
     /// <param name="border">This value must be 0.</param>
     /// <param name="imageSize">
     /// Specifies the number of unsigned bytes of image data starting at the address specified by
-    /// <paramref name="data" />.
+    /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     void CompressedTexImage2D( int target,
@@ -2109,12 +2109,12 @@ public partial interface IGLBindings
     /// Specify a two-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_PROXY_TEXTURE_2D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_PROXY_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> or
-    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_PROXY_TEXTURE_2D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_PROXY_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> or
+    /// <see cref="GL_PROXY_TEXTURE_CUBE_MAP"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2122,8 +2122,8 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
-    /// <see cref="GL_COMPRESSED_RED" />, <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />,
-    /// <see cref="GL_COMPRESSED_RGBA" />, <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
+    /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support 2D texture images that are at
@@ -2141,8 +2141,8 @@ public partial interface IGLBindings
     /// Specify a one-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" /> or
-    /// <see cref="GL_PROXY_TEXTURE_1D" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/> or
+    /// <see cref="GL_PROXY_TEXTURE_1D"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2150,8 +2150,8 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
-    /// <see cref="GL_COMPRESSED_RED" />, <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />,
-    /// <see cref="GL_COMPRESSED_RGBA" />, <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
+    /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support 2D texture images that are at
@@ -2160,7 +2160,7 @@ public partial interface IGLBindings
     /// <param name="border">This value must be 0.</param>
     /// <param name="imageSize">
     /// Specifies the number of unsigned bytes of image data starting at the address specified by
-    /// <paramref name="data" />.
+    /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, int imageSize, IntPtr data );
@@ -2169,8 +2169,8 @@ public partial interface IGLBindings
     /// Specify a one-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" /> or
-    /// <see cref="GL_PROXY_TEXTURE_1D" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/> or
+    /// <see cref="GL_PROXY_TEXTURE_1D"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2178,8 +2178,8 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
-    /// <see cref="GL_COMPRESSED_RED" />, <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />,
-    /// <see cref="GL_COMPRESSED_RGBA" />, <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
+    /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture image. All implementations support 2D texture images that are at
@@ -2193,8 +2193,8 @@ public partial interface IGLBindings
     /// Specify a three-dimensional texture subimage in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" /> or <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/> or <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2216,13 +2216,13 @@ public partial interface IGLBindings
     /// are at least 16 texels deep.
     /// </param>
     /// <param name="format">
-    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED" />,
-    /// <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />, <see cref="GL_COMPRESSED_RGBA" />,
-    /// <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED"/>,
+    /// <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>, <see cref="GL_COMPRESSED_RGBA"/>,
+    /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="imageSize">
     /// Specifies the number of unsigned bytes of image data starting at the address specified by
-    /// <paramref name="data" />.
+    /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     void CompressedTexSubImage3D( int target,
@@ -2241,8 +2241,8 @@ public partial interface IGLBindings
     /// Specify a three-dimensional texture subimage in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D" />,
-    /// <see cref="GL_TEXTURE_2D_ARRAY" /> or <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_3D"/>,
+    /// <see cref="GL_TEXTURE_2D_ARRAY"/> or <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2264,9 +2264,9 @@ public partial interface IGLBindings
     /// are at least 16 texels deep.
     /// </param>
     /// <param name="format">
-    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED" />,
-    /// <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />, <see cref="GL_COMPRESSED_RGBA" />,
-    /// <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED"/>,
+    /// <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>, <see cref="GL_COMPRESSED_RGBA"/>,
+    /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
     void CompressedTexSubImage3D( int target,
@@ -2284,11 +2284,11 @@ public partial interface IGLBindings
     /// Specify a two-dimensional texture subimage in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" /> or
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/> or
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2305,13 +2305,13 @@ public partial interface IGLBindings
     /// that are at least 16 texels high.
     /// </param>
     /// <param name="format">
-    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED" />,
-    /// <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />, <see cref="GL_COMPRESSED_RGBA" />,
-    /// <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED"/>,
+    /// <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>, <see cref="GL_COMPRESSED_RGBA"/>,
+    /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="imageSize">
     /// Specifies the number of unsigned bytes of image data starting at the address specified by
-    /// <paramref name="data" />.
+    /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     void CompressedTexSubImage2D( int target,
@@ -2328,11 +2328,11 @@ public partial interface IGLBindings
     /// Specify a two-dimensional texture subimage in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" /> or
-    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/> or
+    /// <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2349,9 +2349,9 @@ public partial interface IGLBindings
     /// that are at least 16 texels high.
     /// </param>
     /// <param name="format">
-    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED" />,
-    /// <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />, <see cref="GL_COMPRESSED_RGBA" />,
-    /// <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED"/>,
+    /// <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>, <see cref="GL_COMPRESSED_RGBA"/>,
+    /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
     void CompressedTexSubImage2D( int target,
@@ -2366,7 +2366,7 @@ public partial interface IGLBindings
     /// <summary>
     /// Specify a one-dimensional texture subimage in a compressed format
     /// </summary>
-    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" />.</param>
+    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/>.</param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
@@ -2377,13 +2377,13 @@ public partial interface IGLBindings
     /// are at least 16 texels wide.
     /// </param>
     /// <param name="format">
-    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED" />,
-    /// <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />, <see cref="GL_COMPRESSED_RGBA" />,
-    /// <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED"/>,
+    /// <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>, <see cref="GL_COMPRESSED_RGBA"/>,
+    /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="imageSize">
     /// Specifies the number of unsigned bytes of image data starting at the address specified by
-    /// <paramref name="data" />.
+    /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     void CompressedTexSubImage1D( int target, int level, int xoffset, int width, int format, int imageSize, IntPtr data );
@@ -2391,7 +2391,7 @@ public partial interface IGLBindings
     /// <summary>
     /// Specify a one-dimensional texture subimage in a compressed format
     /// </summary>
-    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" />.</param>
+    /// <param name="target">Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/>.</param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
@@ -2402,9 +2402,9 @@ public partial interface IGLBindings
     /// are at least 16 texels wide.
     /// </param>
     /// <param name="format">
-    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED" />,
-    /// <see cref="GL_COMPRESSED_RG" />, <see cref="GL_COMPRESSED_RGB" />, <see cref="GL_COMPRESSED_RGBA" />,
-    /// <see cref="GL_COMPRESSED_SRGB" />, <see cref="GL_COMPRESSED_SRGB_ALPHA" />.
+    /// Specifies the color components in the texture. Must be one of <see cref="GL_COMPRESSED_RED"/>,
+    /// <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>, <see cref="GL_COMPRESSED_RGBA"/>,
+    /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
     void CompressedTexSubImage1D( int target, int level, int xoffset, int width, int format, byte[] data );
@@ -2413,13 +2413,13 @@ public partial interface IGLBindings
     /// Return a compressed texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n
@@ -2432,40 +2432,40 @@ public partial interface IGLBindings
     /// Return a compressed texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z" />, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture. Must be <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_X"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_X"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Y"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Y"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP_POSITIVE_Z"/>, <see cref="GL_TEXTURE_CUBE_MAP_NEGATIVE_Z"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n
     /// is the nth mipmap reduction image.
     /// </param>
-    /// <param name="img">Specifies a <see langword="ref" /> byte array into which the compressed image data will be placed.</param>
+    /// <param name="img">Specifies a <see langword="ref"/> byte array into which the compressed image data will be placed.</param>
     void GetCompressedTexImage( int target, int level, ref byte[] img );
 
     /// <summary>
     /// Specify pixel arithmetic for RGB and alpha components separately. Refer to
-    /// <see href="https://docs.gl/gl4/glBlendFuncSeparate" /> for all possible values for the functions.
+    /// <see href="https://docs.gl/gl4/glBlendFuncSeparate"/> for all possible values for the functions.
     /// </summary>
     /// <param name="sfactorRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is
-    /// <see cref="GL_ONE" />.
+    /// <see cref="GL_ONE"/>.
     /// </param>
     /// <param name="dfactorRGB">
     /// Specifies how the red, green, and blue destination blending factors are computed. The initial
-    /// value is <see cref="GL_ZERO" />.
+    /// value is <see cref="GL_ZERO"/>.
     /// </param>
     /// <param name="sfactorAlpha">
     /// Specifies how the alpha source blending factor is computed. The initial value is
-    /// <see cref="GL_ONE" />.
+    /// <see cref="GL_ONE"/>.
     /// </param>
     /// <param name="dfactorAlpha">
     /// Specifies how the alpha destination blending factor is computed. The initial value is
-    /// <see cref="GL_ZERO" />.
+    /// <see cref="GL_ZERO"/>.
     /// </param>
     void BlendFuncSeparate( int sfactorRGB, int dfactorRGB, int sfactorAlpha, int dfactorAlpha );
 
@@ -2473,26 +2473,26 @@ public partial interface IGLBindings
     /// Render multiple sets of primitives from array data.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_TRIANGLE_STRIP" />,
-    /// <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />, <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLES_ADJACENCY" />, and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_TRIANGLE_STRIP"/>,
+    /// <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="first">Specifies an array of starting indices in the enabled arrays.</param>
     /// <param name="count">Specifies an array of the number of indices to be rendered.</param>
-    /// <param name="drawcount">Specifies the size of the <paramref name="first" /> and <paramref name="count" /> arrays.</param>
+    /// <param name="drawcount">Specifies the size of the <paramref name="first"/> and <paramref name="count"/> arrays.</param>
     unsafe void MultiDrawArrays( int mode, int* first, int* count, int drawcount );
 
     /// <summary>
     /// Render multiple sets of primitives from array data.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_TRIANGLE_STRIP" />,
-    /// <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />, <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLES_ADJACENCY" />, and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_TRIANGLE_STRIP"/>,
+    /// <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="first">Specifies an array of starting indices in the enabled arrays.</param>
     /// <param name="count">Specifies an array of the number of indices to be rendered.</param>
@@ -2502,35 +2502,35 @@ public partial interface IGLBindings
     /// Render multiple sets of primitives by specifying indices of array data elements.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_TRIANGLE_STRIP" />,
-    /// <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />, <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLES_ADJACENCY" />, and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_TRIANGLE_STRIP"/>,
+    /// <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies an array of the elements counts.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
-    /// <param name="drawcount">Specifies the size of the <paramref name="count" /> and <paramref name="indices" /> arrays.</param>
+    /// <param name="drawcount">Specifies the size of the <paramref name="count"/> and <paramref name="indices"/> arrays.</param>
     unsafe void MultiDrawElements( int mode, int* count, int type, IntPtr* indices, int drawcount );
 
     /// <summary>
     /// Render multiple sets of primitives by specifying indices of array data elements.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_TRIANGLE_STRIP" />,
-    /// <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />, <see cref="GL_TRIANGLE_STRIP_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLES_ADJACENCY" />, and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_TRIANGLE_STRIP"/>,
+    /// <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies an array of the elements counts.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a two-dimensional array of indices of the vertices that are to be rendered.</param>
     void MultiDrawElements< T >( int mode, int[] count, int type, T[][] indices ) where T : unmanaged, IUnsignedNumber< T >;
@@ -2539,22 +2539,22 @@ public partial interface IGLBindings
     /// Specify point parameters.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE" />
-    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN" /> are accepted.
+    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE"/>
+    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN"/> are accepted.
     /// </param>
-    /// <param name="param">Specifies the value that parameter <paramref name="pname" /> will be set to.</param>
+    /// <param name="param">Specifies the value that parameter <paramref name="pname"/> will be set to.</param>
     void PointParameterf( int pname, float param );
 
     /// <summary>
     /// Specify point parameters.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE" />
-    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN" /> are accepted.
+    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE"/>
+    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN"/> are accepted.
     /// </param>
     /// <param name="parameters">
     /// Specifies a pointer to an array where the value or values to be assigned to
-    /// <paramref name="pname" /> are currently stored.
+    /// <paramref name="pname"/> are currently stored.
     /// </param>
     unsafe void PointParameterfv( int pname, float* parameters );
 
@@ -2562,8 +2562,8 @@ public partial interface IGLBindings
     /// Specify point parameters.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE" />
-    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN" /> are accepted.
+    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE"/>
+    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN"/> are accepted.
     /// </param>
     /// <param name="parameters">Specifies an array of values that will be used to update the current point parameters.</param>
     void PointParameterfv( int pname, float[] parameters );
@@ -2572,22 +2572,22 @@ public partial interface IGLBindings
     /// Specify point parameters.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE" />
-    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN" /> are accepted.
+    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE"/>
+    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN"/> are accepted.
     /// </param>
-    /// <param name="param">Specifies the value that parameter <paramref name="pname" /> will be set to.</param>
+    /// <param name="param">Specifies the value that parameter <paramref name="pname"/> will be set to.</param>
     void PointParameteri( int pname, int param );
 
     /// <summary>
     /// Specify point parameters.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE" />
-    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN" /> are accepted.
+    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE"/>
+    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN"/> are accepted.
     /// </param>
     /// <param name="parameters">
     /// Specifies a pointer to an array where the value or values to be assigned to
-    /// <paramref name="pname" /> are currently stored.
+    /// <paramref name="pname"/> are currently stored.
     /// </param>
     unsafe void PointParameteriv( int pname, int* parameters );
 
@@ -2595,8 +2595,8 @@ public partial interface IGLBindings
     /// Specify point parameters.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE" />
-    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN" /> are accepted.
+    /// Specifies the symbolic name of the parameter to be set. <see cref="GL_POINT_FADE_THRESHOLD_SIZE"/>
+    /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN"/> are accepted.
     /// </param>
     /// <param name="parameters">Specifies an array of values that will be used to update the current point parameters.</param>
     void PointParameteriv( int pname, int[] parameters );
@@ -2614,9 +2614,9 @@ public partial interface IGLBindings
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation.
     /// </summary>
     /// <param name="mode">
-    /// Specifies how source and destination colors are combined. Must be <see cref="GL_FUNC_ADD" />,
-    /// <see cref="GL_FUNC_SUBTRACT" />, <see cref="GL_FUNC_REVERSE_SUBTRACT" />, <see cref="GL_MIN" />,
-    /// <see cref="GL_MAX" />.
+    /// Specifies how source and destination colors are combined. Must be <see cref="GL_FUNC_ADD"/>,
+    /// <see cref="GL_FUNC_SUBTRACT"/>, <see cref="GL_FUNC_REVERSE_SUBTRACT"/>, <see cref="GL_MIN"/>,
+    /// <see cref="GL_MAX"/>.
     /// </param>
     void BlendEquation( int mode );
 
@@ -2657,18 +2657,18 @@ public partial interface IGLBindings
     /// Determine if a name corresponds to a query object.
     /// </summary>
     /// <param name="id">Specifies a value that may be the name of a query object.</param>
-    /// <returns><see langword="true" /> if <paramref name="id" /> is query object name, otherwise <see langword="false" />.</returns>
+    /// <returns><see langword="true"/> if <paramref name="id"/> is query object name, otherwise <see langword="false"/>.</returns>
     bool IsQuery( uint id );
 
     /// <summary>
     /// Delimit the boundaries of a query object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target type of query object established between <see cref="BeginQuery" /> and the
-    /// subsequent <see cref="EndQuery" />. The symbol constant must be one of <see cref="GL_SAMPLES_PASSED" />,
-    /// <see cref="GL_ANY_SAMPLES_PASSED" />, <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE" />,
-    /// <see cref="GL_PRIMITIVES_GENERATED" />, <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN" /> or
-    /// <see cref="GL_TIME_ELAPSED" />.
+    /// Specifies the target type of query object established between <see cref="BeginQuery"/> and the
+    /// subsequent <see cref="EndQuery"/>. The symbol constant must be one of <see cref="GL_SAMPLES_PASSED"/>,
+    /// <see cref="GL_ANY_SAMPLES_PASSED"/>, <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE"/>,
+    /// <see cref="GL_PRIMITIVES_GENERATED"/>, <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"/> or
+    /// <see cref="GL_TIME_ELAPSED"/>.
     /// </param>
     /// <param name="id">Specifies the name of a query object.</param>
     void BeginQuery( int target, uint id );
@@ -2677,11 +2677,11 @@ public partial interface IGLBindings
     /// Delimit the boundaries of a query object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target type of query object established between <see cref="BeginQuery" /> and the
-    /// subsequent <see cref="EndQuery" />. The symbol constant must be one of <see cref="GL_SAMPLES_PASSED" />,
-    /// <see cref="GL_ANY_SAMPLES_PASSED" />, <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE" />,
-    /// <see cref="GL_PRIMITIVES_GENERATED" />, <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN" /> or
-    /// <see cref="GL_TIME_ELAPSED" />.
+    /// Specifies the target type of query object established between <see cref="BeginQuery"/> and the
+    /// subsequent <see cref="EndQuery"/>. The symbol constant must be one of <see cref="GL_SAMPLES_PASSED"/>,
+    /// <see cref="GL_ANY_SAMPLES_PASSED"/>, <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE"/>,
+    /// <see cref="GL_PRIMITIVES_GENERATED"/>, <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"/> or
+    /// <see cref="GL_TIME_ELAPSED"/>.
     /// </param>
     void EndQuery( int target );
 
@@ -2690,14 +2690,14 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target parameter of the query object being queried. The symbolic constant must be
-    /// one of <see cref="GL_SAMPLES_PASSED" />, <see cref="GL_ANY_SAMPLES_PASSED" />,
-    /// <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE" />, <see cref="GL_PRIMITIVES_GENERATED" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN" />, <see cref="GL_TIME_ELAPSED" /> or
-    /// <see cref="GL_TIMESTAMP" />.
+    /// one of <see cref="GL_SAMPLES_PASSED"/>, <see cref="GL_ANY_SAMPLES_PASSED"/>,
+    /// <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE"/>, <see cref="GL_PRIMITIVES_GENERATED"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"/>, <see cref="GL_TIME_ELAPSED"/> or
+    /// <see cref="GL_TIMESTAMP"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a query object target parameter. <see cref="GL_CURRENT_QUERY" /> and
-    /// <see cref="GL_QUERY_COUNTER_BITS" /> are accepted.
+    /// Specifies the symbolic name of a query object target parameter. <see cref="GL_CURRENT_QUERY"/> and
+    /// <see cref="GL_QUERY_COUNTER_BITS"/> are accepted.
     /// </param>
     /// <param name="parameters">A pointer to the location where the integer value or values are to be returned.</param>
     unsafe void GetQueryiv( int target, int pname, int* parameters );
@@ -2707,17 +2707,17 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target parameter of the query object being queried. The symbolic constant must be
-    /// one of <see cref="GL_SAMPLES_PASSED" />, <see cref="GL_ANY_SAMPLES_PASSED" />,
-    /// <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE" />, <see cref="GL_PRIMITIVES_GENERATED" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN" />, <see cref="GL_TIME_ELAPSED" /> or
-    /// <see cref="GL_TIMESTAMP" />.
+    /// one of <see cref="GL_SAMPLES_PASSED"/>, <see cref="GL_ANY_SAMPLES_PASSED"/>,
+    /// <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE"/>, <see cref="GL_PRIMITIVES_GENERATED"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"/>, <see cref="GL_TIME_ELAPSED"/> or
+    /// <see cref="GL_TIMESTAMP"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a query object target parameter. <see cref="GL_CURRENT_QUERY" /> and
-    /// <see cref="GL_QUERY_COUNTER_BITS" /> are accepted.
+    /// Specifies the symbolic name of a query object target parameter. <see cref="GL_CURRENT_QUERY"/> and
+    /// <see cref="GL_QUERY_COUNTER_BITS"/> are accepted.
     /// </param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an integer array where the integer value or values are to be
+    /// A <see langword="ref"/> to an integer array where the integer value or values are to be
     /// returned.
     /// </param>
     void GetQueryiv( int target, int pname, ref int[] parameters );
@@ -2727,8 +2727,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="id">Specifies the name of a query object.</param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a query object parameter. <see cref="GL_QUERY_RESULT" />,
-    /// <see cref="GL_QUERY_RESULT_NO_WAIT" /> or <see cref="GL_QUERY_RESULT_AVAILABLE" /> are accepted.
+    /// Specifies the symbolic name of a query object parameter. <see cref="GL_QUERY_RESULT"/>,
+    /// <see cref="GL_QUERY_RESULT_NO_WAIT"/> or <see cref="GL_QUERY_RESULT_AVAILABLE"/> are accepted.
     /// </param>
     /// <param name="parameters">A pointer to the location where the integer value or values are to be returned.</param>
     unsafe void GetQueryObjectiv( uint id, int pname, int* parameters );
@@ -2738,11 +2738,11 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="id">Specifies the name of a query object.</param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a query object parameter. <see cref="GL_QUERY_RESULT" />,
-    /// <see cref="GL_QUERY_RESULT_NO_WAIT" /> or <see cref="GL_QUERY_RESULT_AVAILABLE" /> are accepted.
+    /// Specifies the symbolic name of a query object parameter. <see cref="GL_QUERY_RESULT"/>,
+    /// <see cref="GL_QUERY_RESULT_NO_WAIT"/> or <see cref="GL_QUERY_RESULT_AVAILABLE"/> are accepted.
     /// </param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an integer array where the integer value or values are to be
+    /// A <see langword="ref"/> to an integer array where the integer value or values are to be
     /// returned.
     /// </param>
     void GetQueryObjectiv( uint id, int pname, ref int[] parameters );
@@ -2752,8 +2752,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="id">Specifies the name of a query object.</param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a query object parameter. <see cref="GL_QUERY_RESULT" />,
-    /// <see cref="GL_QUERY_RESULT_NO_WAIT" /> or <see cref="GL_QUERY_RESULT_AVAILABLE" /> are accepted.
+    /// Specifies the symbolic name of a query object parameter. <see cref="GL_QUERY_RESULT"/>,
+    /// <see cref="GL_QUERY_RESULT_NO_WAIT"/> or <see cref="GL_QUERY_RESULT_AVAILABLE"/> are accepted.
     /// </param>
     /// <param name="parameters">A pointer to the location where the unsigned integer value or values are to be returned.</param>
     unsafe void GetQueryObjectuiv( uint id, int pname, uint* parameters );
@@ -2763,11 +2763,11 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="id">Specifies the name of a query object.</param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a query object parameter. <see cref="GL_QUERY_RESULT" />,
-    /// <see cref="GL_QUERY_RESULT_NO_WAIT" /> or <see cref="GL_QUERY_RESULT_AVAILABLE" /> are accepted.
+    /// Specifies the symbolic name of a query object parameter. <see cref="GL_QUERY_RESULT"/>,
+    /// <see cref="GL_QUERY_RESULT_NO_WAIT"/> or <see cref="GL_QUERY_RESULT_AVAILABLE"/> are accepted.
     /// </param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an unsigned integer array where the integer value or values are to be
+    /// A <see langword="ref"/> to an unsigned integer array where the integer value or values are to be
     /// returned.
     /// </param>
     void GetQueryObjectuiv( uint id, int pname, ref uint[] parameters );
@@ -2777,11 +2777,11 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the buffer object is bound. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DISPATCH_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER" />, <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER" />, <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
+    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="buffer">Specifies the name of a buffer object.</param>
     void BindBuffer( int target, uint buffer );
@@ -2824,7 +2824,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="buffer">A value that may be the name of a buffer object.</param>
     /// <returns>
-    /// <see langword="true" /> if <paramref name="buffer" /> is a buffer object name. <see langword="false" />
+    /// <see langword="true"/> if <paramref name="buffer"/> is a buffer object name. <see langword="false"/>
     /// otherwise.
     /// </returns>
     bool IsBuffer( uint buffer );
@@ -2833,23 +2833,23 @@ public partial interface IGLBindings
     /// Create and initialize a buffer object's data store.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
     /// <param name="data">
     /// Specifies a pointer to data that will be copied into the data store for initialization, or
-    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.NULL" /> if no data is to be copied.
+    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.NULL"/> if no data is to be copied.
     /// </param>
     /// <param name="usage">
     /// Specifies the expected usage pattern of the data store. The symbolic constant must be
-    /// <see cref="GL_STREAM_DRAW" />, <see cref="GL_STREAM_READ" />, <see cref="GL_STREAM_COPY" />,
-    /// <see cref="GL_STATIC_DRAW" />, <see cref="GL_STATIC_READ" />, <see cref="GL_STATIC_COPY" />,
-    /// <see cref="GL_DYNAMIC_DRAW" />, <see cref="GL_DYNAMIC_READ" /> or <see cref="GL_DYNAMIC_COPY" />.
+    /// <see cref="GL_STREAM_DRAW"/>, <see cref="GL_STREAM_READ"/>, <see cref="GL_STREAM_COPY"/>,
+    /// <see cref="GL_STATIC_DRAW"/>, <see cref="GL_STATIC_READ"/>, <see cref="GL_STATIC_COPY"/>,
+    /// <see cref="GL_DYNAMIC_DRAW"/>, <see cref="GL_DYNAMIC_READ"/> or <see cref="GL_DYNAMIC_COPY"/>.
     /// </param>
     void BufferData( int target, int size, IntPtr data, int usage );
 
@@ -2858,19 +2858,19 @@ public partial interface IGLBindings
     /// </summary>
     /// <typeparam name="T">The type of the data to be copied.</typeparam>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
-    /// <param name="data">An array of <typeparamref name="T" />s that will be copied into the data store for initialization.</param>
+    /// <param name="data">An array of <typeparamref name="T"/>s that will be copied into the data store for initialization.</param>
     /// <param name="usage">
     /// Specifies the expected usage pattern of the data store. The symbolic constant must be
-    /// <see cref="GL_STREAM_DRAW" />, <see cref="GL_STREAM_READ" />, <see cref="GL_STREAM_COPY" />,
-    /// <see cref="GL_STATIC_DRAW" />, <see cref="GL_STATIC_READ" />, <see cref="GL_STATIC_COPY" />,
-    /// <see cref="GL_DYNAMIC_DRAW" />, <see cref="GL_DYNAMIC_READ" /> or <see cref="GL_DYNAMIC_COPY" />.
+    /// <see cref="GL_STREAM_DRAW"/>, <see cref="GL_STREAM_READ"/>, <see cref="GL_STREAM_COPY"/>,
+    /// <see cref="GL_STATIC_DRAW"/>, <see cref="GL_STATIC_READ"/>, <see cref="GL_STATIC_COPY"/>,
+    /// <see cref="GL_DYNAMIC_DRAW"/>, <see cref="GL_DYNAMIC_READ"/> or <see cref="GL_DYNAMIC_COPY"/>.
     /// </param>
     void BufferData< T >( int target, T[] data, int usage ) where T : unmanaged;
 
@@ -2878,12 +2878,12 @@ public partial interface IGLBindings
     /// Update a subset of a buffer object's data store.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="offset">
     /// Specifies the offset into the buffer object's data store where data replacement will begin,
@@ -2898,27 +2898,27 @@ public partial interface IGLBindings
     /// </summary>
     /// <typeparam name="T">The type of the data to be copied.</typeparam>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="offsetCount">Specifies the offset into the buffer object's data store where data replacement will begin.</param>
-    /// <param name="data">An array of <typeparamref name="T" />s that will be copied into the data store for replacement.</param>
+    /// <param name="data">An array of <typeparamref name="T"/>s that will be copied into the data store for replacement.</param>
     void BufferSubData< T >( int target, int offsetCount, T[] data ) where T : unmanaged;
 
     /// <summary>
     /// Return a subset of a buffer object's data store.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="offset">
     /// Specifies the offset into the buffer object's data store from which data will be returned,
@@ -2933,33 +2933,33 @@ public partial interface IGLBindings
     /// </summary>
     /// <typeparam name="T">The type of the data to be returned.</typeparam>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="offsetCount">Specifies the offset into the buffer object's data store from which data will be returned.</param>
-    /// <param name="count">Specifies the number of <typeparamref name="T" />s to be returned.</param>
-    /// <param name="data">An array of <typeparamref name="T" />s that will be filled with the data from the buffer object.</param>
+    /// <param name="count">Specifies the number of <typeparamref name="T"/>s to be returned.</param>
+    /// <param name="data">An array of <typeparamref name="T"/>s that will be filled with the data from the buffer object.</param>
     void GetBufferSubData< T >( int target, int offsetCount, int count, ref T[] data ) where T : unmanaged;
 
     /// <summary>
     /// Map a buffer object's data store into the client's address space.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="access">
     /// Specifies a combination of access flags indicating the desired access to the range of the buffer
-    /// object's data store. One of <see cref="GL_READ_ONLY" />, <see cref="GL_WRITE_ONLY" /> or
-    /// <see cref="GL_READ_WRITE" />.
+    /// object's data store. One of <see cref="GL_READ_ONLY"/>, <see cref="GL_WRITE_ONLY"/> or
+    /// <see cref="GL_READ_WRITE"/>.
     /// </param>
     /// <returns>Returns a pointer to the beginning of the mapped range.</returns>
     IntPtr MapBuffer( int target, int access );
@@ -2968,19 +2968,19 @@ public partial interface IGLBindings
     /// Map a buffer object's data store into the client's address space.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="access">
     /// Specifies a combination of access flags indicating the desired access to the range of the buffer
-    /// object's data store. One of <see cref="GL_READ_ONLY" />, <see cref="GL_WRITE_ONLY" /> or
-    /// <see cref="GL_READ_WRITE" />.
+    /// object's data store. One of <see cref="GL_READ_ONLY"/>, <see cref="GL_WRITE_ONLY"/> or
+    /// <see cref="GL_READ_WRITE"/>.
     /// </param>
-    /// <returns>Returns a type-safe and memory-safe <see cref="System.Span{T}" /> of the buffers data.</returns>
+    /// <returns>Returns a type-safe and memory-safe <see cref="System.Span{T}"/> of the buffers data.</returns>
     Span< T > MapBuffer< T >( int target, int access ) where T : unmanaged;
 
     /// <summary>
@@ -2988,16 +2988,16 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target buffer object being unmapped. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DISPATCH_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER" />, <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER" />, <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
+    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <returns>
-    /// <see langword="true" /> unless the data store contents have become corrupt during the time the data store was
+    /// <see langword="true"/> unless the data store contents have become corrupt during the time the data store was
     /// mapped. This can occur for system-specific reasons that affect the availability of graphics memory, such as screen
-    /// mode changes. In such situations, <see cref="UnmapBuffer" /> may return <see langword="false" /> to
+    /// mode changes. In such situations, <see cref="UnmapBuffer"/> may return <see langword="false"/> to
     /// indicate that
     /// the contents of the buffer have become corrupt and should be considered undefined. An application must detect this
     /// rare condition and reinitialize the data store.
@@ -3008,13 +3008,13 @@ public partial interface IGLBindings
     /// Return parameters of a buffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a buffer object parameter. Accepted values are
-    /// <see cref="GL_BUFFER_ACCESS" />, <see cref="GL_BUFFER_MAPPED" />, <see cref="GL_BUFFER_SIZE" />,
-    /// <see cref="GL_BUFFER_USAGE" />.
+    /// <see cref="GL_BUFFER_ACCESS"/>, <see cref="GL_BUFFER_MAPPED"/>, <see cref="GL_BUFFER_SIZE"/>,
+    /// <see cref="GL_BUFFER_USAGE"/>.
     /// </param>
     /// <param name="parameters">A pointer to a memory location where the returned data will be placed.</param>
     unsafe void GetBufferParameteriv( int target, int pname, int* parameters );
@@ -3023,15 +3023,15 @@ public partial interface IGLBindings
     /// Return parameters of a buffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />.
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a buffer object parameter. Accepted values are
-    /// <see cref="GL_BUFFER_ACCESS" />, <see cref="GL_BUFFER_MAPPED" />, <see cref="GL_BUFFER_SIZE" />,
-    /// <see cref="GL_BUFFER_USAGE" />.
+    /// <see cref="GL_BUFFER_ACCESS"/>, <see cref="GL_BUFFER_MAPPED"/>, <see cref="GL_BUFFER_SIZE"/>,
+    /// <see cref="GL_BUFFER_USAGE"/>.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an integer array where the returned data will be placed.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an integer array where the returned data will be placed.</param>
     void GetBufferParameteriv( int target, int pname, ref int[] parameters );
 
     /// <summary>
@@ -3039,13 +3039,13 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target buffer object being mapped. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DISPATCH_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER" />, <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER" />, <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
+    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
-    /// <param name="pname">Specifies the pointer to be returned. Accepted values are <see cref="GL_BUFFER_MAP_POINTER" />.</param>
+    /// <param name="pname">Specifies the pointer to be returned. Accepted values are <see cref="GL_BUFFER_MAP_POINTER"/>.</param>
     /// <param name="parameters">A pointer to a memory location where the returned data will be placed.</param>
     unsafe void GetBufferPointerv( int target, int pname, IntPtr* parameters );
 
@@ -3054,15 +3054,15 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target buffer object being mapped. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DISPATCH_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER" />, <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER" />, <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
+    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
-    /// <param name="pname">Specifies the pointer to be returned. Accepted values are <see cref="GL_BUFFER_MAP_POINTER" />.</param>
+    /// <param name="pname">Specifies the pointer to be returned. Accepted values are <see cref="GL_BUFFER_MAP_POINTER"/>.</param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an array of <see cref="IntPtr" />s where the returned pointer(s) will
+    /// A <see langword="ref"/> to an array of <see cref="IntPtr"/>s where the returned pointer(s) will
     /// be placed.
     /// </param>
     void GetBufferPointerv( int target, int pname, ref IntPtr[] parameters );
@@ -3072,13 +3072,13 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="modeRGB">
     /// Specifies the RGB blend equation, how the red, green, and blue components of the source and
-    /// destination colors are combined. Must be <see cref="GL_FUNC_ADD" />, <see cref="GL_FUNC_SUBTRACT" />,
-    /// <see cref="GL_FUNC_REVERSE_SUBTRACT" />, <see cref="GL_MIN" /> or <see cref="GL_MAX" />.
+    /// destination colors are combined. Must be <see cref="GL_FUNC_ADD"/>, <see cref="GL_FUNC_SUBTRACT"/>,
+    /// <see cref="GL_FUNC_REVERSE_SUBTRACT"/>, <see cref="GL_MIN"/> or <see cref="GL_MAX"/>.
     /// </param>
     /// <param name="modeAlpha">
     /// Specifies the alpha blend equation, how the alpha component of the source and destination
-    /// colors are combined. Must be <see cref="GL_FUNC_ADD" />, <see cref="GL_FUNC_SUBTRACT" />,
-    /// <see cref="GL_FUNC_REVERSE_SUBTRACT" />, <see cref="GL_MIN" /> or <see cref="GL_MAX" />.
+    /// colors are combined. Must be <see cref="GL_FUNC_ADD"/>, <see cref="GL_FUNC_SUBTRACT"/>,
+    /// <see cref="GL_FUNC_REVERSE_SUBTRACT"/>, <see cref="GL_MIN"/> or <see cref="GL_MAX"/>.
     /// </param>
     void BlendEquationSeparate( int modeRGB, int modeAlpha );
 
@@ -3088,9 +3088,9 @@ public partial interface IGLBindings
     /// <param name="n">Specifies the number of buffers in the list that follows.</param>
     /// <param name="bufs">
     /// Specifies a pointer to an array of symbolic constants specifying the buffers into which fragment
-    /// colors or data values will be written. The symbolic constants must be <see cref="GL_NONE" />,
-    /// <see cref="GL_FRONT_LEFT" />, <see cref="GL_FRONT_RIGHT" />, <see cref="GL_BACK_LEFT" />,
-    /// <see cref="GL_BACK_RIGHT" />, <see cref="GL_COLOR_ATTACHMENT0" /> through <see cref="GL_COLOR_ATTACHMENT31" />.
+    /// colors or data values will be written. The symbolic constants must be <see cref="GL_NONE"/>,
+    /// <see cref="GL_FRONT_LEFT"/>, <see cref="GL_FRONT_RIGHT"/>, <see cref="GL_BACK_LEFT"/>,
+    /// <see cref="GL_BACK_RIGHT"/>, <see cref="GL_COLOR_ATTACHMENT0"/> through <see cref="GL_COLOR_ATTACHMENT31"/>.
     /// </param>
     unsafe void DrawBuffers( int n, int* bufs );
 
@@ -3099,9 +3099,9 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="bufs">
     /// Specifies an array of symbol constants specifying the buffers into which the fragment colors or data
-    /// values will be written. The symbolic constants must be <see cref="GL_NONE" />, <see cref="GL_FRONT_LEFT" />,
-    /// <see cref="GL_FRONT_RIGHT" />, <see cref="GL_BACK_LEFT" />, <see cref="GL_BACK_RIGHT" />,
-    /// <see cref="GL_COLOR_ATTACHMENT0" /> through <see cref="GL_COLOR_ATTACHMENT31" />.
+    /// values will be written. The symbolic constants must be <see cref="GL_NONE"/>, <see cref="GL_FRONT_LEFT"/>,
+    /// <see cref="GL_FRONT_RIGHT"/>, <see cref="GL_BACK_LEFT"/>, <see cref="GL_BACK_RIGHT"/>,
+    /// <see cref="GL_COLOR_ATTACHMENT0"/> through <see cref="GL_COLOR_ATTACHMENT31"/>.
     /// </param>
     void DrawBuffers( params int[] bufs );
 
@@ -3110,21 +3110,21 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="face">
     /// Specifies whether the stencil test applies to front and/or back-facing polygons, or both. Must be
-    /// <see cref="GL_FRONT" />, <see cref="GL_BACK" /> or <see cref="GL_FRONT_AND_BACK" />.
+    /// <see cref="GL_FRONT"/>, <see cref="GL_BACK"/> or <see cref="GL_FRONT_AND_BACK"/>.
     /// </param>
     /// <param name="sfail">
-    /// Specifies the action to take when the stencil test fails. Must be <see cref="GL_KEEP" />,
-    /// <see cref="GL_ZERO" />, <see cref="GL_REPLACE" />, <see cref="GL_INCR" />, <see cref="GL_INCR_WRAP" />,
-    /// <see cref="GL_DECR" />, <see cref="GL_DECR_WRAP" /> or <see cref="GL_INVERT" />.
+    /// Specifies the action to take when the stencil test fails. Must be <see cref="GL_KEEP"/>,
+    /// <see cref="GL_ZERO"/>, <see cref="GL_REPLACE"/>, <see cref="GL_INCR"/>, <see cref="GL_INCR_WRAP"/>,
+    /// <see cref="GL_DECR"/>, <see cref="GL_DECR_WRAP"/> or <see cref="GL_INVERT"/>.
     /// </param>
     /// <param name="dpfail">
     /// Specifies the stencil action when the stencil test passes, but the depth test fails.
-    /// <paramref name="dpfail" /> accepts the same symbolic constants as <paramref name="sfail" />.
+    /// <paramref name="dpfail"/> accepts the same symbolic constants as <paramref name="sfail"/>.
     /// </param>
     /// <param name="dppass">
     /// Specifies the stencil action when both the stencil test and the depth test pass, or when the
-    /// stencil test passes and either there is no depth buffer or depth testing is not enabled. <paramref name="dppass" />
-    /// accepts the same symbolic constants as <paramref name="sfail" />.
+    /// stencil test passes and either there is no depth buffer or depth testing is not enabled. <paramref name="dppass"/>
+    /// accepts the same symbolic constants as <paramref name="sfail"/>.
     /// </param>
     void StencilOpSeparate( int face, int sfail, int dpfail, int dppass );
 
@@ -3133,16 +3133,16 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="face">
     /// Specifies whether the stencil test applies to front and/or back-facing polygons, or both. Must be
-    /// <see cref="GL_FRONT" />, <see cref="GL_BACK" /> or <see cref="GL_FRONT_AND_BACK" />.
+    /// <see cref="GL_FRONT"/>, <see cref="GL_BACK"/> or <see cref="GL_FRONT_AND_BACK"/>.
     /// </param>
     /// <param name="func">
-    /// Specifies the test function. Eight symbolic constants are accepted: <see cref="GL_NEVER" />,
-    /// <see cref="GL_LESS" />, <see cref="GL_LEQUAL" />, <see cref="GL_GREATER" />, <see cref="GL_GEQUAL" />,
-    /// <see cref="GL_EQUAL" />, <see cref="GL_NOTEQUAL" /> and <see cref="GL_ALWAYS" />. The initial value is
-    /// <see cref="GL_ALWAYS" />.
+    /// Specifies the test function. Eight symbolic constants are accepted: <see cref="GL_NEVER"/>,
+    /// <see cref="GL_LESS"/>, <see cref="GL_LEQUAL"/>, <see cref="GL_GREATER"/>, <see cref="GL_GEQUAL"/>,
+    /// <see cref="GL_EQUAL"/>, <see cref="GL_NOTEQUAL"/> and <see cref="GL_ALWAYS"/>. The initial value is
+    /// <see cref="GL_ALWAYS"/>.
     /// </param>
     /// <param name="ref">
-    /// Specifies the reference value for the stencil test. <paramref name="ref" /> is clamped to the range
+    /// Specifies the reference value for the stencil test. <paramref name="ref"/> is clamped to the range
     /// [0, 2^n - 1], where n is the number of bitplanes in the stencil buffer. The initial value is 0.
     /// </param>
     /// <param name="mask">
@@ -3156,7 +3156,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="face">
     /// Specifies whether the stencil writemask applies to front and/or back-facing polygons, or both. Must
-    /// be <see cref="GL_FRONT" />, <see cref="GL_BACK" /> or <see cref="GL_FRONT_AND_BACK" />.
+    /// be <see cref="GL_FRONT"/>, <see cref="GL_BACK"/> or <see cref="GL_FRONT_AND_BACK"/>.
     /// </param>
     /// <param name="mask">
     /// Specifies a bit mask to enable and disable writing of individual bits in the stencil planes.
@@ -3211,9 +3211,9 @@ public partial interface IGLBindings
     /// Creates a shader object
     /// </summary>
     /// <param name="type">
-    /// Specifies the type of shader to be created. Must be <see cref="GL_COMPUTE_SHADER" />,
-    /// <see cref="GL_VERTEX_SHADER" />, <see cref="GL_TESS_CONTROL_SHADER" />, <see cref="GL_TESS_EVALUATION_SHADER" />,
-    /// <see cref="GL_GEOMETRY_SHADER" /> or <see cref="GL_FRAGMENT_SHADER" />.
+    /// Specifies the type of shader to be created. Must be <see cref="GL_COMPUTE_SHADER"/>,
+    /// <see cref="GL_VERTEX_SHADER"/>, <see cref="GL_TESS_CONTROL_SHADER"/>, <see cref="GL_TESS_EVALUATION_SHADER"/>,
+    /// <see cref="GL_GEOMETRY_SHADER"/> or <see cref="GL_FRAGMENT_SHADER"/>.
     /// </param>
     /// <returns>The name of the shader object created.</returns>
     GLuint CreateShader( int type );
@@ -3353,7 +3353,7 @@ public partial interface IGLBindings
     /// </returns>
     unsafe int GetAttribLocation( int program, byte* name );
 
-    /// <inheritdoc cref="IGLBindings.GetAttribLocation(int, byte*)" />
+    /// <inheritdoc cref="IGLBindings.GetAttribLocation(int, byte*)"/>
     int GetAttribLocation( int program, string name );
 
     /// <summary>
@@ -3361,7 +3361,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="pname">
-    /// Specifies the object parameter to query. Refer to <see href="https://docs.gl/gl4/glGetProgram" />
+    /// Specifies the object parameter to query. Refer to <see href="https://docs.gl/gl4/glGetProgram"/>
     /// for a list of possible values.
     /// </param>
     /// <param name="parameters">Returns the requested object parameter.</param>
@@ -3372,10 +3372,10 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="pname">
-    /// Specifies the object parameter to query. Refer to <see href="https://docs.gl/gl4/glGetProgram" />
+    /// Specifies the object parameter to query. Refer to <see href="https://docs.gl/gl4/glGetProgram"/>
     /// for a list of possible values.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an integer array where the returned value(s) will be placed.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an integer array where the returned value(s) will be placed.</param>
     void GetProgramiv( int program, int pname, ref int[] parameters );
 
     /// <summary>
@@ -3392,7 +3392,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object whose information log is to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned information log.</param>
-    /// <returns>Returns the information log for <paramref name="program" />, resized to the correct length.</returns>
+    /// <returns>Returns the information log for <paramref name="program"/>, resized to the correct length.</returns>
     string GetProgramInfoLog( int program, int bufSize );
 
     /// <summary>
@@ -3400,9 +3400,9 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="shader">Specifies the shader object to be queried.</param>
     /// <param name="pname">
-    /// Specifies the object parameter to query. Accepted symbolic names are <see cref="GL_SHADER_TYPE" />,
-    /// <see cref="GL_DELETE_STATUS" />, <see cref="GL_COMPILE_STATUS" />, <see cref="GL_INFO_LOG_LENGTH" />,
-    /// <see cref="GL_SHADER_SOURCE_LENGTH" />.
+    /// Specifies the object parameter to query. Accepted symbolic names are <see cref="GL_SHADER_TYPE"/>,
+    /// <see cref="GL_DELETE_STATUS"/>, <see cref="GL_COMPILE_STATUS"/>, <see cref="GL_INFO_LOG_LENGTH"/>,
+    /// <see cref="GL_SHADER_SOURCE_LENGTH"/>.
     /// </param>
     /// <param name="parameters">Returns the requested object parameter.</param>
     unsafe void GetShaderiv( int shader, int pname, int* parameters );
@@ -3412,11 +3412,11 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="shader">Specifies the shader object to be queried.</param>
     /// <param name="pname">
-    /// Specifies the object parameter to query. Accepted symbolic names are <see cref="GL_SHADER_TYPE" />,
-    /// <see cref="GL_DELETE_STATUS" />, <see cref="GL_COMPILE_STATUS" />, <see cref="GL_INFO_LOG_LENGTH" />,
-    /// <see cref="GL_SHADER_SOURCE_LENGTH" />.
+    /// Specifies the object parameter to query. Accepted symbolic names are <see cref="GL_SHADER_TYPE"/>,
+    /// <see cref="GL_DELETE_STATUS"/>, <see cref="GL_COMPILE_STATUS"/>, <see cref="GL_INFO_LOG_LENGTH"/>,
+    /// <see cref="GL_SHADER_SOURCE_LENGTH"/>.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an integer array where the returned value(s) will be placed.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an integer array where the returned value(s) will be placed.</param>
     void GetShaderiv( int shader, int pname, ref int[] parameters );
 
     /// <summary>
@@ -3433,7 +3433,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="shader">Specifies the shader object whose information log is to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned information log.</param>
-    /// <returns>Returns the information log for <paramref name="shader" />, resized to the correct length.</returns>
+    /// <returns>Returns the information log for <paramref name="shader"/>, resized to the correct length.</returns>
     string GetShaderInfoLog( int shader, int bufSize );
 
     /// <summary>
@@ -3450,7 +3450,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="shader">Specifies the shader object to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned source code string.</param>
-    /// <returns>Returns the source code string for <paramref name="shader" />, resized to the correct length.</returns>
+    /// <returns>Returns the source code string for <paramref name="shader"/>, resized to the correct length.</returns>
     string GetShaderSource( int shader, int bufSize = 4096 );
 
     /// <summary>
@@ -3484,7 +3484,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="location">Specifies the location of the uniform variable to be queried.</param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an array to receive the value of the uniform variable at the location
+    /// A <see langword="ref"/> to an array to receive the value of the uniform variable at the location
     /// specified by location.
     /// </param>
     void GetUniformfv( int program, int location, ref float[] parameters );
@@ -3503,7 +3503,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="location">Specifies the location of the uniform variable to be queried.</param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an array to receive the value of the uniform variable at the location
+    /// A <see langword="ref"/> to an array to receive the value of the uniform variable at the location
     /// specified by location.
     /// </param>
     void GetUniformiv( int program, int location, ref int[] parameters );
@@ -3514,11 +3514,11 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute parameter to be queried.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the vertex attribute parameter to be queried. Accepted values are:
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>
     /// </param>
     /// <param name="parameters">
     /// Returns the value of the generic vertex attribute parameter specified by pname for the vertex
@@ -3532,14 +3532,14 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute parameter to be queried.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the vertex attribute parameter to be queried. Accepted values are:
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>
     /// </param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an array to receive the value of the generic vertex attribute
+    /// A <see langword="ref"/> to an array to receive the value of the generic vertex attribute
     /// parameter specified by pname for the vertex attribute specified by index.
     /// </param>
     void GetVertexAttribdv( uint index, int pname, ref double[] parameters );
@@ -3550,11 +3550,11 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute parameter to be queried.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the vertex attribute parameter to be queried. Accepted values are:
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>
     /// </param>
     /// <param name="parameters">
     /// Returns the value of the generic vertex attribute parameter specified by pname for the vertex
@@ -3568,14 +3568,14 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute parameter to be queried.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the vertex attribute parameter to be queried. Accepted values are:
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>
     /// </param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an array to receive the value of the generic vertex attribute
+    /// A <see langword="ref"/> to an array to receive the value of the generic vertex attribute
     /// parameter specified by pname for the vertex attribute specified by index.
     /// </param>
     void GetVertexAttribfv( uint index, int pname, ref float[] parameters );
@@ -3586,11 +3586,11 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute parameter to be queried.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the vertex attribute parameter to be queried. Accepted values are:
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>
     /// </param>
     /// <param name="parameters">
     /// Returns the value of the generic vertex attribute parameter specified by pname for the vertex
@@ -3604,14 +3604,14 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute parameter to be queried.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the vertex attribute parameter to be queried. Accepted values are:
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>
     /// </param>
     /// <param name="parameters">
-    /// A <see langword="ref" /> to an array to receive the value of the generic vertex attribute
+    /// A <see langword="ref"/> to an array to receive the value of the generic vertex attribute
     /// parameter specified by pname for the vertex attribute specified by index.
     /// </param>
     void GetVertexAttribiv( uint index, int pname, ref int[] parameters );
@@ -3622,7 +3622,7 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute pointer to be returned.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the generic vertex attribute pointer to be returned. Accepted values
-    /// are: <see cref="GL_VERTEX_ATTRIB_ARRAY_POINTER" />
+    /// are: <see cref="GL_VERTEX_ATTRIB_ARRAY_POINTER"/>
     /// </param>
     /// <param name="pointer">Returns the address of the specified generic vertex attribute pointer.</param>
     unsafe void GetVertexAttribPointerv( uint index, int pname, IntPtr* pointer );
@@ -3633,10 +3633,10 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute pointer to be returned.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the generic vertex attribute pointer to be returned. Accepted values
-    /// are: <see cref="GL_VERTEX_ATTRIB_ARRAY_POINTER" />
+    /// are: <see cref="GL_VERTEX_ATTRIB_ARRAY_POINTER"/>
     /// </param>
     /// <param name="pointer">
-    /// A <see langword="ref" /> to an array to receive the address of the specified generic vertex
+    /// A <see langword="ref"/> to an array to receive the address of the specified generic vertex
     /// attribute pointer.
     /// </param>
     void GetVertexAttribPointerv( uint index, int pname, ref uint[] pointer );
@@ -3646,7 +3646,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies a potential program object.</param>
     /// <returns>
-    /// <see langword="true" /> if program is currently the name of a program object. <see langword="false" />
+    /// <see langword="true"/> if program is currently the name of a program object. <see langword="false"/>
     /// otherwise.
     /// </returns>
     bool IsProgram( int program );
@@ -3656,7 +3656,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="shader">Specifies a potential shader object.</param>
     /// <returns>
-    /// <see langword="true" /> if shader is currently the name of a shader object. <see langword="false" />
+    /// <see langword="true"/> if shader is currently the name of a shader object. <see langword="false"/>
     /// otherwise.
     /// </returns>
     bool IsShader( int shader );
@@ -3672,7 +3672,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="shader">Specifies the handle of the shader object whose source code is to be replaced.</param>
     /// <param name="count">
-    /// Specifies the number of elements in the <paramref name="str" /> and <paramref name="length" />
+    /// Specifies the number of elements in the <paramref name="str"/> and <paramref name="length"/>
     /// arrays.
     /// </param>
     /// <param name="str">Specifies an array of pointers to strings containing the source code to be loaded into the shader.</param>
@@ -3699,7 +3699,7 @@ public partial interface IGLBindings
     /// Specifies the value of a uniform variable for the current program object
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
-    /// <param name="v0">Specifies the new value to be used for the uniform variable at location <paramref name="location" />.</param>
+    /// <param name="v0">Specifies the new value to be used for the uniform variable at location <paramref name="location"/>.</param>
     void Uniform1f( int location, float v0 );
 
     /// <summary>
@@ -3708,11 +3708,11 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="v0">
     /// Specifies the first new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v1">
     /// Specifies the second new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     void Uniform2f( int location, float v0, float v1 );
 
@@ -3722,15 +3722,15 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="v0">
     /// Specifies the first new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v1">
     /// Specifies the second new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v2">
     /// Specifies the third new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     void Uniform3f( int location, float v0, float v1, float v2 );
 
@@ -3740,19 +3740,19 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="v0">
     /// Specifies the first new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v1">
     /// Specifies the second new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v2">
     /// Specifies the third new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v3">
     /// Specifies the fourth new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     void Uniform4f( int location, float v0, float v1, float v2, float v3 );
 
@@ -3760,7 +3760,7 @@ public partial interface IGLBindings
     /// Specifies the value of a uniform variable for the current program object
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
-    /// <param name="v0">Specifies the new value to be used for the uniform variable at location <paramref name="location" />.</param>
+    /// <param name="v0">Specifies the new value to be used for the uniform variable at location <paramref name="location"/>.</param>
     void Uniform1i( int location, int v0 );
 
     /// <summary>
@@ -3769,11 +3769,11 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="v0">
     /// Specifies the first new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v1">
     /// Specifies the second new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     void Uniform2i( int location, int v0, int v1 );
 
@@ -3783,15 +3783,15 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="v0">
     /// Specifies the first new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v1">
     /// Specifies the second new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v2">
     /// Specifies the third new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     void Uniform3i( int location, int v0, int v1, int v2 );
 
@@ -3801,19 +3801,19 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="v0">
     /// Specifies the first new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v1">
     /// Specifies the second new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v2">
     /// Specifies the third new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     /// <param name="v3">
     /// Specifies the fourth new value to be used for the uniform variable at location
-    /// <paramref name="location" />.
+    /// <paramref name="location"/>.
     /// </param>
     void Uniform4i( int location, int v0, int v1, int v2, int v3 );
 
@@ -3823,7 +3823,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform1fv( int location, int count, float* value );
@@ -3841,7 +3841,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform2fv( int location, int count, float* value );
@@ -3859,7 +3859,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform3fv( int location, int count, float* value );
@@ -3877,7 +3877,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform4fv( int location, int count, float* value );
@@ -3895,7 +3895,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform1iv( int location, int count, int* value );
@@ -3913,7 +3913,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform2iv( int location, int count, int* value );
@@ -3931,7 +3931,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform3iv( int location, int count, int* value );
@@ -3949,7 +3949,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform4iv( int location, int count, int* value );
@@ -3968,7 +3968,7 @@ public partial interface IGLBindings
     /// <param name="count">Specifies the number of matrices that are to be modified.</param>
     /// <param name="transpose">Specifies whether to transpose the matrix as the values are loaded into the uniform variable.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void UniformMatrix2fv( int location, int count, bool transpose, float* value );
@@ -3991,7 +3991,7 @@ public partial interface IGLBindings
     /// <param name="count">Specifies the number of matrices that are to be modified.</param>
     /// <param name="transpose">Specifies whether to transpose the matrix as the values are loaded into the uniform variable.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void UniformMatrix3fv( int location, int count, bool transpose, float* value );
@@ -4014,7 +4014,7 @@ public partial interface IGLBindings
     /// <param name="count">Specifies the number of matrices that are to be modified.</param>
     /// <param name="transpose">Specifies whether to transpose the matrix as the values are loaded into the uniform variable.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void UniformMatrix4fv( int location, int count, bool transpose, float* value );
@@ -4518,15 +4518,15 @@ public partial interface IGLBindings
     /// <param name="size">Specifies the number of components per generic vertex attribute. Must be 1,2,3 or 4.</param>
     /// <param name="type">
     /// Specifies the data type of each component in the array. The symbolic constants
-    /// <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_SHORT" />, <see cref="GL_UNSIGNED_SHORT" />,
-    /// <see cref="GL_INT" />, <see cref="GL_UNSIGNED_INT" />, <see cref="GL_HALF_FLOAT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_DOUBLE" />, <see cref="GL_FIXED" />, <see cref="GL_INT_2_10_10_10_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />, and <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV" /> are accepted. The
-    /// initial value is <see cref="GL_FLOAT" />.
+    /// <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_SHORT"/>, <see cref="GL_UNSIGNED_SHORT"/>,
+    /// <see cref="GL_INT"/>, <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_HALF_FLOAT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_DOUBLE"/>, <see cref="GL_FIXED"/>, <see cref="GL_INT_2_10_10_10_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>, and <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV"/> are accepted. The
+    /// initial value is <see cref="GL_FLOAT"/>.
     /// </param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized <see langword="true" /> or
-    /// converted directly as fixed-point values <see langword="false" /> when they are accessed.
+    /// Specifies whether fixed-point data values should be normalized <see langword="true"/> or
+    /// converted directly as fixed-point values <see langword="false"/> when they are accessed.
     /// </param>
     /// <param name="stride">
     /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the
@@ -4534,7 +4534,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pointer">
     /// Specifies an offset of the first component in the first generic vertex attribute in the array in
-    /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER" /> target. The initial value is 0.
+    /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER"/> target. The initial value is 0.
     /// </param>
     void VertexAttribPointer( GLuint index, int size, int type, bool normalized, int stride, IntPtr pointer );
 
@@ -4545,15 +4545,15 @@ public partial interface IGLBindings
     /// <param name="size">Specifies the number of components per generic vertex attribute. Must be 1,2,3 or 4.</param>
     /// <param name="type">
     /// Specifies the data type of each component in the array. The symbolic constants
-    /// <see cref="GL_BYTE" />, <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_SHORT" />, <see cref="GL_UNSIGNED_SHORT" />,
-    /// <see cref="GL_INT" />, <see cref="GL_UNSIGNED_INT" />, <see cref="GL_HALF_FLOAT" />, <see cref="GL_FLOAT" />,
-    /// <see cref="GL_DOUBLE" />, <see cref="GL_FIXED" />, <see cref="GL_INT_2_10_10_10_REV" />,
-    /// <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />, and <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV" /> are accepted. The
-    /// initial value is <see cref="GL_FLOAT" />.
+    /// <see cref="GL_BYTE"/>, <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_SHORT"/>, <see cref="GL_UNSIGNED_SHORT"/>,
+    /// <see cref="GL_INT"/>, <see cref="GL_UNSIGNED_INT"/>, <see cref="GL_HALF_FLOAT"/>, <see cref="GL_FLOAT"/>,
+    /// <see cref="GL_DOUBLE"/>, <see cref="GL_FIXED"/>, <see cref="GL_INT_2_10_10_10_REV"/>,
+    /// <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>, and <see cref="GL_UNSIGNED_INT_10F_11F_11F_REV"/> are accepted. The
+    /// initial value is <see cref="GL_FLOAT"/>.
     /// </param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized <see langword="true" /> or
-    /// converted directly as fixed-point values <see langword="false" /> when they are accessed.
+    /// Specifies whether fixed-point data values should be normalized <see langword="true"/> or
+    /// converted directly as fixed-point values <see langword="false"/> when they are accessed.
     /// </param>
     /// <param name="stride">
     /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the
@@ -4561,7 +4561,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pointer">
     /// Specifies an offset of the first component in the first generic vertex attribute in the array in
-    /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER" /> target. The initial value is 0.
+    /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER"/> target. The initial value is 0.
     /// </param>
     void VertexAttribPointer( GLuint index, int size, int type, GLboolean normalized, int stride, uint pointer );
 
@@ -4739,7 +4739,7 @@ public partial interface IGLBindings
     /// Return the boolean value of a selected indexed state variable
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet" /> for a list of
+    /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet"/> for a list of
     /// possible targets.
     /// </param>
     /// <param name="index">Specifies the index of the indexed state variable to be queried.</param>
@@ -4750,18 +4750,18 @@ public partial interface IGLBindings
     /// Return the boolean value of a selected indexed state variable
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet" /> for a list of
+    /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet"/> for a list of
     /// possible targets.
     /// </param>
     /// <param name="index">Specifies the index of the indexed state variable to be queried.</param>
-    /// <param name="data">A <see langword="ref" /> to an array to receive the data.</param>
+    /// <param name="data">A <see langword="ref"/> to an array to receive the data.</param>
     void GetBooleani_v( int target, uint index, ref bool[] data );
 
     /// <summary>
     /// Return the integer value of a selected indexed state variable
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet" /> for a list of
+    /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet"/> for a list of
     /// possible targets.
     /// </param>
     /// <param name="index">Specifies the index of the indexed state variable to be queried.</param>
@@ -4772,11 +4772,11 @@ public partial interface IGLBindings
     /// Return the integer value of a selected indexed state variable
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet" /> for a list of
+    /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet"/> for a list of
     /// possible targets.
     /// </param>
     /// <param name="index">Specifies the index of the indexed state variable to be queried.</param>
-    /// <param name="data">A <see langword="ref" /> to an array to receive the data.</param>
+    /// <param name="data">A <see langword="ref"/> to an array to receive the data.</param>
     void GetIntegeri_v( int target, uint index, ref int[] data );
 
     /// <summary>
@@ -4784,7 +4784,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target of the capability to enable. Refer to
-    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible capabilities.
+    /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible capabilities.
     /// </param>
     /// <param name="index">Specifies the index of the target to enable or disable.</param>
     void Enablei( int target, uint index );
@@ -4794,7 +4794,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target of the capability to enable. Refer to
-    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible capabilities.
+    /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible capabilities.
     /// </param>
     /// <param name="index">Specifies the index of the target to enable or disable.</param>
     void Disablei( int target, uint index );
@@ -4804,7 +4804,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target of the capability to enable. Refer to
-    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible capabilities.
+    /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible capabilities.
     /// </param>
     /// <param name="index">Specifies the index of the target to enable or disable.</param>
     bool IsEnabledi( int target, uint index );
@@ -4813,12 +4813,12 @@ public partial interface IGLBindings
     /// Start transform feedback operations
     /// </summary>
     /// <param name="primitiveMode">
-    /// Specifies the mode used to capture vertex data. Symbolic constants <see cref="GL_POINTS" />
-    /// , <see cref="GL_LINES" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINE_STRIP" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES_ADJACENCY" /> and
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> are accepted. Refer to
-    /// <see href="https://docs.gl/gl4/glBeginTransformFeedback" /> for some quirks regarding this parameter.
+    /// Specifies the mode used to capture vertex data. Symbolic constants <see cref="GL_POINTS"/>
+    /// , <see cref="GL_LINES"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINE_STRIP"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES_ADJACENCY"/> and
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> are accepted. Refer to
+    /// <see href="https://docs.gl/gl4/glBeginTransformFeedback"/> for some quirks regarding this parameter.
     /// </param>
     void BeginTransformFeedback( int primitiveMode );
 
@@ -4831,11 +4831,11 @@ public partial interface IGLBindings
     /// Bind a range of a buffer object to an indexed buffer target
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the bind operation. <paramref name="target" /> must be one of
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" />,
-    /// <see cref="GL_UNIFORM_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />.
+    /// Specifies the target of the bind operation. <paramref name="target"/> must be one of
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/>,
+    /// <see cref="GL_UNIFORM_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>.
     /// </param>
-    /// <param name="index">Specifies the index of the binding point within the array specified by <paramref name="target" />.</param>
+    /// <param name="index">Specifies the index of the binding point within the array specified by <paramref name="target"/>.</param>
     /// <param name="buffer">Specifies the name of a buffer object whose storage to bind to the specified binding point.</param>
     /// <param name="offset">Specifies the starting offset within the buffer of the range to bind.</param>
     /// <param name="size">
@@ -4848,11 +4848,11 @@ public partial interface IGLBindings
     /// Bind a buffer object to an indexed buffer target
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the bind operation. <paramref name="target" /> must be one of
-    /// <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" />,
-    /// <see cref="GL_UNIFORM_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />.
+    /// Specifies the target of the bind operation. <paramref name="target"/> must be one of
+    /// <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/>,
+    /// <see cref="GL_UNIFORM_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>.
     /// </param>
-    /// <param name="index">Specifies the index of the binding point within the array specified by <paramref name="target" />.</param>
+    /// <param name="index">Specifies the index of the binding point within the array specified by <paramref name="target"/>.</param>
     /// <param name="buffer">Specifies the name of a buffer object whose storage to bind to the specified binding point.</param>
     void BindBufferBase( int target, uint index, uint buffer );
 
@@ -4866,12 +4866,12 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="varyings">
     /// Specifies an array of pointers to buffers into which to place the names of the transform
-    /// feedback varyings for the program named by <paramref name="program" />.
+    /// feedback varyings for the program named by <paramref name="program"/>.
     /// </param>
     /// <param name="bufferMode">
     /// Specifies the mode used to capture the varying variables when transform feedback is active.
-    /// <paramref name="bufferMode" /> must be one of <see cref="GL_INTERLEAVED_ATTRIBS" /> or
-    /// <see cref="GL_SEPARATE_ATTRIBS" />.
+    /// <paramref name="bufferMode"/> must be one of <see cref="GL_INTERLEAVED_ATTRIBS"/> or
+    /// <see cref="GL_SEPARATE_ATTRIBS"/>.
     /// </param>
     unsafe void TransformFeedbackVaryings( uint program, int count, byte** varyings, int bufferMode );
 
@@ -4882,8 +4882,8 @@ public partial interface IGLBindings
     /// <param name="varyings">Specifies an array of names of varying variables to use for transform feedback.</param>
     /// <param name="bufferMode">
     /// Specifies the mode used to capture the varying variables when transform feedback is active.
-    /// <paramref name="bufferMode" /> must be one of <see cref="GL_INTERLEAVED_ATTRIBS" /> or
-    /// <see cref="GL_SEPARATE_ATTRIBS" />.
+    /// <paramref name="bufferMode"/> must be one of <see cref="GL_INTERLEAVED_ATTRIBS"/> or
+    /// <see cref="GL_SEPARATE_ATTRIBS"/>.
     /// </param>
     void TransformFeedbackVaryings( uint program, string[] varyings, int bufferMode );
 
@@ -4894,9 +4894,9 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the varying variable to query.</param>
     /// <param name="bufSize">
     /// Specifies the maximum number of characters OpenGL is allowed to write into
-    /// <paramref name="name" />.
+    /// <paramref name="name"/>.
     /// </param>
-    /// <param name="length">Returns the number of characters actually written by OpenGL into <paramref name="name" />.</param>
+    /// <param name="length">Returns the number of characters actually written by OpenGL into <paramref name="name"/>.</param>
     /// <param name="size">Returns the size of the requested varying variable.</param>
     /// <param name="type">Returns the data type of the requested varying variable.</param>
     /// <param name="name">Returns a null-terminated string containing the name of the requested varying variable.</param>
@@ -4922,12 +4922,12 @@ public partial interface IGLBindings
     string GetTransformFeedbackVarying( uint program, uint index, int bufSize, out int size, out int type );
 
     /// <summary>
-    /// Specify whether data read via <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.ReadPixels" /> should be clamped.
+    /// Specify whether data read via <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.ReadPixels"/> should be clamped.
     /// </summary>
-    /// <param name="target">Specifies the target to be clamped. Must be <see cref="GL_CLAMP_READ_COLOR" />.</param>
+    /// <param name="target">Specifies the target to be clamped. Must be <see cref="GL_CLAMP_READ_COLOR"/>.</param>
     /// <param name="clamp">
-    /// Specifies whether to apply color clamping. <see langword="true" /> specifies that clamping is
-    /// enabled, <see langword="false" /> specifies that clamping is disabled.
+    /// Specifies whether to apply color clamping. <see langword="true"/> specifies that clamping is
+    /// enabled, <see langword="false"/> specifies that clamping is disabled.
     /// </param>
     void ClampColor( int target, int clamp );
 
@@ -4939,7 +4939,7 @@ public partial interface IGLBindings
     /// commands are discarded or not.
     /// </param>
     /// <param name="mode">
-    /// Specifies how <see cref="BeginConditionalRender" /> interprets the results of the occlusion
+    /// Specifies how <see cref="BeginConditionalRender"/> interprets the results of the occlusion
     /// query.
     /// </param>
     void BeginConditionalRender( uint id, int mode );
@@ -4955,9 +4955,9 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="size">Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4.</param>
     /// <param name="type">
-    /// Specifies the data type of each component in the array. Must be one of <see cref="GL_BYTE" />,
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_SHORT" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_INT" />,
-    /// <see cref="GL_UNSIGNED_INT" /> or <see cref="GL_DOUBLE" />.
+    /// Specifies the data type of each component in the array. Must be one of <see cref="GL_BYTE"/>,
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_SHORT"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_INT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/> or <see cref="GL_DOUBLE"/>.
     /// </param>
     /// <param name="stride">
     /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the
@@ -4965,7 +4965,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pointer">
     /// Specifies an offset of the first component of the first generic vertex attribute in the array in
-    /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER" /> target. The initial value is 0.
+    /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER"/> target. The initial value is 0.
     /// </param>
     void VertexAttribIPointer( uint index, int size, int type, int stride, IntPtr pointer );
 
@@ -4975,9 +4975,9 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="size">Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4.</param>
     /// <param name="type">
-    /// Specifies the data type of each component in the array. Must be one of <see cref="GL_BYTE" />,
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_SHORT" />, <see cref="GL_UNSIGNED_SHORT" />, <see cref="GL_INT" />,
-    /// <see cref="GL_UNSIGNED_INT" /> or <see cref="GL_DOUBLE" />.
+    /// Specifies the data type of each component in the array. Must be one of <see cref="GL_BYTE"/>,
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_SHORT"/>, <see cref="GL_UNSIGNED_SHORT"/>, <see cref="GL_INT"/>,
+    /// <see cref="GL_UNSIGNED_INT"/> or <see cref="GL_DOUBLE"/>.
     /// </param>
     /// <param name="stride">
     /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the
@@ -4985,7 +4985,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pointer">
     /// Specifies an offset of the first component of the first generic vertex attribute in the array in
-    /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER" /> target. The initial value is 0.
+    /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER"/> target. The initial value is 0.
     /// </param>
     void VertexAttribIPointer( uint index, int size, int type, int stride, uint pointer );
 
@@ -4995,11 +4995,11 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the generic vertex attribute parameter to be queried. Must be one of
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />.
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>.
     /// </param>
     /// <param name="parameters">Returns the requested parameter.</param>
     unsafe void GetVertexAttribIiv( uint index, int pname, int* parameters );
@@ -5010,13 +5010,13 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the generic vertex attribute parameter to be queried. Must be one of
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />.
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an array into which the returned values will be placed.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an array into which the returned values will be placed.</param>
     void GetVertexAttribIiv( uint index, int pname, ref int[] parameters );
 
     /// <summary>
@@ -5025,11 +5025,11 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the generic vertex attribute parameter to be queried. Must be one of
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />.
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>.
     /// </param>
     /// <param name="parameters">Returns the requested parameter.</param>
     unsafe void GetVertexAttribIuiv( uint index, int pname, uint* parameters );
@@ -5040,13 +5040,13 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of the generic vertex attribute parameter to be queried. Must be one of
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED" />,
-    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER" />, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR" />,
-    /// <see cref="GL_CURRENT_VERTEX_ATTRIB" />.
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_ENABLED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_SIZE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_STRIDE"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_TYPE"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_NORMALIZED"/>,
+    /// <see cref="GL_VERTEX_ATTRIB_ARRAY_INTEGER"/>, <see cref="GL_VERTEX_ATTRIB_ARRAY_DIVISOR"/>,
+    /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an array into which the returned values will be placed.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an array into which the returned values will be placed.</param>
     void GetVertexAttribIuiv( uint index, int pname, ref uint[] parameters );
 
     /// <summary>
@@ -5298,7 +5298,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object containing the uniform variable to be queried.</param>
     /// <param name="location">Specifies the location of the uniform variable to be queried.</param>
-    /// <param name="parameters">A <see langword="ref" /> to an array to receive the value of the specified uniform variable.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an array to receive the value of the specified uniform variable.</param>
     void GetUniformuiv( uint program, int location, ref uint[] parameters );
 
     /// <summary>
@@ -5322,7 +5322,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="name">Specifies the name of the user-defined varying out variable whose location is to be queried.</param>
-    /// <returns>The location of the user-defined varying out variable specified by <paramref name="name" /> is returned.</returns>
+    /// <returns>The location of the user-defined varying out variable specified by <paramref name="name"/> is returned.</returns>
     unsafe int GetFragDataLocation( uint program, byte* name );
 
     /// <summary>
@@ -5330,7 +5330,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="name">Specifies the name of the user-defined varying out variable whose location is to be queried.</param>
-    /// <returns>The location of the user-defined varying out variable specified by <paramref name="name" /> is returned.</returns>
+    /// <returns>The location of the user-defined varying out variable specified by <paramref name="name"/> is returned.</returns>
     int GetFragDataLocation( uint program, string name );
 
     /// <summary>
@@ -5373,7 +5373,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform1uiv( int location, int count, uint* value );
@@ -5391,7 +5391,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform2uiv( int location, int count, uint* value );
@@ -5409,7 +5409,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform3uiv( int location, int count, uint* value );
@@ -5427,7 +5427,7 @@ public partial interface IGLBindings
     /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
     /// <param name="value">
-    /// Specifies a pointer to an array of <paramref name="count" /> values that will be used to update the
+    /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
     unsafe void Uniform4uiv( int location, int count, uint* value );
@@ -5443,42 +5443,42 @@ public partial interface IGLBindings
     /// Set the value of a texture parameter for the current texture unit, with integer values
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname" /> can be
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" /> or <see cref="GL_TEXTURE_WRAP_R" />.
+    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname"/> can be
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     unsafe void TexParameterIiv( int target, int pname, int* param );
 
     /// <summary>
     /// Set the value of a texture parameter for the current texture unit, with integer values
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname" /> can be
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" /> or <see cref="GL_TEXTURE_WRAP_R" />.
+    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname"/> can be
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
     /// <param name="param">Specifies an array of values that will be used to update the specified texture parameter.</param>
     void TexParameterIiv( int target, int pname, int[] param );
@@ -5487,42 +5487,42 @@ public partial interface IGLBindings
     /// Set the value of a texture parameter for the current texture unit, with unsigned integer values
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname" /> can be
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" /> or <see cref="GL_TEXTURE_WRAP_R" />.
+    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname"/> can be
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     unsafe void TexParameterIuiv( int target, int pname, uint* param );
 
     /// <summary>
     /// Set the value of a texture parameter for the current texture unit, with unsigned integer values
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname" /> can be
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" /> or <see cref="GL_TEXTURE_WRAP_R" />.
+    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname"/> can be
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
     /// <param name="param">Specifies an array of values that will be used to update the specified texture parameter.</param>
     void TexParameterIuiv( int target, int pname, uint[] param );
@@ -5531,20 +5531,20 @@ public partial interface IGLBindings
     /// Get the value of a texture parameter for the current texture unit, with signed integer values
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname" /> can be
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" /> or <see cref="GL_TEXTURE_WRAP_R" />.
+    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname"/> can be
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
     /// <param name="parameters">Returns the texture parameter value.</param>
     unsafe void GetTexParameterIiv( int target, int pname, int* parameters );
@@ -5553,42 +5553,42 @@ public partial interface IGLBindings
     /// Get the value of a texture parameter for the current texture unit, with signed integer values
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname" /> can be
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" /> or <see cref="GL_TEXTURE_WRAP_R" />.
+    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname"/> can be
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an array to receive the texture parameter value.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an array to receive the texture parameter value.</param>
     void GetTexParameterIiv( int target, int pname, ref int[] parameters );
 
     /// <summary>
     /// Get the value of a texture parameter for the current texture unit, with unsigned integer values
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname" /> can be
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" /> or <see cref="GL_TEXTURE_WRAP_R" />.
+    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname"/> can be
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
     /// <param name="parameters">Returns the texture parameter value.</param>
     unsafe void GetTexParameterIuiv( int target, int pname, uint* parameters );
@@ -5597,103 +5597,103 @@ public partial interface IGLBindings
     /// Get the value of a texture parameter for the current texture unit, with unsigned integer values
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D" />,
-    /// <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE" />, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" /> or
-    /// <see cref="GL_TEXTURE_RECTANGLE" />.
+    /// Specifies the target texture, which must be either <see cref="GL_TEXTURE_1D"/>,
+    /// <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="GL_TEXTURE_RECTANGLE"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname" /> can be
-    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE" />, <see cref="GL_TEXTURE_BASE_LEVEL" />,
-    /// <see cref="GL_TEXTURE_COMPARE_FUNC" />, <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_MIN_LOD" />,
-    /// <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_MAX_LEVEL" />, <see cref="GL_TEXTURE_SWIZZLE_R" />,
-    /// <see cref="GL_TEXTURE_SWIZZLE_G" />, <see cref="GL_TEXTURE_SWIZZLE_B" />, <see cref="GL_TEXTURE_SWIZZLE_A" />,
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" /> or <see cref="GL_TEXTURE_WRAP_R" />.
+    /// Specifies the symbolic name of a single-valued texture parameter. <paramref name="pname"/> can be
+    /// <see cref="GL_DEPTH_STENCIL_TEXTURE_MODE"/>, <see cref="GL_TEXTURE_BASE_LEVEL"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_FUNC"/>, <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_MIN_LOD"/>,
+    /// <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_MAX_LEVEL"/>, <see cref="GL_TEXTURE_SWIZZLE_R"/>,
+    /// <see cref="GL_TEXTURE_SWIZZLE_G"/>, <see cref="GL_TEXTURE_SWIZZLE_B"/>, <see cref="GL_TEXTURE_SWIZZLE_A"/>,
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an array to receive the texture parameter value.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an array to receive the texture parameter value.</param>
     void GetTexParameterIuiv( int target, int pname, ref uint[] parameters );
 
     /// <summary>
-    /// Clear a buffer to an integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer" /> for details on how to
+    /// Clear a buffer to an integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on how to
     /// use this function.
     /// </summary>
     /// <param name="buffer">
-    /// Specifies the buffer to clear. <paramref name="buffer" /> must be one of <see cref="GL_COLOR" />,
-    /// <see cref="GL_DEPTH" />, <see cref="GL_STENCIL" />.
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="GL_COLOR"/>,
+    /// <see cref="GL_DEPTH"/>, <see cref="GL_STENCIL"/>.
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
     unsafe void ClearBufferiv( int buffer, int drawbuffer, int* value );
 
     /// <summary>
-    /// Clear a buffer to an integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer" /> for details on how to
+    /// Clear a buffer to an integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on how to
     /// use this function.
     /// </summary>
     /// <param name="buffer">
-    /// Specifies the buffer to clear. <paramref name="buffer" /> must be one of <see cref="GL_COLOR" />,
-    /// <see cref="GL_DEPTH" />, <see cref="GL_STENCIL" />.
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="GL_COLOR"/>,
+    /// <see cref="GL_DEPTH"/>, <see cref="GL_STENCIL"/>.
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
     void ClearBufferiv( int buffer, int drawbuffer, int[] value );
 
     /// <summary>
-    /// Clear a buffer to an unsigned integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer" /> for details
+    /// Clear a buffer to an unsigned integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details
     /// on how to use this function.
     /// </summary>
     /// <param name="buffer">
-    /// Specifies the buffer to clear. <paramref name="buffer" /> must be one of <see cref="GL_COLOR" />,
-    /// <see cref="GL_DEPTH" />, <see cref="GL_STENCIL" />.
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="GL_COLOR"/>,
+    /// <see cref="GL_DEPTH"/>, <see cref="GL_STENCIL"/>.
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
     unsafe void ClearBufferuiv( int buffer, int drawbuffer, uint* value );
 
     /// <summary>
-    /// Clear a buffer to an unsigned integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer" /> for details
+    /// Clear a buffer to an unsigned integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details
     /// on how to use this function.
     /// </summary>
     /// <param name="buffer">
-    /// Specifies the buffer to clear. <paramref name="buffer" /> must be one of <see cref="GL_COLOR" />,
-    /// <see cref="GL_DEPTH" />, <see cref="GL_STENCIL" />.
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="GL_COLOR"/>,
+    /// <see cref="GL_DEPTH"/>, <see cref="GL_STENCIL"/>.
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
     void ClearBufferuiv( int buffer, int drawbuffer, uint[] value );
 
     /// <summary>
-    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer" /> for details on
+    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on
     /// how to use this function.
     /// </summary>
     /// <param name="buffer">
-    /// Specifies the buffer to clear. <paramref name="buffer" /> must be one of <see cref="GL_COLOR" />,
-    /// <see cref="GL_DEPTH" />, <see cref="GL_STENCIL" />.
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="GL_COLOR"/>,
+    /// <see cref="GL_DEPTH"/>, <see cref="GL_STENCIL"/>.
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
     unsafe void ClearBufferfv( int buffer, int drawbuffer, float* value );
 
     /// <summary>
-    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer" /> for details on
+    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on
     /// how to use this function.
     /// </summary>
     /// <param name="buffer">
-    /// Specifies the buffer to clear. <paramref name="buffer" /> must be one of <see cref="GL_COLOR" />,
-    /// <see cref="GL_DEPTH" />, <see cref="GL_STENCIL" />.
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="GL_COLOR"/>,
+    /// <see cref="GL_DEPTH"/>, <see cref="GL_STENCIL"/>.
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
     void ClearBufferfv( int buffer, int drawbuffer, float[] value );
 
     /// <summary>
-    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer" /> for details on
+    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on
     /// how to use this function.
     /// </summary>
     /// <param name="buffer">
-    /// Specifies the buffer to clear. <paramref name="buffer" /> must be one of
-    /// <see cref="GL_DEPTH_STENCIL" />.
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of
+    /// <see cref="GL_DEPTH_STENCIL"/>.
     /// </param>
     /// <param name="drawbuffer">Must be zero.</param>
     /// <param name="depth">Specifies the value to clear the depth buffer to.</param>
@@ -5704,8 +5704,8 @@ public partial interface IGLBindings
     /// Returns a string describing the current  connection.
     /// </summary>
     /// <param name="name">
-    /// Specifies a symbolic constant, one of <see cref="GL_VENDOR" />, <see cref="GL_RENDERER" />,
-    /// <see cref="GL_VERSION" />, <see cref="GL_SHADING_LANGUAGE_VERSION" /> or <see cref="GL_EXTENSIONS" />.
+    /// Specifies a symbolic constant, one of <see cref="GL_VENDOR"/>, <see cref="GL_RENDERER"/>,
+    /// <see cref="GL_VERSION"/>, <see cref="GL_SHADING_LANGUAGE_VERSION"/> or <see cref="GL_EXTENSIONS"/>.
     /// </param>
     /// <param name="index">Specifies the index of the string to return.</param>
     /// <returns>The requested string.</returns>
@@ -5715,8 +5715,8 @@ public partial interface IGLBindings
     /// Returns a string describing the current  connection.
     /// </summary>
     /// <param name="name">
-    /// Specifies a symbolic constant, one of <see cref="GL_VENDOR" />, <see cref="GL_RENDERER" />,
-    /// <see cref="GL_VERSION" />, <see cref="GL_SHADING_LANGUAGE_VERSION" /> or <see cref="GL_EXTENSIONS" />.
+    /// Specifies a symbolic constant, one of <see cref="GL_VENDOR"/>, <see cref="GL_RENDERER"/>,
+    /// <see cref="GL_VERSION"/>, <see cref="GL_SHADING_LANGUAGE_VERSION"/> or <see cref="GL_EXTENSIONS"/>.
     /// </param>
     /// <param name="index">Specifies the index of the string to return.</param>
     /// <returns>The requested string.</returns>
@@ -5727,8 +5727,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="renderbuffer">Specifies a value that may be the name of a renderbuffer object.</param>
     /// <returns>
-    /// <see langword="true" /> if <paramref name="renderbuffer" /> is the name of a renderbuffer object.
-    /// <see langword="false" /> otherwise.
+    /// <see langword="true"/> if <paramref name="renderbuffer"/> is the name of a renderbuffer object.
+    /// <see langword="false"/> otherwise.
     /// </returns>
     bool IsRenderbuffer( uint renderbuffer );
 
@@ -5736,8 +5736,8 @@ public partial interface IGLBindings
     /// Bind a named renderbuffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the renderbuffer target of the binding operation. <paramref name="target" /> must be
-    /// <see cref="GL_RENDERBUFFER" />.
+    /// Specifies the renderbuffer target of the binding operation. <paramref name="target"/> must be
+    /// <see cref="GL_RENDERBUFFER"/>.
     /// </param>
     /// <param name="renderbuffer">Specifies the name of the renderbuffer object to bind.</param>
     void BindRenderbuffer( int target, uint renderbuffer );
@@ -5747,7 +5747,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="n">Specifies the number of renderbuffer objects to be deleted.</param>
     /// <param name="renderbuffers">
-    /// Specifies an array of <paramref name="n" /> values, each of which contains a renderbuffer
+    /// Specifies an array of <paramref name="n"/> values, each of which contains a renderbuffer
     /// object name to be deleted.
     /// </param>
     unsafe void DeleteRenderbuffers( int n, uint* renderbuffers );
@@ -5783,7 +5783,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies a binding to which the target of the allocation and must be
-    /// <see cref="GL_RENDERBUFFER" />.
+    /// <see cref="GL_RENDERBUFFER"/>.
     /// </param>
     /// <param name="internalFormat">Specifies the internal format to use for the renderbuffer object's image.</param>
     /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
@@ -5794,16 +5794,16 @@ public partial interface IGLBindings
     /// Return renderbuffer object parameter values.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the query operation. <paramref name="target" /> must be
-    /// <see cref="GL_RENDERBUFFER" />.
+    /// Specifies the target of the query operation. <paramref name="target"/> must be
+    /// <see cref="GL_RENDERBUFFER"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a renderbuffer object parameter. <paramref name="pname" /> can be
-    /// one of the following: <see cref="GL_RENDERBUFFER_WIDTH" />, <see cref="GL_RENDERBUFFER_HEIGHT" />,
-    /// <see cref="GL_RENDERBUFFER_INTERNAL_FORMAT" />, <see cref="GL_RENDERBUFFER_SAMPLES" />,
-    /// <see cref="GL_RENDERBUFFER_RED_SIZE" />, <see cref="GL_RENDERBUFFER_GREEN_SIZE" />,
-    /// <see cref="GL_RENDERBUFFER_BLUE_SIZE" />, <see cref="GL_RENDERBUFFER_ALPHA_SIZE" />,
-    /// <see cref="GL_RENDERBUFFER_DEPTH_SIZE" />, or <see cref="GL_RENDERBUFFER_STENCIL_SIZE" />.
+    /// Specifies the symbolic name of a renderbuffer object parameter. <paramref name="pname"/> can be
+    /// one of the following: <see cref="GL_RENDERBUFFER_WIDTH"/>, <see cref="GL_RENDERBUFFER_HEIGHT"/>,
+    /// <see cref="GL_RENDERBUFFER_INTERNAL_FORMAT"/>, <see cref="GL_RENDERBUFFER_SAMPLES"/>,
+    /// <see cref="GL_RENDERBUFFER_RED_SIZE"/>, <see cref="GL_RENDERBUFFER_GREEN_SIZE"/>,
+    /// <see cref="GL_RENDERBUFFER_BLUE_SIZE"/>, <see cref="GL_RENDERBUFFER_ALPHA_SIZE"/>,
+    /// <see cref="GL_RENDERBUFFER_DEPTH_SIZE"/>, or <see cref="GL_RENDERBUFFER_STENCIL_SIZE"/>.
     /// </param>
     /// <param name="parameters">Specifies the address of a variable to receive the value of the queried parameter.</param>
     unsafe void GetRenderbufferParameteriv( int target, int pname, int* parameters );
@@ -5812,18 +5812,18 @@ public partial interface IGLBindings
     /// Return renderbuffer object parameter values.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the query operation. <paramref name="target" /> must be
-    /// <see cref="GL_RENDERBUFFER" />.
+    /// Specifies the target of the query operation. <paramref name="target"/> must be
+    /// <see cref="GL_RENDERBUFFER"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a renderbuffer object parameter. <paramref name="pname" /> can be
-    /// one of the following: <see cref="GL_RENDERBUFFER_WIDTH" />, <see cref="GL_RENDERBUFFER_HEIGHT" />,
-    /// <see cref="GL_RENDERBUFFER_INTERNAL_FORMAT" />, <see cref="GL_RENDERBUFFER_SAMPLES" />,
-    /// <see cref="GL_RENDERBUFFER_RED_SIZE" />, <see cref="GL_RENDERBUFFER_GREEN_SIZE" />,
-    /// <see cref="GL_RENDERBUFFER_BLUE_SIZE" />, <see cref="GL_RENDERBUFFER_ALPHA_SIZE" />,
-    /// <see cref="GL_RENDERBUFFER_DEPTH_SIZE" />, or <see cref="GL_RENDERBUFFER_STENCIL_SIZE" />.
+    /// Specifies the symbolic name of a renderbuffer object parameter. <paramref name="pname"/> can be
+    /// one of the following: <see cref="GL_RENDERBUFFER_WIDTH"/>, <see cref="GL_RENDERBUFFER_HEIGHT"/>,
+    /// <see cref="GL_RENDERBUFFER_INTERNAL_FORMAT"/>, <see cref="GL_RENDERBUFFER_SAMPLES"/>,
+    /// <see cref="GL_RENDERBUFFER_RED_SIZE"/>, <see cref="GL_RENDERBUFFER_GREEN_SIZE"/>,
+    /// <see cref="GL_RENDERBUFFER_BLUE_SIZE"/>, <see cref="GL_RENDERBUFFER_ALPHA_SIZE"/>,
+    /// <see cref="GL_RENDERBUFFER_DEPTH_SIZE"/>, or <see cref="GL_RENDERBUFFER_STENCIL_SIZE"/>.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an array which will receive the value of the queried parameter.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an array which will receive the value of the queried parameter.</param>
     void GetRenderbufferParameteriv( int target, int pname, ref int[] parameters );
 
     /// <summary>
@@ -5831,8 +5831,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="framebuffer">Specifies a value that may be the name of a framebuffer object.</param>
     /// <returns>
-    /// <see langword="true" /> if <paramref name="framebuffer" /> is the name of a framebuffer object.
-    /// <see langword="false" /> otherwise.
+    /// <see langword="true"/> if <paramref name="framebuffer"/> is the name of a framebuffer object.
+    /// <see langword="false"/> otherwise.
     /// </returns>
     bool IsFramebuffer( uint framebuffer );
 
@@ -5840,8 +5840,8 @@ public partial interface IGLBindings
     /// Bind a named framebuffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the bind operation. <paramref name="target" /> must be one of
-    /// <see cref="GL_FRAMEBUFFER" />, <see cref="GL_DRAW_FRAMEBUFFER" /> or <see cref="GL_READ_FRAMEBUFFER" />.
+    /// Specifies the target of the bind operation. <paramref name="target"/> must be one of
+    /// <see cref="GL_FRAMEBUFFER"/>, <see cref="GL_DRAW_FRAMEBUFFER"/> or <see cref="GL_READ_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="framebuffer">Specifies the name of a framebuffer object.</param>
     void BindFramebuffer( int target, uint framebuffer );
@@ -5883,12 +5883,12 @@ public partial interface IGLBindings
     /// Check the completeness status of a framebuffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the framebuffer completeness check. <paramref name="target" /> must be one
-    /// of <see cref="GL_FRAMEBUFFER" />, <see cref="GL_DRAW_FRAMEBUFFER" /> or <see cref="GL_READ_FRAMEBUFFER" />.
+    /// Specifies the target of the framebuffer completeness check. <paramref name="target"/> must be one
+    /// of <see cref="GL_FRAMEBUFFER"/>, <see cref="GL_DRAW_FRAMEBUFFER"/> or <see cref="GL_READ_FRAMEBUFFER"/>.
     /// </param>
     /// <returns>
-    /// The framebuffer completeness status of <paramref name="target" />. Refer to
-    /// <see href="https://docs.gl/gl4/glCheckFramebufferStatus" /> for a list of all possible values.
+    /// The framebuffer completeness status of <paramref name="target"/>. Refer to
+    /// <see href="https://docs.gl/gl4/glCheckFramebufferStatus"/> for a list of all possible values.
     /// </returns>
     int CheckFramebufferStatus( int target );
 
@@ -5896,13 +5896,13 @@ public partial interface IGLBindings
     /// Attach a level of a 1D texture object as a logical buffer to the currently bound framebuffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the framebuffer target. <paramref name="target" /> must be one of
-    /// <see cref="GL_FRAMEBUFFER" />, <see cref="GL_DRAW_FRAMEBUFFER" /> or <see cref="GL_READ_FRAMEBUFFER" />.
+    /// Specifies the framebuffer target. <paramref name="target"/> must be one of
+    /// <see cref="GL_FRAMEBUFFER"/>, <see cref="GL_DRAW_FRAMEBUFFER"/> or <see cref="GL_READ_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="attachment">
-    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0" />
-    /// through <see cref="GL_COLOR_ATTACHMENT31" />, <see cref="GL_DEPTH_ATTACHMENT" />,
-    /// <see cref="GL_STENCIL_ATTACHMENT" />, <see cref="GL_DEPTH_STENCIL_ATTACHMENT" />.
+    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0"/>
+    /// through <see cref="GL_COLOR_ATTACHMENT31"/>, <see cref="GL_DEPTH_ATTACHMENT"/>,
+    /// <see cref="GL_STENCIL_ATTACHMENT"/>, <see cref="GL_DEPTH_STENCIL_ATTACHMENT"/>.
     /// </param>
     /// <param name="textarget">Specifies the type of texture.</param>
     /// <param name="texture">Specifies the name of an existing 1D texture object.</param>
@@ -5913,13 +5913,13 @@ public partial interface IGLBindings
     /// Attach a level of a 2D texture object as a logical buffer to the currently bound framebuffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the framebuffer target. <paramref name="target" /> must be one of
-    /// <see cref="GL_FRAMEBUFFER" />, <see cref="GL_DRAW_FRAMEBUFFER" /> or <see cref="GL_READ_FRAMEBUFFER" />.
+    /// Specifies the framebuffer target. <paramref name="target"/> must be one of
+    /// <see cref="GL_FRAMEBUFFER"/>, <see cref="GL_DRAW_FRAMEBUFFER"/> or <see cref="GL_READ_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="attachment">
-    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0" />
-    /// through <see cref="GL_COLOR_ATTACHMENT31" />, <see cref="GL_DEPTH_ATTACHMENT" />,
-    /// <see cref="GL_STENCIL_ATTACHMENT" />, <see cref="GL_DEPTH_STENCIL_ATTACHMENT" />.
+    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0"/>
+    /// through <see cref="GL_COLOR_ATTACHMENT31"/>, <see cref="GL_DEPTH_ATTACHMENT"/>,
+    /// <see cref="GL_STENCIL_ATTACHMENT"/>, <see cref="GL_DEPTH_STENCIL_ATTACHMENT"/>.
     /// </param>
     /// <param name="textarget">Specifies the type of texture.</param>
     /// <param name="texture">Specifies the name of an existing 2D texture object.</param>
@@ -5930,13 +5930,13 @@ public partial interface IGLBindings
     /// Attach a level of a 3D texture object as a logical buffer to the currently bound framebuffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the framebuffer target. <paramref name="target" /> must be one of
-    /// <see cref="GL_FRAMEBUFFER" />, <see cref="GL_DRAW_FRAMEBUFFER" /> or <see cref="GL_READ_FRAMEBUFFER" />.
+    /// Specifies the framebuffer target. <paramref name="target"/> must be one of
+    /// <see cref="GL_FRAMEBUFFER"/>, <see cref="GL_DRAW_FRAMEBUFFER"/> or <see cref="GL_READ_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="attachment">
-    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0" />
-    /// through <see cref="GL_COLOR_ATTACHMENT31" />, <see cref="GL_DEPTH_ATTACHMENT" />,
-    /// <see cref="GL_STENCIL_ATTACHMENT" />, <see cref="GL_DEPTH_STENCIL_ATTACHMENT" />.
+    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0"/>
+    /// through <see cref="GL_COLOR_ATTACHMENT31"/>, <see cref="GL_DEPTH_ATTACHMENT"/>,
+    /// <see cref="GL_STENCIL_ATTACHMENT"/>, <see cref="GL_DEPTH_STENCIL_ATTACHMENT"/>.
     /// </param>
     /// <param name="textarget">Specifies the type of texture.</param>
     /// <param name="texture">Specifies the name of an existing 3D texture object.</param>
@@ -5948,21 +5948,21 @@ public partial interface IGLBindings
     /// Attach a renderbuffer as a logical buffer to the currently bound framebuffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the framebuffer target. <paramref name="target" /> must be one of
-    /// <see cref="GL_FRAMEBUFFER" />, <see cref="GL_DRAW_FRAMEBUFFER" /> or <see cref="GL_READ_FRAMEBUFFER" />.
+    /// Specifies the framebuffer target. <paramref name="target"/> must be one of
+    /// <see cref="GL_FRAMEBUFFER"/>, <see cref="GL_DRAW_FRAMEBUFFER"/> or <see cref="GL_READ_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="attachment">
-    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0" />
-    /// through <see cref="GL_COLOR_ATTACHMENT31" />, <see cref="GL_DEPTH_ATTACHMENT" />,
-    /// <see cref="GL_STENCIL_ATTACHMENT" />, <see cref="GL_DEPTH_STENCIL_ATTACHMENT" />.
+    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0"/>
+    /// through <see cref="GL_COLOR_ATTACHMENT31"/>, <see cref="GL_DEPTH_ATTACHMENT"/>,
+    /// <see cref="GL_STENCIL_ATTACHMENT"/>, <see cref="GL_DEPTH_STENCIL_ATTACHMENT"/>.
     /// </param>
     /// <param name="renderbuffertarget">
-    /// Specifies the renderbuffer target. <paramref name="renderbuffertarget" /> must be
-    /// <see cref="GL_RENDERBUFFER" />.
+    /// Specifies the renderbuffer target. <paramref name="renderbuffertarget"/> must be
+    /// <see cref="GL_RENDERBUFFER"/>.
     /// </param>
     /// <param name="renderbuffer">
     /// Specifies the name of an existing renderbuffer object of type
-    /// <paramref name="renderbuffertarget" />.
+    /// <paramref name="renderbuffertarget"/>.
     /// </param>
     void FramebufferRenderbuffer( int target, int attachment, int renderbuffertarget, uint renderbuffer );
 
@@ -5970,17 +5970,17 @@ public partial interface IGLBindings
     /// Return parameters of a framebuffer attachment.
     /// </summary>
     /// <param name="target">
-    /// Specifies the framebuffer target. <paramref name="target" /> must be one of
-    /// <see cref="GL_FRAMEBUFFER" />, <see cref="GL_DRAW_FRAMEBUFFER" /> or <see cref="GL_READ_FRAMEBUFFER" />.
+    /// Specifies the framebuffer target. <paramref name="target"/> must be one of
+    /// <see cref="GL_FRAMEBUFFER"/>, <see cref="GL_DRAW_FRAMEBUFFER"/> or <see cref="GL_READ_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="attachment">
-    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0" />
-    /// through <see cref="GL_COLOR_ATTACHMENT31" />, <see cref="GL_DEPTH_ATTACHMENT" />,
-    /// <see cref="GL_STENCIL_ATTACHMENT" />, <see cref="GL_DEPTH_STENCIL_ATTACHMENT" />.
+    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0"/>
+    /// through <see cref="GL_COLOR_ATTACHMENT31"/>, <see cref="GL_DEPTH_ATTACHMENT"/>,
+    /// <see cref="GL_STENCIL_ATTACHMENT"/>, <see cref="GL_DEPTH_STENCIL_ATTACHMENT"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the parameter of <paramref name="attachment" /> to query. Refer to
-    /// <see href="https://docs.gl/gl4/glGetFramebufferAttachmentParameter" /> for details.
+    /// Specifies the parameter of <paramref name="attachment"/> to query. Refer to
+    /// <see href="https://docs.gl/gl4/glGetFramebufferAttachmentParameter"/> for details.
     /// </param>
     /// <param name="parameters">Specifies the address of a variable to receive the value of the queried parameter.</param>
     unsafe void GetFramebufferAttachmentParameteriv( int target, int attachment, int pname, int* parameters );
@@ -5989,19 +5989,19 @@ public partial interface IGLBindings
     /// Return parameters of a framebuffer attachment.
     /// </summary>
     /// <param name="target">
-    /// Specifies the framebuffer target. <paramref name="target" /> must be one of
-    /// <see cref="GL_FRAMEBUFFER" />, <see cref="GL_DRAW_FRAMEBUFFER" /> or <see cref="GL_READ_FRAMEBUFFER" />.
+    /// Specifies the framebuffer target. <paramref name="target"/> must be one of
+    /// <see cref="GL_FRAMEBUFFER"/>, <see cref="GL_DRAW_FRAMEBUFFER"/> or <see cref="GL_READ_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="attachment">
-    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0" />
-    /// through <see cref="GL_COLOR_ATTACHMENT31" />, <see cref="GL_DEPTH_ATTACHMENT" />,
-    /// <see cref="GL_STENCIL_ATTACHMENT" />, <see cref="GL_DEPTH_STENCIL_ATTACHMENT" />.
+    /// Specifies the attachment point of the framebuffer. One of <see cref="GL_COLOR_ATTACHMENT0"/>
+    /// through <see cref="GL_COLOR_ATTACHMENT31"/>, <see cref="GL_DEPTH_ATTACHMENT"/>,
+    /// <see cref="GL_STENCIL_ATTACHMENT"/>, <see cref="GL_DEPTH_STENCIL_ATTACHMENT"/>.
     /// </param>
     /// <param name="pname">
-    /// Specifies the parameter of <paramref name="attachment" /> to query. Refer to
-    /// <see href="https://docs.gl/gl4/glGetFramebufferAttachmentParameter" /> for details.
+    /// Specifies the parameter of <paramref name="attachment"/> to query. Refer to
+    /// <see href="https://docs.gl/gl4/glGetFramebufferAttachmentParameter"/> for details.
     /// </param>
-    /// <param name="parameters">A <see langword="ref" /> to an array which will receive the returned value(s).</param>
+    /// <param name="parameters">A <see langword="ref"/> to an array which will receive the returned value(s).</param>
     void GetFramebufferAttachmentParameteriv( int target, int attachment, int pname, ref int[] parameters );
 
     /// <summary>
@@ -6009,9 +6009,9 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the texture whose mimaps to generate is bound.
-    /// <paramref name="target" /> must be one of <see cref="GL_TEXTURE_1D" />, <see cref="GL_TEXTURE_2D" />,
-    /// <see cref="GL_TEXTURE_3D" />, <see cref="GL_TEXTURE_1D_ARRAY" />, <see cref="GL_TEXTURE_2D_ARRAY" />,
-    /// <see cref="GL_TEXTURE_CUBE_MAP" />, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY" />.
+    /// <paramref name="target"/> must be one of <see cref="GL_TEXTURE_1D"/>, <see cref="GL_TEXTURE_2D"/>,
+    /// <see cref="GL_TEXTURE_3D"/>, <see cref="GL_TEXTURE_1D_ARRAY"/>, <see cref="GL_TEXTURE_2D_ARRAY"/>,
+    /// <see cref="GL_TEXTURE_CUBE_MAP"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>.
     /// </param>
     void GenerateMipmap( int target );
 
@@ -6028,12 +6028,12 @@ public partial interface IGLBindings
     /// <param name="dstY1">Specify the top pixel coordinate of the destination rectangle.</param>
     /// <param name="mask">
     /// Specifies the bitwise OR of the flags indicating which buffers are to be copied. The allowed flags
-    /// are <see cref="GL_COLOR_BUFFER_BIT" />, <see cref="GL_DEPTH_BUFFER_BIT" /> and <see cref="GL_STENCIL_BUFFER_BIT" />
+    /// are <see cref="GL_COLOR_BUFFER_BIT"/>, <see cref="GL_DEPTH_BUFFER_BIT"/> and <see cref="GL_STENCIL_BUFFER_BIT"/>
     /// .
     /// </param>
     /// <param name="filter">
     /// Specifies the interpolation to be applied if the image is stretched. Must be one of
-    /// <see cref="GL_NEAREST" /> or <see cref="GL_LINEAR" />.
+    /// <see cref="GL_NEAREST"/> or <see cref="GL_LINEAR"/>.
     /// </param>
     void BlitFramebuffer( int srcX0,
                           int srcY0,
@@ -6051,7 +6051,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the renderbuffer object is bound for storage. Must be
-    /// <see cref="GL_RENDERBUFFER" />.
+    /// <see cref="GL_RENDERBUFFER"/>.
     /// </param>
     /// <param name="samples">Specifies the number of samples to be used for the renderbuffer object's storage.</param>
     /// <param name="internalFormat">Specifies the internal format to be used for the renderbuffer object's image.</param>
@@ -6064,14 +6064,14 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the texture should be attached. Must be
-    /// <see cref="GL_FRAMEBUFFER" />.
+    /// <see cref="GL_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
     /// <param name="texture">Specifies the name of an existing texture object.</param>
     /// <param name="level">Specifies the mipmap level of the texture image to be attached.</param>
     /// <param name="layer">
     /// Specifies the layer of a 3D texture that is to be attached, if any. Must be a number in the range 0
-    /// to the value of <see cref="GL_MAX_ARRAY_TEXTURE_LAYERS" /> minus 1.
+    /// to the value of <see cref="GL_MAX_ARRAY_TEXTURE_LAYERS"/> minus 1.
     /// </param>
     void FramebufferTextureLayer( int target, int attachment, uint texture, int level, int layer );
 
@@ -6080,12 +6080,12 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target buffer object being mapped. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="offset">Specifies the starting offset within the buffer of the range to be mapped.</param>
     /// <param name="length">Specifies the length of the range to be mapped.</param>
@@ -6098,17 +6098,17 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target buffer object being mapped. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="offset">Specifies the starting offset within the buffer of the range to be mapped.</param>
     /// <param name="length">Specifies the length of the range to be mapped.</param>
     /// <param name="access">Specifies a combination of access flags indicating the desired access to the range.</param>
-    /// <returns>Returns a type-safe and memory-safe <see cref="System.Span{T}" /> of the entire mapped memory.</returns>
+    /// <returns>Returns a type-safe and memory-safe <see cref="System.Span{T}"/> of the entire mapped memory.</returns>
     Span< T > MapBufferRange< T >( int target, int offset, int length, uint access ) where T : unmanaged;
 
     /// <summary>
@@ -6116,12 +6116,12 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target buffer object whose data store is to be flushed and/or invalidated. The
-    /// symbolic constant must be <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />,
-    /// <see cref="GL_COPY_READ_BUFFER" />, <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER" />, <see cref="GL_DRAW_INDIRECT_BUFFER" />,
-    /// <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />, <see cref="GL_PIXEL_UNPACK_BUFFER" />,
-    /// <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />, <see cref="GL_TEXTURE_BUFFER" />,
-    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" /> or <see cref="GL_UNIFORM_BUFFER" />.
+    /// symbolic constant must be <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>,
+    /// <see cref="GL_COPY_READ_BUFFER"/>, <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>, <see cref="GL_DRAW_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>, <see cref="GL_PIXEL_UNPACK_BUFFER"/>,
+    /// <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="offset">
     /// Specifies the offset within the buffer object's data store of the first byte to be flushed and/or
@@ -6140,7 +6140,7 @@ public partial interface IGLBindings
     /// Delete vertex array objects.
     /// </summary>
     /// <param name="n">Specifies the number of vertex array objects to be deleted.</param>
-    /// <param name="arrays">Specifies an array of <paramref name="n" /> names of vertex array objects to be deleted.</param>
+    /// <param name="arrays">Specifies an array of <paramref name="n"/> names of vertex array objects to be deleted.</param>
     unsafe void DeleteVertexArrays( int n, uint* arrays );
 
     /// <summary>
@@ -6160,7 +6160,7 @@ public partial interface IGLBindings
     /// Generate vertex array object names.
     /// </summary>
     /// <param name="n">Specifies the number of vertex array object names to generate.</param>
-    /// <returns>Returns an array of <paramref name="n" /> generated vertex array object names.</returns>
+    /// <returns>Returns an array of <paramref name="n"/> generated vertex array object names.</returns>
     uint[] GenVertexArrays( int n );
 
     /// <summary>
@@ -6174,8 +6174,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="array">Specifies a value that may be the name of a vertex array object.</param>
     /// <returns>
-    /// Returns <see langword="true" /> if <paramref name="array" /> is the name of a vertex array object. Otherwise,
-    /// returns <see langword="false" />.
+    /// Returns <see langword="true"/> if <paramref name="array"/> is the name of a vertex array object. Otherwise,
+    /// returns <see langword="false"/>.
     /// </returns>
     bool IsVertexArray( uint array );
 
@@ -6183,11 +6183,11 @@ public partial interface IGLBindings
     /// Draw multiple instances of a range of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="first">Specifies the starting index in the enabled arrays.</param>
     /// <param name="count">Specifies the number of indices to be rendered.</param>
@@ -6201,16 +6201,16 @@ public partial interface IGLBindings
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in indices. Must be one of <see cref="GL_UNSIGNED_BYTE" />,
-    /// <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in indices. Must be one of <see cref="GL_UNSIGNED_BYTE"/>,
+    /// <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
     /// <param name="instancecount">
@@ -6223,19 +6223,19 @@ public partial interface IGLBindings
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in indices. Must be one of <see cref="GL_UNSIGNED_BYTE" />,
-    /// <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in indices. Must be one of <see cref="GL_UNSIGNED_BYTE"/>,
+    /// <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">
-    /// Specifies an array containin the indices. Make sure to match <typeparamref name="T" /> to the
+    /// Specifies an array containin the indices. Make sure to match <typeparamref name="T"/> to the
     /// type of the indices.
     /// </param>
     /// <param name="instancecount">Specifies the number of instances of the specified range of indices to be rendered.</param>
@@ -6247,7 +6247,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the buffer object's data store is attached for the purposes of the
-    /// specified buffer texture object. target​ must be <see cref="GL_TEXTURE_BUFFER" />.
+    /// specified buffer texture object. target​ must be <see cref="GL_TEXTURE_BUFFER"/>.
     /// </param>
     /// <param name="internalFormat">Specifies the internal format of the data in the store belonging to buffer.</param>
     /// <param name="buffer">
@@ -6267,19 +6267,19 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="readTarget">
     /// Specifies the target from which the data will be copied. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DISPATCH_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER" />, <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER" />, <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" />, or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
+    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/>, or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="writeTarget">
     /// Specifies the target to which the data will be copied. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DISPATCH_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER" />, <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER" />, <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" />, or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
+    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/>, or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="readOffset">Specifies the offset into the data store of the buffer object containing the data to copy.</param>
     /// <param name="writeOffset">Specifies the offset into the data store of the buffer object into which data will be copied.</param>
@@ -6307,18 +6307,18 @@ public partial interface IGLBindings
     /// Returns information about several active uniform variables for the specified program object
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
-    /// <param name="uniformCount">Specifies the number of elements in the array of indices <paramref name="uniformIndices" />.</param>
+    /// <param name="uniformCount">Specifies the number of elements in the array of indices <paramref name="uniformIndices"/>.</param>
     /// <param name="uniformIndices">
-    /// Specifies an array of <paramref name="uniformCount" /> integers containing the indices of
+    /// Specifies an array of <paramref name="uniformCount"/> integers containing the indices of
     /// the uniform variables to be queried.
     /// </param>
     /// <param name="pname">
     /// Specifies the information to be queried about each uniform variable specified in
-    /// <paramref name="uniformIndices" />.
+    /// <paramref name="uniformIndices"/>.
     /// </param>
     /// <param name="parameters">
-    /// Specifies an array of <paramref name="uniformCount" /> integers to receive the information
-    /// requested about each uniform variable specified in <paramref name="uniformIndices" />.
+    /// Specifies an array of <paramref name="uniformCount"/> integers to receive the information
+    /// requested about each uniform variable specified in <paramref name="uniformIndices"/>.
     /// </param>
     unsafe void GetActiveUniformsiv( uint program, int uniformCount, uint* uniformIndices, int pname, int* parameters );
 
@@ -6328,7 +6328,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="pname">
     /// Specifies the information to be queried about each uniform variable specified in
-    /// <paramref name="uniformIndices" />.
+    /// <paramref name="uniformIndices"/>.
     /// </param>
     /// <param name="uniformIndices">
     /// Specifies an array of integers containing the indices of the uniform variables to be
@@ -6336,7 +6336,7 @@ public partial interface IGLBindings
     /// </param>
     /// <returns>
     /// An array of integers to receive the information requested about each uniform variable specified in
-    /// <paramref name="uniformIndices" />.
+    /// <paramref name="uniformIndices"/>.
     /// </returns>
     int[] GetActiveUniformsiv( uint program, int pname, params uint[] uniformIndices );
 
@@ -6346,16 +6346,16 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="uniformIndex">Specifies the index of the uniform variable to be queried.</param>
     /// <param name="bufSize">
-    /// Specifies the size of the buffer whose address is specified by <paramref name="uniformName" />,
+    /// Specifies the size of the buffer whose address is specified by <paramref name="uniformName"/>,
     /// in characters.
     /// </param>
     /// <param name="length">
     /// Returns the number of characters actually written into the buffer indicated by
-    /// <paramref name="uniformName" />.
+    /// <paramref name="uniformName"/>.
     /// </param>
     /// <param name="uniformName">
     /// Returns the name of the uniform variable at the specified index in the program object
-    /// specified by <paramref name="program" />.
+    /// specified by <paramref name="program"/>.
     /// </param>
     unsafe void GetActiveUniformName( uint program, uint uniformIndex, int bufSize, int* length, byte* uniformName );
 
@@ -6365,12 +6365,12 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="uniformIndex">Specifies the index of the uniform variable to be queried.</param>
     /// <param name="bufSize">
-    /// Specifies the size of the buffer whose address is specified by <paramref name="uniformIndex" />,
+    /// Specifies the size of the buffer whose address is specified by <paramref name="uniformIndex"/>,
     /// in characters.
     /// </param>
     /// <returns>
     /// The name of the uniform variable at the specified index in the program object specified by
-    /// <paramref name="program" />, in the correct size.
+    /// <paramref name="program"/>, in the correct size.
     /// </returns>
     string GetActiveUniformName( uint program, uint uniformIndex, int bufSize );
 
@@ -6383,8 +6383,8 @@ public partial interface IGLBindings
     /// to query.
     /// </param>
     /// <returns>
-    /// The index of the uniform block named <paramref name="uniformBlockName" /> within the program object
-    /// <paramref name="program" />.
+    /// The index of the uniform block named <paramref name="uniformBlockName"/> within the program object
+    /// <paramref name="program"/>.
     /// </returns>
     unsafe uint GetUniformBlockIndex( uint program, byte* uniformBlockName );
 
@@ -6400,7 +6400,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="uniformBlockIndex">
-    /// Specifies the index of the uniform block within <paramref name="program" /> whose
+    /// Specifies the index of the uniform block within <paramref name="program"/> whose
     /// information to query.
     /// </param>
     /// <param name="pname">Specifies the specific information to query about the active uniform block.</param>
@@ -6412,7 +6412,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="uniformBlockIndex">
-    /// Specifies the index of the uniform block within <paramref name="program" /> whose
+    /// Specifies the index of the uniform block within <paramref name="program"/> whose
     /// information to query.
     /// </param>
     /// <param name="pname">Specifies the specific information to query about the active uniform block.</param>
@@ -6424,17 +6424,17 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="uniformBlockIndex">
-    /// Specifies the index of the uniform block within <paramref name="program" /> whose name
+    /// Specifies the index of the uniform block within <paramref name="program"/> whose name
     /// to retrieve.
     /// </param>
     /// <param name="bufSize">
     /// Specifies the size of the buffer whose address is specified by
-    /// <paramref name="uniformBlockName" />, in characters.
+    /// <paramref name="uniformBlockName"/>, in characters.
     /// </param>
     /// <param name="length">Returns the length of the uniform block name.</param>
     /// <param name="uniformBlockName">
     /// Returns the name of the uniform block at the specified index in the program object
-    /// specified by <paramref name="program" />.
+    /// specified by <paramref name="program"/>.
     /// </param>
     unsafe void GetActiveUniformBlockName( uint program, uint uniformBlockIndex, int bufSize, int* length, byte* uniformBlockName );
 
@@ -6443,7 +6443,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="uniformBlockIndex">
-    /// Specifies the index of the uniform block within <paramref name="program" /> whose name
+    /// Specifies the index of the uniform block within <paramref name="program"/> whose name
     /// to retrieve.
     /// </param>
     /// <param name="bufSize">Specifies a maximum amount of characters OpenGL is allowed to write in the character buffer.</param>
@@ -6454,12 +6454,12 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object containing the active uniform block whose binding to assign.</param>
     /// <param name="uniformBlockIndex">
-    /// Specifies the index of the active uniform block within <paramref name="program" />
+    /// Specifies the index of the active uniform block within <paramref name="program"/>
     /// whose binding to assign.
     /// </param>
     /// <param name="uniformBlockBinding">
     /// Specifies the binding point to which to bind the uniform block with index
-    /// <paramref name="uniformBlockIndex" /> within the program object <paramref name="program" />.
+    /// <paramref name="uniformBlockIndex"/> within the program object <paramref name="program"/>.
     /// </param>
     void UniformBlockBinding( uint program, uint uniformBlockIndex, uint uniformBlockBinding );
 
@@ -6467,20 +6467,20 @@ public partial interface IGLBindings
     /// Render primitives from array data with a per-element offset.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
     /// <param name="basevertex">
-    /// Specifies a constant that should be added to each element of <paramref name="indices" /> when
+    /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
     void DrawElementsBaseVertex( int mode, int count, int type, IntPtr indices, int basevertex );
@@ -6489,23 +6489,23 @@ public partial interface IGLBindings
     /// Render primitives from array data with a per-element offset.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">
-    /// Specifies an array of indices. Make sure to match the type <typeparamref name="T" /> with
-    /// <paramref name="type" />.
+    /// Specifies an array of indices. Make sure to match the type <typeparamref name="T"/> with
+    /// <paramref name="type"/>.
     /// </param>
     /// <param name="basevertex">
-    /// Specifies a constant that should be added to each element of <paramref name="indices" /> when
+    /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
     void DrawElementsBaseVertex< T >( int mode, int count, int type, T[] indices, int basevertex )
@@ -6515,22 +6515,22 @@ public partial interface IGLBindings
     /// Render primitives from array data with a per-element offset.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
-    /// <param name="start">Specifies the minimum array index contained in <paramref name="indices" />.</param>
-    /// <param name="end">Specifies the maximum array index contained in <paramref name="indices" />.</param>
+    /// <param name="start">Specifies the minimum array index contained in <paramref name="indices"/>.</param>
+    /// <param name="end">Specifies the maximum array index contained in <paramref name="indices"/>.</param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
     /// <param name="basevertex">
-    /// Specifies a constant that should be added to each element of <paramref name="indices" /> when
+    /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
     void DrawRangeElementsBaseVertex( int mode, uint start, uint end, int count, int type, IntPtr indices, int basevertex );
@@ -6539,25 +6539,25 @@ public partial interface IGLBindings
     /// Render primitives from array data with a per-element offset.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
-    /// <param name="start">Specifies the minimum array index contained in <paramref name="indices" />.</param>
-    /// <param name="end">Specifies the maximum array index contained in <paramref name="indices" />.</param>
+    /// <param name="start">Specifies the minimum array index contained in <paramref name="indices"/>.</param>
+    /// <param name="end">Specifies the maximum array index contained in <paramref name="indices"/>.</param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">
-    /// Specifies an array of indices. Make sure to match the type <typeparamref name="T" /> with
-    /// <paramref name="type" />.
+    /// Specifies an array of indices. Make sure to match the type <typeparamref name="T"/> with
+    /// <paramref name="type"/>.
     /// </param>
     /// <param name="basevertex">
-    /// Specifies a constant that should be added to each element of <paramref name="indices" /> when
+    /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
     void DrawRangeElementsBaseVertex< T >( int mode, uint start, uint end, int count, int type, T[] indices, int basevertex )
@@ -6567,21 +6567,21 @@ public partial interface IGLBindings
     /// Render multiple instances of a set of primitives from array data with a per-element offset.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
     /// <param name="instancecount">Specifies the number of instances of the indexed geometry that should be drawn.</param>
     /// <param name="basevertex">
-    /// Specifies a constant that should be added to each element of <paramref name="indices" /> when
+    /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
     void DrawElementsInstancedBaseVertex( int mode, int count, int type, IntPtr indices, int instancecount, int basevertex );
@@ -6590,24 +6590,24 @@ public partial interface IGLBindings
     /// Render multiple instances of a set of primitives from array data with a per-element offset.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">
-    /// Specifies an array of indices. Make sure to match the type <typeparamref name="T" /> with
-    /// <paramref name="type" />.
+    /// Specifies an array of indices. Make sure to match the type <typeparamref name="T"/> with
+    /// <paramref name="type"/>.
     /// </param>
     /// <param name="instancecount">Specifies the number of instances of the indexed geometry that should be drawn.</param>
     /// <param name="basevertex">
-    /// Specifies a constant that should be added to each element of <paramref name="indices" /> when
+    /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
     void DrawElementsInstancedBaseVertex< T >( int mode, int count, int type, T[] indices, int instancecount, int basevertex )
@@ -6617,22 +6617,22 @@ public partial interface IGLBindings
     /// Render multiple sets of primitives from array data with a per-element offset.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="count">Specifies an array of the elements counts.</param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies an array of pointers to the location where the indices are stored.</param>
-    /// <param name="drawcount">Specifies the size of the <paramref name="count" /> and <paramref name="basevertex" /> arrays.</param>
+    /// <param name="drawcount">Specifies the size of the <paramref name="count"/> and <paramref name="basevertex"/> arrays.</param>
     /// <param name="basevertex">
     /// Specifies an array of the constants that should be added to each element of
-    /// <paramref name="indices" /> when choosing elements from the enabled vertex arrays.
+    /// <paramref name="indices"/> when choosing elements from the enabled vertex arrays.
     /// </param>
     unsafe void MultiDrawElementsBaseVertex( int mode, int* count, int type, IntPtr* indices, int drawcount, int* basevertex );
 
@@ -6640,23 +6640,23 @@ public partial interface IGLBindings
     /// Render multiple sets of primitives from array data with a per-element offset.
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS" />,
-    /// <see cref="GL_LINE_STRIP" />, <see cref="GL_LINE_LOOP" />, <see cref="GL_LINES" />,
-    /// <see cref="GL_TRIANGLE_STRIP" />, <see cref="GL_TRIANGLE_FAN" />, <see cref="GL_TRIANGLES" />,
-    /// <see cref="GL_LINES_ADJACENCY" />, <see cref="GL_LINE_STRIP_ADJACENCY" />, <see cref="GL_TRIANGLES_ADJACENCY" />,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY" /> and <see cref="GL_PATCHES" /> are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants <see cref="GL_POINTS"/>,
+    /// <see cref="GL_LINE_STRIP"/>, <see cref="GL_LINE_LOOP"/>, <see cref="GL_LINES"/>,
+    /// <see cref="GL_TRIANGLE_STRIP"/>, <see cref="GL_TRIANGLE_FAN"/>, <see cref="GL_TRIANGLES"/>,
+    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
+    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
     /// </param>
     /// <param name="type">
-    /// Specifies the type of the values in <paramref name="indices" />. Must be one of
-    /// <see cref="GL_UNSIGNED_BYTE" />, <see cref="GL_UNSIGNED_SHORT" />, or <see cref="GL_UNSIGNED_INT" />.
+    /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
+    /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">
-    /// Specifies an array of arrays of indices. Make sure to match the type <typeparamref name="T" />
-    /// with <paramref name="type" />.
+    /// Specifies an array of arrays of indices. Make sure to match the type <typeparamref name="T"/>
+    /// with <paramref name="type"/>.
     /// </param>
     /// <param name="basevertex">
     /// Specifies an array of the constants that should be added to each element of
-    /// <paramref name="indices" /> when choosing elements from the enabled vertex arrays.
+    /// <paramref name="indices"/> when choosing elements from the enabled vertex arrays.
     /// </param>
     void MultiDrawElementsBaseVertex< T >( int mode, int type, T[][] indices, int[] basevertex ) where T : unmanaged, IUnsignedNumber< T >;
 
@@ -6665,7 +6665,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="mode">
     /// Specifies the vertex to be used as the source of data for flat shaded varyings. Must be
-    /// <see cref="GL_FIRST_VERTEX_CONVENTION" /> or <see cref="GL_LAST_VERTEX_CONVENTION" />.
+    /// <see cref="GL_FIRST_VERTEX_CONVENTION"/> or <see cref="GL_LAST_VERTEX_CONVENTION"/>.
     /// </param>
     void ProvokingVertex( int mode );
 
@@ -6674,11 +6674,11 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="condition">
     /// Specifies the condition that must be met to set the sync object's state to signaled. Must be
-    /// <see cref="GL_SYNC_GPU_COMMANDS_COMPLETE" />.
+    /// <see cref="GL_SYNC_GPU_COMMANDS_COMPLETE"/>.
     /// </param>
     /// <param name="flags">
     /// Specifies a bitwise combination of flags controlling the behavior of the sync object. No flags are
-    /// presently defined for this operation and <paramref name="flags" /> must be zero.
+    /// presently defined for this operation and <paramref name="flags"/> must be zero.
     /// </param>
     /// <returns>The sync object.</returns>
     IntPtr FenceSync( int condition, uint flags );
@@ -6688,8 +6688,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="sync">Specifies a value that may be the name of a sync object.</param>
     /// <returns>
-    /// <see langword="true" /> if <paramref name="sync" /> is a name of a sync object. Otherwise,
-    /// <see langword="false" />.
+    /// <see langword="true"/> if <paramref name="sync"/> is a name of a sync object. Otherwise,
+    /// <see langword="false"/>.
     /// </returns>
     bool IsSync( IntPtr sync );
 
@@ -6704,16 +6704,16 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="sync">Specifies the sync object whose status to wait on.</param>
     /// <param name="flags">
-    /// A bitfield controlling the command flushing behavior. <paramref name="flags" /> may be
-    /// <see cref="GL_SYNC_FLUSH_COMMANDS_BIT" /> or zero.
+    /// A bitfield controlling the command flushing behavior. <paramref name="flags"/> may be
+    /// <see cref="GL_SYNC_FLUSH_COMMANDS_BIT"/> or zero.
     /// </param>
     /// <param name="timeout">
     /// The timeout, specified in nanoseconds, for which the implementation should wait for
-    /// <paramref name="sync" /> to become signaled.
+    /// <paramref name="sync"/> to become signaled.
     /// </param>
     /// <returns>
-    /// One of <see cref="GL_ALREADY_SIGNALED" />, <see cref="GL_TIMEOUT_EXPIRED" />,
-    /// <see cref="GL_CONDITION_SATISFIED" />, or <see cref="GL_WAIT_FAILED" />.
+    /// One of <see cref="GL_ALREADY_SIGNALED"/>, <see cref="GL_TIMEOUT_EXPIRED"/>,
+    /// <see cref="GL_CONDITION_SATISFIED"/>, or <see cref="GL_WAIT_FAILED"/>.
     /// </returns>
     int ClientWaitSync( IntPtr sync, uint flags, ulong timeout );
 
@@ -6721,10 +6721,10 @@ public partial interface IGLBindings
     /// Causes the server to block and wait for a sync object to become signaled.
     /// </summary>
     /// <param name="sync">Specifies the sync object whose status to wait on.</param>
-    /// <param name="flags">A bitfield controlling the command flushing behavior. <paramref name="flags" /> must be zero.</param>
+    /// <param name="flags">A bitfield controlling the command flushing behavior. <paramref name="flags"/> must be zero.</param>
     /// <param name="timeout">
     /// The timeout, specified in nanoseconds, for which the implementation should wait for
-    /// <paramref name="sync" /> to become signaled.
+    /// <paramref name="sync"/> to become signaled.
     /// </param>
     void WaitSync( IntPtr sync, uint flags, ulong timeout );
 
@@ -6732,7 +6732,7 @@ public partial interface IGLBindings
     /// Returns the 64bit integer value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">Returns the value or values of the specified parameter.</param>
@@ -6742,7 +6742,7 @@ public partial interface IGLBindings
     /// Returns the 64bit integer value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
-    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet" /> for
+    /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">Returns the value or values of the specified parameter.</param>
@@ -6754,11 +6754,11 @@ public partial interface IGLBindings
     /// <param name="sync">Specifies the sync object whose properties to query.</param>
     /// <param name="pname">
     /// Specifies the parameter whose value to retrieve from the sync object indicated by
-    /// <paramref name="sync" />. Allowed values are <see cref="GL_OBJECT_TYPE" />, <see cref="GL_SYNC_STATUS" />,
-    /// <see cref="GL_SYNC_CONDITION" />, <see cref="GL_SYNC_FLAGS" />.
+    /// <paramref name="sync"/>. Allowed values are <see cref="GL_OBJECT_TYPE"/>, <see cref="GL_SYNC_STATUS"/>,
+    /// <see cref="GL_SYNC_CONDITION"/>, <see cref="GL_SYNC_FLAGS"/>.
     /// </param>
-    /// <param name="bufSize">Specifies the size of the buffer whose address is given by <paramref name="values" />.</param>
-    /// <param name="length">Returns the number of integers placed in <paramref name="values" />.</param>
+    /// <param name="bufSize">Specifies the size of the buffer whose address is given by <paramref name="values"/>.</param>
+    /// <param name="length">Returns the number of integers placed in <paramref name="values"/>.</param>
     /// <param name="values">Returns the requested parameter.</param>
     unsafe void GetSynciv( IntPtr sync, int pname, int bufSize, int* length, int* values );
 
@@ -6768,8 +6768,8 @@ public partial interface IGLBindings
     /// <param name="sync">Specifies the sync object whose properties to query.</param>
     /// <param name="pname">
     /// Specifies the parameter whose value to retrieve from the sync object indicated by
-    /// <paramref name="sync" />. Allowed values are <see cref="GL_OBJECT_TYPE" />, <see cref="GL_SYNC_STATUS" />,
-    /// <see cref="GL_SYNC_CONDITION" />, <see cref="GL_SYNC_FLAGS" />.
+    /// <paramref name="sync"/>. Allowed values are <see cref="GL_OBJECT_TYPE"/>, <see cref="GL_SYNC_STATUS"/>,
+    /// <see cref="GL_SYNC_CONDITION"/>, <see cref="GL_SYNC_FLAGS"/>.
     /// </param>
     /// <param name="bufSize"></param>
     /// <returns>Returns the requested parameter(s).</returns>
@@ -6779,8 +6779,8 @@ public partial interface IGLBindings
     /// Returns the 64bit integer value or values of a selected parameter.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of which the indexed parameter <paramref name="index" /> is to be returned.
-    /// Refer to <see href="https://docs.gl/gl4/glGet" /> for a list of possible values.
+    /// Specifies the target of which the indexed parameter <paramref name="index"/> is to be returned.
+    /// Refer to <see href="https://docs.gl/gl4/glGet"/> for a list of possible values.
     /// </param>
     /// <param name="index">Specifies the index of the value to be returned.</param>
     /// <param name="data">Returns the value or values of the specified parameter.</param>
@@ -6790,8 +6790,8 @@ public partial interface IGLBindings
     /// Returns the 64bit integer value or values of a selected parameter.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of which the indexed parameter <paramref name="index" /> is to be returned.
-    /// Refer to <see href="https://docs.gl/gl4/glGet" /> for a list of possible values.
+    /// Specifies the target of which the indexed parameter <paramref name="index"/> is to be returned.
+    /// Refer to <see href="https://docs.gl/gl4/glGet"/> for a list of possible values.
     /// </param>
     /// <param name="index">Specifies the index of the value to be returned.</param>
     /// <param name="data">Returns the value or values of the specified parameter.</param>
@@ -6802,17 +6802,17 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// . Specifies the target to which the buffer object is bound. Must be one of
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DISPATCH_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER" />, <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER" />, <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" />, or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
+    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/>, or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a buffer object parameter. Accepted values are
-    /// <see cref="GL_BUFFER_ACCESS" />, <see cref="GL_BUFFER_ACCESS_FLAGS" />, <see cref="GL_BUFFER_IMMUTABLE_STORAGE" />,
-    /// <see cref="GL_BUFFER_MAPPED" />, <see cref="GL_BUFFER_MAP_LENGTH" />, <see cref="GL_BUFFER_MAP_OFFSET" />,
-    /// <see cref="GL_BUFFER_SIZE" />, <see cref="GL_BUFFER_STORAGE_FLAGS" />, <see cref="GL_BUFFER_USAGE" />.
+    /// <see cref="GL_BUFFER_ACCESS"/>, <see cref="GL_BUFFER_ACCESS_FLAGS"/>, <see cref="GL_BUFFER_IMMUTABLE_STORAGE"/>,
+    /// <see cref="GL_BUFFER_MAPPED"/>, <see cref="GL_BUFFER_MAP_LENGTH"/>, <see cref="GL_BUFFER_MAP_OFFSET"/>,
+    /// <see cref="GL_BUFFER_SIZE"/>, <see cref="GL_BUFFER_STORAGE_FLAGS"/>, <see cref="GL_BUFFER_USAGE"/>.
     /// </param>
     /// <param name="parameters">Returns the requested parameter.</param>
     unsafe void GetBufferParameteri64v( int target, int pname, long* parameters );
@@ -6822,17 +6822,17 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// . Specifies the target to which the buffer object is bound. Must be one of
-    /// <see cref="GL_ARRAY_BUFFER" />, <see cref="GL_ATOMIC_COUNTER_BUFFER" />, <see cref="GL_COPY_READ_BUFFER" />,
-    /// <see cref="GL_COPY_WRITE_BUFFER" />, <see cref="GL_DISPATCH_INDIRECT_BUFFER" />,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER" />, <see cref="GL_ELEMENT_ARRAY_BUFFER" />, <see cref="GL_PIXEL_PACK_BUFFER" />
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER" />, <see cref="GL_QUERY_BUFFER" />, <see cref="GL_SHADER_STORAGE_BUFFER" />,
-    /// <see cref="GL_TEXTURE_BUFFER" />, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER" />, or <see cref="GL_UNIFORM_BUFFER" />.
+    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
+    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
+    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
+    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
+    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/>, or <see cref="GL_UNIFORM_BUFFER"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a buffer object parameter. Accepted values are
-    /// <see cref="GL_BUFFER_ACCESS" />, <see cref="GL_BUFFER_ACCESS_FLAGS" />, <see cref="GL_BUFFER_IMMUTABLE_STORAGE" />,
-    /// <see cref="GL_BUFFER_MAPPED" />, <see cref="GL_BUFFER_MAP_LENGTH" />, <see cref="GL_BUFFER_MAP_OFFSET" />,
-    /// <see cref="GL_BUFFER_SIZE" />, <see cref="GL_BUFFER_STORAGE_FLAGS" />, <see cref="GL_BUFFER_USAGE" />.
+    /// <see cref="GL_BUFFER_ACCESS"/>, <see cref="GL_BUFFER_ACCESS_FLAGS"/>, <see cref="GL_BUFFER_IMMUTABLE_STORAGE"/>,
+    /// <see cref="GL_BUFFER_MAPPED"/>, <see cref="GL_BUFFER_MAP_LENGTH"/>, <see cref="GL_BUFFER_MAP_OFFSET"/>,
+    /// <see cref="GL_BUFFER_SIZE"/>, <see cref="GL_BUFFER_STORAGE_FLAGS"/>, <see cref="GL_BUFFER_USAGE"/>.
     /// </param>
     /// <param name="parameters">Returns the requested parameter.</param>
     void GetBufferParameteri64v( int target, int pname, ref long[] parameters );
@@ -6841,14 +6841,14 @@ public partial interface IGLBindings
     /// Attaches a level of a texture object as a logical buffer to the currently bound framebuffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the framebuffer target. Must be <see cref="GL_DRAW_FRAMEBUFFER" />,
-    /// <see cref="GL_READ_FRAMEBUFFER" /> or <see cref="GL_FRAMEBUFFER" />.
+    /// Specifies the framebuffer target. Must be <see cref="GL_DRAW_FRAMEBUFFER"/>,
+    /// <see cref="GL_READ_FRAMEBUFFER"/> or <see cref="GL_FRAMEBUFFER"/>.
     /// </param>
     /// <param name="attachment">
     /// Specifies the attachment point of the framebuffer. Must be one of
-    /// <see cref="GL_COLOR_ATTACHMENT0" /> through <see cref="GL_COLOR_ATTACHMENT31" />,
-    /// <see cref="GL_DEPTH_ATTACHMENT" />, <see cref="GL_STENCIL_ATTACHMENT" />,
-    /// <see cref="GL_DEPTH_STENCIL_ATTACHMENT" />.
+    /// <see cref="GL_COLOR_ATTACHMENT0"/> through <see cref="GL_COLOR_ATTACHMENT31"/>,
+    /// <see cref="GL_DEPTH_ATTACHMENT"/>, <see cref="GL_STENCIL_ATTACHMENT"/>,
+    /// <see cref="GL_DEPTH_STENCIL_ATTACHMENT"/>.
     /// </param>
     /// <param name="texture">Specifies the texture object whose image is to be attached.</param>
     /// <param name="level">Specifies the mipmap level of the texture object to be attached.</param>
@@ -6858,8 +6858,8 @@ public partial interface IGLBindings
     /// Establishes the data storage, format, dimensions, and number of samples of a multisample texture's image.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the operation. Must be <see cref="GL_TEXTURE_2D_MULTISAMPLE" /> or
-    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE" />.
+    /// Specifies the target of the operation. Must be <see cref="GL_TEXTURE_2D_MULTISAMPLE"/> or
+    /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>.
     /// </param>
     /// <param name="samples">Specifies the number of samples in the multisample texture's image.</param>
     /// <param name="internalFormat">Specifies the internal format to be used to store texture image data.</param>
@@ -6881,8 +6881,8 @@ public partial interface IGLBindings
     /// Establishes the data storage, format, dimensions, and number of samples of a multisample texture's image.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the operation. Must be <see cref="IGL.GL_TEXTURE_2D_MULTISAMPLE" /> or
-    /// <see cref="IGL.GL_PROXY_TEXTURE_2D_MULTISAMPLE" />.
+    /// Specifies the target of the operation. Must be <see cref="IGL.GL_TEXTURE_2D_MULTISAMPLE"/> or
+    /// <see cref="IGL.GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>.
     /// </param>
     /// <param name="samples">Specifies the number of samples in the multisample texture's image.</param>
     /// <param name="internalFormat">Specifies the internal format to be used to store texture image data.</param>
@@ -6905,7 +6905,7 @@ public partial interface IGLBindings
     /// <summary>
     /// Returns the location of a sample.
     /// </summary>
-    /// <param name="pname">Specifies the sample parameter to query. Must be <see cref="GL_SAMPLE_POSITION" />.</param>
+    /// <param name="pname">Specifies the sample parameter to query. Must be <see cref="GL_SAMPLE_POSITION"/>.</param>
     /// <param name="index">Specifies the index of the sample.</param>
     /// <param name="val">Specifies the address of an array to receive the location of the sample.</param>
     unsafe void GetMultisamplefv( int pname, uint index, float* val );
@@ -6913,7 +6913,7 @@ public partial interface IGLBindings
     /// <summary>
     /// Returns the location of a sample.
     /// </summary>
-    /// <param name="pname">Specifies the sample parameter to query. Must be <see cref="GL_SAMPLE_POSITION" />.</param>
+    /// <param name="pname">Specifies the sample parameter to query. Must be <see cref="GL_SAMPLE_POSITION"/>.</param>
     /// <param name="index">Specifies the index of the sample.</param>
     /// <param name="val">Specifies the address of an array to receive the location of the sample.</param>
     void GetMultisamplefvSafe( int pname, uint index, ref float[] val );
@@ -6997,8 +6997,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="sampler">Specifies a value that may be the name of a sampler object.</param>
     /// <returns>
-    /// <see langword="true" /> if <paramref name="sampler" /> is a value generated by OpenGL; otherwise,
-    /// <see langword="false" />.
+    /// <see langword="true"/> if <paramref name="sampler"/> is a value generated by OpenGL; otherwise,
+    /// <see langword="false"/>.
     /// </returns>
     bool IsSampler( uint sampler );
 
@@ -7015,12 +7015,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     void SamplerParameteri( uint sampler, int pname, int param );
 
     /// <summary>
@@ -7029,12 +7029,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     unsafe void SamplerParameteriv( uint sampler, int pname, int* param );
 
     /// <summary>
@@ -7043,12 +7043,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     void SamplerParameteriv( uint sampler, int pname, int[] param );
 
     /// <summary>
@@ -7057,12 +7057,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     void SamplerParameterf( uint sampler, int pname, float param );
 
     /// <summary>
@@ -7071,12 +7071,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     unsafe void SamplerParameterfv( uint sampler, int pname, float* param );
 
     /// <summary>
@@ -7085,12 +7085,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     void SamplerParameterfv( uint sampler, int pname, float[] param );
 
     /// <summary>
@@ -7099,12 +7099,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     unsafe void SamplerParameterIiv( uint sampler, int pname, int* param );
 
     /// <summary>
@@ -7113,12 +7113,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     void SamplerParameterIiv( uint sampler, int pname, int[] param );
 
     /// <summary>
@@ -7127,12 +7127,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     unsafe void SamplerParameterIuiv( uint sampler, int pname, uint* param );
 
     /// <summary>
@@ -7141,12 +7141,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to modify.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Specifies the value of <paramref name="pname" />.</param>
+    /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
     void SamplerParameterIuiv( uint sampler, int pname, uint[] param );
 
     /// <summary>
@@ -7155,12 +7155,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to query.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Returns the value of <paramref name="pname" />.</param>
+    /// <param name="param">Returns the value of <paramref name="pname"/>.</param>
     unsafe void GetSamplerParameteriv( uint sampler, int pname, int* param );
 
     /// <summary>
@@ -7169,12 +7169,12 @@ public partial interface IGLBindings
     /// <param name="sampler">Specifies the name of the sampler object whose parameter to query.</param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
-    /// <see cref="GL_TEXTURE_WRAP_S" />, <see cref="GL_TEXTURE_WRAP_T" />, <see cref="GL_TEXTURE_WRAP_R" />,
-    /// <see cref="GL_TEXTURE_MIN_FILTER" />, <see cref="GL_TEXTURE_MAG_FILTER" />, <see cref="GL_TEXTURE_BORDER_COLOR" />,
-    /// <see cref="GL_TEXTURE_MIN_LOD" />, <see cref="GL_TEXTURE_MAX_LOD" />, <see cref="GL_TEXTURE_LOD_BIAS" />,
-    /// <see cref="GL_TEXTURE_COMPARE_MODE" />, <see cref="GL_TEXTURE_COMPARE_FUNC" />.
+    /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/>, <see cref="GL_TEXTURE_WRAP_R"/>,
+    /// <see cref="GL_TEXTURE_MIN_FILTER"/>, <see cref="GL_TEXTURE_MAG_FILTER"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="GL_TEXTURE_MIN_LOD"/>, <see cref="GL_TEXTURE_MAX_LOD"/>, <see cref="GL_TEXTURE_LOD_BIAS"/>,
+    /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
-    /// <param name="param">Returns the value of <paramref name="pname" />.</param>
+    /// <param name="param">Returns the value of <paramref name="pname"/>.</param>
     void GetSamplerParameteriv( uint sampler, int pname, ref int[] param );
 
     unsafe void GetSamplerParameterIiv( uint sampler, int pname, int* param );
@@ -7202,10 +7202,10 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="id">Specifies the name of a query object.</param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a query object parameter. One of <see cref="GL_QUERY_RESULT" />,
-    /// <see cref="GL_QUERY_RESULT_NO_WAIT" /> or <see cref="GL_QUERY_RESULT_AVAILABLE" />.
+    /// Specifies the symbolic name of a query object parameter. One of <see cref="GL_QUERY_RESULT"/>,
+    /// <see cref="GL_QUERY_RESULT_NO_WAIT"/> or <see cref="GL_QUERY_RESULT_AVAILABLE"/>.
     /// </param>
-    /// <param name="param">Returns the value of <paramref name="pname" />.</param>
+    /// <param name="param">Returns the value of <paramref name="pname"/>.</param>
     unsafe void GetQueryObjecti64v( uint id, int pname, long* param );
 
     void GetQueryObjecti64v( uint id, int pname, ref long[] param );
@@ -7215,10 +7215,10 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="id">Specifies the name of a query object.</param>
     /// <param name="pname">
-    /// Specifies the symbolic name of a query object parameter. One of <see cref="GL_QUERY_RESULT" />,
-    /// <see cref="GL_QUERY_RESULT_NO_WAIT" /> or <see cref="GL_QUERY_RESULT_AVAILABLE" />.
+    /// Specifies the symbolic name of a query object parameter. One of <see cref="GL_QUERY_RESULT"/>,
+    /// <see cref="GL_QUERY_RESULT_NO_WAIT"/> or <see cref="GL_QUERY_RESULT_AVAILABLE"/>.
     /// </param>
-    /// <param name="param">Returns the value of <paramref name="pname" />.</param>
+    /// <param name="param">Returns the value of <paramref name="pname"/>.</param>
     unsafe void GetQueryObjectui64v( uint id, int pname, ulong* param );
 
     void GetQueryObjectui64v( uint id, int pname, ref ulong[] param );
@@ -7229,7 +7229,7 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute.</param>
     /// <param name="divisor">
     /// Specifies the number of instances that will pass between updates of the generic attribute at slot
-    /// <paramref name="index" />.
+    /// <paramref name="index"/>.
     /// </param>
     void VertexAttribDivisor( uint index, uint divisor );
 
@@ -7239,8 +7239,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP1ui( uint index, int type, bool normalized, uint value );
@@ -7251,8 +7251,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies a pointer to the value of the vertex attribute.</param>
     unsafe void VertexAttribP1uiv( uint index, int type, bool normalized, uint* value );
@@ -7263,8 +7263,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP1uiv( uint index, int type, bool normalized, uint[] value );
@@ -7275,8 +7275,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP2ui( uint index, int type, bool normalized, uint value );
@@ -7287,8 +7287,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies a pointer to the value of the vertex attribute.</param>
     unsafe void VertexAttribP2uiv( uint index, int type, bool normalized, uint* value );
@@ -7299,8 +7299,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP2uiv( uint index, int type, bool normalized, uint[] value );
@@ -7311,8 +7311,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP3ui( uint index, int type, bool normalized, uint value );
@@ -7323,8 +7323,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies a pointer to the value of the vertex attribute.</param>
     unsafe void VertexAttribP3uiv( uint index, int type, bool normalized, uint* value );
@@ -7335,8 +7335,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP3uiv( uint index, int type, bool normalized, uint[] value );
@@ -7347,8 +7347,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP4ui( uint index, int type, bool normalized, uint value );
@@ -7359,8 +7359,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies a pointer to the value of the vertex attribute.</param>
     unsafe void VertexAttribP4uiv( uint index, int type, bool normalized, uint* value );
@@ -7371,8 +7371,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true" />), or
-    /// converted directly as fixed-point values (<see langword="false" />).
+    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
+    /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP4uiv( uint index, int type, bool normalized, uint[] value );

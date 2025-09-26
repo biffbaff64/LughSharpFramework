@@ -70,7 +70,7 @@ public partial class AssetManager
     // ========================================================================
 
     /// <summary>
-    /// Output Assetmanager metrics via the <see cref="Logger" /> class.
+    /// Output Assetmanager metrics via the <see cref="Logger"/> class.
     /// </summary>
     public void DisplayMetrics()
     {

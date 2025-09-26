@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// An action that runs a <see cref="IRunnable.Runnable" />. Alternatively, the <see cref="Run()" />
+/// An action that runs a <see cref="IRunnable.Runnable"/>. Alternatively, the <see cref="Run()"/>
 /// method can be overridden instead of setting a runnable.
 /// </summary>
 [PublicAPI]

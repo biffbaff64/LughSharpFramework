@@ -31,7 +31,7 @@ namespace LughSharp.Lugh.Graphics.Text;
 public partial class BitmapFont
 {
     /// <summary>
-    /// Backing data for a <see cref="BitmapFont" />.
+    /// Backing data for a <see cref="BitmapFont"/>.
     /// </summary>
     [PublicAPI]
     public class BitmapFontData
@@ -132,7 +132,7 @@ public partial class BitmapFont
 
         /// <summary>
         /// Creates an empty BitmapFontData for configuration before calling
-        /// <see cref="Load(FileInfo, bool)" />, to subclass, or to populate
+        /// <see cref="Load(FileInfo, bool)"/>, to subclass, or to populate
         /// yourself, e.g. using stb-truetype or FreeType.
         /// </summary>
         public BitmapFontData()
@@ -628,7 +628,7 @@ public partial class BitmapFont
         /// <param name="glyph">
         /// A reference to the Glyph whose region is to be set.
         /// </param>
-        /// <param name="region"> The <see cref="TextureRegion" />. </param>
+        /// <param name="region"> The <see cref="TextureRegion"/>. </param>
         public Glyph SetGlyphRegion( Glyph glyph, TextureRegion region )
         {
             if ( region.Texture == null )
@@ -784,7 +784,7 @@ public partial class BitmapFont
         }
 
         /// <summary>
-        /// Returns true if the font has the glyph, or if the font has a <see cref="MissingGlyph" />.
+        /// Returns true if the font has the glyph, or if the font has a <see cref="MissingGlyph"/>.
         /// </summary>
         public bool HasGlyph( char ch )
         {
@@ -801,7 +801,7 @@ public partial class BitmapFont
         /// glyph exists. Note that
         /// </summary>
         /// See also
-        /// <see cref="GetGlyphs" />
+        /// <see cref="GetGlyphs"/>
         /// should be be used to shape a string
         /// of characters into a list of glyphs.
         public virtual Glyph? GetGlyph( char ch )
@@ -992,9 +992,9 @@ public partial class BitmapFont
         /// Scales the font by the specified amounts on both axes
         /// <para>
         /// Note that smoother scaling can be achieved if the texture backing
-        /// the BitmapFont is using <see cref="TextureFilterMode.Linear" />.
+        /// the BitmapFont is using <see cref="TextureFilterMode.Linear"/>.
         /// The default is Nearest, so use a BitmapFont constructor that takes
-        /// a <see cref="TextureRegion" />.
+        /// a <see cref="TextureRegion"/>.
         /// </para>
         /// </summary>
         /// <exception cref="ArgumentException">if scaleX or scaleY is zero.</exception>
@@ -1033,7 +1033,7 @@ public partial class BitmapFont
         /// Scales the font by the specified amount in both directions.
         /// </summary>
         /// See also
-        /// <see cref="SetScale(float, float)" />
+        /// <see cref="SetScale(float, float)"/>
         /// <exception cref="ArgumentException">if scaleX or scaleY is zero.</exception>
         public void SetScale( float scaleXy )
         {
@@ -1044,7 +1044,7 @@ public partial class BitmapFont
         /// Sets the font's scale relative to the current scale.
         /// </summary>
         /// See also
-        /// <see cref="SetScale(float, float)" />
+        /// <see cref="SetScale(float, float)"/>
         /// <exception cref="ArgumentException">if the resulting scale is zero.</exception>
         public void Scale( float amount )
         {

@@ -57,8 +57,8 @@ public class AssetDescriptor
     /// Information will need providing before this object can be used.
     /// <li> AssetType - The Type of asset ( Texture, TextureAtlas, Sound, Pixmap etc. ) </li>
     /// <li> Filepath - The full path, including filename, of the asset. </li>
-    /// <li> Parameters - The <see cref="AssetLoaderParameters" /> to use. </li>
-    /// <li> File - A <see cref="FileInfo" /> object holding file/path information </li>
+    /// <li> Parameters - The <see cref="AssetLoaderParameters"/> to use. </li>
+    /// <li> File - A <see cref="FileInfo"/> object holding file/path information </li>
     /// </summary>
     public AssetDescriptor()
     {
@@ -85,7 +85,7 @@ public class AssetDescriptor
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AssetDescriptor" /> class.
+    /// Initializes a new instance of the <see cref="AssetDescriptor"/> class.
     /// </summary>
     /// <param name="file"> The file information for the asset. </param>
     /// <param name="assetType"> The Type of asset ( Texture, Pixmap, Audio, Atlas etc ). </param>

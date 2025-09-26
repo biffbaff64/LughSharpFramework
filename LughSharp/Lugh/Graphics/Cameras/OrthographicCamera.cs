@@ -106,7 +106,7 @@ public class OrthographicCamera : Camera
 
     /// <summary>
     /// Updates the camera.
-    /// Also updates the frustrum if <paramref name="updateFrustrum" /> is true.
+    /// Also updates the frustrum if <paramref name="updateFrustrum"/> is true.
     /// </summary>
     /// <param name="updateFrustrum">
     /// if <c>true</c> the frustrum will be updated. The frustum is a rectangle that

@@ -42,11 +42,11 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> and <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" />
+    /// Only <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> and <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/>
     /// are supported.
     /// </summary>
-    /// <param name="pixmap"> the <see cref="Pixmap" /> </param>
-    /// <returns> the <see cref="ETC1Data" /> </returns>
+    /// <param name="pixmap"> the <see cref="Pixmap"/> </param>
+    /// <returns> the <see cref="ETC1Data"/> </returns>
     public ETC1Data EncodeImage( Pixmap pixmap )
     {
         var pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
@@ -59,11 +59,11 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> and <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" /> are supported.
+    /// Only <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> and <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/> are supported.
     /// Adds a PKM header in front of the compressed image data.
     /// </summary>
-    /// <param name="pixmap"> the <see cref="Pixmap" /> </param>
-    /// <returns> the <see cref="ETC1Data" /> </returns>
+    /// <param name="pixmap"> the <see cref="Pixmap"/> </param>
+    /// <returns> the <see cref="ETC1Data"/> </returns>
     public ETC1Data EncodeImagePKM( Pixmap pixmap )
     {
         var pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
@@ -75,12 +75,12 @@ public class ETC1
     }
 
     /// <summary>
-    /// Takes ETC1 compressed image data and converts it to a <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> or
-    /// <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" /> <see cref="Pixmap" />.
+    /// Takes ETC1 compressed image data and converts it to a <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> or
+    /// <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/> <see cref="Pixmap"/>.
     /// Does not modify the Buffer's position or limit.
     /// </summary>
-    /// <param name="etc1Data"> the <see cref="ETC1Data" /> instance </param>
-    /// <param name="format"> either <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> or <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" /> </param>
+    /// <param name="etc1Data"> the <see cref="ETC1Data"/> instance </param>
+    /// <param name="format"> either <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> or <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/> </param>
     /// <returns> the Pixmap </returns>
     public Pixmap DecodeImage( ETC1Data? etc1Data, int format )
     {
@@ -113,7 +113,7 @@ public class ETC1
 
     /// <summary>
     /// Gets the pixel size for the given <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>, which must be
-    /// one of <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> or <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" />.
+    /// one of <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> or <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/>.
     /// </summary>
     private int GetPixelSize( int format )
     {

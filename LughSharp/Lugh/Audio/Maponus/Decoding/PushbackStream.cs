@@ -45,7 +45,7 @@ public class PushbackStream
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PushbackStream" /> class with a specified
+    /// Initializes a new instance of the <see cref="PushbackStream"/> class with a specified
     /// stream and a back buffer size.
     /// </summary>
     /// <param name="s">The stream to be wrapped.</param>

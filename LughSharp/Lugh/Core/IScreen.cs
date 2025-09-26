@@ -34,7 +34,7 @@ public interface IScreen
 {
     /// <summary>
     /// Called when this screen becomes the current screen for
-    /// a <see cref="Game" />.
+    /// a <see cref="Game"/>.
     /// </summary>
     void Show();
 
@@ -69,7 +69,7 @@ public interface IScreen
     void Resume();
 
     /// <summary>
-    /// Called when this screen is no longer the current screen for a <see cref="Game" />.
+    /// Called when this screen is no longer the current screen for a <see cref="Game"/>.
     /// </summary>
     void Hide();
 

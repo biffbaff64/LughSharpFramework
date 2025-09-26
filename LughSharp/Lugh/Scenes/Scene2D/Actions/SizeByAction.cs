@@ -25,8 +25,8 @@
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// Scales an actor by the the values in <see cref="AmountWidth" />
-/// and <see cref="AmountHeight" />.
+/// Scales an actor by the the values in <see cref="AmountWidth"/>
+/// and <see cref="AmountHeight"/>.
 /// </summary>
 [PublicAPI]
 public class SizeByAction : RelativeTemporalAction

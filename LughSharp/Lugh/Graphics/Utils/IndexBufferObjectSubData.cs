@@ -27,14 +27,14 @@ namespace LughSharp.Lugh.Graphics.Utils;
 /// <summary>
 /// IndexBufferObject wraps OpenGL's index buffer functionality to be used in conjunction with VBOs.
 /// <para>
-/// You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()" />" or
-/// <see cref="Unbind()" />" in this case but rather use <see cref="GetBuffer(bool)" />" to use the
+/// You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()"/> or
+/// <see cref="Unbind()"/> in this case but rather use <see cref="GetBuffer(bool)"/> to use the
 /// buffer directly with GLDrawElements. You must also create the IndexBufferObject with the second
 /// constructor and specify isDirect as true as glDrawElements in conjunction with vertex arrays
 /// needs direct buffers.
 /// </para>
 /// <para>
-/// IndexBufferObjects must be disposed via the <see cref="Dispose()" />" method when no longer needed.
+/// IndexBufferObjects must be disposed via the <see cref="Dispose()"/> method when no longer needed.
 /// </para>
 /// </summary>
 [PublicAPI]

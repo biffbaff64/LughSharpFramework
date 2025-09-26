@@ -25,9 +25,9 @@
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// Used by a <see cref="Cubemap" /> to load the pixel data. The Cubemap will
-/// request the CubemapData to prepare itself through <see cref="Prepare()" />
-/// and upload its data using <see cref="ConsumeCubemapData()" />. These are
+/// Used by a <see cref="Cubemap"/> to load the pixel data. The Cubemap will
+/// request the CubemapData to prepare itself through <see cref="Prepare()"/>
+/// and upload its data using <see cref="ConsumeCubemapData()"/>. These are
 /// the first methods to be called by Cubemap.
 /// <para>
 /// After that the Cubemap will invoke the other methods to find out about the
@@ -35,10 +35,10 @@ namespace LughSharp.Lugh.Graphics;
 /// manage the pixel data if the OpenGL ES context is lost.
 /// </para>
 /// <para>
-/// Before a call to either <see cref="ConsumeCubemapData()" />, Cubemap will
+/// Before a call to either <see cref="ConsumeCubemapData()"/>, Cubemap will
 /// bind the OpenGL ES texture.
 /// </para>
-/// Look at <see cref="KtxTextureData" /> for example implementation of this
+/// Look at <see cref="KtxTextureData"/> for example implementation of this
 /// interface.
 /// </summary>
 [PublicAPI]
@@ -60,7 +60,7 @@ public interface ICubemapData : IManaged
     int Height { get; }
 
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="ConsumeCubemapData()" />.
+    /// Prepares the TextureData for a call to <see cref="ConsumeCubemapData()"/>.
     /// This method can be called from a non OpenGL thread and should thus not
     /// interact with OpenGL.
     /// </summary>
@@ -68,9 +68,9 @@ public interface ICubemapData : IManaged
 
     /// <summary>
     /// Uploads the pixel data for the 6 faces of the cube to the OpenGL ES texture.
-    /// The caller must bind an OpenGL ES texture. A call to <see cref="Prepare()" />
+    /// The caller must bind an OpenGL ES texture. A call to <see cref="Prepare()"/>
     /// must preceed a call to this method. Any internal data structures created
-    /// in <see cref="Prepare()" /> should be disposed of here.
+    /// in <see cref="Prepare()"/> should be disposed of here.
     /// </summary>
     void ConsumeCubemapData();
 }

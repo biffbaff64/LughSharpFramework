@@ -210,7 +210,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
 
     /// <summary>
     /// </summary>
-    /// <param name="rectangle"> the other <see cref="Rectangle" />.</param>
+    /// <param name="rectangle"> the other <see cref="Rectangle"/>.</param>
     /// <returns> whether the other rectangle is contained in this rectangle.</returns>
     public bool Contains( Rectangle rectangle )
     {
@@ -288,7 +288,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <summary>
     /// Checks for overlap between this rectangle and the specified rectangle.
     /// </summary>
-    /// <param name="r"> the other <see cref="Rectangle" /> </param>
+    /// <param name="r"> the other <see cref="Rectangle"/> </param>
     /// <returns> whether this rectangle overlaps the other rectangle.  </returns>
     public bool Overlaps( Rectangle r )
     {
@@ -543,7 +543,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// </summary>
     /// <param name="rect"> the other rectangle to fit this rectangle around </param>
     /// <returns> this rectangle for chaining </returns>
-    /// <see cref="Scaling " />
+    /// <see cref="Scaling "/>
     public Rectangle FitOutside( Rectangle rect )
     {
         var ratio = GetAspectRatio();
@@ -571,7 +571,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// </summary>
     /// <param name="rect"> the other rectangle to fit this rectangle inside </param>
     /// <returns> this rectangle for chaining </returns>
-    /// <see cref="Scaling " />
+    /// <see cref="Scaling "/>
     public Rectangle FitInside( Rectangle rect )
     {
         var ratio = GetAspectRatio();
@@ -606,7 +606,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
 
     /// <summary>
     /// Sets this {@code Rectangle} to the value represented by the
-    /// specified string according to the format of <see cref="ToString()" />.
+    /// specified string according to the format of <see cref="ToString()"/>.
     /// </summary>
     /// <param name="v"> the string. </param>
     /// <returns> this rectangle for chaining  </returns>

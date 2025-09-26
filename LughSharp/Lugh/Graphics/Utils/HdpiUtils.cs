@@ -28,17 +28,17 @@ namespace LughSharp.Lugh.Graphics.Utils;
 public enum HdpiMode
 {
     /// <summary>
-    /// Mouse coordinates, <see cref="IGraphicsDevice.Width" /> and <see cref="IGraphicsDevice.Height" />
+    /// Mouse coordinates, <see cref="IGraphicsDevice.Width"/> and <see cref="IGraphicsDevice.Height"/>
     /// will return logical coordinates according to the system defined HDPI scaling.
-    /// Rendering will be performed to a backbuffer at raw resolution. Use <see cref="HdpiUtils" />
-    /// when calling <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Scissor" /> or
-    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Viewport" />
+    /// Rendering will be performed to a backbuffer at raw resolution. Use <see cref="HdpiUtils"/>
+    /// when calling <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Scissor"/> or
+    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Viewport"/>
     /// which expect raw coordinates.
     /// </summary>
     Logical,
 
     /// <summary>
-    /// Mouse coordinates, <see cref="IGraphicsDevice.Width" /> and <see cref="IGraphicsDevice.Height" />
+    /// Mouse coordinates, <see cref="IGraphicsDevice.Width"/> and <see cref="IGraphicsDevice.Height"/>
     /// will return raw pixel coordinates irrespective of the system defined HDPI scaling.
     /// </summary>
     Pixels,
@@ -78,7 +78,7 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Calls <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Scissor(int, int, int, int)" />,
+    /// Calls <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Scissor(int, int, int, int)"/>,
     /// expecting the coordinates and sizes given in logical coordinates and automatically
     /// converts them to backbuffer coordinates, which may be bigger on HDPI screens.
     /// </summary>
@@ -100,7 +100,7 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Calls <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Viewport(int, int, int, int)" />,
+    /// Calls <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Viewport(int, int, int, int)"/>,
     /// expecting the coordinates and sizes given in logical coordinates and automatically
     /// converts them to backbuffer coordinates, which may be bigger on HDPI screens.
     /// </summary>

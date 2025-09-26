@@ -38,7 +38,7 @@ public class SampleBuffer : AudioBase
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SampleBuffer" /> class with the
+    /// Initializes a new instance of the <see cref="SampleBuffer"/> class with the
     /// specified sample frequency and number of channels.
     /// </summary>
     /// <param name="sampleFrequency">The sample frequency of the audio samples.</param>

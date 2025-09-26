@@ -60,7 +60,7 @@ public abstract class AbstractInput : IInput
     // ========================================================================
 
     /// <summary>
-    /// Returns TRUE if the key identified by the supplied <see cref="IInput.Keys" /> key code is pressed.
+    /// Returns TRUE if the key identified by the supplied <see cref="IInput.Keys"/> key code is pressed.
     /// </summary>
     public virtual bool IsKeyPressed( int key )
     {
@@ -73,7 +73,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    /// Returns TRUE if the key identified by the supplied <see cref="IInput.Keys" />
+    /// Returns TRUE if the key identified by the supplied <see cref="IInput.Keys"/>
     /// key code has <b>just</b> been pressed.
     /// </summary>
     public virtual bool IsKeyJustPressed( int key )
@@ -108,7 +108,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.BACK" />
+    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.BACK"/>
     /// </summary>
     public virtual bool IsOverrideBackKey()
     {
@@ -116,7 +116,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.BACK" /> key.
+    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.BACK"/> key.
     /// </summary>
     /// <param name="addKey"> True to add, false to remove. </param>
     public virtual void SetOverrideBackKey( bool addKey )
@@ -125,7 +125,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.MENU" />
+    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.MENU"/>
     /// </summary>
     public virtual bool IsOverrideMenuKey()
     {
@@ -133,7 +133,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.MENU" /> key.
+    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.MENU"/> key.
     /// </summary>
     /// <param name="addKey"> True to add, false to remove. </param>
     public virtual void SetOverrideMenuKey( bool addKey )

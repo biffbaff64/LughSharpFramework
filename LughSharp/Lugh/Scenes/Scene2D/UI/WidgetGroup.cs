@@ -27,7 +27,7 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A <see cref="Group" /> that participates in layout and provides a minimum,
+/// A <see cref="Group"/> that participates in layout and provides a minimum,
 /// preferred, and maximum size.
 /// <para>
 /// The default preferred size of a widget group is 0 and this is almost always
@@ -36,9 +36,9 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// itself to be sized smaller than the preferred size. The default maximum size
 /// is 0, which means no maximum size.
 /// </para>
-/// See <see cref="ILayout" /> for details on how a widget group should participate
-/// in layout. A widget group's mutator methods should call <see cref="Invalidate()" />
-/// or <see cref="InvalidateHierarchy()" /> as needed. By default, InvalidateHierarchy
+/// See <see cref="ILayout"/> for details on how a widget group should participate
+/// in layout. A widget group's mutator methods should call <see cref="Invalidate()"/>
+/// or <see cref="InvalidateHierarchy()"/> as needed. By default, InvalidateHierarchy
 /// is called when child widgets are added and removed.
 /// </summary>
 [PublicAPI]

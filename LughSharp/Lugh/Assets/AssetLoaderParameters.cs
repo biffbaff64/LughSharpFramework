@@ -41,7 +41,7 @@ public interface ILoaderParameters
 
 /// <summary>
 /// Callback interface that will be invoked when the
-/// <see cref="AssetManager" /> loaded an asset.
+/// <see cref="AssetManager"/> loaded an asset.
 /// </summary>
 [PublicAPI]
 public interface ILoadedCallback

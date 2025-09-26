@@ -34,8 +34,8 @@ namespace LughSharp.Lugh.Utils.Logging;
 /// <li>Debug messages will not work if (TraceLevel &amp; LOG_DEBUG) is false.</li>
 /// <li>Error Debug messages will not work if (TraceLevel &amp; LOG_ERROR) is false.</li>
 /// <para>
-/// To enable writing to file, <see cref="EnableWriteToFile" /> must be TRUE
-/// and <see cref="OpenDebugFile" /> must be called.
+/// To enable writing to file, <see cref="EnableWriteToFile"/> must be TRUE
+/// and <see cref="OpenDebugFile"/> must be called.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -475,7 +475,7 @@ public static class Logger
     }
 
     /// <summary>
-    /// Creates a <see cref="CallerID" /> object from the supplied file path, method and line number.
+    /// Creates a <see cref="CallerID"/> object from the supplied file path, method and line number.
     /// </summary>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>

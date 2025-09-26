@@ -25,11 +25,11 @@
 namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 
 /// <summary>
-/// This <see cref="IFileHandleResolver" /> uses a given list of <see cref="Resolution" />s to
+/// This <see cref="IFileHandleResolver"/> uses a given list of <see cref="Resolution"/>s to
 /// determine the best match based on the current back buffer size. An example of how this
 /// resolver works:
 /// <para>
-/// Let's assume that we have only a single <see cref="Resolution" />; added to this
+/// Let's assume that we have only a single <see cref="Resolution"/>; added to this
 /// resolver. This resolution has the following properties:
 /// </para>
 /// <ul>
@@ -45,7 +45,7 @@ namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 /// </ul>
 /// <para>
 /// One would now supply a file to be found to the resolver. For this example, we assume it is
-/// <tt>"textures/walls/brick.png"</tt>. Since there is only a single <see cref="Resolution" />,
+/// <tt>"textures/walls/brick.png"</tt>. Since there is only a single <see cref="Resolution"/>,
 /// this will be the best match for any screen size. The resolver will now try to find the file
 /// in the following ways:
 /// </para>
@@ -58,7 +58,7 @@ namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 /// </li>
 /// </ul>
 /// <para>
-/// The files are ultimately resolved via the given <see cref="BaseResolver" />. In case the
+/// The files are ultimately resolved via the given <see cref="BaseResolver"/>. In case the
 /// first version cannot be resolved, the fallback will try to search for the file without
 /// the resolution folder.
 /// </para>
@@ -72,14 +72,14 @@ public class ResolutionFileResolver : IFileHandleResolver
     // ========================================================================
 
     /// <summary>
-    /// Creates a <see cref="ResolutionFileResolver" /> based on a given
-    /// <see cref="IFileHandleResolver" /> and a list of <see cref="Resolution" />s.
+    /// Creates a <see cref="ResolutionFileResolver"/> based on a given
+    /// <see cref="IFileHandleResolver"/> and a list of <see cref="Resolution"/>s.
     /// </summary>
     /// <param name="baseResolver">
-    /// The <see cref="IFileHandleResolver" /> that will ultimately used to resolve the file.
+    /// The <see cref="IFileHandleResolver"/> that will ultimately used to resolve the file.
     /// </param>
     /// <param name="descs">
-    /// A list of <see cref="Resolution" />s. At least one has to be supplied.
+    /// A list of <see cref="Resolution"/>s. At least one has to be supplied.
     /// </param>
     public ResolutionFileResolver( IFileHandleResolver baseResolver, params Resolution[] descs )
     {
@@ -183,7 +183,7 @@ public class ResolutionFileResolver : IFileHandleResolver
     public class Resolution
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="Resolution" /> class with
+        /// Constructs a new instance of the <see cref="Resolution"/> class with
         /// the specified portrait width, portrait height, and assets folder.
         /// </summary>
         /// <param name="portraitWidth">The width of this resolution in portrait mode.</param>

@@ -40,7 +40,7 @@ namespace LughSharp.Lugh.Graphics;
 public static class PixmapIO
 {
     /// <summary>
-    /// Writes the <see cref="Pixmap" /> to the given file using a custom compression
+    /// Writes the <see cref="Pixmap"/> to the given file using a custom compression
     /// scheme. First three integers define the width, height and format, remaining
     /// bytes are zlib compressed pixels. To be able to load the Pixmap to a Texture,
     /// use ".cim" as the file suffix.
@@ -56,8 +56,8 @@ public static class PixmapIO
     }
 
     /// <summary>
-    /// Reads the <see cref="Pixmap" /> from the given file, assuming the Pixmap was
-    /// written with the <see cref="PixmapIO.WriteCIM(FileInfo, Pixmap)" /> method.
+    /// Reads the <see cref="Pixmap"/> from the given file, assuming the Pixmap was
+    /// written with the <see cref="PixmapIO.WriteCIM(FileInfo, Pixmap)"/> method.
     /// <para>
     /// Throws a GdxRuntimeException in case the file couldn't be read.
     /// </para>
@@ -69,14 +69,14 @@ public static class PixmapIO
     }
 
     /// <summary>
-    /// Writes the pixmap as a PNG. See <see cref="PNG" /> to write out multiple PNGs
+    /// Writes the pixmap as a PNG. See <see cref="PNG"/> to write out multiple PNGs
     /// with minimal allocation.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="pixmap"></param>
     /// <param name="compression">
     /// Sets the deflate compression level.
-    /// Default is <see cref="Deflater.DEFAULT_COMPRESSION" />
+    /// Default is <see cref="Deflater.DEFAULT_COMPRESSION"/>
     /// </param>
     /// <param name="flipY">Flips the Pixmap vertically if true</param>
     public static void WritePNG( FileInfo file,
@@ -269,7 +269,7 @@ public static class PixmapIO
 
         /// <summary>
         /// Sets the deflate compression level.
-        /// Default is <see cref="Deflater.DEFAULT_COMPRESSION" />.
+        /// Default is <see cref="Deflater.DEFAULT_COMPRESSION"/>.
         /// </summary>
         public void SetCompression( int level )
         {
@@ -277,7 +277,7 @@ public static class PixmapIO
         }
 
         /// <summary>
-        /// Writes the supplied <see cref="Pixmap" /> to the supplied <see cref="FileInfo" /> instance.
+        /// Writes the supplied <see cref="Pixmap"/> to the supplied <see cref="FileInfo"/> instance.
         /// </summary>
         public void Write( FileInfo file, Pixmap pixmap )
         {

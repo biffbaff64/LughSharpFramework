@@ -36,7 +36,7 @@ public interface IDesktopGLInput : IInput, IDisposable
     /// <param name="windowHandle"> The new handle. </param>
     void WindowHandleChanged( GLFW.Window windowHandle );
 
-    /// <inheritdoc cref="InputEventQueue.Drain" />
+    /// <inheritdoc cref="InputEventQueue.Drain"/>
     void Update();
 
     void PrepareNext();

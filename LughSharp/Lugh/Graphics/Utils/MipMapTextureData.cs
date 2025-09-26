@@ -63,8 +63,8 @@ public class MipMapTextureData : ITextureData
     }
 
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
-    /// <see cref="ITextureData.ConsumeCustomData" />. This method can be called from a non
+    /// Prepares the TextureData for a call to <see cref="ITextureData.FetchPixmap"/> or
+    /// <see cref="ITextureData.UploadCustomData"/>. This method can be called from a non
     /// OpenGL thread and should thus not interact with OpenGL.
     /// </summary>
     public void Prepare()
@@ -72,29 +72,29 @@ public class MipMapTextureData : ITextureData
     }
 
     /// <summary>
-    /// Returns the <see cref="Pixmap" /> for upload by Texture.
+    /// Returns the <see cref="Pixmap"/> for upload by Texture.
     /// <para>
-    /// A call to <see cref="ITextureData.Prepare" /> must precede a call to this method. Any
-    /// internal data structures created in <see cref="ITextureData.Prepare" /> should be
+    /// A call to <see cref="ITextureData.Prepare"/> must precede a call to this method. Any
+    /// internal data structures created in <see cref="ITextureData.Prepare"/> should be
     /// disposed of here.
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public Pixmap ConsumePixmap()
+    public Pixmap FetchPixmap()
     {
         throw new GdxRuntimeException( "This Texture is compressed, use the compress method." );
     }
 
     /// <summary>
     /// Uploads the pixel data to the OpenGL ES texture. The caller must bind an
-    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare" /> must preceed
+    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare"/> must preceed
     /// a call to this method.
     /// <para>
-    /// Any internal data structures created in <see cref="ITextureData.Prepare" />
+    /// Any internal data structures created in <see cref="ITextureData.Prepare"/>
     /// should be disposed of here.
     /// </para>
     /// </summary>
-    public void ConsumeCustomData( int target )
+    public void UploadCustomData( int target )
     {
         var derivedGLTexture = new DerivedGLTexture();
 

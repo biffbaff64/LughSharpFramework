@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 /// <remarks>
 /// This struct provides constant error codes that are used to indicate specific errors
 /// encountered during decoding. The error codes are built upon the base error code
-/// defined in <see cref="BitstreamErrors.DECODER_ERROR" />.
+/// defined in <see cref="BitstreamErrors.DECODER_ERROR"/>.
 /// </remarks>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]

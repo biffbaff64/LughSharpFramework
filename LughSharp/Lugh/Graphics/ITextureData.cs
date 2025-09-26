@@ -48,14 +48,17 @@ public interface ITextureData : IManaged
         Custom,
     }
 
+    // ========================================================================
+    
     /// <summary>
-    /// Returns the <see cref="TextureDataType" />.
+    /// Returns the <see cref="TextureDataType"/>. Possible values are
+    /// <see cref="TextureType.Pixmap"/> and <see cref="TextureType.Custom"/>.
     /// </summary>
     TextureType TextureDataType { get; }
 
     /// <summary>
     /// Returns whether the TextureData is prepared or not.
-    /// See <see cref="Prepare" />.
+    /// See <see cref="Prepare"/>.
     /// </summary>
     bool IsPrepared { get; set; }
 
@@ -85,39 +88,39 @@ public interface ITextureData : IManaged
     int PixelFormat { get; set; }
 
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="ConsumePixmap()" /> or
-    /// <see cref="ConsumeCustomData" />. This method can be called from a non
+    /// Prepares the TextureData for a call to <see cref="FetchPixmap"/> or
+    /// <see cref="UploadCustomData"/>. This method can be called from a non
     /// OpenGL thread and should not interact with OpenGL.
     /// </summary>
     void Prepare();
 
     /// <summary>
-    /// Returns the <see cref="Pixmap" /> for upload by Texture.
+    /// Returns the <see cref="Pixmap"/> for upload by Texture.
     /// <para>
-    /// A call to <see cref="Prepare()" /> must precede a call to this method. Any
-    /// internal data structures created in <see cref="Prepare()" /> should be
+    /// A call to <see cref="Prepare()"/> must precede a call to this method. Any
+    /// internal data structures created in <see cref="Prepare()"/> should be
     /// disposed of here.
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    Pixmap? ConsumePixmap();
+    Pixmap? FetchPixmap();
 
     /// <summary>
-    /// Returns whether the caller of <see cref="ConsumePixmap()" /> should
-    /// dispose the Pixmap returned by <see cref="ConsumePixmap()" />.
+    /// Returns whether the caller of <see cref="FetchPixmap"/> should
+    /// dispose the Pixmap returned by <see cref="FetchPixmap"/>.
     /// </summary>
     bool ShouldDisposePixmap();
 
     /// <summary>
     /// Uploads the pixel data to the OpenGL ES texture. The caller must bind an
-    /// OpenGL ES texture. A call to <see cref="Prepare()" /> must preceed a call
+    /// OpenGL ES texture. A call to <see cref="Prepare()"/> must preceed a call
     /// to this method.
     /// <para>
-    /// Any internal data structures created in <see cref="Prepare()" /> should be
+    /// Any internal data structures created in <see cref="Prepare()"/> should be
     /// disposed of here.
     /// </para>
     /// </summary>
-    void ConsumeCustomData( int target );
+    void UploadCustomData( int target );
     
     /// <summary>
     /// Dumps the internal state of the TextureData to the log.

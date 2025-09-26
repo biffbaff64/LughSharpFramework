@@ -226,8 +226,8 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
-    /// Returns a new length for <see cref="Values" /> when it is not enough to
-    /// hold all the entries after <see cref="MaxDepth" /> has been reached.
+    /// Returns a new length for <see cref="Values"/> when it is not enough to
+    /// hold all the entries after <see cref="MaxDepth"/> has been reached.
     /// </summary>
     protected int GrowValues()
     {

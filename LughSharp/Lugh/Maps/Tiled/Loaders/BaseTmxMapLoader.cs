@@ -79,7 +79,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     /// <param name="tmxFile">The Filehandle of the tmx file </param>
     /// <param name="parameter"></param>
     /// <param name="imageResolver"></param>
-    /// <returns>The <see cref="TiledMap" />.</returns>
+    /// <returns>The <see cref="TiledMap"/>.</returns>
     protected TiledMap LoadTiledMap( FileInfo tmxFile, TP? parameter, IImageResolver imageResolver )
     {
         // ====================================================================
@@ -436,7 +436,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     /// Object. This way, you gain the ability to freely scale and rotate the image."
     /// See https://doc.mapeditor.org/en/stable/manual/layers/
     /// </summary>
-    /// <param name="map"> The parent <see cref="TiledMap" />. </param>
+    /// <param name="map"> The parent <see cref="TiledMap"/>. </param>
     /// <param name="parentLayers"> The actual layer group belonging to the map. </param>
     /// <param name="node"> The xml node being processed. </param>
     /// <param name="tmxFile"> The parent TMX map file. </param>
@@ -963,7 +963,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     }
 
     /// <summary>
-    /// Loads a Tileset as described in <paramref name="tilesetNode" />.
+    /// Loads a Tileset as described in <paramref name="tilesetNode"/>.
     /// The Node is laid ouit as follows:-
     /// <code>
     /// &lt;tileset firstgid="x" source="filename.tsx"/&gt;

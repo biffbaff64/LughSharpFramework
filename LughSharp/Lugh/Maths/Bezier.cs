@@ -38,14 +38,14 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Bezier{T}" /> class.
+    /// Initializes a new instance of the <see cref="Bezier{T}"/> class.
     /// </summary>
     public Bezier()
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
+    /// Initializes a new instance of the <see cref="Bezier{T}"/> class with the specified points.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     public Bezier( params T[] points )
@@ -54,7 +54,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
+    /// Initializes a new instance of the <see cref="Bezier{T}"/> class with the specified points.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     /// <param name="offset">The offset in the array of points at which to start.</param>
@@ -65,7 +65,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
+    /// Initializes a new instance of the <see cref="Bezier{T}"/> class with the specified points.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     /// <param name="offset">The offset in the list of points at which to start.</param>

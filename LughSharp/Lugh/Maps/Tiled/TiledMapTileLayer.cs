@@ -52,11 +52,11 @@ public class TiledMapTileLayer : MapLayer
     public Cell[ , ] Cells      { get; }
 
     /// <summary>
-    /// Gets the <see cref="Cell" /> at the given X, Y coordinates.
+    /// Gets the <see cref="Cell"/> at the given X, Y coordinates.
     /// </summary>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
-    /// <returns> <see cref="Cell" /> at (x, y) </returns>
+    /// <returns> <see cref="Cell"/> at (x, y) </returns>
     public Cell? GetCell( int x, int y )
     {
         if ( ( x < 0 ) || ( x >= Width ) )
@@ -73,11 +73,11 @@ public class TiledMapTileLayer : MapLayer
     }
 
     /// <summary>
-    /// Sets the <see cref="Cell" /> at the given coordinates.
+    /// Sets the <see cref="Cell"/> at the given coordinates.
     /// </summary>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
-    /// <param name="cell"> the <see cref="Cell" /> to set at the given coordinates. </param>
+    /// <param name="cell"> the <see cref="Cell"/> to set at the given coordinates. </param>
     public void SetCell( int x, int y, Cell cell )
     {
         if ( ( x < 0 ) || ( x >= Width ) )
@@ -120,7 +120,7 @@ public class TiledMapTileLayer : MapLayer
         /// <summary>
         /// Sets the tile to be used for this cell.
         /// </summary>
-        /// <param name="tile"> the <see cref="ITiledMapTile" /> to use for this cell. </param>
+        /// <param name="tile"> the <see cref="ITiledMapTile"/> to use for this cell. </param>
         /// <returns> this, for method chaining </returns>
         public Cell SetTile( ITiledMapTile tile )
         {

@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// <summary>
 /// Displays a dialog, which is a window with a title, a content table, and a button table.
 /// Methods are provided to add a label to the content table and buttons to the button table,
-/// but any widgets can be added. When a button is clicked, <see cref="Result(object)" /> is
+/// but any widgets can be added. When a button is clicked, <see cref="Result(object)"/> is
 /// called and the dialog is removed from the stage.
 /// </summary>
 [PublicAPI]
@@ -47,7 +47,7 @@ public class Dialog : Window
     // ========================================================================
 
     /// <summary>
-    /// Creates a new Dialog, using the supplied title and <see cref="Skin" />
+    /// Creates a new Dialog, using the supplied title and <see cref="Skin"/>
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="skin"></param>
@@ -64,7 +64,7 @@ public class Dialog : Window
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="skin"></param>
-    /// <param name="windowStyle"> The <see cref="Window.WindowStyle" /> to use. </param>
+    /// <param name="windowStyle"> The <see cref="Window.WindowStyle"/> to use. </param>
     public Dialog( string title, Skin skin, string windowStyle )
         : base( title, skin.Get< WindowStyle >( windowStyle ) )
     {
@@ -75,10 +75,10 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Creates a new Dialog window, using the supplied name and <see cref="Window.WindowStyle" />.
+    /// Creates a new Dialog window, using the supplied name and <see cref="Window.WindowStyle"/>.
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="windowStyle"> The <see cref="Window.WindowStyle" /> to use. </param>
+    /// <param name="windowStyle"> The <see cref="Window.WindowStyle"/> to use. </param>
     public Dialog( string title, WindowStyle windowStyle )
         : base( title, windowStyle )
     {
@@ -125,7 +125,7 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Sets the <see cref="Stage" /> which this Dialog will act on.
+    /// Sets the <see cref="Stage"/> which this Dialog will act on.
     /// </summary>
     public override void SetStage( Stage? stage )
     {
@@ -143,7 +143,7 @@ public class Dialog : Window
 
     /// <summary>
     /// Adds a label to the content table. The dialog needs to have been constructed
-    /// with a <see cref="Skin" /> to use this method. If it hasn't, a default Skin
+    /// with a <see cref="Skin"/> to use this method. If it hasn't, a default Skin
     /// will be created which may need further adjustments.
     /// </summary>
     public Dialog Text( string? text )
@@ -177,7 +177,7 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Adds a text button to the button table. Null will be passed to <see cref="Result(object)" />
+    /// Adds a text button to the button table. Null will be passed to <see cref="Result(object)"/>
     /// if this button is clicked. The dialog must have been constructed with a skin to use this
     /// method. If it hasn't, a default Skin will be created which may need further adjustments.
     /// </summary>
@@ -198,7 +198,7 @@ public class Dialog : Window
     /// </summary>
     /// <param name="text"></param>
     /// <param name="obj">
-    /// The object that will be passed to <see cref="Result(object)" />
+    /// The object that will be passed to <see cref="Result(object)"/>
     /// if this button is clicked. May be null.
     /// </param>
     /// <param name="buttonStyle"></param>
@@ -212,7 +212,7 @@ public class Dialog : Window
     /// </summary>
     /// <param name="button"></param>
     /// <param name="obj">
-    /// The object that will be passed to <see cref="Result(object)" /> if this
+    /// The object that will be passed to <see cref="Result(object)"/> if this
     /// button is clicked. May be null.
     /// </param>
     public Dialog Button( Button button, object? obj = null )
@@ -225,7 +225,7 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// <see cref="WidgetGroup.Pack()" /> the dialog (but doesn't set the position),
+    /// <see cref="WidgetGroup.Pack()"/> the dialog (but doesn't set the position),
     /// adds it to the stage, sets it as the keyboard and scroll focus, clears any
     /// actions on the dialog, and adds the specified action to it. The previous
     /// keyboard and scroll focus are remembered so they can be restored when the
@@ -270,8 +270,8 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Centers the dialog in the stage and calls <see cref="Show(Stage, Action)" />
-    /// with a <see cref="Actions.FadeIn(float,LughSharp.Lugh.Maths.IInterpolation)" /> action.
+    /// Centers the dialog in the stage and calls <see cref="Show(Stage, Action)"/>
+    /// with a <see cref="Actions.FadeIn(float,LughSharp.Lugh.Maths.IInterpolation)"/> action.
     /// </summary>
     public Dialog Show( Stage stage )
     {
@@ -353,7 +353,7 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// If this key is pressed, <see cref="Result(object)" /> is
+    /// If this key is pressed, <see cref="Result(object)"/> is
     /// called with the specified object.
     /// </summary>
     public Dialog Key( int keycode, object obj )
@@ -394,7 +394,7 @@ public class Dialog : Window
 
     /// <summary>
     /// Called when a button is clicked. The dialog will be hidden after this
-    /// method returns unless <see cref="CancelHide" /> is set.
+    /// method returns unless <see cref="CancelHide"/> is set.
     /// </summary>
     /// <param name="obj"> The object specified when the button was added. </param>
     public virtual void Result( object? obj )

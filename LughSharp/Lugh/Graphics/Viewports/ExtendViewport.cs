@@ -43,7 +43,7 @@ public class ExtendViewport : Viewport
     // ========================================================================
 
     /// <summary>
-    /// Creates a new viewport using a new <see cref="OrthographicCamera" />
+    /// Creates a new viewport using a new <see cref="OrthographicCamera"/>
     /// with no maximum world size.
     /// </summary>
     /// <param name="minWorldWidth"> The minimum allowable world width. </param>
@@ -65,7 +65,7 @@ public class ExtendViewport : Viewport
     }
 
     /// <summary>
-    /// Creates a new viewport using a new <see cref="OrthographicCamera" />
+    /// Creates a new viewport using a new <see cref="OrthographicCamera"/>
     /// and a maximum world size.
     /// </summary>
     /// <param name="minWorldWidth"> The minimum allowable world width. </param>

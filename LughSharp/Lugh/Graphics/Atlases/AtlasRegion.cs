@@ -29,7 +29,7 @@ public class AtlasRegion : TextureRegion
 {
     /// <summary>
     /// Values for name/value pairs other than the fields provided on this class,
-    /// each entry corresponding to <see cref="Names" />.
+    /// each entry corresponding to <see cref="Names"/>.
     /// </summary>
     public int[]?[]? Values { get; set; }
 
@@ -96,7 +96,7 @@ public class AtlasRegion : TextureRegion
 
     /// <summary>
     /// Names for name/value pairs other than the fields provided on this class,
-    /// each entry corresponding to <see cref="Values" />.
+    /// each entry corresponding to <see cref="Values"/>.
     /// </summary>
     public string?[]? Names { get; set; }
 
@@ -155,14 +155,14 @@ public class AtlasRegion : TextureRegion
     // ========================================================================
 
     /// <summary>
-    /// Returns the packed width considering the <see cref="Rotate" /> value,
+    /// Returns the packed width considering the <see cref="Rotate"/> value,
     /// if it is true then it returns the packedHeight, otherwise it returns
     /// the packedWidth.
     /// </summary>
     public float RotatedPackedWidth => Rotate ? PackedHeight : PackedWidth;
 
     /// <summary>
-    /// Returns the packed height considering the <see cref="Rotate" /> value,
+    /// Returns the packed height considering the <see cref="Rotate"/> value,
     /// if it is true then it returns the packedWidth, otherwise it returns the
     /// packedHeight.
     /// </summary>

@@ -94,7 +94,7 @@ public class FileTextureArrayData : ITextureArrayData
     }
 
     /// <summary>
-    /// Prepares the TextureArrayData for a call to <see cref="ConsumeTextureArrayData" />.
+    /// Prepares the TextureArrayData for a call to <see cref="ConsumeTextureArrayData"/>.
     /// This method can be called from a non OpenGL thread and should thus not interact
     /// with OpenGL.
     /// </summary>
@@ -135,10 +135,10 @@ public class FileTextureArrayData : ITextureArrayData
     /// ES texture. The caller must bind an OpenGL ES texture.
     /// <para></para>
     /// <para>
-    /// A call to <see cref="ITextureArrayData.Prepare" /> must preceed a call to this method.
+    /// A call to <see cref="ITextureArrayData.Prepare"/> must preceed a call to this method.
     /// </para>
     /// <para>
-    /// Any internal data structures created in <see cref="ITextureArrayData.Prepare" />
+    /// Any internal data structures created in <see cref="ITextureArrayData.Prepare"/>
     /// should be disposed of here.
     /// </para>
     /// </summary>
@@ -148,12 +148,12 @@ public class FileTextureArrayData : ITextureArrayData
         {
             if ( _textureData[ i ]?.TextureDataType == ITextureData.TextureType.Custom )
             {
-                _textureData[ i ]?.ConsumeCustomData( IGL.GL_TEXTURE_2D_ARRAY );
+                _textureData[ i ]?.UploadCustomData( IGL.GL_TEXTURE_2D_ARRAY );
             }
             else
             {
                 var texData       = _textureData[ i ];
-                var pixmap        = texData?.ConsumePixmap();
+                var pixmap        = texData?.FetchPixmap();
                 var disposePixmap = texData?.ShouldDisposePixmap() ?? false;
 
                 Debug.Assert( texData != null, nameof( texData ) + " == null" );

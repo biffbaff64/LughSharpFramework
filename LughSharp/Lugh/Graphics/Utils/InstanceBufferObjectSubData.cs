@@ -25,8 +25,8 @@
 namespace LughSharp.Lugh.Graphics.Utils;
 
 /// <summary>
-/// Modification of the <see cref="VertexBufferObjectSubData" /> class.
-/// Sets the glVertexAttribDivisor for every <see cref="VertexAttribute" />
+/// Modification of the <see cref="VertexBufferObjectSubData"/> class.
+/// Sets the glVertexAttribDivisor for every <see cref="VertexAttribute"/>
 /// automatically.
 /// </summary>
 [PublicAPI]
@@ -48,7 +48,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     /// </summary>
     /// <param name="isStatic"> whether the vertex data is static. </param>
     /// <param name="numInstances"> the maximum number of vertices. </param>
-    /// <param name="instanceAttributes"> the <see cref="VertexAttributes" />". </param>
+    /// <param name="instanceAttributes"> the <see cref="VertexAttributes"/>. </param>
     public InstanceBufferObjectSubData( bool isStatic,
                                         int numInstances,
                                         params VertexAttribute[] instanceAttributes )
@@ -61,7 +61,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     /// </summary>
     /// <param name="isStatic"> whether the vertex data is static. </param>
     /// <param name="numInstances"> the maximum number of vertices. </param>
-    /// <param name="instanceAttributes"> the <see cref="VertexAttributes" />". </param>
+    /// <param name="instanceAttributes"> the <see cref="VertexAttributes"/>. </param>
     public InstanceBufferObjectSubData( bool isStatic, int numInstances, VertexAttributes instanceAttributes )
     {
         _isStatic   = isStatic;

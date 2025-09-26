@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// A slider is a horizontal indicator that allows a user to set a value. The slider has
 /// a range (min, max) and a stepping between each value the slider represents.
 /// <para>
-/// <see cref="ChangeListener.ChangeEvent" /> is fired when the
+/// <see cref="ChangeListener.ChangeEvent"/> is fired when the
 /// slider knob is moved. Canceling the event will move the knob to where it was previously.
 /// </para>
 /// <para>
@@ -63,9 +63,9 @@ public class Slider : ProgressBar
     /// Creates a new slider. If horizontal, its width is determined by the prefWidth
     /// parameter, its height is determined by the maximum of the height of either the
     /// slider
-    /// <see cref="NinePatch" />
+    /// <see cref="NinePatch"/>
     /// or slider handle
-    /// <see cref="TextureRegion" />
+    /// <see cref="TextureRegion"/>
     /// .
     /// The min and max values determine the range the values of this slider can take on,
     /// the stepSize parameter specifies the distance between individual values. E.g. min
@@ -75,7 +75,7 @@ public class Slider : ProgressBar
     /// <param name="max"> the maximum value </param>
     /// <param name="stepSize"> the step size between values </param>
     /// <param name="vertical"></param>
-    /// <param name="style"> the <see cref="SliderStyle" /> </param>
+    /// <param name="style"> the <see cref="SliderStyle"/> </param>
     public Slider( float min, float max, float stepSize, bool vertical, SliderStyle style )
         : base( min, max, stepSize, vertical, style )
     {
@@ -92,7 +92,7 @@ public class Slider : ProgressBar
 
     /// <summary>
     /// Sets the inverse interpolation to use for display. This should perform the
-    /// inverse of setting <see cref="ProgressBar.VisualInterpolation" />".
+    /// inverse of setting <see cref="ProgressBar.VisualInterpolation"/>.
     /// </summary>
     public Interpolator VisualInterpolationInverse { get; set; } = Interpolation.Linear;
 

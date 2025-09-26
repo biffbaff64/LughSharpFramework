@@ -32,7 +32,7 @@ public class BufferUtils
     /// </summary>
     /// <param name="source">The source buffer to copy from.</param>
     /// <param name="destination">The destination buffer to copy to.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="source" /> or <paramref name="destination" /> is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="source"/> or <paramref name="destination"/> is null.</exception>
     /// <exception cref="ArgumentException">If buffers are incompatible or destination is too small.</exception>
     public static void Copy< T >( Buffer< T > source, Buffer< T > destination ) where T : unmanaged
     {

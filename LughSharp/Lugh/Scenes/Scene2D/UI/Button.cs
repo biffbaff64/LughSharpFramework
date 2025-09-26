@@ -29,8 +29,8 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A button is a <see cref="Table" /> with a checked state and additional
-/// <see cref="ButtonStyle" /> style fields for pressed, unpressed, and
+/// A button is a <see cref="Table"/> with a checked state and additional
+/// <see cref="ButtonStyle"/> style fields for pressed, unpressed, and
 /// checked. Each time a button is clicked, the checked state is toggled.
 /// Being a table, a button can contain any other actors.
 /// <para>
@@ -39,7 +39,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// can still be set on the button's table cells.
 /// </para>
 /// <para>
-/// A <see cref="ChangeListener.ChangeEvent" /> is fired when the button is
+/// A <see cref="ChangeListener.ChangeEvent"/> is fired when the button is
 /// clicked. Cancelling the event will restore the checked button state to
 /// what it was previously.
 /// </para>
@@ -124,7 +124,7 @@ public class Button : Table, IDisableable
 
     /// <summary>
     /// Returns the button's style. Modifying the returned style may not have an
-    /// effect until <see cref="Style" /> set() is called.
+    /// effect until <see cref="Style"/> set() is called.
     /// </summary>
     public virtual ButtonStyle? Style
     {
@@ -193,8 +193,8 @@ public class Button : Table, IDisableable
     }
 
     /// <summary>
-    /// If false, <see cref="SetChecked(bool)" /> and <see cref="Toggle()" /> will not
-    /// fire <see cref="ChangeListener.ChangeEvent()" />.
+    /// If false, <see cref="SetChecked(bool)"/> and <see cref="Toggle()"/> will not
+    /// fire <see cref="ChangeListener.ChangeEvent()"/>.
     /// The event will only be fired when the user clicks the button
     /// </summary>
     public void SetProgrammaticChangeEvents( bool programmaticChangeEvents )
@@ -354,7 +354,7 @@ public class Button : Table, IDisableable
     // ========================================================================
 
     /// <summary>
-    /// The style for a button, see <see cref="Button" />.
+    /// The style for a button, see <see cref="Button"/>.
     /// </summary>
     [PublicAPI]
     public class ButtonStyle

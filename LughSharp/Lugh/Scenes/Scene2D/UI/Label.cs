@@ -33,7 +33,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// A text label, with optional word wrapping.
 /// <para>
 /// The preferred size of the label is determined by the actual text bounds,
-/// unless <see cref="Wrap" /> is enabled.
+/// unless <see cref="Wrap"/> is enabled.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -418,7 +418,7 @@ public class Label : Widget
     /// Aligns all the text within the label (default left center) and each line
     /// of text horizontally (default is left).
     /// </param>
-    /// <see cref="Alignment" />
+    /// <see cref="Alignment"/>
     public void SetAlignment( int alignment )
     {
         SetAlignment( alignment, alignment );
@@ -427,7 +427,7 @@ public class Label : Widget
     /// <summary>
     /// <param name="labelAlign"> Aligns all the text within the label (default left center). </param>
     /// <param name="lineAlign"> Aligns each line of text horizontally (default left). </param>
-    /// See also <see cref="Alignment " />
+    /// See also <see cref="Alignment "/>
     /// </summary>
     public void SetAlignment( int labelAlign, int lineAlign )
     {
@@ -510,7 +510,7 @@ public class Label : Widget
     #region labelstyle
 
     /// <summary>
-    /// The style for a label, see <see cref="Label" />.
+    /// The style for a label, see <see cref="Label"/>.
     /// </summary>
     [PublicAPI]
     public class LabelStyle
@@ -563,7 +563,7 @@ public class Label : Widget
     }
 
     /// <summary>
-    /// Creates a label, using a <see cref="LabelStyle" /> that has a BitmapFont with
+    /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont with
     /// the specified name from the skin and the specified color.
     /// </summary>
     public Label( string text, Skin skin, string fontName, Color color )
@@ -572,7 +572,7 @@ public class Label : Widget
     }
 
     /// <summary>
-    /// Creates a label, using a <see cref="LabelStyle" /> that has a BitmapFont
+    /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont
     /// with the specified name and the specified color from the
     /// skin.
     /// </summary>

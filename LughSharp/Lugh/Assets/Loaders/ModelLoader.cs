@@ -37,11 +37,12 @@ namespace LughSharp.Lugh.Assets.Loaders;
 [PublicAPI]
 public abstract class ModelLoader : AsynchronousAssetLoader
 {
-    protected readonly ModelLoaderParameters                        DefaultLoaderParameters = new();
-    protected readonly List< ObjectMap< string, ModelData >.Entry > Items                   = [ ];
+    protected readonly ModelLoaderParameters DefaultLoaderParameters = new();
+
+    protected readonly List< ObjectMap< string, ModelData >.Entry > Items = [ ];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ModelLoader" /> class
+    /// Initializes a new instance of the <see cref="ModelLoader"/> class
     /// with the specified file resolver.
     /// </summary>
     /// <param name="resolver">The file resolver to use for resolving model file paths.</param>
@@ -55,7 +56,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
     protected virtual ModelData? LoadModelData< T >( in FileInfo fileHandle, T? parameters )
         where T : ModelLoaderParameters
     {
-        return default( ModelData );
+        return null;
     }
 
     /// <summary>
@@ -68,7 +69,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
     /// <summary>
     /// Directly load the model on the calling thread.
-    /// The model with not be managed by an <see cref="AssetManager" />.
+    /// The model with not be managed by an <see cref="AssetManager"/>.
     /// </summary>
     public Model? LoadModel< T >( in FileInfo fileHandle, ITextureProvider textureProvider, T? parameters )
         where T : ModelLoaderParameters
@@ -80,7 +81,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
     /// <summary>
     /// Directly load the model on the calling thread.
-    /// The model with not be managed by an <see cref="AssetManager" />.
+    /// The model with not be managed by an <see cref="AssetManager"/>.
     /// </summary>
     public Model? LoadModel< T >( in FileInfo fileHandle, T parameters ) where T : ModelLoaderParameters
     {
@@ -89,7 +90,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
     /// <summary>
     /// Directly load the model on the calling thread.
-    /// The model with not be managed by an <see cref="AssetManager" />.
+    /// The model with not be managed by an <see cref="AssetManager"/>.
     /// </summary>
     public Model? LoadModel( in FileInfo fileHandle, ITextureProvider textureProvider )
     {
@@ -98,7 +99,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
     /// <summary>
     /// Directly load the model on the calling thread.
-    /// The model with not be managed by an <see cref="AssetManager" />.
+    /// The model with not be managed by an <see cref="AssetManager"/>.
     /// </summary>
     public Model? LoadModel( in FileInfo fileHandle )
     {
@@ -209,7 +210,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
     public class ModelLoaderParameters : AssetLoaderParameters
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModelLoaderParameters" />
+        /// Initializes a new instance of the <see cref="ModelLoaderParameters"/>
         /// class with default values.
         /// </summary>
         public ModelLoaderParameters()
@@ -225,3 +226,6 @@ public abstract class ModelLoader : AsynchronousAssetLoader
         public TextureLoader.TextureLoaderParameters TextureLoaderParameters { get; set; }
     }
 }
+
+// ============================================================================
+// ============================================================================

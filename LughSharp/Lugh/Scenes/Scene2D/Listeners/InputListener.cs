@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>
-/// EventListener for low-level input events. Unpacks <see cref="InputEvent" />s
+/// EventListener for low-level input events. Unpacks <see cref="InputEvent"/>s
 /// and calls the appropriate method. By default the methods here do nothing with
 /// the event. Users are expected to override the methods they are interested in.
 /// </summary>
@@ -35,16 +35,16 @@ public class InputListener : IEventListener
     private static readonly Vector2 _tmpCoords = new();
 
     /// <summary>
-    /// Try to handle the given event, if it is an <see cref="InputEvent" />.
+    /// Try to handle the given event, if it is an <see cref="InputEvent"/>.
     /// <para>
-    /// If the input event is of type <see cref="InputEvent.EventType.TouchDown" />,
-    /// <see cref="InputEvent.TouchFocus" /> is true and
-    /// <see cref="TouchDown(InputEvent, float, float, int, int)" /> returns true
+    /// If the input event is of type <see cref="InputEvent.EventType.TouchDown"/>,
+    /// <see cref="InputEvent.TouchFocus"/> is true and
+    /// <see cref="TouchDown(InputEvent, float, float, int, int)"/> returns true
     /// ( indicating the event was handled ) then this listener is added to the
     /// stage's touch focus via:-
     /// <para>
     /// <tt>
-    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)" />
+    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>
     /// </tt>
     /// </para>
     /// so it will receive all touch dragged events until the next touch up event.
@@ -134,10 +134,10 @@ public class InputListener : IEventListener
     /// <summary>
     /// Called when a mouse button or a finger touch goes down on the actor.
     /// If true is returned, this listener will have
-    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)" />,
+    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>,
     /// so it will receive all touchDragged and touchUp events, even those not
     /// over this actor, until touchUp is received. Also when true is returned,
-    /// the event is handled by <see cref="Event.SetHandled" />.
+    /// the event is handled by <see cref="Event.SetHandled"/>.
     /// </summary>
     public virtual bool TouchDown( InputEvent? ev, float x, float y, int ptr, int button )
     {
@@ -147,7 +147,7 @@ public class InputListener : IEventListener
     /// <summary>
     /// Called when a mouse button or a finger touch goes up anywhere, but only
     /// if touchDown previously returned true for the mouse button or touch.
-    /// The touchUp event is always handled by <see cref="Event.SetHandled" />.
+    /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
     public virtual void TouchUp( InputEvent? ev, float x, float y, int ptr, int button )
     {
@@ -156,7 +156,7 @@ public class InputListener : IEventListener
     /// <summary>
     /// Called when a mouse button or a finger touch is moved anywhere, but only
     /// if touchDown previously returned true for the mouse button or touch.
-    /// The touchDragged event is always handled by <see cref="Event.SetHandled" />.
+    /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
     public virtual void TouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
     {
@@ -165,7 +165,7 @@ public class InputListener : IEventListener
     /// <summary>
     /// Called any time the mouse is moved when a button is not down. This event
     /// only occurs on the desktop. When true is returned, the event is handled
-    /// by <see cref="Event.SetHandled" />.
+    /// by <see cref="Event.SetHandled"/>.
     /// </summary>
     public virtual bool MouseMoved( InputEvent? inputEvent, float x, float y )
     {
@@ -196,14 +196,14 @@ public class InputListener : IEventListener
     /// <param name="y"></param>
     /// <param name="pointer"></param>
     /// <param name="toActor"> May be null. </param>
-    /// <see cref="InputEvent " />
+    /// <see cref="InputEvent "/>
     public virtual void Exit( InputEvent? inputEvent, float x, float y, int pointer, Actor? toActor )
     {
     }
 
     /// <summary>
     /// Called when the mouse wheel has been scrolled. When true is returned,
-    /// the event is handled in <see cref="Event.SetHandled" />.
+    /// the event is handled in <see cref="Event.SetHandled"/>.
     /// </summary>
     public virtual bool Scrolled( InputEvent? inputEvent, float x, float y, float amountX, float amountY )
     {
@@ -212,7 +212,7 @@ public class InputListener : IEventListener
 
     /// <summary>
     /// Called when a key goes down. When true is returned, the event is
-    /// handled by <see cref="Event.SetHandled" />.
+    /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
     public virtual bool KeyDown( InputEvent? inputEvent, int keycode )
     {
@@ -221,7 +221,7 @@ public class InputListener : IEventListener
 
     /// <summary>
     /// Called when a key goes up. When true is returned, the event is
-    /// handled by <see cref="Event.SetHandled" />.
+    /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
     public virtual bool KeyUp( InputEvent? inputEvent, int keycode )
     {
@@ -230,7 +230,7 @@ public class InputListener : IEventListener
 
     /// <summary>
     /// Called when a key is typed. When true is returned, the event is
-    /// handled by <see cref="Event.SetHandled" />.
+    /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
     /// <param name="inputEvent"></param>
     /// <param name="character">

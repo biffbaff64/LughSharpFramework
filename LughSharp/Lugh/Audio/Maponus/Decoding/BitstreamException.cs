@@ -86,11 +86,11 @@ public class BitstreamException : Mp3SharpException
     /// Initializes a new BitstreamException with serialized data.
     /// </summary>
     /// <param name="info">
-    /// The <see cref="SerializationInfo" /> that holds the serialized object
+    /// The <see cref="SerializationInfo"/> that holds the serialized object
     /// data about the exception being thrown.
     /// </param>
     /// <param name="context">
-    /// The <see cref="StreamingContext" /> that contains contextual information
+    /// The <see cref="StreamingContext"/> that contains contextual information
     /// about the source or destination.
     /// </param>
     protected BitstreamException( SerializationInfo info, StreamingContext context )

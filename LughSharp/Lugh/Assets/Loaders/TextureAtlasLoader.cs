@@ -142,7 +142,7 @@ public class TextureAtlasLoader
     // ========================================================================
 
     /// <summary>
-    /// Parameters for loading a <see cref="TextureAtlas" />
+    /// Parameters for loading a <see cref="TextureAtlas"/>
     /// </summary>
     [PublicAPI]
     public class TextureAtlasParameter( bool flip ) : AssetLoaderParameters
@@ -154,3 +154,6 @@ public class TextureAtlasLoader
         public bool FlipVertically { get; } = flip;
     }
 }
+
+// ============================================================================
+// ============================================================================

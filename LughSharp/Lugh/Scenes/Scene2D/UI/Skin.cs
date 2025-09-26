@@ -108,7 +108,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Creates a skin containing the resources in the specified skin JSON
     /// file. If a file in the same directory with a ".atlas" extension exists,
-    /// it is loaded as a <see cref="TextureAtlas" /> and the texture regions
+    /// it is loaded as a <see cref="TextureAtlas"/> and the texture regions
     /// added to the skin. The atlas is automatically disposed when the skin is
     /// disposed.
     /// </summary>
@@ -155,7 +155,7 @@ public class Skin : IDisposable
     public static Dictionary< string, Type >                        JsonClassTags { get; set; }
 
     /// <summary>
-    /// Returns the <see cref="TextureAtlas" /> passed to this skin constructor, or null.
+    /// Returns the <see cref="TextureAtlas"/> passed to this skin constructor, or null.
     /// </summary>
     public TextureAtlas? Atlas { get; set; }
 
@@ -382,7 +382,7 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Returns an array with the <see cref="TextureRegion" /> that have an index that
+    /// Returns an array with the <see cref="TextureRegion"/> that have an index that
     /// is not equal to -1, or null if none are found.
     /// </summary>
     public List< TextureRegion >? GetRegions( string regionName )
@@ -440,7 +440,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a registered ninepatch. If no ninepatch is found but a region exists with
     /// the name, a ninepatch is created from the region and stored in the skin. If the
-    /// region is an <see cref="AtlasRegion" /> then its split <see cref="AtlasRegion.Values" />
+    /// region is an <see cref="AtlasRegion"/> then its split <see cref="AtlasRegion.Values"/>
     /// are used, otherwise the ninepatch will have the region as the center patch.
     /// </summary>
     public NinePatch GetPatch( string name )
@@ -493,7 +493,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a registered sprite. If no sprite is found but a region exists
     /// with the name, a sprite is created from the region and stored in the skin.
-    /// If the region is an <see cref="AtlasRegion" /> then an <see cref="AtlasSprite" />
+    /// If the region is an <see cref="AtlasRegion"/> then an <see cref="AtlasSprite"/>
     /// is used if the region has been whitespace stripped or packed rotated 90 degrees.
     /// </summary>
     public Sprite GetSprite( string name )
@@ -638,7 +638,7 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Returns a copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
     public ISceneDrawable NewDrawable( string name )
     {
@@ -646,7 +646,7 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
     public ISceneDrawable NewDrawable( string name, float r, float g, float b, float a )
     {
@@ -654,7 +654,7 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
     public ISceneDrawable NewDrawable( string name, Color tint )
     {
@@ -678,7 +678,7 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
     public ISceneDrawable NewDrawable( ISceneDrawable drawable, float r, float g, float b, float a )
     {
@@ -686,7 +686,7 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
     public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color tint )
     {
@@ -716,12 +716,12 @@ public class Skin : IDisposable
 
     /// <summary>
     /// Scales the drawable's :-
-    /// <see cref="ISceneDrawable.LeftWidth" />,
-    /// <see cref="ISceneDrawable.RightWidth" />,
-    /// <see cref="ISceneDrawable.BottomHeight" />,
-    /// <see cref="ISceneDrawable.TopHeight" />,
-    /// <see cref="ISceneDrawable.MinWidth" />,
-    /// <see cref="ISceneDrawable.MinHeight" />.
+    /// <see cref="ISceneDrawable.LeftWidth"/>,
+    /// <see cref="ISceneDrawable.RightWidth"/>,
+    /// <see cref="ISceneDrawable.BottomHeight"/>,
+    /// <see cref="ISceneDrawable.TopHeight"/>,
+    /// <see cref="ISceneDrawable.MinWidth"/>,
+    /// <see cref="ISceneDrawable.MinHeight"/>.
     /// </summary>
     public ISceneDrawable ScaleDrawable( ISceneDrawable drawable )
     {
@@ -797,7 +797,7 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Disposes the <see cref="TextureAtlas" /> and all <see cref="IDisposable" />
+    /// Disposes the <see cref="TextureAtlas"/> and all <see cref="IDisposable"/>
     /// resources in the skin.
     /// </summary>
     public void Dispose()

@@ -29,7 +29,7 @@ using Platform = LughSharp.Lugh.Core.Platform;
 namespace LughSharp.Lugh.Graphics.Utils;
 
 /// <summary>
-/// A <see cref="ITextureData" /> implementation which should be used
+/// A <see cref="ITextureData"/> implementation which should be used
 /// to create float textures.
 /// </summary>
 [PublicAPI]
@@ -108,7 +108,7 @@ public class FloatTextureData : ITextureData
         IsPrepared = true;
     }
 
-    public void ConsumeCustomData( int target )
+    public void UploadCustomData( int target )
     {
         if ( ( Api.App.AppType == Platform.ApplicationType.Android )
              || ( Api.App.AppType == Platform.ApplicationType.IOS )
@@ -180,7 +180,7 @@ public class FloatTextureData : ITextureData
         set => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
-    public Pixmap ConsumePixmap()
+    public Pixmap FetchPixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }

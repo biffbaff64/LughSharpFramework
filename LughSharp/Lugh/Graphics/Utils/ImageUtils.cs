@@ -27,6 +27,13 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class ImageUtils
 {
+    public static byte[] GetAsPNG( Texture texture )
+    {
+        return PNGDecoder.CreatePNGFromRawRGBA( texture.GetImageData()!,
+                                                texture.Width,
+                                                texture.Height,
+                                                texture.ColorFormat );
+    }
 }
 
 // ========================================================================

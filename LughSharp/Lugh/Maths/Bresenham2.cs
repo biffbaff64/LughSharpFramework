@@ -43,7 +43,7 @@ public class Bresenham2
     private readonly Pool< GridPoint2 >? _pool   = new( GetNewObject );
 
     /// <summary>
-    /// Returns a list of <see cref="GridPoint2" /> instances along the given line,
+    /// Returns a list of <see cref="GridPoint2"/> instances along the given line,
     /// at integer coordinates.
     /// </summary>
     /// <param name="start"> the start of the line </param>
@@ -55,7 +55,7 @@ public class Bresenham2
     }
 
     /// <summary>
-    /// Returns a list of <see cref="GridPoint2" /> instances along the given line,
+    /// Returns a list of <see cref="GridPoint2"/> instances along the given line,
     /// at integer coordinates.
     /// </summary>
     /// <param name="startX"> the start x coordinate of the line </param>
@@ -72,7 +72,7 @@ public class Bresenham2
     }
 
     /// <summary>
-    /// Returns a list of <see cref="GridPoint2" /> instances along the given line,
+    /// Returns a list of <see cref="GridPoint2"/> instances along the given line,
     /// at integer coordinates.
     /// </summary>
     /// <param name="startX"> the start x coordinate of the line </param>
