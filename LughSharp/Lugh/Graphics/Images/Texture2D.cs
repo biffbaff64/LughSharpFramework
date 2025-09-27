@@ -126,9 +126,7 @@ public class Texture2D : Image, IDrawable, IDisposable
     /// </summary>
     public TextureWrapMode VWrap { get; set; } = TextureWrapMode.ClampToEdge;
 
-    /// <inheritdoc />
-    public bool IsDrawable { get; set; }
-
+    public bool         IsDrawable  { get; set; }
     public ITextureData TextureData { get; set; }
 
     // ========================================================================
@@ -152,7 +150,6 @@ public class Texture2D : Image, IDrawable, IDisposable
     // ========================================================================
     // ========================================================================
 
-    
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
 

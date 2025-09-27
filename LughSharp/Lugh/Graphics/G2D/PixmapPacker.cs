@@ -25,7 +25,7 @@
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Input;
 
@@ -53,7 +53,7 @@ public class InputMultiplexer : IInputProcessor
         }
     }
 
-    public SnapshotArrayList< IInputProcessor > Processors { get; set; } = new( 4 );
+    public Utils.SnapshotArrayList< IInputProcessor > Processors { get; set; } = new( 4 );
 
     /// <inheritdoc />
     public bool KeyDown( int keycode )

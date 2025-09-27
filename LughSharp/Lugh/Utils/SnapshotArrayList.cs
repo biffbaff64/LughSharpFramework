@@ -24,7 +24,9 @@
 
 using System.Collections;
 
-namespace LughSharp.Lugh.Utils.Collections;
+using LughSharp.Lugh.Utils.Collections;
+
+namespace LughSharp.Lugh.Utils;
 
 /// <summary>
 /// An array that allows modification during iteration. Guarantees that array entries provided
@@ -656,3 +658,6 @@ public class SnapshotEnumerator< T > : IEnumerator< T >
     {
     }
 }
+
+// ========================================================================
+// ========================================================================

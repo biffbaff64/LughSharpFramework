@@ -30,7 +30,9 @@ using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
-using LughSharp.Lugh.Utils.Collections;
+using LughSharp.Lugh.Utils;
+
+using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Assets;
 

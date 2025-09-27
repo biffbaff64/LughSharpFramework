@@ -25,8 +25,8 @@
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Audio.OpenAL;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
+using LughUtils.source.Collections;
+using LughUtils.source.Exceptions;
 
 using Exception = System.Exception;
 

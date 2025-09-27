@@ -27,6 +27,8 @@ using System.Runtime.InteropServices;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Utils;
 
+using LughUtils.source;
+
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Extensions.Source.Freetype;

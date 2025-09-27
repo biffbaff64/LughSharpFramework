@@ -24,8 +24,8 @@
 
 using System.Text;
 
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Logging;
+using LughUtils.source.Collections;
+using LughUtils.source.Logging;
 
 namespace Extensions.Source.Json;
 

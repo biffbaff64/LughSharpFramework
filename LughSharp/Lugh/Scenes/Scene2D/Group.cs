@@ -23,7 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
-using LughSharp.Lugh.Utils.Collections;
+
+using LughUtils.source.Collections;
 
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
@@ -42,11 +43,12 @@ public class Group : Actor, ICullable
 {
     // ========================================================================
 
-    private readonly Matrix4                    _computedTransform = new();
-    private readonly Matrix4                    _oldTransform      = new();
-    private readonly Vector2                    _tmp               = new();
-    private readonly Affine2                    _worldTransform    = new();
-    public           SnapshotArrayList< Actor > Children { get; set; } = new( 4 );
+    public Lugh.Utils.SnapshotArrayList< Actor > Children { get; set; } = new( 4 );
+
+    private readonly Matrix4 _computedTransform = new();
+    private readonly Matrix4 _oldTransform      = new();
+    private readonly Vector2 _tmp               = new();
+    private readonly Affine2 _worldTransform    = new();
 
     /// <summary>
     /// When true (the default), the Batch is transformed so children are drawn

@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Cameras;
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 

@@ -25,8 +25,8 @@
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
+using LughUtils.source.Exceptions;
+using LughUtils.source.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
 
@@ -262,9 +262,14 @@ public partial class TexturePacker
                                 TexturePackerSettings settings,
                                 TexturePackerProgressListener? progressListener = null )
     {
+        Logger.Checkpoint();
+        
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
+            
+            Logger.Debug( "Processor initialised" );
+            
             _ = processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
         }
         catch ( Exception ex )
@@ -345,17 +350,24 @@ public partial class TexturePacker
             
             // ---------- Handle writing of the texture atlas ----------
 
+            var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
+
             #if TEXTURE_ATLAS_WRITING
 
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
             ProgressListener.Total = pages.Count;
 
-            var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
-
             WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
             ProgressListener.End();
+
+            #endif // TEXTURE_ATLAS_WRITING
+
+            // ---------- End of writing of the texture atlas ----------
+            
+            // ---------- Write the .atlas pack file ----------
+            
             ProgressListener.Start( 0.01f );
 
             try
@@ -374,10 +386,8 @@ public partial class TexturePacker
             {
                 return;
             }
-
-            #endif // TEXTURE_ATLAS_WRITING
             
-            // ---------- End of writing of the texture atlas ----------
+            // ---------- End of writing of the .atlas pack file ----------
         }
 
         ProgressListener.End();

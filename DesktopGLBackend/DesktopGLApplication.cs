@@ -25,10 +25,10 @@
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
+using LughUtils.source;
+using LughUtils.source.Collections;
+using LughUtils.source.Exceptions;
+using LughUtils.source.Logging;
 
 using Platform = LughSharp.Lugh.Core.Platform;
 

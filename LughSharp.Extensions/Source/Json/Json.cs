@@ -28,9 +28,11 @@ using System.Runtime.Serialization;
 using System.Security;
 
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
+
+using LughUtils.source;
+using LughUtils.source.Collections;
+using LughUtils.source.Exceptions;
+using LughUtils.source.Logging;
 
 namespace Extensions.Source.Json;
 

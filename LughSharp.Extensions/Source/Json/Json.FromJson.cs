@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Serialization;
+
 using LughSharp.Lugh.Files;
 
 namespace Extensions.Source.Json;

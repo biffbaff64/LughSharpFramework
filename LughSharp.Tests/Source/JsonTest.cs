@@ -29,9 +29,9 @@ using Extensions.Source.Json;
 
 using JetBrains.Annotations;
 
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
+using LughUtils.source.Collections;
+using LughUtils.source.Exceptions;
+using LughUtils.source.Logging;
 
 namespace LughSharp.Tests.Source;
 

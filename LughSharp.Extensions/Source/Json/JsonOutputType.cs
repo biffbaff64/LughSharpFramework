@@ -26,7 +26,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Text;
-using LughSharp.Lugh.Utils.Exceptions;
+using LughUtils.source.Exceptions;
 
 namespace Extensions.Source.Json;
 

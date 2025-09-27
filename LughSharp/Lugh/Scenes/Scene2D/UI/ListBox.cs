@@ -26,8 +26,8 @@ using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Pooling;
+using LughUtils.source.Collections;
+using LughUtils.source.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
@@ -47,6 +47,14 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ListBox< T > : Widget
 {
+    public Rectangle?          CullingArea  { get; set; }
+    public InputListener?      KeyListener  { get; set; }
+    public ArraySelection< T > Selection    { get; set; } = null!;
+    public List< T >           Items        { get; set; } = [ ];
+    public float               ItemHeight   { get; set; }
+    public int                 Alignment    { get; set; } = LughUtils.source.Alignment.LEFT;
+    public bool                TypeToSelect { get; set; }
+
     // ========================================================================
 
     private int   _overIndex = -1;
@@ -86,14 +94,6 @@ public class ListBox< T > : Widget
     {
         Create( style );
     }
-
-    public Rectangle?          CullingArea  { get; set; }
-    public InputListener?      KeyListener  { get; set; }
-    public ArraySelection< T > Selection    { get; set; } = null!;
-    public List< T >           Items        { get; set; } = new();
-    public float               ItemHeight   { get; set; }
-    public int                 Alignment    { get; set; } = Lugh.Utils.Alignment.LEFT;
-    public bool                TypeToSelect { get; set; }
 
     public override float PrefWidth
     {

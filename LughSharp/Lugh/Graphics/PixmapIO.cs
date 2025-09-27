@@ -27,7 +27,7 @@ using System.IO.Hashing;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 using Exception = System.Exception;
 

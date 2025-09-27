@@ -26,8 +26,8 @@ using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Pooling;
+using LughUtils.source.Collections;
+using LughUtils.source.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 

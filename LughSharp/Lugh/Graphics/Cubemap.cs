@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Graphics;
 

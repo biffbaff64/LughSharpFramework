@@ -24,8 +24,8 @@
 
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Pooling;
+using LughUtils.source.Collections;
+using LughUtils.source.Pooling;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 

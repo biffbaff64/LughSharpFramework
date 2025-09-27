@@ -30,8 +30,9 @@ using LughSharp.Lugh.Graphics.Viewports;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Pooling;
+
+using LughUtils.source.Collections;
+using LughUtils.source.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 using Platform = LughSharp.Lugh.Core.Platform;
@@ -124,11 +125,12 @@ public class Stage : InputAdapter, IDisposable
         viewport.Update( Api.Graphics.Width, Api.Graphics.Height, true );
     }
 
-    public SnapshotArrayList< TouchFocus > TouchFocuses { get; }      = new( true, 4 );
-    public Camera?                         Camera       { get; set; } = null!;
-    public Viewport                        Viewport     { get; }
-    public IBatch                          Batch        { get; }
-    public bool                            Debug        { get; set; } // True if any actor has ever had debug enabled.
+    public Lugh.Utils.SnapshotArrayList< TouchFocus > TouchFocuses { get; } = new( true, 4 );
+
+    public Camera?  Camera   { get; set; } = null!;
+    public Viewport Viewport { get; }
+    public IBatch   Batch    { get; }
+    public bool     Debug    { get; set; } // True if any actor has ever had debug enabled.
 
     public float Width  => Viewport.WorldWidth;
     public float Height => Viewport.WorldHeight;
@@ -278,7 +280,7 @@ public class Stage : InputAdapter, IDisposable
     /// Returns the root's child actors.
     /// </summary>
     /// <see cref="Group.Children "/>
-    public SnapshotArrayList< Actor > Actors => Root.Children;
+    public LughSharp.Lugh.Utils.SnapshotArrayList< Actor > Actors => Root.Children;
 
     /// <summary>
     /// If true, any actions executed during a call to <see cref="Act()"/>)

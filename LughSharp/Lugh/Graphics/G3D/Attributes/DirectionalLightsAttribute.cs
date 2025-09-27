@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.G3D.Env;
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Graphics.G3D.Attributes;
 

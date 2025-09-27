@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Pooling;
+using LughUtils.source.Pooling;
 
 namespace LughSharp.Lugh.Scenes.Scene2D;
 

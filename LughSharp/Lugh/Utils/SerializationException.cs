@@ -22,9 +22,48 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils.Exceptions;
+namespace LughSharp.Lugh.Utils;
 
 [PublicAPI]
-public class NumberFormatException : FormatException
+[Serializable]
+public class SerializationException : System.Runtime.Serialization.SerializationException
 {
+    public SerializationException()
+    {
+    }
+
+    public SerializationException( string message )
+        : base( message )
+    {
+    }
+
+    public SerializationException( string message, Exception inner )
+        : base( message, inner )
+    {
+    }
+
+    public SerializationException( Exception inner )
+        : base( "", inner )
+    {
+    }
+
+    public void AddTrace( string traceMessage )
+    {
+        if ( Data.Contains( "Trace" ) )
+        {
+            Data[ "Trace" ] = Data[ "Trace" ] + Environment.NewLine + traceMessage;
+        }
+        else
+        {
+            Data[ "Trace" ] = traceMessage;
+        }
+    }
+
+    public string? GetTrace()
+    {
+        return Data.Contains( "Trace" ) ? Data[ "Trace" ]!.ToString() : null;
+    }
 }
+
+// ========================================================================
+// ========================================================================

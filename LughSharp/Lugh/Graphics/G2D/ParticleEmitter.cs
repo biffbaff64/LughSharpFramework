@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Maths.Collision;
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 using Exception = System.Exception;
 

@@ -26,8 +26,9 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
+
+using LughUtils.source.Exceptions;
+using LughUtils.source.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -121,6 +122,8 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </returns>
     public virtual List< Entry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
+        Logger.Checkpoint();
+
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
         CollectSettingsFiles( inputRoot, outputRoot );
@@ -128,12 +131,11 @@ public class TexturePackerFileProcessor : FileProcessor
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
         // _packCount variable to the number of packer invocations.
-        // The result from the base.Process method is discarded.
         CountOnly = true;
         _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
 
-        // Do actual processing.
+        // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
         var result = base.Process( inputRoot, outputRoot );
         ProgressListener?.End();
@@ -177,15 +179,27 @@ public class TexturePackerFileProcessor : FileProcessor
 
         var parent = ( DirectoryInfo? )inputDir.InputFile;
 
-        for ( ;
-             ( parent != null )
-             && !_dirToSettings.TryGetValue( parent, out settings )
-             && !parent.Equals( _rootDirectory );
-             parent = parent.Parent )
+        // The loop continues as long as 'parent' is not null, the settings for 'parent'
+        // are not found, and 'parent' is not the root directory.
+        // 'parent' is updated to its parent in each iteration.
+        while ( true )
         {
-            // The loop continues as long as 'parent' is not null,
-            // the settings for 'parent' are not found, and 'parent' is not the root directory.
-            // 'parent' is updated to its parent in each iteration.
+            if ( parent != null )
+            {
+                _dirToSettings.TryGetValue( parent, out settings );
+            }
+
+            if ( settings != null )
+            {
+                break;
+            }
+
+            if ( parent == null || parent.Equals( _rootDirectory ) )
+            {
+                break;
+            }
+
+            parent = parent.Parent;
         }
 
         // After the loop, 'settings' will contain the found settings (if any),
@@ -287,21 +301,23 @@ public class TexturePackerFileProcessor : FileProcessor
 
         var sourceString = inputDir.InputFile?.FullName.Substring( IOUtils.AssetsRoot.Length );
 
-        // Pack.
-        try
+        // ---------- Pack ----------
+
+        if ( !_defaultSettings.Silent )
         {
-            Logger.Debug( $"Reading: {sourceString}" );
-        }
-        catch ( IOException ioe )
-        {
-            Logger.Debug( $"Reading: {sourceString} ( IOException )" );
-            Logger.Warning( $"IOException while reading: {ioe.Message}" );
+            try
+            {
+                Logger.Debug( $"Reading: {sourceString}" );
+            }
+            catch ( IOException ioe )
+            {
+                Logger.Debug( $"Reading: {sourceString} ( IOException )" );
+                Logger.Warning( $"IOException while reading: {ioe.Message}" );
+            }
         }
 
         if ( ProgressListener != null )
         {
-            Logger.Debug( "Starting ProgressListener" );
-
             ProgressListener.Start( 1f / _packCount );
 
             string? inputPath = null;
@@ -356,241 +372,6 @@ public class TexturePackerFileProcessor : FileProcessor
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
-
-//    /// <summary>
-//    /// Processes the given array of files starting from a specific output directory
-//    /// and populates a mapping of directories to their corresponding entries. Handles
-//    /// recursive traversal and processing based on the specified depth.
-//    /// </summary>
-//    /// <param name="files">
-//    /// An array of <see cref="FileInfo"/> objects representing the files to be processed.
-//    /// </param>
-//    /// <param name="outputRoot">
-//    /// The root output directory where the processed files will be stored.
-//    /// </param>
-//    /// <param name="outputDir">
-//    /// The currently targeted output directory during the processing operation.
-//    /// </param>
-//    /// <param name="dirToEntries">
-//    /// A dictionary mapping each discovered directory to a list of associated
-//    /// <see cref="FileProcessor.Entry"/> objects.
-//    /// </param>
-//    /// <param name="depth">
-//    /// The current recursion depth during processing, used to manage directory
-//    /// hierarchy and traversal.
-//    /// </param>
-//    public override void Process( FileInfo[] files,
-//                                  DirectoryInfo outputRoot, DirectoryInfo outputDir,
-//                                 Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
-//    {
-//        foreach ( var file in files )
-//        {
-//            var dir = file.Directory;
-//
-//            if ( dir != null )
-//            {
-//                if ( !dirToEntries.ContainsKey( dir ) )
-//                {
-//                    // If the directory is not already a key in the dictionary, add it
-//                    dirToEntries[ dir ] = [ ];
-//                }
-//            }
-//            else
-//            {
-//                // Handle the case where a file has no parent directory (e.g., root level)
-//                // Either log a warning, throw an exception, or handle it differently
-//                // ( Logging a warning for now... )
-//                Logger.Warning( $"File '{file.FullName}' has no parent directory." );
-//            }
-//        }
-//
-//        foreach ( var file in files )
-//        {
-//            if ( IOUtils.IsFile( file ) )
-//            {
-//                if ( InputRegex.Count > 0 )
-//                {
-//                    var found = false;
-//
-//                    foreach ( var pattern in InputRegex )
-//                    {
-//                        if ( pattern.IsMatch( file.Name ) )
-//                        {
-//                            found = true;
-//
-//                            break;
-//                        }
-//                    }
-//
-//                    if ( !found )
-//                    {
-//                        continue;
-//                    }
-//                }
-//
-//                if ( file.DirectoryName == null )
-//                {
-//                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
-//                }
-//
-//                if ( ( FilenameFilterDelegate != null )
-//                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
-//                {
-//                    continue;
-//                }
-//
-//                var outputName = file.Name;
-//
-//                if ( OutputSuffix != null )
-//                {
-//                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
-//                }
-//
-//                var entry = new Entry
-//                {
-//                    Depth           = depth,
-//                    InputFile       = file,
-//                    OutputDirectory = outputDir,
-//                    OutputFileName = FlattenOutput
-//                        ? Path.Combine( outputRoot.FullName, outputName )
-//                        : Path.Combine( outputDir.FullName, outputName ),
-//                };
-//
-//                var dir = file.Directory!;
-//
-//                if ( !dirToEntries.TryGetValue( dir, out var dirList ) )
-//                {
-//                    dirList             = [ ];
-//                    dirToEntries[ dir ] = dirList;
-//                }
-//                
-//                dirList?.Add( entry );
-//            }
-//
-//            if ( Recursive && IOUtils.IsDirectory( file ) )
-//            {
-//                var subdir = outputDir.FullName.Length == 0
-//                    ? new DirectoryInfo( file.Name )
-//                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
-//
-//                Process( new DirectoryInfo( file.FullName )
-//                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
-//                         outputRoot, subdir, dirToEntries, depth + 1 );
-//            }
-//        }
-//    }
-
-//    /// <summary>
-//    /// </summary>
-//    /// <param name="files"></param>
-//    /// <param name="outputRoot"></param>
-//    /// <param name="outputDir"></param>
-//    /// <param name="dirToEntries"></param>
-//    /// <param name="depth"></param>
-//    public override void Process( FileInfo[] files,
-//                                  DirectoryInfo outputRoot,
-//                                  DirectoryInfo outputDir,
-//                                  Dictionary< string, List< Entry > > dirToEntries,
-//                                  int depth )
-//    {
-//        foreach ( var file in files )
-//        {
-//            var dir = file.Directory;
-//
-//            if ( dir != null )
-//            {
-//                if ( !dirToEntries.ContainsKey( dir.FullName ) )
-//                {
-//                    // If the directory is not already a key in the dictionary, add it
-//                    dirToEntries[ dir.FullName ] = [ ];
-//                }
-//            }
-//            else
-//            {
-//                // Handle the case where a file has no parent directory (e.g., root level)
-//                // Either log a warning, throw an exception, or handle it differently
-//                // ( Logging a warning for now... )
-//                Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
-//            }
-//        }
-//
-//        foreach ( var file in files )
-//        {
-//            if ( IOUtils.IsFile( file ) )
-//            {
-//                if ( InputRegex.Count > 0 )
-//                {
-//                    var found = false;
-//
-//                    foreach ( var pattern in InputRegex )
-//                    {
-//                        if ( pattern.IsMatch( file.Name ) )
-//                        {
-//                            found = true;
-//
-//                            break;
-//                        }
-//                    }
-//
-//                    if ( !found )
-//                    {
-//                        continue;
-//                    }
-//                }
-//
-//                if ( ( FilenameFilterDelegate != null )
-//                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
-//                {
-//                    continue;
-//                }
-//
-//                var outputName = file.Name;
-//
-//                if ( OutputSuffix != null )
-//                {
-//                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" )
-//                                 + OutputSuffix;
-//                }
-//
-//                var entry = new Entry
-//                {
-//                    Depth           = depth,
-//                    InputFile       = file,
-//                    OutputDirectory = outputDir,
-//                    OutputFileName = FlattenOutput
-//                        ? Path.Combine( outputRoot.FullName, outputName )
-//                        : Path.Combine( outputDir.FullName, outputName ),
-//                };
-//
-//                var dir = file.Directory!.FullName;
-//
-//                if ( dirToEntries.TryGetValue( dir, out var value ) )
-//                {
-//                    value.Add( entry );
-//                }
-//                else
-//                {
-//                    // This should ideally not happen if the first loop worked correctly.
-//
-//                    Logger.Warning( $"Directory '{dir}' not found in dirToEntries during file processing." );
-//
-//                    // TODO: Potentially create a new list here if there is a specific fallback behavior:
-//                    // dirToEntries[dir] = new List<Entry> { entry };
-//                }
-//            }
-//
-//            if ( Recursive && IOUtils.IsDirectory( file ) )
-//            {
-//                var subdir = outputDir.FullName.Length == 0
-//                    ? new DirectoryInfo( file.Name )
-//                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
-//
-//                Process( new DirectoryInfo( file.FullName )
-//                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
-//                         outputRoot, subdir, dirToEntries, depth + 1 );
-//            }
-//        }
-//    }
 
     /// <summary>
     /// </summary>
@@ -677,7 +458,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
         if ( settingsFiles.Count == 0 )
         {
-            // No settings files found.
+            // No settings files found, logger message is for development purposes.
             Logger.Debug( "No settings files found." );
         }
         else
@@ -818,3 +599,6 @@ public class TexturePackerFileProcessor : FileProcessor
         return new TexturePackerSettings( settings );
     }
 }
+
+// ============================================================================
+// ============================================================================

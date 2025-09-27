@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using ByteOrder = LughSharp.Lugh.Utils.ByteOrder;
+using ByteOrder = LughUtils.source.ByteOrder;
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Graphics.Utils;

@@ -22,8 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Pooling;
+using LughUtils.source.Collections;
+using LughUtils.source.Pooling;
 
 namespace LughSharp.Lugh.Graphics.Text;
 

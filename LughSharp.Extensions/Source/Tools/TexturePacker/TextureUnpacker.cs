@@ -23,8 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
+using LughUtils.source.Exceptions;
+using LughUtils.source.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

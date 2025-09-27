@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
+
+using LughUtils.source;
+using LughUtils.source.Exceptions;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

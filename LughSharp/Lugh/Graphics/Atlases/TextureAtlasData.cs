@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 using Exception = System.Exception;
 
@@ -68,26 +68,28 @@ public partial class TextureAtlasData
     {
         Guard.ThrowIfNull( packFile );
 
+        //@formatter:off
         ObjectMap< string, IField< Page > > pageFields = new( 15, 0.99f )
         {
-            { "size", new PageFieldSize() },
-            { "format", new PageFieldFormat() },
-            { "filter", new PageFieldFilter() },
-            { "repeat", new PageFieldRepeat() },
-            { "pma", new PageFieldPma() },
+            { "size",       new PageFieldSize() },
+            { "format",     new PageFieldFormat() },
+            { "filter",     new PageFieldFilter() },
+            { "repeat",     new PageFieldRepeat() },
+            { "pma",        new PageFieldPma() },
         };
 
         ObjectMap< string, IField< Region > > regionFields = new( 127, 0.99f )
         {
-            { "xy", new RegionFieldXY() },
-            { "size", new RegionFieldSize() },
-            { "bounds", new RegionFieldBounds() },
-            { "offset", new RegionFieldOffset() },
-            { "orig", new RegionFieldOrig() },
-            { "offsets", new RegionFieldOffsets() },
-            { "rotate", new RegionFieldRotate() },
-            { "index", new RegionFieldIndex() },
+            { "xy",         new RegionFieldXY() },
+            { "size",       new RegionFieldSize() },
+            { "bounds",     new RegionFieldBounds() },
+            { "offset",     new RegionFieldOffset() },
+            { "orig",       new RegionFieldOrig() },
+            { "offsets",    new RegionFieldOffsets() },
+            { "rotate",     new RegionFieldRotate() },
+            { "index",      new RegionFieldIndex() },
         };
+        //@formatter:on
 
         var reader = new StreamReader( packFile.FullName, false );
 
@@ -205,7 +207,7 @@ public partial class TextureAtlasData
                                 {
                                     entryValues[ i ] = int.Parse( Entry[ i + 1 ] );
                                 }
-                                catch ( NumberFormatException )
+                                catch ( Exception )
                                 {
                                     // Silently ignore non-integer values.
                                 }

@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils.Exceptions;
+using LughUtils.source.Exceptions;
 
 namespace DesktopGLBackend.Utils;
 

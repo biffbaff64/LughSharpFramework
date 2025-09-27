@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Collections;
+using LughUtils.source.Collections;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

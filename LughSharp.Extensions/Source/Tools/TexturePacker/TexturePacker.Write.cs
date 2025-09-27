@@ -26,8 +26,8 @@ using Extensions.Source.Drawing;
 
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
+using LughUtils.source.Exceptions;
+using LughUtils.source.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
 using Pen = System.Drawing.Pen;
