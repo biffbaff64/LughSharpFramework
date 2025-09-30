@@ -314,7 +314,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             // Check if there is any data to flush.
             if ( Idx <= 0 )
             {
-                Logger.Warning( $"Flush cancelled: Idx: {Idx}" );
+                Logger.Error( $"Flush cancelled: Idx: {Idx}" );
 
                 // Ensure that Idx is reset to zero.
                 Idx = 0;
@@ -341,7 +341,7 @@ public partial class SpriteBatch : IBatch, IDisposable
                 Idx = 0;
                 _nullTextureCount++;
 
-                Logger.Warning( $"Attempt to flush with null texture. This batch will be skipped. " +
+                Logger.Error( $"Attempt to flush with null texture. This batch will be skipped. " +
                                 $"Null texture count: {_nullTextureCount}. " +
                                 $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
 
@@ -750,7 +750,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         if ( maxTextureUnits[ 0 ] < 32 )
         {
             Logger.Divider( '#', 100 );
-            Logger.Warning( $"Warning: Low MaxTextureUnits detected ({maxTextureUnits[ 0 ]}." );
+            Logger.Error( $"Warning: Low MaxTextureUnits detected ({maxTextureUnits[ 0 ]}." );
             Logger.Divider( '#', 100 );
         }
 
@@ -798,7 +798,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         {
             if ( !_shader.IsCompiled )
             {
-                Logger.Warning( $"Shader is not compiled: {Shader}" );
+                Logger.Error( $"Shader is not compiled: {Shader}" );
 
                 return;
             }

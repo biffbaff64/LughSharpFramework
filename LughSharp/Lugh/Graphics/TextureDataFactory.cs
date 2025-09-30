@@ -40,7 +40,7 @@ public static class TextureDataFactory
     /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
     public static ITextureData LoadFromFile( FileInfo file, bool useMipMaps = true )
     {
-        return LoadFromFile( file, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888, useMipMaps );
+        return LoadFromFile( file, Pixmap.Format.Default, useMipMaps );
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public static class TextureDataFactory
     /// <returns>The loaded texture data.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
     public static ITextureData LoadFromFile( FileInfo file,
-                                             int format,
+                                             Pixmap.Format format,
                                              bool useMipMaps = true )
     {
         Logger.Checkpoint();

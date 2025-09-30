@@ -1951,7 +1951,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             if ( name <= 0 )
             {
-                Logger.Warning( $"Object handle {name} for {label} cannot be <= 0" );
+                Logger.Error( $"Object handle {name} for {label} cannot be <= 0" );
 
                 // No need, in this case, to throw an exception. Just return without
                 // adding a debug label. 

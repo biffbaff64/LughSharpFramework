@@ -45,7 +45,7 @@ public class FontUtils
         }
         catch ( Exception e )
         {
-            Logger.Warning( e.Message );
+            Logger.Error( e.Message );
 
             font = new BitmapFont();
         }

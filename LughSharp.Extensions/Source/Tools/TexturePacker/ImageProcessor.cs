@@ -319,13 +319,13 @@ public class ImageProcessor
         }
         catch ( ObjectDisposedException )
         {
-            Logger.Warning( $"Bitmap '{name}' has already been disposed!" );
+            Logger.Error( $"Bitmap '{name}' has already been disposed!" );
 
             return null; // Or handle the error appropriately
         }
         catch ( ArgumentException ex )
         {
-            Logger.Warning( $"ArgumentException accessing Bitmap '{name}': {ex.Message}" );
+            Logger.Error( $"ArgumentException accessing Bitmap '{name}': {ex.Message}" );
 
             return null; // Or handle the error appropriately
         }

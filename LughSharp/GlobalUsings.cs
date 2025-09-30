@@ -52,11 +52,22 @@ global using GLFW = DotGLFW;
 // ============================================================================
 
 global using LughSharp.Lugh.Core;
-global using LughSharp.Lugh.Graphics.OpenGL.Enums;
-global using LughSharp.Lugh.Graphics.Utils;
-global using LughSharp.Lugh.Maths;
-global using LughSharp.Lugh.Graphics.OpenGL;
+
+global using LughSharp.Lugh.Graphics;
+global using LughSharp.Lugh.Graphics.Atlases;
+global using LughSharp.Lugh.Graphics.Cameras;
+global using LughSharp.Lugh.Graphics.FrameBuffers;
 global using LughSharp.Lugh.Graphics.G2D;
+global using LughSharp.Lugh.Graphics.G3D;
+global using LughSharp.Lugh.Graphics.Images;
+global using LughSharp.Lugh.Graphics.OpenGL;
+global using LughSharp.Lugh.Graphics.OpenGL.Enums;
+global using LughSharp.Lugh.Graphics.Text;
+global using LughSharp.Lugh.Graphics.Utils;
+global using LughSharp.Lugh.Graphics.Viewports;
+
+global using LughSharp.Lugh.Maths;
+
 global using LughSharp.Lugh.Utils;
 
 // ============================================================================

@@ -156,11 +156,11 @@ public static class BMPUtils
         }
         catch ( NullReferenceException nre )
         {
-            Logger.Warning( $"Error: Bitmap object is null: {nre.Message}" );
+            Logger.Error( $"Error: Bitmap object is null: {nre.Message}" );
         }
         catch ( Exception e )
         {
-            Logger.Warning( e.Message );
+            Logger.Error( e.Message );
         }
     }
 

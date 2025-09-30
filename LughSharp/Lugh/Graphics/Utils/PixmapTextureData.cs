@@ -27,18 +27,18 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class PixmapTextureData : ITextureData
 {
-    public Pixmap Pixmap        { get; set; }
-    public bool   DisposePixmap { get; set; }
-    public int    PixelFormat   { get; set; }
-    public bool   IsManaged     { get; set; }
-    public bool   UseMipMaps    { get; set; }
-    public bool   IsPrepared    { get; set; } = true;
-    public bool IsOwned { get; set; }
+    public Pixmap        Pixmap        { get; set; }
+    public Pixmap.Format PixelFormat   { get; set; }
+    public bool          UseMipMaps    { get; set; }
+    public bool          DisposePixmap { get; set; }
+    public bool          IsManaged     { get; set; }
+    public bool          IsPrepared    { get; set; } = true;
+    public bool          IsOwned       { get; set; }
 
     // ========================================================================
 
     public PixmapTextureData( Pixmap pixmap,
-                              int format,
+                              Pixmap.Format format,
                               bool useMipMaps,
                               bool disposePixmap,
                               bool managed = false )
@@ -87,7 +87,7 @@ public class PixmapTextureData : ITextureData
 
     public void Prepare()
     {
-        Logger.Warning( "prepare() must not be called on a PixmapTextureData" +
+        Logger.Error( "prepare() must not be called on a PixmapTextureData" +
                         " instance as it is already prepared." );
     }
 }

@@ -121,11 +121,11 @@ public partial class GLBindings
             {
                 Logger.Debug( $"target: {PixelFormatUtils.GetGLTargetName( target )}" );
                 Logger.Debug( $"level: {level}" );
-                Logger.Debug( $"pixmap.GLInternalPixelFormat: {PixelFormatUtils.GetGLInternalFormatName( pixmap.GLInternalPixelFormat )}" );
+                Logger.Debug( $"pixmap.GLInternalPixelFormat: {PixelFormatUtils.GLInternalFormatAsString( pixmap.GLInternalPixelFormat )}" );
                 Logger.Debug( $"pixmap.Width: {pixmap.Width}" );
                 Logger.Debug( $"pixmap.Height: {pixmap.Height}" );
                 Logger.Debug( $"border: {border}" );
-                Logger.Debug( $"pixmap.GLPixelFormat: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+                Logger.Debug( $"pixmap.GLPixelFormat: {PixelFormatUtils.GLFormatAsString( pixmap.GLPixelFormat )}" );
                 Logger.Debug( $"pixmap.GLDataType: {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
 
                 GL.PixelStorei( PixelStoreParameter.UnpackAlignment, 1 );

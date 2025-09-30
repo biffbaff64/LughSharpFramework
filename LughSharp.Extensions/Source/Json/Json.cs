@@ -320,7 +320,7 @@ public partial class Json
         }
         catch ( Exception ignored )
         {
-            Logger.Warning( $"Exception (IGNORED): {ignored.Message}" );
+            Logger.Error( $"Exception (IGNORED): {ignored.Message}" );
 
             _classToDefaultValues[ type ] = null;
 
@@ -948,7 +948,7 @@ public partial class Json
             }
             catch ( ArithmeticException ignored )
             {
-                Logger.Warning( $"ArithmeticException (IGNORED): {ignored.Message}" );
+                Logger.Error( $"ArithmeticException (IGNORED): {ignored.Message}" );
             }
 
             jsonData = new JsonValue( jsonData.AsString() );
@@ -965,7 +965,7 @@ public partial class Json
             }
             catch ( ArithmeticException ignored )
             {
-                Logger.Warning( $"ArithmeticException (IGNORED): {ignored.Message}" );
+                Logger.Error( $"ArithmeticException (IGNORED): {ignored.Message}" );
             }
 
             jsonData = new JsonValue( jsonData.AsString() );
@@ -1017,7 +1017,7 @@ public partial class Json
             catch ( FormatException ignored )
             {
                 // Handle invalid number format
-                Logger.Warning( $"FormatException (IGNORED): {ignored.Message}" );
+                Logger.Error( $"FormatException (IGNORED): {ignored.Message}" );
             }
 
             if ( type == typeof( bool ) )

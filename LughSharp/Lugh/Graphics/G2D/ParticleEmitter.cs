@@ -1965,7 +1965,7 @@ public class ParticleEmitter
                                              + "Please download the latest version of the Particle Editor tool and "
                                              + "recreate the file by loading and saving it again.";
 
-                Logger.Warning( ERROR_MESSAGE );
+                Logger.Error( ERROR_MESSAGE );
 
                 throw new IOException( ERROR_MESSAGE );
             }

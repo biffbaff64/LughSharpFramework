@@ -38,6 +38,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 public partial class TexturePacker
 {
     /// <summary>
+    /// Writes packed images to disk, applying padding, power-of-two, and other settings.
     /// </summary>
     /// <param name="outputDir"></param>
     /// <param name="scaledPackFileName"></param>
@@ -47,8 +48,7 @@ public partial class TexturePacker
     /// <exception cref="Exception"></exception>
     private void WriteImages( string outputDir, string scaledPackFileName, List< Page? > pages )
     {
-        Logger.Checkpoint();
-
+        // Prepare output file and directory names
         var packFileNoExt = Path.Combine( outputDir, scaledPackFileName );
         var packDir       = Path.GetDirectoryName( packFileNoExt );
         var imageName     = Path.GetFileName( packFileNoExt );
@@ -65,6 +65,7 @@ public partial class TexturePacker
         Logger.Debug( $"imageName: {imageName}" );
         Logger.Debug( $"pages.Count: {pages.Count}" );
 
+        // Iterate over each page to write its image
         for ( var p = 0; p < pages.Count; p++ )
         {
             var page = pages[ p ] ?? throw new NullReferenceException( "Page is null" );
@@ -72,6 +73,7 @@ public partial class TexturePacker
             var width  = page.Width;
             var height = page.Height;
 
+            // Apply edge padding if enabled
             if ( _settings.EdgePadding )
             {
                 var edgePadX = _settings.PaddingX;
@@ -89,18 +91,21 @@ public partial class TexturePacker
                 height += edgePadY * 2;
             }
 
+            // Adjust to next power of two if required
             if ( _settings.PowerOfTwo )
             {
                 width  = MathUtils.NextPowerOfTwo( width );
                 height = MathUtils.NextPowerOfTwo( height );
             }
 
+            // Adjust to multiple of four if required
             if ( _settings.MultipleOfFour )
             {
                 width  = ( width % 4 ) == 0 ? width : ( width + 4 ) - ( width % 4 );
                 height = ( height % 4 ) == 0 ? height : ( height + 4 ) - ( height % 4 );
             }
 
+            // Enforce minimum dimensions
             width            = Math.Max( _settings.MinWidth, width );
             height           = Math.Max( _settings.MinHeight, height );
             page.ImageWidth  = width;
@@ -111,6 +116,7 @@ public partial class TexturePacker
             Logger.Debug( $"page.ImageWidth: {page.ImageWidth}" );
             Logger.Debug( $"page.ImageHeight: {page.ImageHeight}" );
 
+            // Find a unique output file name
             while ( true )
             {
                 var name = imageName;
@@ -142,12 +148,13 @@ public partial class TexturePacker
 
             Logger.Debug( $"outputFile: {outputFile}" );
 
-            // Create output directories
+            // Create output directories if needed
             Directory.CreateDirectory( Path.GetDirectoryName( outputFile )
                                        ?? throw new GdxRuntimeException( "Error creating output directory" ) );
 
             page.ImageName = Path.GetFileName( outputFile );
 
+            // Create a bitmap canvas for the page
             var canvas = new Bitmap( width, height, PixmapFormatExtensions.ToSystemPixelFormat( _settings.Format ) );
             var g      = Graphics.FromImage( canvas );
 
@@ -158,6 +165,7 @@ public partial class TexturePacker
 
             ProgressListener?.Start( 1f / pages.Count );
 
+            // Draw each rect (image region) onto the canvas
             for ( var r = 0; r < page.OutputRects.Count; r++ )
             {
                 var rect = page.OutputRects[ r ];
@@ -169,6 +177,7 @@ public partial class TexturePacker
                     var rectX = page.X + rect.X;
                     var rectY = ( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY );
 
+                    // Apply duplicate padding if enabled
                     if ( _settings.DuplicatePadding )
                     {
                         var amountX = _settings.PaddingX / 2;
@@ -176,7 +185,7 @@ public partial class TexturePacker
 
                         if ( rect.Rotated )
                         {
-                            // Copy corner pixels to fill the corners of the padding.
+                            // Fill corners and edges for rotated rects
                             for ( var i = 1; i <= amountX; i++ )
                             {
                                 for ( var j = 1; j <= amountY; j++ )
@@ -188,7 +197,7 @@ public partial class TexturePacker
                                 }
                             }
 
-                            // Copy edge pixels into padding.
+                            // Fill edge pixels for rotated rects
                             for ( var i = 1; i <= amountY; i++ )
                             {
                                 for ( var j = 0; j < iw; j++ )
@@ -209,7 +218,7 @@ public partial class TexturePacker
                         }
                         else
                         {
-                            // Copy corner pixels to fill the corners of the padding.
+                            // Fill corners and edges for non-rotated rects
                             for ( var i = 1; i <= amountX; i++ )
                             {
                                 for ( var j = 1; j <= amountY; j++ )
@@ -222,7 +231,7 @@ public partial class TexturePacker
                                 }
                             }
 
-                            // Copy edge pixels into padding.
+                            // Fill edge pixels for non-rotated rects
                             for ( var i = 1; i <= amountY; i++ )
                             {
                                 Copy( image, 0, 0, iw, 1, canvas, rectX, rectY - i, rect.Rotated );
@@ -237,8 +246,10 @@ public partial class TexturePacker
                         }
                     }
 
+                    // Copy the actual image region to the canvas
                     Copy( image, 0, 0, iw, ih, canvas, rectX, rectY, rect.Rotated );
 
+                    // Draw debug rectangle if enabled
                     if ( _settings.Debug )
                     {
                         using ( var pen = new Pen( Color.Magenta ) )
@@ -249,6 +260,7 @@ public partial class TexturePacker
                         }
                     }
 
+                    // Update progress, abort if requested
                     if ( ProgressListener!.Update( r + 1, page.OutputRects.Count ) )
                     {
                         return;
@@ -258,6 +270,7 @@ public partial class TexturePacker
 
             ProgressListener?.End();
 
+            // Apply color bleed effect if enabled and not saving as JPEG
             if ( _settings is { Bleed: true, PremultiplyAlpha: false }
                  && !( _settings.OutputFormat.Equals( "jpg", StringComparison.OrdinalIgnoreCase ) ||
                        _settings.OutputFormat.Equals( "jpeg", StringComparison.OrdinalIgnoreCase ) ) )
@@ -268,6 +281,7 @@ public partial class TexturePacker
                 g = Graphics.FromImage( canvas );
             }
 
+            // Draw debug border if enabled
             if ( _settings.Debug )
             {
                 var pen = new Pen( Color.Magenta );
@@ -276,6 +290,7 @@ public partial class TexturePacker
 
             try
             {
+                // Save as JPEG with quality settings
                 if ( _settings.OutputFormat.Equals( "jpg", StringComparison.OrdinalIgnoreCase ) ||
                      _settings.OutputFormat.Equals( "jpeg", StringComparison.OrdinalIgnoreCase ) )
                 {
@@ -295,9 +310,9 @@ public partial class TexturePacker
                 }
                 else
                 {
+                    // Premultiply alpha if required
                     if ( _settings.PremultiplyAlpha )
                     {
-                        // Premultiply alpha (if needed)
                         for ( var y = 0; y < canvas.Height; y++ )
                         {
                             for ( var x = 0; x < canvas.Width; x++ )
@@ -313,6 +328,7 @@ public partial class TexturePacker
                         }
                     }
 
+                    // Save as PNG
                     canvas.Save( outputFile, ImageFormat.Png );
                 }
             }
@@ -321,6 +337,7 @@ public partial class TexturePacker
                 throw new Exception( "Error writing file: " + outputFile, ex );
             }
 
+            // Update progress, abort if requested
             if ( ProgressListener!.Update( p + 1, pages.Count ) )
             {
                 return;
@@ -331,11 +348,8 @@ public partial class TexturePacker
     }
 
     /// <summary>
+    /// Plots a single pixel to the destination bitmap if within bounds.
     /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="argb"></param>
     private static void Plot( Bitmap dst, int x, int y, Color argb )
     {
         if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
@@ -345,17 +359,8 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// 
+    /// Copies a region from the source bitmap to the destination bitmap, handling rotation.
     /// </summary>
-    /// <param name="src"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="w"></param>
-    /// <param name="h"></param>
-    /// <param name="dst"></param>
-    /// <param name="dx"></param>
-    /// <param name="dy"></param>
-    /// <param name="rotated"></param>
     private static void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
     {
         for ( var i = 0; i < w; i++ )
@@ -375,31 +380,23 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// 
+    /// Writes the atlas pack file, including all page and rect metadata.
     /// </summary>
-    /// <param name="outputDir"></param>
-    /// <param name="scaledPackFileName"></param>
-    /// <param name="pages"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
-    /// <exception cref="NullReferenceException"></exception>
-    private void WritePackFile( DirectoryInfo outputDir, string scaledPackFileName, List< Page? > pages )
+    private void WritePackFile( DirectoryInfo outputDir, string scaledPackFileName, List< Page > pages )
     {
-        Logger.Checkpoint();
-
         var packFile = new FileInfo( Path.Combine( outputDir.FullName, scaledPackFileName + _settings.AtlasExtension ) );
         var packDir  = packFile.Directory;
 
         packDir?.Create();
 
+        // Check for duplicate region names if appending
         if ( packFile.Exists )
         {
-            // Make sure there aren't duplicate names.
-            var textureAtlasData = new TextureAtlasData( packFile, flip: _settings.FlattenPaths );
+            var textureAtlasData = new TextureAtlasData( packFile, packDir, _settings.FlattenPaths );
 
             foreach ( var page in pages )
             {
                 Guard.ThrowIfNull( page );
-                Guard.ThrowIfNull( page.OutputRects );
 
                 foreach ( var rect in page.OutputRects )
                 {
@@ -411,7 +408,8 @@ public partial class TexturePacker
 
                         if ( region.Name.Equals( rectName ) )
                         {
-                            throw new GdxRuntimeException( $"A region with the name \"{rectName}\" has already been packed: {rect.Name}" );
+                            throw new GdxRuntimeException( $"A region with the name \"{rectName}\" " +
+                                                           $"has already been packed: {rect.Name}" );
                         }
                     }
                 }
@@ -423,6 +421,7 @@ public partial class TexturePacker
 
         var appending = packFile.Exists;
 
+        // Write metadata for each page and its rects
         using ( var writer = new StreamWriter( packFile.FullName, appending, System.Text.Encoding.UTF8 ) )
         {
             Logger.Debug( $"pages.Count: {pages.Count}" );
@@ -434,6 +433,8 @@ public partial class TexturePacker
                 Guard.ThrowIfNull( page );
                 Guard.ThrowIfNull( page.OutputRects );
 
+                // ---------- Writing Atlas Header ----------
+                
                 if ( _settings.LegacyOutput )
                 {
                     WritePageLegacy( writer, page );
@@ -448,6 +449,8 @@ public partial class TexturePacker
                     WritePage( writer, appending, page );
                 }
 
+                // ---------- Writing Atlas Rects ----------
+                
                 page.OutputRects.Sort();
 
                 foreach ( var rect in page.OutputRects )
@@ -466,6 +469,7 @@ public partial class TexturePacker
                         WriteRect( writer, page, rect, rect.Name );
                     }
 
+                    // Write aliases for the rect
                     var aliases = new List< Alias >( rect.Aliases );
 
                     aliases.Sort();
@@ -495,6 +499,9 @@ public partial class TexturePacker
         }
     }
 
+    /// <summary>
+    /// Writes page metadata in non-legacy format.
+    /// </summary>
     private void WritePage( TextWriter writer, bool appending, Page page )
     {
         var tab   = "";
@@ -534,6 +541,9 @@ public partial class TexturePacker
         }
     }
 
+    /// <summary>
+    /// Writes rect metadata in non-legacy format.
+    /// </summary>
     private void WriteRect( TextWriter writer, Page page, Rect rect, string name )
     {
         var tab   = "";
@@ -586,7 +596,7 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// Writes the header details for the atlas.
+    /// Writes page metadata in legacy format.
     /// </summary>
     private void WritePageLegacy( TextWriter writer, Page page )
     {
@@ -601,7 +611,7 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// Writes the details for a single packed image to the atlas.
+    /// Writes rect metadata in legacy format.
     /// </summary>
     private void WriteRectLegacy( TextWriter writer, Page page, Rect rect, string name )
     {
@@ -631,10 +641,8 @@ public partial class TexturePacker
     }
 
     /// <summary>
+    /// Gets the encoder for a given image format.
     /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
     private static ImageCodecInfo GetEncoder( ImageFormat format )
     {
         var codecs = ImageCodecInfo.GetImageEncoders();
@@ -651,9 +659,8 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// 
+    /// Returns the repeat value for texture wrapping based on settings.
     /// </summary>
-    /// <returns></returns>
     private string? GetRepeatValue()
     {
         return _settings switch

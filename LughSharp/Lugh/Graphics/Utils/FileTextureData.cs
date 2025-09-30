@@ -50,7 +50,7 @@ public class FileTextureData : ITextureData
     public bool UseMipMaps { get; set; }
 
     /// <inheritdoc/>
-    public int PixelFormat { get; set; }
+    public Pixmap.Format PixelFormat { get; set; }
 
     // ========================================================================
 
@@ -59,28 +59,26 @@ public class FileTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, bool useMipMaps )
-        : this( file, preloadedPixmap, preloadedPixmap.GetColorFormat(), useMipMaps )
-    {
-    }
-
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int desiredFormat, bool useMipMaps )
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, Pixmap.Format desiredFormat, bool useMipMaps )
     {
         Logger.Checkpoint();
-        
+
         File        = file;
         _pixmap     = preloadedPixmap;
         PixelFormat = desiredFormat;
         UseMipMaps  = useMipMaps;
-        Width       = _pixmap.Width;
-        Height      = _pixmap.Height;
-
-        // If the pixmap format doesn't match our desired format, convert it
-        if ( _pixmap.GetColorFormat() != desiredFormat )
+        
+        if ( _pixmap != null )
         {
-            _pixmap.Gdx2DPixmap?.ConvertPixelFormatTo( desiredFormat );
-        }
+            Width  = _pixmap.Width;
+            Height = _pixmap.Height;
 
+            if ( PixelFormat == null )
+            {
+                PixelFormat = _pixmap.GetColorFormat();
+            }
+        }
+        
         IsOwned = false;
     }
 
@@ -121,13 +119,15 @@ public class FileTextureData : ITextureData
         }
 
         // Resolve/validate pixel format
-        if ( PixelFormat == Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT )
+//        if ( PixelFormat == Pixmap.Format.RGBA8888 )
+//        {
+//            PixelFormat = _pixmap.GetColorFormat();
+//        }
+//        else
+        if ( PixelFormat != _pixmap.GetColorFormat() )
         {
+//            PixelFormatUtils.PixmapFormatToGDXFormat( PixelFormat );
             PixelFormat = _pixmap.GetColorFormat();
-        }
-        else if ( PixelFormat != _pixmap.GetColorFormat() )
-        {
-            _pixmap.Gdx2DPixmap?.ConvertPixelFormatTo( PixelFormat );
         }
 
         IsPrepared = true;
@@ -145,7 +145,7 @@ public class FileTextureData : ITextureData
     public virtual Pixmap FetchPixmap()
     {
         Logger.Checkpoint();
-        
+
         if ( !IsPrepared )
         {
             throw new GdxRuntimeException( "Call prepare() before calling FetchPixmap()" );

@@ -386,7 +386,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     {
         if ( data == null )
         {
-            Logger.Warning( "NULL ITextureData supplied!" );
+            Logger.Error( "NULL ITextureData supplied!" );
 
             return;
         }
@@ -411,7 +411,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
         if ( pixmap?.PixelData == null )
         {
-            Logger.Warning( "FetchPixmap() resulted in a null Pixmap!" );
+            Logger.Error( "FetchPixmap() resulted in a null Pixmap!" );
 
             return;
         }
@@ -548,9 +548,9 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
             Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap?.ColorType}" );
-            Logger.Debug( $"Pixmap Pixel Format    : {PixelFormatUtils.GetFormatString( pixmap.Gdx2DPixmap!.ColorType )}" );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixelFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorType )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
-            Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+            Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormatUtils.GLFormatAsString( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );
             Logger.Debug( $"pixmap.GLType          : {pixmap.GLDataType}" );
             Logger.Debug( $"pixmap.GLType Name     : {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );

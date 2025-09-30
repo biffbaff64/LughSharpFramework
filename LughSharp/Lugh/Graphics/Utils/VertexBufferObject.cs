@@ -192,7 +192,7 @@ public class VertexBufferObject : IVertexData
         // Check if the byte buffer is null and log an error if it is.
         if ( _byteBuffer == null )
         {
-            Logger.Warning( "_byteBuffer is NULL!" );
+            Logger.Error( "_byteBuffer is NULL!" );
 
             return;
         }

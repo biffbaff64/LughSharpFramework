@@ -407,7 +407,7 @@ public class TextureUnpacker
 
     private static void PrintExceptionAndExit( Exception e )
     {
-        Logger.Warning( e.StackTrace ?? "No Stacktrace available" );
+        Logger.Error( e.StackTrace ?? "No Stacktrace available" );
 
         Environment.Exit( 1 );
     }

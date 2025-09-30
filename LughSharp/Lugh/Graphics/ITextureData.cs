@@ -85,7 +85,7 @@ public interface ITextureData : IManaged
     /// <summary>
     /// Returns the <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> of the pixel data.
     /// </summary>
-    int PixelFormat { get; set; }
+    Pixmap.Format PixelFormat { get; set; }
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="FetchPixmap"/> or

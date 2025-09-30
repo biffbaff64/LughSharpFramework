@@ -281,7 +281,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( region.Region.Texture == null )
         {
-            Logger.Warning( "Cannot draw a null texture!" );
+            Logger.Error( "Cannot draw a null texture!" );
 
             return;
         }
@@ -320,7 +320,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( region.Region.Texture == null )
         {
-            Logger.Warning( "Cannot draw a null texture!" );
+            Logger.Error( "Cannot draw a null texture!" );
 
             return;
         }
@@ -373,7 +373,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( region.Region.Texture == null )
         {
-            Logger.Warning( "Cannot draw a null texture!" );
+            Logger.Error( "Cannot draw a null texture!" );
 
             return;
         }
@@ -931,7 +931,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( region.Texture == null )
         {
-            Logger.Warning( "Cannot draw a null texture!" );
+            Logger.Error( "Cannot draw a null texture!" );
 
             return;
         }
@@ -1000,7 +1000,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( textureRegion.Texture == null )
         {
-            Logger.Warning( "Cannot draw a null texture!" );
+            Logger.Error( "Cannot draw a null texture!" );
 
             return;
         }
@@ -1146,7 +1146,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( textureRegion.Texture == null )
         {
-            Logger.Warning( "Cannot draw a null texture!" );
+            Logger.Error( "Cannot draw a null texture!" );
 
             return;
         }
@@ -1307,7 +1307,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( region.Texture == null )
         {
-            Logger.Warning( "Cannot draw a null texture!" );
+            Logger.Error( "Cannot draw a null texture!" );
 
             return;
         }

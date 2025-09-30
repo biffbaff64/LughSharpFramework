@@ -291,7 +291,7 @@ public class TexturePackerSettings
         WrapX                 = TextureWrapMode.ClampToEdge;
         WrapY                 = TextureWrapMode.ClampToEdge;
         Debug                 = false;
-        Silent                = true;
+        Silent                = false;
         CombineSubdirectories = false;
         Ignore                = false;
         FlattenPaths          = false;

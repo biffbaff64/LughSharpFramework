@@ -120,7 +120,7 @@ public class VertexBufferObjectWithVAO : IVertexData
         {
             if ( Attributes.VertexSize == 0 )
             {
-                Logger.Warning( "WARNING: VertexData has no attributes!" );
+                Logger.Error( "WARNING: VertexData has no attributes!" );
 
                 return 0;
             }
@@ -141,7 +141,7 @@ public class VertexBufferObjectWithVAO : IVertexData
         {
             if ( Attributes.VertexSize == 0 )
             {
-                Logger.Warning( "WARNING: VertexData has no attributes!" );
+                Logger.Error( "WARNING: VertexData has no attributes!" );
 
                 return 0;
             }

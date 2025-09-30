@@ -30,6 +30,22 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 [PublicAPI]
 public partial interface IGL
 {
+    [PublicAPI]
+    enum Format : int
+    {
+        Alpha,
+        RGB,
+        RGBA,
+        RGBA4,
+        RGB565,
+        Luminance,
+        LuminanceAlpha,
+        ColorIndex,
+    }
+
+    // ========================================================================
+    // ========================================================================
+
     const int GL_CONTEXT_CORE_PROFILE_BIT                                   = 0x00000001;
     const int GL_CONTEXT_COMPATIBILITY_PROFILE_BIT                          = 0x00000002;
     const int GL_CONTEXT_FLAG_NO_ERROR_BIT                                  = 0x00000008;

@@ -341,11 +341,11 @@ public class DesktopGLApplication : IApplication, IDisposable
     {
         _errorCallback = ( error, description ) =>
         {
-            Logger.Warning( $"ErrorCode: {error}, {description}" );
+            Logger.Error( $"ErrorCode: {error}, {description}" );
 
             if ( error == ErrorCode.InvalidEnum )
             {
-                Logger.Warning( "Invalid Error!!" );
+                Logger.Error( "Invalid Error!!" );
             }
         };
     }

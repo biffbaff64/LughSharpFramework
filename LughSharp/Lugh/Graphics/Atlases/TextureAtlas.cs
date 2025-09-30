@@ -64,7 +64,6 @@ public class TextureAtlas : IDisposable
     /// <summary>
     /// Creates a new TextureAtlas.
     /// </summary>
-    /// Creates a new TextureAtlas.
     /// <param name="packFile"></param>
     /// <param name="flip">
     /// If true, all regions loaded will be flipped for use with a perspective

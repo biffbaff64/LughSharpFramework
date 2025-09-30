@@ -165,7 +165,7 @@ public partial class BitmapFont
         {
             if ( ImagePaths != null )
             {
-                Logger.Warning( "BitmapFont Already loaded." );
+                Logger.Error( "BitmapFont Already loaded." );
 
                 return;
             }
@@ -239,7 +239,7 @@ public partial class BitmapFont
                     }
                     catch ( Exception e )
                     {
-                        Logger.Warning( $"IGNORED NumberFormatException: {e.Message}" );
+                        Logger.Error( $"IGNORED NumberFormatException: {e.Message}" );
                     }
                 }
 
@@ -331,14 +331,14 @@ public partial class BitmapFont
                     if ( ( parts.Length < 3 ) || ( parts[ 0 ] != "char" ) || ( parts[ 1 ] != "id" ) )
                     {
                         // Handle unexpected format, maybe throw an exception
-                        Logger.Warning( $"Unexpected 'char' line format: {line}" );
+                        Logger.Error( $"Unexpected 'char' line format: {line}" );
 
                         continue;
                     }
 
                     if ( !int.TryParse( parts[ 2 ], out var ch ) )
                     {
-                        Logger.Warning( $"Skipping malformed 'char' line (invalid ID): {line}" );
+                        Logger.Error( $"Skipping malformed 'char' line (invalid ID): {line}" );
 
                         continue;
                     }
@@ -400,14 +400,14 @@ public partial class BitmapFont
                                 {
                                     if ( !int.TryParse( parts[ currentPartIndex ], out var parsedPage ) )
                                     {
-                                        Logger.Warning( $"IGNORED NumberFormatException: Invalid page ID: {parts[ currentPartIndex ]} on line: {line}" );
+                                        Logger.Error( $"IGNORED NumberFormatException: Invalid page ID: {parts[ currentPartIndex ]} on line: {line}" );
                                     }
 
                                     glyph.Page = parsedPage;
                                 }
                                 catch ( Exception ignored ) // Catching general exception for old code compatibility
                                 {
-                                    Logger.Warning( $"IGNORED Exception parsing page ID: {ignored.Message}" );
+                                    Logger.Error( $"IGNORED Exception parsing page ID: {ignored.Message}" );
                                 }
 
                                 currentPartIndex++; // Move past the page value

@@ -75,7 +75,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.TextureData == null )
         {
-            var format     = Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT;
+            var format     = Pixmap.Format.RGBA8888;   // Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;
@@ -239,7 +239,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets the format of the final texture. Uses the source image's format if null.
         /// </summary>
-        public int Format { get; set; }
+        public Pixmap.Format Format { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate mipmaps for the texture.

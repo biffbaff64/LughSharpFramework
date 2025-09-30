@@ -231,11 +231,17 @@ public class AtlasSprite : Sprite
         return ( Height / Region.RotatedPackedHeight ) * Region.OriginalHeight;
     }
 
+    /// <summary>
+    /// Get the width ratio between the sprite and the region.
+    /// </summary>
     public float GetWidthRatio()
     {
         return Width / Region.RotatedPackedWidth;
     }
 
+    /// <summary>
+    /// Get the height ratio between the sprite and the region.
+    /// </summary>
     public float GetHeightRatio()
     {
         return Height / Region.RotatedPackedHeight;

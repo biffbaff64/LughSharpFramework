@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.CompilerServices;
+
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Maths;
@@ -263,7 +265,7 @@ public partial class TexturePacker
                                 TexturePackerProgressListener? progressListener = null )
     {
         Logger.Checkpoint();
-        
+
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
@@ -288,8 +290,6 @@ public partial class TexturePacker
     /// <param name="packFileName"> The name for the resulting TextureAtlas. </param>
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
-        Logger.Checkpoint();
-
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = Path.GetFileNameWithoutExtension( packFileName );
@@ -340,6 +340,7 @@ public partial class TexturePacker
             }
 
             ProgressListener.End();
+            
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
@@ -352,8 +353,6 @@ public partial class TexturePacker
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
 
-            #if TEXTURE_ATLAS_WRITING
-
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
             ProgressListener.Total = pages.Count;
@@ -361,8 +360,6 @@ public partial class TexturePacker
             WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
             ProgressListener.End();
-
-            #endif // TEXTURE_ATLAS_WRITING
 
             // ---------- End of writing of the texture atlas ----------
             

@@ -29,205 +29,254 @@ public class PixelFormatUtils
 {
     // ========================================================================
 
-    #region Methods handling pixel format in memory.
+    #region Methods returning OGL pixel formats
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
-    public static int GLFormatToPixelTypeFormat( int format )
-    {
-        return format switch
-        {
-            IGL.GL_ALPHA           => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
-            IGL.GL_LUMINANCE_ALPHA => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
-            IGL.GL_RGB             => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-            IGL.GL_RGBA            => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
-            IGL.GL_RGB565          => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
-            IGL.GL_RGBA4           => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
-            IGL.GL_COLOR_INDEX     => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
+//    /// <summary>
+//    /// Converts a given Gdx2DPixmap format to its corresponding OpenGL pixel format.
+//    /// </summary>
+//    /// <param name="format">The Gdx2DPixmap format to be converted.</param>
+//    /// <returns>The integer value representing the corresponding OpenGL pixel format.</returns>
+//    /// <exception cref="GdxRuntimeException">
+//    /// Thrown when the provided format is invalid or unrecognized.
+//    /// </exception>
+//    public static int GdxFormatToGLPixelFormat( int format )
+//    {
+//        return format switch
+//        {
+//            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
+//            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
+//            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_COLOR_INDEX,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+//        };
+//    }
+//
+//    /// <summary>
+//    /// Converts a Gdx2DPixmap format to the corresponding OpenGL data type.
+//    /// </summary>
+//    /// <param name="format">The Gdx2DPixmap format that needs to be converted.</param>
+//    /// <returns>The corresponding OpenGL data type as an integer constant.</returns>
+//    /// <exception cref="GdxRuntimeException">
+//    /// Thrown if the specified format is not valid or recognized.
+//    /// </exception>
+//    public static int GdxFormatToGLDataType( int format )
+//    {
+//        return format switch
+//        {
+//            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
+//            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+//            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_UNSIGNED_BYTE,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+//        };
+//    }
+//
+//    /// <summary>
+//    /// 
+//    /// </summary>
+//    /// <param name="format"></param>
+//    /// <returns></returns>
+//    /// <exception cref="ArgumentException"></exception>
+//    public static int GdxFormatToGLInternalFormat( int format )
+//    {
+//        return format switch
+//        {
+//            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
+//            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB8,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA8,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB565,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA4,
+//            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_RGB8,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new ArgumentException( $"Unsupported format: {format}" ),
+//        };
+//    }
 
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
-
-    /// <summary>
-    /// Returns the pixel format from a valid named string.
-    /// </summary>
-    public static int GetFormatFromString( string str )
-    {
-        str = str.ToLower();
-
-        return str switch
-        {
-            "Alpha"          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
-            "Luminancealpha" => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
-            "RGB565"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
-            "RGBA4444"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
-            "RGB888"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-            "RGBA8888"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
-            "IndexedColor"   => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
-
-            var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
-        };
-    }
-
-    /// <summary>
-    /// Converts a PNG color type to the corresponding Pixmap pixel format.
-    /// </summary>
-    /// <param name="format">The PNG color type represented as an integer.</param>
-    /// <returns>
-    /// The corresponding Pixmap pixel format.
-    /// </returns>
-    /// <exception cref="GdxRuntimeException">
-    /// Thrown if the format is unknown or if the format is an unsupported indexed color.
-    /// </exception>
-    public static int PNGColorTypeToPixmapFormat( int format )
-    {
-        return format switch
-        {
-            0 or 2 => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-
-            // ----------------------------------
-
-            3 => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
-
-            // ----------------------------------
-
-            4 => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
-            6 => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
-        };
-    }
-
-    public static byte PixmapFormatToPNGColorType( int format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => 0,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => 4,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 6,
-            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => 3,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
-        };
-    }
-
-    public static int DeterminePixelFormatFromBitDepth( byte colorType, byte bitDepth )
-    {
-        // Map PNG color type and bit depth to the format
-        var format = ( colorType, bitDepth ) switch
-        {
-            (6, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,        // Truecolor with alpha, 8 bits
-            (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
-            (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
-            (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
-            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Truecolor, 5 bits per channel
-            (3, 8) => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,         // Indexed color, 8 bits
-
-            // Add more mappings as needed
-            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
-        };
-
-        return format;
-    }
-
-    #endregion Methods handling pixel format in memory.
+    #endregion Methods returning OGL pixel formats
 
     // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    
+    #region Methods returning Pixmap formats
 
-    #region Methods handling pixel format OpenGL expects
+//    public static Pixmap.Format GdxFormatToPixmapFormat( int format )
+//    {
+//        return format switch
+//        {
+//            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => Pixmap.Format.Alpha,
+//            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => Pixmap.Format.LuminanceAlpha,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => Pixmap.Format.RGB565,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => Pixmap.Format.RGBA4444,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => Pixmap.Format.RGB888,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => Pixmap.Format.RGBA8888,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new GdxRuntimeException( "Unknown Gdx2DPixmap Format: " + format ),
+//        };
+//    }
 
-    /// <summary>
-    /// Converts a given Gdx2DPixmap format to its corresponding OpenGL pixel format.
-    /// </summary>
-    /// <param name="format">The Gdx2DPixmap format to be converted.</param>
-    /// <returns>The integer value representing the corresponding OpenGL pixel format.</returns>
-    /// <exception cref="GdxRuntimeException">
-    /// Thrown when the provided format is invalid or unrecognized.
-    /// </exception>
-    public static int ToGLPixelFormat( int format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
-            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_COLOR_INDEX,
+    #endregion Methods returning Pixmap formats
 
-            // ----------------------------------
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    
+    #region Methods returning GDX Pixel formats
 
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
+//    public static int GLFormatToGdxFormat( int format )
+//    {
+//        return format switch
+//        {
+//            IGL.GL_ALPHA           => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+//            IGL.GL_LUMINANCE_ALPHA => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
+//            IGL.GL_RGB             => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+//            IGL.GL_RGBA            => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+//            IGL.GL_RGB565          => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+//            IGL.GL_RGBA4           => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+//            IGL.GL_COLOR_INDEX     => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+//        };
+//    }
+//
+//    /// <summary>
+//    /// Returns the pixel format from a valid named string.
+//    /// </summary>
+//    public static int GetGdxFormatFromString( string str )
+//    {
+//        str = str.ToLower();
+//
+//        return str switch
+//        {
+//            "alpha"          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+//            "luminancealpha" => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
+//            "rgb565"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+//            "rgba4444"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+//            "rgb888"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+//            "rgba8888"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+//            "indexedcolor"   => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
+//
+//            var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
+//        };
+//    }
+//
+//    /// <summary>
+//    /// Converts a PNG color type to the corresponding Pixmap pixel format.
+//    /// </summary>
+//    /// <param name="format">The PNG color type represented as an integer.</param>
+//    /// <returns>
+//    /// The corresponding Pixmap pixel format.
+//    /// </returns>
+//    /// <exception cref="GdxRuntimeException">
+//    /// Thrown if the format is unknown or if the format is an unsupported indexed color.
+//    /// </exception>
+//    public static int PNGColorTypeToGdxFormat( int format )
+//    {
+//        return format switch
+//        {
+//            0 or 2 => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+//
+//            // ----------------------------------
+//
+//            3 => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
+//
+//            // ----------------------------------
+//
+//            4 => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+//            6 => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
+//        };
+//    }
+//
+//    public static int DetermineGdxFormatFromBitDepth( byte colorType, byte bitDepth )
+//    {
+//        // Map PNG color type and bit depth to the format
+//        var format = ( colorType, bitDepth ) switch
+//        {
+//            (6, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,        // Truecolor with alpha, 8 bits
+//            (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
+//            (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
+//            (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
+//            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Truecolor, 5 bits per channel
+//            (3, 8) => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,         // Indexed color, 8 bits
+//
+//            // Add more mappings as needed
+//            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
+//        };
+//
+//        return format;
+//    }
+//
+//    public static int PixmapFormatToGDXFormat( Pixmap.Format format )
+//    {
+//        return format switch
+//        {
+//            Pixmap.Format.Alpha          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+//            Pixmap.Format.Intensity      => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+//            Pixmap.Format.LuminanceAlpha => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
+//            Pixmap.Format.RGB565         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+//            Pixmap.Format.RGBA4444       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+//            Pixmap.Format.RGB888         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+//            Pixmap.Format.RGBA8888       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new GdxRuntimeException( "Unknown Format: " + format ),
+//        };
+//    }
 
-    /// <summary>
-    /// Converts a Gdx2DPixmap format to the corresponding OpenGL data type.
-    /// </summary>
-    /// <param name="format">The Gdx2DPixmap format that needs to be converted.</param>
-    /// <returns>The corresponding OpenGL data type as an integer constant.</returns>
-    /// <exception cref="GdxRuntimeException">
-    /// Thrown if the specified format is not valid or recognized.
-    /// </exception>
-    public static int ToGLDataType( int format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
-            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_UNSIGNED_BYTE,
+    #endregion Methods returning GDX pixel formats
 
-            // ----------------------------------
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    
+    #region Methods returning PNG pixel formats
 
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
+//    public static byte GdxFormatToPNGColorType( int format )
+//    {
+//        return format switch
+//        {
+//            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => 0,
+//            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => 4,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => 2,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 2,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 6,
+//            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => 3,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
+//        };
+//    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    public static int GetGLInternalFormat( int format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB8,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA8,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB565,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA4,
-            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_RGB8,
-
-            // ----------------------------------
-
-            var _ => throw new ArgumentException( $"Unsupported format: {format}" ),
-        };
-    }
-
-    #endregion Methods handling pixel format OpenGL expects
-
+    #endregion Methods returning PNG pixel formats
+    
+    // ========================================================================
+    // ========================================================================
     // ========================================================================
 
     #region bytes per pixel methods
@@ -254,82 +303,84 @@ public class PixelFormatUtils
         };
     }
 
-    /// <summary>
-    /// Gets the number of bytes required for 1 pixel of the specified format.
-    /// </summary>
-    public static int Gdx2dBytesPerPixel( int format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => 1,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 3,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 4,
-            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => 1,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
+//    /// <summary>
+//    /// Gets the number of bytes required for 1 pixel of the specified format.
+//    /// </summary>
+//    public static int Gdx2dBytesPerPixel( int format )
+//    {
+//        return format switch
+//        {
+//            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => 1,
+//            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => 2,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => 2,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 3,
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 4,
+//            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => 1,
+//
+//            // ----------------------------------
+//
+//            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+//        };
+//    }
 
     #endregion bytes per pixel methods
 
     // ========================================================================
+    // ========================================================================
+    // ========================================================================
 
     #region Miscellaneous
 
-    /// <summary>
-    /// Converts a color to the specified pixel format
-    /// </summary>
-    public static uint ToPixelFormat( int requestedFormat, uint color )
-    {
-        uint r, g, b, a;
-
-        switch ( requestedFormat )
-        {
-            case Gdx2DPixmap.GDX_2D_FORMAT_ALPHA:
-                return color & 0xff;
-
-            case Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA:
-                r = ( color & 0xff000000 ) >> 24;
-                g = ( color & 0xff0000 ) >> 16;
-                b = ( color & 0xff00 ) >> 8;
-                a = color & 0xff;
-                var l = ( ( uint )( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
-
-                return ( l & 0xffffff00 ) | a;
-
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGB888:
-                return color >> 8;
-
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888:
-                return color;
-
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGB565:
-                r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
-                g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
-                b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
-
-                return r | g | b;
-
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444:
-                r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
-                g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
-                b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
-                a = ( ( color & 0xff ) >> 4 ) & 0xf;
-
-                return r | g | b | a;
-
-            case Gdx2DPixmap.GDX_2D_FORMAT_INDEXED:
-                return color;
-
-            default:
-                return 0;
-        }
-    }
+//    /// <summary>
+//    /// Converts a color to the specified pixel format
+//    /// </summary>
+//    public static uint GdxFormatToRGBAFormat( int requestedFormat, uint color )
+//    {
+//        uint r, g, b, a;
+//
+//        switch ( requestedFormat )
+//        {
+//            case Gdx2DPixmap.GDX_2D_FORMAT_ALPHA:
+//                return color & 0xff;
+//
+//            case Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA:
+//                r = ( color & 0xff000000 ) >> 24;
+//                g = ( color & 0xff0000 ) >> 16;
+//                b = ( color & 0xff00 ) >> 8;
+//                a = color & 0xff;
+//                var l = ( ( uint )( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
+//
+//                return ( l & 0xffffff00 ) | a;
+//
+//            case Gdx2DPixmap.GDX_2D_FORMAT_RGB888:
+//                return color >> 8;
+//
+//            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888:
+//                return color;
+//
+//            case Gdx2DPixmap.GDX_2D_FORMAT_RGB565:
+//                r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
+//                g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
+//                b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
+//
+//                return r | g | b;
+//
+//            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444:
+//                r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
+//                g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
+//                b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
+//                a = ( ( color & 0xff ) >> 4 ) & 0xf;
+//
+//                return r | g | b | a;
+//
+//            case Gdx2DPixmap.GDX_2D_FORMAT_INDEXED:
+//                return color;
+//
+//            default:
+//                return 0;
+//        }
+//    }
 
     /// <summary>
     /// Computes the alignment for a given row stride in bytes.
@@ -384,38 +435,40 @@ public class PixelFormatUtils
     #endregion Miscellaneous
 
     // ========================================================================
+    // ========================================================================
+    // ========================================================================
 
-    #region Get String methods
+    #region Methods returning String representations of various Pixel formats
 
-    /// <summary>
-    /// Converts a <c>Gdx2DPixmap.</c> format to its string representation.
-    /// </summary>
-    /// <param name="format">The pixmap format to convert.</param>
-    /// <returns>A string representing the given pixmap format.</returns>
-    public static string GetFormatString( int format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => "Alpha",
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => "LuminanceAlpha",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => "RGB888",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => "RGBA8888",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => "RGB565",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => "RGBA4444",
-            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => "Indexed",
-
-            // ----------------------------------
-
-            var _ => $"Invalid format: {format}",
-        };
-    }
+//    /// <summary>
+//    /// Converts a <c>Gdx2DPixmap.</c> format to its string representation.
+//    /// </summary>
+//    /// <param name="format">The pixmap format to convert.</param>
+//    /// <returns>A string representing the given pixmap format.</returns>
+//    public static string GdxFormatAsString( int format )
+//    {
+//        return format switch
+//        {
+//            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => "Alpha",
+//            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => "LuminanceAlpha",
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => "RGB888",
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => "RGBA8888",
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => "RGB565",
+//            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => "RGBA4444",
+//            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => "Indexed",
+//
+//            // ----------------------------------
+//
+//            var _ => $"Invalid format: {format}",
+//        };
+//    }
 
     /// <summary>
     /// Retrieves the name of the OpenGL pixel format based on the provided format identifier.
     /// </summary>
     /// <param name="format">The integer identifier of the OpenGL pixel format.</param>
     /// <returns>A string representing the name of the corresponding OpenGL pixel format.</returns>
-    public static string GetGLPixelFormatName( int format )
+    public static string GLFormatAsString( int format )
     {
         return format switch
         {
@@ -443,7 +496,7 @@ public class PixelFormatUtils
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
-    public static string GetGLInternalFormatName( int format )
+    public static string GLInternalFormatAsString( int format )
     {
         return format switch
         {
@@ -554,7 +607,53 @@ public class PixelFormatUtils
         };
     }
 
-    #endregion Get String methods
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
+    public static string GetFormatString( Pixmap.Format format )
+    {
+        return format switch
+        {
+            Pixmap.Format.Alpha          => "Alpha",
+            Pixmap.Format.Intensity      => "Intensity",
+            Pixmap.Format.LuminanceAlpha => "LuminanceAlpha",
+            Pixmap.Format.RGB565         => "RGB565",
+            Pixmap.Format.RGBA4444       => "RGBA4444",
+            Pixmap.Format.RGB888         => "RGB888",
+            Pixmap.Format.RGBA8888       => "RGBA8888",
+
+            // ----------------------------------
+
+            var _ => throw new GdxRuntimeException( $"Unknown Format: {format}" ),
+        };
+    }
+
+    #endregion Methods returning String representations of various Pixel formats
+
+//    /// <summary>
+//    /// Returns the pixel format from a valid named string.
+//    /// </summary>
+//    public static int GetFormatFromString( string str )
+//    {
+//        str = str.ToLower();
+//
+//        return str switch
+//        {
+//            "alpha"          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+//            "luminancealpha" => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
+//            "rgb565"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+//            "rgba4444"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+//            "rgb888"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+//            "rgba8888"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+//
+//            // ----------------------------------
+//            
+//            var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
+//        };
+//    }
 }
 
 // ========================================================================

@@ -32,7 +32,7 @@ public class IOUtils
     // ========================================================================
 
     /// <inheritdoc cref="PathTypes.External"/>
-    public static string ExternalPath => NormalizePath( $"{Environment.GetFolderPath( Environment.SpecialFolder.UserProfile )}/" );
+    public static string ExternalPath => NormalizePath( $"{System.Environment.GetFolderPath( System.Environment.SpecialFolder.UserProfile )}/" );
 
     /// <inheritdoc cref="PathTypes.Internal"/>
     public static string InternalPath => NormalizePath( $"{Directory.GetCurrentDirectory()}/" );
@@ -202,7 +202,7 @@ public class IOUtils
         // Handle potential exceptions like PathTooLongException, SecurityException, etc.
         catch ( Exception e )
         {
-            Logger.Warning( $"Exception ignored: {e.Message}" );
+            Logger.Error( $"Exception ignored: {e.Message}" );
 
             return PathTypes.Invalid;
         }
@@ -270,7 +270,7 @@ public class IOUtils
     private static void OnDeleted( object sender, FileSystemEventArgs e )
     {
         // A breakpoint here will stop execution when the file is deleted.
-        Logger.Warning( $"File deleted at: {e.FullPath}" );
+        Logger.Error( $"File deleted at: {e.FullPath}" );
 
         // You can also add more logging or an exception to break execution.
         throw new Exception( "File was deleted!" );

@@ -22,11 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
 
+using LughUtils.source.Collections;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 
@@ -38,7 +40,7 @@ public partial class FileProcessor
     public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
 
     // Delegate to filter filenames in a directory
-    public Func< string, string, bool >? FilenameFilterDelegate { get; set; }
+    public Func< string, string, bool >? InputFilter { get; set; }
 
     // Delegate to signal a processed file
     public virtual Action< FileSystemInfo >? FileProcessedDelegate { get; set; }
@@ -100,6 +102,20 @@ public partial class FileProcessor
         Recursive       = true;
     }
 
+    public FileProcessor( FileProcessor processor )
+    {
+        InputFilter = processor.InputFilter;
+        Comparator  = processor.Comparator;
+
+        InputRegex ??= [ ];
+        InputRegex.AddAll(processor.InputRegex);
+
+        OutputFilesList = processor.OutputFilesList;
+        OutputSuffix    = processor.OutputSuffix;
+        Recursive       = processor.Recursive;
+        FlattenOutput   = processor.FlattenOutput;
+    }
+    
     // ========================================================================
 
     #region process methods
@@ -290,7 +306,7 @@ public partial class FileProcessor
             else
             {
                 // Log a warning if a file has no parent directory
-                Logger.Warning( $"File '{file.FullName}' has no parent directory." );
+                Logger.Error( $"File '{file.FullName}' has no parent directory." );
             }
         }
 
@@ -327,8 +343,8 @@ public partial class FileProcessor
                 }
 
                 // Apply filename filter delegate if set
-                if ( ( FilenameFilterDelegate != null )
-                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
+                if ( ( InputFilter != null )
+                     && !InputFilter( file.Directory!.FullName, file.Name ) )
                 {
                     continue;
                 }
@@ -407,7 +423,7 @@ public partial class FileProcessor
                 // Handle the case where a file has no parent directory (e.g., root level)
                 // Either log a warning, throw an exception, or handle it differently
                 // ( Logging a warning for now... )
-                Logger.Warning( $"File '{file.FullName}' has no parent directory." );
+                Logger.Error( $"File '{file.FullName}' has no parent directory." );
             }
         }
 
@@ -435,8 +451,8 @@ public partial class FileProcessor
                     }
                 }
 
-                if ( ( FilenameFilterDelegate != null )
-                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
+                if ( ( InputFilter != null )
+                     && !InputFilter( file.Directory!.FullName, file.Name ) )
                 {
                     continue;
                 }
@@ -509,15 +525,13 @@ public partial class FileProcessor
     /// This method should be called by:-
     /// <li><see cref="ProcessFile(Entry)"/> or,</li>
     /// <li><see cref="ProcessDir(Entry, List{Entry})"/></li>
-    /// if the return value of <see cref="Process(FileSystemInfo, DirectoryInfo)"/> or
+    /// if the return value of <see cref="System.Diagnostics.Process"/> or
     /// <see cref="Process(FileInfo[], DirectoryInfo)"/> should return all the processed
     /// files.
     /// </summary>
     /// <param name="entry"></param>
     public virtual void AddProcessedFile( Entry entry )
     {
-        Logger.Debug( $"{entry.InputFile?.Name}" );
-
         OutputFilesList.Add( entry );
     }
 

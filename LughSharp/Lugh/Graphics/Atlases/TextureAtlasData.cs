@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Files;
+
 using LughUtils.source.Collections;
 
 using Exception = System.Exception;
@@ -64,62 +65,141 @@ public partial class TextureAtlasData
     /// <param name="imagesDir"></param>
     /// <param name="flip"></param>
     /// <exception cref="GdxRuntimeException"></exception>
-    private void Load( FileInfo? packFile, DirectoryInfo? imagesDir, bool flip )
+    public void Load( FileInfo packFile, DirectoryInfo imagesDir, bool flip )
     {
-        Guard.ThrowIfNull( packFile );
+        var entry = new string[ 5 ];
 
-        //@formatter:off
-        ObjectMap< string, IField< Page > > pageFields = new( 15, 0.99f )
+        // Page field parsers
+        var pageFields = new Dictionary< string, Action< Page > >
         {
-            { "size",       new PageFieldSize() },
-            { "format",     new PageFieldFormat() },
-            { "filter",     new PageFieldFilter() },
-            { "repeat",     new PageFieldRepeat() },
-            { "pma",        new PageFieldPma() },
+            [ "size" ] = page =>
+            {
+                page.Width  = int.Parse( entry[ 1 ] );
+                page.Height = int.Parse( entry[ 2 ] );
+            },
+            [ "format" ] = page =>
+            {
+                page.Format = Enum.Parse< Pixmap.Format >( entry[ 1 ] );
+            },
+            [ "filter" ] = page =>
+            {
+                page.MinFilter = Enum.Parse< TextureFilterMode >( entry[ 1 ] );
+                page.MagFilter = Enum.Parse< TextureFilterMode >( entry[ 2 ] );
+                page.UseMipMaps = page.MinFilter != TextureFilterMode.Nearest
+                                  && page.MinFilter != TextureFilterMode.Linear;
+            },
+            [ "repeat" ] = page =>
+            {
+                if ( entry[ 1 ].Contains( 'x' ) )
+                {
+                    page.UWrap = TextureWrapMode.Repeat;
+                }
+
+                if ( entry[ 1 ].Contains( 'y' ) )
+                {
+                    page.VWrap = TextureWrapMode.Repeat;
+                }
+            },
+            [ "pma" ] = page =>
+            {
+                page.PreMultipliedAlpha = entry[ 1 ] == "true";
+            }
         };
 
-        ObjectMap< string, IField< Region > > regionFields = new( 127, 0.99f )
-        {
-            { "xy",         new RegionFieldXY() },
-            { "size",       new RegionFieldSize() },
-            { "bounds",     new RegionFieldBounds() },
-            { "offset",     new RegionFieldOffset() },
-            { "orig",       new RegionFieldOrig() },
-            { "offsets",    new RegionFieldOffsets() },
-            { "rotate",     new RegionFieldRotate() },
-            { "index",      new RegionFieldIndex() },
-        };
-        //@formatter:on
+        var hasIndexes = false;
 
-        var reader = new StreamReader( packFile.FullName, false );
+        // Region field parsers
+        var regionFields = new Dictionary< string, Action< Region > >
+        {
+            [ "xy" ] = region =>
+            {
+                region.Left = int.Parse( entry[ 1 ] );
+                region.Top  = int.Parse( entry[ 2 ] );
+            },
+            [ "size" ] = region =>
+            {
+                region.Width  = int.Parse( entry[ 1 ] );
+                region.Height = int.Parse( entry[ 2 ] );
+            },
+            [ "bounds" ] = region =>
+            {
+                region.Left   = int.Parse( entry[ 1 ] );
+                region.Top    = int.Parse( entry[ 2 ] );
+                region.Width  = int.Parse( entry[ 3 ] );
+                region.Height = int.Parse( entry[ 4 ] );
+            },
+            [ "offset" ] = region =>
+            {
+                region.OffsetX = int.Parse( entry[ 1 ] );
+                region.OffsetY = int.Parse( entry[ 2 ] );
+            },
+            [ "orig" ] = region =>
+            {
+                region.OriginalWidth  = int.Parse( entry[ 1 ] );
+                region.OriginalHeight = int.Parse( entry[ 2 ] );
+            },
+            [ "offsets" ] = region =>
+            {
+                region.OffsetX        = int.Parse( entry[ 1 ] );
+                region.OffsetY        = int.Parse( entry[ 2 ] );
+                region.OriginalWidth  = int.Parse( entry[ 3 ] );
+                region.OriginalHeight = int.Parse( entry[ 4 ] );
+            },
+            [ "rotate" ] = region =>
+            {
+                var value = entry[ 1 ];
+
+                if ( value == "true" )
+                {
+                    region.Degrees = 90;
+                }
+                else if ( value != "false" )
+                {
+                    region.Degrees = int.Parse( value );
+                }
+
+                region.Rotate = region.Degrees == 90;
+            },
+            [ "index" ] = region =>
+            {
+                region.Index = int.Parse( entry[ 1 ] );
+
+                if ( region.Index != -1 )
+                {
+                    hasIndexes = true;
+                }
+            }
+        };
+
+        using var reader = new StreamReader( packFile.FullName );
 
         try
         {
             var line = reader.ReadLine();
 
-            // Ignore empty lines before first entry.
-            while ( ( line != null ) && ( line.Trim().Length == 0 ) )
+            // Ignore empty lines before first entry
+            while ( line != null && line.Trim().Length == 0 )
             {
                 line = reader.ReadLine();
             }
 
-            // Header entries.
+            // Header entries
             while ( true )
             {
-                if ( ( line == null ) || ( line.Trim().Length == 0 ) )
+                if ( line == null || line.Trim().Length == 0 )
                 {
                     break;
                 }
 
-                if ( ReadEntry( line ) == 0 )
+                if ( ReadEntry( entry, line ) == 0 )
                 {
-                    break; // Silently ignore all header fields.
+                    break;
                 }
 
                 line = reader.ReadLine();
             }
 
-            // Page and region entries.
+            // Page and region entries
             Page?           page   = null;
             List< string >? names  = null;
             List< int[] >?  values = null;
@@ -138,28 +218,28 @@ public partial class TextureAtlasData
                 }
                 else if ( page == null )
                 {
-                    line = IOUtils.NormalizePath( $"{packFile.Directory?.FullName}/{line}" );
-
-                    Logger.Debug( $"line: {line}" );
-
-                    page = new Page
+                    if ( imagesDir != null )
                     {
-                        TextureFile = new FileInfo( line ),
-                    };
-
-                    while ( true )
-                    {
-                        if ( ReadEntry( line = reader.ReadLine() ) == 0 )
+                        page = new Page
                         {
-                            break;
+                            TextureFile = new FileInfo( Path.Combine( imagesDir.FullName, line ) ),
+                        };
+
+                        while ( true )
+                        {
+                            if ( ReadEntry( entry, line = reader.ReadLine() ) == 0 )
+                            {
+                                break;
+                            }
+
+                            if ( pageFields.TryGetValue( entry[ 0 ], out var field ) )
+                            {
+                                field( page );
+                            }
                         }
 
-                        var field = pageFields.Get( Entry[ 0 ] );
-
-                        field?.Parse( page, Entry ); // Silently ignore unknown page fields.
+                        Pages.Add( page );
                     }
-
-                    Pages.Add( page );
                 }
                 else
                 {
@@ -176,44 +256,34 @@ public partial class TextureAtlasData
 
                     while ( true )
                     {
-                        var count = ReadEntry( line = reader.ReadLine() );
+                        var count = ReadEntry( entry, line = reader.ReadLine() );
 
                         if ( count == 0 )
                         {
                             break;
                         }
 
-                        var field = regionFields.Get( Entry[ 0 ] );
-
-                        if ( field != null )
+                        if ( regionFields.TryGetValue( entry[ 0 ], out var field ) )
                         {
-                            field.Parse( region, Entry );
+                            field( region );
                         }
                         else
                         {
-                            if ( names == null )
-                            {
-                                names  = new List< string >( 8 );
-                                values = new List< int[] >( 8 );
-                            }
-
-                            names.Add( Entry[ 0 ] );
+                            names  ??= new List< string >( 8 );
+                            values ??= new List< int[] >( 8 );
+                            names.Add( entry[ 0 ] );
 
                             var entryValues = new int[ count ];
 
                             for ( var i = 0; i < count; i++ )
                             {
-                                try
+                                if ( int.TryParse( entry[ i + 1 ], out var val ) )
                                 {
-                                    entryValues[ i ] = int.Parse( Entry[ i + 1 ] );
-                                }
-                                catch ( Exception )
-                                {
-                                    // Silently ignore non-integer values.
+                                    entryValues[ i ] = val;
                                 }
                             }
 
-                            values?.Add( entryValues );
+                            values.Add( entryValues );
                         }
                     }
 
@@ -227,7 +297,6 @@ public partial class TextureAtlasData
                     {
                         region.Names  = names.ToArray();
                         region.Values = values?.ToArray();
-
                         names.Clear();
                         values?.Clear();
                     }
@@ -238,24 +307,28 @@ public partial class TextureAtlasData
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( "Error reading texture atlas file: " + packFile, ex );
-        }
-        finally
-        {
-            reader.Close();
+            throw new GdxRuntimeException( $"Error reading texture atlas file: {packFile}", ex );
         }
 
-        if ( HasIndexes[ 0 ] )
+        // Sort regions by index if needed
+        if ( hasIndexes )
         {
-            Regions.Sort( new ComparatorAnonymousInnerClass( this ) );
+            Regions.Sort( ( region1, region2 ) =>
+            {
+                var i1 = region1.Index != -1 ? region1.Index : int.MaxValue;
+                var i2 = region2.Index != -1 ? region2.Index : int.MaxValue;
+
+                return i1.CompareTo( i2 );
+            } );
         }
     }
 
     /// <summary>
     /// </summary>
+    /// <param name="entry"></param>
     /// <param name="line"></param>
     /// <returns></returns>
-    private int ReadEntry( string? line )
+    private int ReadEntry( string[] entry, string? line )
     {
         if ( line == null )
         {
@@ -276,7 +349,7 @@ public partial class TextureAtlasData
             return 0;
         }
 
-        Entry[ 0 ] = line.Substring( 0, colon ).Trim();
+        entry[ 0 ] = line.Substring( 0, colon ).Trim();
 
         for ( int i = 1, lastMatch = colon + 1;; i++ )
         {
@@ -284,12 +357,12 @@ public partial class TextureAtlasData
 
             if ( comma == -1 )
             {
-                Entry[ i ] = line.Substring( lastMatch ).Trim();
+                entry[ i ] = line.Substring( lastMatch ).Trim();
 
                 return i;
             }
 
-            Entry[ i ] = line.Substring( lastMatch, comma - lastMatch ).Trim();
+            entry[ i ] = line.Substring( lastMatch, comma - lastMatch ).Trim();
 
             lastMatch = comma + 1;
 
@@ -327,7 +400,7 @@ public partial class TextureAtlasData
         public FileInfo? TextureFile { get; set; }
 
         public bool              UseMipMaps         { get; set; }
-        public int               Format             { get; set; } = Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
+        public Pixmap.Format     Format             { get; set; } = Pixmap.Format.RGBA8888;    // Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
         public TextureFilterMode MinFilter          { get; set; } = TextureFilterMode.Nearest;
         public TextureFilterMode MagFilter          { get; set; } = TextureFilterMode.Nearest;
         public TextureWrapMode   UWrap              { get; set; } = TextureWrapMode.ClampToEdge;
@@ -343,8 +416,8 @@ public partial class TextureAtlasData
     [PublicAPI]
     public class Region
     {
-        public Page?     Page           { get; init; }
-        public string    Name           { get; init; } = string.Empty;
+        public Page?     Page           { get; set; }
+        public string    Name           { get; set; } = string.Empty;
         public int       Left           { get; set; }
         public int       Top            { get; set; }
         public int       Width          { get; set; }

@@ -206,9 +206,9 @@ public class Engine
 
     private static bool CheckEnvironmentVar( string envVar, string value )
     {
-        return Environment.GetEnvironmentVariables().Contains( envVar )
-               && Environment.GetEnvironmentVariable( envVar )!
-                             .Equals( value, StringComparison.CurrentCultureIgnoreCase );
+        return System.Environment.GetEnvironmentVariables().Contains( envVar )
+               && System.Environment.GetEnvironmentVariable( envVar )!
+                        .Equals( value, StringComparison.CurrentCultureIgnoreCase );
     }
 
     // ========================================================================

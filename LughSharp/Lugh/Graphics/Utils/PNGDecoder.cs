@@ -87,7 +87,7 @@ public class PNGDecoder
     public static PNGFormatStructs.IHDRChunk    IHDRchunk     { get; private set; }
     public static PNGFormatStructs.IDATChunk    IDATchunk     { get; private set; }
     public static long                          TotalIDATSize { get; private set; } = 0;
-    public static int                           PixelFormat   { get; private set; }
+    public static Pixmap.Format                 PixelFormat   { get; private set; }
     public static int                           BytesPerPixel { get; private set; }
 
     public static byte BitDepth    => IHDRchunk.BitDepth;
@@ -117,7 +117,7 @@ public class PNGDecoder
 
         if ( texture == null )
         {
-            Logger.Warning( "Unable to perform analysis, texture is null" );
+            Logger.Error( "Unable to perform analysis, texture is null" );
 
             return;
         }
@@ -200,26 +200,26 @@ public class PNGDecoder
 
         if ( !PngSignature.Signature.SequenceEqual( StandardPNGSignature ) )
         {
-            Logger.Warning( "Not a valid PNG file, Signature is incorrect" );
-            
+            Logger.Error( "Not a valid PNG file, Signature is incorrect" );
+
             StringBuilder sb = new();
-            
+
             for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
             {
-                sb.Append( $"[{PngSignature.Signature[i]:X2}]" );
+                sb.Append( $"[{PngSignature.Signature[ i ]:X2}]" );
             }
-            
+
             Logger.Debug( sb.ToString() );
 
             sb.Clear();
-            
+
             for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
             {
-                sb.Append( $"[{StandardPNGSignature[i]:X2}]" );
+                sb.Append( $"[{StandardPNGSignature[ i ]:X2}]" );
             }
-            
+
             Logger.Debug( sb.ToString() );
-            
+
             return;
         }
 
@@ -284,7 +284,7 @@ public class PNGDecoder
             Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
             Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
             Logger.Debug( $"- ColorType     : {ColorTypeName( IHDRchunk.ColorType )} :: ( {IHDRchunk.ColorType} )" );
-            Logger.Debug( $"- PixelFormat   : {PixelFormatUtils.GetFormatString( PixelFormat )} :: ( {PixelFormat} )" );
+            Logger.Debug( $"- PixelFormat   : {Lugh.Graphics.PixelFormat.GetFormatString( PixelFormat )} :: ( {PixelFormat} )" );
             Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
             Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
             Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
@@ -318,10 +318,10 @@ public class PNGDecoder
 
             if ( ( idatIndex + fullChunkSize ) > pngData.Length )
             {
-                Logger.Warning( $"Error: Invalid Chunk Size or truncated file. " +
-                                $"Index: {idatIndex}, " +
-                                $"Chunksize: {fullChunkSize}, " +
-                                $"File Length: {pngData.Length}" );
+                Logger.Error( $"Error: Invalid Chunk Size or truncated file. " +
+                              $"Index: {idatIndex}, " +
+                              $"Chunksize: {fullChunkSize}, " +
+                              $"File Length: {pngData.Length}" );
 
                 break;
             }
@@ -349,7 +349,7 @@ public class PNGDecoder
     {
         if ( data.Length != IHDR_DATA_SIZE )
         {
-            Logger.Warning( "IHDR chunk is an unexpected size" );
+            Logger.Error( "IHDR chunk is an unexpected size" );
 
             return;
         }
@@ -425,7 +425,7 @@ public class PNGDecoder
     {
         if ( ( startIndex < 0 ) || ( ( startIndex + 3 ) >= bytes.Length ) )
         {
-            Logger.Warning( "Error: ReadIntFromBytes out of bounds" );
+            Logger.Error( "Error: ReadIntFromBytes out of bounds" );
 
             return 0; // Or throw an exception
         }
@@ -541,7 +541,7 @@ public class PNGDecoder
     /// <returns>
     /// A Gdx2DPixmapFormat enum value representing the pixel format of the PNG image.
     /// </returns>
-    public static int GetFormatFromPngHeader( Stream pngStream )
+    public static Pixmap.Format GetFormatFromPngHeader( Stream pngStream )
     {
         // Read PNG signature (8 bytes)
         var signature = new byte[ 8 ];
@@ -566,20 +566,7 @@ public class PNGDecoder
         var bitDepth  = ihdr[ 8 ];
         var colorType = ihdr[ 9 ];
 
-        // Map PNG color type and bit depth to the format
-//        var format = ( colorType, bitDepth ) switch
-//        {
-//            (6, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,        // Truecolor with alpha, 8 bits
-//            (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
-//            (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
-//            (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
-//            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Not standard, but logic can be added for 16-bit
-//
-//            // Add more mappings as needed
-//            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
-//        };
-
-        var format = PixelFormatUtils.DeterminePixelFormatFromBitDepth( colorType, bitDepth );
+        var format = LughSharp.Lugh.Graphics.PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
 
         return format;
     }
@@ -796,7 +783,7 @@ public class PNGDecoder
         }
 
         Logger.Debug( $"Writing PNG data to file: {filename}" );
-        
+
         File.WriteAllBytes( filename, pngData );
     }
 

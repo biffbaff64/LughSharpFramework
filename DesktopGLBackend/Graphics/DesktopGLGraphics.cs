@@ -24,11 +24,11 @@
 
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics;
+using LughSharp.Lugh.Graphics.FrameBuffers;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 
-using LughUtils.source;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 
@@ -461,7 +461,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
         if ( ( viewport[ 0 ] != x ) || ( viewport[ 1 ] != y ) ||
              ( viewport[ 2 ] != width ) || ( viewport[ 3 ] != height ) )
         {
-            Logger.Warning( "Viewport dimensions mismatch!"
+            Logger.Error( "Viewport dimensions mismatch!"
                             + $"\nRequested: [{x}, {y}, {width}, {height}]"
                             + $"\nActual: [{viewport[ 0 ]}, {viewport[ 1 ]}, "
                             + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );

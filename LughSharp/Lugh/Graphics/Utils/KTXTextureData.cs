@@ -47,8 +47,8 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// <returns> the height of the pixel data </returns>
     public int Height { get; set; }
 
-    /// <returns> the <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> of the pixel data </returns>
-    public int PixelFormat { get; set; } = Gdx2DPixmap.GDX_2D_FORMAT_ALPHA;
+    /// <inheritdoc />
+    public Pixmap.Format PixelFormat { get; set; } = Pixmap.Format.RGBA8888;
 
     /// <returns> whether to generate mipmaps or not. </returns>
     public bool UseMipMaps { get; set; } = useMipMaps;

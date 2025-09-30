@@ -45,7 +45,7 @@ public partial class TextureAtlasData
         {
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry ) );
 
-            page.Format = Pixmap.GetFormatFromString( entry[ 1 ] );
+            page.Format = PixelFormatUtils.GetFormatFromString( entry[ 1 ] );
         }
     }
 

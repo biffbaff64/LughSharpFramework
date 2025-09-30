@@ -66,7 +66,7 @@ public class AssetManagerTest
 
         if ( !_assetManager.Contains( file1 ) )
         {
-            Logger.Warning( $"AssetManager does not contain {file1}" );
+            Logger.Error( $"AssetManager does not contain {file1}" );
 
             return;
         }
@@ -75,7 +75,7 @@ public class AssetManagerTest
 
         if ( data1 == null )
         {
-            Logger.Warning( $"Failed to load image data: {file1}" );
+            Logger.Error( $"Failed to load image data: {file1}" );
         }
         else
         {

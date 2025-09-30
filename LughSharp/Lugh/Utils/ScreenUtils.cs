@@ -123,7 +123,7 @@ public static class ScreenUtils
         var potW      = MathUtils.NextPowerOfTwo( w );
         var potH      = MathUtils.NextPowerOfTwo( h );
         var pixmap    = Pixmap.CreateFromFrameBuffer( x, y, w, h );
-        var potPixmap = new Pixmap( potW, potH, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 );
+        var potPixmap = new Pixmap( potW, potH, Pixmap.Format.RGBA8888 );
 
         potPixmap.Blending = Pixmap.BlendTypes.None;
         potPixmap.DrawPixmap( pixmap, 0, 0 );

@@ -51,7 +51,7 @@ public class SerializationException : System.Runtime.Serialization.Serialization
     {
         if ( Data.Contains( "Trace" ) )
         {
-            Data[ "Trace" ] = Data[ "Trace" ] + Environment.NewLine + traceMessage;
+            Data[ "Trace" ] = Data[ "Trace" ] + System.Environment.NewLine + traceMessage;
         }
         else
         {

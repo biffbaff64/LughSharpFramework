@@ -25,17 +25,9 @@
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
-public class ImageUtils
+public class PixmapFormatUtils
 {
-    public static byte[] GetAsPNG( Texture texture )
-    {
-        var format = PixelFormatUtils.PixmapFormatToGDXFormat( texture.ColorFormat );
-
-        return PNGDecoder.CreatePNGFromRawRGBA( texture.GetImageData()!,
-                                                texture.Width,
-                                                texture.Height,
-                                                format );
-    }
+    
 }
 
 // ========================================================================

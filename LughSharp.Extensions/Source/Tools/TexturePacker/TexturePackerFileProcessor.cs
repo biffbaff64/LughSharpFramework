@@ -38,9 +38,9 @@ public class TexturePackerFileProcessor : FileProcessor
 {
     public TexturePacker.TexturePackerProgressListener? ProgressListener { get; set; }
 
-    public List< DirectoryInfo > DirsToIgnore { get; set; }
-    public bool                  CountOnly    { get; set; }
-    public string                PackFileName { get; set; }
+    public List< DirectoryInfo? > DirsToIgnore { get; set; }
+    public bool                   CountOnly    { get; set; }
+    public string                 PackFileName { get; set; }
 
     // ========================================================================
 
@@ -126,7 +126,11 @@ public class TexturePackerFileProcessor : FileProcessor
 
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
-        CollectSettingsFiles( inputRoot, outputRoot );
+        Logger.Debug( "Collecting available settings files..." );
+        var settingsFiles = CollectSettingsFiles( inputRoot, outputRoot );
+        Logger.Debug( $"files found: {settingsFiles}" );
+        
+        Logger.Debug( "Counting Invocations..." );
 
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
@@ -134,7 +138,10 @@ public class TexturePackerFileProcessor : FileProcessor
         CountOnly = true;
         _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
-
+        Logger.Debug( $"Invocations: {_packCount}" );
+        
+        Logger.Debug( "Processing files..." );
+        
         // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
         var result = base.Process( inputRoot, outputRoot );
@@ -168,7 +175,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="entryList"></param>
     public override void ProcessDir( Entry inputDir, List< Entry > entryList )
     {
-        // Do not proceed if this dir is one of those to ignore
+        // Do not proceed if this dir is in the ignore list.
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
         {
             return;
@@ -179,9 +186,10 @@ public class TexturePackerFileProcessor : FileProcessor
 
         var parent = ( DirectoryInfo? )inputDir.InputFile;
 
-        // The loop continues as long as 'parent' is not null, the settings for 'parent'
-        // are not found, and 'parent' is not the root directory.
-        // 'parent' is updated to its parent in each iteration.
+        // Note:
+        // The loop continues as long as 'parent' is not null, the settings for
+        // 'parent' are not found, and 'parent' is not the root directory.
+        // 'parent' is updated to its own parent in each iteration.
         while ( true )
         {
             if ( parent != null )
@@ -202,6 +210,7 @@ public class TexturePackerFileProcessor : FileProcessor
             parent = parent.Parent;
         }
 
+        // Note:
         // After the loop, 'settings' will contain the found settings (if any),
         // and 'current' will be either null, the directory with settings, or the
         // root directory.
@@ -218,7 +227,33 @@ public class TexturePackerFileProcessor : FileProcessor
             // Collect all files under subdirectories except those with a pack.json file.
             // A directory with its own settings can't be combined since combined directories
             // must use the settings of the parent directory.
-            var combiningProcessor = new CombineSettingsProcessor( inputDir, this );
+            var combiningProcessor = new FileProcessor( this )
+            {
+                ProcessDirDelegate = ( entryDir, files ) =>
+                {
+                    var file = entryDir.InputFile as DirectoryInfo;
+
+                    while ( file != null && !file.Equals( inputDir.InputFile ) )
+                    {
+                        var packJson = new FileInfo( Path.Combine( file.FullName, "pack.json" ) );
+
+                        if ( packJson.Exists )
+                        {
+                            files.Clear();
+
+                            return;
+                        }
+
+                        file = file.Parent;
+                    }
+
+                    if ( !CountOnly )
+                    {
+                        DirsToIgnore.Add( entryDir.InputFile as DirectoryInfo );
+                    }
+                },
+                ProcessFileDelegate = AddProcessedFile,
+            };
 
             entryList = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null ).ToList();
         }
@@ -270,7 +305,7 @@ public class TexturePackerFileProcessor : FileProcessor
                 }
                 catch ( Exception e )
                 {
-                    Logger.Warning( $"Exception ignored: {e.Message}" );
+                    Logger.Error( $"Exception ignored: {e.Message}" );
                 }
             }
 
@@ -285,7 +320,7 @@ public class TexturePackerFileProcessor : FileProcessor
                 }
                 catch ( Exception e )
                 {
-                    Logger.Warning( $"Exception ignored: {e.Message}" );
+                    Logger.Error( $"Exception ignored: {e.Message}" );
                 }
             }
 
@@ -312,7 +347,7 @@ public class TexturePackerFileProcessor : FileProcessor
             catch ( IOException ioe )
             {
                 Logger.Debug( $"Reading: {sourceString} ( IOException )" );
-                Logger.Warning( $"IOException while reading: {ioe.Message}" );
+                Logger.Error( $"IOException while reading: {ioe.Message}" );
             }
         }
 
@@ -329,8 +364,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
                 if ( inputPath.StartsWith( rootPath ) )
                 {
-                    rootPath = IOUtils.NormalizePath( rootPath );
-
+                    rootPath  = IOUtils.NormalizePath( rootPath );
                     inputPath = inputPath.Substring( rootPath.Length );
                     inputPath = IOUtils.NormalizePath( inputPath );
 
@@ -342,7 +376,7 @@ public class TexturePackerFileProcessor : FileProcessor
             }
             catch ( IOException ioe )
             {
-                Logger.Warning( ioe.Message );
+                Logger.Error( ioe.Message );
             }
 
             if ( ( inputPath == null ) || ( inputPath.Length == 0 ) )
@@ -353,8 +387,11 @@ public class TexturePackerFileProcessor : FileProcessor
             ProgressListener.Message = inputPath!;
         }
 
+        // ---------- Pack Images ----------
+        
         var packer = NewTexturePacker( _rootDirectory, settings );
 
+        // Add all the gathered images to the packer.
         foreach ( var file in entryList )
         {
             if ( file.InputFile != null )
@@ -363,6 +400,7 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
 
+        // Do the actual packing.
         Pack( packer, inputDir );
 
         ProgressListener?.End();
@@ -374,8 +412,11 @@ public class TexturePackerFileProcessor : FileProcessor
     // ------------------------------------------------------------------------
 
     /// <summary>
+    /// Processes a single file entry for texture packing. Determines the parent directory,
+    /// retrieves the appropriate settings, creates a new <see cref="TexturePacker"/> instance,
+    /// and performs packing if not in count-only mode. Adds the processed file to the result list.
     /// </summary>
-    /// <param name="entry"></param>
+    /// <param name="entry">The file entry to process.</param>
     public override void ProcessFile( Entry entry )
     {
         Guard.ThrowIfNull( entry.InputFile );
@@ -416,12 +457,12 @@ public class TexturePackerFileProcessor : FileProcessor
         AddProcessedFile( entry );
     }
 
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-
     #endregion Process methods
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     // ========================================================================
     // ========================================================================
@@ -444,22 +485,31 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="outputRoot">
     /// The directory where the packed texture files and metadata will be saved.
     /// </param>
-    public void CollectSettingsFiles( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
+    public int CollectSettingsFiles( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
-        var settingsProcessor = new PackingSettingsProcessor();
-        settingsProcessor.AddInputRegex( "pack\\.json" );
-        _ = settingsProcessor.Process( inputRoot, outputRoot );
+        List< FileInfo > settingsFiles = [ ];
 
+        var settingsProcessor = new FileProcessor( this )
+        {
+            ProcessFileDelegate = ( entry ) =>
+            {
+                if ( entry.InputFile is FileInfo fileInfo
+                     && fileInfo.Name.Equals( "pack.json", StringComparison.OrdinalIgnoreCase ) )
+                {
+                    settingsFiles.Add( fileInfo );
+                }
+            },
+        };
+        
+        settingsProcessor.Process( inputRoot, outputRoot );
+        
         ProgressListener ??= new TexturePacker.TexturePackerProgressListener();
-
-        var settingsFiles = settingsProcessor.SettingsFiles;
 
         // -----------------------------------------------------
 
         if ( settingsFiles.Count == 0 )
         {
-            // No settings files found, logger message is for development purposes.
-            Logger.Debug( "No settings files found." );
+            // No settings files found
         }
         else
         {
@@ -496,6 +546,8 @@ public class TexturePackerFileProcessor : FileProcessor
                 _dirToSettings.Add( settingsFile.Directory!, settings );
             }
         }
+
+        return settingsFiles.Count;
     }
 
     /// <summary>
@@ -543,11 +595,15 @@ public class TexturePackerFileProcessor : FileProcessor
 
         for ( int i = 0, n = rootSettings.Scale.Length; i < n; i++ )
         {
-            var deleteProcessor = new DeleteProcessor
+            var deleteProcessor = new FileProcessor( this )
             {
+                ProcessFileDelegate = ( entry ) =>
+                {
+                    entry.InputFile?.Delete();
+                },
                 Recursive = false,
             };
-
+            
             var packFile = new FileInfo( rootSettings.GetScaledPackFileName( PackFileName, i ) );
             var prefix   = packFile.Name;
             var dotIndex = prefix.LastIndexOf( '.' );

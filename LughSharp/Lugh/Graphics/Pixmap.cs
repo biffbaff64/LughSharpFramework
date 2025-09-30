@@ -64,7 +64,7 @@ public class Pixmap : IDisposable
         {
             if ( Gdx2DPixmap == null )
             {
-                Logger.Warning( $"Gdx2DPixmap instance is null!" );
+                Logger.Error( $"Gdx2DPixmap instance is null!" );
 
                 return 0;
             }
@@ -82,7 +82,7 @@ public class Pixmap : IDisposable
         {
             if ( Gdx2DPixmap == null )
             {
-                Logger.Warning( $"Gdx2DPixmap instance is null!" );
+                Logger.Error( $"Gdx2DPixmap instance is null!" );
 
                 return 0;
             }
@@ -108,8 +108,8 @@ public class Pixmap : IDisposable
     /// </summary>
     /// <param name="width">The width in pixels.</param>
     /// <param name="height">The height in pixels.</param>
-    /// <param name="format">The <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c></param>
-    public Pixmap( int width, int height, int format )
+    /// <param name="format">The <see cref="Pixmap.Format"/> </param>
+    public Pixmap( int width, int height, Pixmap.Format format )
     {
         Logger.Checkpoint();
 
@@ -158,7 +158,7 @@ public class Pixmap : IDisposable
     public Pixmap( FileInfo file )
     {
         Logger.Checkpoint();
-        
+
         ArgumentNullException.ThrowIfNull( file );
 
         try
@@ -209,7 +209,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            return PixelFormatUtils.ToGLPixelFormat( Gdx2DPixmap.ColorType );
+            return PixelFormat.PixmapFormatToGLFormat( Gdx2DPixmap.ColorType );
         }
     }
 
@@ -223,7 +223,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            return PixelFormatUtils.GetGLInternalFormat( Gdx2DPixmap.ColorType );
+            return PixelFormat.PixmapFormatToGLInternalFormat( Gdx2DPixmap.ColorType );
         }
     }
 
@@ -237,12 +237,13 @@ public class Pixmap : IDisposable
         {
             return Gdx2DPixmap?.ColorType switch
             {
-                Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
-                Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-                Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
-                Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
-                Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
-                Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+                Format.Alpha          => IGL.GL_UNSIGNED_BYTE,
+                Format.LuminanceAlpha => IGL.GL_UNSIGNED_BYTE,
+                Format.RGB888         => IGL.GL_UNSIGNED_BYTE,
+                Format.RGBA8888       => IGL.GL_UNSIGNED_BYTE,
+                Format.RGB565         => IGL.GL_UNSIGNED_SHORT_5_6_5,
+                Format.RGBA4444       => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+                Format.IndexedColor   => IGL.GL_UNSIGNED_BYTE,
 
                 var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap?.ColorType}" ),
             };
@@ -380,13 +381,10 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Returns the <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> of this Pixmap.
     /// </summary>
-    public int GetColorFormat()
+    public Format GetColorFormat()
     {
-        Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
-
-        return Gdx2DPixmap.ColorType;
+        return Gdx2DPixmap!.ColorType;
     }
 
     /// <summary>
@@ -605,7 +603,7 @@ public class Pixmap : IDisposable
     {
         GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
-        Pixmap pixmap = new( width, height, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 );
+        Pixmap pixmap = new( width, height, Format.RGBA8888 );
 
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
@@ -652,26 +650,6 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Returns the pixel format from a valid named string.
-    /// </summary>
-    public static int GetFormatFromString( string str )
-    {
-        str = str.ToLower();
-
-        return str switch
-        {
-            "alpha"          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
-            "luminancealpha" => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
-            "rgb565"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
-            "rgba4444"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
-            "rgb888"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-            "rgba8888"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
-
-            var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
-        };
-    }
-
-    /// <summary>
     /// Dump Pixmap debug info to console.
     /// </summary>
     public void DebugPrint()
@@ -680,7 +658,7 @@ public class Pixmap : IDisposable
         {
             if ( Gdx2DPixmap == null )
             {
-                Logger.Warning( $"Gdx2DPixmap is NULL, cannot print debug" );
+                Logger.Error( $"Gdx2DPixmap is NULL, cannot print debug" );
 
                 return;
             }
@@ -694,9 +672,9 @@ public class Pixmap : IDisposable
             var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
 
             Guard.ThrowIfNull( a );
-            
+
             Logger.Debug( $"Buffer Length : {a.Length}" );
-            
+
             for ( var i = 0; i < 100; i += 10 )
             {
                 Logger.Debug( $"{a[ i + 0 ]},{a[ i + 1 ]},{a[ i + 2 ]},{a[ i + 3 ]},"
@@ -760,9 +738,27 @@ public class Pixmap : IDisposable
 
     #endregion dispose pattern
 
-// ========================================================================
+    // ========================================================================
+    // ========================================================================
 
     #region PixmapEnums
+
+    [PublicAPI]
+    public enum Format : int
+    {
+        Alpha,
+        Intensity,
+        LuminanceAlpha,
+        IndexedColor,
+        RGB565,
+        RGBA4444,
+        RGB888,
+        RGBA8888,
+
+        // ------------------
+
+        Default = RGBA8888,
+    }
 
     [PublicAPI]
     public enum ScaleType : int
@@ -770,6 +766,8 @@ public class Pixmap : IDisposable
         Nearest  = 0,
         Linear   = 1,
         Bilinear = Linear,
+
+        // ------------------
 
         Default = Bilinear,
     }
@@ -783,6 +781,8 @@ public class Pixmap : IDisposable
         None       = 0,
         SourceOver = 1,
 
+        // ------------------
+
         Default = SourceOver,
     }
 
@@ -795,13 +795,12 @@ public class Pixmap : IDisposable
         NearestNeighbour,
         BiLinear,
 
+        // ------------------
+
         Default = BiLinear,
     }
 
     #endregion
-
-// ========================================================================
-// ========================================================================
 }
 
 // ========================================================================

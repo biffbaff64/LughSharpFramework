@@ -54,17 +54,17 @@ public partial class Gdx2DPixmap : Image, IDisposable
     // ========================================================================
 
     public const int GDX_2D_IGNORE = 0;
-    
+
     // ========================================================================
-    
-    public const int GDX_2D_FORMAT_ALPHA           = 1;
-    public const int GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
-    public const int GDX_2D_FORMAT_RGB888          = 3;
-    public const int GDX_2D_FORMAT_RGBA8888        = 4;
-    public const int GDX_2D_FORMAT_RGB565          = 5;
-    public const int GDX_2D_FORMAT_RGBA4444        = 6;
-    public const int GDX_2D_FORMAT_INDEXED         = 7;
-    public const int GDX_2D_FORMAT_DEFAULT         = 4;
+
+//    public const int GDX_2D_FORMAT_ALPHA           = 1;
+//    public const int GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
+//    public const int GDX_2D_FORMAT_RGB888          = 3;
+//    public const int GDX_2D_FORMAT_RGBA8888        = 4;
+//    public const int GDX_2D_FORMAT_RGB565          = 5;
+//    public const int GDX_2D_FORMAT_RGBA4444        = 6;
+//    public const int GDX_2D_FORMAT_INDEXED         = 7;
+//    public const int GDX_2D_FORMAT_DEFAULT         = 4;
 
     // ========================================================================
 
@@ -80,7 +80,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     // ========================================================================
 
     public Buffer< byte > PixmapBuffer  { get; set; }
-    public int            ColorType     { get; set; }
+    public Pixmap.Format  ColorType     { get; set; }
     public uint           Blend         { get; set; }
     public uint           Scale         { get; set; }
     public long           TotalIDATSize { get; set; }
@@ -102,7 +102,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="len"> The number of bytes to copy from buffer. </param>
     /// <param name="requestedFormat"> The desired color format. </param>
     /// <exception cref="IOException"></exception>
-    public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
+    public Gdx2DPixmap( byte[] buffer, int offset, int len, Pixmap.Format requestedFormat )
     {
         Logger.Checkpoint();
 
@@ -134,7 +134,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="requestedFormat">
     /// The desired pixel format for the pixmap. Use 0 to keep the original format.
     /// </param>
-    public Gdx2DPixmap( StreamReader inStream, int requestedFormat )
+    public Gdx2DPixmap( StreamReader inStream, Pixmap.Format requestedFormat )
     {
         Logger.Checkpoint();
 
@@ -185,7 +185,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="height"> Height in pixels. </param>
     /// <param name="format"> The requested Gdx2DPixmap color format. </param>
     /// <exception cref="GdxRuntimeException"></exception>
-    public Gdx2DPixmap( int width, int height, int format )
+    public Gdx2DPixmap( int width, int height, Pixmap.Format format )
     {
         Logger.Checkpoint();
 
@@ -193,13 +193,13 @@ public partial class Gdx2DPixmap : Image, IDisposable
         Blend     = ( uint )Pixmap.BlendTypes.Default;
         Scale     = ( uint )Pixmap.ScaleType.Default;
 
-        var length = width * height * PixelFormatUtils.Gdx2dBytesPerPixel( format );
+        var length = width * height * PixelFormat.BytesPerPixel( format );
 
         PixmapBuffer = new Buffer< byte >( length );
         var data = PNGDecoder.CreatePNGFromRawRGBA( PixmapBuffer.BackingArray(),
                                                     width,
                                                     height,
-                                                    PixelFormatUtils.PixmapFormatToPNGColorType( format ) );
+                                                    PixelFormat.PixmapFormatToPNGColorType( format ) );
         PixmapBuffer.PutBytes( data );
 
         PNGDecoder.AnalysePNG( PixmapBuffer.BackingArray(), false );
@@ -255,9 +255,9 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="width">The width of the pixmap in pixels.</param>
     /// <param name="height">The height of the pixmap in pixels.</param>
     /// <param name="format">The pixel format of the pixmap, defining the color encoding and storage.</param>
-    private void SafeInitPixmapDataType( int width, int height, int format )
+    private void SafeInitPixmapDataType( int width, int height, Pixmap.Format format )
     {
-        var length = width * height * PixelFormatUtils.Gdx2dBytesPerPixel( format );
+        var length = width * height * PixelFormat.BytesPerPixel( format );
 
         _pixmapDescriptor = new PixmapDescriptor
         {
@@ -294,7 +294,8 @@ public partial class Gdx2DPixmap : Image, IDisposable
         // Decoded properties will be held statically in the PNGDecoder class. 
         PNGDecoder.AnalysePNG( buffer, false );
 
-        var colorType = PixelFormatUtils.PNGColorTypeToPixmapFormat( PNGDecoder.IHDRchunk.ColorType );
+        var colorType = PixelFormat.FromPNGColorAndBitDepth( PNGDecoder.IHDRchunk.ColorType,
+                                                             PNGDecoder.IHDRchunk.BitDepth );
         var width     = ( int )PNGDecoder.IHDRchunk.Width;
         var height    = ( int )PNGDecoder.IHDRchunk.Height;
         var bufLength = width * height * PNGDecoder.BytesPerPixel;
@@ -327,9 +328,9 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// Converts this Pixmaps <see cref="ColorType"/> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
-    public void ConvertPixelFormatTo( int requestedFormat )
+    public void ConvertPixelFormatTo( Pixmap.Format requestedFormat )
     {
-        Logger.Debug( $"requestedFormat: {PixelFormatUtils.GetFormatString( requestedFormat )}" );
+        Logger.Debug( $"requestedFormat: {requestedFormat}" );
 
         // Double-check conditions
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )

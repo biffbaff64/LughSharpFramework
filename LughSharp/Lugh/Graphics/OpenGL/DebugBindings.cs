@@ -137,7 +137,7 @@ public unsafe partial class GLBindings
             var _                              => "UNKNOWN",
         };
 
-        Logger.Warning( $"{srcStr}, {typeStr}, {severityStr}, {id}: {message}" );
+        Logger.Error( $"{srcStr}, {typeStr}, {severityStr}, {id}: {message}" );
     }
 
     // ========================================================================

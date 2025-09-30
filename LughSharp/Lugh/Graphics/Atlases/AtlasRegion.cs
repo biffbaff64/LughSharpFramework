@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics.Atlases;
 
 [PublicAPI]
-public class AtlasRegion : TextureRegion
+public class AtlasRegion : TextureRegion, IDisposable
 {
     /// <summary>
     /// Values for name/value pairs other than the fields provided on this class,
@@ -102,6 +102,10 @@ public class AtlasRegion : TextureRegion
 
     // ========================================================================
 
+    private bool _isDisposed = false;
+    
+    // ========================================================================
+
     /// <summary>
     /// </summary>
     /// <param name="texture"></param>
@@ -140,8 +144,9 @@ public class AtlasRegion : TextureRegion
     }
 
     /// <summary>
+    /// Creates a new AtlasRegion using the supplied TextureRegion.
     /// </summary>
-    /// <param name="region"></param>
+    /// <param name="region"> The texture region to use for initialization. </param>
     public AtlasRegion( TextureRegion region )
     {
         SetRegion( region );
@@ -212,4 +217,26 @@ public class AtlasRegion : TextureRegion
     {
         return Name;
     }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected void Dispose( bool disposing )
+    {
+        if ( !_isDisposed )
+        {
+            if ( disposing )
+            {
+            }
+            
+            _isDisposed = true;
+        }
+    }
 }
+
+// ============================================================================
+// ============================================================================

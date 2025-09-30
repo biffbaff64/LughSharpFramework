@@ -11,7 +11,7 @@
     <ItemGroup>
         <PackageReference Include="DotGLFW" Version="1.2.0"/>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-        <PackageReference Include="LughUtils" Version="0.0.3" />
+        <PackageReference Include="LughUtils" Version="0.0.4" />
         <PackageReference Include="NUnit" Version="4.4.0" />
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2"/>
     </ItemGroup>

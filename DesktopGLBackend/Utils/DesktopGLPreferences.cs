@@ -88,12 +88,12 @@ public class DesktopGLPreferences : IPreferences
             }
             else
             {
-                Logger.Warning( "Invalid root element in preferences file." );
+                Logger.Error( "Invalid root element in preferences file." );
             }
         }
         catch ( Exception e )
         {
-            Logger.Warning( e.Message );
+            Logger.Error( e.Message );
         }
 
         Flush();
