@@ -29,7 +29,7 @@ public class ImageUtils
 {
     public static byte[] GetAsPNG( Texture texture )
     {
-        var format = PixelFormatUtils.PixmapFormatToGDXFormat( texture.ColorFormat );
+        var format = PixelFormat.PixmapFormatToPNGColorType( texture.ColorFormat );
 
         return PNGDecoder.CreatePNGFromRawRGBA( texture.GetImageData()!,
                                                 texture.Width,

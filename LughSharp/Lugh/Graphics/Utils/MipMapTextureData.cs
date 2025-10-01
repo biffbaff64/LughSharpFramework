@@ -36,7 +36,6 @@ public class MipMapTextureData : ITextureData
     public int  Width      { get; set; }
     public int  Height     { get; set; }
     public bool IsOwned    { get; set; }
-    public int PixelFormat { get; set; } = Gdx2DPixmap.GDX_2D_FORMAT_ALPHA;
 
     // ========================================================================
 
@@ -102,6 +101,12 @@ public class MipMapTextureData : ITextureData
         {
             derivedGLTexture.UploadImageData( target, _mips[ i ], i );
         }
+    }
+
+    /// <inheritdoc />
+    public Pixmap.Format GetPixelFormat()
+    {
+        return _mips[ 0 ].GetPixelFormat();
     }
 
     /// <inheritdoc />
