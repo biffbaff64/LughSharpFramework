@@ -48,7 +48,7 @@ public class DesktopGLCursor : ICursor, IDisposable
     {
         Window = window;
 
-        if ( pixmap.GetColorFormat() != Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 )
+        if ( pixmap.GetColorFormat() != Pixmap.Format.RGBA8888 )
         {
             throw new GdxRuntimeException( "Cursor image pixmap should be in RGBA8888 format." );
         }
@@ -77,7 +77,7 @@ public class DesktopGLCursor : ICursor, IDisposable
                                            + $"image height bounds: [0, {pixmap.Height})." );
         }
 
-        PixmapCopy          = new Pixmap( pixmap.Width, pixmap.Height, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 );
+        PixmapCopy          = new Pixmap( pixmap.Width, pixmap.Height, Pixmap.Format.RGBA8888 );
         PixmapCopy.Blending = Pixmap.BlendTypes.None;
         PixmapCopy.DrawPixmap( pixmap, 0, 0 );
 

@@ -447,16 +447,16 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     /// <param name="enabled"></param>
-    void TexImage2D( int target,
+    void TexImage2D< T >( int target,
                      int level,
-                     int internalFormat,
+                     T internalFormat,
                      int width,
                      int height,
                      int border,
-                     int format,
+                     T format,
                      int type,
                      IntPtr pixels,
-                     bool enabled = true );
+                     GLboolean enabled = true ) where T : notnull;
 
     /// <summary>
     /// Specify a two-dimensional texture image
@@ -526,7 +526,7 @@ public partial interface IGLBindings
                           int format,
                           int type,
                           T[] pixels,
-                          bool enabled = true ) where T : unmanaged;
+                          GLboolean enabled = true ) where T : unmanaged;
 
     /// <summary>
     /// </summary>

@@ -28,7 +28,6 @@ namespace LughSharp.Lugh.Graphics.Utils;
 public class PixmapTextureData : ITextureData
 {
     public Pixmap        Pixmap        { get; set; }
-    public Pixmap.Format PixelFormat   { get; set; }
     public bool          UseMipMaps    { get; set; }
     public bool          DisposePixmap { get; set; }
     public bool          IsManaged     { get; set; }
@@ -37,6 +36,10 @@ public class PixmapTextureData : ITextureData
 
     // ========================================================================
 
+    private Pixmap.Format _pixelFormat;
+    
+    // ========================================================================
+    
     public PixmapTextureData( Pixmap pixmap,
                               Pixmap.Format format,
                               bool useMipMaps,
@@ -45,7 +48,7 @@ public class PixmapTextureData : ITextureData
     {
         Pixmap        = pixmap;
         DisposePixmap = disposePixmap;
-        PixelFormat   = format;
+        _pixelFormat   = format;
         IsManaged     = managed;
         UseMipMaps    = useMipMaps;
     }
@@ -58,6 +61,9 @@ public class PixmapTextureData : ITextureData
     /// </returns>
     public bool ShouldDisposePixmap() => DisposePixmap;
 
+    /// <inheritdoc />
+    public Pixmap.Format GetPixelFormat() => _pixelFormat;
+    
     /// <inheritdoc />
     public Pixmap FetchPixmap() => Pixmap;
 

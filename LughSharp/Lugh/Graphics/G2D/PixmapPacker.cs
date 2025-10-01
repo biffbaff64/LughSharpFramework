@@ -24,7 +24,6 @@
 
 using System.Text.RegularExpressions;
 
-using LughSharp.Lugh.Graphics.Atlases;
 using LughUtils.source.Collections;
 
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
@@ -95,15 +94,15 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public class PixmapPacker : IDisposable
 {
-    public int          PageWidth        { get; set; }
-    public int          PageHeight       { get; set; }
-    public int          PageFormat       { get; set; }
-    public List< Page > Pages            { get; set; } = [ ];
-    public Color        TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
-    public bool         PackToTexture    { get; set; }
-    public bool         DuplicateBorder  { get; set; }
-    public int          Padding          { get; set; }
-    public int          AlphaThreshold   { get; set; }
+    public int           PageWidth        { get; set; }
+    public int           PageHeight       { get; set; }
+    public Pixmap.Format PageFormat       { get; set; }
+    public List< Page >  Pages            { get; set; } = [ ];
+    public Color         TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
+    public bool          PackToTexture    { get; set; }
+    public bool          DuplicateBorder  { get; set; }
+    public int           Padding          { get; set; }
+    public int           AlphaThreshold   { get; set; }
 
     // ========================================================================
 
@@ -133,7 +132,7 @@ public class PixmapPacker : IDisposable
     /// </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
-                         int pageFormat,
+                         Pixmap.Format pageFormat,
                          int padding,
                          bool duplicateBorder )
         : this( pageWidth, pageHeight, pageFormat, padding, duplicateBorder, false, false, new GuillotineStrategy() )
@@ -158,7 +157,7 @@ public class PixmapPacker : IDisposable
     /// <param name="packStrategy"> The <see cref="IPackStrategy"/> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
-                         int pageFormat,
+                         Pixmap.Format pageFormat,
                          int padding,
                          bool duplicateBorder,
                          IPackStrategy packStrategy )
@@ -186,7 +185,7 @@ public class PixmapPacker : IDisposable
     /// <param name="packStrategy"> The <see cref="IPackStrategy"/> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
-                         int pageFormat,
+                         Pixmap.Format pageFormat,
                          int padding,
                          bool duplicateBorder,
                          bool stripWhitespaceX,

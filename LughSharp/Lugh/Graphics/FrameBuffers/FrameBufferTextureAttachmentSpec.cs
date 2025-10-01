@@ -25,23 +25,17 @@
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
 
 [PublicAPI]
-public class FrameBufferTextureAttachmentSpec
+public class FrameBufferTextureAttachmentSpec( int internalFormat, int format, int type )
 {
-    public FrameBufferTextureAttachmentSpec( int internalFormat, int format, int type )
-    {
-        InternalFormat = internalFormat;
-        Format         = format;
-        Type           = type;
-    }
+    public int  InternalFormat { get; } = internalFormat;
+    public int  Format         { get; } = format;
+    public int  Type           { get; } = type;
+    public bool IsFloat        { get; init; }
+    public bool IsGpuOnly      { get; init; }
+    public bool IsDepth        { get; init; }
+    public bool IsStencil      { get; init; }
 
-    public int InternalFormat { get; }
-    public int Format         { get; }
-    public int Type           { get; }
-
-    public bool IsFloat   { get; init; }
-    public bool IsGpuOnly { get; init; }
-    public bool IsDepth   { get; init; }
-    public bool IsStencil { get; init; }
+    // ========================================================================
 
     public bool IsColorTexture => !IsDepth && !IsStencil;
 }

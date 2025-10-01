@@ -416,10 +416,9 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             return;
         }
 
-        if ( data.PixelFormat != pixmap.GetColorFormat() )
+        if ( data.GetPixelFormat() != pixmap.GetColorFormat() )
         {
-            Logger.Checkpoint();
-            var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.PixelFormat );
+            var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.GetPixelFormat() );
 
             if ( IsDrawable )
             {
@@ -457,10 +456,6 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
                              pixmap.Height );
         
         CheckGLError( "TextureStorage2D" );
-        
-        Logger.Debug( $"pixmap.Width : {pixmap.Width}" );
-        Logger.Debug( $"pixmap.Height: {pixmap.Height}" );
-        Logger.Debug( $"pixmap.Length: {pixmap.PixelData.Length}" );
         
         GL.TextureSubImage2D( GLTextureHandle,
                               0,

@@ -65,14 +65,14 @@ public class Etc1TextureData : ITextureData
     public bool IsOwned { get; set; }
 
     /// <inheritdoc />
-    public int PixelFormat { get; set; } = Gdx2DPixmap.GDX_2D_FORMAT_ALPHA;
-
-    /// <inheritdoc />
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
     /// <inheritdoc />
     bool IManaged.IsManaged => false;
 
+    // ========================================================================
+    // ========================================================================
+    
     /// <inheritdoc />
     public void Prepare()
     {
@@ -102,18 +102,6 @@ public class Etc1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public Pixmap FetchPixmap()
-    {
-        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
-    }
-
-    /// <inheritdoc />
-    public bool ShouldDisposePixmap()
-    {
-        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
-    }
-
-    /// <inheritdoc />
     public unsafe void UploadCustomData( int target )
     {
         if ( !IsPrepared )
@@ -128,7 +116,7 @@ public class Etc1TextureData : ITextureData
 
         if ( !Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
-            var pixmap = _etc1.DecodeImage( _data, Gdx2DPixmap.GDX_2D_FORMAT_RGB565 );
+            var pixmap = _etc1.DecodeImage( _data, Pixmap.Format.RGB565 );
 
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
@@ -178,8 +166,25 @@ public class Etc1TextureData : ITextureData
     }
 
     /// <inheritdoc />
+    public Pixmap.Format GetPixelFormat() => Pixmap.Format.RGB565;
+
+    /// <inheritdoc />
     public void DebugPrint()
     {
+    }
+
+    // ========================================================================
+    
+    /// <inheritdoc />
+    public Pixmap FetchPixmap()
+    {
+        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+    }
+
+    /// <inheritdoc />
+    public bool ShouldDisposePixmap()
+    {
+        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 }
 

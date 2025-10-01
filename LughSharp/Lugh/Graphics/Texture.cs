@@ -67,7 +67,7 @@ public class Texture : GLTexture, IManaged
     public int           NumManagedTextures => _managedTextures.Count;
     public uint          TextureID          => GLTextureHandle;
     public bool          IsManaged          => TextureData is { IsManaged: true };
-    public Pixmap.Format ColorFormat        => TextureData.PixelFormat;
+    public Pixmap.Format ColorFormat        => TextureData.GetPixelFormat();
 
     // ========================================================================
 
@@ -477,7 +477,7 @@ public class Texture : GLTexture, IManaged
     public void Debug()
     {
         Logger.Debug( $"Dimensions        : {Width} x {Height}" );
-        Logger.Debug( $"Format            : {TextureData.PixelFormat}" );
+        Logger.Debug( $"Format            : {TextureData.GetPixelFormat()}" );
         Logger.Debug( $"IsManaged         : {IsManaged}" );
         Logger.Debug( $"NumManagedTextures: {NumManagedTextures}" );
         Logger.Debug( $"Depth             : {Depth}" );

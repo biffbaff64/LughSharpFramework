@@ -78,7 +78,7 @@ public class FacedCubemapData : ICubemapData
     /// <summary>
     /// Construct a Cubemap with <see cref="Pixmap"/>s for each side of the specified size.
     /// </summary>
-    public FacedCubemapData( int width, int height, int depth, int format )
+    public FacedCubemapData( int width, int height, int depth, Pixmap.Format format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
                 new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
                 new PixmapTextureData( new Pixmap( width, depth, format ), 0, false, true ),
@@ -130,9 +130,9 @@ public class FacedCubemapData : ICubemapData
                 var pixmap        = _data[ i ]!.FetchPixmap()!;
                 var disposePixmap = _data[ i ]!.ShouldDisposePixmap();
 
-                if ( _data[ i ]!.PixelFormat != pixmap.GetColorFormat() )
+                if ( _data[ i ]!.GetPixelFormat() != pixmap.GetColorFormat() )
                 {
-                    var tmp = new Pixmap( pixmap.Width, pixmap.Height, _data[ i ]!.PixelFormat );
+                    var tmp = new Pixmap( pixmap.Width, pixmap.Height, _data[ i ]!.GetPixelFormat() );
 
                     tmp.Blending = Pixmap.BlendTypes.None;
                     tmp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );

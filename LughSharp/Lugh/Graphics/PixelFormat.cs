@@ -280,7 +280,7 @@ public class PixelFormat
         };
     }
 
-    public static int GetGLDataType( Pixmap.Format format )
+    public static int PixmapFormatToGLDataType( Pixmap.Format format )
     {
         return format switch
         {
@@ -295,6 +295,28 @@ public class PixelFormat
             // ----------------------------------
 
             var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+        };
+    }
+
+    /// <summary>
+    /// Returns the pixel format from a valid named string.
+    /// </summary>
+    public static Pixmap.Format GetFormatFromString( string str )
+    {
+        str = str.ToLower();
+
+        return str switch
+        {
+            "alpha"          => Pixmap.Format.Alpha,
+            "luminancealpha" => Pixmap.Format.LuminanceAlpha,
+            "rgb565"         => Pixmap.Format.RGB565,
+            "rgba4444"       => Pixmap.Format.RGBA4444,
+            "rgb888"         => Pixmap.Format.RGB888,
+            "rgba8888"       => Pixmap.Format.RGBA8888,
+
+            // ----------------------------------
+            
+            var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
         };
     }
 

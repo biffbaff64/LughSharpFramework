@@ -83,9 +83,9 @@ public interface ITextureData : IManaged
     int Height { get; set; }
 
     /// <summary>
-    /// Returns the <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> of the pixel data.
+    /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
     /// </summary>
-    Pixmap.Format PixelFormat { get; set; }
+    Pixmap.Format GetPixelFormat();
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="FetchPixmap"/> or

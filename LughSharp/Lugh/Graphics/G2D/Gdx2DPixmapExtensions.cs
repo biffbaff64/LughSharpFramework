@@ -36,37 +36,47 @@ public partial class Gdx2DPixmap
     {
         var size = ( uint )( _pixmapDescriptor.Width
                              * _pixmapDescriptor.Height
-                             * PixelFormatUtils.Gdx2dBytesPerPixel( _pixmapDescriptor.ColorType ) );
+                             * PixelFormat.BytesPerPixel( _pixmapDescriptor.ColorType ) );
 
         switch ( _pixmapDescriptor.ColorType )
         {
-            case GDX_2D_FORMAT_ALPHA:
+            case Pixmap.Format.Alpha:
                 ClearAlpha( _pixmapDescriptor, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case Pixmap.Format.LuminanceAlpha:
                 ClearLuminanceAlpha( _pixmapDescriptor, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_RGB888:
+            case Pixmap.Format.RGB888:
                 ClearRGB888( _pixmapDescriptor, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_RGBA8888:
+            case Pixmap.Format.RGBA8888:
                 ClearRGBA8888( _pixmapDescriptor, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_RGB565:
+            case Pixmap.Format.RGB565:
                 ClearRGB565( _pixmapDescriptor, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_RGBA4444:
+            case Pixmap.Format.RGBA4444:
                 ClearRGBA4444( _pixmapDescriptor, color, size );
+
+                break;
+
+            case Pixmap.Format.Intensity:
+                ClearIntensity( _pixmapDescriptor, color, size );
+
+                break;
+
+            case Pixmap.Format.IndexedColor:
+                ClearIndexedColor( _pixmapDescriptor, color, size );
 
                 break;
 
@@ -191,18 +201,42 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
+    /// Clears the pixmap data using indexed color format with the specified color.
+    /// </summary>
+    /// <param name="pd">The pixmap data type containing pixel data and format information.</param>
+    /// <param name="color">The color to fill the pixmap with, in IndexedColor format.</param>
+    /// <param name="size">The size of the pixmap data in bytes.</param>
+    private static void ClearIndexedColor( PixmapDescriptor pd, Color color, uint size )
+    {
+        //TODO:
+    }
+
+    /// <summary>
+    /// Clears the pixmap data using Intensity color format with the specified color.
+    /// </summary>
+    /// <param name="pd">The pixmap data type containing pixel data and format information.</param>
+    /// <param name="color">The color to fill the pixmap with, in Intensity format.</param>
+    /// <param name="size">The size of the pixmap data in bytes.</param>
+    private static void ClearIntensity( PixmapDescriptor pd, Color color, uint size )
+    {
+        //TODO:
+    }
+    
+    // ========================================================================
+    
+    /// <summary>
     /// Converts a color to the specified pixel format
     /// </summary>
-    public static uint ToPixelFormat( int format, uint color )
+    public static uint ToPixelFormat( Pixmap.Format format, uint color )
     {
         uint r, g, b, a;
 
         switch ( format )
         {
-            case GDX_2D_FORMAT_ALPHA:
+            case Pixmap.Format.Alpha:
                 return color & 0xff;
 
-            case GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case Pixmap.Format.LuminanceAlpha:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
@@ -211,20 +245,20 @@ public partial class Gdx2DPixmap
 
                 return ( l & 0xffffff00 ) | a;
 
-            case GDX_2D_FORMAT_RGB888:
+            case Pixmap.Format.RGB888:
                 return color >> 8;
 
-            case GDX_2D_FORMAT_RGBA8888:
+            case Pixmap.Format.RGBA8888:
                 return color;
 
-            case GDX_2D_FORMAT_RGB565:
+            case Pixmap.Format.RGB565:
                 r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
                 g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
                 b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
 
                 return r | g | b;
 
-            case GDX_2D_FORMAT_RGBA4444:
+            case Pixmap.Format.RGBA4444:
                 r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
                 g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
                 b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
@@ -232,6 +266,10 @@ public partial class Gdx2DPixmap
 
                 return r | g | b | a;
 
+            case Pixmap.Format.Intensity:
+                //TODO:
+            case Pixmap.Format.IndexedColor:
+                //TODO:
             default:
                 return 0;
         }

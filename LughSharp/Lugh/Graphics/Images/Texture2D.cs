@@ -126,17 +126,17 @@ public class Texture2D : Image, IDrawable, IDisposable
     /// </summary>
     public TextureWrapMode VWrap { get; set; } = TextureWrapMode.ClampToEdge;
 
-    public bool         IsDrawable  { get; set; }
-    public ITextureData TextureData { get; set; }
+    public bool         IsDrawable  { get; set; } = true;
+    public ITextureData TextureData { get; set; } = null!;
 
     // ========================================================================
 
-    public override int  Width              => TextureData.Width;
-    public override int  Height             => TextureData.Height;
-    public          int  NumManagedTextures => _managedTextures.Count;
-    public          uint TextureID          => GLTextureHandle;
-    public          bool IsManaged          => TextureData is { IsManaged: true };
-    public          int  ColorFormat        => TextureData.PixelFormat;
+    public override int           Width              => TextureData.Width;
+    public override int           Height             => TextureData.Height;
+    public          int           NumManagedTextures => _managedTextures.Count;
+    public          uint          TextureID          => GLTextureHandle;
+    public          bool          IsManaged          => TextureData is { IsManaged: true };
+    public          Pixmap.Format ColorFormat        => TextureData.GetPixelFormat();
 
     // ========================================================================
 

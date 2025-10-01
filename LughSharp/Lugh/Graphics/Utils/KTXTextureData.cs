@@ -47,9 +47,6 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// <returns> the height of the pixel data </returns>
     public int Height { get; set; }
 
-    /// <inheritdoc />
-    public Pixmap.Format PixelFormat { get; set; } = Pixmap.Format.RGBA8888;
-
     /// <returns> whether to generate mipmaps or not. </returns>
     public bool UseMipMaps { get; set; } = useMipMaps;
 
@@ -255,6 +252,12 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
+    /// <inheritdoc />
+    public Pixmap.Format GetPixelFormat()
+    {
+        throw new GdxRuntimeException( "This TextureData implementation directly handles texture formats." );
+    }
+
     /// <returns>
     /// whether the caller of <see cref="ITextureData.FetchPixmap"/> should dispose the
     /// Pixmap returned by <see cref="ITextureData.FetchPixmap"/>
@@ -450,7 +453,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             {
                                 ETC1 etc1    = new();
                                 var  etcData = new ETC1.ETC1Data( pixelWidth, pixelHeight, data, 0, etc1 );
-                                var  pixmap  = etc1.DecodeImage( etcData, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 );
+                                var  pixmap  = etc1.DecodeImage( etcData, Pixmap.Format.RGBA8888 );
 
                                 unsafe
                                 {

@@ -49,7 +49,9 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <param name="format"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    public GLFrameBufferBuilder< TU > AddColorTextureAttachment( int internalFormat, int format, int type )
+    public GLFrameBufferBuilder< TU > AddColorTextureAttachment( int internalFormat,
+                                                                 int format,
+                                                                 int type )
     {
         TextureAttachmentSpecs.Add( new FrameBufferTextureAttachmentSpec( internalFormat, format, type ) );
 
@@ -60,10 +62,10 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
-    public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( int format )
+    public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( Pixmap.Format format )
     {
-        var glFormat = PixelFormatUtils.GdxFormatToGLPixelFormat( format );
-        var glType   = PixelFormatUtils.GdxFormatToGLDataType( format );
+        var glFormat = PixelFormat.PixmapFormatToGLFormat( format );
+        var glType   = PixelFormat.PixmapFormatToGLDataType( format );
 
         return AddColorTextureAttachment( glFormat, glFormat, glType );
     }

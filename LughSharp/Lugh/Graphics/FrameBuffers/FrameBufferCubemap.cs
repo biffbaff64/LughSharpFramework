@@ -67,7 +67,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the FrameBuffer could not be created
     /// </exception>
-    public FrameBufferCubemap( int format,
+    public FrameBufferCubemap( Pixmap.Format format,
                                int width,
                                int height,
                                bool hasDepth,
@@ -94,6 +94,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
         BuildBuffer();
     }
 
+    /// <inheritdoc />
     protected override Cubemap CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
     {
         GLOnlyTextureData data = new( BufferBuilder.Width,
@@ -111,11 +112,13 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
         return result;
     }
 
+    /// <inheritdoc />
     protected override void DisposeColorTexture( Cubemap colorTexture )
     {
         colorTexture.Dispose();
     }
 
+    /// <inheritdoc />
     protected override void AttachFrameBufferColorTexture( Cubemap texture )
     {
         var glHandle = ( uint )texture.GLTextureHandle;

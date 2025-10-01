@@ -42,7 +42,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> and <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/>
+    /// Only <see cref="Pixmap.Format.RGB565"/> and <see cref="Pixmap.Format.RGB888"/>
     /// are supported.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap"/> </param>
@@ -59,7 +59,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> and <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/> are supported.
+    /// Only <see cref="Pixmap.Format.RGB565"/> and <see cref="Pixmap.Format.RGB888"/> are supported.
     /// Adds a PKM header in front of the compressed image data.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap"/> </param>
@@ -75,14 +75,14 @@ public class ETC1
     }
 
     /// <summary>
-    /// Takes ETC1 compressed image data and converts it to a <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> or
-    /// <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/> <see cref="Pixmap"/>.
+    /// Takes ETC1 compressed image data and converts it to a <see cref="Pixmap.Format.RGB565"/> or
+    /// <see cref="Pixmap.Format.RGB888"/> <see cref="Pixmap"/>.
     /// Does not modify the Buffer's position or limit.
     /// </summary>
     /// <param name="etc1Data"> the <see cref="ETC1Data"/> instance </param>
-    /// <param name="format"> either <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> or <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/> </param>
+    /// <param name="format"> either <see cref="Pixmap.Format.RGB565"/> or <see cref="Pixmap.Format.RGB888"/> </param>
     /// <returns> the Pixmap </returns>
-    public Pixmap DecodeImage( ETC1Data? etc1Data, int format )
+    public Pixmap DecodeImage( ETC1Data? etc1Data, Pixmap.Format format )
     {
         ArgumentNullException.ThrowIfNull( etc1Data );
 
@@ -112,19 +112,19 @@ public class ETC1
     }
 
     /// <summary>
-    /// Gets the pixel size for the given <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>, which must be
-    /// one of <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565"/> or <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888"/>.
+    /// Gets the pixel size for the given <c>Pixmap.Format.XXX</c>, which must be
+    /// one of <see cref="Pixmap.Format.RGB565"/> or <see cref="Pixmap.Format.RGB888"/>.
     /// </summary>
-    private int GetPixelSize( int format )
+    private int GetPixelSize( Pixmap.Format format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565   => RGB565_PIXEL_SIZE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 => RGB888_PIXEL_SIZE,
+            Pixmap.Format.RGB565   => RGB565_PIXEL_SIZE,
+            Pixmap.Format.RGBA8888 => RGB888_PIXEL_SIZE,
 
             // ----------------------------------
 
-            var _ => throw new GdxRuntimeException( "Can only handle RGB565 or GDX_2D_FORMAT_RGB888 images" )
+            var _ => throw new GdxRuntimeException( "Can only handle RGB565 or RGB888 images" )
         };
     }
 

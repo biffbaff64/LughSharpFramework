@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughUtils.source.Exceptions;
 
@@ -39,15 +40,15 @@ public static class PixmapFormatExtensions
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided Pixmap pixel format is invalid or not supported.
     /// </exception>
-    public static int SystemPixelFormatToGdx2DFormat( PixelFormat format )
+    public static Pixmap.Format SystemPixelFormatToPixmapFormat( PixelFormat format )
     {
         return format switch
         {
-            PixelFormat.Alpha                => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
-            PixelFormat.Format24bppRgb       => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-            PixelFormat.Format32bppArgb      => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
-            PixelFormat.Format16bppRgb565    => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
-            PixelFormat.Format16bppGrayScale => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+            PixelFormat.Alpha                => Pixmap.Format.Alpha,
+            PixelFormat.Format24bppRgb       => Pixmap.Format.RGB888,
+            PixelFormat.Format32bppArgb      => Pixmap.Format.RGBA8888,
+            PixelFormat.Format16bppRgb565    => Pixmap.Format.RGB565,
+            PixelFormat.Format16bppGrayScale => Pixmap.Format.RGBA4444,
 
             // ----------------------------------
 
@@ -63,16 +64,16 @@ public static class PixmapFormatExtensions
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
-    public static PixelFormat ToSystemPixelFormat( int format )
+    public static PixelFormat ToSystemPixelFormat( Pixmap.Format format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => PixelFormat.Alpha,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            Pixmap.Format.Alpha           => PixelFormat.Alpha,
+            Pixmap.Format.LuminanceAlpha => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
+            Pixmap.Format.RGB888          => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
+            Pixmap.Format.RGB565          => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
+            Pixmap.Format.RGBA8888        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            Pixmap.Format.RGBA4444        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
 
             // ----------------------------------
 

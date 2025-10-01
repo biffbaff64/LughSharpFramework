@@ -71,7 +71,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <summary>
     /// the GL Data type of this TextureArray
     /// </summary>
-    public int GLDataType => Lugh.Graphics.PixelFormat.GetGLDataType( PixelFormat );
+    public int GLDataType => Lugh.Graphics.PixelFormat.PixmapFormatToGLDataType( PixelFormat );
 
     // ========================================================================
 
@@ -159,9 +159,9 @@ public class FileTextureArrayData : ITextureArrayData
                 Debug.Assert( texData != null, nameof( texData ) + " == null" );
                 Debug.Assert( pixmap != null, nameof( pixmap ) + " == null" );
 
-                if ( texData.PixelFormat != pixmap.GetColorFormat() )
+                if ( texData.GetPixelFormat() != pixmap.GetColorFormat() )
                 {
-                    var temp = new Pixmap( pixmap.Width, pixmap.Height, texData.PixelFormat );
+                    var temp = new Pixmap( pixmap.Width, pixmap.Height, texData.GetPixelFormat() );
 
                     temp.Blending = Pixmap.BlendTypes.None;
                     temp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );

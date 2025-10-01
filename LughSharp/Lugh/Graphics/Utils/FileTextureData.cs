@@ -49,12 +49,10 @@ public class FileTextureData : ITextureData
     /// <inheritdoc/>
     public bool UseMipMaps { get; set; }
 
-    /// <inheritdoc/>
-    public Pixmap.Format PixelFormat { get; set; }
-
     // ========================================================================
 
-    private Pixmap? _pixmap;
+    private Pixmap.Format? _pixelFormat;
+    private Pixmap?        _pixmap;
 
     // ========================================================================
     // ========================================================================
@@ -63,22 +61,22 @@ public class FileTextureData : ITextureData
     {
         Logger.Checkpoint();
 
-        File        = file;
-        _pixmap     = preloadedPixmap;
-        PixelFormat = desiredFormat;
-        UseMipMaps  = useMipMaps;
-        
+        File         = file;
+        _pixmap      = preloadedPixmap;
+        _pixelFormat = desiredFormat;
+        UseMipMaps   = useMipMaps;
+
         if ( _pixmap != null )
         {
             Width  = _pixmap.Width;
             Height = _pixmap.Height;
 
-            if ( PixelFormat == null )
+            if ( _pixelFormat == null )
             {
-                PixelFormat = _pixmap.GetColorFormat();
+                _pixelFormat = _pixmap.GetColorFormat();
             }
         }
-        
+
         IsOwned = false;
     }
 
@@ -118,19 +116,17 @@ public class FileTextureData : ITextureData
             throw new InvalidOperationException( "Pixmap has invalid dimensions." );
         }
 
-        // Resolve/validate pixel format
-//        if ( PixelFormat == Pixmap.Format.RGBA8888 )
-//        {
-//            PixelFormat = _pixmap.GetColorFormat();
-//        }
-//        else
-        if ( PixelFormat != _pixmap.GetColorFormat() )
+        if ( _pixelFormat == null )
         {
-//            PixelFormatUtils.PixmapFormatToGDXFormat( PixelFormat );
-            PixelFormat = _pixmap.GetColorFormat();
+            _pixelFormat = _pixmap.GetColorFormat();
         }
 
         IsPrepared = true;
+    }
+
+    public Pixmap.Format GetPixelFormat()
+    {
+        return _pixelFormat ?? _pixmap?.GetColorFormat() ?? Pixmap.Format.RGBA8888;
     }
 
     /// <summary>
@@ -196,7 +192,7 @@ public class FileTextureData : ITextureData
         Logger.Debug( $"IsPrepared     : {IsPrepared}" );
         Logger.Debug( $"IsOwned        : {IsOwned}" );
         Logger.Debug( $"UseMipMaps     : {UseMipMaps}" );
-        Logger.Debug( $"PixelFormat    : {PixelFormatUtils.GetFormatString( PixelFormat )}" );
+        Logger.Debug( $"PixelFormat    : {_pixelFormat}" );
     }
 }
 

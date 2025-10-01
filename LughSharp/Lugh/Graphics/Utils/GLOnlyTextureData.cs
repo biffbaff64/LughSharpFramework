@@ -35,14 +35,13 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class GLOnlyTextureData : ITextureData
 {
-    public int           MipLevel       { get; set; } = 0;
-    public int           InternalFormat { get; set; }
-    public int           Type           { get; set; }
-    public Pixmap.Format PixelFormat    { get; set; }
-    public int           Width          { get; set; } = 0;
-    public int           Height         { get; set; } = 0;
-    public bool          IsPrepared     { get; set; } = false;
-    public bool          UseMipMaps     { get; set; }
+    public int  InternalFormat { get; set; }
+    public int  MipLevel       { get; set; } = 0;
+    public int  Type           { get; set; }
+    public int  Width          { get; set; } = 0;
+    public int  Height         { get; set; } = 0;
+    public bool IsPrepared     { get; set; } = false;
+    public bool UseMipMaps     { get; set; }
 
     /// <inheritdoc />
     public bool IsOwned { get; set; }
@@ -54,6 +53,10 @@ public class GLOnlyTextureData : ITextureData
 
     // ========================================================================
 
+    private int _pixelFormat;
+    
+    // ========================================================================
+    
     /// <summary>
     /// See <a href="https://www.khronos.org/opengles/sdk/docs/man/xhtml/glTexImage2D.xml">glTexImage2D</a>
     /// </summary>
@@ -87,12 +90,16 @@ public class GLOnlyTextureData : ITextureData
         Height         = height;
         MipLevel       = mipMapLevel;
         InternalFormat = internalFormat;
-        PixelFormat    = PixelFormatUtils.GLFormatToGdxFormat( format );
+        _pixelFormat   = format;
         Type           = type;
     }
 
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="GdxRuntimeException"></exception>
     public void Prepare()
     {
         if ( IsPrepared )
@@ -103,6 +110,10 @@ public class GLOnlyTextureData : ITextureData
         IsPrepared = true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
     public void UploadCustomData( int target )
     {
         GL.TexImage2D( target,
@@ -111,7 +122,7 @@ public class GLOnlyTextureData : ITextureData
                        Width,
                        Height,
                        0,
-                       ( int )PixelFormat,
+                       _pixelFormat,
                        Type,
                        0 );
     }
@@ -119,14 +130,18 @@ public class GLOnlyTextureData : ITextureData
     /// <inheritdoc />
     public void DebugPrint()
     {
+        // TODO: Implement DebugPrint
     }
+
+    // ========================================================================
 
     /// <summary>
     /// Returns the <see cref="ITextureData.TextureType"/> for this Texture Data.
     /// </summary>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
-    // ========================================================================
+    public Pixmap.Format GetPixelFormat() => Pixmap.Format.RGBA8888;
+    
     // ========================================================================
 
     public Pixmap FetchPixmap()

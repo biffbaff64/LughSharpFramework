@@ -67,7 +67,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     /// <param name="hasDepth"> whether to attach a depth buffer </param>
     /// <param name="hasStencil"></param>
     /// <exception cref="GdxRuntimeException"> in case the FrameBuffer could not be created  </exception>
-    public FrameBuffer( int format,
+    public FrameBuffer( Pixmap.Format format,
                         int width,
                         int height,
                         bool hasDepth,
@@ -92,6 +92,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
         BuildBuffer();
     }
 
+    /// <inheritdoc />
     protected override Texture CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
     {
         var data = new GLOnlyTextureData( BufferBuilder.Width,
