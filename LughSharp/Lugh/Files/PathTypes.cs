@@ -100,6 +100,16 @@ public enum PathTypes
     File,
 
     /// <summary>
+    /// Represents a path to the frameworks default assets directory. This is
+    /// typically the "assets" folder in the application's root directory.
+    /// An example Assets path would be:-
+    /// <code>
+    /// C:\Development\Projects\CSharp\ConsoleApp1\bin\Debug\net8.0\assets\
+    /// </code>
+    /// </summary>
+    Assets,
+
+    /// <summary>
     /// Represents a path to a directory. Used to specify or resolve paths that
     /// refer to directories, enabling organization or manipulation of grouped
     /// files and subdirectories.

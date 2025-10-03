@@ -28,17 +28,26 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Assets;
 
 /// <summary>
-/// Represents a task for loading an asset, including managing dependencies and handling cancellation.
+/// Responsible for loading an asset through an <see cref="AssetLoader"/> based
+/// on an <see cref="AssetDescriptor"/>.
 /// </summary>
 [PublicAPI]
 public class AssetLoadingTask
 {
+    public bool                     DependenciesLoaded { get; private set; }
+    public List< AssetDescriptor >? Dependencies       { get; private set; }
+    public AssetDescriptor          AssetDesc          { get; }
+    public bool                     Cancel             { get; set; }
+    public object?                  Asset              { get; set; }
+    public bool                     IsAsyncLoader      { get; private set; }
+
     // ========================================================================
 
     private readonly AssetLoader  _loader;
     private readonly object       _lock = new();
     private readonly AssetManager _manager;
     private readonly long         _startTime;
+    private          bool         _asyncDone;
 
     // ========================================================================
     // ========================================================================
@@ -56,12 +65,48 @@ public class AssetLoadingTask
         _loader   = loader;
     }
 
-    public bool                     DependenciesLoaded { get; private set; }
-    public List< AssetDescriptor >? Dependencies       { get; private set; }
-    public AssetDescriptor          AssetDesc          { get; }
-    public bool                     Cancel             { get; set; }
-    public object?                  Asset              { get; set; }
-    public bool                     IsAsyncLoader      { get; private set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Call()
+    {
+        if ( Cancel )
+        {
+            return;
+        }
+
+        var asyncLoader = ( AsynchronousAssetLoader? )_loader;
+
+        if ( !DependenciesLoaded )
+        {
+            Dependencies = asyncLoader?.GetDependencies( AssetDesc.AssetName,
+                                                         Resolve( _loader, AssetDesc )!,
+                                                         AssetDesc.Parameters );
+
+            if ( Dependencies != null )
+            {
+                RemoveDuplicates( Dependencies );
+                _manager.InjectDependencies( AssetDesc.File.FullName, Dependencies );
+            }
+            else
+            {
+                // if we have no dependencies, we load the async part of the task immediately.
+                asyncLoader.LoadAsync( _manager,
+                                       AssetDesc.File.FullName,
+                                       Resolve( _loader, AssetDesc ),
+                                       AssetDesc.Parameters );
+                _asyncDone = true;
+            }
+        }
+        else
+        {
+            asyncLoader.LoadAsync( _manager,
+                                   AssetDesc.File.FullName,
+                                   Resolve( _loader, AssetDesc ),
+                                   AssetDesc.Parameters );
+            _asyncDone = true;
+        }
+    }
 
     /// <summary>
     /// Asynchronously loads an asset along with its dependencies based on the type of asset loader
@@ -230,3 +275,6 @@ public class AssetLoadingTask
         array.AddRange( uniqueAssets );
     }
 }
+
+// ============================================================================
+// ============================================================================

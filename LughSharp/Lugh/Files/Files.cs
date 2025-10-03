@@ -58,6 +58,7 @@ public class Files : IFiles
             PathTypes.Assembly  => Assembly( path ),
             PathTypes.External  => External( path ),
             PathTypes.Local     => Local( path ),
+            PathTypes.Assets    => Assets( path ),
 
             // ----------------------------------
 
@@ -315,6 +316,49 @@ public class Files : IFiles
 
     // ========================================================================
     // ========================================================================
+    // Default Assets path
+
+    /// <summary>
+    /// Convenience method that returns a <see cref="PathTypes.Assets"/> file handle.
+    /// </summary>
+    public virtual FileInfo Assets( string path )
+    {
+        if ( string.IsNullOrEmpty( path ) )
+        {
+            throw new ArgumentNullException( nameof( path ),
+                                             "Assets path cannot be null or empty.\n" +
+                                             "Example: 'Textures/sprite.png'" );
+        }
+
+        path = IOUtils.NormalizePath( path );
+
+        if ( path.Contains( ".." ) )
+        {
+            throw new GdxRuntimeException( $"Path traversal is not allowed in assets storage: {path}\n" +
+                                           "Example valid path: 'Textures/sprite.png'\n" +
+                                           "Note: '../' is not allowed for security reasons. " +
+                                           "Use paths relative to internal storage root." );
+        }
+
+        var assetsPath = GetAssetsStoragePath();
+
+        return new FileInfo( Path.Combine( assetsPath, path ) );
+    }
+
+    /// <summary>
+    /// Returns the default Assets storage path directory.
+    /// </summary>
+    public virtual string GetAssetsStoragePath()
+    {
+        var path = IOUtils.AssetsRoot;
+
+        return string.IsNullOrEmpty( path )
+            ? throw new GdxRuntimeException( "Could not determine default assets storage path" )
+            : path;
+    }
+    
+    // ========================================================================
+    // ========================================================================
     // Assembly path
 
     /// <summary>
@@ -352,12 +396,9 @@ public class Files : IFiles
     {
         var path = IOUtils.AssemblyDirectory;
 
-        if ( string.IsNullOrEmpty( path ) )
-        {
-            throw new GdxRuntimeException( "Could not determine assembly storage path" );
-        }
-
-        return path;
+        return string.IsNullOrEmpty( path )
+            ? throw new GdxRuntimeException( "Could not determine assembly storage path" )
+            : path;
     }
 
     /// <summary>
@@ -425,12 +466,9 @@ public class Files : IFiles
     {
         var path = IOUtils.LocalPath;
 
-        if ( string.IsNullOrEmpty( path ) )
-        {
-            throw new GdxRuntimeException( "Could not determine local storage path" );
-        }
-
-        return path;
+        return string.IsNullOrEmpty( path )
+            ? throw new GdxRuntimeException( "Could not determine local storage path" )
+            : path;
     }
 
     /// <summary>

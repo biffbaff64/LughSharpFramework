@@ -113,8 +113,6 @@ public class PNGDecoder
     /// <param name="verbose">Specifies whether to display the analysis results in the output.</param>
     public static void AnalysePNG( Texture? texture, bool verbose = false )
     {
-        Logger.Checkpoint();
-
         if ( texture == null )
         {
             Logger.Error( "Unable to perform analysis, texture is null" );
@@ -141,8 +139,6 @@ public class PNGDecoder
     /// <exception cref="ArgumentException">Thrown if the file format is invalid or not a valid PNG.</exception>
     public static void AnalysePNG( string filename, bool verbose = false )
     {
-        Logger.Checkpoint();
-
         AnalysePNG( File.ReadAllBytes( filename ), verbose );
     }
 
@@ -159,8 +155,6 @@ public class PNGDecoder
     /// <param name="verbose"></param>
     public static void AnalyseAndWritePNG( string path, byte[] pngData, bool verbose = false )
     {
-        Logger.Checkpoint();
-
         AnalysePNG( pngData, verbose );
 
         WritePNGToFile( pngData, path );
@@ -182,8 +176,6 @@ public class PNGDecoder
     /// </exception>
     public static void AnalysePNG( byte[] pngData, bool verbose = false )
     {
-        Logger.Checkpoint();
-
         if ( ( pngData == null ) || ( pngData.Length == 0 ) )
         {
             throw new ArgumentException( "Invalid PNG Data" );
@@ -198,27 +190,27 @@ public class PNGDecoder
 
         Array.Copy( pngData, 0, PngSignature.Signature, 0, SIGNATURE_LENGTH );
 
-        if ( !PngSignature.Signature.SequenceEqual( StandardPNGSignature ) )
+        if ( !IsPNG( pngData ) )
         {
-            Logger.Error( "Not a valid PNG file, Signature is incorrect" );
-
-            StringBuilder sb = new();
-
-            for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
+            Logger.Error( "Invalid PNG Signature" );
+            
+            if ( Api.DevMode )
             {
-                sb.Append( $"[{PngSignature.Signature[ i ]:X2}]" );
+                StringBuilder sb  = new();
+                StringBuilder sb2 = new();
+
+                for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
+                {
+                    sb.Append( $"[{PngSignature.Signature[ i ]:X2}]" );
+                    sb2.Append( $"[{StandardPNGSignature[ i ]:X2}]" );
+                }
+
+                sb.Append( " - Image signature" );
+                sb2.Append( " - Correct PNG signature" );
+
+                Logger.Debug( sb.ToString() );
+                Logger.Debug( sb2.ToString() );
             }
-
-            Logger.Debug( sb.ToString() );
-
-            sb.Clear();
-
-            for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
-            {
-                sb.Append( $"[{StandardPNGSignature[ i ]:X2}]" );
-            }
-
-            Logger.Debug( sb.ToString() );
 
             return;
         }
@@ -395,10 +387,10 @@ public class PNGDecoder
 
         for ( var i = startIndex; i <= ( bytes.Length - 8 ); i++ )
         {
-            if ( ( bytes[ i + 4 ] == chunkTypeBytes[ 0 ] ) &&
-                 ( bytes[ i + 5 ] == chunkTypeBytes[ 1 ] ) &&
-                 ( bytes[ i + 6 ] == chunkTypeBytes[ 2 ] ) &&
-                 ( bytes[ i + 7 ] == chunkTypeBytes[ 3 ] ) )
+            if ( ( bytes[ i + 5 ] == chunkTypeBytes[ 1 ] )
+                 && ( bytes[ i + 4 ] == chunkTypeBytes[ 0 ] )
+                 && ( bytes[ i + 6 ] == chunkTypeBytes[ 2 ] )
+                 && ( bytes[ i + 7 ] == chunkTypeBytes[ 3 ] ) )
             {
                 return i; // Return the index of the chunk size
             }
@@ -492,6 +484,27 @@ public class PNGDecoder
         }
 
         return BitConverter.ToUInt32( bytes, 0 );
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> if the provided byte array represents
+    /// a valid PNG file based on its signature.
+    /// <para>
+    /// The PNG signature is 8 bytes long and consists of the following bytes:
+    /// <li>89 50 4E 47 0D 0A 1A 0A</li>
+    /// </para>
+    /// If the first 8 bytes of the provided byte array do not match the PNG
+    /// signature, then the provided byte array is not a valid PNG file.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public static bool IsPNG( byte[] data )
+    {
+        var signature = new byte[ SIGNATURE_LENGTH ];
+
+        Array.Copy( data, 0, signature, 0, SIGNATURE_LENGTH );
+
+        return signature.SequenceEqual( StandardPNGSignature );
     }
 
     /// <summary>
@@ -765,7 +778,9 @@ public class PNGDecoder
 
             if ( crc32.Hash != null )
             {
-                WriteBigEndian( s, BitConverter.ToInt32( crc32.Hash.Reverse().ToArray(), 0 ) );
+                WriteBigEndian( s, BitConverter.ToInt32( crc32.Hash, 0 ) );
+
+//                WriteBigEndian( s, BitConverter.ToInt32( crc32.Hash.Reverse().ToArray(), 0 ) );
             }
         }
     }

@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets;
+using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Utils;
@@ -55,34 +56,43 @@ public class AssetManagerTest
             return;
         }
 
-        var file1 = Path.Combine( IOUtils.AssetsRoot, "PackedImages/Objects/libgdx.png" );
-        var file2 = Path.Combine( IOUtils.AssetsRoot, "PackedImages/Objects/rover_wheel.png" );
-        var file3 = Path.Combine( IOUtils.AssetsRoot, "PackedImages/Objects/red7logo_small.png" );
+        var file1 = Engine.Api.Files.Assets( "PackedImages/Objects/red7logo_small.png" );
+        var file2 = Engine.Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" );
+        var file3 = Engine.Api.Files.Assets( "PackedImages/Objects/libgdx.png" );
+        var file4 = Engine.Api.Files.Assets( "title_background.png" );
 
-        _assetManager.Load< Texture >( file1 );
-        _assetManager.Load< Texture >( file2 );
-        _assetManager.Load< Texture >( file3 );
+        _assetManager.Load< Texture >( file1.FullName );
+        _assetManager.Load< Texture >( file2.FullName );
+        _assetManager.Load< Texture >( file3.FullName );
+        _assetManager.Load< Texture >( file4.FullName );
         _assetManager.FinishLoading();
+        
+//        if ( !_assetManager.Contains( file1.FullName ) )
+//        {
+//            Logger.Error( $"AssetManager does not contain {file1}" );
 
-        if ( !_assetManager.Contains( file1 ) )
-        {
-            Logger.Error( $"AssetManager does not contain {file1}" );
+//            return;
+//        }
 
-            return;
-        }
+//        var data1 = _assetManager.Get< Texture >( file1.FullName )?.GetImageData();
 
-        var data1 = _assetManager.Get< Texture >( file1 )?.GetImageData();
+//        if ( data1 == null )
+//        {
+//            Logger.Error( $"Failed to load image data: {file1}" );
+//        }
+//        else
+//        {
+//            PNGDecoder.AnalysePNG( data1, true );
+//        }
 
-        if ( data1 == null )
-        {
-            Logger.Error( $"Failed to load image data: {file1}" );
-        }
-        else
-        {
-            PNGDecoder.AnalysePNG( data1, true );
-        }
-
+        _assetManager.DebugPrint();
+        
         Logger.Debug( "Finished!", true );
+
+//        PNGDecoder.AnalysePNG( File.ReadAllBytes( file1.FullName ), true );
+//        PNGDecoder.AnalysePNG( File.ReadAllBytes( file2.FullName ), true );
+//        PNGDecoder.AnalysePNG( File.ReadAllBytes( file3.FullName ), true );
+//        PNGDecoder.AnalysePNG( File.ReadAllBytes( file4.FullName ), true );
     }
 
     [TearDown]

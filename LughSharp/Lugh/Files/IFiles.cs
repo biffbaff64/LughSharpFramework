@@ -98,6 +98,17 @@ public interface IFiles
 
     // ========================================================================
 
+    /// <inheritdoc cref="PathTypes.Assets"/>
+    FileInfo Assets( string path );
+    
+    /// <summary>
+    /// Returns the assets storage path directory. This is the app asset directory
+    /// on Android and the Applications root directory on the desktop.
+    /// </summary>
+    string GetAssetsStoragePath();
+    
+    // ========================================================================
+
     /// <inheritdoc cref="PathTypes.Local"/>
     FileInfo Local( string path );
 
