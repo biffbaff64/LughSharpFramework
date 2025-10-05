@@ -133,7 +133,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 /*
 LughSharpFramework
     - Solution Items
-    - ConsoleApp1
+    - Template
         - Dependencies
         - Assets
         - Source

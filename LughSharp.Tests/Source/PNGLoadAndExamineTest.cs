@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+//  Copyright (c) 2024 Richard Ikin
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,19 @@
 
 using JetBrains.Annotations;
 
-using NUnit.Framework;
-
 using LughSharp.Lugh.Core;
+using LughSharp.Lugh.Graphics;
+using LughSharp.Lugh.Graphics.Utils;
+
 using LughUtils.source.Logging;
+
+using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
 
 [TestFixture]
 [PublicAPI]
-public class FilepathTest
+public class PNGLoadAndExamineTest
 {
     [SetUp]
     public void Setup()
@@ -43,19 +46,9 @@ public class FilepathTest
     [Test]
     public void Run()
     {
-        try
-        {
-            Logger.Debug( $"Absolute : {Engine.Api.Files.Absolute( "C:/Development/Projects/CSharp/Template/bin/Debug/net8.0/PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Assembly : {Engine.Api.Files.Assembly( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Classpath: {Engine.Api.Files.Classpath( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"External : {Engine.Api.Files.External( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Internal : {Engine.Api.Files.Internal( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Local    : {Engine.Api.Files.Local( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-        }
-        catch ( Exception )
-        {
-            // Ignore
-        }
+        var file = Engine.Api.Files.Assets( "PackedImages/objects/rover_wheel.png" );
+        
+        PNGDecoder.AnalysePNG( file.FullName, true );
     }
 
     [TearDown]
@@ -64,5 +57,6 @@ public class FilepathTest
     }
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================
+

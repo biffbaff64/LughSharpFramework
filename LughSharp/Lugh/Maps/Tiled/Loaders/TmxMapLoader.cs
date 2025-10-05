@@ -106,10 +106,12 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     /// <summary>
     /// </summary>
     /// <param name="manager"></param>
+    /// <param name="filename"></param>
     /// <param name="tmxFile"></param>
     /// <param name="parameter"></param>
     public override void LoadAsync< TP >( AssetManager manager,
-                                          FileInfo tmxFile,
+                                          string filename,
+                                          FileInfo? tmxFile,
                                           TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( tmxFile );

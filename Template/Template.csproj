@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>preview</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DesktopGLBackend\DesktopGLBackend.csproj" />
+      <ProjectReference Include="..\LughSharp.Extensions\LughSharp.Extensions.csproj" />
+      <ProjectReference Include="..\LughSharp.Tests\LughSharp.Tests.csproj" />
+      <ProjectReference Include="..\LughSharp\LughSharp.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\image_info.py" />
+      <Content Include="Assets\image_info.py">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\title_background.png" />
+      <Content Include="Assets\title_background.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\PackedImages\Objects\libgdx.png" />
+      <Content Include="Assets\PackedImages\Objects\libgdx.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\PackedImages\Objects\red7logo_small.png" />
+      <Content Include="Assets\PackedImages\Objects\red7logo_small.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\PackedImages\Objects\rover_wheel.png" />
+      <Content Include="Assets\PackedImages\Objects\rover_wheel.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Acme-Regular.ttf" />
+      <Content Include="Assets\Fonts\Acme-Regular.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\arial-15.fnt" />
+      <Content Include="Assets\Fonts\arial-15.fnt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\arial-15.png" />
+      <Content Include="Assets\Fonts\arial-15.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\CENSCBK.TTF" />
+      <Content Include="Assets\Fonts\CENSCBK.TTF">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\lsans-15.fnt" />
+      <Content Include="Assets\Fonts\lsans-15.fnt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\lsans-15.png" />
+      <Content Include="Assets\Fonts\lsans-15.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\ProFontWindows.ttf" />
+      <Content Include="Assets\Fonts\ProFontWindows.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

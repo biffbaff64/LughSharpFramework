@@ -32,19 +32,19 @@ namespace LughSharp.Lugh.Assets;
 
 public partial class AssetManager
 {
-    private readonly HashSet< Type > _typeList =
+    protected readonly HashSet< Type > TypeList =
     [
-        typeof( Texture ),
         typeof( BitmapFont ),
-        typeof( Pixmap ),
-        typeof( TextureAtlas ),
-        typeof( Skin ),
+        typeof( Cubemap ),
+        typeof( IMusic ),
+        typeof( ISound ),
         typeof( ParticleEffect ),
+        typeof( Pixmap ),
         typeof( PolygonRegion ),
         typeof( ShaderProgram ),
-        typeof( Cubemap ),
-        typeof( ISound ),
-        typeof( IMusic ),
+        typeof( Skin ),
+        typeof( Texture ),
+        typeof( TextureAtlas ),
     ];
 
     /// <summary>
@@ -59,7 +59,7 @@ public partial class AssetManager
     /// </returns>
     public T? GetAs< T >( string name ) where T : class
     {
-        if ( _typeList.TryGetValue( typeof( T ), out var _ ) )
+        if ( TypeList.TryGetValue( typeof( T ), out var _ ) )
         {
             return Get( name ) as T;
         }
@@ -69,9 +69,7 @@ public partial class AssetManager
 
     // ========================================================================
 
-    /// <summary>
-    /// Output Assetmanager metrics via the <see cref="Logger"/> class.
-    /// </summary>
+    [Conditional( "DEBUG" )]
     public void DisplayMetrics()
     {
         lock ( this )
@@ -81,11 +79,11 @@ public partial class AssetManager
 
             foreach ( var key in _assetTypes.Keys )
             {
-                Logger.Debug( $"{key}: " );
+                Logger.Debug( $"Key: {key}: " );
 
                 foreach ( var value in _assetTypes.Values )
                 {
-                    Logger.Debug( $"{value}" );
+                    Logger.Debug( $"Value: {value}" );
                 }
             }
 
@@ -96,66 +94,98 @@ public partial class AssetManager
             Logger.Debug( $"_loadQueue Count    : {_loadQueue.Count}" );
             Logger.Debug( $"_tasks Count        : {_tasks.Count}" );
             Logger.Divider();
+
+            var names = GetAssetNames();
+            
+            if ( names.Count == 0 )
+            {
+                Logger.Debug( "No assets loaded." );
+                
+                return;
+            }
+            
+            foreach( var name in names )
+            {
+                var type = GetAssetType( name );
+                var asset = Get( name );
+                
+                Logger.Debug( $"Asset: {name}, Type: {type.Name}, Asset: {(asset != null ? "Loaded" : "NULL")}" );
+            }
         }
     }
 
-    /// <summary>
-    /// Returns a string containing ref count and dependency
-    /// information for all assets.
-    /// </summary>
-    public string GetDiagnostics()
+//    public string GetDiagnostics()
+//    {
+//        lock ( this )
+//        {
+//            var sb = new StringBuilder();
+//
+//            sb.Append( $"_assets.Length    : {_assets.Count}\n" );
+//            sb.Append( $"_assetTypes.Length: {_assetTypes.Count}\n" );
+//            sb.Append( $"_loaders.Length   : {_loaders?.Count}\n" );
+//            sb.Append( $"_tasks.Length     : {_tasks.Count}\n" );
+//            sb.Append( $"_loadQueue.Length : {_loadQueue.Count}\n" );
+//            sb.Append( $"_injected.Length  : {_injected.Count}\n" );
+//
+//            foreach ( var fileName in _assetTypes.Keys )
+//            {
+//                if ( sb.Length > 0 )
+//                {
+//                    sb.Append( '\n' );
+//                }
+//
+//                sb.Append( fileName ).Append( ", " );
+//
+//                var type = _assetTypes[ fileName ];
+//
+//                if ( _assets == null )
+//                {
+//                    sb.Append( "NULL assets List!" );
+//                }
+//                else
+//                {
+//                    var dependencies = _assetDependencies?[ fileName ];
+//
+//                    if ( dependencies != null )
+//                    {
+//                        sb.Append( type.Name );
+//                        sb.Append( ", refs: " ).Append( _assets[ type ]?[ fileName ].RefCount );
+//                        sb.Append( ", deps: [" );
+//
+//                        foreach ( var dep in dependencies )
+//                        {
+//                            sb.Append( dep );
+//                            sb.Append( ',' );
+//                        }
+//
+//                        sb.Append( ']' );
+//                    }
+//                }
+//            }
+//
+//            return sb.ToString();
+//        }
+//    }
+
+    [Conditional( "DEBUG" )]
+    protected void DebugAssetLoaders()
     {
         lock ( this )
         {
-            var sb = new StringBuilder();
-
-            sb.Append( $"_assets.Length    : {_assets.Count}\n" );
-            sb.Append( $"_assetTypes.Length: {_assetTypes.Count}\n" );
-            sb.Append( $"_loaders.Length   : {_loaders?.Count}\n" );
-            sb.Append( $"_tasks.Length     : {_tasks.Count}\n" );
-            sb.Append( $"_loadQueue.Length : {_loadQueue.Count}\n" );
-            sb.Append( $"_injected.Length  : {_injected.Count}\n" );
-
-            foreach ( var fileName in _assetTypes.Keys )
+            foreach( var loader in _loaders! )
             {
-                if ( sb.Length > 0 )
+                Logger.Debug( $"Type: {loader.Key.Name}" );
+                
+                foreach( var entry in loader.Value )
                 {
-                    sb.Append( '\n' );
-                }
-
-                sb.Append( fileName ).Append( ", " );
-
-                var type = _assetTypes[ fileName ];
-
-                if ( _assets == null )
-                {
-                    sb.Append( "NULL assets List!" );
-                }
-                else
-                {
-                    var dependencies = _assetDependencies?[ fileName ];
-
-                    if ( dependencies != null )
-                    {
-                        sb.Append( type.Name );
-                        sb.Append( ", refs: " ).Append( _assets[ type ][ fileName ].RefCount );
-                        sb.Append( ", deps: [" );
-
-                        foreach ( var dep in dependencies )
-                        {
-                            sb.Append( dep );
-                            sb.Append( ',' );
-                        }
-
-                        sb.Append( ']' );
-                    }
-                }
+                    var suffix = string.IsNullOrEmpty( entry.Key ) ? "(default)" : entry.Key;
+                    
+                    Logger.Debug( $"  Suffix: '{suffix}' => Loader class: {entry.Value.GetType().Name}" );
+                }   
             }
-
-            return sb.ToString();
         }
     }
-
+    
     // ========================================================================
     // ========================================================================
 }

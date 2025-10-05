@@ -69,9 +69,13 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
     /// the asset into the AssetManager.
     /// </summary>
     /// <param name="manager"> The <see cref="AssetManager"/> to use. </param>
+    /// <param name="filename"></param>
     /// <param name="file"> A <see cref="FileInfo"/> object holding file information. </param>
     /// <param name="parameter"> <see cref="SoundLoaderParameters"/> to use. </param>
-    public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
+    public override void LoadAsync< TP >( AssetManager manager,
+                                          string filename,
+                                          FileInfo? file,
+                                          TP? parameter ) where TP : class
     {
         LoadedSound = Api.Audio.NewSound( file );
     }

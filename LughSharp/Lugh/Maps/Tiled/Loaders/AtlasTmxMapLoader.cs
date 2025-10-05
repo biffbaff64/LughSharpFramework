@@ -89,6 +89,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
     /// <inheritdoc />
     public override void LoadAsync< TP >( AssetManager? manager,
+                                          string filename,
                                           FileInfo? tmxFile,
                                           TP? parameter ) where TP : class
     {

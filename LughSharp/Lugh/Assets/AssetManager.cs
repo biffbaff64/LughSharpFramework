@@ -40,6 +40,17 @@ namespace LughSharp.Lugh.Assets;
 [PublicAPI]
 public partial class AssetManager
 {
+    [PublicAPI]
+    public class AssetData
+    {
+        public string?      Name     { get; set; } // Short name (no path)
+        public string?      FullName { get; set; } // Full name (with path)
+        public Type?        Type     { get; set; } // Asset type (e.g., Texture, Sound, etc.)
+        public AssetLoader? Loader   { get; set; } // Loader used to load the asset
+    }
+
+    // ========================================================================
+
     /// <summary>
     /// Returns the <see cref="IFileHandleResolver"/> which this
     /// AssetManager was loaded with.
@@ -48,10 +59,18 @@ public partial class AssetManager
     public IFileHandleResolver FileHandleResolver { get; set; }
 
     // ========================================================================
-    // ========================================================================
+
+    // NEW
+    /// <summary>
+    /// A list of all asset data currently managed by the AssetManager.
+    /// </summary>
+    public readonly List< AssetData > AssetDataList = [ ];
 
     /// <summary>
     /// A Dictionary holding the loaders for each asset type.
+    /// The loaders are stored in a Dictionary with the assetloader type as key
+    /// and the a second Dictionary with the asset suffix as key and the asset loader
+    /// as value.
     /// </summary>
     private readonly Dictionary< Type, Dictionary< string, AssetLoader > >? _loaders = [ ];
 
@@ -61,19 +80,27 @@ public partial class AssetManager
     /// container is a Dictionary holding the asset name as key and a reference counter
     /// as the value. 
     /// </summary>
-    private readonly Dictionary< Type, Dictionary< string, IRefCountedContainer > > _assets = [ ];
+    private readonly Dictionary< Type, Dictionary< string, IRefCountedContainer >? > _assets = [ ];
 
+    /// <summary>
+    /// A Dictionary holding the dependencies for each asset. The dependencies are stored in a
+    /// Dictionary with the asset name as key and a list of dependencies as value.
+    /// </summary>
     private readonly Dictionary< string, List< string > > _assetDependencies = [ ];
-    private readonly Dictionary< string, Type >           _assetTypes        = [ ];
 
-    private readonly List< string >            _injected  = [ ];
-    private readonly List< AssetDescriptor >   _loadQueue = [ ];
-    private readonly Queue< AssetLoadingTask > _tasks     = [ ];
+    /// <summary>
+    /// Asset filename lookup table. This Dictionary holds the asset filename as the
+    /// key, and the asset type as the value.
+    /// </summary>
+    private readonly Dictionary< string, Type > _assetTypes = [ ];
 
-    private readonly object               _filenameLock = new();
-    private readonly ReaderWriterLockSlim _loadersLock  = new();
+    private readonly List< string >            _injected    = [ ];
+    private readonly List< AssetDescriptor >   _loadQueue   = [ ];
+    private readonly Queue< AssetLoadingTask > _tasks       = [ ];
+    private readonly ReaderWriterLockSlim      _loadersLock = new();
 
     private IAssetErrorListener? _listener;
+    private AsyncExecutor        _executor;
 
     private int _loaded;
     private int _peakTasks;
@@ -121,6 +148,7 @@ public partial class AssetManager
             // .obj loader here...
         }
 
+        _executor          = new AsyncExecutor( 1, "AssetManager" );
         FileHandleResolver = resolver;
     }
 
@@ -494,9 +522,9 @@ public partial class AssetManager
             try
             {
                 var assetsByType   = _assets[ type ];
-                var assetContainer = assetsByType.Get( name );
+                var assetContainer = assetsByType?.Get( name );
 
-                Logger.Debug( $"AssetContainer>.Asset: {assetContainer?.Asset}" );
+                Logger.Debug( $"AssetContainer.Asset: {assetContainer?.Asset}" );
 
                 return assetContainer?.Asset;
             }
@@ -731,10 +759,15 @@ public partial class AssetManager
                     var assetName = innerEntry.Key;
                     var loader    = innerEntry.Value;
 
+                    if ( assetName == string.Empty )
+                    {
+                        assetName = "(default)";
+                    }
+
                     // Get the actual derived class name (e.g., "TextureLoader" or "SoundLoader")
                     var concreteType = loader.GetType();
 
-                    Logger.Debug( $"  - Asset Type    : '{assetName}'" );
+                    Logger.Debug( $"  - Suffix        : '{assetName}'" );
                     Logger.Debug( $"    [Loader Class]: {concreteType.Name}" );
                 }
             }
@@ -751,6 +784,7 @@ public partial class AssetManager
     public void Dispose()
     {
         Dispose( true );
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>
@@ -765,6 +799,8 @@ public partial class AssetManager
         if ( disposing )
         {
             ClearAsync();
+            
+            _executor.Dispose();
         }
     }
 
@@ -857,7 +893,7 @@ public partial class AssetManager
                 throw new GdxRuntimeException( $"Asset not loaded: {fileName}" );
             }
 
-            _assets[ type ][ fileName ].RefCount = refCount;
+            _assets[ type ]?[ fileName ].RefCount = refCount;
         }
     }
 
@@ -1065,19 +1101,21 @@ public partial class AssetManager
     /// <exception cref="GdxRuntimeException">Thrown if the asset is null.</exception>
     public void AddAsset( string fileName, Type type, object? asset )
     {
-        // Add the asset to the filename lookup
-        _assetTypes[ fileName ] = type;
-
-        // Check if the outer dictionary already contains the type
-        if ( !_assets.TryGetValue( type, out var assetDictionary ) )
+        lock ( this )
         {
-            // If not, create a new inner dictionary for this type
-            assetDictionary = new Dictionary< string, IRefCountedContainer >();
-            _assets[ type ] = assetDictionary;
-        }
+            // Add the asset to the filename lookup
+            _assetTypes[ fileName ] = type;
 
-        // Add the new container to the inner dictionary
-        assetDictionary[ fileName ] = new RefCountedContainer( asset );
+            var typeToAssets = _assets[ type ];
+
+            if ( typeToAssets == null )
+            {
+                typeToAssets    = new Dictionary< string, IRefCountedContainer >();
+                _assets[ type ] = typeToAssets;
+            }
+
+            typeToAssets[ fileName ] = new RefCountedContainer( asset );
+        }
     }
 
     /// <summary>
@@ -1155,7 +1193,7 @@ public partial class AssetManager
     /// </param>
     public void SetLoader( Type type, AssetLoader loader, string? suffix = "" )
     {
-        // Normalize the suffix: Use "" for null or empty strings
+        // Normalize the suffix
         suffix = string.IsNullOrEmpty( suffix ) ? "" : suffix;
 
         _loadersLock.EnterWriteLock();
@@ -1170,7 +1208,8 @@ public partial class AssetManager
 
             if ( !typeLoaders.TryAdd( suffix, loader ) )
             {
-                throw new ArgumentException( $"A loader for type {type.Name} with suffix '{suffix}' already exists." );
+                throw new ArgumentException( $"A loader for type {type.Name} " +
+                                             $"with suffix '{suffix}' already exists." );
             }
         }
         finally
@@ -1266,7 +1305,7 @@ public partial class AssetManager
             throw new GdxRuntimeException( $"No loader for type: {assetDesc.AssetType}" );
         }
 
-        _tasks.Enqueue( new AssetLoadingTask( this, assetDesc, loader ) );
+        _tasks.Enqueue( new AssetLoadingTask( this, assetDesc, loader, _executor ) );
 
         _peakTasks++;
     }
@@ -1282,40 +1321,50 @@ public partial class AssetManager
         if ( _tasks.TryPeek( out var task ) )
         {
             var complete = true;
-            
+
             try
             {
-                complete = task.Cancel || task.
-                
-                
-                
-                var asset = task.LoadAsync();
+                complete = task.Cancel || task.Update();
+            }
+            catch ( Exception e )
+            {
+                task.Cancel = true;
+                TaskFailed( task.AssetDesc, e );
+            }
 
-                if ( !task.Cancel )
+            // if the task has been cancelled or has finished loading
+            if ( complete )
+            {
+                // increase the number of loaded assets and pop the task from the stack
+                if ( _tasks.Count == 1 )
                 {
-                    AddAsset( task.AssetDesc.AssetName, task.AssetDesc.AssetType, asset );
-
-                    task.AssetDesc.Parameters?
-                        .LoadedCallback?
-                        .FinishedLoading( this, task.AssetDesc.AssetName, task.AssetDesc.AssetType );
+                    _loaded++;
+                    _peakTasks = 0;
                 }
 
-                _loaded++;
+                _ = _tasks.Dequeue();
+
+                if ( task.Cancel )
+                {
+                    return true;
+                }
+
+                AddAsset( task.AssetDesc.AssetName, task.AssetDesc.AssetType, task.Asset );
+
+                if ( task.AssetDesc.Parameters is { LoadedCallback: not null } )
+                {
+                    task.AssetDesc.Parameters.LoadedCallback.FinishedLoading( this, task.AssetDesc.AssetName, task.AssetDesc.AssetType );
+                }
+
+                return true;
             }
-            catch ( Exception )
-            {
-                Logger.Error( $"Error loading asset: {task.AssetDesc.AssetName}" );
-                task.Cancel = true;
-            }
-            finally
-            {
-                _tasks.Dequeue();
-            }
+
+            return false;
         }
-        else
-        {
-            Logger.Debug( $"No task to load: {task?.AssetDesc.AssetName}" );
-        }
+
+        Logger.Debug( $"No task to load: {task?.AssetDesc.AssetName}" );
+
+        return false;
     }
 
     /// <summary>
@@ -1464,27 +1513,32 @@ public partial class AssetManager
 
         GdxRuntimeException.ThrowIfNull( _assets );
 
+        IRefCountedContainer? container = null;
+
         if ( !_assets.TryGetValue( type, out var assetRef )
-             || !assetRef.TryGetValue( fileName, out var container ) )
+             && ( ( assetRef != null ) && !assetRef.TryGetValue( fileName, out container ) ) )
         {
             throw new GdxRuntimeException( $"Asset not loaded: {fileName}" );
         }
 
-        container.RefCount--;
-
-        if ( container.RefCount <= 0 )
+        if ( container != null )
         {
-            DisposeAsset( container );
+            container.RefCount--;
 
-            _assetTypes.Remove( fileName );
-            assetRef.Remove( fileName );
+            if ( container.RefCount <= 0 )
+            {
+                DisposeAsset( container );
 
-            // Remove dependencies if the asset is completely unloaded
-            RemoveDependencies( fileName );
-        }
-        else
-        {
-            Logger.Debug( $"Unload (decrement): {fileName}" );
+                _assetTypes.Remove( fileName );
+                assetRef?.Remove( fileName );
+
+                // Remove dependencies if the asset is completely unloaded
+                RemoveDependencies( fileName );
+            }
+            else
+            {
+                Logger.Debug( $"Unload (decrement): {fileName}" );
+            }
         }
     }
 
@@ -1520,7 +1574,7 @@ public partial class AssetManager
             }
         }
 
-        if ( _assets[ _assetTypes[ fileName ] ][ fileName ].RefCount <= 0 )
+        if ( _assets[ _assetTypes[ fileName ] ]?[ fileName ].RefCount <= 0 )
         {
             _assetDependencies.Remove( fileName );
         }
@@ -1528,3 +1582,6 @@ public partial class AssetManager
 
     #endregion private methods
 }
+
+// ============================================================================
+// ============================================================================

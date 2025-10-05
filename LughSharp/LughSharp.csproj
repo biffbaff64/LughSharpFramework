@@ -10,7 +10,7 @@
         <Version>0.0.1-beta3.3</Version>
         <Description>C# 2D/3D Game Framework.</Description>
         <RepositoryUrl>https://github.com/biffbaff64/LughSharp</RepositoryUrl>
-        <LangVersion>latestmajor</LangVersion>
+        <LangVersion>preview</LangVersion>
         <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
         <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
         <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>

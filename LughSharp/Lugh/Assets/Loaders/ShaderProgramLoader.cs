@@ -82,7 +82,10 @@ public class ShaderProgramLoader : AsynchronousAssetLoader
     }
 
     /// <inheritdoc />
-    public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
+    public override void LoadAsync< TP >( AssetManager manager,
+                                          string filename,
+                                          FileInfo? file,
+                                          TP? parameter ) where TP : class
     {
     }
 

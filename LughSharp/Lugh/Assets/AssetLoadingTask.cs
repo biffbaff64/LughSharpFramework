@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders;
-using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Assets;
 
@@ -32,10 +31,12 @@ namespace LughSharp.Lugh.Assets;
 /// on an <see cref="AssetDescriptor"/>.
 /// </summary>
 [PublicAPI]
-public class AssetLoadingTask
+public partial class AssetLoadingTask : IAsyncTask< object >
 {
     public bool                     DependenciesLoaded { get; private set; }
     public List< AssetDescriptor >? Dependencies       { get; private set; }
+    public AsyncResult< object >?   DepsFuture         { get; private set; }
+    public AsyncResult< object >?   LoadFuture         { get; private set; }
     public AssetDescriptor          AssetDesc          { get; }
     public bool                     Cancel             { get; set; }
     public object?                  Asset              { get; set; }
@@ -43,11 +44,12 @@ public class AssetLoadingTask
 
     // ========================================================================
 
-    private readonly AssetLoader  _loader;
-    private readonly object       _lock = new();
-    private readonly AssetManager _manager;
-    private readonly long         _startTime;
-    private          bool         _asyncDone;
+    private readonly AssetLoader   _loader;
+    private readonly object        _lock = new();
+    private readonly AssetManager  _manager;
+    private readonly long          _startTime;
+    private          bool          _asyncDone;
+    private          AsyncExecutor _executor;
 
     // ========================================================================
     // ========================================================================
@@ -55,7 +57,10 @@ public class AssetLoadingTask
     /// <summary>
     /// Represents a task for loading an asset, including managing dependencies and handling cancellation.
     /// </summary>
-    public AssetLoadingTask( AssetManager manager, AssetDescriptor assetDesc, AssetLoader loader )
+    public AssetLoadingTask( AssetManager manager,
+                             AssetDescriptor assetDesc,
+                             AssetLoader loader,
+                             AsyncExecutor threadPool )
     {
         IsAsyncLoader = _loader is AsynchronousAssetLoader;
         _startTime    = Logger.TraceLevel.Equals( Logger.LOG_DEBUG ) ? TimeUtils.NanoTime() : 0;
@@ -63,16 +68,17 @@ public class AssetLoadingTask
         AssetDesc = assetDesc;
         _manager  = manager;
         _loader   = loader;
+        _executor = threadPool;
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public void Call()
+    public object? Call()
     {
         if ( Cancel )
         {
-            return;
+            return null;
         }
 
         var asyncLoader = ( AsynchronousAssetLoader? )_loader;
@@ -91,21 +97,23 @@ public class AssetLoadingTask
             else
             {
                 // if we have no dependencies, we load the async part of the task immediately.
-                asyncLoader.LoadAsync( _manager,
-                                       AssetDesc.File.FullName,
-                                       Resolve( _loader, AssetDesc ),
-                                       AssetDesc.Parameters );
+                asyncLoader?.LoadAsync( _manager,
+                                        AssetDesc.File.FullName,
+                                        Resolve( _loader, AssetDesc ),
+                                        AssetDesc.Parameters );
                 _asyncDone = true;
             }
         }
         else
         {
-            asyncLoader.LoadAsync( _manager,
-                                   AssetDesc.File.FullName,
-                                   Resolve( _loader, AssetDesc ),
-                                   AssetDesc.Parameters );
+            asyncLoader?.LoadAsync( _manager,
+                                    AssetDesc.File.FullName,
+                                    Resolve( _loader, AssetDesc ),
+                                    AssetDesc.Parameters );
             _asyncDone = true;
         }
+
+        return null;
     }
 
     /// <summary>
@@ -176,7 +184,10 @@ public class AssetLoadingTask
             else
             {
                 // If we have no dependencies, we load the part of the task immediately.
-                loader.LoadAsync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
+                loader.LoadAsync( _manager,
+                                  AssetDesc.AssetName,
+                                  Resolve( loader, AssetDesc )!,
+                                  AssetDesc.Parameters! );
             }
 
             DependenciesLoaded = true;
@@ -236,7 +247,10 @@ public class AssetLoadingTask
     {
         if ( _loader is AsynchronousAssetLoader asyncLoader )
         {
-            asyncLoader.UnloadAsync( _manager, Resolve( _loader, AssetDesc )!, AssetDesc.Parameters! );
+            asyncLoader.UnloadAsync( _manager,
+                                     AssetDesc.AssetName,
+                                     Resolve( _loader, AssetDesc )!,
+                                     AssetDesc.Parameters! );
         }
     }
 
@@ -264,15 +278,19 @@ public class AssetLoadingTask
     /// <param name="array">The list of asset descriptors to process for duplicates.</param>
     private static void RemoveDuplicates( List< AssetDescriptor > array )
     {
-        var uniqueAssets = array.GroupBy( a => new
-                                {
-                                    a.AssetName, a.AssetType,
-                                } )
-                                .Select( g => g.First() )
-                                .ToList();
+        for ( var i = 0; i < array.Count; ++i )
+        {
+            var fn   = array[ i ].AssetName;
+            var type = array[ i ].AssetType;
 
-        array.Clear();
-        array.AddRange( uniqueAssets );
+            for ( var j = array.Count - 1; j > i; --j )
+            {
+                if ( type == array[ j ].AssetType && fn.Equals( array[ j ].AssetName ) )
+                {
+                    array.RemoveAt( j );
+                }
+            }
+        }
     }
 }
 

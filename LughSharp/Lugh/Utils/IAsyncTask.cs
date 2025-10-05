@@ -22,46 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
+namespace LughSharp.Lugh.Utils;
 
-using NUnit.Framework;
-
-using LughSharp.Lugh.Core;
-using LughUtils.source.Logging;
-
-namespace LughSharp.Tests.Source;
-
-[TestFixture]
+/// <summary>
+/// Task to be submitted to an AsyncExecutor, returning a result of type T.
+/// </summary>
 [PublicAPI]
-public class FilepathTest
+public interface IAsyncTask< T >
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
-
-    [Test]
-    public void Run()
-    {
-        try
-        {
-            Logger.Debug( $"Absolute : {Engine.Api.Files.Absolute( "C:/Development/Projects/CSharp/Template/bin/Debug/net8.0/PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Assembly : {Engine.Api.Files.Assembly( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Classpath: {Engine.Api.Files.Classpath( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"External : {Engine.Api.Files.External( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Internal : {Engine.Api.Files.Internal( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Local    : {Engine.Api.Files.Local( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-        }
-        catch ( Exception )
-        {
-            // Ignore
-        }
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-    }
+    T? Call();
 }
 
 // ========================================================================

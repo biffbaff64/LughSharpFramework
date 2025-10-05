@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -71,9 +70,17 @@ public class CubemapLoader : AsynchronousAssetLoader
         return null!;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads the non-OpenGL part of the asset and injects any dependencies of
+    /// the asset into the <paramref name="manager"/>.
+    /// </summary>
+    /// <param name="manager">The asset manager responsible for loading the asset.</param>
+    /// <param name="filename"> The name of the asset to load. </param>
+    /// <param name="file">The file information of the asset to load.</param>
+    /// <param name="parameter">The parameters for loading the asset.</param>
     public override void LoadAsync< TP >( AssetManager manager,
-                                          FileInfo file,
+                                          string filename,
+                                          FileInfo? file,
                                           TP? parameter ) where TP : class
     {
     }

@@ -23,9 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 
 namespace LughSharp.Lugh.Assets.Loaders;
@@ -105,14 +102,27 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
         return deps;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads the non-OpenGL part of the asset and injects any dependencies of
+    /// the asset into the <paramref name="manager"/>.
+    /// </summary>
+    /// <param name="manager">The asset manager responsible for loading the asset.</param>
+    /// <param name="filename"> The name of the asset to load. </param>
+    /// <param name="file">The file information of the asset to load.</param>
+    /// <param name="parameter">The parameters for loading the asset.</param>
     public override void LoadAsync< TP >( AssetManager manager,
-                                          FileInfo file,
+                                          string filename,
+                                          FileInfo? file,
                                           TP? parameter ) where TP : class
     {
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads the OpenGL part of the asset.
+    /// </summary>
+    /// <param name="manager"></param>
+    /// <param name="file"> the resolved file to load </param>
+    /// <param name="parameter"></param>
     public override object LoadSync< TP >( AssetManager manager,
                                            FileInfo file,
                                            TP? parameter ) where TP : class

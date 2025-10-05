@@ -59,10 +59,12 @@ public abstract class AsynchronousAssetLoader : AssetLoader
     /// the asset into the <paramref name="manager"/>.
     /// </summary>
     /// <param name="manager">The asset manager responsible for loading the asset.</param>
+    /// <param name="filename"> The name of the asset to load. </param>
     /// <param name="file">The file information of the asset to load.</param>
     /// <param name="parameter">The parameters for loading the asset.</param>
     public abstract void LoadAsync< TP >( AssetManager manager,
-                                          FileInfo file,
+                                          string filename,
+                                          FileInfo? file,
                                           TP? parameter ) where TP : AssetLoaderParameters;
 
     /// <summary>
@@ -76,9 +78,11 @@ public abstract class AsynchronousAssetLoader : AssetLoader
     /// and must release any resources it allocated.
     /// </summary>
     /// <param name="manager"></param>
+    /// <param name="filename"> The name of the asset to load. </param>
     /// <param name="file"></param>
     /// <param name="parameter"></param>
     public virtual void UnloadAsync< TP >( AssetManager manager,
+                                           string filename,
                                            FileInfo file,
                                            TP? parameter ) where TP : AssetLoaderParameters
     {

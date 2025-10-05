@@ -85,7 +85,8 @@ public class AssetManagerTest
 //            PNGDecoder.AnalysePNG( data1, true );
 //        }
 
-        _assetManager.DebugPrint();
+//        _assetManager.DebugPrint();
+        _assetManager.DisplayMetrics();
         
         Logger.Debug( "Finished!", true );
 

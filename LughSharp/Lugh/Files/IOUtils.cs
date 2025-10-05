@@ -62,7 +62,7 @@ public class IOUtils
     /// The full path to the applicationsbase assets folder.
     /// a valid example path is:-
     /// <code>
-    /// C:\Development\Projects\CSharp\ConsoleApp1\bin\Debug\net8.0\Assets\
+    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\Assets\
     /// </code>
     /// </summary>
     public static string AssetsRoot => NormalizePath( $"{AssemblyDirectory}Assets/" );

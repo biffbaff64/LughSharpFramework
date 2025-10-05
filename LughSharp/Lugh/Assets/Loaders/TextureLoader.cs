@@ -64,7 +64,8 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
     /// <inheritdoc />
     public override void LoadAsync< TP >( AssetManager manager,
-                                          FileInfo file,
+                                          string filename,
+                                          FileInfo? file,
                                           TP? parameter ) where TP : class
     {
         Logger.Checkpoint();
