@@ -86,7 +86,7 @@ public class AssetManagerTest
 //        }
 
 //        _assetManager.DebugPrint();
-        _assetManager.DisplayMetrics();
+//        _assetManager.DisplayMetrics();
         
         Logger.Debug( "Finished!", true );
 

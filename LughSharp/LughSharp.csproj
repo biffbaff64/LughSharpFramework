@@ -55,7 +55,6 @@
     <ItemGroup>
         <PackageReference Include="DotGLFW" Version="1.2.0"/>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-        <PackageReference Include="LughUtils" Version="0.0.4" />
         <PackageReference Include="RestSharp" Version="112.1.0"/>
         <PackageReference Include="SharpZipLib" Version="1.4.2"/>
         <PackageReference Include="StbiSharp" Version="1.2.1"/>
@@ -124,6 +123,12 @@
 
     <ItemGroup>
       <Folder Include="Lugh\Graphics\Drawing\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="LughUtils">
+        <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

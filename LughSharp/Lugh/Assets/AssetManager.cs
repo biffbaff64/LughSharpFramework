@@ -40,6 +40,7 @@ namespace LughSharp.Lugh.Assets;
 [PublicAPI]
 public partial class AssetManager
 {
+    //TODO: implement this
     [PublicAPI]
     public class AssetData
     {
@@ -60,39 +61,44 @@ public partial class AssetManager
 
     // ========================================================================
 
-    // NEW
+    //TODO: implement this
     /// <summary>
     /// A list of all asset data currently managed by the AssetManager.
     /// </summary>
     public readonly List< AssetData > AssetDataList = [ ];
 
     /// <summary>
-    /// A Dictionary holding the loaders for each asset type.
-    /// The loaders are stored in a Dictionary with the assetloader type as key
-    /// and the a second Dictionary with the asset suffix as key and the asset loader
+    /// A ObjectMap holding the loaders for each asset type.
+    /// The loaders are stored in a ObjectMap with the assetloader type as key
+    /// and the a second ObjectMap with the asset suffix as key and the asset loader
     /// as value.
     /// </summary>
-    private readonly Dictionary< Type, Dictionary< string, AssetLoader > >? _loaders = [ ];
+    private readonly ObjectMap< Type, ObjectMap< string, AssetLoader > >? _loaders = [ ];
 
     /// <summary>
-    /// A Dictionary holding the assets for each asset type. The assets are stored in a
-    /// Dictionary with the asset name as key and the asset container as value. The asset
-    /// container is a Dictionary holding the asset name as key and a reference counter
+    /// A ObjectMap holding the assets for each asset type. The assets are stored in a
+    /// ObjectMap with the asset name as key and the asset container as value. The asset
+    /// container is a ObjectMap holding the asset name as key and a reference counter
     /// as the value. 
     /// </summary>
-    private readonly Dictionary< Type, Dictionary< string, IRefCountedContainer >? > _assets = [ ];
+    private readonly ObjectMap< Type, ObjectMap< string, IRefCountedContainer >? > _assets = [ ];
 
     /// <summary>
-    /// A Dictionary holding the dependencies for each asset. The dependencies are stored in a
-    /// Dictionary with the asset name as key and a list of dependencies as value.
+    /// A ObjectMap holding the dependencies for each asset. The dependencies are stored in a
+    /// ObjectMap with the asset name as key and a list of dependencies as value.
     /// </summary>
-    private readonly Dictionary< string, List< string > > _assetDependencies = [ ];
+    private readonly ObjectMap< string, List< string > > _assetDependencies = [ ];
 
-    /// <summary>
-    /// Asset filename lookup table. This Dictionary holds the asset filename as the
-    /// key, and the asset type as the value.
-    /// </summary>
-    private readonly Dictionary< string, Type > _assetTypes = [ ];
+//NOTE: I have removed this because I feel it is unnecessary duplication of data, and
+//      it is also defined the wrong way around. I think the key should be the type,
+//      and the value should be the asset name. The data in this ObjectMap can be
+//      reconstructed from the _assets ObjectMap if needed.
+
+//    /// <summary>
+//    /// Asset filename lookup table. This ObjectMap holds the asset filename as the
+//    /// key, and the asset type as the value.
+//    /// </summary>
+    private readonly ObjectMap< string, Type > _assetTypes = [ ];
 
     private readonly List< string >            _injected    = [ ];
     private readonly List< AssetDescriptor >   _loadQueue   = [ ];
@@ -107,6 +113,81 @@ public partial class AssetManager
     private int _toLoad;
 
     // ========================================================================
+
+    public void TestSetup()
+    {
+        var value1 = new ObjectMap< string, IRefCountedContainer >();
+
+//        var value2 = new ObjectMap< string, IRefCountedContainer >();
+//        var value3 = new ObjectMap< string, IRefCountedContainer >();
+//        var value4 = new ObjectMap< string, IRefCountedContainer >();
+
+        value1.AddPair( "test1", new RefCountedContainer( new object() ) );
+        value1.AddPair( "test2", new RefCountedContainer( new object() ) );
+        value1.AddPair( "test3", new RefCountedContainer( new object() ) );
+        value1.AddPair( "test4", new RefCountedContainer( new object() ) );
+
+        _assets.AddPair( typeof( Texture ), value1 );
+
+//        _assets.AddPair( typeof( Texture ), value2 );
+//        _assets.AddPair( typeof( Texture ), value3 );
+//        _assets.AddPair( typeof( Texture ), value4 );
+    }
+
+    public void TestRun()
+    {
+        var numAssetTypes = 0;
+        var numAssets     = 0;
+        var index         = 0;
+
+        foreach ( var assetType in _assets.Keys )
+        {
+            if ( assetType == null )
+            {
+                Logger.Debug( "Asset Type is null" );
+
+                continue;
+            }
+
+            numAssetTypes++;
+
+            foreach ( var assetContainer in _assets![ assetType ]! )
+            {
+                Logger.Debug( $"[Index: {index:000}]" +
+                              $"Asset Type: {assetType}\n" +
+                              $"Index of Asset Type: {_assets?.LocateKey( assetType )}\n" +
+                              $"Asset Name: {assetContainer.Key}\n" +
+                              $"Asset RefCount: {assetContainer.Value.RefCount}\n" +
+                              $"Asset: {assetContainer.Value.Asset}" );
+                index++;
+                numAssets++;
+            }
+        }
+
+        Logger.Debug( $"No. of Asset TYPES: {numAssetTypes}" );
+        Logger.Debug( $"No. of Assets     : {numAssets}" );
+
+        Logger.Checkpoint();
+
+        var names = GetAssetNames();
+
+        Logger.Checkpoint();
+
+        if ( names.Count == 0 )
+        {
+            Logger.Debug( "No Names retrieved!" );
+
+            return;
+        }
+
+        Logger.Checkpoint();
+
+        foreach ( var name in names )
+        {
+            Logger.Debug( $"Asset Name: {name}" );
+        }
+    }
+
     // ========================================================================
 
     /// <summary>
@@ -316,9 +397,14 @@ public partial class AssetManager
 
             var assetsByType = _assets[ asset.GetType() ];
 
+            if ( assetsByType == null )
+            {
+                return false;
+            }
+
             foreach ( var assetRef in assetsByType.Values )
             {
-                if ( assetRef.Asset != null )
+                if ( assetRef?.Asset != null )
                 {
                     if ( assetRef.Asset.Equals( asset )
                          || asset.Equals( assetRef.Asset ) )
@@ -380,11 +466,53 @@ public partial class AssetManager
     /// <summary>
     /// Returns a list of all asset names.
     /// </summary>
-    public List< string > GetAssetNames()
+    public List< string? > GetAssetNames()
     {
         lock ( this )
         {
-            return _assetTypes.Keys.ToList();
+//            return _assets.Values.SelectMany( innerDict => innerDict!.Keys ).ToList();
+
+            // 1. Use a HashSet to efficiently store unique keys.
+            // This prevents duplicate strings from being added.
+            var uniqueKeys = new HashSet< string? >();
+
+            // 2. Iterate through the OUTER Dictionary's VALUES (the inner dictionaries).
+            foreach ( var innerDictionary in _assets.Values )
+            {
+                if ( innerDictionary == null )
+                {
+                    continue;
+                }
+                
+                // 3. Iterate through the KEYS of the inner Dictionary.
+                foreach ( var key in innerDictionary.Keys )
+                {
+                    if ( key == null )
+                    {
+                        continue;
+                    }
+                    
+                    // 4. Add the key string to the HashSet.
+                    // HashSet's Add method automatically handles uniqueness.
+                    uniqueKeys.Add( key );
+                }
+            }
+
+            return uniqueKeys.ToList();
+        }
+    }
+
+    /// <summary>
+    /// Returns a list of all asset names.
+    /// </summary>
+    public List< string? > GetAssetNamesDistinct()
+    {
+        lock ( this )
+        {
+            return _assets.Values
+                          .SelectMany( innerDict => innerDict!.Keys )
+                          .Distinct()
+                          .ToList();
         }
     }
 
@@ -393,7 +521,7 @@ public partial class AssetManager
     /// </summary>
     /// <param name="name"> Asset name. </param>
     /// <returns> Dependencies list. </returns>
-    public IEnumerable< string > GetDependencies( string name )
+    public IEnumerable< string >? GetDependencies( string name )
     {
         lock ( this )
         {
@@ -414,9 +542,14 @@ public partial class AssetManager
         {
             name = IOUtils.NormalizePath( name );
 
-            return !_assetTypes.TryGetValue( name, out var _ )
-                ? throw new GdxRuntimeException( $"Assets Container does not hold {name}" )
-                : _assetTypes[ name ];
+            var result = _assetTypes.TryGetValue( name, out var assetType );
+
+            if ( !result || ( assetType == null ) )
+            {
+                throw new GdxRuntimeException( $"Assets Container does not hold {name}" );
+            }
+
+            return assetType;
         }
     }
 
@@ -464,19 +597,16 @@ public partial class AssetManager
 
             var type           = GetAssetType( name );
             var assetsByType   = _assets[ type ];
-            var assetContainer = assetsByType.Get( name );
+            var assetContainer = assetsByType?.Get( name );
 
             if ( assetContainer != null )
             {
                 return assetContainer.Asset;
             }
 
-            if ( required )
-            {
-                throw new GdxRuntimeException( $"Asset not loaded: {name}" );
-            }
-
-            return null;
+            return required
+                ? throw new GdxRuntimeException( $"Asset not loaded: {name}" )
+                : null;
         }
     }
 
@@ -555,14 +685,14 @@ public partial class AssetManager
         {
             lock ( this )
             {
-                if ( !_assets.TryGetValue( type, out var assetsByType ) )
+                if ( !_assets.TryGetValue( type, out var assetsByType ) || assetsByType == null )
                 {
                     throw new GdxRuntimeException( $"No assets loaded for type {type.FullName}" );
                 }
 
                 foreach ( var assetContainer in assetsByType.Values )
                 {
-                    if ( assetContainer.Asset is T asset )
+                    if ( assetContainer?.Asset is T asset )
                     {
                         outArray.Add( asset );
                     }
@@ -679,9 +809,9 @@ public partial class AssetManager
 
         FinishLoading();
 
-        var dependencyCount = new Dictionary< string, int >();
+        var dependencyCount = new ObjectMap< string, int >();
 
-        while ( _assetTypes.Count > 0 )
+        while ( _assetTypes.Size > 0 )
         {
             // for each asset, figure out how often it was referenced
             dependencyCount.Clear();
@@ -739,21 +869,21 @@ public partial class AssetManager
             Guard.ThrowIfNull( _loaders );
             Guard.ThrowIfNull( _assetTypes );
 
-            Logger.Debug( $"Number of Assets: {_assets.Count}" );
-            Logger.Debug( $"Number of Types: {_assetTypes.Count}" );
+            Logger.Debug( $"Number of Assets: {_assets.Size}" );
+            Logger.Debug( $"Number of Types: {_assetTypes.Size}" );
 
-            Logger.Debug( $"\n--- Asset Loader Debug Dump ({_loaders.Count} Asset Types Registered) ---" );
+            Logger.Debug( $"\n--- Asset Loader Debug Dump ({_loaders.Size} Asset Types Registered) ---" );
 
-            // Iterate over the outer dictionary (Key: Asset Type)
+            // Iterate over the outer ObjectMap (Key: Asset Type)
             foreach ( var outerEntry in _loaders )
             {
                 var assetType    = outerEntry.Key;
                 var innerLoaders = outerEntry.Value;
 
-                Logger.Debug( $"\n[ASSET TYPE]: {assetType.Name} (Total Loaders: {innerLoaders.Count})" );
+                Logger.Debug( $"\n[ASSET TYPE]: {assetType.Name} (Total Loaders: {innerLoaders.Size})" );
                 Logger.Debug( "--------------------------------------------------" );
 
-                // Iterate over the inner dictionary (Key: Asset Name, Value: Concrete Loader)
+                // Iterate over the inner ObjectMap (Key: Asset Name, Value: Concrete Loader)
                 foreach ( var innerEntry in innerLoaders )
                 {
                     var assetName = innerEntry.Key;
@@ -799,7 +929,7 @@ public partial class AssetManager
         if ( disposing )
         {
             ClearAsync();
-            
+
             _executor.Dispose();
         }
     }
@@ -977,7 +1107,7 @@ public partial class AssetManager
     /// <exception cref="GdxRuntimeException"> If no loader was found. </exception>
     public AssetLoader? GetLoader( Type? type, string? fileName = null )
     {
-        if ( ( type == null ) || ( _loaders?[ type ].Count < 1 ) )
+        if ( ( type == null ) || ( _loaders?[ type ].Size < 1 ) )
         {
             throw new GdxRuntimeException( $"No loader for type: {type?.Name}" );
         }
@@ -1103,18 +1233,31 @@ public partial class AssetManager
     {
         lock ( this )
         {
+            Logger.Checkpoint();
+
             // Add the asset to the filename lookup
-            _assetTypes[ fileName ] = type;
+//            _assetTypes[ fileName ] = type;
+            _assetTypes.Put( fileName, type );
+
+            Logger.Checkpoint();
 
             var typeToAssets = _assets[ type ];
 
+            Logger.Checkpoint();
+
             if ( typeToAssets == null )
             {
-                typeToAssets    = new Dictionary< string, IRefCountedContainer >();
-                _assets[ type ] = typeToAssets;
-            }
+                Logger.Checkpoint();
 
-            typeToAssets[ fileName ] = new RefCountedContainer( asset );
+                typeToAssets    = new ObjectMap< string, IRefCountedContainer >();
+                _assets[ type ] = typeToAssets;
+
+                Logger.Checkpoint();
+
+                typeToAssets[ fileName ] = new RefCountedContainer( asset );
+
+                Logger.Checkpoint();
+            }
         }
     }
 
@@ -1202,7 +1345,7 @@ public partial class AssetManager
         {
             if ( !_loaders!.TryGetValue( type, out var typeLoaders ) )
             {
-                typeLoaders      = new Dictionary< string, AssetLoader >();
+                typeLoaders      = new ObjectMap< string, AssetLoader >();
                 _loaders[ type ] = typeLoaders;
             }
 
@@ -1397,7 +1540,7 @@ public partial class AssetManager
 
     /// <summary>
     /// Check ths potential asset against assets currently in the preload queue and
-    /// the loaded assets dictionary, to make sure its has not already been loaded.
+    /// the loaded assets ObjectMap, to make sure its has not already been loaded.
     /// </summary>
     /// <param name="fileName"></param>
     /// <param name="type"></param>
@@ -1434,7 +1577,7 @@ public partial class AssetManager
                 }
             }
 
-            // Try to find an asset in the loaded assets dictionary that has the same
+            // Try to find an asset in the loaded assets ObjectMap that has the same
             // name as this asset, but which has a different asset type.
             if ( _assetTypes.ContainsKey( fileName ) )
             {

@@ -12,7 +12,6 @@
     <ItemGroup>
         <PackageReference Include="DotGLFW" Version="1.2.0"/>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-        <PackageReference Include="LughUtils" Version="0.0.4" />
         <PackageReference Include="System.Drawing.Common" Version="9.0.9" />
         <PackageReference Include="System.Drawing.Primitives" Version="4.3.0"/>
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2"/>
@@ -20,6 +19,12 @@
 
     <ItemGroup>
         <ProjectReference Include="..\LughSharp\LughSharp.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="LughUtils">
+        <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU'">
