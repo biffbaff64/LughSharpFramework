@@ -26,7 +26,7 @@ using System.Collections;
 using System.Globalization;
 using System.Text;
 
-using LughSharp.Lugh.Maths;
+using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 

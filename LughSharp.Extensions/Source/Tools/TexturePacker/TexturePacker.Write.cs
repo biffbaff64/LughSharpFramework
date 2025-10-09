@@ -25,7 +25,7 @@
 using Extensions.Source.Drawing;
 
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Maths;
+using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 

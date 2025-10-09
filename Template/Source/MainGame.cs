@@ -13,7 +13,7 @@ using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Maths;
+using LughUtils.source.Maths;
 using LughSharp.Lugh.Utils;
 
 using LughUtils.source;

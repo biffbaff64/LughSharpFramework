@@ -25,7 +25,7 @@
 using System.Numerics;
 using System.Text;
 
-using LughSharp.Lugh.Maths;
+using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
 
 namespace Extensions.Source.Json;

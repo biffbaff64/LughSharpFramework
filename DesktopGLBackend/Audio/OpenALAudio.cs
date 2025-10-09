@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Audio.OpenAL;
-using LughSharp.Lugh.Maths;
+using LughUtils.source.Maths;
 using LughUtils.source.Collections;
 using LughUtils.source.Exceptions;
 

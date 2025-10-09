@@ -29,7 +29,7 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
-using LughSharp.Lugh.Maths;
+using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 

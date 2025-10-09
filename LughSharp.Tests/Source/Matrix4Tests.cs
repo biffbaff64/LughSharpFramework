@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Maths;
+using LughUtils.source.Maths;
 
 using NUnit.Framework;
 
