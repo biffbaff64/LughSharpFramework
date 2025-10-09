@@ -22,11 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Cameras;
-using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 
-using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+using Rectangle = LughUtils.source.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.Viewports;
 

@@ -65,9 +65,6 @@ global using LughSharp.Lugh.Graphics.OpenGL.Enums;
 global using LughSharp.Lugh.Graphics.Text;
 global using LughSharp.Lugh.Graphics.Utils;
 global using LughSharp.Lugh.Graphics.Viewports;
-
-global using LughSharp.Lugh.Maths;
-
 global using LughSharp.Lugh.Utils;
 
 // ============================================================================
@@ -76,15 +73,18 @@ global using static LughSharp.Lugh.Core.Engine;
 
 // ============================================================================
 
-global using Vector2 = LughSharp.Lugh.Maths.Vector2;
-global using Vector3 = LughSharp.Lugh.Maths.Vector3;
-global using Vector4 = LughSharp.Lugh.Maths.Vector4;
+global using Vector2 = LughUtils.source.Maths.Vector2;
+global using Vector3 = LughUtils.source.Maths.Vector3;
+global using Vector4 = LughUtils.source.Maths.Vector4;
 
 // ============================================================================
 
-global using LughUtils.source.Exceptions;
 global using LughUtils.source;
+global using LughUtils.source.Collections;
+global using LughUtils.source.Exceptions;
 global using LughUtils.source.Logging;
+global using LughUtils.source.Maths;
+global using LughUtils.source.Maths.Collision;
 
 global using SerializationException = LughSharp.Lugh.Utils.SerializationException;
 

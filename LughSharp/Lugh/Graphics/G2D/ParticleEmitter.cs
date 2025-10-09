@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Maths.Collision;
-using LughUtils.source.Collections;
-
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Graphics.G2D;

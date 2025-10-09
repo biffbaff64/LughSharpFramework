@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Maths.Collision;
+using LughUtils.source.Maths.Collision;
 
 namespace LughSharp.Lugh.Graphics;
 

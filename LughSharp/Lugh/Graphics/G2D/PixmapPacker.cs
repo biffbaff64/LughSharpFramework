@@ -24,9 +24,7 @@
 
 using System.Text.RegularExpressions;
 
-using LughUtils.source.Collections;
-
-using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+using Rectangle = LughUtils.source.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.G2D;
 

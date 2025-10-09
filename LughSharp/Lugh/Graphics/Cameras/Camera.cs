@@ -22,9 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Maths.Collision;
 
-using Quaternion = LughSharp.Lugh.Maths.Quaternion;
+using Quaternion = LughUtils.source.Maths.Quaternion;
 
 namespace LughSharp.Lugh.Graphics.Cameras;
 

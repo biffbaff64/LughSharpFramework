@@ -24,19 +24,15 @@
 
 using System.Reflection.Metadata;
 
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.Cameras;
-using LughSharp.Lugh.Graphics.Viewports;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 
-using LughUtils.source.Collections;
 using LughUtils.source.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 using Platform = LughSharp.Lugh.Core.Platform;
-using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+using Rectangle = LughUtils.source.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D;
 

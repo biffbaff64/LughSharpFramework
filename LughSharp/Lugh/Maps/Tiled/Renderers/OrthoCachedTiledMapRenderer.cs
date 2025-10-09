@@ -22,10 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Cameras;
-
 using Color = LughSharp.Lugh.Graphics.Color;
-using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+using Rectangle = LughUtils.source.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 

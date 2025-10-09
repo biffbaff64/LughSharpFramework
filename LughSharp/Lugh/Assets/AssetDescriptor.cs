@@ -101,6 +101,7 @@ public class AssetDescriptor
     public void DebugPrint()
     {
         Logger.Debug( $"AssetName: {AssetName}" );
+        Logger.Debug( $"AssetType: {AssetType}" );
         Logger.Debug( $"Path: {File.FullName}" );
         Logger.Debug( $"{IOUtils.StripAssetsPath( File.FullName )}" );
     }

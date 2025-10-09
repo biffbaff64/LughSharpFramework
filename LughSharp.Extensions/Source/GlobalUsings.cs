@@ -62,8 +62,8 @@ global using static LughSharp.Lugh.Core.Engine;
 
 // ============================================================================
 
-global using Vector2 = LughSharp.Lugh.Maths.Vector2;
-global using Vector3 = LughSharp.Lugh.Maths.Vector3;
+global using Vector2 = LughUtils.source.Maths.Vector2;
+global using Vector3 = LughUtils.source.Maths.Vector3;
 
 // ============================================================================
 

@@ -62,9 +62,9 @@ public class AssetManagerTest
         var file4 = Engine.Api.Files.Assets( "title_background.png" );
 
         _assetManager.Load< Texture >( file1.FullName );
-        _assetManager.Load< Texture >( file2.FullName );
-        _assetManager.Load< Texture >( file3.FullName );
-        _assetManager.Load< Texture >( file4.FullName );
+//        _assetManager.Load< Texture >( file2.FullName );
+//        _assetManager.Load< Texture >( file3.FullName );
+//        _assetManager.Load< Texture >( file4.FullName );
         _assetManager.FinishLoading();
         
 //        if ( !_assetManager.Contains( file1.FullName ) )

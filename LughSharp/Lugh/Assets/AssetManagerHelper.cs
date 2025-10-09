@@ -75,7 +75,7 @@ public partial class AssetManager
         lock ( this )
         {
             Logger.Divider();
-            Logger.Debug( $"_assetTypes[].Count: {_assetTypes.Size}" );
+            Logger.Debug( $"_assetTypes[].Count: {_assetTypes.Count}" );
 
             foreach ( var key in _assetTypes.Keys )
             {
@@ -87,8 +87,8 @@ public partial class AssetManager
                 }
             }
 
-            Logger.Debug( $"_assets Count       : {_assets.Size}" );
-            Logger.Debug( $"_loaders Count      : {_loaders?.Size}" );
+            Logger.Debug( $"_assets Count       : {_assets.Count}" );
+            Logger.Debug( $"_loaders Count      : {_loaders?.Count}" );
             Logger.Debug( $"_loaded             : {_loaded}" );
             Logger.Debug( $"_toLoad             : {_toLoad}" );
             Logger.Debug( $"_loadQueue Count    : {_loadQueue.Count}" );

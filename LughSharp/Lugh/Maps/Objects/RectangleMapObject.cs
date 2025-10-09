@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+using Rectangle = LughUtils.source.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Maps.Objects;
 

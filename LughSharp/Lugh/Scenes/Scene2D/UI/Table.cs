@@ -28,7 +28,7 @@ using LughUtils.source.Collections;
 using LughUtils.source.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
-using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+using Rectangle = LughUtils.source.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
