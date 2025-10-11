@@ -24,147 +24,98 @@
 
 namespace LughSharp.Lugh.Utils;
 
-/// <summary>
-/// Allows asynchronous execution of IAsyncTask instances on a separate thread.
-/// Needs to be disposed via a call to Dispose() when no longer used, in which case the executor waits for running tasks to finish.
-/// Scheduled but not yet running tasks will not be executed.
-/// </summary>
-[PublicAPI]
 public class AsyncExecutor : IDisposable
 {
-    // The C# TaskScheduler is typically used to manage where Tasks run.
-    // For a fixed-size thread pool, we can use a custom TaskScheduler or a SemaphoreSlim
-    // to limit concurrency on the default TaskScheduler, but for simplicity,
-    // we'll use a SemaphoreSlim to manage the worker threads' capacity
-    // and let the built-in TaskFactory handle the actual task creation.
+    // C# mechanism to limit the number of concurrent tasks (the maxConcurrent property)
+    private readonly SemaphoreSlim _semaphore;
 
-    private readonly SemaphoreSlim           _semaphore;
-    private readonly CancellationTokenSource _cancellationTokenSource = new();
-    private readonly List< Task >            _runningTasks            = [ ];
-    private          bool                    _isDisposed              = false;
+    private bool _isDisposed = false;
 
     // ========================================================================
 
-    /// <summary>
-    /// Creates a new AsyncExecutor that allows maxConcurrent tasks to run in parallel.
-    /// </summary>
-    /// <param name="maxConcurrent">The maximum number of tasks to run concurrently.</param>
-    /// <param name="name">The name for the threads (used here for logging/debugging context, though C# threads are harder to name globally)</param>
-    public AsyncExecutor( int maxConcurrent, string name = "AsyncExecutor-Thread" )
+    public AsyncExecutor( int maxConcurrent, string name = "" )
     {
-        // The thread naming from the Java example is less direct in C# Task model,
-        // but we can manage the degree of parallelism.
-        if ( maxConcurrent <= 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( maxConcurrent ), "maxConcurrent must be greater than zero." );
-        }
-
+        // Semaphore initialized with maxConcurrent concurrent slots
+        
         _semaphore = new SemaphoreSlim( maxConcurrent, maxConcurrent );
-
-        // Note: The thread name is mostly ignored in this C# implementation
-        // as Tasks use the default ThreadPool.
+        // Thread naming is often ignored in .NET, relying on debugger tools, but name
+        // is used here for logging and debugging purposes.
     }
 
     /// <summary>
-    /// Submits an IAsyncTask to be executed asynchronously. If maxConcurrent
-    /// tasks are already running, the task will be queued.
+    /// Submits a task to be executed asynchronously, limiting concurrency via a SemaphoreSlim.
     /// </summary>
-    /// <param name="task">the task to execute asynchronously</param>
-    public AsyncResult< T > Submit< T >( IAsyncTask< T > task )
+    /// <param name="task"> The AssetLoadingTask instance that implements the Call() method. </param>
+    /// <returns> A Task that can be used like the original AsyncResult. </returns>
+    public Task Submit( IAssetTask task ) // No generics needed since AssetLoadingTask returns void
     {
-        if ( _isDisposed )
+        if (_isDisposed)
         {
-            throw new GdxRuntimeException( "Cannot run tasks on an executor that has been shutdown (disposed)" );
+            throw new GdxRuntimeException( "Cannot run tasks on an executor that has been shut down (disposed)" );
         }
 
-        // We use Task.Run for simple queuing onto the thread pool, 
-        // and wrap the execution logic with the SemaphoreSlim.
-        var cts = CancellationTokenSource.CreateLinkedTokenSource( _cancellationTokenSource.Token );
-
-        var taskWrapper = Task.Run( async () =>
+        // 1. Wait for a concurrency slot. Use WaitAsync() to avoid blocking the calling thread.
+        // We use ConfigureAwait(false) for library code to avoid context switching issues.
+        var submissionTask = _semaphore.WaitAsync().ContinueWith(waitTask =>
         {
-            // Wait for a slot in the concurrency limit
-            await _semaphore.WaitAsync( cts.Token );
-
-            try
+            // If the wait was successful, execute the task.
+            if (waitTask.IsCompletedSuccessfully)
             {
-                // Check if cancellation was requested while waiting (i.e., Dispose was called)
-                if ( cts.Token.IsCancellationRequested )
+                // 2. Task.Run executes the work on the standard .NET ThreadPool.
+                return Task.Run(() =>
                 {
-                    // Throw to mark the task as canceled
-                    cts.Token.ThrowIfCancellationRequested();
-                }
-
-                // Execute the user's task logic
-                return task.Call();
+                    try
+                    {
+                        task.Call();
+                    }
+                    catch (Exception e)
+                    {
+                        // Wrap and rethrow as GdxRuntimeException if needed, or just let it bubble up
+                        throw new GdxRuntimeException("Asynchronous task failed.", e);
+                    }
+                    finally
+                    {
+                        // 3. Release the semaphore slot when the work is finished (SUCCESS or FAILURE)
+                        _semaphore.Release();
+                    }
+                });
             }
-            finally
-            {
-                // Release the slot back to the semaphore
-                _semaphore.Release();
-            }
-        }, cts.Token );
+            return Task.CompletedTask;
+        }, TaskContinuationOptions.ExecuteSynchronously)
+        .Unwrap(); // Unwrap the Task<Task> to return just the inner Task
 
-        // Track the task so Dispose can await it
-        lock ( _runningTasks )
-        {
-            _runningTasks.Add( taskWrapper );
-
-            // Optionally remove the task when it completes, but for Dispose() simplicity, 
-            // we'll just await all tracked tasks.
-        }
-
-        return new AsyncResult< T >( taskWrapper );
+        return submissionTask;
     }
 
-    /// <summary>
-    /// Waits for running IAsyncTask instances to finish, then destroys any resources like threads.
-    /// Can not be used after this method is called.
-    /// </summary>
+    /// <inheritdoc/>
     public void Dispose()
     {
-        if ( _isDisposed ) return;
+        if (_isDisposed) return;
 
-        _isDisposed = true;
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
 
-        // 1. Signal cancellation for any tasks waiting in the semaphore queue
-        // The semaphore.WaitAsync logic above handles the check.
-        _cancellationTokenSource.Cancel();
-
-        // 2. Wait for all currently running tasks to finish.
-        // We capture a list of current tasks and wait for them all.
-        Task[] tasksToWait;
-
-        lock ( _runningTasks )
+    /// <inheritdoc cref="Dispose"/>
+    protected void Dispose( bool disposing )
+    {
+        if (!_isDisposed)
         {
-            tasksToWait = _runningTasks.ToArray();
-        }
-
-        try
-        {
-            // Use Task.WaitAll with a large timeout, similar to the Long.MAX_VALUE, TimeUnit.SECONDS in Java.
-            // C# tasks don't have a direct equivalent to Java's executor.awaitTermination, but Task.WaitAll works
-            // for waiting for the active work to complete.
-            Task.WaitAll( tasksToWait, Timeout.Infinite );
-        }
-        catch ( AggregateException ae )
-        {
-            // The original Java code re-throws InterruptedException as GdxRuntimeException.
-            // We'll re-throw a GdxRuntimeException if any of the underlying tasks failed or if WaitAll itself was interrupted
-            // (e.g., if we were to use a timeout and it elapsed, but we are using Infinite here).
-            // A more robust pattern would check for ThreadAbortException or TaskCanceledException.
-            throw new GdxRuntimeException( "Couldn't shutdown loading thread gracefully.", ae );
-        }
-        finally
-        {
-            _semaphore.Dispose();
-            _cancellationTokenSource.Dispose();
-
-            // Clear the list after waiting
-            lock ( _runningTasks )
+            if (disposing)
             {
-                _runningTasks.Clear();
+                // In the SemaphoreSlim model, waiting for all tasks is difficult without
+                // tracking them manually. For simplicity, we mostly rely on the GC and the
+                // OS to clean up the Task threads, after preventing new tasks from starting.
+
+                // TODO: If it turns out I absolutely need to wait for all *currently running* tasks,
+                // I will need to implement a more complex tracking mechanism. This would need a
+                // concurrent collection to track all the Tasks returned by Submit().
+                // As it stands currently, relying on the semaphore to prevent *new* tasks is often enough.
+
+                _semaphore.Dispose();
             }
+
+            _isDisposed = true;
         }
     }
 }

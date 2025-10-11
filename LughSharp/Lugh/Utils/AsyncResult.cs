@@ -35,7 +35,7 @@ using System.Threading.Tasks;
 [PublicAPI]
 public class AsyncResult< T >
 {
-    private readonly Task< T > _task;
+    private readonly Task< T? > _task;
 
     // ========================================================================
     
@@ -43,7 +43,7 @@ public class AsyncResult< T >
     /// Initializes a new instance of the AsyncResult class, wrapping a C# Task.
     /// </summary>
     /// <param name="task">The underlying Task representing the asynchronous operation.</param>
-    public AsyncResult( Task< T > task )
+    public AsyncResult( Task< T? > task )
     {
         this._task = task ?? throw new ArgumentNullException( nameof( task ) );
     }
@@ -64,7 +64,7 @@ public class AsyncResult< T >
     /// </summary>
     /// <returns>The result of the asynchronous computation.</returns>
     /// <exception cref="GdxRuntimeException">If there was an error during the task execution.</exception>
-    public T Get()
+    public T? Get()
     {
         try
         {

@@ -25,12 +25,12 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// Task to be submitted to an AsyncExecutor, returning a result of type T.
+/// 
 /// </summary>
 [PublicAPI]
-public interface IAsyncTask< T >
+public interface IAsyncTask
 {
-    T? Call();
+    void Call();
 }
 
 // ========================================================================

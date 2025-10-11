@@ -51,8 +51,8 @@ global using GLFW = DotGLFW;
 
 // ============================================================================
 
+global using LughSharp.Lugh.Assets;
 global using LughSharp.Lugh.Core;
-
 global using LughSharp.Lugh.Graphics;
 global using LughSharp.Lugh.Graphics.Atlases;
 global using LughSharp.Lugh.Graphics.Cameras;

@@ -47,26 +47,6 @@ public partial class AssetManager
         typeof( TextureAtlas ),
     ];
 
-    /// <summary>
-    /// Retrieves an asset of the specified type by its name, if it exists within
-    /// the loaded assets.
-    /// </summary>
-    /// <typeparam name="T"> The type of the asset to retrieve. </typeparam>
-    /// <param name="name"> The name of the asset to retrieve. </param>
-    /// <returns>
-    /// The asset cast to the specified type, or null if not found or if the type
-    /// does not match.
-    /// </returns>
-    public T? GetAs< T >( string name ) where T : class
-    {
-        if ( TypeList.TryGetValue( typeof( T ), out var _ ) )
-        {
-            return Get( name ) as T;
-        }
-
-        return null;
-    }
-
     // ========================================================================
 
     [Conditional( "DEBUG" )]
@@ -111,6 +91,51 @@ public partial class AssetManager
                 
                 Logger.Debug( $"Asset: {name}, Type: {type.Name}, Asset: {(asset != null ? "Loaded" : "NULL")}" );
             }
+        }
+    }
+
+    public void DebugPrint()
+    {
+        lock ( this )
+        {
+            Guard.ThrowIfNull( _assets );
+            Guard.ThrowIfNull( _loaders );
+            Guard.ThrowIfNull( _assetTypes );
+
+            Logger.Debug( $"Number of Assets: {_assets.Count}" );
+            Logger.Debug( $"Number of Types: {_assetTypes.Count}" );
+
+            Logger.Debug( $"\n--- Asset Loader Debug Dump ({_loaders.Count} Asset Types Registered) ---" );
+
+            // Iterate over the outer Dictionary (Key: Asset Type)
+            foreach ( var outerEntry in _loaders )
+            {
+                var assetType    = outerEntry.Key;
+                var innerLoaders = outerEntry.Value;
+
+                Logger.Debug( $"\n[ASSET TYPE]: {assetType.Name} (Total Loaders: {innerLoaders.Count})" );
+                Logger.Debug( "--------------------------------------------------" );
+
+                // Iterate over the inner Dictionary (Key: Asset Name, Value: Concrete Loader)
+                foreach ( var innerEntry in innerLoaders )
+                {
+                    var assetName = innerEntry.Key;
+                    var loader    = innerEntry.Value;
+
+                    if ( assetName == string.Empty )
+                    {
+                        assetName = "(default)";
+                    }
+
+                    // Get the actual derived class name (e.g., "TextureLoader" or "SoundLoader")
+                    var concreteType = loader.GetType();
+
+                    Logger.Debug( $"  - Suffix        : '{assetName}'" );
+                    Logger.Debug( $"    [Loader Class]: {concreteType.Name}" );
+                }
+            }
+
+            Logger.Debug( "\n--- End of Debug Dump ---" );
         }
     }
 
@@ -185,7 +210,7 @@ public partial class AssetManager
             }
         }
     }
-    
-    // ========================================================================
-    // ========================================================================
 }
+    
+// ============================================================================
+// ============================================================================

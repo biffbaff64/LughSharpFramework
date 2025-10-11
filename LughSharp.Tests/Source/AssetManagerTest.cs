@@ -67,12 +67,12 @@ public class AssetManagerTest
 //        _assetManager.Load< Texture >( file4.FullName );
         _assetManager.FinishLoading();
         
-//        if ( !_assetManager.Contains( file1.FullName ) )
-//        {
-//            Logger.Error( $"AssetManager does not contain {file1}" );
+        if ( _assetManager.Contains( file1.FullName ) )
+        {
+            Logger.Debug( $"AssetManager contains {file1}" );
 
-//            return;
-//        }
+            return;
+        }
 
 //        var data1 = _assetManager.Get< Texture >( file1.FullName )?.GetImageData();
 
