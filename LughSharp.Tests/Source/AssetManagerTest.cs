@@ -27,6 +27,7 @@ using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Utils;
+
 using LughUtils.source.Logging;
 
 using NUnit.Framework;
@@ -56,48 +57,74 @@ public class AssetManagerTest
             return;
         }
 
-        var file1 = Engine.Api.Files.Assets( "PackedImages/Objects/red7logo_small.png" );
-        var file2 = Engine.Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" );
-        var file3 = Engine.Api.Files.Assets( "PackedImages/Objects/libgdx.png" );
-        var file4 = Engine.Api.Files.Assets( "title_background.png" );
-
-        _assetManager.Load< Texture >( file1.FullName );
-//        _assetManager.Load< Texture >( file2.FullName );
-//        _assetManager.Load< Texture >( file3.FullName );
-//        _assetManager.Load< Texture >( file4.FullName );
-        _assetManager.FinishLoading();
-        
-        if ( _assetManager.Contains( file1.FullName ) )
+        var files = new List< FileInfo >
         {
-            Logger.Debug( $"AssetManager contains {file1}" );
+            Engine.Api.Files.Assets( "PackedImages/Objects/red7logo.png" ),
+//            Engine.Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" ),
+//            Engine.Api.Files.Assets( "PackedImages/Objects/libgdx.png" ),
+//            Engine.Api.Files.Assets( "title_background.png" ),
+        };
 
-            return;
+        // Test without using AssetManager
+//        PNGDecoder.AnalysePNG( files[ 0 ].FullName, true );
+
+        // Test with AssetManager
+        foreach ( var file in files )
+        {
+            _assetManager.Load< Texture >( file.FullName );
+        }
+        _assetManager.FinishLoading();
+
+        foreach ( var file in files )
+        {
+            CheckAsset< Texture >( file );
         }
 
-//        var data1 = _assetManager.Get< Texture >( file1.FullName )?.GetImageData();
-
-//        if ( data1 == null )
-//        {
-//            Logger.Error( $"Failed to load image data: {file1}" );
-//        }
-//        else
-//        {
-//            PNGDecoder.AnalysePNG( data1, true );
-//        }
-
-//        _assetManager.DebugPrint();
-//        _assetManager.DisplayMetrics();
-        
         Logger.Debug( "Finished!", true );
-
-//        PNGDecoder.AnalysePNG( File.ReadAllBytes( file1.FullName ), true );
-//        PNGDecoder.AnalysePNG( File.ReadAllBytes( file2.FullName ), true );
-//        PNGDecoder.AnalysePNG( File.ReadAllBytes( file3.FullName ), true );
-//        PNGDecoder.AnalysePNG( File.ReadAllBytes( file4.FullName ), true );
     }
 
     [TearDown]
     public void TearDown()
     {
     }
+
+    private void CheckAsset< T >( FileInfo asset )
+    {
+        if ( _assetManager == null )
+        {
+            return;
+        }
+
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Debug( $"########## Checking asset {asset.Name}... ##########" );
+
+        if ( _assetManager.Contains( asset.FullName ) )
+        {
+            Logger.Debug( $"AssetManager contains {asset.Name}" );
+
+            var texture = _assetManager.Get< Texture >( asset.FullName );
+
+            if ( texture != null )
+            {
+                PNGDecoder.AnalysePNG( texture, true );
+            }
+            else
+            {
+                Logger.Debug( $"Unable to retrieve {asset.Name} from AssetManager" );
+            }
+        }
+        else
+        {
+            Logger.Debug( $"AssetManager does not contain {asset.Name}" );
+        }
+
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Divider();
+    }
 }
+
+// ============================================================================
+// ============================================================================

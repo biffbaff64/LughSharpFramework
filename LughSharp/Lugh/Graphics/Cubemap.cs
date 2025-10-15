@@ -229,9 +229,9 @@ public class Cubemap : GLTexture, IManaged
 
             foreach ( var cubemap in cubemaps )
             {
-                var fileName = AssetManager.GetAssetFileName( cubemap );
+                var filename = AssetManager.GetAssetFileName( cubemap );
 
-                if ( fileName == null )
+                if ( filename == null )
                 {
                     cubemap.Reload();
                 }
@@ -241,9 +241,9 @@ public class Cubemap : GLTexture, IManaged
                     // can actually remove it from the assetmanager. Also set the
                     // handle to zero, otherwise we might accidentially dispose
                     // already reloaded cubemaps.
-                    var refCount = AssetManager.GetReferenceCount( fileName );
+                    var refCount = AssetManager.GetReferenceCount( filename );
 
-                    AssetManager.SetReferenceCount( fileName, 0 );
+                    AssetManager.SetReferenceCount( filename, 0 );
 
                     cubemap.GLTextureHandle = 0;
 
@@ -263,10 +263,10 @@ public class Cubemap : GLTexture, IManaged
                     };
 
                     // unload the c, create a new gl handle then reload it.
-                    AssetManager.Unload( fileName );
+                    AssetManager.Unload( filename );
 
                     cubemap.GLTextureHandle = GL.GenTexture();
-                    AssetManager.Load< Cubemap >( fileName, parameter );
+                    AssetManager.Load< Cubemap >( filename, parameter );
                 }
             }
 

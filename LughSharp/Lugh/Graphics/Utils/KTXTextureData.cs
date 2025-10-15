@@ -47,6 +47,12 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// <returns> the height of the pixel data </returns>
     public int Height { get; set; }
 
+    /// <inheritdoc />
+    public int BitDepth { get; set; }
+
+    /// <inheritdoc />
+    public int BytesPerPixel { get; set; }
+    
     /// <returns> whether to generate mipmaps or not. </returns>
     public bool UseMipMaps { get; set; } = useMipMaps;
 

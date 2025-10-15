@@ -33,7 +33,7 @@ namespace LughSharp.Lugh.Graphics.G3D.Utils;
 [PublicAPI]
 public interface ITextureProvider
 {
-    Texture Load( string fileName );
+    Texture Load( string filename );
 
     [PublicAPI]
     public class FileTextureProvider : ITextureProvider
@@ -64,9 +64,9 @@ public interface ITextureProvider
             _useMipMaps = useMipMaps;
         }
 
-        public Texture Load( string fileName )
+        public Texture Load( string filename )
         {
-            var result = new Texture( Api.Files.Internal( fileName ), _useMipMaps );
+            var result = new Texture( Api.Files.Internal( filename ), _useMipMaps );
             result.SetFilter( _minFilter, _magFilter );
             result.SetWrap( _uWrap, _vWrap );
 
@@ -83,16 +83,16 @@ public interface ITextureProvider
 
         private AssetManager? AssetManager { get; }
 
-        public Texture Load( string fileName )
+        public Texture Load( string filename )
         {
             if ( AssetManager == null )
             {
                 throw new NullReferenceException();
             }
 
-            if ( AssetManager.Get( fileName ) is not Texture texture )
+            if ( AssetManager.Get( filename ) is not Texture texture )
             {
-                throw new NullReferenceException( $"Loaded texture {fileName} is null!" );
+                throw new NullReferenceException( $"Loaded texture {filename} is null!" );
             }
 
             return texture;

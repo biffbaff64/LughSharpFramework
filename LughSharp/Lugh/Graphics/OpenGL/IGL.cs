@@ -33,14 +33,14 @@ public partial interface IGL
     [PublicAPI]
     enum Format : int
     {
-        Alpha,
-        RGB,
-        RGBA,
-        RGBA4,
-        RGB565,
-        Luminance,
-        LuminanceAlpha,
-        ColorIndex,
+        Alpha          = GL_ALPHA,
+        RGB            = GL_RGB,
+        RGBA           = GL_RGBA,
+        RGBA4          = GL_RGB4,
+        RGB565         = GL_RGB565,
+        Luminance      = GL_LUMINANCE,
+        LuminanceAlpha = GL_LUMINANCE_ALPHA,
+        ColorIndex     = GL_COLOR_INDEX,
     }
 
     // ========================================================================

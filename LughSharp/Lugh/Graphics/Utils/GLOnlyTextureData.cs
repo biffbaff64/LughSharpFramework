@@ -40,6 +40,8 @@ public class GLOnlyTextureData : ITextureData
     public int  Type           { get; set; }
     public int  Width          { get; set; } = 0;
     public int  Height         { get; set; } = 0;
+    public int  BitDepth       { get; set; }
+    public int  BytesPerPixel  { get; set; }
     public bool IsPrepared     { get; set; } = false;
     public bool UseMipMaps     { get; set; }
 
@@ -54,9 +56,9 @@ public class GLOnlyTextureData : ITextureData
     // ========================================================================
 
     private int _pixelFormat;
-    
+
     // ========================================================================
-    
+
     /// <summary>
     /// See <a href="https://www.khronos.org/opengles/sdk/docs/man/xhtml/glTexImage2D.xml">glTexImage2D</a>
     /// </summary>
@@ -141,7 +143,7 @@ public class GLOnlyTextureData : ITextureData
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
     public Pixmap.Format GetPixelFormat() => Pixmap.Format.RGBA8888;
-    
+
     // ========================================================================
 
     public Pixmap FetchPixmap()

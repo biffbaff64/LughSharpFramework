@@ -235,7 +235,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
         return Map;
     }
 
-    public List< AssetDescriptor >? GetDependencies( string fileName, FileInfo tmxFile, TP? parameter )
+    public List< AssetDescriptor >? GetDependencies( string filename, FileInfo tmxFile, TP? parameter )
     {
         var textureParameter = new TextureLoader.TextureLoaderParameters();
 

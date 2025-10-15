@@ -83,6 +83,16 @@ public interface ITextureData : IManaged
     int Height { get; set; }
 
     /// <summary>
+    /// The number of bits per pixel.
+    /// </summary>
+    int BitDepth { get; set; }
+    
+    /// <summary>
+    /// The number of bytes per pixel.
+    /// </summary>
+    int BytesPerPixel { get; set; }
+    
+    /// <summary>
     /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
     /// </summary>
     Pixmap.Format GetPixelFormat();

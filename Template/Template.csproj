@@ -64,6 +64,10 @@
       <Content Include="Assets\Fonts\ProFontWindows.ttf">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="Assets\PackedImages\Objects\red7logo.png" />
+      <Content Include="Assets\PackedImages\Objects\red7logo.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

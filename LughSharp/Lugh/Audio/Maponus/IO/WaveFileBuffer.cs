@@ -37,9 +37,9 @@ public class WaveFileBuffer : AudioBase
     private readonly int      _channels;
     private readonly WaveFile _outWave;
 
-    public WaveFileBuffer( int numberOfChannels, int freq, string fileName )
+    public WaveFileBuffer( int numberOfChannels, int freq, string filename )
     {
-        ArgumentNullException.ThrowIfNull( fileName );
+        ArgumentNullException.ThrowIfNull( filename );
 
         _buffer   = new short[ OBUFFERSIZE ];
         _bufferp  = new short[ MAXCHANNELS ];
@@ -51,7 +51,7 @@ public class WaveFileBuffer : AudioBase
         }
 
         _outWave = new WaveFile();
-        _outWave.OpenForWrite( fileName, null, freq, 16, ( short )_channels );
+        _outWave.OpenForWrite( filename, null, freq, 16, ( short )_channels );
     }
 
     public WaveFileBuffer( int numberOfChannels, int freq, Stream stream )

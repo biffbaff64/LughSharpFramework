@@ -35,11 +35,13 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class FloatTextureData : ITextureData
 {
-    public Buffer< float > Buffer     { get; private set; } = null!;
-    public int             Width      { get; set; }         = 0;
-    public int             Height     { get; set; }         = 0;
-    public bool            IsPrepared { get; set; }         = false;
-    public bool            UseMipMaps { get; set; }
+    public Buffer< float > Buffer        { get; private set; } = null!;
+    public int             Width         { get; set; }         = 0;
+    public int             Height        { get; set; }         = 0;
+    public int             BitDepth      { get; set; }
+    public int             BytesPerPixel { get; set; }
+    public bool            IsPrepared    { get; set; } = false;
+    public bool            UseMipMaps    { get; set; }
 
     /// <inheritdoc />
     public bool IsOwned { get; set; }

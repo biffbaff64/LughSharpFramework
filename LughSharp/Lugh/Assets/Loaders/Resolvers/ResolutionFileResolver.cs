@@ -93,15 +93,15 @@ public class ResolutionFileResolver : IFileHandleResolver
     }
 
     /// <inheritdoc />
-    public FileInfo Resolve( string fileName )
+    public FileInfo Resolve( string filename )
     {
         var      bestResolution = Choose( Descriptors );
-        FileInfo originalHandle = new( fileName );
+        FileInfo originalHandle = new( filename );
         var      handle         = BaseResolver.Resolve( Resolve( originalHandle, bestResolution.AssetsFolder ) );
 
         if ( !handle.Exists )
         {
-            handle = BaseResolver.Resolve( fileName );
+            handle = BaseResolver.Resolve( filename );
         }
 
         return handle;

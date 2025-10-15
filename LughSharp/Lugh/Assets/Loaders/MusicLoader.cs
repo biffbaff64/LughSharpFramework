@@ -57,7 +57,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? parameter ) where TP : class
     {

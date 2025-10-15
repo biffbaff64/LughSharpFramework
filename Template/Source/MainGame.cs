@@ -289,7 +289,7 @@ public class MainGame : Game
             }
 
             Logger.Debug( $"Texture loaded - Width: {_image1.Width}, Height: {_image1.Height}" );
-            Logger.Debug( $"Format: {PixelFormatUtils.GetFormatString( _image1.TextureData.GetPixelFormat() )}" );
+            Logger.Debug( $"Format: {LughSharp.Lugh.Graphics.PixelFormat.GetFormatString( _image1.TextureData.GetPixelFormat() )}" );
             Logger.Debug( $"Length: {_image1.GetImageData()?.Length}" );
             
             _image1.Upload();

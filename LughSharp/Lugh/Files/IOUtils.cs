@@ -211,7 +211,7 @@ public class IOUtils
     /// <summary>
     /// Removes the specified file extension from the given file name, if it exists.
     /// </summary>
-    /// <param name="fileName">
+    /// <param name="filename">
     /// The file name or path from which the extension should be removed.
     /// </param>
     /// <param name="extension">
@@ -221,14 +221,14 @@ public class IOUtils
     /// The file name without the specified extension, or the original file name if the
     /// extension does not match.
     /// </returns>
-    public static string StripExtension( string fileName, string extension )
+    public static string StripExtension( string filename, string extension )
     {
-        if ( fileName.ToLower().EndsWith( extension.ToLower() ) )
+        if ( filename.ToLower().EndsWith( extension.ToLower() ) )
         {
-            fileName = fileName.Substring( 0, fileName.Length - extension.Length );
+            filename = filename.Substring( 0, filename.Length - extension.Length );
         }
 
-        return fileName;
+        return filename;
     }
 
     /// <summary>
@@ -254,16 +254,16 @@ public class IOUtils
     {
         var fileInfo      = new FileInfo( file );
         var directoryPath = fileInfo.Directory?.FullName ?? string.Empty;
-        var fileName      = fileInfo.Name;
+        var filename      = fileInfo.Name;
 
         using ( var watcher = new FileSystemWatcher( directoryPath ) )
         {
-            watcher.Filter              =  fileName;
+            watcher.Filter              =  filename;
             watcher.NotifyFilter        =  NotifyFilters.FileName | NotifyFilters.LastWrite;
             watcher.Deleted             += OnDeleted;
             watcher.EnableRaisingEvents =  true;
 
-            Logger.Debug( $"Monitoring for deletion of {fileName}..." );
+            Logger.Debug( $"Monitoring for deletion of {filename}..." );
         }
     }
 

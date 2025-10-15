@@ -110,10 +110,10 @@ public abstract class ModelLoader : AsynchronousAssetLoader
     /// Returns the assets this asset requires to be loaded first.
     /// This method may be called on a thread other than the GL thread.
     /// </summary>
-    /// <param name="fileName">name of the asset to load</param>
+    /// <param name="filename">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
     /// <param name="parameters">parameters for loading the asset</param>
-    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? parameters ) where TP : class
     {
@@ -132,7 +132,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
         var item = new ObjectMap< string, ModelData >.Entry
         {
-            Key   = fileName,
+            Key   = filename,
             Value = data,
         };
 

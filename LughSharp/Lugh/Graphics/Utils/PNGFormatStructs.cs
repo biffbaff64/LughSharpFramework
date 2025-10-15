@@ -49,7 +49,7 @@ public class PNGFormatStructs
     public struct IHDRChunk
     {
         public byte[] Ihdr        { get; set; } // 13 bytes - 0x00, 0x00, 0x00, 0x0D
-        public byte[] IhdrType    { get; set; } //  4 bytes - 'I', 'H', 'D', 'R'
+        public byte[] IhdrType    { get; set; } //  4 bytes - 'I', 'H', 'D', 'R' - 0x49, 0x48, 0x44, 0x52
         public uint   Width       { get; set; } //  4 bytes - Width of image in pixels
         public uint   Height      { get; set; } //  4 bytes - Height of image in pixels
         public byte   BitDepth    { get; set; } //  1 byte  - Bits per pixel or per sample

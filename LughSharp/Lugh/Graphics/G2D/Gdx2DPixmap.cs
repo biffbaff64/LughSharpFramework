@@ -34,37 +34,11 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// provides constructors for different initialization scenarios.
 /// </summary>
 [PublicAPI]
-public partial class Gdx2DPixmap : Image, IDisposable
+public partial class Gdx2DPixmap : IDisposable
 {
-//    [PublicAPI]
-//    public enum Gdx2dPixelFormat : int
-//    {
-//        Alpha          = 1,
-//        LuminanceAlpha = 2,
-//        RGB888         = 3,
-//        RGBA8888       = 4,
-//        RGB565         = 5,
-//        RGBA4444       = 6,
-//
-//        // ----------------------------
-//
-//        Default = RGBA8888,
-//    };
-
     // ========================================================================
 
     public const int GDX_2D_IGNORE = 0;
-
-    // ========================================================================
-
-//    public const int GDX_2D_FORMAT_ALPHA           = 1;
-//    public const int GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
-//    public const int GDX_2D_FORMAT_RGB888          = 3;
-//    public const int GDX_2D_FORMAT_RGBA8888        = 4;
-//    public const int GDX_2D_FORMAT_RGB565          = 5;
-//    public const int GDX_2D_FORMAT_RGBA4444        = 6;
-//    public const int GDX_2D_FORMAT_INDEXED         = 7;
-//    public const int GDX_2D_FORMAT_DEFAULT         = 4;
 
     // ========================================================================
 
@@ -84,6 +58,9 @@ public partial class Gdx2DPixmap : Image, IDisposable
     public uint           Blend         { get; set; }
     public uint           Scale         { get; set; }
     public long           TotalIDATSize { get; set; }
+    public int            Width         { get; set; }
+    public int            Height        { get; set; }
+    public byte           BitDepth      { get; set; }
 
     // ========================================================================
 
@@ -97,25 +74,25 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <paramref name="len"/> bytes are copied from <paramref name="buffer"/>, starting
     /// at position specified by <paramref name="offset"/>.
     /// </summary>
-    /// <param name="buffer"> The source byte buffer. </param>
+    /// <param name="encodedData"> The source byte buffer. </param>
     /// <param name="offset"> The position in buffer to start copying data from. </param>
     /// <param name="len"> The number of bytes to copy from buffer. </param>
     /// <param name="requestedFormat"> The desired color format. </param>
     /// <exception cref="IOException"></exception>
-    public Gdx2DPixmap( byte[] buffer, int offset, int len, Pixmap.Format requestedFormat )
+    public Gdx2DPixmap( byte[] encodedData, int offset, int len, Pixmap.Format requestedFormat )
     {
         Logger.Checkpoint();
 
-        ( PixmapBuffer, _pixmapDescriptor ) = LoadPixmapDataType( buffer, offset, len );
+        ( PixmapBuffer, _pixmapDescriptor ) = LoadPixmapDataType( encodedData, offset, len );
+
+        Guard.ThrowIfNull( PixmapBuffer );
+
+        CommonConstructorInit( _pixmapDescriptor );
 
         if ( ( requestedFormat != 0 ) && ( requestedFormat != _pixmapDescriptor.ColorType ) )
         {
             ConvertPixelFormatTo( requestedFormat );
         }
-
-        Guard.ThrowIfNull( PixmapBuffer );
-
-        CommonConstructorInit( _pixmapDescriptor );
     }
 
     /// <summary>
@@ -152,14 +129,14 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
         ( PixmapBuffer, _pixmapDescriptor ) = LoadPixmapDataType( buffer, 0, buffer.Length );
 
+        Guard.ThrowIfNull( PixmapBuffer );
+
+        CommonConstructorInit( _pixmapDescriptor );
+
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
         {
             ConvertPixelFormatTo( requestedFormat );
         }
-
-        Guard.ThrowIfNull( PixmapBuffer );
-
-        CommonConstructorInit( _pixmapDescriptor );
     }
 
     /// <summary>
@@ -179,11 +156,13 @@ public partial class Gdx2DPixmap : Image, IDisposable
     }
 
     /// <summary>
-    /// Creates a new Gdx2DPixmap object with the given width, height, and pixel format.
+    /// Allocates memory for a new pixmap with the specified width and height, using
+    /// the specified color format. This can be used to draw an existing Pixmap into
+    /// this newly created buffer.
     /// </summary>
     /// <param name="width"> Width in pixels. </param>
     /// <param name="height"> Height in pixels. </param>
-    /// <param name="format"> The requested Gdx2DPixmap color format. </param>
+    /// <param name="format"> The requested Pixmap.Format color format. </param>
     /// <exception cref="GdxRuntimeException"></exception>
     public Gdx2DPixmap( int width, int height, Pixmap.Format format )
     {
@@ -196,15 +175,16 @@ public partial class Gdx2DPixmap : Image, IDisposable
         var length = width * height * PixelFormat.BytesPerPixel( format );
 
         PixmapBuffer = new Buffer< byte >( length );
-        var data = PNGDecoder.CreatePNGFromRawRGBA( PixmapBuffer.BackingArray(),
-                                                    width,
-                                                    height,
-                                                    PixelFormat.PixmapFormatToPNGColorType( format ) );
-        PixmapBuffer.PutBytes( data );
 
-        PNGDecoder.AnalysePNG( PixmapBuffer.BackingArray(), false );
+//        var data = PNGDecoder.CreatePNGFromRawRGBA( PixmapBuffer.BackingArray(),
+//                                                    width,
+//                                                    height,
+//                                                    PixelFormat.PixmapFormatToPNGColorType( format ) );
+//        PixmapBuffer.PutBytes( data );
 
-        BitDepth = PNGDecoder.BitDepth;
+//        PNGDecoder.AnalysePNG( PixmapBuffer.BackingArray(), false );
+
+//        BitDepth = PNGDecoder.BitDepth;
 
         SafeConstructorInit( width, height );
         SafeInitPixmapDataType( width, height, format );
@@ -287,15 +267,23 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <exception cref="IOException"></exception>
     private static ( Buffer< byte >, PixmapDescriptor ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
-        Logger.Debug( $"buffer length: {buffer.Length}, offset: {offset}, len: {len}" );
-
         // Analyse the PNG file the get the properties. Do this with
         // verbose set to false, as we don't need the full analysis report.
         // Decoded properties will be held statically in the PNGDecoder class. 
         PNGDecoder.AnalysePNG( buffer, false );
 
+        Logger.Debug( $"ColorType: {PNGDecoder.IHDRchunk.ColorType}" );
+        Logger.Debug( $"BitDepth: {PNGDecoder.IHDRchunk.BitDepth}" );
+
         var colorType = PixelFormat.FromPNGColorAndBitDepth( PNGDecoder.IHDRchunk.ColorType,
                                                              PNGDecoder.IHDRchunk.BitDepth );
+
+        if ( colorType == Pixmap.Format.Invalid )
+        {
+            ImageUtils.RejectInvalidImage( ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
+                                           $"BitDepth: {PNGDecoder.IHDRchunk.BitDepth}, ColorType: {colorType}." );
+        }
+
         var width     = ( int )PNGDecoder.IHDRchunk.Width;
         var height    = ( int )PNGDecoder.IHDRchunk.Height;
         var bufLength = width * height * PNGDecoder.BytesPerPixel;
@@ -361,19 +349,26 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
     public void DrawPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
+        DrawPixmapNative( src, srcX, srcY, dstX, dstY, width, height );
     }
 
-    public override int GetPixel( int x, int y )
+    public int GetPixel( int x, int y )
     {
-        return 0;
+        return GetPixelNative( x, y );
     }
 
-    public override void SetPixel( int x, int y, Color color )
+    public void SetPixel( int x, int y, Color color )
     {
+        SetPixelNative( x, y, color );
     }
 
-    public override void SetPixel( int x, int y, int color )
+    public void SetPixel( int x, int y, int color )
     {
+        var rgba = new Color();
+
+        Color.RGBA8888ToColor( ref rgba, ( uint )color );
+
+        SetPixel( x, y, rgba );
     }
 
     // ========================================================================
@@ -417,7 +412,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 //    /// <param name="height">The height of the region to copy, in pixels.</param>
 //    private void BlitPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
 //    {
-//        var bytesPerPixel = PixelFormatUtils.Gdx2dBytesPerPixel( ColorType );
+//        var bytesPerPixel = PixelFormat.Gdx2dBytesPerPixel( ColorType );
 //
 //        for ( var y = 0; y < height; y++ )
 //        {
@@ -466,7 +461,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 //            return;
 //        }
 //
-//        var bytesPerPixel = PixelFormatUtils.Gdx2dBytesPerPixel( ColorType );
+//        var bytesPerPixel = PixelFormat.Gdx2dBytesPerPixel( ColorType );
 //        var offset        = ( int )( ( ( y * Width ) + x ) * bytesPerPixel );
 //
 //        WritePixel( offset, color );

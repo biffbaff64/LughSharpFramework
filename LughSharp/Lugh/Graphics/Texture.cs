@@ -60,21 +60,19 @@ public class Texture : GLTexture, IManaged
 
     // ========================================================================
 
-    public override int Width  => TextureData.Width;
-    public override int Height => TextureData.Height;
-    public override int Depth  => 0;
-
+    public int           Width              => TextureData.Width;
+    public int           Height             => TextureData.Height;
     public int           NumManagedTextures => _managedTextures.Count;
     public uint          TextureID          => GLTextureHandle;
     public bool          IsManaged          => TextureData is { IsManaged: true };
     public Pixmap.Format ColorFormat        => TextureData.GetPixelFormat();
+    public int           BitDepth           => TextureData.BitDepth;
 
     // ========================================================================
 
     private readonly Dictionary< IApplication, List< Texture > > _managedTextures = [ ];
 
-    private string? _name;
-    private bool    _isUploaded = false;
+    private bool _isUploaded = false;
 
     // ========================================================================
     // ========================================================================
@@ -185,7 +183,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    /// 
+    /// Uploads the texture to the GPU.
     /// </summary>
     public void Upload()
     {
@@ -202,15 +200,14 @@ public class Texture : GLTexture, IManaged
             TextureData.Prepare();
         }
 
-        Logger.Checkpoint();
         Load( TextureData );
-        Logger.Checkpoint();
 
         _isUploaded = true;
     }
 
     /// <summary>
-    /// 
+    /// Ensures that the texture is uploaded to the GPU. If the texture is not
+    /// uploaded, it will be uploaded.
     /// </summary>
     public void EnsureUploaded()
     {
@@ -330,9 +327,9 @@ public class Texture : GLTexture, IManaged
 
             foreach ( var texture in textures )
             {
-                var fileName = AssetManager.GetAssetFileName( texture );
+                var filename = AssetManager.GetAssetFileName( texture );
 
-                if ( fileName == null )
+                if ( filename == null )
                 {
                     texture.Reload();
                 }
@@ -342,9 +339,9 @@ public class Texture : GLTexture, IManaged
                     // we can actually remove it from the assetmanager. Also set the
                     // handle to zero, otherwise we might accidentially dispose
                     // already reloaded textures.
-                    var refCount = AssetManager.GetReferenceCount( fileName );
+                    var refCount = AssetManager.GetReferenceCount( filename );
 
-                    AssetManager.SetReferenceCount( fileName, 0 );
+                    AssetManager.SetReferenceCount( filename, 0 );
                     texture.GLTextureHandle = 0;
 
                     // create the parameters, passing the reference to the texture as
@@ -362,9 +359,9 @@ public class Texture : GLTexture, IManaged
                     };
 
                     // unload the texture, create a new gl handle then reload it.
-                    AssetManager.Unload( fileName );
+                    AssetManager.Unload( filename );
                     texture.GLTextureHandle = GL.GenTexture();
-                    AssetManager.Load< Texture >( fileName, parameters );
+                    AssetManager.Load< Texture >( filename, parameters );
                 }
             }
 
@@ -418,22 +415,22 @@ public class Texture : GLTexture, IManaged
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
 
-    public override void ClearWithColor( Color color )
+    public void ClearWithColor( Color color )
     {
         throw new NotImplementedException();
     }
 
-    public override int GetPixel( int x, int y )
+    public int GetPixel( int x, int y )
     {
         throw new NotImplementedException();
     }
 
-    public override void SetPixel( int x, int y, Color color )
+    public void SetPixel( int x, int y, Color color )
     {
         throw new NotImplementedException();
     }
 
-    public override void SetPixel( int x, int y, int color )
+    public void SetPixel( int x, int y, int color )
     {
         throw new NotImplementedException();
     }
@@ -450,18 +447,20 @@ public class Texture : GLTexture, IManaged
     /// The Texture name, usually the filename but can be something else.
     /// Name will be set to 'Name Not Set' if null or empty.
     /// </summary>
+    [field: AllowNull]
+    [field: MaybeNull]
     public string Name
     {
         get
         {
-            if ( string.IsNullOrEmpty( _name ) )
+            if ( string.IsNullOrEmpty( field ) )
             {
-                _name = "Name Not Set";
+                field = "Name Not Set";
             }
 
-            return _name;
+            return field;
         }
-        set => _name = value;
+        set;
     }
 
     // ========================================================================
@@ -474,15 +473,17 @@ public class Texture : GLTexture, IManaged
 
     /// <summary>
     /// </summary>
-    public void Debug()
+    public void DebugPrint()
     {
-        Logger.Debug( $"Dimensions        : {Width} x {Height}" );
+        Logger.Debug( $"Dimensions        : {Width} x {Height} = {Width * Height}" );
         Logger.Debug( $"Format            : {TextureData.GetPixelFormat()}" );
         Logger.Debug( $"IsManaged         : {IsManaged}" );
         Logger.Debug( $"NumManagedTextures: {NumManagedTextures}" );
         Logger.Debug( $"Depth             : {Depth}" );
-        Logger.Debug( $"GLTarget          : {PixelFormatUtils.GetGLTargetName( GLTarget )}" );
+        Logger.Debug( $"GLTarget          : {PixelFormat.GetGLTargetName( GLTarget )}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle:X}" );
+        Logger.Debug( $"BytesPerPixel     : {TextureData.BytesPerPixel}" );
+        Logger.Debug( $"BitDepth          : {TextureData.BitDepth}" );
 
         if ( !TextureData.IsPrepared )
         {
@@ -532,9 +533,9 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     private sealed class LoadedCallbackInnerClass( int refCount ) : ILoadedCallback
     {
-        public void FinishedLoading( AssetManager assetManager, string? fileName, Type? type )
+        public void FinishedLoading( AssetManager assetManager, string? filename, Type? type )
         {
-            assetManager.SetReferenceCount( fileName!, refCount );
+            assetManager.SetReferenceCount( filename!, refCount );
         }
     }
 

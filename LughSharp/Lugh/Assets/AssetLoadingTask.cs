@@ -87,12 +87,10 @@ public class AssetLoadingTask : IAssetTask
             return;
         }
 
-        var asyncLoader = Loader as AsynchronousAssetLoader;
-
-        if ( asyncLoader == null )
+        if ( Loader is not AsynchronousAssetLoader asyncLoader )
         {
             // This should never happen, but just in case...
-            Logger.Error( $"AssetLoadingTask.Call() - Loader is not an AsynchronousAssetLoader: {Loader}" );
+            Logger.Error( $"Loader is not an AsynchronousAssetLoader: {Loader}" );
 
             return;
         }
@@ -106,7 +104,7 @@ public class AssetLoadingTask : IAssetTask
             if ( Dependencies != null )
             {
                 RemoveDuplicates( Dependencies );
-                Manager.InjectDependencies( AssetDesc.File.FullName, Dependencies );
+                Manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
             }
             else
             {
@@ -121,7 +119,7 @@ public class AssetLoadingTask : IAssetTask
         else
         {
             asyncLoader.LoadAsync( Manager,
-                                   AssetDesc.File.FullName,
+                                   AssetDesc.AssetName,
                                    Resolve( Loader, AssetDesc ),
                                    AssetDesc.Parameters );
             AsyncDone = true;

@@ -56,11 +56,11 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     /// By default it will resolve to an internal file. The map will be loaded for a
     /// y-up coordinate system.
     /// </summary>
-    /// <param name="fileName"> the filename </param>
+    /// <param name="filename"> the filename </param>
     /// <returns> the TiledMap </returns>
-    public TiledMap Load( string fileName )
+    public TiledMap Load( string filename )
     {
-        return Load( fileName, new LoaderParameters() );
+        return Load( filename, new LoaderParameters() );
     }
 
     /// <summary>
@@ -68,12 +68,12 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     /// via the <see cref="IFileHandleResolver"/> set in the constructor of this class.
     /// By default it will resolve to an internal file.
     /// </summary>
-    /// <param name="fileName"> the filename </param>
+    /// <param name="filename"> the filename </param>
     /// <param name="parameter"> specifies whether to use y-up, generate mip maps etc. </param>
     /// <returns> the TiledMap </returns>
-    public TiledMap Load( string fileName, LoaderParameters parameter )
+    public TiledMap Load( string filename, LoaderParameters parameter )
     {
-        var tmxFile = Resolve( fileName );
+        var tmxFile = Resolve( filename );
 
         // ----------------------------------------
 

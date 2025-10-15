@@ -27,21 +27,21 @@ namespace LughSharp.Lugh.Audio.Maponus.IO;
 [PublicAPI]
 public class RandomAccessFileStream
 {
-    public static FileStream CreateRandomAccessFile( string fileName, string mode )
+    public static FileStream CreateRandomAccessFile( string filename, string mode )
     {
         FileStream newFile;
 
         if ( string.Compare( mode, "rw", StringComparison.Ordinal ) == 0 )
         {
-            newFile = new FileStream( fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite );
+            newFile = new FileStream( filename, FileMode.OpenOrCreate, FileAccess.ReadWrite );
         }
         else if ( string.Compare( mode, "r", StringComparison.Ordinal ) == 0 )
         {
-            newFile = new FileStream( fileName, FileMode.Open, FileAccess.Read );
+            newFile = new FileStream( filename, FileMode.Open, FileAccess.Read );
         }
         else
         {
-            throw new ArgumentException( $"fileName: {fileName}, mode: {mode}" );
+            throw new ArgumentException( $"filename: {filename}, mode: {mode}" );
         }
 
         return newFile;

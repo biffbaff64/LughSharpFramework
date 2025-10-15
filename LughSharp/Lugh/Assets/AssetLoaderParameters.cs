@@ -46,7 +46,7 @@ public interface ILoaderParameters
 [PublicAPI]
 public interface ILoadedCallback
 {
-    void FinishedLoading( AssetManager assetManager, string fileName, Type? type );
+    void FinishedLoading( AssetManager assetManager, string filename, Type? type );
 }
 
 // ====================================================================--------
@@ -71,9 +71,9 @@ public class AssetLoaderParameters : ILoaderParameters
 [PublicAPI]
 public class DefaultLoadedCallback( int refCount ) : ILoadedCallback
 {
-    public void FinishedLoading( AssetManager assetManager, string fileName, Type? type )
+    public void FinishedLoading( AssetManager assetManager, string filename, Type? type )
     {
-        assetManager.SetReferenceCount( fileName, refCount );
+        assetManager.SetReferenceCount( filename, refCount );
     }
 }
 

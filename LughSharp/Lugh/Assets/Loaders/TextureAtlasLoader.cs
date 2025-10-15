@@ -80,7 +80,7 @@ public class TextureAtlasLoader
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo atlasFile,
                                                                    TP? parameter ) where TP : class
     {

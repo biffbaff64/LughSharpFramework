@@ -64,7 +64,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver )
     /// in <see cref="PolygonRegionParameters.TextureExtensions"/> will be used. If no suitable file is
     /// found, the returned Array will be empty.
     /// </summary>
-    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? parameters ) where TP : class
     {
@@ -92,15 +92,15 @@ public class PolygonRegionLoader( IFileHandleResolver resolver )
         }
         catch ( IOException e )
         {
-            throw new GdxRuntimeException( "Error reading " + fileName, e );
+            throw new GdxRuntimeException( "Error reading " + filename, e );
         }
 
         var siblingFilePath = string.Empty;
 
         if ( image == null )
         {
-            var directory = Path.GetDirectoryName( fileName );
-            var fileNoExt = Path.GetFileNameWithoutExtension( fileName );
+            var directory = Path.GetDirectoryName( filename );
+            var fileNoExt = Path.GetFileNameWithoutExtension( filename );
 
             foreach ( var extension in p.TextureExtensions )
             {

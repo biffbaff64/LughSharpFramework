@@ -22,13 +22,16 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.Utils;
+namespace LughSharp.Lugh.Assets;
 
+/// <summary>
+/// Interface representing a task to be performed on an asset.
+/// </summary>
 [PublicAPI]
-public class PixmapFormatUtils
+public interface IAssetTask
 {
-    
+    void Call();
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================

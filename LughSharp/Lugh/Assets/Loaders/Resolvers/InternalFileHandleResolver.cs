@@ -28,8 +28,8 @@ namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 public class InternalFileHandleResolver : IFileHandleResolver
 {
     /// <inheritdoc />
-    public FileInfo Resolve( string fileName )
+    public FileInfo Resolve( string filename )
     {
-        return Api.Files.Internal( fileName );
+        return Api.Files.Internal( filename );
     }
 }

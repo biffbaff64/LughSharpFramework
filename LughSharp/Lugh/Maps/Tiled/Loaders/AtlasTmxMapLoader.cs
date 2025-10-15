@@ -57,14 +57,14 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     {
     }
 
-    public TiledMap Load( string fileName )
+    public TiledMap Load( string filename )
     {
-        return Load( fileName, new AtlasTiledMapLoaderParameters() );
+        return Load( filename, new AtlasTiledMapLoaderParameters() );
     }
 
-    public TiledMap Load( string fileName, AtlasTiledMapLoaderParameters parameter )
+    public TiledMap Load( string filename, AtlasTiledMapLoaderParameters parameter )
     {
-        var tmxFile = Resolve( fileName );
+        var tmxFile = Resolve( filename );
 
         // ----------------------------------------
 

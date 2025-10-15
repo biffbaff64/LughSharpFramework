@@ -513,8 +513,8 @@ public class TexturePackerSettings
     /// Writes this Settings object to a Json string and saves that string
     /// to a .json file with the specified name.
     /// </summary>
-    /// <param name="fileName"></param>
-    public void WriteToJsonFile( string fileName )
+    /// <param name="filename"></param>
+    public void WriteToJsonFile( string filename )
     {
         var jsonString      = WriteToJsonString();
         var writeableString = new UTF8Encoding( true ).GetBytes( jsonString );
@@ -522,14 +522,14 @@ public class TexturePackerSettings
         if ( writeableString.Length > 0 )
         {
             // Ensure the directory exists before creating the file
-            var directoryPath = Path.GetDirectoryName( fileName );
+            var directoryPath = Path.GetDirectoryName( filename );
 
             if ( !string.IsNullOrEmpty( directoryPath ) )
             {
                 Directory.CreateDirectory( directoryPath );
             }
 
-            using ( var fs = File.Create( fileName ) )
+            using ( var fs = File.Create( filename ) )
             {
                 fs.Write( writeableString );
             }

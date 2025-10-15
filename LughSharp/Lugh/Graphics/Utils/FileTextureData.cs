@@ -40,6 +40,12 @@ public class FileTextureData : ITextureData
     /// <inheritdoc/>
     public int Height { get; set; } = 0;
 
+    /// <inheritdoc />
+    public int BitDepth { get; set; }
+
+    /// <inheritdoc />
+    public int BytesPerPixel { get; set; }
+    
     /// <inheritdoc/>
     public bool IsPrepared { get; set; }
 
@@ -140,8 +146,6 @@ public class FileTextureData : ITextureData
     /// <returns> the pixmap.</returns>
     public virtual Pixmap FetchPixmap()
     {
-        Logger.Checkpoint();
-
         if ( !IsPrepared )
         {
             throw new GdxRuntimeException( "Call prepare() before calling FetchPixmap()" );

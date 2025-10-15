@@ -22,42 +22,42 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics;
-
-/// <summary>
-/// Base class for all Image types:-
-/// <li>Common interface for all image types.</li>
-/// <li>Shared basic functionality.</li>
-/// <li>Clear separation between system memory and GPU memory implementations.</li>
-/// <li>Easier to add new image types later.</li>
-/// <li>Potential for shared utility methods.</li>
-/// </summary>
-[PublicAPI]
-public abstract class Image
-{
-    // Common properties
-    public virtual int Width  { get; protected set; }
-    public virtual int Height { get; protected set; }
-
-    public byte BitDepth   { get; protected set; }
-    public bool IsDisposed { get; protected set; }
-
-    // ========================================================================
-
-    // Common methods for basic image operations
-    public abstract void ClearWithColor( Color color );
-    public abstract int GetPixel( int x, int y );
-    public abstract void SetPixel( int x, int y, Color color );
-    public abstract void SetPixel( int x, int y, int color );
-
-    // ========================================================================
-
-    // Common utility methods
-    public bool IsInBounds( int x, int y )
-    {
-        return ( x >= 0 ) && ( x < Width ) && ( y >= 0 ) && ( y < Height );
-    }
-}
+//namespace LughSharp.Lugh.Graphics;
+//
+///// <summary>
+///// Base class for all Image types:-
+///// <li>Common interface for all image types.</li>
+///// <li>Shared basic functionality.</li>
+///// <li>Clear separation between system memory and GPU memory implementations.</li>
+///// <li>Easier to add new image types later.</li>
+///// <li>Potential for shared utility methods.</li>
+///// </summary>
+//[PublicAPI]
+//public abstract class Image
+//{
+//    // Common properties
+//    public virtual int  Width      { get; set; }
+//    public virtual int  Height     { get; set; }
+//    public virtual byte BitDepth   { get; set; }
+//    public virtual bool IsDisposed { get; set; }
+//    public         bool IsDrawable { get; set; }
+//
+//    // ========================================================================
+//
+//    // Common methods for basic image operations
+//    public abstract void ClearWithColor( Color color );
+//    public abstract int GetPixel( int x, int y );
+//    public abstract void SetPixel( int x, int y, Color color );
+//    public abstract void SetPixel( int x, int y, int color );
+//
+//    // ========================================================================
+//
+//    // Common utility methods
+//    public bool IsInBounds( int x, int y )
+//    {
+//        return ( x >= 0 ) && ( x < Width ) && ( y >= 0 ) && ( y < Height );
+//    }
+//}
 
 // ========================================================================
 // ========================================================================

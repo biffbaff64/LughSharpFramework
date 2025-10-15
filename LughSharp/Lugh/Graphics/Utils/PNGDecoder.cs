@@ -67,10 +67,6 @@ public class PNGDecoder
 
     // ========================================================================
 
-    private PNGDecoder()
-    {
-    }
-
     // ( Example... )
     //  0 -  7 => 89 50 4E 47 0D 0A 1A 0A                  - PNG Signature (8 bytes)
     //  8 - 11 => 00 00 00 0D                              - IHDR Chunk size (4 bytes)
@@ -90,6 +86,8 @@ public class PNGDecoder
     public static Pixmap.Format                 PixelFormat   { get; private set; }
     public static int                           BytesPerPixel { get; private set; }
 
+    // ========================================================================
+
     public static byte BitDepth    => IHDRchunk.BitDepth;
     public static uint Width       => IHDRchunk.Width;
     public static uint Height      => IHDRchunk.Height;
@@ -99,6 +97,10 @@ public class PNGDecoder
     public static byte Interlace   => IHDRchunk.Interlace;
 
     // ========================================================================
+
+    private PNGDecoder()
+    {
+    }
 
     /// <summary>
     /// Analyzes the specified <see cref="Texture"/> image to extract metadata, including
@@ -115,12 +117,18 @@ public class PNGDecoder
     {
         if ( texture == null )
         {
-            Logger.Error( "Unable to perform analysis, texture is null" );
-
-            return;
+            throw new GdxRuntimeException( "Unable to perform analysis, texture is null" );
         }
 
-        var data = ImageUtils.GetAsPNG( texture );
+        var data = CreatePNGFromRawRGBA( texture.GetImageData()!,
+                                         texture.Width,
+                                         texture.Height,
+                                         texture.ColorFormat );
+
+        if ( data == null )
+        {
+            throw new GdxRuntimeException( "WARNING: Unable to analyse Texture. No image data found." );
+        }
 
         AnalysePNG( data, verbose );
     }
@@ -183,6 +191,8 @@ public class PNGDecoder
 
         // --------------------------------------
         // PNG Signature (8 bytes)
+        // --------------------------------------
+
         PngSignature = new PNGFormatStructs.PNGSignature
         {
             Signature = new byte[ SIGNATURE_LENGTH ],
@@ -193,7 +203,7 @@ public class PNGDecoder
         if ( !IsPNG( pngData ) )
         {
             Logger.Error( "Invalid PNG Signature" );
-            
+
             if ( Api.DevMode )
             {
                 StringBuilder sb  = new();
@@ -215,8 +225,15 @@ public class PNGDecoder
             return;
         }
 
+        if ( verbose )
+        {
+            Logger.Debug( "Passed validation checks" );
+        }
+
         // --------------------------------------
         // IHDR
+        // --------------------------------------
+
         var ihdr         = new byte[ IHDR_SIZE ];
         var ihdrTypeData = new byte[ IHDR_CHUNK_TYPE_SIZE ];
         var crc          = new byte[ IHDR_CRC_SIZE ];
@@ -245,6 +262,8 @@ public class PNGDecoder
 
         // --------------------------------------
         // IDAT
+        // --------------------------------------
+
         var tmp = new byte[ IDAT_SIZE ];
 
         Array.Copy( pngData, IDAT_START, tmp, 0, IDAT_SIZE );
@@ -259,11 +278,12 @@ public class PNGDecoder
 
         TotalIDATSize = CalculateTotalIDATSize( pngData );
 
-        // Pixel Format
-        PixelFormat = GetFormatFromPngHeader( new MemoryStream( pngData ) );
-
-        // Bytes Per Pixel
+        PixelFormat   = GetFormatFromPngHeader( new MemoryStream( pngData ) );
         BytesPerPixel = GetBytesPerPixel( IHDRchunk.ColorType, IHDRchunk.BitDepth );
+
+        var idatData = new byte[ IHDR_DATA_SIZE ];
+
+        Array.Copy( pngData, IHDR_DATA_OFFSET, idatData, 0, IHDR_DATA_SIZE );
 
         if ( verbose )
         {
@@ -271,11 +291,12 @@ public class PNGDecoder
             Logger.Debug( "-----------------------------" );
             Logger.Debug( $"IHDR            : {BitConverter.ToString( IHDRchunk.Ihdr ).Replace( "-", " " )}" );
             Logger.Debug( $"IHDR TYPE       : {BitConverter.ToString( IHDRchunk.IhdrType ).Replace( "-", " " )}" );
+            Logger.Debug( $"IHDR DATA       : {BitConverter.ToString( idatData ).Replace( "-", " " )}" );
             Logger.Debug( "-----------------------------" );
             Logger.Debug( $"- Width         : {IHDRchunk.Width}" );
             Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
             Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
-            Logger.Debug( $"- ColorType     : {ColorTypeName( IHDRchunk.ColorType )} :: ( {IHDRchunk.ColorType} )" );
+            Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType} :: ( {ColorTypeName( IHDRchunk.ColorType )} )" );
             Logger.Debug( $"- PixelFormat   : {Lugh.Graphics.PixelFormat.GetFormatString( PixelFormat )} :: ( {PixelFormat} )" );
             Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
             Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
@@ -581,6 +602,12 @@ public class PNGDecoder
 
         var format = LughSharp.Lugh.Graphics.PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
 
+        if ( format == Pixmap.Format.Invalid )
+        {
+            ImageUtils.RejectInvalidImage( ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
+                                           $"BitDepth: {bitDepth}, ColorType: {colorType}." );
+        }
+
         return format;
     }
 
@@ -646,7 +673,9 @@ public class PNGDecoder
             4 => "Grayscale with Alpha - Allowed Bit Depths: 8,16",
             6 => "Truecolor with Alpha - Allowed Bit Depths: 8,16",
 
-            var _ => $"Unknow colortype: {colortype}",
+            // ----------------------------------
+
+            var _ => $"Unknown colortype: {colortype}",
         };
     }
 
@@ -688,17 +717,44 @@ public class PNGDecoder
     /// <param name="height"></param>
     /// <param name="format"></param>
     /// <returns></returns>
-    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba,
-                                               int width,
-                                               int height,
-                                               int format )
+    /// <exception cref="ArgumentException"></exception>
+    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba, int width, int height, Pixmap.Format format )
     {
-        ArgumentNullException.ThrowIfNull( rawRgba );
+        return CreatePNGFromRawRGBA( rawRgba,
+                                     width,
+                                     height,
+                                     Graphics.PixelFormat.PixmapFormatToGLFormat( format ) );
+    }
 
-        if ( rawRgba.Length != ( width * height * 4 ) )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rawRgba"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba, int width, int height, int format )
+    {
+        if ( rawRgba == null )
         {
-            throw new ArgumentException( "Input data size does not match width*height*4" );
+            throw new GdxRuntimeException( "Cannot perform PNG conversion as Input data is null." );
         }
+
+        var bytesPerPixel = Graphics.PixelFormat.BytesPerPixel( format );
+
+        if ( rawRgba.Length != ( width * height * bytesPerPixel ) )
+        {
+            Logger.Debug( $"Input data size does not match width x height x {bytesPerPixel}" );
+            Logger.Debug( $"Expected: {width * height * bytesPerPixel}, Actual: {rawRgba.Length}" );
+            Logger.Debug( $"Width: {width}, Height: {height}" );
+            Logger.Debug( $"Format: {format}" );
+
+            throw new ArgumentException( $"Input data size does not match width x height x {bytesPerPixel}" );
+        }
+
+        Logger.Debug( $"Input data size, {rawRgba.Length}, matches {width} x {height} x {bytesPerPixel}" );
 
         using var ms = new MemoryStream();
 
@@ -712,8 +768,9 @@ public class PNGDecoder
             WriteBigEndian( ihdr, height );
 
             var colorType = ( byte )format;
+            var bitDepth  = ( byte )8;
 
-            ihdr.WriteByte( 8 );         // bit depth
+            ihdr.WriteByte( bitDepth );  // bit depth
             ihdr.WriteByte( colorType ); // color type: RGBA
             ihdr.WriteByte( 0 );         // compression
             ihdr.WriteByte( 0 );         // filter

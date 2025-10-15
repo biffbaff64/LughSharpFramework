@@ -92,6 +92,14 @@ public partial class Gdx2DPixmap
     // ========================================================================
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="color"></param>
+    public static void Clear( int color )
+    {
+    }
+    
+    /// <summary>
     /// Clears the pixmap by setting the alpha channel to the specified color's alpha.
     /// </summary>
     /// <param name="pd">The pixmap data to be cleared.</param>
@@ -448,6 +456,9 @@ file static class NativeMethods
                                                    int dstY,
                                                    int dstWidth,
                                                    int dstHeight );
+
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
+    internal static extern void gdx2d_clear( PixmapDescriptor pd, uint color );
 
     // ========================================================================
     // ========================================================================

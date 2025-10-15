@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -54,7 +53,13 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns the assets this asset requires to be loaded first. This method may be
+    /// called on a thread other than the GL thread.
+    /// </summary>
+    /// <param name="filename"> name of the asset to load. </param>
+    /// <param name="file"> the resolved file to load. </param>
+    /// <param name="parameters"> parameters for loading the asset. </param>
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? parameters ) where TP : class
@@ -62,33 +67,58 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         return null!;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads the non-OpenGL part of the asset and injects any dependencies of
+    /// the asset into the <paramref name="manager"/>.
+    /// </summary>
+    /// <param name="manager">The asset manager responsible for loading the asset.</param>
+    /// <param name="filename"> The name of the asset to load. </param>
+    /// <param name="file">The file information of the asset to load.</param>
+    /// <param name="parameter">The parameters for loading the asset.</param>
     public override void LoadAsync< TP >( AssetManager manager,
                                           string filename,
                                           FileInfo? file,
                                           TP? parameter ) where TP : class
     {
-        Logger.Checkpoint();
-        
+        if ( manager == null )
+        {
+            throw new GdxRuntimeException( "NULL AssetManager passed to TextureLoader.loadAsync" );
+        }
+
+        if ( string.IsNullOrEmpty( filename ) )
+        {
+            throw new GdxRuntimeException( "filename cannot be null or empty" );
+        }
+
+//        if ( file == null )
+//        {
+//            file = Resolve( filename );
+//
+//            if ( file == null )
+//            {
+//                throw new GdxRuntimeException( $"Unable to resolve filename: {filename}" );
+//            }
+//        }
+
         var p = parameter as TextureLoaderParameters;
 
-        _loaderInfo.Filename = file.Name;
+        _loaderInfo.Filename = file?.Name;
 
         if ( p?.TextureData == null )
         {
-            var format     = Pixmap.Format.RGBA8888;   // Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT;
+            var format     = Pixmap.Format.RGBA8888;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;
 
             if ( parameter != null )
             {
-                format              = p!.Format;
+                format              = p.Format;
                 genMipMaps          = p.GenMipMaps;
                 _loaderInfo.Texture = p.Texture;
             }
 
-            _loaderInfo.Data = TextureDataFactory.LoadFromFile( file, format, genMipMaps );
+            _loaderInfo.Data = TextureDataFactory.LoadFromFile( file!, format, genMipMaps );
         }
         else
         {
@@ -102,13 +132,16 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads the OpenGL part of the asset.
+    /// </summary>
+    /// <param name="manager"></param>
+    /// <param name="file"> the resolved file to load </param>
+    /// <param name="parameter"></param>
     public override Texture LoadSync< TP >( AssetManager manager,
                                             FileInfo file,
                                             TP? parameter ) where TP : class
     {
-        Logger.Checkpoint();
-        
         var p       = parameter as TextureLoaderParameters;
         var texture = _loaderInfo.Texture;
 
@@ -253,8 +286,8 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         public Texture? Texture { get; set; } = null;
 
         /// <summary>
-        /// Gets or sets the <see cref="ITextureData"/> for textures created on the fly (optional).
-        /// When set, all format and genMipMaps are ignored.
+        /// Gets or sets the <see cref="ITextureData"/> for textures created on the fly
+        /// (optional). When set, all format and genMipMaps are ignored.
         /// </summary>
         public ITextureData? TextureData { get; set; } = null;
     }

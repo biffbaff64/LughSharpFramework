@@ -32,5 +32,5 @@ namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 [PublicAPI]
 public interface IFileHandleResolver
 {
-    FileInfo Resolve( string fileName );
+    FileInfo Resolve( string filename );
 }

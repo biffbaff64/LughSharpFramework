@@ -104,13 +104,13 @@ public class ParticleEffectLoader
     /// <see cref="ParticleEffectParameter.AtlasFile"/>.
     /// </para>
     /// </summary>
-    /// <param name="fileName">The name of the file associated with the asset.</param>
+    /// <param name="filename">The name of the file associated with the asset.</param>
     /// <param name="file">The file information associated with the asset.</param>
     /// <param name="parameters">The parameters used for loading the asset.</param>
     /// <returns>
     /// A list of asset descriptors representing the dependencies required for loading the particle effect.
     /// </returns>
-    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? parameters ) where TP : class
     {

@@ -31,11 +31,13 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class MipMapTextureData : ITextureData
 {
-    public bool IsPrepared { get; set; }
-    public bool UseMipMaps { get; set; }
-    public int  Width      { get; set; }
-    public int  Height     { get; set; }
-    public bool IsOwned    { get; set; }
+    public bool IsPrepared    { get; set; }
+    public bool UseMipMaps    { get; set; }
+    public int  Width         { get; set; }
+    public int  Height        { get; set; }
+    public int  BitDepth      { get; set; }
+    public int  BytesPerPixel { get; set; }
+    public bool IsOwned       { get; set; }
 
     // ========================================================================
 

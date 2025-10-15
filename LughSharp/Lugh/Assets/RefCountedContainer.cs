@@ -32,7 +32,7 @@ namespace LughSharp.Lugh.Assets;
 [PublicAPI]
 public interface IRefCountedContainer
 {
-    object? Asset    { get; }
+    object? Asset    { get; set;  }
     int     RefCount { get; set; }
 }
 
@@ -49,10 +49,7 @@ public class RefCountedContainer( object? asset ) : IRefCountedContainer
 {
     public object? Asset    { get; set; } = asset;
     public int     RefCount { get; set; } = 1;
-
-    // ========================================================================
 }
 
-// ====================================================================--------
 // ====================================================================--------
 // ====================================================================--------

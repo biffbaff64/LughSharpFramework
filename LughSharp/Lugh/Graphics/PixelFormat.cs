@@ -120,6 +120,30 @@ public class PixelFormat
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
+    public static int GLFormatToPNGFormat( int format )
+    {
+        return format switch
+        {
+            IGL.GL_ALPHA           => 0, // Pixmap.Format.Alpha,
+            IGL.GL_LUMINANCE_ALPHA => 4, // Pixmap.Format.LuminanceAlpha,
+            IGL.GL_RGB565          => 2, // Pixmap.Format.RGB565,
+            IGL.GL_RGBA4           => 2, // Pixmap.Format.RGBA4444,
+            IGL.GL_RGB             => 2, // Pixmap.Format.RGB888,
+            IGL.GL_RGBA            => 6, // Pixmap.Format.RGBA8888,
+            IGL.GL_COLOR_INDEX     => 3, // Pixmap.Format.IndexedColor,
+
+            // ----------------------------------
+
+            var _ => throw new GdxRuntimeException( $"Unknown GL Format: {format}" ),
+        };
+    }
+
+    /// <summary>
     /// Converts a PNG color type and bit depth to a Pixmap.Format value.
     /// </summary>
     public static Pixmap.Format FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
@@ -134,9 +158,10 @@ public class PixelFormat
             (4, 8) => Pixmap.Format.LuminanceAlpha, // Grayscale with alpha, 8 bits
             (2, 5) => Pixmap.Format.RGB565,         // Truecolor, 5 bits
             (3, 8) => Pixmap.Format.IndexedColor,   // Indexed color, 8 bits
-
-            // Add more mappings as needed
-            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
+            
+            // ----------------------------------
+            
+            var _ => Pixmap.Format.Invalid,         // Invalid format, handled by caller
         };
 
         return format;
@@ -280,6 +305,57 @@ public class PixelFormat
         };
     }
 
+    /// <summary>
+    /// Converts a color to the specified pixel format
+    /// </summary>
+    public static uint PixmapFormatToRGBAFormat( Pixmap.Format requestedFormat, uint color )
+    {
+        uint r, g, b, a;
+
+        switch ( requestedFormat )
+        {
+            case Pixmap.Format.Alpha:
+                return color & 0xff;
+
+            case Pixmap.Format.LuminanceAlpha:
+                r = ( color & 0xff000000 ) >> 24;
+                g = ( color & 0xff0000 ) >> 16;
+                b = ( color & 0xff00 ) >> 8;
+                a = color & 0xff;
+                var l = ( ( uint )( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
+
+                return ( l & 0xffffff00 ) | a;
+
+            case Pixmap.Format.RGB888:
+                return color >> 8;
+
+            case Pixmap.Format.RGBA8888:
+                return color;
+
+            case Pixmap.Format.RGB565:
+                r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
+                g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
+                b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
+
+                return r | g | b;
+
+            case Pixmap.Format.RGBA4444:
+                r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
+                g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
+                b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
+                a = ( ( color & 0xff ) >> 4 ) & 0xf;
+
+                return r | g | b | a;
+
+            case Pixmap.Format.IndexedColor:
+            case Pixmap.Format.Intensity:
+                return color;
+
+            default:
+                return 0;
+        }
+    }
+
     public static int PixmapFormatToGLDataType( Pixmap.Format format )
     {
         return format switch
@@ -313,9 +389,11 @@ public class PixelFormat
             "rgba4444"       => Pixmap.Format.RGBA4444,
             "rgb888"         => Pixmap.Format.RGB888,
             "rgba8888"       => Pixmap.Format.RGBA8888,
+            "indexedcolor"   => Pixmap.Format.IndexedColor,
+            "intensity"      => Pixmap.Format.Intensity,
 
             // ----------------------------------
-            
+
             var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
         };
     }
@@ -333,6 +411,7 @@ public class PixelFormat
     {
         return format switch
         {
+            // GL Formats
             IGL.GL_ALPHA           => 1,
             IGL.GL_LUMINANCE       => 1,
             IGL.GL_LUMINANCE_ALPHA => 2,

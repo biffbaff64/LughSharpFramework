@@ -48,16 +48,16 @@ public class Mp3Stream : Stream
     /// Creates a new stream instance using the provided filename, and the default
     /// chunk size of 4096 bytes.
     /// </summary>
-    public Mp3Stream( string fileName )
-        : this( new FileStream( fileName, FileMode.Open, FileAccess.Read ) )
+    public Mp3Stream( string filename )
+        : this( new FileStream( filename, FileMode.Open, FileAccess.Read ) )
     {
     }
 
     /// <summary>
     /// Creates a new stream instance using the provided filename and chunk size.
     /// </summary>
-    public Mp3Stream( string fileName, int chunkSize )
-        : this( new FileStream( fileName, FileMode.Open, FileAccess.Read ), chunkSize )
+    public Mp3Stream( string filename, int chunkSize )
+        : this( new FileStream( filename, FileMode.Open, FileAccess.Read ), chunkSize )
     {
     }
 

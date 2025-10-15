@@ -43,8 +43,8 @@ public class PrefixFileHandleResolver : IFileHandleResolver
     public IFileHandleResolver BaseResolver { get; }
 
     /// <inheritdoc />
-    public FileInfo Resolve( string fileName )
+    public FileInfo Resolve( string filename )
     {
-        return BaseResolver.Resolve( Prefix + fileName );
+        return BaseResolver.Resolve( Prefix + filename );
     }
 }

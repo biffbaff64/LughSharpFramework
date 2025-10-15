@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Graphics;
 /// create TextureData and upload image data.
 /// </summary>
 [PublicAPI]
-public abstract class GLTexture : Image, IDrawable, IDisposable
+public abstract class GLTexture : IDrawable, IDisposable
 {
     /// <summary>
     /// The OpenGL target for the texture. A GL target, in the context of OpenGL (and
@@ -109,7 +109,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// </para>
     /// </para>
     /// </summary>
-    public virtual int Depth { get; }
+    public virtual int Depth { get; private set; } = 1;
 
     /// <summary>
     /// Returns the <see cref="TextureFilterMode"/> used for minification.
@@ -131,8 +131,8 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// </summary>
     public TextureWrapMode VWrap { get; set; } = TextureWrapMode.ClampToEdge;
 
-    /// <inheritdoc />
     public bool IsDrawable { get; set; }
+    public bool IsDisposed { get; set; }
 
     // ========================================================================
 
@@ -406,15 +406,8 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         var pixmap = data.FetchPixmap();
 
         Guard.ThrowIfNull( pixmap );
-        
+
         var shouldDispose = data.ShouldDisposePixmap();
-
-        if ( pixmap?.PixelData == null )
-        {
-            Logger.Error( "FetchPixmap() resulted in a null Pixmap!" );
-
-            return;
-        }
 
         if ( data.GetPixelFormat() != pixmap.GetColorFormat() )
         {
@@ -435,7 +428,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             shouldDispose = true;
         }
 
-        GL.SetGLUnpackAlignment( pixmap, PixelFormatUtils.GetAlignment( pixmap ) );
+        GL.SetGLUnpackAlignment( pixmap, PixelFormat.GetAlignment( pixmap ) );
         CheckGLError( "SetGLUnpackAlignment" );
 
         if ( data.UseMipMaps )
@@ -454,9 +447,9 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
                              IGL.GL_RGBA8,
                              pixmap.Width,
                              pixmap.Height );
-        
+
         CheckGLError( "TextureStorage2D" );
-        
+
         GL.TextureSubImage2D( GLTextureHandle,
                               0,
                               0,
@@ -466,9 +459,9 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
                               IGL.GL_RGBA,
                               IGL.GL_UNSIGNED_BYTE,
                               pixmap.PixelData );
- 
+
         CheckGLError( "TextureSubImage2D" );
-        
+
         if ( shouldDispose )
         {
             pixmap.Dispose();
@@ -545,10 +538,10 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap?.ColorType}" );
             Logger.Debug( $"Pixmap Pixel Format    : {PixelFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorType )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
-            Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormatUtils.GLFormatAsString( pixmap.GLPixelFormat )}" );
+            Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormat.GLFormatAsString( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );
             Logger.Debug( $"pixmap.GLType          : {pixmap.GLDataType}" );
-            Logger.Debug( $"pixmap.GLType Name     : {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
+            Logger.Debug( $"pixmap.GLType Name     : {PixelFormat.GetGLTypeName( pixmap.GLDataType )}" );
             Logger.Debug( $"Number of Pixels       : {pixmap.Width * pixmap.Height}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );
 

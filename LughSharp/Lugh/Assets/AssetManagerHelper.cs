@@ -23,13 +23,13 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Audio;
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 
 namespace LughSharp.Lugh.Assets;
 
+/// <summary>
+/// Debug methods for the AssetManager.
+/// </summary>
 public partial class AssetManager
 {
     protected readonly HashSet< Type > TypeList =
@@ -152,16 +152,16 @@ public partial class AssetManager
 //            sb.Append( $"_loadQueue.Length : {_loadQueue.Count}\n" );
 //            sb.Append( $"_injected.Length  : {_injected.Count}\n" );
 //
-//            foreach ( var fileName in _assetTypes.Keys )
+//            foreach ( var filename in _assetTypes.Keys )
 //            {
 //                if ( sb.Length > 0 )
 //                {
 //                    sb.Append( '\n' );
 //                }
 //
-//                sb.Append( fileName ).Append( ", " );
+//                sb.Append( filename ).Append( ", " );
 //
-//                var type = _assetTypes[ fileName ];
+//                var type = _assetTypes[ filename ];
 //
 //                if ( _assets == null )
 //                {
@@ -169,12 +169,12 @@ public partial class AssetManager
 //                }
 //                else
 //                {
-//                    var dependencies = _assetDependencies?[ fileName ];
+//                    var dependencies = _assetDependencies?[ filename ];
 //
 //                    if ( dependencies != null )
 //                    {
 //                        sb.Append( type.Name );
-//                        sb.Append( ", refs: " ).Append( _assets[ type ]?[ fileName ].RefCount );
+//                        sb.Append( ", refs: " ).Append( _assets[ type ]?[ filename ].RefCount );
 //                        sb.Append( ", deps: [" );
 //
 //                        foreach ( var dep in dependencies )
