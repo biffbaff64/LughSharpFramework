@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics.Images;
 
 [PublicAPI]
-public class Texture2D : Image, IDrawable, IDisposable
+public class Texture2D : IDrawable, IDisposable
 {
     /// <summary>
     /// The OpenGL target for the texture. A GL target, in the context of OpenGL (and
@@ -131,12 +131,12 @@ public class Texture2D : Image, IDrawable, IDisposable
 
     // ========================================================================
 
-    public override int           Width              => TextureData.Width;
-    public override int           Height             => TextureData.Height;
-    public          int           NumManagedTextures => _managedTextures.Count;
-    public          uint          TextureID          => GLTextureHandle;
-    public          bool          IsManaged          => TextureData is { IsManaged: true };
-    public          Pixmap.Format ColorFormat        => TextureData.GetPixelFormat();
+    public int           Width              => TextureData.Width;
+    public int           Height             => TextureData.Height;
+    public int           NumManagedTextures => _managedTextures.Count;
+    public uint          TextureID          => GLTextureHandle;
+    public bool          IsManaged          => TextureData is { IsManaged: true };
+    public Pixmap.Format ColorFormat        => TextureData.GetPixelFormat();
 
     // ========================================================================
 
@@ -144,6 +144,7 @@ public class Texture2D : Image, IDrawable, IDisposable
 
     private        string?     _name;
     private        bool        _isUploaded                = false;
+    private        bool        _isDisposed                = false;
     private static float       _maxAnisotropicFilterLevel = 0;
     private        TextureUnit _activeTextureUnit         = TextureUnit.None;
 
@@ -151,26 +152,21 @@ public class Texture2D : Image, IDrawable, IDisposable
     // ========================================================================
 
     // ========================================================================
-    // Implementations of abstract methods from the base Image class.
 
-    /// <inheritdoc />
-    public override void ClearWithColor( Color color )
+    public void ClearWithColor( Color color )
     {
     }
 
-    /// <inheritdoc />
-    public override int GetPixel( int x, int y )
+    public int GetPixel( int x, int y )
     {
         return 0;
     }
 
-    /// <inheritdoc />
-    public override void SetPixel( int x, int y, Color color )
+    public void SetPixel( int x, int y, Color color )
     {
     }
 
-    /// <inheritdoc />
-    public override void SetPixel( int x, int y, int color )
+    public void SetPixel( int x, int y, int color )
     {
     }
 
@@ -187,13 +183,13 @@ public class Texture2D : Image, IDrawable, IDisposable
 
     protected virtual void Dispose( bool disposing )
     {
-        if ( !IsDisposed )
+        if ( !_isDisposed )
         {
             if ( disposing )
             {
             }
 
-            IsDisposed = true;
+            _isDisposed = true;
         }
     }
 }

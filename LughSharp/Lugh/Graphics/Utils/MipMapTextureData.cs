@@ -126,24 +126,20 @@ public class MipMapTextureData : ITextureData
         {
         }
 
-        /// <inheritdoc />
-        public override void ClearWithColor( Color color )
+        public void ClearWithColor( Color color )
         {
         }
 
-        /// <inheritdoc />
-        public override int GetPixel( int x, int y )
+        public int GetPixel( int x, int y )
         {
             return 0;
         }
 
-        /// <inheritdoc />
-        public override void SetPixel( int x, int y, Color color )
+        public void SetPixel( int x, int y, Color color )
         {
         }
 
-        /// <inheritdoc />
-        public override void SetPixel( int x, int y, int color )
+        public void SetPixel( int x, int y, int color )
         {
         }
     }

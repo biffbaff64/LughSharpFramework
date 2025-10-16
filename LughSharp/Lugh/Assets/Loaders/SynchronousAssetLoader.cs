@@ -29,11 +29,11 @@ namespace LughSharp.Lugh.Assets.Loaders;
 /// <summary>
 /// Abstract base class for synchronous asset loaders.
 /// </summary>
-/// <typeparam name="TAssetType">The type of the asset to load.</typeparam>
-/// <typeparam name="TParameters">The type of the parameters for loading the asset.</typeparam>
+/// <typeparam name="Ta">The type of the asset to load.</typeparam>
+/// <typeparam name="Tp">The type of the parameters for loading the asset.</typeparam>
 [PublicAPI]
-public abstract class SynchronousAssetLoader< TAssetType, TParameters >
-    : AssetLoader where TParameters : AssetLoaderParameters
+public abstract class SynchronousAssetLoader< Ta, Tp >
+    : AssetLoader where Tp : AssetLoaderParameters
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="SynchronousAssetLoader{TAssetType, TParameters}"/>
@@ -51,8 +51,8 @@ public abstract class SynchronousAssetLoader< TAssetType, TParameters >
     /// <param name="assetManager">The asset manager responsible for loading assets.</param>
     /// <param name="file">The file information of the asset to load.</param>
     /// <param name="parameter">The parameters for loading the asset.</param>
-    /// <returns>The loaded asset of type <typeparamref name="TAssetType"/>.</returns>
-    public abstract TAssetType Load( AssetManager assetManager, FileInfo file, TParameters parameter );
+    /// <returns>The loaded asset of type <typeparamref name="Ta"/>.</returns>
+    public abstract Ta Load( AssetManager assetManager, FileInfo file, Tp parameter );
 }
 
 // ============================================================================

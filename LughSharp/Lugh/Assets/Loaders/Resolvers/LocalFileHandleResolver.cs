@@ -33,3 +33,6 @@ public class LocalFileHandleResolver : IFileHandleResolver
         return Api.Files.Local( filename );
     }
 }
+
+// ============================================================================
+// ============================================================================

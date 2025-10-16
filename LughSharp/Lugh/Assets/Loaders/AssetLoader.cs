@@ -35,6 +35,9 @@ public enum AssetLoaderType : int
     Asynchronous,
 }
 
+// ============================================================================
+// ============================================================================
+
 /// <summary>
 /// Abstract base class for asset loaders.
 /// </summary>

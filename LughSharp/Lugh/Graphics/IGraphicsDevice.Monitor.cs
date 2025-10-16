@@ -29,6 +29,7 @@ public partial interface IGraphicsDevice
     /// <summary>
     /// Describes a monitor.
     /// </summary>
+    [PublicAPI]
     public class Monitor
     {
         public readonly string Name;

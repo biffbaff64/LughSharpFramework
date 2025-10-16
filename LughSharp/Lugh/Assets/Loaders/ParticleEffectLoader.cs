@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics.Atlases;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -127,7 +126,7 @@ public class ParticleEffectLoader
     }
 
     /// <summary>
-    /// Parameter to be passed to <see cref="AssetManager.AddToLoadqueue"/>
+    /// Parameter to be passed to <see cref="AssetManager.Load(string, Type, AssetLoaderParameters)"/>
     /// if additional configuration is necessary for the <see cref="ParticleEffect"/>.
     /// </summary>
     [PublicAPI]

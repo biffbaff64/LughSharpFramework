@@ -33,15 +33,9 @@ namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 /// resolver. This resolution has the following properties:
 /// </para>
 /// <ul>
-/// <li>
-/// <tt> portraitWidth = 1920</tt>
-/// </li>
-/// <li>
-/// <tt> portraitHeight = 1080</tt>
-/// </li>
-/// <li>
-/// <tt> folder = "1920x1080"</tt>
-/// </li>
+/// <li><tt> portraitWidth = 1920</tt></li>
+/// <li><tt> portraitHeight = 1080</tt></li>
+/// <li><tt> folder = "1920x1080"</tt></li>
 /// </ul>
 /// <para>
 /// One would now supply a file to be found to the resolver. For this example, we assume it is
@@ -50,18 +44,15 @@ namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 /// in the following ways:
 /// </para>
 /// <ul>
-/// <li>
-/// <tt>"textures/walls/1920x1080/brick.png"</tt>
-/// </li>
-/// <li>
-/// <tt>"textures/walls/brick.png"</tt>
-/// </li>
+/// <li><tt>"textures/walls/1920x1080/brick.png"</tt></li>
+/// <li><tt>"textures/walls/brick.png"</tt></li>
 /// </ul>
 /// <para>
 /// The files are ultimately resolved via the given <see cref="BaseResolver"/>. In case the
 /// first version cannot be resolved, the fallback will try to search for the file without
 /// the resolution folder.
 /// </para>
+/// <br/>
 /// </summary>
 [PublicAPI]
 public class ResolutionFileResolver : IFileHandleResolver
@@ -212,3 +203,6 @@ public class ResolutionFileResolver : IFileHandleResolver
         public string AssetsFolder { get; }
     }
 }
+
+// ============================================================================
+// ============================================================================

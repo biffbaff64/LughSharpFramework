@@ -65,8 +65,8 @@ public class GLTextureArray : GLTexture, IManaged
 
     // ========================================================================
 
-    public override int Width  => _data.Width;
-    public override int Height => _data.Height;
+    public int Width  => _data.Width;
+    public int Height => _data.Height;
     public override int Depth  => _data.Depth;
 
     [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
@@ -240,22 +240,22 @@ public class GLTextureArray : GLTexture, IManaged
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
 
-    public override void ClearWithColor( Color color )
+    public void ClearWithColor( Color color )
     {
         throw new NotImplementedException();
     }
 
-    public override int GetPixel( int x, int y )
+    public int GetPixel( int x, int y )
     {
         throw new NotImplementedException();
     }
 
-    public override void SetPixel( int x, int y, Color color )
+    public void SetPixel( int x, int y, Color color )
     {
         throw new NotImplementedException();
     }
 
-    public override void SetPixel( int x, int y, int color )
+    public void SetPixel( int x, int y, int color )
     {
         throw new NotImplementedException();
     }

@@ -32,7 +32,7 @@ public partial class Gdx2DPixmap
     /// <summary>
     /// Clears the pixmap with the specified color
     /// </summary>
-    public override void ClearWithColor( Color color )
+    public void ClearWithColor( Color color )
     {
         var size = ( uint )( _pixmapDescriptor.Width
                              * _pixmapDescriptor.Height

@@ -23,11 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G3D;
 using LughSharp.Lugh.Graphics.G3D.Models.Data;
 using LughSharp.Lugh.Graphics.G3D.Utils;
-using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -40,6 +37,8 @@ public abstract class ModelLoader : AsynchronousAssetLoader
     protected readonly ModelLoaderParameters DefaultLoaderParameters = new();
 
     protected readonly List< ObjectMap< string, ModelData >.Entry > Items = [ ];
+
+    // ========================================================================
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModelLoader"/> class
@@ -210,20 +209,26 @@ public abstract class ModelLoader : AsynchronousAssetLoader
     public class ModelLoaderParameters : AssetLoaderParameters
     {
         /// <summary>
+        /// Gets or sets the texture loader parameters for loading model textures.
+        /// </summary>
+        public TextureLoader.TextureLoaderParameters TextureLoaderParameters { get; set; }
+
+        // ====================================================================
+        
+        /// <summary>
         /// Initializes a new instance of the <see cref="ModelLoaderParameters"/>
         /// class with default values.
         /// </summary>
         public ModelLoaderParameters()
         {
-            TextureLoaderParameters           = new TextureLoader.TextureLoaderParameters();
-            TextureLoaderParameters.MinFilter = TextureLoaderParameters.MagFilter = TextureFilterMode.Linear;
-            TextureLoaderParameters.WrapU     = TextureLoaderParameters.WrapV     = TextureWrapMode.Repeat;
+            TextureLoaderParameters = new TextureLoader.TextureLoaderParameters
+            {
+                MinFilter = TextureFilterMode.Linear,
+                MagFilter = TextureFilterMode.Linear,
+                WrapU     = TextureWrapMode.Repeat,
+                WrapV     = TextureWrapMode.Repeat,
+            };
         }
-
-        /// <summary>
-        /// Gets or sets the texture loader parameters for loading model textures.
-        /// </summary>
-        public TextureLoader.TextureLoaderParameters TextureLoaderParameters { get; set; }
     }
 }
 

@@ -116,6 +116,7 @@ public class CubemapLoader : AsynchronousAssetLoader
     }
 
     // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// Contains information about the Cubemap being loaded.
@@ -135,6 +136,11 @@ public class CubemapLoader : AsynchronousAssetLoader
     public class CubemapParameter : AssetLoaderParameters
     {
         /// <summary>
+        /// The texture to put the TextureData in, optional.
+        /// </summary>
+        public Cubemap? Cubemap { get; set; } = null;
+
+        /// <summary>
         /// CubemapData for textures created on the fly, optional.
         /// When set, all format and genMipMaps are ignored
         /// </summary>
@@ -149,11 +155,6 @@ public class CubemapLoader : AsynchronousAssetLoader
         public TextureFilterMode MinFilter = TextureFilterMode.Nearest;
         public TextureWrapMode   WrapU     = TextureWrapMode.ClampToEdge;
         public TextureWrapMode   WrapV     = TextureWrapMode.ClampToEdge;
-
-        /// <summary>
-        /// The texture to put the TextureData in, optional.
-        /// </summary>
-        public Cubemap? Cubemap { get; set; } = null;
     }
 }
 

@@ -45,16 +45,6 @@ public abstract class AsynchronousAssetLoader : AssetLoader
     }
 
     /// <summary>
-    /// Loads the OpenGL part of the asset.
-    /// </summary>
-    /// <param name="manager"></param>
-    /// <param name="file"> the resolved file to load </param>
-    /// <param name="parameter"></param>
-    public abstract object? LoadSync< TP >( AssetManager manager,
-                                            FileInfo file,
-                                            TP? parameter ) where TP : AssetLoaderParameters;
-
-    /// <summary>
     /// Loads the non-OpenGL part of the asset and injects any dependencies of
     /// the asset into the <paramref name="manager"/>.
     /// </summary>
@@ -72,9 +62,9 @@ public abstract class AsynchronousAssetLoader : AssetLoader
     /// be invoked on any thread, but will not be invoked during or after <see cref="LoadSync{TP}"/>.
     /// This method is not invoked when a task is cancelled because it threw an exception, only
     /// when the asset is unloaded before loading is complete. The default implementation does
-    /// nothing. Subclasses should release any resources acquired in <see cref="LoadUpdate{TP}"/>,
+    /// nothing. Subclasses should release any resources acquired in <see cref="LoadAsync{TP}"/>,
     /// which may or may not have been called before this method, but never during or after this
-    /// method. Note that <see cref="LoadUpdate{TP}"/> may still be executing when this method is called
+    /// method. Note that <see cref="LoadAsync{TP}"/> may still be executing when this method is called
     /// and must release any resources it allocated.
     /// </summary>
     /// <param name="manager"></param>
@@ -87,6 +77,16 @@ public abstract class AsynchronousAssetLoader : AssetLoader
                                            TP? parameter ) where TP : AssetLoaderParameters
     {
     }
+
+    /// <summary>
+    /// Loads the OpenGL part of the asset.
+    /// </summary>
+    /// <param name="manager"></param>
+    /// <param name="file"> the resolved file to load </param>
+    /// <param name="parameter"></param>
+    public abstract object? LoadSync< TP >( AssetManager manager,
+                                            FileInfo file,
+                                            TP? parameter ) where TP : AssetLoaderParameters;
 }
 
 // ============================================================================

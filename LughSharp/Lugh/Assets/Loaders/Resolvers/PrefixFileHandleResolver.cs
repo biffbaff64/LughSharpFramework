@@ -33,14 +33,21 @@ namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 [PublicAPI]
 public class PrefixFileHandleResolver : IFileHandleResolver
 {
+    public string              Prefix       { get; }
+    public IFileHandleResolver BaseResolver { get; }
+
+    // ========================================================================
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="baseResolver"></param>
+    /// <param name="prefix"></param>
     public PrefixFileHandleResolver( IFileHandleResolver baseResolver, string prefix )
     {
         BaseResolver = baseResolver;
         Prefix       = prefix;
     }
-
-    public string              Prefix       { get; }
-    public IFileHandleResolver BaseResolver { get; }
 
     /// <inheritdoc />
     public FileInfo Resolve( string filename )
@@ -48,3 +55,6 @@ public class PrefixFileHandleResolver : IFileHandleResolver
         return BaseResolver.Resolve( Prefix + filename );
     }
 }
+
+// ============================================================================
+// ============================================================================

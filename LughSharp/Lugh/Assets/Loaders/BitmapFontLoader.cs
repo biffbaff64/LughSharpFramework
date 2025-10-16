@@ -179,6 +179,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 }
 
 // ============================================================================
+// ============================================================================
 
 [PublicAPI]
 public class BitmapFontParameter : AssetLoaderParameters

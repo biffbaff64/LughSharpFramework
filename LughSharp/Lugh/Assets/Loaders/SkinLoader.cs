@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 
 namespace LughSharp.Lugh.Assets.Loaders;
@@ -139,6 +138,16 @@ public class SkinLoader : AsynchronousAssetLoader
     public class SkinLoaderParameters : AssetLoaderParameters
     {
         /// <summary>
+        /// Gets or sets the resources to be used by the skin.
+        /// </summary>
+        public Dictionary< string, object >? Resources { get; set; }
+
+        /// <summary>
+        /// Gets or sets the file path of the texture atlas to be used by the skin.
+        /// </summary>
+        public string? TextureAtlasPath { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SkinLoaderParameters"/>
         /// class with default values.
         /// </summary>
@@ -166,16 +175,6 @@ public class SkinLoader : AsynchronousAssetLoader
             TextureAtlasPath = textureAtlasPath;
             Resources        = resources;
         }
-
-        /// <summary>
-        /// Gets or sets the resources to be used by the skin.
-        /// </summary>
-        public Dictionary< string, object >? Resources { get; set; }
-
-        /// <summary>
-        /// Gets or sets the file path of the texture atlas to be used by the skin.
-        /// </summary>
-        public string? TextureAtlasPath { get; set; }
     }
 }
 

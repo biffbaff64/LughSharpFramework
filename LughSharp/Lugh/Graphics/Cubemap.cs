@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
+
 using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Graphics;
@@ -106,8 +107,8 @@ public class Cubemap : GLTexture, IManaged
     public Cubemap( int width, int height, int depth, Pixmap.Format format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
                 new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
-                new PixmapTextureData( new Pixmap( width, depth, format ),  0, false, true ),
-                new PixmapTextureData( new Pixmap( width, depth, format ),  0, false, true ),
+                new PixmapTextureData( new Pixmap( width, depth, format ), 0, false, true ),
+                new PixmapTextureData( new Pixmap( width, depth, format ), 0, false, true ),
                 new PixmapTextureData( new Pixmap( width, height, format ), 0, false, true ),
                 new PixmapTextureData( new Pixmap( width, height, format ), 0, false, true ) )
     {
@@ -128,8 +129,8 @@ public class Cubemap : GLTexture, IManaged
 
     // ========================================================================
 
-    public override int Width  => Data.Width;
-    public override int Height => Data.Height;
+    public          int Width  => Data.Width;
+    public          int Height => Data.Height;
     public override int Depth  => 0;
 
     /// <summary>
@@ -295,24 +296,20 @@ public class Cubemap : GLTexture, IManaged
 
     // ========================================================================
 
-    /// <inheritdoc />
-    public override void ClearWithColor( Color color )
+    public void ClearWithColor( Color color )
     {
     }
 
-    /// <inheritdoc />
-    public override int GetPixel( int x, int y )
+    public int GetPixel( int x, int y )
     {
         return 0;
     }
 
-    /// <inheritdoc />
-    public override void SetPixel( int x, int y, Color color )
+    public void SetPixel( int x, int y, Color color )
     {
     }
 
-    /// <inheritdoc />
-    public override void SetPixel( int x, int y, int color )
+    public void SetPixel( int x, int y, int color )
     {
     }
 

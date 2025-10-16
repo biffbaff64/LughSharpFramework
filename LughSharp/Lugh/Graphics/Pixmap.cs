@@ -398,6 +398,14 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
+    /// Returns TRUE if this pixmaps color format is RGBA8888.
+    /// </summary>
+    public bool IsRGBA8888()
+    {
+        return GetColorFormat() == Format.RGBA8888;
+    }
+    
+    /// <summary>
     /// Draws a line between the given coordinates using the currently set color.
     /// </summary>
     /// <param name="x"> The x-coodinate of the first point </param>
@@ -554,8 +562,9 @@ public class Pixmap : IDisposable
     /// <returns> The pixel color in RGBA8888 format.  </returns>
     public int GetPixel( int x, int y )
     {
-        Guard.ThrowIfNull( Gdx2DPixmap );
-
+//TODO:        Guard.Against.Null( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
+        Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
+        
         return Gdx2DPixmap.GetPixel( x, y );
     }
 

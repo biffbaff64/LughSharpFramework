@@ -47,21 +47,12 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
 
     public IMusic LoadedMusic { get; set; }
 
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing,
-    /// releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose( true );
-    }
-
     /// <inheritdoc />
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? parameter ) where TP : class
     {
-        return default( List< AssetDescriptor > )!;
+        return null!;
     }
 
     /// <inheritdoc />
@@ -78,6 +69,17 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
         LoadedMusic = Api.Audio.NewMusic( file );
 
         return LoadedMusic;
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+        
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>

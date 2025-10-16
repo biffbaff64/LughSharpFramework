@@ -24,9 +24,6 @@
 
 namespace LughSharp.Lugh.Assets;
 
-// ====================================================================--------
-// ====================================================================--------
-
 /// <summary>
 /// Interface representing the parameters required for loading assets.
 /// </summary>

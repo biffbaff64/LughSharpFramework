@@ -250,8 +250,6 @@ public partial class AssetManager : IDisposable
         {
             name = IOUtils.NormalizePath( name );
 
-            Logger.Debug( $"Getting asset: {name} ({type.FullName})" );
-
             _assets.TryGetValue( type, out var assetsByType );
             assetsByType!.TryGetValue( name, out var assetContainer );
 
@@ -533,7 +531,9 @@ public partial class AssetManager : IDisposable
         Guard.ThrowIfNull( _loaders );
 
         // Check if the type exists in _loaders before accessing it.
-        if ( type == null || !_loaders.TryGetValue( type, out var typeLoaders ) || ( typeLoaders.Count < 1 ) )
+        if ( ( type == null )
+             || !_loaders.TryGetValue( type, out var typeLoaders )
+             || ( typeLoaders.Count < 1 ) )
         {
             throw new GdxRuntimeException( $"No loader for type: {type?.Name}" );
         }

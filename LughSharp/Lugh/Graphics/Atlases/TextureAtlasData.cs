@@ -48,7 +48,7 @@ public partial class TextureAtlasData
     /// <param name="packFile"></param>
     /// <param name="imagesDir"></param>
     /// <param name="flip"></param>
-    public TextureAtlasData( FileInfo packFile, DirectoryInfo imagesDir, bool flip = false )
+    public TextureAtlasData( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
     {
         try
         {

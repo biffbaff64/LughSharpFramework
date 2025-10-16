@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
-public class PNGDecoder
+public partial class PNGDecoder
 {
     public const int SIGNATURE_LENGTH       = 8;
     public const int IHDR_START             = 8;
@@ -120,10 +120,7 @@ public class PNGDecoder
             throw new GdxRuntimeException( "Unable to perform analysis, texture is null" );
         }
 
-        var data = CreatePNGFromRawRGBA( texture.GetImageData()!,
-                                         texture.Width,
-                                         texture.Height,
-                                         texture.ColorFormat );
+        var data = CreatePNGFromTexture( texture );
 
         if ( data == null )
         {
@@ -193,120 +190,50 @@ public class PNGDecoder
         // PNG Signature (8 bytes)
         // --------------------------------------
 
-        PngSignature = new PNGFormatStructs.PNGSignature
+        PngSignature = ExtractSignature( pngData );
+
+        if ( PngSignature.Signature.Length <= 0 )
         {
-            Signature = new byte[ SIGNATURE_LENGTH ],
-        };
-
-        Array.Copy( pngData, 0, PngSignature.Signature, 0, SIGNATURE_LENGTH );
-
-        if ( !IsPNG( pngData ) )
-        {
-            Logger.Error( "Invalid PNG Signature" );
-
-            if ( Api.DevMode )
-            {
-                StringBuilder sb  = new();
-                StringBuilder sb2 = new();
-
-                for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
-                {
-                    sb.Append( $"[{PngSignature.Signature[ i ]:X2}]" );
-                    sb2.Append( $"[{StandardPNGSignature[ i ]:X2}]" );
-                }
-
-                sb.Append( " - Image signature" );
-                sb2.Append( " - Correct PNG signature" );
-
-                Logger.Debug( sb.ToString() );
-                Logger.Debug( sb2.ToString() );
-            }
-
             return;
-        }
-
-        if ( verbose )
-        {
-            Logger.Debug( "Passed validation checks" );
         }
 
         // --------------------------------------
         // IHDR
         // --------------------------------------
 
-        var ihdr         = new byte[ IHDR_SIZE ];
-        var ihdrTypeData = new byte[ IHDR_CHUNK_TYPE_SIZE ];
-        var crc          = new byte[ IHDR_CRC_SIZE ];
-        var widthData    = new byte[ WIDTH_SIZE ];
-        var heightData   = new byte[ HEIGHT_SIZE ];
-
-        Array.Copy( pngData, IHDR_START, ihdr, 0, IHDR_SIZE );
-        Array.Copy( pngData, IHDR_CHUNK_TYPE_OFFSET, ihdrTypeData, 0, IHDR_CHUNK_TYPE_SIZE );
-        Array.Copy( pngData, IHDR_CRC_START, crc, 0, IHDR_CRC_SIZE );
-        Array.Copy( pngData, IHDR_DATA_OFFSET + WIDTH_OFFSET, widthData, 0, WIDTH_SIZE );
-        Array.Copy( pngData, IHDR_DATA_OFFSET + HEIGHT_OFFSET, heightData, 0, HEIGHT_SIZE );
-
-        IHDRchunk = new PNGFormatStructs.IHDRChunk
-        {
-            Ihdr        = ihdr,
-            IhdrType    = ihdrTypeData,
-            Width       = ReadBigEndianUInt32( widthData, WIDTH_SIZE ),
-            Height      = ReadBigEndianUInt32( heightData, HEIGHT_SIZE ),
-            BitDepth    = pngData[ IHDR_DATA_OFFSET + BITDEPTH_OFFSET ],
-            ColorType   = pngData[ IHDR_DATA_OFFSET + COLORTYPE_OFFSET ],
-            Compression = pngData[ IHDR_DATA_OFFSET + COMPRESSION_OFFSET ],
-            Filter      = pngData[ IHDR_DATA_OFFSET + FILTER_OFFSET ],
-            Interlace   = pngData[ IHDR_DATA_OFFSET + INTERLACE_OFFSET ],
-            Crc         = crc,
-        };
+        IHDRchunk = ExtractIHDR( pngData );
 
         // --------------------------------------
         // IDAT
         // --------------------------------------
 
-        var tmp = new byte[ IDAT_SIZE ];
-
-        Array.Copy( pngData, IDAT_START, tmp, 0, IDAT_SIZE );
-
-        var tmpChunkSize = ReadBigEndianUInt32( tmp, IDAT_SIZE );
-
-        IDATchunk = new PNGFormatStructs.IDATChunk
-        {
-            ChunkSize = tmpChunkSize,
-            ChunkType = tmp,
-        };
-
+        IDATchunk     = ExtractIDAT( pngData );
         TotalIDATSize = CalculateTotalIDATSize( pngData );
 
-        PixelFormat   = GetFormatFromPngHeader( new MemoryStream( pngData ) );
-        BytesPerPixel = GetBytesPerPixel( IHDRchunk.ColorType, IHDRchunk.BitDepth );
+        // --------------------------------------
+        // ANALYSIS
+        // --------------------------------------
 
-        var idatData = new byte[ IHDR_DATA_SIZE ];
+        var colorType = IHDRchunk.ColorType;
+        var bitDepth  = IHDRchunk.BitDepth;
 
-        Array.Copy( pngData, IHDR_DATA_OFFSET, idatData, 0, IHDR_DATA_SIZE );
+        BytesPerPixel = GetBytesPerPixel( colorType, bitDepth );
+        PixelFormat   = LughSharp.Lugh.Graphics.PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
+
+        Logger.Debug( $"colorType    : {colorType}" );
+        Logger.Debug( $"bitDepth     : {bitDepth}" );
+        Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
+        Logger.Debug( $"PixelFormat  : {PixelFormat}" );
+
+        if ( PixelFormat == Pixmap.Format.Invalid )
+        {
+            ImageUtils.RejectInvalidImage( ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
+                                           $"BitDepth: {bitDepth}, ColorType: {colorType}." );
+        }
 
         if ( verbose )
         {
-            Logger.Debug( $"PNG Signature   : {BitConverter.ToString( PngSignature.Signature ).Replace( "-", " " )}" );
-            Logger.Debug( "-----------------------------" );
-            Logger.Debug( $"IHDR            : {BitConverter.ToString( IHDRchunk.Ihdr ).Replace( "-", " " )}" );
-            Logger.Debug( $"IHDR TYPE       : {BitConverter.ToString( IHDRchunk.IhdrType ).Replace( "-", " " )}" );
-            Logger.Debug( $"IHDR DATA       : {BitConverter.ToString( idatData ).Replace( "-", " " )}" );
-            Logger.Debug( "-----------------------------" );
-            Logger.Debug( $"- Width         : {IHDRchunk.Width}" );
-            Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
-            Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
-            Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType} :: ( {ColorTypeName( IHDRchunk.ColorType )} )" );
-            Logger.Debug( $"- PixelFormat   : {Lugh.Graphics.PixelFormat.GetFormatString( PixelFormat )} :: ( {PixelFormat} )" );
-            Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
-            Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
-            Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
-            Logger.Debug( $"- Checksum      : 0x{ReadBigEndianUInt32( IHDRchunk.Crc, 4 ):X}" );
-            Logger.Debug( "-----------------------------" );
-
-//            Logger.Debug( $"- IHDR/IDAT Data: {BitConverter.ToString( pngData ).Replace( "-", " " )}" );
-            Logger.Debug( $"- TotalIDATSize : 0x{TotalIDATSize:X}" );
-            Logger.Debug( "-----------------------------" );
+            OutputAnalysis( pngData );
         }
     }
 
@@ -545,70 +472,50 @@ public class PNGDecoder
     /// </returns>
     public static int GetBytesPerPixel( int colorType, int bitDepth )
     {
+        Logger.Debug( $"colorType: {colorType}" );
+        Logger.Debug( $"bitDepth : {bitDepth}" );
+
         return colorType switch
         {
             // Grayscale
-            0 => bitDepth == 8 ? 1 : bitDepth == 16 ? 2 : -1,
+            0 => bitDepth switch
+            {
+                8     => 1,
+                16    => 2,
+                var _ => -1,
+            },
 
             // RGB
-            2 => bitDepth == 8 ? 3 : bitDepth == 16 ? 6 : -1,
+            2 => bitDepth switch
+            {
+                8     => 3,
+                16    => 6,
+                var _ => -1,
+            },
 
-            // Indexed-color
-            // Indexed color uses a palette
+            // Indexed-color ( Indexed color uses a palette )
             3 => 1,
 
             // Grayscale with alpha
-            4 => bitDepth == 8 ? 2 : bitDepth == 16 ? 4 : -1,
+            4 => bitDepth switch
+            {
+                8     => 2,
+                16    => 4,
+                var _ => -1,
+            },
 
             // RGBA
-            6 => bitDepth == 8 ? 4 : bitDepth == 16 ? 8 : -1,
+            6 => bitDepth switch
+            {
+                8     => 4,
+                16    => 8,
+                var _ => -1,
+            },
+
+            // ----------------------------------
 
             var _ => -1,
         };
-    }
-
-    /// <summary>
-    /// Gets the pixel format ( RGBA8888, RGB565, etc. ) from the provided
-    /// PNG image data.
-    /// </summary>
-    /// <param name="pngStream"> A Stream with which to access the data. </param>
-    /// <returns>
-    /// A Gdx2DPixmapFormat enum value representing the pixel format of the PNG image.
-    /// </returns>
-    public static Pixmap.Format GetFormatFromPngHeader( Stream pngStream )
-    {
-        // Read PNG signature (8 bytes)
-        var signature = new byte[ 8 ];
-
-        pngStream.ReadExactly( signature, 0, 8 );
-
-        // Read IHDR chunk length (4 bytes) and type (4 bytes)
-        pngStream.ReadExactly( new byte[ 4 ], 0, 4 ); // length
-        var type = new byte[ 4 ];
-        pngStream.ReadExactly( type, 0, 4 );
-
-        // Ensure it's IHDR
-        if ( Encoding.ASCII.GetString( type ) != "IHDR" )
-        {
-            throw new Exception( "Invalid PNG: Missing IHDR" );
-        }
-
-        // Read IHDR data (13 bytes)
-        var ihdr = new byte[ 13 ];
-        pngStream.ReadExactly( ihdr, 0, 13 );
-
-        var bitDepth  = ihdr[ 8 ];
-        var colorType = ihdr[ 9 ];
-
-        var format = LughSharp.Lugh.Graphics.PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
-
-        if ( format == Pixmap.Format.Invalid )
-        {
-            ImageUtils.RejectInvalidImage( ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
-                                           $"BitDepth: {bitDepth}, ColorType: {colorType}." );
-        }
-
-        return format;
     }
 
     /// <summary>
@@ -709,6 +616,18 @@ public class PNGDecoder
             BitConverter.ToInt32( heightbytes, 0 ) );
     }
 
+    public static byte[] CreatePNGFromTexture( Texture texture )
+    {
+        Guard.Against.Null( texture );
+        Guard.Against.Null( texture.GetImageData() );
+
+        return CreatePNGFromRawRGBA( texture.GetImageData()!,
+                                     texture.Width,
+                                     texture.Height,
+                                     texture.ColorFormat,
+                                     ( byte )texture.BitDepth );
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -716,9 +635,10 @@ public class PNGDecoder
     /// <param name="width"></param>
     /// <param name="height"></param>
     /// <param name="format"></param>
+    /// <param name="bitDepth"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba, int width, int height, Pixmap.Format format )
+    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba, int width, int height, Pixmap.Format format, byte bitDepth = 8 )
     {
         return CreatePNGFromRawRGBA( rawRgba,
                                      width,
@@ -733,9 +653,14 @@ public class PNGDecoder
     /// <param name="width"></param>
     /// <param name="height"></param>
     /// <param name="format"></param>
+    /// <param name="bitDepth"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba, int width, int height, int format )
+    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba,
+                                               int width,
+                                               int height,
+                                               int format,
+                                               byte bitDepth = 8 )
     {
         if ( rawRgba == null )
         {
@@ -767,14 +692,11 @@ public class PNGDecoder
             WriteBigEndian( ihdr, width );
             WriteBigEndian( ihdr, height );
 
-            var colorType = ( byte )format;
-            var bitDepth  = ( byte )8;
-
-            ihdr.WriteByte( bitDepth );  // bit depth
-            ihdr.WriteByte( colorType ); // color type: RGBA
-            ihdr.WriteByte( 0 );         // compression
-            ihdr.WriteByte( 0 );         // filter
-            ihdr.WriteByte( 0 );         // interlace
+            ihdr.WriteByte( bitDepth );       // bit depth
+            ihdr.WriteByte( ( byte )format ); // color type: RGBA
+            ihdr.WriteByte( 0 );              // compression
+            ihdr.WriteByte( 0 );              // filter
+            ihdr.WriteByte( 0 );              // interlace
 
             WriteChunk( ms, "IHDR", ihdr.ToArray() );
         }
@@ -827,7 +749,7 @@ public class PNGDecoder
             s.Write( data, 0, data.Length );
 
             // CRC
-            using var crc32 = new Crc32();
+            using var crc32 = new MinimalCrc32();
 
             crc32.TransformBlock( typeBytes, 0, 4, null, 0 );
             crc32.TransformBlock( data, 0, data.Length, null, 0 );
@@ -859,52 +781,158 @@ public class PNGDecoder
         File.WriteAllBytes( filename, pngData );
     }
 
+    // ========================================================================
+
     /// <summary>
-    /// CRC32 implementation (minimal)
+    /// Extracts the PNG signature (first 8 bytes) from the provided PNG data and returns it
+    /// as a <see cref="PNGFormatStructs.PNGSignature"/> structure. The signature is validated
+    /// against the standard PNG signature to determine its validity.
+    /// If the validation fails, an error is logged, and an empty signature is returned.
     /// </summary>
-    [PublicAPI]
-    public class Crc32 : HashAlgorithm
+    /// <param name="pngData"> The byte array containing PNG file data to extract the signature from. </param>
+    /// <returns>
+    /// A <see cref="PNGFormatStructs.PNGSignature"/> structure containing the extracted PNG signature.
+    /// If the provided data is invalid, an empty signature is returned.
+    /// </returns>
+    private static PNGFormatStructs.PNGSignature ExtractSignature( byte[] pngData )
     {
-        private uint _crc = 0xFFFFFFFF;
+        var signature = new byte[ SIGNATURE_LENGTH ];
 
-        private static readonly uint[] _table = Enumerable.Range( 0, 256 ).Select( i =>
+        Array.Copy( pngData, 0, signature, 0, SIGNATURE_LENGTH );
+
+        var signatureStruct = new PNGFormatStructs.PNGSignature
         {
-            var c = ( uint )i;
+            Signature = signature,
+        };
 
-            for ( var k = 0; k < 8; k++ )
+        if ( !IsPNG( pngData ) )
+        {
+            Logger.Error( "Invalid PNG Signature" );
+
+            if ( Api.DevMode )
             {
-                c = ( c & 1 ) != 0 ? 0xEDB88320 ^ ( c >> 1 ) : c >> 1;
+                StringBuilder sb  = new();
+                StringBuilder sb2 = new();
+
+                for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
+                {
+                    sb.Append( $"[{PngSignature.Signature[ i ]:X2}]" );
+                    sb2.Append( $"[{StandardPNGSignature[ i ]:X2}]" );
+                }
+
+                sb.Append( " - Image signature" );
+                sb2.Append( " - Correct PNG signature" );
+
+                Logger.Debug( sb.ToString() );
+                Logger.Debug( sb2.ToString() );
             }
 
-            return c;
-        } ).ToArray();
-
-        public override void Initialize()
-        {
-            _crc = 0xFFFFFFFF;
+            signatureStruct.Signature = [ ];
         }
 
-        public override int HashSize => 32;
+        return signatureStruct;
+    }
 
-        protected override void HashCore( byte[] array, int ibStart, int cbSize )
+    /// <summary>
+    /// Extracts and parses the IHDR chunk from the provided PNG data, retrieving essential
+    /// metadata such as image dimensions, color properties, and compression information.
+    /// This method processes the data starting from the expected IHDR chunk location in the
+    /// PNG byte array.
+    /// </summary>
+    /// <param name="pngData">
+    /// The binary data of the PNG file from which the IHDR chunk is extracted. Must not be null or empty.
+    /// </param>
+    /// <returns>
+    /// An instance of <see cref="PNGFormatStructs.IHDRChunk"/> containing the parsed IHDR chunk data,
+    /// including width, height, bit depth, color type, compression, filter, interlace information,
+    /// and CRC values.
+    /// </returns>
+    private static PNGFormatStructs.IHDRChunk ExtractIHDR( byte[] pngData )
+    {
+        var ihdr         = new byte[ IHDR_SIZE ];
+        var ihdrTypeData = new byte[ IHDR_CHUNK_TYPE_SIZE ];
+        var crc          = new byte[ IHDR_CRC_SIZE ];
+        var widthData    = new byte[ WIDTH_SIZE ];
+        var heightData   = new byte[ HEIGHT_SIZE ];
+
+        Array.Copy( pngData, IHDR_START, ihdr, 0, IHDR_SIZE );
+        Array.Copy( pngData, IHDR_CHUNK_TYPE_OFFSET, ihdrTypeData, 0, IHDR_CHUNK_TYPE_SIZE );
+        Array.Copy( pngData, IHDR_CRC_START, crc, 0, IHDR_CRC_SIZE );
+        Array.Copy( pngData, IHDR_DATA_OFFSET + WIDTH_OFFSET, widthData, 0, WIDTH_SIZE );
+        Array.Copy( pngData, IHDR_DATA_OFFSET + HEIGHT_OFFSET, heightData, 0, HEIGHT_SIZE );
+
+        return new PNGFormatStructs.IHDRChunk
         {
-            for ( var i = ibStart; i < ( ibStart + cbSize ); i++ )
-            {
-                _crc = _table[ ( byte )( _crc ^ array[ i ] ) ] ^ ( _crc >> 8 );
-            }
-        }
+            Ihdr        = ihdr,
+            IhdrType    = ihdrTypeData,
+            Width       = ReadBigEndianUInt32( widthData, WIDTH_SIZE ),
+            Height      = ReadBigEndianUInt32( heightData, HEIGHT_SIZE ),
+            BitDepth    = pngData[ IHDR_DATA_OFFSET + BITDEPTH_OFFSET ],
+            ColorType   = pngData[ IHDR_DATA_OFFSET + COLORTYPE_OFFSET ],
+            Compression = pngData[ IHDR_DATA_OFFSET + COMPRESSION_OFFSET ],
+            Filter      = pngData[ IHDR_DATA_OFFSET + FILTER_OFFSET ],
+            Interlace   = pngData[ IHDR_DATA_OFFSET + INTERLACE_OFFSET ],
+            Crc         = crc,
+        };
+    }
 
-        protected override byte[] HashFinal()
+    /// <summary>
+    /// Extracts the IDAT chunk from the provided PNG data. The IDAT chunk contains
+    /// the image data of the PNG file, including its compressed size and type.
+    /// </summary>
+    /// <param name="pngData">The byte array containing the PNG file data.</param>
+    /// <returns>
+    /// A <see cref="PNGFormatStructs.IDATChunk"/> containing the size and type
+    /// information of the IDAT chunk.
+    /// </returns>
+    private static PNGFormatStructs.IDATChunk ExtractIDAT( byte[] pngData )
+    {
+        var tmp = new byte[ IDAT_SIZE ];
+
+        Array.Copy( pngData, IDAT_START, tmp, 0, IDAT_SIZE );
+
+        var tmpChunkSize = ReadBigEndianUInt32( tmp, IDAT_SIZE );
+
+        return new PNGFormatStructs.IDATChunk
         {
-            var hash = BitConverter.GetBytes( ~_crc );
+            ChunkSize = tmpChunkSize,
+            ChunkType = tmp,
+        };
+    }
 
-            if ( BitConverter.IsLittleEndian )
-            {
-                Array.Reverse( hash );
-            }
+    /// <summary>
+    /// Outputs the analysis of the PNG image, including details such as the PNG
+    /// signature, IHDR chunk properties (e.g., dimensions, bit depth, color type),
+    /// pixel format, compression, filter method, interlace method, and checksum.
+    /// Logs the analysis results to the debug console.
+    /// </summary>
+    /// <param name="pngData">The byte array containing the PNG file data.</param>">
+    private static void OutputAnalysis( byte[] pngData )
+    {
+        var idatData = new byte[ IHDR_DATA_SIZE ];
 
-            return hash;
-        }
+        Array.Copy( pngData, IHDR_DATA_OFFSET, idatData, 0, IHDR_DATA_SIZE );
+
+        Logger.Debug( $"PNG Signature   : {BitConverter.ToString( PngSignature.Signature ).Replace( "-", " " )}" );
+        Logger.Debug( "-----------------------------" );
+        Logger.Debug( $"IHDR            : {BitConverter.ToString( IHDRchunk.Ihdr ).Replace( "-", " " )}" );
+        Logger.Debug( $"IHDR TYPE       : {BitConverter.ToString( IHDRchunk.IhdrType ).Replace( "-", " " )}" );
+        Logger.Debug( $"IHDR DATA       : {BitConverter.ToString( idatData ).Replace( "-", " " )}" );
+        Logger.Debug( "-----------------------------" );
+        Logger.Debug( $"- Width         : {IHDRchunk.Width}" );
+        Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
+        Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
+        Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType} :: ( {ColorTypeName( IHDRchunk.ColorType )} )" );
+        Logger.Debug( $"- PixelFormat   : {Lugh.Graphics.PixelFormat.GetFormatString( PixelFormat )} :: ( {PixelFormat} )" );
+        Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
+        Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
+        Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
+        Logger.Debug( $"- Checksum      : 0x{ReadBigEndianUInt32( IHDRchunk.Crc, 4 ):X}" );
+        Logger.Debug( "-----------------------------" );
+
+//            Logger.Debug( $"- IHDR/IDAT Data: {BitConverter.ToString( pngData ).Replace( "-", " " )}" );
+        Logger.Debug( $"- TotalIDATSize : 0x{TotalIDATSize:X}" );
+        Logger.Debug( "-----------------------------" );
     }
 }
 

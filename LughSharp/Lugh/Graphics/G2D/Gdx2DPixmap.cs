@@ -140,7 +140,7 @@ public partial class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Creates a new Gdx2DPixmap instance using data from the supplied buffer.
     /// </summary>
     /// <param name="buffer"></param>
     /// <exception cref="GdxRuntimeException"></exception>
@@ -158,12 +158,13 @@ public partial class Gdx2DPixmap : IDisposable
     /// <summary>
     /// Allocates memory for a new pixmap with the specified width and height, using
     /// the specified color format. This can be used to draw an existing Pixmap into
-    /// this newly created buffer.
+    /// this newly created EMPTY buffer.
     /// </summary>
     /// <param name="width"> Width in pixels. </param>
     /// <param name="height"> Height in pixels. </param>
     /// <param name="format"> The requested Pixmap.Format color format. </param>
     /// <exception cref="GdxRuntimeException"></exception>
+    /// <remarks> After buffer creation, the Pixmap BitDepth is undefined. </remarks>
     public Gdx2DPixmap( int width, int height, Pixmap.Format format )
     {
         Logger.Checkpoint();
@@ -175,16 +176,6 @@ public partial class Gdx2DPixmap : IDisposable
         var length = width * height * PixelFormat.BytesPerPixel( format );
 
         PixmapBuffer = new Buffer< byte >( length );
-
-//        var data = PNGDecoder.CreatePNGFromRawRGBA( PixmapBuffer.BackingArray(),
-//                                                    width,
-//                                                    height,
-//                                                    PixelFormat.PixmapFormatToPNGColorType( format ) );
-//        PixmapBuffer.PutBytes( data );
-
-//        PNGDecoder.AnalysePNG( PixmapBuffer.BackingArray(), false );
-
-//        BitDepth = PNGDecoder.BitDepth;
 
         SafeConstructorInit( width, height );
         SafeInitPixmapDataType( width, height, format );
@@ -275,13 +266,13 @@ public partial class Gdx2DPixmap : IDisposable
         Logger.Debug( $"ColorType: {PNGDecoder.IHDRchunk.ColorType}" );
         Logger.Debug( $"BitDepth: {PNGDecoder.IHDRchunk.BitDepth}" );
 
-        var colorType = PixelFormat.FromPNGColorAndBitDepth( PNGDecoder.IHDRchunk.ColorType,
+        var pixelFormat = PixelFormat.FromPNGColorAndBitDepth( PNGDecoder.IHDRchunk.ColorType,
                                                              PNGDecoder.IHDRchunk.BitDepth );
 
-        if ( colorType == Pixmap.Format.Invalid )
+        if ( pixelFormat == Pixmap.Format.Invalid )
         {
             ImageUtils.RejectInvalidImage( ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
-                                           $"BitDepth: {PNGDecoder.IHDRchunk.BitDepth}, ColorType: {colorType}." );
+                                           $"BitDepth: {PNGDecoder.IHDRchunk.BitDepth}, ColorType: {pixelFormat}." );
         }
 
         var width     = ( int )PNGDecoder.IHDRchunk.Width;
@@ -293,7 +284,7 @@ public partial class Gdx2DPixmap : IDisposable
             Width         = width,
             Height        = height,
             BitDepth      = PNGDecoder.IHDRchunk.BitDepth,
-            ColorType     = colorType,
+            ColorType     = pixelFormat,
             BytesPerPixel = PNGDecoder.BytesPerPixel,
             Blend         = 0,
             Scale         = 0,
@@ -326,6 +317,7 @@ public partial class Gdx2DPixmap : IDisposable
             Logger.Debug( $"Requested pixel format {requestedFormat} differs from pixmap format {ColorType}." );
             Logger.Debug( $"Converting pixmap format from {ColorType} to {requestedFormat}." );
 
+            // Create an empty pixmap of the requested format and size
             var pixmap = new Gdx2DPixmap( ( int )Width, ( int )Height, requestedFormat );
 
             pixmap.Blend = GDX_2D_BLEND_NONE;

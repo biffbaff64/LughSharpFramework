@@ -23,8 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Lugh.Files;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -64,8 +63,7 @@ public class TextureAtlasLoader
         {
             if ( page.TextureFile != null )
             {
-                var name = page.TextureFile.FullName.Replace( @"\\", "/" );
-
+                var name = IOUtils.NormalizePath( page.TextureFile.FullName );
                 var texture = assetManager.Get( name ) as Texture;
 
                 page.Texture = texture;

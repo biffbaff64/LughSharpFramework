@@ -34,26 +34,17 @@ namespace LughSharp.Lugh.Assets.Loaders;
 public class SoundLoader : AsynchronousAssetLoader, IDisposable
 {
     /// <summary>
+    /// The <see cref="ISound"/> instance currently loaded by this <see cref="SoundLoader"/>.
+    /// </summary>
+    public ISound? LoadedSound { get; set; }
+
+    /// <summary>
     /// Creates a new SoundLoader using the provided <see cref="IFileHandleResolver"/>
     /// </summary>
     /// <param name="resolver"></param>
     public SoundLoader( IFileHandleResolver resolver ) : base( resolver )
     {
         LoadedSound = null!;
-    }
-
-    /// <summary>
-    /// The <see cref="ISound"/> instance currently loaded by this <see cref="SoundLoader"/>.
-    /// </summary>
-    public ISound? LoadedSound { get; set; }
-
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing,
-    /// releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose( true );
     }
 
     /// <inheritdoc />
@@ -94,6 +85,15 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
         LoadedSound = null;
 
         return sound;
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
     }
 
     /// <summary>
