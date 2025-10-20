@@ -535,8 +535,8 @@ public abstract class GLTexture : IDrawable, IDisposable
             Logger.Debug( $"pixmap.Width           : {pixmap.Width}" );
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
-            Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap?.ColorType}" );
-            Logger.Debug( $"Pixmap Pixel Format    : {PixelFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorType )}" );
+            Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap?.ColorFormat}" );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixelFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorFormat )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
             Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormat.GLFormatAsString( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );

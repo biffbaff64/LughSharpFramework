@@ -618,6 +618,8 @@ public partial class PNGDecoder
 
     public static byte[] CreatePNGFromTexture( Texture texture )
     {
+        Logger.Checkpoint();
+        
         Guard.Against.Null( texture );
         Guard.Against.Null( texture.GetImageData() );
 

@@ -1,4 +1,4 @@
-﻿// /////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
 //  Copyright (c) 2024 Richard Ikin
@@ -22,10 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
+using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Core;
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Utils;
 
 using LughUtils.source.Logging;
@@ -35,8 +36,7 @@ using NUnit.Framework;
 namespace LughSharp.Tests.Source;
 
 [TestFixture]
-[PublicAPI]
-public class PNGLoadAndExamineTest
+public class GraphicsTest
 {
     [SetUp]
     public void Setup()
@@ -46,9 +46,17 @@ public class PNGLoadAndExamineTest
     [Test]
     public void Run()
     {
-        var file = Engine.Api.Files.Assets( "PackedImages/objects/rover_wheel.png" );
+        var files = new List< FileInfo >
+        {
+            Engine.Api.Files.Assets( "PackedImages/Objects/red7logo.png" ),
+            Engine.Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" ),
+            Engine.Api.Files.Assets( "PackedImages/Objects/libgdx.png" ),
+            Engine.Api.Files.Assets( "title_background.png" ),
+        };
+
+        var pixmap = new Pixmap( files[ 1 ] );
         
-        PNGDecoder.AnalysePNG( file.FullName, true );
+        pixmap.DebugPrint();
     }
 
     [TearDown]
@@ -59,4 +67,3 @@ public class PNGLoadAndExamineTest
 
 // ============================================================================
 // ============================================================================
-

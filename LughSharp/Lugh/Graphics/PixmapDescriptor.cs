@@ -34,13 +34,12 @@ public struct PixmapDescriptor()
 {
     public int           Width         { get; set; } = 0;   // Width of the pixmap in pixels.
     public int           Height        { get; set; } = 0;   // Height of the pixmap in pixels.
+    public Pixmap.Format ColorFormat   { get; set; } = 0;   // Color type of the pixmap.
     public byte          BitDepth      { get; set; } = 0;   // Number of bits per pixel.
-    public Pixmap.Format ColorType     { get; set; } = 0;   // Color type of the pixmap.
     public int           BytesPerPixel { get; set; } = 0;   // Number of bytes per pixel.
     public uint          Blend         { get; set; } = 0;   // Blend mode.
     public uint          Scale         { get; set; } = 0;   // Scale mode.
     public byte[]        Pixels        { get; set; } = [ ]; // Pixel data.
-    public long          TotalIDATSize { get; set; } = 0;   // Total size of the IDAT data.
 
     // ========================================================================
 
@@ -48,12 +47,11 @@ public struct PixmapDescriptor()
     {
         Logger.Debug( $"Width        : {Width}" );
         Logger.Debug( $"Height       : {Height}" );
-        Logger.Debug( $"BitDepth     : {BitDepth}" );
-        Logger.Debug( $"ColorType    : {ColorType}" );
-        Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
+        Logger.Debug( $"ColorType    : {ColorFormat}" );
         Logger.Debug( $"Blend        : {Blend}" );
         Logger.Debug( $"Scale        : {Scale}" );
-        Logger.Debug( $"TotalIDATSize: {TotalIDATSize}" );
+        Logger.Debug( $"BitDepth     : {BitDepth}" );
+        Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
     }
 }
 

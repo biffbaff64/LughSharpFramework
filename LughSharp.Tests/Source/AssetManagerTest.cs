@@ -65,10 +65,6 @@ public class AssetManagerTest
 //            Engine.Api.Files.Assets( "title_background.png" ),
         };
 
-        // Test without using AssetManager
-//        PNGDecoder.AnalysePNG( files[ 0 ].FullName, true );
-
-        // Test with AssetManager
         foreach ( var file in files )
         {
             _assetManager.Load< Texture >( file.FullName );
@@ -108,7 +104,7 @@ public class AssetManagerTest
 
             if ( texture != null )
             {
-                PNGDecoder.AnalysePNG( texture, true );
+                Logger.Debug( $"Texture loaded and retrieved: {asset.Name}" );
             }
             else
             {
@@ -120,6 +116,7 @@ public class AssetManagerTest
             Logger.Debug( $"AssetManager does not contain {asset.Name}" );
         }
 
+        Logger.Debug( $"########## Completed {asset.Name}... ##########" );
         Logger.Divider();
         Logger.Divider();
         Logger.Divider();

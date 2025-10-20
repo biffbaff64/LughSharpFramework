@@ -116,7 +116,26 @@ public class PixelFormat
     /// </summary>
     public static Pixmap.Format PNGColorToPixmapFormat( int colorType )
     {
-        throw new NotImplementedException();
+//        const int GDX_2D_FORMAT_ALPHA           = 1;
+//        const int GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
+//        const int GDX_2D_FORMAT_RGB888          = 3;
+//        const int GDX_2D_FORMAT_RGBA8888        = 4;
+//        const int GDX_2D_FORMAT_RGB565          = 5;
+//        const int GDX_2D_FORMAT_RGBA4444        = 6;
+
+        return colorType switch
+        {
+            1 => Pixmap.Format.Alpha,
+            2 => Pixmap.Format.LuminanceAlpha,
+            3 => Pixmap.Format.RGB888,
+            4 => Pixmap.Format.RGBA8888,
+            5 => Pixmap.Format.RGB565,
+            6 => Pixmap.Format.RGBA4444,
+
+            // ----------------------------------
+
+            var _ => throw new GdxRuntimeException( $"Unknown PNG Color Type: {colorType}" ),
+        };
     }
 
     /// <summary>
@@ -158,10 +177,10 @@ public class PixelFormat
             (4, 8) => Pixmap.Format.LuminanceAlpha, // Grayscale with alpha, 8 bits
             (2, 5) => Pixmap.Format.RGB565,         // Truecolor, 5 bits
             (3, 8) => Pixmap.Format.IndexedColor,   // Indexed color, 8 bits
-            
+
             // ----------------------------------
-            
-            var _ => Pixmap.Format.Invalid,         // Invalid format, handled by caller
+
+            var _ => Pixmap.Format.Invalid, // Invalid format, handled by caller
         };
 
         return format;

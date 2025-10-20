@@ -62,25 +62,15 @@ public class MainGame : Game
 
         Logger.Divider();
         Logger.Divider();
-        var test = new AssetManagerTest();
+//        var test = new AssetManagerTest();
 //        var test = new TexturePackerTest();
 //        var test = new PNGLoadAndExamineTest();
+        var test = new GraphicsTest();
         test.Setup();
         test.Run();
         test.TearDown();
         Logger.Divider();
         Logger.Divider();
-
-//        var imagePath = $"{IOUtils.AssetsRoot}packedimages/objects/rover_wheel.png";
-//        _assetManager.Load< Texture >( imagePath );
-//        _assetManager.FinishLoading();
-//        var image = _assetManager.Get< Texture >( imagePath );
-//        PNGDecoder.AnalysePNG( image, true );
-//        var data  = image?.GetAsPNG();
-//        if ( data != null )
-//        {
-//            PNGDecoder.AnalyseAndWritePNG( $"{IOUtils.AssetsRoot}newimage.png", data, true );
-//        }
 
         Logger.Debug( "Done" );
     }
@@ -314,8 +304,6 @@ public class MainGame : Game
 
             Logger.Debug( "TextureMinFilter set to GL_NEAREST" );
             Logger.Debug( "TextureMagFilter set to GL_NEAREST" );
-
-            PNGDecoder.AnalysePNG( filename, true );
         }
         catch ( Exception ex )
         {

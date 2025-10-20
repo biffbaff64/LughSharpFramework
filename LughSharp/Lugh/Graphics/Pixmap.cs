@@ -209,7 +209,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            return PixelFormat.PixmapFormatToGLFormat( Gdx2DPixmap.ColorType );
+            return PixelFormat.PixmapFormatToGLFormat( Gdx2DPixmap.ColorFormat );
         }
     }
 
@@ -223,7 +223,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            return PixelFormat.PixmapFormatToGLInternalFormat( Gdx2DPixmap.ColorType );
+            return PixelFormat.PixmapFormatToGLInternalFormat( Gdx2DPixmap.ColorFormat );
         }
     }
 
@@ -235,7 +235,7 @@ public class Pixmap : IDisposable
     {
         get
         {
-            return Gdx2DPixmap?.ColorType switch
+            return Gdx2DPixmap?.ColorFormat switch
             {
                 Format.Alpha          => IGL.GL_UNSIGNED_BYTE,
                 Format.LuminanceAlpha => IGL.GL_UNSIGNED_BYTE,
@@ -245,7 +245,7 @@ public class Pixmap : IDisposable
                 Format.RGBA4444       => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
                 Format.IndexedColor   => IGL.GL_UNSIGNED_BYTE,
 
-                var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap?.ColorType}" ),
+                var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap?.ColorFormat}" ),
             };
         }
     }
@@ -384,7 +384,7 @@ public class Pixmap : IDisposable
     /// </summary>
     public Format GetColorFormat()
     {
-        return Gdx2DPixmap!.ColorType;
+        return Gdx2DPixmap!.ColorFormat;
     }
 
     /// <summary>
@@ -562,8 +562,7 @@ public class Pixmap : IDisposable
     /// <returns> The pixel color in RGBA8888 format.  </returns>
     public int GetPixel( int x, int y )
     {
-//TODO:        Guard.Against.Null( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
-        Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
+        Guard.Against.Null( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
         
         return Gdx2DPixmap.GetPixel( x, y );
     }
@@ -663,34 +662,36 @@ public class Pixmap : IDisposable
     /// </summary>
     public void DebugPrint()
     {
-        if ( Api.DevMode )
+//        if ( !Api.DevMode )
+//        {
+//            return;
+//        }
+
+        if ( Gdx2DPixmap == null )
         {
-            if ( Gdx2DPixmap == null )
-            {
-                Logger.Error( $"Gdx2DPixmap is NULL, cannot print debug" );
+            Logger.Error( $"Gdx2DPixmap is NULL, cannot print debug" );
 
-                return;
-            }
+            return;
+        }
 
-            Logger.Debug( $"Width : {Width}, Height: {Height}" );
-            Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
-                          + $"{Width} x {Height} : {Gdx2DPixmap.ColorType}: "
-                          + $"{PixelFormat.GetFormatString( GetColorFormat() )}" );
-            Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
+        Logger.Debug( $"Width : {Width}, Height: {Height}" );
+        Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
+                      + $"{Width} x {Height} : {Gdx2DPixmap.ColorFormat}: "
+                      + $"{PixelFormat.GetFormatString( GetColorFormat() )}" );
+        Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
-            var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
+        var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
 
-            Guard.ThrowIfNull( a );
+        Guard.ThrowIfNull( a );
 
-            Logger.Debug( $"Buffer Length : {a.Length}" );
+        Logger.Debug( $"Buffer Length : {a.Length}" );
 
-            for ( var i = 0; i < 100; i += 10 )
-            {
-                Logger.Debug( $"{a[ i + 0 ]},{a[ i + 1 ]},{a[ i + 2 ]},{a[ i + 3 ]},"
-                              + $"{a[ i + 4 ]},{a[ i + 5 ]},{a[ i + 6 ]},{a[ i + 7 ]},"
-                              + $"{a[ i + 8 ]},{a[ i + 9 ]},{a[ i + 10 ]},{a[ i + 11 ]},"
-                              + $"{a[ i + 12 ]},{a[ i + 13 ]},{a[ i + 14 ]},{a[ i + 15 ]}," );
-            }
+        for ( var i = 0; i < 100; i += 10 )
+        {
+            Logger.Debug( $"{a[ i + 0 ]},{a[ i + 1 ]},{a[ i + 2 ]},{a[ i + 3 ]},"
+                          + $"{a[ i + 4 ]},{a[ i + 5 ]},{a[ i + 6 ]},{a[ i + 7 ]},"
+                          + $"{a[ i + 8 ]},{a[ i + 9 ]},{a[ i + 10 ]},{a[ i + 11 ]},"
+                          + $"{a[ i + 12 ]},{a[ i + 13 ]},{a[ i + 14 ]},{a[ i + 15 ]}," );
         }
     }
 
@@ -743,6 +744,11 @@ public class Pixmap : IDisposable
             Color      = null!;
             IsDisposed = true;
         }
+    }
+
+    ~Pixmap()
+    {
+        Dispose( false );
     }
 
     #endregion dispose pattern
