@@ -90,30 +90,20 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
             throw new GdxRuntimeException( "filename cannot be null or empty" );
         }
 
-//        if ( file == null )
-//        {
-//            file = Resolve( filename );
-//
-//            if ( file == null )
-//            {
-//                throw new GdxRuntimeException( $"Unable to resolve filename: {filename}" );
-//            }
-//        }
-
         var p = parameter as TextureLoaderParameters;
 
         _loaderInfo.Filename = file?.Name;
 
         if ( p?.TextureData == null )
         {
-            var format     = Pixmap.Format.RGBA8888;
+            var format     = LughFormat.RGBA8888;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;
 
             if ( parameter != null )
             {
-                format              = p.Format;
+                format              = p!.Format;
                 genMipMaps          = p.GenMipMaps;
                 _loaderInfo.Texture = p.Texture;
             }
@@ -273,7 +263,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets the format of the final texture. Uses the source image's format if null.
         /// </summary>
-        public Pixmap.Format Format { get; set; }
+        public int Format { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate mipmaps for the texture.

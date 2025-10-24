@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
-public partial class PNGDecoder
+public class PNGDecoder
 {
     public const int SIGNATURE_LENGTH       = 8;
     public const int IHDR_START             = 8;
@@ -79,12 +79,12 @@ public partial class PNGDecoder
 
     // ========================================================================
 
-    public static PNGFormatStructs.PNGSignature PngSignature  { get; private set; }
-    public static PNGFormatStructs.IHDRChunk    IHDRchunk     { get; private set; }
-    public static PNGFormatStructs.IDATChunk    IDATchunk     { get; private set; }
-    public static long                          TotalIDATSize { get; private set; } = 0;
-    public static Pixmap.Format                 PixelFormat   { get; private set; }
-    public static int                           BytesPerPixel { get; private set; }
+    public static PNGFormatStructs.PNGSignature PngSignature   { get; private set; }
+    public static PNGFormatStructs.IHDRChunk    IHDRchunk      { get; private set; }
+    public static PNGFormatStructs.IDATChunk    IDATchunk      { get; private set; }
+    public static long                          TotalIDATSize  { get; private set; } = 0;
+    public static int                           PNGPixelFormat { get; private set; }
+    public static int                           BytesPerPixel  { get; private set; }
 
     // ========================================================================
 
@@ -217,15 +217,15 @@ public partial class PNGDecoder
         var colorType = IHDRchunk.ColorType;
         var bitDepth  = IHDRchunk.BitDepth;
 
-        BytesPerPixel = GetBytesPerPixel( colorType, bitDepth );
-        PixelFormat   = LughSharp.Lugh.Graphics.PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
+        BytesPerPixel  = GetBytesPerPixel( colorType, bitDepth );
+        PNGPixelFormat = LughSharp.Lugh.Graphics.PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
 
         Logger.Debug( $"colorType    : {colorType}" );
         Logger.Debug( $"bitDepth     : {bitDepth}" );
         Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
-        Logger.Debug( $"PixelFormat  : {PixelFormat}" );
+        Logger.Debug( $"PixelFormat  : {PNGPixelFormat}" );
 
-        if ( PixelFormat == Pixmap.Format.Invalid )
+        if ( PNGPixelFormat == LughFormat.INVALID )
         {
             ImageUtils.RejectInvalidImage( ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
                                            $"BitDepth: {bitDepth}, ColorType: {colorType}." );
@@ -619,7 +619,7 @@ public partial class PNGDecoder
     public static byte[] CreatePNGFromTexture( Texture texture )
     {
         Logger.Checkpoint();
-        
+
         Guard.Against.Null( texture );
         Guard.Against.Null( texture.GetImageData() );
 
@@ -628,24 +628,6 @@ public partial class PNGDecoder
                                      texture.Height,
                                      texture.ColorFormat,
                                      ( byte )texture.BitDepth );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="rawRgba"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="format"></param>
-    /// <param name="bitDepth"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba, int width, int height, Pixmap.Format format, byte bitDepth = 8 )
-    {
-        return CreatePNGFromRawRGBA( rawRgba,
-                                     width,
-                                     height,
-                                     Graphics.PixelFormat.PixmapFormatToGLFormat( format ) );
     }
 
     /// <summary>
@@ -768,7 +750,7 @@ public partial class PNGDecoder
 
     public static void WritePNGToFile( byte[] pngData, string filename )
     {
-        if ( pngData == null || pngData.Length == 0 )
+        if ( ( pngData == null ) || ( pngData.Length == 0 ) )
         {
             throw new ArgumentException( "PNG data is null or empty." );
         }
@@ -925,7 +907,7 @@ public partial class PNGDecoder
         Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
         Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
         Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType} :: ( {ColorTypeName( IHDRchunk.ColorType )} )" );
-        Logger.Debug( $"- PixelFormat   : {Lugh.Graphics.PixelFormat.GetFormatString( PixelFormat )} :: ( {PixelFormat} )" );
+        Logger.Debug( $"- PixelFormat   : {Lugh.Graphics.PixelFormat.GetFormatString( PNGPixelFormat )} :: ( {PNGPixelFormat} )" );
         Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
         Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
         Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );

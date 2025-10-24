@@ -59,7 +59,7 @@ public class MipMapGenerator
     {
         if ( !UseHwMipMap )
         {
-            GenerateMipMapCPU( target, pixmap, textureWidth, textureHeight );
+            GenerateMipMapCpu( target, pixmap, textureWidth, textureHeight );
 
             return;
         }
@@ -119,11 +119,11 @@ public class MipMapGenerator
         }
         else
         {
-            GenerateMipMapCPU( target, pixmap, textureWidth, textureHeight );
+            GenerateMipMapCpu( target, pixmap, textureWidth, textureHeight );
         }
     }
 
-    private static unsafe void GenerateMipMapCPU( int target, Pixmap pixmap, int textureWidth, int textureHeight )
+    private static unsafe void GenerateMipMapCpu( int target, Pixmap pixmap, int textureWidth, int textureHeight )
     {
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {

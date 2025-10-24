@@ -3,7 +3,6 @@ using System.Text;
 using System.Text.Json.Serialization;
 
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -114,9 +113,9 @@ public class TexturePackerSettings
     public TextureWrapMode WrapY { get; set; }
 
     /// <summary>
-    /// The <c>Pixmap.Format.XXX</c> the texture will use in-memory.
+    /// The <c>PixelFormat.XXX</c> the texture will use in-memory.
     /// </summary>
-    public Pixmap.Format Format { get; set; }
+    public int Format { get; set; }
 
     /// <summary>
     /// If true, two images that are pixel for pixel the same will only be packed once.
@@ -284,7 +283,7 @@ public class TexturePackerSettings
         StripWhitespaceX      = false;
         StripWhitespaceY      = false;
         IsAlias               = true;
-        Format                = Pixmap.Format.RGBA8888;
+        Format                = LughFormat.RGBA8888;
         JpegQuality           = 1.0f;
         OutputFormat          = "png";
         FilterMin             = TextureFilterMode.Nearest;

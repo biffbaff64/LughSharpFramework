@@ -90,68 +90,22 @@ public partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void TexImage2D< T >( GLenum target,
-                                 GLint level,
-                                 T internalFormat,
-                                 GLsizei width,
-                                 GLsizei height,
-                                 GLint border,
-                                 T format,
-                                 GLenum type,
-                                 IntPtr pixels,
-                                 GLboolean enabled = true ) where T : notnull
+    public void TexImage2D( GLenum target,
+                            GLint level,
+                            GLenum internalFormat,
+                            GLsizei width,
+                            GLsizei height,
+                            GLint border,
+                            GLenum format,
+                            GLenum type,
+                            IntPtr pixels = 0,
+                            GLboolean enabled = true )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
         if ( enabled )
         {
-            int internalFormatAsInt;
-            int formatAsInt;
-
-            if ( typeof( T ) == typeof( Pixmap.Format ) )
-            {
-                var internalFormatAsPixmapFormat = ( Pixmap.Format )( object )internalFormat;
-                var formatAsPixmapFormat         = ( Pixmap.Format )( object )format;
-
-                internalFormatAsInt = PixelFormat.PixmapFormatToPNGColorType( internalFormatAsPixmapFormat );
-                formatAsInt         = PixelFormat.PixmapFormatToPNGColorType( formatAsPixmapFormat );
-            }
-            else
-            {
-                internalFormatAsInt = ( int )( object )internalFormat;
-                formatAsInt         = ( int )( object )format;
-            }
-
-            _glTexImage2D( target, level, internalFormatAsInt, width, height, border, formatAsInt, type, pixels );
-        }
-    }
-
-    /// <inheritdoc />
-    public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap, bool enabled = true )
-    {
-        Logger.Checkpoint();
-
-        GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
-
-        unsafe
-        {
-            fixed ( byte* p = &pixmap.PixelData[ 0 ] )
-            {
-                GL.PixelStorei( PixelStoreParameter.UnpackAlignment, 1 );
-
-                if ( enabled )
-                {
-                    _glTexImage2D( target,                       // int
-                                   level,                        // int
-                                   pixmap.GLInternalPixelFormat, // int
-                                   pixmap.Width,                 // int
-                                   pixmap.Height,                // int
-                                   border,                       // int
-                                   pixmap.GLPixelFormat,         // int
-                                   pixmap.GLDataType,            // int
-                                   *p );                         // nint
-                }
-            }
+            _glTexImage2D( target, level, internalFormat, width, height, border, format, type, pixels );
         }
     }
 
@@ -189,6 +143,35 @@ public partial class GLBindings
                                    pixelFormat,
                                    dataType,
                                    ( IntPtr )p );
+                }
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap, GLboolean enabled = true )
+    {
+        Logger.Checkpoint();
+
+        GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
+
+        unsafe
+        {
+            fixed ( byte* p = &pixmap.PixelData[ 0 ] )
+            {
+                GL.PixelStorei( PixelStoreParameter.UnpackAlignment, 1 );
+
+                if ( enabled )
+                {
+                    _glTexImage2D( target,                       // int
+                                   level,                        // int
+                                   pixmap.GLInternalPixelFormat, // int
+                                   pixmap.Width,                 // int
+                                   pixmap.Height,                // int
+                                   border,                       // int
+                                   pixmap.GLPixelFormat,         // int
+                                   pixmap.GLDataType,            // int
+                                   *p );                         // nint
                 }
             }
         }

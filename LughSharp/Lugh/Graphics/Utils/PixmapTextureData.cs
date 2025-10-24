@@ -38,12 +38,12 @@ public class PixmapTextureData : ITextureData
 
     // ========================================================================
 
-    private Pixmap.Format _pixelFormat;
+    private int _pixelFormat;
 
     // ========================================================================
 
     public PixmapTextureData( Pixmap pixmap,
-                              Pixmap.Format format,
+                              int format,
                               bool useMipMaps,
                               bool disposePixmap,
                               bool managed = false )
@@ -64,7 +64,7 @@ public class PixmapTextureData : ITextureData
     public bool ShouldDisposePixmap() => DisposePixmap;
 
     /// <inheritdoc />
-    public Pixmap.Format GetPixelFormat() => _pixelFormat;
+    public int GetPixelFormat() => _pixelFormat;
 
     /// <inheritdoc />
     public Pixmap FetchPixmap() => Pixmap;

@@ -46,7 +46,7 @@ public partial class TexturePacker
     /// <exception cref="GdxRuntimeException"></exception>
     /// <exception cref="NullReferenceException"></exception>
     /// <exception cref="Exception"></exception>
-    private void WriteImages( string outputDir, string scaledPackFileName, List< Page? > pages )
+    private void WriteImages( string outputDir, string scaledPackFileName, List< Page > pages )
     {
         // Prepare output file and directory names
         var packFileNoExt = Path.Combine( outputDir, scaledPackFileName );
@@ -392,7 +392,7 @@ public partial class TexturePacker
         // Check for duplicate region names if appending
         if ( packFile.Exists )
         {
-            var textureAtlasData = new TextureAtlasData( packFile, packDir, _settings.FlattenPaths );
+            var textureAtlasData = new TextureAtlasData( packFile, packDir!, _settings.FlattenPaths );
 
             foreach ( var page in pages )
             {

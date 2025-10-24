@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using SixLabors.ImageSharp.PixelFormats;
-
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
@@ -31,32 +29,36 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// </summary>
 public partial class Gdx2DPixmap
 {
-    private static Buffer< byte > Load( gdx2d_pixmap nativeData, byte[] buffer, int offset, int len )
+    private unsafe Buffer< byte > InitializeFromBuffer( byte[] buffer, int offset, int len )
     {
-        // 1. Load the image
-        using var stream = new System.IO.MemoryStream( buffer, offset, len );
-        using var image  = SixLabors.ImageSharp.Image.Load< Rgba32 >( stream );
+        var bufferHandle  = GCHandle.Alloc( buffer, GCHandleType.Pinned );
+        var pixmapPtr     = load( bufferHandle.AddrOfPinnedObject() + offset, len );
+        var pixmap        = Marshal.PtrToStructure< gdx2d_pixmap >( pixmapPtr );
+        var dataBlockSize = ( int )( pixmap.Width * pixmap.Height * bytes_per_pixel( pixmap.ColorFormat ) );
 
-        // 2. Calculate the required byte size
-        // Rgba32 is 4 bytes per pixel.
-        var dataBlockSize = image.Width * image.Height * Unsafe.SizeOf< Rgba32 >();
-        var pixelBytes    = new byte[ dataBlockSize ];
+        bufferHandle.Free();
 
-        // 3. COPY the raw pixel data directly into your byte array
-        // This is the direct, supported replacement for Marshal.Copy logic.
-        image.CopyPixelDataTo( pixelBytes );
+        Width       = ( int )pixmap.Width;
+        Height      = ( int )pixmap.Height;
+        ColorFormat = ( int )pixmap.ColorFormat;
+        Pixels      = new byte[ dataBlockSize ];
 
-        // Note: This requires the System.Runtime.CompilerServices namespace 
-        // for Unsafe.SizeOf<T>() for efficiency.
+        Marshal.Copy( pixmap.Pixels, Pixels, 0, dataBlockSize );
 
-        nativeData.Width       = ( uint )image.Width;
-        nativeData.Height      = ( uint )image.Height;
-        nativeData.ColorFormat = ( uint )Pixmap.Format.RGBA8888;
-        nativeData.Pixels      = pixelBytes;
+        var byteBuffer = Buffer< byte >.Wrap( Pixels );
 
-        var pixelBuffer = Buffer< byte >.Wrap( pixelBytes );
+        return byteBuffer;
 
-        return pixelBuffer;
+        // --------------------------------------
+
+        [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_load" )]
+        static extern IntPtr load( IntPtr nativeData, int len );
+
+        [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_bytes_per_pixel" )]
+        static extern uint bytes_per_pixel( uint format );
+
+        [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_free" )]
+        static extern void free( gdx2d_pixmap* nativeData );
     }
 
     /// <summary>
@@ -68,47 +70,47 @@ public partial class Gdx2DPixmap
 
         switch ( ColorFormat )
         {
-            case Pixmap.Format.Alpha:
+            case LughFormat.ALPHA:
                 ClearAlpha( color, size );
 
                 break;
 
-            case Pixmap.Format.LuminanceAlpha:
+            case LughFormat.LUMINANCE_ALPHA:
                 ClearLuminanceAlpha( color, size );
 
                 break;
 
-            case Pixmap.Format.RGB888:
+            case LughFormat.RGB888:
                 ClearRGB888( color, size );
 
                 break;
 
-            case Pixmap.Format.RGBA8888:
+            case LughFormat.RGBA8888:
                 ClearRGBA8888( color, size );
 
                 break;
 
-            case Pixmap.Format.RGB565:
+            case LughFormat.RGB565:
                 ClearRGB565( color, size );
 
                 break;
 
-            case Pixmap.Format.RGBA4444:
+            case LughFormat.RGBA4444:
                 ClearRGBA4444( color, size );
 
                 break;
 
-            case Pixmap.Format.Intensity:
-                ClearIntensity( color, size );
+//            case PixelFormat.INTENSITY:
+//                ClearIntensity( color, size );
+//
+//                break;
 
-                break;
-
-            case Pixmap.Format.IndexedColor:
+            case LughFormat.INDEXED_COLOR:
                 ClearIndexedColor( color, size );
 
                 break;
 
-            case Pixmap.Format.Invalid:
+            case LughFormat.INVALID:
             default:
                 throw new GdxRuntimeException( "Unknown color type" );
         }
@@ -254,16 +256,16 @@ public partial class Gdx2DPixmap
     /// <summary>
     /// Converts a color to the specified pixel format
     /// </summary>
-    public static uint ToPixelFormat( Pixmap.Format format, uint color )
+    public static uint ToPixelFormat( int format, uint color )
     {
         uint r, g, b, a;
 
         switch ( format )
         {
-            case Pixmap.Format.Alpha:
+            case LughFormat.ALPHA:
                 return color & 0xff;
 
-            case Pixmap.Format.LuminanceAlpha:
+            case LughFormat.LUMINANCE_ALPHA:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
@@ -272,17 +274,17 @@ public partial class Gdx2DPixmap
 
                 return ( l & 0xffffff00 ) | a;
 
-            case Pixmap.Format.RGB888:
+            case LughFormat.RGB888:
                 return color >> 8;
 
-            case Pixmap.Format.RGB565:
+            case LughFormat.RGB565:
                 r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
                 g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
                 b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
 
                 return r | g | b;
 
-            case Pixmap.Format.RGBA4444:
+            case LughFormat.RGBA4444:
                 r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
                 g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
                 b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
@@ -290,11 +292,11 @@ public partial class Gdx2DPixmap
 
                 return r | g | b | a;
 
-            case Pixmap.Format.Intensity:
+//            case PixelFormat.INTENSITY:
             //TODO:
-            case Pixmap.Format.IndexedColor:
+            case LughFormat.INDEXED_COLOR:
             //TODO:
-            case Pixmap.Format.RGBA8888:
+            case LughFormat.RGBA8888:
                 return color;
 
             default:
@@ -403,8 +405,15 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// Draws a pixmap at the specified location
+    /// Draws an area of the source pixmap onto this pixmap.
     /// </summary>
+    /// <param name="src"> The source pixmap. </param>
+    /// <param name="srcX"> The source X coordinate. </param>
+    /// <param name="srcY"> The source Y coordinate. </param>
+    /// <param name="dstX"> The destination X coordinate. </param>
+    /// <param name="dstY"> The destination Y coordinate. </param>
+    /// <param name="width"> The width of the area. </param>
+    /// <param name="height"> The height of the area. </param>
     public void DrawPixmapNative( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
         gdx2d_draw_pixmap( new gdx2d_pixmap(),
@@ -454,15 +463,15 @@ public partial class Gdx2DPixmap
 //    private static extern void gdx2d_fill_circle( int x, int y, uint radius, uint color );
 //
 //    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_fill_triangle( PixmapDescriptor pd,
+//    private static extern void gdx2d_fill_triangle( PixmapData pd,
 //                                                     int x1, int y1,
 //                                                     int x2, int y2,
 //                                                     int x3, int y3,
 //                                                     uint color );
 //
 //    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_pixmap( PixmapDescriptor pd,
-//                                                   PixmapDescriptor dpd,
+//    private static extern void gdx2d_draw_pixmap( PixmapData pd,
+//                                                   PixmapData dpd,
 //                                                   int srcX,
 //                                                   int srcY,
 //                                                   int srcWidth,
@@ -478,7 +487,7 @@ public partial class Gdx2DPixmap
     // ------------------------------------------
 
     [DllImport( DLL_PATH, EntryPoint = "gdx2d_load", CallingConvention = CallingConvention.Cdecl )]
-    private static extern IntPtr gdx2d_load( [In] [Out] long[] nativeData, byte[] buffer, int offset, int len );
+    private static extern IntPtr gdx2d_load( IntPtr nativeData, int len );
 
     [DllImport( DLL_PATH, EntryPoint = "gdx2d_new", CallingConvention = CallingConvention.Cdecl )]
     private static extern IntPtr gdx2d_new( [In] [Out] long[] nativeData, int width, int height, int format );

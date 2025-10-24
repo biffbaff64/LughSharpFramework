@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
-
-using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -60,13 +57,13 @@ public class Texture : GLTexture, IManaged
 
     // ========================================================================
 
-    public int           Width              => TextureData.Width;
-    public int           Height             => TextureData.Height;
-    public int           NumManagedTextures => _managedTextures.Count;
-    public uint          TextureID          => GLTextureHandle;
-    public bool          IsManaged          => TextureData is { IsManaged: true };
-    public Pixmap.Format ColorFormat        => TextureData.GetPixelFormat();
-    public int           BitDepth           => TextureData.BitDepth;
+    public int  Width              => TextureData.Width;
+    public int  Height             => TextureData.Height;
+    public int  NumManagedTextures => _managedTextures.Count;
+    public uint TextureID          => GLTextureHandle;
+    public bool IsManaged          => TextureData is { IsManaged: true };
+    public int  ColorFormat        => TextureData.GetPixelFormat();
+    public int  BitDepth           => TextureData.BitDepth;
 
     // ========================================================================
 
@@ -96,7 +93,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="file"> The file to load. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file, bool useMipMaps )
-        : this( file, Pixmap.Format.RGBA8888, useMipMaps )
+        : this( file, LughFormat.RGBA8888, useMipMaps )
     {
         Name = Path.GetFileNameWithoutExtension( file.Name );
     }
@@ -104,13 +101,13 @@ public class Texture : GLTexture, IManaged
     /// <summary>
     /// Create a new Texture from the file specified in the given <see cref="FileInfo"/>.
     /// The Texture pixmap format will be set to the given format, which defaults to
-    /// <see cref="Pixmap.Format.RGBA8888"/>.
+    /// <see cref="LughFormat.RGBA8888"/>.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file,
-                    Pixmap.Format format = Pixmap.Format.RGBA8888,
+                    int format = LughFormat.RGBA8888,
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
@@ -133,7 +130,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
-    public Texture( Pixmap pixmap, Pixmap.Format format, bool useMipMaps = false )
+    public Texture( Pixmap pixmap, int format, bool useMipMaps = false )
         : this( new PixmapTextureData( pixmap, format, useMipMaps, false ) )
     {
     }
@@ -145,7 +142,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="height"> The Height in pixels. </param>
     /// <param name="format"> The pixmap <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> </param>
     /// <param name="managed"></param>
-    public Texture( int width, int height, Pixmap.Format format, bool managed = false )
+    public Texture( int width, int height, int format, bool managed = false )
         : this( new PixmapTextureData( new Pixmap( width, height, format ),
                                        0,
                                        false,

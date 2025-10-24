@@ -22,16 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Files;
-
-using LughUtils.source.Collections;
-
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Graphics.Atlases;
 
 [PublicAPI]
-public partial class TextureAtlasData
+public class TextureAtlasData
 {
     public List< Page >   Pages   { get; set; } = [ ];
     public List< Region > Regions { get; set; } = [ ];
@@ -48,7 +44,7 @@ public partial class TextureAtlasData
     /// <param name="packFile"></param>
     /// <param name="imagesDir"></param>
     /// <param name="flip"></param>
-    public TextureAtlasData( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
+    public TextureAtlasData( FileInfo packFile, DirectoryInfo imagesDir, bool flip = false )
     {
         try
         {
@@ -83,14 +79,14 @@ public partial class TextureAtlasData
             },
             [ "format" ] = page =>
             {
-                page.Format = Enum.Parse< Pixmap.Format >( entry[ 1 ] );
+                page.Format = int.Parse( entry[ 1 ] );
             },
             [ "filter" ] = page =>
             {
                 page.MinFilter = Enum.Parse< TextureFilterMode >( entry[ 1 ] );
                 page.MagFilter = Enum.Parse< TextureFilterMode >( entry[ 2 ] );
-                page.UseMipMaps = page.MinFilter != TextureFilterMode.Nearest
-                                  && page.MinFilter != TextureFilterMode.Linear;
+                page.UseMipMaps = ( page.MinFilter != TextureFilterMode.Nearest )
+                                  && ( page.MinFilter != TextureFilterMode.Linear );
             },
             [ "repeat" ] = page =>
             {
@@ -182,7 +178,7 @@ public partial class TextureAtlasData
             var line = reader.ReadLine();
 
             // Ignore empty lines before first entry
-            while ( line != null && line.Trim().Length == 0 )
+            while ( ( line != null ) && ( line.Trim().Length == 0 ) )
             {
                 line = reader.ReadLine();
             }
@@ -190,7 +186,7 @@ public partial class TextureAtlasData
             // Header entries
             while ( true )
             {
-                if ( line == null || line.Trim().Length == 0 )
+                if ( ( line == null ) || ( line.Trim().Length == 0 ) )
                 {
                     break;
                 }
@@ -404,7 +400,7 @@ public partial class TextureAtlasData
         public FileInfo? TextureFile { get; set; }
 
         public bool              UseMipMaps         { get; set; }
-        public Pixmap.Format     Format             { get; set; } = Pixmap.Format.RGBA8888;    // Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
+        public int               Format             { get; set; } = LughFormat.RGBA8888; // Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
         public TextureFilterMode MinFilter          { get; set; } = TextureFilterMode.Nearest;
         public TextureFilterMode MagFilter          { get; set; } = TextureFilterMode.Nearest;
         public TextureWrapMode   UWrap              { get; set; } = TextureWrapMode.ClampToEdge;

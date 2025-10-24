@@ -60,9 +60,9 @@ public class AssetManagerTest
         var files = new List< FileInfo >
         {
             Engine.Api.Files.Assets( "PackedImages/Objects/red7logo.png" ),
-//            Engine.Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" ),
-//            Engine.Api.Files.Assets( "PackedImages/Objects/libgdx.png" ),
-//            Engine.Api.Files.Assets( "title_background.png" ),
+            Engine.Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" ),
+            Engine.Api.Files.Assets( "PackedImages/Objects/libgdx.png" ),
+            Engine.Api.Files.Assets( "title_background.png" ),
         };
 
         foreach ( var file in files )

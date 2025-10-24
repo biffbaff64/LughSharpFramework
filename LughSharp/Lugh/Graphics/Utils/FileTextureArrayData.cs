@@ -36,7 +36,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <summary>
     /// 
     /// </summary>
-    public Pixmap.Format PixelFormat { get; set; }
+    public int PixelFormat { get; set; }
 
     /// <summary>
     /// whether the TextureArrayData is prepared or not.
@@ -71,7 +71,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <summary>
     /// the GL Data type of this TextureArray
     /// </summary>
-    public int GLDataType => Lugh.Graphics.PixelFormat.PixmapFormatToGLDataType( PixelFormat );
+    public int GLDataType => Lugh.Graphics.PixelFormat.PixelFormatToGLDataType( PixelFormat );
 
     // ========================================================================
 
@@ -80,7 +80,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <param name="pixelFormat"></param>
     /// <param name="useMipMaps"></param>
     /// <param name="files"></param>
-    public FileTextureArrayData( Pixmap.Format pixelFormat, bool useMipMaps, FileInfo[] files )
+    public FileTextureArrayData( int pixelFormat, bool useMipMaps, FileInfo[] files )
     {
         PixelFormat  = pixelFormat;
         _useMipMaps  = useMipMaps;

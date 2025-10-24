@@ -123,21 +123,15 @@ public class FloatTextureData : ITextureData
 
             // GLES and WebGL defines texture format by 3rd and 8th argument,
             // so to get a float texture one needs to supply GL_RGBA and GL_FLOAT there.
-            unsafe
-            {
-                fixed ( void* ptr = &Buffer.ToArray()[ 0 ] )
-                {
-                    GL.TexImage2D( target,
-                                   0,
-                                   IGL.GL_RGBA,
-                                   Width,
-                                   Height,
-                                   0,
-                                   IGL.GL_RGBA,
-                                   IGL.GL_FLOAT,
-                                   ( IntPtr )ptr );
-                }
-            }
+            GL.TexImage2D( target,
+                           0,
+                           IGL.GL_RGBA,
+                           Width,
+                           Height,
+                           0,
+                           IGL.GL_RGBA,
+                           IGL.GL_FLOAT,
+                           Buffer.ToArray() );
         }
         else
         {
@@ -148,21 +142,15 @@ public class FloatTextureData : ITextureData
 
             // in desktop OpenGL the texture format is defined only by the third argument,
             // hence we need to use GL_RGBA32F there (this constant is unavailable in GLES/WebGL)
-            unsafe
-            {
-                fixed ( void* ptr = &Buffer.ToArray()[ 0 ] )
-                {
-                    GL.TexImage2D( target,
-                                   0,
-                                   _internalFormat,
-                                   Width,
-                                   Height,
-                                   0,
-                                   _format,
-                                   IGL.GL_FLOAT,
-                                   ( IntPtr )ptr );
-                }
-            }
+            GL.TexImage2D( target,
+                           0,
+                           _internalFormat,
+                           Width,
+                           Height,
+                           0,
+                           _format,
+                           IGL.GL_FLOAT,
+                           Buffer.ToArray() );
         }
     }
 
@@ -174,15 +162,15 @@ public class FloatTextureData : ITextureData
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
     /// <inheritdoc />
-    public Pixmap.Format GetPixelFormat()
+    public int GetPixelFormat()
     {
-        return Pixmap.Format.RGBA8888;
+        return LughFormat.RGBA8888;
     }
 
     // ========================================================================
     // ========================================================================
 
-    public Pixmap.Format PixelFormat
+    public int PixelFormat
     {
         get => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
         set => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );

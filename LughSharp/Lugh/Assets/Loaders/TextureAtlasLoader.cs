@@ -87,6 +87,8 @@ public class TextureAtlasLoader
         var p      = parameter as TextureAtlasParameter;
         var imgDir = atlasFile.Directory;
 
+        Guard.Against.Null( imgDir, "Image directory cannot be null!" );
+        
         _data = p != null
             ? new TextureAtlasData( atlasFile, imgDir, p.FlipVertically )
             : new TextureAtlasData( atlasFile, imgDir );

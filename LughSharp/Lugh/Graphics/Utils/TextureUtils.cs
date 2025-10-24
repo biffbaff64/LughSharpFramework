@@ -91,9 +91,8 @@ public class TextureUtils
                            width,
                            height,
                            0,
-                           ( int )OpenGL.Enums.PixelFormat.Rgba,
-                           ( int )PixelType.UnsignedByte,
-                           0 );
+                           ( int )GLPixelFormat.Rgba,
+                           ( int )PixelType.UnsignedByte );
         }
 
         return textureHandle;

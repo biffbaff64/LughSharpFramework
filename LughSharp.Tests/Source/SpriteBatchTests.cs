@@ -52,7 +52,7 @@ public class SpriteBatchTests
         _spriteBatch = new SpriteBatch();
 
         // Create and verify the pixmap
-        var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, Pixmap.Format.RGBA8888 );
+        var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, LughFormat.RGBA8888 );
         
         Assert.That( pixmap, Is.Not.Null, "Pixmap creation failed" );
         Assert.That( pixmap.Gdx2DPixmap, Is.Not.Null, "pixmap.Gdx2DPixmap is null" );
@@ -62,7 +62,7 @@ public class SpriteBatchTests
         pixmap.SetColor( Color.White );
         pixmap.FillWithCurrentColor();
 
-        var textureData = new PixmapTextureData( pixmap, Pixmap.Format.RGBA8888, false, false );
+        var textureData = new PixmapTextureData( pixmap, LughFormat.RGBA8888, false, false );
         
         Assert.That( textureData, Is.Not.Null, "TextureData creation failed" );
 

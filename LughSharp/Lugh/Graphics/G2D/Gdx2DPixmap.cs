@@ -55,8 +55,9 @@ public partial class Gdx2DPixmap : IDisposable
         public uint Blend;
         public uint Scale;
 
-//        public IntPtr PixelPtr;
-        public byte[] Pixels;
+        public IntPtr Pixels;
+
+//        public byte[] Pixels;
     }
 
     // ========================================================================
@@ -79,18 +80,14 @@ public partial class Gdx2DPixmap : IDisposable
     public Buffer< byte > PixmapBuffer  { get; set; }
     public long           TotalIDATSize { get; set; }
 
-    public int           Width         { get; set; }
-    public int           Height        { get; set; }
-    public Pixmap.Format ColorFormat   { get; set; }
-    public byte          BitDepth      { get; set; }
-    public int           BytesPerPixel { get; set; }
-    public uint          Blend         { get; set; }
-    public uint          Scale         { get; set; }
-    public byte[]        Pixels        { get; set; } = [ ];
-
-    // ========================================================================
-
-    private gdx2d_pixmap _nativeData = new();
+    public int    Width         { get; set; }
+    public int    Height        { get; set; }
+    public int    ColorFormat   { get; set; }
+    public byte   BitDepth      { get; set; }
+    public int    BytesPerPixel { get; set; }
+    public uint   Blend         { get; set; }
+    public uint   Scale         { get; set; }
+    public byte[] Pixels        { get; set; } = [ ];
 
     // ========================================================================
     // ========================================================================
@@ -105,14 +102,10 @@ public partial class Gdx2DPixmap : IDisposable
     /// <param name="len"> The number of bytes to copy from buffer. </param>
     /// <param name="requestedFormat"> The desired color format. </param>
     /// <exception cref="IOException"></exception>
-    public Gdx2DPixmap( byte[] encodedData, int offset, int len, Pixmap.Format requestedFormat )
+    public Gdx2DPixmap( byte[] encodedData, int offset, int len, int requestedFormat )
     {
-        Logger.Checkpoint();
-
-        PixmapBuffer = Load( _nativeData, encodedData, offset, len );
-
-        Guard.Against.Null( PixmapBuffer );
-
+        PixmapBuffer = InitializeFromBuffer( encodedData, offset, len );
+        
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorFormat ) )
         {
             ConvertPixelFormatTo( requestedFormat );
@@ -135,10 +128,8 @@ public partial class Gdx2DPixmap : IDisposable
     /// <param name="requestedFormat">
     /// The desired pixel format for the pixmap. Use 0 to keep the original format.
     /// </param>
-    public Gdx2DPixmap( StreamReader inStream, Pixmap.Format requestedFormat )
+    public Gdx2DPixmap( StreamReader inStream, int requestedFormat )
     {
-        Logger.Checkpoint();
-
         MemoryStream memoryStream = new( 1024 );
         StreamWriter writer       = new( memoryStream );
 
@@ -151,9 +142,7 @@ public partial class Gdx2DPixmap : IDisposable
 
         var buffer = memoryStream.ToArray();
 
-        PixmapBuffer = Load( _nativeData, buffer, 0, buffer.Length );
-
-        Guard.ThrowIfNull( PixmapBuffer );
+        PixmapBuffer = InitializeFromBuffer( buffer, 0, buffer.Length );
 
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorFormat ) )
         {
@@ -168,11 +157,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="GdxRuntimeException"></exception>
     public Gdx2DPixmap( byte[] buffer )
     {
-        Logger.Checkpoint();
-
-        PixmapBuffer = Load( _nativeData, buffer, 0, buffer.Length );
-
-        Guard.ThrowIfNull( PixmapBuffer );
+        PixmapBuffer = InitializeFromBuffer( buffer, 0, buffer.Length );
     }
 
     /// <summary>
@@ -185,10 +170,10 @@ public partial class Gdx2DPixmap : IDisposable
     /// <param name="format"> The requested Pixmap.Format color format. </param>
     /// <exception cref="GdxRuntimeException"></exception>
     /// <remarks> After buffer creation, the Pixmap BitDepth is undefined. </remarks>
-    public Gdx2DPixmap( int width, int height, Pixmap.Format format )
+    public Gdx2DPixmap( int width, int height, int format )
     {
-        Logger.Checkpoint();
-
+        Width       = width;
+        Height      = height;
         ColorFormat = format;
         Blend       = ( uint )Pixmap.BlendTypes.Default;
         Scale       = ( uint )Pixmap.ScaleType.Default;
@@ -196,28 +181,7 @@ public partial class Gdx2DPixmap : IDisposable
         var length = width * height * PixelFormat.BytesPerPixel( format );
 
         PixmapBuffer = new Buffer< byte >( length );
-
-        SafeConstructorInit( width, height );
-
         PixmapBuffer.Put( Pixels );
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Initializes the properties of the Gdx2DPixmap with the specified width,
-    /// height, and bit depth.
-    /// <para>
-    /// Used by constructors that need to reference virtual members, which should not be
-    /// done directly from constructors.
-    /// </para>
-    /// </summary>
-    /// <param name="width">The width of the pixmap in pixels.</param>
-    /// <param name="height">The height of the pixmap in pixels.</param>
-    private void SafeConstructorInit( int width, int height )
-    {
-        Width  = width;
-        Height = height;
     }
 
     // ========================================================================
@@ -226,16 +190,11 @@ public partial class Gdx2DPixmap : IDisposable
     /// Converts this Pixmaps <see cref="ColorFormat"/> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
-    public void ConvertPixelFormatTo( Pixmap.Format requestedFormat )
+    public void ConvertPixelFormatTo( int requestedFormat )
     {
-        Logger.Debug( $"requestedFormat: {requestedFormat}" );
-
         // Double-check conditions
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorFormat ) )
         {
-            Logger.Debug( $"Requested pixel format {requestedFormat} differs from pixmap format {ColorFormat}." );
-            Logger.Debug( $"Converting pixmap format from {ColorFormat} to {requestedFormat}." );
-
             // Create an empty pixmap of the requested format and size
             var pixmap = new Gdx2DPixmap( ( int )Width, ( int )Height, requestedFormat );
 
@@ -257,16 +216,32 @@ public partial class Gdx2DPixmap : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Draws an area of the source pixmap onto this pixmap.
+    /// </summary>
+    /// <param name="src"> The source pixmap. </param>
+    /// <param name="srcX"> The source X coordinate. </param>
+    /// <param name="srcY"> The source Y coordinate. </param>
+    /// <param name="dstX"> The destination X coordinate. </param>
+    /// <param name="dstY"> The destination Y coordinate. </param>
+    /// <param name="width"> The width of the area. </param>
+    /// <param name="height"> The height of the area. </param>
     public void DrawPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
         DrawPixmapNative( src, srcX, srcY, dstX, dstY, width, height );
     }
 
+    /// <summary>
+    /// Returns the pixel from this pixmap at the specified coordinates.
+    /// </summary>
     public int GetPixel( int x, int y )
     {
         return GetPixelNative( x, y );
     }
 
+    /// <summary>
+    /// Sets the pixel at the specified coordinates to the specified color.
+    /// </summary>
     public void SetPixel( int x, int y, Color color )
     {
         SetPixelNative( x, y, color );
@@ -307,6 +282,9 @@ public partial class Gdx2DPixmap : IDisposable
     {
         if ( disposing )
         {
+            PixmapBuffer.Dispose();
+            PixmapBuffer = null!;
+            Pixels       = null!;
         }
     }
 }

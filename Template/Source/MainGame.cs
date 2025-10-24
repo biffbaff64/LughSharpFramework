@@ -64,8 +64,7 @@ public class MainGame : Game
         Logger.Divider();
 //        var test = new AssetManagerTest();
 //        var test = new TexturePackerTest();
-//        var test = new PNGLoadAndExamineTest();
-        var test = new GraphicsTest();
+        var test = new ImagePackerTest();
         test.Setup();
         test.Run();
         test.TearDown();
@@ -243,10 +242,10 @@ public class MainGame : Game
     /// </summary>
     private void CreateImage1Texture()
     {
-        var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, Pixmap.Format.RGBA8888 );
+        var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, LughFormat.RGBA8888 );
 
         _image1 = new Texture( new PixmapTextureData( pixmap,
-                                                      Pixmap.Format.RGBA8888,
+                                                      LughFormat.RGBA8888,
                                                       false,
                                                       false,
                                                       true ) );
@@ -322,11 +321,11 @@ public class MainGame : Game
             return;
         }
 
-        var pixmap = new Pixmap( 100, 100, Pixmap.Format.RGBA8888 );
+        var pixmap = new Pixmap( 100, 100, LughFormat.RGBA8888 );
         pixmap.SetColor( Color.White );
         pixmap.FillWithCurrentColor();
 
-        var textureData = new PixmapTextureData( pixmap, Pixmap.Format.RGBA8888, false, false );
+        var textureData = new PixmapTextureData( pixmap, LughFormat.RGBA8888, false, false );
 
         _whitePixelTexture      = new Texture( textureData );
         _whitePixelTexture.Name = "WhitePixel";

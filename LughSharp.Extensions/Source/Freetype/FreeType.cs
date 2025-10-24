@@ -1327,7 +1327,7 @@ public partial class FreeType
             throw new NotImplementedException();
         }
 
-        public Pixmap GetPixmap( Pixmap.Format rgba8888, Color parameterColor, float parameterGamma )
+        public Pixmap GetPixmap( int rgba8888, Color parameterColor, float parameterGamma )
         {
             throw new NotImplementedException();
         }

@@ -106,7 +106,7 @@ public class MipMapTextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public Pixmap.Format GetPixelFormat()
+    public int GetPixelFormat()
     {
         return _mips[ 0 ].GetPixelFormat();
     }

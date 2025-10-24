@@ -76,20 +76,24 @@ public partial class AssetManager
             Logger.Divider();
 
             var names = GetAssetNames();
-            
+
             if ( names.Count == 0 )
             {
                 Logger.Debug( "No assets loaded." );
-                
+
                 return;
             }
-            
-            foreach( var name in names )
+
+            foreach ( var name in names )
             {
-                var type = GetAssetType( name );
-                var asset = Get( name );
-                
-                Logger.Debug( $"Asset: {name}, Type: {type.Name}, Asset: {(asset != null ? "Loaded" : "NULL")}" );
+                if ( name != null )
+                {
+                    var type  = GetAssetType( name );
+                    var asset = Get( name );
+
+                    Logger.Debug( $"Asset: {name}, Type: {type.Name}, " +
+                                  $"Asset: {( asset != null ? "Loaded" : "NULL" )}" );
+                }
             }
         }
     }
@@ -197,20 +201,20 @@ public partial class AssetManager
     {
         lock ( this )
         {
-            foreach( var loader in _loaders! )
+            foreach ( var loader in _loaders! )
             {
                 Logger.Debug( $"Type: {loader.Key.Name}" );
-                
-                foreach( var entry in loader.Value )
+
+                foreach ( var entry in loader.Value )
                 {
                     var suffix = string.IsNullOrEmpty( entry.Key ) ? "(default)" : entry.Key;
-                    
+
                     Logger.Debug( $"  Suffix: '{suffix}' => Loader class: {entry.Value.GetType().Name}" );
-                }   
+                }
             }
         }
     }
 }
-    
+
 // ============================================================================
 // ============================================================================

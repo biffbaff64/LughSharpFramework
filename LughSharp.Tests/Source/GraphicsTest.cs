@@ -54,9 +54,23 @@ public class GraphicsTest
             Engine.Api.Files.Assets( "title_background.png" ),
         };
 
-        var pixmap = new Pixmap( files[ 1 ] );
+        Pixmap pixmap;
+        var assetManager = new AssetManager();
+
+        assetManager.Load< Pixmap >( files[ 0 ].FullName );
+        assetManager.Load< Pixmap >( files[ 1 ].FullName );
+        assetManager.Load< Pixmap >( files[ 2 ].FullName );
+        assetManager.Load< Pixmap >( files[ 3 ].FullName );
+        assetManager.FinishLoading();
         
-        pixmap.DebugPrint();
+//        pixmap = new Pixmap( files[ 0 ] );
+//        pixmap.DebugPrint();
+//        pixmap = new Pixmap( files[ 1 ] );
+//        pixmap.DebugPrint();
+//        pixmap = new Pixmap( files[ 2 ] );
+//        pixmap.DebugPrint();
+//        pixmap = new Pixmap( files[ 3 ] );
+//        pixmap.DebugPrint();
     }
 
     [TearDown]

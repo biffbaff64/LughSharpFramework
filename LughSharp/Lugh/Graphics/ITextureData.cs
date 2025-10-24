@@ -95,7 +95,7 @@ public interface ITextureData : IManaged
     /// <summary>
     /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
     /// </summary>
-    Pixmap.Format GetPixelFormat();
+    int GetPixelFormat();
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="FetchPixmap"/> or

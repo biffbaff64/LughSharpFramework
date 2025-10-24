@@ -60,7 +60,7 @@ public class Etc1TextureData : ITextureData
 
     /// <inheritdoc />
     public int BytesPerPixel { get; set; }
-    
+
     /// <inheritdoc />
     public bool UseMipMaps { get; set; } = false;
 
@@ -78,7 +78,7 @@ public class Etc1TextureData : ITextureData
 
     // ========================================================================
     // ========================================================================
-    
+
     /// <inheritdoc />
     public void Prepare()
     {
@@ -122,20 +122,17 @@ public class Etc1TextureData : ITextureData
 
         if ( !Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
-            var pixmap = _etc1.DecodeImage( _data, Pixmap.Format.RGB565 );
+            var pixmap = _etc1.DecodeImage( _data, LughFormat.RGB565 );
 
-            fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
-            {
-                GL.TexImage2D( target,
-                               0,
-                               pixmap.GLInternalPixelFormat,
-                               pixmap.Width,
-                               pixmap.Height,
-                               0,
-                               pixmap.GLPixelFormat,
-                               pixmap.GLDataType,
-                               ( IntPtr )ptr );
-            }
+            GL.TexImage2D( target,
+                           0,
+                           pixmap.GLInternalPixelFormat,
+                           pixmap.Width,
+                           pixmap.Height,
+                           0,
+                           pixmap.GLPixelFormat,
+                           pixmap.GLDataType,
+                           pixmap.PixelData );
 
             if ( UseMipMaps )
             {
@@ -172,7 +169,7 @@ public class Etc1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public Pixmap.Format GetPixelFormat() => Pixmap.Format.RGB565;
+    public int GetPixelFormat() => LughFormat.RGB565;
 
     /// <inheritdoc />
     public void DebugPrint()
@@ -180,7 +177,7 @@ public class Etc1TextureData : ITextureData
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public Pixmap FetchPixmap()
     {

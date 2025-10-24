@@ -24,36 +24,40 @@
 
 namespace LughSharp.Lugh.Graphics;
 
-/// <summary>
-/// Simple pixmap struct holding the pixel data, the dimensions and the
-/// format of the pixmap.
-/// </summary>
-[PublicAPI]
-[StructLayout( LayoutKind.Sequential )]
-public struct PixmapDescriptor()
+public partial class Pixmap
 {
-    public int           Width         { get; set; } = 0;   // Width of the pixmap in pixels.
-    public int           Height        { get; set; } = 0;   // Height of the pixmap in pixels.
-    public Pixmap.Format ColorFormat   { get; set; } = 0;   // Color type of the pixmap.
-    public byte          BitDepth      { get; set; } = 0;   // Number of bits per pixel.
-    public int           BytesPerPixel { get; set; } = 0;   // Number of bytes per pixel.
-    public uint          Blend         { get; set; } = 0;   // Blend mode.
-    public uint          Scale         { get; set; } = 0;   // Scale mode.
-    public byte[]        Pixels        { get; set; } = [ ]; // Pixel data.
+    /// <summary>
+    /// Downloads an image from http(s) url and passes it as a Pixmap to the
+    /// specified <see cref="IDownloadPixmapResponseListener"/>.
+    /// </summary>
+    /// <param name="url">http url to download the image from.</param>
+    /// <param name="responseListener"> The listener to call once the image is available as a Pixmap</param>
+    /// <remarks> NOT YET IMPLEMENTED. </remarks>
+    public static void DownloadFromUrl( string url, IDownloadPixmapResponseListener responseListener )
+    {
+        //TODO:
+        throw new NotImplementedException( "Pixmap#DownloadFromUrl is not currently implemented." );
+    }
 
     // ========================================================================
 
-    public void DebugPrint()
+    /// <summary>
+    /// Response listener for <see cref="Pixmap.DownloadFromUrl(String, IDownloadPixmapResponseListener)"/>
+    /// </summary>
+    [PublicAPI]
+    public interface IDownloadPixmapResponseListener
     {
-        Logger.Debug( $"Width        : {Width}" );
-        Logger.Debug( $"Height       : {Height}" );
-        Logger.Debug( $"ColorType    : {ColorFormat}" );
-        Logger.Debug( $"Blend        : {Blend}" );
-        Logger.Debug( $"Scale        : {Scale}" );
-        Logger.Debug( $"BitDepth     : {BitDepth}" );
-        Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
+        /// <summary>
+        /// Called on the render thread when image was downloaded successfully.
+        /// </summary>
+        void DownloadComplete( Pixmap pixmap );
+
+        /// <summary>
+        /// Called when image download failed. This might get called on a background thread.
+        /// </summary>
+        void DownloadFailed( Exception e );
     }
 }
 
-// ============================================================================
-// ============================================================================
+// ========================================================================
+// ========================================================================

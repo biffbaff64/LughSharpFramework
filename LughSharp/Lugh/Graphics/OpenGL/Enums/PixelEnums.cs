@@ -34,7 +34,7 @@ public enum PixelType : int
 }
 
 [PublicAPI]
-public enum PixelFormat : int
+public enum GLPixelFormat : int
 {
     Alpha          = IGL.GL_ALPHA,
     Luminance      = IGL.GL_LUMINANCE,

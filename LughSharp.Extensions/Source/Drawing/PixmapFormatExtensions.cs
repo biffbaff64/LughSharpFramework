@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
 using LughUtils.source.Exceptions;
 
 namespace Extensions.Source.Drawing;
@@ -33,22 +31,24 @@ namespace Extensions.Source.Drawing;
 public static class PixmapFormatExtensions
 {
     /// <summary>
-    /// Converts a Pixmap pixel format to the corresponding PixelType format.
+    /// Converts a system pixel format to the corresponding PixelFormat format.
     /// </summary>
-    /// <param name="format">The Pixmap pixel format to be converted.</param>
-    /// <returns>The corresponding <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> for the given Pixmap pixel format.</returns>
+    /// <param name="format">The system pixel format to be converted.</param>
+    /// <returns>
+    /// The corresponding <c>PixelFormat</c> value for the given system pixel format.
+    /// </returns>
     /// <exception cref="GdxRuntimeException">
-    /// Thrown if the provided Pixmap pixel format is invalid or not supported.
+    /// Thrown if the provided system pixel format is invalid or not supported.
     /// </exception>
-    public static Pixmap.Format SystemPixelFormatToPixmapFormat( PixelFormat format )
+    public static int SystemPixelFormatToPixelFormat( System.Drawing.Imaging.PixelFormat format )
     {
         return format switch
         {
-            PixelFormat.Alpha                => Pixmap.Format.Alpha,
-            PixelFormat.Format24bppRgb       => Pixmap.Format.RGB888,
-            PixelFormat.Format32bppArgb      => Pixmap.Format.RGBA8888,
-            PixelFormat.Format16bppRgb565    => Pixmap.Format.RGB565,
-            PixelFormat.Format16bppGrayScale => Pixmap.Format.RGBA4444,
+            PixelFormat.Alpha                => LughSharp.Lugh.Graphics.LughFormat.ALPHA,
+            PixelFormat.Format16bppRgb565    => LughSharp.Lugh.Graphics.LughFormat.RGB565,
+            PixelFormat.Format16bppGrayScale => LughSharp.Lugh.Graphics.LughFormat.RGBA4444,
+            PixelFormat.Format24bppRgb       => LughSharp.Lugh.Graphics.LughFormat.RGB888,
+            PixelFormat.Format32bppArgb      => LughSharp.Lugh.Graphics.LughFormat.RGBA8888,
 
             // ----------------------------------
 
@@ -64,16 +64,16 @@ public static class PixmapFormatExtensions
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
-    public static PixelFormat ToSystemPixelFormat( Pixmap.Format format )
+    public static System.Drawing.Imaging.PixelFormat ToSystemPixelFormat( int format )
     {
         return format switch
         {
-            Pixmap.Format.Alpha           => PixelFormat.Alpha,
-            Pixmap.Format.LuminanceAlpha => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
-            Pixmap.Format.RGB888          => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
-            Pixmap.Format.RGB565          => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
-            Pixmap.Format.RGBA8888        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
-            Pixmap.Format.RGBA4444        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            LughSharp.Lugh.Graphics.LughFormat.ALPHA           => System.Drawing.Imaging.PixelFormat.Alpha,
+            LughSharp.Lugh.Graphics.LughFormat.LUMINANCE_ALPHA => System.Drawing.Imaging.PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
+            LughSharp.Lugh.Graphics.LughFormat.RGB565          => System.Drawing.Imaging.PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
+            LughSharp.Lugh.Graphics.LughFormat.RGB888          => System.Drawing.Imaging.PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
+            LughSharp.Lugh.Graphics.LughFormat.RGBA8888        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            LughSharp.Lugh.Graphics.LughFormat.RGBA4444        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
 
             // ----------------------------------
 

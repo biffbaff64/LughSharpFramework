@@ -126,7 +126,7 @@ public class GLOnlyTextureData : ITextureData
                        0,
                        _pixelFormat,
                        Type,
-                       0 );
+                       IntPtr.Zero );
     }
 
     /// <inheritdoc />
@@ -142,7 +142,7 @@ public class GLOnlyTextureData : ITextureData
     /// </summary>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
-    public Pixmap.Format GetPixelFormat() => Pixmap.Format.RGBA8888;
+    public int GetPixelFormat() => LughFormat.RGBA8888;
 
     // ========================================================================
 

@@ -45,7 +45,7 @@ public class FileTextureData : ITextureData
 
     /// <inheritdoc />
     public int BytesPerPixel { get; set; }
-    
+
     /// <inheritdoc/>
     public bool IsPrepared { get; set; }
 
@@ -57,19 +57,19 @@ public class FileTextureData : ITextureData
 
     // ========================================================================
 
-    private Pixmap.Format? _pixelFormat;
-    private Pixmap?        _pixmap;
+    private int     _pixelFormat;
+    private Pixmap? _pixmap;
 
     // ========================================================================
     // ========================================================================
 
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, Pixmap.Format desiredFormat, bool useMipMaps )
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int format, bool useMipMaps )
     {
-        Logger.Checkpoint();
+        Guard.Against.Null( preloadedPixmap, nameof( preloadedPixmap ) );
 
         File         = file;
         _pixmap      = preloadedPixmap;
-        _pixelFormat = desiredFormat;
+        _pixelFormat = format;
         UseMipMaps   = useMipMaps;
 
         if ( _pixmap != null )
@@ -77,7 +77,8 @@ public class FileTextureData : ITextureData
             Width  = _pixmap.Width;
             Height = _pixmap.Height;
 
-            if ( _pixelFormat == null )
+            // If _pixelFormat is not set, use the pixmap's format.
+            if ( _pixelFormat <= 0 )
             {
                 _pixelFormat = _pixmap.GetColorFormat();
             }
@@ -122,17 +123,17 @@ public class FileTextureData : ITextureData
             throw new InvalidOperationException( "Pixmap has invalid dimensions." );
         }
 
-        if ( _pixelFormat == null )
-        {
-            _pixelFormat = _pixmap.GetColorFormat();
-        }
+        _pixelFormat = _pixmap.GetColorFormat();
 
         IsPrepared = true;
     }
 
-    public Pixmap.Format GetPixelFormat()
+    /// <summary>
+    /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
+    /// </summary>
+    public int GetPixelFormat()
     {
-        return _pixelFormat ?? _pixmap?.GetColorFormat() ?? Pixmap.Format.RGBA8888;
+        return _pixmap?.GetColorFormat() ?? LughFormat.RGBA8888;
     }
 
     /// <summary>
@@ -188,7 +189,9 @@ public class FileTextureData : ITextureData
         throw new GdxRuntimeException( "This TextureData implementation does not upload data itself" );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Dumps the internal state of the TextureData to the log.
+    /// </summary>
     public void DebugPrint()
     {
         Logger.Debug( $"FileTextureData: {File.Name}" );

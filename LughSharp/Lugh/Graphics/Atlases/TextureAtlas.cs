@@ -83,15 +83,15 @@ public class TextureAtlas : IDisposable
     /// If true, all regions loaded will be flipped for use with a perspective
     /// where 0,0 is the upper left corner.
     /// </param>
-    public TextureAtlas( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
+    public TextureAtlas( FileInfo packFile, DirectoryInfo imagesDir, bool flip = false )
     {
         Logger.Debug( $"packFile Name: {packFile.FullName}" );
-        Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
+        Logger.Debug( $"imagesDir Name: {imagesDir.FullName}" );
 
         var atlasData = new TextureAtlasData( packFile, imagesDir, flip );
 
         Logger.Debug( $"packFile Name: {packFile.FullName}" );
-        Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
+        Logger.Debug( $"imagesDir Name: {imagesDir.FullName}" );
 
         foreach ( var page in atlasData.Pages )
         {

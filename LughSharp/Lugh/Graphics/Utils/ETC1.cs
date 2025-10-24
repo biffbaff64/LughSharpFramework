@@ -75,14 +75,14 @@ public class ETC1
     }
 
     /// <summary>
-    /// Takes ETC1 compressed image data and converts it to a <see cref="Pixmap.Format.RGB565"/> or
-    /// <see cref="Pixmap.Format.RGB888"/> <see cref="Pixmap"/>.
+    /// Takes ETC1 compressed image data and converts it to a <see cref="LughFormat.RGB565"/> or
+    /// <see cref="LughFormat.RGB888"/> <see cref="Pixmap"/>.
     /// Does not modify the Buffer's position or limit.
     /// </summary>
     /// <param name="etc1Data"> the <see cref="ETC1Data"/> instance </param>
-    /// <param name="format"> either <see cref="Pixmap.Format.RGB565"/> or <see cref="Pixmap.Format.RGB888"/> </param>
+    /// <param name="format"> either <see cref="LughFormat.RGB565"/> or <see cref="LughFormat.RGB888"/> </param>
     /// <returns> the Pixmap </returns>
-    public Pixmap DecodeImage( ETC1Data? etc1Data, Pixmap.Format format )
+    public Pixmap DecodeImage( ETC1Data? etc1Data, int format )
     {
         ArgumentNullException.ThrowIfNull( etc1Data );
 
@@ -112,15 +112,15 @@ public class ETC1
     }
 
     /// <summary>
-    /// Gets the pixel size for the given <c>Pixmap.Format.XXX</c>, which must be
-    /// one of <see cref="Pixmap.Format.RGB565"/> or <see cref="Pixmap.Format.RGB888"/>.
+    /// Gets the pixel size for the given <c>LughFormat.XXX</c>, which must be
+    /// one of <see cref="LughFormat.RGB565"/> or <see cref="LughFormat.RGB888"/>.
     /// </summary>
-    private int GetPixelSize( Pixmap.Format format )
+    private int GetPixelSize( int format )
     {
         return format switch
         {
-            Pixmap.Format.RGB565   => RGB565_PIXEL_SIZE,
-            Pixmap.Format.RGBA8888 => RGB888_PIXEL_SIZE,
+            LughFormat.RGB565   => RGB565_PIXEL_SIZE,
+            LughFormat.RGBA8888 => RGB888_PIXEL_SIZE,
 
             // ----------------------------------
 

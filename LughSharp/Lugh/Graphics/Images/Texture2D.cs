@@ -131,12 +131,12 @@ public class Texture2D : IDrawable, IDisposable
 
     // ========================================================================
 
-    public int           Width              => TextureData.Width;
-    public int           Height             => TextureData.Height;
-    public int           NumManagedTextures => _managedTextures.Count;
-    public uint          TextureID          => GLTextureHandle;
-    public bool          IsManaged          => TextureData is { IsManaged: true };
-    public Pixmap.Format ColorFormat        => TextureData.GetPixelFormat();
+    public int  Width              => TextureData.Width;
+    public int  Height             => TextureData.Height;
+    public int  NumManagedTextures => _managedTextures.Count;
+    public uint TextureID          => GLTextureHandle;
+    public bool IsManaged          => TextureData is { IsManaged: true };
+    public int  ColorFormat        => TextureData.GetPixelFormat();
 
     // ========================================================================
 
@@ -151,6 +151,10 @@ public class Texture2D : IDrawable, IDisposable
     // ========================================================================
     // ========================================================================
 
+    public Texture2D()
+    {
+    }
+    
     // ========================================================================
 
     public void ClearWithColor( Color color )

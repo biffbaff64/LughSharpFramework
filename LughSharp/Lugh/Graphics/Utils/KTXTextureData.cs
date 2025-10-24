@@ -259,7 +259,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     }
 
     /// <inheritdoc />
-    public Pixmap.Format GetPixelFormat()
+    public int GetPixelFormat()
     {
         throw new GdxRuntimeException( "This TextureData implementation directly handles texture formats." );
     }
@@ -459,7 +459,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             {
                                 ETC1 etc1    = new();
                                 var  etcData = new ETC1.ETC1Data( pixelWidth, pixelHeight, data, 0, etc1 );
-                                var  pixmap  = etc1.DecodeImage( etcData, Pixmap.Format.RGBA8888 );
+                                var  pixmap  = etc1.DecodeImage( etcData, LughFormat.RGBA8888 );
 
                                 unsafe
                                 {

@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
-
-using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -104,7 +101,7 @@ public class Cubemap : GLTexture, IManaged
     /// <summary>
     /// Construct a Cubemap with <see cref="Pixmap"/>s for each side of the specified size.
     /// </summary>
-    public Cubemap( int width, int height, int depth, Pixmap.Format format )
+    public Cubemap( int width, int height, int depth, int format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
                 new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
                 new PixmapTextureData( new Pixmap( width, depth, format ), 0, false, true ),

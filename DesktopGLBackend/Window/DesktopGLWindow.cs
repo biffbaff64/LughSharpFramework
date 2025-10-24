@@ -474,9 +474,9 @@ public partial class DesktopGLWindow : IDisposable
 
         for ( var i = 0; i < images.Length; i++ )
         {
-            if ( images[ i ].GetColorFormat() != Pixmap.Format.RGBA8888 )
+            if ( images[ i ].GetColorFormat() != LughFormat.RGBA8888 )
             {
-                var rgba = new Pixmap( images[ i ].Width, images[ i ].Height, Pixmap.Format.RGBA8888 );
+                var rgba = new Pixmap( images[ i ].Width, images[ i ].Height, LughFormat.RGBA8888 );
 
                 rgba.Blending = Pixmap.BlendTypes.None;
                 rgba.DrawPixmap( images[ i ], 0, 0 );

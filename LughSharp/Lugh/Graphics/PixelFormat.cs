@@ -28,19 +28,19 @@ namespace LughSharp.Lugh.Graphics;
 public class PixelFormat
 {
     /// <summary>
-    /// Converts a GL format to a Pixmap.Format value.
+    /// Converts a GL format to a PixelFormat value.
     /// </summary>
-    public static Pixmap.Format GLFormatToPixmapFormat( int format )
+    public static int GLFormatToPixelFormat( int format )
     {
         return format switch
         {
-            IGL.GL_ALPHA           => Pixmap.Format.Alpha,
-            IGL.GL_LUMINANCE_ALPHA => Pixmap.Format.LuminanceAlpha,
-            IGL.GL_RGB565          => Pixmap.Format.RGB565,
-            IGL.GL_RGBA4           => Pixmap.Format.RGBA4444,
-            IGL.GL_RGB             => Pixmap.Format.RGB888,
-            IGL.GL_RGBA            => Pixmap.Format.RGBA8888,
-            IGL.GL_COLOR_INDEX     => Pixmap.Format.IndexedColor,
+            IGL.GL_ALPHA           => LughFormat.ALPHA,
+            IGL.GL_LUMINANCE_ALPHA => LughFormat.LUMINANCE_ALPHA,
+            IGL.GL_RGB565          => LughFormat.RGB565,
+            IGL.GL_RGBA4           => LughFormat.RGBA4444,
+            IGL.GL_RGB             => LughFormat.RGB888,
+            IGL.GL_RGBA            => LughFormat.RGBA8888,
+            IGL.GL_COLOR_INDEX     => LughFormat.INDEXED_COLOR,
 
             // ----------------------------------
 
@@ -49,19 +49,19 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a Pixmap.Format value to a GL format.
+    /// Converts a PixelFormat value to a GL format.
     /// </summary>
-    public static int PixmapFormatToGLFormat( Pixmap.Format format )
+    public static int PixelFormatToGLFormat( int format )
     {
         return format switch
         {
-            Pixmap.Format.Alpha          => IGL.GL_ALPHA,
-            Pixmap.Format.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
-            Pixmap.Format.RGB888         => IGL.GL_RGB,
-            Pixmap.Format.RGBA8888       => IGL.GL_RGBA,
-            Pixmap.Format.RGB565         => IGL.GL_RGB565,
-            Pixmap.Format.RGBA4444       => IGL.GL_RGBA4,
-            Pixmap.Format.IndexedColor   => IGL.GL_COLOR_INDEX,
+            LughFormat.ALPHA           => IGL.GL_ALPHA,
+            LughFormat.LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
+            LughFormat.RGB888          => IGL.GL_RGB,
+            LughFormat.RGBA8888        => IGL.GL_RGBA,
+            LughFormat.RGB565          => IGL.GL_RGB565,
+            LughFormat.RGBA4444        => IGL.GL_RGBA4,
+            LughFormat.INDEXED_COLOR   => IGL.GL_COLOR_INDEX,
 
             // ----------------------------------
 
@@ -70,19 +70,19 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a Pixmap.Format value to a GL format.
+    /// Converts a PixelFormat value to a GL format.
     /// </summary>
-    public static int PixmapFormatToGLInternalFormat( Pixmap.Format format )
+    public static int PixelFormatToGLInternalFormat( int format )
     {
         return format switch
         {
-            Pixmap.Format.Alpha          => IGL.GL_ALPHA,
-            Pixmap.Format.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
-            Pixmap.Format.RGB888         => IGL.GL_RGB,
-            Pixmap.Format.RGBA8888       => IGL.GL_RGBA,
-            Pixmap.Format.RGB565         => IGL.GL_RGB565,
-            Pixmap.Format.RGBA4444       => IGL.GL_RGBA4,
-            Pixmap.Format.IndexedColor   => IGL.GL_COLOR_INDEX,
+            LughFormat.ALPHA           => IGL.GL_ALPHA,
+            LughFormat.LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
+            LughFormat.RGB888          => IGL.GL_RGB,
+            LughFormat.RGBA8888        => IGL.GL_RGBA,
+            LughFormat.RGB565          => IGL.GL_RGB565,
+            LughFormat.RGBA4444        => IGL.GL_RGBA4,
+            LughFormat.INDEXED_COLOR   => IGL.GL_COLOR_INDEX,
 
             // ----------------------------------
 
@@ -91,19 +91,19 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a Pixmap.Format value to a PNG Color Type value.
+    /// Converts a PixelFormat value to a PNG Color Type value.
     /// </summary>
-    public static byte PixmapFormatToPNGColorType( Pixmap.Format format )
+    public static byte PixelFormatToPNGColorType( int format )
     {
         return format switch
         {
-            Pixmap.Format.Alpha          => 0,
-            Pixmap.Format.LuminanceAlpha => 4,
-            Pixmap.Format.RGB565         => 2,
-            Pixmap.Format.RGBA4444       => 2,
-            Pixmap.Format.RGB888         => 2,
-            Pixmap.Format.RGBA8888       => 6,
-            Pixmap.Format.IndexedColor   => 3,
+            LughFormat.ALPHA           => 0,
+            LughFormat.LUMINANCE_ALPHA => 4,
+            LughFormat.RGB565          => 2,
+            LughFormat.RGBA4444        => 2,
+            LughFormat.RGB888          => 2,
+            LughFormat.RGBA8888        => 6,
+            LughFormat.INDEXED_COLOR   => 3,
 
             // ----------------------------------
 
@@ -112,25 +112,18 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a PNG Color Type value to a Pixmap.Format value.
+    /// Converts a PNG Color Type value to a PixelFormat value.
     /// </summary>
-    public static Pixmap.Format PNGColorToPixmapFormat( int colorType )
+    public static int PNGColorToPixelFormat( int colorType )
     {
-//        const int GDX_2D_FORMAT_ALPHA           = 1;
-//        const int GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
-//        const int GDX_2D_FORMAT_RGB888          = 3;
-//        const int GDX_2D_FORMAT_RGBA8888        = 4;
-//        const int GDX_2D_FORMAT_RGB565          = 5;
-//        const int GDX_2D_FORMAT_RGBA4444        = 6;
-
         return colorType switch
         {
-            1 => Pixmap.Format.Alpha,
-            2 => Pixmap.Format.LuminanceAlpha,
-            3 => Pixmap.Format.RGB888,
-            4 => Pixmap.Format.RGBA8888,
-            5 => Pixmap.Format.RGB565,
-            6 => Pixmap.Format.RGBA4444,
+            1 => LughFormat.ALPHA,
+            2 => LughFormat.LUMINANCE_ALPHA,
+            3 => LughFormat.RGB888,
+            4 => LughFormat.RGBA8888,
+            5 => LughFormat.RGB565,
+            6 => LughFormat.RGBA4444,
 
             // ----------------------------------
 
@@ -148,13 +141,13 @@ public class PixelFormat
     {
         return format switch
         {
-            IGL.GL_ALPHA           => 0, // Pixmap.Format.Alpha,
-            IGL.GL_LUMINANCE_ALPHA => 4, // Pixmap.Format.LuminanceAlpha,
-            IGL.GL_RGB565          => 2, // Pixmap.Format.RGB565,
-            IGL.GL_RGBA4           => 2, // Pixmap.Format.RGBA4444,
-            IGL.GL_RGB             => 2, // Pixmap.Format.RGB888,
-            IGL.GL_RGBA            => 6, // Pixmap.Format.RGBA8888,
-            IGL.GL_COLOR_INDEX     => 3, // Pixmap.Format.IndexedColor,
+            IGL.GL_ALPHA           => 0, // ALPHA,
+            IGL.GL_LUMINANCE_ALPHA => 4, // LUMINANCE_ALPHA,
+            IGL.GL_RGB565          => 2, // RGB565,
+            IGL.GL_RGBA4           => 2, // RGBA4444,
+            IGL.GL_RGB             => 2, // RGB888,
+            IGL.GL_RGBA            => 6, // RGBA8888,
+            IGL.GL_COLOR_INDEX     => 3, // INDEXED_COLOR,
 
             // ----------------------------------
 
@@ -163,24 +156,24 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a PNG color type and bit depth to a Pixmap.Format value.
+    /// Converts a PNG color type and bit depth to a PixelFormat value.
     /// </summary>
-    public static Pixmap.Format FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
+    public static int FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
     {
         // Map PNG color type and bit depth to the format
         var format = ( colorType, bitDepth ) switch
         {
-            (6, 8) => Pixmap.Format.RGBA8888,       // Truecolor with alpha, 8 bits
-            (6, 4) => Pixmap.Format.RGBA4444,       // Truecolor with alpha, 4 bits
-            (2, 8) => Pixmap.Format.RGB888,         // Truecolor, 8 bits
-            (0, 8) => Pixmap.Format.Alpha,          // Grayscale, 8 bits
-            (4, 8) => Pixmap.Format.LuminanceAlpha, // Grayscale with alpha, 8 bits
-            (2, 5) => Pixmap.Format.RGB565,         // Truecolor, 5 bits
-            (3, 8) => Pixmap.Format.IndexedColor,   // Indexed color, 8 bits
+            (6, 8) => LughFormat.RGBA8888,        // Truecolor with alpha, 8 bits
+            (6, 4) => LughFormat.RGBA4444,        // Truecolor with alpha, 4 bits
+            (2, 8) => LughFormat.RGB888,          // Truecolor, 8 bits
+            (0, 8) => LughFormat.ALPHA,           // Grayscale, 8 bits
+            (4, 8) => LughFormat.LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
+            (2, 5) => LughFormat.RGB565,          // Truecolor, 5 bits
+            (3, 8) => LughFormat.INDEXED_COLOR,   // Indexed color, 8 bits
 
             // ----------------------------------
 
-            var _ => Pixmap.Format.Invalid, // Invalid format, handled by caller
+            var _ => LughFormat.INVALID, // Invalid format, handled by caller
         };
 
         return format;
@@ -237,20 +230,24 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Retrieves the name of the Pixmap.Format format based on the provided format identifier.
+    /// Retrieves the name of the PixelFormat format based on the provided format identifier.
     /// </summary>
-    public static string GetFormatString( Pixmap.Format format )
+    public static string GetFormatString( int format )
     {
         return format switch
         {
-            Pixmap.Format.Alpha          => "Alpha",
-            Pixmap.Format.Intensity      => "Intensity",
-            Pixmap.Format.LuminanceAlpha => "LuminanceAlpha",
-            Pixmap.Format.RGB565         => "RGB565",
-            Pixmap.Format.RGBA4444       => "RGBA4444",
-            Pixmap.Format.RGB888         => "RGB888",
-            Pixmap.Format.RGBA8888       => "RGBA8888",
-            Pixmap.Format.IndexedColor   => "IndexedColor",
+            LughFormat.ALPHA           => "Alpha",
+            LughFormat.LUMINANCE_ALPHA => "LuminanceAlpha",
+            LughFormat.RGB565          => "RGB565",
+            LughFormat.RGBA4444        => "RGBA4444",
+            LughFormat.RGB888          => "RGB888",
+            LughFormat.RGBA8888        => "RGBA8888 ( DEFAULT )",
+            LughFormat.INDEXED_COLOR   => "IndexedColor",
+
+            // ----------------------------------
+
+            LughFormat.INVALID   => "Invalid",
+            LughFormat.UNDEFINED => "Undefined",
 
             // ----------------------------------
 
@@ -327,16 +324,16 @@ public class PixelFormat
     /// <summary>
     /// Converts a color to the specified pixel format
     /// </summary>
-    public static uint PixmapFormatToRGBAFormat( Pixmap.Format requestedFormat, uint color )
+    public static uint PixelFormatToRGBAFormat( int requestedFormat, uint color )
     {
         uint r, g, b, a;
 
         switch ( requestedFormat )
         {
-            case Pixmap.Format.Alpha:
+            case LughFormat.ALPHA:
                 return color & 0xff;
 
-            case Pixmap.Format.LuminanceAlpha:
+            case LughFormat.LUMINANCE_ALPHA:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
@@ -345,20 +342,20 @@ public class PixelFormat
 
                 return ( l & 0xffffff00 ) | a;
 
-            case Pixmap.Format.RGB888:
+            case LughFormat.RGB888:
                 return color >> 8;
 
-            case Pixmap.Format.RGBA8888:
+            case LughFormat.RGBA8888:
                 return color;
 
-            case Pixmap.Format.RGB565:
+            case LughFormat.RGB565:
                 r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
                 g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
                 b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
 
                 return r | g | b;
 
-            case Pixmap.Format.RGBA4444:
+            case LughFormat.RGBA4444:
                 r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
                 g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
                 b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
@@ -366,8 +363,7 @@ public class PixelFormat
 
                 return r | g | b | a;
 
-            case Pixmap.Format.IndexedColor:
-            case Pixmap.Format.Intensity:
+            case LughFormat.INDEXED_COLOR:
                 return color;
 
             default:
@@ -375,17 +371,17 @@ public class PixelFormat
         }
     }
 
-    public static int PixmapFormatToGLDataType( Pixmap.Format format )
+    public static int PixelFormatToGLDataType( int format )
     {
         return format switch
         {
-            Pixmap.Format.Alpha          => IGL.GL_ALPHA,
-            Pixmap.Format.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
-            Pixmap.Format.RGB888         => IGL.GL_RGB,
-            Pixmap.Format.RGBA8888       => IGL.GL_RGBA,
-            Pixmap.Format.RGB565         => IGL.GL_RGB,
-            Pixmap.Format.RGBA4444       => IGL.GL_RGBA,
-            Pixmap.Format.IndexedColor   => IGL.GL_COLOR_INDEX,
+            LughFormat.ALPHA           => IGL.GL_ALPHA,
+            LughFormat.LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
+            LughFormat.RGB888          => IGL.GL_RGB,
+            LughFormat.RGBA8888        => IGL.GL_RGBA,
+            LughFormat.RGB565          => IGL.GL_RGB,
+            LughFormat.RGBA4444        => IGL.GL_RGBA,
+            LughFormat.INDEXED_COLOR   => IGL.GL_COLOR_INDEX,
 
             // ----------------------------------
 
@@ -396,20 +392,19 @@ public class PixelFormat
     /// <summary>
     /// Returns the pixel format from a valid named string.
     /// </summary>
-    public static Pixmap.Format GetFormatFromString( string str )
+    public static int GetFormatFromString( string str )
     {
         str = str.ToLower();
 
         return str switch
         {
-            "alpha"          => Pixmap.Format.Alpha,
-            "luminancealpha" => Pixmap.Format.LuminanceAlpha,
-            "rgb565"         => Pixmap.Format.RGB565,
-            "rgba4444"       => Pixmap.Format.RGBA4444,
-            "rgb888"         => Pixmap.Format.RGB888,
-            "rgba8888"       => Pixmap.Format.RGBA8888,
-            "indexedcolor"   => Pixmap.Format.IndexedColor,
-            "intensity"      => Pixmap.Format.Intensity,
+            "alpha"          => LughFormat.ALPHA,
+            "luminancealpha" => LughFormat.LUMINANCE_ALPHA,
+            "rgb565"         => LughFormat.RGB565,
+            "rgba4444"       => LughFormat.RGBA4444,
+            "rgb888"         => LughFormat.RGB888,
+            "rgba8888"       => LughFormat.RGBA8888,
+            "indexedcolor"   => LughFormat.INDEXED_COLOR,
 
             // ----------------------------------
 
@@ -428,6 +423,8 @@ public class PixelFormat
     /// </summary>
     public static int BytesPerPixel( int format )
     {
+        //TODO: I might have to revisit this, it doesn't feel right
+        //      but I'm not sure how else I want to do it just yet.
         return format switch
         {
             // GL Formats
@@ -442,24 +439,13 @@ public class PixelFormat
 
             // ----------------------------------
 
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
-
-    /// <summary>
-    /// Gets the number of bytes required for 1 pixel of the specified format.
-    /// </summary>
-    public static int BytesPerPixel( Pixmap.Format format )
-    {
-        return format switch
-        {
-            Pixmap.Format.Alpha          => 1,
-            Pixmap.Format.LuminanceAlpha => 2,
-            Pixmap.Format.RGB565         => 2,
-            Pixmap.Format.RGBA4444       => 2,
-            Pixmap.Format.RGB888         => 3,
-            Pixmap.Format.RGBA8888       => 4,
-            Pixmap.Format.IndexedColor   => 1,
+            LughFormat.ALPHA           => 1,
+            LughFormat.LUMINANCE_ALPHA => 2,
+            LughFormat.RGB565          => 2,
+            LughFormat.RGBA4444        => 2,
+            LughFormat.RGB888          => 3,
+            LughFormat.RGBA8888        => 4,
+            LughFormat.INDEXED_COLOR   => 1,
 
             // ----------------------------------
 
@@ -520,7 +506,7 @@ public class PixelFormat
             var _ => 1,
         };
     }
-
+    
     #endregion Miscellaneous Methods
 }
 

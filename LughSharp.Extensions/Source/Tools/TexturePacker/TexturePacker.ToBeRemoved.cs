@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
 using LughUtils.source.Exceptions;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -142,17 +141,17 @@ public partial class TexturePacker
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    private PixelFormat GetPixelFormat( Pixmap.Format format )
+    private PixelFormat GetPixelFormat( int format )
     {
         return format switch
         {
-            Pixmap.Format.RGBA8888
-                or Pixmap.Format.RGBA4444 => PixelFormat.Format32bppArgb,
+            LughFormat.RGBA8888
+                or LughFormat.RGBA4444 => PixelFormat.Format32bppArgb,
 
-            Pixmap.Format.RGB565
-                or Pixmap.Format.RGB888 => PixelFormat.Format32bppRgb,
+            LughFormat.RGB565
+                or LughFormat.RGB888 => PixelFormat.Format32bppRgb,
 
-            Pixmap.Format.Alpha => PixelFormat.Alpha,
+            LughFormat.ALPHA => PixelFormat.Alpha,
 
             var _ => throw new GdxRuntimeException( $"Unsupported format: {_settings.Format}" ),
         };

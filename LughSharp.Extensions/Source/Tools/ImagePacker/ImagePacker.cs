@@ -90,7 +90,6 @@ public class ImagePacker
     private readonly Node _root;
 
     // ========================================================================
-    // ========================================================================
 
     /// <summary>
     /// Creates a new ImagePacker which will insert all supplied images into a <tt>width</tt>
@@ -153,14 +152,14 @@ public class ImagePacker
 
             if ( _duplicateBorder )
             {
+                // Note to self:
+                // the 'with' expression here essentially creates a new Rectangle
+                // using the dimensions of 'rect', with Y being set to rect.Y-1,
+                // and Height being set to 1.
+                // ie. new Rectangle( rect.X, rect.Y - 1, rect.Width, 1 ),
+
                 // Duplicate top border
                 g.DrawImage( image,
-
-                             // Note to self:
-                             // the 'with' expression here essentially creates a new Rectangle
-                             // using the dimensions of 'rect', with Y being set to rect.Y-1,
-                             // and Height being set to 1.
-                             // ie. new Rectangle( rect.X, rect.Y - 1, rect.Width, 1 ),
                              rect with { Y = rect.Y - 1, Height = 1 },
                              new Rectangle( 0, 0, image.Width, 1 ),
                              GraphicsUnit.Pixel );
@@ -261,10 +260,18 @@ public class ImagePacker
     /// <param name="width">The width of the image to create.</param>
     /// <param name="height">The height of the image to create.</param>
     /// <param name="pixelFormat"></param>
+    /// <param name="color"></param>
     /// <returns>A new image with the specified dimensions and background color.</returns>
-    private static Bitmap CreateImage( int width, int height, PixelFormat pixelFormat )
+    public static Bitmap CreateImage( int width, int height, PixelFormat pixelFormat, Color color )
     {
-        return new Bitmap( width, height, pixelFormat );
+        var bitmap = new Bitmap( width, height, pixelFormat );
+
+        using ( var gfx = Graphics.FromImage( bitmap ) )
+        {
+            gfx.Clear( color );
+        }
+
+        return bitmap;
     }
 
     // ========================================================================

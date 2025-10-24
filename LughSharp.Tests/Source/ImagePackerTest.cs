@@ -22,13 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
-using Extensions.Source.Tools.TexturePacker;
+using Extensions.Source.Tools.ImagePacker;
 
 using JetBrains.Annotations;
 
-using LughSharp.Lugh.Files;
+using LughUtils.source.Logging;
 
 using NUnit.Framework;
 
@@ -37,7 +39,7 @@ namespace LughSharp.Tests.Source;
 [TestFixture]
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class TexturePackerTest
+public class ImagePackerTest
 {
     private const bool REMOVE_DUPLICATE_IMAGES = true;
     private const bool KEEP_DUPLICATE_IMAGES   = false;
@@ -53,35 +55,32 @@ public class TexturePackerTest
     [Test]
     public void Run()
     {
-        var settings = new TexturePackerSettings
+        var rand   = new Random( 0 );
+        var packer = new ImagePacker( 2048, 2048, 1, true );
+        var images = new Bitmap[ 100 ];
+
+        for ( var i = 0; i < images.Length; i++ )
         {
-            MaxWidth         = 2048,                  // Maximum Width of final atlas image
-            MaxHeight        = 2048,                  // Maximum Height of final atlas image
-            PowerOfTwo       = true,                  // 
-            Debug            = DRAW_DEBUG_LINES,      // 
-            IsAlias          = KEEP_DUPLICATE_IMAGES, // 
-            Silent           = false,                 // 
-            PaddingX         = 2,                     // Increase padding
-            PaddingY         = 2,                     // Increase padding
-            EdgePadding      = true,                  // Disable edge padding initially
-            DuplicatePadding = false,                 // Disable duplicate padding
-            MinWidth         = 16,                    // 
-            MinHeight        = 16,                    // 
-        };
+            var color = Color.FromArgb( 255,
+                                        ( byte )rand.Next( 256 ),
+                                        ( byte )rand.Next( 256 ),
+                                        ( byte )rand.Next( 256 ) );
 
-        // Build the Atlases from the specified parameters :-
-        // 1. source folder
-        // 2. destination folder
-        // 3. name of atlas, without extension (the extension '.atlas' will be added automatically)
-        //    If an extension is specified, it will be removed.
-        // 4. configuration settings
-        var inputFolder  = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
-        var outputFolder = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
+            var width  = rand.Next( 10, 61 );
+            var height = rand.Next( 10, 61 );
 
-//        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
-//        settings.WriteToJsonFile( settingsFilePath );
+            images[ i ] = ImagePacker.CreateImage( width, height, PixelFormat.Format32bppArgb, color );
+        }
 
-        TexturePacker.Process( inputFolder, outputFolder, "objects", settings );
+        Array.Sort( images, ( a, b ) => ( b.Width * b.Height ) - ( a.Width * a.Height ) );
+
+        for ( var i = 0; i < images.Length; i++ )
+        {
+            Logger.Debug( $"Inserting image {i}..." );
+            packer.InsertImage( $"image_{i}", images[ i ] );
+        }
+
+        packer.Image.Save( "packed.png" );
     }
 
     [TearDown]
