@@ -41,12 +41,6 @@ namespace LughSharp.Tests.Source;
 [SupportedOSPlatform( "windows" )]
 public class ImagePackerTest
 {
-    private const bool REMOVE_DUPLICATE_IMAGES = true;
-    private const bool KEEP_DUPLICATE_IMAGES   = false;
-    private const bool DRAW_DEBUG_LINES        = false;
-
-    // ========================================================================
-
     [SetUp]
     public void Setup()
     {
@@ -76,7 +70,6 @@ public class ImagePackerTest
 
         for ( var i = 0; i < images.Length; i++ )
         {
-            Logger.Debug( $"Inserting image {i}..." );
             packer.InsertImage( $"image_{i}", images[ i ] );
         }
 

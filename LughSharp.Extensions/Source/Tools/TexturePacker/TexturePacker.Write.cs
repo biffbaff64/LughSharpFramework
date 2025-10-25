@@ -60,10 +60,10 @@ public partial class TexturePacker
 
         var fileIndex = 1;
 
-        Logger.Debug( $"packFileNoExt: {packFileNoExt}" );
-        Logger.Debug( $"packDir: {packDir}" );
-        Logger.Debug( $"imageName: {imageName}" );
-        Logger.Debug( $"pages.Count: {pages.Count}" );
+//        Logger.Debug( $"packFileNoExt: {packFileNoExt}" );
+//        Logger.Debug( $"packDir: {packDir}" );
+//        Logger.Debug( $"imageName: {imageName}" );
+//        Logger.Debug( $"pages.Count: {pages.Count}" );
 
         // Iterate over each page to write its image
         for ( var p = 0; p < pages.Count; p++ )
@@ -113,8 +113,8 @@ public partial class TexturePacker
 
             string outputFile;
 
-            Logger.Debug( $"page.ImageWidth: {page.ImageWidth}" );
-            Logger.Debug( $"page.ImageHeight: {page.ImageHeight}" );
+//            Logger.Debug( $"page.ImageWidth: {page.ImageWidth}" );
+//            Logger.Debug( $"page.ImageHeight: {page.ImageHeight}" );
 
             // Find a unique output file name
             while ( true )
@@ -146,7 +146,7 @@ public partial class TexturePacker
                 }
             }
 
-            Logger.Debug( $"outputFile: {outputFile}" );
+//            Logger.Debug( $"outputFile: {outputFile}" );
 
             // Create output directories if needed
             Directory.CreateDirectory( Path.GetDirectoryName( outputFile )

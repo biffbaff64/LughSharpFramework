@@ -262,13 +262,9 @@ public partial class TexturePacker
                                 TexturePackerSettings settings,
                                 TexturePackerProgressListener? progressListener = null )
     {
-        Logger.Checkpoint();
-
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
-            
-            Logger.Debug( "Processor initialised" );
             
             _ = processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
         }

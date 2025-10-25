@@ -39,8 +39,8 @@ public class TexturePackerFileProcessor : FileProcessor
     public TexturePacker.TexturePackerProgressListener? ProgressListener { get; set; }
 
     public List< DirectoryInfo? > DirsToIgnore { get; set; }
-    public bool                   CountOnly    { get; set; }
     public string                 PackFileName { get; set; }
+    public bool                   CountOnly    { get; set; } = false;
 
     // ========================================================================
 
@@ -122,15 +122,9 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </returns>
     public virtual List< Entry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
-        Logger.Debug( "Collecting available settings files..." );
-        var settingsFiles = CollectSettingsFiles( inputRoot, outputRoot );
-        Logger.Debug( $"files found: {settingsFiles}" );
-        
-        Logger.Debug( "Counting Invocations..." );
+        _ = CollectSettingsFiles( inputRoot, outputRoot );
 
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
@@ -138,10 +132,7 @@ public class TexturePackerFileProcessor : FileProcessor
         CountOnly = true;
         _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
-        Logger.Debug( $"Invocations: {_packCount}" );
-        
-        Logger.Debug( "Processing files..." );
-        
+
         // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
         var result = base.Process( inputRoot, outputRoot );
@@ -202,7 +193,7 @@ public class TexturePackerFileProcessor : FileProcessor
                 break;
             }
 
-            if ( parent == null || parent.Equals( _rootDirectory ) )
+            if ( ( parent == null ) || parent.Equals( _rootDirectory ) )
             {
                 break;
             }
@@ -233,7 +224,7 @@ public class TexturePackerFileProcessor : FileProcessor
                 {
                     var file = entryDir.InputFile as DirectoryInfo;
 
-                    while ( file != null && !file.Equals( inputDir.InputFile ) )
+                    while ( ( file != null ) && !file.Equals( inputDir.InputFile ) )
                     {
                         var packJson = new FileInfo( Path.Combine( file.FullName, "pack.json" ) );
 
@@ -388,7 +379,7 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         // ---------- Pack Images ----------
-        
+
         var packer = NewTexturePacker( _rootDirectory, settings );
 
         // Add all the gathered images to the packer.
@@ -500,9 +491,9 @@ public class TexturePackerFileProcessor : FileProcessor
                 }
             },
         };
-        
+
         settingsProcessor.Process( inputRoot, outputRoot );
-        
+
         ProgressListener ??= new TexturePacker.TexturePackerProgressListener();
 
         // -----------------------------------------------------
@@ -603,7 +594,7 @@ public class TexturePackerFileProcessor : FileProcessor
                 },
                 Recursive = false,
             };
-            
+
             var packFile = new FileInfo( rootSettings.GetScaledPackFileName( PackFileName, i ) );
             var prefix   = packFile.Name;
             var dotIndex = prefix.LastIndexOf( '.' );

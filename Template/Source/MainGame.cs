@@ -60,16 +60,18 @@ public class MainGame : Game
 
         CreateCamera();
 
-        Logger.Divider();
-        Logger.Divider();
+//        Logger.Divider();
+//        Logger.Divider();
 //        var test = new AssetManagerTest();
 //        var test = new TexturePackerTest();
-        var test = new ImagePackerTest();
-        test.Setup();
-        test.Run();
-        test.TearDown();
-        Logger.Divider();
-        Logger.Divider();
+//        var test = new ImagePackerTest();
+//        test.Setup();
+//        test.Run();
+//        test.TearDown();
+//        Logger.Divider();
+//        Logger.Divider();
+
+        LoadImage1Texture();
 
         Logger.Debug( "Done" );
     }

@@ -153,9 +153,10 @@ public class TextureAtlasData
                 {
                     region.Degrees = 90;
                 }
-                else if ( value != "false" )
+                else if ( ( value != "false" )
+                         && ( int.TryParse( value, out var degrees ) ) )
                 {
-                    region.Degrees = int.Parse( value );
+                    region.Degrees = degrees;
                 }
 
                 region.Rotate = region.Degrees == 90;

@@ -204,8 +204,7 @@ public class ImagePacker
                 g.DrawImage( image,
                              new Rectangle( rect.X + rect.Width, rect.Y + rect.Height, 1, 1 ),
                              new Rectangle( image.Width - 1, image.Height - 1, 1, 1 ),
-                             GraphicsUnit.Pixel );
-            }
+                             GraphicsUnit.Pixel ); }
         }
     }
 
@@ -228,7 +227,8 @@ public class ImagePacker
         {
             var node = stack.Pop();
 
-            if ( ( node.LeaveName == null ) && node is { LeftChild: not null, RightChild: not null } )
+            if ( ( node.LeaveName == null )
+                 && node is { LeftChild: not null, RightChild: not null } )
             {
                 stack.Push( node.RightChild );
                 stack.Push( node.LeftChild );
@@ -236,12 +236,15 @@ public class ImagePacker
                 continue;
             }
 
-            if ( ( node.LeaveName != null ) || ( node.Rect.Width < rect.Width ) || ( node.Rect.Height < rect.Height ) )
+            if ( ( node.LeaveName != null )
+                 || ( node.Rect.Width < rect.Width )
+                 || ( node.Rect.Height < rect.Height ) )
             {
                 continue;
             }
 
-            if ( ( node.Rect.Width == rect.Width ) && ( node.Rect.Height == rect.Height ) )
+            if ( ( node.Rect.Width == rect.Width )
+                 && ( node.Rect.Height == rect.Height ) )
             {
                 return node;
             }

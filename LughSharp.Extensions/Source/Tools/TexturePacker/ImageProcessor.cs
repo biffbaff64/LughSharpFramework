@@ -43,7 +43,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 [SupportedOSPlatform( "windows" )]
 public class ImageProcessor
 {
-    public float                      Scale      { get; set; }
+    public float                      Scale      { get; set; } = 1.0f;
     public Resampling                 Resampling { get; set; } = Resampling.Bicubic;
     public List< TexturePacker.Rect > ImageRects { get; set; } = [ ];
     public TexturePackerSettings      Settings   { get; }
@@ -54,8 +54,6 @@ public class ImageProcessor
     private static readonly Regex  _indexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
 
     private readonly Dictionary< string, TexturePacker.Rect? > _crcs = [ ];
-
-    private float _scale = 1;
 
     // ========================================================================
     // ========================================================================
@@ -78,8 +76,6 @@ public class ImageProcessor
     {
         ArgumentNullException.ThrowIfNull( file );
 
-        rootPath = IOUtils.NormalizePath( rootPath );
-
         Bitmap? image;
 
         try
@@ -91,18 +87,15 @@ public class ImageProcessor
             throw new GdxRuntimeException( $"Error reading image: {file}", ex );
         }
 
-        if ( image == null )
-        {
-            throw new GdxRuntimeException( $"Unable to read image: {file}" );
-        }
-
         var name = IOUtils.NormalizePath( file.FullName );
 
-        // Strip root dir from the front of the image path.
-        if ( !name.StartsWith( rootPath ) )
-        {
-            throw new GdxRuntimeException( $"Path '{name}' does not start with root: {rootPath}" );
-        }
+//        rootPath = IOUtils.NormalizePath( rootPath );
+//
+//        // Strip root dir from the front of the image path.
+//        if ( !name.StartsWith( rootPath ) )
+//        {
+//            throw new GdxRuntimeException( $"Path '{name}' does not start with root: {rootPath}" );
+//        }
 
         // Strip extension.
         name = Path.GetFileNameWithoutExtension( name );
@@ -129,8 +122,7 @@ public class ImageProcessor
 
         if ( rect == null )
         {
-            Logger.Debug( "Returning early: Rect is null" );
-            Logger.Debug( $"Ignoring blank input image: {name}" );
+            Logger.Debug( $"Returning early: Ignoring blank input image: {name}" );
 
             return null;
         }
@@ -181,9 +173,11 @@ public class ImageProcessor
     /// </summary>
     public TexturePacker.Rect? ProcessImage( Bitmap? image, string? name )
     {
-        if ( _scale <= 0 )
+        if ( Scale <= 0 )
         {
-            throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
+            Logger.Debug( $"scale cannot be <= 0: {Scale}, resetting to 1.0f" );
+            
+            Scale = 1.0f;
         }
 
         if ( image == null )
@@ -233,14 +227,14 @@ public class ImageProcessor
         }
 
         // Scale image.
-        if ( Math.Abs( _scale - 1f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( Scale - 1f ) > NumberUtils.FLOAT_TOLERANCE )
         {
-            width  = ( int )Math.Max( 1, Math.Round( width * _scale ) );
-            height = ( int )Math.Max( 1, Math.Round( height * _scale ) );
+            width  = ( int )Math.Max( 1, Math.Round( width * Scale ) );
+            height = ( int )Math.Max( 1, Math.Round( height * Scale ) );
 
             var newImage = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-            if ( _scale < 1 )
+            if ( Scale < 1 )
             {
                 // Scaling down: Use HighQualityBicubic for good quality downscaling
                 var g = Graphics.FromImage( newImage );
@@ -530,12 +524,12 @@ public class ImageProcessor
             endY = image.Height - 2;
         }
 
-        if ( Math.Abs( _scale - 1.0f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( Scale - 1.0f ) > NumberUtils.FLOAT_TOLERANCE )
         {
-            startX = ( int )Math.Round( startX * _scale );
-            endX   = ( int )Math.Round( endX * _scale );
-            startY = ( int )Math.Round( startY * _scale );
-            endY   = ( int )Math.Round( endY * _scale );
+            startX = ( int )Math.Round( startX * Scale );
+            endX   = ( int )Math.Round( endX * Scale );
+            startY = ( int )Math.Round( startY * Scale );
+            endY   = ( int )Math.Round( endY * Scale );
         }
 
         return [ startX, endX, startY, endY ];
@@ -617,12 +611,12 @@ public class ImageProcessor
                 break;
         }
 
-        if ( Math.Abs( _scale - 1.0f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( Scale - 1.0f ) > NumberUtils.FLOAT_TOLERANCE )
         {
-            startX = ( int )Math.Round( startX * _scale );
-            endX   = ( int )Math.Round( endX * _scale );
-            startY = ( int )Math.Round( startY * _scale );
-            endY   = ( int )Math.Round( endY * _scale );
+            startX = ( int )Math.Round( startX * Scale );
+            endX   = ( int )Math.Round( endX * Scale );
+            startY = ( int )Math.Round( startY * Scale );
+            endY   = ( int )Math.Round( endY * Scale );
         }
 
         var pads = new[] { startX, endX, startY, endY };
