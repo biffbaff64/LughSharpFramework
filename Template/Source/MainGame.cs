@@ -44,7 +44,8 @@ public class MainGame : Game
     private AssetManager?           _assetManager;
     private Texture?                _image1;
     private Texture?                _whitePixelTexture;
-
+    private bool                    _disposed = false;
+    
     // ========================================================================
     // ========================================================================
 
@@ -78,9 +79,37 @@ public class MainGame : Game
 
     // ========================================================================
 
+    private int   _direction = 0;
+    private float _scale     = 1.0f;
+    private float _speed     = 0.1f;
+    
     /// <inheritdoc />
     public override void Update()
     {
+        if ( _direction == 0 )
+        {
+            _scale -= _speed;
+
+            if ( _scale < 0.0f )
+            {
+                _scale     = 0.0f;
+                _direction = 1;
+            }
+        }
+        else
+        {
+            _scale += _speed;
+
+            if ( _scale > 1.0f )
+            {
+                _scale     = 1.0f;
+                _direction = 0;
+            }
+        }
+        
+        _orthoGameCam?.CameraZoom = _scale;
+
+        CheckViewportCoverage();
     }
 
     /// <inheritdoc />
@@ -102,6 +131,8 @@ public class MainGame : Game
                 _spriteBatch?.Draw( _image1, 0, 0 );
             }
 
+            DrawViewportBounds();
+            
             _spriteBatch?.End();
         }
     }
@@ -112,6 +143,8 @@ public class MainGame : Game
         _orthoGameCam?.ResizeViewport( width, height );
     }
 
+    // ========================================================================
+    
     /// <inheritdoc />
     public override void Dispose()
     {
@@ -123,13 +156,18 @@ public class MainGame : Game
 
     protected override void Dispose( bool disposing )
     {
-        if ( disposing )
+        if ( !_disposed )
         {
-            _spriteBatch?.Dispose();
-            _image1?.Dispose();
-            _whitePixelTexture?.Dispose();
-            _assetManager?.Dispose();
-            _orthoGameCam?.Dispose();
+            if ( disposing )
+            {
+                _spriteBatch?.Dispose();
+                _image1?.Dispose();
+                _whitePixelTexture?.Dispose();
+                _assetManager?.Dispose();
+                _orthoGameCam?.Dispose();
+            }
+
+            _disposed = true;
         }
     }
 
@@ -207,6 +245,8 @@ public class MainGame : Game
         }
     }
 
+    private static bool _first = true;
+    
     private static void CheckViewportCoverage()
     {
         var viewport = new int[ 4 ];
@@ -235,6 +275,14 @@ public class MainGame : Game
             if ( ( viewport[ 2 ] != windowWidth ) || ( viewport[ 3 ] != windowHeight ) )
             {
                 Logger.Debug( "Viewport size doesn't match window size!" );
+            }
+        }
+        else
+        {
+            if ( _first )
+            {
+                Logger.Debug( "Viewport fully covers the window." );
+                _first = false;
             }
         }
     }
@@ -270,7 +318,7 @@ public class MainGame : Game
         {
             var filename = $"{IOUtils.AssetsRoot}title_background.png";
 
-            _image1 = new Texture( new FileInfo( filename ) );
+            _image1 = _assetManager?.LoadSingleAsset< Texture >( filename );
 
             if ( _image1 == null )
             {
@@ -316,14 +364,13 @@ public class MainGame : Game
 
     private void CreateWhitePixelTexture()
     {
-        Logger.Checkpoint();
-
         if ( _whitePixelTexture != null )
         {
             return;
         }
 
         var pixmap = new Pixmap( 100, 100, LughFormat.RGBA8888 );
+        
         pixmap.SetColor( Color.White );
         pixmap.FillWithCurrentColor();
 
@@ -357,7 +404,7 @@ public class MainGame : Game
     {
         if ( _whitePixelTexture == null )
         {
-            Logger.Debug( "white pixel texture not initialized" );
+            CreateWhitePixelTexture();
 
             return;
         }
@@ -365,8 +412,6 @@ public class MainGame : Game
         // Get and verify viewport dimensions
         var viewport = new int[ 4 ];
         Engine.GL.GetIntegerv( ( int )GLParameter.Viewport, ref viewport );
-
-        Logger.Debug( $"Viewport dimensions: {viewport[ 2 ]}x{viewport[ 3 ]}" );
 
         var width  = viewport[ 2 ];
         var height = viewport[ 3 ];

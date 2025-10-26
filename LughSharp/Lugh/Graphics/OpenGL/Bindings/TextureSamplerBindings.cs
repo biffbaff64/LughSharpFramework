@@ -34,7 +34,7 @@ using GLboolean = bool;
 
 // ============================================================================
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings
 {
@@ -396,6 +396,7 @@ public unsafe partial class GLBindings
     {
         return CreateSamplers( 1 )[ 0 ];
     }
-
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================

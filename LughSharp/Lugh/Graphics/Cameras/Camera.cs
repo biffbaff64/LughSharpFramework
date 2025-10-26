@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 using Quaternion = LughUtils.source.Maths.Quaternion;
 
@@ -255,7 +256,7 @@ public abstract class Camera
     /// a point on the near plane, a z-coordinate of 1 will return a point on the far plane.
     /// <para>
     /// This method allows you to specify the viewport position and dimensions in the coordinate system
-    /// expected by <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Viewport(int, int, int, int)"/>, with the origin in the bottom
+    /// expected by <see cref="Lugh.Graphics.OpenGL.Bindings.GLBindings.Viewport(int, int, int, int)"/>, with the origin in the bottom
     /// left corner of the screen.
     /// </para>
     /// </summary>
@@ -324,7 +325,7 @@ public abstract class Camera
     /// to the right. This makes it easily useable in conjunction with <see cref="IBatch"/>
     /// and similar classes.
     /// This method allows you to specify the viewport position and dimensions in the coordinate
-    /// system expected by <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Viewport(int,int,int,int)"/>, with the origin
+    /// system expected by <see cref="Lugh.Graphics.OpenGL.Bindings.GLBindings.Viewport(int,int,int,int)"/>, with the origin
     /// in the bottom left corner of the screen.
     /// </summary>
     /// <param name="worldCoords"></param>

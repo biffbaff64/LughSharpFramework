@@ -102,9 +102,9 @@ public partial class AssetManager : IDisposable
 
     private IAssetErrorListener? _listener;
     private AsyncExecutor        _executor;
-
-    private int _loaded;
-    private int _toLoad;
+    private int                  _loaded;
+    private int                  _toLoad;
+    private bool                 _disposed = false;
 
     // ========================================================================
     // ========================================================================
@@ -282,7 +282,7 @@ public partial class AssetManager : IDisposable
         {
             lock ( this )
             {
-                if ( !_assets.TryGetValue( type, out var assetsByType ) || assetsByType == null )
+                if ( !_assets.TryGetValue( type, out var assetsByType ) || ( assetsByType == null ) )
                 {
                     throw new GdxRuntimeException( $"No assets loaded for type {type.FullName}" );
                 }
@@ -492,7 +492,7 @@ public partial class AssetManager : IDisposable
     {
         lock ( this )
         {
-            return filename != null && _assetTypes.ContainsKey( filename );
+            return ( filename != null ) && _assetTypes.ContainsKey( filename );
         }
     }
 
@@ -505,8 +505,6 @@ public partial class AssetManager : IDisposable
         {
             ArgumentNullException.ThrowIfNull( type );
             GdxRuntimeException.ThrowIfNull( _assets );
-
-//            filename = IOUtils.NormalizePath( filename );
 
             // Retrieve all assets of the required type
             _assets.TryGetValue( type, out var assetsByType );
@@ -528,7 +526,7 @@ public partial class AssetManager : IDisposable
     /// <exception cref="GdxRuntimeException"> If no loader was found. </exception>
     public AssetLoader? GetLoader( Type? type, string? filename = null )
     {
-        Guard.ThrowIfNull( _loaders );
+        Guard.Against.Null( _loaders );
 
         // Check if the type exists in _loaders before accessing it.
         if ( ( type == null )
@@ -599,7 +597,7 @@ public partial class AssetManager : IDisposable
     /// <param name="desc">the <see cref="AssetDescriptor"/></param>
     public void Load( AssetDescriptor desc )
     {
-        ArgumentNullException.ThrowIfNull( desc );
+        Guard.Against.Null( desc );
 
         lock ( this )
         {
@@ -617,15 +615,15 @@ public partial class AssetManager : IDisposable
     /// <param name="parameters"></param>
     public void Load( string? filename, Type? type, AssetLoaderParameters? parameters )
     {
-        ArgumentNullException.ThrowIfNull( filename );
-        ArgumentNullException.ThrowIfNull( type );
+        Guard.Against.Null( filename );
+        Guard.Against.Null( type );
 
         lock ( this )
         {
             // Confirm availability of the loader for the supplied asset.
             if ( GetLoader( type, filename ) == null )
             {
-                throw new GdxRuntimeException( $"No loader for type: {type?.Name}" );
+                throw new GdxRuntimeException( $"No loader for type: {type.Name}" );
             }
 
             if ( _loadQueue.Count == 0 )
@@ -644,6 +642,22 @@ public partial class AssetManager : IDisposable
             // Add this asset to the load queue
             _loadQueue.Add( descriptor );
         }
+    }
+
+    /// <summary>
+    /// Loads a single asset and returns it. This simple method combines a call to
+    /// <see cref="Load(string, Type, AssetLoaderParameters?)"/>
+    /// with a call to <see cref="FinishLoadingAsset(string)"/>.
+    /// </summary>
+    /// <param name="filename"> The filename of the asset to load. </param>
+    /// <param name="parameters"> </param>
+    /// <typeparam name="T"> The Type of the requested asset. </typeparam>
+    public T? LoadSingleAsset< T >( string filename, AssetLoaderParameters? parameters = null )
+    {
+        Load( filename, typeof( T ), parameters );
+        FinishLoadingAsset( filename );
+
+        return Contains( filename ) ? Get< T >( filename ) : default( T? );
     }
 
     /// <summary>
@@ -702,7 +716,7 @@ public partial class AssetManager : IDisposable
             {
                 var done = Update();
 
-                if ( done || TimeUtils.Millis() >= endTime )
+                if ( done || ( TimeUtils.Millis() >= endTime ) )
                 {
                     return done;
                 }
@@ -774,7 +788,7 @@ public partial class AssetManager : IDisposable
 
                 Guard.ThrowIfNull( assetContainer );
 
-                var asset = assetContainer?.Asset;
+                var asset = assetContainer.Asset;
 
                 if ( asset != null )
                 {
@@ -1148,11 +1162,11 @@ public partial class AssetManager : IDisposable
     /// </returns>
     public T? GetAs< T >( string name ) where T : class
     {
-        if ( TypeList.TryGetValue( typeof( T ), out var _ ) )
+        if ( _assetTypes.ContainsValue( typeof( T ) ) )
         {
             return Get( name ) as T;
         }
-
+        
         return null;
     }
 
@@ -1212,7 +1226,7 @@ public partial class AssetManager : IDisposable
 
         _assets.Clear();
         _assetTypes.Clear();
-        _assetDependencies?.Clear();
+        _assetDependencies.Clear();
         _loadQueue.Clear();
         _tasks.Clear();
     }
@@ -1543,7 +1557,7 @@ public partial class AssetManager : IDisposable
             }
         }
 
-        if ( _assets[ GetAssetType( filename ) ]?[ filename ]!.RefCount <= 0 )
+        if ( _assets[ GetAssetType( filename ) ]?[ filename ].RefCount <= 0 )
         {
             _assetDependencies.Remove( filename );
         }
@@ -1565,16 +1579,21 @@ public partial class AssetManager : IDisposable
     /// Releases all resources used by the AssetManager.
     /// </summary>
     /// <param name="disposing">
-    /// Indicates whether the method call comes from a Dispose
-    /// method (true) or from a finalizer (false).
+    /// Indicates whether the method call comes from a Dispose method (true) or from
+    /// a finalizer (false).
     /// </param>
     protected void Dispose( bool disposing )
     {
-        if ( disposing )
+        if ( !_disposed )
         {
-            ClearAsync();
+            if ( disposing )
+            {
+                ClearAsync();
 
-            _executor.Dispose();
+                _executor.Dispose();
+            }
+
+            _disposed = true;
         }
     }
 }

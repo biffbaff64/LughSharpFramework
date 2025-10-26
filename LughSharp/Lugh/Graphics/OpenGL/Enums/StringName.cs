@@ -27,8 +27,9 @@ namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum StringName : int
 {
-    Extensions = IGL.GL_EXTENSIONS,
-    Renderer   = IGL.GL_RENDERER,
-    Vendor     = IGL.GL_VENDOR,
-    Version    = IGL.GL_VERSION,
+    Extensions             = IGL.GL_EXTENSIONS,
+    Renderer               = IGL.GL_RENDERER,
+    Vendor                 = IGL.GL_VENDOR,
+    Version                = IGL.GL_VERSION,
+    ShadingLanguageVersion = IGL.GL_SHADING_LANGUAGE_VERSION,
 }

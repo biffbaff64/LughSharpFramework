@@ -184,6 +184,11 @@ public partial class Gdx2DPixmap
     /// <param name="size">The size of the pixmap data in bytes, representing the total pixel data.</param>
     private void ClearRGBA8888( Color color, uint size )
     {
+        if ( ( size % 4 ) != 0 )
+        {
+            throw new GdxRuntimeException( "Invalid size for RGBA8888 format" );
+        }
+        
         var col = Color.RGBA8888( color );
         var a   = ( byte )( col & 0x000000ff );
         var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );

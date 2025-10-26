@@ -22,9 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-
-// ============================================================================
 using GLenum = int;
 using GLsizei = int;
 using GLuint = uint;
@@ -34,7 +31,7 @@ using GLchar = byte;
 
 // ============================================================================
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings
 {

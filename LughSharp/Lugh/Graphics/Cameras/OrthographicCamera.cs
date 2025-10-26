@@ -36,8 +36,6 @@ public class OrthographicCamera : Camera
 
     private readonly Vector3 _tmp = new();
 
-    private float _zoom;
-
     // ========================================================================
 
     /// <summary>
@@ -179,11 +177,11 @@ public class OrthographicCamera : Camera
     {
         get
         {
-            _zoom = Math.Max( 0.0001f, _zoom );
+            field = Math.Max( 0.0001f, field );
 
-            return _zoom;
+            return field;
         }
-        set => _zoom = value;
+        set;
     }
 }
 

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using Platform = LughSharp.Lugh.Core.Platform;
+using Capabilities = LughSharp.Lugh.Graphics.OpenGL.OpenGL.Capabilities;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -32,29 +33,19 @@ namespace LughSharp.Lugh.Graphics.Utils;
 /// <remarks>
 /// It is HIGHLY likely that this class can be removed, with some minor work elsewhere.
 /// </remarks>
+//[DebuggerDisplay( "DebugVersionString" )]
 [PublicAPI]
-[DebuggerDisplay( "DebugVersionString" )]
-public class GLVersion
+public class AppVersion
 {
     public GraphicsBackend.BackendType BackendType { get; set; }
 
-    // ========================================================================
-
-    private int           _majorVersion    = 0;
-    private int           _minorVersion    = 0;
-    private string        _renderer        = "";
-    private int           _revisionVersion = 0;
-    private OpenGLProfile _openGLProfile;
-    private string        _vendor = "";
-
-    // ========================================================================
     // ========================================================================
 
     /// <summary>
     /// </summary>
     /// <param name="appType"></param>
     /// <param name="profile"></param>
-    public unsafe GLVersion( Platform.ApplicationType appType, OpenGLProfile profile )
+    public AppVersion( Platform.ApplicationType appType, OpenGLProfile profile )
     {
         BackendType = appType switch
         {
@@ -67,44 +58,10 @@ public class GLVersion
             var _ => throw new GdxRuntimeException( $"Unknown Platform ApplicationType: {appType}" ),
         };
 
-        var version = BytePointerToString.Convert( GL.GetString( ( int )StringName.Version ) );
+        OpenGL.OpenGL.Initialisation.LoadVersion();
+        Capabilities.OpenGLProfile = profile;
 
-        _majorVersion    = ( int )char.GetNumericValue( version[ 0 ] );
-        _minorVersion    = ( int )char.GetNumericValue( version[ 2 ] );
-        _revisionVersion = ( int )char.GetNumericValue( version[ 4 ] );
-        _openGLProfile   = profile;
-
-        Logger.Divider();
         DebugPrint();
-        Logger.Divider();
-    }
-
-    public unsafe string VendorString
-    {
-        get
-        {
-            _vendor = BytePointerToString.Convert( GL.GetString( ( int )StringName.Vendor ) );
-
-            return _vendor;
-        }
-    }
-
-    public unsafe string RendererString
-    {
-        get
-        {
-            _renderer = BytePointerToString.Convert( GL.GetString( ( int )StringName.Renderer ) );
-
-            return _renderer;
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
-    public (int major, int minor, int revision) Get()
-    {
-        return ( _majorVersion, _minorVersion, _revisionVersion );
     }
 
     /// <summary>
@@ -116,19 +73,22 @@ public class GLVersion
     /// <returns> true if the current version is higher or equal to the test version </returns>
     public bool IsVersionEqualToOrHigher( int testMajorVersion, int testMinorVersion )
     {
-        return ( _majorVersion > testMajorVersion )
-               || ( ( _majorVersion == testMajorVersion ) && ( _minorVersion >= testMinorVersion ) );
+        return ( Capabilities.MajorVersion > testMajorVersion )
+               || ( ( Capabilities.MajorVersion == testMajorVersion )
+                    && ( Capabilities.MinorVersion >= testMinorVersion ) );
     }
 
     /// <summary>
     /// </summary>
     public void DebugPrint()
     {
+        Logger.Divider();
         Logger.Debug( $"BackendType : {BackendType}" );
-        Logger.Debug( $"Version     : {_majorVersion}.{_minorVersion}.{_revisionVersion}" );
-        Logger.Debug( $"Profile     : {_openGLProfile}" );
-        Logger.Debug( $"Vendor      : {VendorString}" );
-        Logger.Debug( $"Renderer    : {RendererString}" );
+        Logger.Debug( $"Version     : {Capabilities.MajorVersion}.{Capabilities.MinorVersion}.{Capabilities.RevisionVersion}" );
+        Logger.Debug( $"Profile     : {Capabilities.OpenGLProfile}" );
+        Logger.Debug( $"Vendor      : {Capabilities.VendorString}" );
+        Logger.Debug( $"Renderer    : {Capabilities.RendererString}" );
+        Logger.Divider();
     }
 
     /// <summary>
@@ -136,12 +96,13 @@ public class GLVersion
     /// </summary>
     public string DebugVersionString()
     {
-        return $"Type: {BackendType} :: "
-               + $"Version: {_majorVersion}.{_minorVersion}.{_revisionVersion} :: "
-               + $"Profile: {_openGLProfile} :: "
-               + $"Vendor: {VendorString} :: "
-               + $"Renderer: {RendererString}";
+        return $"Type: {BackendType} :: " +
+               $"Version: {Capabilities.MajorVersion}.{Capabilities.MinorVersion}.{Capabilities.RevisionVersion} :: " +
+               $"Profile: {Capabilities.OpenGLProfile} :: " +
+               $"Vendor: {Capabilities.VendorString} :: " +
+               $"Renderer: {Capabilities.RendererString}";
     }
-
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================

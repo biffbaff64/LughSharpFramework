@@ -65,7 +65,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     public List< IRunnable.Runnable > ExecutedRunnables { get; set; } = [ ];
 
     public IClipboard?      Clipboard     { get; set; }
-    public GLVersion?       GLVersion     { get; set; }
+    public AppVersion?       GLVersion     { get; set; }
     public OpenGLProfile    OGLProfile    { get; set; }
     public DesktopGLWindow? CurrentWindow { get; set; }
 
@@ -411,7 +411,12 @@ public class DesktopGLApplication : IApplication, IDisposable
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns the <see cref="IPreferences"/> instance of this Application. It can be
+    /// used to store application settings across runs.
+    /// </summary>
+    /// <param name="name"> the name of the preferences, must be useable as a file name. </param>
+    /// <returns> The preferences. </returns>
     public IPreferences GetPreferences( string name )
     {
         if ( Preferences.ContainsKey( name ) )
@@ -426,14 +431,18 @@ public class DesktopGLApplication : IApplication, IDisposable
         return prefs;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// What <see cref="Platform.ApplicationType"/> the application has.
+    /// </summary>
     public Platform.ApplicationType AppType
     {
         get => Platform.ApplicationType.WindowsGL;
         set { }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Posts a <see cref="IRunnable"/> to the event queue.
+    /// </summary>
     public void PostRunnable( IRunnable.Runnable runnable )
     {
         lock ( Runnables )
@@ -749,7 +758,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
         GLUtils.CreateCapabilities();
 
-        GLVersion = new GLVersion( Platform.ApplicationType.WindowsGL, OGLProfile );
+        GLVersion = new AppVersion( Platform.ApplicationType.WindowsGL, OGLProfile );
 
         if ( config.Debug )
         {

@@ -22,17 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
-[SuppressMessage( "ReSharper", "InconsistentNaming" )]
-public partial interface IGLBindings
+public partial class GLBindings
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="pixmap"></param>
-    /// <param name="alignment"></param>
-    void SetGLUnpackAlignment( Pixmap pixmap, int alignment );
 }
 
 // ========================================================================

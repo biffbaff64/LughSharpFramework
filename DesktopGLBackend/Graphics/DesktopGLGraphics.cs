@@ -530,7 +530,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 //        var vendorString   = GdxApi.GL.GetString( IGL.GL_VENDOR );
 //        var rendererString = GdxApi.GL.GetString( IGL.GL_RENDERER );
 
-//        GLVersion = new GLVersion( Platform.ApplicationType.WindowsGL,
+//        AppVersion = new AppVersion( Platform.ApplicationType.WindowsGL,
 //                                   vendorString,
 //                                   rendererString );
 

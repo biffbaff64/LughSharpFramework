@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL.Bindings;
+
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
@@ -60,7 +62,7 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// The GL enum used in the call to <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.BufferData"/>,
+    /// The GL enum used in the call to <see cref="Lugh.Graphics.OpenGL.Bindings.GLBindings.BufferData"/>,
     /// e.g. GL_STATIC_DRAW or GL_DYNAMIC_DRAW. It can only be called when the VBO is not bound.
     /// </summary>
     public int Usage

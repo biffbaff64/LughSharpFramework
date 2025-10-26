@@ -36,7 +36,7 @@ using GLint64 = long;
 
 // ============================================================================
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings
 {

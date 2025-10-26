@@ -38,7 +38,7 @@ using GLchar = byte;
 
 // ============================================================================
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings : IGLBindings
 {
@@ -1397,7 +1397,7 @@ public unsafe partial class GLBindings : IGLBindings
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
-                                                                            out _glGetProgramResourceLocationIndex );
+                                                                                                         out _glGetProgramResourceLocationIndex );
 
         return _glGetProgramResourceLocationIndex( ( uint )program, programInterface, name );
     }
@@ -1412,7 +1412,7 @@ public unsafe partial class GLBindings : IGLBindings
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
-                                                                            out _glGetProgramResourceLocationIndex );
+                                                                                                         out _glGetProgramResourceLocationIndex );
 
         fixed ( GLchar* pName = &nameBytes[ 0 ] )
         {
@@ -1447,6 +1447,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         return CreateProgramPipelines( 1 )[ 0 ];
     }
-
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================

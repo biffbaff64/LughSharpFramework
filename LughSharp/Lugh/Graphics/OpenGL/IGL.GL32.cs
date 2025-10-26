@@ -27,6 +27,7 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 /// <summary>
 /// OpenGL 3.2 functions.
 /// </summary>
+[SuppressMessage( "ReSharper", "InconsistentNaming" )]
 partial interface IGL
 {
     const int GL_CONTEXT_FLAG_DEBUG_BIT                          = 0x00000002;

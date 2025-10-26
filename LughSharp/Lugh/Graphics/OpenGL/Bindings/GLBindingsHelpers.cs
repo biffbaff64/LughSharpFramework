@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin.
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,22 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+// ============================================================================
 
-public partial interface IGLBindings
+
+
+// ============================================================================
+
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
+
+public partial class GLBindings
 {
+    /// <inheritdoc />
+    public void SetGLUnpackAlignment( Pixmap pixmap, int alignment )
+    {
+        GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
+    }
 }
 
-// ============================================================================
-// ============================================================================
+// ========================================================================
+// ========================================================================

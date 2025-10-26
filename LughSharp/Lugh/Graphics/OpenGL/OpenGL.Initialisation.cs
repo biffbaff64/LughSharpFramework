@@ -28,6 +28,10 @@ public static partial class OpenGL
 {
     public class Initialisation
     {
+        public static OpenGL.Capabilities Capabilities { get; } = new();
+
+        // ====================================================================
+
         /// <summary>
         /// Loads and sets the OpenGL version and determines the capabilities of the environment,
         /// including whether it is OpenGL ES and if the reported version is emulated.
@@ -36,8 +40,9 @@ public static partial class OpenGL
         /// </summary>
         public static unsafe void LoadVersion()
         {
-            var majorVersion = 0;
-            var minorVersion = 0;
+            var majorVersion    = 0;
+            var minorVersion    = 0;
+            var revisionVersion = 0;
 
             var version = GL.GetString( IGL.GL_VERSION ) -> ToString();
 
@@ -48,19 +53,24 @@ public static partial class OpenGL
 
             if ( GL.GetError() == IGL.GL_INVALID_ENUM )
             {
-                if ( !TryParseOpenGLVersionFromString( version, out majorVersion, out minorVersion ) )
+                if ( !TryParseOpenGLVersionFromString( version,
+                                                       out majorVersion,
+                                                       out minorVersion,
+                                                       out revisionVersion ) )
                 {
                     // Something is horribly wrong with our version string; be optimistic!
-                    Capabilities.MajorVersion = 4;
-                    Capabilities.MinorVersion = 0;
+                    Capabilities.MajorVersion    = 4;
+                    Capabilities.MinorVersion    = 0;
+                    Capabilities.RevisionVersion = 0;
                 }
             }
             else
             {
                 GL.GetIntegerv( IGL.GL_MINOR_VERSION, &minorVersion );
 
-                Capabilities.MajorVersion = majorVersion;
-                Capabilities.MinorVersion = minorVersion;
+                Capabilities.MajorVersion    = majorVersion;
+                Capabilities.MinorVersion    = minorVersion;
+                Capabilities.RevisionVersion = revisionVersion;
             }
 
             // In the case of GLES, it's possible for the value reported by glGetIntegerv() to
@@ -70,14 +80,16 @@ public static partial class OpenGL
             {
                 if ( TryParseOpenGLVersionFromString( GL.GetString( IGL.GL_VERSION ) -> ToString(),
                                                       out var glesMajorVersion,
-                                                      out var glesMinorVersion ) )
+                                                      out var glesMinorVersion,
+                                                      out var glesRevisionVersion ) )
                 {
                     if ( ( glesMajorVersion != Capabilities.MajorVersion )
                          || ( glesMinorVersion != Capabilities.MinorVersion ) )
                     {
-                        Capabilities.IsEmulated   = true;
-                        Capabilities.MajorVersion = glesMajorVersion;
-                        Capabilities.MinorVersion = glesMinorVersion;
+                        Capabilities.IsEmulated      = true;
+                        Capabilities.MajorVersion    = glesMajorVersion;
+                        Capabilities.MinorVersion    = glesMinorVersion;
+                        Capabilities.RevisionVersion = glesRevisionVersion;
                     }
                 }
             }
@@ -88,7 +100,7 @@ public static partial class OpenGL
     /// Attempts to parse the version of the loaded OpenGL implementation from the string
     /// returned by Api.GL.GetString( IGL.GL_VERSION ).
     /// </summary>
-    private static bool TryParseOpenGLVersionFromString( string str, out int major, out int minor )
+    private static bool TryParseOpenGLVersionFromString( string str, out int major, out int minor, out int revision )
     {
         str = Capabilities.IsGLES
             ? str.Substring( "OpenGL ES ".Length )
@@ -98,10 +110,12 @@ public static partial class OpenGL
 
         if ( ( components.Length < 2 )
              || !int.TryParse( components[ 0 ], out major )
-             || !int.TryParse( components[ 1 ], out minor ) )
+             || !int.TryParse( components[ 1 ], out minor )
+             || !int.TryParse( components[ 2 ], out revision ) )
         {
-            major = 0;
-            minor = 0;
+            major    = 0;
+            minor    = 0;
+            revision = 0;
 
             return false;
         }

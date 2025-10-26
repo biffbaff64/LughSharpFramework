@@ -179,6 +179,8 @@ public partial class Gdx2DPixmap : IDisposable
         Scale       = ( uint )Pixmap.ScaleType.Default;
 
         var length = width * height * PixelFormat.BytesPerPixel( format );
+        
+        Pixels = new byte[ length ];
 
         PixmapBuffer = new Buffer< byte >( length );
         PixmapBuffer.Put( Pixels );

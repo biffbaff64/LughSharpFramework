@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL.Bindings;
+
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
@@ -31,8 +33,8 @@ public enum HdpiMode
     /// Mouse coordinates, <see cref="IGraphicsDevice.Width"/> and <see cref="IGraphicsDevice.Height"/>
     /// will return logical coordinates according to the system defined HDPI scaling.
     /// Rendering will be performed to a backbuffer at raw resolution. Use <see cref="HdpiUtils"/>
-    /// when calling <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Scissor"/> or
-    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Viewport"/>
+    /// when calling <see cref="Lugh.Graphics.OpenGL.Bindings.GLBindings.Scissor"/> or
+    /// <see cref="Lugh.Graphics.OpenGL.Bindings.GLBindings.Viewport"/>
     /// which expect raw coordinates.
     /// </summary>
     Logical,
@@ -78,7 +80,7 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Calls <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Scissor(int, int, int, int)"/>,
+    /// Calls <see cref="Lugh.Graphics.OpenGL.Bindings.GLBindings.Scissor(int, int, int, int)"/>,
     /// expecting the coordinates and sizes given in logical coordinates and automatically
     /// converts them to backbuffer coordinates, which may be bigger on HDPI screens.
     /// </summary>
@@ -100,7 +102,7 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Calls <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.Viewport(int, int, int, int)"/>,
+    /// Calls <see cref="Lugh.Graphics.OpenGL.Bindings.GLBindings.Viewport(int, int, int, int)"/>,
     /// expecting the coordinates and sizes given in logical coordinates and automatically
     /// converts them to backbuffer coordinates, which may be bigger on HDPI screens.
     /// </summary>

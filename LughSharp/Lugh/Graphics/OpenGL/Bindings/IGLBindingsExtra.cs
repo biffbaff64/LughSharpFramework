@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial interface IGLBindings
@@ -689,3 +689,6 @@ public partial interface IGLBindings
     /// <param name="clamp">Specifies the maximum (or minimum) depth clamping value. The initial value is 0.</param>
     void PolygonOffsetClamp( float factor, float units, float clamp );
 }
+
+// ============================================================================
+// ============================================================================

@@ -41,7 +41,7 @@ public partial interface IGraphicsDevice
     /// <summary>
     /// Gets or sets the OpenGL version information.
     /// </summary>
-    GLVersion? GLVersion { get; set; }
+    AppVersion? GLVersion { get; set; }
 
     /// <summary>
     /// Gets the type of graphics backend being used.

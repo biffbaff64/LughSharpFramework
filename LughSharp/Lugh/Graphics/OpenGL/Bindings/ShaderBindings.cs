@@ -38,7 +38,7 @@ using GLchar = byte;
 
 // ============================================================================
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings
 {
@@ -1365,6 +1365,7 @@ public unsafe partial class GLBindings
             _glUniformMatrix4x3fv( location, value.Length / 12, transpose, p );
         }
     }
-
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================

@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -43,7 +42,7 @@ using GLint64 = long;
 
 // ============================================================================
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial class GLBindings
@@ -2964,8 +2963,6 @@ public partial class GLBindings
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLPOLYGONOFFSETCLAMPPROC( GLfloat factor, GLfloat units, GLfloat clamp );
-
-    // ========================================================================
 }
 
 // ============================================================================

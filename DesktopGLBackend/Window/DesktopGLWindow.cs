@@ -132,7 +132,7 @@ public partial class DesktopGLWindow : IDisposable
 
     /// <summary>
     /// Creates a DesktopGLWindow by initializing the specified GLFW window, setting
-    /// up the input and graphics components, and configuring GLVersion and callback
+    /// up the input and graphics components, and configuring AppVersion and callback
     /// behaviors.
     /// </summary>
     /// <param name="window">

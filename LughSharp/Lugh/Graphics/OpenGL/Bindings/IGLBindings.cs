@@ -32,7 +32,7 @@ using GLboolean = bool;
 
 using static LughSharp.Lugh.Graphics.OpenGL.IGL;
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 [PublicAPI]
 public partial interface IGLBindings
@@ -955,7 +955,7 @@ public partial interface IGLBindings
     /// <param name="name">
     /// Specifies a symbolic constant, one of <see cref="GL_VENDOR"/>, <see cref="GL_RENDERER"/>,
     /// <see cref="GL_VERSION"/>, or <see cref="GL_SHADING_LANGUAGE_VERSION"/>. Additionally,
-    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.GetStringi"/>
+    /// <see cref="GLBindings.GetStringi"/>
     /// accepts <see cref="GL_EXTENSIONS"/>.
     /// </param>
     /// <returns>The requested string as a <see cref="byte"/> pointer.</returns>
@@ -967,7 +967,7 @@ public partial interface IGLBindings
     /// <param name="name">
     /// Specifies a symbolic constant, one of <see cref="GL_VENDOR"/>, <see cref="GL_RENDERER"/>,
     /// <see cref="GL_VERSION"/>, or <see cref="GL_SHADING_LANGUAGE_VERSION"/>. Additionally,
-    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.GetStringi"/>
+    /// <see cref="GLBindings.GetStringi"/>
     /// accepts <see cref="GL_EXTENSIONS"/>.
     /// </param>
     /// <returns>The requested string as a managed string.</returns>
@@ -2843,7 +2843,7 @@ public partial interface IGLBindings
     /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
     /// <param name="data">
     /// Specifies a pointer to data that will be copied into the data store for initialization, or
-    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.NULL"/> if no data is to be copied.
+    /// <see cref="GLBindings.NULL"/> if no data is to be copied.
     /// </param>
     /// <param name="usage">
     /// Specifies the expected usage pattern of the data store. The symbolic constant must be
@@ -4922,7 +4922,7 @@ public partial interface IGLBindings
     string GetTransformFeedbackVarying( uint program, uint index, int bufSize, out int size, out int type );
 
     /// <summary>
-    /// Specify whether data read via <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.ReadPixels"/> should be clamped.
+    /// Specify whether data read via <see cref="GLBindings.ReadPixels"/> should be clamped.
     /// </summary>
     /// <param name="target">Specifies the target to be clamped. Must be <see cref="GL_CLAMP_READ_COLOR"/>.</param>
     /// <param name="clamp">

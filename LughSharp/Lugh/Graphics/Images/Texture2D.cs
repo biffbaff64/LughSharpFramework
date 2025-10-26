@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL.Bindings;
+
 namespace LughSharp.Lugh.Graphics.Images;
 
 [PublicAPI]
