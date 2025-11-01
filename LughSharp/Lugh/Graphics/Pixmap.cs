@@ -176,13 +176,13 @@ public partial class Pixmap : IDisposable
     /// Returns the OpenGL pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
-    public int GLPixelFormat => PixelFormat.PixelFormatToGLFormat( Gdx2DPixmap.ColorFormat );
+    public int GLPixelFormat => PixelFormat.LughFormatToGLFormat( Gdx2DPixmap.ColorFormat );
 
     /// <summary>
     /// Returns the OpenGL internal pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_LUMINANCE_ALPHA, GL_RGB8, GL_RGBA8, GL_RGB565, or GL_RGBA4.</returns>
-    public int GLInternalPixelFormat => PixelFormat.PixelFormatToGLInternalFormat( Gdx2DPixmap.ColorFormat );
+    public int GLInternalPixelFormat => PixelFormat.LughFormatToGLInternalFormat( Gdx2DPixmap.ColorFormat );
 
     /// <summary>
     /// Returns the OpenGL Data Type of this Pixmap.

@@ -94,7 +94,7 @@ public static class CIM
             var input    = new BinaryReader( new InflaterInputStream( file.OpenRead() ) );
             var width    = input.Read();
             var height   = input.Read();
-            var format   = PixelFormat.PNGColorToPixelFormat( input.Read() );
+            var format   = PixelFormat.PNGColorToLughFormat( input.Read() );
             var pixmap   = new Pixmap( width, height, format );
             var pixelBuf = pixmap.ByteBuffer;
 

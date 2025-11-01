@@ -301,7 +301,7 @@ public class TexturePackerSettings
         Bleed                 = true;
         BleedIterations       = 2;
         LimitMemory           = true;
-        Grid                  = false;
+        Grid                  = true;
         AtlasExtension        = ".atlas";
         PrettyPrint           = true;
         LegacyOutput          = true;

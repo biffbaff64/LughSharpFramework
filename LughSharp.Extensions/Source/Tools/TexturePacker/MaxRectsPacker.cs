@@ -57,14 +57,14 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         _settings = settings;
         _methods  = Enum.GetValues< FreeRectChoiceHeuristic >();
 
-        if ( settings.MinWidth > settings.MaxWidth )
+        if ( settings.MinWidth >= settings.MaxWidth )
         {
-            throw new GdxRuntimeException( "Page min width cannot be higher than max width." );
+            throw new GdxRuntimeException( "Page min width MUST be less than max width." );
         }
 
-        if ( settings.MinHeight > settings.MaxHeight )
+        if ( settings.MinHeight >= settings.MaxHeight )
         {
-            throw new GdxRuntimeException( "Page min height cannot be higher than max height." );
+            throw new GdxRuntimeException( "Page min height MUST be less than max height." );
         }
     }
 

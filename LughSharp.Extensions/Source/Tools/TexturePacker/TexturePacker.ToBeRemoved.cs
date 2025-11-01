@@ -106,7 +106,7 @@ public partial class TexturePacker
         }
     }
 
-    public static bool ProcessIfModified( string input, string output, string packFileName )
+    public bool ProcessIfModified( string input, string output, string packFileName )
     {
         var settings = new TexturePackerSettings();
 
@@ -120,7 +120,7 @@ public partial class TexturePacker
         return false;
     }
 
-    public static bool ProcessIfModified( TexturePackerSettings settings,
+    public bool ProcessIfModified( TexturePackerSettings settings,
                                           string input,
                                           string output,
                                           string packFileName )

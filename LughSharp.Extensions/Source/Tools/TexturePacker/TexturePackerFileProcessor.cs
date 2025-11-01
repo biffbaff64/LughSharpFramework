@@ -142,10 +142,11 @@ public class TexturePackerFileProcessor : FileProcessor
     }
 
     /// <summary>
-    /// 
+    /// Processes texture packing for the given array of files, handling deletion
+    /// of output files and directories if necessary.
     /// </summary>
-    /// <param name="files"></param>
-    /// <param name="outputRoot"></param>
+    /// <param name="files"> the array of files to process. </param>
+    /// <param name="outputRoot"> The output folder. </param>
     /// <returns></returns>
     public virtual List< Entry > Process( FileInfo[] files, FileInfo? outputRoot )
     {
@@ -161,9 +162,12 @@ public class TexturePackerFileProcessor : FileProcessor
     }
 
     /// <summary>
+    /// Processes a single directory entry for texture packing. Determines the parent directory,
+    /// retrieves the appropriate settings, creates a new <see cref="TexturePacker"/> instance,
+    /// and performs packing if not in count-only mode. Adds the processed file to the result list.
     /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="entryList"></param>
+    /// <param name="inputDir"> The directory to pack. </param>
+    /// <param name="entryList"> The resulting list of entries. </param>
     public override void ProcessDir( Entry inputDir, List< Entry > entryList )
     {
         // Do not proceed if this dir is in the ignore list.
@@ -546,7 +550,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="settings"></param>
     /// <param name="settingsFile"></param>
     /// <exception cref="Exception"></exception>
-    public static TexturePackerSettings MergeSettings( TexturePackerSettings settings, FileInfo settingsFile )
+    public TexturePackerSettings MergeSettings( TexturePackerSettings settings, FileInfo settingsFile )
     {
         try
         {

@@ -60,11 +60,6 @@ public partial class TexturePacker
 
         var fileIndex = 1;
 
-//        Logger.Debug( $"packFileNoExt: {packFileNoExt}" );
-//        Logger.Debug( $"packDir: {packDir}" );
-//        Logger.Debug( $"imageName: {imageName}" );
-//        Logger.Debug( $"pages.Count: {pages.Count}" );
-
         // Iterate over each page to write its image
         for ( var p = 0; p < pages.Count; p++ )
         {
@@ -113,9 +108,6 @@ public partial class TexturePacker
 
             string outputFile;
 
-//            Logger.Debug( $"page.ImageWidth: {page.ImageWidth}" );
-//            Logger.Debug( $"page.ImageHeight: {page.ImageHeight}" );
-
             // Find a unique output file name
             while ( true )
             {
@@ -145,8 +137,6 @@ public partial class TexturePacker
                     break;
                 }
             }
-
-//            Logger.Debug( $"outputFile: {outputFile}" );
 
             // Create output directories if needed
             Directory.CreateDirectory( Path.GetDirectoryName( outputFile )
@@ -350,7 +340,7 @@ public partial class TexturePacker
     /// <summary>
     /// Plots a single pixel to the destination bitmap if within bounds.
     /// </summary>
-    private static void Plot( Bitmap dst, int x, int y, Color argb )
+    private void Plot( Bitmap dst, int x, int y, Color argb )
     {
         if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
         {
@@ -361,7 +351,7 @@ public partial class TexturePacker
     /// <summary>
     /// Copies a region from the source bitmap to the destination bitmap, handling rotation.
     /// </summary>
-    private static void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
+    private void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
     {
         for ( var i = 0; i < w; i++ )
         {
@@ -394,6 +384,8 @@ public partial class TexturePacker
         {
             var textureAtlasData = new TextureAtlasData( packFile, packDir!, _settings.FlattenPaths );
 
+            Logger.Debug( $"pages.Count: {pages.Count}" );
+            
             foreach ( var page in pages )
             {
                 Guard.ThrowIfNull( page );
@@ -424,8 +416,6 @@ public partial class TexturePacker
         // Write metadata for each page and its rects
         using ( var writer = new StreamWriter( packFile.FullName, appending, System.Text.Encoding.UTF8 ) )
         {
-            Logger.Debug( $"pages.Count: {pages.Count}" );
-
             for ( var i = 0; i < pages.Count; i++ )
             {
                 var page = pages[ i ];

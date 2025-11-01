@@ -359,7 +359,6 @@ public partial class TexturePacker
 
         private float  _scale = 1;
         private float  _lastUpdate;
-        private string _message = "";
 
         // ====================================================================
 
@@ -415,14 +414,14 @@ public partial class TexturePacker
 
         public string Message
         {
-            get => _message;
+            get;
             set
             {
-                _message = value;
+                field = value;
 
                 Progress( _lastUpdate );
             }
-        }
+        } = "";
 
         protected virtual void Progress( float progress )
         {

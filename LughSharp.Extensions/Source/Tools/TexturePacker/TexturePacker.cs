@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
+
 using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
@@ -200,10 +201,13 @@ public partial class TexturePacker
         }
 
         Packer = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
-
+        
         _imageProcessor = new ImageProcessor( settings );
 
         SetRootDir( rootDir );
+        
+        Logger.Debug( $"Using Packer: {Packer.GetType().Name}" );
+        Logger.Debug( $"RootPath: {RootPath}" );
     }
 
     // ========================================================================
@@ -221,7 +225,7 @@ public partial class TexturePacker
     /// be cleared before processing.
     /// </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
-    public static void Process( string input, string output, string packFileName )
+    public void Process( string input, string output, string packFileName )
     {
         Process( input, output, packFileName, new TexturePackerSettings() );
     }
@@ -238,7 +242,7 @@ public partial class TexturePacker
     /// be cleared before processing.
     /// </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
-    public static void Process( TexturePackerSettings settings, string input, string output, string packFileName )
+    public void Process( TexturePackerSettings settings, string input, string output, string packFileName )
     {
         Process( input, output, packFileName, settings, null );
     }
@@ -246,7 +250,7 @@ public partial class TexturePacker
     /// <summary>
     /// Packs the images in the supplied input folder into a texture atlas.
     /// This method does not perform any modifications to the provided paths. It is
-    /// essential to provide the correct paths, optherwise processing will fail.
+    /// essential to provide the correct paths, otherwise processing will fail.
     /// </summary>
     /// <param name="inputFolder"> Directory containing individual images to be packed. </param>
     /// <param name="outputFolder">
@@ -256,16 +260,20 @@ public partial class TexturePacker
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
     /// <param name="settings"> The <see cref="TexturePackerSettings"/> to use. </param>
     /// <param name="progressListener"> Could be null. </param>
-    public static void Process( string inputFolder,
-                                string outputFolder,
-                                string packFileName,
-                                TexturePackerSettings settings,
-                                TexturePackerProgressListener? progressListener = null )
+    public void Process( string inputFolder,
+                         string outputFolder,
+                         string packFileName,
+                         TexturePackerSettings settings,
+                         TexturePackerProgressListener? progressListener = null )
     {
         try
         {
+            Logger.Debug( $"inputFolder: {inputFolder}" );
+            Logger.Debug( $"outputFolder: {outputFolder}" );
+            Logger.Debug( $"packFileName: {packFileName}" );
+
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
-            
+
             _ = processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
         }
         catch ( Exception ex )
@@ -334,15 +342,22 @@ public partial class TexturePacker
             }
 
             ProgressListener.End();
-            
+
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
+            #if DEBUG
+            foreach ( var page in pages )
+            {
+                page.Debug();
+            }
+            #endif
+
             ProgressListener.End();
-            
+
             // ---------- Handle writing of the texture atlas ----------
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
@@ -356,9 +371,9 @@ public partial class TexturePacker
             ProgressListener.End();
 
             // ---------- End of writing of the texture atlas ----------
-            
+
             // ---------- Write the .atlas pack file ----------
-            
+
             ProgressListener.Start( 0.01f );
 
             try
@@ -377,7 +392,7 @@ public partial class TexturePacker
             {
                 return;
             }
-            
+
             // ---------- End of writing of the .atlas pack file ----------
         }
 
@@ -388,7 +403,7 @@ public partial class TexturePacker
     /// 
     /// </summary>
     /// <param name="outputDir"></param>
-    private static void HandleFolders( DirectoryInfo outputDir )
+    private void HandleFolders( DirectoryInfo outputDir )
     {
         Logger.Checkpoint();
 

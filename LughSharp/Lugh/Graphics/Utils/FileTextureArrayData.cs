@@ -71,7 +71,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <summary>
     /// the GL Data type of this TextureArray
     /// </summary>
-    public int GLDataType => Lugh.Graphics.PixelFormat.PixelFormatToGLDataType( PixelFormat );
+    public int GLDataType => Lugh.Graphics.PixelFormat.LughFormatToGLDataType( PixelFormat );
 
     // ========================================================================
 

@@ -28,9 +28,9 @@ namespace LughSharp.Lugh.Graphics;
 public class PixelFormat
 {
     /// <summary>
-    /// Converts a GL format to a PixelFormat value.
+    /// Converts a GL format to a LughFormat value.
     /// </summary>
-    public static int GLFormatToPixelFormat( int format )
+    public static int GLFormatToLughFormat( int format )
     {
         return format switch
         {
@@ -51,7 +51,7 @@ public class PixelFormat
     /// <summary>
     /// Converts a PixelFormat value to a GL format.
     /// </summary>
-    public static int PixelFormatToGLFormat( int format )
+    public static int LughFormatToGLFormat( int format )
     {
         return format switch
         {
@@ -72,7 +72,7 @@ public class PixelFormat
     /// <summary>
     /// Converts a PixelFormat value to a GL format.
     /// </summary>
-    public static int PixelFormatToGLInternalFormat( int format )
+    public static int LughFormatToGLInternalFormat( int format )
     {
         return format switch
         {
@@ -93,7 +93,7 @@ public class PixelFormat
     /// <summary>
     /// Converts a PixelFormat value to a PNG Color Type value.
     /// </summary>
-    public static byte PixelFormatToPNGColorType( int format )
+    public static byte LughFormatToPNGColorType( int format )
     {
         return format switch
         {
@@ -114,7 +114,7 @@ public class PixelFormat
     /// <summary>
     /// Converts a PNG Color Type value to a PixelFormat value.
     /// </summary>
-    public static int PNGColorToPixelFormat( int colorType )
+    public static int PNGColorToLughFormat( int colorType )
     {
         return colorType switch
         {
@@ -324,7 +324,7 @@ public class PixelFormat
     /// <summary>
     /// Converts a color to the specified pixel format
     /// </summary>
-    public static uint PixelFormatToRGBAFormat( int requestedFormat, uint color )
+    public static uint RGBAToLughFormat( int requestedFormat, uint color )
     {
         uint r, g, b, a;
 
@@ -371,7 +371,7 @@ public class PixelFormat
         }
     }
 
-    public static int PixelFormatToGLDataType( int format )
+    public static int LughFormatToGLDataType( int format )
     {
         return format switch
         {
@@ -455,6 +455,8 @@ public class PixelFormat
 
     #endregion Bytes Per Pixel Methods
 
+    // ========================================================================
+    
     #region Miscellaneous Methods
 
     /// <summary>

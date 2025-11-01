@@ -42,6 +42,7 @@ public class GridPacker : TexturePacker.IPacker
     // ========================================================================
 
     /// <summary>
+    /// Performs a grid packing of the input rects.
     /// </summary>
     /// <param name="inputRects"></param>
     /// <returns></returns>
@@ -51,6 +52,7 @@ public class GridPacker : TexturePacker.IPacker
     }
 
     /// <summary>
+    /// Performs a grid packing of the input rects.
     /// </summary>
     /// <param name="progress"></param>
     /// <param name="inputRects"></param>

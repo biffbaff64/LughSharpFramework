@@ -30,6 +30,8 @@ using JetBrains.Annotations;
 
 using LughSharp.Lugh.Files;
 
+using LughUtils.source.Logging;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -78,10 +80,15 @@ public class TexturePackerTest
         var inputFolder  = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
         var outputFolder = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
 
-//        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
-//        settings.WriteToJsonFile( settingsFilePath );
+        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
+        settings.WriteToJsonFile( settingsFilePath );
 
-        TexturePacker.Process( inputFolder, outputFolder, "objects", settings );
+        Logger.Divider( lineCount: 3 );
+        
+        var packer = new TexturePacker( new DirectoryInfo( inputFolder ), settings );
+        packer.Process( inputFolder, outputFolder, "objects", settings );
+        
+        Logger.Divider( lineCount: 3 );
     }
 
     [TearDown]
