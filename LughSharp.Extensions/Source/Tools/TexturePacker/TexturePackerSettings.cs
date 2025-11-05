@@ -126,7 +126,7 @@ public class TexturePackerSettings
     /// The image type for output pages, “png” or “jpg”.
     /// "bmp" is planned.
     /// </summary>
-    public string OutputFormat { get; set; }
+    public string OutputFormat { get; set; } = null!;
 
     /// <summary>
     /// From 0 to 1. The quality setting if outputFormat is “jpg”
@@ -209,24 +209,24 @@ public class TexturePackerSettings
     /// <summary>
     /// For each scale, the images are scaled and an entire atlas is output.
     /// </summary>
-    public float[] Scale { get; set; }
+    public float[] Scale { get; set; } = null!;
 
     /// <summary>
     /// For each scale, the suffix to use for the output files. If omitted, files for multiple
     /// scales will be output with the same name to a subdirectory for each scale.
     /// </summary>
-    public string[] ScaleSuffix { get; set; }
+    public string[] ScaleSuffix { get; set; } = null!;
 
     /// <summary>
     /// For each scale, the type of interpolation used for resampling the source to the scaled
     /// size. One of nearest, bilinear or bicubic.
     /// </summary>
-    public List< Resampling > ScaleResampling { get; set; }
+    public List< Resampling > ScaleResampling { get; set; } = null!;
 
     /// <summary>
     /// The file extension to be appended to the atlas filename.
     /// </summary>
-    public string AtlasExtension { get; set; }
+    public string AtlasExtension { get; set; } = null!;
 
     /// <summary>
     /// If true, removes all whitespace except newlines.
@@ -301,7 +301,7 @@ public class TexturePackerSettings
         Bleed                 = true;
         BleedIterations       = 2;
         LimitMemory           = true;
-        Grid                  = true;
+        Grid                  = false;
         AtlasExtension        = ".atlas";
         PrettyPrint           = true;
         LegacyOutput          = true;
@@ -314,54 +314,13 @@ public class TexturePackerSettings
         #endif
     }
 
+    /// <summary>
+    /// Copy constructor
+    /// </summary>
+    /// <param name="settings"></param>
     public TexturePackerSettings( TexturePackerSettings settings )
     {
-        MinWidth              = settings.MinWidth;
-        MinHeight             = settings.MinHeight;
-        MaxWidth              = settings.MaxWidth;
-        MaxHeight             = settings.MaxHeight;
-        Fast                  = settings.Fast;
-        Rotation              = settings.Rotation;
-        PowerOfTwo            = settings.PowerOfTwo;
-        MultipleOfFour        = settings.MultipleOfFour;
-        PaddingX              = settings.PaddingX;
-        PaddingY              = settings.PaddingY;
-        EdgePadding           = settings.EdgePadding;
-        DuplicatePadding      = settings.DuplicatePadding;
-        AlphaThreshold        = settings.AlphaThreshold;
-        IgnoreBlankImages     = settings.IgnoreBlankImages;
-        StripWhitespaceX      = settings.StripWhitespaceX;
-        StripWhitespaceY      = settings.StripWhitespaceY;
-        IsAlias               = settings.IsAlias;
-        Format                = settings.Format;
-        JpegQuality           = settings.JpegQuality;
-        OutputFormat          = settings.OutputFormat;
-        FilterMin             = TextureFilterMode.Nearest;
-        FilterMag             = TextureFilterMode.Nearest;
-        WrapX                 = TextureWrapMode.ClampToEdge;
-        WrapY                 = TextureWrapMode.ClampToEdge;
-        Debug                 = settings.Debug;
-        Silent                = settings.Silent;
-        CombineSubdirectories = settings.CombineSubdirectories;
-        Ignore                = settings.Ignore;
-        FlattenPaths          = settings.FlattenPaths;
-        PremultiplyAlpha      = settings.PremultiplyAlpha;
-        Square                = settings.Square;
-        UseIndexes            = settings.UseIndexes;
-        Bleed                 = settings.Bleed;
-        BleedIterations       = settings.BleedIterations;
-        LimitMemory           = settings.LimitMemory;
-        Grid                  = settings.Grid;
-        AtlasExtension        = settings.AtlasExtension;
-        PrettyPrint           = settings.PrettyPrint;
-        LegacyOutput          = settings.LegacyOutput;
-        Scale                 = [ 1.0f ];
-        ScaleSuffix           = [ "" ];
-        ScaleResampling       = [ Resampling.Bicubic ];
-
-        #if DEBUG
-        CleanAtStart = false;
-        #endif
+        Set( settings );
     }
 
     // ====================================================================
@@ -412,10 +371,10 @@ public class TexturePackerSettings
         PrettyPrint           = settings.PrettyPrint;
         LegacyOutput          = settings.LegacyOutput;
 
-        settings.Scale.CopyTo( Scale, 0 );
-        settings.ScaleSuffix.CopyTo( ScaleSuffix, 0 );
+        Scale           = settings.Scale.ToArray();
+        ScaleSuffix     = settings.ScaleSuffix.ToArray();
         ScaleResampling = settings.ScaleResampling.ToList();
-
+        
         #if DEBUG
         CleanAtStart = false;
         #endif

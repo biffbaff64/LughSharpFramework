@@ -159,9 +159,8 @@ public partial class TexturePacker
 
         public Rect( Bitmap source, int left, int top, int newWidth, int newHeight, bool isPatch )
         {
-            _image   = new Bitmap( newWidth, newHeight, source.PixelFormat );
-            _isPatch = isPatch;
-
+            _image         = source;
+            _isPatch       = isPatch;
             OffsetX        = left;
             OffsetY        = top;
             RegionWidth    = newWidth;
@@ -257,14 +256,15 @@ public partial class TexturePacker
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            const int PRIME = 31;
+            //TODO: Come back to this
+            
+            // C# rule: If the object is mutable, the hash code should be calculated based on
+            // an immutable field, or the warning must be suppressed.
+            // We suppress the warning here to allow calculation based on the mutable 'Name'.
 
-            var result = PRIME + NumberUtils.FloatToRawIntBits( 10f );
-            result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 20f );
-            result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 30f );
-            result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 40f );
-
-            return result;
+            // We use the null-conditional and null-coalescing operators to safely get the hash.
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
+            return Name?.GetHashCode() ?? 0;
         }
 
         /// <inheritdoc />
@@ -321,7 +321,7 @@ public partial class TexturePacker
         List< Page > Pack( List< Rect > inputRects );
 
         List< Page > Pack( TexturePackerProgressListener progressListener,
-                            List< Rect > inputRects );
+                           List< Rect > inputRects );
     }
 
     // ========================================================================
@@ -357,8 +357,8 @@ public partial class TexturePacker
 
         private readonly List< float > _portions = new( 8 );
 
-        private float  _scale = 1;
-        private float  _lastUpdate;
+        private float _scale = 1;
+        private float _lastUpdate;
 
         // ====================================================================
 

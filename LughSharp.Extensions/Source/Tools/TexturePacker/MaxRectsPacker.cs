@@ -88,7 +88,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <returns></returns>
     /// <exception cref="NullReferenceException"></exception>
     public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress,
-                                             List< TexturePacker.Rect > inputRects )
+                                            List< TexturePacker.Rect > inputRects )
     {
         var n = inputRects.Count;
 
@@ -130,50 +130,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
         }
 
-/*
-LughSharpFramework
-    - Solution Items
-    - Template
-        - Dependencies
-        - Assets
-        - Source
-        .gitignore
-        global.json
-        README.md
-    - DesktopGLBackend
-        - Dependencies
-        - Audio
-        - Graphics
-        - Input
-        - Utils
-        - Window
-        DesktopApplication.cs
-        DesktopApplicationConfiguration.cs
-        DesktopGKLNativesLoader.cs
-        GlobalUsings.cs
-        Sync.cs
-        TODO.md
-    - LughSharp
-        - Dependencies
-        - Assets
-        - lib
-        - Lugh
-            - Assets
-            - Audio
-            - Core
-            - Files
-            - Graphics
-            - Input
-            - Maps
-            - Maths
-            - Network
-            - Scenes
-            - Utils
-        GlobalUsings.cs
-        README.md
-    - LughSharp.Extensions
-    - LughSharp.Tests
- */
         List< TexturePacker.Page > pages = [ ];
 
         while ( inputRects.Count > 0 )
@@ -301,13 +257,13 @@ LughSharpFramework
         {
             if ( _settings.DuplicatePadding )
             {
-                adjustX = paddingX - paddingX; // ????
-                adjustY = paddingY - paddingY; // ????
+                adjustX -= paddingX;
+                adjustY -= paddingY;
             }
             else
             {
-                adjustX = paddingX - ( paddingX * 2 ); // ????
-                adjustY = paddingY - ( paddingY * 2 ); // ????
+                adjustX -= paddingX * 2;
+                adjustY -= paddingY * 2;
             }
         }
 
@@ -681,7 +637,7 @@ LughSharpFramework
 
         return bestResult;
     }
-
-    // ========================================================================
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================

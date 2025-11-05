@@ -207,10 +207,10 @@ public partial class MaxRectsPacker
         {
             var width         = rect.Width;
             var height        = rect.Height;
-            var rotatedWidth  = ( height - _settings.PaddingY ) + _settings.PaddingX;
-            var rotatedHeight = ( width - _settings.PaddingX ) + _settings.PaddingY;
+            var rotatedWidth  = rect.Height;
+            var rotatedHeight = rect.Width;
             var rotate        = rect.CanRotate && _settings.Rotation;
-
+            
             TexturePacker.Rect? newNode;
 
             switch ( method )
@@ -653,16 +653,21 @@ public partial class MaxRectsPacker
         /// <returns></returns>
         private bool SplitFreeNode( TexturePacker.Rect freeNode, TexturePacker.Rect? usedNode )
         {
+            if ( usedNode == null )
+            {
+                return false;
+            }
+            
             // Test with SAT if the rectangles even intersect.
-            if ( ( usedNode?.X >= ( freeNode.X + freeNode.Width ) )
-                 || ( ( usedNode?.X + usedNode?.Width ) <= freeNode.X )
-                 || ( usedNode?.Y >= ( freeNode.Y + freeNode.Height ) ) ||
-                 ( ( usedNode?.Y + usedNode?.Height ) <= freeNode.Y ) )
+            if ( ( usedNode.X >= ( freeNode.X + freeNode.Width ) )
+                 || ( ( usedNode.X + usedNode.Width ) <= freeNode.X )
+                 || ( usedNode.Y >= ( freeNode.Y + freeNode.Height ) ) ||
+                 ( ( usedNode.Y + usedNode.Height ) <= freeNode.Y ) )
             {
                 return false;
             }
 
-            if ( ( usedNode?.X < ( freeNode.X + freeNode.Width ) ) && ( ( usedNode.X + usedNode.Width ) > freeNode.X ) )
+            if ( ( usedNode.X < ( freeNode.X + freeNode.Width ) ) && ( ( usedNode.X + usedNode.Width ) > freeNode.X ) )
             {
                 // New node at the top side of the used node.
                 if ( ( usedNode.Y > freeNode.Y ) && ( usedNode.Y < ( freeNode.Y + freeNode.Height ) ) )
@@ -685,7 +690,7 @@ public partial class MaxRectsPacker
                 }
             }
 
-            if ( ( usedNode?.Y < ( freeNode.Y + freeNode.Height ) )
+            if ( ( usedNode.Y < ( freeNode.Y + freeNode.Height ) )
                  && ( ( usedNode.Y + usedNode.Height ) > freeNode.Y ) )
             {
                 // New node at the left side of the used node.
