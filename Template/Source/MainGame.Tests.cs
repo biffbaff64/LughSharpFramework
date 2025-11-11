@@ -28,42 +28,26 @@ public partial class MainGame : Game
     {
         Logger.Divider();
         Logger.Divider();
+        // --------------------------------------
+        IOUtils.DebugPaths();
+        // --------------------------------------
+        Logger.Divider();
+        Logger.Divider();
+        // --------------------------------------
 //        var test = new AssetManagerTest();
         var test = new TexturePackerTest();
 //        var test = new ImagePackerTest();
+        // --------------------------------------
         test.Setup();
         test.Run();
         test.TearDown();
+        // --------------------------------------
         Logger.Divider();
         Logger.Divider();
     }
     
     private void UpdateTests()
     {
-        if ( _direction == 0 )
-        {
-            _scale -= _speed;
-
-            if ( _scale < 0.0f )
-            {
-                _scale     = 0.0f;
-                _direction = 1;
-            }
-        }
-        else
-        {
-            _scale += _speed;
-
-            if ( _scale > 1.0f )
-            {
-                _scale     = 1.0f;
-                _direction = 0;
-            }
-        }
-        
-        _orthoGameCam?.CameraZoom = _scale;
-
-        CheckViewportCoverage();
     }
     
     private static void CheckViewportCoverage()

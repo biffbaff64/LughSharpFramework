@@ -43,7 +43,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public virtual bool  ContinuousRendering { get; set; } = true;
     public virtual bool  IsFullscreen        { get; }
 
-    public virtual AppVersion?                  GLVersion      { get; set; } = null!;
+    public virtual AppVersion?                 GLVersion      { get; set; } = null!;
     public virtual GraphicsBackend.BackendType GraphicsType   { get; set; }
     public virtual GraphicsCapabilities        Capabilities   { get; set; } = null!;
     public virtual GLFormatChooser             FormatChooser  { get; set; } = null!;

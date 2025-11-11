@@ -1,142 +1,79 @@
-﻿protected TexturePacker.Rect? StripWhitespace( string name, Bitmap source )
+﻿// Inside the primary Process recursive worker method:
+
+// 1. First, process all FILES in the array:
+foreach ( var file in files )
 {
-    // ... initial checks and setup remain the same ...
-
-    var width  = source.Width;
-    var height = source.Height;
-
-    // ... non-alpha check and settings check remain the same ...
-
-    // --- START: Performance Critical Section Refactor ---
-    var bitmapData = source.LockBits( new Rectangle( 0, 0, width, height ),
-                                     ImageLockMode.ReadOnly,
-                                     PixelFormat.Format32bppArgb );
-
-    try
+    // Use FileAttributes to reliably check if it's a directory (or a file)
+    if ( ( file.Attributes & FileAttributes.Directory ) != 0 )
     {
-        unsafe
-        {
-            var ptr    = ( byte* )bitmapData.Scan0;
-            var stride = bitmapData.Stride;
-            
-            // Y-Stripping Logic
-            var top    = 0;
-            var bottom = height;
-
-            if ( Settings.StripWhitespaceY )
-            {
-                // Find TOP
-            outer1:
-                for ( var y = 0; y < height; y++ )
-                {
-                    var rowPtr = ptr + ( y * stride );
-
-                    for ( var x = 0; x < width; x++ )
-                    {
-                        // Alpha is the 4th byte (index 3) in BGRA
-                        if ( rowPtr[ ( x * 4 ) + 3 ] > Settings.AlphaThreshold )
-                        {
-                            goto outer1;
-                        }
-                    }
-                    top++;
-                }
-
-                // Find BOTTOM
-            outer2:
-                for ( var y = height - 1; y >= top; y-- )
-                {
-                    var rowPtr = ptr + ( y * stride );
-                    
-                    for ( var x = 0; x < width; x++ )
-                    {
-                        if ( rowPtr[ ( x * 4 ) + 3 ] > Settings.AlphaThreshold )
-                        {
-                            goto outer2;
-                        }
-                    }
-                    bottom--;
-                }
-
-                // ... DuplicatePadding Y logic remains the same ...
-            }
-            
-            // X-Stripping Logic
-            var left  = 0;
-            var right = width;
-
-            if ( Settings.StripWhitespaceX )
-            {
-                // Find LEFT
-            outer3:
-                for ( var x = 0; x < width; x++ )
-                {
-                    for ( var y = top; y < bottom; y++ )
-                    {
-                        var rowPtr = ptr + ( y * stride );
-                        
-                        if ( rowPtr[ ( x * 4 ) + 3 ] > Settings.AlphaThreshold )
-                        {
-                            goto outer3;
-                        }
-                    }
-                    left++;
-                }
-
-                // Find RIGHT
-            outer4:
-                for ( var x = width - 1; x >= left; x-- )
-                {
-                    for ( var y = top; y < bottom; y++ )
-                    {
-                        var rowPtr = ptr + ( y * stride );
-                        
-                        if ( rowPtr[ ( x * 4 ) + 3 ] > Settings.AlphaThreshold )
-                        {
-                            goto outer4;
-                        }
-                    }
-                    right--;
-                }
-                
-                // ... DuplicatePadding X logic remains the same ...
-            }
-
-            // --- END: Performance Critical Section Refactor ---
-            
-            // The rest of the method (newWidth, newHeight, and the final Bitmap creation)
-            // must be done OUTSIDE the unsafe block but still inside the 'try' block,
-            // so we must return a new Rect from inside the finally block if we want
-            // to avoid storing temporary state outside of the lock.
-            
-            // Since the logic following the stripping is not pointer access,
-            // we will simply move it outside the unsafe block but keep it in the try block.
-
-            var newWidth  = right - left;
-            var newHeight = bottom - top;
-
-            if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
-            {
-                // ... blank image handling logic ...
-            }
-
-            // Create a new Bitmap representing the stripped area
-            var strippedImage = new Bitmap( newWidth, newHeight, source.PixelFormat );
-
-            using ( var g = Graphics.FromImage( strippedImage ) )
-            {
-                g.DrawImage( source,
-                            new Rectangle( 0, 0, newWidth, newHeight ),
-                            new Rectangle( left, top, newWidth, newHeight ),
-                            GraphicsUnit.Pixel );
-            }
-
-            return new TexturePacker.Rect( strippedImage, 0, 0, newWidth, newHeight, false );
-        }
+        // Skip directories for now; we only process files here.
+        continue;
     }
-    finally
+
+    // -- Start FILE PROCESSING logic --
+    
+    // Apply input regex filters
+    if ( InputRegex.Count > 0 )
     {
-        // This MUST be called to release the bitmap data.
-        source.UnlockBits( bitmapData ); 
+        // ... (existing regex filtering logic) ...
+    }
+    
+    // Apply filename filter delegate
+    if ( ( InputFilter != null )
+         && !InputFilter( file.Directory!.FullName, file.Name ) )
+    {
+        continue;
+    }
+    
+    // Determine output file name and create entry (existing logic)
+    var outputName = file.Name;
+    // ... (output name/suffix logic) ...
+
+    var entry = new Entry
+    {
+        // ... (entry creation logic) ...
+    };
+
+    var dir = file.Directory!;
+
+    // Add entry to the directory's entry list
+    if ( !dirToEntries.TryGetValue( dir, out var dirList ) )
+    {
+        dirList             = [ ];
+        dirToEntries[ dir ] = dirList;
+    }
+
+    dirList?.Add( entry );
+    
+    // -- End FILE PROCESSING logic --
+}
+
+
+// 2. Next, handle RECURSIVE DIRECTORY TRAVERSAL:
+if ( Recursive )
+{
+    // We need to iterate over the contents of the starting directory,
+    // getting only the subdirectories.
+
+    // Get the directory containing these files (assuming a non-flat structure)
+    var inputDir = files.FirstOrDefault(f => f.Directory != null)?.Directory;
+
+    if ( inputDir != null )
+    {
+        var subdirectories = inputDir.GetDirectories();
+
+        foreach ( var subdirInfo in subdirectories )
+        {
+            var subdirOutput = outputDir.FullName.Length == 0
+                ? new DirectoryInfo( subdirInfo.Name )
+                : new DirectoryInfo( Path.Combine( outputDir.FullName, subdirInfo.Name ) );
+            
+            // Recursively process the subdirectory's files
+            Process( subdirInfo.GetFiles(), 
+                     outputRoot, 
+                     subdirOutput, 
+                     dirToEntries, 
+                     depth + 1 );
+        }
     }
 }

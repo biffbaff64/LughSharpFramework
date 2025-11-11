@@ -77,16 +77,15 @@ public class TexturePackerTest
         // 3. name of atlas, without extension (the extension '.atlas' will be added
         //    automatically). If an extension is specified, it will be removed.
         // 4. configuration settings
-        var inputFolder  = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
-        var outputFolder = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
+        var inputFolder  = IOUtils.NormalizeAssetPath( @"Assets\PackedImages\objects" );
+        var outputFolder = IOUtils.NormalizeAssetPath( @"Assets\PackedImages\output" );
 
         // Make sure we have a settings file to use. Comment out if not needed,
         // or to test with default settings.
-        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
+        var settingsFilePath = IOUtils.NormalizePath( Path.Combine( inputFolder, "pack.json" ) );
         settings.WriteToJsonFile( settingsFilePath );
 
-        var packer = new TexturePacker( new DirectoryInfo( inputFolder ), settings );
-        packer.Process( inputFolder, outputFolder, "objects", settings );
+        TexturePacker.Process( inputFolder, outputFolder, "objects", settings );
     }
 
     [TearDown]

@@ -1132,6 +1132,21 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Converts this Color to a System.Drawing.Color.
+    /// </summary>
+    /// <returns></returns>
+    public System.Drawing.Color ToSystemColor()
+    {
+        return System.Drawing.Color.FromArgb( ( int )( A * 255 ),
+                                              ( int )( R * 255 ),
+                                              ( int )( G * 255 ),
+                                              ( int )( B * 255 ) );
+    }
+    
+    // ========================================================================
+    // ========================================================================
+
     #region From ICloneable Interface
 
     /// <inheritdoc />

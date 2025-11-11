@@ -2,7 +2,12 @@
 using System.Text;
 using System.Text.Json.Serialization;
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
+
+using LughUtils.source.Logging;
+
+using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -374,7 +379,7 @@ public class TexturePackerSettings
         Scale           = settings.Scale.ToArray();
         ScaleSuffix     = settings.ScaleSuffix.ToArray();
         ScaleResampling = settings.ScaleResampling.ToList();
-        
+
         #if DEBUG
         CleanAtStart = false;
         #endif
@@ -480,7 +485,7 @@ public class TexturePackerSettings
         if ( writeableString.Length > 0 )
         {
             // Ensure the directory exists before creating the file
-            var directoryPath = Path.GetDirectoryName( filename );
+            var directoryPath = IOUtils.NormalizePath( Path.GetDirectoryName( filename ) );
 
             if ( !string.IsNullOrEmpty( directoryPath ) )
             {

@@ -29,16 +29,14 @@ namespace LughSharp.Lugh.Files;
 [PublicAPI]
 public class IOUtils
 {
-    // ========================================================================
-
     /// <inheritdoc cref="PathTypes.External"/>
-    public static string ExternalPath => NormalizePath( $"{System.Environment.GetFolderPath( System.Environment.SpecialFolder.UserProfile )}/" );
+    public static string ExternalPath => NormalizePath( $"{System.Environment.GetFolderPath( System.Environment.SpecialFolder.UserProfile )}\\" );
 
     /// <inheritdoc cref="PathTypes.Internal"/>
-    public static string InternalPath => NormalizePath( $"{Directory.GetCurrentDirectory()}/" );
+    public static string InternalPath => NormalizePath( $"{Directory.GetCurrentDirectory()}\\" );
 
     /// <inheritdoc cref="PathTypes.Local"/>
-    public static string LocalPath => NormalizePath( "/" );
+    public static string LocalPath => NormalizePath( Path.DirectorySeparatorChar.ToString() );
 
     // ========================================================================
 
@@ -54,7 +52,7 @@ public class IOUtils
     /// trailing directory separator. This value is derived from the location of the
     /// assembly currently executing.
     /// </summary>
-    public static string AssemblyDirectory => NormalizePath( Path.GetDirectoryName( AssemblyPath ) + "/" );
+    public static string AssemblyDirectory => NormalizePath( Path.GetDirectoryName( AssemblyPath ) + "\\" );
 
     // ========================================================================
 
@@ -65,7 +63,7 @@ public class IOUtils
     /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\Assets\
     /// </code>
     /// </summary>
-    public static string AssetsRoot => NormalizePath( $"{AssemblyDirectory}Assets/" );
+    public static string AssetsRoot => NormalizePath( $"{AssemblyDirectory}Assets\\" );
 
     // ========================================================================
 
@@ -77,16 +75,30 @@ public class IOUtils
     /// <returns> The normalized path with consistent separators. </returns>
     public static string NormalizePath( string? path )
     {
-        if ( string.IsNullOrEmpty( path ) )
-        {
-            return $"{Path.DirectorySeparatorChar}";
-        }
+        return path;
+        
 
-        return path.Replace( @"\\", Path.DirectorySeparatorChar.ToString() )
-                   .Replace( '\\', Path.DirectorySeparatorChar )
-                   .Replace( '/', Path.DirectorySeparatorChar );
+//        // If the path is null or empty, return a single forward slash.
+//        if ( string.IsNullOrEmpty( path ) )
+//        {
+//            return "/";
+//        }
+//
+//        // 1. Replace the platform-specific separator (e.g., '\' on Windows) with '/'.
+//        // 2. Also ensure any explicitly written backslashes are converted.
+//        var normalizedPath = path.Replace( Path.DirectorySeparatorChar, '/' )
+//                                 .Replace( '\\', '/' );
+//
+//        // 3. Optional cleanup: replace any accidental double slashes with a single one.
+//        // This is a safety measure, though subsequent code should use Path.Combine/joining methods correctly.
+//        while ( normalizedPath.Contains( "//" ) )
+//        {
+//            normalizedPath = normalizedPath.Replace( "//", "/" );
+//        }
+//
+//        return normalizedPath;
     }
-
+    
     /// <summary>
     /// Validates the provided asset path by ensuring it is relative to the assets
     /// directory and normalizing it to use consistent directory separators.

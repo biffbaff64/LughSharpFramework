@@ -225,7 +225,7 @@ public partial class TexturePacker
     /// be cleared before processing.
     /// </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
-    public void Process( string input, string output, string packFileName )
+    public static void Process( string input, string output, string packFileName )
     {
         Process( input, output, packFileName, new TexturePackerSettings() );
     }
@@ -242,7 +242,7 @@ public partial class TexturePacker
     /// be cleared before processing.
     /// </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
-    public void Process( TexturePackerSettings settings, string input, string output, string packFileName )
+    public static void Process( TexturePackerSettings settings, string input, string output, string packFileName )
     {
         Process( input, output, packFileName, settings, null );
     }
@@ -260,20 +260,25 @@ public partial class TexturePacker
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
     /// <param name="settings"> The <see cref="TexturePackerSettings"/> to use. </param>
     /// <param name="progressListener"> Could be null. </param>
-    public void Process( string inputFolder,
-                         string outputFolder,
-                         string packFileName,
-                         TexturePackerSettings settings,
-                         TexturePackerProgressListener? progressListener = null )
+    public static void Process( string inputFolder,
+                                string outputFolder,
+                                string packFileName,
+                                TexturePackerSettings settings,
+                                TexturePackerProgressListener? progressListener = null )
     {
         try
         {
             Logger.Debug( $"inputFolder: {inputFolder}" );
             Logger.Debug( $"outputFolder: {outputFolder}" );
             Logger.Debug( $"packFileName: {packFileName}" );
+            Logger.Divider();
+            Logger.Divider();
 
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
 
+            Logger.Divider();
+            Logger.Divider();
+            
             _ = processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
         }
         catch ( Exception ex )
@@ -403,7 +408,7 @@ public partial class TexturePacker
     /// 
     /// </summary>
     /// <param name="outputDir"></param>
-    private void HandleFolders( DirectoryInfo outputDir )
+    private static void PrepareOutputDirectory( DirectoryInfo outputDir )
     {
         Logger.Checkpoint();
 
@@ -441,11 +446,11 @@ public partial class TexturePacker
             return;
         }
 
-        RootPath = IOUtils.NormalizePath( Path.GetFullPath( rootDir.FullName ) );
+        RootPath = Path.GetFullPath( rootDir.FullName );
 
-        if ( !RootPath!.EndsWith( '/' ) )
+        if ( !RootPath!.EndsWith( '\\' ) )
         {
-            RootPath += "/";
+            RootPath += "\\";
         }
     }
 

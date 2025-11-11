@@ -102,20 +102,24 @@ public partial class FileProcessor
         Recursive       = true;
     }
 
+    /// <summary>
+    /// Copy Constructor.
+    /// Creates a new <see cref="FileProcessor"/> object as a copy of the specified FileProcessor.
+    /// </summary>
     public FileProcessor( FileProcessor processor )
     {
         InputFilter = processor.InputFilter;
         Comparator  = processor.Comparator;
 
         InputRegex ??= [ ];
-        InputRegex.AddAll(processor.InputRegex);
+        InputRegex.AddAll( processor.InputRegex );
 
         OutputFilesList = processor.OutputFilesList;
         OutputSuffix    = processor.OutputSuffix;
         Recursive       = processor.Recursive;
         FlattenOutput   = processor.FlattenOutput;
     }
-    
+
     // ========================================================================
 
     #region process methods
@@ -141,23 +145,35 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
+    /// <param name="countOnly"></param>
     /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot )
+    public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot, bool countOnly = false )
     {
+        Logger.Checkpoint( message: $"CountOnly: {countOnly}" );
+
+        //TODO: Make sure this copes with outputRoot == null
+
         if ( inputFileOrDir is not { Exists: true } )
         {
             throw new ArgumentException( $"Input file/dir does not exist: {inputFileOrDir?.FullName}" );
         }
 
-        if ( IOUtils.IsFile( inputFileOrDir ) )
+        List< Entry > result;
+
+        if ( inputFileOrDir is DirectoryInfo dir )
         {
-            return Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
+            Logger.Debug( $"Processing directory: {dir.FullName}" );
+
+            result = Process( dir.GetFiles(), outputRoot );
+        }
+        else
+        {
+            Logger.Debug( $"Processing file: {inputFileOrDir.FullName}" );
+
+            result = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
 
-        // Not a File, must be a Directory
-        var directory = new DirectoryInfo( inputFileOrDir.FullName );
-
-        return Process( directory.GetFiles(), outputRoot );
+        return result;
     }
 
     /// <summary>
@@ -168,6 +184,8 @@ public partial class FileProcessor
     /// <returns>A list of processed files.</returns>
     public List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
+        Logger.Checkpoint();
+
         if ( outputRoot == null )
         {
             outputRoot = new DirectoryInfo( "." );
@@ -263,6 +281,13 @@ public partial class FileProcessor
             }
         }
 
+        Logger.Debug( $"OutputFilesList.Count: {OutputFilesList.Count}" );
+
+        foreach ( var entry in OutputFilesList )
+        {
+            entry.DebugPrint();
+        }
+
         return OutputFilesList;
     }
 
@@ -313,207 +338,125 @@ public partial class FileProcessor
         foreach ( var file in files )
         {
             // Only process files (not directories)
-            if ( IOUtils.IsFile( file ) )
+            if ( ( file.Attributes & FileAttributes.Directory ) != 0 )
             {
-                // Apply input regex filters if any are set
-                if ( InputRegex.Count > 0 )
+                // Skip directories for now, only process files here
+                continue;
+            }
+
+            // Apply input regex filters if any are set
+            if ( InputRegex.Count > 0 )
+            {
+                var found = false;
+
+                foreach ( var pattern in InputRegex )
                 {
-                    var found = false;
-
-                    foreach ( var pattern in InputRegex )
+                    if ( pattern.IsMatch( file.Name ) )
                     {
-                        if ( pattern.IsMatch( file.Name ) )
-                        {
-                            found = true;
+                        found = true;
 
-                            break;
-                        }
-                    }
-
-                    if ( !found )
-                    {
-                        continue;
+                        break;
                     }
                 }
 
-                // Log if directory name is missing
-                if ( file.DirectoryName == null )
-                {
-                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
-                }
-
-                // Apply filename filter delegate if set
-                if ( ( InputFilter != null )
-                     && !InputFilter( file.Directory!.FullName, file.Name ) )
+                if ( !found )
                 {
                     continue;
                 }
-
-                // Determine output file name, applying suffix if needed
-                var outputName = file.Name;
-
-                if ( OutputSuffix != null )
-                {
-                    outputName = RegexUtils.FileNameWithoutExtensionRegex()
-                                           .Replace( outputName, "$1" ) + OutputSuffix;
-                }
-
-                // Create an entry for the file
-                var entry = new Entry
-                {
-                    Depth           = depth,
-                    InputFile       = file,
-                    OutputDirectory = outputDir,
-                    OutputFileName = FlattenOutput
-                        ? Path.Combine( outputRoot.FullName, outputName )
-                        : Path.Combine( outputDir.FullName, outputName ),
-                };
-
-                var dir = file.Directory!;
-
-                // Add entry to the directory's entry list
-                if ( !dirToEntries.TryGetValue( dir, out var dirList ) )
-                {
-                    dirList             = [ ];
-                    dirToEntries[ dir ] = dirList;
-                }
-
-                dirList?.Add( entry );
             }
 
-            // Recursively process directories if enabled
-            if ( Recursive && IOUtils.IsDirectory( file ) )
+            // Log if directory name is missing
+            if ( file.DirectoryName == null )
             {
-                var subdir = outputDir.FullName.Length == 0
-                    ? new DirectoryInfo( file.Name )
-                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
+                Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
+            }
 
-                Process( new DirectoryInfo( file.FullName )
-                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
-                         outputRoot, subdir, dirToEntries, depth + 1 );
+            // Apply filename filter delegate if set
+            if ( ( InputFilter != null )
+                 && !InputFilter( file.Directory!.FullName, file.Name ) )
+            {
+                continue;
+            }
+
+            // Determine output file name, applying suffix if needed
+            var outputName = file.Name;
+
+            if ( OutputSuffix != null )
+            {
+                outputName = RegexUtils.FileNameWithoutExtensionRegex()
+                                       .Replace( outputName, "$1" ) + OutputSuffix;
+            }
+
+            // Create an entry for the file
+            var entry = new Entry
+            {
+                Depth           = depth,
+                InputFile       = file,
+                OutputDirectory = outputDir,
+                OutputFileName = FlattenOutput
+                    ? Path.Combine( outputRoot.FullName, outputName )
+                    : Path.Combine( outputDir.FullName, outputName ),
+            };
+
+            var dir = file.Directory!;
+
+            // Add entry to the directory's entry list
+            if ( !dirToEntries.TryGetValue( dir, out var dirList ) )
+            {
+                dirList             = [ ];
+                dirToEntries[ dir ] = dirList;
+            }
+
+            dirList?.Add( entry );
+
+            // Recursively process directories if enabled
+            if ( Recursive )
+            {
+                // We need to iterate over the contents of the starting directory,
+                // getting only the subdirectories.
+
+                // Get the directory containing these files (assuming a non-flat structure)
+                var inputDir = files.FirstOrDefault( f => f.Directory != null )?.Directory;
+
+                if ( inputDir != null )
+                {
+                    var subdirectories = inputDir.GetDirectories();
+
+                    foreach ( var subdirInfo in subdirectories )
+                    {
+                        var subdirOutput = outputDir.FullName.Length == 0
+                            ? new DirectoryInfo( subdirInfo.Name )
+                            : new DirectoryInfo( Path.Combine( outputDir.FullName, subdirInfo.Name ) );
+
+                        // Recursively process the subdirectory's files
+                        Process( subdirInfo.GetFiles(),
+                                 outputRoot,
+                                 subdirOutput,
+                                 dirToEntries,
+                                 depth + 1 );
+                    }
+                }
             }
         }
     }
 
     /// <summary>
+    /// Called with each input file.
     /// </summary>
-    /// <param name="files"></param>
-    /// <param name="outputRoot"></param>
-    /// <param name="outputDir"></param>
-    /// <param name="stringToEntries"></param>
-    /// <param name="depth"></param>
-    public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                                 Dictionary< string, List< Entry > > stringToEntries, int depth )
-    {
-        // Store empty entries for every directory.
-        foreach ( var file in files )
-        {
-            var dir = file.Directory?.Name;
-
-            if ( dir != null )
-            {
-                if ( !stringToEntries.ContainsKey( dir ) )
-                {
-                    // If the directory is not already a key in the dictionary, add it
-                    stringToEntries[ dir ] = [ ];
-                }
-            }
-            else
-            {
-                // Handle the case where a file has no parent directory (e.g., root level)
-                // Either log a warning, throw an exception, or handle it differently
-                // ( Logging a warning for now... )
-                Logger.Error( $"File '{file.FullName}' has no parent directory." );
-            }
-        }
-
-        foreach ( var file in files )
-        {
-            if ( ( file.Attributes & FileAttributes.Directory ) == 0 )
-            {
-                if ( InputRegex.Count > 0 )
-                {
-                    var found = false;
-
-                    foreach ( var pattern in InputRegex )
-                    {
-                        if ( pattern.IsMatch( file.Name ) )
-                        {
-                            found = true;
-
-                            break;
-                        }
-                    }
-
-                    if ( !found )
-                    {
-                        continue;
-                    }
-                }
-
-                if ( ( InputFilter != null )
-                     && !InputFilter( file.Directory!.FullName, file.Name ) )
-                {
-                    continue;
-                }
-
-                var outputName = file.Name;
-
-                if ( OutputSuffix != null )
-                {
-                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
-                }
-
-                var entry = new Entry
-                {
-                    Depth           = depth,
-                    InputFile       = file,
-                    OutputDirectory = outputDir,
-                    OutputFileName = FlattenOutput
-                        ? Path.Combine( outputRoot.FullName, outputName )
-                        : Path.Combine( outputDir.FullName, outputName ),
-                };
-
-                var dir = file.Directory!.FullName;
-
-                if ( !stringToEntries.TryGetValue( dir, out var value ) )
-                {
-                    value                  = [ ];
-                    stringToEntries[ dir ] = value;
-                }
-
-                value.Add( entry );
-            }
-
-            if ( Recursive && ( ( file.Attributes & FileAttributes.Directory ) != 0 ) )
-            {
-                var subdir = outputDir.FullName.Length == 0
-                    ? new DirectoryInfo( file.Name )
-                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
-
-                Logger.Debug( $"Recursive call :: subdir: {subdir.FullName}" );
-
-                Process( new DirectoryInfo( file.FullName )
-                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
-                         outputRoot, subdir, stringToEntries, depth + 1 );
-            }
-        }
-
-        // Note:
-        // To get the count of files stores in the List< Entry >, use something like:-
-        // var totalEntries = stringToEntries.Values.Sum(list => list.Count);
-    }
-
     public virtual void ProcessFile( Entry entry )
     {
-        Guard.ThrowIfNull( entry.InputFile );
-
-        FileProcessedDelegate?.Invoke( ( FileInfo )entry.InputFile );
-        ProcessFileDelegate?.Invoke( entry );
+        Logger.Checkpoint();
     }
 
+    /// <summary>
+    /// Called for each input directory. The files will be sorted. The specified files list can
+    /// be modified to change which files are processed.
+    /// </summary>
+    /// <param name="entryDir"> The input directory. </param>
+    /// <param name="files"> The destination for processed files. </param>
     public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
+        Logger.Checkpoint();
     }
 
     #endregion process methods

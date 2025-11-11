@@ -25,6 +25,7 @@
 using Extensions.Source.Drawing;
 
 using LughSharp.Lugh.Graphics.Atlases;
+
 using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
@@ -48,10 +49,9 @@ public partial class TexturePacker
     /// <exception cref="Exception"></exception>
     private void WriteImages( string outputDir, string scaledPackFileName, List< Page > pages )
     {
-        // Prepare output file and directory names
-        var packFileNoExt = Path.Combine( outputDir, scaledPackFileName );
-        var packDir       = Path.GetDirectoryName( packFileNoExt );
-        var imageName     = Path.GetFileName( packFileNoExt );
+        var packFileNoExt = new FileInfo( Path.Combine( outputDir, scaledPackFileName ) );
+        var packDir       = packFileNoExt.Directory;
+        var imageName     = Path.GetFileName( packFileNoExt.FullName );
 
         if ( packDir == null )
         {
@@ -130,15 +130,19 @@ public partial class TexturePacker
 
                 fileIndex++;
 
-                outputFile = Path.Combine( packDir, name + "." + _settings.OutputFormat );
+                outputFile = Path.Combine( packDir.FullName, name + "." + _settings.OutputFormat );
 
                 if ( !File.Exists( outputFile ) )
                 {
+                    Logger.Debug( $"outputFile {outputFile} does not exist, therefore is available" );
+
                     break;
                 }
             }
 
             // Create output directories if needed
+            Logger.Debug( $"Creating folder: {Path.GetDirectoryName( outputFile )}" );
+
             Directory.CreateDirectory( Path.GetDirectoryName( outputFile )
                                        ?? throw new GdxRuntimeException( "Error creating output directory" ) );
 
@@ -287,6 +291,8 @@ public partial class TexturePacker
                     using ( var newImage = new Bitmap( canvas.Width, canvas.Height, PixelFormat.Format24bppRgb ) )
                     using ( var newGraphics = Graphics.FromImage( newImage ) )
                     {
+                        // Clear the background with the configured color before drawing.
+                        newGraphics.Clear( System.Drawing.Color.White );
                         newGraphics.DrawImage( canvas, 0, 0 );
 
                         var jpgEncoder          = GetEncoder( ImageFormat.Jpeg );
@@ -303,18 +309,58 @@ public partial class TexturePacker
                     // Premultiply alpha if required
                     if ( _settings.PremultiplyAlpha )
                     {
-                        for ( var y = 0; y < canvas.Height; y++ )
-                        {
-                            for ( var x = 0; x < canvas.Width; x++ )
-                            {
-                                var color = canvas.GetPixel( x, y );
-                                var alpha = color.A / 255f;
-                                var red   = ( int )( color.R * alpha );
-                                var green = ( int )( color.G * alpha );
-                                var blue  = ( int )( color.B * alpha );
+                        // Use LockBits for massive performance improvement
+                        var bitmapData = canvas.LockBits( new System.Drawing.Rectangle( 0, 0, width, height ),
+                                                          ImageLockMode.ReadWrite,
+                                                          PixelFormat.Format32bppArgb );
 
-                                canvas.SetPixel( x, y, Color.FromArgb( color.A, red, green, blue ) );
+                        try
+                        {
+                            unsafe
+                            {
+                                var ptr    = ( byte* )bitmapData.Scan0;
+                                var stride = bitmapData.Stride;
+
+                                for ( var y = 0; y < height; y++ )
+                                {
+                                    var rowPtr = ptr + ( y * stride );
+
+                                    for ( var x = 0; x < width; x++ )
+                                    {
+                                        // Pixels are stored in BGRA order (Blue, Green, Red, Alpha)
+                                        var index = x * 4;
+
+                                        var alpha = rowPtr[ index + 3 ]; // Alpha (index 3)
+
+                                        if ( alpha == 0 )
+                                        {
+                                            // Optimization: Skip fully transparent pixels
+                                            continue;
+                                        }
+
+                                        // Alpha factor (0.0 to 1.0)
+                                        var alphaFactor = alpha / 255f;
+
+                                        // Apply premultiplication: R = R * A, G = G * A, B = B * A
+                                        // Note: Alpha (index 3) remains unchanged
+
+                                        // Blue (index 0)
+                                        rowPtr[ index + 0 ] = ( byte )( rowPtr[ index + 0 ] * alphaFactor );
+
+                                        // Green (index 1)
+                                        rowPtr[ index + 1 ] = ( byte )( rowPtr[ index + 1 ] * alphaFactor );
+
+                                        // Red (index 2)
+                                        rowPtr[ index + 2 ] = ( byte )( rowPtr[ index + 2 ] * alphaFactor );
+                                    }
+                                }
                             }
+                        }
+                        finally
+                        {
+                            // Unlock the bits to ensure the changes are
+                            // applied and memory is released.
+                            canvas.UnlockBits( bitmapData );
                         }
                     }
 
@@ -385,7 +431,7 @@ public partial class TexturePacker
             var textureAtlasData = new TextureAtlasData( packFile, packDir!, _settings.FlattenPaths );
 
             Logger.Debug( $"pages.Count: {pages.Count}" );
-            
+
             foreach ( var page in pages )
             {
                 Guard.ThrowIfNull( page );
@@ -424,7 +470,7 @@ public partial class TexturePacker
                 Guard.ThrowIfNull( page.OutputRects );
 
                 // ---------- Writing Atlas Header ----------
-                
+
                 if ( _settings.LegacyOutput )
                 {
                     WritePageLegacy( writer, page );
@@ -440,7 +486,7 @@ public partial class TexturePacker
                 }
 
                 // ---------- Writing Atlas Rects ----------
-                
+
                 page.OutputRects.Sort();
 
                 foreach ( var rect in page.OutputRects )
@@ -554,7 +600,8 @@ public partial class TexturePacker
             writer.WriteLine( $"{tab}index{colon}{rect.Index}" );
         }
 
-        writer.WriteLine( $"{tab}bounds{colon}{page.X + rect.X}{comma}{( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY )}{comma}{rect.RegionWidth}{comma}{rect.RegionHeight}" );
+        var atlasY = page.ImageHeight - rect.Y - rect.RegionHeight;
+        writer.WriteLine( $"{tab}bounds{colon}{page.X + rect.X}{comma}{atlasY}{comma}{rect.RegionWidth}{comma}{rect.RegionHeight}" );
 
         var offsetY = rect.OriginalHeight - rect.RegionHeight - rect.OffsetY;
 
@@ -607,7 +654,10 @@ public partial class TexturePacker
     {
         writer.WriteLine( Rect.GetAtlasName( name, _settings.FlattenPaths ) );
         writer.WriteLine( $"  rotate: {rect.Rotated}" );
-        writer.WriteLine( $"  xy: {page.X + rect.X}, {( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY )}" );
+
+        var atlasY = page.ImageHeight - rect.Y - rect.RegionHeight;
+        writer.WriteLine( $"  xy: {page.X + rect.X}, {atlasY}" );
+
         writer.WriteLine( $"  size: {rect.RegionWidth}, {rect.RegionHeight}" );
 
         if ( rect.Splits != null )

@@ -133,21 +133,13 @@ public class ImageProcessor
         {
             var crc = Hash( rect.GetImage( this ) );
 
-            TexturePacker.Rect? existing = null;
-
-            try
+            if ( _crcs.TryGetValue( crc, out var existing ) )
             {
-                existing = _crcs[ crc ];
-            }
-            catch ( KeyNotFoundException )
-            {
-                // This is expected for new images
-                Logger.Debug( $"CRC '{crc}' not found in _crcs (first time?)" );
-            }
-
-            if ( existing != null )
-            {
-                existing.Aliases.Add( new TexturePacker.Alias( rect ) );
+                // Image already exists, add current rect as an alias to the existing one.
+                existing?.Aliases.Add( new TexturePacker.Alias( rect ) );
+        
+                // Log is now cleaner
+                Logger.Debug( $"Image is an alias of '{existing?.Name}' with CRC '{crc}'." );
 
                 return null;
             }
@@ -165,8 +157,12 @@ public class ImageProcessor
     /// </summary>
     public void Clear()
     {
+        // Only clear the image rectangles processed for the current scale.
         ImageRects.Clear();
-        _crcs.Clear();
+    
+        // The CRC dictionary (_crcs) must REMAIN POPULATED to track aliased 
+        // images across all scale iterations defined in settings.
+        // DO NOT CALL: _crcs.Clear();
     }
 
     /// <summary>
@@ -356,6 +352,7 @@ public class ImageProcessor
 
                 if ( Settings.StripWhitespaceY )
                 {
+                    // Find TOP
                 outer1:
 
                     for ( var y = 0; y < height; y++ )
@@ -374,6 +371,7 @@ public class ImageProcessor
                         top++;
                     }
 
+                    // Find BOTTOM
                 outer2:
 
                     for ( var y = height - 1; y >= top; y-- )
@@ -405,20 +403,22 @@ public class ImageProcessor
                     }
                 }
 
+                // X-Stripping Logic
                 var left  = 0;
                 var right = width;
 
                 if ( Settings.StripWhitespaceX )
                 {
+                    // Find LEFT
                 outer3:
 
                     for ( var x = 0; x < width; x++ )
                     {
                         for ( var y = top; y < bottom; y++ )
                         {
-                            var pixel = source.GetPixel( x, y );
+                            var rowPtr = ptr + ( y * stride );
 
-                            if ( pixel.A > Settings.AlphaThreshold )
+                            if ( rowPtr[ ( x * 4 ) + 3 ] > Settings.AlphaThreshold )
                             {
                                 goto outer3;
                             }
@@ -427,15 +427,16 @@ public class ImageProcessor
                         left++;
                     }
 
+                    // Find RIGHT
                 outer4:
 
                     for ( var x = width - 1; x >= left; x-- )
                     {
                         for ( var y = top; y < bottom; y++ )
                         {
-                            var pixel = source.GetPixel( x, y );
+                            var rowPtr = ptr + ( y * stride );
 
-                            if ( pixel.A > Settings.AlphaThreshold )
+                            if ( rowPtr[ ( x * 4 ) + 3 ] > Settings.AlphaThreshold )
                             {
                                 goto outer4;
                             }
@@ -756,25 +757,26 @@ public class ImageProcessor
 
             try
             {
-                const int BYTES_PER_PIXEL = 4; // 32bppArgb = 4 bytes per pixel
-                var       pixels          = new byte[ width * BYTES_PER_PIXEL ];
+                const int BYTES_PER_PIXEL = 4;
+                // Buffer sized to hold the largest row, using Stride for safety, but width*4 is often sufficient.
+                // Let's use a standard array based on width for clear intent:
+                var pixels = new byte[ width * BYTES_PER_PIXEL ];
 
                 for ( var y = 0; y < height; y++ )
                 {
                     var row = bitmapData.Scan0 + ( y * bitmapData.Stride );
+                    // Copy the row data from the unmanaged pointer into the managed byte array
                     Marshal.Copy( row, pixels, 0, width * BYTES_PER_PIXEL );
 
-                    for ( var x = 0; x < width; x++ )
-                    {
-                        var pixelValue = BitConverter.ToInt32( pixels, x * BYTES_PER_PIXEL );
-                        HashTransformBlock( sha1, pixelValue ); // Use TransformBlock
-                    }
+                    // Hash the entire row block at once, efficiently.
+                    sha1.TransformBlock( pixels, 0, pixels.Length, pixels, 0 );
                 }
 
-                HashTransformBlock( sha1, width );  // Use TransformBlock
-                HashTransformBlock( sha1, height ); // Use TransformBlock
+                // Hash width and height (using the existing helper)
+                HashTransformBlock( sha1, width );
+                HashTransformBlock( sha1, height );
 
-                // Finalize the hash
+                // Finalize the hash with any remaining data in the internal buffer
                 sha1.TransformFinalBlock( [ ], 0, 0 ); // Pass an empty byte array
 
                 var hashBytes = sha1.Hash;
@@ -794,6 +796,11 @@ public class ImageProcessor
 
     private static void HashTransformBlock( SHA1 digest, int value )
     {
-        digest.TransformBlock( BitConverter.GetBytes( value ), 0, 4, null, 0 );
+        // The TransformBlock method with an output buffer set to null is fine for 
+        // feeding data sequentially before the final block.
+        digest.TransformBlock( BitConverter.GetBytes( value ), 0, 4, null!, 0 ); 
     }
 }
+
+// ============================================================================
+// ============================================================================

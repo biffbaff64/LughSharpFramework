@@ -94,9 +94,6 @@ public partial class MainGame : Game
             {
                 _spriteBatch?.Draw( _image1, 0, 0 );
             }
-
-            DrawViewportBounds();
-            DebugViewportState();
             
             _spriteBatch?.End();
         }

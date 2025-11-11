@@ -46,5 +46,11 @@
   ],
   "AtlasExtension": ".atlas",
   "PrettyPrint": true,
-  "LegacyOutput": true
+  "LegacyOutput": true,
+  "BackgroundColor": {
+    "R": 0,
+    "G": 0,
+    "B": 0,
+    "A": 0
+  }
 }

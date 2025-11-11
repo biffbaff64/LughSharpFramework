@@ -37,19 +37,20 @@ namespace Extensions.Source.Tools.TexturePacker;
 public class TexturePackerFileProcessor : FileProcessor
 {
     public TexturePacker.TexturePackerProgressListener? ProgressListener { get; set; }
-
-    public List< DirectoryInfo? > DirsToIgnore { get; set; }
-    public string                 PackFileName { get; set; }
-    public bool                   CountOnly    { get; set; } = false;
+    public List< DirectoryInfo? >                       DirsToIgnore     { get; set; }
+    public string                                       PackFileName     { get; set; }
+    public bool                                         CountOnly        { get; set; } = false;
 
     // ========================================================================
 
-    private readonly TexturePackerSettings _defaultSettings;
-
+    /// <summary>
+    /// A dictionary of settings files to use for processing, grouped by directory.
+    /// </summary>
     private Dictionary< DirectoryInfo, TexturePackerSettings > _dirToSettings; //TODO: Rename
 
-    private int           _packCount;
-    private DirectoryInfo _rootDirectory = null!;
+    private readonly TexturePackerSettings _defaultSettings;
+    private          int                   _packCount;
+    private          DirectoryInfo         _rootDirectory = null!;
 
     // ========================================================================
 
@@ -83,6 +84,9 @@ public class TexturePackerFileProcessor : FileProcessor
 
         PackFileName  = packFileName;
         FlattenOutput = true;
+
+        Logger.Debug( "TexturePackerFileProcessor created." );
+        Logger.Debug( $"Default packfile name: {packFileName}" );
 
         // Set the default file extensions for processable images.
         AddInputSuffix( ".png", ".jpg", ".jpeg" );
@@ -122,20 +126,23 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </returns>
     public virtual List< Entry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
+        Logger.Checkpoint();
+
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
+        // Collect settings files from input directory and subdirectories.
         _ = CollectSettingsFiles( inputRoot, outputRoot );
 
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
         // _packCount variable to the number of packer invocations.
         CountOnly = true;
-        _         = base.Process( inputRoot, outputRoot );
+        _         = base.Process( inputRoot, outputRoot, CountOnly );
         CountOnly = false;
 
         // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
-        var result = base.Process( inputRoot, outputRoot );
+        var result = base.Process( inputRoot, outputRoot, CountOnly );
         ProgressListener?.End();
 
         return result;
@@ -170,6 +177,8 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="entryList"> The resulting list of entries. </param>
     public override void ProcessDir( Entry inputDir, List< Entry > entryList )
     {
+        Logger.Checkpoint();
+        
         // Do not proceed if this dir is in the ignore list.
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
         {
@@ -414,41 +423,6 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="entry">The file entry to process.</param>
     public override void ProcessFile( Entry entry )
     {
-        Guard.ThrowIfNull( entry.InputFile );
-
-        if ( !CountOnly )
-        {
-            // Get the directory properly from FileSystemInfo
-            DirectoryInfo? parentDirectory = null;
-
-            if ( entry.InputFile is FileInfo fileInfo )
-            {
-                parentDirectory = fileInfo.Directory;
-            }
-            else if ( entry.InputFile is DirectoryInfo dirInfo )
-            {
-                parentDirectory = dirInfo.Parent;
-            }
-            else
-            {
-                // Fallback: get directory from the full path
-                var parentPath = Path.GetDirectoryName( entry.InputFile.FullName );
-
-                if ( !string.IsNullOrEmpty( parentPath ) )
-                {
-                    parentDirectory = new DirectoryInfo( parentPath );
-                }
-            }
-
-            var settings = parentDirectory != null
-                ? _dirToSettings.GetValueOrDefault( parentDirectory, _defaultSettings )
-                : _defaultSettings;
-
-            var packer = NewTexturePacker( _rootDirectory, settings );
-
-            Pack( packer, entry );
-        }
-
         AddProcessedFile( entry );
     }
 
@@ -474,14 +448,13 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <summary>
     /// Collect any pack.json setting files present in the input folder.
     /// </summary>
-    /// <param name="inputRoot">
-    /// The directory containing the images or assets that will be packed.
-    /// </param>
-    /// <param name="outputRoot">
-    /// The directory where the packed texture files and metadata will be saved.
-    /// </param>
+    /// <param name="inputRoot"> The directory containing the images or assets that will be packed. </param>
+    /// <param name="outputRoot"> The directory where the packed texture files and metadata will be saved. </param>
+    /// <returns> The number of settings files found. </returns>
     public int CollectSettingsFiles( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
+        Logger.Checkpoint();
+
         List< FileInfo > settingsFiles = [ ];
 
         var settingsProcessor = new FileProcessor( this )
@@ -496,7 +469,7 @@ public class TexturePackerFileProcessor : FileProcessor
             },
         };
 
-        settingsProcessor.Process( inputRoot, outputRoot );
+        settingsProcessor.Process( inputRoot, null );
 
         ProgressListener ??= new TexturePacker.TexturePackerProgressListener();
 
@@ -575,6 +548,8 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </param>
     public virtual void DeleteOutput( FileInfo outputRoot )
     {
+        Logger.Checkpoint();
+
         // Load root settings to get scale.
         var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, DEFAULT_PACKFILE_NAME ) );
         var rootSettings = _defaultSettings;
