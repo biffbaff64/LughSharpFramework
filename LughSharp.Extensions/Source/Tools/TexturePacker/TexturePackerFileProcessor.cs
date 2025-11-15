@@ -131,8 +131,10 @@ public class TexturePackerFileProcessor : FileProcessor
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
         // Collect settings files from input directory and subdirectories.
-        _ = CollectSettingsFiles( inputRoot, outputRoot );
+        var numSettingsFiles = CollectSettingsFiles( inputRoot, outputRoot );
 
+        Logger.Debug( $"Collected {numSettingsFiles} settings files." );
+        
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
         // _packCount variable to the number of packer invocations.
@@ -469,11 +471,12 @@ public class TexturePackerFileProcessor : FileProcessor
             },
         };
 
+        //TODO: This should be using the delegate!
         settingsProcessor.Process( inputRoot, null );
 
         ProgressListener ??= new TexturePacker.TexturePackerProgressListener();
 
-        // -----------------------------------------------------
+        Logger.Debug( $"Collected {settingsFiles.Count} settings files." );
 
         if ( settingsFiles.Count == 0 )
         {

@@ -51,6 +51,11 @@ public partial class FileProcessor
     // Delegate to process a directory
     public Action< Entry, List< Entry > >? ProcessDirDelegate { get; set; }
 
+    public delegate void ProcessDelegate( Entry entry );
+    
+    
+    
+    
     // ========================================================================
 
     public List< Regex > InputRegex      { get; set; }
@@ -149,9 +154,7 @@ public partial class FileProcessor
     /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
     public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot, bool countOnly = false )
     {
-        Logger.Checkpoint( message: $"CountOnly: {countOnly}" );
-
-        //TODO: Make sure this copes with outputRoot == null
+        Logger.Debug( $"CountOnly: {countOnly}" );
 
         if ( inputFileOrDir is not { Exists: true } )
         {
@@ -160,17 +163,17 @@ public partial class FileProcessor
 
         List< Entry > result;
 
-        if ( inputFileOrDir is DirectoryInfo dir )
+        if ( inputFileOrDir is FileInfo file )
         {
-            Logger.Debug( $"Processing directory: {dir.FullName}" );
+            Logger.Debug( $"Processing file: {file.FullName}" );
 
-            result = Process( dir.GetFiles(), outputRoot );
+            result = Process( [ file ], outputRoot );
         }
         else
         {
-            Logger.Debug( $"Processing file: {inputFileOrDir.FullName}" );
+            Logger.Debug( $"Processing directory: {inputFileOrDir.FullName}" );
 
-            result = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
+            result = Process( ( DirectoryInfo )inputFileOrDir, outputRoot );
         }
 
         return result;
@@ -372,6 +375,7 @@ public partial class FileProcessor
             }
 
             // Apply filename filter delegate if set
+            //TODO: Is this needed?
             if ( ( InputFilter != null )
                  && !InputFilter( file.Directory!.FullName, file.Name ) )
             {
@@ -479,6 +483,18 @@ public partial class FileProcessor
     }
 
     /// <summary>
+    /// Adds a case insensitive suffix for matching input files.
+    /// </summary>
+    /// <param name="suffixes"></param>
+    public void AddInputSuffix( params string[] suffixes )
+    {
+        foreach ( var suffix in suffixes )
+        {
+            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
+        }
+    }
+
+    /// <summary>
     /// Adds a regex filter, or group of filters, to the <see cref="InputRegex"/>
     /// list of filters.
     /// </summary>
@@ -489,18 +505,6 @@ public partial class FileProcessor
         foreach ( var regex in regexes )
         {
             InputRegex.Add( new Regex( regex ) );
-        }
-    }
-
-    /// <summary>
-    /// Adds a case insensitive suffix for matching input files.
-    /// </summary>
-    /// <param name="suffixes"></param>
-    public void AddInputSuffix( params string[] suffixes )
-    {
-        foreach ( var suffix in suffixes )
-        {
-            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
         }
     }
 }

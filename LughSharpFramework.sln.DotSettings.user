@@ -45,6 +45,9 @@
   &lt;Assembly Path="C:\Users\richi\.nuget\packages\dotglfw\1.2.0\lib\net8.0\DotGLFW.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Development\Projects\CSharp\LughSharpFramework\LughSharp\lib\net8.0\gdx2d.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d1f97183_002D08c1_002D4cb8_002D83da_002D327e7a42cd02/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	
