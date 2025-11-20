@@ -22,6 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Runtime.Versioning;
+
+using JetBrains.Annotations;
+
 using LughUtils.source.Collections;
 
 namespace Extensions.Source.Tools.TexturePacker;

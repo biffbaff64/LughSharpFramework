@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 namespace Extensions.Source.Json;
 
 public partial class JsonValue

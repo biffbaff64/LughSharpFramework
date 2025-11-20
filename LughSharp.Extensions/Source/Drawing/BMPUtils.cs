@@ -28,8 +28,9 @@ using LughSharp.Lugh.Graphics;
 using LughUtils.source.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
+//using PixelFormat = LughSharp.Lugh.Graphics.PixelFormat;
 
-namespace Extensions.Source.Drawing.Utils;
+namespace Extensions.Source.Drawing;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]

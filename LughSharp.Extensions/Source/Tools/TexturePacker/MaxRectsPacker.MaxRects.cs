@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using LughUtils.source.Collections;
 
 namespace Extensions.Source.Tools.TexturePacker;

@@ -42,7 +42,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Pixmap.Format.RGB565"/> and <see cref="Pixmap.Format.RGB888"/>
+    /// Only <see cref="IGL.Format.RGB565"/> and <see cref="IGL.Format.RGB888"/>
     /// are supported.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap"/> </param>
@@ -59,7 +59,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Pixmap.Format.RGB565"/> and <see cref="Pixmap.Format.RGB888"/> are supported.
+    /// Only <see cref="IGL.Format.RGB565"/> and <see cref="IGL.Format.RGB888"/> are supported.
     /// Adds a PKM header in front of the compressed image data.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap"/> </param>

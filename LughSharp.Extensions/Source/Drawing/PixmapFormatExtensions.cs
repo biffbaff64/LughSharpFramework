@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
+
+using JetBrains.Annotations;
+
 using LughUtils.source.Exceptions;
 
 namespace Extensions.Source.Drawing;

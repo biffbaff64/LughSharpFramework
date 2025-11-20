@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
 using System.Text;
 
 using LughUtils.source.Logging;

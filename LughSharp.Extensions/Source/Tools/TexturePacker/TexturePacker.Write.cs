@@ -22,9 +22,17 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Runtime.Versioning;
+
 using Extensions.Source.Drawing;
 
 using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;

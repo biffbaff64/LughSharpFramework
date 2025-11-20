@@ -22,6 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.IO;
+
+using JetBrains.Annotations;
+
 using LughSharp.Lugh.Files;
 
 namespace Extensions.Source.Json;

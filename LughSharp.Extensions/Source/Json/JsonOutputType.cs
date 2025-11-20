@@ -22,8 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
+
+using JetBrains.Annotations;
 
 using LughSharp.Lugh.Graphics.Text;
 using LughUtils.source.Exceptions;

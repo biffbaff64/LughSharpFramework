@@ -22,7 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
 using System.Text;
+
+using JetBrains.Annotations;
 
 using LughUtils.source.Collections;
 using LughUtils.source.Logging;

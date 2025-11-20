@@ -22,7 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+
+using JetBrains.Annotations;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

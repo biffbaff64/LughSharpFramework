@@ -22,6 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+
+using JetBrains.Annotations;
+
 using LughUtils.source.Maths;
 
 namespace Extensions.Source.Tools.TexturePacker;

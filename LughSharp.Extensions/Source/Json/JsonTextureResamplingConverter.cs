@@ -22,9 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using Extensions.Source.Tools.TexturePacker;
+
+using JetBrains.Annotations;
 
 namespace Extensions.Source.Json;
 

@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
 using System.Runtime.Serialization;
 
 using LughSharp.Lugh.Files;

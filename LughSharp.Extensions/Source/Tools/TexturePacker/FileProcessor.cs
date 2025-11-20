@@ -22,10 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
 
 using LughUtils.source.Collections;
@@ -51,11 +49,8 @@ public partial class FileProcessor
     // Delegate to process a directory
     public Action< Entry, List< Entry > >? ProcessDirDelegate { get; set; }
 
-    public delegate void ProcessDelegate( Entry entry );
-    
-    
-    
-    
+    public delegate void ProcessEntryDelegate( Entry entry );
+
     // ========================================================================
 
     public List< Regex > InputRegex      { get; set; }
@@ -161,20 +156,37 @@ public partial class FileProcessor
             throw new ArgumentException( $"Input file/dir does not exist: {inputFileOrDir?.FullName}" );
         }
 
-        List< Entry > result;
+        FileInfo[]? fileList;
 
         if ( inputFileOrDir is FileInfo file )
         {
-            Logger.Debug( $"Processing file: {file.FullName}" );
+            if ( !countOnly )
+            {
+                Logger.Debug( $"Processing file: {file.FullName}" );
+            }
 
-            result = Process( [ file ], outputRoot );
+            fileList = [ file ];
+
+            Guard.Against.Null( fileList, $"Could not get file list from file: {file.FullName}" );
         }
         else
         {
-            Logger.Debug( $"Processing directory: {inputFileOrDir.FullName}" );
+            if ( !countOnly )
+            {
+                Logger.Debug( $"Processing directory: {inputFileOrDir.FullName}" );
+            }
 
-            result = Process( ( DirectoryInfo )inputFileOrDir, outputRoot );
+            fileList = ( inputFileOrDir as DirectoryInfo )?.GetFiles();
+
+            Guard.Against.Null( fileList, $"Could not get files from directory: {inputFileOrDir.FullName}" );
         }
+
+        if ( !countOnly )
+        {
+            Logger.Debug( $"fileList.Length: {fileList.Length}" );
+        }
+
+        var result = Process( fileList, outputRoot, countOnly );
 
         return result;
     }
@@ -184,8 +196,9 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="files">The array of input files to process.</param>
     /// <param name="outputRoot">The root directory for output. Can be null.</param>
+    /// <param name="countOnly"></param>
     /// <returns>A list of processed files.</returns>
-    public List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
+    public virtual List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot, bool countOnly = false )
     {
         Logger.Checkpoint();
 
@@ -198,9 +211,34 @@ public partial class FileProcessor
 
         var dirToEntries = new Dictionary< DirectoryInfo, List< Entry >? >();
 
+        if ( !countOnly )
+        {
+            Logger.Debug( $"files.Length: {files.Length}" );
+            Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
+            Logger.Debug( $"outputRoot: {outputRoot.FullName}" );
+        }
+
         Process( files, outputRoot, outputRoot, dirToEntries, 0 );
 
         var allEntries = new List< Entry >();
+
+        if ( !countOnly )
+        {
+            Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
+
+            foreach ( var dte in dirToEntries )
+            {
+                if ( dte.Value != null )
+                {
+                    foreach ( var entry in dte.Value )
+                    {
+                        Logger.Debug( $"{entry.InputFile!.Name}" );
+                    }
+                }
+            }
+        }
+
+        return [ ];
 
         foreach ( var mapEntry in dirToEntries )
         {
@@ -319,22 +357,24 @@ public partial class FileProcessor
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
     {
-        // Ensure every file's parent directory is a key in the dictionary
+        // Store empty entries for every directory.
         foreach ( var file in files )
         {
             var dir = file.Directory;
 
-            if ( dir != null )
-            {
-                if ( !dirToEntries.ContainsKey( dir ) )
-                {
-                    dirToEntries[ dir ] = [ ];
-                }
-            }
-            else
+            if ( dir == null )
             {
                 // Log a warning if a file has no parent directory
                 Logger.Error( $"File '{file.FullName}' has no parent directory." );
+            }
+            else
+            {
+                var entries = dirToEntries[ dir ];
+
+                if ( entries == null )
+                {
+                    dirToEntries[ dir ] = [ ];
+                }
             }
         }
 
@@ -413,6 +453,8 @@ public partial class FileProcessor
 
             dirList?.Add( entry );
 
+            Logger.Debug( $"Recursive: {Recursive}" );
+
             // Recursively process directories if enabled
             if ( Recursive )
             {
@@ -445,11 +487,14 @@ public partial class FileProcessor
     }
 
     /// <summary>
-    /// Called with each input file.
+    /// Processes a single file entry for texture packing. Determines the parent directory,
+    /// retrieves the appropriate settings, creates a new <see cref="TexturePacker"/> instance,
+    /// and performs packing if not in count-only mode. Adds the processed file to the result list.
     /// </summary>
+    /// <param name="entry">The file entry to process.</param>
+    /// <remarks> This default implementation does nothing, and should be overriden where necessary. </remarks>
     public virtual void ProcessFile( Entry entry )
     {
-        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -458,9 +503,9 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="entryDir"> The input directory. </param>
     /// <param name="files"> The destination for processed files. </param>
+    /// <remarks> This default implementation does nothing, and should be overriden where necessary. </remarks>
     public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
-        Logger.Checkpoint();
     }
 
     #endregion process methods
@@ -473,7 +518,7 @@ public partial class FileProcessor
     /// <li><see cref="ProcessFile(Entry)"/> or,</li>
     /// <li><see cref="ProcessDir(Entry, List{Entry})"/></li>
     /// if the return value of <see cref="System.Diagnostics.Process"/> or
-    /// <see cref="Process(FileInfo[], DirectoryInfo)"/> should return all the processed
+    /// <see cref="Process(FileInfo[], DirectoryInfo, bool)"/> should return all the processed
     /// files.
     /// </summary>
     /// <param name="entry"></param>

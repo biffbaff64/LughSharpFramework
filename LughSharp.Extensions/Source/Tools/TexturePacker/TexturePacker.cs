@@ -22,6 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Versioning;
+
+using JetBrains.Annotations;
+
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
 
