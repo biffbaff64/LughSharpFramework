@@ -309,7 +309,7 @@ public partial class TexturePacker
             packFileName = Path.GetFileNameWithoutExtension( packFileName );
         }
 
-        // Initialize the progress listener, which can be used to report progress
+        // Initialise the progress listener, which can be used to report progress
         // in the form of a progress bar or console output.
         ProgressListener ??= new TexturePackerProgressListener();
         ProgressListener.Start( 1 );

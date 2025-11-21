@@ -161,7 +161,7 @@ public class TexturePackerFileProcessor : FileProcessor
     public override List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot, bool countOnly = false )
     {
         Logger.Checkpoint();
-        
+
         Guard.ThrowIfNull( outputRoot );
 
         // Delete pack file and images.
@@ -182,7 +182,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="entryList"> The resulting list of entries. </param>
     public override void ProcessDir( Entry inputDir, List< Entry > entryList )
     {
-        // Do not proceed if this dir is in the ignore list.
+        // Do not proceed if this input file is in the ignore list.
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
         {
             return;
@@ -231,9 +231,9 @@ public class TexturePackerFileProcessor : FileProcessor
 
         if ( settings.CombineSubdirectories )
         {
-            // Collect all files under subdirectories except those with a pack.json file.
-            // A directory with its own settings can't be combined since combined directories
-            // must use the settings of the parent directory.
+            // Collect all files under subdirectories except for those directories with a
+            // pack.json file. A directory with its own settings can't be combined since
+            // combined directories must use the settings of the parent directory.
             var combiningProcessor = new FileProcessor( this )
             {
                 ProcessDirDelegate = ( entryDir, files ) =>
@@ -282,7 +282,7 @@ public class TexturePackerFileProcessor : FileProcessor
         {
             var full1    = entry1.InputFile?.Name;
             var dotIndex = full1?.LastIndexOf( '.' );
-
+            
             if ( dotIndex != -1 )
             {
                 full1 = full1?.Substring( 0, ( int )dotIndex! );
@@ -427,7 +427,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </summary>
     /// <param name="packer"></param>
     /// <param name="entry"></param>
-    public virtual void Pack( TexturePacker packer, Entry entry )
+    public void Pack( TexturePacker packer, Entry entry )
     {
         packer.Pack( entry.OutputDirectory!, PackFileName );
     }
@@ -500,7 +500,7 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         Logger.Debug( $"Collected {settingsFiles.Count} settings files." );
-        
+
         return settingsFiles.Count;
     }
 
@@ -535,6 +535,7 @@ public class TexturePackerFileProcessor : FileProcessor
     public virtual void DeleteOutput( DirectoryInfo outputRoot )
     {
         Logger.Checkpoint();
+        Logger.Debug( $"outputRoot: {outputRoot.FullName}" );
 
         // Load root settings to get scale.
         var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, DEFAULT_PACKFILE_NAME ) );
@@ -546,21 +547,13 @@ public class TexturePackerFileProcessor : FileProcessor
             MergeSettings( rootSettings, settingsFile );
         }
 
-        var atlasExtension       = rootSettings.AtlasExtension;
-        var quotedAtlasExtension = Regex.Escape( atlasExtension );
+        var quotedAtlasExtension = Regex.Escape( rootSettings.AtlasExtension );
 
         for ( int i = 0, n = rootSettings.Scale.Length; i < n; i++ )
         {
-            var deleteProcessor = new FileProcessor( this )
-            {
-                ProcessFileDelegate = ( entry ) =>
-                {
-                    entry.InputFile?.Delete();
-                },
-                Recursive = false,
-            };
-
+            var inputRegexes = new List< Regex >();
             var packFile = new FileInfo( rootSettings.GetScaledPackFileName( PackFileName, i ) );
+
             var prefix   = packFile.Name;
             var dotIndex = prefix.LastIndexOf( '.' );
 
@@ -569,19 +562,75 @@ public class TexturePackerFileProcessor : FileProcessor
                 prefix = prefix.Substring( 0, dotIndex );
             }
 
-            deleteProcessor.AddInputRegex( "(?i)" + prefix + @"-?\d*\.(png|jpg|jpeg)" );
-            deleteProcessor.AddInputRegex( "(?i)" + prefix + quotedAtlasExtension );
+            inputRegexes.Add( new Regex( "(?i)" + prefix + @"-?\d*\.(png|jpg|jpeg)" ) );
+            inputRegexes.Add( new Regex( "(?i)" + prefix + quotedAtlasExtension ) );
 
             var dir = packFile.DirectoryName;
 
+            Logger.Debug( $"outputRoot: {outputRoot.FullName}" );
+
             if ( dir == null )
             {
-                deleteProcessor.Process( outputRoot, null );
+                ClearOutputFolder( outputRoot, inputRegexes );
             }
-            else if ( Directory.Exists( Path.Combine( outputRoot.FullName, dir ) ) )
+            else if ( Directory.Exists( outputRoot.FullName ) )
             {
-                deleteProcessor.Process( new DirectoryInfo( Path.Combine( outputRoot.FullName, dir ) ), null );
+                ClearOutputFolder( new DirectoryInfo( outputRoot.FullName ), inputRegexes );
             }
+        }
+    }
+    
+    public static void ClearOutputFolder( DirectoryInfo outputRoot, List< Regex > inputRegexes )
+    {
+        // Define the folder path where you want to start deleting files
+        var targetDirectoryPath = outputRoot.FullName;
+
+        try
+        {
+            //@formatter:off
+            // Directory.EnumerateFiles gets all file paths in the directory and all subdirectories
+            var filesToDelete = Directory.EnumerateFiles(
+                targetDirectoryPath, 
+                "*.*", 
+                SearchOption.AllDirectories
+            )
+            // Filter the file paths
+            .Where( filePath => 
+            {
+                // Get just the file name to match against the regexes
+                var fileName = Path.GetFileName( filePath );
+                
+                // Check if ANY of the Regex objects in the list match the file name
+                return inputRegexes.Any( regex => regex.IsMatch( fileName ) );
+            } );
+            //@formatter:on
+
+            var deletedCount = 0;
+
+            // Iterate through the filtered paths and delete each file
+            foreach ( var filePath in filesToDelete )
+            {
+                // Use File.Delete to remove the file
+//                File.Delete( filePath );
+                deletedCount++;
+
+                // Optional: Output the file being deleted for logging/tracking
+                Logger.Debug( $"Deleted: {filePath}" );
+            }
+
+            Logger.Debug( $"Successfully deleted {deletedCount} files in {targetDirectoryPath}." );
+        }
+        catch ( DirectoryNotFoundException )
+        {
+            Logger.Debug( $"Error: Directory not found at {targetDirectoryPath}" );
+        }
+        catch ( System.UnauthorizedAccessException )
+        {
+            Logger.Debug( "Error: Access denied. Check file permissions." );
+        }
+        catch ( System.Exception ex )
+        {
+            Logger.Debug( $"An unexpected error occurred: {ex.Message}" );
         }
     }
 
@@ -609,6 +658,36 @@ public class TexturePackerFileProcessor : FileProcessor
     public virtual TexturePackerSettings NewSettings( TexturePackerSettings settings )
     {
         return new TexturePackerSettings( settings );
+    }
+    
+    // ========================================================================
+    // ========================================================================
+
+    private class CombiningProcessor : FileProcessor
+    {
+        public override void ProcessDir( Entry entryDir, List< Entry > files )
+        {
+            var file = entryDir.InputFile as DirectoryInfo;
+
+            while ( ( file != null ) && !file.Equals( entryDir.InputFile ) )
+            {
+                var packJson = new FileInfo( Path.Combine( file.FullName, "pack.json" ) );
+
+                if ( packJson.Exists )
+                {
+                    files.Clear();
+
+                    return;
+                }
+
+                file = file.Parent;
+            }
+
+            if ( !CountOnly )
+            {
+                DirsToIgnore.Add( entryDir.InputFile as DirectoryInfo );
+            }
+        }
     }
 }
 

@@ -150,6 +150,8 @@ public partial class FileProcessor
     public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot, bool countOnly = false )
     {
         Logger.Debug( $"CountOnly: {countOnly}" );
+        Logger.Debug( $"inputFileOrDir: {inputFileOrDir?.FullName}" );
+        Logger.Debug( $"OutputRoot: {outputRoot?.FullName}" );
 
         if ( inputFileOrDir is not { Exists: true } )
         {
@@ -211,17 +213,20 @@ public partial class FileProcessor
 
         var dirToEntries = new Dictionary< DirectoryInfo, List< Entry >? >();
 
+        #if DEBUG
         if ( !countOnly )
         {
             Logger.Debug( $"files.Length: {files.Length}" );
             Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
             Logger.Debug( $"outputRoot: {outputRoot.FullName}" );
         }
-
+        #endif
+        
         Process( files, outputRoot, outputRoot, dirToEntries, 0 );
 
         var allEntries = new List< Entry >();
 
+        #if DEBUG
         if ( !countOnly )
         {
             Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
@@ -237,9 +242,8 @@ public partial class FileProcessor
                 }
             }
         }
-
-        return [ ];
-
+        #endif
+        
         foreach ( var mapEntry in dirToEntries )
         {
             var dirEntries = mapEntry.Value;
@@ -369,9 +373,7 @@ public partial class FileProcessor
             }
             else
             {
-                var entries = dirToEntries[ dir ];
-
-                if ( entries == null )
+                if ( !dirToEntries.ContainsKey( dir ) )
                 {
                     dirToEntries[ dir ] = [ ];
                 }
