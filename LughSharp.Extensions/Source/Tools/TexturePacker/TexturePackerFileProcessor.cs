@@ -234,35 +234,12 @@ public class TexturePackerFileProcessor : FileProcessor
             // Collect all files under subdirectories except for those directories with a
             // pack.json file. A directory with its own settings can't be combined since
             // combined directories must use the settings of the parent directory.
-            var combiningProcessor = new FileProcessor( this )
-            {
-                ProcessDirDelegate = ( entryDir, files ) =>
-                {
-                    var file = entryDir.InputFile as DirectoryInfo;
-
-                    while ( ( file != null ) && !file.Equals( inputDir.InputFile ) )
-                    {
-                        var packJson = new FileInfo( Path.Combine( file.FullName, "pack.json" ) );
-
-                        if ( packJson.Exists )
-                        {
-                            files.Clear();
-
-                            return;
-                        }
-
-                        file = file.Parent;
-                    }
-
-                    if ( !CountOnly )
-                    {
-                        DirsToIgnore.Add( entryDir.InputFile as DirectoryInfo );
-                    }
-                },
-                ProcessFileDelegate = AddProcessedFile,
-            };
-
-            entryList = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null ).ToList();
+            
+            Logger.Checkpoint();
+            
+            var combiningProcessor = new CombiningProcessor( this );
+            
+            entryList = combiningProcessor.Process( inputDir.InputFile, null ).ToList();
         }
 
         if ( entryList.Count == 0 )
@@ -534,6 +511,8 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </param>
     public virtual void DeleteOutput( DirectoryInfo outputRoot )
     {
+        Logger.Divider();
+        Logger.Divider();
         Logger.Checkpoint();
         Logger.Debug( $"outputRoot: {outputRoot.FullName}" );
 
@@ -578,6 +557,9 @@ public class TexturePackerFileProcessor : FileProcessor
                 ClearOutputFolder( new DirectoryInfo( outputRoot.FullName ), inputRegexes );
             }
         }
+        
+        Logger.Divider();
+        Logger.Divider();
     }
     
     public static void ClearOutputFolder( DirectoryInfo outputRoot, List< Regex > inputRegexes )
@@ -624,11 +606,11 @@ public class TexturePackerFileProcessor : FileProcessor
         {
             Logger.Debug( $"Error: Directory not found at {targetDirectoryPath}" );
         }
-        catch ( System.UnauthorizedAccessException )
+        catch ( UnauthorizedAccessException )
         {
             Logger.Debug( "Error: Access denied. Check file permissions." );
         }
-        catch ( System.Exception ex )
+        catch ( Exception ex )
         {
             Logger.Debug( $"An unexpected error occurred: {ex.Message}" );
         }
@@ -663,10 +645,19 @@ public class TexturePackerFileProcessor : FileProcessor
     // ========================================================================
     // ========================================================================
 
-    private class CombiningProcessor : FileProcessor
+    private class CombiningProcessor( TexturePackerFileProcessor parent ) : FileProcessor
     {
+        public override void ProcessFile( Entry entry )
+        {
+            Logger.Checkpoint();
+
+            AddProcessedFile( entry );
+        }
+
         public override void ProcessDir( Entry entryDir, List< Entry > files )
         {
+            Logger.Checkpoint();
+            
             var file = entryDir.InputFile as DirectoryInfo;
 
             while ( ( file != null ) && !file.Equals( entryDir.InputFile ) )
@@ -683,9 +674,9 @@ public class TexturePackerFileProcessor : FileProcessor
                 file = file.Parent;
             }
 
-            if ( !CountOnly )
+            if ( !parent.CountOnly )
             {
-                DirsToIgnore.Add( entryDir.InputFile as DirectoryInfo );
+                parent.DirsToIgnore.Add( entryDir.InputFile as DirectoryInfo );
             }
         }
     }

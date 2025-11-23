@@ -23,9 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Text.RegularExpressions;
-
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
-
 using LughUtils.source.Collections;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
@@ -36,9 +35,6 @@ namespace Extensions.Source.Tools.TexturePacker;
 public partial class FileProcessor
 {
     public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
-
-    // Delegate to filter filenames in a directory
-    public Func< string, string, bool >? InputFilter { get; set; }
 
     // Delegate to signal a processed file
     public virtual Action< FileSystemInfo >? FileProcessedDelegate { get; set; }
@@ -53,11 +49,12 @@ public partial class FileProcessor
 
     // ========================================================================
 
-    public List< Regex > InputRegex      { get; set; }
-    public List< Entry > OutputFilesList { get; set; }
-    public string        OutputSuffix    { get; set; }
-    public bool          Recursive       { get; set; }
-    public bool          FlattenOutput   { get; set; }
+    public IFilenameFilter? InputFilter     { get; set; }
+    public List< Regex >    InputRegex      { get; set; }
+    public List< Entry >    OutputFilesList { get; set; }
+    public string           OutputSuffix    { get; set; }
+    public bool             Recursive       { get; set; }
+    public bool             FlattenOutput   { get; set; }
 
     // ========================================================================
 
@@ -69,6 +66,8 @@ public partial class FileProcessor
         get =>
             ( o1, o2 ) =>
             {
+                Logger.Checkpoint();
+
                 Guard.ThrowIfNull( o1.InputFile, o2.InputFile );
 
                 if ( o1.InputFile is FileInfo file1 && o2.InputFile is FileInfo file2 )
@@ -147,7 +146,8 @@ public partial class FileProcessor
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
     /// <param name="countOnly"></param>
     /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot, bool countOnly = false )
+    public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot,
+                                          bool countOnly = false )
     {
         Logger.Debug( $"CountOnly: {countOnly}" );
         Logger.Debug( $"inputFileOrDir: {inputFileOrDir?.FullName}" );
@@ -204,46 +204,16 @@ public partial class FileProcessor
     {
         Logger.Checkpoint();
 
-        if ( outputRoot == null )
-        {
-            outputRoot = new DirectoryInfo( "." );
-        }
+        outputRoot ??= new DirectoryInfo( "." );
 
         OutputFilesList.Clear();
 
         var dirToEntries = new Dictionary< DirectoryInfo, List< Entry >? >();
 
-        #if DEBUG
-        if ( !countOnly )
-        {
-            Logger.Debug( $"files.Length: {files.Length}" );
-            Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
-            Logger.Debug( $"outputRoot: {outputRoot.FullName}" );
-        }
-        #endif
-        
         Process( files, outputRoot, outputRoot, dirToEntries, 0 );
 
         var allEntries = new List< Entry >();
 
-        #if DEBUG
-        if ( !countOnly )
-        {
-            Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
-
-            foreach ( var dte in dirToEntries )
-            {
-                if ( dte.Value != null )
-                {
-                    foreach ( var entry in dte.Value )
-                    {
-                        Logger.Debug( $"{entry.InputFile!.Name}" );
-                    }
-                }
-            }
-        }
-        #endif
-        
         foreach ( var mapEntry in dirToEntries )
         {
             var dirEntries = mapEntry.Value;
@@ -285,10 +255,10 @@ public partial class FileProcessor
             }
 
             var entry = new Entry
-            {
-                InputFile       = inputDir,
-                OutputDirectory = newOutputDir,
-            };
+                        {
+                            InputFile       = inputDir,
+                            OutputDirectory = newOutputDir,
+                        };
 
             if ( newOutputDir != null )
             {
@@ -361,6 +331,8 @@ public partial class FileProcessor
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
     {
+        Logger.Checkpoint();
+
         // Store empty entries for every directory.
         foreach ( var file in files )
         {
@@ -396,6 +368,8 @@ public partial class FileProcessor
 
                 foreach ( var pattern in InputRegex )
                 {
+                    Logger.Debug( $"{pattern.ToString()}" );
+
                     if ( pattern.IsMatch( file.Name ) )
                     {
                         found = true;
@@ -417,9 +391,7 @@ public partial class FileProcessor
             }
 
             // Apply filename filter delegate if set
-            //TODO: Is this needed?
-            if ( ( InputFilter != null )
-                 && !InputFilter( file.Directory!.FullName, file.Name ) )
+            if ( ( InputFilter != null ) && !InputFilter.Accept( file.Directory!, file.Name ) )
             {
                 continue;
             }
@@ -435,27 +407,21 @@ public partial class FileProcessor
 
             // Create an entry for the file
             var entry = new Entry
-            {
-                Depth           = depth,
-                InputFile       = file,
-                OutputDirectory = outputDir,
-                OutputFileName = FlattenOutput
-                    ? Path.Combine( outputRoot.FullName, outputName )
-                    : Path.Combine( outputDir.FullName, outputName ),
-            };
+                        {
+                            Depth           = depth,
+                            InputFile       = file,
+                            OutputDirectory = outputDir,
+                            OutputFileName = FlattenOutput
+                                ? Path.Combine( outputRoot.FullName, outputName )
+                                : Path.Combine( outputDir.FullName, outputName ),
+                        };
 
             var dir = file.Directory!;
 
-            // Add entry to the directory's entry list
-            if ( !dirToEntries.TryGetValue( dir, out var dirList ) )
+            if ( dirToEntries.TryGetValue( dir, out var value ) )
             {
-                dirList             = [ ];
-                dirToEntries[ dir ] = dirList;
+                value?.Add( entry );
             }
-
-            dirList?.Add( entry );
-
-            Logger.Debug( $"Recursive: {Recursive}" );
 
             // Recursively process directories if enabled
             if ( Recursive )

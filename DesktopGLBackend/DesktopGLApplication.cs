@@ -29,7 +29,6 @@ using LughUtils.source;
 using LughUtils.source.Collections;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
-
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace DesktopGLBackend;
@@ -65,7 +64,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     public List< IRunnable.Runnable > ExecutedRunnables { get; set; } = [ ];
 
     public IClipboard?      Clipboard     { get; set; }
-    public AppVersion?       GLVersion     { get; set; }
+    public AppVersion?      GLVersion     { get; set; }
     public OpenGLProfile    OGLProfile    { get; set; }
     public DesktopGLWindow? CurrentWindow { get; set; }
 
