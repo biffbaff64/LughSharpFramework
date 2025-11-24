@@ -88,9 +88,6 @@ public class TexturePackerFileProcessor : FileProcessor
         Logger.Debug( "TexturePackerFileProcessor created." );
         Logger.Debug( $"Default packfile name: {packFileName}" );
 
-        // Set the default file extensions for processable images.
-        AddInputSuffix( ".png", ".jpg", ".jpeg" );
-
         InputRegex      = [ ];
         OutputFilesList = [ ];
         DirsToIgnore    = [ ];
@@ -99,6 +96,9 @@ public class TexturePackerFileProcessor : FileProcessor
         CountOnly       = false;
         OutputSuffix    = string.Empty;
         Recursive       = true;
+
+        // Set the default file extensions for processable images.
+        AddInputSuffix( ".png", ".jpg", ".jpeg" );
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
         Comparator = ( file1, file2 ) => string.Compare( file1.Name,
@@ -138,13 +138,15 @@ public class TexturePackerFileProcessor : FileProcessor
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
         // _packCount variable to the number of packer invocations.
+        Logger.DisableDebugLogging();
         CountOnly = true;
-        _         = base.Process( inputRoot, outputRoot, CountOnly );
+        _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
-
+        Logger.EnableDebugLogging();
+        
         // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
-        var result = base.Process( inputRoot, outputRoot, CountOnly );
+        var result = base.Process( inputRoot, outputRoot );
         ProgressListener?.End();
 
         return result;
@@ -156,9 +158,8 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </summary>
     /// <param name="files"> the array of files to process. </param>
     /// <param name="outputRoot"> The output folder. </param>
-    /// <param name="countOnly"></param>
     /// <returns></returns>
-    public override List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot, bool countOnly = false )
+    public override List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
         Logger.Checkpoint();
 
@@ -170,7 +171,7 @@ public class TexturePackerFileProcessor : FileProcessor
             DeleteOutput( outputRoot );
         }
 
-        return base.Process( files, outputRoot, countOnly );
+        return base.Process( files, outputRoot );
     }
 
     /// <summary>
@@ -235,7 +236,7 @@ public class TexturePackerFileProcessor : FileProcessor
             // pack.json file. A directory with its own settings can't be combined since
             // combined directories must use the settings of the parent directory.
             
-            Logger.Checkpoint();
+            Logger.Debug( "Combining subdirectories" );
             
             var combiningProcessor = new CombiningProcessor( this );
             
@@ -593,11 +594,8 @@ public class TexturePackerFileProcessor : FileProcessor
             foreach ( var filePath in filesToDelete )
             {
                 // Use File.Delete to remove the file
-//                File.Delete( filePath );
+                File.Delete( filePath );
                 deletedCount++;
-
-                // Optional: Output the file being deleted for logging/tracking
-                Logger.Debug( $"Deleted: {filePath}" );
             }
 
             Logger.Debug( $"Successfully deleted {deletedCount} files in {targetDirectoryPath}." );

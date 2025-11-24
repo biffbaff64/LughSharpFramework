@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
 using System.Text.RegularExpressions;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
@@ -144,15 +145,9 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
-    /// <param name="countOnly"></param>
     /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot,
-                                          bool countOnly = false )
+    public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot )
     {
-        Logger.Debug( $"CountOnly: {countOnly}" );
-        Logger.Debug( $"inputFileOrDir: {inputFileOrDir?.FullName}" );
-        Logger.Debug( $"OutputRoot: {outputRoot?.FullName}" );
-
         if ( inputFileOrDir is not { Exists: true } )
         {
             throw new ArgumentException( $"Input file/dir does not exist: {inputFileOrDir?.FullName}" );
@@ -162,33 +157,18 @@ public partial class FileProcessor
 
         if ( inputFileOrDir is FileInfo file )
         {
-            if ( !countOnly )
-            {
-                Logger.Debug( $"Processing file: {file.FullName}" );
-            }
-
             fileList = [ file ];
 
             Guard.Against.Null( fileList, $"Could not get file list from file: {file.FullName}" );
         }
         else
         {
-            if ( !countOnly )
-            {
-                Logger.Debug( $"Processing directory: {inputFileOrDir.FullName}" );
-            }
-
             fileList = ( inputFileOrDir as DirectoryInfo )?.GetFiles();
 
             Guard.Against.Null( fileList, $"Could not get files from directory: {inputFileOrDir.FullName}" );
         }
 
-        if ( !countOnly )
-        {
-            Logger.Debug( $"fileList.Length: {fileList.Length}" );
-        }
-
-        var result = Process( fileList, outputRoot, countOnly );
+        var result = Process( fileList, outputRoot );
 
         return result;
     }
@@ -198,9 +178,8 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="files">The array of input files to process.</param>
     /// <param name="outputRoot">The root directory for output. Can be null.</param>
-    /// <param name="countOnly"></param>
     /// <returns>A list of processed files.</returns>
-    public virtual List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot, bool countOnly = false )
+    public virtual List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
         Logger.Checkpoint();
 
@@ -208,7 +187,7 @@ public partial class FileProcessor
 
         OutputFilesList.Clear();
 
-        var dirToEntries = new Dictionary< DirectoryInfo, List< Entry >? >();
+        var dirToEntries = new Dictionary< DirectoryInfo, List< Entry >? >( new DirectoryInfoComparer() );
 
         Process( files, outputRoot, outputRoot, dirToEntries, 0 );
 
@@ -296,8 +275,6 @@ public partial class FileProcessor
             }
         }
 
-        Logger.Debug( $"OutputFilesList.Count: {OutputFilesList.Count}" );
-
         foreach ( var entry in OutputFilesList )
         {
             entry.DebugPrint();
@@ -347,14 +324,16 @@ public partial class FileProcessor
             {
                 if ( !dirToEntries.ContainsKey( dir ) )
                 {
-                    dirToEntries[ dir ] = [ ];
+                    // For the first file, the key is added.
+                    // For files 2 onwards, the key is FOUND because the path is the same.
+                    dirToEntries.Add( dir, new List< Entry >() );
                 }
             }
         }
 
         foreach ( var file in files )
         {
-            // Only process files (not directories)
+            // Only process files, not directories
             if ( ( file.Attributes & FileAttributes.Directory ) != 0 )
             {
                 // Skip directories for now, only process files here
@@ -364,19 +343,7 @@ public partial class FileProcessor
             // Apply input regex filters if any are set
             if ( InputRegex.Count > 0 )
             {
-                var found = false;
-
-                foreach ( var pattern in InputRegex )
-                {
-                    Logger.Debug( $"{pattern.ToString()}" );
-
-                    if ( pattern.IsMatch( file.Name ) )
-                    {
-                        found = true;
-
-                        break;
-                    }
-                }
+                var found = InputRegex.Any( pattern => pattern.IsMatch( file.Name ) );
 
                 if ( !found )
                 {
@@ -463,6 +430,7 @@ public partial class FileProcessor
     /// <remarks> This default implementation does nothing, and should be overriden where necessary. </remarks>
     public virtual void ProcessFile( Entry entry )
     {
+        Logger.Error( $"Empty base method called!" );
     }
 
     /// <summary>
@@ -474,6 +442,7 @@ public partial class FileProcessor
     /// <remarks> This default implementation does nothing, and should be overriden where necessary. </remarks>
     public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
+        Logger.Error( $"Empty base method called!" );
     }
 
     #endregion process methods
@@ -518,6 +487,35 @@ public partial class FileProcessor
         foreach ( var regex in regexes )
         {
             InputRegex.Add( new Regex( regex ) );
+        }
+    }
+
+    // ========================================================================
+
+    public class DirectoryInfoComparer : IEqualityComparer< DirectoryInfo >
+    {
+        // The Equals method defines when two DirectoryInfo objects are considered the same.
+        public bool Equals( DirectoryInfo? x, DirectoryInfo? y )
+        {
+            if ( x is null || y is null ) return x is null && y is null;
+
+            // Compare based on the FullName string (the directory path)
+            // We use StringComparer.OrdinalIgnoreCase for case-insensitive comparison, 
+            // which is appropriate for most file systems (like Windows).
+            return StringComparer.OrdinalIgnoreCase.Equals( x.FullName, y.FullName );
+        }
+
+        // The GetHashCode method must return the same hash code for objects 
+        // that are considered equal by the Equals method.
+        public int GetHashCode( DirectoryInfo? obj )
+        {
+            if ( obj is null )
+            {
+                return 0;
+            }
+
+            // Return the hash code of the path string
+            return StringComparer.OrdinalIgnoreCase.GetHashCode( obj.FullName );
         }
     }
 }
