@@ -1,9 +1,0 @@
-﻿{
-  "name": "Jane Smith",
-  "age": 25,
-  "address": {
-    "street": "123 Main St",
-    "city": "Anytown",
-    "zip": "00000"
-  }
-}

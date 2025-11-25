@@ -1,6 +1,4 @@
-﻿
-using System.Runtime.Versioning;
-
+﻿using System.Runtime.Versioning;
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
@@ -8,7 +6,6 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Tests.Source;
-
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 
@@ -23,7 +20,7 @@ public partial class MainGame : Game
     private        float _speed     = 0.1f;
 
     // ========================================================================
-    
+
     private void RunTests()
     {
         Logger.Divider();
@@ -35,8 +32,8 @@ public partial class MainGame : Game
         Logger.Divider();
         // --------------------------------------
 //        var test = new AssetManagerTest();
-        var test = new TexturePackerTest();
-//        var test = new ImagePackerTest();
+//        var test = new TexturePackerTest();
+        var test = new ImagePackerTest();
         // --------------------------------------
         test.Setup();
         test.Run();
@@ -45,11 +42,11 @@ public partial class MainGame : Game
         Logger.Divider();
         Logger.Divider();
     }
-    
+
     private void UpdateTests()
     {
     }
-    
+
     private static void CheckViewportCoverage()
     {
         var viewport = new int[ 4 ];
@@ -59,10 +56,10 @@ public partial class MainGame : Game
         var windowWidth  = Engine.Api.Graphics.Width;
         var windowHeight = Engine.Api.Graphics.Height;
 
-        var isFullyCovered = ( viewport[ 0 ] == 0 )                // Left edge at 0
-                             && ( viewport[ 1 ] == 0 )             // Bottom edge at 0
-                             && ( viewport[ 2 ] == windowWidth )   // Width matches
-                             && ( viewport[ 3 ] == windowHeight ); // Height matches
+        var isFullyCovered = ( viewport[ 0 ] == 0 )             // Left edge at 0
+                          && ( viewport[ 1 ] == 0 )             // Bottom edge at 0
+                          && ( viewport[ 2 ] == windowWidth )   // Width matches
+                          && ( viewport[ 3 ] == windowHeight ); // Height matches
 
         if ( !isFullyCovered )
         {
@@ -113,7 +110,7 @@ public partial class MainGame : Game
     private void LoadImage1Texture()
     {
         Logger.Checkpoint();
-        
+
         try
         {
             var filename = $"{IOUtils.AssetsRoot}title_background.png";
@@ -130,12 +127,12 @@ public partial class MainGame : Game
             Logger.Debug( $"Texture loaded - Width: {_image1.Width}, Height: {_image1.Height}" );
             Logger.Debug( $"Format: {LughSharp.Lugh.Graphics.PixelFormat.GetFormatString( _image1.TextureData.GetPixelFormat() )}" );
             Logger.Debug( $"Length: {_image1.GetImageData()?.Length}" );
-            
+
             _image1.Upload();
             _image1.Bind( 0 ); // Set active texture and bind to texture unit 0
 
             Logger.Debug( "Texture uploaded to GPU and bound to texture unit 0" );
-            
+
             var width  = new int[ 1 ];
             var height = new int[ 1 ];
 
@@ -170,7 +167,7 @@ public partial class MainGame : Game
         }
 
         var pixmap = new Pixmap( 100, 100, LughFormat.RGBA8888 );
-        
+
         pixmap.SetColor( Color.White );
         pixmap.FillWithCurrentColor();
 

@@ -62,7 +62,8 @@ public partial class MainGame : Game
         _whitePixelTexture = null;
 
         CreateCamera();
-
+        LoadImage1Texture();
+        
         RunTests();
 
         Logger.Debug( "Done" );
@@ -73,7 +74,7 @@ public partial class MainGame : Game
     /// <inheritdoc />
     public override void Update()
     {
-        UpdateTests();
+//        UpdateTests();
     }
 
     /// <inheritdoc />

@@ -62,22 +62,22 @@ EXTENSIONS/TOOLS/IMAGEPACKER
     CODE   DOCUMENT
     ----   --------
     - DONE - IP   - ColorBleedEffect
-    - IP   - IP   - FileProcessor
-    - IP   - IP   - FreeRectChoiceHeuristic
+    - DONE - IP   - FileProcessor
+    - DONE - IP   - FreeRectChoiceHeuristic
     - DONE - IP   - GridPacker
-    - IP   - IP   - IFileProcessor
+    - DONE - IP   - IFileProcessor
     - DONE - DONE - ImagePacker
     - DONE - IP   - ImageProcessor
-    - IP   - IP   - MaxRectsPacker
-    - IP   - IP   - MaxRectsPacker.BinarySearch
-    - IP   - IP   - MaxRectsPacket.MaxRects
-    - IP   - IP   - PackingSettingsProcessor
+    - DONE - IP   - MaxRectsPacker
+    - DONE - IP   - MaxRectsPacker.BinarySearch
+    - DONE - IP   - MaxRectsPacket.MaxRects
+    - DONE - IP   - PackingSettingsProcessor
     - DONE - **** - SamplePackFile.json
     - DONE - IP   - TexturePacker
     - DONE - IP   - TexturePacker.Resampling
-    - IP   - IP   - TexturePacker.Settings
-    - IP   - IP   - TexturePackerEntry
-    - IP   - IP   - TexturePackerFileProcessor
+    - DONE - IP   - TexturePacker.Settings
+    - DONE - IP   - TexturePackerEntry
+    - DONE - IP   - TexturePackerFileProcessor
     - IP   - IP   - TextureUnpacker
 
 EXTENSIONS/TOOLS/TILEDMAPPACKER

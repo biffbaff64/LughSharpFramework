@@ -1,9 +1,0 @@
-﻿[
-  "hello",
-  123,
-  true,
-  null,
-  {
-    "nested": "value"
-  }
-]
