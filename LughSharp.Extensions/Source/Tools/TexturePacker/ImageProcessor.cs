@@ -133,8 +133,6 @@ public class ImageProcessor
 
         if ( rect == null )
         {
-            Logger.Debug( $"Returning early: Ignoring blank input image: {name}" );
-
             return null;
         }
 
@@ -146,9 +144,6 @@ public class ImageProcessor
             {
                 // Image already exists, add current rect as an alias to the existing one.
                 existing?.Aliases.Add( new TexturePacker.Alias( rect ) );
-        
-                // Log is now cleaner
-                Logger.Debug( $"Image is an alias of '{existing?.Name}' with CRC '{crc}'." );
 
                 return null;
             }

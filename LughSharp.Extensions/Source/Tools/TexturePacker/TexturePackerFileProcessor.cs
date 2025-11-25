@@ -85,9 +85,6 @@ public class TexturePackerFileProcessor : FileProcessor
         PackFileName  = packFileName;
         FlattenOutput = true;
 
-        Logger.Debug( "TexturePackerFileProcessor created." );
-        Logger.Debug( $"Default packfile name: {packFileName}" );
-
         InputRegex      = [ ];
         OutputFilesList = [ ];
         DirsToIgnore    = [ ];
@@ -126,10 +123,6 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </returns>
     public virtual List< Entry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-        Logger.Debug( $"inputRoot: {inputRoot?.FullName}" );
-        Logger.Debug( $"outputRoot: {outputRoot?.FullName}" );
-
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
         // Collect settings files from input directory and subdirectories.
@@ -138,11 +131,9 @@ public class TexturePackerFileProcessor : FileProcessor
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
         // _packCount variable to the number of packer invocations.
-        Logger.DisableDebugLogging();
         CountOnly = true;
         _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
-        Logger.EnableDebugLogging();
         
         // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
@@ -161,8 +152,6 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <returns></returns>
     public override List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         Guard.ThrowIfNull( outputRoot );
 
         // Delete pack file and images.
@@ -235,8 +224,6 @@ public class TexturePackerFileProcessor : FileProcessor
             // Collect all files under subdirectories except for those directories with a
             // pack.json file. A directory with its own settings can't be combined since
             // combined directories must use the settings of the parent directory.
-            
-            Logger.Debug( "Combining subdirectories" );
             
             var combiningProcessor = new CombiningProcessor( this );
             
@@ -418,8 +405,6 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <returns> The number of settings files found. </returns>
     public int CollectSettingsFiles( DirectoryInfo inputRoot, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         //@formatter:off
         var settingsFiles = Directory.EnumerateFiles
         (
@@ -477,8 +462,6 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
 
-        Logger.Debug( $"Collected {settingsFiles.Count} settings files." );
-
         return settingsFiles.Count;
     }
 
@@ -512,11 +495,6 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </param>
     public virtual void DeleteOutput( DirectoryInfo outputRoot )
     {
-        Logger.Divider();
-        Logger.Divider();
-        Logger.Checkpoint();
-        Logger.Debug( $"outputRoot: {outputRoot.FullName}" );
-
         // Load root settings to get scale.
         var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, DEFAULT_PACKFILE_NAME ) );
         var rootSettings = _defaultSettings;
@@ -547,8 +525,6 @@ public class TexturePackerFileProcessor : FileProcessor
 
             var dir = packFile.DirectoryName;
 
-            Logger.Debug( $"outputRoot: {outputRoot.FullName}" );
-
             if ( dir == null )
             {
                 ClearOutputFolder( outputRoot, inputRegexes );
@@ -558,9 +534,6 @@ public class TexturePackerFileProcessor : FileProcessor
                 ClearOutputFolder( new DirectoryInfo( outputRoot.FullName ), inputRegexes );
             }
         }
-        
-        Logger.Divider();
-        Logger.Divider();
     }
     
     public static void ClearOutputFolder( DirectoryInfo outputRoot, List< Regex > inputRegexes )
@@ -593,12 +566,9 @@ public class TexturePackerFileProcessor : FileProcessor
             // Iterate through the filtered paths and delete each file
             foreach ( var filePath in filesToDelete )
             {
-                // Use File.Delete to remove the file
                 File.Delete( filePath );
                 deletedCount++;
             }
-
-            Logger.Debug( $"Successfully deleted {deletedCount} files in {targetDirectoryPath}." );
         }
         catch ( DirectoryNotFoundException )
         {
@@ -647,15 +617,11 @@ public class TexturePackerFileProcessor : FileProcessor
     {
         public override void ProcessFile( Entry entry )
         {
-            Logger.Checkpoint();
-
             AddProcessedFile( entry );
         }
 
         public override void ProcessDir( Entry entryDir, List< Entry > files )
         {
-            Logger.Checkpoint();
-            
             var file = entryDir.InputFile as DirectoryInfo;
 
             while ( ( file != null ) && !file.Equals( entryDir.InputFile ) )

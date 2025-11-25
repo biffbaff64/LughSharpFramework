@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
 using System.Text.RegularExpressions;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
@@ -67,8 +66,6 @@ public partial class FileProcessor
         get =>
             ( o1, o2 ) =>
             {
-                Logger.Checkpoint();
-
                 Guard.ThrowIfNull( o1.InputFile, o2.InputFile );
 
                 if ( o1.InputFile is FileInfo file1 && o2.InputFile is FileInfo file2 )
@@ -181,8 +178,6 @@ public partial class FileProcessor
     /// <returns>A list of processed files.</returns>
     public virtual List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         outputRoot ??= new DirectoryInfo( "." );
 
         OutputFilesList.Clear();
@@ -199,8 +194,6 @@ public partial class FileProcessor
 
             if ( dirEntries == null )
             {
-                Logger.Debug( $"dirEntries is null: {mapEntry.Key.FullName}" );
-
                 continue;
             }
 
@@ -275,11 +268,6 @@ public partial class FileProcessor
             }
         }
 
-        foreach ( var entry in OutputFilesList )
-        {
-            entry.DebugPrint();
-        }
-
         return OutputFilesList;
     }
 
@@ -308,8 +296,6 @@ public partial class FileProcessor
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
     {
-        Logger.Checkpoint();
-
         // Store empty entries for every directory.
         foreach ( var file in files )
         {
@@ -349,12 +335,6 @@ public partial class FileProcessor
                 {
                     continue;
                 }
-            }
-
-            // Log if directory name is missing
-            if ( file.DirectoryName == null )
-            {
-                Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
             }
 
             // Apply filename filter delegate if set
@@ -430,7 +410,6 @@ public partial class FileProcessor
     /// <remarks> This default implementation does nothing, and should be overriden where necessary. </remarks>
     public virtual void ProcessFile( Entry entry )
     {
-        Logger.Error( $"Empty base method called!" );
     }
 
     /// <summary>
@@ -442,7 +421,6 @@ public partial class FileProcessor
     /// <remarks> This default implementation does nothing, and should be overriden where necessary. </remarks>
     public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
-        Logger.Error( $"Empty base method called!" );
     }
 
     #endregion process methods
@@ -455,7 +433,7 @@ public partial class FileProcessor
     /// <li><see cref="ProcessFile(Entry)"/> or,</li>
     /// <li><see cref="ProcessDir(Entry, List{Entry})"/></li>
     /// if the return value of <see cref="System.Diagnostics.Process"/> or
-    /// <see cref="Process(FileInfo[], DirectoryInfo, bool)"/> should return all the processed
+    /// <see cref="Process(FileInfo[], DirectoryInfo)"/> should return all the processed
     /// files.
     /// </summary>
     /// <param name="entry"></param>

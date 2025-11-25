@@ -212,9 +212,6 @@ public partial class TexturePacker
         _imageProcessor = new ImageProcessor( settings );
 
         SetRootDir( rootDir );
-        
-        Logger.Debug( $"Using Packer: {Packer.GetType().Name}" );
-        Logger.Debug( $"RootPath: {RootPath}" );
     }
 
     // ========================================================================
@@ -275,17 +272,7 @@ public partial class TexturePacker
     {
         try
         {
-            Logger.Debug( $"inputFolder: {inputFolder}" );
-            Logger.Debug( $"outputFolder: {outputFolder}" );
-            Logger.Debug( $"packFileName: {packFileName}" );
-            Logger.Divider();
-            Logger.Divider();
-
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
-
-            Logger.Divider();
-            Logger.Divider();
-            
             _ = processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
         }
         catch ( Exception ex )
@@ -417,8 +404,6 @@ public partial class TexturePacker
     /// <param name="outputDir"></param>
     private static void PrepareOutputDirectory( DirectoryInfo outputDir )
     {
-        Logger.Checkpoint();
-
         // If the output directory does not exist, create it.
         Directory.CreateDirectory( outputDir.FullName );
 

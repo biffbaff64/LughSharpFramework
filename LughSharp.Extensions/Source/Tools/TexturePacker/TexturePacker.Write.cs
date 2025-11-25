@@ -142,15 +142,11 @@ public partial class TexturePacker
 
                 if ( !File.Exists( outputFile ) )
                 {
-                    Logger.Debug( $"outputFile {outputFile} does not exist, therefore is available" );
-
                     break;
                 }
             }
 
             // Create output directories if needed
-            Logger.Debug( $"Creating folder: {Path.GetDirectoryName( outputFile )}" );
-
             Directory.CreateDirectory( Path.GetDirectoryName( outputFile )
                                        ?? throw new GdxRuntimeException( "Error creating output directory" ) );
 
@@ -438,8 +434,6 @@ public partial class TexturePacker
         {
             var textureAtlasData = new TextureAtlasData( packFile, packDir!, _settings.FlattenPaths );
 
-            Logger.Debug( $"pages.Count: {pages.Count}" );
-
             foreach ( var page in pages )
             {
                 Guard.ThrowIfNull( page );
@@ -461,9 +455,6 @@ public partial class TexturePacker
                 }
             }
         }
-
-        Logger.Debug( $"packFile.FullName: {packFile.FullName}" );
-        Logger.Debug( $"packFile.Exists: {File.Exists( packFile.FullName )}" );
 
         var appending = packFile.Exists;
 
