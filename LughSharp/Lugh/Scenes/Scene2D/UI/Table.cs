@@ -2150,7 +2150,7 @@ public class Table : WidgetGroup
     /// </summary>
     public static readonly Value BackgroundRight = new BackgroundRightDelegate();
 
-    private sealed class BackgroundTopDelegate : Value
+    private class BackgroundTopDelegate : Value
     {
         public override float Get( Actor? context = null )
         {
@@ -2158,7 +2158,7 @@ public class Table : WidgetGroup
         }
     }
 
-    private sealed class BackgroundBottomDelegate : Value
+    private class BackgroundBottomDelegate : Value
     {
         public override float Get( Actor? context = null )
         {
@@ -2166,7 +2166,7 @@ public class Table : WidgetGroup
         }
     }
 
-    private sealed class BackgroundLeftDelegate : Value
+    private class BackgroundLeftDelegate : Value
     {
         public override float Get( Actor? context = null )
         {
@@ -2174,7 +2174,7 @@ public class Table : WidgetGroup
         }
     }
 
-    private sealed class BackgroundRightDelegate : Value
+    private class BackgroundRightDelegate : Value
     {
         public override float Get( Actor? context = null )
         {

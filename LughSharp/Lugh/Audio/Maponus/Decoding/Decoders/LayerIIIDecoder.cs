@@ -33,7 +33,7 @@ namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders;
 /// Implements decoding of MPEG Audio Layer 3 frames.
 /// </summary>
 [PublicAPI]
-public sealed class LayerIIIDecoder : IFrameDecoder
+public class LayerIIIDecoder : IFrameDecoder
 {
     private const int SSLIMIT = 18;
     private const int SBLIMIT = 32;

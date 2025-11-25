@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [PublicAPI]
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
-public sealed class GLFormatChooser
+public class GLFormatChooser
 {
     private readonly GraphicsCapabilities _caps;
     private readonly IGLBindings          _gl;

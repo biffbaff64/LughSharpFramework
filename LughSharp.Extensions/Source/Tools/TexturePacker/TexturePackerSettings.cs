@@ -5,15 +5,11 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
 using JetBrains.Annotations;
-
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
-
 using LughUtils.source.Logging;
-
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -251,26 +247,25 @@ public class TexturePackerSettings
     /// </summary>
     public bool LegacyOutput { get; set; }
 
-    /// <summary>
-    /// If true, texture packer will clear out the output folder before processing.
-    /// This is a DEBUG setting only.
-    /// </summary>
-    #if DEBUG
-    public bool CleanAtStart { get; set; }
-    #endif
-
     // ====================================================================
 
+    /// <summary>
+    /// Represents the default options for JSON serialization used in TexturePacker settings.
+    /// Configures key naming policy, indentation, and includes custom converters such as enum
+    /// string serialization for maintaining consistency and readability in serialized JSON outputs.
+    /// </summary>
+    //@formatter:off
     private JsonSerializerOptions _defaultJsonSerializerOptions = new()
     {
         DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented       = true,
         Converters =
         {
-            new JsonStringEnumConverter(),
+          new JsonStringEnumConverter(),
         },
     };
-
+    //@formatter:on
+    
     // ====================================================================
 
     /// <summary>
@@ -303,7 +298,7 @@ public class TexturePackerSettings
         WrapX                 = TextureWrapMode.ClampToEdge;
         WrapY                 = TextureWrapMode.ClampToEdge;
         Debug                 = false;
-        Silent                = false;
+        Silent                = true;
         CombineSubdirectories = false;
         Ignore                = false;
         FlattenPaths          = false;
@@ -320,10 +315,6 @@ public class TexturePackerSettings
         Scale                 = [ 1.0f ];
         ScaleSuffix           = [ "" ];
         ScaleResampling       = [ Resampling.Bicubic ];
-
-        #if DEBUG
-        CleanAtStart = false;
-        #endif
     }
 
     /// <summary>
@@ -338,9 +329,9 @@ public class TexturePackerSettings
     // ====================================================================
 
     /// <summary>
-    /// 
+    /// Sets this Settings instance to the values of the supplied Settings instance.
     /// </summary>
-    /// <param name="settings"></param>
+    /// <param name="settings"> The other Settings instance. </param>
     public void Set( TexturePackerSettings settings )
     {
         MinWidth              = settings.MinWidth;
@@ -386,18 +377,15 @@ public class TexturePackerSettings
         Scale           = settings.Scale.ToArray();
         ScaleSuffix     = settings.ScaleSuffix.ToArray();
         ScaleResampling = settings.ScaleResampling.ToList();
-
-        #if DEBUG
-        CleanAtStart = false;
-        #endif
     }
 
     /// <summary>
-    /// 
+    /// Generates a scaled pack file name based on the provided file name and scale index.
+    /// Updates the file name with a scale suffix or a subdirectory depending on the scale configuration.
     /// </summary>
-    /// <param name="packFileName"></param>
-    /// <param name="scaleIndex"></param>
-    /// <returns></returns>
+    /// <param name="packFileName">The base name of the pack file to apply the scaling modifications to.</param>
+    /// <param name="scaleIndex">The index of the scale to apply, corresponding to the scale and suffix arrays.</param>
+    /// <returns>Returns the modified pack file name with the applied scaling suffix or subdirectory.</returns>
     public string GetScaledPackFileName( string packFileName, int scaleIndex )
     {
         // Use suffix if not empty string.
@@ -413,8 +401,8 @@ public class TexturePackerSettings
             if ( Scale.Length != 1 )
             {
                 packFileName = ( ( scaleValue % 1 ) == 0f ? $"{( int )scaleValue}" : $"{scaleValue}" )
-                               + "/"
-                               + packFileName;
+                             + "/"
+                             + packFileName;
             }
         }
 
@@ -432,7 +420,7 @@ public class TexturePackerSettings
         }
 
         var properties = typeof( TexturePackerSettings ).GetProperties( BindingFlags.Public
-                                                                        | BindingFlags.Instance );
+                                                                      | BindingFlags.Instance );
 
         foreach ( var property in properties )
         {

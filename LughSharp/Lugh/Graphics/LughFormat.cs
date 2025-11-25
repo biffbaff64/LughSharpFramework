@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics;
 
 [PublicAPI]
-public sealed class LughFormat
+public class LughFormat
 {
     public const int ALPHA           = 1; // Was GDX_2D_FORMAT_ALPHA
     public const int LUMINANCE_ALPHA = 2; // Was GDX_2D_FORMAT_LUMINANCE_ALPHA

@@ -46,7 +46,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <summary>
     /// A dictionary of settings files to use for processing, grouped by directory.
     /// </summary>
-    private Dictionary< DirectoryInfo, TexturePackerSettings > _dirToSettings; //TODO: Rename
+    private Dictionary< DirectoryInfo, TexturePackerSettings > _dirToSettings;
 
     private readonly TexturePackerSettings _defaultSettings;
     private          int                   _packCount;
@@ -152,7 +152,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <returns></returns>
     public override List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        Guard.ThrowIfNull( outputRoot );
+        Guard.Against.Null( outputRoot );
 
         // Delete pack file and images.
         if ( CountOnly && outputRoot.Exists )

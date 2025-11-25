@@ -1277,7 +1277,7 @@ public class SpriteCache
     /// intended to be accessed or modified directly by consumers.
     /// </para>
     /// </summary>
-    private sealed class Cache
+    private class Cache
     {
         internal readonly int    ID;
         internal readonly int    Offset;

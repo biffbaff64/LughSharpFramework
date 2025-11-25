@@ -22,14 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.IO;
-using System.Runtime.Versioning;
-
-using JetBrains.Annotations;
-
 using LughSharp.Lugh.Graphics.Atlases;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
@@ -40,12 +32,15 @@ namespace Extensions.Source.Tools.TexturePacker;
 [SupportedOSPlatform( "windows" )]
 public class TextureUnpacker
 {
+    /// <summary>
+    /// If true, enables informational messages during execution.
+    /// </summary>
     public bool Quiet { get; set; }
 
     // ========================================================================
 
     private const string DEFAULT_OUTPUT_PATH  = "output";
-    private const string OUTPUT_TYPE          = "png";
+    private const string DEFAULT_OUTPUT_TYPE  = "png";
     private const string HELP                 = "Usage: atlasFile [imageDir] [outputDir]";
     private const string ATLAS_FILE_EXTENSION = ".atlas";
     private const int    NINEPATCH_PADDING    = 1;
@@ -113,7 +108,8 @@ public class TextureUnpacker
 
                         if ( ( region.Width != region.OriginalWidth ) || ( region.Height != region.OriginalHeight ) )
                         {
-                            var originalImg = new Bitmap( region.OriginalWidth, region.OriginalHeight, img.PixelFormat );
+                            var originalImg =
+                                new Bitmap( region.OriginalWidth, region.OriginalHeight, img.PixelFormat );
 
                             using ( var g = Graphics.FromImage( originalImg ) )
                             {
@@ -126,20 +122,19 @@ public class TextureUnpacker
                             splitImage = originalImg;
                         }
 
-                        extension = OUTPUT_TYPE;
+                        extension = DEFAULT_OUTPUT_TYPE;
                     }
                     else
                     {
                         splitImage = ExtractNinePatch( img, region, outputDirInfo );
-                        extension  = $"9.{OUTPUT_TYPE}";
+                        extension  = $"9.{DEFAULT_OUTPUT_TYPE}";
                     }
 
                     // check if the parent directories of this image file exist and create them if not
                     var imgOutputFilePath = Path.Combine( outputDirInfo.FullName,
                                                           $"{region.Index switch
-                                                              { -1      => region.Name,
-                                                                  var _ => $"{region.Name}_{region.Index}" }
-                                                          }.{extension}" );
+                                                             { -1 => region.Name,
+                                                                 var _ => $"{region.Name}_{region.Index}" }}.{extension}" );
                     var imgDirInfo = new FileInfo( imgOutputFilePath ).Directory;
 
                     if ( imgDirInfo is { Exists: false } )
@@ -155,7 +150,7 @@ public class TextureUnpacker
                     // save the image
                     try
                     {
-                        splitImage.Save( imgOutputFilePath, GetImageFormat( OUTPUT_TYPE ) );
+                        splitImage.Save( imgOutputFilePath, GetImageFormat( DEFAULT_OUTPUT_TYPE ) );
                     }
                     catch ( Exception e )
                     {
@@ -166,6 +161,15 @@ public class TextureUnpacker
         }
     }
 
+    /// <summary>
+    /// Entry point for the TextureUnpacker application.
+    /// Parses command-line arguments and performs texture atlas unpacking.
+    /// </summary>
+    /// <param name="args">
+    /// Command-line arguments including atlas file path, optional image directory,
+    /// and optional output directory.
+    /// </param>
+    /// <exception cref="GdxRuntimeException">Thrown if the specified atlas file is not found.</exception>
     public static void Entry( string[] args )
     {
         var unpacker = new TextureUnpacker();
@@ -219,15 +223,8 @@ public class TextureUnpacker
         }
 
         // Set the directory variables to a default when they weren't given in the variables
-        if ( imageDir == null )
-        {
-            imageDir = atlasParentPath;
-        }
-
-        if ( outputDir == null )
-        {
-            outputDir = string.Join( atlasParentPath, DEFAULT_OUTPUT_PATH );
-        }
+        imageDir  ??= atlasParentPath;
+        outputDir ??= string.Join( atlasParentPath, DEFAULT_OUTPUT_PATH );
 
         // Opens the atlas file from the specified filename
         var atlas = new TextureAtlasData( new FileInfo( atlasFile ), new DirectoryInfo( imageDir ) );
@@ -243,7 +240,8 @@ public class TextureUnpacker
     /// <param name="outputDir"> The output directory </param>
     /// <param name="padding"> padding (in pixels) to apply to the image </param>
     /// <returns> The extracted image </returns>
-    public static Bitmap ExtractImage( Bitmap page, TextureAtlasData.Region region, DirectoryInfo outputDir, int padding )
+    public static Bitmap ExtractImage( Bitmap page, TextureAtlasData.Region region, DirectoryInfo outputDir,
+                                       int padding )
     {
         Bitmap splitImage;
 
@@ -255,13 +253,12 @@ public class TextureUnpacker
 
             splitImage = new Bitmap( region.Width, region.Height, page.PixelFormat );
 
-            using ( var g = Graphics.FromImage( splitImage ) )
-            {
-                g.InterpolationMode = InterpolationMode.Bilinear;
-                g.TranslateTransform( 0, -region.Width );
-                g.RotateTransform( 90 );
-                g.DrawImage( srcImage, 0, 0 );
-            }
+            using var g = Graphics.FromImage( splitImage );
+
+            g.InterpolationMode = InterpolationMode.Bilinear;
+            g.TranslateTransform( 0, -region.Width );
+            g.RotateTransform( 90 );
+            g.DrawImage( srcImage, 0, 0 );
         }
         else
         {
@@ -277,10 +274,8 @@ public class TextureUnpacker
                                           splitImage.Height + ( padding * 2 ),
                                           page.PixelFormat );
 
-            using ( var g = Graphics.FromImage( paddedImage ) )
-            {
-                g.DrawImage( splitImage, padding, padding );
-            }
+            using var g = Graphics.FromImage( paddedImage );
+            g.DrawImage( splitImage, padding, padding );
 
             return paddedImage;
         }
@@ -298,49 +293,50 @@ public class TextureUnpacker
     {
         var splitImage = ExtractImage( page, region, outputDir, NINEPATCH_PADDING );
 
-        using ( var g = Graphics.FromImage( splitImage ) )
-        using ( var blackPen = new Pen( Color.Black ) )
+        using var g        = Graphics.FromImage( splitImage );
+        using var blackPen = new Pen( Color.Black );
+
+        // Draw the four lines to save the ninepatch's padding and splits
+        var splits = region.FindValue( "split" );
+
+        if ( splits is { Length: 4 } )
         {
-            // Draw the four lines to save the ninepatch's padding and splits
-            var splits = region.FindValue( "split" );
+            var startX = splits[ 0 ] + NINEPATCH_PADDING;
+            var endX   = ( ( region.Width - splits[ 1 ] ) + NINEPATCH_PADDING ) - 1;
+            var startY = splits[ 2 ] + NINEPATCH_PADDING;
+            var endY   = ( ( region.Height - splits[ 3 ] ) + NINEPATCH_PADDING ) - 1;
 
-            if ( splits is { Length: 4 } )
+            if ( endX >= startX )
             {
-                var startX = splits[ 0 ] + NINEPATCH_PADDING;
-                var endX   = ( ( region.Width - splits[ 1 ] ) + NINEPATCH_PADDING ) - 1;
-                var startY = splits[ 2 ] + NINEPATCH_PADDING;
-                var endY   = ( ( region.Height - splits[ 3 ] ) + NINEPATCH_PADDING ) - 1;
-
-                if ( endX >= startX )
-                {
-                    g.DrawLine( blackPen, startX, 0, endX, 0 );
-                }
-
-                if ( endY >= startY )
-                {
-                    g.DrawLine( blackPen, 0, startY, 0, endY );
-                }
+                g.DrawLine( blackPen, startX, 0, endX, 0 );
             }
 
-            var pads = region.FindValue( "pad" );
-
-            if ( pads is { Length: 4 } )
+            if ( endY >= startY )
             {
-                var padStartX = pads[ 0 ] + NINEPATCH_PADDING;
-                var padEndX   = ( ( region.Width - pads[ 1 ] ) + NINEPATCH_PADDING ) - 1;
-                var padStartY = pads[ 2 ] + NINEPATCH_PADDING;
-                var padEndY   = ( ( region.Height - pads[ 3 ] ) + NINEPATCH_PADDING ) - 1;
-
-                g.DrawLine( blackPen, padStartX, splitImage.Height - 1, padEndX, splitImage.Height - 1 );
-                g.DrawLine( blackPen, splitImage.Width - 1, padStartY, splitImage.Width - 1, padEndY );
+                g.DrawLine( blackPen, 0, startY, 0, endY );
             }
+        }
+
+        var pads = region.FindValue( "pad" );
+
+        if ( pads is { Length: 4 } )
+        {
+            var padStartX = pads[ 0 ] + NINEPATCH_PADDING;
+            var padEndX   = ( ( region.Width - pads[ 1 ] ) + NINEPATCH_PADDING ) - 1;
+            var padStartY = pads[ 2 ] + NINEPATCH_PADDING;
+            var padEndY   = ( ( region.Height - pads[ 3 ] ) + NINEPATCH_PADDING ) - 1;
+
+            g.DrawLine( blackPen, padStartX, splitImage.Height - 1, padEndX, splitImage.Height - 1 );
+            g.DrawLine( blackPen, splitImage.Width - 1, padStartY, splitImage.Width - 1, padEndY );
         }
 
         return splitImage;
     }
 
-    /** Checks the command line arguments for correctness.
-     * @return 0 If arguments are invalid, Number of arguments otherwise. */
+    /// <summary>
+    /// Checks the command line arguments for correctness.
+    /// </summary>
+    /// <returns> 0 If arguments are invalid, Number of arguments otherwise. </returns>
     private int ParseArguments( string[] args )
     {
         var numArgs = args.Length;
@@ -352,7 +348,8 @@ public class TextureUnpacker
         }
 
         // check if the input file's extension is right
-        var extension = args[ 0 ].Substring( args[ 0 ].Length - ATLAS_FILE_EXTENSION.Length ).Equals( ATLAS_FILE_EXTENSION );
+        var extension = args[ 0 ].Substring( args[ 0 ].Length - ATLAS_FILE_EXTENSION.Length )
+                                 .Equals( ATLAS_FILE_EXTENSION );
 
         // check if the directory names are valid
         var directory = true;
@@ -370,6 +367,11 @@ public class TextureUnpacker
         return extension && directory ? numArgs : 0;
     }
 
+    /// <summary>
+    /// Verifies the validity of a directory path.
+    /// </summary>
+    /// <param name="directory">The directory path to validate.</param>
+    /// <returns>True if the directory path is valid; otherwise, false.</returns>
     private bool CheckDirectoryValidity( string directory )
     {
         var checkFile = new FileInfo( directory );
@@ -388,31 +390,33 @@ public class TextureUnpacker
         return path;
     }
 
-    private ImageFormat GetImageFormat( string extension )
+    /// <summary>
+    /// Determines the appropriate image format based on the given file extension.
+    /// </summary>
+    /// <param name="extension">
+    /// The file extension (e.g., "png", "jpg", "bmp") used to identify the image format.
+    /// </param>
+    /// <returns>
+    /// The corresponding <see cref="ImageFormat"/> based on the provided file extension.
+    /// Defaults to PNG if the format is unrecognized.
+    /// </returns>
+    private static ImageFormat GetImageFormat( string extension )
     {
-        switch ( extension.ToLower() )
-        {
-            case "png":
-                return ImageFormat.Png;
-
-            case "jpg":
-            case "jpeg":
-                return ImageFormat.Jpeg;
-
-            case "bmp":
-                return ImageFormat.Bmp;
-
-            case "gif":
-                return ImageFormat.Gif;
-
-            case "tiff":
-                return ImageFormat.Tiff;
-
-            default:
-                return ImageFormat.Png; // Default to PNG
-        }
+        return extension.ToLower() switch
+               {
+                   "png"           => ImageFormat.Png,
+                   "jpg" or "jpeg" => ImageFormat.Jpeg,
+                   "bmp"           => ImageFormat.Bmp,
+                   "gif"           => ImageFormat.Gif,
+                   "tiff"          => ImageFormat.Tiff,
+                   _               => ImageFormat.Png
+               };
     }
 
+    /// <summary>
+    /// Logs the details of an exception and terminates the application with an exit code of 1.
+    /// </summary>
+    /// <param name="e">The exception to be logged before exiting the application.</param>
     private static void PrintExceptionAndExit( Exception e )
     {
         Logger.Error( e.StackTrace ?? "No Stacktrace available" );
@@ -420,3 +424,6 @@ public class TextureUnpacker
         Environment.Exit( 1 );
     }
 }
+
+// ============================================================================
+// ============================================================================

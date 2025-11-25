@@ -1182,7 +1182,7 @@ public class PixmapPacker : IDisposable
             {
             }
 
-            internal sealed record RowSpec
+            internal record RowSpec
             {
                 internal int Height = 0;
                 internal int X      = 0;

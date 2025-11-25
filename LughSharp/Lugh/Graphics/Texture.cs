@@ -529,7 +529,7 @@ public class Texture : GLTexture, IManaged
 
     /// <summary>
     /// </summary>
-    private sealed class LoadedCallbackInnerClass( int refCount ) : ILoadedCallback
+    private class LoadedCallbackInnerClass( int refCount ) : ILoadedCallback
     {
         public void FinishedLoading( AssetManager assetManager, string? filename, Type? type )
         {

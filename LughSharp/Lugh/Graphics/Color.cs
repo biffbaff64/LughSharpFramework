@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Graphics;
 /// </summary>
 [PublicAPI]
 [DebuggerDisplay( "RGBADebugString" )]
-public sealed class Color : ICloneable, IEquatable< Color >
+public class Color : ICloneable, IEquatable< Color >
 {
     /// <summary>
     /// Debug string for DebuggerDisplay attribute.

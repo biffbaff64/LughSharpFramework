@@ -348,13 +348,6 @@ public partial class TexturePacker
 
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
-            #if DEBUG
-            foreach ( var page in pages )
-            {
-                page.Debug();
-            }
-            #endif
-
             ProgressListener.End();
 
             // ---------- Handle writing of the texture atlas ----------

@@ -1115,7 +1115,7 @@ public class TextField : Widget
     // ========================================================================
     // ========================================================================
 
-    private sealed class BlinkTaskManager
+    private class BlinkTaskManager
     {
         private readonly TextField _tf;
 
@@ -1167,7 +1167,7 @@ public class TextField : Widget
     // ========================================================================
 
     [PublicAPI]
-    public sealed class KeyRepeatTaskManager
+    public class KeyRepeatTaskManager
     {
         private readonly TextField _tf;
 

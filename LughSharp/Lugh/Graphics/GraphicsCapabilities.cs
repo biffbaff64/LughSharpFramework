@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics;
 
 [PublicAPI]
-public sealed unsafe class GraphicsCapabilities
+public unsafe class GraphicsCapabilities
 {
     public int  Major                  { get; init; }
     public int  Minor                  { get; init; }

@@ -32,7 +32,7 @@ namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 /// The Bistream class is responsible for parsing an MPEG audio bitstream.
 /// </summary>
 [PublicAPI]
-public sealed class Bitstream
+public class Bitstream
 {
 //TODO: much of the parsing currently occurs in the various decoders. This should be moved into this class and associated inner classes.
 
