@@ -22,20 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Versioning;
-
-using JetBrains.Annotations;
-
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
 
 using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
-
 using Bitmap = System.Drawing.Bitmap;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -248,7 +238,7 @@ public partial class TexturePacker
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
     public static void Process( TexturePackerSettings settings, string input, string output, string packFileName )
     {
-        Process( input, output, packFileName, settings, null );
+        Process( input, output, packFileName, settings );
     }
 
     /// <summary>
@@ -350,10 +340,18 @@ public partial class TexturePacker
 
             ProgressListener.End();
 
+            Logger.Debug( $"pages: {pages.Count}" );
+            foreach ( var page in pages )
+            {
+                page.Debug();
+            }
+            
             // ---------- Handle writing of the texture atlas ----------
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
 
+            Logger.Debug( @$"Writing texture atlas to {outputDir.FullName}\{scaledPackFileName}" );
+            
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
             ProgressListener.Total = pages.Count;
@@ -389,32 +387,6 @@ public partial class TexturePacker
         }
 
         ProgressListener.End();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="outputDir"></param>
-    private static void PrepareOutputDirectory( DirectoryInfo outputDir )
-    {
-        // If the output directory does not exist, create it.
-        Directory.CreateDirectory( outputDir.FullName );
-
-        // Clear the output directory.
-        var outputDirFiles = outputDir.GetFiles( "*" );
-
-        foreach ( var file in outputDirFiles )
-        {
-            file.Delete();
-        }
-
-        // Clear any subdirectories.
-        var outputDirDirs = outputDir.GetDirectories( "*" );
-
-        foreach ( var dir in outputDirDirs )
-        {
-            dir.Delete( true );
-        }
     }
 
     // ========================================================================

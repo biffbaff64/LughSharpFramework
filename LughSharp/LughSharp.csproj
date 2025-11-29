@@ -137,10 +137,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Lugh\Graphics\Drawing\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="LughUtils">
         <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
       </Reference>

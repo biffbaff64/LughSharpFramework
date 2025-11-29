@@ -22,7 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
 using LughUtils.source.Collections;
@@ -268,6 +273,8 @@ public partial class FileProcessor
             }
         }
 
+        Logger.Debug( $"Output files: {OutputFilesList.Count}" );
+
         return OutputFilesList;
     }
 
@@ -312,7 +319,7 @@ public partial class FileProcessor
                 {
                     // For the first file, the key is added.
                     // For files 2 onwards, the key is FOUND because the path is the same.
-                    dirToEntries.Add( dir, new List< Entry >() );
+                    dirToEntries.Add( dir, [ ] );
                 }
             }
         }
@@ -465,35 +472,6 @@ public partial class FileProcessor
         foreach ( var regex in regexes )
         {
             InputRegex.Add( new Regex( regex ) );
-        }
-    }
-
-    // ========================================================================
-
-    public class DirectoryInfoComparer : IEqualityComparer< DirectoryInfo >
-    {
-        // The Equals method defines when two DirectoryInfo objects are considered the same.
-        public bool Equals( DirectoryInfo? x, DirectoryInfo? y )
-        {
-            if ( x is null || y is null ) return x is null && y is null;
-
-            // Compare based on the FullName string (the directory path)
-            // We use StringComparer.OrdinalIgnoreCase for case-insensitive comparison, 
-            // which is appropriate for most file systems (like Windows).
-            return StringComparer.OrdinalIgnoreCase.Equals( x.FullName, y.FullName );
-        }
-
-        // The GetHashCode method must return the same hash code for objects 
-        // that are considered equal by the Equals method.
-        public int GetHashCode( DirectoryInfo? obj )
-        {
-            if ( obj is null )
-            {
-                return 0;
-            }
-
-            // Return the hash code of the path string
-            return StringComparer.OrdinalIgnoreCase.GetHashCode( obj.FullName );
         }
     }
 }

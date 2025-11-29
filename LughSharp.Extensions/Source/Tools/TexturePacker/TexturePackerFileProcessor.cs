@@ -131,9 +131,11 @@ public class TexturePackerFileProcessor : FileProcessor
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
         // _packCount variable to the number of packer invocations.
+        Logger.DisableDebugLogging();
         CountOnly = true;
         _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
+        Logger.EnableDebugLogging();
         
         // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
@@ -172,6 +174,8 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="entryList"> The resulting list of entries. </param>
     public override void ProcessDir( Entry inputDir, List< Entry > entryList )
     {
+        Logger.Checkpoint();
+        
         // Do not proceed if this input file is in the ignore list.
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
         {
@@ -394,6 +398,8 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="entry"></param>
     public void Pack( TexturePacker packer, Entry entry )
     {
+        Logger.Checkpoint();
+        
         packer.Pack( entry.OutputDirectory!, PackFileName );
     }
 
@@ -489,6 +495,10 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <summary>
     /// Deletes the output files and directories related to the given root file,
     /// based on the texture packing settings and associated patterns.
+    /// This only deletes files and directories that relate to the source folder
+    /// being packed. For instance, if the source folder is "Assets/Images", and
+    /// the output folder is "Assets/Textures", then only the output files and directories
+    /// for "Assets/Textures/Images" will be deleted, leaving all other files intact.
     /// </summary>
     /// <param name="outputRoot">
     /// The root file where the output files and directories to be deleted are located.
@@ -506,7 +516,7 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         var quotedAtlasExtension = Regex.Escape( rootSettings.AtlasExtension );
-
+        
         for ( int i = 0, n = rootSettings.Scale.Length; i < n; i++ )
         {
             var inputRegexes = new List< Regex >();
@@ -561,13 +571,10 @@ public class TexturePackerFileProcessor : FileProcessor
             } );
             //@formatter:on
 
-            var deletedCount = 0;
-
             // Iterate through the filtered paths and delete each file
             foreach ( var filePath in filesToDelete )
             {
                 File.Delete( filePath );
-                deletedCount++;
             }
         }
         catch ( DirectoryNotFoundException )

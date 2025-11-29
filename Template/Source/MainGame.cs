@@ -1,28 +1,16 @@
 ﻿using System.Runtime.Versioning;
 using System.Text;
-
 using JetBrains.Annotations;
-
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Cameras;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Graphics.Utils;
 using LughUtils.source.Maths;
 using LughSharp.Lugh.Utils;
-
-using LughUtils.source;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
-using LughSharp.Tests.Source;
-
-using NUnit.Framework.Api;
-
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Template.Source;
@@ -46,8 +34,8 @@ public partial class MainGame : Game
     private AssetManager?           _assetManager;
     private Texture?                _image1;
     private Texture?                _whitePixelTexture;
-    private bool                    _disposed = false;
-    
+    private bool                    _disposed;
+
     // ========================================================================
     // ========================================================================
 
@@ -74,7 +62,6 @@ public partial class MainGame : Game
     /// <inheritdoc />
     public override void Update()
     {
-//        UpdateTests();
     }
 
     /// <inheritdoc />
@@ -95,20 +82,28 @@ public partial class MainGame : Game
             {
                 _spriteBatch?.Draw( _image1, 0, 0 );
             }
-            
+
             _spriteBatch?.End();
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when the <see cref="IApplication"/> is resized. This can happen at any point
+    /// during a non-paused state but will never happen before a call to <see cref="Game.Create"/>
+    /// </summary>
+    /// <param name="width">The new width in pixels.</param>
+    /// <param name="height">The new height in pixels.</param>
     public override void Resize( int width, int height )
     {
         _orthoGameCam?.ResizeViewport( width, height );
     }
 
     // ========================================================================
-    
-    /// <inheritdoc />
+
+    /// <summary>
+    /// Called when the <see cref="IApplication"/> is destroyed. Preceded by a
+    /// call to <see cref="Game.Pause"/>.
+    /// </summary>
     public override void Dispose()
     {
         Logger.Checkpoint();
@@ -182,7 +177,7 @@ public partial class MainGame : Game
         {
             Logger.Debug( "Asset loaded" );
 
-            #if DEBUG
+#if DEBUG
             Logger.Debug( $"Loaded image type: {_image1.GetType()}" );
 
             var data = _image1.GetImageData();
@@ -204,7 +199,7 @@ public partial class MainGame : Game
 
                 Logger.Debug( sb.ToString() );
             }
-            #endif
+#endif
         }
     }
 }

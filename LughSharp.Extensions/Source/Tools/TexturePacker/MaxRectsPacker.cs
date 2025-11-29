@@ -22,15 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.Versioning;
-
-using JetBrains.Annotations;
-
 using LughSharp.Lugh.Utils;
-
-using LughUtils.source;
 using LughUtils.source.Exceptions;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -115,6 +107,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         {
             if ( _settings.Rotation )
             {
+                Logger.Debug( "Sorting by longest side for fast packing." );
+
                 // Sort by longest side if rotation is enabled.
                 SortUtils.Sort( inputRects, ( o1, o2 ) =>
                 {
@@ -126,6 +120,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
             else
             {
+                Logger.Debug( "Sorting by width for fast packing." );
+
                 // Sort only by width (largest to smallest) if rotation is disabled.
                 inputRects.Sort( CompareRectsByWidthIfRotationDisabled );
 
@@ -159,7 +155,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             inputRects = result?.RemainingRects ?? throw new NullReferenceException();
         }
-
+        
         return pages;
     }
 
@@ -218,7 +214,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             if ( _settings.Rotation )
             {
                 if ( ( ( width > maxWidth ) || ( height > maxHeight ) )
-                     && ( ( width > maxHeight ) || ( height > maxWidth ) ) )
+                  && ( ( width > maxHeight ) || ( height > maxWidth ) ) )
                 {
                     var paddingMessage = edgePadX || edgePadY
                         ? $" and edge padding {paddingX} *2, {paddingY} *2"
@@ -252,12 +248,12 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         minWidth  = Math.Max( minWidth, _settings.MinWidth );
         minHeight = Math.Max( minHeight, _settings.MinHeight );
 
-        var adjustX = paddingX;
-        var adjustY = paddingY;
-
         // BinarySearch uses the max size. Rects are packed with right
         // and top padding, so the max size is increased to match. After
         // packing the padding is subtracted from the page size.
+
+        var adjustX = paddingX;
+        var adjustY = paddingY;
 
         if ( _settings.EdgePadding )
         {
@@ -273,12 +269,19 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
         }
 
+        if ( _settings.Silent )
+        {
+            Logger.Debug( "Packing" );
+        }
+
         // --------------------------------------------------------------------
         // Find the minimal page size that fits all rects.
         TexturePacker.Page? bestResult = null;
 
         if ( _settings.Square )
         {
+            Logger.Debug( "Finding minimal square page size" );
+            
             var minSize = Math.Max( minWidth, minHeight );
             var maxSize = Math.Min( _settings.MaxWidth, _settings.MaxHeight );
             var sizeSearch = new BinarySearch( minSize,
@@ -288,21 +291,33 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                                                _settings.MultipleOfFour );
 
             var size = sizeSearch.Reset();
+            var i    = 0;
 
-            TexturePacker.Page? result;
-
-            for ( var i = 0; size != -1; size = sizeSearch.Next( result == null ) )
+            while ( size != -1 )
             {
-                result = PackAtSize( true, size + i, size + adjustY, inputRects );
+                var result = PackAtSize( true, size + adjustX, size + adjustY, inputRects );
+
+                if ( !_settings.Silent )
+                {
+                    if ( ++i % 70 == 0 )
+                    {
+                        Console.WriteLine();
+                    }
+
+                    Console.Write( "." );
+                }
 
                 bestResult = GetBest( bestResult, result );
+                size       = sizeSearch.Next( result == null );
+            }
+
+            if ( !_settings.Silent )
+            {
+                Console.WriteLine();
             }
 
             // Rects don't fit on one page. Fill a whole page and return.
-            if ( bestResult == null )
-            {
-                bestResult = PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
-            }
+            bestResult ??= PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
 
             if ( bestResult != null )
             {
@@ -313,6 +328,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         }
         else
         {
+            Logger.Debug( "Finding minimal rectangular page size" );
+            
             var widthSearch = new BinarySearch( minWidth,
                                                 _settings.MaxWidth,
                                                 _settings.Fast ? 25 : 15,
@@ -327,6 +344,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             var width  = widthSearch.Reset();
             var height = _settings.Square ? width : heightSearch.Reset();
+            var i      = 0;
 
             while ( true )
             {
@@ -335,6 +353,16 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 while ( width != -1 )
                 {
                     var result = PackAtSize( true, width + adjustX, height + adjustY, inputRects );
+
+                    if ( !_settings.Silent )
+                    {
+                        if ( ++i % 70 == 0 )
+                        {
+                            Console.WriteLine();
+                        }
+
+                        Console.Write( "." );
+                    }
 
                     bestWidthResult = GetBest( bestWidthResult, result );
                     width           = widthSearch.Next( result == null );
@@ -360,13 +388,15 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 width = widthSearch.Reset();
             }
 
-            if ( bestResult == null )
+            if ( !_settings.Silent )
             {
-                bestResult = PackAtSize( false,
-                                         _settings.MaxWidth + adjustX,
-                                         _settings.MaxHeight + adjustY,
-                                         inputRects );
+                Console.WriteLine();
             }
+            
+            bestResult ??= PackAtSize( false,
+                                       _settings.MaxWidth + adjustX,
+                                       _settings.MaxHeight + adjustY,
+                                       inputRects );
 
             if ( bestResult != null )
             {
@@ -414,7 +444,10 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
                     if ( _maxRects.Insert( rect, _methods[ i ] ) == null )
                     {
-                        remaining.Add( rect );
+                        while ( j < numMethods )
+                        {
+                            remaining.Add( inputRects[ j++ ] );
+                        }
                     }
                 }
 
@@ -423,7 +456,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
 
             if ( ( fully && ( result.RemainingRects.Count > 0 ) )
-                 || ( result.OutputRects.Count == 0 ) )
+              || ( result.OutputRects.Count == 0 ) )
             {
                 continue;
             }
@@ -514,10 +547,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
 
             // Rects don't fit on one page. Fill a whole page and return.
-            if ( bestResult == null )
-            {
-                bestResult = PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
-            }
+            bestResult ??= PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
 
             if ( bestResult != null )
             {
@@ -593,13 +623,10 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 Console.WriteLine();
             }
 
-            if ( bestResult == null )
-            {
-                bestResult = PackAtSize( false,
-                                         _settings.MaxWidth + adjustX,
-                                         _settings.MaxHeight + adjustY,
-                                         inputRects );
-            }
+            bestResult ??= PackAtSize( false,
+                                       _settings.MaxWidth + adjustX,
+                                       _settings.MaxHeight + adjustY,
+                                       inputRects );
 
             if ( bestResult != null )
             {
@@ -618,12 +645,12 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             {
                 // Create a fallback empty page
                 bestResult = new TexturePacker.Page
-                {
-                    Width          = _settings.MinWidth,
-                    Height         = _settings.MinHeight,
-                    OutputRects    = [ ],
-                    RemainingRects = [ ..inputRects ],
-                };
+                             {
+                                 Width          = _settings.MinWidth,
+                                 Height         = _settings.MinHeight,
+                                 OutputRects    = [ ],
+                                 RemainingRects = [ ..inputRects ],
+                             };
             }
         }
 

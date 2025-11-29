@@ -60,12 +60,12 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// </summary>
     public DesktopGLApplicationConfiguration? AppConfig { get; set; }
 
-    public List< IRunnable.Runnable > Runnables         { get; set; } = [ ];
-    public List< IRunnable.Runnable > ExecutedRunnables { get; set; } = [ ];
+    public List< Action > Runnables         { get; set; } = [ ];
+    public List< Action > ExecutedRunnables { get; set; } = [ ];
 
     public IClipboard?      Clipboard     { get; set; }
     public AppVersion?      GLVersion     { get; set; }
-    public OpenGLProfile    OGLProfile    { get; set; }
+    public OpenGLProfile    OglProfile    { get; set; }
     public DesktopGLWindow? CurrentWindow { get; set; }
 
     // ========================================================================
@@ -77,11 +77,15 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     private static   GlfwErrorCallback? _errorCallback;
     private readonly Sync?              _sync;
-    private          bool               _glfwInitialised = false;
+    private          bool               _glfwInitialised;
     private          IPreferences       _prefs;
     private          bool               _running  = true;
-    private          bool               _disposed = false;
+    private          bool               _disposed;
 
+    // A lock object for synchronized blocks
+    private readonly object _runnablesLock          = new();
+    private readonly object _lifecycleListenersLock = new();
+    
     // ========================================================================
     // ========================================================================
 
@@ -195,7 +199,7 @@ public class DesktopGLApplication : IApplication, IDisposable
                         targetFramerate = window.AppConfig.ForegroundFPS;
                     }
 
-                    lock ( LifecycleListeners )
+                    lock ( _lifecycleListenersLock )
                     {
                         haveWindowsRendered |= window.Update();
                     }
@@ -209,24 +213,19 @@ public class DesktopGLApplication : IApplication, IDisposable
 
             bool shouldRequestRendering;
 
-            lock ( Runnables )
+            lock ( _runnablesLock )
             {
                 shouldRequestRendering = Runnables.Count > 0;
 
                 ExecutedRunnables.Clear();
-
-                foreach ( var runnable in Runnables )
-                {
-                    ExecutedRunnables.Add( runnable );
-                }
-
+                ExecutedRunnables.AddRange( Runnables );
                 Runnables.Clear();
             }
 
             // Handle all Runnables.
             foreach ( var runnable in ExecutedRunnables )
             {
-                runnable();
+                runnable.Invoke();
             }
 
             if ( shouldRequestRendering )
@@ -373,7 +372,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         Glfw.WindowHint( WindowHint.DepthBits, config.Depth );
         Glfw.WindowHint( WindowHint.Samples, config.Samples );
 
-        OGLProfile = GLData.DEFAULT_OPENGL_PROFILE;
+        OglProfile = GLData.DEFAULT_OPENGL_PROFILE;
 
         if ( config.GLContextMajorVersion is > 0 )
         {
@@ -394,7 +393,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         }
 
         Glfw.WindowHint( WindowHint.OpenGLForwardCompat, GLData.DEFAULT_OPENGL_FORWARDCOMPAT );
-        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
+        Glfw.WindowHint( WindowHint.OpenGLProfile, OglProfile );
         Glfw.WindowHint( WindowHint.ClientAPI, GLData.DEFAULT_CLIENT_API );
 
         Glfw.WindowHint( WindowHint.DoubleBuffer, true );
@@ -437,17 +436,6 @@ public class DesktopGLApplication : IApplication, IDisposable
     {
         get => Platform.ApplicationType.WindowsGL;
         set { }
-    }
-
-    /// <summary>
-    /// Posts a <see cref="IRunnable"/> to the event queue.
-    /// </summary>
-    public void PostRunnable( IRunnable.Runnable runnable )
-    {
-        lock ( Runnables )
-        {
-            Runnables.Add( runnable );
-        }
     }
 
     /// <summary>
@@ -625,6 +613,17 @@ public class DesktopGLApplication : IApplication, IDisposable
     }
 
     /// <summary>
+    /// Posts a <see cref="IRunnable"/> to the event queue.
+    /// </summary>
+    public void PostRunnable( Action runnable )
+    {
+        lock ( Runnables )
+        {
+            Runnables.Add( runnable );
+        }
+    }
+
+    /// <summary>
     /// </summary>
     /// <param name="dglWindow"></param>
     /// <param name="config"></param>
@@ -757,7 +756,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
         GLUtils.CreateCapabilities();
 
-        GLVersion = new AppVersion( Platform.ApplicationType.WindowsGL, OGLProfile );
+        GLVersion = new AppVersion( Platform.ApplicationType.WindowsGL, OglProfile );
 
         if ( config.Debug )
         {

@@ -22,10 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
 using LughUtils.source.Collections;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
-
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 
@@ -40,16 +40,17 @@ public partial class TexturePacker
         public string?      ImageName      { get; set; } = "";
         public List< Rect > OutputRects    { get; set; } = [ ];
         public List< Rect > RemainingRects { get; set; } = [ ];
-        public float        Occupancy      { get; set; } = 0;
-        public int          X              { get; set; } = 0;
-        public int          Y              { get; set; } = 0;
-        public int          Width          { get; set; } = 0;
-        public int          Height         { get; set; } = 0;
-        public int          ImageWidth     { get; set; } = 0;
-        public int          ImageHeight    { get; set; } = 0;
+        public float        Occupancy      { get; set; }
+        public int          X              { get; set; }
+        public int          Y              { get; set; }
+        public int          Width          { get; set; }
+        public int          Height         { get; set; }
+        public int          ImageWidth     { get; set; }
+        public int          ImageHeight    { get; set; }
 
         public void Debug()
         {
+            Logger.Block();
             Logger.Debug( $"ImageName: {ImageName}" );
             Logger.Debug( $"OutputRects: {OutputRects.Count}" );
             Logger.Debug( $"RemainingRects: {RemainingRects.Count}" );
@@ -60,6 +61,7 @@ public partial class TexturePacker
             Logger.Debug( $"Height: {Height}" );
             Logger.Debug( $"ImageWidth: {ImageWidth}" );
             Logger.Debug( $"ImageHeight: {ImageHeight}" );
+            Logger.EndBlock();
         }
     }
 
@@ -69,11 +71,11 @@ public partial class TexturePacker
     [PublicAPI]
     public class Alias : IComparable< Alias >
     {
-        public int     Index          = 0;
-        public int     OffsetX        = 0;
-        public int     OffsetY        = 0;
-        public int     OriginalHeight = 0;
-        public int     OriginalWidth  = 0;
+        public int     Index;
+        public int     OffsetX;
+        public int     OffsetY;
+        public int     OriginalHeight;
+        public int     OriginalWidth;
         public string? Name;
         public int[]?  Pads;
         public int[]?  Splits;
@@ -114,33 +116,33 @@ public partial class TexturePacker
     [PublicAPI]
     public class Rect : IComparable< Rect >
     {
-        public int  Score1         = 0;
-        public int  Score2         = 0;
-        public bool Rotated        = false;
-        public bool CanRotate      = true;
-        public bool IsPadded       = false;
-        public int  X              = 0;
-        public int  Y              = 0;
-        public int  Width          = 0; // Portion of page taken by this region, including padding.
-        public int  Height         = 0; // Portion of page taken by this region, including padding.
-        public int  Index          = 0;
-        public int  OffsetX        = 0;
-        public int  OffsetY        = 0;
-        public int  OriginalHeight = 0;
-        public int  OriginalWidth  = 0;
-        public int  RegionHeight   = 0;
-        public int  RegionWidth    = 0;
+        public int  Score1;
+        public int  Score2;
+        public bool Rotated;
+        public bool CanRotate = true;
+        public bool IsPadded;
+        public int  X;
+        public int  Y;
+        public int  Width;  // Portion of page taken by this region, including padding.
+        public int  Height; // Portion of page taken by this region, including padding.
+        public int  Index;
+        public int  OffsetX;
+        public int  OffsetY;
+        public int  OriginalHeight;
+        public int  OriginalWidth;
+        public int  RegionHeight;
+        public int  RegionWidth;
 
         public string?       Name    = string.Empty;
         public List< Alias > Aliases = [ ];
-        public int[]?        Splits  = null;
-        public int[]?        Pads    = null;
+        public int[]?        Splits;
+        public int[]?        Pads;
 
         // ====================================================================
 
-        private Bitmap?  _image   = null;
-        private FileInfo _file    = null!;
-        private bool     _isPatch = false;
+        private Bitmap?  _image;
+        private FileInfo _file = null!;
+        private bool     _isPatch;
 
         // ====================================================================
 
@@ -253,19 +255,19 @@ public partial class TexturePacker
         }
 
         /// <inheritdoc />
+        [SuppressMessage( "ReSharper", "NonReadonlyMemberInGetHashCode" )]
         public override int GetHashCode()
         {
-            //TODO: Come back to this
-            
-            // C# rule: If the object is mutable, the hash code should be calculated based on
-            // an immutable field, or the warning must be suppressed.
-            // We suppress the warning here to allow calculation based on the mutable 'Name'.
-
-            // We use the null-conditional and null-coalescing operators to safely get the hash.
-            // ReSharper disable once NonReadonlyMemberInGetHashCode
-            return Name?.GetHashCode() ?? 0;
+            // If two objects are equal (based only on Name), they MUST have the same hash code.
+            // If the hash code is based on other fields, it violates the hash contract.
+    
+            // Use the modern HashCode struct for efficient hashing of a single field.
+            var hash = new HashCode();
+            hash.Add(Name, StringComparer.Ordinal);
+    
+            return hash.ToHashCode();
         }
-
+        
         /// <inheritdoc />
         public override bool Equals( object? obj )
         {
@@ -304,6 +306,19 @@ public partial class TexturePacker
             return true;
         }
 
+        public void DebugPrint()
+        {
+            Logger.Block();
+            Logger.Debug( $"Name: {Name}" );
+            Logger.Debug( $"X: {X}" );
+            Logger.Debug( $"Y: {Y}" );
+            Logger.Debug( $"Width: {Width}: " );
+            Logger.Debug( $"Height: {Height}: " );
+            Logger.Debug( $"Rotated: {Rotated}" );
+            Logger.Debug( $"IsPadded: {IsPadded}: " );
+            Logger.EndBlock();
+        }
+        
         /// <inheritdoc />
         public override string ToString()
         {
@@ -329,10 +344,10 @@ public partial class TexturePacker
     [PublicAPI]
     public class InputImage
     {
-        public FileInfo? FileInfo { get; set; } = null;
-        public string?   RootPath { get; set; } = null;
-        public string?   Name     { get; set; } = null;
-        public Bitmap?   Image    { get; set; } = null;
+        public FileInfo? FileInfo { get; set; }
+        public string?   RootPath { get; set; }
+        public string?   Name     { get; set; }
+        public Bitmap?   Image    { get; set; }
 
         public void DebugPrint()
         {
@@ -385,7 +400,7 @@ public partial class TexturePacker
         public void Update( float percent )
         {
             _lastUpdate = _portions[ _portions.Count - 3 ]
-                          + ( _portions[ _portions.Count - 2 ] * percent );
+                        + ( _portions[ _portions.Count - 2 ] * percent );
 
             Progress( _lastUpdate );
         }

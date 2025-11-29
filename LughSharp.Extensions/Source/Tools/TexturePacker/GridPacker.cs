@@ -22,31 +22,14 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.Versioning;
-
-using JetBrains.Annotations;
-
 using LughUtils.source.Collections;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class GridPacker : TexturePacker.IPacker
+public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacker
 {
-    private readonly TexturePackerSettings _settings;
-
-    // ========================================================================
-
-    public GridPacker( TexturePackerSettings settings )
-    {
-        _settings = settings;
-    }
-
-    // ========================================================================
-
     /// <summary>
     /// Performs a grid packing of the input rects.
     /// </summary>
@@ -70,14 +53,14 @@ public class GridPacker : TexturePacker.IPacker
 
         // Rects are packed with right and top padding, so the max size is increased
         // to match. After packing the padding is subtracted from the page size.
-        var paddingX = _settings.PaddingX;
-        var paddingY = _settings.PaddingY;
+        var paddingX = settings.PaddingX;
+        var paddingY = settings.PaddingY;
         var adjustX  = paddingX;
         var adjustY  = paddingY;
 
-        if ( _settings.EdgePadding )
+        if ( settings.EdgePadding )
         {
-            if ( _settings.DuplicatePadding )
+            if ( settings.DuplicatePadding )
             {
                 adjustX -= paddingX;
                 adjustY -= paddingY;
@@ -89,13 +72,13 @@ public class GridPacker : TexturePacker.IPacker
             }
         }
 
-        var maxWidth   = _settings.MaxWidth + adjustX;
-        var maxHeight  = _settings.MaxHeight + adjustY;
-        var n          = inputRects.Count;
+        var maxWidth   = settings.MaxWidth + adjustX;
+        var maxHeight  = settings.MaxHeight + adjustY;
+        var numRects   = inputRects.Count;
         var cellWidth  = 0;
         var cellHeight = 0;
 
-        for ( var i = 0; i < n; i++ )
+        for ( var i = 0; i < numRects; i++ )
         {
             var rect = inputRects[ i ];
 
@@ -112,9 +95,9 @@ public class GridPacker : TexturePacker.IPacker
 
         while ( inputRects.Count > 0 )
         {
-            progress.Count = ( n - inputRects.Count ) + 1;
+            progress.Count = ( numRects - inputRects.Count ) + 1;
 
-            if ( progress.Update( progress.Count, n ) )
+            if ( progress.Update( progress.Count, numRects ) )
             {
                 break;
             }
@@ -170,8 +153,8 @@ public class GridPacker : TexturePacker.IPacker
 
             rect.X      =  x;
             rect.Y      =  y;
-            rect.Width  += _settings.PaddingX;
-            rect.Height += _settings.PaddingY;
+            rect.Width  += settings.PaddingX;
+            rect.Height += settings.PaddingY;
 
             page.OutputRects.Add( rect );
 
@@ -190,3 +173,6 @@ public class GridPacker : TexturePacker.IPacker
         return page;
     }
 }
+
+// ============================================================================
+// ============================================================================

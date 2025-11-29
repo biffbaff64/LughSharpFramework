@@ -254,7 +254,7 @@ public class Engine
     #if DEBUG
     public static void SettingsCheck( int num = 0 )
     {
-        var outputFolder     = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
+        var outputFolder     = IOUtils.AssetPath( @"\Assets\PackedImages\objects" );
         var settingsFilePath = Path.Combine( outputFolder, "pack.json" );
 
         var sb = new StringBuilder( $"Settings file exists: {File.Exists( settingsFilePath )}" );

@@ -73,11 +73,8 @@ public class IOUtils
     /// </summary>
     /// <param name="path"> The path to normalize. </param>
     /// <returns> The normalized path with consistent separators. </returns>
-    public static string NormalizePath( string? path )
+    public static string NormalizePath( string path )
     {
-        return path;
-        
-
 //        // If the path is null or empty, return a single forward slash.
 //        if ( string.IsNullOrEmpty( path ) )
 //        {
@@ -97,6 +94,7 @@ public class IOUtils
 //        }
 //
 //        return normalizedPath;
+        return path;
     }
     
     /// <summary>
@@ -105,7 +103,7 @@ public class IOUtils
     /// </summary>
     /// <param name="path">The asset path to validate and normalize.</param>
     /// <returns>The validated and normalized asset path.</returns>
-    public static string NormalizeAssetPath( string path )
+    public static string AssetPath( string path )
     {
         if ( !path.Contains( AssemblyDirectory ) )
         {

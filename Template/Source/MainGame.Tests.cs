@@ -1,5 +1,4 @@
-﻿using System.Runtime.Versioning;
-using LughSharp.Lugh.Core;
+﻿using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.OpenGL;
@@ -11,13 +10,9 @@ using LughUtils.source.Logging;
 
 namespace Template.Source;
 
-[SupportedOSPlatform( "windows" )]
-public partial class MainGame : Game
+public partial class MainGame
 {
-    private static bool  _first     = true;
-    private        int   _direction = 0;
-    private        float _scale     = 1.0f;
-    private        float _speed     = 0.1f;
+    private static bool _first = true;
 
     // ========================================================================
 
@@ -32,8 +27,8 @@ public partial class MainGame : Game
         Logger.Divider();
         // --------------------------------------
 //        var test = new AssetManagerTest();
-//        var test = new TexturePackerTest();
-        var test = new ImagePackerTest();
+        var test = new TexturePackerTest();
+//        var test = new ImagePackerTest();
         // --------------------------------------
         test.Setup();
         test.Run();
@@ -125,7 +120,7 @@ public partial class MainGame : Game
             }
 
             Logger.Debug( $"Texture loaded - Width: {_image1.Width}, Height: {_image1.Height}" );
-            Logger.Debug( $"Format: {LughSharp.Lugh.Graphics.PixelFormat.GetFormatString( _image1.TextureData.GetPixelFormat() )}" );
+            Logger.Debug( $"Format: {PixelFormat.GetFormatString( _image1.TextureData.GetPixelFormat() )}" );
             Logger.Debug( $"Length: {_image1.GetImageData()?.Length}" );
 
             _image1.Upload();

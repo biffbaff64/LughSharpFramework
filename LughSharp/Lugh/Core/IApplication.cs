@@ -109,7 +109,7 @@ public interface IApplication
     /// <summary>
     /// Posts a <see cref="IRunnable"/> to the event queue.
     /// </summary>
-    void PostRunnable( IRunnable.Runnable runnable );
+    void PostRunnable( Action runnable );
 
     /// <summary>
     /// Schedule an exit from the application. On android, this will cause a call to
