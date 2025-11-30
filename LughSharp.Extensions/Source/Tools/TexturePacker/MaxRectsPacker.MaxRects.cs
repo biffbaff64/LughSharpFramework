@@ -191,7 +191,7 @@ public partial class MaxRectsPacker
             var width  = 0;
             var height = 0;
 
-            // Find the maximum utilized width and height (not necessarily the bin size).
+            // Find the maximum utilised width and height (not necessarily the bin size).
             foreach ( var rect in _usedRectangles )
             {
                 width  = Math.Max( width, rect.X + rect.Width );
@@ -200,7 +200,7 @@ public partial class MaxRectsPacker
 
             return new TexturePacker.Page
                    {
-                       OutputRects = [ .._usedRectangles ],
+                       OutputRects = new List< TexturePacker.Rect >( _usedRectangles ),
                        Occupancy   = GetOccupancyRatio(),
                        Width       = width,
                        Height      = height,
@@ -208,8 +208,9 @@ public partial class MaxRectsPacker
         }
 
         /// <summary>
-        /// Finalizes the placement of a rectangle after its position has been determined by a scoring function.
-        /// This updates the free list by splitting the space and pruning redundant nodes.
+        /// Finalises the placement of a rectangle after its position has been determined
+        /// by a scoring function. This updates the free list by splitting the space and
+        /// pruning redundant nodes.
         /// </summary>
         /// <param name="node">The rectangle node that has been placed.</param>
         private void PlaceRect( TexturePacker.Rect node )

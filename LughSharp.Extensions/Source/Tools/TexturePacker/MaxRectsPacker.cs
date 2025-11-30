@@ -94,14 +94,13 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         {
             var rect = inputRects[ i ];
 
-            if ( !rect.IsPadded )
-            {
-                rect.Width  += _settings.PaddingX;
-                rect.Height += _settings.PaddingY;
-
-                rect.IsPadded = true;
-            }
+            rect.Width  += _settings.PaddingX;
+            rect.Height += _settings.PaddingY;
         }
+
+        Logger.Debug( $"inputRects.Count: {inputRects.Count}" );
+        Logger.Debug( $"_settings.Fast: {_settings.Fast}" );
+        Logger.Debug( $"_settings.Rotation: {_settings.Rotation}" );
 
         if ( _settings.Fast )
         {
@@ -155,7 +154,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             inputRects = result?.RemainingRects ?? throw new NullReferenceException();
         }
-        
+
         return pages;
     }
 
@@ -176,8 +175,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     {
         var paddingX  = _settings.PaddingX;
         var paddingY  = _settings.PaddingY;
-        var maxWidth  = ( float )_settings.MaxWidth;
-        var maxHeight = ( float )_settings.MaxHeight;
+        var maxWidth  = _settings.MaxWidth;
+        var maxHeight = _settings.MaxHeight;
         var edgePadX  = false;
         var edgePadY  = false;
 
@@ -202,9 +201,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         var minWidth  = int.MaxValue;
         var minHeight = int.MaxValue;
 
-        for ( int i = 0, numRects = inputRects.Count; i < numRects; ++i )
+        foreach ( var rect in inputRects )
         {
-            var rect   = inputRects[ i ];
             var width  = rect.Width - paddingX;
             var height = rect.Height - paddingY;
 
@@ -255,6 +253,10 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         var adjustX = paddingX;
         var adjustY = paddingY;
 
+        Logger.Debug( $"_settings.EdgePadding: {_settings.EdgePadding}" );
+        Logger.Debug( $"_settings.DuplicatePadding: {_settings.DuplicatePadding}" );
+        Logger.Debug( $"_settings.Square: {_settings.Square}" );
+
         if ( _settings.EdgePadding )
         {
             if ( _settings.DuplicatePadding )
@@ -271,7 +273,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
         if ( _settings.Silent )
         {
-            Logger.Debug( "Packing" );
+            Console.Write( "Packing" );
         }
 
         // --------------------------------------------------------------------
@@ -281,7 +283,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         if ( _settings.Square )
         {
             Logger.Debug( "Finding minimal square page size" );
-            
+
             var minSize = Math.Max( minWidth, minHeight );
             var maxSize = Math.Min( _settings.MaxWidth, _settings.MaxHeight );
             var sizeSearch = new BinarySearch( minSize,
@@ -319,17 +321,14 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             // Rects don't fit on one page. Fill a whole page and return.
             bestResult ??= PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
 
-            if ( bestResult != null )
-            {
-                bestResult.OutputRects.Sort( _rectComparator );
-                bestResult.Width  = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
-                bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingY;
-            }
+            bestResult?.OutputRects.Sort( _rectComparator );
+            bestResult?.Width  = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
+            bestResult?.Height = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingY;
         }
         else
         {
             Logger.Debug( "Finding minimal rectangular page size" );
-            
+
             var widthSearch = new BinarySearch( minWidth,
                                                 _settings.MaxWidth,
                                                 _settings.Fast ? 25 : 15,
@@ -348,7 +347,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             while ( true )
             {
-                var bestWidthResult = new TexturePacker.Page();
+                TexturePacker.Page? bestWidthResult = null;
 
                 while ( width != -1 )
                 {
@@ -392,7 +391,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             {
                 Console.WriteLine();
             }
-            
+
             bestResult ??= PackAtSize( false,
                                        _settings.MaxWidth + adjustX,
                                        _settings.MaxHeight + adjustY,
@@ -405,8 +404,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 bestResult.Height -= paddingY;
             }
         }
-
-        // --------------------------------------------------------------------
 
         return bestResult;
     }
@@ -422,7 +419,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <param name="inputRects"></param>
     private TexturePacker.Page? PackAtSize( bool fully, int width, int height, List< TexturePacker.Rect > inputRects )
     {
-        var bestResult = new TexturePacker.Page();
+        TexturePacker.Page? bestResult = null;
 
         for ( int i = 0, numMethods = _methods.Length; i < numMethods; i++ )
         {
@@ -438,15 +435,15 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             {
                 List< TexturePacker.Rect > remaining = [ ];
 
-                for ( int j = 0, nn = inputRects.Count; j < nn; j++ )
+                for ( int ii = 0, nn = inputRects.Count; ii < nn; ii++ )
                 {
-                    var rect = inputRects[ j ];
+                    var rect = inputRects[ ii ];
 
                     if ( _maxRects.Insert( rect, _methods[ i ] ) == null )
                     {
-                        while ( j < numMethods )
+                        while ( ii < numMethods )
                         {
-                            remaining.Add( inputRects[ j++ ] );
+                            remaining.Add( inputRects[ ii++ ] );
                         }
                     }
                 }
