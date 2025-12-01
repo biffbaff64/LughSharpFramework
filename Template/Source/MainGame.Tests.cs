@@ -1,4 +1,5 @@
-﻿using LughSharp.Lugh.Core;
+﻿using System.Runtime.Versioning;
+using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.OpenGL;
@@ -16,6 +17,7 @@ public partial class MainGame
 
     // ========================================================================
 
+    [SupportedOSPlatform( "windows" )]
     private void RunTests()
     {
         Logger.Divider();
@@ -26,8 +28,8 @@ public partial class MainGame
         Logger.Divider();
         Logger.Divider();
         // --------------------------------------
-//        var test = new AssetManagerTest();
-        var test = new TexturePackerTest();
+        var test = new AssetManagerTest();
+//        var test = new TexturePackerTest();
 //        var test = new ImagePackerTest();
         // --------------------------------------
         test.Setup();

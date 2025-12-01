@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughUtils.source.Collections;
-
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
@@ -31,33 +29,39 @@ namespace Extensions.Source.Tools.TexturePacker;
 public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacker
 {
     /// <summary>
-    /// Performs a grid packing of the input rects.
+    /// Performs a grid packing of the input rects without a progress listener.
     /// </summary>
-    /// <param name="inputRects"></param>
-    /// <returns></returns>
+    /// <param name="inputRects">The list of rectangles to pack.</param>
+    /// <returns>A list of packed pages.</returns>
     public List< TexturePacker.Page > Pack( List< TexturePacker.Rect > inputRects )
     {
+        // Pass null safely to the main Pack method.
         return Pack( null, inputRects );
     }
 
     /// <summary>
     /// Performs a grid packing of the input rects.
     /// </summary>
-    /// <param name="progress"></param>
-    /// <param name="inputRects"></param>
-    /// <returns></returns>
+    /// <param name="progress">The progress listener to report packing status. Can be null.</param>
+    /// <param name="inputRects">The list of rectangles to pack.</param>
+    /// <returns>A list of packed pages.</returns>
     public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress,
                                             List< TexturePacker.Rect > inputRects )
     {
-        ArgumentNullException.ThrowIfNull( progress );
+        // Check for null only if the progress listener is actually used.
+        // We'll trust the user to handle the null checks inside the loop or caller if needed.
 
         // Rects are packed with right and top padding, so the max size is increased
         // to match. After packing the padding is subtracted from the page size.
         var paddingX = settings.PaddingX;
         var paddingY = settings.PaddingY;
-        var adjustX  = paddingX;
-        var adjustY  = paddingY;
 
+        // Resetting adjustX/Y to a sane default of padding before applying edge rules.
+        var adjustX = paddingX;
+        var adjustY = paddingY;
+
+        // NOTE: The padding adjustment logic here is preserved from the original code,
+        // but it is mathematically complex and may be incorrect for generic grid padding.
         if ( settings.EdgePadding )
         {
             if ( settings.DuplicatePadding )
@@ -78,6 +82,7 @@ public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacke
         var cellWidth  = 0;
         var cellHeight = 0;
 
+        // 1. Determine the maximum required cell size.
         for ( var i = 0; i < numRects; i++ )
         {
             var rect = inputRects[ i ];
@@ -86,23 +91,32 @@ public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacke
             cellHeight = Math.Max( cellHeight, rect.Height );
         }
 
+        // 2. Add padding to define the final cell size.
         cellWidth  += paddingX;
         cellHeight += paddingY;
 
-        inputRects.Reverse();
+        List< TexturePacker.Page > pages          = [ ];
+        List< TexturePacker.Rect > remainingRects = new( inputRects );
 
-        List< TexturePacker.Page > pages = [ ];
-
-        while ( inputRects.Count > 0 )
+        while ( remainingRects.Count > 0 )
         {
-            progress.Count = ( numRects - inputRects.Count ) + 1;
-
-            if ( progress.Update( progress.Count, numRects ) )
+            if ( progress != null )
             {
-                break;
+                progress.Count = ( numRects - remainingRects.Count ) + 1;
+
+                if ( progress.Update( progress.Count, numRects ) )
+                {
+                    break;
+                }
             }
 
-            var page = PackPage( inputRects, cellWidth, cellHeight, maxWidth, maxHeight );
+            // Pack the page and get the list of rects that were successfully placed.
+            var (page, packedRects) = PackPage( remainingRects, cellWidth, cellHeight, maxWidth, maxHeight );
+
+            // Update the list of remaining rectangles by excluding those that were packed.
+            remainingRects = remainingRects.Except( packedRects ).ToList();
+
+            // Subtract the padding from the final page size.
             page.Width  -= paddingX;
             page.Height -= paddingY;
 
@@ -113,64 +127,79 @@ public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacke
     }
 
     /// <summary>
+    /// Packs one page (atlas) using the calculated cell dimensions.
     /// </summary>
-    /// <param name="inputRects"></param>
-    /// <param name="cellWidth"></param>
-    /// <param name="cellHeight"></param>
-    /// <param name="maxWidth"></param>
-    /// <param name="maxHeight"></param>
-    /// <returns></returns>
-    private TexturePacker.Page PackPage( List< TexturePacker.Rect > inputRects,
-                                         int cellWidth,
-                                         int cellHeight,
-                                         int maxWidth,
-                                         int maxHeight )
+    /// <param name="inputRects">The list of rectangles that need to be packed.</param>
+    /// <param name="cellWidth">The fixed width of each grid cell (includes padding).</param>
+    /// <param name="cellHeight">The fixed height of each grid cell (includes padding).</param>
+    /// <param name="maxWidth">The maximum allowed width for the page (adjusted for padding).</param>
+    /// <param name="maxHeight">The maximum allowed height for the page (adjusted for padding).</param>
+    /// <returns>A tuple containing the packed page object and the list of rectangles that were successfully packed.</returns>
+    private (TexturePacker.Page page, List< TexturePacker.Rect > packedRects) PackPage(
+        List< TexturePacker.Rect > inputRects,
+        int cellWidth,
+        int cellHeight,
+        int maxWidth,
+        int maxHeight )
     {
         TexturePacker.Page page = new()
         {
             OutputRects = [ ],
         };
+        List< TexturePacker.Rect > packedRects = [ ];
 
         var n = inputRects.Count;
         var x = 0;
         var y = 0;
 
-        for ( var i = n - 1; i >= 0; i-- )
+        // Iterate forward through the list for O(1) tracking.
+        for ( var i = 0; i < n; i++ )
         {
+            var rect = inputRects[ i ];
+
+            // Check if the next cell position exceeds the max width.
             if ( ( x + cellWidth ) > maxWidth )
             {
+                // Move to the next row.
                 y += cellHeight;
 
+                // Check if the current row exceeds the max height.
                 if ( y > ( maxHeight - cellHeight ) )
                 {
-                    break;
+                    break; // Page is full.
                 }
 
+                // Reset X for the new row.
                 x = 0;
             }
 
-            var rect = inputRects.RemoveIndex( i );
-
-            rect.X      =  x;
-            rect.Y      =  y;
+            // Assign position and size (with padding).
+            rect.X = x;
+            rect.Y = y;
+            
+            // NOTE: The rect's own Width/Height properties are being changed to include padding.
             rect.Width  += settings.PaddingX;
             rect.Height += settings.PaddingY;
 
             page.OutputRects.Add( rect );
+            packedRects.Add( rect ); // Keep track of successfully packed rects
 
-            x           += cellWidth;
-            page.Width  =  Math.Max( page.Width, x );
-            page.Height =  Math.Max( page.Height, y + cellHeight );
+            // Advance to the next column.
+            x += cellWidth;
+
+            // Update the page's utilized size.
+            page.Width  = Math.Max( page.Width, x );
+            page.Height = Math.Max( page.Height, y + cellHeight );
         }
 
-        // Flip so rows start at top.
+        // Flip Y coordinates so the first row starts at the top (Y=0).
         for ( var i = page.OutputRects.Count - 1; i >= 0; i-- )
         {
             var rect = page.OutputRects[ i ];
             rect.Y = page.Height - rect.Y - rect.Height;
         }
 
-        return page;
+        return ( page, packedRects );
     }
 }
 

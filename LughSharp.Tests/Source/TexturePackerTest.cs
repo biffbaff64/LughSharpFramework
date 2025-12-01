@@ -64,7 +64,7 @@ public class TexturePackerTest
             DuplicatePadding = false,                 // Disable duplicate padding
             MinWidth         = 16,                    // 
             MinHeight        = 16,                    // 
-//            Grid             = true,
+//            Grid             = true,                  // 
         };
 
         // Build the Atlases from the specified parameters :-

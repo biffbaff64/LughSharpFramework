@@ -29,7 +29,7 @@ using System.Runtime.Versioning;
 using Extensions.Source.Tools.ImagePacker;
 
 using JetBrains.Annotations;
-
+using LughSharp.Lugh.Files;
 using LughUtils.source.Logging;
 
 using NUnit.Framework;
@@ -73,7 +73,7 @@ public class ImagePackerTest
             packer.InsertImage( $"image_{i}", images[ i ] );
         }
 
-        packer.Image.Save( "packed.png" );
+        packer.Image.Save( IOUtils.AssetPath( "packed.png" ) );
     }
 
     [TearDown]

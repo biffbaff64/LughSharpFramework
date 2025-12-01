@@ -66,12 +66,11 @@ public class AssetManagerTest
             Engine.Api.Files.Assets( "title_background.png" ),
         };
 
-        foreach ( var file in files )
-        {
-            _assetManager.Load< Texture >( file.FullName );
-        }
+        _assetManager.Load< Texture >( files );
         _assetManager.FinishLoading();
 
+        Logger.Debug( "Checking loaded assets...", true );
+        
         foreach ( var file in files )
         {
             CheckAsset< Texture >( file );

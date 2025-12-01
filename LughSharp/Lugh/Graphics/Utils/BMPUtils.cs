@@ -22,19 +22,16 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
 
-using LughSharp.Lugh.Graphics;
-using LughUtils.source.Logging;
-
+using System.Drawing.Imaging;
+using System.Runtime.Versioning;
 using Bitmap = System.Drawing.Bitmap;
-//using PixelFormat = LughSharp.Lugh.Graphics.PixelFormat;
 
-namespace Extensions.Source.Drawing;
+namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public static class BMPUtils
+public static class BmpUtils
 {
     public static BitmapFileHeader     BitmapFileHeader     { get; private set; }
     public static BitmapFileInfoHeader BitmapFileInfoHeader { get; private set; }
@@ -79,17 +76,17 @@ public static class BMPUtils
                     infoHeaderHandle.Free();
 
                     Logger.Debug( $"--- BMP Info Header ---" );
-                    Logger.Debug( $"Header Size     : {infoHeader.HeaderSize} bytes" );
-                    Logger.Debug( $"Width           : {infoHeader.Width} pixels" );
-                    Logger.Debug( $"Height          : {infoHeader.Height} pixels" );
-                    Logger.Debug( $"Planes          : {infoHeader.Planes}" );
-                    Logger.Debug( $"Bits per Pixel  : {infoHeader.BitCount}" );
-                    Logger.Debug( $"Compression     : {infoHeader.Compression}" ); // See BMP spec for values (0=BI_RGB, 1=BI_RLE8, etc.)
-                    Logger.Debug( $"Image Size      : {infoHeader.ImageSize} bytes" );
-                    Logger.Debug( $"X Pels per Meter: {infoHeader.XPixelsPerMeter}" );
-                    Logger.Debug( $"Y Pels per Meter: {infoHeader.YPixelsPerMeter}" );
-                    Logger.Debug( $"Colors Used     : {infoHeader.ColorsUsed}" );
-                    Logger.Debug( $"Colors Important: {infoHeader.ImportantColors}" );
+                    Logger.Debug( $"Header Size       : {infoHeader.HeaderSize} bytes" );
+                    Logger.Debug( $"Width             : {infoHeader.Width} pixels" );
+                    Logger.Debug( $"Height            : {infoHeader.Height} pixels" );
+                    Logger.Debug( $"Planes            : {infoHeader.Planes}" );
+                    Logger.Debug( $"Bits per Pixel    : {infoHeader.BitCount}" );
+                    Logger.Debug( $"Compression       : {infoHeader.Compression}" ); // See BMP spec for values (0=BI_RGB, 1=BI_RLE8, etc.)
+                    Logger.Debug( $"Image Size        : {infoHeader.ImageSize} bytes" );
+                    Logger.Debug( $"X Pixels per Meter: {infoHeader.XPixelsPerMeter}" );
+                    Logger.Debug( $"Y Pixels per Meter: {infoHeader.YPixelsPerMeter}" );
+                    Logger.Debug( $"Colors Used       : {infoHeader.ColorsUsed}" );
+                    Logger.Debug( $"Colors Important  : {infoHeader.ImportantColors}" );
                 }
             }
         }
@@ -117,11 +114,11 @@ public static class BMPUtils
             Logger.Debug( $"Bits per Pixel: {bitsPerPixel}" );
 
             // Check for Alpha Channel
-            if ( bmp.PixelFormat is PixelFormat.Format32bppArgb
-                                    or PixelFormat.Format32bppPArgb
-                                    or PixelFormat.Format64bppArgb
-                                    or PixelFormat.Format64bppPArgb
-                                    or PixelFormat.Format16bppArgb1555 )
+            if ( bmp.PixelFormat is System.Drawing.Imaging.PixelFormat.Format32bppArgb
+                                    or System.Drawing.Imaging.PixelFormat.Format32bppPArgb
+                                    or System.Drawing.Imaging.PixelFormat.Format64bppArgb
+                                    or System.Drawing.Imaging.PixelFormat.Format64bppPArgb
+                                    or System.Drawing.Imaging.PixelFormat.Format16bppArgb1555 )
             {
                 Logger.Debug( "Image has an Alpha channel." );
             }
@@ -135,9 +132,9 @@ public static class BMPUtils
             }
 
             // Check if it's Indexed
-            if ( bmp.PixelFormat is PixelFormat.Format1bppIndexed
-                                    or PixelFormat.Format4bppIndexed
-                                    or PixelFormat.Format8bppIndexed )
+            if ( bmp.PixelFormat is System.Drawing.Imaging.PixelFormat.Format1bppIndexed
+                                    or System.Drawing.Imaging.PixelFormat.Format4bppIndexed
+                                    or System.Drawing.Imaging.PixelFormat.Format8bppIndexed )
             {
                 Logger.Debug( "Image is Indexed (uses a color palette)." );
                 Logger.Debug( $"Palette Entries: {bmp.Palette.Entries.Length}" );

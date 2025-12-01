@@ -131,17 +131,19 @@ public partial class AssetManager : IDisposable
             Logger.Debug( "Setting Default Asset Loaders..." );
             #endif
 
-            SetLoader( typeof( BitmapFont ), new BitmapFontLoader( resolver ) );
-            SetLoader( typeof( IMusic ), new MusicLoader( resolver ) );
-            SetLoader( typeof( Pixmap ), new PixmapLoader( resolver ) );
-            SetLoader( typeof( ISound ), new SoundLoader( resolver ) );
-            SetLoader( typeof( TextureAtlas ), new TextureAtlasLoader( resolver ) );
-            SetLoader( typeof( Texture ), new TextureLoader( resolver ) );
-            SetLoader( typeof( Skin ), new SkinLoader( resolver ) );
-            SetLoader( typeof( ParticleEffect ), new ParticleEffectLoader( resolver ) );
-            SetLoader( typeof( PolygonRegion ), new PolygonRegionLoader( resolver ) );
-            SetLoader( typeof( ShaderProgram ), new ShaderProgramLoader( resolver ) );
-            SetLoader( typeof( Cubemap ), new CubemapLoader( resolver ) );
+            //@formatter:off
+            SetLoader( typeof( BitmapFont ),        new BitmapFontLoader( resolver ) );
+            SetLoader( typeof( IMusic ),            new MusicLoader( resolver ) );
+            SetLoader( typeof( Pixmap ),            new PixmapLoader( resolver ) );
+            SetLoader( typeof( ISound ),            new SoundLoader( resolver ) );
+            SetLoader( typeof( TextureAtlas ),      new TextureAtlasLoader( resolver ) );
+            SetLoader( typeof( Texture ),           new TextureLoader( resolver ) );
+            SetLoader( typeof( Skin ),              new SkinLoader( resolver ) );
+            SetLoader( typeof( ParticleEffect ),    new ParticleEffectLoader( resolver ) );
+            SetLoader( typeof( PolygonRegion ),     new PolygonRegionLoader( resolver ) );
+            SetLoader( typeof( ShaderProgram ),     new ShaderProgramLoader( resolver ) );
+            SetLoader( typeof( Cubemap ),           new CubemapLoader( resolver ) );
+            //@formatter:on
 
             //TODO:
             // 3D Particle effect loader here...
@@ -499,12 +501,28 @@ public partial class AssetManager : IDisposable
     /// <summary>
     /// Returns TRUE if the asset identified by filename and Type is loaded.
     /// </summary>
+    public bool IsLoaded< T >( string? filename )
+    {
+        lock ( this )
+        {
+            Guard.Against.Null( _assets );
+            Guard.Against.Null( filename );
+
+            _assets.TryGetValue( typeof( T ), out var assetsByType );
+                
+            return assetsByType?[ filename ] != null;
+        }
+    }
+    
+    /// <summary>
+    /// Returns TRUE if the asset identified by filename and Type is loaded.
+    /// </summary>
     public bool IsLoaded( string filename, Type? type )
     {
         lock ( this )
         {
             ArgumentNullException.ThrowIfNull( type );
-            GdxRuntimeException.ThrowIfNull( _assets );
+            Guard.Against.Null( _assets );
 
             // Retrieve all assets of the required type
             _assets.TryGetValue( type, out var assetsByType );
@@ -660,6 +678,32 @@ public partial class AssetManager : IDisposable
         return Contains( filename ) ? Get< T >( filename ) : default( T? );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="files"></param>
+    /// <typeparam name="T"></typeparam>
+    public void Load< T >( List< FileInfo > files )
+    {
+        foreach ( var asset in files )
+        {
+            Load< T >( asset.FullName );
+        }
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="files"></param>
+    /// <typeparam name="T"></typeparam>
+    public void Load< T >( List< string > files )
+    {
+        foreach ( var asset in files )
+        {
+            Load< T >( asset );
+        }
+    }
+    
     /// <summary>
     /// Updates the asset manager, loading new assets and processing asset loading tasks.
     /// Returns true if all assets are loaded, otherwise false.
