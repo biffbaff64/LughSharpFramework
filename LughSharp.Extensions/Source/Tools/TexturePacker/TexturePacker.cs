@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Atlases;
-
-using LughUtils.source.Maths;
-using LughUtils.source.Exceptions;
 using Bitmap = System.Drawing.Bitmap;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -260,6 +256,12 @@ public partial class TexturePacker
                                 TexturePackerSettings settings,
                                 TexturePackerProgressListener? progressListener = null )
     {
+        // All other Process() methods call this one, so this is the best place to do the
+        // conversion of the input and output paths ao that they are guaranteed to be
+        // pointing to the correct assets folder.
+        inputFolder = IOUtils.AssetPath( inputFolder );
+        outputFolder = IOUtils.AssetPath( outputFolder );
+        
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
@@ -340,18 +342,10 @@ public partial class TexturePacker
 
             ProgressListener.End();
 
-            Logger.Debug( $"pages: {pages.Count}" );
-            foreach ( var page in pages )
-            {
-                page.Debug();
-            }
-            
             // ---------- Handle writing of the texture atlas ----------
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
 
-            Logger.Debug( @$"Writing texture atlas to {outputDir.FullName}\{scaledPackFileName}" );
-            
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
             ProgressListener.Total = pages.Count;

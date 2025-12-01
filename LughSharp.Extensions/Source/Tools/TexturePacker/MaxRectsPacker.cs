@@ -98,16 +98,10 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             rect.Height += _settings.PaddingY;
         }
 
-        Logger.Debug( $"inputRects.Count: {inputRects.Count}" );
-        Logger.Debug( $"_settings.Fast: {_settings.Fast}" );
-        Logger.Debug( $"_settings.Rotation: {_settings.Rotation}" );
-
         if ( _settings.Fast )
         {
             if ( _settings.Rotation )
             {
-                Logger.Debug( "Sorting by longest side for fast packing." );
-
                 // Sort by longest side if rotation is enabled.
                 SortUtils.Sort( inputRects, ( o1, o2 ) =>
                 {
@@ -119,8 +113,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
             else
             {
-                Logger.Debug( "Sorting by width for fast packing." );
-
                 // Sort only by width (largest to smallest) if rotation is disabled.
                 inputRects.Sort( CompareRectsByWidthIfRotationDisabled );
 
@@ -201,6 +193,11 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         var minWidth  = int.MaxValue;
         var minHeight = int.MaxValue;
 
+        if ( !_settings.Silent )
+        {
+            Console.Write( "Packing" );
+        }
+
         foreach ( var rect in inputRects )
         {
             var width  = rect.Width - paddingX;
@@ -253,10 +250,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         var adjustX = paddingX;
         var adjustY = paddingY;
 
-        Logger.Debug( $"_settings.EdgePadding: {_settings.EdgePadding}" );
-        Logger.Debug( $"_settings.DuplicatePadding: {_settings.DuplicatePadding}" );
-        Logger.Debug( $"_settings.Square: {_settings.Square}" );
-
         if ( _settings.EdgePadding )
         {
             if ( _settings.DuplicatePadding )
@@ -271,19 +264,12 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
         }
 
-        if ( _settings.Silent )
-        {
-            Console.Write( "Packing" );
-        }
-
         // --------------------------------------------------------------------
         // Find the minimal page size that fits all rects.
         TexturePacker.Page? bestResult = null;
 
         if ( _settings.Square )
         {
-            Logger.Debug( "Finding minimal square page size" );
-
             var minSize = Math.Max( minWidth, minHeight );
             var maxSize = Math.Min( _settings.MaxWidth, _settings.MaxHeight );
             var sizeSearch = new BinarySearch( minSize,
@@ -327,8 +313,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         }
         else
         {
-            Logger.Debug( "Finding minimal rectangular page size" );
-
             var widthSearch = new BinarySearch( minWidth,
                                                 _settings.MaxWidth,
                                                 _settings.Fast ? 25 : 15,

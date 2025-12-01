@@ -28,6 +28,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

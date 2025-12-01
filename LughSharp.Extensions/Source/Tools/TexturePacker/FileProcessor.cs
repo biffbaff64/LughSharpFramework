@@ -232,10 +232,10 @@ public partial class FileProcessor
             }
 
             var entry = new Entry
-                        {
-                            InputFile       = inputDir,
-                            OutputDirectory = newOutputDir,
-                        };
+            {
+                InputFile       = inputDir,
+                OutputDirectory = newOutputDir,
+            };
 
             if ( newOutputDir != null )
             {
@@ -272,8 +272,6 @@ public partial class FileProcessor
                 throw new Exception( $"Error processing file: {entry.InputFile?.FullName}", ex );
             }
         }
-
-        Logger.Debug( $"Output files: {OutputFilesList.Count}" );
 
         return OutputFilesList;
     }
@@ -361,14 +359,14 @@ public partial class FileProcessor
 
             // Create an entry for the file
             var entry = new Entry
-                        {
-                            Depth           = depth,
-                            InputFile       = file,
-                            OutputDirectory = outputDir,
-                            OutputFileName = FlattenOutput
-                                ? Path.Combine( outputRoot.FullName, outputName )
-                                : Path.Combine( outputDir.FullName, outputName ),
-                        };
+            {
+                Depth           = depth,
+                InputFile       = file,
+                OutputDirectory = outputDir,
+                OutputFileName = FlattenOutput
+                    ? Path.Combine( outputRoot.FullName, outputName )
+                    : Path.Combine( outputDir.FullName, outputName ),
+            };
 
             var dir = file.Directory!;
 

@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-using LughUtils.source.Collections;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 

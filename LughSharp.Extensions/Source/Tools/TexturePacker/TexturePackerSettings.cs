@@ -480,16 +480,21 @@ public class TexturePackerSettings
         if ( writeableString.Length > 0 )
         {
             // Ensure the directory exists before creating the file
-            var directoryPath = IOUtils.NormalizePath( Path.GetDirectoryName( filename ) );
+            var name = Path.GetDirectoryName( filename );
 
-            if ( !string.IsNullOrEmpty( directoryPath ) )
+            if ( !string.IsNullOrEmpty( name ) )
             {
-                Directory.CreateDirectory( directoryPath );
-            }
+                var directoryPath = IOUtils.NormalizePath( name );
 
-            using ( var fs = File.Create( filename ) )
-            {
-                fs.Write( writeableString );
+                if ( !string.IsNullOrEmpty( directoryPath ) )
+                {
+                    Directory.CreateDirectory( directoryPath );
+                }
+
+                using ( var fs = File.Create( filename ) )
+                {
+                    fs.Write( writeableString );
+                }
             }
         }
     }

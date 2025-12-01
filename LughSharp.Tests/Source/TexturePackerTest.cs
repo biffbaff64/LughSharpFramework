@@ -23,15 +23,10 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
-
 using Extensions.Source.Tools.TexturePacker;
-
 using JetBrains.Annotations;
-
 using LughSharp.Lugh.Files;
-
 using LughUtils.source.Logging;
-
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -62,13 +57,14 @@ public class TexturePackerTest
             PowerOfTwo       = true,                  // 
             Debug            = DRAW_DEBUG_LINES,      // 
             IsAlias          = KEEP_DUPLICATE_IMAGES, // 
-            Silent           = false,                 // 
+            Silent           = true,                 // 
             PaddingX         = 2,                     // Increase padding
             PaddingY         = 2,                     // Increase padding
             EdgePadding      = true,                  // Disable edge padding initially
             DuplicatePadding = false,                 // Disable duplicate padding
             MinWidth         = 16,                    // 
             MinHeight        = 16,                    // 
+//            Grid             = true,
         };
 
         // Build the Atlases from the specified parameters :-
@@ -85,7 +81,13 @@ public class TexturePackerTest
         var settingsFilePath = IOUtils.NormalizePath( Path.Combine( inputFolder, "pack.json" ) );
         settings.WriteToJsonFile( settingsFilePath );
 
-        TexturePacker.Process( inputFolder, outputFolder, "objects", settings );
+        // Calls to TexturePacker.Process() do not modify the paths with any IOUtils
+        // mthods, as this is done by the TexturePacker class itself.
+
+        TexturePacker.Process( @"Assets\PackedImages\animations", outputFolder, "animations", settings );
+        TexturePacker.Process( @"Assets\PackedImages\input", outputFolder, "input", settings );
+        TexturePacker.Process( @"Assets\PackedImages\objects", outputFolder, "objects", settings );
+        TexturePacker.Process( @"Assets\PackedImages\text", outputFolder, "text", settings );
     }
 
     [TearDown]

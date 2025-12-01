@@ -22,14 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.Versioning;
-
-using JetBrains.Annotations;
-
-using LughUtils.source.Exceptions;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.ImagePacker;
 

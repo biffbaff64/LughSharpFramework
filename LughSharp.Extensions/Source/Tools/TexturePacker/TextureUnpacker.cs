@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics.Atlases;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

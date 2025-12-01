@@ -131,11 +131,9 @@ public class TexturePackerFileProcessor : FileProcessor
         // Count the number of texture packer invocations for the ProgressListener
         // to use. This is done by a dry run with CountOnly = true, and will set the
         // _packCount variable to the number of packer invocations.
-        Logger.DisableDebugLogging();
         CountOnly = true;
         _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
-        Logger.EnableDebugLogging();
         
         // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
@@ -174,8 +172,6 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="entryList"> The resulting list of entries. </param>
     public override void ProcessDir( Entry inputDir, List< Entry > entryList )
     {
-        Logger.Checkpoint();
-        
         // Do not proceed if this input file is in the ignore list.
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
         {
@@ -398,8 +394,6 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="entry"></param>
     public void Pack( TexturePacker packer, Entry entry )
     {
-        Logger.Checkpoint();
-        
         packer.Pack( entry.OutputDirectory!, PackFileName );
     }
 
