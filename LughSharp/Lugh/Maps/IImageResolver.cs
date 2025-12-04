@@ -130,7 +130,7 @@ public interface IImageResolver
                 throw new AssetNotLoadedException( $"The asset '{name}' is not loaded." );
             }
 
-            var texture = _assetManager.Get( name ) as Texture;
+            var texture = _assetManager.Get< Texture >( name );
 
             return new TextureRegion( texture! );
         }

@@ -101,7 +101,7 @@ public class TextureAtlas : IDisposable
         Load( atlasData );
 
         Logger.Debug( $"packFile Name: {packFile.FullName}" );
-        Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
+        Logger.Debug( $"imagesDir Name: {imagesDir.FullName}" );
     }
 
     /// <summary>
@@ -447,3 +447,6 @@ public class TextureAtlas : IDisposable
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

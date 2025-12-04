@@ -144,11 +144,11 @@ public class Texture2D : IDrawable, IDisposable
 
     private readonly Dictionary< IApplication, List< Texture > > _managedTextures = [ ];
 
-    private        string?     _name;
-    private        bool        _isUploaded                = false;
+//    private        string?     _name;
+//    private        bool        _isUploaded                = false;
+//    private static float       _maxAnisotropicFilterLevel = 0;
+//    private        TextureUnit _activeTextureUnit         = TextureUnit.None;
     private        bool        _isDisposed                = false;
-    private static float       _maxAnisotropicFilterLevel = 0;
-    private        TextureUnit _activeTextureUnit         = TextureUnit.None;
 
     // ========================================================================
     // ========================================================================

@@ -22,17 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Files;
-
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
 /// AssetLoader to load TextureAtlas instances.
 /// </summary>
 [PublicAPI]
-public class TextureAtlasLoader
-    : SynchronousAssetLoader< TextureAtlas, TextureAtlasLoader.TextureAtlasParameter >, IDisposable
+public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDisposable
 {
     private TextureAtlasData? _data;
 
@@ -52,8 +48,10 @@ public class TextureAtlasLoader
     /// <param name="parameter">The parameters for loading the texture atlas.</param>
     /// <returns>The loaded texture atlas.</returns>
     /// <exception cref="GdxRuntimeException">Thrown if the texture atlas data is null.</exception>
-    public override TextureAtlas Load( AssetManager assetManager, FileInfo? file, TextureAtlasParameter? parameter )
+    public override TextureAtlas Load( AssetManager assetManager, FileInfo? file, AssetLoaderParameters? parameter )
     {
+        Logger.Checkpoint();
+        
         if ( _data == null )
         {
             throw new GdxRuntimeException( "TextureAtlasData cannot be null!" );
@@ -63,10 +61,12 @@ public class TextureAtlasLoader
         {
             if ( page.TextureFile != null )
             {
-                var name = IOUtils.NormalizePath( page.TextureFile.FullName );
-                var texture = assetManager.Get( name ) as Texture;
-
+                var texture = assetManager.Get< Texture >( page.TextureFile.FullName );
                 page.Texture = texture;
+            }
+            else
+            {
+                Logger.Debug( "page texture file is null!" );
             }
         }
 
@@ -130,29 +130,29 @@ public class TextureAtlasLoader
     /// <param name="disposing">
     /// True to release both managed and unmanaged resources; false to release only unmanaged resources.
     /// </param>
-    protected virtual void Dispose( bool disposing )
+    protected void Dispose( bool disposing )
     {
         if ( disposing )
         {
             _data = null;
         }
     }
+}
 
-    // ========================================================================
-    // ========================================================================
+// ========================================================================
+// ========================================================================
 
-    /// <summary>
-    /// Parameters for loading a <see cref="TextureAtlas"/>
-    /// </summary>
-    [PublicAPI]
-    public class TextureAtlasParameter( bool flip ) : AssetLoaderParameters
+/// <summary>
+/// Parameters for loading a <see cref="TextureAtlas"/>
+/// </summary>
+[PublicAPI]
+public class TextureAtlasParameter( bool flip ) : AssetLoaderParameters
+{
+    public TextureAtlasParameter() : this( false )
     {
-        public TextureAtlasParameter() : this( false )
-        {
-        }
-
-        public bool FlipVertically { get; } = flip;
     }
+
+    public bool FlipVertically { get; } = flip;
 }
 
 // ============================================================================

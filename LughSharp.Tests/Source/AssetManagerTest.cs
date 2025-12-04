@@ -26,8 +26,7 @@ using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.Utils;
-
+using LughSharp.Lugh.Graphics.Atlases;
 using LughUtils.source.Logging;
 
 using NUnit.Framework;
@@ -37,12 +36,16 @@ namespace LughSharp.Tests.Source;
 [TestFixture]
 public class AssetManagerTest
 {
-    private AssetManager? _assetManager;
+    private readonly AssetManager? _assetManager;
 
+    public AssetManagerTest( AssetManager? assetManager )
+    {
+        _assetManager = assetManager;
+        
+    }
     [SetUp]
     public void Setup()
     {
-        _assetManager = new AssetManager();
     }
 
     [Test]
@@ -76,12 +79,34 @@ public class AssetManagerTest
             CheckAsset< Texture >( file );
         }
 
+        Logger.Debug( "Checking TextureAtlas assets...", true );
+
+        // ====================================================================
+        
+        const string OBJECTS_ATLAS = @"Assets\PackedImages\output\objects.atlas";
+        
+        Logger.Debug( $"Loading atlas: {Engine.Api.Files.Internal( OBJECTS_ATLAS )}" );
+        
+        var objectsAtlas = new TextureAtlas( Engine.Api.Files.Internal( OBJECTS_ATLAS ) );
+        
+        Logger.Debug( "Fetching atlas region..." );
+
+        var region = objectsAtlas.FindRegion( "bar9" );
+        
+        if ( region == null )
+        {
+            Logger.Error( "Unable to find requested region in objects.atlas" );
+        }
+        
+        Logger.Debug( $"region size: {region?.RegionWidth}, {region?.RegionHeight}" );
+        
         Logger.Debug( "Finished!", true );
     }
 
     [TearDown]
     public void TearDown()
     {
+        _assetManager?.Dispose();
     }
 
     private void CheckAsset< T >( FileInfo asset )
@@ -102,14 +127,9 @@ public class AssetManagerTest
 
             var texture = _assetManager.Get< Texture >( asset.FullName );
 
-            if ( texture != null )
-            {
-                Logger.Debug( $"Texture loaded and retrieved: {asset.Name}" );
-            }
-            else
-            {
-                Logger.Debug( $"Unable to retrieve {asset.Name} from AssetManager" );
-            }
+            Logger.Debug( texture != null
+                              ? $"Texture loaded and retrieved: {asset.Name}"
+                              : $"Unable to retrieve {asset.Name} from AssetManager" );
         }
         else
         {

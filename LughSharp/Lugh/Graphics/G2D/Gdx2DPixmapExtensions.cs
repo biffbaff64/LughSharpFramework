@@ -56,9 +56,6 @@ public partial class Gdx2DPixmap
 
         [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_bytes_per_pixel" )]
         static extern uint bytes_per_pixel( uint format );
-
-        [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_free" )]
-        static extern void free( gdx2d_pixmap* nativeData );
     }
 
     /// <summary>

@@ -68,6 +68,8 @@ public class AssetLoadingTask : IAssetTask
                              AssetLoader loader,
                              AsyncExecutor threadPool )
     {
+        Logger.Checkpoint();
+
         AssetDesc = assetDesc;
         Manager   = manager;
         Loader    = loader;
@@ -87,14 +89,8 @@ public class AssetLoadingTask : IAssetTask
             return;
         }
 
-        if ( Loader is not AsynchronousAssetLoader asyncLoader )
-        {
-            // This should never happen, but just in case...
-            Logger.Error( $"Loader is not an AsynchronousAssetLoader: {Loader}" );
-
-            return;
-        }
-
+        var asyncLoader = ( AsynchronousAssetLoader )Loader;
+        
         if ( !DependenciesLoaded )
         {
             Dependencies = asyncLoader.GetDependencies( AssetDesc.AssetName,
@@ -135,14 +131,14 @@ public class AssetLoadingTask : IAssetTask
     /// the rendering thread via <see cref="AsynchronousAssetLoader.LoadSync"/>.
     /// </para>
     /// </summary>
-    /// <returns> true in case the asset was fully loaded, false otherwise. </returns>
+    /// <returns> true if the asset was fully loaded, false otherwise. </returns>
     public bool Update()
     {
         if ( Loader is AsynchronousAssetLoader )
         {
             HandleAsyncLoader();
         }
-        else if ( Loader is SynchronousAssetLoader< Type, AssetLoaderParameters > )
+        else
         {
             HandleSyncLoader();
         }
@@ -198,9 +194,7 @@ public class AssetLoadingTask : IAssetTask
             }
             else if ( AsyncDone )
             {
-                Asset = asyncLoader.LoadSync( Manager,
-                                              Resolve( Loader, AssetDesc )!,
-                                              AssetDesc.Parameters );
+                Asset = asyncLoader.LoadSync( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters );
             }
             else if ( LoadFuture!.IsCompleted )
             {
@@ -213,9 +207,7 @@ public class AssetLoadingTask : IAssetTask
                     throw new GdxRuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", e );
                 }
 
-                Asset = asyncLoader.LoadSync( Manager,
-                                              Resolve( Loader, AssetDesc )!,
-                                              AssetDesc.Parameters );
+                Asset = asyncLoader.LoadSync( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters );
             }
         }
     }
@@ -225,20 +217,18 @@ public class AssetLoadingTask : IAssetTask
     /// </summary>
     private void HandleSyncLoader()
     {
-        var syncLoader = ( SynchronousAssetLoader< Type, AssetLoaderParameters > )Loader;
+        var syncLoader = Loader as SynchronousAssetLoader< Type >;
 
         if ( !DependenciesLoaded )
         {
             DependenciesLoaded = true;
-            Dependencies = syncLoader.GetDependencies( AssetDesc.AssetName,
+            Dependencies = syncLoader?.GetDependencies( AssetDesc.AssetName,
                                                        Resolve( Loader, AssetDesc )!,
                                                        AssetDesc.Parameters );
 
             if ( Dependencies == null )
             {
-                Asset = syncLoader.Load( Manager,
-                                         Resolve( Loader, AssetDesc )!,
-                                         AssetDesc.Parameters! );
+                Asset = syncLoader?.Load( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters! );
 
                 return;
             }
@@ -248,9 +238,7 @@ public class AssetLoadingTask : IAssetTask
         }
         else
         {
-            Asset = syncLoader.Load( Manager,
-                                     Resolve( Loader, AssetDesc )!,
-                                     AssetDesc.Parameters! );
+            Asset = syncLoader?.Load( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters! );
         }
     }
 

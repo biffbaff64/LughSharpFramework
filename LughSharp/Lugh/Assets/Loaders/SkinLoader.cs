@@ -98,7 +98,7 @@ public class SkinLoader : AsynchronousAssetLoader
             }
         }
 
-        var atlas = manager.Get( textureAtlasPath! ) as TextureAtlas;
+        var atlas = manager.Get< TextureAtlas >( textureAtlasPath! );
         var skin  = NewSkin( atlas );
 
         if ( resources != null )

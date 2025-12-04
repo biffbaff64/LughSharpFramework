@@ -50,7 +50,6 @@ public partial class MainGame : Game
         _whitePixelTexture = null;
 
         CreateCamera();
-        LoadImage1Texture();
         
         RunTests();
 
@@ -166,7 +165,7 @@ public partial class MainGame : Game
 
         if ( _assetManager.Contains( TEST_ASSET1 ) )
         {
-            _image1 = _assetManager.GetAs< Texture >( TEST_ASSET1 );
+            _image1 = _assetManager.Get< Texture >( TEST_ASSET1 );
         }
 
         if ( _image1 == null )

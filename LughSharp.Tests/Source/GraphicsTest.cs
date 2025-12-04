@@ -54,7 +54,7 @@ public class GraphicsTest
             Engine.Api.Files.Assets( "title_background.png" ),
         };
 
-        Pixmap pixmap;
+//        Pixmap pixmap;
         var assetManager = new AssetManager();
 
         assetManager.Load< Pixmap >( files[ 0 ].FullName );

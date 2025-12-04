@@ -316,7 +316,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         {
             public TextureAtlas? GetAtlas()
             {
-                return assetManager.Get( atlasName ) as TextureAtlas;
+                return assetManager.Get< TextureAtlas >( atlasName );
             }
 
             public TextureRegion? GetImage( string name )

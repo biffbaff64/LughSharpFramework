@@ -16,6 +16,7 @@
     <ItemGroup>
         <PackageReference Include="DotGLFW" Version="1.2.0"/>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
+        <PackageReference Include="LughUtils" Version="0.0.6" />
         <PackageReference Include="OpenTK" Version="4.9.4" />
         <PackageReference Include="OpenTK.Audio.OpenAL" Version="4.9.4" />
         <PackageReference Include="OpenTK.Compute" Version="4.9.4" />
@@ -28,12 +29,6 @@
         <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.9.4" />
         <PackageReference Include="OpenTK.Windowing.GraphicsLibraryFramework" Version="4.9.4" />
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="LughUtils">
-        <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU'">

@@ -85,10 +85,6 @@ public class Engine
 
     // ========================================================================
 
-    private IGLBindings? _glBindings;
-
-    // ========================================================================
-
     private Engine()
     {
     }
@@ -117,8 +113,8 @@ public class Engine
     /// </summary>
     public IGLBindings Bindings
     {
-        get => _glBindings ??= new GLBindings();
-        set => _glBindings = value;
+        get => field ??= new GLBindings();
+        set;
     }
 
     /// <summary>

@@ -33,8 +33,7 @@ namespace LughSharp.Lugh.Assets.Loaders;
 /// Per default images are loaded from the directory in which the effect file is found.
 /// </summary>
 [PublicAPI]
-public class ParticleEffectLoader
-    : SynchronousAssetLoader< ParticleEffect, ParticleEffectLoader.ParticleEffectParameter >
+public class ParticleEffectLoader : SynchronousAssetLoader< ParticleEffect >
 {
     /// <summary>
     /// Creates a new <see cref="ParticleEffect"/> loader using the
@@ -59,21 +58,22 @@ public class ParticleEffectLoader
     /// </summary>
     /// <param name="am">The asset manager used for loading dependent assets.</param>
     /// <param name="file">The file information associated with the asset.</param>
-    /// <param name="param">The parameters used for loading the asset.</param>
+    /// <param name="parameters">The parameters used for loading the asset.</param>
     /// <returns>
     /// A loaded instance of the <see cref="ParticleEffect"/> class.
     /// </returns>
-    public override ParticleEffect Load( AssetManager? am, FileInfo? file, ParticleEffectParameter? param )
+    public override ParticleEffect Load( AssetManager? am, FileInfo? file, AssetLoaderParameters? parameters )
     {
         ArgumentNullException.ThrowIfNull( am );
         ArgumentNullException.ThrowIfNull( file );
 
         var effect = new ParticleEffect();
-
+        var param  = parameters as ParticleEffectParameter;
+        
         switch ( param )
         {
             case { AtlasFile: not null }:
-                var atlas = am.Get( param.AtlasFile ) as TextureAtlas;
+                var atlas = am.Get< TextureAtlas >( param.AtlasFile! );
 
                 effect.Load( file, atlas!, param.AtlasPrefix );
 
@@ -124,29 +124,29 @@ public class ParticleEffectLoader
 
         return deps!;
     }
+}
+
+/// <summary>
+/// Parameter to be passed to <see cref="AssetManager.Load(string, Type, AssetLoaderParameters)"/>
+/// if additional configuration is necessary for the <see cref="ParticleEffect"/>.
+/// </summary>
+[PublicAPI]
+public class ParticleEffectParameter : AssetLoaderParameters
+{
+    /// <summary>
+    /// Atlas file name.
+    /// </summary>
+    public string? AtlasFile { get; set; }
 
     /// <summary>
-    /// Parameter to be passed to <see cref="AssetManager.Load(string, Type, AssetLoaderParameters)"/>
-    /// if additional configuration is necessary for the <see cref="ParticleEffect"/>.
+    /// Optional prefix to image names
     /// </summary>
-    [PublicAPI]
-    public class ParticleEffectParameter : AssetLoaderParameters
-    {
-        /// <summary>
-        /// Atlas file name.
-        /// </summary>
-        public string? AtlasFile { get; set; }
+    public string? AtlasPrefix { get; set; }
 
-        /// <summary>
-        /// Optional prefix to image names
-        /// </summary>
-        public string? AtlasPrefix { get; set; }
-
-        /// <summary>
-        /// Image directory.
-        /// </summary>
-        public DirectoryInfo? ImagesDir { get; set; }
-    }
+    /// <summary>
+    /// Image directory.
+    /// </summary>
+    public DirectoryInfo? ImagesDir { get; set; }
 }
 
 // ============================================================================

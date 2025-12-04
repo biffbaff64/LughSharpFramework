@@ -134,7 +134,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.AtlasName != null )
         {
-            var atlas = manager.Get( p.AtlasName! ) as TextureAtlas;
+            var atlas = manager.Get< TextureAtlas >( p.AtlasName! );
             var name  = Path.GetFileNameWithoutExtension( _data?.ImagePaths?[ 0 ] );
 
             TextureRegion? region = atlas?.FindRegion( name );
@@ -152,7 +152,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 
         for ( var i = 0; i < capacity; i++ )
         {
-            var texture = manager.Get( _data.ImagePaths[ i ] ) as Texture;
+            var texture = manager.Get< Texture >( _data.ImagePaths[ i ] );
             regs.Add( new TextureRegion( texture! ) );
         }
 

@@ -19,51 +19,10 @@
         <Content Include="Assets\**\*.*">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-<!--        <None Remove="Assets\image_info.py"/>-->
-<!--        <Content Include="Assets\image_info.py">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="Assets\title_background.png"/>-->
-<!--        <Content Include="Assets\title_background.png">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="Assets\Fonts\Acme-Regular.ttf"/>-->
-<!--        <Content Include="Assets\Fonts\Acme-Regular.ttf">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="Assets\Fonts\arial-15.fnt"/>-->
-<!--        <Content Include="Assets\Fonts\arial-15.fnt">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="Assets\Fonts\arial-15.png"/>-->
-<!--        <Content Include="Assets\Fonts\arial-15.png">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="Assets\Fonts\CENSCBK.TTF"/>-->
-<!--        <Content Include="Assets\Fonts\CENSCBK.TTF">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="Assets\Fonts\lsans-15.fnt"/>-->
-<!--        <Content Include="Assets\Fonts\lsans-15.fnt">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="Assets\Fonts\lsans-15.png"/>-->
-<!--        <Content Include="Assets\Fonts\lsans-15.png">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="Assets\Fonts\ProFontWindows.ttf"/>-->
-<!--        <Content Include="Assets\Fonts\ProFontWindows.ttf">-->
-<!--            <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="LughUtils">
-            <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
+        <PackageReference Include="LughUtils" Version="0.0.6" />
         <PackageReference Include="OpenTK" Version="4.9.4"/>
         <PackageReference Include="OpenTK.Audio.OpenAL" Version="4.9.4"/>
         <PackageReference Include="OpenTK.Compute" Version="4.9.4"/>

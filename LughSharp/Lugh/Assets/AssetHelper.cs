@@ -22,14 +22,25 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Files;
+
 namespace LughSharp.Lugh.Assets;
 
 [PublicAPI]
 public class AssetHelper
 {
-    public AssetManager AssetManager = new();
+    private AssetManager _assetManager;
 
     // ========================================================================
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="assetManager"></param>
+    public AssetHelper( AssetManager? assetManager )
+    {
+        _assetManager = assetManager ?? throw new ArgumentNullException( nameof( assetManager ) );
+    }
 
     /// <summary>
     /// Load single asset, and ensures that it is loaded.
@@ -40,35 +51,64 @@ public class AssetHelper
     /// <returns>
     /// An object of the specified type, or null if the asset could not be loaded.
     /// </returns>
-    public T? LoadSingleAsset< T >( string asset )
+    public T? LoadSingleAsset< T >( string asset ) where T : class
     {
-        if ( !AssetManager.IsLoaded( asset ) )
+        if ( !_assetManager.IsLoaded( asset ) )
         {
-            AssetManager.Load< T >( asset );
-            AssetManager.FinishLoadingAsset( asset );
+            _assetManager.Load< T >( asset );
+            _assetManager.FinishLoadingAsset< T >( asset );
         }
 
-        return AssetManager.Get< T >( asset );
+        return _assetManager.Get< T >( asset );
     }
 
     /// <summary>
-    /// Load TextureAtlas asset.
+    /// 
     /// </summary>
     /// <param name="atlasName"> the full name of the specified atlas. </param>
     public void LoadAtlas( string atlasName )
     {
-        LoadSingleAsset< TextureAtlas >( atlasName );
+        // Ensure that the path contains the path to the assets folder.
+        atlasName = IOUtils.AssetPath( atlasName );
+
+        Logger.Debug( $"loading atlas: {atlasName}" );
+
+        
+        
+        
+        _assetManager.Load< TextureAtlas >( atlasName );
+        _assetManager.FinishLoadingAsset< TextureAtlas >( atlasName );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="atlasName"></param>
+    /// <param name="assetName"></param>
+    /// <returns></returns>
+    public TextureRegion? GetAtlasRegion( string atlasName, string assetName )
+    {
+        TextureAtlas? atlas = null;
+
+        if ( _assetManager.Contains( atlasName ) )
+        {
+            Logger.Debug( $"atlas found: {atlasName}" );
+
+            atlas = _assetManager.Get< TextureAtlas >( atlasName );
+        }
+
+        return atlas?.FindRegion( assetName );
     }
 
     /// <summary>
     /// Unload the specified object
     /// </summary>
     /// <param name="asset"> the filename of the object to unload. </param>
-    public void UnloadAsset< T >( string asset )
+    public void UnloadAsset< T >( string asset ) where T : class
     {
-        if ( AssetManager.IsLoaded< T >( asset ) )
+        if ( _assetManager.IsLoaded< T >( asset ) )
         {
-            AssetManager.Unload( asset );
+            _assetManager.Unload( asset );
         }
     }
 }

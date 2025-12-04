@@ -32,8 +32,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// loads <see cref="PolygonRegion"/>s.
 /// </summary>
 [PublicAPI]
-public class PolygonRegionLoader( IFileHandleResolver resolver )
-    : SynchronousAssetLoader< PolygonRegion, PolygonRegionLoader.PolygonRegionParameters >( resolver )
+public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAssetLoader< PolygonRegion >( resolver )
 {
     private readonly PolygonRegionParameters _defaultParameters = new();
     private readonly EarClippingTriangulator _triangulator      = new();
@@ -48,11 +47,11 @@ public class PolygonRegionLoader( IFileHandleResolver resolver )
 
     public override PolygonRegion Load( AssetManager manager,
                                         FileInfo? file,
-                                        PolygonRegionParameters? parameter )
+                                        AssetLoaderParameters? parameter )
     {
         ArgumentNullException.ThrowIfNull( file?.Name );
 
-        var texture = manager.Get( manager.GetDependencies( file.Name )!.First() ) as Texture;
+        var texture = manager.Get< Texture >( manager.GetDependencies( file.Name )!.First() );
 
         return Load( new TextureRegion( texture! ), file );
     }

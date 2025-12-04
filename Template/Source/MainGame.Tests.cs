@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Versioning;
+using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
@@ -28,7 +29,7 @@ public partial class MainGame
         Logger.Divider();
         Logger.Divider();
         // --------------------------------------
-        var test = new AssetManagerTest();
+        var test = new AssetManagerTest( _assetManager );
 //        var test = new TexturePackerTest();
 //        var test = new ImagePackerTest();
         // --------------------------------------
@@ -112,7 +113,8 @@ public partial class MainGame
         {
             var filename = $"{IOUtils.AssetsRoot}title_background.png";
 
-            _image1 = _assetManager?.LoadSingleAsset< Texture >( filename );
+            var assetHelper = new AssetHelper( _assetManager );
+            _image1 = assetHelper.LoadSingleAsset< Texture >( filename );
 
             if ( _image1 == null )
             {
