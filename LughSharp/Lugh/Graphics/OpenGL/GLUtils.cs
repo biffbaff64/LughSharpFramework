@@ -28,6 +28,22 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 public static class GLUtils
 {
     /// <summary>
+    /// Checks for OpenGL errors after a given stage of rendering or processing.
+    /// Throws an <see cref="InvalidOperationException"/> if an OpenGL error is detected.
+    /// </summary>
+    /// <param name="stage">The description of the stage at which the error occurred.</param>
+    /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
+    public static void GLErrorCheck( string stage )
+    {
+        var error = GL.GetError();
+
+        if ( error != ( int )ErrorCode.NoError )
+        {
+            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
+        }
+    }
+
+    /// <summary>
     /// Converts a specified OpenGL error code into a corresponding descriptive error string.
     /// </summary>
     /// <param name="errorCode">

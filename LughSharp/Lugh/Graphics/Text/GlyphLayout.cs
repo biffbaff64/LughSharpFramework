@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughUtils.source.Collections;
 using LughUtils.source.Pooling;
 
 namespace LughSharp.Lugh.Graphics.Text;
@@ -56,11 +55,11 @@ public class GlyphLayout : IResetable
 
     // ========================================================================
 
-    private static readonly float _epsilon = 0.0001f;
+    private const float EPSILON = 0.0001f;
 
-    private readonly Pool< Color >    _colorPool    = Pools.Get< Color >( () => new Color() );
+    private readonly Pool< Color >    _colorPool    = Pools.Get( () => new Color() );
     private readonly List< Color >    _colorStack   = new( 4 );
-    private readonly Pool< GlyphRun > _glyphRunPool = Pools.Get< GlyphRun >( () => new GlyphRun() );
+    private readonly Pool< GlyphRun > _glyphRunPool = Pools.Get( () => new GlyphRun() );
 
     // ========================================================================
 
@@ -476,7 +475,7 @@ public class GlyphLayout : IResetable
             var glyph      = run.Glyphs[ i - 1 ];
             var glyphWidth = ( ( glyph.Width + glyph.Xoffset ) * fontData.ScaleX ) - fontData.PadRight;
 
-            if ( ( ( x + glyphWidth ) - _epsilon ) <= targetWidth )
+            if ( ( ( x + glyphWidth ) - EPSILON ) <= targetWidth )
             {
                 x += xAdvances[ i ];
 

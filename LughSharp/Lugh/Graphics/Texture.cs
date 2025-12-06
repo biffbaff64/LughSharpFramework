@@ -70,7 +70,7 @@ public class Texture : GLTexture, IManaged
 
     private readonly Dictionary< IApplication, List< Texture > > _managedTextures = [ ];
 
-    private bool _isUploaded = false;
+    private bool _isUploaded;
 
     // ========================================================================
     // ========================================================================

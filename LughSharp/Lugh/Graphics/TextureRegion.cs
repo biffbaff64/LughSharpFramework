@@ -32,15 +32,26 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public class TextureRegion
 {
-    public Texture? Texture { get; set; } = null!;
+    /// <summary>
+    /// </summary>
+    public Texture? Texture { get; set; }
 
-    // ========================================================================
-    // Backing values for properties U, U2, V, and V2.
-    private float _u;
-    private float _u2;
-    private float _v;
-    private float _v2;
+    /// <summary>
+    /// </summary>
+    public virtual float U { get; set; }
 
+    /// <summary>
+    /// </summary>
+    public virtual float U2 { get; set; }
+
+    /// <summary>
+    /// </summary>
+    public virtual float V { get; set; }
+
+    /// <summary>
+    /// </summary>
+    public virtual float V2 { get; set; }
+    
     // ========================================================================
 
     /// <summary>
@@ -368,62 +379,6 @@ public class TextureRegion
 
     /// <summary>
     /// </summary>
-    public virtual float U
-    {
-        get => _u;
-        set =>
-
-            // Add validation here if needed
-            _u = value;
-
-        // No need to explicitly update RegionWidth, its getter will recalculate.
-        // If using INotifyPropertyChanged, raise for U and RegionWidth here.
-    }
-
-    /// <summary>
-    /// </summary>
-    public virtual float U2
-    {
-        get => _u2;
-        set =>
-
-            // Add validation here if needed
-            _u2 = value;
-
-        // No need to explicitly update RegionWidth, its getter will recalculate.
-        // If using INotifyPropertyChanged, raise for U2 and RegionWidth here.
-    }
-
-    /// <summary>
-    /// </summary>
-    public virtual float V
-    {
-        get => _v;
-        set =>
-
-            // Add validation here if needed
-            _v = value;
-
-        // No need to explicitly update RegionHeight, its getter will recalculate.
-        // If using INotifyPropertyChanged, raise for V and RegionHeight here.
-    }
-
-    /// <summary>
-    /// </summary>
-    public virtual float V2
-    {
-        get => _v2;
-        set =>
-
-            // Add validation here if needed
-            _v2 = value;
-
-        // No need to explicitly update RegionHeight, its getter will recalculate.
-        // If using INotifyPropertyChanged, raise for V2 and RegionHeight here.
-    }
-
-    /// <summary>
-    /// </summary>
     public int RegionX
     {
         get
@@ -477,7 +432,7 @@ public class TextureRegion
                 return 0;
             }
 
-            return ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
+            return ( int )Math.Round( Math.Abs( U2 - U ) * Texture.Width );
         }
 
         // No setter for RegionHeight as it is derived.
@@ -496,7 +451,7 @@ public class TextureRegion
                 return 0;
             }
 
-            return ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
+            return ( int )Math.Round( Math.Abs( V2 - V ) * Texture.Height );
         }
 
         // No setter for RegionHeight as it is derived.

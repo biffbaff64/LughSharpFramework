@@ -63,44 +63,6 @@ public class AssetHelper
     }
 
     /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="atlasName"> the full name of the specified atlas. </param>
-    public void LoadAtlas( string atlasName )
-    {
-        // Ensure that the path contains the path to the assets folder.
-        atlasName = IOUtils.AssetPath( atlasName );
-
-        Logger.Debug( $"loading atlas: {atlasName}" );
-
-        
-        
-        
-        _assetManager.Load< TextureAtlas >( atlasName );
-        _assetManager.FinishLoadingAsset< TextureAtlas >( atlasName );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="atlasName"></param>
-    /// <param name="assetName"></param>
-    /// <returns></returns>
-    public TextureRegion? GetAtlasRegion( string atlasName, string assetName )
-    {
-        TextureAtlas? atlas = null;
-
-        if ( _assetManager.Contains( atlasName ) )
-        {
-            Logger.Debug( $"atlas found: {atlasName}" );
-
-            atlas = _assetManager.Get< TextureAtlas >( atlasName );
-        }
-
-        return atlas?.FindRegion( assetName );
-    }
-
-    /// <summary>
     /// Unload the specified object
     /// </summary>
     /// <param name="asset"> the filename of the object to unload. </param>
@@ -110,6 +72,29 @@ public class AssetHelper
         {
             _assetManager.Unload( asset );
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="atlasName"> the full name of the specified atlas. </param>
+    public TextureAtlas LoadAtlas( string atlasName )
+    {
+        // Ensure that the path contains the path to the assets folder.
+        atlasName = IOUtils.AssetPath( atlasName );
+
+        return new TextureAtlas( atlasName );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="atlas"></param>
+    /// <param name="assetName"></param>
+    /// <returns></returns>
+    public TextureRegion? GetAtlasRegion( TextureAtlas atlas, string assetName )
+    {
+        return atlas?.FindRegion( assetName );
     }
 }
 

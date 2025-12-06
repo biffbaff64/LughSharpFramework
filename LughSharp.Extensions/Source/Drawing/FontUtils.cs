@@ -22,7 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.Text;
+using Extensions.Source.Freetype;
+using LughSharp.Lugh.Core;
+using Color = LughSharp.Lugh.Graphics.Color;
+
+namespace Extensions.Source.Drawing;
 
 [PublicAPI]
 public class FontUtils
@@ -65,14 +69,14 @@ public class FontUtils
 
         try
         {
-//            var generator = new FreeTypeFontGenerator( GdxApi.Files.Internal( fontFile ) );
-//            var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
-//            {
-//                Size = size,
-//            };
+            var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( fontFile ) );
+            var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
+            {
+                Size = size,
+            };
 
-//            font = generator.GenerateFont( parameter );
-//            font.SetColor( Color.White );
+            font = generator.GenerateFont( parameter );
+            font.SetColor( Color.White );
         }
         catch ( Exception e )
         {

@@ -373,10 +373,13 @@ public class DesktopGLPreferences : IPreferences
 
     // ========================================================================
 
-    private IPreferences _put( string key, string value )
+    private DesktopGLPreferences _put( string key, string value )
     {
         _properties[ key ] = value.ToLower();
 
         return this;
     }
 }
+
+// ============================================================================
+// ============================================================================

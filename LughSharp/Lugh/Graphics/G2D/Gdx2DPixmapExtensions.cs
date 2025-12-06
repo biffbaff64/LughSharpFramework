@@ -33,7 +33,7 @@ public partial class Gdx2DPixmap
     {
         var bufferHandle  = GCHandle.Alloc( buffer, GCHandleType.Pinned );
         var pixmapPtr     = load( bufferHandle.AddrOfPinnedObject() + offset, len );
-        var pixmap        = Marshal.PtrToStructure< gdx2d_pixmap >( pixmapPtr );
+        var pixmap        = Marshal.PtrToStructure< NativePixmapStruct >( pixmapPtr );
         var dataBlockSize = ( int )( pixmap.Width * pixmap.Height * bytes_per_pixel( pixmap.ColorFormat ) );
 
         bufferHandle.Free();
@@ -403,7 +403,7 @@ public partial class Gdx2DPixmap
     /// <param name="color">The fill color</param>
     public void FillTriangleNative( int x1, int y1, int x2, int y2, int x3, int y3, Color color )
     {
-        gdx2d_fill_triangle( new gdx2d_pixmap(), x1, y1, x2, y2, x3, y3, color.PackedColorABGR() );
+        gdx2d_fill_triangle( new NativePixmapStruct(), x1, y1, x2, y2, x3, y3, color.PackedColorABGR() );
     }
 
     /// <summary>
@@ -418,8 +418,8 @@ public partial class Gdx2DPixmap
     /// <param name="height"> The height of the area. </param>
     public void DrawPixmapNative( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
-        gdx2d_draw_pixmap( new gdx2d_pixmap(),
-                           new gdx2d_pixmap(),
+        gdx2d_draw_pixmap( new NativePixmapStruct(),
+                           new NativePixmapStruct(),
                            srcX, srcY, width, height,
                            dstX, dstY, width, height );
     }
@@ -432,8 +432,8 @@ public partial class Gdx2DPixmap
                                   int dstX, int srcWidth, int srcHeight,
                                   int dstY, int dstWidth, int dstHeight )
     {
-        gdx2d_draw_pixmap( new gdx2d_pixmap(),
-                           new gdx2d_pixmap(),
+        gdx2d_draw_pixmap( new NativePixmapStruct(),
+                           new NativePixmapStruct(),
                            srcX, srcY, srcWidth, srcHeight,
                            dstX, dstY, dstWidth, dstHeight );
     }
@@ -516,15 +516,15 @@ public partial class Gdx2DPixmap
     private static extern void gdx2d_fill_circle( int x, int y, uint radius, uint color );
 
     [DllImport( DLL_PATH, EntryPoint = "gdx2d_fill_triangle", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void gdx2d_fill_triangle( gdx2d_pixmap pd,
+    private static extern void gdx2d_fill_triangle( NativePixmapStruct pd,
                                                     int x1, int y1,
                                                     int x2, int y2,
                                                     int x3, int y3,
                                                     uint color );
 
     [DllImport( DLL_PATH, EntryPoint = "gdx2d_draw_pixmap", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void gdx2d_draw_pixmap( gdx2d_pixmap pd,
-                                                  gdx2d_pixmap dpd,
+    private static extern void gdx2d_draw_pixmap( NativePixmapStruct pd,
+                                                  NativePixmapStruct dpd,
                                                   int srcX,
                                                   int srcY,
                                                   int srcWidth,

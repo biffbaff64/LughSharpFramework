@@ -588,3 +588,6 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
     #endregion IDisposable implementation
 }
+
+// ============================================================================
+// ============================================================================

@@ -93,9 +93,6 @@ public class GraphicsBackend
     /// </summary>
     public BackendInfo Data { get; set; }
 
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
     /// Represents detailed information about a graphics backend, including the backend type
     /// and any subcategories associated with it.
@@ -108,3 +105,6 @@ public class GraphicsBackend
         public OpenGLSubCategories SubCategory { get; set; }
     }
 }
+
+// ============================================================================
+// ============================================================================

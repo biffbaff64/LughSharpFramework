@@ -182,22 +182,6 @@ public class Engine
         return this;
     }
 
-    /// <summary>
-    /// Checks for OpenGL errors after a given stage of rendering or processing.
-    /// Throws an <see cref="InvalidOperationException"/> if an OpenGL error is detected.
-    /// </summary>
-    /// <param name="stage">The description of the stage at which the error occurred.</param>
-    /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
-    public void GLErrorCheck( string stage )
-    {
-        var error = GL.GetError();
-
-        if ( error != ( int )ErrorCode.NoError )
-        {
-            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
-        }
-    }
-
     // ========================================================================
     // ========================================================================
 
@@ -216,6 +200,7 @@ public class Engine
     /// </summary>
     public static void Shutdown()
     {
+        //TODO: Add shutdown operations here.
     }
 
     // ========================================================================

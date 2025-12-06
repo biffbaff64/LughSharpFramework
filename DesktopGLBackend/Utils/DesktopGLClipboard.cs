@@ -53,3 +53,6 @@ public class DesktopGLClipboard : IClipboard
         set => Glfw.SetClipboardString( ( ( DesktopGLGraphics )Engine.Api.Graphics ).GLWindow!.GlfwWindow, value );
     }
 }
+
+// ============================================================================
+// ============================================================================

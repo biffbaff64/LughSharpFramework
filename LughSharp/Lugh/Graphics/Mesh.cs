@@ -41,7 +41,7 @@ public class Mesh : IDisposable
 
     // ========================================================================
 
-    private static readonly Dictionary< IApplication, List< Mesh >? > _meshes = new();
+    private static readonly Dictionary< IApplication, List< Mesh >? > Meshes = new();
 
     private readonly bool            _isVertexArray;
     private readonly Buffer< short > _shortBuffer = new( 100 );
@@ -167,12 +167,6 @@ public class Mesh : IDisposable
     /// <param name="attributes">the <see cref="VertexAttributes"/>.</param>
     public Mesh( VertexDataType? type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
-//        Logger.Debug( $"\ntype: {type},\n" +
-//                      $"isStatic: {isStatic},\n" +
-//                      $"maxVertices: {maxVertices},\n" +
-//                      $"maxIndices: {maxIndices},\n" +
-//                      $"attributes: {attributes}\n" );
-
         switch ( type )
         {
             case VertexDataType.VertexBufferObject:
@@ -258,9 +252,9 @@ public class Mesh : IDisposable
         {
             var builder = new StringBuilder( "Managed meshes/app: { " );
 
-            foreach ( var app in _meshes.Keys )
+            foreach ( var app in Meshes.Keys )
             {
-                builder.Append( _meshes[ app ]?.Count );
+                builder.Append( Meshes[ app ]?.Count );
                 builder.Append( ' ' );
             }
 
@@ -1352,18 +1346,18 @@ public class Mesh : IDisposable
     {
         List< Mesh >? managedResources;
 
-        if ( !_meshes.ContainsKey( app ) || ( _meshes[ app ] == null ) )
+        if ( !Meshes.ContainsKey( app ) || ( Meshes[ app ] == null ) )
         {
             managedResources = [ ];
         }
         else
         {
-            managedResources = _meshes[ app ];
+            managedResources = Meshes[ app ];
         }
 
         managedResources?.Add( mesh );
 
-        _meshes.Add( app, managedResources );
+        Meshes.Add( app, managedResources );
     }
 
     /// <summary>
@@ -1372,10 +1366,10 @@ public class Mesh : IDisposable
     /// <param name="app">  </param>
     public static void InvalidateAllMeshes( IApplication app )
     {
-        for ( var i = 0; i < _meshes.Count; i++ )
+        for ( var i = 0; i < Meshes.Count; i++ )
         {
-            _meshes[ app ]?[ i ]._vertices.Invalidate();
-            _meshes[ app ]?[ i ].IndexData.Invalidate();
+            Meshes[ app ]?[ i ]._vertices.Invalidate();
+            Meshes[ app ]?[ i ].IndexData.Invalidate();
         }
     }
 
@@ -1384,7 +1378,7 @@ public class Mesh : IDisposable
     /// </summary>
     public static void ClearAllMeshes( IApplication app )
     {
-        _meshes.Remove( app );
+        Meshes.Remove( app );
     }
 
     /// <summary>
@@ -1846,9 +1840,9 @@ public class Mesh : IDisposable
     {
         if ( disposing )
         {
-            if ( _meshes[ Api.App ] != null )
+            if ( Meshes[ Api.App ] != null )
             {
-                _meshes[ Api.App ]?.Remove( this );
+                Meshes[ Api.App ]?.Remove( this );
             }
 
             _vertices.Dispose();

@@ -44,10 +44,6 @@ public class Animation< T >
 
     private float _animationDuration;
     private float _frameDuration;
-
-    // IMPORTANT: KeyFrames array Length must not be modified without updating
-    // _animationDuration.
-    private T[]   _keyFrames = null!;
     private int   _lastFrameNumber;
     private float _lastStateTime;
 
@@ -107,11 +103,11 @@ public class Animation< T >
     /// </summary>
     public T[] KeyFrames
     {
-        get => _keyFrames;
+        get => field;
         set
         {
-            _keyFrames         = value;
-            _animationDuration = _keyFrames.Length * _frameDuration;
+            field              = value;
+            _animationDuration = field.Length * _frameDuration;
         }
     }
 
@@ -131,14 +127,14 @@ public class Animation< T >
         var oldPlayMode = PlayMode;
 
         if ( looping
-             && ( ( PlayMode == AnimMode.Normal )
-                  || ( PlayMode == AnimMode.Reversed ) ) )
+          && ( ( PlayMode == AnimMode.Normal )
+            || ( PlayMode == AnimMode.Reversed ) ) )
         {
             PlayMode = PlayMode == AnimMode.Normal ? AnimMode.Loop : AnimMode.LoopReversed;
         }
         else if ( !looping
-                  && !( ( PlayMode == AnimMode.Normal )
-                        || ( PlayMode == AnimMode.Reversed ) ) )
+               && !( ( PlayMode == AnimMode.Normal )
+                  || ( PlayMode == AnimMode.Reversed ) ) )
         {
             PlayMode = PlayMode == AnimMode.LoopReversed
                 ? AnimMode.Reversed
@@ -163,7 +159,7 @@ public class Animation< T >
     {
         var frameNumber = GetKeyFrameIndex( stateTime );
 
-        return _keyFrames[ frameNumber ];
+        return KeyFrames[ frameNumber ];
     }
 
     /// <summary>
@@ -171,7 +167,7 @@ public class Animation< T >
     /// </summary>
     public int GetKeyFrameIndex( float stateTime )
     {
-        if ( _keyFrames.Length == 1 )
+        if ( KeyFrames.Length == 1 )
         {
             return 0;
         }
@@ -182,25 +178,25 @@ public class Animation< T >
         {
             case AnimMode.Normal:
             {
-                frameNumber = Math.Min( _keyFrames.Length - 1, frameNumber );
+                frameNumber = Math.Min( KeyFrames.Length - 1, frameNumber );
 
                 break;
             }
 
             case AnimMode.Loop:
             {
-                frameNumber %= _keyFrames.Length;
+                frameNumber %= KeyFrames.Length;
 
                 break;
             }
 
             case AnimMode.LoopPingpong:
             {
-                frameNumber %= ( _keyFrames.Length * 2 ) - 2;
+                frameNumber %= ( KeyFrames.Length * 2 ) - 2;
 
-                if ( frameNumber >= _keyFrames.Length )
+                if ( frameNumber >= KeyFrames.Length )
                 {
-                    frameNumber = _keyFrames.Length - 2 - ( frameNumber - _keyFrames.Length );
+                    frameNumber = KeyFrames.Length - 2 - ( frameNumber - KeyFrames.Length );
                 }
 
                 break;
@@ -211,7 +207,7 @@ public class Animation< T >
                 var lastFrameNumber = ( int )( _lastStateTime / _frameDuration );
 
                 frameNumber = lastFrameNumber != frameNumber
-                    ? MathUtils.Random( _keyFrames.Length - 1 )
+                    ? MathUtils.Random( KeyFrames.Length - 1 )
                     : _lastFrameNumber;
 
                 break;
@@ -219,15 +215,15 @@ public class Animation< T >
 
             case AnimMode.Reversed:
             {
-                frameNumber = Math.Max( _keyFrames.Length - frameNumber - 1, 0 );
+                frameNumber = Math.Max( KeyFrames.Length - frameNumber - 1, 0 );
 
                 break;
             }
 
             case AnimMode.LoopReversed:
             {
-                frameNumber %= _keyFrames.Length;
-                frameNumber =  _keyFrames.Length - frameNumber - 1;
+                frameNumber %= KeyFrames.Length;
+                frameNumber =  KeyFrames.Length - frameNumber - 1;
 
                 break;
             }
@@ -249,7 +245,7 @@ public class Animation< T >
     {
         var frameNumber = ( int )( stateTime / _frameDuration );
 
-        return ( _keyFrames.Length - 1 ) < frameNumber;
+        return ( KeyFrames.Length - 1 ) < frameNumber;
     }
 
     /// <summary>
@@ -259,7 +255,7 @@ public class Animation< T >
     public void SetFrameDuration( float frameDuration )
     {
         _frameDuration     = frameDuration;
-        _animationDuration = _keyFrames.Length * frameDuration;
+        _animationDuration = KeyFrames.Length * frameDuration;
     }
 
     /// <summary>

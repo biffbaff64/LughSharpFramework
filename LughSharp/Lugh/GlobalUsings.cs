@@ -60,7 +60,6 @@ global using LughSharp.Lugh.Graphics.Cameras;
 global using LughSharp.Lugh.Graphics.FrameBuffers;
 global using LughSharp.Lugh.Graphics.G2D;
 global using LughSharp.Lugh.Graphics.G3D;
-global using LughSharp.Lugh.Graphics.Images;
 global using LughSharp.Lugh.Graphics.OpenGL;
 global using LughSharp.Lugh.Graphics.OpenGL.Enums;
 global using LughSharp.Lugh.Graphics.Text;

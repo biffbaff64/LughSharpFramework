@@ -119,28 +119,10 @@
         </Content>
     </ItemGroup>
 
-<!--    <ItemGroup>-->
-<!--        <None Remove="lib\net8.0\freetype.dll"/>-->
-<!--        <Content Include="lib\net8.0\freetype.dll">-->
-<!--          <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--        <None Remove="lib\net8.0\gdx2d.dll"/>-->
-<!--        <Content Include="lib\net8.0\gdx2d.dll">-->
-<!--          <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
-<!--        </Content>-->
-<!--    </ItemGroup>-->
-
     <ItemGroup>
         <Content Include="runtimes\**\*.*">
             <Pack>true</Pack>
             <PackagePath>runtimes</PackagePath>
         </Content>
     </ItemGroup>
-
-    <!--    <ItemGroup>-->
-<!--      <Reference Include="LughUtils">-->
-<!--        <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>-->
-<!--      </Reference>-->
-<!--    </ItemGroup>-->
-
 </Project>

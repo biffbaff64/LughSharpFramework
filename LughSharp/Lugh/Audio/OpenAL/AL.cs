@@ -27,7 +27,7 @@ using System.Reflection;
 using Environment = System.Environment;
 
 namespace LughSharp.Lugh.Audio.OpenAL;
-
+ 
 [PublicAPI]
 public static class AL
 {

@@ -45,19 +45,14 @@ public partial class Gdx2DPixmap : IDisposable
     /// </para>
     /// </summary>
     [StructLayout( LayoutKind.Sequential )]
-
-    // ReSharper disable once InconsistentNaming
-    private struct gdx2d_pixmap
+    private struct NativePixmapStruct
     {
         public uint Width;
         public uint Height;
         public uint ColorFormat;
         public uint Blend;
         public uint Scale;
-
         public IntPtr Pixels;
-
-//        public byte[] Pixels;
     }
 
     // ========================================================================

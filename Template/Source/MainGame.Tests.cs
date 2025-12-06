@@ -220,7 +220,7 @@ public partial class MainGame
             if ( _whitePixelTexture != null )
             {
                 _spriteBatch?.Draw( _whitePixelTexture, width / 2f, height / 2f );
-                Engine.Api.GLErrorCheck( "MainGame::DrawViewportBounds" );
+                GLUtils.GLErrorCheck( "MainGame::DrawViewportBounds" );
             }
         }
         catch ( Exception ex )

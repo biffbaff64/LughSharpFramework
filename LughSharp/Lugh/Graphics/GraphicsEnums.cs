@@ -24,6 +24,7 @@
 
 namespace LughSharp.Lugh.Graphics;
 
+[PublicAPI]
 public enum VertexDataType
 {
     VertexArray,
@@ -35,6 +36,7 @@ public enum VertexDataType
 /// <summary>
 /// Represents various OpenGL capabilities that can be enabled or disabled.
 /// </summary>
+[PublicAPI]
 public enum GraphicsCapability
 {
     Blend,
@@ -48,6 +50,7 @@ public enum GraphicsCapability
 /// <summary>
 /// Represents common texture internal formats.
 /// </summary>
+[PublicAPI]
 public enum TextureFormat
 {
     Rgb,
@@ -60,6 +63,7 @@ public enum TextureFormat
 /// <summary>
 /// Represents common OpenGL blending factors.
 /// </summary>
+[PublicAPI]
 public enum BlendFactor
 {
     Zero,
@@ -72,4 +76,5 @@ public enum BlendFactor
     // Add more as needed
 }
 
-// ========================================================================
+// ============================================================================
+// ============================================================================

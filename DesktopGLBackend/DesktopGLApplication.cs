@@ -81,9 +81,8 @@ public class DesktopGLApplication : IApplication, IDisposable
     private          IPreferences       _prefs;
     private          bool               _running  = true;
     private          bool               _disposed;
-
-    // A lock object for synchronized blocks
-    private readonly object _runnablesLock          = new();
+    
+    private readonly object _runnablesLock          = new();    // A lock object for synchronized blocks
     private readonly object _lifecycleListenersLock = new();
     
     // ========================================================================
@@ -109,7 +108,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
         // Enable GLProfiling in preferences
         _prefs = GetPreferences( "desktopgl.lugh.engine.preferences" );
-        _prefs.PutBool( "profiling", config.GLProfilingEnabled );
+        _prefs.PutBool( "GL Profiling", config.GLProfilingEnabled );
         _prefs.Flush();
 
         // Config.Title becomes the name of the ApplicationListener
@@ -305,9 +304,15 @@ public class DesktopGLApplication : IApplication, IDisposable
         {
             if ( !_glfwInitialised )
             {
-                DesktopGLNativesLoader.Load(); //TODO: Is this still necessary?
+                _errorCallback = ( error, description ) =>
+                {
+                    Logger.Error( $"ErrorCode: {error}, {description}" );
 
-                ErrorCallback();
+                    if ( error == ErrorCode.InvalidEnum )
+                    {
+                        Logger.Error( "Invalid Error!!" );
+                    }
+                };
 
                 Glfw.SetErrorCallback( _errorCallback );
                 Glfw.InitHint( InitHint.JoystickHatButtons, false );
@@ -316,7 +321,7 @@ public class DesktopGLApplication : IApplication, IDisposable
                 {
                     Glfw.GetError( out var error );
 
-                    Logger.Debug( $"Failed to initialise Glfw: {error}" );
+                    Logger.Error( $"Failed to initialise Glfw: {error}" );
 
                     Glfw.Terminate();
 
@@ -330,22 +335,6 @@ public class DesktopGLApplication : IApplication, IDisposable
         {
             throw new ApplicationException( $"Failure in InitialiseGLFW() : {e}" );
         }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private static void ErrorCallback()
-    {
-        _errorCallback = ( error, description ) =>
-        {
-            Logger.Error( $"ErrorCode: {error}, {description}" );
-
-            if ( error == ErrorCode.InvalidEnum )
-            {
-                Logger.Error( "Invalid Error!!" );
-            }
-        };
     }
 
     /// <summary>
@@ -466,7 +455,12 @@ public class DesktopGLApplication : IApplication, IDisposable
         _running = false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Adds a new <see cref="ILifecycleListener"/> to the application. This can be
+    /// used by extensions to hook into the lifecycle more easily.
+    /// The <see cref="IApplicationListener"/> methods are sufficient for application
+    /// level development.
+    /// </summary>
     public void AddLifecycleListener( ILifecycleListener listener )
     {
         lock ( LifecycleListeners )
@@ -475,7 +469,9 @@ public class DesktopGLApplication : IApplication, IDisposable
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Removes the specified <see cref="ILifecycleListener"/>
+    /// </summary>
     public void RemoveLifecycleListener( ILifecycleListener listener )
     {
         lock ( LifecycleListeners )
@@ -493,9 +489,6 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// </summary>
     protected void CleanupWindows()
     {
-        Logger.Debug( $"LifeCycleListeners count: {LifecycleListeners.Count}" );
-        Logger.Debug( $"Windows count: {Windows.Count}" );
-
         lock ( LifecycleListeners )
         {
             foreach ( var lifecycleListener in LifecycleListeners )
@@ -515,7 +508,9 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Cleanup everything before shutdown.
+    /// </summary>
     public void Cleanup()
     {
         DesktopGLCursor.DisposeSystemCursors();
@@ -527,7 +522,10 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing,
+    /// or resetting unmanaged resources.
+    /// </summary>
     public void Dispose()
     {
         Dispose( true );
@@ -552,6 +550,10 @@ public class DesktopGLApplication : IApplication, IDisposable
         }
     }
 
+    /// <summary>
+    /// Allows an object to try to free resources and perform other cleanup operations
+    /// before it is reclaimed by garbage collection.
+    /// </summary>
     ~DesktopGLApplication()
     {
         Dispose( false );
@@ -567,7 +569,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// <para>
     /// This function only instantiates a <see cref="DesktopGLWindow"/> and
     /// returns immediately. The actual window creation is postponed with
-    /// <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)"/> until after all
+    /// <see cref="DesktopGLApplication.PostRunnable"/> until after all
     /// existing windows are updated.
     /// </para>
     /// </summary>
@@ -613,7 +615,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     }
 
     /// <summary>
-    /// Posts a <see cref="IRunnable"/> to the event queue.
+    /// Posts an <see cref="Action"/> to the event queue.
     /// </summary>
     public void PostRunnable( Action runnable )
     {
@@ -652,9 +654,9 @@ public class DesktopGLApplication : IApplication, IDisposable
             Glfw.SwapBuffers( windowHandle );
         }
 
-        // the call above to CreateGlfwWindow switches the OpenGL context to the
-        // newly created window, ensure that the invariant "currentWindow is the
-        // window with the current active OpenGL context" holds
+        // The call above to CreateGlfwWindow switches the OpenGL context to the
+        // newly created window, so ensure that the invariant "currentWindow is the
+        // window with the current active OpenGL context" holds.
         CurrentWindow?.MakeCurrent();
 
         return dglWindow;
@@ -675,7 +677,6 @@ public class DesktopGLApplication : IApplication, IDisposable
         if ( config.FullscreenMode != null )
         {
             // Create a fullscreen window
-
             Glfw.WindowHint( WindowHint.RefreshRate, config.FullscreenMode.RefreshRate );
 
             windowHandle = Glfw.CreateWindow( config.FullscreenMode.Width,
@@ -687,7 +688,6 @@ public class DesktopGLApplication : IApplication, IDisposable
         else
         {
             // Create a 'windowed' window
-
             windowHandle = Glfw.CreateWindow( config.WindowWidth,
                                               config.WindowHeight,
                                               config.Title ?? "",
@@ -768,3 +768,6 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     #endregion window creation handlers
 }
+
+// ============================================================================
+// ============================================================================

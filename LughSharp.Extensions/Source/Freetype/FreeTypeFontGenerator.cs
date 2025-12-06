@@ -22,20 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-using JetBrains.Annotations;
-
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Graphics.Text;
-using LughUtils.source.Maths;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
-
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Extensions.Source.Freetype;
