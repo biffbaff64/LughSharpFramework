@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
@@ -142,7 +143,7 @@ public class SelectBox< T > : Widget, IDisableable
 
     public void SetStyle( SelectBoxStyle style )
     {
-        ArgumentNullException.ThrowIfNull( style );
+        Guard.Against.Null( style );
 
         BoxStyle = style;
 
@@ -160,7 +161,7 @@ public class SelectBox< T > : Widget, IDisableable
     /// </summary>
     public void SetItems( params T[] newItems )
     {
-        ArgumentNullException.ThrowIfNull( newItems );
+        Guard.Against.Null( newItems );
 
         var oldPrefWidth = PrefWidth;
 
@@ -182,7 +183,7 @@ public class SelectBox< T > : Widget, IDisableable
     /// </summary>
     public void SetItems( List< T > newItems )
     {
-        ArgumentNullException.ThrowIfNull( newItems );
+        Guard.Against.Null( newItems );
 
         var oldPrefWidth = PrefWidth;
 
@@ -979,7 +980,7 @@ public class SelectBox< T > : Widget, IDisableable
 
         public SelectBoxStyle( SelectBoxStyle? style )
         {
-            ArgumentNullException.ThrowIfNull( style );
+            Guard.Against.Null( style );
 
             Font = style.Font;
             FontColor.Set( style.FontColor );

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 

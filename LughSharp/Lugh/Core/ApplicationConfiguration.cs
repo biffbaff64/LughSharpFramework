@@ -23,10 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics;
-
+using LughSharp.Lugh.Graphics.Utils;
 using static LughSharp.Lugh.Graphics.GraphicsBackend;
-
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Core;
@@ -43,20 +41,20 @@ public class ApplicationConfiguration
     public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
     public string          PreferencesDirectory           { get; set; } = ".prefs/";
     public PathTypes       PreferencesFileType            { get; set; } = PathTypes.External;
-    public bool            DisableAudio                   { get; set; } = false;
+    public bool            DisableAudio                   { get; set; }
     public int             AudioDeviceSimultaneousSources { get; set; } = 16;
     public int             AudioDeviceBufferSize          { get; set; } = 512;
     public int             AudioDeviceBufferCount         { get; set; } = 9;
-    public bool            Debug                          { get; set; } = false;
-    public bool            TransparentFramebuffer         { get; set; } = false;
+    public bool            Debug                          { get; set; }
+    public bool            TransparentFramebuffer         { get; set; }
     public int             Depth                          { get; set; } = 16;
-    public int             Stencil                        { get; set; } = 0;
-    public int             Samples                        { get; set; } = 0;
+    public int             Stencil                        { get; set; }
+    public int             Samples                        { get; set; }
     public int             IdleFPS                        { get; set; } = 60;
-    public int             ForegroundFPS                  { get; set; } = 0;
-    public int?            GLContextMajorVersion          { get; set; } = null!;
-    public int?            GLContextMinorVersion          { get; set; } = null!;
-    public int             GLContextRevision              { get; set; } = 0;
+    public int             ForegroundFPS                  { get; set; }
+    public int             GLContextMajorVersion          { get; set; }
+    public int             GLContextMinorVersion          { get; set; }
+    public int             GLContextRevision              { get; set; }
     public int             Red                            { get; set; } = 8;
     public int             Green                          { get; set; } = 8;
     public int             Blue                           { get; set; } = 8;
@@ -130,14 +128,14 @@ public class ApplicationConfiguration
     /// Whether the window starts maximized. Ignored if the window is full screen.
     /// (default false)
     /// </summary>
-    public bool WindowMaximized { get; set; } = false;
+    public bool WindowMaximized { get; set; }
 
     /// <summary>
     /// Whether the window should automatically iconify and restore previous video mode
     /// on input focus loss. (default false). Does nothing in windowed mode.
     /// (default false)
     /// </summary>
-    public bool AutoIconify { get; set; } = false;
+    public bool AutoIconify { get; set; }
 
     /// <summary>
     /// The initial window background color. Defaults to blue.
@@ -439,5 +437,5 @@ public class ApplicationConfiguration
     }
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================

@@ -159,7 +159,7 @@ public class RepeatablePolygonSprite
     /// <returns> offsetted vertices </returns>
     private float[] Offset( float[]? vertices )
     {
-        ArgumentNullException.ThrowIfNull( vertices );
+        Guard.Against.Null( vertices );
 
         _offset.Set( vertices[ 0 ], vertices[ 1 ] );
 

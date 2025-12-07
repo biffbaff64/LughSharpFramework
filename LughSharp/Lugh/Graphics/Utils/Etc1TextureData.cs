@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
+
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
@@ -108,7 +110,7 @@ public class Etc1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public unsafe void UploadCustomData( int target )
+    public unsafe void ConsumeCustomData( int target )
     {
         if ( !IsPrepared )
         {
@@ -179,7 +181,7 @@ public class Etc1TextureData : ITextureData
     // ========================================================================
 
     /// <inheritdoc />
-    public Pixmap FetchPixmap()
+    public Pixmap ConsumePixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }

@@ -22,6 +22,16 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.Text;
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 using Rectangle = System.Drawing.Rectangle;
@@ -51,8 +61,8 @@ public class ImageProcessor
 
     // ========================================================================
 
-    private static readonly Bitmap _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
-    private static readonly Regex  _indexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
+    private static readonly Bitmap EmptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
+    private static readonly Regex  IndexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
 
     private readonly Dictionary< string, TexturePacker.Rect? > _crcs = [ ];
 
@@ -75,7 +85,7 @@ public class ImageProcessor
     /// </param>
     public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
     {
-        ArgumentNullException.ThrowIfNull( file );
+        Guard.Against.Null( file );
 
         Bitmap? image;
 
@@ -246,7 +256,7 @@ public class ImageProcessor
 
         if ( Settings.UseIndexes )
         {
-            var match = _indexPattern.Match( name );
+            var match = IndexPattern.Match( name );
 
             if ( match.Success )
             {
@@ -452,7 +462,7 @@ public class ImageProcessor
                 {
                     return Settings.IgnoreBlankImages
                         ? null
-                        : new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
+                        : new TexturePacker.Rect( EmptyImage, 0, 0, 1, 1, false );
                 }
 
                 // Create a new Bitmap representing the stripped area

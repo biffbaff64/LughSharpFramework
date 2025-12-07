@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
@@ -392,7 +393,7 @@ public class ListBox< T > : Widget
 
     public void SetItems( params T[] newItems )
     {
-        ArgumentNullException.ThrowIfNull( newItems );
+        Guard.Against.Null( newItems );
 
         var oldPrefWidth  = PrefWidth;
         var oldPrefHeight = PrefHeight;
@@ -420,7 +421,7 @@ public class ListBox< T > : Widget
     /// </summary>
     public void SetItems( List< T > newItems )
     {
-        ArgumentNullException.ThrowIfNull( newItems );
+        Guard.Against.Null( newItems );
 
         var oldPrefWidth  = PrefWidth;
         var oldPrefHeight = PrefHeight;

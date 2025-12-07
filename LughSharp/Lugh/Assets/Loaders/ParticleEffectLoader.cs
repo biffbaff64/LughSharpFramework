@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
+using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Lugh.Graphics.G2D;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -64,8 +66,8 @@ public class ParticleEffectLoader : SynchronousAssetLoader< ParticleEffect >
     /// </returns>
     public override ParticleEffect Load( AssetManager? am, FileInfo? file, AssetLoaderParameters? parameters )
     {
-        ArgumentNullException.ThrowIfNull( am );
-        ArgumentNullException.ThrowIfNull( file );
+        Guard.Against.Null( am );
+        Guard.Against.Null( file );
 
         var effect = new ParticleEffect();
         var param  = parameters as ParticleEffectParameter;

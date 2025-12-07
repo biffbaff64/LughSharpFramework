@@ -100,7 +100,7 @@ public class PolygonSprite
 
     public void Set( PolygonSprite sprite )
     {
-        ArgumentNullException.ThrowIfNull( sprite );
+        Guard.Against.Null( sprite );
 
         SetRegion( sprite.Region );
 

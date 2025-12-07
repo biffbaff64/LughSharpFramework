@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Cameras;
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Utils;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;

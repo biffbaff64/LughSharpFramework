@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.FrameBuffers;
+using LughSharp.Lugh.Graphics.OpenGL;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -116,7 +117,7 @@ public class GLOnlyTextureData : ITextureData
     /// 
     /// </summary>
     /// <param name="target"></param>
-    public void UploadCustomData( int target )
+    public void ConsumeCustomData( int target )
     {
         GL.TexImage2D( target,
                        MipLevel,
@@ -146,7 +147,7 @@ public class GLOnlyTextureData : ITextureData
 
     // ========================================================================
 
-    public Pixmap FetchPixmap()
+    public Pixmap ConsumePixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }

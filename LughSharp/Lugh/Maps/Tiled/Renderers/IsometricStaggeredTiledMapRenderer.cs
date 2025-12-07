@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;

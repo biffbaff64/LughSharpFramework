@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Atlases;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 [PublicAPI]

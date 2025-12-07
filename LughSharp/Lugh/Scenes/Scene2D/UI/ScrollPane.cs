@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 
@@ -81,7 +83,7 @@ public partial class ScrollPane : WidgetGroup
 
     public ScrollPane( Actor? widget, ScrollPaneStyle style )
     {
-        ArgumentNullException.ThrowIfNull( style, "style cannot be null." );
+        Guard.Against.Null( style );
 
         Style = style;
 
@@ -156,7 +158,7 @@ public partial class ScrollPane : WidgetGroup
 
     public void SetStyle( ScrollPaneStyle? style )
     {
-        ArgumentNullException.ThrowIfNull( style, "style cannot be null." );
+        Guard.Against.Null( style, "style cannot be null." );
 
         Style = style;
         InvalidateHierarchy();
@@ -852,7 +854,7 @@ public partial class ScrollPane : WidgetGroup
 
     public bool RemoveActor( Actor? actor )
     {
-        ArgumentNullException.ThrowIfNull( actor, "actor cannot be null." );
+        Guard.Against.Null( actor, "actor cannot be null." );
 
         if ( actor != _widget )
         {

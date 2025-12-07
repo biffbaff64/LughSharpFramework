@@ -53,7 +53,7 @@ public class ArraySelection< T > : Selection< T >
     /// <inheritdoc />
     public override void Choose( T item )
     {
-        ArgumentNullException.ThrowIfNull( item );
+        Guard.Against.Null( item );
 
         if ( IsDisabled )
         {

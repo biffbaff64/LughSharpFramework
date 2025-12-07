@@ -184,12 +184,9 @@ public class Files : IFiles
     {
         var path = IOUtils.InternalPath;
 
-        if ( string.IsNullOrEmpty( path ) )
-        {
-            throw new GdxRuntimeException( "Could not determine internal storage path" );
-        }
-
-        return path;
+        return string.IsNullOrEmpty( path )
+            ? throw new GdxRuntimeException( "Could not determine internal storage path" )
+            : path;
     }
 
     /// <summary>

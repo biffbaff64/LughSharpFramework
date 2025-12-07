@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
-
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using NUnit.Framework;
 using GLBindings = LughSharp.Lugh.Graphics.OpenGL.Bindings.GLBindings;
 
 namespace LughSharp.Tests.Source;
@@ -56,20 +58,21 @@ public unsafe class OpenGLTest
         0.0f, 0.5f, 0.0f,
     ];
 
-//    private uint _shaderProgram;
-//    private uint _vao, _vbo, _ibo;
+    private uint _shaderProgram;
+    private uint _vao, _vbo, _ibo;
 
     // ========================================================================
     // ========================================================================
 
-    public void Create()
+    [SetUp]
+    public void Setup()
     {
 //        _shaderProgram = CreateProgram( _vertexShaderSource, _fragmentShaderSource );
 //
 //        _vao = _gl.GenVertexArray();
 //        _gl.BindVertexArray( _vao );
 //
-//        _vbo = _gl..GenBuffer();
+//        _vbo = _gl.GenBuffer();
 //        _gl.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 //
 //        fixed ( float* ptr = vertices )

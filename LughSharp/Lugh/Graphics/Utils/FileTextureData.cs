@@ -94,8 +94,8 @@ public class FileTextureData : ITextureData
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="ITextureData.FetchPixmap"/> or
-    /// <see cref="ITextureData.UploadCustomData"/>. This method can be called from a non
+    /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap"/> or
+    /// <see cref="ITextureData.ConsumeCustomData"/>. This method can be called from a non
     /// OpenGL thread and should thus not interact with OpenGL.
     /// </summary>
     public void Prepare()
@@ -145,7 +145,7 @@ public class FileTextureData : ITextureData
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public virtual Pixmap FetchPixmap()
+    public virtual Pixmap ConsumePixmap()
     {
         if ( !IsPrepared )
         {
@@ -167,8 +167,8 @@ public class FileTextureData : ITextureData
     }
 
     /// <returns>
-    /// whether the caller of <see cref="ITextureData.FetchPixmap"/> should dispose the
-    /// Pixmap returned by <see cref="ITextureData.FetchPixmap"/>
+    /// whether the caller of <see cref="ITextureData.ConsumePixmap"/> should dispose the
+    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap"/>
     /// </returns>
     public virtual bool ShouldDisposePixmap()
     {
@@ -184,7 +184,7 @@ public class FileTextureData : ITextureData
     /// disposed of here.
     /// </para>
     /// </summary>
-    public virtual void UploadCustomData( int target )
+    public virtual void ConsumeCustomData( int target )
     {
         throw new GdxRuntimeException( "This TextureData implementation does not upload data itself" );
     }

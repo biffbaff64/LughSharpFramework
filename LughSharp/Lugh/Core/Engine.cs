@@ -24,8 +24,8 @@
 
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.OpenGL.Bindings;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Network;
 
@@ -58,7 +58,7 @@ public class Engine
     /// Test mode flag which, when TRUE, means that all developer options are enabled.
     /// This must, however, mean that software with this enabled cannot be published.
     /// </summary>
-    public bool DevMode { get; set; } = false;
+    public bool DevMode { get; set; }
 
     /// <summary>
     /// From Wiktionary...
@@ -76,7 +76,7 @@ public class Engine
     /// local game code.
     /// </para>
     /// </summary>
-    public bool GodMode { get; set; } = false;
+    public bool GodMode { get; set; }
 
     // ========================================================================
 
@@ -185,6 +185,13 @@ public class Engine
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Checks if the specified environment variable a) exists, and b) is set to
+    /// the specified value.
+    /// </summary>
+    /// <param name="envVar"> The name of the environment variable. </param>
+    /// <param name="value"> The value to check for. </param>
+    /// <returns> True if a match is found. </returns>
     private static bool CheckEnvironmentVar( string envVar, string value )
     {
         return System.Environment.GetEnvironmentVariables().Contains( envVar )
@@ -206,7 +213,15 @@ public class Engine
     // ========================================================================
     // ========================================================================
 
-    // Fully Lazy instantiation.
+    /// <summary>
+    /// The Nested class is a private utility class that encapsulates the singleton instance
+    /// of the Engine. It ensures a consistent, thread-safe mechanism for accessing the Engine
+    /// instance throughout the application.
+    /// <para>
+    /// By isolating the singleton instance management into this class, it provides a clear
+    /// separation of concerns and simplifies access control.
+    /// </para>
+    /// </summary>
     private class Nested
     {
         internal static readonly Engine Instance = new();
@@ -228,28 +243,6 @@ public class Engine
         + "Bind what is bruised in me. "
         + "Heal what is sick in me. "
         + "Revive whatever peace & love has died in me.";
-
-    // ========================================================================
-    // ========================================================================
-
-    #if DEBUG
-    public static void SettingsCheck( int num = 0 )
-    {
-        var outputFolder     = IOUtils.AssetPath( @"\Assets\PackedImages\objects" );
-        var settingsFilePath = Path.Combine( outputFolder, "pack.json" );
-
-        var sb = new StringBuilder( $"Settings file exists: {File.Exists( settingsFilePath )}" );
-
-        if ( num > 0 )
-        {
-            sb.Append( $" :: {num}" );
-        }
-
-        sb.Append( $" :: {settingsFilePath}" );
-
-        Logger.Debug( sb.ToString() );
-    }
-    #endif
 }
 
 // ============================================================================

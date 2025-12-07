@@ -1,4 +1,5 @@
-﻿using System.Runtime.Versioning;
+﻿using System;
+using System.Runtime.Versioning;
 using System.Text;
 using JetBrains.Annotations;
 using LughSharp.Lugh.Assets;
@@ -21,7 +22,7 @@ namespace Template.Source;
 [PublicAPI]
 public partial class MainGame : Game
 {
-    private const string TEST_ASSET1 = Assets.ROVER_WHEEL;
+    private const string TEST_ASSET1 = Assets.BACKGROUND_IMAGE;
     private const int    TEST_WIDTH  = 100;
     private const int    TEST_HEIGHT = 100;
 
@@ -46,13 +47,10 @@ public partial class MainGame : Game
         _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
 
-        _image1            = null;
-        _whitePixelTexture = null;
-
         CreateCamera();
         
-        RunTests();
-
+        _image1 = new Texture( Assets.BACKGROUND_IMAGE );
+        
         Logger.Debug( "Done" );
     }
 
@@ -71,11 +69,9 @@ public partial class MainGame : Game
 
         if ( _orthoGameCam is { IsInUse: true } )
         {
-            _spriteBatch?.Begin();
-            _spriteBatch?.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
-
             _orthoGameCam.Viewport?.Apply();
-            _orthoGameCam.Update();
+            _spriteBatch?.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
+            _spriteBatch?.Begin();
 
             if ( _image1 != null )
             {
@@ -87,8 +83,9 @@ public partial class MainGame : Game
     }
 
     /// <summary>
-    /// Called when the <see cref="IApplication"/> is resized. This can happen at any point
-    /// during a non-paused state but will never happen before a call to <see cref="Game.Create"/>
+    /// Called when the <see cref="IApplication"/> is resized. This can happen at
+    /// any point during a non-paused state but will never happen before a call
+    /// to <see cref="Game.Create"/>
     /// </summary>
     /// <param name="width">The new width in pixels.</param>
     /// <param name="height">The new height in pixels.</param>
@@ -176,7 +173,7 @@ public partial class MainGame : Game
         {
             Logger.Debug( "Asset loaded" );
 
-#if DEBUG
+            #if DEBUG
             Logger.Debug( $"Loaded image type: {_image1.GetType()}" );
 
             var data = _image1.GetImageData();
@@ -198,7 +195,7 @@ public partial class MainGame : Game
 
                 Logger.Debug( sb.ToString() );
             }
-#endif
+            #endif
         }
     }
 }

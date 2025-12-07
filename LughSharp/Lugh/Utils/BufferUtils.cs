@@ -36,8 +36,8 @@ public class BufferUtils
     /// <exception cref="ArgumentException">If buffers are incompatible or destination is too small.</exception>
     public static void Copy< T >( Buffer< T > source, Buffer< T > destination ) where T : unmanaged
     {
-        ArgumentNullException.ThrowIfNull( source );
-        ArgumentNullException.ThrowIfNull( destination );
+        Guard.Against.Null( source );
+        Guard.Against.Null( destination );
 
         if ( source == destination )
         {
@@ -73,8 +73,8 @@ public class BufferUtils
                                   int destinationOffset,
                                   int length ) where T : unmanaged
     {
-        ArgumentNullException.ThrowIfNull( source );
-        ArgumentNullException.ThrowIfNull( destination );
+        Guard.Against.Null( source );
+        Guard.Against.Null( destination );
 
         if ( source == destination )
         {
@@ -118,8 +118,8 @@ public class BufferUtils
     /// <exception cref="NotImplementedException"></exception>
     public static void Copy( byte[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
-        ArgumentNullException.ThrowIfNull( source );
-        ArgumentNullException.ThrowIfNull( destination );
+        Guard.Against.Null( source );
+        Guard.Against.Null( destination );
 
         if ( ( sourceOffset < 0 ) || ( length < 0 ) )
         {
@@ -144,8 +144,8 @@ public class BufferUtils
     /// <exception cref="NotImplementedException"></exception>
     public static void Copy( short[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
-        ArgumentNullException.ThrowIfNull( source );
-        ArgumentNullException.ThrowIfNull( destination );
+        Guard.Against.Null( source );
+        Guard.Against.Null( destination );
 
         if ( ( sourceOffset < 0 ) || ( length < 0 ) )
         {
@@ -170,8 +170,8 @@ public class BufferUtils
     /// <exception cref="NotImplementedException"></exception>
     public static void Copy( float[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
-        ArgumentNullException.ThrowIfNull( source );
-        ArgumentNullException.ThrowIfNull( destination );
+        Guard.Against.Null( source );
+        Guard.Against.Null( destination );
 
         if ( ( sourceOffset < 0 ) || ( length < 0 ) )
         {

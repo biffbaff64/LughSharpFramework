@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
@@ -44,7 +46,7 @@ public class BaseSceneDrawable : ISceneDrawable
     /// </summary>
     protected BaseSceneDrawable( ISceneDrawable? drawable )
     {
-        ArgumentNullException.ThrowIfNull( drawable );
+        Guard.Against.Null( drawable );
 
         if ( drawable is BaseSceneDrawable baseDrawable )
         {

@@ -23,6 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
+
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using GLfloat = float;
 using GLdouble = double;
 using GLuint = uint;

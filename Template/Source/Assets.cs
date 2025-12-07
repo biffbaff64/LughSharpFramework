@@ -26,7 +26,5 @@ namespace Template.Source;
 
 public static class Assets
 {
-    public const string LIBGDX_LOGO = "Assets/PackedImages/Objects/libgdx.png";
-    public const string ROVER_WHEEL = "Assets/PackedImages/Objects/rover_wheel.png";
-    public const string RED7_LOGO   = "Assets/PackedImages/Objects/red7logo_small.png";
+    public const string BACKGROUND_IMAGE = @"Assets\title_background.png";
 }

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
@@ -239,8 +240,8 @@ public class TextField : Widget
 
     public virtual void SetStyle( TextFieldStyle style )
     {
-        ArgumentNullException.ThrowIfNull( style );
-        ArgumentNullException.ThrowIfNull( style.Font );
+        Guard.Against.Null( style );
+        Guard.Against.Null( style.Font );
 
         Style = style;
 

@@ -62,7 +62,7 @@ public class ButtonGroup< T > where T : Button
 
     public void Add( T button )
     {
-        ArgumentNullException.ThrowIfNull( button );
+        Guard.Against.Null( button );
 
         button.ButtonGroup = null!;
 

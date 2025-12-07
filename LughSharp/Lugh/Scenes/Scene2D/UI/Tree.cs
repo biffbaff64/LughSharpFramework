@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
@@ -654,7 +655,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     /// </summary>
     public TNode? FindNode( TValue value )
     {
-        ArgumentNullException.ThrowIfNull( value );
+        Guard.Against.Null( value );
 
         return ( TNode? )FindNode( RootNodes, value );
     }
@@ -852,7 +853,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
         public Node( Actor actor )
         {
-            ArgumentNullException.ThrowIfNull( actor );
+            Guard.Against.Null( actor );
 
             _actor = actor;
         }
@@ -1206,7 +1207,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         /// </summary>
         public TNode? FindNode( TValue? value )
         {
-            ArgumentNullException.ThrowIfNull( value );
+            Guard.Against.Null( value );
 
             if ( value.Equals( Value ) )
             {
@@ -1290,7 +1291,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         /// </summary>
         public bool IsAscendantOf( TNode node )
         {
-            ArgumentNullException.ThrowIfNull( node );
+            Guard.Against.Null( node );
 
             var current = node;
 

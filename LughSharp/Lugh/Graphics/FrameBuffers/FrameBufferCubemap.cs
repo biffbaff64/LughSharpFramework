@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Graphics.Utils;
+
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
 
 [PublicAPI]
@@ -178,7 +182,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// <param name="side"> The side to bind </param>
     protected void BindSide( Cubemap.CubemapSide? side )
     {
-        ArgumentNullException.ThrowIfNull( side );
+        Guard.Against.Null( side );
 
         GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
                                  IGL.GL_COLOR_ATTACHMENT0,

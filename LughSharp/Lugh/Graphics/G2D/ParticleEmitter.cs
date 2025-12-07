@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Graphics.G2D;
@@ -853,7 +854,7 @@ public class ParticleEmitter
 
     private bool UpdateParticle( Particle particle, float delta, int deltaMillis )
     {
-        ArgumentNullException.ThrowIfNull( particle );
+        Guard.Against.Null( particle );
 
         var life = particle.CurrentLife - deltaMillis;
 

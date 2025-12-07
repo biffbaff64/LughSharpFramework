@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
+
 namespace Extensions.Source.Drawing;
 
 [PublicAPI]

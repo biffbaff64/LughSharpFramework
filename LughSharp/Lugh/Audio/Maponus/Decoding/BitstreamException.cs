@@ -108,7 +108,7 @@ public class BitstreamException : Mp3SharpException
     {
         //TODO: This needs replacing!!
 
-        ArgumentNullException.ThrowIfNull( info );
+        Guard.Against.Null( info );
 
         info.AddValue( "ErrorCode", ErrorCode );
         base.GetObjectData( info, context );

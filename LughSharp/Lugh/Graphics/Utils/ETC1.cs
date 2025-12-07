@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -84,7 +85,7 @@ public class ETC1
     /// <returns> the Pixmap </returns>
     public Pixmap DecodeImage( ETC1Data? etc1Data, int format )
     {
-        ArgumentNullException.ThrowIfNull( etc1Data );
+        Guard.Against.Null( etc1Data );
 
         int dataOffset;
         int width;

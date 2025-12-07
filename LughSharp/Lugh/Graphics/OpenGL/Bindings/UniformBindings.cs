@@ -465,7 +465,7 @@ public unsafe partial class GLBindings
     /// </param>
     public void UniformMatrix4fv( int location, GLboolean transpose, params GLfloat[] value )
     {
-        ArgumentNullException.ThrowIfNull( value );
+        Guard.Against.Null( value );
 
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4FVPROC >( "glUniformMatrix4fv", out _glUniformMatrix4fv );
 

@@ -85,7 +85,7 @@ public class Buffer16BitStereo : AudioBase
     /// </returns>
     public int Read( byte[] bufferOut, int offset, int count )
     {
-        ArgumentNullException.ThrowIfNull( bufferOut );
+        Guard.Against.Null( bufferOut );
 
         if ( ( count + offset ) > bufferOut.Length )
         {
@@ -136,7 +136,7 @@ public class Buffer16BitStereo : AudioBase
     public override void AppendSamples( int channel, float[] samples )
     {
         // samples is required.
-        ArgumentNullException.ThrowIfNull( samples );
+        Guard.Against.Null( samples );
 
         if ( samples.Length < 32 )
         {

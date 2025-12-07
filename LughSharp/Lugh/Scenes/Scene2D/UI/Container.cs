@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 using Rectangle = LughUtils.source.Maths.Rectangle;
@@ -258,7 +260,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public bool RemoveActor( Actor actor )
     {
-        ArgumentNullException.ThrowIfNull( actor );
+        Guard.Against.Null( actor );
 
         if ( actor != _actor )
         {
@@ -272,7 +274,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public override bool RemoveActor( Actor actor, bool unfocus )
     {
-        ArgumentNullException.ThrowIfNull( actor );
+        Guard.Against.Null( actor );
 
         if ( actor != _actor )
         {
@@ -302,7 +304,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > Size( Value size )
     {
-        ArgumentNullException.ThrowIfNull( size );
+        Guard.Against.Null( size );
 
         _minWidth   = size;
         _minHeight  = size;
@@ -320,8 +322,8 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > Size( Value width, Value height )
     {
-        ArgumentNullException.ThrowIfNull( width );
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( width );
+        Guard.Against.Null( height );
 
         _minWidth   = width;
         _minHeight  = height;
@@ -473,7 +475,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetWidths( Value width )
     {
-        ArgumentNullException.ThrowIfNull( width );
+        Guard.Against.Null( width );
 
         _minWidth  = width;
         _prefWidth = width;
@@ -494,7 +496,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetMinWidth( Value minWidth )
     {
-        ArgumentNullException.ThrowIfNull( minWidth );
+        Guard.Against.Null( minWidth );
 
         _minWidth = minWidth;
 
@@ -547,7 +549,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetHeights( Value height )
     {
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( height );
 
         _minHeight  = height;
         _prefHeight = height;
@@ -568,7 +570,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetMinHeight( Value minHeight )
     {
-        ArgumentNullException.ThrowIfNull( minHeight );
+        Guard.Against.Null( minHeight );
 
         _minHeight = minHeight;
 
@@ -621,7 +623,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetMinSize( Value size )
     {
-        ArgumentNullException.ThrowIfNull( size );
+        Guard.Against.Null( size );
 
         _minWidth  = size;
         _minHeight = size;
@@ -634,8 +636,8 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetMinSize( Value width, Value height )
     {
-        ArgumentNullException.ThrowIfNull( width );
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( width );
+        Guard.Against.Null( height );
 
         _minWidth  = width;
         _minHeight = height;
@@ -675,7 +677,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetMaxSize( Value size )
     {
-        ArgumentNullException.ThrowIfNull( size );
+        Guard.Against.Null( size );
 
         _maxWidth  = size;
         _maxHeight = size;
@@ -688,8 +690,8 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetMaxSize( Value width, Value height )
     {
-        ArgumentNullException.ThrowIfNull( width );
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( width );
+        Guard.Against.Null( height );
 
         _maxWidth  = width;
         _maxHeight = height;
@@ -699,7 +701,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetMaxWidth( Value maxWidth )
     {
-        ArgumentNullException.ThrowIfNull( maxWidth );
+        Guard.Against.Null( maxWidth );
 
         _maxWidth = maxWidth;
 
@@ -708,7 +710,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetMaxHeight( Value maxHeight )
     {
-        ArgumentNullException.ThrowIfNull( maxHeight );
+        Guard.Against.Null( maxHeight );
 
         _maxHeight = maxHeight;
 
@@ -761,7 +763,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetPrefSize( Value size )
     {
-        ArgumentNullException.ThrowIfNull( size );
+        Guard.Against.Null( size );
 
         _prefWidth  = size;
         _prefHeight = size;
@@ -774,8 +776,8 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetPrefSize( Value width, Value height )
     {
-        ArgumentNullException.ThrowIfNull( width );
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( width );
+        Guard.Against.Null( height );
 
         _prefWidth  = width;
         _prefHeight = height;
@@ -805,7 +807,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetPrefWidth( Value prefWidth )
     {
-        ArgumentNullException.ThrowIfNull( prefWidth );
+        Guard.Against.Null( prefWidth );
 
         _prefWidth = prefWidth;
 
@@ -821,7 +823,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetPrefHeight( Value prefHeight )
     {
-        ArgumentNullException.ThrowIfNull( prefHeight );
+        Guard.Against.Null( prefHeight );
 
         _prefHeight = prefHeight;
 
@@ -881,7 +883,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetPadding( Value pad )
     {
-        ArgumentNullException.ThrowIfNull( pad );
+        Guard.Against.Null( pad );
 
         _padTop    = pad;
         _padLeft   = pad;
@@ -896,10 +898,10 @@ public class Container< T > : WidgetGroup where T : Actor
     /// </summary>
     public Container< T > SetPadding( Value top, Value left, Value bottom, Value right )
     {
-        ArgumentNullException.ThrowIfNull( top );
-        ArgumentNullException.ThrowIfNull( left );
-        ArgumentNullException.ThrowIfNull( bottom );
-        ArgumentNullException.ThrowIfNull( right );
+        Guard.Against.Null( top );
+        Guard.Against.Null( left );
+        Guard.Against.Null( bottom );
+        Guard.Against.Null( right );
 
         _padTop    = top;
         _padLeft   = left;
@@ -936,7 +938,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetPadTop( Value padTop )
     {
-        ArgumentNullException.ThrowIfNull( padTop );
+        Guard.Against.Null( padTop );
 
         _padTop = padTop;
 
@@ -945,7 +947,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetPadLeft( Value padLeft )
     {
-        ArgumentNullException.ThrowIfNull( padLeft );
+        Guard.Against.Null( padLeft );
 
         _padLeft = padLeft;
 
@@ -954,7 +956,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetPadBottom( Value padBottom )
     {
-        ArgumentNullException.ThrowIfNull( padBottom );
+        Guard.Against.Null( padBottom );
 
         _padBottom = padBottom;
 
@@ -963,7 +965,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public Container< T > SetPadRight( Value padRight )
     {
-        ArgumentNullException.ThrowIfNull( padRight );
+        Guard.Against.Null( padRight );
 
         _padRight = padRight;
 

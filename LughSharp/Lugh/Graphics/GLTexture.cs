@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Bindings;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Graphics.Utils;
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -32,7 +35,7 @@ namespace LughSharp.Lugh.Graphics;
 /// create TextureData and upload image data.
 /// </summary>
 [PublicAPI]
-public abstract class GLTexture : IDrawable, IDisposable
+public abstract class GLTexture : IDisposable
 {
     /// <summary>
     /// The OpenGL target for the texture. A GL target, in the context of OpenGL (and
@@ -47,7 +50,7 @@ public abstract class GLTexture : IDrawable, IDisposable
     /// <li>GL_TEXTURE_2D_ARRAY: For 2D texture arrays</li>
     /// </para>
     /// </summary>
-    public int GLTarget { get; private set; }
+    public int GLTarget { get; set; }
 
     /// <summary>
     /// A GL texture handle, or OpenGL texture handle, is a unique identifier assigned
@@ -87,7 +90,7 @@ public abstract class GLTexture : IDrawable, IDisposable
     /// so games and applications often allow users to adjust this setting.
     /// </li>
     /// </summary>
-    public float AnisotropicFilterLevel { get; private set; } = 1.0f;
+    public float AnisotropicFilterLevel { get; set; } = 1.0f;
 
     /// <summary>
     /// Texture depth in computer graphics typically refers to one of two concepts:
@@ -111,17 +114,17 @@ public abstract class GLTexture : IDrawable, IDisposable
     /// </para>
     /// </para>
     /// </summary>
-    public virtual int Depth { get; private set; } = 1;
+    public virtual int Depth { get; set; } = 1;
 
     /// <summary>
     /// Returns the <see cref="TextureFilterMode"/> used for minification.
     /// </summary>
-    public TextureFilterMode MinFilter { get; private set; } = TextureFilterMode.Nearest;
+    public TextureFilterMode MinFilter { get; set; } = TextureFilterMode.Nearest;
 
     /// <summary>
     /// Returns the <see cref="TextureFilterMode"/> used for magnification.
     /// </summary>
-    public TextureFilterMode MagFilter { get; private set; } = TextureFilterMode.Nearest;
+    public TextureFilterMode MagFilter { get; set; } = TextureFilterMode.Nearest;
 
     /// <summary>
     /// Returns the <see cref="TextureWrapMode"/> used for horizontal (U) texture coordinates.
@@ -133,8 +136,10 @@ public abstract class GLTexture : IDrawable, IDisposable
     /// </summary>
     public TextureWrapMode VWrap { get; set; } = TextureWrapMode.ClampToEdge;
 
-    public bool IsDrawable { get; set; }
-    public bool IsDisposed { get; set; }
+    // ========================================================================
+
+    internal bool IsDrawable { get; set; }
+    internal bool IsDisposed { get; set; }
 
     // ========================================================================
 
@@ -143,7 +148,11 @@ public abstract class GLTexture : IDrawable, IDisposable
 
     // ========================================================================
 
-    protected GLTexture()
+    /// <summary>
+    /// Default constructor. Creates a new GLTexture object using the
+    /// default GL_TEXTURE_2D target.
+    /// </summary>
+    protected GLTexture() : this( IGL.GL_TEXTURE_2D, GL.GenTexture() )
     {
     }
 
@@ -215,23 +224,23 @@ public abstract class GLTexture : IDrawable, IDisposable
     /// Sets the <see cref="TextureWrapMode"/> for this texture on the u and v axis.
     /// Assumes the texture is bound and active!
     /// </summary>
-    /// <param name="u"> The u wrap. </param>
-    /// <param name="v"> The v wrap. </param>
+    /// <param name="s"> The setting for GL_TEXTURE_WRAP_S. </param>
+    /// <param name="t"> The setting for GL_TEXTURE_WRAP_T. </param>
     /// <param name="force">
     /// True to always set the values, even if they are the same as the current values.
     /// </param>
-    public void UnsafeSetWrap( TextureWrapMode u, TextureWrapMode v, bool force = false )
+    public void UnsafeSetWrap( TextureWrapMode s, TextureWrapMode t, bool force = false )
     {
-        if ( force || ( UWrap != u ) )
+        if ( force || ( UWrap != s ) )
         {
-            GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )u );
-            UWrap = u;
+            GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )s );
+            UWrap = s;
         }
 
-        if ( force || ( VWrap != v ) )
+        if ( force || ( VWrap != t ) )
         {
-            GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )v );
-            VWrap = v;
+            GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )t );
+            VWrap = t;
         }
     }
 
@@ -239,17 +248,17 @@ public abstract class GLTexture : IDrawable, IDisposable
     /// Sets the <see cref="TextureWrapMode"/> for this texture on the u and v axis.
     /// This will bind this texture!
     /// </summary>
-    /// <param name="u">the u wrap</param>
-    /// <param name="v">the v wrap</param>
-    public void SetWrap( TextureWrapMode u, TextureWrapMode v )
+    /// <param name="s"> The setting for GL_TEXTURE_WRAP_S. </param>
+    /// <param name="t"> The setting for GL_TEXTURE_WRAP_T. </param>
+    public void SetWrap( TextureWrapMode s, TextureWrapMode t )
     {
-        UWrap = u;
-        VWrap = v;
+        UWrap = s;
+        VWrap = t;
 
         Bind();
 
-        GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )u );
-        GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )v );
+        GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )s );
+        GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )t );
     }
 
     /// <summary>
@@ -380,16 +389,26 @@ public abstract class GLTexture : IDrawable, IDisposable
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="data"></param>
+    protected void UploadImageData( int target, ITextureData data )
+    {
+        UploadImageData( target, data, 0 );
+    }
+
+    /// <summary>
+    /// 
     /// </summary>
     /// <param name="target"></param>
     /// <param name="data"></param>
     /// <param name="miplevel"></param>
-    public void UploadImageData( int target, ITextureData? data, int miplevel = 0 )
+    public void UploadImageData( int target, ITextureData? data, int miplevel )
     {
         if ( data == null )
         {
-            Logger.Error( "NULL ITextureData supplied!" );
-
+            // FIXME: remove texture on target?
             return;
         }
 
@@ -398,28 +417,26 @@ public abstract class GLTexture : IDrawable, IDisposable
             data.Prepare();
         }
 
-        if ( data.TextureDataType == ITextureData.TextureType.Custom )
+        var type = data.TextureDataType;
+
+        if ( type == ITextureData.TextureType.Custom )
         {
-            data.UploadCustomData( target );
+            data.ConsumeCustomData( target );
 
             return;
         }
 
-        var pixmap = data.FetchPixmap();
+        var pixmap        = data.ConsumePixmap();
+        var disposePixmap = data.ShouldDisposePixmap();
 
-        Guard.ThrowIfNull( pixmap );
-
-        var shouldDispose = data.ShouldDisposePixmap();
+        Guard.Against.Null( pixmap );
 
         if ( data.GetPixelFormat() != pixmap.GetColorFormat() )
         {
             var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.GetPixelFormat() );
 
-            if ( IsDrawable )
-            {
-                tmp.Blending = Pixmap.BlendTypes.None;
-                tmp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );
-            }
+            tmp.Blending = Pixmap.BlendTypes.None;
+            tmp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );
 
             if ( data.ShouldDisposePixmap() )
             {
@@ -427,7 +444,7 @@ public abstract class GLTexture : IDrawable, IDisposable
             }
 
             pixmap        = tmp;
-            shouldDispose = true;
+            disposePixmap = true;
         }
 
         GL.SetGLUnpackAlignment( pixmap, PixelFormat.GetAlignment( pixmap ) );
@@ -438,33 +455,15 @@ public abstract class GLTexture : IDrawable, IDisposable
             MipMapGenerator.GenerateMipMap( target, pixmap, pixmap.Width, pixmap.Height );
             CheckGLError( "GenerateMipMap" );
         }
+        else
+        {
+            GL.TexImage2D( target, miplevel, pixmap.GLInternalPixelFormat,
+                           pixmap.Width, pixmap.Height, 0,
+                           pixmap.GLPixelFormat, pixmap.GLDataType, pixmap.PixelData );
+            CheckGLError( "TexImage2D" );
+        }
 
-        GL.TexParameteri( target, IGL.GL_TEXTURE_MIN_FILTER, IGL.GL_NEAREST );
-        GL.TexParameteri( target, IGL.GL_TEXTURE_MAG_FILTER, IGL.GL_NEAREST );
-        GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_S, IGL.GL_CLAMP_TO_EDGE );
-        GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_T, IGL.GL_CLAMP_TO_EDGE );
-
-        GL.TextureStorage2D( GLTextureHandle,
-                             1,
-                             IGL.GL_RGBA8,
-                             pixmap.Width,
-                             pixmap.Height );
-
-        CheckGLError( "TextureStorage2D" );
-
-        GL.TextureSubImage2D( GLTextureHandle,
-                              0,
-                              0,
-                              0,
-                              pixmap.Width,
-                              pixmap.Height,
-                              IGL.GL_RGBA,
-                              IGL.GL_UNSIGNED_BYTE,
-                              pixmap.PixelData );
-
-        CheckGLError( "TextureSubImage2D" );
-
-        if ( shouldDispose )
+        if ( disposePixmap )
         {
             pixmap.Dispose();
         }
@@ -494,7 +493,7 @@ public abstract class GLTexture : IDrawable, IDisposable
     {
         if ( GLTextureHandle != 0 )
         {
-            GL.DeleteTextures( ( uint )GLTextureHandle );
+            GL.DeleteTextures( GLTextureHandle );
             GLTextureHandle = 0;
         }
     }
@@ -537,7 +536,7 @@ public abstract class GLTexture : IDrawable, IDisposable
             Logger.Debug( $"pixmap.Width           : {pixmap.Width}" );
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
-            Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap?.ColorFormat}" );
+            Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap.ColorFormat}" );
             Logger.Debug( $"Pixmap Pixel Format    : {PixelFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorFormat )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
             Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormat.GLFormatAsString( pixmap.GLPixelFormat )}" );

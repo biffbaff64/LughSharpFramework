@@ -64,8 +64,8 @@ public class MipMapTextureData : ITextureData
     }
 
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="ITextureData.FetchPixmap"/> or
-    /// <see cref="ITextureData.UploadCustomData"/>. This method can be called from a non
+    /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap"/> or
+    /// <see cref="ITextureData.ConsumeCustomData"/>. This method can be called from a non
     /// OpenGL thread and should thus not interact with OpenGL.
     /// </summary>
     public void Prepare()
@@ -81,7 +81,7 @@ public class MipMapTextureData : ITextureData
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public Pixmap FetchPixmap()
+    public Pixmap ConsumePixmap()
     {
         throw new GdxRuntimeException( "This Texture is compressed, use the compress method." );
     }
@@ -95,7 +95,7 @@ public class MipMapTextureData : ITextureData
     /// should be disposed of here.
     /// </para>
     /// </summary>
-    public void UploadCustomData( int target )
+    public void ConsumeCustomData( int target )
     {
         var derivedGLTexture = new DerivedGLTexture();
 

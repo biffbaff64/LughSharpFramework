@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders;
-using LughSharp.Lugh.Graphics.OpenGL.Bindings;
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Graphics.Utils;
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -53,24 +55,24 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public class Texture : GLTexture, IManaged
 {
-    public AssetManager? AssetManager { get; set; } = null;
-    public ITextureData  TextureData  { get; set; }
+    public ITextureData? TextureData  { get; set; }
 
     // ========================================================================
 
-    public int  Width              => TextureData.Width;
-    public int  Height             => TextureData.Height;
+    public int  Width              => TextureData?.Width ?? 0;
+    public int  Height             => TextureData?.Height ?? 0;
+    public int  ColorFormat        => TextureData?.GetPixelFormat() ?? LughFormat.RGBA8888;
+    public int  BitDepth           => TextureData?.BitDepth ?? 32;
     public int  NumManagedTextures => _managedTextures.Count;
     public uint TextureID          => GLTextureHandle;
     public bool IsManaged          => TextureData is { IsManaged: true };
-    public int  ColorFormat        => TextureData.GetPixelFormat();
-    public int  BitDepth           => TextureData.BitDepth;
 
     // ========================================================================
 
     private readonly Dictionary< IApplication, List< Texture > > _managedTextures = [ ];
 
-    private bool _isUploaded;
+    private AssetManager? _assetManager;
+    private bool          _isUploaded;
 
     // ========================================================================
     // ========================================================================
@@ -85,7 +87,6 @@ public class Texture : GLTexture, IManaged
     public Texture( string internalPath )
         : this( Api.Files.Internal( internalPath ), false )
     {
-        Name = Path.GetFileNameWithoutExtension( internalPath );
     }
 
     /// <summary>
@@ -96,7 +97,6 @@ public class Texture : GLTexture, IManaged
     public Texture( FileInfo file, bool useMipMaps )
         : this( file, LughFormat.RGBA8888, useMipMaps )
     {
-        Name = Path.GetFileNameWithoutExtension( file.Name );
     }
 
     /// <summary>
@@ -112,7 +112,6 @@ public class Texture : GLTexture, IManaged
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
-        Name = Path.GetFileNameWithoutExtension( file.Name );
     }
 
     /// <summary>
@@ -170,48 +169,13 @@ public class Texture : GLTexture, IManaged
     protected Texture( int glTarget, uint glTextureHandle, ITextureData data )
         : base( glTarget, glTextureHandle )
     {
-        ArgumentNullException.ThrowIfNull( data );
+        Guard.Against.Null( data );
 
-        TextureData = data;
+        Load( data );
 
         if ( data.IsManaged )
         {
             AddManagedTexture( Api.App, this );
-        }
-    }
-
-    /// <summary>
-    /// Uploads the texture to the GPU.
-    /// </summary>
-    public void Upload()
-    {
-        if ( _isUploaded )
-        {
-            return;
-        }
-
-        GLUtils.CheckOpenGLContext();
-
-        if ( TextureData is { IsPrepared: false } )
-        {
-            // CPU-side decode (safe if already prepared)
-            TextureData.Prepare();
-        }
-
-        Load( TextureData );
-
-        _isUploaded = true;
-    }
-
-    /// <summary>
-    /// Ensures that the texture is uploaded to the GPU. If the texture is not
-    /// uploaded, it will be uploaded.
-    /// </summary>
-    public void EnsureUploaded()
-    {
-        if ( !_isUploaded )
-        {
-            Load( TextureData );
         }
     }
 
@@ -221,7 +185,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="data"></param>
     public void Load( ITextureData data )
     {
-        if ( data.IsManaged != TextureData.IsManaged )
+        if ( ( TextureData != null ) && ( data.IsManaged != TextureData.IsManaged ) )
         {
             throw new GdxRuntimeException( "New data must have the same managed status as the old data" );
         }
@@ -240,6 +204,8 @@ public class Texture : GLTexture, IManaged
         UnsafeSetFilter( MinFilter, MagFilter, true );
         UnsafeSetWrap( UWrap, VWrap, true );
         UnsafeSetAnisotropicFilter( AnisotropicFilterLevel, true );
+        
+        GL.BindTexture( GLTarget, 0 );
     }
 
     /// <summary>
@@ -255,7 +221,7 @@ public class Texture : GLTexture, IManaged
 
         GLTextureHandle = GL.GenTexture();
 
-        EnsureUploaded();
+        Load( TextureData! );
     }
 
     /// <summary>
@@ -297,7 +263,7 @@ public class Texture : GLTexture, IManaged
 
         managedTextureArray.Add( texture );
 
-        _managedTextures.Put( app, managedTextureArray );
+        _managedTextures[ app ] = managedTextureArray;
     }
 
     /// <summary>
@@ -305,7 +271,7 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     internal void InvalidateAllTextures( IApplication app )
     {
-        if ( AssetManager == null )
+        if ( _assetManager == null )
         {
             foreach ( var t in _managedTextures[ app ] )
             {
@@ -317,7 +283,7 @@ public class Texture : GLTexture, IManaged
             // first we have to make sure the AssetManager isn't loading anything anymore,
             // otherwise the ref counting trick below wouldn't work (when a texture is
             // currently on the task stack of the manager.)
-            AssetManager.FinishLoading();
+            _assetManager.FinishLoading();
 
             // next we go through each texture and reload either directly or via the
             // asset manager.
@@ -325,7 +291,7 @@ public class Texture : GLTexture, IManaged
 
             foreach ( var texture in textures )
             {
-                var filename = AssetManager.GetAssetFileName( texture );
+                var filename = _assetManager.GetAssetFileName( texture );
 
                 if ( filename == null )
                 {
@@ -337,9 +303,9 @@ public class Texture : GLTexture, IManaged
                     // we can actually remove it from the assetmanager. Also set the
                     // handle to zero, otherwise we might accidentially dispose
                     // already reloaded textures.
-                    var refCount = AssetManager.GetReferenceCount( filename );
+                    var refCount = _assetManager.GetReferenceCount( filename );
 
-                    AssetManager.SetReferenceCount( filename, 0 );
+                    _assetManager.SetReferenceCount( filename, 0 );
                     texture.GLTextureHandle = 0;
 
                     // create the parameters, passing the reference to the texture as
@@ -357,9 +323,9 @@ public class Texture : GLTexture, IManaged
                     };
 
                     // unload the texture, create a new gl handle then reload it.
-                    AssetManager.Unload( filename );
+                    _assetManager.Unload( filename );
                     texture.GLTextureHandle = GL.GenTexture();
-                    AssetManager.Load< Texture >( filename, parameters );
+                    _assetManager.Load< Texture >( filename, parameters );
                 }
             }
 
@@ -394,12 +360,14 @@ public class Texture : GLTexture, IManaged
     /// <returns></returns>
     public byte[]? GetImageData()
     {
+        Guard.Against.Null( TextureData );
+
         if ( !TextureData.IsPrepared )
         {
             TextureData.Prepare();
         }
 
-        return TextureData.FetchPixmap()?.PixelData;
+        return TextureData.ConsumePixmap()?.PixelData;
     }
 
     /// <summary>
@@ -408,29 +376,6 @@ public class Texture : GLTexture, IManaged
     internal void ClearAllTextures( IApplication app )
     {
         _managedTextures.Remove( app );
-    }
-
-    // ========================================================================
-    // Implementations of abstract methods from the base Image class.
-
-    public void ClearWithColor( Color color )
-    {
-        throw new NotImplementedException();
-    }
-
-    public int GetPixel( int x, int y )
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SetPixel( int x, int y, Color color )
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SetPixel( int x, int y, int color )
-    {
-        throw new NotImplementedException();
     }
 
     public static bool IsMipMap( TextureFilterMode filter )
@@ -463,16 +408,18 @@ public class Texture : GLTexture, IManaged
 
     // ========================================================================
 
-    /// <inheritdoc />
-    public override string? ToString()
-    {
-        return TextureData is FileTextureData ? TextureData.ToString() : base.ToString();
-    }
-
     /// <summary>
+    /// 
     /// </summary>
     public void DebugPrint()
     {
+        Guard.Against.Null( TextureData );
+
+        if ( !TextureData.IsPrepared )
+        {
+            TextureData.Prepare();
+        }
+
         Logger.Debug( $"Dimensions        : {Width} x {Height} = {Width * Height}" );
         Logger.Debug( $"Format            : {TextureData.GetPixelFormat()}" );
         Logger.Debug( $"IsManaged         : {IsManaged}" );
@@ -483,12 +430,7 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"BytesPerPixel     : {TextureData.BytesPerPixel}" );
         Logger.Debug( $"BitDepth          : {TextureData.BitDepth}" );
 
-        if ( !TextureData.IsPrepared )
-        {
-            TextureData.Prepare();
-        }
-
-        Logger.Debug( $"TextureData Length: {TextureData.FetchPixmap()!.PixelData.Length}" );
+        Logger.Debug( $"TextureData Length: {TextureData.ConsumePixmap()!.PixelData.Length}" );
     }
 
     // ========================================================================
@@ -536,8 +478,6 @@ public class Texture : GLTexture, IManaged
             assetManager.SetReferenceCount( filename!, refCount );
         }
     }
-
-    // ========================================================================
 }
 
 // ========================================================================

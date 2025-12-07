@@ -180,7 +180,7 @@ public class Cell : IResetable
     /// <exception cref="ArgumentNullException">If parameter <tt>size</tt> is null.</exception>
     public Cell Size( Value size )
     {
-        ArgumentNullException.ThrowIfNull( size );
+        Guard.Against.Null( size );
 
         MinWidth   = size;
         MinHeight  = size;
@@ -199,8 +199,8 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Size( Value width, Value height )
     {
-        ArgumentNullException.ThrowIfNull( width );
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( width );
+        Guard.Against.Null( height );
 
         MinWidth   = width;
         MinHeight  = height;
@@ -243,7 +243,7 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Width( Value width )
     {
-        ArgumentNullException.ThrowIfNull( width );
+        Guard.Against.Null( width );
 
         MinWidth  = width;
         PrefWidth = width;
@@ -271,7 +271,7 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Height( Value height )
     {
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( height );
 
         MinHeight  = height;
         PrefHeight = height;
@@ -297,7 +297,7 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell MinSize( Value size )
     {
-        ArgumentNullException.ThrowIfNull( size );
+        Guard.Against.Null( size );
 
         MinWidth  = size;
         MinHeight = size;
@@ -322,8 +322,8 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell MinSize( Value width, Value height )
     {
-        ArgumentNullException.ThrowIfNull( width );
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( width );
+        Guard.Against.Null( height );
 
         MinWidth  = width;
         MinHeight = height;
@@ -352,7 +352,7 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinWidth( Value minWidth )
     {
-        ArgumentNullException.ThrowIfNull( minWidth );
+        Guard.Against.Null( minWidth );
 
         MinWidth = minWidth;
 
@@ -369,7 +369,7 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinHeight( Value minHeight )
     {
-        ArgumentNullException.ThrowIfNull( minHeight );
+        Guard.Against.Null( minHeight );
 
         MinHeight = minHeight;
 
@@ -417,7 +417,7 @@ public class Cell : IResetable
     /// </remarks>
     public Cell SetPrefSize( Value size )
     {
-        ArgumentNullException.ThrowIfNull( size );
+        Guard.Against.Null( size );
 
         PrefWidth  = size;
         PrefHeight = size;
@@ -436,8 +436,8 @@ public class Cell : IResetable
     /// </remarks>
     public Cell SetPrefSize( Value width, Value height )
     {
-        ArgumentNullException.ThrowIfNull( width );
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( width );
+        Guard.Against.Null( height );
 
         PrefWidth  = width;
         PrefHeight = height;
@@ -455,7 +455,7 @@ public class Cell : IResetable
     /// </remarks>
     public Cell SetPrefWidth( Value prefWidth )
     {
-        ArgumentNullException.ThrowIfNull( prefWidth );
+        Guard.Against.Null( prefWidth );
 
         PrefWidth = prefWidth;
 
@@ -472,7 +472,7 @@ public class Cell : IResetable
     /// </remarks>
     public Cell SetPrefHeight( Value prefHeight )
     {
-        ArgumentNullException.ThrowIfNull( prefHeight );
+        Guard.Against.Null( prefHeight );
 
         PrefHeight = prefHeight;
 
@@ -547,7 +547,7 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell SetMaxSize( Value size )
     {
-        ArgumentNullException.ThrowIfNull( size );
+        Guard.Against.Null( size );
 
         MaxWidth  = size;
         MaxHeight = size;
@@ -565,8 +565,8 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell SetMaxSize( Value width, Value height )
     {
-        ArgumentNullException.ThrowIfNull( width );
-        ArgumentNullException.ThrowIfNull( height );
+        Guard.Against.Null( width );
+        Guard.Against.Null( height );
 
         MaxWidth  = width;
         MaxHeight = height;
@@ -582,7 +582,7 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell SetMaxWidth( Value maxWidth )
     {
-        ArgumentNullException.ThrowIfNull( maxWidth );
+        Guard.Against.Null( maxWidth );
 
         MaxWidth = maxWidth;
 
@@ -597,7 +597,7 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell SetMaxHeight( Value maxHeight )
     {
-        ArgumentNullException.ThrowIfNull( maxHeight );
+        Guard.Against.Null( maxHeight );
 
         MaxHeight = maxHeight;
 
@@ -663,7 +663,7 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell Space( Value space )
     {
-        ArgumentNullException.ThrowIfNull( space );
+        Guard.Against.Null( space );
 
         SpaceTop    = space;
         SpaceLeft   = space;
@@ -682,10 +682,10 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Space( Value top, Value left, Value bottom, Value right )
     {
-        ArgumentNullException.ThrowIfNull( top );
-        ArgumentNullException.ThrowIfNull( left );
-        ArgumentNullException.ThrowIfNull( bottom );
-        ArgumentNullException.ThrowIfNull( right );
+        Guard.Against.Null( top );
+        Guard.Against.Null( left );
+        Guard.Against.Null( bottom );
+        Guard.Against.Null( right );
 
         SpaceTop    = top;
         SpaceLeft   = left;
@@ -701,7 +701,7 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetSpaceTop( Value spaceTop )
     {
-        ArgumentNullException.ThrowIfNull( spaceTop );
+        Guard.Against.Null( spaceTop );
 
         SpaceTop = spaceTop;
 
@@ -714,7 +714,7 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetSpaceLeft( Value spaceLeft )
     {
-        ArgumentNullException.ThrowIfNull( spaceLeft );
+        Guard.Against.Null( spaceLeft );
 
         SpaceLeft = spaceLeft;
 
@@ -723,7 +723,7 @@ public class Cell : IResetable
 
     public Cell SetSpaceBottom( Value spaceBottom )
     {
-        ArgumentNullException.ThrowIfNull( spaceBottom );
+        Guard.Against.Null( spaceBottom );
 
         SpaceBottom = spaceBottom;
 
@@ -732,7 +732,7 @@ public class Cell : IResetable
 
     public Cell SetSpaceRight( Value spaceRight )
     {
-        ArgumentNullException.ThrowIfNull( spaceRight );
+        Guard.Against.Null( spaceRight );
 
         SpaceRight = spaceRight;
 
@@ -835,7 +835,7 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Pad( Value pad )
     {
-        ArgumentNullException.ThrowIfNull( pad );
+        Guard.Against.Null( pad );
 
         PadTop    = pad;
         PadLeft   = pad;
@@ -847,10 +847,10 @@ public class Cell : IResetable
 
     public Cell Pad( Value top, Value left, Value bottom, Value right )
     {
-        ArgumentNullException.ThrowIfNull( top );
-        ArgumentNullException.ThrowIfNull( left );
-        ArgumentNullException.ThrowIfNull( bottom );
-        ArgumentNullException.ThrowIfNull( right );
+        Guard.Against.Null( top );
+        Guard.Against.Null( left );
+        Guard.Against.Null( bottom );
+        Guard.Against.Null( right );
 
         PadTop    = top;
         PadLeft   = left;
@@ -862,7 +862,7 @@ public class Cell : IResetable
 
     public Cell SetPadTop( Value padTop )
     {
-        ArgumentNullException.ThrowIfNull( padTop );
+        Guard.Against.Null( padTop );
 
         PadTop = padTop;
 
@@ -871,7 +871,7 @@ public class Cell : IResetable
 
     public Cell SetPadBottom( Value padBottom )
     {
-        ArgumentNullException.ThrowIfNull( padBottom );
+        Guard.Against.Null( padBottom );
 
         PadBottom = padBottom;
 
@@ -880,7 +880,7 @@ public class Cell : IResetable
 
     public Cell SetPadRight( Value padRight )
     {
-        ArgumentNullException.ThrowIfNull( padRight );
+        Guard.Against.Null( padRight );
 
         PadRight = padRight;
 

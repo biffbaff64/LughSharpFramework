@@ -23,8 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders;
+using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Text;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 
 namespace LughSharp.Lugh.Assets;
@@ -155,18 +160,6 @@ public partial class AssetManager : IDisposable
 
         _executor          = new AsyncExecutor( 1, "AssetManager" );
         FileHandleResolver = resolver;
-        
-        #if DEBUG
-        foreach( var al in _loaders )
-        {
-            Logger.Debug( $"Key: {al.Key.FullName}" );
-
-            foreach( var loader in al.Value.Values )
-            {
-                Logger.Debug( $"Loader: {loader.GetType().Name}" );
-            }
-        }
-        #endif        
     }
 
     // ========================================================================
@@ -245,7 +238,7 @@ public partial class AssetManager : IDisposable
     {
         lock ( this )
         {
-            ArgumentNullException.ThrowIfNull( type );
+            Guard.Against.Null( type );
             Guard.Against.Null( _assets );
 
             // Retrieve all assets of the required type
@@ -383,20 +376,7 @@ public partial class AssetManager : IDisposable
     /// </returns>
     public T FinishLoadingAsset< T >( string filename )
     {
-        Logger.Checkpoint();
-
-        ArgumentNullException.ThrowIfNull( filename );
-
-        Logger.Debug( $"Waiting for asset: {filename}" );
-        Logger.Debug( $"Asset type: {typeof( T ).FullName}" );
-        Logger.Debug( $"Num tasks: {_tasks.Count}" );
-        Logger.Debug( $"loadQueue count: {_loadQueue.Count}" );
-        Logger.Debug( $"Num queued assets: {GetQueuedAssets()}" );
-
-        foreach ( var qa in _loadQueue )
-        {
-            Logger.Debug( $"Asset in queue: {qa.AssetName}" );
-        }
+        Guard.Against.Null( filename );
 
         while ( true )
         {
@@ -534,8 +514,8 @@ public partial class AssetManager : IDisposable
     /// <exception cref="GdxRuntimeException">Thrown if no assets of the specified type are found.</exception>
     public List< T > GetAll< T >( Type? type, List< T > outArray )
     {
-        ArgumentNullException.ThrowIfNull( type );
-        ArgumentNullException.ThrowIfNull( outArray );
+        Guard.Against.Null( type );
+        Guard.Against.Null( outArray );
 
         lock ( this )
         {
@@ -745,8 +725,6 @@ public partial class AssetManager : IDisposable
     /// </summary>
     private bool LoadNextTask()
     {
-        Logger.Checkpoint();
-
         lock ( this )
         {
             var assetDesc = _loadQueue.RemoveIndex( 0 );
@@ -770,8 +748,6 @@ public partial class AssetManager : IDisposable
             }
             else
             {
-                Logger.Checkpoint();
-
                 AddTask( assetDesc );
 
                 isLoaded = true;
@@ -802,8 +778,6 @@ public partial class AssetManager : IDisposable
     /// </exception>
     private void AddTask( AssetDescriptor assetDesc )
     {
-        Logger.Checkpoint();
-
         var loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
 
         if ( loader == null )
@@ -1015,7 +989,7 @@ public partial class AssetManager : IDisposable
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="parentAssetFilename"/> is null.</exception>
     public void InjectDependencies( string parentAssetFilename, List< AssetDescriptor > dependendAssetDescs )
     {
-        ArgumentNullException.ThrowIfNull( parentAssetFilename );
+        Guard.Against.Null( parentAssetFilename );
 
         lock ( this )
         {
@@ -1449,9 +1423,7 @@ public partial class AssetManager : IDisposable
     {
         lock ( this )
         {
-            // Add the asset to the filename lookup
             _assetTypes[ filename ] = type;
-
             _assets.TryGetValue( type, out var typeToAssets );
 
             if ( typeToAssets == null )

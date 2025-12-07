@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
+using System.Runtime.Versioning;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.ImagePacker;

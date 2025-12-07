@@ -437,7 +437,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <returns>This Color for chaining.</returns>
     public Color Lerp( Color target, float interpolationCoefficient )
     {
-        ArgumentNullException.ThrowIfNull( target );
+        Guard.Against.Null( target );
 
         if ( interpolationCoefficient is < 0.0f or > 1.0f )
         {
@@ -1238,8 +1238,8 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="c2"> Color 2. </param>
     public static Color operator *( Color? c1, Color? c2 )
     {
-        ArgumentNullException.ThrowIfNull( c1 );
-        ArgumentNullException.ThrowIfNull( c2 );
+        Guard.Against.Null( c1 );
+        Guard.Against.Null( c2 );
 
         c1.R *= c2.R;
         c1.G *= c2.G;

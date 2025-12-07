@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.G2D;
 
 namespace LughSharp.Lugh.Graphics.Atlases;
 

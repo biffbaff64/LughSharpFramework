@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughUtils.source.Collections;
@@ -329,7 +331,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <returns> True if the event was cancelled. </returns>
     public virtual bool Fire( Event? ev )
     {
-        ArgumentNullException.ThrowIfNull( ev );
+        Guard.Against.Null( ev );
 
         ev.Stage       ??= Stage;
         ev.TargetActor =   this;
@@ -645,7 +647,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <exception cref="ArgumentException"></exception>
     public bool IsDescendantOf( Actor? actor )
     {
-        ArgumentNullException.ThrowIfNull( actor );
+        Guard.Against.Null( actor );
 
         var parent = this;
 
@@ -668,7 +670,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public bool IsAscendantOf( Actor? actor )
     {
-        ArgumentNullException.ThrowIfNull( actor );
+        Guard.Against.Null( actor );
 
         do
         {

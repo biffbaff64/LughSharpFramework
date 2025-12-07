@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
+
 namespace LughSharp.Lugh.Graphics.Text;
 
 /// <summary>

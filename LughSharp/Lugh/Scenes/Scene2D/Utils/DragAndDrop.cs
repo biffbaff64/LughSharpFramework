@@ -402,7 +402,7 @@ public class DragAndDrop
     {
         public DragSource( Actor actor )
         {
-            ArgumentNullException.ThrowIfNull( actor );
+            Guard.Against.Null( actor );
 
             Actor = actor;
         }
@@ -462,7 +462,7 @@ public class DragAndDrop
         /// <exception cref="ArgumentException"></exception>
         protected DragTarget( Actor actor )
         {
-            ArgumentNullException.ThrowIfNull( actor );
+            Guard.Against.Null( actor );
 
             Actor = actor;
             var stage = actor.Stage;

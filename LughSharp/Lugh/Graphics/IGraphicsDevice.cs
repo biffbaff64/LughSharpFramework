@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.FrameBuffers;
+using LughSharp.Lugh.Graphics.Utils;
+
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>

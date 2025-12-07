@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
 using LughSharp.Lugh.Utils;
 using LughUtils.source.Exceptions;
 

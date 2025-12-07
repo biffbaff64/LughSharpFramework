@@ -598,7 +598,7 @@ public class SubbandLayer2 : ASubband
     /// </summary>
     public override void ReadAllocation( Bitstream stream, Header? header, Crc16 crc )
     {
-        ArgumentNullException.ThrowIfNull( header );
+        Guard.Against.Null( header );
 
         var length = GetAllocationLength( header );
         allocation = stream.GetBitsFromBuffer( length );
@@ -620,7 +620,7 @@ public class SubbandLayer2 : ASubband
     /// </summary>
     public override void ReadScaleFactor( Bitstream stream, Header? header )
     {
-        ArgumentNullException.ThrowIfNull( header );
+        Guard.Against.Null( header );
 
         if ( allocation != 0 )
         {

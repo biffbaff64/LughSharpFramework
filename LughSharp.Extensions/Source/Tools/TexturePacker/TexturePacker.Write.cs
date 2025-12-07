@@ -444,7 +444,7 @@ public partial class TexturePacker
 
                     foreach ( var region in textureAtlasData.Regions )
                     {
-                        ArgumentNullException.ThrowIfNull( region.Name );
+                        Guard.Against.Null( region.Name );
 
                         if ( region.Name.Equals( rectName ) )
                         {

@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;

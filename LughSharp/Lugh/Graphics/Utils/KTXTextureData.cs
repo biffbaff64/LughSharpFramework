@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
 using ByteOrder = LughUtils.source.ByteOrder;
 using Exception = System.Exception;
 
@@ -94,7 +95,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// </summary>
     public void ConsumeCubemapData()
     {
-        UploadCustomData( IGL.GL_TEXTURE_CUBE_MAP );
+        ConsumeCustomData( IGL.GL_TEXTURE_CUBE_MAP );
     }
 
     /// <summary>
@@ -253,7 +254,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public Pixmap FetchPixmap()
+    public Pixmap ConsumePixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
@@ -265,8 +266,8 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     }
 
     /// <returns>
-    /// whether the caller of <see cref="ITextureData.FetchPixmap"/> should dispose the
-    /// Pixmap returned by <see cref="ITextureData.FetchPixmap"/>
+    /// whether the caller of <see cref="ITextureData.ConsumePixmap"/> should dispose the
+    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap"/>
     /// </returns>
     public bool ShouldDisposePixmap()
     {
@@ -282,7 +283,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// disposed of here.
     /// </para>
     /// </summary>
-    public void UploadCustomData( int target )
+    public void ConsumeCustomData( int target )
     {
         if ( _compressedData == null )
         {

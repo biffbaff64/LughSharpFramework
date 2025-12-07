@@ -98,8 +98,8 @@ public interface ITextureData : IManaged
     int GetPixelFormat();
 
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="FetchPixmap"/> or
-    /// <see cref="UploadCustomData"/>. This method can be called from a non
+    /// Prepares the TextureData for a call to <see cref="ConsumePixmap"/> or
+    /// <see cref="ConsumeCustomData"/>. This method can be called from a non
     /// OpenGL thread and should not interact with OpenGL.
     /// </summary>
     void Prepare();
@@ -113,11 +113,11 @@ public interface ITextureData : IManaged
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    Pixmap? FetchPixmap();
+    Pixmap? ConsumePixmap();
 
     /// <summary>
-    /// Returns whether the caller of <see cref="FetchPixmap"/> should
-    /// dispose the Pixmap returned by <see cref="FetchPixmap"/>.
+    /// Returns whether the caller of <see cref="ConsumePixmap"/> should
+    /// dispose the Pixmap returned by <see cref="ConsumePixmap"/>.
     /// </summary>
     bool ShouldDisposePixmap();
 
@@ -130,7 +130,7 @@ public interface ITextureData : IManaged
     /// disposed of here.
     /// </para>
     /// </summary>
-    void UploadCustomData( int target );
+    void ConsumeCustomData( int target );
     
     /// <summary>
     /// Dumps the internal state of the TextureData to the log.

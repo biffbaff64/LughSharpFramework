@@ -71,7 +71,7 @@ public class Selection< T > : IDisableable, IDisposable
     /// </summary>
     public virtual void Choose( T item )
     {
-        ArgumentNullException.ThrowIfNull( item );
+        Guard.Against.Null( item );
 
         if ( IsDisabled )
         {
@@ -191,7 +191,7 @@ public class Selection< T > : IDisableable, IDisposable
     /// </summary>
     public void Set( T? item )
     {
-        ArgumentNullException.ThrowIfNull( item );
+        Guard.Against.Null( item );
 
         if ( ( Selected.Count == 1 ) && Equals( Selected.First(), item ) )
         {
@@ -261,7 +261,7 @@ public class Selection< T > : IDisableable, IDisposable
     /// </summary>
     public void Add( T item )
     {
-        ArgumentNullException.ThrowIfNull( item );
+        Guard.Against.Null( item );
 
         if ( !Selected.Add( item ) )
         {
@@ -321,7 +321,7 @@ public class Selection< T > : IDisableable, IDisposable
 
     public void Remove( T item )
     {
-        ArgumentNullException.ThrowIfNull( item );
+        Guard.Against.Null( item );
 
         if ( !Selected.Remove( item ) )
         {

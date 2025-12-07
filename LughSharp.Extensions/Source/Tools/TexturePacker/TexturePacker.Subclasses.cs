@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Versioning;
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 
@@ -245,7 +247,7 @@ public partial class TexturePacker
 
         public static string GetAtlasName( string? name, bool flattenPaths )
         {
-            ArgumentNullException.ThrowIfNull( name );
+            Guard.Against.Null( name );
 
             return flattenPaths ? new FileInfo( name ).Name : name;
         }

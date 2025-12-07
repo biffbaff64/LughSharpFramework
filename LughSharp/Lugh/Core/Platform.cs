@@ -127,11 +127,6 @@ public static class Platform
 
     // ========================================================================
 
-    private static ApplicationType _targetPlatform;
-    private static Family          _familyGroup;
-
-    // ========================================================================
-
     public static bool IsWindows { get; private set; } = RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
     public static bool Is64Bit   { get; private set; } = Environment.Is64BitOperatingSystem;
     public static bool IsLinux   { get; private set; } = RuntimeInformation.IsOSPlatform( OSPlatform.Linux );
@@ -140,9 +135,9 @@ public static class Platform
 
     // ========================================================================
 
-    public static bool IsIos     { get; private set; } = false; //TODO: For the future, concentrating on desktop for now. 
-    public static bool IsAndroid { get; private set; } = false; //TODO: For the future, concentrating on desktop for now.
-    public static bool IsXBox    { get; private set; } = false; //TODO: For the future, concentrating on desktop for now.
+    public static bool IsIos     { get; private set; } //TODO: For the future, concentrating on desktop for now. 
+    public static bool IsAndroid { get; private set; } //TODO: For the future, concentrating on desktop for now.
+    public static bool IsXBox    { get; private set; } //TODO: For the future, concentrating on desktop for now.
 
     // ========================================================================
 
@@ -153,31 +148,31 @@ public static class Platform
     /// <exception cref="GdxRuntimeException"></exception>
     public static ApplicationType TargetPlatform
     {
-        get => _targetPlatform;
+        get;
         set
-            => _targetPlatform = value switch
-            {
-                // ----------------------------------------
+            => field = value switch
+                       {
+                           // ----------------------------------------
 
-                ApplicationType.Windows
-                    or ApplicationType.WindowsGL
-                    or ApplicationType.WindowsGles
-                    or ApplicationType.WindowsVK
-                    or ApplicationType.WindowsGdk
-                    or ApplicationType.WebGL
-                    or ApplicationType.XBoxOne
-                    or ApplicationType.XBoxSeries
-                    or ApplicationType.NintendoSwitch
-                    or ApplicationType.PlayStation4
-                    or ApplicationType.PlayStation5
-                    or ApplicationType.Android
-                    or ApplicationType.IOS
-                    or ApplicationType.MacOS => value,
+                           ApplicationType.Windows
+                               or ApplicationType.WindowsGL
+                               or ApplicationType.WindowsGles
+                               or ApplicationType.WindowsVK
+                               or ApplicationType.WindowsGdk
+                               or ApplicationType.WebGL
+                               or ApplicationType.XBoxOne
+                               or ApplicationType.XBoxSeries
+                               or ApplicationType.NintendoSwitch
+                               or ApplicationType.PlayStation4
+                               or ApplicationType.PlayStation5
+                               or ApplicationType.Android
+                               or ApplicationType.IOS
+                               or ApplicationType.MacOS => value,
 
-                // ----------------------------------------
+                           // ----------------------------------------
 
-                var _ => throw new GdxRuntimeException( $"Unsupported Target Platform: {value.ToString()}" ),
-            };
+                           var _ => throw new GdxRuntimeException( $"Unsupported Target Platform: {value.ToString()}" ),
+                       };
     }
 
     /// <summary>
@@ -187,20 +182,20 @@ public static class Platform
     /// <exception cref="GdxRuntimeException"></exception>
     public static Family FamilyGroup
     {
-        get => _familyGroup;
+        get;
         set
-            => _familyGroup = value switch
-            {
-                // ----------------------------------------
+            => field = value switch
+                       {
+                           // ----------------------------------------
 
-                Family.Console
-                    or Family.Desktop
-                    or Family.Mobile => value,
+                           Family.Console
+                               or Family.Desktop
+                               or Family.Mobile => value,
 
-                // ----------------------------------------
+                           // ----------------------------------------
 
-                var _ => throw new GdxRuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
-            };
+                           var _ => throw new GdxRuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
+                       };
     }
 
     /// <summary>
@@ -209,14 +204,14 @@ public static class Platform
     public static bool IsArmArchitecture()
     {
         return RuntimeInformation.OSArchitecture switch
-        {
-            Architecture.Arm   => true,
-            Architecture.Arm64 => true,
+               {
+                   Architecture.Arm   => true,
+                   Architecture.Arm64 => true,
 
-            // ----------------------------------
+                   // ----------------------------------
 
-            var _ => false,
-        };
+                   var _ => false,
+               };
     }
 
     /// <summary>
@@ -227,3 +222,6 @@ public static class Platform
         return Guid.NewGuid().ToString();
     }
 }
+
+// ============================================================================
+// ============================================================================

@@ -23,7 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Reflection.Metadata;
-
+using LughSharp.Lugh.Graphics.Cameras;
+using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Utils;
+using LughSharp.Lugh.Graphics.Viewports;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
@@ -1369,8 +1373,8 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     private void DisableDebug( Actor actor, Actor except )
     {
-        ArgumentNullException.ThrowIfNull( actor );
-        ArgumentNullException.ThrowIfNull( except );
+        Guard.Against.Null( actor );
+        Guard.Against.Null( except );
 
         if ( actor == except )
         {

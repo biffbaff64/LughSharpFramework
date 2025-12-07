@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
@@ -142,7 +144,7 @@ public class NinePatch
     /// <param name="bottom"> Pixels from bottom edge.  </param>
     public NinePatch( TextureRegion region, int left, int right, int top, int bottom )
     {
-        ArgumentNullException.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         var middleWidth  = region.RegionWidth - left - right;
         var middleHeight = region.RegionHeight - top - bottom;
@@ -513,7 +515,7 @@ public class NinePatch
 
     private int Add( TextureRegion? region, bool isStretchW, bool isStretchH )
     {
-        ArgumentNullException.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         if ( Texture == null )
         {

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
@@ -275,7 +276,7 @@ public class Image : Widget
     /// </summary>
     public void SetScaling( Scaling scale )
     {
-        ArgumentNullException.ThrowIfNull( scale );
+        Guard.Against.Null( scale );
 
         _scaling = scale;
         Invalidate();

@@ -57,7 +57,7 @@ public class Sprite : TextureRegion
     /// <exception cref="ArgumentNullException">Thrown if the provided sprite is null.</exception>
     public void Set( Sprite sprite )
     {
-        ArgumentNullException.ThrowIfNull( sprite, nameof( sprite ) );
+        Guard.Against.Null( sprite, nameof( sprite ) );
 
         try
         {

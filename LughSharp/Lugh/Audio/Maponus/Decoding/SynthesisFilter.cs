@@ -1269,7 +1269,7 @@ public class SynthesisFilter
     /// </summary>
     public void CalculatePcSamples( AudioBase? buffer )
     {
-        ArgumentNullException.ThrowIfNull( buffer );
+        Guard.Against.Null( buffer );
 
         ComputeNewValues();
         ComputePcSamples( buffer );

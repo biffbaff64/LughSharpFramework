@@ -23,6 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Graphics.Text;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>

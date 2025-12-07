@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL.Bindings;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
 

@@ -33,24 +33,24 @@ namespace LughSharp.Lugh.Core;
 [PublicAPI]
 public abstract class Game : IApplicationListener
 {
-    private IScreen? _screen;
-
+    private bool _isDisposed = false;
+    
     /// <summary>
     /// Sets the current screen. Screen.hide() is called on any old screen, and
     /// Screen.show() is called on the new screen, if any.
     /// </summary>
     public IScreen? Screen
     {
-        get => _screen;
+        get;
         set
         {
-            _screen?.Hide();
-            _screen = value;
+            field?.Hide();
+            field = value;
 
-            if ( _screen != null )
+            if ( field != null )
             {
-                _screen.Show();
-                _screen.Resize( Api.Graphics.Width, Api.Graphics.Height );
+                field.Show();
+                field.Resize( Api.Graphics.Width, Api.Graphics.Height );
             }
         }
     }
@@ -107,6 +107,8 @@ public abstract class Game : IApplicationListener
         Screen?.Resume();
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Called when the <see cref="IApplication"/> is destroyed. Preceded by a call to <see cref="Pause"/>.
     /// </summary>
@@ -118,9 +120,16 @@ public abstract class Game : IApplicationListener
 
     protected virtual void Dispose( bool disposing )
     {
+        if ( _isDisposed ) return;
+        
         if ( disposing )
         {
             Screen?.Hide();
         }
+        
+        _isDisposed = true;
     }
 }
+
+// ============================================================================
+// ============================================================================

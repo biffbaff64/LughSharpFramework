@@ -64,8 +64,8 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     /// </summary>
     public SnapshotArrayList( ArrayList< T > arrayList )
     {
-        ArgumentNullException.ThrowIfNull( arrayList );
-        ArgumentNullException.ThrowIfNull( arrayList.Items );
+        Guard.Against.Null( arrayList );
+        Guard.Against.Null( arrayList.Items );
 
         Ordered = arrayList.Ordered;
         Count   = arrayList.Count;

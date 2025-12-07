@@ -41,5 +41,26 @@ public enum TextureTarget : int
     TextureCubeMapNegativeZ = IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
 }
 
+[PublicAPI]
+public static class TextureTargetExtensions
+{
+    /// <summary>
+    /// Checks if a given integer GL target is a valid member of the TextureTarget enum.
+    /// </summary>
+    /// <param name="target">This is the instance (or value) of the enum being extended.</param>
+    /// <param name="glTarget">The integer GL value to validate.</param>
+    /// <returns>True if the integer value maps to a named enum member, false otherwise.</returns>
+    public static bool IsValid( this TextureTarget target, int glTarget )
+    {
+        // Check if the integer value is defined in the enum's underlying type
+        if ( Enum.IsDefined( typeof( TextureTarget ), glTarget ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
+
 // ========================================================================
 // ========================================================================

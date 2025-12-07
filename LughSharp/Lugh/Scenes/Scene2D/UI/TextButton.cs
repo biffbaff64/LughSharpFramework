@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 
@@ -86,7 +87,7 @@ public class TextButton : Button
         get => _style;
         set
         {
-            ArgumentNullException.ThrowIfNull( value );
+            Guard.Against.Null( value );
 
             if ( value.GetType() != typeof( TextButtonStyle ) )
             {
@@ -115,7 +116,7 @@ public class TextButton : Button
         get => _label;
         set
         {
-            ArgumentNullException.ThrowIfNull( value );
+            Guard.Against.Null( value );
 
             GetLabelCell()!.Actor = value;
             _label                = value;

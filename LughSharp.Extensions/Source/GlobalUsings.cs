@@ -24,31 +24,11 @@
 
 // ====================================================================--------
 
-global using System.Drawing;
-global using System.Drawing.Drawing2D;
-global using System.Drawing.Imaging;
-global using System.Collections.Generic;
-global using System.IO;
-global using System.Text.Json;
-global using System.Runtime.Versioning;
-global using System.Numerics;
-global using System.Runtime.InteropServices;
-global using System.Security.Cryptography;
-global using System.Text.RegularExpressions;
-global using System.Diagnostics.CodeAnalysis;
-
 global using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 // ============================================================================
 
 global using JetBrains.Annotations;
-
-// ============================================================================
-
-global using LughSharp.Lugh.Graphics.OpenGL.Enums;
-global using LughSharp.Lugh.Files;
-global using LughSharp.Lugh.Graphics.Atlases;
-global using LughSharp.Lugh.Graphics.Text;
 
 // ============================================================================
 

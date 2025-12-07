@@ -23,8 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
+using LughSharp.Lugh.Graphics.G3D;
 using LughSharp.Lugh.Graphics.G3D.Models.Data;
 using LughSharp.Lugh.Graphics.G3D.Utils;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -116,7 +118,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
                                                                    FileInfo file,
                                                                    TP? parameters ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( file );
+        Guard.Against.Null( file );
 
         var p = parameters as ModelLoaderParameters;
 

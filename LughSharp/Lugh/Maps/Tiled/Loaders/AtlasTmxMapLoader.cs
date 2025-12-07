@@ -29,6 +29,7 @@ using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Lugh.Maps.Tiled.Loaders;
 
@@ -93,8 +94,8 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
                                           FileInfo? tmxFile,
                                           TP? parameter ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( manager );
-        ArgumentNullException.ThrowIfNull( tmxFile );
+        Guard.Against.Null( manager );
+        Guard.Against.Null( tmxFile );
 
         var atlasHandle = GetAtlasFileHandle( tmxFile );
 

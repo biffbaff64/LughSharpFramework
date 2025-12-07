@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.G2D;
 using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Graphics.Text;
@@ -221,7 +222,7 @@ public partial class BitmapFont
     /// </param>
     public BitmapFont( BitmapFontData data, List< TextureRegion >? pageRegions, bool useIntegerPositions )
     {
-        ArgumentNullException.ThrowIfNull( data );
+        Guard.Against.Null( data );
 
         UseIntegerPositions = useIntegerPositions;
         Flipped             = data.Flipped;

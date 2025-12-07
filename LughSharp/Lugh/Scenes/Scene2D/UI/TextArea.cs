@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
@@ -130,7 +131,7 @@ public class TextArea : TextField
 
     public override void SetStyle( TextFieldStyle? style )
     {
-        ArgumentNullException.ThrowIfNull( style );
+        Guard.Against.Null( style );
 
         Style = style;
 

@@ -26,6 +26,7 @@ using System.Reflection;
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughUtils.source.Collections;
@@ -223,8 +224,8 @@ public class Skin : IDisposable
 
     public static void Add( string? name, object? resource, Type type )
     {
-        ArgumentNullException.ThrowIfNull( name );
-        ArgumentNullException.ThrowIfNull( resource );
+        Guard.Against.Null( name );
+        Guard.Against.Null( resource );
 
         var typeResources = Resources.Get( type );
 
@@ -245,7 +246,7 @@ public class Skin : IDisposable
 
     public static void Remove( string name, Type type )
     {
-        ArgumentNullException.ThrowIfNull( name );
+        Guard.Against.Null( name );
 
         Resources.Get( type )?.Remove( name );
     }
@@ -274,7 +275,7 @@ public class Skin : IDisposable
     /// <exception cref="GdxRuntimeException">if the resource was not found.</exception>
     public object Get( string name, Type type )
     {
-        ArgumentNullException.ThrowIfNull( name );
+        Guard.Against.Null( name );
 
         if ( type == typeof( ISceneDrawable ) )
         {
@@ -319,7 +320,7 @@ public class Skin : IDisposable
     /// <returns> null if not found. </returns>
     public static T? Optional< T >( string name )
     {
-        ArgumentNullException.ThrowIfNull( name );
+        Guard.Against.Null( name );
 
         if ( typeof( T ) == null )
         {

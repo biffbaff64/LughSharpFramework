@@ -55,7 +55,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     /// <inheritdoc />
     public DefaultDesktopGLInput( DesktopGLWindow window )
     {
-        ArgumentNullException.ThrowIfNull( window );
+        Guard.Against.Null( window );
 
         _window = window;
 

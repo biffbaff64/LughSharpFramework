@@ -35,43 +35,68 @@ namespace LughSharp.Lugh.Core;
 [PublicAPI]
 public class ScreenAdapter : IScreen
 {
-    /// <inheritdoc cref="IScreen.Show"/>
+    /// <summary>
+    /// Called when this screen becomes the current screen for
+    /// a <see cref="Game"/>.
+    /// </summary>
     public virtual void Show()
     {
     }
 
-    /// <inheritdoc cref="IScreen.Update"/>
+    /// <summary>
+    /// Called when the screen should update itself.
+    /// </summary>
+    /// <param name="delta"> The time in seconds since the last update. </param>
     public virtual void Update( float delta )
     {
     }
 
-    /// <inheritdoc cref="IScreen.Render"/>
+    /// <summary>
+    /// Called when the screen should render itself.
+    /// </summary>
+    /// <param name="delta"> The time in seconds since the last render. </param>
     public virtual void Render( float delta )
     {
     }
 
-    /// <inheritdoc cref="IScreen.Resize"/>
+    /// <summary>
+    /// Called when the Application is resized. This can happen at any point during
+    /// a non-paused state but will never happen before a call to create().
+    /// </summary>
     public virtual void Resize( int width, int height )
     {
     }
 
-    /// <inheritdoc cref="IScreen.Pause"/>
+    /// <summary>
+    /// Called when the Application is paused, usually when it's not active or visible
+    /// on-screen. An Application is also paused before it is destroyed.
+    /// </summary>
     public virtual void Pause()
     {
     }
 
-    /// <inheritdoc cref="IScreen.Resume"/>
+    /// <summary>
+    /// Called when the Application is resumed from a paused state, usually when
+    /// it regains focus.
+    /// </summary>
     public virtual void Resume()
     {
     }
 
-    /// <inheritdoc cref="IScreen.Hide"/>
+    /// <summary>
+    /// Called when this screen is no longer the current screen for a <see cref="Game"/>.
+    /// </summary>
     public virtual void Hide()
     {
     }
 
-    /// <inheritdoc cref="IScreen.Close"/>
+    /// <summary>
+    /// Called when this screen should release all resources.
+    /// </summary>
     public virtual void Close()
     {
     }
 }
+
+// ============================================================================
+// ============================================================================

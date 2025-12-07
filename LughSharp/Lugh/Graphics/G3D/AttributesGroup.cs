@@ -36,8 +36,8 @@ public class AttributesGroup : IComparer< Attribute >
     /// </summary>
     public int Compare( Attribute? arg0, Attribute? arg1 )
     {
-        ArgumentNullException.ThrowIfNull( arg0 );
-        ArgumentNullException.ThrowIfNull( arg1 );
+        Guard.Against.Null( arg0 );
+        Guard.Against.Null( arg1 );
 
         return ( int )( arg0.type - arg1.type );
     }

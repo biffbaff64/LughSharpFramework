@@ -27,7 +27,8 @@ using static LughSharp.Lugh.Network.INet;
 namespace LughSharp.Lugh.Network;
 
 [PublicAPI]
-public abstract class NetHandler : INet
+public abstract class 
+    NetHandler : INet
 {
     /// <inheritdoc />
     public abstract void SendHttpRequest( HttpRequest httpRequest,

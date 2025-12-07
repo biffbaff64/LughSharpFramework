@@ -73,7 +73,7 @@ public class TextTooltip : Tooltip< Label >
 
     public void SetStyle( TextTooltipStyle style )
     {
-        ArgumentNullException.ThrowIfNull( style );
+        Guard.Against.Null( style );
 
         if ( Container == null )
         {

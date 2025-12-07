@@ -25,6 +25,7 @@
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Lugh.Graphics.Text;
 
@@ -826,7 +827,7 @@ public partial class BitmapFont
         /// </param>
         public virtual void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end, Glyph? lastGlyph )
         {
-            ArgumentNullException.ThrowIfNull( glyphRun );
+            Guard.Against.Null( glyphRun );
 
             var max = end - start;
 

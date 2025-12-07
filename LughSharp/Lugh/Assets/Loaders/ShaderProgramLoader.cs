@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-
+using LughSharp.Lugh.Graphics.Utils;
 using File = System.IO.File;
 
 namespace LughSharp.Lugh.Assets.Loaders;
@@ -93,7 +93,7 @@ public class ShaderProgramLoader : AsynchronousAssetLoader
                                            FileInfo file,
                                            TP? parameter ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( file.Name );
+        Guard.Against.Null( file.Name );
 
         var p = parameter as ShaderProgramParameter;
 

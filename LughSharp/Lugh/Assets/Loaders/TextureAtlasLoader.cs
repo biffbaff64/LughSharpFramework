@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Assets.Loaders.Resolvers;
+using LughSharp.Lugh.Graphics.Atlases;
+
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
@@ -82,12 +85,12 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
                                                                    FileInfo atlasFile,
                                                                    TP? parameter ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( atlasFile );
+        Guard.Against.Null( atlasFile );
 
         var p      = parameter as TextureAtlasParameter;
         var imgDir = atlasFile.Directory;
 
-        Guard.Against.Null( imgDir, "Image directory cannot be null!" );
+        Guard.Against.Null( imgDir );
         
         _data = p != null
             ? new TextureAtlasData( atlasFile, imgDir, p.FlipVertically )

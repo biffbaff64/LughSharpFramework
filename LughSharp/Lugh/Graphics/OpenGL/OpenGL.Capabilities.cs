@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [PublicAPI]

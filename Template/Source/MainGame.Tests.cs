@@ -1,4 +1,5 @@
-﻿using System.Runtime.Versioning;
+﻿using System;
+using System.Runtime.Versioning;
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
@@ -9,6 +10,7 @@ using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Tests.Source;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
+using StbiSharp;
 
 namespace Template.Source;
 
@@ -29,13 +31,14 @@ public partial class MainGame
         Logger.Divider();
         Logger.Divider();
         // --------------------------------------
-        var test = new AssetManagerTest( _assetManager );
+//        var test = new AssetManagerTest( _assetManager );
 //        var test = new TexturePackerTest();
 //        var test = new ImagePackerTest();
+//        var test = new OpenGLTest();
         // --------------------------------------
-        test.Setup();
-        test.Run();
-        test.TearDown();
+//        test.Setup();
+//        test.Run();
+//        test.TearDown();
         // --------------------------------------
         Logger.Divider();
         Logger.Divider();
@@ -89,12 +92,13 @@ public partial class MainGame
     {
         var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, LughFormat.RGBA8888 );
 
+        pixmap.FillWithColor( Color.Red );
+        
         _image1 = new Texture( new PixmapTextureData( pixmap,
                                                       LughFormat.RGBA8888,
                                                       false,
                                                       false,
                                                       true ) );
-        _image1.Name = "TestImage";
 
         pixmap.Dispose();
 
@@ -105,54 +109,21 @@ public partial class MainGame
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void LoadImage1Texture()
     {
         Logger.Checkpoint();
 
         try
         {
-            var filename = $"{IOUtils.AssetsRoot}title_background.png";
-
-            var assetHelper = new AssetHelper( _assetManager );
-            _image1 = assetHelper.LoadSingleAsset< Texture >( filename );
-
-            if ( _image1 == null )
-            {
-                Logger.Debug( "Failed to create texture object." );
-
-                return;
-            }
-
-            Logger.Debug( $"Texture loaded - Width: {_image1.Width}, Height: {_image1.Height}" );
-            Logger.Debug( $"Format: {PixelFormat.GetFormatString( _image1.TextureData.GetPixelFormat() )}" );
-            Logger.Debug( $"Length: {_image1.GetImageData()?.Length}" );
-
-            _image1.Upload();
-            _image1.Bind( 0 ); // Set active texture and bind to texture unit 0
-
-            Logger.Debug( "Texture uploaded to GPU and bound to texture unit 0" );
-
-            var width  = new int[ 1 ];
-            var height = new int[ 1 ];
-
-            Engine.GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_WIDTH, ref width );
-            Engine.GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
-
-            Logger.Debug( $"Initial texture dimensions in GPU: {width[ 0 ]}x{height[ 0 ]}" );
-
-            Engine.GL.TexParameteri( ( int )TextureTarget.Texture2D,
-                                     ( int )TextureParameter.MinFilter,
-                                     ( int )TextureFilterMode.Nearest );
-            Engine.GL.TexParameteri( ( int )TextureTarget.Texture2D,
-                                     ( int )TextureParameter.MagFilter,
-                                     ( int )TextureFilterMode.Nearest );
-
-            Logger.Debug( "TextureMinFilter set to GL_NEAREST" );
-            Logger.Debug( "TextureMagFilter set to GL_NEAREST" );
+            _image1 = new Texture( @"Assets\title_background.png" );
         }
         catch ( Exception ex )
         {
             Logger.Error( $"Exception while loading texture: {ex.Message}" );
+            
             _image1?.Dispose();
             _image1 = null;
         }
@@ -172,8 +143,7 @@ public partial class MainGame
 
         var textureData = new PixmapTextureData( pixmap, LughFormat.RGBA8888, false, false );
 
-        _whitePixelTexture      = new Texture( textureData );
-        _whitePixelTexture.Name = "WhitePixel";
+        _whitePixelTexture = new Texture( textureData );
 
         if ( _whitePixelTexture != null )
         {

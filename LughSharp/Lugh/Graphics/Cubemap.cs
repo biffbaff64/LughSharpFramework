@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders;
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Utils;
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -46,7 +48,7 @@ public class Cubemap : GLTexture, IManaged
     /// </summary>
     public Cubemap( ICubemapData? data ) : base( IGL.GL_TEXTURE_CUBE_MAP )
     {
-        ArgumentNullException.ThrowIfNull( data );
+        Guard.Against.Null( data );
 
         Data = data;
 

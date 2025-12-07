@@ -39,7 +39,7 @@ public class WaveFileBuffer : AudioBase
 
     public WaveFileBuffer( int numberOfChannels, int freq, string filename )
     {
-        ArgumentNullException.ThrowIfNull( filename );
+        Guard.Against.Null( filename );
 
         _buffer   = new short[ OBUFFERSIZE ];
         _bufferp  = new short[ MAXCHANNELS ];

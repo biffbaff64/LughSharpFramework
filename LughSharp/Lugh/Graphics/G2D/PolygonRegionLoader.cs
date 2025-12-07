@@ -49,7 +49,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
                                         FileInfo? file,
                                         AssetLoaderParameters? parameter )
     {
-        ArgumentNullException.ThrowIfNull( file?.Name );
+        Guard.Against.Null( file?.Name );
 
         var texture = manager.Get< Texture >( manager.GetDependencies( file.Name )!.First() );
 
@@ -67,7 +67,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
                                                                    FileInfo file,
                                                                    TP? parameters ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( file );
+        Guard.Against.Null( file );
 
         var p = parameters as PolygonRegionParameters ?? _defaultParameters;
 

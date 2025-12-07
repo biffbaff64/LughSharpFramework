@@ -30,6 +30,7 @@ using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maps.Objects;
 using LughSharp.Lugh.Maps.Tiled.Objects;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
@@ -272,7 +273,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                                    FileInfo tmxFile,
                                    IImageResolver imageResolver )
     {
-        ArgumentNullException.ThrowIfNull( node );
+        Guard.Against.Null( node );
 
         if ( node.Name.Equals( "group" ) )
         {
@@ -1283,8 +1284,8 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                                           float offsetX,
                                           float offsetY )
     {
-        ArgumentNullException.ThrowIfNull( tileSet );
-        ArgumentNullException.ThrowIfNull( textureRegion );
+        Guard.Against.Null( tileSet );
+        Guard.Against.Null( textureRegion );
 
         ITiledMapTile tile = new StaticTiledMapTile( textureRegion );
 

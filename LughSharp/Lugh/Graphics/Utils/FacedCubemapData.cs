@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
+
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
@@ -123,11 +125,11 @@ public class FacedCubemapData : ICubemapData
         {
             if ( _data[ i ]!.TextureDataType == ITextureData.TextureType.Custom )
             {
-                _data[ i ]!.UploadCustomData( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+                _data[ i ]!.ConsumeCustomData( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
             }
             else
             {
-                var pixmap        = _data[ i ]!.FetchPixmap()!;
+                var pixmap        = _data[ i ]!.ConsumePixmap()!;
                 var disposePixmap = _data[ i ]!.ShouldDisposePixmap();
 
                 if ( _data[ i ]!.GetPixelFormat() != pixmap.GetColorFormat() )

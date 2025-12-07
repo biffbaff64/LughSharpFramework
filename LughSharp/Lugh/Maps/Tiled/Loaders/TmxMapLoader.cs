@@ -114,7 +114,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
                                           FileInfo? tmxFile,
                                           TP? parameter ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( tmxFile );
+        Guard.Against.Null( tmxFile );
 
         Map = LoadTiledMap( tmxFile,
                             parameter as LoaderParameters,

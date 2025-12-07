@@ -80,7 +80,7 @@ public class AssetDescriptor
     /// <param name="parameters">Optional parameters for the asset loader.</param>
     public AssetDescriptor( string? filepath, Type assetType, AssetLoaderParameters? parameters )
     {
-        ArgumentNullException.ThrowIfNull( filepath );
+        Guard.Against.Null( filepath );
 
         AssetType  = assetType;
         Parameters = parameters;

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
 using LughUtils.source.Collections;
 
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
@@ -601,7 +602,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     /// </summary>
     public void InvalidateAllFrameBuffers( IApplication app )
     {
-        ArgumentNullException.ThrowIfNull( app );
+        Guard.Against.Null( app );
 
         if ( Buffers?[ app ] == null )
         {

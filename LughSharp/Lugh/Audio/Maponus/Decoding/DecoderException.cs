@@ -96,7 +96,7 @@ public class DecoderException : Mp3SharpException
     {
         //TODO: This needs replacing!!
 
-        ArgumentNullException.ThrowIfNull( info );
+        Guard.Against.Null( info );
 
         info.AddValue( "ErrorCode", ErrorCode );
 

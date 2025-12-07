@@ -24,6 +24,7 @@
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
+using LughSharp.Lugh.Graphics.OpenGL;
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -110,7 +111,7 @@ public class FloatTextureData : ITextureData
         IsPrepared = true;
     }
 
-    public void UploadCustomData( int target )
+    public void ConsumeCustomData( int target )
     {
         if ( ( Api.App.AppType == Platform.ApplicationType.Android )
              || ( Api.App.AppType == Platform.ApplicationType.IOS )
@@ -176,7 +177,7 @@ public class FloatTextureData : ITextureData
         set => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
-    public Pixmap FetchPixmap()
+    public Pixmap ConsumePixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }

@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Text.RegularExpressions;
-
+using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Graphics.Utils;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.G2D;

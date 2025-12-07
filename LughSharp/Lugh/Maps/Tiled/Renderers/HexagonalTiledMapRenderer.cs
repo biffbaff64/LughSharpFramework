@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
 
 using Color = LughSharp.Lugh.Graphics.Color;
@@ -222,7 +223,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
 
     private void RenderCell( in TiledMapTileLayer.Cell? cell, in float x, in float y, in float color )
     {
-        ArgumentNullException.ThrowIfNull( cell );
+        Guard.Against.Null( cell );
 
         var tile = cell.GetTile();
 

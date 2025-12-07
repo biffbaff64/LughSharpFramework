@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
+
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
@@ -148,12 +150,12 @@ public class FileTextureArrayData : ITextureArrayData
         {
             if ( _textureData[ i ]?.TextureDataType == ITextureData.TextureType.Custom )
             {
-                _textureData[ i ]?.UploadCustomData( IGL.GL_TEXTURE_2D_ARRAY );
+                _textureData[ i ]?.ConsumeCustomData( IGL.GL_TEXTURE_2D_ARRAY );
             }
             else
             {
                 var texData       = _textureData[ i ];
-                var pixmap        = texData?.FetchPixmap();
+                var pixmap        = texData?.ConsumePixmap();
                 var disposePixmap = texData?.ShouldDisposePixmap() ?? false;
 
                 Debug.Assert( texData != null, nameof( texData ) + " == null" );

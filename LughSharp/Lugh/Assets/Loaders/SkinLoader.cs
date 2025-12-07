@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
+using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 
 namespace LughSharp.Lugh.Assets.Loaders;
@@ -76,8 +77,8 @@ public class SkinLoader : AsynchronousAssetLoader
                                            FileInfo file,
                                            TP? parameter ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( manager );
-        ArgumentNullException.ThrowIfNull( file );
+        Guard.Against.Null( manager );
+        Guard.Against.Null( file );
 
         var p = parameter as SkinLoaderParameters;
 
@@ -123,7 +124,7 @@ public class SkinLoader : AsynchronousAssetLoader
     /// </returns>
     protected virtual Skin NewSkin( TextureAtlas? atlas )
     {
-        ArgumentNullException.ThrowIfNull( atlas );
+        Guard.Against.Null( atlas );
 
         return new Skin( atlas );
     }

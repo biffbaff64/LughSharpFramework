@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets;
+using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughUtils.source.Collections;
 using LughUtils.source.Pooling;
@@ -425,7 +427,7 @@ public class Table : WidgetGroup
     /// </summary>
     public Cell Add( string? text )
     {
-        ArgumentNullException.ThrowIfNull( text );
+        Guard.Against.Null( text );
 
         if ( Skin == null )
         {
@@ -756,7 +758,7 @@ public class Table : WidgetGroup
     /// <returns></returns>
     public Table Pad( Value pad )
     {
-        ArgumentNullException.ThrowIfNull( pad );
+        Guard.Against.Null( pad );
 
         _padTop      = pad;
         _padLeft     = pad;

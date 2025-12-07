@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Utils;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
@@ -199,7 +201,7 @@ public class CpuSpriteBatch : SpriteBatch
                                bool flipX,
                                bool flipY )
     {
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         if ( !_adjustNeeded )
         {
@@ -233,7 +235,7 @@ public class CpuSpriteBatch : SpriteBatch
                                bool flipX,
                                bool flipY )
     {
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         if ( !_adjustNeeded )
         {
@@ -263,7 +265,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// <inheritdoc />
     public override void Draw( Texture? texture, float x, float y, GRect src )
     {
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         if ( !_adjustNeeded )
         {
@@ -298,7 +300,7 @@ public class CpuSpriteBatch : SpriteBatch
                                float u2,
                                float v2 )
     {
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         if ( !_adjustNeeded )
         {
@@ -328,7 +330,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// <inheritdoc />
     public override void Draw( Texture? texture, float x, float y )
     {
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         if ( !_adjustNeeded )
         {
@@ -343,7 +345,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// <inheritdoc />
     public override void Draw( Texture? texture, float posX, float posY, float width, float height )
     {
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         if ( !_adjustNeeded )
         {
@@ -358,7 +360,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// <inheritdoc />
     public override void Draw( TextureRegion? region, float x, float y )
     {
-        ArgumentNullException.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         if ( !_adjustNeeded )
         {
@@ -373,7 +375,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// <inheritdoc />
     public override void Draw( TextureRegion? region, float x, float y, float width, float height )
     {
-        ArgumentNullException.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         if ( !_adjustNeeded )
         {
@@ -392,7 +394,7 @@ public class CpuSpriteBatch : SpriteBatch
                                Point2D scale,
                                float rotation )
     {
-        ArgumentNullException.ThrowIfNull( textureRegion );
+        Guard.Against.Null( textureRegion );
 
         if ( !_adjustNeeded )
         {
@@ -421,7 +423,7 @@ public class CpuSpriteBatch : SpriteBatch
                                float rotation,
                                bool clockwise )
     {
-        ArgumentNullException.ThrowIfNull( textureRegion );
+        Guard.Against.Null( textureRegion );
 
         if ( !_adjustNeeded )
         {
@@ -446,7 +448,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// <inheritdoc />
     public override void Draw( Texture? texture, float[] spriteVertices, int offset, int count )
     {
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         if ( ( count % Sprite.SPRITE_SIZE ) != 0 )
         {
@@ -466,7 +468,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// <inheritdoc />
     public override void Draw( TextureRegion? region, float width, float height, Affine2 transform )
     {
-        ArgumentNullException.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         if ( !_adjustNeeded )
         {
@@ -489,7 +491,7 @@ public class CpuSpriteBatch : SpriteBatch
                                float scaleY,
                                float rotation )
     {
-        ArgumentNullException.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         // v must be flipped
         DrawAdjustedUV( region.Texture,
@@ -527,7 +529,7 @@ public class CpuSpriteBatch : SpriteBatch
                                bool flipX,
                                bool flipY )
     {
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         var invWidth  = 1.0f / texture.Width;
         var invHeight = 1.0f / texture.Height;
@@ -577,7 +579,7 @@ public class CpuSpriteBatch : SpriteBatch
             throw new InvalidOperationException( "CpuSpriteBatch.begin must be called before draw." );
         }
 
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
         GdxRuntimeException.ThrowIfNull( LastTexture );
 
         if ( texture != LastTexture )
@@ -721,7 +723,7 @@ public class CpuSpriteBatch : SpriteBatch
             throw new GdxRuntimeException( "CpuSpriteBatch.begin must be called before draw." );
         }
 
-        ArgumentNullException.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         if ( region.Texture != LastTexture )
         {
@@ -869,7 +871,7 @@ public class CpuSpriteBatch : SpriteBatch
             throw new InvalidOperationException( "CpuSpriteBatch.begin must be called before draw." );
         }
 
-        ArgumentNullException.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         if ( region.Texture != LastTexture )
         {
@@ -930,7 +932,7 @@ public class CpuSpriteBatch : SpriteBatch
             throw new InvalidOperationException( "CpuSpriteBatch.begin must be called before draw." );
         }
 
-        ArgumentNullException.ThrowIfNull( texture );
+        Guard.Against.Null( texture );
 
         if ( texture != LastTexture )
         {

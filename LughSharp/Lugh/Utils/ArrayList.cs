@@ -90,7 +90,7 @@ public class ArrayList< T >
     /// <param name="count"> The number of elements to copy. </param>
     public ArrayList( bool ordered, T[]? array, int start, int count )
     {
-        ArgumentNullException.ThrowIfNull( array );
+        Guard.Against.Null( array );
 
         Ordered = ordered;
         Count   = count;
@@ -138,7 +138,7 @@ public class ArrayList< T >
     /// <param name="count">The number of items to copy.</param>
     public virtual void AddAll( List< T > array, int start, int count )
     {
-        ArgumentNullException.ThrowIfNull( array );
+        Guard.Against.Null( array );
 
         if ( ( start + count ) > array.Count )
         {

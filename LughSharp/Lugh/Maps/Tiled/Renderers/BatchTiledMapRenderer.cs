@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Cameras;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
 
 using Color = LughSharp.Lugh.Graphics.Color;

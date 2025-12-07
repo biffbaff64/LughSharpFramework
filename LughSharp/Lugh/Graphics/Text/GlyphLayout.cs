@@ -775,8 +775,8 @@ public class GlyphLayout : IResetable
     /// <returns> May be null if second run is all whitespace. </returns>
     private GlyphRun? Wrap( BitmapFont.BitmapFontData? fontData, GlyphRun? first, int wrapIndex, int widthIndex )
     {
-        ArgumentNullException.ThrowIfNull( fontData );
-        ArgumentNullException.ThrowIfNull( first );
+        Guard.Against.Null( fontData );
+        Guard.Against.Null( first );
 
         var glyphs2    = first.Glyphs; // Starts with all the glyphs.
         var glyphCount = first.Glyphs.Count;

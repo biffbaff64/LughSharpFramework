@@ -58,7 +58,7 @@ public class PixmapLoader : AsynchronousAssetLoader, IDisposable
                                           FileInfo? file,
                                           TP? parameter ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( file );
+        Guard.Against.Null( file );
 
         _pixmap = new Pixmap( file );
     }

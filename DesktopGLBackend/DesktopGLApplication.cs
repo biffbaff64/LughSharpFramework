@@ -343,7 +343,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration"/> to use. </param>
     private void SetWindowHints( DesktopGLApplicationConfiguration config )
     {
-        ArgumentNullException.ThrowIfNull( config );
+        Guard.Against.Null( config );
 
         Glfw.DefaultWindowHints();
 
@@ -634,7 +634,7 @@ public class DesktopGLApplication : IApplication, IDisposable
                                          DesktopGLApplicationConfiguration config,
                                          long sharedContext )
     {
-        ArgumentNullException.ThrowIfNull( dglWindow );
+        Guard.Against.Null( dglWindow );
 
         var windowHandle = CreateGlfwWindow( config, sharedContext );
 

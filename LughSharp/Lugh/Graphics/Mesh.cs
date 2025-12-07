@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Utils;
 using LughUtils.source.Maths.Collision;
 
 namespace LughSharp.Lugh.Graphics;
@@ -767,7 +769,7 @@ public class Mesh : IDisposable
     /// <param name="autoBind"> overrides the autoBind member of this Mesh  </param>
     public unsafe void Render( ShaderProgram? shader, int primitiveType, int offset, int count, bool autoBind )
     {
-        ArgumentNullException.ThrowIfNull( shader );
+        Guard.Against.Null( shader );
 
         if ( count == 0 )
         {

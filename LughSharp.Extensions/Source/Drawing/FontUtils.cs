@@ -24,6 +24,7 @@
 
 using Extensions.Source.Freetype;
 using LughSharp.Lugh.Core;
+using LughSharp.Lugh.Graphics.Text;
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Extensions.Source.Drawing;
@@ -63,7 +64,7 @@ public class FontUtils
     /// <param name="fontFile"></param>
     /// <param name="size"></param>
     /// <returns></returns>
-    public BitmapFont? CreateFont( string fontFile, int size )
+    public BitmapFont CreateFont( string fontFile, int size )
     {
         BitmapFont? font = null;
 

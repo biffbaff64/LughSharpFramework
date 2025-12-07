@@ -130,7 +130,7 @@ public class OpenALAudio : IAudio
     /// <exception cref="NullReferenceException"></exception>
     public ISound NewSound( FileInfo? file )
     {
-        ArgumentNullException.ThrowIfNull( file );
+        Guard.Against.Null( file );
 
         var soundClass = _extensionToSoundClass.Get( file.Extension.ToLower() );
 
@@ -160,7 +160,7 @@ public class OpenALAudio : IAudio
     /// <exception cref="NullReferenceException"></exception>
     public IMusic NewMusic( FileInfo? file )
     {
-        ArgumentNullException.ThrowIfNull( file );
+        Guard.Against.Null( file );
 
         var musicClass = _extensionToMusicClass.Get( file.Extension.ToLower() );
 
@@ -257,8 +257,8 @@ public class OpenALAudio : IAudio
     /// <param name="soundClass"></param>
     public void RegisterSound( string extension, Type soundClass )
     {
-        ArgumentNullException.ThrowIfNull( extension );
-        ArgumentNullException.ThrowIfNull( soundClass );
+        Guard.Against.Null( extension );
+        Guard.Against.Null( soundClass );
 
         _extensionToSoundClass.Put( extension, soundClass );
     }
@@ -269,8 +269,8 @@ public class OpenALAudio : IAudio
     /// <param name="musicClass"></param>
     public void RegisterMusic( string extension, Type musicClass )
     {
-        ArgumentNullException.ThrowIfNull( extension );
-        ArgumentNullException.ThrowIfNull( musicClass );
+        Guard.Against.Null( extension );
+        Guard.Against.Null( musicClass );
 
         _extensionToMusicClass.Put( extension, musicClass );
     }

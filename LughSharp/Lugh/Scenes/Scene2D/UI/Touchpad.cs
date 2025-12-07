@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughUtils.source.Pooling;
@@ -345,7 +346,7 @@ public class Touchpad : Widget
         get => _style;
         set
         {
-            ArgumentNullException.ThrowIfNull( value );
+            Guard.Against.Null( value );
 
             _style = value;
 

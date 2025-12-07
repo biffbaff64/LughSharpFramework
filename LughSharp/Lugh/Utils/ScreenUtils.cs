@@ -22,8 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
-
+using LughSharp.Lugh.Graphics.OpenGL;
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Utils;

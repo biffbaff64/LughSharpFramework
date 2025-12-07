@@ -78,6 +78,8 @@ public class ApplicationAdapter : IApplicationListener
     {
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Called when the <see cref="IApplication"/> is destroyed. Preceded by a call to
     /// <see cref="IApplicationListener.Pause"/>.
@@ -95,3 +97,6 @@ public class ApplicationAdapter : IApplicationListener
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

@@ -23,6 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Graphics.Utils;
 
 namespace LughSharp.Lugh.Graphics.G2D;
 
@@ -667,11 +670,8 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-//        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.vert" );
-//        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.frag" );
-
-        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/Simple.glsl.vert" );
-        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/Simple.glsl.frag" );
+        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.vert" );
+        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.frag" );
 
         return new ShaderProgram( vertexShader, fragShader );
     }
@@ -1000,8 +1000,6 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
-
-//            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
                 Flush();
@@ -1118,8 +1116,6 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
-
-//            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
                 Flush();
@@ -1166,8 +1162,6 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
-
-//            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
                 Flush();
@@ -1206,8 +1200,6 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
-
-//            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
                 Flush();
