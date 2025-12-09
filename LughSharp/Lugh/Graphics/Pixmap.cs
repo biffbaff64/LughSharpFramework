@@ -51,7 +51,7 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public partial class Pixmap : IDisposable
 {
-    public bool        IsDisposed  { get; set; } = false;       // 
+    public bool        IsDisposed  { get; set; }                // 
     public int         Scale       { get; set; } = 1;           // 
     public Color       Color       { get; set; } = Color.Clear; // 
     public Gdx2DPixmap Gdx2DPixmap { get; set; }                // 
@@ -162,12 +162,12 @@ public partial class Pixmap : IDisposable
     /// <summary>
     /// Returns the width of the Pixmap in pixels.
     /// </summary>
-    public int Width => ( int )Gdx2DPixmap.Width;
+    public int Width => Gdx2DPixmap.Width;
 
     /// <summary>
     /// Returns the height of the Pixmap in pixels.
     /// </summary>
-    public int Height => ( int )Gdx2DPixmap.Height;
+    public int Height => Gdx2DPixmap.Height;
 
     /// <summary>
     /// Sets the type of <see cref="BlendTypes"/> to be used for all operations.
@@ -299,43 +299,26 @@ public partial class Pixmap : IDisposable
     /// <summary>
     /// Fills the complete bitmap with the currently set color.
     /// </summary>
-    public void FillWithCurrentColor()
-    {
-        Gdx2DPixmap.ClearWithColor( Color );
-    }
+    public void FillWithCurrentColor() => Gdx2DPixmap.ClearWithColor( Color );
 
     /// <summary>
     /// Fills the complete bitmap with the currently set color.
     /// </summary>
-    public void FillWithColor( Color color )
-    {
-        Gdx2DPixmap.ClearWithColor( color );
-    }
+    public void FillWithColor( Color color ) => Gdx2DPixmap.ClearWithColor( color );
 
     /// <summary>
     /// </summary>
-    public int GetColorFormat()
-    {
-        return Gdx2DPixmap.ColorFormat;
-    }
+    public int GetColorFormat() => Gdx2DPixmap.ColorFormat;
 
     /// <summary>
     /// Gets the number of bits per pixel.
     /// </summary>
-    public int GetBitDepth()
-    {
-        Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
-
-        return ( int )Gdx2DPixmap.BitDepth;
-    }
+    public int GetBitDepth() => Gdx2DPixmap.BitDepth;
 
     /// <summary>
     /// Returns TRUE if this pixmaps color format is RGBA8888.
     /// </summary>
-    public bool IsRGBA8888()
-    {
-        return GetColorFormat() == LughFormat.RGBA8888;
-    }
+    public bool IsRGBA8888() => GetColorFormat() == LughFormat.RGBA8888;
 
     /// <summary>
     /// Draws a line between the given coordinates using the currently set color.
@@ -370,7 +353,7 @@ public partial class Pixmap : IDisposable
     /// <param name="y"> The target y-coordinate (top left corner)  </param>
     public void DrawPixmap( Pixmap pixmap, int x, int y )
     {
-        DrawPixmap( pixmap, x, y, 0, 0, ( int )pixmap.Width, ( int )pixmap.Height );
+        DrawPixmap( pixmap, x, y, 0, 0, pixmap.Width, pixmap.Height );
     }
 
     /// <summary>
@@ -689,7 +672,7 @@ public partial class Pixmap : IDisposable
 //    }
 
     [PublicAPI]
-    public enum ScaleType : int
+    public enum ScaleType
     {
         Nearest  = 0,
         Linear   = 1,
@@ -704,7 +687,7 @@ public partial class Pixmap : IDisposable
     /// Blending functions to be set with <see cref="Pixmap.Blending"/>.
     /// </summary>
     [PublicAPI]
-    public enum BlendTypes : int
+    public enum BlendTypes
     {
         None       = 0,
         SourceOver = 1,
@@ -718,7 +701,7 @@ public partial class Pixmap : IDisposable
     /// Filters to be used with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)"/>.
     /// </summary>
     [PublicAPI]
-    public enum Filter : int
+    public enum Filter
     {
         NearestNeighbour,
         BiLinear,

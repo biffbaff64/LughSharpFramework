@@ -92,6 +92,16 @@ public interface ITextureData : IManaged
     /// </summary>
     int BytesPerPixel { get; set; }
     
+    //TODO: Update 'BytesPerPixel' in:-
+    //      - Etc1TextureData.cs
+    //      - FileTextureData.cs
+    //      - FloatTextureData.cs
+    //      - PixmapTextureData.cs
+    //      - GLOnlyTextureData.cs
+    //      - KTXTextureData.cs
+    //      - MipMapTextureData.cs
+    //      Use PixelFormat.BytesPerPixel( _pixmap.GetColorFormat() ).
+    
     /// <summary>
     /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
     /// </summary>

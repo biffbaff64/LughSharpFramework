@@ -29,19 +29,20 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// </summary>
 public partial class Gdx2DPixmap
 {
-    private unsafe Buffer< byte > InitializeFromBuffer( byte[] buffer, int offset, int len )
+    private Buffer< byte > InitializeFromBuffer( byte[] buffer, int offset, int len )
     {
         var bufferHandle  = GCHandle.Alloc( buffer, GCHandleType.Pinned );
         var pixmapPtr     = load( bufferHandle.AddrOfPinnedObject() + offset, len );
         var pixmap        = Marshal.PtrToStructure< NativePixmapStruct >( pixmapPtr );
         var dataBlockSize = ( int )( pixmap.Width * pixmap.Height * bytes_per_pixel( pixmap.ColorFormat ) );
-
+        
         bufferHandle.Free();
 
-        Width       = ( int )pixmap.Width;
-        Height      = ( int )pixmap.Height;
-        ColorFormat = ( int )pixmap.ColorFormat;
-        Pixels      = new byte[ dataBlockSize ];
+        Width         = ( int )pixmap.Width;
+        Height        = ( int )pixmap.Height;
+        ColorFormat   = ( int )pixmap.ColorFormat;
+        BytesPerPixel = ( int )bytes_per_pixel( pixmap.ColorFormat );
+        Pixels        = new byte[ dataBlockSize ];
 
         Marshal.Copy( pixmap.Pixels, Pixels, 0, dataBlockSize );
 
@@ -443,49 +444,6 @@ public partial class Gdx2DPixmap
 
     private const string DLL_PATH = "lib/net8.0/gdx2d.dll";
 
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern int gdx2d_get_pixel( int x, int y );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_set_pixel( int x, int y, uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_line( int x1, int y1, int x2, int y2, uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_rect( int x, int y, uint width, uint height, uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_circle( int x, int y, uint radius, uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_fill_rect( int x, int y, uint width, uint height, uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_fill_circle( int x, int y, uint radius, uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_fill_triangle( PixmapData pd,
-//                                                     int x1, int y1,
-//                                                     int x2, int y2,
-//                                                     int x3, int y3,
-//                                                     uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_pixmap( PixmapData pd,
-//                                                   PixmapData dpd,
-//                                                   int srcX,
-//                                                   int srcY,
-//                                                   int srcWidth,
-//                                                   int srcHeight,
-//                                                   int dstX,
-//                                                   int dstY,
-//                                                   int dstWidth,
-//                                                   int dstHeight );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_clear( uint color );
-
     // ------------------------------------------
 
     [DllImport( DLL_PATH, EntryPoint = "gdx2d_load", CallingConvention = CallingConvention.Cdecl )]
@@ -536,71 +494,6 @@ public partial class Gdx2DPixmap
 
     [DllImport( DLL_PATH, EntryPoint = "gdx2d_clear", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_clear( uint color );
-
-// ========================================================================
-// ========================================================================
-
-//TODO: Convert all of these to C#
-
-//    [DllImport( DLL_PATH, SetLastError = true )]
-//    private static extern Gdx2dPixmapStruct gdx2d_load( byte[] buffer, int len );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern Gdx2dPixmapStruct gdx2d_new( int width, int height, int format );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern string gdx2d_get_failure_reason();
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_clear( Gdx2dPixmapStruct pd, uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern int gdx2d_get_pixel( Gdx2dPixmapStruct pd, int x, int y );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_set_pixel( Gdx2dPixmapStruct pd, int x, int y, uint color );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_set_blend( Gdx2dPixmapStruct src, int blend );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_set_scale( Gdx2dPixmapStruct src, int Scale );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern uint gdx2d_bytes_per_pixel( uint format );
-//
-//    [DllImport( DLL_PATH, EntryPoint = "gdx2d_free", CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void free( Gdx2dPixmapStruct pixmap );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_line( Gdx2dPixmapStruct pd, int x0, int y0, int x1, int y1, uint col );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_rect( Gdx2dPixmapStruct pd, int x, int y, uint width, uint height, uint col );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_circle( Gdx2dPixmapStruct pd, int x, int y, uint radius, uint col );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_fill_rect( Gdx2dPixmapStruct pd, int x, int y, uint width, uint height, uint col );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_fill_circle( Gdx2dPixmapStruct pd, int x0, int y0, uint radius, uint col );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_fill_triangle( Gdx2dPixmapStruct pd, int x1, int y1, int x2, int y2, int x3, int y3, uint col );
-//
-//    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
-//    private static extern void gdx2d_draw_pixmap( Gdx2dPixmapStruct src,
-//                                                  Gdx2dPixmapStruct dst,
-//                                                  int srcX,
-//                                                  int srcY,
-//                                                  int srcWidth,
-//                                                  int srcHeight,
-//                                                  int dstX,
-//                                                  int dstY,
-//                                                  int dstWidth,
-//                                                  int dstHeight );
 }
 
 // ========================================================================

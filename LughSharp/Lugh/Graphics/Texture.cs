@@ -420,6 +420,8 @@ public class Texture : GLTexture, IManaged
             TextureData.Prepare();
         }
 
+        var pixmap = TextureData.ConsumePixmap();
+        
         Logger.Debug( $"Dimensions        : {Width} x {Height} = {Width * Height}" );
         Logger.Debug( $"Format            : {TextureData.GetPixelFormat()}" );
         Logger.Debug( $"IsManaged         : {IsManaged}" );
@@ -428,9 +430,12 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"GLTarget          : {PixelFormat.GetGLTargetName( GLTarget )}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle:X}" );
         Logger.Debug( $"BytesPerPixel     : {TextureData.BytesPerPixel}" );
+        Logger.Debug( $"BytesPerPixel     : {pixmap!.Gdx2DPixmap.BytesPerPixel}" );
         Logger.Debug( $"BitDepth          : {TextureData.BitDepth}" );
 
-        Logger.Debug( $"TextureData Length: {TextureData.ConsumePixmap()!.PixelData.Length}" );
+        Logger.Debug( $"TextureData Length: {pixmap!.PixelData.Length}" +
+                      $" (should be {Width} x {Height} x {pixmap.Gdx2DPixmap.BytesPerPixel}: " +
+                      $"{Width * Height * pixmap.Gdx2DPixmap.BytesPerPixel})" );
     }
 
     // ========================================================================

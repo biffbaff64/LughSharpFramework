@@ -106,7 +106,7 @@ public class PNGDecoder
     /// Analyzes the specified <see cref="Texture"/> image to extract metadata, including
     /// details such as dimensions, bit depth, color type, and interlace method, while
     /// optionally displaying the results.
-    /// The extracted details are logged for debugging purposes if the <paramref name="verbose"/>
+    /// The extracted details are logged for debugging purposes if '<paramref name="verbose"/>'
     /// is set to true.
     /// This method will return, after logging a warning, if the provided texture is null
     /// or if the texture has no image data.
@@ -220,10 +220,10 @@ public class PNGDecoder
         BytesPerPixel  = GetBytesPerPixel( colorType, bitDepth );
         PNGPixelFormat = LughSharp.Lugh.Graphics.PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
 
-        Logger.Debug( $"colorType    : {colorType}" );
-        Logger.Debug( $"bitDepth     : {bitDepth}" );
-        Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
-        Logger.Debug( $"PixelFormat  : {PNGPixelFormat}" );
+//        Logger.Debug( $"colorType    : {colorType}" );
+//        Logger.Debug( $"bitDepth     : {bitDepth}" );
+//        Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
+//        Logger.Debug( $"PixelFormat  : {PNGPixelFormat}" );
 
         if ( PNGPixelFormat == LughFormat.INVALID )
         {
@@ -908,6 +908,7 @@ public class PNGDecoder
         Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
         Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType} :: ( {ColorTypeName( IHDRchunk.ColorType )} )" );
         Logger.Debug( $"- PixelFormat   : {Lugh.Graphics.PixelFormat.GetFormatString( PNGPixelFormat )} :: ( {PNGPixelFormat} )" );
+        Logger.Debug( $"- BytesPerPixel : {BytesPerPixel}" );
         Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
         Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
         Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
@@ -915,7 +916,7 @@ public class PNGDecoder
         Logger.Debug( "-----------------------------" );
 
 //            Logger.Debug( $"- IHDR/IDAT Data: {BitConverter.ToString( pngData ).Replace( "-", " " )}" );
-        Logger.Debug( $"- TotalIDATSize : 0x{TotalIDATSize:X}" );
+        Logger.Debug( $"- TotalIDATSize : 0x{TotalIDATSize:X} ({TotalIDATSize})" );
         Logger.Debug( "-----------------------------" );
     }
 }

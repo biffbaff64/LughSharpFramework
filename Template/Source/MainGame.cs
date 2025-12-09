@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Versioning;
 using System.Text;
+using Extensions.Source.Tools;
 using JetBrains.Annotations;
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
@@ -8,6 +9,7 @@ using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Cameras;
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Utils;
 using LughUtils.source.Maths;
 using LughSharp.Lugh.Utils;
 using LughUtils.source.Exceptions;
@@ -23,8 +25,8 @@ namespace Template.Source;
 public partial class MainGame : Game
 {
     private const string TEST_ASSET1 = Assets.BACKGROUND_IMAGE;
-    private const int    TEST_WIDTH  = 100;
-    private const int    TEST_HEIGHT = 100;
+    private const int    TEST_WIDTH  = 64;
+    private const int    TEST_HEIGHT = 64;
 
     // ========================================================================
 
@@ -49,7 +51,15 @@ public partial class MainGame : Game
 
         CreateCamera();
         
-        _image1 = new Texture( Assets.BACKGROUND_IMAGE );
+        var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, LughFormat.RGBA8888 );
+        pixmap.SetColor( Color.White );
+        pixmap.FillWithCurrentColor();
+        Logger.Debug( $"pixmap width: {pixmap.Width}, height: {pixmap.Height}" );
+        Logger.Debug( $"Bytes per Pixel: {pixmap.Gdx2DPixmap.BytesPerPixel}" );
+        Logger.Debug( $"pixmap ByteBuffer length: {pixmap.ByteBuffer.Length}" );
+        
+        _image1 = new Texture( Assets.COMPLETE_STAR );
+        _image1.DebugPrint();
         
         Logger.Debug( "Done" );
     }

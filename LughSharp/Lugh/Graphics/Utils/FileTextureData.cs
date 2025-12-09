@@ -65,7 +65,7 @@ public class FileTextureData : ITextureData
 
     public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int format, bool useMipMaps )
     {
-        Guard.Against.Null( preloadedPixmap, nameof( preloadedPixmap ) );
+        Guard.Against.Null( preloadedPixmap );
 
         File         = file;
         _pixmap      = preloadedPixmap;
@@ -82,6 +82,8 @@ public class FileTextureData : ITextureData
             {
                 _pixelFormat = _pixmap.GetColorFormat();
             }
+
+            BytesPerPixel = PixelFormat.BytesPerPixel( _pixmap.GetColorFormat() );
         }
 
         IsOwned = false;

@@ -27,4 +27,5 @@ namespace Template.Source;
 public static class Assets
 {
     public const string BACKGROUND_IMAGE = @"Assets\title_background.png";
+    public const string COMPLETE_STAR    = @"Assets\complete_star.png";
 }

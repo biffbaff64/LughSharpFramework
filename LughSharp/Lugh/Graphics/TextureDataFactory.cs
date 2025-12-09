@@ -79,8 +79,7 @@ public static class TextureDataFactory
 
             // Other supported image file formats, PNG, BMP
             case var _:
-                var pixmap = new Pixmap( file );
-                data = new FileTextureData( file, pixmap, format, useMipMaps );
+                data = new FileTextureData( file, new Pixmap( file ), format, useMipMaps );
 
                 break;
         }
