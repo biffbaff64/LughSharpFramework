@@ -3,18 +3,18 @@ using System.Runtime.Versioning;
 using System.Text;
 using Extensions.Source.Tools;
 using JetBrains.Annotations;
-using LughSharp.Lugh.Assets;
-using LughSharp.Lugh.Assets.Loaders;
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.Cameras;
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.Utils;
+using LughSharp.Core.Assets;
+using LughSharp.Core.Assets.Loaders;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Main;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Graphics;
 using LughUtils.source.Maths;
-using LughSharp.Lugh.Utils;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
-using Color = LughSharp.Lugh.Graphics.Color;
+using Color = LughSharp.Core.Graphics.Color;
 
 namespace Template.Source;
 

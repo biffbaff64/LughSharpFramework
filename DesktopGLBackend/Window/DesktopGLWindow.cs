@@ -23,16 +23,15 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Graphics;
-
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
-
+using LughSharp.Core.Files;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Main;
+using LughSharp.Core.Graphics;
 using LughUtils.source.Maths;
 using LughUtils.source;
 
-using Platform = LughSharp.Lugh.Core.Platform;
+using Platform = LughSharp.Core.Main.Platform;
 
 namespace DesktopGLBackend.Window;
 

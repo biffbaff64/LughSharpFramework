@@ -22,13 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.FrameBuffers;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Utils;
-
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.FrameBuffers;
+using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.OpenGL;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 

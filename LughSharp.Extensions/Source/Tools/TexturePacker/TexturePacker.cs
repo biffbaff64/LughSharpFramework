@@ -23,8 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
-using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics.Atlases;
+using LughSharp.Core.Files;
+using LughSharp.Core.Graphics.Atlases;
 using Bitmap = System.Drawing.Bitmap;
 
 namespace Extensions.Source.Tools.TexturePacker;

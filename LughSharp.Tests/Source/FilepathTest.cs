@@ -23,10 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
-
+using LughSharp.Core.Main;
 using NUnit.Framework;
-
-using LughSharp.Lugh.Core;
 using LughUtils.source.Logging;
 
 namespace LughSharp.Tests.Source;

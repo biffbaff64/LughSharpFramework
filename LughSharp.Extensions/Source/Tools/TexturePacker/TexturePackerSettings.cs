@@ -6,11 +6,12 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using JetBrains.Annotations;
-using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Core.Files;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Graphics;
 using LughUtils.source.Logging;
-using Color = LughSharp.Lugh.Graphics.Color;
+using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

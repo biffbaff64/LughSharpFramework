@@ -22,8 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics;
 using LughUtils.source.Exceptions;
 
 namespace DesktopGLBackend.Utils;

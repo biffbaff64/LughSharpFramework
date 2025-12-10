@@ -23,10 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Core.Graphics.OpenGL;
 using NUnit.Framework;
-using GLBindings = LughSharp.Lugh.Graphics.OpenGL.Bindings.GLBindings;
+using GLBindings = LughSharp.Core.Graphics.OpenGL.Bindings.GLBindings;
 
 namespace LughSharp.Tests.Source;
 

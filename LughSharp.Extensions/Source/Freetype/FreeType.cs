@@ -28,13 +28,12 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 using JetBrains.Annotations;
-
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Utils;
-
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Graphics;
 using LughUtils.source;
 
-using Color = LughSharp.Lugh.Graphics.Color;
+using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Freetype;
 

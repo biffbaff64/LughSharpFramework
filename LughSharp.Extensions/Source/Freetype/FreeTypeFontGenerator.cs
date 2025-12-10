@@ -22,11 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Graphics.Text;
-using Color = LughSharp.Lugh.Graphics.Color;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Text;
+using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Freetype;
 
@@ -479,7 +481,7 @@ public class FreeTypeFontGenerator : IDisposable
             }
 
             ownsAtlas = true;
-            packer    = new PixmapPacker( size, size, LughSharp.Lugh.Graphics.LughFormat.RGBA8888, 1, false, packStrategy );
+            packer    = new PixmapPacker( size, size, LughFormat.RGBA8888, 1, false, packStrategy );
 
             packer.TransparentColor   = parameter.BorderWidth > 0 ? parameter.BorderColor : parameter.Color;
             packer.TransparentColor.A = 0;

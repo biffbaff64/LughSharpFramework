@@ -30,10 +30,8 @@ using System.IO;
 using System.Runtime.Versioning;
 
 using Extensions.Source.Drawing;
-
-using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
-
+using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
@@ -153,7 +151,7 @@ public partial class TexturePacker
             page.ImageName = Path.GetFileName( outputFile );
 
             // Create a bitmap canvas for the page
-            var canvas = new Bitmap( width, height, LughSharp.Lugh.Graphics.PixelFormat.ToSystemPixelFormat( _settings.Format ) );
+            var canvas = new Bitmap( width, height, LughSharp.Core.Graphics.PixelFormat.ToSystemPixelFormat( _settings.Format ) );
             var g      = Graphics.FromImage( canvas );
 
             if ( page.OutputRects == null )
@@ -553,7 +551,7 @@ public partial class TexturePacker
         writer.WriteLine( page.ImageName );
         writer.WriteLine( $"{tab}size{colon}{page.ImageWidth}{comma}{page.ImageHeight}" );
 
-        if ( LughSharp.Lugh.Graphics.PixelFormat.ToSystemPixelFormat( _settings.Format ) != PixelFormat.Format32bppArgb )
+        if ( LughSharp.Core.Graphics.PixelFormat.ToSystemPixelFormat( _settings.Format ) != PixelFormat.Format32bppArgb )
         {
             writer.WriteLine( $"{tab}format{colon}{_settings.Format}" );
         }

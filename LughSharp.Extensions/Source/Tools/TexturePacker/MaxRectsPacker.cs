@@ -23,7 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
-using LughSharp.Lugh.Utils;
+using LughSharp.Core.Utils;
 using LughUtils.source.Exceptions;
 
 namespace Extensions.Source.Tools.TexturePacker;

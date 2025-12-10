@@ -23,8 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Audio.Mock;
-
-using LughSharp.Lugh.Audio;
+using LughSharp.Core.Audio;
 using LughUtils.source.Logging;
 
 namespace DesktopGLBackend.Audio;

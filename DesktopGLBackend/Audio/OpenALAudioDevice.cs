@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Audio;
+using LughSharp.Core.Audio;
 
 namespace DesktopGLBackend.Audio;
 

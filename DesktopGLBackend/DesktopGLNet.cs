@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Network;
+using LughSharp.Core.Network;
 
 namespace DesktopGLBackend;
 

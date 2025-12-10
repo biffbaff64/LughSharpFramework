@@ -1,8 +1,8 @@
 ﻿using System.Runtime.Versioning;
 using DesktopGLBackend;
 using Extensions.Source.Tools.TexturePacker;
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Files;
+using LughSharp.Core.Files;
+using LughSharp.Core.Main;
 
 namespace Template.Source;
 

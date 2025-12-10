@@ -22,7 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics;
 
 namespace DesktopGLBackend.Graphics;
 

@@ -22,8 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Audio;
-using LughSharp.Lugh.Audio.OpenAL;
+using LughSharp.Core.Audio;
+using LughSharp.Core.Audio.OpenAL;
 using LughUtils.source.Exceptions;
 
 namespace DesktopGLBackend.Audio;

@@ -23,8 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Graphics;
-
-using LughSharp.Lugh.Core;
+using LughSharp.Core.Main;
 
 namespace DesktopGLBackend.Window;
 

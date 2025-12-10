@@ -24,9 +24,9 @@
 
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
-
-using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics.Text;
+using LughSharp.Core.Files;
+using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Graphics.Text;
 
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;

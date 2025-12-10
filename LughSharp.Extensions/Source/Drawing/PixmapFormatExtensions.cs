@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+using LughSharp.Core.Graphics;
 
 namespace Extensions.Source.Drawing;
 
@@ -44,11 +45,11 @@ public static class PixmapFormatExtensions
     {
         return format switch
         {
-            PixelFormat.Alpha                => LughSharp.Lugh.Graphics.LughFormat.ALPHA,
-            PixelFormat.Format16bppRgb565    => LughSharp.Lugh.Graphics.LughFormat.RGB565,
-            PixelFormat.Format16bppGrayScale => LughSharp.Lugh.Graphics.LughFormat.RGBA4444,
-            PixelFormat.Format24bppRgb       => LughSharp.Lugh.Graphics.LughFormat.RGB888,
-            PixelFormat.Format32bppArgb      => LughSharp.Lugh.Graphics.LughFormat.RGBA8888,
+            PixelFormat.Alpha                => LughFormat.ALPHA,
+            PixelFormat.Format16bppRgb565    => LughFormat.RGB565,
+            PixelFormat.Format16bppGrayScale => LughFormat.RGBA4444,
+            PixelFormat.Format24bppRgb       => LughFormat.RGB888,
+            PixelFormat.Format32bppArgb      => LughFormat.RGBA8888,
 
             // ----------------------------------
 
@@ -68,12 +69,12 @@ public static class PixmapFormatExtensions
     {
         return format switch
         {
-            LughSharp.Lugh.Graphics.LughFormat.ALPHA           => System.Drawing.Imaging.PixelFormat.Alpha,
-            LughSharp.Lugh.Graphics.LughFormat.LUMINANCE_ALPHA => System.Drawing.Imaging.PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
-            LughSharp.Lugh.Graphics.LughFormat.RGB565          => System.Drawing.Imaging.PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
-            LughSharp.Lugh.Graphics.LughFormat.RGB888          => System.Drawing.Imaging.PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
-            LughSharp.Lugh.Graphics.LughFormat.RGBA8888        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
-            LughSharp.Lugh.Graphics.LughFormat.RGBA4444        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            LughFormat.ALPHA           => System.Drawing.Imaging.PixelFormat.Alpha,
+            LughFormat.LUMINANCE_ALPHA => System.Drawing.Imaging.PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
+            LughFormat.RGB565          => System.Drawing.Imaging.PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
+            LughFormat.RGB888          => System.Drawing.Imaging.PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
+            LughFormat.RGBA8888        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            LughFormat.RGBA4444        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
 
             // ----------------------------------
 

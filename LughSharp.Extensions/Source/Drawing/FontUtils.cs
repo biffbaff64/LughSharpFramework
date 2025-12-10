@@ -23,9 +23,10 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using Extensions.Source.Freetype;
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics.Text;
-using Color = LughSharp.Lugh.Graphics.Color;
+using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Main;
+using LughSharp.Core.Graphics.Text;
+using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Drawing;
 

@@ -22,14 +22,16 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
+using LughSharp.Core.Files;
+using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
+using LughSharp.Core.Graphics.OpenGL;
 using LughUtils.source;
 using LughUtils.source.Collections;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
-using Platform = LughSharp.Lugh.Core.Platform;
+using Platform = LughSharp.Core.Main.Platform;
 
 namespace DesktopGLBackend;
 
@@ -126,7 +128,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         // Note: Engine.Graphics is set later, during window creation as each window that
         // is created will have its own IGraphics instance.
         Engine.Api.Audio = AudioManager.CreateAudio( AppConfig );
-        Engine.Api.Files = new LughSharp.Lugh.Files.Files();
+        Engine.Api.Files = new Files();
         Engine.Api.Net   = new DesktopGLNet( AppConfig );
 
         Clipboard = new DesktopGLClipboard();

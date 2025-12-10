@@ -22,10 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Input;
-using LughSharp.Lugh.Utils;
-
+using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Input;
+using LughSharp.Core.Utils;
 using LughUtils.source;
 using LughUtils.source.Exceptions;
 
