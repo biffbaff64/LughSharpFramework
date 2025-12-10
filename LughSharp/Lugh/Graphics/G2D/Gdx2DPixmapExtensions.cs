@@ -22,6 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Runtime.InteropServices;
+using LughUtils.source;
+using LughUtils.source.Exceptions;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
@@ -97,11 +102,6 @@ public partial class Gdx2DPixmap
                 ClearRGBA4444( color, size );
 
                 break;
-
-//            case PixelFormat.INTENSITY:
-//                ClearIntensity( color, size );
-//
-//                break;
 
             case LughFormat.INDEXED_COLOR:
                 ClearIndexedColor( color, size );

@@ -22,35 +22,19 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+using JetBrains.Annotations;
+using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughUtils.source;
+using LughUtils.source.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
 public class Etc1TextureData : ITextureData
 {
-    // ========================================================================
-
-    private readonly FileInfo?      _file;
-    private          ETC1.ETC1Data? _data;
-    private          ETC1           _etc1;
-
-    // ========================================================================
-
-    public Etc1TextureData( FileInfo file, bool useMipMaps = false )
-    {
-        _file      = file;
-        _etc1      = new ETC1();
-        UseMipMaps = useMipMaps;
-    }
-
-    public Etc1TextureData( ETC1.ETC1Data encodedImage, bool useMipMaps )
-    {
-        _data      = encodedImage;
-        _etc1      = new ETC1();
-        UseMipMaps = useMipMaps;
-    }
-
     /// <inheritdoc />
     public int Width { get; set; }
 
@@ -79,9 +63,42 @@ public class Etc1TextureData : ITextureData
     bool IManaged.IsManaged => false;
 
     // ========================================================================
+
+    private readonly FileInfo?      _file;
+    private          ETC1.ETC1Data? _data;
+    private          ETC1           _etc1;
+
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="file"></param>
+    /// <param name="useMipMaps"></param>
+    public Etc1TextureData( FileInfo file, bool useMipMaps = false )
+    {
+        _file      = file;
+        _etc1      = new ETC1();
+        UseMipMaps = useMipMaps;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="encodedImage"></param>
+    /// <param name="useMipMaps"></param>
+    public Etc1TextureData( ETC1.ETC1Data encodedImage, bool useMipMaps )
+    {
+        _data      = encodedImage;
+        _etc1      = new ETC1();
+        UseMipMaps = useMipMaps;
+    }
+
+    /// <summary>
+    /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap"/> or
+    /// <see cref="ITextureData.ConsumeCustomData"/>. This method can be called from a non
+    /// OpenGL thread and should not interact with OpenGL.
+    /// </summary>
     public void Prepare()
     {
         if ( IsPrepared )
@@ -109,7 +126,15 @@ public class Etc1TextureData : ITextureData
         IsPrepared = true;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Uploads the pixel data to the OpenGL ES texture. The caller must bind an
+    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare"/> must preceed a call
+    /// to this method.
+    /// <para>
+    /// Any internal data structures created in <see cref="ITextureData.Prepare"/> should be
+    /// disposed of here.
+    /// </para>
+    /// </summary>
     public unsafe void ConsumeCustomData( int target )
     {
         if ( !IsPrepared )
@@ -122,11 +147,11 @@ public class Etc1TextureData : ITextureData
             throw new GdxRuntimeException( "No data to consume!" );
         }
 
-        if ( !Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
+        if ( !Engine.Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
             var pixmap = _etc1.DecodeImage( _data, LughFormat.RGB565 );
 
-            GL.TexImage2D( target,
+            Engine.GL.TexImage2D( target,
                            0,
                            pixmap.GLInternalPixelFormat,
                            pixmap.Width,
@@ -148,7 +173,7 @@ public class Etc1TextureData : ITextureData
         {
             fixed ( void* ptr = &_data.CompressedData.BackingArray()[ 0 ] )
             {
-                GL.CompressedTexImage2D( target,
+                Engine.GL.CompressedTexImage2D( target,
                                          0,
                                          ETC1.ETC1_RGB8_OES,
                                          Width,
@@ -160,7 +185,7 @@ public class Etc1TextureData : ITextureData
 
             if ( UseMipMaps )
             {
-                GL.GenerateMipmap( IGL.GL_TEXTURE_2D );
+                Engine.GL.GenerateMipmap( IGL.GL_TEXTURE_2D );
             }
         }
 
@@ -170,26 +195,42 @@ public class Etc1TextureData : ITextureData
         IsPrepared = false;
     }
 
-    /// <inheritdoc />
-    public int GetPixelFormat() => LughFormat.RGB565;
-
-    /// <inheritdoc />
-    public void DebugPrint()
+    /// <summary>
+    /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
+    /// </summary>
+    public int GetPixelFormat()
     {
+        return LughFormat.RGB565;
     }
 
-    // ========================================================================
-
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns the <see cref="Pixmap"/> for upload by Texture.
+    /// <para>
+    /// A call to <see cref="ITextureData.Prepare"/> must precede a call to this method. Any
+    /// internal data structures created in <see cref="ITextureData.Prepare"/> should be
+    /// disposed of here.
+    /// </para>
+    /// </summary>
+    /// <returns> the pixmap.</returns>
     public Pixmap ConsumePixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns whether the caller of <see cref="ITextureData.ConsumePixmap"/> should
+    /// dispose the Pixmap returned by <see cref="ITextureData.ConsumePixmap"/>.
+    /// </summary>
     public bool ShouldDisposePixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+    }
+
+    /// <summary>
+    /// Dumps the internal state of the TextureData to the log.
+    /// </summary>
+    public void DebugPrint()
+    {
     }
 }
 

@@ -22,7 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+using JetBrains.Annotations;
+using LughUtils.source.Exceptions;
 
 namespace LughSharp.Lugh.Graphics;
 

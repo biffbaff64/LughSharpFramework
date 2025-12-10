@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughUtils.source;
+
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
@@ -94,12 +97,13 @@ public interface ITextureData : IManaged
     
     //TODO: Update 'BytesPerPixel' in:-
     //      - Etc1TextureData.cs
-    //      - FileTextureData.cs
+    //      - FileTextureData.cs    - Done
     //      - FloatTextureData.cs
     //      - PixmapTextureData.cs
     //      - GLOnlyTextureData.cs
     //      - KTXTextureData.cs
     //      - MipMapTextureData.cs
+    //      ONLY If necessary!
     //      Use PixelFormat.BytesPerPixel( _pixmap.GetColorFormat() ).
     
     /// <summary>

@@ -155,14 +155,11 @@ public class FloatTextureData : ITextureData
         }
     }
 
-    /// <inheritdoc />
-    public void DebugPrint()
-    {
-    }
-
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
+    /// </summary>
     public int GetPixelFormat()
     {
         return LughFormat.RGBA8888;
@@ -185,6 +182,11 @@ public class FloatTextureData : ITextureData
     public bool ShouldDisposePixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+    }
+
+    /// <inheritdoc />
+    public void DebugPrint()
+    {
     }
 }
 

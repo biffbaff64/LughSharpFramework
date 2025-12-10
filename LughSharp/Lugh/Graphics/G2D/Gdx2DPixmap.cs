@@ -22,6 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+using LughUtils.source;
+using LughUtils.source.Exceptions;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>

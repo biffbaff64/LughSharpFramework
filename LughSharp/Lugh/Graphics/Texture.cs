@@ -430,7 +430,6 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"GLTarget          : {PixelFormat.GetGLTargetName( GLTarget )}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle:X}" );
         Logger.Debug( $"BytesPerPixel     : {TextureData.BytesPerPixel}" );
-        Logger.Debug( $"BytesPerPixel     : {pixmap!.Gdx2DPixmap.BytesPerPixel}" );
         Logger.Debug( $"BitDepth          : {TextureData.BitDepth}" );
 
         Logger.Debug( $"TextureData Length: {pixmap!.PixelData.Length}" +

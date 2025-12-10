@@ -63,6 +63,13 @@ public class FileTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="file"></param>
+    /// <param name="preloadedPixmap"></param>
+    /// <param name="format"></param>
+    /// <param name="useMipMaps"></param>
     public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int format, bool useMipMaps )
     {
         Guard.Against.Null( preloadedPixmap );

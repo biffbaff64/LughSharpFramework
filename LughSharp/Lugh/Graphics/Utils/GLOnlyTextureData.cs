@@ -97,8 +97,6 @@ public class GLOnlyTextureData : ITextureData
         Type           = type;
     }
 
-    // ========================================================================
-
     /// <summary>
     /// 
     /// </summary>
@@ -136,16 +134,12 @@ public class GLOnlyTextureData : ITextureData
         // TODO: Implement DebugPrint
     }
 
-    // ========================================================================
-
     /// <summary>
     /// Returns the <see cref="ITextureData.TextureType"/> for this Texture Data.
     /// </summary>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
     public int GetPixelFormat() => LughFormat.RGBA8888;
-
-    // ========================================================================
 
     public Pixmap ConsumePixmap()
     {

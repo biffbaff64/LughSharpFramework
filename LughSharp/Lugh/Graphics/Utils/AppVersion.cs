@@ -33,7 +33,7 @@ namespace LughSharp.Lugh.Graphics.Utils;
 /// <remarks>
 /// It is HIGHLY likely that this class can be removed, with some minor work elsewhere.
 /// </remarks>
-//[DebuggerDisplay( "DebugVersionString" )]
+[DebuggerDisplay( "DebugVersionString" )]
 [PublicAPI]
 public class AppVersion
 {
