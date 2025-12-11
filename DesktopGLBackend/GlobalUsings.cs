@@ -27,11 +27,6 @@
 global using JetBrains.Annotations;
 
 // ============================================================================
-global using DotGLFW;
-
-global using GLFW = DotGLFW;
-
-// ============================================================================
 global using DesktopGLBackend.Audio;
 global using DesktopGLBackend.Input;
 global using DesktopGLBackend.Utils;

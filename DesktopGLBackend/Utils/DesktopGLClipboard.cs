@@ -48,8 +48,8 @@ public class DesktopGLClipboard : IClipboard
     /// </summary>
     public string? Contents
     {
-        get => Glfw.GetClipboardString( ( ( DesktopGLGraphics )Engine.Api.Graphics ).GLWindow!.GlfwWindow );
-        set => Glfw.SetClipboardString( ( ( DesktopGLGraphics )Engine.Api.Graphics ).GLWindow!.GlfwWindow, value );
+        get => DotGLFW.Glfw.GetClipboardString( ( ( DesktopGLGraphics )Engine.Api.Graphics ).GLWindow!.GlfwWindow );
+        set => DotGLFW.Glfw.SetClipboardString( ( ( DesktopGLGraphics )Engine.Api.Graphics ).GLWindow!.GlfwWindow, value );
     }
 }
 

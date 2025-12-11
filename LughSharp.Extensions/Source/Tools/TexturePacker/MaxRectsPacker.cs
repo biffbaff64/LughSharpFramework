@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+using JetBrains.Annotations;
 using LughSharp.Core.Utils;
 using LughUtils.source.Exceptions;
 

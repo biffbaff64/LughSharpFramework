@@ -33,13 +33,14 @@ public class DesktopGLCursor : ICursor, IDisposable
 {
     public DesktopGLWindow Window     { get; set; }
     public Pixmap          PixmapCopy { get; set; }
-    public GLFW.Image      GlfwImage  { get; set; }
-    public Cursor          GlfwCursor { get; set; }
+    public DotGLFW.Image   GlfwImage  { get; set; }
+    public DotGLFW.Cursor  GlfwCursor { get; set; }
 
     // ========================================================================
 
-    public static readonly List< DesktopGLCursor >                    Cursors       = [ ];
-    public static readonly Dictionary< ICursor.SystemCursor, Cursor > SystemCursors = [ ];
+    public static readonly List< DesktopGLCursor > Cursors = [ ];
+
+    public static readonly Dictionary< ICursor.SystemCursor, DotGLFW.Cursor > SystemCursors = [ ];
 
     // ========================================================================
     // ========================================================================
@@ -56,66 +57,66 @@ public class DesktopGLCursor : ICursor, IDisposable
         if ( ( pixmap.Width & ( pixmap.Width - 1 ) ) != 0 )
         {
             throw new GdxRuntimeException( $"Cursor image pixmap width of {pixmap.Width} is "
-                                           + $"not a power-of-two greater than zero." );
+                                         + $"not a power-of-two greater than zero." );
         }
 
         if ( ( pixmap.Height & ( pixmap.Height - 1 ) ) != 0 )
         {
             throw new GdxRuntimeException( $"Cursor image pixmap height of {pixmap.Height} "
-                                           + $"is not a power-of-two greater than zero." );
+                                         + $"is not a power-of-two greater than zero." );
         }
 
         if ( ( xHotspot < 0 ) || ( xHotspot >= pixmap.Width ) )
         {
             throw new GdxRuntimeException( $"xHotspot coordinate of {xHotspot} is not within "
-                                           + $"image width bounds: [0, {pixmap.Width})." );
+                                         + $"image width bounds: [0, {pixmap.Width})." );
         }
 
         if ( ( yHotspot < 0 ) || ( yHotspot >= pixmap.Height ) )
         {
             throw new GdxRuntimeException( $"yHotspot coordinate of {yHotspot} is not within "
-                                           + $"image height bounds: [0, {pixmap.Height})." );
+                                         + $"image height bounds: [0, {pixmap.Height})." );
         }
 
         PixmapCopy          = new Pixmap( pixmap.Width, pixmap.Height, LughFormat.RGBA8888 );
         PixmapCopy.Blending = Pixmap.BlendTypes.None;
         PixmapCopy.DrawPixmap( pixmap, 0, 0 );
 
-        GlfwImage = new GLFW.Image
+        GlfwImage = new DotGLFW.Image
         {
             Pixels = PixmapCopy.PixelData,
             Width  = PixmapCopy.Width,
             Height = PixmapCopy.Height,
         };
 
-        GlfwCursor = Glfw.CreateCursor( GlfwImage, xHotspot, yHotspot );
+        GlfwCursor = DotGLFW.Glfw.CreateCursor( GlfwImage, xHotspot, yHotspot );
 
         Cursors.Add( this );
     }
 
     /// <summary>
-    /// Sets the system cursor for the given <see cref="GLFW.Window"/> to the
+    /// Sets the system cursor for the given <see cref="DotGLFW.Window"/> to the
     /// cursor specified by the parameter <paramref name="systemCursor"/>.
     /// </summary>
     /// <param name="window"></param>
     /// <param name="systemCursor"></param>
-    public static void SetSystemCursor( GLFW.Window window, ICursor.SystemCursor systemCursor )
+    public static void SetSystemCursor( DotGLFW.Window window, ICursor.SystemCursor systemCursor )
     {
         //@formatter:off
         var glCursor = systemCursor switch
         {
-            ICursor.SystemCursor.Ibeam            => Glfw.CreateStandardCursor( CursorShape.Ibeam ),
-            ICursor.SystemCursor.Crosshair        => Glfw.CreateStandardCursor( CursorShape.Crosshair ),
-            ICursor.SystemCursor.Hand             => Glfw.CreateStandardCursor( CursorShape.PointingHand ),
-            ICursor.SystemCursor.HorizontalResize => Glfw.CreateStandardCursor( CursorShape.Hresize ),
-            ICursor.SystemCursor.VerticalResize   => Glfw.CreateStandardCursor( CursorShape.Vresize ),
-            var _                                 => Glfw.CreateStandardCursor( CursorShape.Arrow ),
+            ICursor.SystemCursor.Ibeam            => DotGLFW.Glfw.CreateStandardCursor( DotGLFW.CursorShape.Ibeam ),
+            ICursor.SystemCursor.Crosshair        => DotGLFW.Glfw.CreateStandardCursor( DotGLFW.CursorShape.Crosshair ),
+            ICursor.SystemCursor.Hand             => DotGLFW.Glfw.CreateStandardCursor( DotGLFW.CursorShape.PointingHand ),
+            ICursor.SystemCursor.HorizontalResize => DotGLFW.Glfw.CreateStandardCursor( DotGLFW.CursorShape.Hresize ),
+            ICursor.SystemCursor.VerticalResize   => DotGLFW.Glfw.CreateStandardCursor( DotGLFW.CursorShape.Vresize ),
+            var _                                 => DotGLFW.Glfw.CreateStandardCursor( DotGLFW.CursorShape.Arrow ),
         };
         //@formatter:on
 
         SystemCursors[ systemCursor ] = glCursor;
 
-        Glfw.SetCursor( window, glCursor );
+        DotGLFW.Glfw.SetCursor( window, glCursor );
     }
 
     // ========================================================================
@@ -142,7 +143,7 @@ public class DesktopGLCursor : ICursor, IDisposable
             PixmapCopy.Dispose();
             PixmapCopy = null!;
             GlfwImage  = null!;
-            Glfw.DestroyCursor( GlfwCursor );
+            DotGLFW.Glfw.DestroyCursor( GlfwCursor );
         }
     }
 
@@ -163,7 +164,7 @@ public class DesktopGLCursor : ICursor, IDisposable
     {
         foreach ( var systemCursor in SystemCursors.Values )
         {
-            Glfw.DestroyCursor( systemCursor );
+            DotGLFW.Glfw.DestroyCursor( systemCursor );
         }
 
         SystemCursors.Clear();

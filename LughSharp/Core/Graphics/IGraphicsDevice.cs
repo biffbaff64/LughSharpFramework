@@ -101,7 +101,7 @@ public partial interface IGraphicsDevice
     /// which might be needed for advanced GLFW operations.
     /// </para>
     /// </summary>
-    Window CurrentContext { get; set; }
+    DotGLFW.Window CurrentContext { get; set; }
 
     /// <summary>
     /// Gets a value indicating whether continuous rendering is enabled.
@@ -259,16 +259,16 @@ public partial interface IGraphicsDevice
     /// Returns an array of all supported display modes for the specified monitor.
     /// Display modes describe available screen resolutions, refresh rates, and bit depths.
     /// </summary>
-    /// <param name="monitor">The <see cref="GLFW.Monitor"/> to query for display modes.</param>
+    /// <param name="monitor">The <see cref="DotGLFW.Monitor"/> to query for display modes.</param>
     /// <returns>An array of <see cref="DisplayMode"/> objects representing supported display modes for the specified monitor.</returns>
-    DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
+    DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor );
 
     /// <summary>
     /// Gets the current display mode of the specified monitor.
     /// </summary>
-    /// <param name="monitor">The <see cref="GLFW.Monitor"/> to query for the display mode.</param>
+    /// <param name="monitor">The <see cref="DotGLFW.Monitor"/> to query for the display mode.</param>
     /// <returns>The current <see cref="DisplayMode"/> of the specified monitor.</returns>
-    DisplayMode GetDisplayMode( GLFW.Monitor monitor );
+    DisplayMode GetDisplayMode( DotGLFW.Monitor monitor );
 
     /// <summary>
     /// Retrieves the current High-DPI mode, which determines whether rendering coordinates

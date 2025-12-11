@@ -23,22 +23,21 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics;
 
 namespace DesktopGLBackend.Graphics;
 
 public partial class DesktopGLGraphics
 {
     /// <summary>
-    /// Describes a Display Mode for a <see cref="GLFW.Monitor"/>
+    /// Describes a Display Mode for a <see cref="DotGLFW.Monitor"/>
     /// </summary>
     [PublicAPI]
     public class DesktopGLDisplayMode : IGraphicsDevice.DisplayMode
     {
         /// <summary>
-        /// The <see cref="GLFW.Monitor"/> this <see cref="IGraphicsDevice.DisplayMode"/> applies to.
+        /// The <see cref="DotGLFW.Monitor"/> this <see cref="IGraphicsDevice.DisplayMode"/> applies to.
         /// </summary>
-        public GLFW.Monitor MonitorHandle { get; set; }
+        public DotGLFW.Monitor MonitorHandle { get; set; }
 
         /// <summary>
         /// Creates a new Display Mode and its properties.
@@ -48,7 +47,7 @@ public partial class DesktopGLGraphics
         /// <param name="height"> Monior display height. </param>
         /// <param name="refreshRate"> The refresh rate. </param>
         /// <param name="bitsPerPixel"> The bits per pixel. </param>
-        public DesktopGLDisplayMode( GLFW.Monitor monitor,
+        public DesktopGLDisplayMode( DotGLFW.Monitor monitor,
                                      int width,
                                      int height,
                                      int refreshRate,

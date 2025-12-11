@@ -45,7 +45,7 @@ public class AppVersion
     /// </summary>
     /// <param name="appType"></param>
     /// <param name="profile"></param>
-    public AppVersion( Platform.ApplicationType appType, OpenGLProfile profile )
+    public AppVersion( Platform.ApplicationType appType, DotGLFW.OpenGLProfile profile )
     {
         BackendType = appType switch
         {

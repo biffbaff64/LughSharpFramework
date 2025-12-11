@@ -23,7 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
+using LughUtils.source.Exceptions;
+
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Extensions.Source.Drawing;
 

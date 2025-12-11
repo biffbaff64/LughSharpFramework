@@ -51,7 +51,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public virtual GraphicsBackend.BackendType GraphicsType   { get; set; }
     public virtual GraphicsCapabilities        Capabilities   { get; set; } = null!;
     public virtual GLFormatChooser             FormatChooser  { get; set; } = null!;
-    public virtual Window                      CurrentContext { get; set; } = null!;
+    public virtual DotGLFW.Window              CurrentContext { get; set; } = null!;
 
     // ========================================================================
 
@@ -100,7 +100,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// <param name="windowHandle"></param>
     /// <param name="width"></param>
     /// <param name="height"></param>
-    public abstract void RenderWindow( Window windowHandle, int width, int height );
+    public abstract void RenderWindow( DotGLFW.Window windowHandle, int width, int height );
 
     /// <summary>
     /// Updates the viewport with the specified dimensions and coordinates.
@@ -121,9 +121,9 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// <summary>
     /// Gets the current display mode of the specified monitor.
     /// </summary>
-    /// <param name="monitor">The <see cref="GLFW.Monitor"/> to query for the display mode.</param>
+    /// <param name="monitor">The <see cref="DotGLFW.Monitor"/> to query for the display mode.</param>
     /// <returns>The current <see cref="IGraphicsDevice.DisplayMode"/> of the specified monitor.</returns>
-    public abstract IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor );
+    public abstract IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor );
 
     /// <summary>
     /// Returns an array of all supported display modes for the current monitor.
@@ -136,9 +136,9 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// Returns an array of all supported display modes for the specified monitor.
     /// Display modes describe available screen resolutions, refresh rates, and bit depths.
     /// </summary>
-    /// <param name="monitor">The <see cref="GLFW.Monitor"/> to query for display modes.</param>
+    /// <param name="monitor">The <see cref="DotGLFW.Monitor"/> to query for display modes.</param>
     /// <returns>An array of <see cref="IGraphicsDevice.DisplayMode"/> objects representing supported display modes for the specified monitor.</returns>
-    public abstract IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
+    public abstract IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor );
 
     /// <summary>
     /// Retrieves the current High-DPI mode, which determines whether rendering coordinates

@@ -39,7 +39,7 @@ public static class GLUtils
     {
         var error = GL.GetError();
 
-        if ( error != ( int )ErrorCode.NoError )
+        if ( error != ( int )DotGLFW.ErrorCode.NoError )
         {
             throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
         }
@@ -94,7 +94,7 @@ public static class GLUtils
     /// </exception>
     public static bool CheckOpenGLContext()
     {
-        if ( Glfw.GetCurrentContext() == null )
+        if ( DotGLFW.Glfw.GetCurrentContext() == null )
         {
             throw new GdxRuntimeException( "No OpenGL context is current on this thread!" );
         }

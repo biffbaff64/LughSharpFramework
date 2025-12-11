@@ -478,7 +478,7 @@ public abstract class GLTexture : IDisposable
     {
         var error = GL.GetError();
 
-        if ( error != ( int )ErrorCode.NoError )
+        if ( error != ( int )DotGLFW.ErrorCode.NoError )
         {
             throw new GdxRuntimeException( $"OpenGL error during {operation}: {error}" );
         }

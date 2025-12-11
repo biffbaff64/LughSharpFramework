@@ -27,11 +27,11 @@ namespace LughSharp.Core.Graphics.OpenGL;
 [PublicAPI]
 public class GLData
 {
-    public const int           DEFAULT_GL_MAJOR             = 3;
-    public const int           DEFAULT_GL_MINOR             = 2;
-    public const ClientAPI     DEFAULT_CLIENT_API           = ClientAPI.OpenGLAPI;
-    public const OpenGLProfile DEFAULT_OPENGL_PROFILE       = OpenGLProfile.CoreProfile;
-    public const bool          DEFAULT_OPENGL_FORWARDCOMPAT = true;
+    public const int                   DEFAULT_GL_MAJOR             = 3;
+    public const int                   DEFAULT_GL_MINOR             = 2;
+    public const DotGLFW.ClientAPI     DEFAULT_CLIENT_API           = DotGLFW.ClientAPI.OpenGLAPI;
+    public const DotGLFW.OpenGLProfile DEFAULT_OPENGL_PROFILE       = DotGLFW.OpenGLProfile.CoreProfile;
+    public const bool                  DEFAULT_OPENGL_FORWARDCOMPAT = true;
 
     public const int TEXTURE_2D     = 0x0DE1;
     public const int EXTENSIONS     = 0x1F03;

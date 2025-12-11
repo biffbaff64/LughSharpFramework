@@ -75,7 +75,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
         UpdateFramebufferInfo();
         UpdateGLVersion();
 
-        Glfw.SetWindowSizeCallback( GLWindow.GlfwWindow, ResizeCallback );
+        DotGLFW.Glfw.SetWindowSizeCallback( GLWindow.GlfwWindow, ResizeCallback );
     }
 
     // ========================================================================
@@ -104,11 +104,16 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
         {
             GdxRuntimeException.ThrowIfNull( GLWindow );
 
-            return Glfw.GetWindowMonitor( GLWindow.GlfwWindow ) != null;
+            return DotGLFW.Glfw.GetWindowMonitor( GLWindow.GlfwWindow ) != null;
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Whether an IGraphics implementation supports display mode changing or not.
+    /// Display mode changing refers to the ability to switch between different
+    /// screen resolutions, refresh rates, and fullscreen/windowed modes.
+    /// </summary>
+    /// <returns><c>true</c> if display mode changing is supported, <c>false</c> otherwise.</returns>
     public override bool SupportsDisplayModeChange()
     {
         // Display mode change is enabled by default on Windows Desktop.
@@ -121,7 +126,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <param name="windowHandle">The handle to the GLFW window being resized.</param>
     /// <param name="width">The new width of the window after resizing.</param>
     /// <param name="height">The new height of the window after resizing.</param>
-    public void ResizeCallback( GLFW.Window windowHandle, int width, int height )
+    public void ResizeCallback( DotGLFW.Window windowHandle, int width, int height )
     {
         RenderWindow( windowHandle, width, height );
     }
@@ -138,12 +143,12 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
             throw new GdxRuntimeException( "GLWindow ( or GlfwWindow ) is null!" );
         }
 
-        Glfw.GetFramebufferSize( GLWindow.GlfwWindow, out var tmpWidth, out var tmpHeight );
+        DotGLFW.Glfw.GetFramebufferSize( GLWindow.GlfwWindow, out var tmpWidth, out var tmpHeight );
 
         BackBufferWidth  = tmpWidth;
         BackBufferHeight = tmpHeight;
 
-        Glfw.GetWindowSize( GLWindow.GlfwWindow, out tmpWidth, out tmpHeight );
+        DotGLFW.Glfw.GetWindowSize( GLWindow.GlfwWindow, out tmpWidth, out tmpHeight );
 
         LogicalWidth  = tmpWidth;
         LogicalHeight = tmpHeight;
@@ -215,20 +220,20 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         GLWindow?.Input.ResetPollingStates();
 
-        var monitor = Glfw.GetPrimaryMonitor();
+        var monitor = DotGLFW.Glfw.GetPrimaryMonitor();
 
         if ( !IsFullscreen )
         {
             if ( ( width != LogicalWidth ) || ( height != LogicalHeight ) )
             {
                 //Center window
-                Glfw.GetMonitorWorkarea( monitor, out var x, out var y, out var w, out var h );
-                Glfw.SetWindowPos( GLWindow!.GlfwWindow, x, y );
+                DotGLFW.Glfw.GetMonitorWorkarea( monitor, out var x, out var y, out var w, out var h );
+                DotGLFW.Glfw.SetWindowPos( GLWindow!.GlfwWindow, x, y );
 
                 GLWindow?.SetPosition( x + ( ( w - width ) / 2 ), y + ( ( h - height ) / 2 ) );
             }
 
-            Glfw.SetWindowSize( GLWindow!.GlfwWindow, width, height );
+            DotGLFW.Glfw.SetWindowSize( GLWindow!.GlfwWindow, width, height );
         }
         else
         {
@@ -239,9 +244,9 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
             if ( ( width != _windowWidthBeforeFullscreen ) || ( height != _windowHeightBeforeFullscreen ) )
             {
-                Glfw.GetMonitorWorkarea( monitor, out var x, out var y, out var w, out var h );
+                DotGLFW.Glfw.GetMonitorWorkarea( monitor, out var x, out var y, out var w, out var h );
 
-                Glfw.SetWindowMonitor( GLWindow!.GlfwWindow,
+                DotGLFW.Glfw.SetWindowMonitor( GLWindow!.GlfwWindow,
                                        monitor,
                                        x + ( ( w - width ) / 2 ),
                                        y + ( ( h - height ) / 2 ),
@@ -251,7 +256,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
             }
             else
             {
-                Glfw.SetWindowMonitor( GLWindow!.GlfwWindow,
+                DotGLFW.Glfw.SetWindowMonitor( GLWindow!.GlfwWindow,
                                        monitor,
                                        _windowPosXBeforeFullscreen,
                                        _windowPosYBeforeFullscreen,
@@ -273,7 +278,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
         GLWindow.AppConfig.WindowDecorated = !undecorated;
 
-        Glfw.SetWindowAttrib( GLWindow.GlfwWindow, WindowAttrib.Decorated, undecorated );
+        DotGLFW.Glfw.SetWindowAttrib( GLWindow.GlfwWindow, DotGLFW.WindowAttrib.Decorated, undecorated );
     }
 
     /// <inheritdoc />
@@ -283,7 +288,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
         GLWindow.AppConfig.WindowResizable = resizable;
 
-        Glfw.SetWindowAttrib( GLWindow.GlfwWindow, WindowAttrib.Resizable, resizable );
+        DotGLFW.Glfw.SetWindowAttrib( GLWindow.GlfwWindow, DotGLFW.WindowAttrib.Resizable, resizable );
     }
 
     /// <inheritdoc />
@@ -293,7 +298,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
         GLWindow.AppConfig.VSyncEnabled = vsync;
 
-        Glfw.SwapInterval( vsync ? 1 : 0 );
+        DotGLFW.Glfw.SwapInterval( vsync ? 1 : 0 );
     }
 
     /// <inheritdoc />
@@ -307,7 +312,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override bool SupportsExtension( string extension )
     {
-        return Glfw.ExtensionSupported( extension );
+        return DotGLFW.Glfw.ExtensionSupported( extension );
     }
 
     /// <inheritdoc />
@@ -336,7 +341,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         GdxRuntimeException.ThrowIfNull( GLWindow );
 
-        Glfw.SetCursor( GLWindow.GlfwWindow, ( ( DesktopGLCursor )cursor ).GlfwCursor );
+        DotGLFW.Glfw.SetCursor( GLWindow.GlfwWindow, ( ( DesktopGLCursor )cursor ).GlfwCursor );
     }
 
     /// <summary>
@@ -355,11 +360,11 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         Guard.ThrowIfNull( GLWindow );
 
-        return GLWindow.AppConfig.GetDisplayModes( Glfw.GetPrimaryMonitor() );
+        return GLWindow.AppConfig.GetDisplayModes( DotGLFW.Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
-    public override IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
+    public override IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {
         Guard.ThrowIfNull( GLWindow );
 
@@ -371,11 +376,11 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         Guard.ThrowIfNull( GLWindow );
 
-        return GLWindow.AppConfig.GetDisplayMode( Glfw.GetPrimaryMonitor() );
+        return GLWindow.AppConfig.GetDisplayMode( DotGLFW.Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
-    public override IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
+    public override IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
         Guard.ThrowIfNull( GLWindow );
 
@@ -405,12 +410,12 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
                  && ( currentMode.RefreshRate == newMode.RefreshRate ) )
             {
                 // same monitor and refresh rate
-                Glfw.SetWindowSize( GLWindow.GlfwWindow, newMode.Width, newMode.Height );
+                DotGLFW.Glfw.SetWindowSize( GLWindow.GlfwWindow, newMode.Width, newMode.Height );
             }
             else
             {
                 // different monitor and/or refresh rate
-                Glfw.SetWindowMonitor( GLWindow.GlfwWindow,
+                DotGLFW.Glfw.SetWindowMonitor( GLWindow.GlfwWindow,
                                        newMode.MonitorHandle,
                                        0,
                                        0,
@@ -426,7 +431,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
             BackupCurrentWindow();
 
             // switch from windowed to fullscreen
-            Glfw.SetWindowMonitor( GLWindow.GlfwWindow,
+            DotGLFW.Glfw.SetWindowMonitor( GLWindow.GlfwWindow,
                                    newMode.MonitorHandle,
                                    0,
                                    0,
@@ -480,7 +485,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override (float X, float Y) GetPpcXY()
     {
-        Glfw.GetMonitorPhysicalSize( Glfw.GetPrimaryMonitor(), out var sizeX, out var sizeY );
+        DotGLFW.Glfw.GetMonitorPhysicalSize( DotGLFW.Glfw.GetPrimaryMonitor(), out var sizeX, out var sizeY );
 
         return ( ( GetDisplayMode().Width / ( float )sizeX ) * 10,
             ( GetDisplayMode().Height / ( float )sizeY ) * 10 );
@@ -489,7 +494,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     // ========================================================================
     // ========================================================================
 
-    public override void RenderWindow( GLFW.Window? windowHandle, int width, int height )
+    public override void RenderWindow( DotGLFW.Window? windowHandle, int width, int height )
     {
         UpdateFramebufferInfo();
 
@@ -506,7 +511,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
         GLWindow.ApplicationListener?.Update();
         GLWindow.ApplicationListener?.Render();
 
-        Glfw.SwapBuffers( windowHandle );
+        DotGLFW.Glfw.SwapBuffers( windowHandle );
     }
 
     /// <summary>

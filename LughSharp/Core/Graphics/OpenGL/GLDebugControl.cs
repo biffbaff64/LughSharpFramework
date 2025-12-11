@@ -36,7 +36,7 @@ public class GLDebugControl
     /// </summary>
     public static unsafe void EnableGLDebugOutput()
     {
-        Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLDebugContext, true );
 
         GL.Enable( ( int )EnableCap.DebugOutput );
         GL.Enable( ( int )EnableCap.DebugOutputSynchronous );

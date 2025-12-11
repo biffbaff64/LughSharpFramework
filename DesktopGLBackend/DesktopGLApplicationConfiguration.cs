@@ -25,7 +25,6 @@
 using DesktopGLBackend.Graphics;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Main;
-using LughSharp.Core.Graphics;
 
 namespace DesktopGLBackend;
 
@@ -70,9 +69,9 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     }
 
     /// <inheritdoc />
-    public override IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
+    public override IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
-        var videoMode = Glfw.GetVideoMode( monitor );
+        var videoMode = DotGLFW.Glfw.GetVideoMode( monitor );
 
         return new DesktopGLGraphics.DesktopGLDisplayMode( monitor,
                                                            videoMode.Width,
@@ -84,7 +83,7 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
-        var videoModes = Glfw.GetVideoModes( Glfw.GetPrimaryMonitor() );
+        var videoModes = DotGLFW.Glfw.GetVideoModes( DotGLFW.Glfw.GetPrimaryMonitor() );
 
         var result = new IGraphicsDevice.DisplayMode[ videoModes.Length ];
 
@@ -92,7 +91,7 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
         {
             var videoMode = videoModes[ i ];
 
-            result[ i ] = new DesktopGLGraphics.DesktopGLDisplayMode( Glfw.GetPrimaryMonitor(),
+            result[ i ] = new DesktopGLGraphics.DesktopGLDisplayMode( DotGLFW.Glfw.GetPrimaryMonitor(),
                                                                       videoMode.Width,
                                                                       videoMode.Height,
                                                                       videoMode.RefreshRate,
@@ -103,9 +102,9 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     }
 
     /// <inheritdoc />
-    public override IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
+    public override IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {
-        var videoModes = Glfw.GetVideoModes( monitor );
+        var videoModes = DotGLFW.Glfw.GetVideoModes( monitor );
 
         var vmode = new IGraphicsDevice.DisplayMode[ videoModes.Length ];
 

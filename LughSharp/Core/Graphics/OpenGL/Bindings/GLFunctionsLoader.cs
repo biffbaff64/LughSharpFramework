@@ -56,7 +56,7 @@ public partial class GLBindings
 
         if ( functionPtr == IntPtr.Zero )
         {
-            functionPtr = Glfw.GetProcAddress( functionName );
+            functionPtr = DotGLFW.Glfw.GetProcAddress( functionName );
         }
 
         if ( functionPtr != IntPtr.Zero )
@@ -87,7 +87,7 @@ public partial class GLBindings
 
         if ( functionPtr == IntPtr.Zero )
         {
-            functionPtr = Glfw.GetProcAddress( functionName );
+            functionPtr = DotGLFW.Glfw.GetProcAddress( functionName );
         }
 
         if ( functionPtr != IntPtr.Zero )

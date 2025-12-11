@@ -311,13 +311,13 @@ public class ApplicationConfiguration
     /// </summary>
     public virtual IGraphicsDevice.DisplayMode GetDisplayMode()
     {
-        return GetDisplayMode( Glfw.GetPrimaryMonitor() );
+        return GetDisplayMode( DotGLFW.Glfw.GetPrimaryMonitor() );
     }
 
     /// <summary>
     /// Gets the currterntly active display mode for the given monitor.
     /// </summary>
-    public virtual IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
+    public virtual IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
         throw new NotImplementedException();
     }
@@ -333,7 +333,7 @@ public class ApplicationConfiguration
     /// <summary>
     /// Returns a list of the available <see cref="IGraphicsDevice.DisplayMode"/>s of the given monitor.
     /// </summary>
-    public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
+    public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {
         throw new NotImplementedException();
     }

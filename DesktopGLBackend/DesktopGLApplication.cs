@@ -65,10 +65,10 @@ public class DesktopGLApplication : IApplication, IDisposable
     public List< Action > Runnables         { get; set; } = [ ];
     public List< Action > ExecutedRunnables { get; set; } = [ ];
 
-    public IClipboard?      Clipboard     { get; set; }
-    public AppVersion?      GLVersion     { get; set; }
-    public OpenGLProfile    OglProfile    { get; set; }
-    public DesktopGLWindow? CurrentWindow { get; set; }
+    public IClipboard?           Clipboard     { get; set; }
+    public AppVersion?           GLVersion     { get; set; }
+    public DotGLFW.OpenGLProfile OglProfile    { get; set; }
+    public DesktopGLWindow?      CurrentWindow { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -77,16 +77,16 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     // ========================================================================
 
-    private static   GlfwErrorCallback? _errorCallback;
-    private readonly Sync?              _sync;
-    private          bool               _glfwInitialised;
-    private          IPreferences       _prefs;
-    private          bool               _running  = true;
-    private          bool               _disposed;
-    
-    private readonly object _runnablesLock          = new();    // A lock object for synchronized blocks
+    private static   DotGLFW.GlfwErrorCallback? _errorCallback;
+    private readonly Sync?                      _sync;
+    private          bool                       _glfwInitialised;
+    private          IPreferences               _prefs;
+    private          bool                       _running = true;
+    private          bool                       _disposed;
+
+    private readonly object _runnablesLock          = new(); // A lock object for synchronized blocks
     private readonly object _lifecycleListenersLock = new();
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -288,7 +288,7 @@ public class DesktopGLApplication : IApplication, IDisposable
             Engine.Api.Audio?.Update();
 
             // Glfw.SwapBuffers is called in window.Update().
-            Glfw.PollEvents();
+            DotGLFW.Glfw.PollEvents();
         }
 
         Logger.Debug( "Ending framework loop" );
@@ -310,22 +310,22 @@ public class DesktopGLApplication : IApplication, IDisposable
                 {
                     Logger.Error( $"ErrorCode: {error}, {description}" );
 
-                    if ( error == ErrorCode.InvalidEnum )
+                    if ( error == DotGLFW.ErrorCode.InvalidEnum )
                     {
                         Logger.Error( "Invalid Error!!" );
                     }
                 };
 
-                Glfw.SetErrorCallback( _errorCallback );
-                Glfw.InitHint( InitHint.JoystickHatButtons, false );
+                DotGLFW.Glfw.SetErrorCallback( _errorCallback );
+                DotGLFW.Glfw.InitHint( DotGLFW.InitHint.JoystickHatButtons, false );
 
-                if ( !Glfw.Init() )
+                if ( !DotGLFW.Glfw.Init() )
                 {
-                    Glfw.GetError( out var error );
+                    DotGLFW.Glfw.GetError( out var error );
 
                     Logger.Error( $"Failed to initialise Glfw: {error}" );
 
-                    Glfw.Terminate();
+                    DotGLFW.Glfw.Terminate();
 
                     Environment.Exit( 1 );
                 }
@@ -340,63 +340,55 @@ public class DesktopGLApplication : IApplication, IDisposable
     }
 
     /// <summary>
-    /// Initialise the main Window <see cref="WindowHint"/>s.
+    /// Initialise the main Window <see cref="DotGLFW.WindowHint"/>s.
     /// </summary>
     /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration"/> to use. </param>
     private void SetWindowHints( DesktopGLApplicationConfiguration config )
     {
         Guard.Against.Null( config );
 
-        Glfw.DefaultWindowHints();
+        DotGLFW.Glfw.DefaultWindowHints();
 
-        Glfw.WindowHint( WindowHint.Visible, config.InitialVisibility );
-        Glfw.WindowHint( WindowHint.Resizable, config.WindowResizable );
-        Glfw.WindowHint( WindowHint.Maximized, config.WindowMaximized );
-        Glfw.WindowHint( WindowHint.AutoIconify, config.AutoIconify );
-        Glfw.WindowHint( WindowHint.Decorated, config.WindowDecorated );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Visible, config.InitialVisibility );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Resizable, config.WindowResizable );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Maximized, config.WindowMaximized );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.AutoIconify, config.AutoIconify );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Decorated, config.WindowDecorated );
 
-        Glfw.WindowHint( WindowHint.RedBits, config.Red );
-        Glfw.WindowHint( WindowHint.GreenBits, config.Green );
-        Glfw.WindowHint( WindowHint.BlueBits, config.Blue );
-        Glfw.WindowHint( WindowHint.AlphaBits, config.Alpha );
-        Glfw.WindowHint( WindowHint.StencilBits, config.Stencil );
-        Glfw.WindowHint( WindowHint.DepthBits, config.Depth );
-        Glfw.WindowHint( WindowHint.Samples, config.Samples );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.RedBits, config.Red );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.GreenBits, config.Green );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.BlueBits, config.Blue );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.AlphaBits, config.Alpha );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.StencilBits, config.Stencil );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.DepthBits, config.Depth );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Samples, config.Samples );
 
         OglProfile = GLData.DEFAULT_OPENGL_PROFILE;
 
-        if ( config.GLContextMajorVersion is > 0 )
-        {
-            Glfw.WindowHint( WindowHint.ContextVersionMajor, ( int )config.GLContextMajorVersion );
-        }
-        else
-        {
-            Glfw.WindowHint( WindowHint.ContextVersionMajor, GLData.DEFAULT_GL_MAJOR );
-        }
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ContextVersionMajor,
+                                 config.GLContextMajorVersion > 0
+                                     ? config.GLContextMajorVersion
+                                     : GLData.DEFAULT_GL_MAJOR );
 
-        if ( config.GLContextMinorVersion is > 0 )
-        {
-            Glfw.WindowHint( WindowHint.ContextVersionMinor, ( int )config.GLContextMinorVersion );
-        }
-        else
-        {
-            Glfw.WindowHint( WindowHint.ContextVersionMinor, GLData.DEFAULT_GL_MINOR );
-        }
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ContextVersionMinor,
+                                 config.GLContextMinorVersion > 0
+                                     ? config.GLContextMinorVersion
+                                     : GLData.DEFAULT_GL_MINOR );
 
-        Glfw.WindowHint( WindowHint.OpenGLForwardCompat, GLData.DEFAULT_OPENGL_FORWARDCOMPAT );
-        Glfw.WindowHint( WindowHint.OpenGLProfile, OglProfile );
-        Glfw.WindowHint( WindowHint.ClientAPI, GLData.DEFAULT_CLIENT_API );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLForwardCompat, GLData.DEFAULT_OPENGL_FORWARDCOMPAT );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLProfile, OglProfile );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ClientAPI, GLData.DEFAULT_CLIENT_API );
 
-        Glfw.WindowHint( WindowHint.DoubleBuffer, true );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.DoubleBuffer, true );
 
         if ( config.TransparentFramebuffer )
         {
-            Glfw.WindowHint( WindowHint.TransparentFramebuffer, true );
+            DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.TransparentFramebuffer, true );
         }
 
         if ( config.Debug )
         {
-            Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
+            DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLDebugContext, true );
         }
     }
 
@@ -519,7 +511,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         Engine.Api.Audio.Dispose();
         _errorCallback = null;
 
-        Glfw.Terminate();
+        DotGLFW.Glfw.Terminate();
     }
 
     // ========================================================================
@@ -653,7 +645,7 @@ public class DesktopGLApplication : IApplication, IDisposable
                                   config.InitialBackgroundColor.A );
 
             Engine.GL.Clear( IGL.GL_COLOR_BUFFER_BIT );
-            Glfw.SwapBuffers( windowHandle );
+            DotGLFW.Glfw.SwapBuffers( windowHandle );
         }
 
         // The call above to CreateGlfwWindow switches the OpenGL context to the
@@ -670,31 +662,31 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// <param name="sharedContextWindow"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    private GLFW.Window CreateGlfwWindow( DesktopGLApplicationConfiguration config, long sharedContextWindow )
+    private DotGLFW.Window CreateGlfwWindow( DesktopGLApplicationConfiguration config, long sharedContextWindow )
     {
         SetWindowHints( config );
 
-        GLFW.Window? windowHandle;
+        DotGLFW.Window? windowHandle;
 
         if ( config.FullscreenMode != null )
         {
             // Create a fullscreen window
-            Glfw.WindowHint( WindowHint.RefreshRate, config.FullscreenMode.RefreshRate );
+            DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.RefreshRate, config.FullscreenMode.RefreshRate );
 
-            windowHandle = Glfw.CreateWindow( config.FullscreenMode.Width,
+            windowHandle = DotGLFW.Glfw.CreateWindow( config.FullscreenMode.Width,
                                               config.FullscreenMode.Height,
                                               config.Title ?? "",
                                               config.FullscreenMode.MonitorHandle,
-                                              GLFW.Window.NULL );
+                                              DotGLFW.Window.NULL );
         }
         else
         {
             // Create a 'windowed' window
-            windowHandle = Glfw.CreateWindow( config.WindowWidth,
+            windowHandle = DotGLFW.Glfw.CreateWindow( config.WindowWidth,
                                               config.WindowHeight,
                                               config.Title ?? "",
-                                              GLFW.Monitor.NULL,
-                                              GLFW.Window.NULL );
+                                              DotGLFW.Monitor.NULL,
+                                              DotGLFW.Window.NULL );
         }
 
         if ( windowHandle.Equals( null ) )
@@ -725,27 +717,27 @@ public class DesktopGLApplication : IApplication, IDisposable
                     windowHeight = Math.Min( windowHeight, config.WindowMaxHeight );
                 }
 
-                var monitorHandle = Glfw.GetPrimaryMonitor();
+                var monitorHandle = DotGLFW.Glfw.GetPrimaryMonitor();
 
                 if ( config is { WindowMaximized: true, MaximizedMonitor: not null } )
                 {
                     monitorHandle = config.MaximizedMonitor.MonitorHandle;
                 }
 
-                Glfw.GetMonitorWorkarea( monitorHandle, out var areaX, out var areaY, out var areaW, out var areaH );
+                DotGLFW.Glfw.GetMonitorWorkarea( monitorHandle, out var areaX, out var areaY, out var areaW, out var areaH );
 
-                Glfw.SetWindowPos( windowHandle,
+                DotGLFW.Glfw.SetWindowPos( windowHandle,
                                    ( areaX + ( areaW / 2 ) ) - ( windowWidth / 2 ),
                                    ( areaY + ( areaH / 2 ) ) - ( windowHeight / 2 ) );
             }
             else
             {
-                Glfw.SetWindowPos( windowHandle, config.WindowX, config.WindowY );
+                DotGLFW.Glfw.SetWindowPos( windowHandle, config.WindowX, config.WindowY );
             }
 
             if ( config.WindowMaximized )
             {
-                Glfw.MaximizeWindow( windowHandle );
+                DotGLFW.Glfw.MaximizeWindow( windowHandle );
             }
         }
 
@@ -754,8 +746,8 @@ public class DesktopGLApplication : IApplication, IDisposable
             DesktopGLWindow.SetIcon( windowHandle, config.WindowIconPaths, config.WindowIconFileType );
         }
 
-        Glfw.MakeContextCurrent( windowHandle );
-        Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
+        DotGLFW.Glfw.MakeContextCurrent( windowHandle );
+        DotGLFW.Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
         GLUtils.CreateCapabilities();
 
         GLVersion = new AppVersion( Platform.ApplicationType.WindowsGL, OglProfile );

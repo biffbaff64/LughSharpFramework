@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using DotGLFW;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils;
 
@@ -33,17 +34,17 @@ public partial class OpenGL
     [PublicAPI]
     public class Capabilities
     {
-        public static bool IsDebugContext      { get; set; } = false;
-        public static bool IsGLES              { get; set; } = false;
-        public static bool IsEmulated          { get; set; } = false;
-        public static bool IsCoreProfile       { get; set; } = false;
-        public static bool IsForwardCompatible { get; set; } = false;
+        public static bool IsDebugContext      { get; set; }
+        public static bool IsGLES              { get; set; }
+        public static bool IsEmulated          { get; set; }
+        public static bool IsCoreProfile       { get; set; }
+        public static bool IsForwardCompatible { get; set; }
 
         // --------------------------------------
         
-        public static int MajorVersion    { get; set; } = 0;
-        public static int MinorVersion    { get; set; } = 0;
-        public static int RevisionVersion { get; set; } = 0;
+        public static int MajorVersion    { get; set; }
+        public static int MinorVersion    { get; set; }
+        public static int RevisionVersion { get; set; }
 
         // --------------------------------------
         

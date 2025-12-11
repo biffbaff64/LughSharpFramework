@@ -27,16 +27,16 @@ namespace DesktopGLBackend.Graphics;
 public partial class DesktopGLGraphics
 {
     /// <summary>
-    /// Wrapper for a <see cref="GLFW.Monitor"/> which adds virtual X & Y, plus a name.
+    /// Wrapper for a <see cref="DotGLFW.Monitor"/> which adds virtual X & Y, plus a name.
     /// Virtual positions are for multiple monitors.
     /// </summary>
     [PublicAPI]
-    public class DesktopGLMonitor( GLFW.Monitor monitor, int virtualX, int virtualY, string name )
+    public class DesktopGLMonitor( DotGLFW.Monitor monitor, int virtualX, int virtualY, string name )
     {
         /// <summary>
-        /// The <see cref="GLFW.Monitor"/>.
+        /// The <see cref="DotGLFW.Monitor"/>.
         /// </summary>
-        public GLFW.Monitor MonitorHandle { get; private set; } = monitor;
+        public DotGLFW.Monitor MonitorHandle { get; private set; } = monitor;
 
         public int    VirtualX { get; set; } = virtualX;
         public int    VirtualY { get; set; } = virtualY;

@@ -34,7 +34,7 @@ public partial class DesktopGLWindow
     /// A boolean indicating the new focus state; true if the window gained focus,
     /// otherwise false.
     /// </param>
-    public void GdxFocusCallback( GLFW.Window windowHandle, bool focused )
+    public void GdxFocusCallback( DotGLFW.Window windowHandle, bool focused )
     {
         if ( WindowListener != null )
         {
@@ -59,7 +59,7 @@ public partial class DesktopGLWindow
     /// A boolean indicating the new iconification state; true if the window was minimized,
     /// otherwise false.
     /// </param>
-    public void GdxIconifyCallback( GLFW.Window windowHandle, bool iconified )
+    public void GdxIconifyCallback( DotGLFW.Window windowHandle, bool iconified )
     {
         WindowListener?.Iconified( iconified );
 
@@ -83,7 +83,7 @@ public partial class DesktopGLWindow
     /// A boolean indicating the new maximization state; true if the window is maximized,
     /// otherwise false.
     /// </param>
-    public void GdxMaximizeCallback( GLFW.Window windowHandle, bool maximized )
+    public void GdxMaximizeCallback( DotGLFW.Window windowHandle, bool maximized )
     {
         WindowListener?.Maximized( maximized );
     }
@@ -94,13 +94,13 @@ public partial class DesktopGLWindow
     /// <param name="windowHandle">
     /// The handle to the GLFW window for which the close request is received.
     /// </param>
-    public void GdxWindowCloseCallback( GLFW.Window windowHandle )
+    public void GdxWindowCloseCallback( DotGLFW.Window windowHandle )
     {
         if ( WindowListener != null )
         {
             if ( !WindowListener.CloseRequested() )
             {
-                Glfw.SetWindowShouldClose( windowHandle, false );
+                DotGLFW.Glfw.SetWindowShouldClose( windowHandle, false );
             }
         }
     }
@@ -110,7 +110,7 @@ public partial class DesktopGLWindow
     /// </summary>
     /// <param name="window">The handle to the GLFW window on which files were dropped.</param>
     /// <param name="paths">An array of file paths representing the dropped files.</param>
-    public void GdxDropCallback( GLFW.Window window, string[] paths )
+    public void GdxDropCallback( DotGLFW.Window window, string[] paths )
     {
         var files = new string[ paths.Length ];
 
@@ -124,7 +124,7 @@ public partial class DesktopGLWindow
     /// typically used to redraw or re-render the window's content.
     /// </summary>
     /// <param name="window">The handle to the GLFW window that requires a refresh.</param>
-    public void GdxRefreshCallback( GLFW.Window window )
+    public void GdxRefreshCallback( DotGLFW.Window window )
     {
         WindowListener?.RefreshRequested();
     }
