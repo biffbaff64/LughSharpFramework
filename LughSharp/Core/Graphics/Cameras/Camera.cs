@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using Quaternion = LughUtils.source.Maths.Quaternion;
 
-namespace LughSharp.Core.Graphics.Cameras;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Cameras;
 
 /// <summary>
 /// Base class for <see cref="OrthographicCamera"/> and <see cref="PerspectiveCamera"/>.

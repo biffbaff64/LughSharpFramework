@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D;
 
 public class ModelCache
 {

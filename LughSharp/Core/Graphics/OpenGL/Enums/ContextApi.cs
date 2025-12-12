@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.OpenGL.Enums;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 /// <summary>
 /// The context API used to create the window context.

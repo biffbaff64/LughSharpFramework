@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.G3D.Models.Data;
 using LughSharp.Core.Graphics.G3D.Utils;
 
-namespace LughSharp.Core.Graphics.G3D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D;
 
 public class Model
 {

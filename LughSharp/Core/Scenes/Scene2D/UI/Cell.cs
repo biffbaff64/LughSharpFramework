@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Files;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A Cell for use with <see cref="Table"/>s.

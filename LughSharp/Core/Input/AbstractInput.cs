@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Input;
+using JetBrains.Annotations; namespace LughSharp.Core.Input;
 
 /// <summary>
 /// Base class for Input classes.

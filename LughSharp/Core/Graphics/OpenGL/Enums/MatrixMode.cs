@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.OpenGL.Enums;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
 public enum MatrixMode

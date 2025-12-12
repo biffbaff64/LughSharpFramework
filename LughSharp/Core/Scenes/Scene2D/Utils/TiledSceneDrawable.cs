@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Scenes.Scene2D.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// Draws a <see cref="TextureRegion"/> repeatedly to fill the area,

@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 
-namespace LughSharp.Core.Graphics.FrameBuffers;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.FrameBuffers;
 
 /// <summary>
 /// Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper

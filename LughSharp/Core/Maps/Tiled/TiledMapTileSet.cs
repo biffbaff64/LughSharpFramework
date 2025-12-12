@@ -24,7 +24,7 @@
 
 using System.Collections;
 
-namespace LughSharp.Core.Maps.Tiled;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled;
 
 /// <summary>
 /// A set of <see cref="ITiledMapTile"/> instances used to compose a TiledMapLayer

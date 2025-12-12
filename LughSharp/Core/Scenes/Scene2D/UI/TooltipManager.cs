@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// Keeps track of an application's tooltips.

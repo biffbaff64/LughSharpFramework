@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Scenes.Scene2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D;
 
 [PublicAPI]
 public class InputEvent : Event

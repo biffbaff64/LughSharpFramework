@@ -24,7 +24,7 @@
 
 using System.Collections;
 
-namespace LughSharp.Core.Maps;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps;
 
 /// <summary>
 /// A Collection of <see cref="MapObject"/> instances.

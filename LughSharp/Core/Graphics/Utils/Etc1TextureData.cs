@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 
-namespace LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
 
 [PublicAPI]
 public class Etc1TextureData : ITextureData

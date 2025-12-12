@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using Exception = System.Exception;
 
-namespace LughSharp.Core.Graphics.Atlases;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Atlases;
 
 [PublicAPI]
 public class TextureAtlasData

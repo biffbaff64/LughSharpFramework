@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
-namespace LughSharp.Core.Graphics.OpenGL.Bindings;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial interface IGLBindings

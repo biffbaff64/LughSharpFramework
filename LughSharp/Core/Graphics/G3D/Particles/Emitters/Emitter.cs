@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Particles.Emitters;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Particles.Emitters;
 
 public class Emitter
 {

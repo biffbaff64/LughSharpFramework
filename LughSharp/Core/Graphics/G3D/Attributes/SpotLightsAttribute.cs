@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.G3D.Env;
 
-namespace LughSharp.Core.Graphics.G3D.Attributes;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Attributes;
 
 [PublicAPI]
 public class SpotLightsAttribute : Attribute

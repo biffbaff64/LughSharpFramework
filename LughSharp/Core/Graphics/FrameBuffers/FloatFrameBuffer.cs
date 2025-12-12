@@ -27,7 +27,7 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using Platform = LughSharp.Core.Main.Platform;
 
-namespace LughSharp.Core.Graphics.FrameBuffers;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.FrameBuffers;
 
 /// <summary>
 /// This is a <see cref="FrameBuffer"/> variant backed by a float texture.

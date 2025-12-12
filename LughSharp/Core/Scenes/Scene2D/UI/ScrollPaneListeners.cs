@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 public partial class ScrollPane
 {

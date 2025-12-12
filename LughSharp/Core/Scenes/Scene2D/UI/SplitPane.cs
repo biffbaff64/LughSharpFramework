@@ -27,7 +27,7 @@ using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public class SplitPane : WidgetGroup

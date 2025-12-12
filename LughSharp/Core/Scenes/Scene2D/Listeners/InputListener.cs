@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Scenes.Scene2D.Listeners;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
 /// <summary>
 /// EventListener for low-level input events. Unpacks <see cref="InputEvent"/>s

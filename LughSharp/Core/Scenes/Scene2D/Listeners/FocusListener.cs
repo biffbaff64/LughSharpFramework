@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Scenes.Scene2D.Listeners;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
 /// <summary>
 /// Fired when an actor gains or loses keyboard or scroll focus. Can be

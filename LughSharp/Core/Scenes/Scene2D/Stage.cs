@@ -38,7 +38,7 @@ using Color = LughSharp.Core.Graphics.Color;
 using Platform = LughSharp.Core.Main.Platform;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-namespace LughSharp.Core.Scenes.Scene2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D;
 
 /// <summary>
 /// A 2D scene graph containing hierarchies of actors. Stage handles the viewport and

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// Immediate mode rendering class for GLES 2.0. The renderer will allow you to

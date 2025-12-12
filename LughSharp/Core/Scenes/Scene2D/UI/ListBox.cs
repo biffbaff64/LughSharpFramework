@@ -32,7 +32,7 @@ using LughUtils.source.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A list box displays textual items and highlights the currently selected item.

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
 
 [PublicAPI]
 public class VertexAttributes

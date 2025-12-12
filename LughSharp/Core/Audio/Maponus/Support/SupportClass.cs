@@ -24,7 +24,7 @@
 
 using Exception = System.Exception;
 
-namespace LughSharp.Core.Audio.Maponus.Support;
+using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Support;
 
 [PublicAPI]
 public class SupportClass

@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Assets.Loaders;
 
-namespace LughSharp.Core.Graphics.G3D.Models.Data;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Models.Data;
 
 /// <summary>
 /// Returned by a <see cref="ModelLoader"/>, contains meshes, materials, nodes and animations.

@@ -24,7 +24,7 @@
 
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-namespace LughSharp.Core.Graphics.G2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 
 [PublicAPI]
 public class PolygonSprite

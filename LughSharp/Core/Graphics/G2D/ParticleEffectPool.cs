@@ -24,7 +24,7 @@
 
 using LughUtils.source.Pooling;
 
-namespace LughSharp.Core.Graphics.G2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 
 [PublicAPI]
 public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >

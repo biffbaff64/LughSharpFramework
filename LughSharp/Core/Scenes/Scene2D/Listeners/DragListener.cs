@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Input;
 
-namespace LughSharp.Core.Scenes.Scene2D.Listeners;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
 /// <summary>
 /// Detects mouse or finger touch drags on an actor. A touch must go down over the actor

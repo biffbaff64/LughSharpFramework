@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Maps.Tiled;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled;
 
 /// <summary>
 /// Represents a tiled map, adds the concept of tiles and tilesets.

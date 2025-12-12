@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A button with a child <see cref="UI.Image"/> to display an image. This is useful when

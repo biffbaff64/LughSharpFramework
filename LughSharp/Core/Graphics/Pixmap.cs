@@ -27,6 +27,9 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using Exception = System.Exception;
 
+using JetBrains.Annotations;
+using LughSharp.Core.Graphics.ImageDecoders;
+
 namespace LughSharp.Core.Graphics;
 
 /// <summary>
@@ -89,7 +92,7 @@ public partial class Pixmap : IDisposable
     /// </summary>
     public Pixmap( byte[] encodedData, int offset, int length )
     {
-        ArgumentException.ThrowIfNullOrEmpty( nameof( encodedData ) );
+        Guard.Against.NullOrEmpty( nameof( encodedData ) );
 
         try
         {
@@ -196,17 +199,17 @@ public partial class Pixmap : IDisposable
         get
         {
             return Gdx2DPixmap.ColorFormat switch
-            {
-                LughFormat.ALPHA           => IGL.GL_UNSIGNED_BYTE,
-                LughFormat.LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-                LughFormat.RGB888          => IGL.GL_UNSIGNED_BYTE,
-                LughFormat.RGBA8888        => IGL.GL_UNSIGNED_BYTE,
-                LughFormat.RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
-                LughFormat.RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
-                LughFormat.INDEXED_COLOR   => IGL.GL_UNSIGNED_BYTE,
+                   {
+                       LughFormat.ALPHA           => IGL.GL_UNSIGNED_BYTE,
+                       LughFormat.LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
+                       LughFormat.RGB888          => IGL.GL_UNSIGNED_BYTE,
+                       LughFormat.RGBA8888        => IGL.GL_UNSIGNED_BYTE,
+                       LughFormat.RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
+                       LughFormat.RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+                       LughFormat.INDEXED_COLOR   => IGL.GL_UNSIGNED_BYTE,
 
-                var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap.ColorFormat}" ),
-            };
+                       var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap.ColorFormat}" ),
+                   };
         }
     }
 
@@ -567,8 +570,8 @@ public partial class Pixmap : IDisposable
     public void DebugPrint()
     {
         Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
-                      + $"( {Width} x {Height} ) : {Gdx2DPixmap.ColorFormat}: "
-                      + $"{PixelFormat.GetFormatString( Gdx2DPixmap.ColorFormat )}" );
+                    + $"( {Width} x {Height} ) : {Gdx2DPixmap.ColorFormat}: "
+                    + $"{PixelFormat.GetFormatString( Gdx2DPixmap.ColorFormat )}" );
         Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
         var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
@@ -649,27 +652,6 @@ public partial class Pixmap : IDisposable
     // ========================================================================
 
     #region PixmapEnums
-
-//    [PublicAPI]
-//    public enum Format : int
-//    {
-//        Alpha,
-//        Intensity,
-//        LuminanceAlpha,
-//        IndexedColor,
-//        RGB565,
-//        RGBA4444,
-//        RGB888,
-//        RGBA8888,
-//
-//        // ------------------
-//
-//        Default = RGBA8888,
-//        
-//        // ------------------
-//        
-//        Invalid = -1,
-//    }
 
     [PublicAPI]
     public enum ScaleType

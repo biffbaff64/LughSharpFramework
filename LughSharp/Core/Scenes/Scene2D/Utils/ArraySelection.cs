@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Input;
 
-namespace LughSharp.Core.Scenes.Scene2D.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// A selection that supports range selection by knowing about the

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Main;
+using JetBrains.Annotations; namespace LughSharp.Core.Main;
 
 /// <summary>
 /// Convenience implementation of <see cref="IApplicationListener"/>.

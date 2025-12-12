@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.G2D;
 
-namespace LughSharp.Core.Graphics.Text;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
 
 /// <summary>
 /// Caches glyph geometry for a BitmapFont, providing a fast way to render

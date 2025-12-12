@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics.G2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// A Batch is used to draw 2D rectangles that reference a texture (region). The class will

@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.Text;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
 
 /// <summary>
 /// Instances of this class represent particular subsets of the Unicode character set.

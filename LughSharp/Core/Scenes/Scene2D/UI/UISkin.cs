@@ -24,7 +24,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public class UISkin

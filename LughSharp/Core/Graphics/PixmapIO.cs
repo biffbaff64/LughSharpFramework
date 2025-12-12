@@ -24,7 +24,7 @@
 
 using ICSharpCode.SharpZipLib.Zip.Compression;
 
-namespace LughSharp.Core.Graphics;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// Write Pixmaps to various formats.

@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics.G2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// A PolygonSpriteBatch is used to Draw 2D polygons that reference a

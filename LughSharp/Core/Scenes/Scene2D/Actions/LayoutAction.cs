@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
-namespace LughSharp.Core.Scenes.Scene2D.Actions;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 public class LayoutAction : Action
 {

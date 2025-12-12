@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// This class will load each contained TextureData to the chosen

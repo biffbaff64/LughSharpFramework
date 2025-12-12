@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics;
 using Environment = System.Environment;
 
-namespace LughSharp.Core.Main;
+using JetBrains.Annotations; namespace LughSharp.Core.Main;
 
 /// <summary>
 /// Platform specific flags and methods.

@@ -34,7 +34,7 @@ using LughSharp.Core.Maps.Tiled.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Maps.Tiled.Loaders;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Loaders;
 
 [PublicAPI]
 public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )

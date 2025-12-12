@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Maps.Objects;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Objects;
 
 [PublicAPI]
 public class EllipseMapObject : MapObject

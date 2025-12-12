@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Scenes.Scene2D.Actions;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 public class RotateByAction : RelativeTemporalAction
 {

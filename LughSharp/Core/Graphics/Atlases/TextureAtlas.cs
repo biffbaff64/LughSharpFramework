@@ -25,7 +25,7 @@
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 
-namespace LughSharp.Core.Graphics.Atlases;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Atlases;
 
 [PublicAPI]
 public class TextureAtlas : IDisposable

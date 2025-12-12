@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// Factory class for creating instances of ITextureData based on file types.
@@ -78,10 +78,16 @@ public static class TextureDataFactory
                 break;
 
             // Other supported image file formats, PNG, BMP
-            case var _:
-                data = new FileTextureData( file, new Pixmap( file ), format, useMipMaps );
-
+            case ".bmp":
+            case ".png":
+                var pixmap = new Pixmap( file );
+                
+                data = new FileTextureData( file, pixmap, format, useMipMaps );
                 break;
+            
+            case var _:
+
+                throw new NotSupportedException( $"File extension '{file.Extension}' is not supported." );
         }
 
         return data;

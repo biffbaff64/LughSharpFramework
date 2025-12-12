@@ -25,7 +25,7 @@
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Scenes.Scene2D.Actions;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 [PublicAPI]
 public class Actions

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Audio.Maponus.Decoding;
 using Decoder = LughSharp.Core.Audio.Maponus.Decoding.Decoder;
 

@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.Cameras;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Cameras;
 
 [PublicAPI]
 public class CameraData

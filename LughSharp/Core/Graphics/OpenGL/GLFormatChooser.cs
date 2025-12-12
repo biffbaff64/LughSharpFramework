@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
-namespace LughSharp.Core.Graphics.OpenGL;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL;
 
 [PublicAPI]
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]

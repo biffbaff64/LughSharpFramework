@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Audio.Maponus.Support;
 
-namespace LughSharp.Core.Audio.Maponus.Decoding;
+using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 /// <summary>
 /// Implements a Huffman decoder.

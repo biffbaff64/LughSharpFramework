@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Utils;
 
-namespace LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// An IndexBufferObject wraps OpenGL's index buffer functionality to be used in conjunction

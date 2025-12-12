@@ -24,7 +24,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace LughSharp.Core.Graphics.Text;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
 
 [PublicAPI]
 public partial class RegexUtils

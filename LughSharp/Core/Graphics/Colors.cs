@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Text;
 
-namespace LughSharp.Core.Graphics;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// A general purpose class containing named colors that can be changed at will.

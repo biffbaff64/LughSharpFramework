@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using Platform = LughSharp.Core.Main.Platform;
 
-namespace LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
 
 [PublicAPI]
 public class MipMapGenerator

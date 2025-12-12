@@ -24,7 +24,7 @@
 
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Maps;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps;
 
 /// <summary>
 /// Generic Map entity with basic attributes like name, opacity, color

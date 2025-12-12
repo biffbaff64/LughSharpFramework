@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Particles.Influencers;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Particles.Influencers;
 
 public class ScaleInfluencer
 {

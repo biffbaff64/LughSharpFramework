@@ -25,7 +25,7 @@
 using Exception = System.Exception;
 using Platform = LughSharp.Core.Main.Platform;
 
-namespace LughSharp.Core.Network;
+using JetBrains.Annotations; namespace LughSharp.Core.Network;
 
 [PublicAPI]
 public interface INet

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Models;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Models;
 
 public class Attribute
 {

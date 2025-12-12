@@ -25,7 +25,7 @@
 using LughSharp.Core.Scenes.Scene2D.Actions;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// Displays a dialog, which is a window with a title, a content table, and a button table.

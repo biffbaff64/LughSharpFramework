@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.G3D.Attributes;
 using LughSharp.Core.Graphics.G3D.Env;
 
-namespace LughSharp.Core.Graphics.G3D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D;
 
 public class Environment : AttributesGroup
 {

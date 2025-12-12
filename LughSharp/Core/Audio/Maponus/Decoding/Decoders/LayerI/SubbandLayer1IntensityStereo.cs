@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerI;
+using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerI;
 
 /// <summary>
 /// public class for layer I subbands in joint stereo mode.

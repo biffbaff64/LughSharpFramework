@@ -30,7 +30,7 @@ using LughUtils.source.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-namespace LughSharp.Core.Scenes.Scene2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D;
 
 [PublicAPI]
 public class Actor : IActor, IComparable< Actor >

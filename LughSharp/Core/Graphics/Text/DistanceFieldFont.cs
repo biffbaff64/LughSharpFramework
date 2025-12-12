@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics.Text;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
 
 /// <summary>
 /// Renders bitmap fonts using distance field textures, see the

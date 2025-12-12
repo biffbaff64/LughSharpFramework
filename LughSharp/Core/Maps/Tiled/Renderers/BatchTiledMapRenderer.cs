@@ -28,7 +28,7 @@ using LughSharp.Core.Maps.Tiled.Tiles;
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-namespace LughSharp.Core.Maps.Tiled.Renderers;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Renderers;
 
 [PublicAPI]
 public class BatchTileMapRenderer : ITiledMapRenderer

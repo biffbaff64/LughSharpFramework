@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Attributes;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Attributes;
 
 public class CubemapAttribute
 {

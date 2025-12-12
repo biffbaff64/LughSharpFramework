@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Cameras;
 
-namespace LughSharp.Core.Maps;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps;
 
 [PublicAPI]
 public interface IMapRenderer

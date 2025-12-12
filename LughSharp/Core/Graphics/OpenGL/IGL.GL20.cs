@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.OpenGL;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL;
 
 /// <summary>
 /// OpenGL 2.0 functions.

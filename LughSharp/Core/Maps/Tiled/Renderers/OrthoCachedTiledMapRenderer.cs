@@ -28,7 +28,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-namespace LughSharp.Core.Maps.Tiled.Renderers;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Renderers;
 
 /// <summary>
 /// Renders ortho tiles by caching geometry on the GPU. How much is cached is controlled

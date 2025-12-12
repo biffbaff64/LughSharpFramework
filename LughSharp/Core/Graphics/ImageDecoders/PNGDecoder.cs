@@ -22,35 +22,38 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations;
+using LughSharp.Core.Graphics.Utils;
 
+namespace LughSharp.Core.Graphics.ImageDecoders;
+
+/// <summary>
+/// This class provides methods for decoding PNG images.
+/// </summary>
 [PublicAPI]
 public class PNGDecoder
 {
-    public const int SIGNATURE_LENGTH       = 8;
-    public const int IHDR_START             = 8;
-    public const int IHDR_SIZE              = 4;
-    public const int IHDR_CHUNK_TYPE_OFFSET = IHDR_START + IHDR_SIZE;
-    public const int IHDR_CHUNK_TYPE_SIZE   = 4;
-    public const int IHDR_DATA_OFFSET       = IHDR_CHUNK_TYPE_OFFSET + IHDR_CHUNK_TYPE_SIZE;
-    public const int IHDR_DATA_SIZE         = 13;
-    public const int IHDR_CRC_START         = IHDR_DATA_OFFSET + IHDR_DATA_SIZE;
-    public const int IHDR_CRC_SIZE          = 4;
-    public const int IDAT_START             = IHDR_CRC_START + IHDR_CRC_SIZE;
-    public const int IDAT_SIZE              = 4;
-    public const int IDAT_CHUNK_TYPE_OFFSET = IDAT_START + IDAT_SIZE;
-    public const int IDAT_DATA_OFFSET       = IDAT_CHUNK_TYPE_OFFSET + IDAT_SIZE;
+    public const int CHUNK_LENGTH_FIELD_SIZE = 4;
+    public const int SIGNATURE_LENGTH        = 8;
+    public const int IHDR_START              = 8;
+    public const int IHDR_CHUNK_TYPE_OFFSET  = IHDR_START + CHUNK_LENGTH_FIELD_SIZE;
+    public const int IHDR_CHUNK_TYPE_SIZE    = 4;
+    public const int IHDR_DATA_OFFSET        = IHDR_CHUNK_TYPE_OFFSET + IHDR_CHUNK_TYPE_SIZE;
+    public const int IHDR_DATA_SIZE          = 13;
+    public const int IHDR_CRC_START          = IHDR_DATA_OFFSET + IHDR_DATA_SIZE;
+    public const int IHDR_CRC_SIZE           = 4;
 
     // ------------------------------------------------------------------------
-
-    public const bool SHOW_OUTPUT = true;
-    public const bool NO_OUTPUT   = false;
 
     public static readonly byte[] StandardPNGSignature =
     [
         // DO NOT CHANGE THESE VALUES!
         0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
     ];
+
+    public static readonly byte[] IHDRSequence = "IHDR"u8.ToArray();
+    public static readonly byte[] IDATSequence = "IDAT"u8.ToArray();
+    public static readonly byte[] IENDSequence = "IEND"u8.ToArray();
 
     // ------------------------------------------------------------------------
     // Offsets into PNG data starting at IHDR_DATA_OFFSET
@@ -82,7 +85,7 @@ public class PNGDecoder
     public static PNGFormatStructs.PNGSignature PngSignature   { get; private set; }
     public static PNGFormatStructs.IHDRChunk    IHDRchunk      { get; private set; }
     public static PNGFormatStructs.IDATChunk    IDATchunk      { get; private set; }
-    public static long                          TotalIDATSize  { get; private set; } = 0;
+    public static long                          TotalIDATSize  { get; private set; }
     public static int                           PNGPixelFormat { get; private set; }
     public static int                           BytesPerPixel  { get; private set; }
 
@@ -98,9 +101,11 @@ public class PNGDecoder
 
     // ========================================================================
 
-    private PNGDecoder()
-    {
-    }
+    private static int _idatStartPosition;
+    private static int _idatChunkTypeOffset;
+    private static int _idatDataOffset;
+
+    // ========================================================================
 
     /// <summary>
     /// Analyzes the specified <see cref="Texture"/> image to extract metadata, including
@@ -207,6 +212,14 @@ public class PNGDecoder
         // IDAT
         // --------------------------------------
 
+        _idatStartPosition   = FindFirstIDATDataOffset( pngData );
+        _idatChunkTypeOffset = _idatStartPosition + 4;
+        _idatDataOffset      = _idatStartPosition + 8;
+
+        Logger.Debug( $"_idatStartPosition: {_idatStartPosition}" );
+        Logger.Debug( $"_idatChunkTypeOffset: {_idatChunkTypeOffset}" );
+        Logger.Debug( $"_idatDataOffset: {_idatDataOffset}" );
+
         IDATchunk     = ExtractIDAT( pngData );
         TotalIDATSize = CalculateTotalIDATSize( pngData );
 
@@ -219,11 +232,6 @@ public class PNGDecoder
 
         BytesPerPixel  = GetBytesPerPixel( colorType, bitDepth );
         PNGPixelFormat = PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
-
-//        Logger.Debug( $"colorType    : {colorType}" );
-//        Logger.Debug( $"bitDepth     : {bitDepth}" );
-//        Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
-//        Logger.Debug( $"PixelFormat  : {PNGPixelFormat}" );
 
         if ( PNGPixelFormat == LughFormat.INVALID )
         {
@@ -267,7 +275,7 @@ public class PNGDecoder
             }
 
             totalIDATSize += chunkSize;
-            idatIndex     += fullChunkSize - 1; //Correctly increment the index. -1 to account for the +1 in the while loop.
+            idatIndex += fullChunkSize - 1; //Correctly increment the index. -1 to account for the +1 in the while loop.
         }
 
         return totalIDATSize;
@@ -336,15 +344,75 @@ public class PNGDecoder
         for ( var i = startIndex; i <= ( bytes.Length - 8 ); i++ )
         {
             if ( ( bytes[ i + 5 ] == chunkTypeBytes[ 1 ] )
-                 && ( bytes[ i + 4 ] == chunkTypeBytes[ 0 ] )
-                 && ( bytes[ i + 6 ] == chunkTypeBytes[ 2 ] )
-                 && ( bytes[ i + 7 ] == chunkTypeBytes[ 3 ] ) )
+              && ( bytes[ i + 4 ] == chunkTypeBytes[ 0 ] )
+              && ( bytes[ i + 6 ] == chunkTypeBytes[ 2 ] )
+              && ( bytes[ i + 7 ] == chunkTypeBytes[ 3 ] ) )
             {
                 return i; // Return the index of the chunk size
             }
         }
 
         return -1;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
+    private static int FindFirstIDATDataOffset( byte[] data )
+    {
+        // 1. Initial Position: Skip the PNG Signature (8 bytes)
+        var currentOffset = IHDR_START;
+
+        // 2. Parse the mandatory IHDR Chunk (25 bytes)
+        //    We don't need the data, just skip the chunk.
+        currentOffset += 25; // Now at offset 33
+
+        // 3. Loop through Ancillary Chunks until IDAT is found
+        while ( currentOffset < data.Length )
+        {
+            // --- Read the current chunk's metadata ---
+
+            // A. Read 4 bytes at 'current_offset' to get the Data Length (L)
+            var lengthBytes = ReadIntFromBytes( data, currentOffset );
+
+            // B. Read 4 bytes at 'current_offset + 4' and convert to a string
+            // to get the Chunk Type
+            var chunkTypeBytes = new byte[ 4 ];
+            Array.Copy( data, currentOffset + 4, chunkTypeBytes, 0, 4 );
+
+            // C. Check the type
+            if ( chunkTypeBytes.SequenceEqual( IDATSequence ) )
+            {
+                // Found the start of the image data!
+                // The data field starts 8 bytes after the current chunk's offset
+                // (4 for Length, 4 for Type).
+                Logger.Debug( "Found IDAT Chunk" );
+
+                return currentOffset + 8;
+            }
+
+            if ( chunkTypeBytes.SequenceEqual( IENDSequence ) )
+            {
+                // Reached the end marker before finding IDAT. Something is wrong
+                // with the file structure.
+
+                throw new GdxRuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
+            }
+
+            // Skip the current chunk and move to the next one.
+            // Total size to skip = 4 (Type) + L (Data) + 4 (CRC)
+
+            // L + 12 is the total size of the chunk:
+            currentOffset = currentOffset + 4 + lengthBytes + 4;
+
+            // The next iteration will read the Length of the new chunk at 'current_offset'
+        }
+
+        // End of file reached without finding IDAT
+        throw new GdxRuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
     }
 
     /// <summary>
@@ -365,15 +433,36 @@ public class PNGDecoder
     {
         if ( ( startIndex < 0 ) || ( ( startIndex + 3 ) >= bytes.Length ) )
         {
-            Logger.Error( "Error: ReadIntFromBytes out of bounds" );
+            Logger.Error( $"Error: ReadIntFromBytes out of bounds: {startIndex}" );
 
             return 0; // Or throw an exception
         }
 
         return ( bytes[ startIndex ] << 24 )
-               | ( bytes[ startIndex + 1 ] << 16 )
-               | ( bytes[ startIndex + 2 ] << 8 )
-               | bytes[ startIndex + 3 ];
+             | ( bytes[ startIndex + 1 ] << 16 )
+             | ( bytes[ startIndex + 2 ] << 8 )
+             | bytes[ startIndex + 3 ];
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bytes"></param>
+    /// <param name="startIndex"></param>
+    /// <returns></returns>
+    public static string ReadStringFromBytes( byte[] bytes, int startIndex )
+    {
+        if ( ( startIndex < 0 ) || ( ( startIndex + 3 ) >= bytes.Length ) )
+        {
+            Logger.Error( $"Error: ReadStringFromBytes out of bounds: {startIndex}" );
+
+            return string.Empty; // Or throw an exception
+        }
+
+        var byteArray = new byte[ 4 ];
+        Array.Copy( bytes, startIndex, byteArray, 0, 4 );
+
+        return BitConverter.ToString( byteArray ).Replace( "-", "" );
     }
 
     /// <summary>
@@ -476,46 +565,46 @@ public class PNGDecoder
         Logger.Debug( $"bitDepth : {bitDepth}" );
 
         return colorType switch
-        {
-            // Grayscale
-            0 => bitDepth switch
-            {
-                8     => 1,
-                16    => 2,
-                var _ => -1,
-            },
+               {
+                   // Grayscale
+                   0 => bitDepth switch
+                        {
+                            8     => 1,
+                            16    => 2,
+                            var _ => -1,
+                        },
 
-            // RGB
-            2 => bitDepth switch
-            {
-                8     => 3,
-                16    => 6,
-                var _ => -1,
-            },
+                   // RGB
+                   2 => bitDepth switch
+                        {
+                            8     => 3,
+                            16    => 6,
+                            var _ => -1,
+                        },
 
-            // Indexed-color ( Indexed color uses a palette )
-            3 => 1,
+                   // Indexed-color ( Indexed color uses a palette )
+                   3 => 1,
 
-            // Grayscale with alpha
-            4 => bitDepth switch
-            {
-                8     => 2,
-                16    => 4,
-                var _ => -1,
-            },
+                   // Grayscale with alpha
+                   4 => bitDepth switch
+                        {
+                            8     => 2,
+                            16    => 4,
+                            var _ => -1,
+                        },
 
-            // RGBA
-            6 => bitDepth switch
-            {
-                8     => 4,
-                16    => 8,
-                var _ => -1,
-            },
+                   // RGBA
+                   6 => bitDepth switch
+                        {
+                            8     => 4,
+                            16    => 8,
+                            var _ => -1,
+                        },
 
-            // ----------------------------------
+                   // ----------------------------------
 
-            var _ => -1,
-        };
+                   var _ => -1,
+               };
     }
 
     /// <summary>
@@ -530,39 +619,39 @@ public class PNGDecoder
     public static string DetermineColorFormat( byte colorType, byte bitDepth )
     {
         return colorType switch
-        {
-            0 => $"Grayscale {bitDepth}-bit",
+               {
+                   0 => $"Grayscale {bitDepth}-bit",
 
-            // --------------------------------------------
-            2 => bitDepth switch
-            {
-                8     => "RGB888",
-                16    => "RGB161616",
-                var _ => $"Truecolor {bitDepth}-bit",
-            },
+                   // --------------------------------------------
+                   2 => bitDepth switch
+                        {
+                            8     => "RGB888",
+                            16    => "RGB161616",
+                            var _ => $"Truecolor {bitDepth}-bit",
+                        },
 
-            // --------------------------------------------
-            3 => $"Indexed {bitDepth}-bit",
+                   // --------------------------------------------
+                   3 => $"Indexed {bitDepth}-bit",
 
-            // --------------------------------------------
-            4 => bitDepth switch
-            {
-                8     => "Grayscale with Alpha 88",
-                16    => "Grayscale with Alpha 1616",
-                var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}",
-            },
+                   // --------------------------------------------
+                   4 => bitDepth switch
+                        {
+                            8     => "Grayscale with Alpha 88",
+                            16    => "Grayscale with Alpha 1616",
+                            var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}",
+                        },
 
-            // --------------------------------------------
-            6 => bitDepth switch
-            {
-                8     => "RGBA8888",
-                16    => "RGBA16161616",
-                var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}",
-            },
+                   // --------------------------------------------
+                   6 => bitDepth switch
+                        {
+                            8     => "RGBA8888",
+                            16    => "RGBA16161616",
+                            var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}",
+                        },
 
-            // --------------------------------------------
-            var _ => "Unknown Color Format",
-        };
+                   // --------------------------------------------
+                   var _ => "Unknown Color Format",
+               };
     }
 
     /// <summary>
@@ -573,17 +662,17 @@ public class PNGDecoder
     public static string ColorTypeName( int colortype )
     {
         return colortype switch
-        {
-            0 => "Grayscale - Allowed Bit Depths: 1,2,4,8,16",
-            2 => "Truecolor - Allowed Bit Depths: 8,16",
-            3 => "Indexed Color - Allowed Bit Depths: 1,2,4,8",
-            4 => "Grayscale with Alpha - Allowed Bit Depths: 8,16",
-            6 => "Truecolor with Alpha - Allowed Bit Depths: 8,16",
+               {
+                   0 => "Grayscale - Allowed Bit Depths: 1,2,4,8,16",
+                   2 => "Truecolor - Allowed Bit Depths: 8,16",
+                   3 => "Indexed Color - Allowed Bit Depths: 1,2,4,8",
+                   4 => "Grayscale with Alpha - Allowed Bit Depths: 8,16",
+                   6 => "Truecolor with Alpha - Allowed Bit Depths: 8,16",
 
-            // ----------------------------------
+                   // ----------------------------------
 
-            var _ => $"Unknown colortype: {colortype}",
-        };
+                   var _ => $"Unknown colortype: {colortype}",
+               };
     }
 
     /// <summary>
@@ -833,13 +922,13 @@ public class PNGDecoder
     /// </returns>
     private static PNGFormatStructs.IHDRChunk ExtractIHDR( byte[] pngData )
     {
-        var ihdr         = new byte[ IHDR_SIZE ];
+        var ihdr         = new byte[ CHUNK_LENGTH_FIELD_SIZE ];
         var ihdrTypeData = new byte[ IHDR_CHUNK_TYPE_SIZE ];
         var crc          = new byte[ IHDR_CRC_SIZE ];
         var widthData    = new byte[ WIDTH_SIZE ];
         var heightData   = new byte[ HEIGHT_SIZE ];
 
-        Array.Copy( pngData, IHDR_START, ihdr, 0, IHDR_SIZE );
+        Array.Copy( pngData, IHDR_START, ihdr, 0, CHUNK_LENGTH_FIELD_SIZE );
         Array.Copy( pngData, IHDR_CHUNK_TYPE_OFFSET, ihdrTypeData, 0, IHDR_CHUNK_TYPE_SIZE );
         Array.Copy( pngData, IHDR_CRC_START, crc, 0, IHDR_CRC_SIZE );
         Array.Copy( pngData, IHDR_DATA_OFFSET + WIDTH_OFFSET, widthData, 0, WIDTH_SIZE );
@@ -871,11 +960,11 @@ public class PNGDecoder
     /// </returns>
     private static PNGFormatStructs.IDATChunk ExtractIDAT( byte[] pngData )
     {
-        var tmp = new byte[ IDAT_SIZE ];
+        var tmp = new byte[ CHUNK_LENGTH_FIELD_SIZE ];
 
-        Array.Copy( pngData, IDAT_START, tmp, 0, IDAT_SIZE );
+        Array.Copy( pngData, _idatStartPosition, tmp, 0, CHUNK_LENGTH_FIELD_SIZE );
 
-        var tmpChunkSize = ReadBigEndianUInt32( tmp, IDAT_SIZE );
+        var tmpChunkSize = ReadBigEndianUInt32( tmp, CHUNK_LENGTH_FIELD_SIZE );
 
         return new PNGFormatStructs.IDATChunk
         {
@@ -918,8 +1007,53 @@ public class PNGDecoder
 //            Logger.Debug( $"- IHDR/IDAT Data: {BitConverter.ToString( pngData ).Replace( "-", " " )}" );
         Logger.Debug( $"- TotalIDATSize : 0x{TotalIDATSize:X} ({TotalIDATSize})" );
         Logger.Debug( "-----------------------------" );
+
+        Logger.Debug( "-----------------------------" );
+        Logger.Debug( "-----------------------------" );
+        Logger.Debug( $"CHUNK_LENGTH_FIELD_SIZE: {CHUNK_LENGTH_FIELD_SIZE}" );
+        Logger.Debug( $"SIGNATURE_LENGTH       : {SIGNATURE_LENGTH}" );
+        Logger.Debug( $"IHDR_START             : {IHDR_START}" );
+        Logger.Debug( $"IHDR_CHUNK_TYPE_OFFSET : {IHDR_CHUNK_TYPE_OFFSET}" );
+        Logger.Debug( $"IHDR_CHUNK_TYPE_SIZE   : {IHDR_CHUNK_TYPE_SIZE}" );
+        Logger.Debug( $"IHDR_DATA_OFFSET       : {IHDR_DATA_OFFSET}" );
+        Logger.Debug( $"IHDR_DATA_SIZE         : {IHDR_DATA_SIZE}" );
+        Logger.Debug( $"IHDR_CRC_START         : {IHDR_CRC_START}" );
+        Logger.Debug( $"IHDR_CRC_SIZE          : {IHDR_CRC_SIZE}" );
+        Logger.Debug( $"IDAT_START             : {_idatStartPosition}" );
+        Logger.Debug( $"IDAT_CHUNK_TYPE_OFFSET : {_idatChunkTypeOffset}" );
+        Logger.Debug( $"IDAT_DATA_OFFSET       : {_idatDataOffset}" );
+        Logger.Debug( "-----------------------------" );
+        Logger.Debug( "-----------------------------" );
+    }
+
+    private static void DebugDumpPngData( byte[] pngData )
+    {
+        var offset = 0;
+        var length = pngData.Length;
+        var remaining = pngData.Length;
+        var end    = pngData.Length; // 20 * 8;
+        var sb     = new StringBuilder();
+        var index  = 0;
+
+        while ( index < end )
+        {
+            sb.Clear();
+
+            var count = Math.Min( remaining, 8 );
+            
+            for ( var i = 0; i < count; i++ )
+            {
+                sb.Append( $"[{pngData[ offset + index + i ]:X2}]" );
+            }
+            
+            Logger.Debug( sb.ToString() );
+            
+            index += Math.Min( 8, remaining );
+            remaining -= count;
+        }
     }
 }
 
 // ============================================================================
 // ============================================================================
+

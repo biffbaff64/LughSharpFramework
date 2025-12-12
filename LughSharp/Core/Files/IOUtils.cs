@@ -24,7 +24,7 @@
 
 using System.Reflection;
 
-namespace LughSharp.Core.Files;
+using JetBrains.Annotations; namespace LughSharp.Core.Files;
 
 [PublicAPI]
 public class IOUtils

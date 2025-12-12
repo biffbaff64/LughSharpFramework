@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Scenes.Scene2D.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 [PublicAPI]
 public interface IDisableable

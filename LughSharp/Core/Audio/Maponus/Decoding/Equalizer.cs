@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Audio.Maponus.Decoding;
+using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 /// <summary>
 /// The Equalizer class can be used to specify equalization settings for the

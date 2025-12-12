@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Scenes.Scene2D.Actions;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>
 /// Sets an <see cref="Actor"/>s visibility.

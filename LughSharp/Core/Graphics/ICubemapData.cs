@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// Used by a <see cref="Cubemap"/> to load the pixel data. The Cubemap will

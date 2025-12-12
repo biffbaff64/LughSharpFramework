@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Maps.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
 
-namespace LughSharp.Core.Maps.Tiled.Objects;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Objects;
 
 /// <summary>
 /// A <see cref="MapObject"/> with a <see cref="ITiledMapTile"/>.

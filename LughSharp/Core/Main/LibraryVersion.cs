@@ -25,7 +25,7 @@
 using System.Reflection;
 using LughSharp.Core.Graphics.Text;
 
-namespace LughSharp.Core.Main;
+using JetBrains.Annotations; namespace LughSharp.Core.Main;
 
 /// <summary>
 /// The current Library version.

@@ -25,7 +25,7 @@
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 
-namespace LughSharp.Core.Graphics.Text;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
 
 /// <summary>
 /// Renders bitmap fonts. The font consists of 2 files: an image file or <see cref="TextureRegion"/>

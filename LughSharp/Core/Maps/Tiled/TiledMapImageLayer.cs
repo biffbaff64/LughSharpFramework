@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics;
 
-namespace LughSharp.Core.Maps.Tiled;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled;
 
 /// <summary>
 /// Represents a TiledMap layer which is a TextureRegion.

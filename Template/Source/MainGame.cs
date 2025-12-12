@@ -58,6 +58,8 @@ public partial class MainGame : Game
         Logger.Debug( $"Bytes per Pixel: {pixmap.Gdx2DPixmap.BytesPerPixel}" );
         Logger.Debug( $"pixmap ByteBuffer length: {pixmap.ByteBuffer.Length}" );
         
+        Logger.Block();
+
         _image1 = new Texture( Assets.COMPLETE_STAR );
         _image1.DebugPrint();
         

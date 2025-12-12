@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
-namespace LughSharp.Core.Graphics.G2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// A 3x3 grid of texture regions. Any of the regions may be omitted.

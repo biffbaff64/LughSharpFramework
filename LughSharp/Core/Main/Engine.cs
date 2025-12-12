@@ -31,7 +31,7 @@ using LughSharp.Core.Input;
 using LughSharp.Core.Network;
 using GLBindings = LughSharp.Core.Graphics.OpenGL.Bindings.GLBindings;
 
-namespace LughSharp.Core.Main;
+using JetBrains.Annotations; namespace LughSharp.Core.Main;
 
 /// <summary>
 /// The Engine class serves as the central hub linking multiple interfaces and systems

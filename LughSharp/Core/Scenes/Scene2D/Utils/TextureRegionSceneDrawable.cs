@@ -27,7 +27,7 @@ using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Scenes.Scene2D.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// Drawable for a <see cref="TextureRegion"/>.

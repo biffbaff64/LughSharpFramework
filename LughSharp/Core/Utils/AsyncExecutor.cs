@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Assets;
+using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
 
@@ -38,7 +39,7 @@ public class AsyncExecutor : IDisposable
     public AsyncExecutor( int maxConcurrent, string name = "" )
     {
         // Semaphore initialized with maxConcurrent concurrent slots
-        
+
         _semaphore = new SemaphoreSlim( maxConcurrent, maxConcurrent );
         // Thread naming is often ignored in .NET, relying on debugger tools, but name
         // is used here for logging and debugging purposes.
@@ -51,40 +52,41 @@ public class AsyncExecutor : IDisposable
     /// <returns> A Task that can be used like the original AsyncResult. </returns>
     public Task Submit( IAssetTask task ) // No generics needed since AssetLoadingTask returns void
     {
-        if (_isDisposed)
+        if ( _isDisposed )
         {
             throw new GdxRuntimeException( "Cannot run tasks on an executor that has been shut down (disposed)" );
         }
 
         // 1. Wait for a concurrency slot. Use WaitAsync() to avoid blocking the calling thread.
         // We use ConfigureAwait(false) for library code to avoid context switching issues.
-        var submissionTask = _semaphore.WaitAsync().ContinueWith(waitTask =>
-        {
-            // If the wait was successful, execute the task.
-            if (waitTask.IsCompletedSuccessfully)
-            {
-                // 2. Task.Run executes the work on the standard .NET ThreadPool.
-                return Task.Run(() =>
-                {
-                    try
-                    {
-                        task.Call();
-                    }
-                    catch (Exception e)
-                    {
-                        // Wrap and rethrow as GdxRuntimeException if needed, or just let it bubble up
-                        throw new GdxRuntimeException("Asynchronous task failed.", e);
-                    }
-                    finally
-                    {
-                        // 3. Release the semaphore slot when the work is finished (SUCCESS or FAILURE)
-                        _semaphore.Release();
-                    }
-                });
-            }
-            return Task.CompletedTask;
-        }, TaskContinuationOptions.ExecuteSynchronously)
-        .Unwrap(); // Unwrap the Task<Task> to return just the inner Task
+        var submissionTask = _semaphore.WaitAsync().ContinueWith( waitTask =>
+                                       {
+                                           // If the wait was successful, execute the task.
+                                           if ( waitTask.IsCompletedSuccessfully )
+                                           {
+                                               // 2. Task.Run executes the work on the standard .NET ThreadPool.
+                                               return Task.Run( () =>
+                                               {
+                                                   try
+                                                   {
+                                                       task.Call();
+                                                   }
+                                                   catch ( Exception e )
+                                                   {
+                                                       // Wrap and rethrow as GdxRuntimeException if needed, or just let it bubble up
+                                                       throw new GdxRuntimeException( "Asynchronous task failed.", e );
+                                                   }
+                                                   finally
+                                                   {
+                                                       // 3. Release the semaphore slot when the work is finished (SUCCESS or FAILURE)
+                                                       _semaphore.Release();
+                                                   }
+                                               } );
+                                           }
+
+                                           return Task.CompletedTask;
+                                       }, TaskContinuationOptions.ExecuteSynchronously )
+                                       .Unwrap(); // Unwrap the Task<Task> to return just the inner Task
 
         return submissionTask;
     }
@@ -92,7 +94,7 @@ public class AsyncExecutor : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_isDisposed) return;
+        if ( _isDisposed ) return;
 
         Dispose( true );
         GC.SuppressFinalize( this );
@@ -101,9 +103,9 @@ public class AsyncExecutor : IDisposable
     /// <inheritdoc cref="Dispose"/>
     protected void Dispose( bool disposing )
     {
-        if (!_isDisposed)
+        if ( !_isDisposed )
         {
-            if (disposing)
+            if ( disposing )
             {
                 // In the SemaphoreSlim model, waiting for all tasks is difficult without
                 // tracking them manually. For simplicity, we mostly rely on the GC and the

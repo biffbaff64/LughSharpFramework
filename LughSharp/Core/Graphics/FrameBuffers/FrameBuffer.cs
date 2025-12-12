@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics.FrameBuffers;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.FrameBuffers;
 
 /// <summary>
 /// Encapsulates OpenGL frame buffer objects. This is a simple helper class which should

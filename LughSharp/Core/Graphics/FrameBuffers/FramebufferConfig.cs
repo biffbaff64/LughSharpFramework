@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.FrameBuffers;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.FrameBuffers;
 
 /// <summary>
 /// Class describing the bits per pixel, depth buffer precision, stencil precision

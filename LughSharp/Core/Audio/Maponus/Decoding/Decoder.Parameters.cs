@@ -24,7 +24,7 @@
 
 using Exception = System.Exception;
 
-namespace LughSharp.Core.Audio.Maponus.Decoding;
+using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 public partial class Decoder
 {

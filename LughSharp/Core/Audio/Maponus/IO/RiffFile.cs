@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Audio.Maponus.Support;
 
-namespace LughSharp.Core.Audio.Maponus.IO;
+using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.IO;
 
 /// <summary>
 /// public class to manage RIFF files.

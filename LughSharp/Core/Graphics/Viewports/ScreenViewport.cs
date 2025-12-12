@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Cameras;
 
-namespace LughSharp.Core.Graphics.Viewports;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Viewports;
 
 /// <summary>
 /// A viewport where the world size is based on the size of the screen.

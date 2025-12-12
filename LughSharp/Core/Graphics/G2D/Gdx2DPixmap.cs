@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// Provides functionality for managing and manipulating 2D pixel maps with various
@@ -179,6 +179,36 @@ public partial class Gdx2DPixmap : IDisposable
 
         PixmapBuffer = new Buffer< byte >( length );
         PixmapBuffer.Put( Pixels );
+    }
+
+    private Buffer< byte > InitializeFromBuffer( byte[] buffer, int offset, int len )
+    {
+        var bufferHandle  = GCHandle.Alloc( buffer, GCHandleType.Pinned );
+        var pixmapPtr     = load( bufferHandle.AddrOfPinnedObject() + offset, len );
+        var pixmap        = Marshal.PtrToStructure< NativePixmapStruct >( pixmapPtr );
+        var dataBlockSize = ( int )( pixmap.Width * pixmap.Height * bytes_per_pixel( pixmap.ColorFormat ) );
+        
+        bufferHandle.Free();
+
+        Width         = ( int )pixmap.Width;
+        Height        = ( int )pixmap.Height;
+        ColorFormat   = ( int )pixmap.ColorFormat;
+        BytesPerPixel = ( int )bytes_per_pixel( pixmap.ColorFormat );
+        Pixels        = new byte[ dataBlockSize ];
+        
+        Marshal.Copy( pixmap.Pixels, Pixels, 0, dataBlockSize );
+
+        var byteBuffer = Buffer< byte >.Wrap( Pixels );
+
+        return byteBuffer;
+
+        // --------------------------------------
+
+        [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_load" )]
+        static extern IntPtr load( IntPtr nativeData, int len );
+
+        [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_bytes_per_pixel" )]
+        static extern uint bytes_per_pixel( uint format );
     }
 
     // ========================================================================

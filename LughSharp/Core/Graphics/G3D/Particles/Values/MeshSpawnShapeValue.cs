@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Particles.Values;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Particles.Values;
 
 public class MeshSpawnShapeValue
 {

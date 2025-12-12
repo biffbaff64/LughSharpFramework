@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.OpenGL;
 
-namespace LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
 
 [PublicAPI]
 public class FileTextureArrayData : ITextureArrayData

@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using Exception = System.Exception;
 
-namespace LughSharp.Core.Graphics.G2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 
 [PublicAPI]
 public class ParticleEmitter

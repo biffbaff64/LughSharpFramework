@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics.G2D;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// CpuSpriteBatch behaves like SpriteBatch, except it doesn't flush automatically

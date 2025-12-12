@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A <see cref="Group"/> that participates in layout and provides a minimum,

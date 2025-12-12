@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerI;
 
-namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
+using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 
 /// <summary>
 /// Implements decoding of MPEG Audio Layer I frames.

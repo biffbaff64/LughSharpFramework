@@ -24,7 +24,7 @@
 
 using Keys = LughSharp.Core.Input.IInput.Keys;
 
-namespace LughSharp.Core.Input;
+using JetBrains.Annotations; namespace LughSharp.Core.Input;
 
 [PublicAPI]
 public static class InputUtils

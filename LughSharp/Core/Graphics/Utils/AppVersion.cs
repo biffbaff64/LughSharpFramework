@@ -25,7 +25,7 @@
 using Platform = LughSharp.Core.Main.Platform;
 using Capabilities = LughSharp.Core.Graphics.OpenGL.OpenGL.Capabilities;
 
-namespace LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// Wrapper for the current OpenGL Version used by this library.

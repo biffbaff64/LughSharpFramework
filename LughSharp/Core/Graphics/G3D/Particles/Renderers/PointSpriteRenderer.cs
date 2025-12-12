@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Particles.Renderers;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Particles.Renderers;
 
 public class PointSpriteRenderer
 {

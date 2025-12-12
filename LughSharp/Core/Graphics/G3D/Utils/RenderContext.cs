@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Utils;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Utils;
 
 public class RenderContext
 {

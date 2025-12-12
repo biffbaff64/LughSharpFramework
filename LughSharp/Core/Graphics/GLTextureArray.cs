@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 
-namespace LughSharp.Core.Graphics;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// OpenGL wrapper for TextureArray.

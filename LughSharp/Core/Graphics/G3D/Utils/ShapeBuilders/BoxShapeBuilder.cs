@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Utils.ShapeBuilders;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Utils.ShapeBuilders;
 
 public class BoxShapeBuilder
 {

@@ -26,7 +26,7 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 
-namespace LughSharp.Core.Maps;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps;
 
 /// <summary>
 /// Resolves an image by a string, wrapper around a Map or AssetManager to load

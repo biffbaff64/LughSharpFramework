@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Input;
 
-namespace LughSharp.Core.Scenes.Scene2D.Listeners;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
 /// <summary>
 /// Detects tap, long press, fling, pan, zoom, and pinch gestures on an actor.

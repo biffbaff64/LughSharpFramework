@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.G2D;
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Maps.Tiled.Renderers;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Renderers;
 
 [PublicAPI]
 public class OrthogonalTiledMapRenderer : BatchTileMapRenderer

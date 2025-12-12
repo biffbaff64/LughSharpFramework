@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.OpenGL;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL;
 
 public static partial class OpenGL
 {

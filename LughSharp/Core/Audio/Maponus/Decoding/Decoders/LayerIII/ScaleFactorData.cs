@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
+using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 
 [PublicAPI]
 public class ScaleFactorData

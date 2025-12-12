@@ -41,7 +41,7 @@ using GLint64 = long;
 
 // ============================================================================
 
-namespace LughSharp.Core.Graphics.OpenGL.Bindings;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
 // ============================================================================
 // ============================================================================

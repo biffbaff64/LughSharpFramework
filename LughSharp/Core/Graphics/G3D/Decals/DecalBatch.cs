@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Decals;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Decals;
 
 public class DecalBatch
 {

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Models.Data;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Models.Data;
 
 [PublicAPI]
 public class ModelMaterial

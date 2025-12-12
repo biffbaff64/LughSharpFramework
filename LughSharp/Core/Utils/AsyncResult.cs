@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Utils;
 
 /// <summary>
@@ -35,7 +37,7 @@ public class AsyncResult< T >
     private readonly Task< T? > _task;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Initializes a new instance of the AsyncResult class, wrapping a C# Task.
     /// </summary>

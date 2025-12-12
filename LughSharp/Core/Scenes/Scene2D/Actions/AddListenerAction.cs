@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 
-namespace LughSharp.Core.Scenes.Scene2D.Actions;
+using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>
 /// Adds a listener to an actor.

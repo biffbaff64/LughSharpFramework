@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Maps.Tiled.Renderers;
+using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Renderers;
 
 [PublicAPI]
 public interface ITiledMapRenderer : IMapRenderer

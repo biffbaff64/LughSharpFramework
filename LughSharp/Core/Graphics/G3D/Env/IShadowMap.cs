@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.G3D.Env;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Env;
 
 public interface IShadowMap
 {

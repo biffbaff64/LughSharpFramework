@@ -28,7 +28,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 
-namespace LughSharp.Core.Graphics;
+using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// Wraps a standard OpenGL Cubemap. Must be disposed when it is no longer used.

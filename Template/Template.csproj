@@ -22,8 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="LughUtils" Version="0.0.6" />
-        <PackageReference Include="OpenTK.redist.glfw" Version="3.4.0.47"/>
+      <Reference Include="LughUtils">
+        <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
