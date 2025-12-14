@@ -189,6 +189,32 @@ public class BufferUtils
             destination.PutFloat( i, source[ sourceOffset + i ] );
         }
     }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="sourceOffset"></param>
+    /// <param name="length"></param>
+    /// <param name="destination"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public static void Copy( int[] source, int sourceOffset, int length, Buffer< byte > destination )
+    {
+        Guard.Against.Null( source );
+        Guard.Against.Null( destination );
+
+        if ( ( sourceOffset < 0 ) || ( length < 0 ) )
+        {
+            throw new GdxRuntimeException( "Offset and length must be non-negative." );
+        }
+
+        destination.EnsureCapacity( length * sizeof( int ) );
+
+        for ( var i = 0; i < length; i++ )
+        {
+            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
+            destination.PutInt( i, source[ sourceOffset + i ] );
+        }
+    }
 }
 
 // ============================================================================

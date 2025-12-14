@@ -35,7 +35,7 @@ public partial class ScrollPane
         /// <inheritdoc />
         public override bool Scrolled( InputEvent? inputEvent, float x, float y, float scrollAmountX, float scrollAmountY )
         {
-            GdxRuntimeException.ThrowIfNull( _parent );
+            Guard.Against.Null( _parent );
 
             _parent!.SetScrollbarsVisible( true );
 
@@ -76,7 +76,7 @@ public partial class ScrollPane
         /// <inheritdoc />
         public override bool TouchDown( InputEvent? inputEvent, float x, float y, int pointer, int button )
         {
-            GdxRuntimeException.ThrowIfNull( _parent );
+            Guard.Against.Null( _parent );
 
             if ( _parent!._draggingPointer != -1 )
             {
@@ -153,7 +153,7 @@ public partial class ScrollPane
         /// <inheritdoc />
         public override void TouchUp( InputEvent? inputEvent, float x, float y, int pointer, int button )
         {
-            GdxRuntimeException.ThrowIfNull( _parent );
+            Guard.Against.Null( _parent );
 
             if ( pointer != _parent!._draggingPointer )
             {
@@ -166,7 +166,7 @@ public partial class ScrollPane
         /// <inheritdoc />
         public override void TouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
         {
-            GdxRuntimeException.ThrowIfNull( _parent );
+            Guard.Against.Null( _parent );
 
             if ( pointer != _parent!._draggingPointer )
             {
@@ -220,7 +220,7 @@ public partial class ScrollPane
         /// <inheritdoc />
         public override bool MouseMoved( InputEvent? inputEvent, float x, float y )
         {
-            GdxRuntimeException.ThrowIfNull( _parent );
+            Guard.Against.Null( _parent );
 
             if ( !_parent!._flickScroll )
             {
@@ -243,7 +243,7 @@ public partial class ScrollPane
         /// <inheritdoc />
         public override void Pan( InputEvent inputEvent, float x, float y, float deltaX, float deltaY )
         {
-            GdxRuntimeException.ThrowIfNull( _parent );
+            Guard.Against.Null( _parent );
 
             _parent!.SetScrollbarsVisible( true );
 
@@ -261,7 +261,7 @@ public partial class ScrollPane
         /// <inheritdoc />
         public override void Fling( InputEvent inputEvent, float x, float y, int button )
         {
-            GdxRuntimeException.ThrowIfNull( _parent );
+            Guard.Against.Null( _parent );
 
             if ( ( Math.Abs( x ) > 150 ) && _parent!.ScrollX )
             {
@@ -289,7 +289,7 @@ public partial class ScrollPane
         /// <inheritdoc />
         public override bool Handle( Event inputEvent )
         {
-            GdxRuntimeException.ThrowIfNull( _parent );
+            Guard.Against.Null( _parent );
 
             if ( base.Handle( inputEvent ) )
             {

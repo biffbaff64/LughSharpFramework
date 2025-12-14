@@ -628,7 +628,7 @@ public partial class AssetManager : IDisposable
     {
         lock ( this )
         {
-            GdxRuntimeException.ThrowIfNull( _assets );
+            Guard.Against.Null( _assets );
 
             if ( asset == null )
             {
@@ -1041,7 +1041,7 @@ public partial class AssetManager : IDisposable
             {
                 _assetTypes.TryGetValue( dependendAssetDesc.AssetName, out var type );
 
-                GdxRuntimeException.ThrowIfNull( type );
+                Guard.Against.Null( type );
 
                 _assets.TryGetValue( type, out var asset );
 
@@ -1536,7 +1536,7 @@ public partial class AssetManager : IDisposable
             throw new GdxRuntimeException( $"Asset not loaded: {filename}: Type not specified." );
         }
 
-        GdxRuntimeException.ThrowIfNull( _assets );
+        Guard.Against.Null( _assets );
 
         IRefCountedContainer? container = null;
 

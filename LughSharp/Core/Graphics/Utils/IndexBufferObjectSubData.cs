@@ -94,7 +94,7 @@ public class IndexBufferObjectSubData : IIndexData
     public int NumMaxIndices => _buffer.Capacity;
 
     /// <inheritdoc />
-    public unsafe void SetIndices( short[] indices, int offset, int count )
+    public unsafe void SetIndices( int[] indices, int offset, int count )
     {
         _isDirty = true;
 

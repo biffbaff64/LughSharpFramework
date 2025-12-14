@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// An IndexBufferObject wraps OpenGL's index buffer functionality to be used in conjunction
@@ -48,13 +48,13 @@ public class IndexBufferObject : IIndexData
 
     // ========================================================================
 
-    private readonly Buffer< short > _buffer;
-    private readonly Buffer< byte >  _byteBuffer;
-    private readonly bool            _empty;
-    private readonly bool            _ownsBuffer;
-    private readonly int             _usage;
-    private          bool            _isBound = false;
-    private          bool            _isDirty = true;
+    private readonly Buffer< int >  _buffer;
+    private readonly Buffer< byte > _byteBuffer;
+    private readonly bool           _empty;
+    private readonly bool           _ownsBuffer;
+    private readonly int            _usage;
+    private          bool           _isBound;
+    private          bool           _isDirty = true;
 
     // ========================================================================
 
@@ -87,11 +87,11 @@ public class IndexBufferObject : IIndexData
             maxIndices = 1;
         }
 
-        // Create a new byte buffer to hold the indices. Each index is a short (2 bytes).
-        _byteBuffer = new Buffer< byte >( maxIndices * 2 );
+        // Create a new byte buffer to hold the indices. Each index is an int (4 bytes).
+        _byteBuffer = new Buffer< byte >( maxIndices * 4 );
 
         // Create a view of the byte buffer as a short buffer.
-        _buffer = _byteBuffer.AsShortBuffer();
+        _buffer = _byteBuffer.AsIntBuffer();
 
         // Set the ownership flag to true, indicating that this object owns the buffer.
         _ownsBuffer = true;
@@ -107,19 +107,29 @@ public class IndexBufferObject : IIndexData
         _usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
     }
 
-    /// <inheritdoc />
+    /// <returns> the number of indices currently stored in this buffer </returns>
     public int NumIndices => _empty ? 0 : _buffer.Limit;
 
-    /// <inheritdoc />
+    /// <returns> the maximum number of indices this IndexBufferObject can store. </returns>
     public int NumMaxIndices => _empty ? 0 : _buffer.Capacity;
 
-    /// <inheritdoc />
-    public unsafe void SetIndices( short[] indices, int offset, int count )
+    /// <summary>
+    /// Sets the indices of this IndexBufferObject, discarding the old indices.
+    /// The count must equal the number of indices to be copied to this IndexBufferObject.
+    /// <para>
+    /// This can be called in between calls to <see cref="IIndexData.Bind"/> and
+    /// <see cref="IIndexData.Unbind"/>. The index data will be updated instantly.
+    /// </para>
+    /// </summary>
+    /// <param name="indices"> the index data </param>
+    /// <param name="offset"> the offset to start copying the data from </param>
+    /// <param name="count"> the number of ints to copy  </param>
+    public unsafe void SetIndices( int[] indices, int offset, int count )
     {
         _isDirty = true;
 
         _buffer.Clear();
-        _buffer.PutShorts( indices, offset, count );
+        _buffer.PutInts( indices, offset, count );
         _buffer.Flip();
 
         _byteBuffer.Position = 0;
@@ -136,15 +146,23 @@ public class IndexBufferObject : IIndexData
         }
     }
 
-    /// <inheritdoc />
-    public unsafe void SetIndices( Buffer< short > indices )
+    /// <summary>
+    /// Copies the specified indices to the indices of this IndexBufferObject,
+    /// discarding the old indices. Copying start at the current
+    /// <see cref="Buffer{T}.Position()"/> of the specified buffer and copied
+    /// the <see cref="Buffer{T}.Remaining()"/> amount of indices. This can be
+    /// called in between calls to <see cref="IIndexData.Bind"/> and <see cref="IIndexData.Unbind"/>.
+    /// The index data will be updated instantly.
+    /// </summary>
+    /// <param name="indices"> the index data to copy  </param>
+    public unsafe void SetIndices( Buffer< int > indices )
     {
         _isDirty = true;
 
         var pos = indices.Position;
 
         _buffer.Clear();
-        _buffer.PutShorts( indices.ToArray() );
+        _buffer.PutInts( indices.ToArray() );
         _buffer.Flip();
 
         indices.Position = pos;
@@ -163,8 +181,14 @@ public class IndexBufferObject : IIndexData
         }
     }
 
-    /// <inheritdoc />
-    public unsafe void UpdateIndices( int targetOffset, short[] indices, int offset, int count )
+    /// <summary>
+    /// Update (a portion of) the indices.
+    /// </summary>
+    /// <param name="targetOffset"> offset in indices buffer </param>
+    /// <param name="indices"> the index data </param>
+    /// <param name="offset"> the offset to start copying the data from </param>
+    /// <param name="count"> the number of ints to copy  </param>
+    public unsafe void UpdateIndices( int targetOffset, int[] indices, int offset, int count )
     {
         _isDirty = true;
 
@@ -189,7 +213,7 @@ public class IndexBufferObject : IIndexData
     }
 
     /// <inheritdoc />
-    public Buffer< short > GetBuffer( bool forWriting )
+    public Buffer< int > GetBuffer( bool forWriting )
     {
         _isDirty = forWriting;
 
@@ -208,7 +232,7 @@ public class IndexBufferObject : IIndexData
 
         if ( _isDirty )
         {
-            _byteBuffer.Limit = _buffer.Limit * 2;
+            _byteBuffer.Limit = _buffer.Limit * 4;
 
             unsafe
             {

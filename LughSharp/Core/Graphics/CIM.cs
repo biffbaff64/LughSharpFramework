@@ -24,7 +24,7 @@
 
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// Provides functionality for reading and writing CIM format Pixmaps.

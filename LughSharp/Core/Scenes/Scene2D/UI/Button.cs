@@ -282,7 +282,7 @@ public class Button : Table, IDisableable
         float offsetX;
         float offsetY;
 
-        GdxRuntimeException.ThrowIfNull( Style );
+        Guard.Against.Null( Style );
 
         if ( IsPressed() && !IsDisabled )
         {

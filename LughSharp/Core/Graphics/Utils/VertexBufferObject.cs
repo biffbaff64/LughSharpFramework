@@ -171,8 +171,8 @@ public class VertexBufferObject : IVertexData
     /// <param name="count"> the number of floats to copy  </param>
     public void SetVertices( float[] vertices, int offset, int count )
     {
-        GdxRuntimeException.ThrowIfNull( _byteBuffer );
-        GdxRuntimeException.ThrowIfNull( _floatBuffer );
+        Guard.Against.Null( _byteBuffer );
+        Guard.Against.Null( _floatBuffer );
 
         _isDirty = true;
 

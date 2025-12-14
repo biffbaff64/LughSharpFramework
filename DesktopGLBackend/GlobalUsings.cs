@@ -1,4 +1,4 @@
-// ///////////////////////////////////////////////////////////////////////////////
+﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
 // Copyright (c) 2024 Richard Ikin.
@@ -22,6 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+global using System;
+global using System.Collections.Generic;
+global using System.Diagnostics;
+global using System.Diagnostics.CodeAnalysis;
+global using System.Drawing;
+global using System.IO;
+global using System.IO.Compression;
+global using System.Linq;
+global using System.Numerics;
+global using System.Runtime.CompilerServices;
+global using System.Runtime.InteropServices;
+global using System.Runtime.Serialization;
+global using System.Text;
+global using System.Threading;
+global using System.Threading.Tasks;
+
 // ============================================================================
 
 global using JetBrains.Annotations;
@@ -33,4 +49,18 @@ global using DesktopGLBackend.Utils;
 global using DesktopGLBackend.Window;
 
 // ============================================================================
+
+global using LughSharp.Core.Network;
+
 // ============================================================================
+
+global using static LughSharp.Core.Main.Engine;
+
+// ============================================================================
+
+global using Vector2 = LughUtils.source.Maths.Vector2;
+global using Vector3 = LughUtils.source.Maths.Vector3;
+global using Vector4 = LughUtils.source.Maths.Vector4;
+
+// ============================================================================
+

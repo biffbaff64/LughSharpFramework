@@ -386,7 +386,7 @@ public class GlyphLayout : IResetable
         }
 
         var run = _glyphRunPool.Obtain();
-        GdxRuntimeException.ThrowIfNull( run, "Unable to obtain a GlyphRun!" );
+        Guard.Against.Null( run, "Unable to obtain a GlyphRun!" );
 
         run.Color.Set( nextColor );
         fontData.GetGlyphs( run, str, runStart, runEnd, lastGlyph! );

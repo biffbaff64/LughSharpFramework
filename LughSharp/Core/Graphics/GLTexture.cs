@@ -214,8 +214,13 @@ public abstract class GLTexture : IDisposable
     /// </param>
     public void Bind( uint unit )
     {
-        //TODO: This NEEDS some safety checks and validation that the result
-        //      is a valid texture unit.
+        var list = Enum.GetValues(typeof(TextureUnit)).Cast<TextureUnit>().ToList();
+
+        if ( !list.Contains( ( TextureUnit )( ( int )TextureUnit.Texture0 + unit ) ) )
+        {
+            throw new ArgumentException( $"Attempt to bind to an invalid texture unit: {unit}" );
+        }
+        
         ActivateTexture( ( TextureUnit )( ( int )TextureUnit.Texture0 + unit ) );
         GL.BindTexture( GLTarget, GLTextureHandle );
     }

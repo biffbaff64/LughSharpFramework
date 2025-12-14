@@ -102,7 +102,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         get
         {
-            GdxRuntimeException.ThrowIfNull( GLWindow );
+            Guard.Against.Null( GLWindow );
 
             return DotGLFW.Glfw.GetWindowMonitor( GLWindow.GlfwWindow ) != null;
         }
@@ -274,7 +274,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override void SetUndecorated( bool undecorated )
     {
-        GdxRuntimeException.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         GLWindow.AppConfig.WindowDecorated = !undecorated;
 
@@ -284,7 +284,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override void SetResizable( bool resizable )
     {
-        GdxRuntimeException.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         GLWindow.AppConfig.WindowResizable = resizable;
 
@@ -294,7 +294,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override void SetVSync( bool vsync )
     {
-        GdxRuntimeException.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         GLWindow.AppConfig.VSyncEnabled = vsync;
 
@@ -304,7 +304,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override void SetForegroundFps( int fps )
     {
-        GdxRuntimeException.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         GLWindow.AppConfig.ForegroundFPS = fps;
     }
@@ -339,7 +339,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// </param>
     public override void SetCursor( ICursor cursor )
     {
-        GdxRuntimeException.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         DotGLFW.Glfw.SetCursor( GLWindow.GlfwWindow, ( ( DesktopGLCursor )cursor ).GlfwCursor );
     }
@@ -396,7 +396,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override bool SetFullscreenMode( IGraphicsDevice.DisplayMode displayMode )
     {
-        GdxRuntimeException.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         GLWindow.Input.ResetPollingStates();
 

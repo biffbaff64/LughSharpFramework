@@ -22,11 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text.RegularExpressions;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
+namespace LughSharp.Core.Graphics.Text;
 
 public partial class BitmapFont
 {

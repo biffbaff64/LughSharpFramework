@@ -22,12 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using DotGLFW;
+using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.G2D;
 
 // ============================================================================
 
@@ -36,7 +38,7 @@ using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
 /// It minimizes the number of draw calls by buffering sprite data and rendering all at once.
 /// </summary>
 [PublicAPI]
-public partial class SpriteBatch : IBatch, IDisposable
+public class SpriteBatch : IBatch, IDisposable
 {
     public const int RENDERING_OPTION_FLIP_X = 1 << 0;
     public const int RENDERING_OPTION_FLIP_Y = 1 << 1;
@@ -44,28 +46,28 @@ public partial class SpriteBatch : IBatch, IDisposable
 
     // ========================================================================
 
-    public bool    BlendingEnabled   { get; set; }         = false;
-    public float   InvTexHeight      { get; set; }         = 0;
-    public float   InvTexWidth       { get; set; }         = 0;
-    public Matrix4 CombinedMatrix    { get; set; }         = new();
-    public Matrix4 ProjectionMatrix  { get; set; }         = new();
-    public Matrix4 TransformMatrix   { get; set; }         = new();
-    public int     RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
-    public long    TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int     MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
-    public int     BlendSrcFunc      { get; private set; } = ( int )BlendMode.SrcColor;
-    public int     BlendDstFunc      { get; private set; } = ( int )BlendMode.DstColor;
-    public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
+    public bool    BlendingEnabled   { get; set; }
+    public float   InvTexHeight      { get; set; }
+    public float   InvTexWidth       { get; set; }
+    public Matrix4 CombinedMatrix    { get; set; } = new();
+    public Matrix4 ProjectionMatrix  { get; set; } = new();
+    public Matrix4 TransformMatrix   { get; set; } = new();
+    public int     RenderCalls       { get; set; }
+    public long    TotalRenderCalls  { get; set; }
+    public int     MaxSpritesInBatch { get; set; }
+    public int     BlendSrcFunc      { get; private set; } = ( int )BlendMode.SrcAlpha;
+    public int     BlendDstFunc      { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
+    public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.One;
     public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
     public float[] Vertices          { get; set; }         = [ ];
-    public int     TextureOffset     { get; set; }         = 0;
+    public int     TextureOffset     { get; set; }
 
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
     // ========================================================================
 
-    protected Texture?     LastTexture        { get; set; } = null;
-    protected int          Idx                { get; set; } = 0;
+    protected Texture?     LastTexture        { get; set; }
+    protected int          Idx                { get; set; }
     protected BatchState?  CurrentBatchState  { get; set; }
     protected RenderState? CurrentRenderState { get; set; }
 
@@ -83,26 +85,27 @@ public partial class SpriteBatch : IBatch, IDisposable
     private readonly object _lockObject = new();
 
     // Prevent reallocation of common vectors
-    private static readonly Vector2 _defaultOrigin = Vector2.Zero;
-    private static readonly Vector2 _defaultScale  = Vector2.One;
+    private static readonly Vector2 DefaultOrigin = Vector2.Zero;
+    private static readonly Vector2 DefaultScale  = Vector2.One;
 
-    private Texture?       _lastSuccessfulTexture = null;
+    private Texture?       _lastSuccessfulTexture;
     private ShaderProgram? _shader;
     private Mesh?          _mesh;
 
     private uint _vao;
     private uint _vbo;
     private uint _ebo;
-    private int  _nullTextureCount    = 0;
-    private int  _currentTextureIndex = 0;
+    private int  _nullTextureCount;
+    private int  _currentTextureIndex;
     private int  _maxTextureUnits;
     private int  _maxVertices;
     private int  _combinedMatrixLocation;
     private int  _textureLocation;
     private bool _ownsShader;
     private bool _originalDepthMask;
-    private bool _disposed = false;
+    private bool _disposed;
     private bool _initialBlendingState;
+    private bool _originalDepthTestEnabled;
 
     // ========================================================================
     // ========================================================================
@@ -134,8 +137,8 @@ public partial class SpriteBatch : IBatch, IDisposable
     protected SpriteBatch( int size = MAX_QUADS, ShaderProgram? defaultShader = null )
     {
         // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
-        Guard.NotGreaterThan( size, MAX_SPRITES, nameof( size ) );
-        Guard.ThrowIfNegative( size, nameof( size ) );
+        Guard.NotGreaterThan( size, MAX_SPRITES );
+        Guard.ThrowIfNegative( size );
 
         CurrentBatchState = BatchState.Ready;
 
@@ -155,13 +158,26 @@ public partial class SpriteBatch : IBatch, IDisposable
     {
         GLUtils.CheckOpenGLContext();
 
+        _currentTextureIndex   = 0;
+        _textureLocation       = 0;
+        _lastSuccessfulTexture = null;
+        _nullTextureCount      = 0;
+
         _maxVertices     = size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
         _maxTextureUnits = QueryMaxSupportedTextureUnits();
 
-        CreateVao();
-        CreateVbo( size );
-        CreateEbo( size );
+        CreateWhitePixel();
 
+        // 1. Create the "Container"
+        CreateVao();
+
+        // 2. Create and Link the Vertex Data
+        CreateVbo( size );
+        SetupVertexAttributes( _shader ); // This links _vbo to _vao
+
+        // 3. Create and Link the Index Data
+        CreateEbo( size ); // This links _ebo to _vao
+        
         // Determine the vertex data type based on OpenGL version.
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
         // which are more efficient. Earlier versions use Vertex Arrays.
@@ -175,12 +191,9 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Usage.COLOR_PACKED: 1 floats for packed RGBA color component.
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
 
-        var va1 = VertexAttribute.Position( VertexConstants.POSITION_COMPONENTS, IGL.GL_FLOAT, false );
-        ;
-
+        var va1 = VertexAttribute.Position( VertexConstants.POSITION_COMPONENTS );
         var va2 = VertexAttribute.ColorPacked( VertexConstants.COLOR_COMPONENTS, IGL.GL_FLOAT, false );
-
-        var va3 = VertexAttribute.TexCoords( 0, VertexConstants.TEXCOORD_COMPONENTS, IGL.GL_FLOAT, false );
+        var va3 = VertexAttribute.TexCoords( 0, VertexConstants.TEXCOORD_COMPONENTS );
 
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
@@ -241,23 +254,34 @@ public partial class SpriteBatch : IBatch, IDisposable
                 throw new InvalidOperationException( "End() must be called before Begin()" );
             }
 
-            if ( _shader == null )
+            CurrentBatchState = BatchState.Drawing;
+            RenderCalls       = 0;
+
+            // Handle Depth state
+            _originalDepthTestEnabled = GL.IsEnabled( ( int )EnableCap.DepthTest );
+
+            if ( depthMaskEnabled )
             {
-                throw new NullReferenceException( "Shader is null" );
+                GL.Enable( ( int )EnableCap.DepthTest );
+            }
+            else
+            {
+                GL.Disable( ( int )EnableCap.DepthTest );
             }
 
-            RenderCalls           = 0;
-            _initialBlendingState = BlendingEnabled;
-            CurrentBatchState     = BatchState.Drawing;
-            _originalDepthMask    = GL.IsEnabled( ( int )EnableCap.DepthTest );
-
             GL.DepthMask( depthMaskEnabled );
+            GL.Disable( ( int )EnableCap.CullFace );
 
+            // Ensure Blending is ready
+            GL.Enable( ( int )EnableCap.Blend );
+            GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
+
+            // Shader and Pipeline setup
             if ( _shader != null )
             {
                 _shader.Bind();
-                SetupMatrices();
-                SetupVertexAttributes( _shader );
+                SetupMatrices();                  // Uploads the Ortho matrix
+                SetupVertexAttributes( _shader ); // Points the VAO to the VBO
             }
         }
     }
@@ -284,17 +308,34 @@ public partial class SpriteBatch : IBatch, IDisposable
                 Flush();
             }
 
-            LastTexture       = null;
             CurrentBatchState = BatchState.Ready;
+            LastTexture       = null;
 
+            // Restore Depth State
             GL.DepthMask( _originalDepthMask );
 
-            // Only modify blending if current state differs from initial state
-            if ( BlendingEnabled != _initialBlendingState )
+            // Restore the EnableCap.DepthTest state we saved in Begin()
+            if ( _originalDepthTestEnabled )
             {
-                GL.EnableOrDisable( IGL.GL_BLEND, _initialBlendingState );
+                GL.Enable( ( int )EnableCap.DepthTest );
+            }
+            else
+            {
+                GL.Disable( ( int )EnableCap.DepthTest );
             }
 
+            // Restore Blending state
+            // Only modify blending if current state differs from initial state
+            if ( _initialBlendingState )
+            {
+                GL.Enable( ( int )EnableCap.Blend );
+            }
+            else
+            {
+                GL.Disable( ( int )EnableCap.Blend );
+            }
+
+            // Reset index for safety
             Idx = 0;
         }
     }
@@ -341,38 +382,45 @@ public partial class SpriteBatch : IBatch, IDisposable
             // Check if the texture is null.
             if ( LastTexture == null )
             {
+                #if DEBUG
+                LastTexture = _whitePixel;
+                Logger.Debug( "Last texture is null. Using white pixel fallback." );
+                #else
                 Idx = 0;
                 _nullTextureCount++;
 
                 Logger.Error( $"Attempt to flush with null texture. This batch will be skipped. " +
-                                $"Null texture count: {_nullTextureCount}. " +
-                                $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
+                              $"Null texture count: {_nullTextureCount}. " +
+                              $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
 
                 return;
+                #endif
             }
 
-            if ( _textureLocation != ShaderProgram.INVALID )
+            // Bind the texture to the current texture unit.
+            GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
+            LastTexture.Bind();
+
+            if ( _textureLocation != -1 )
             {
-                // Bind the texture to the current texture unit.
-                GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
-                LastTexture.Bind();
                 GL.Uniform1i( _textureLocation, _currentTextureIndex );
-
-                _mesh?.SetVertices( Vertices, 0, Idx );
-                _mesh!.IndicesBuffer.Position = 0;
-                _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
             }
+
+            _mesh?.SetVertices( Vertices, 0, Idx );
 
             // Set up blending.
             if ( BlendingEnabled )
             {
                 GL.Enable( IGL.GL_BLEND );
 
-                // Set the blend function if specified.
-                if ( BlendSrcFunc != -1 )
-                {
-                    GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
-                }
+                // Ensure we aren't passing invalid integers/enums
+                // Standard default if -1: SrcAlpha, OneMinusSrcAlpha
+                BlendSrcFunc      = ( BlendSrcFunc != -1 ) ? BlendSrcFunc : ( int )BlendMode.SrcAlpha;
+                BlendDstFunc      = ( BlendDstFunc != -1 ) ? BlendDstFunc : ( int )BlendMode.OneMinusSrcAlpha;
+                BlendSrcFuncAlpha = ( BlendSrcFuncAlpha != -1 ) ? BlendSrcFuncAlpha : ( int )BlendMode.One;
+                BlendDstFuncAlpha = ( BlendDstFuncAlpha != -1 ) ? BlendDstFuncAlpha : ( int )BlendMode.OneMinusSrcAlpha;
+
+                GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
             }
             else
             {
@@ -381,6 +429,23 @@ public partial class SpriteBatch : IBatch, IDisposable
 
             // Render the sprites.
             _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
+
+            #if DEBUG
+            // --- DEBUG OVERRIDE ---
+            GL.BindVertexArray( _vao );
+            GL.UseProgram( _shader!.ShaderProgramHandle );
+
+            // Re-bind the buffers manually
+            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+            GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
+
+            // Use raw OpenGL constants to avoid wrapper errors
+            // 4 = Triangles, 5123 = Unsigned Short
+            GL.DrawElements( 4, spritesInBatch * 6, 5123, IntPtr.Zero );
+            // -----------------------
+            #endif
+
+            Idx = 0;
         }
     }
 
@@ -459,9 +524,9 @@ public partial class SpriteBatch : IBatch, IDisposable
     public void SetBlendFunctionSeparate( int srcFuncColor, int dstFuncColor, int srcFuncAlpha, int dstFuncAlpha )
     {
         if ( ( BlendSrcFunc == srcFuncColor )
-             && ( BlendDstFunc == dstFuncColor )
-             && ( BlendSrcFuncAlpha == srcFuncAlpha )
-             && ( BlendDstFuncAlpha == dstFuncAlpha ) )
+          && ( BlendDstFunc == dstFuncColor )
+          && ( BlendSrcFuncAlpha == srcFuncAlpha )
+          && ( BlendDstFuncAlpha == dstFuncAlpha ) )
         {
             return;
         }
@@ -512,74 +577,60 @@ public partial class SpriteBatch : IBatch, IDisposable
         {
             GLUtils.CheckOpenGLContext();
 
-            // --------------------------------------------------------------------
-
-            if ( ( program == null ) || ( _mesh == null ) )
+            if ( program == null || _mesh == null )
             {
-                throw new NullReferenceException( "program and _mesh cannot be null!" );
+                return;
             }
 
-            // --------------------------------------------------------------------
-
-            var currentProgram = new int[ 1 ];
-
-            GL.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
-
-            if ( currentProgram[ 0 ] != _shader?.ShaderProgramHandle )
-            {
-                throw new GdxRuntimeException( "***** Shader program is unbound *****" );
-            }
-
-            // --------------------------------------------------------------------
-
+            // 1. Bind the VAO and VBO so these settings "stick" to this batch
             GL.BindVertexArray( _vao );
             GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
-            const int STRIDE           = VertexConstants.VERTEX_SIZE_BYTES;
-            const int POSITION_OFFSET  = VertexConstants.POSITION_OFFSET;
-            const int COLOR_OFFSET     = VertexConstants.COLOR_OFFSET * sizeof( float );
-            const int TEX_COORD_OFFSET = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
+            // 2. Define constants in BYTES
+            const int F_SIZE = sizeof( float );
+            const int STRIDE = VertexConstants.VERTEX_SIZE * F_SIZE; // 5 * 4 = 20 bytes
 
-            // Position Attribute
-            var positionLocation = program.GetAttributeLocation( "a_position" );
+            // 3. Position: Location 0 (a_position vec2)
+            var posLoc = program.GetAttributeLocation( "a_position" );
 
-            if ( positionLocation >= 0 )
+            if ( posLoc >= 0 )
             {
-                program.EnableVertexAttribute( positionLocation );
-                program.SetVertexAttribute( positionLocation,
-                                            VertexConstants.POSITION_COMPONENTS,
+                program.EnableVertexAttribute( posLoc );
+                program.SetVertexAttribute( posLoc,
+                                            2, // x, y
                                             IGL.GL_FLOAT,
                                             false,
                                             STRIDE,
-                                            POSITION_OFFSET );
+                                            0 ); // Offset 0
             }
 
-            // Color Attribute
-            var colorLocation = program.GetAttributeLocation( ShaderConstants.A_COLOR );
+            // 4. Color: Location 1 (a_color float)
+            var colLoc = program.GetAttributeLocation( "a_color" );
 
-            if ( colorLocation >= 0 )
+            if ( colLoc >= 0 )
             {
-                program.EnableVertexAttribute( colorLocation );
-                program.SetVertexAttribute( colorLocation,
-                                            VertexConstants.COLOR_COMPONENTS,
+                program.EnableVertexAttribute( colLoc );
+                // IMPORTANT: The shader expects ONE float (location 1)
+                program.SetVertexAttribute( colLoc,
+                                            1, // Only 1 component!
                                             IGL.GL_FLOAT,
                                             false,
                                             STRIDE,
-                                            COLOR_OFFSET );
+                                            2 * F_SIZE ); // Offset 8 bytes
             }
 
-            // Texture Coordinates Attribute
-            var texCoordLocation = program.GetAttributeLocation( "a_texCoord0" );
+            // 5. UVs: Location 2 (a_texCoord0 vec2)
+            var texLoc = program.GetAttributeLocation( "a_texCoord0" );
 
-            if ( texCoordLocation >= 0 )
+            if ( texLoc >= 0 )
             {
-                program.EnableVertexAttribute( texCoordLocation );
-                program.SetVertexAttribute( texCoordLocation,
-                                            VertexConstants.TEXCOORD_COMPONENTS,
+                program.EnableVertexAttribute( texLoc );
+                program.SetVertexAttribute( texLoc,
+                                            2, // u, v
                                             IGL.GL_FLOAT,
                                             false,
                                             STRIDE,
-                                            TEX_COORD_OFFSET );
+                                            3 * F_SIZE ); // Offset 12 bytes
             }
         }
     }
@@ -647,7 +698,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     private void GetCombinedMatrixUniformLocation()
     {
-        GdxRuntimeException.ThrowIfNull( _shader );
+        Guard.Against.Null( _shader );
 
         _combinedMatrixLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle, "u_combinedMatrix" );
     }
@@ -658,7 +709,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     private void GetTextureUniformLocation()
     {
-        GdxRuntimeException.ThrowIfNull( _shader );
+        Guard.Against.Null( _shader );
 
         _textureLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle,
                                                   "u_texture" );
@@ -684,27 +735,33 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="texture">The new texture to switch to. If null, no action is taken.</param>
     protected void SwitchTexture( Texture? texture )
     {
-        if ( texture == null )
-        {
-            Logger.Debug( "NULL Texture passed to SwitchTexture" );
-
-            return;
-        }
+        Guard.Against.Null( _shader );
 
         if ( Idx > 0 )
         {
-            // Necessary call to Flush() to ensure texture switching is handled correctly
+            // Necessary call to Flush() to ensure texture
+            // switching is handled correctly
             Flush();
         }
 
         GL.ActiveTexture( TextureUnit.Texture0 + TextureOffset );
-        texture.Bind();
-        GL.Uniform1i( _textureLocation, TextureOffset );
+
+        texture?.Bind();
+
+        if ( _textureLocation == -1 )
+        {
+            _textureLocation = _shader.GetUniformLocation( "u_texture" );
+        }
+
+        if ( _textureLocation != -1 )
+        {
+            GL.Uniform1i( _textureLocation, TextureOffset );
+        }
 
         LastTexture            = texture;
         _lastSuccessfulTexture = LastTexture;
-        InvTexWidth            = 1.0f / texture.Width;
-        InvTexHeight           = 1.0f / texture.Height;
+        InvTexWidth            = 1.0f / texture!.Width;
+        InvTexHeight           = 1.0f / texture!.Height;
     }
 
     // ========================================================================
@@ -790,6 +847,11 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public virtual void SetupMatrices()
     {
+        while ( GL.GetError() != ( int )ErrorCode.NoError )
+        {
+            Logger.Debug( $"GL Error: {GL.GetError()}" );
+        }
+
         // Note: Do not use the property 'Shader' here as its setter calls
         // this method, which would cause an infinite loop.
         CombinedMatrix = ProjectionMatrix.Mul( TransformMatrix );
@@ -803,7 +865,16 @@ public partial class SpriteBatch : IBatch, IDisposable
                 return;
             }
 
-            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix );
+            // DETECTION LOGIC:
+            // In a standard Ortho matrix, the scaling factors should be on the diagonal.
+            // For 480x320, we expect ~0.004 and ~0.006.
+            // If index 4 (Row 1, Col 0) is 0, it's likely Row Major
+            var isRowMajor = Math.Abs( CombinedMatrix.Val[ 4 ] ) < 0.0001f;
+
+            // If the diagonal values are at index 0, 5, 10, 15 -> Column Major (OpenGL Default)
+            // If the diagonal values are at index 0, 1, 2, 3 -> Something is very wrong
+
+            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix, isRowMajor );
             _shader.SetUniformi( "u_texture", 0 );
         }
     }
@@ -817,10 +888,10 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="indices">
     /// An array to hold the generated indices for the specified number of sprites.
     /// </param>
-    private static void PopulateIndexBuffer( int size, out short[] indices )
+    private static void PopulateIndexBuffer( int size, out int[] indices )
     {
         var len = size * INDICES_PER_SPRITE;
-        indices = new short[ len ];
+        indices = new int[ len ];
 
         for ( short i = 0, j = 0; i < len; i += INDICES_PER_SPRITE, j += 4 )
         {
@@ -890,6 +961,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     {
         _vbo = GL.GenBuffer();
         GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+
         Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
 
         GL.BufferData( ( int )BufferTarget.ArrayBuffer,
@@ -909,12 +981,15 @@ public partial class SpriteBatch : IBatch, IDisposable
 
         for ( uint i = 0, vertex = 0; i < indices.Length; i += INDICES_PER_SPRITE, vertex += 4 )
         {
-            indices[ i + 0 ] = vertex + 0;
-            indices[ i + 1 ] = vertex + 1;
-            indices[ i + 2 ] = vertex + 2;
-            indices[ i + 3 ] = vertex + 2;
-            indices[ i + 4 ] = vertex + 1;
-            indices[ i + 5 ] = vertex + 3;
+            // Triangle 1: Bottom-Left, Top-Left, Top-Right
+            indices[i + 0] = vertex + 0;
+            indices[i + 1] = vertex + 1;
+            indices[i + 2] = vertex + 2;
+
+            // Triangle 2: Top-Right, Bottom-Right, Bottom-Left
+            indices[i + 3] = vertex + 2;
+            indices[i + 4] = vertex + 3;
+            indices[i + 5] = vertex + 0;
         }
 
         _ebo = GL.GenBuffer();
@@ -965,10 +1040,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             const float U2 = 1;
             const float V2 = 0;
 
-            SetVertices( posX, posY, ColorPackedRGBA, U, V2,
-                         posX, fy2, ColorPackedRGBA, U, V,
-                         fx2, fy2, ColorPackedRGBA, U2, V,
-                         fx2, posY, ColorPackedRGBA, U2, V2 );
+            SetVertices( posX, posY, ColorPackedRGBA, U, V,
+                         posX, fy2, ColorPackedRGBA, U, V2,
+                         fx2, fy2, ColorPackedRGBA, U2, V2,
+                         fx2, posY, ColorPackedRGBA, U2, V );
         }
     }
 
@@ -1091,10 +1166,10 @@ public partial class SpriteBatch : IBatch, IDisposable
                 ( v, v2 ) = ( v2, v );
             }
 
-            SetVertices( x1, y1, ColorPackedRGBA, u, v2,
-                         x2, y2, ColorPackedRGBA, u, v,
-                         x3, y3, ColorPackedRGBA, u2, v,
-                         x4, y4, ColorPackedRGBA, u2, v2 );
+            SetVertices( x1, y1, ColorPackedRGBA, u, v,
+                         x2, y2, ColorPackedRGBA, u, v2,
+                         x3, y3, ColorPackedRGBA, u2, v2,
+                         x4, y4, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1138,10 +1213,10 @@ public partial class SpriteBatch : IBatch, IDisposable
                 ( v, v2 ) = ( v2, v );
             }
 
-            SetVertices( region.X, region.Y, ColorPackedRGBA, u, v2,
-                         region.X, fy2, ColorPackedRGBA, u, v,
-                         fx2, fy2, ColorPackedRGBA, u2, v,
-                         fx2, region.Y, ColorPackedRGBA, u2, v2 );
+            SetVertices( region.X, region.Y, ColorPackedRGBA, u, v,
+                         region.X, fy2, ColorPackedRGBA, u, v2,
+                         fx2, fy2, ColorPackedRGBA, u2, v2,
+                         fx2, region.Y, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1174,10 +1249,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             var fx2 = x + src.Width;
             var fy2 = y + src.Height;
 
-            SetVertices( x, y, ColorPackedRGBA, u, v2,
-                         x, fy2, ColorPackedRGBA, u, v,
-                         fx2, fy2, ColorPackedRGBA, u2, v,
-                         fx2, y, ColorPackedRGBA, u2, v2 );
+            SetVertices( x, y, ColorPackedRGBA, u, v,
+                         x, fy2, ColorPackedRGBA, u, v2,
+                         fx2, fy2, ColorPackedRGBA, u2, v2,
+                         fx2, y, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1208,10 +1283,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             var fx2 = region.X + region.Width;
             var fy2 = region.Y + region.Height;
 
-            SetVertices( region.X, region.Y, ColorPackedRGBA, u, v2,
-                         region.X, fy2, ColorPackedRGBA, u, v,
-                         fx2, fy2, ColorPackedRGBA, u2, v,
-                         fx2, region.Y, ColorPackedRGBA, u2, v2 );
+            SetVertices( region.X, region.Y, ColorPackedRGBA, u, v,
+                         region.X, fy2, ColorPackedRGBA, u, v2,
+                         fx2, fy2, ColorPackedRGBA, u2, v2,
+                         fx2, region.Y, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1325,15 +1400,11 @@ public partial class SpriteBatch : IBatch, IDisposable
 
             var fx2 = x + width;
             var fy2 = y + height;
-            var u   = region.U;
-            var v   = region.V2;
-            var u2  = region.U2;
-            var v2  = region.V;
 
-            SetVertices( x, y, ColorPackedRGBA, u, v2,
-                         x, fy2, ColorPackedRGBA, u, v,
-                         fx2, fy2, ColorPackedRGBA, u2, v,
-                         fx2, y, ColorPackedRGBA, u2, v2 );
+            SetVertices( x, y, ColorPackedRGBA, region.U, region.V,
+                         x, fy2, ColorPackedRGBA, region.U, region.V2,
+                         fx2, fy2, ColorPackedRGBA, region.U2, region.V2,
+                         fx2, y, ColorPackedRGBA, region.U2, region.V );
         }
     }
 
@@ -1346,7 +1417,8 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="origin">The origin point for transformations such as scaling and rotation.</param>
     /// <param name="scale">The scale factor to be applied to the texture region.</param>
     /// <param name="rotation">The rotation angle in radians to be applied to the texture region.</param>
-    public virtual void Draw( TextureRegion? textureRegion, GRect region, Point2D origin, Point2D scale, float rotation )
+    public virtual void Draw( TextureRegion? textureRegion, GRect region, Point2D origin, Point2D scale,
+                              float rotation )
     {
         lock ( _lockObject )
         {
@@ -1436,10 +1508,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             x4 += worldOriginX;
             y4 += worldOriginY;
 
-            SetVertices( x1, y1, ColorPackedRGBA, textureRegion.U, textureRegion.V2,
-                         x2, y2, ColorPackedRGBA, textureRegion.U, textureRegion.V,
-                         x3, y3, ColorPackedRGBA, textureRegion.U2, textureRegion.V,
-                         x4, y4, ColorPackedRGBA, textureRegion.U2, textureRegion.V2 );
+            SetVertices( x1, y1, ColorPackedRGBA, textureRegion.U, textureRegion.V,
+                         x2, y2, ColorPackedRGBA, textureRegion.U, textureRegion.V2,
+                         x3, y3, ColorPackedRGBA, textureRegion.U2, textureRegion.V2,
+                         x4, y4, ColorPackedRGBA, textureRegion.U2, textureRegion.V );
         }
     }
 
@@ -1620,10 +1692,15 @@ public partial class SpriteBatch : IBatch, IDisposable
             var x4 = ( transform.M00 * width ) + transform.M02;
             var y4 = ( transform.M10 * width ) + transform.M12;
 
-            SetVertices( x1, y1, ColorPackedRGBA, region.U, region.V2,
-                         x2, y2, ColorPackedRGBA, region.U, region.V,
-                         x3, y3, ColorPackedRGBA, region.U2, region.V,
-                         x4, y4, ColorPackedRGBA, region.U2, region.V2 );
+            var u  = region.U;
+            var v  = region.V2;
+            var u2 = region.U2;
+            var v2 = region.V;
+
+            SetVertices( x1, y1, ColorPackedRGBA, u, v,
+                         x2, y2, ColorPackedRGBA, u, v2,
+                         x3, y3, ColorPackedRGBA, u2, v2,
+                         x4, y4, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1776,6 +1853,22 @@ public partial class SpriteBatch : IBatch, IDisposable
     ~SpriteBatch()
     {
         Dispose( false );
+    }
+
+    // ========================================================================
+
+    private Texture _whitePixel;
+
+    private void CreateWhitePixel()
+    {
+        // Create a 1x1 array with a single white pixel (RGBA: 255, 255, 255, 255)
+        var pixmap = new Pixmap( 1, 1, LughFormat.RGBA8888 );
+        pixmap.SetColor( Color.White );
+        pixmap.FillWithCurrentColor();
+
+        var textureData = new PixmapTextureData( pixmap, LughFormat.RGBA8888, false, false );
+
+        _whitePixel = new Texture( textureData );
     }
 
     // ========================================================================

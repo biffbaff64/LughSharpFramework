@@ -553,7 +553,7 @@ public class RiffFile
     /// </summary>
     public virtual long CurrentFilePosition()
     {
-        GdxRuntimeException.ThrowIfNull( _file );
+        Guard.Against.Null( _file );
 
         long position;
 

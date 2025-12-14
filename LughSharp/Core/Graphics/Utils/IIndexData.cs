@@ -22,11 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// An IndexData instance holds index data.
-/// Can be either a plain short buffer or an OpenGL buffer object.
+/// Can be either a plain int buffer or an OpenGL buffer object.
 /// </summary>
 [PublicAPI]
 public interface IIndexData : IDisposable
@@ -49,8 +49,8 @@ public interface IIndexData : IDisposable
     /// </summary>
     /// <param name="indices"> the index data </param>
     /// <param name="offset"> the offset to start copying the data from </param>
-    /// <param name="count"> the number of shorts to copy  </param>
-    void SetIndices( short[] indices, int offset, int count );
+    /// <param name="count"> the number of ints to copy  </param>
+    void SetIndices( int[] indices, int offset, int count );
 
     /// <summary>
     /// Copies the specified indices to the indices of this IndexBufferObject,
@@ -61,7 +61,7 @@ public interface IIndexData : IDisposable
     /// The index data will be updated instantly.
     /// </summary>
     /// <param name="indices"> the index data to copy  </param>
-    void SetIndices( Buffer< short > indices );
+    void SetIndices( Buffer< int > indices );
 
     /// <summary>
     /// Update (a portion of) the indices.
@@ -69,16 +69,16 @@ public interface IIndexData : IDisposable
     /// <param name="targetOffset"> offset in indices buffer </param>
     /// <param name="indices"> the index data </param>
     /// <param name="offset"> the offset to start copying the data from </param>
-    /// <param name="count"> the number of shorts to copy  </param>
-    void UpdateIndices( int targetOffset, short[] indices, int offset, int count );
+    /// <param name="count"> the number of ints to copy  </param>
+    void UpdateIndices( int targetOffset, int[] indices, int offset, int count );
 
     /// <summary>
     /// Returns the underlying Buffer{T}. If you modify the buffer contents they
     /// wil be uploaded on the call to <see cref="Bind()"/>. If you need immediate
-    /// uploading use <see cref="SetIndices(short[], int, int)"/>.
+    /// uploading use <see cref="SetIndices(int[], int, int)"/>.
     /// </summary>
-    /// <returns> the underlying short buffer. </returns>
-    Buffer< short > GetBuffer( bool forWriting );
+    /// <returns> the underlying int buffer. </returns>
+    Buffer< int > GetBuffer( bool forWriting );
 
     /// <summary>
     /// Binds this IndexBufferObject for rendering with glDrawElements.

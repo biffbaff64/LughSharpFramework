@@ -37,6 +37,7 @@ using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
+using Encoder = System.Drawing.Imaging.Encoder;
 using Pen = System.Drawing.Pen;
 
 namespace Extensions.Source.Tools.TexturePacker;

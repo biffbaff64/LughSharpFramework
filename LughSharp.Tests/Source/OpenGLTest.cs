@@ -24,13 +24,14 @@
 
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using NUnit.Framework;
 using GLBindings = LughSharp.Core.Graphics.OpenGL.Bindings.GLBindings;
 
 namespace LughSharp.Tests.Source;
 
 [PublicAPI]
-public unsafe class OpenGLTest
+public unsafe class OpenGLTest : ILughTest
 {
     private static readonly GLBindings _gl = new();
 
@@ -66,65 +67,77 @@ public unsafe class OpenGLTest
     [SetUp]
     public void Setup()
     {
-//        _shaderProgram = CreateProgram( _vertexShaderSource, _fragmentShaderSource );
-//
-//        _vao = _gl.GenVertexArray();
-//        _gl.BindVertexArray( _vao );
-//
-//        _vbo = _gl.GenBuffer();
-//        _gl.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-//
-//        fixed ( float* ptr = vertices )
-//        {
-//            _gl.BufferData( ( int )BufferTarget.ArrayBuffer, vertices.Length * sizeof( float ), ( IntPtr )ptr, IGL.GL_STATIC_DRAW );
-//        }
-//
-//        _gl.VertexAttribPointer( 0, 3, IGL.GL_FLOAT, false, 3 * sizeof( float ), 0u );
-//        _gl.EnableVertexAttribArray( 0 );
-//
-//        _ibo = _gl.GenBuffer();
-//        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, _ibo );
-//
-//        fixed ( short* ptr = indices )
-//        {
-//            _gl.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, indices.Length * sizeof( short ), ( IntPtr )ptr, IGL.GL_STATIC_DRAW );
-//        }
-//
-//        _gl.BindVertexArray( 0 );
-//        _gl.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-//        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
+        _shaderProgram = CreateProgram( VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE );
+
+        _vao = _gl.GenVertexArray();
+        _gl.BindVertexArray( _vao );
+
+        _vbo = _gl.GenBuffer();
+        _gl.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+
+        fixed ( float* ptr = _vertices )
+        {
+            _gl.BufferData( ( int )BufferTarget.ArrayBuffer,
+                            _vertices.Length * sizeof( float ),
+                            ( IntPtr )ptr, IGL.GL_STATIC_DRAW );
+        }
+
+        _gl.VertexAttribPointer( 0, 3, IGL.GL_FLOAT, false, 3 * sizeof( float ), 0u );
+        _gl.EnableVertexAttribArray( 0 );
+
+        _ibo = _gl.GenBuffer();
+        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, _ibo );
+
+        fixed ( short* ptr = _indices )
+        {
+            _gl.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER,
+                            _indices.Length * sizeof( short ),
+                            ( IntPtr )ptr, IGL.GL_STATIC_DRAW );
+        }
+
+        _gl.BindVertexArray( 0 );
+        _gl.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
     }
 
+    [Test]
+    public void Run()
+    {
+    }
+    
+    [TearDown]
+    public void TearDown()
+    {
+    }
+    
     public void Render()
     {
-//        _gl.UseProgram( ( int )_shaderProgram );
-//        _gl.BindVertexArray( _vao );
-//        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, _ibo );
-//
-////        var offsetInBytes = 0; //offset * sizeof( short );
-//        _gl.DrawElements( IGL.GL_TRIANGLES, indices.Length, IGL.GL_UNSIGNED_SHORT, 0 );
+        _gl.UseProgram( ( int )_shaderProgram );
+        _gl.BindVertexArray( _vao );
+        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, _ibo );
+
+//        var offsetInBytes = 0; //offset * sizeof( short );
+        _gl.DrawElements( IGL.GL_TRIANGLES, _indices.Length, IGL.GL_UNSIGNED_SHORT, 0 );
     }
 
     private uint CreateProgram( string vertexShaderSource, string fragmentShaderSource )
     {
-//        var vertexShader = _gl.CreateShader( IGL.GL_VERTEX_SHADER );
-//        _gl.ShaderSource( ( int )vertexShader, vertexShaderSource );
-//        _gl.CompileShader( ( int )vertexShader );
-//
-//        var fragmentShader = _gl.CreateShader( IGL.GL_FRAGMENT_SHADER );
-//        _gl.ShaderSource( ( int )fragmentShader, fragmentShaderSource );
-//        _gl.CompileShader( ( int )fragmentShader );
-//
-//        var shaderProgram = _gl.CreateProgram();
-//        _gl.AttachShader( ( int )shaderProgram, ( int )vertexShader );
-//        _gl.AttachShader( ( int )shaderProgram, ( int )fragmentShader );
-//        _gl.LinkProgram( ( int )shaderProgram );
-//
-//        _gl.DeleteShader( ( int )vertexShader );
-//        _gl.DeleteShader( ( int )fragmentShader );
-//
-//        return shaderProgram;
+        var vertexShader = _gl.CreateShader( IGL.GL_VERTEX_SHADER );
+        _gl.ShaderSource( ( int )vertexShader, vertexShaderSource );
+        _gl.CompileShader( ( int )vertexShader );
 
-        return 0;
+        var fragmentShader = _gl.CreateShader( IGL.GL_FRAGMENT_SHADER );
+        _gl.ShaderSource( ( int )fragmentShader, fragmentShaderSource );
+        _gl.CompileShader( ( int )fragmentShader );
+
+        var shaderProgram = _gl.CreateProgram();
+        _gl.AttachShader( ( int )shaderProgram, ( int )vertexShader );
+        _gl.AttachShader( ( int )shaderProgram, ( int )fragmentShader );
+        _gl.LinkProgram( ( int )shaderProgram );
+
+        _gl.DeleteShader( ( int )vertexShader );
+        _gl.DeleteShader( ( int )fragmentShader );
+
+        return shaderProgram;
     }
 }

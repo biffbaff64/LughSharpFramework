@@ -92,7 +92,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
     public void SetView( OrthographicCamera camera )
     {
-        GdxRuntimeException.ThrowIfNull( SpriteCache );
+        Guard.Against.Null( SpriteCache );
 
         SpriteCache.ProjectionMatrix = camera.Combined;
 
@@ -112,7 +112,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
     public void SetView( Matrix4 projection, float x, float y, float width, float height )
     {
-        GdxRuntimeException.ThrowIfNull( SpriteCache );
+        Guard.Against.Null( SpriteCache );
 
         SpriteCache.ProjectionMatrix = projection;
 
@@ -134,7 +134,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
     public void Render()
     {
-        GdxRuntimeException.ThrowIfNull( SpriteCache );
+        Guard.Against.Null( SpriteCache );
 
         if ( !Cached )
         {

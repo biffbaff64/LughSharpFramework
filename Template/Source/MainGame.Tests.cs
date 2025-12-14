@@ -17,7 +17,8 @@ namespace Template.Source;
 
 public partial class MainGame
 {
-    private static bool _first = true;
+    private static bool      _first = true;
+    private static ILughTest _test  = new OpenGLTest();
 
     // ========================================================================
 
@@ -35,9 +36,8 @@ public partial class MainGame
 //        var test = new AssetManagerTest( _assetManager );
 //        var test = new TexturePackerTest();
 //        var test = new ImagePackerTest();
-//        var test = new OpenGLTest();
         // --------------------------------------
-//        test.Setup();
+        _test.Setup();
 //        test.Run();
 //        test.TearDown();
         // --------------------------------------
@@ -47,6 +47,11 @@ public partial class MainGame
 
     private void UpdateTests()
     {
+    }
+
+    private void RenderTests()
+    {
+        _test.Render();
     }
 
     private static void CheckViewportCoverage()
@@ -94,7 +99,7 @@ public partial class MainGame
         var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, LughFormat.RGBA8888 );
 
         pixmap.FillWithColor( Color.Red );
-        
+
         _image1 = new Texture( new PixmapTextureData( pixmap,
                                                       LughFormat.RGBA8888,
                                                       false,
@@ -124,7 +129,7 @@ public partial class MainGame
         catch ( Exception ex )
         {
             Logger.Error( $"Exception while loading texture: {ex.Message}" );
-            
+
             _image1?.Dispose();
             _image1 = null;
         }

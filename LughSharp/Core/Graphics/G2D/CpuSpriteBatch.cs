@@ -580,7 +580,7 @@ public class CpuSpriteBatch : SpriteBatch
         }
 
         Guard.Against.Null( texture );
-        GdxRuntimeException.ThrowIfNull( LastTexture );
+        Guard.Against.Null( LastTexture );
 
         if ( texture != LastTexture )
         {

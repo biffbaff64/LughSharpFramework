@@ -157,7 +157,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     {
         if ( pointer == 0 )
         {
-            GdxRuntimeException.ThrowIfNull( _window );
+            Guard.Against.Null( _window );
 
             return ( DotGLFW.Glfw.GetMouseButton( _window.GlfwWindow, DotGLFW.MouseButton.Button1 ) ==
                      DotGLFW.InputState.Press )

@@ -145,7 +145,7 @@ public class InstanceBufferObject : IInstanceData
 
     public void UpdateInstanceData( int targetOffset, Buffer< float > data, int sourceOffset, int count )
     {
-        GdxRuntimeException.ThrowIfNull( _byteBuffer );
+        Guard.Against.Null( _byteBuffer );
 
         _isDirty = true;
 

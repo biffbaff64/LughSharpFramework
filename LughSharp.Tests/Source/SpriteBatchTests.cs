@@ -31,6 +31,7 @@ using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 
 using NUnit.Framework;
+using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Tests.Source;
 

@@ -1012,9 +1012,9 @@ public class FreeTypeFontGenerator : IDisposable
 
             if ( ( glyph == null ) && ( Generator != null ) )
             {
-                GdxRuntimeException.ThrowIfNull( Stroker );
-                GdxRuntimeException.ThrowIfNull( Packer );
-                GdxRuntimeException.ThrowIfNull( Regions );
+                Guard.Against.Null( Stroker );
+                Guard.Against.Null( Packer );
+                Guard.Against.Null( Regions );
 
                 Generator.SetPixelSizes( 0, Parameter.Size );
                 var baseline = ( ( Flipped ? -Ascent : Ascent ) + CapHeight ) / ScaleY;

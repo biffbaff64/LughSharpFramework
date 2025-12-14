@@ -51,17 +51,7 @@ public partial class MainGame : Game
 
         CreateCamera();
         
-        var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, LughFormat.RGBA8888 );
-        pixmap.SetColor( Color.White );
-        pixmap.FillWithCurrentColor();
-        Logger.Debug( $"pixmap width: {pixmap.Width}, height: {pixmap.Height}" );
-        Logger.Debug( $"Bytes per Pixel: {pixmap.Gdx2DPixmap.BytesPerPixel}" );
-        Logger.Debug( $"pixmap ByteBuffer length: {pixmap.ByteBuffer.Length}" );
-        
-        Logger.Block();
-
-        _image1 = new Texture( Assets.COMPLETE_STAR );
-        _image1.DebugPrint();
+//        RunTests();
         
         Logger.Debug( "Done" );
     }
@@ -71,6 +61,7 @@ public partial class MainGame : Game
     /// <inheritdoc />
     public override void Update()
     {
+//        UpdateTests();
     }
 
     /// <inheritdoc />
@@ -78,6 +69,8 @@ public partial class MainGame : Game
     {
         // Clear and set viewport
         ScreenUtils.Clear( Color.Blue );
+
+//        RenderTests();
 
         if ( _orthoGameCam is { IsInUse: true } )
         {
@@ -163,7 +156,7 @@ public partial class MainGame : Game
 
     private void LoadAssets()
     {
-        GdxRuntimeException.ThrowIfNull( _assetManager );
+        Guard.Against.Null( _assetManager );
 
         Logger.Divider();
         Logger.Debug( "Loading assets...", true );

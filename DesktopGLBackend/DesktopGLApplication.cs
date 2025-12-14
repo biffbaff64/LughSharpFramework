@@ -569,7 +569,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// </summary>
     public DesktopGLWindow NewWindow( IApplicationListener listener, DesktopGLApplicationConfiguration windowConfig )
     {
-        GdxRuntimeException.ThrowIfNull( AppConfig );
+        Guard.Against.Null( AppConfig );
 
         AppConfig.SetWindowConfiguration( windowConfig );
 

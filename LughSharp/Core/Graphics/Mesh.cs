@@ -26,13 +26,13 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics;
 
 [PublicAPI]
 public class Mesh : IDisposable
 {
     public IIndexData IndexData   { get; set; }
-    public bool       IsInstanced { get; set; } = false;
+    public bool       IsInstanced { get; set; }
 
     /// <summary>
     /// Whether to bind the underlying <see cref="VertexArray"/> or <see cref="VertexBufferObject"/>
@@ -45,10 +45,10 @@ public class Mesh : IDisposable
 
     private static readonly Dictionary< IApplication, List< Mesh >? > Meshes = new();
 
-    private readonly bool            _isVertexArray;
-    private readonly Buffer< short > _shortBuffer = new( 100 );
-    private readonly Vector3         _tmpV        = new();
-    private readonly IVertexData     _vertices;
+    private readonly bool          _isVertexArray;
+    private readonly Buffer< int > _intBuffer = new( 100 );
+    private readonly Vector3       _tmpV      = new();
+    private readonly IVertexData   _vertices;
 
     private InstanceBufferObject? _instances;
 
@@ -240,7 +240,7 @@ public class Mesh : IDisposable
     /// the backing shortbuffer holding the _indices.
     /// Does not have to be a direct buffer on Android!
     /// </summary>
-    public Buffer< short > IndicesBuffer => IndexData.GetBuffer( false );
+    public Buffer< int > IndicesBuffer => IndexData.GetBuffer( false );
 
     // ========================================================================
 
@@ -285,7 +285,7 @@ public class Mesh : IDisposable
         else
         {
             throw new GdxRuntimeException( "Trying to enable InstancedRendering on same Mesh instance twice."
-                                           + " Use disableInstancedRendering to clean up old InstanceData first" );
+                                         + " Use disableInstancedRendering to clean up old InstanceData first" );
         }
 
         return this;
@@ -518,10 +518,10 @@ public class Mesh : IDisposable
         }
 
         if ( ( srcOffset < 0 )
-             || ( count <= 0 )
-             || ( ( srcOffset + count ) > max )
-             || ( destOffset < 0 )
-             || ( destOffset >= vertices.Length ) )
+          || ( count <= 0 )
+          || ( ( srcOffset + count ) > max )
+          || ( destOffset < 0 )
+          || ( destOffset >= vertices.Length ) )
         {
             throw new IndexOutOfRangeException();
         }
@@ -547,7 +547,7 @@ public class Mesh : IDisposable
     /// </summary>
     /// <param name="indices"> the indices </param>
     /// <returns> the mesh for invocation chaining.  </returns>
-    public Mesh SetIndices( short[] indices )
+    public Mesh SetIndices( int[] indices )
     {
         IndexData.SetIndices( indices, 0, indices.Length );
 
@@ -561,7 +561,7 @@ public class Mesh : IDisposable
     /// <param name="offset"> the offset into the indices array </param>
     /// <param name="count"> the number of indices to copy </param>
     /// <returns> the mesh for invocation chaining.  </returns>
-    public Mesh SetIndices( short[] indices, int offset, int count )
+    public Mesh SetIndices( int[] indices, int offset, int count )
     {
         IndexData.SetIndices( indices, offset, count );
 
@@ -574,7 +574,7 @@ public class Mesh : IDisposable
     /// </summary>
     /// <param name="indices"> the array to copy the indices to </param>
     /// <param name="destOffset"> the offset in the indices array to start copying  </param>
-    public void GetIndices( short[] indices, int destOffset = 0 )
+    public void GetIndices( int[] indices, int destOffset = 0 )
     {
         GetIndices( 0, indices, destOffset );
     }
@@ -586,7 +586,7 @@ public class Mesh : IDisposable
     /// <param name="srcOffset"> the zero-based offset of the first index to fetch </param>
     /// <param name="indices"> the array to copy the indices to </param>
     /// <param name="destOffset"> the offset in the indices array to start copying  </param>
-    public void GetIndices( int srcOffset, short[] indices, int destOffset )
+    public void GetIndices( int srcOffset, int[] indices, int destOffset )
     {
         GetIndices( srcOffset, -1, indices, destOffset );
     }
@@ -599,7 +599,7 @@ public class Mesh : IDisposable
     /// <param name="count"> the total amount of indices to copy </param>
     /// <param name="indices"> the array to copy the indices to </param>
     /// <param name="destOffset"> the offset in the indices array to start copying  </param>
-    public void GetIndices( int srcOffset, int count, short[] indices, int destOffset )
+    public void GetIndices( int srcOffset, int count, int[] indices, int destOffset )
     {
         var max = NumIndices;
 
@@ -615,7 +615,8 @@ public class Mesh : IDisposable
 
         if ( ( indices.Length - destOffset ) < count )
         {
-            throw new ArgumentException( $"not enough room in indices array, has {indices.Length} shorts, needs {count}" );
+            throw new
+                ArgumentException( $"not enough room in indices array, has {indices.Length} shorts, needs {count}" );
         }
 
         var pos = IndicesBuffer.Position;
@@ -799,9 +800,9 @@ public class Mesh : IDisposable
                 buffer.Position = offset;
                 buffer.Limit    = offset + count;
 
-                fixed ( short* ptr = &buffer.ToArray()[ 0 ] )
+                fixed ( int* ptr = &buffer.ToArray()[ 0 ] )
                 {
-                    GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, new IntPtr( ptr + offset ) );
+                    GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, new IntPtr( ptr + offset ) );
                 }
 
                 buffer.Position = oldPosition;
@@ -818,6 +819,8 @@ public class Mesh : IDisposable
 
             if ( IndexData.NumIndices > 0 )
             {
+                IndexData.Bind();
+
                 if ( ( count + offset ) > IndexData.NumMaxIndices )
                 {
                     throw new GdxRuntimeException( $"Mesh attempting to access memory outside " +
@@ -827,11 +830,11 @@ public class Mesh : IDisposable
 
                 if ( IsInstanced && ( numInstances > 0 ) )
                 {
-                    GL.DrawElementsInstanced( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offset * 2, numInstances );
+                    GL.DrawElementsInstanced( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4, numInstances );
                 }
                 else
                 {
-                    GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offset * 2 );
+                    GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4 );
                 }
 
 //                IndexData.Bind();
@@ -1041,7 +1044,7 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), 0, 0 );
 
@@ -1057,7 +1060,7 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( i * vertexSize )! + posoff;
+                        var idx = ( i * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), 0, 0 );
 
@@ -1077,7 +1080,7 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
 
@@ -1093,7 +1096,7 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( i * vertexSize )! + posoff;
+                        var idx = ( i * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
 
@@ -1113,7 +1116,7 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
 
@@ -1129,7 +1132,7 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( i * vertexSize )! + posoff;
+                        var idx = ( i * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
 
@@ -1557,8 +1560,8 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Method to transform the texture coordinates in the mesh. This is a potentially slow operation,
-    /// use with care. It will also create a temporary float[] which will be garbage collected.
+    /// Method to transform the texture coordinates in the mesh. This is a potentially
+    /// slow operation, use with care.
     /// </summary>
     /// <param name="matrix"> the transformation matrix  </param>
     public void TransformUV( in Matrix3 matrix )
@@ -1734,12 +1737,12 @@ public class Mesh : IDisposable
             newVertexSizeFloats = vertexSizeFloats;
         }
 
-        var      numIndices = NumIndices;
-        short[]? indices    = null;
+        var    numIndices = NumIndices;
+        int[]? indices    = null;
 
         if ( numIndices > 0 )
         {
-            indices = new short[ numIndices ];
+            indices = new int[ numIndices ];
             GetIndices( indices );
 
             if ( removeDuplicates || ( newVertexSizeFloats != vertexSizeFloats ) )
@@ -1822,7 +1825,8 @@ public class Mesh : IDisposable
     /// <returns>
     /// A new instance of <see cref="VertexBufferObjectWithVAO"/> configured with the specified parameters.
     /// </returns>
-    private static VertexBufferObjectWithVAO MakeVertexBuffer( bool isStatic, int maxVertices, VertexAttributes vertexAttributes )
+    private static VertexBufferObjectWithVAO MakeVertexBuffer( bool isStatic, int maxVertices,
+                                                               VertexAttributes vertexAttributes )
     {
         return new VertexBufferObjectWithVAO( isStatic, maxVertices, vertexAttributes );
     }

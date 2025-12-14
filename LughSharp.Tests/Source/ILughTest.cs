@@ -22,27 +22,18 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.OpenGL.Enums;
+using JetBrains.Annotations;
+
+namespace LughSharp.Tests.Source;
 
 [PublicAPI]
-public enum BlendMode
+public interface ILughTest
 {
-    Zero                  = IGL.GL_ZERO,
-    One                   = IGL.GL_ONE,
-    SrcColor              = IGL.GL_SRC_COLOR,
-    OneMinusSrcColor      = IGL.GL_ONE_MINUS_SRC_COLOR,
-    DstColor              = IGL.GL_DST_COLOR,
-    OneMinusDstColor      = IGL.GL_ONE_MINUS_DST_COLOR,
-    SrcAlpha              = IGL.GL_SRC_ALPHA,
-    OneMinusSrcAlpha      = IGL.GL_ONE_MINUS_SRC_ALPHA,
-    DstAlpha              = IGL.GL_DST_ALPHA,
-    OneMinusDstAlpha      = IGL.GL_ONE_MINUS_DST_ALPHA,
-    ConstantColor         = IGL.GL_CONSTANT_COLOR,
-    OneMinusConstantColor = IGL.GL_ONE_MINUS_CONSTANT_COLOR,
-    ConstantAlpha         = IGL.GL_CONSTANT_ALPHA,
-    OneMinusConstantAlpha = IGL.GL_ONE_MINUS_CONSTANT_ALPHA,
-    SrcAlphaSaturate      = IGL.GL_SRC_ALPHA_SATURATE,
+    void Setup();
+    void Run();
+    void Render();
+    void TearDown();
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================

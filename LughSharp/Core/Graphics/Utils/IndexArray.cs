@@ -24,14 +24,14 @@
 
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 [PublicAPI]
 public class IndexArray : IIndexData
 {
-    private readonly bool            _empty;
-    private          Buffer< short > _buffer;
-    private          Buffer< byte >  _byteBuffer;
+    private readonly bool           _empty;
+    private          Buffer< int >  _buffer;
+    private          Buffer< byte > _byteBuffer;
 
     // ========================================================================
     // ========================================================================
@@ -49,9 +49,10 @@ public class IndexArray : IIndexData
             maxIndices = 1;
         }
 
-        _byteBuffer = new Buffer< byte >( maxIndices * 2 );
+        // Create a new byte buffer to hold the indices. Each index is an int (4 bytes).
+        _byteBuffer = new Buffer< byte >( maxIndices * 4 );
 
-        _buffer = _byteBuffer.AsShortBuffer();
+        _buffer = _byteBuffer.AsIntBuffer();
         _buffer.Flip();
 
         _byteBuffer.Flip();
@@ -78,10 +79,10 @@ public class IndexArray : IIndexData
     /// <param name="indices"> the vertex data </param>
     /// <param name="offset"> the offset to start copying the data from </param>
     /// <param name="count"> the number of shorts to copy  </param>
-    public void SetIndices( short[] indices, int offset, int count )
+    public void SetIndices( int[] indices, int offset, int count )
     {
         _buffer.Clear();
-        _buffer.PutShorts( indices, offset, count );
+        _buffer.PutInts( indices, offset, count );
         _buffer.Flip();
 
         _byteBuffer.Position = 0;
@@ -91,13 +92,13 @@ public class IndexArray : IIndexData
     /// <summary>
     /// </summary>
     /// <param name="indices"></param>
-    public void SetIndices( Buffer< short > indices )
+    public void SetIndices( Buffer< int > indices )
     {
         var pos = indices.Position;
 
         _buffer.Clear();
         _buffer.Limit = indices.Remaining();
-        _buffer.PutShorts( indices.ToArray() );
+        _buffer.PutInts( indices.ToArray() );
         _buffer.Flip();
 
         indices.Position = pos;
@@ -112,7 +113,7 @@ public class IndexArray : IIndexData
     /// <param name="indices"></param>
     /// <param name="offset"></param>
     /// <param name="count"></param>
-    public void UpdateIndices( int targetOffset, short[] indices, int offset, int count )
+    public void UpdateIndices( int targetOffset, int[] indices, int offset, int count )
     {
         var pos = _byteBuffer.Position;
 
@@ -129,7 +130,7 @@ public class IndexArray : IIndexData
     /// If you need immediate uploading use <see cref="SetIndices(short[], int, int)"/>.
     /// </summary>
     /// <returns> the underlying short buffer. </returns>
-    public virtual Buffer< short > GetBuffer( bool forWriting )
+    public virtual Buffer< int > GetBuffer( bool forWriting )
     {
         return _buffer;
     }

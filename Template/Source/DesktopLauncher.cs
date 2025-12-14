@@ -1,4 +1,6 @@
-﻿using System.Runtime.Versioning;
+﻿using System;
+using System.IO;
+using System.Runtime.Versioning;
 using DesktopGLBackend;
 using Extensions.Source.Tools.TexturePacker;
 using LughSharp.Core.Files;

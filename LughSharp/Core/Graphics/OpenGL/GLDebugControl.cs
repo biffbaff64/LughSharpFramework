@@ -24,23 +24,29 @@
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL;
+using JetBrains.Annotations;
+using LughSharp.Core.Graphics.OpenGL.Bindings;
+
+namespace LughSharp.Core.Graphics.OpenGL;
 
 [PublicAPI]
 public class GLDebugControl
 {
+    private static GLBindings.GLDEBUGPROC? _debugCallback;
+    
     /// <summary>
-    /// Sets up OpenGL's debug message callback and enables debug output. This helps capture and log
-    /// OpenGL debug messages during runtime, providing details about issues such as errors, warnings,
-    /// or performance bottlenecks in OpenGL operations.
+    /// Sets up OpenGL's debug message callback and enables debug output. This helps
+    /// capture and log OpenGL debug messages during runtime, providing details about
+    /// issues such as errors, warnings, or performance bottlenecks in OpenGL operations.
     /// </summary>
     public static unsafe void EnableGLDebugOutput()
     {
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLDebugContext, true );
 
+        _debugCallback = GL.MessageCallback;
         GL.Enable( ( int )EnableCap.DebugOutput );
         GL.Enable( ( int )EnableCap.DebugOutputSynchronous );
-        GL.DebugMessageCallback( GL.MessageCallback, null );
+        GL.DebugMessageCallback( _debugCallback, null );
 
         var array = new uint[ 1 ];
 

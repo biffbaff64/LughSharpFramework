@@ -191,7 +191,7 @@ public class RepeatablePolygonSprite
     /// </summary>
     private void BuildVertices()
     {
-        GdxRuntimeException.ThrowIfNull( _region );
+        Guard.Against.Null( _region );
 
         _vertices.Clear();
 
