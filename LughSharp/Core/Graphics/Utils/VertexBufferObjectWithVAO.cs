@@ -263,17 +263,17 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     private unsafe void BufferChanged()
     {
-        if ( _isBound )
+        // Bind the buffer regardless of _isBound to ensure the upload happens
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+
+        fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
         {
-            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
-
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
-            {
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
-            }
-
-            _isDirty = false;
+            // Use BufferSubData if you already allocated memory in Initialise, 
+            // otherwise BufferData is fine for now.
+            GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
         }
+
+        _isDirty = false;
     }
 
     private void BindAttributes( ShaderProgram shader, int[]? locations )

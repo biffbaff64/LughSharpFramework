@@ -51,6 +51,8 @@ public partial class MainGame : Game
 
         CreateCamera();
         
+        _image1 = new Texture( Assets.BACKGROUND_IMAGE );
+        
 //        RunTests();
         
         Logger.Debug( "Done" );
@@ -68,7 +70,7 @@ public partial class MainGame : Game
     public override void Render()
     {
         // Clear and set viewport
-        ScreenUtils.Clear( Color.Blue );
+        ScreenUtils.Clear( color: Color.Blue, clearDepth: true );
 
 //        RenderTests();
 
@@ -80,7 +82,7 @@ public partial class MainGame : Game
 
             if ( _image1 != null )
             {
-                _spriteBatch?.Draw( _image1, 0, 0 );
+                _spriteBatch?.Draw( _image1, 100, 100 );
             }
 
             _spriteBatch?.End();

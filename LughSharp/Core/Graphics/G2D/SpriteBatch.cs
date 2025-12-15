@@ -177,7 +177,10 @@ public class SpriteBatch : IBatch, IDisposable
 
         // 3. Create and Link the Index Data
         CreateEbo( size ); // This links _ebo to _vao
-        
+
+        // 4. Close the "Container"
+        GL.BindVertexArray( 0 );
+
         // Determine the vertex data type based on OpenGL version.
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
         // which are more efficient. Earlier versions use Vertex Arrays.
@@ -257,6 +260,10 @@ public class SpriteBatch : IBatch, IDisposable
             CurrentBatchState = BatchState.Drawing;
             RenderCalls       = 0;
 
+            GL.Disable( ( int )EnableCap.CullFace );
+            GL.Disable( ( int )EnableCap.ScissorTest );
+            GL.Disable( ( int )EnableCap.StencilTest );
+
             // Handle Depth state
             _originalDepthTestEnabled = GL.IsEnabled( ( int )EnableCap.DepthTest );
 
@@ -270,11 +277,13 @@ public class SpriteBatch : IBatch, IDisposable
             }
 
             GL.DepthMask( depthMaskEnabled );
-            GL.Disable( ( int )EnableCap.CullFace );
 
             // Ensure Blending is ready
             GL.Enable( ( int )EnableCap.Blend );
             GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
+
+            // Use your actual window width and height
+            GL.Viewport( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
 
             // Shader and Pipeline setup
             if ( _shader != null )
@@ -355,96 +364,76 @@ public class SpriteBatch : IBatch, IDisposable
         {
             GLUtils.CheckOpenGLContext();
 
-            // Check if there is any data to flush.
             if ( Idx <= 0 )
             {
-                Logger.Error( $"Flush cancelled: Idx: {Idx}" );
-
-                // Ensure that Idx is reset to zero.
                 Idx = 0;
-
                 return;
             }
 
-            // Increment render call counters.
+            // 1. Prepare State & Stats
             RenderCalls++;
             TotalRenderCalls++;
 
-            // Calculate the number of sprites in the current batch.
-            // Idx represents the number of floats in the Vertices array.
-            // VERTICES_PER_SPRITE is the number of vertices per sprite (4).
-            // VertexConstants.VERTEX_SIZE is the number of floats per vertex.
             var spritesInBatch = ( int )( Idx / ( long )( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) );
-
-            // Update the maximum number of sprites in a batch.
             MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
 
-            // Check if the texture is null.
+            // 2. Texture Management
             if ( LastTexture == null )
             {
                 #if DEBUG
                 LastTexture = _whitePixel;
-                Logger.Debug( "Last texture is null. Using white pixel fallback." );
                 #else
                 Idx = 0;
-                _nullTextureCount++;
-
-                Logger.Error( $"Attempt to flush with null texture. This batch will be skipped. " +
-                              $"Null texture count: {_nullTextureCount}. " +
-                              $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
-
                 return;
                 #endif
             }
 
-            // Bind the texture to the current texture unit.
+            // Bind Texture to specific unit and update shader uniform
             GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
-            LastTexture.Bind();
+            LastTexture?.Bind();
 
             if ( _textureLocation != -1 )
             {
                 GL.Uniform1i( _textureLocation, _currentTextureIndex );
             }
 
-            _mesh?.SetVertices( Vertices, 0, Idx );
+            // 3. Sync CPU Data to GPU (The Missing Link)
+            // We use the raw VBO handle directly to ensure it works regardless of Mesh state
+            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
-            // Set up blending.
+            unsafe
+            {
+                fixed ( float* ptr = Vertices )
+                {
+                    GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ( IntPtr )ptr );
+                }
+            }
+
+            // 4. Final State Assertions (Critical for Core Profile)
+            _shader?.Bind();
+            
+            GL.BindVertexArray( _vao );
+            GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo ); // Links indices to VAO
+
+            // 5. Blending
             if ( BlendingEnabled )
             {
-                GL.Enable( IGL.GL_BLEND );
-
-                // Ensure we aren't passing invalid integers/enums
-                // Standard default if -1: SrcAlpha, OneMinusSrcAlpha
-                BlendSrcFunc      = ( BlendSrcFunc != -1 ) ? BlendSrcFunc : ( int )BlendMode.SrcAlpha;
-                BlendDstFunc      = ( BlendDstFunc != -1 ) ? BlendDstFunc : ( int )BlendMode.OneMinusSrcAlpha;
-                BlendSrcFuncAlpha = ( BlendSrcFuncAlpha != -1 ) ? BlendSrcFuncAlpha : ( int )BlendMode.One;
-                BlendDstFuncAlpha = ( BlendDstFuncAlpha != -1 ) ? BlendDstFuncAlpha : ( int )BlendMode.OneMinusSrcAlpha;
-
-                GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
+                GL.Enable( ( int )EnableCap.Blend );
+                GL.BlendFuncSeparate( BlendSrcFunc != -1 ? BlendSrcFunc : ( int )BlendMode.SrcAlpha,
+                                      BlendDstFunc != -1 ? BlendDstFunc : ( int )BlendMode.OneMinusSrcAlpha,
+                                      BlendSrcFuncAlpha != -1 ? BlendSrcFuncAlpha : ( int )BlendMode.One,
+                                      BlendDstFuncAlpha != -1 ? BlendDstFuncAlpha : ( int )BlendMode.OneMinusSrcAlpha );
             }
             else
             {
-                GL.Disable( IGL.GL_BLEND );
+                GL.Disable( ( int )EnableCap.Blend );
             }
 
-            // Render the sprites.
-            _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
+            // 6. Draw
+            // 4 = Triangles, 5125 = Unsigned Int
+            GL.DrawElements( ( int )PrimitiveType.Triangles, spritesInBatch * 6, ( int )DrawElementsType.UnsignedInt, IntPtr.Zero );
 
-            #if DEBUG
-            // --- DEBUG OVERRIDE ---
-            GL.BindVertexArray( _vao );
-            GL.UseProgram( _shader!.ShaderProgramHandle );
-
-            // Re-bind the buffers manually
-            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-            GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
-
-            // Use raw OpenGL constants to avoid wrapper errors
-            // 4 = Triangles, 5123 = Unsigned Short
-            GL.DrawElements( 4, spritesInBatch * 6, 5123, IntPtr.Zero );
-            // -----------------------
-            #endif
-
+            // 7. Reset
             Idx = 0;
         }
     }
@@ -638,61 +627,6 @@ public class SpriteBatch : IBatch, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Sets the vertex attributes for a quad, including positional, color, and texture coordinate data.
-    /// </summary>
-    /// <param name="x1">The X-coordinate of the first vertex.</param>
-    /// <param name="y1">The Y-coordinate of the first vertex.</param>
-    /// <param name="c1">The color for the first vertex.</param>
-    /// <param name="u1">The U texture coordinate for the first vertex.</param>
-    /// <param name="v1">The V texture coordinate for the first vertex.</param>
-    /// <param name="x2">The X-coordinate of the second vertex.</param>
-    /// <param name="y2">The Y-coordinate of the second vertex.</param>
-    /// <param name="c2">The color for the second vertex.</param>
-    /// <param name="u2">The U texture coordinate for the second vertex.</param>
-    /// <param name="v2">The V texture coordinate for the second vertex.</param>
-    /// <param name="x3">The X-coordinate of the third vertex.</param>
-    /// <param name="y3">The Y-coordinate of the third vertex.</param>
-    /// <param name="c3">The color for the third vertex.</param>
-    /// <param name="u3">The U texture coordinate for the third vertex.</param>
-    /// <param name="v3">The V texture coordinate for the third vertex.</param>
-    /// <param name="x4">The X-coordinate of the fourth vertex.</param>
-    /// <param name="y4">The Y-coordinate of the fourth vertex.</param>
-    /// <param name="c4">The color for the fourth vertex.</param>
-    /// <param name="u4">The U texture coordinate for the fourth vertex.</param>
-    /// <param name="v4">The V texture coordinate for the fourth vertex.</param>
-    private void SetVertices( float x1, float y1, float c1, float u1, float v1,
-                              float x2, float y2, float c2, float u2, float v2,
-                              float x3, float y3, float c3, float u3, float v3,
-                              float x4, float y4, float c4, float u4, float v4 )
-    {
-        Vertices[ Idx + IBatch.X1 ] = x1; // X
-        Vertices[ Idx + IBatch.Y1 ] = y1; // Y
-        Vertices[ Idx + IBatch.C1 ] = c1; // Color
-        Vertices[ Idx + IBatch.U1 ] = u1; // Texture U
-        Vertices[ Idx + IBatch.V1 ] = v1; // Texture V
-
-        Vertices[ Idx + IBatch.X2 ] = x2; // X
-        Vertices[ Idx + IBatch.Y2 ] = y2; // Y
-        Vertices[ Idx + IBatch.C2 ] = c2; // Color
-        Vertices[ Idx + IBatch.U2 ] = u2; // Texture U
-        Vertices[ Idx + IBatch.V2 ] = v2; // Texture V
-
-        Vertices[ Idx + IBatch.X3 ] = x3; // X
-        Vertices[ Idx + IBatch.Y3 ] = y3; // Y
-        Vertices[ Idx + IBatch.C3 ] = c3; // Color
-        Vertices[ Idx + IBatch.U3 ] = u3; // Texture U
-        Vertices[ Idx + IBatch.V3 ] = v3; // Texture V
-
-        Vertices[ Idx + IBatch.X4 ] = x4; // X
-        Vertices[ Idx + IBatch.Y4 ] = y4; // Y
-        Vertices[ Idx + IBatch.C4 ] = c4; // Color
-        Vertices[ Idx + IBatch.U4 ] = u4; // Texture U
-        Vertices[ Idx + IBatch.V4 ] = v4; // Texture V
-
-        Idx += VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
-    }
-
-    /// <summary>
     /// Fetches the location of the CombinedMatrix uniform in the shader and
     /// stores it in <see cref="_combinedMatrixLocation"/> for subsequent use.
     /// </summary>
@@ -874,8 +808,15 @@ public class SpriteBatch : IBatch, IDisposable
             // If the diagonal values are at index 0, 5, 10, 15 -> Column Major (OpenGL Default)
             // If the diagonal values are at index 0, 1, 2, 3 -> Something is very wrong
 
-            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix, isRowMajor );
+//            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix, isRowMajor );
+            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix, true );
             _shader.SetUniformi( "u_texture", 0 );
+
+//            int location = GL.GetUniformLocation( _shader.ShaderProgramHandle, "u_combinedMatrix" );
+//            Logger.Debug( $"Uniform 'u_combinedMatrix' location: {location}" );
+
+            // Output is:-
+            // Uniform 'u_combinedMatrix' location: -1
         }
     }
 
@@ -982,14 +923,14 @@ public class SpriteBatch : IBatch, IDisposable
         for ( uint i = 0, vertex = 0; i < indices.Length; i += INDICES_PER_SPRITE, vertex += 4 )
         {
             // Triangle 1: Bottom-Left, Top-Left, Top-Right
-            indices[i + 0] = vertex + 0;
-            indices[i + 1] = vertex + 1;
-            indices[i + 2] = vertex + 2;
+            indices[ i + 0 ] = vertex + 0;
+            indices[ i + 1 ] = vertex + 1;
+            indices[ i + 2 ] = vertex + 2;
 
             // Triangle 2: Top-Right, Bottom-Right, Bottom-Left
-            indices[i + 3] = vertex + 2;
-            indices[i + 4] = vertex + 3;
-            indices[i + 5] = vertex + 0;
+            indices[ i + 3 ] = vertex + 2;
+            indices[ i + 4 ] = vertex + 3;
+            indices[ i + 5 ] = vertex + 0;
         }
 
         _ebo = GL.GenBuffer();
@@ -1000,7 +941,7 @@ public class SpriteBatch : IBatch, IDisposable
             GL.BufferData( ( int )BufferTarget.ElementArrayBuffer,
                            indices.Length * sizeof( uint ),
                            ( IntPtr )ptr,
-                           ( int )BufferUsageHint.StaticDraw );
+                           ( int )BufferUsageHint.DynamicDraw );
         }
     }
 
@@ -1706,6 +1647,61 @@ public class SpriteBatch : IBatch, IDisposable
 
     #endregion Drawing methods
 
+    /// <summary>
+    /// Sets the vertex attributes for a quad, including positional, color, and texture coordinate data.
+    /// </summary>
+    /// <param name="x1">The X-coordinate of the first vertex.</param>
+    /// <param name="y1">The Y-coordinate of the first vertex.</param>
+    /// <param name="c1">The color for the first vertex.</param>
+    /// <param name="u1">The U texture coordinate for the first vertex.</param>
+    /// <param name="v1">The V texture coordinate for the first vertex.</param>
+    /// <param name="x2">The X-coordinate of the second vertex.</param>
+    /// <param name="y2">The Y-coordinate of the second vertex.</param>
+    /// <param name="c2">The color for the second vertex.</param>
+    /// <param name="u2">The U texture coordinate for the second vertex.</param>
+    /// <param name="v2">The V texture coordinate for the second vertex.</param>
+    /// <param name="x3">The X-coordinate of the third vertex.</param>
+    /// <param name="y3">The Y-coordinate of the third vertex.</param>
+    /// <param name="c3">The color for the third vertex.</param>
+    /// <param name="u3">The U texture coordinate for the third vertex.</param>
+    /// <param name="v3">The V texture coordinate for the third vertex.</param>
+    /// <param name="x4">The X-coordinate of the fourth vertex.</param>
+    /// <param name="y4">The Y-coordinate of the fourth vertex.</param>
+    /// <param name="c4">The color for the fourth vertex.</param>
+    /// <param name="u4">The U texture coordinate for the fourth vertex.</param>
+    /// <param name="v4">The V texture coordinate for the fourth vertex.</param>
+    private void SetVertices( float x1, float y1, float c1, float u1, float v1,
+                              float x2, float y2, float c2, float u2, float v2,
+                              float x3, float y3, float c3, float u3, float v3,
+                              float x4, float y4, float c4, float u4, float v4 )
+    {
+        Vertices[ Idx + IBatch.X1 ] = x1; // X
+        Vertices[ Idx + IBatch.Y1 ] = y1; // Y
+        Vertices[ Idx + IBatch.C1 ] = c1; // Color
+        Vertices[ Idx + IBatch.U1 ] = u1; // Texture U
+        Vertices[ Idx + IBatch.V1 ] = v1; // Texture V
+
+        Vertices[ Idx + IBatch.X2 ] = x2; // X
+        Vertices[ Idx + IBatch.Y2 ] = y2; // Y
+        Vertices[ Idx + IBatch.C2 ] = c2; // Color
+        Vertices[ Idx + IBatch.U2 ] = u2; // Texture U
+        Vertices[ Idx + IBatch.V2 ] = v2; // Texture V
+
+        Vertices[ Idx + IBatch.X3 ] = x3; // X
+        Vertices[ Idx + IBatch.Y3 ] = y3; // Y
+        Vertices[ Idx + IBatch.C3 ] = c3; // Color
+        Vertices[ Idx + IBatch.U3 ] = u3; // Texture U
+        Vertices[ Idx + IBatch.V3 ] = v3; // Texture V
+
+        Vertices[ Idx + IBatch.X4 ] = x4; // X
+        Vertices[ Idx + IBatch.Y4 ] = y4; // Y
+        Vertices[ Idx + IBatch.C4 ] = c4; // Color
+        Vertices[ Idx + IBatch.U4 ] = u4; // Texture U
+        Vertices[ Idx + IBatch.V4 ] = v4; // Texture V
+
+        Idx += VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
+    }
+
     // ========================================================================
 
     #region Color handling
@@ -1857,7 +1853,7 @@ public class SpriteBatch : IBatch, IDisposable
 
     // ========================================================================
 
-    private Texture _whitePixel;
+    private Texture? _whitePixel;
 
     private void CreateWhitePixel()
     {

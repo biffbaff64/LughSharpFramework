@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using Quaternion = LughUtils.source.Maths.Quaternion;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Cameras;
+namespace LughSharp.Core.Graphics.Cameras;
 
 /// <summary>
 /// Base class for <see cref="OrthographicCamera"/> and <see cref="PerspectiveCamera"/>.
@@ -50,28 +50,23 @@ public abstract class Camera
 
     // ========================================================================
 
-    private float _near = 1.0f;
-    private float _far  = 100.0f;
-
-    // ========================================================================
+    /// <summary>
+    /// the near clipping plane distance, has to be positive
+    /// </summary>
+    public float Near
+    {
+        get;
+        set => field = value >= 0 ? value : throw new ArgumentException( "Near must be >= 0" );
+    } = -1.0f;
 
     /// <summary>
     /// the far clipping plane distance, has to be positive
     /// </summary>
     public float Far
     {
-        get => _far;
-        set => _far = value > Near ? value : throw new ArgumentException( "Far must be > Near" );
-    }
-
-    /// <summary>
-    /// the near clipping plane distance, has to be positive
-    /// </summary>
-    public float Near
-    {
-        get => _near;
-        set => _near = value >= 0 ? value : throw new ArgumentException( "Near must be >= 0" );
-    }
+        get;
+        set => field = value > Near ? value : throw new ArgumentException( "Far must be > Near" );
+    } = 1.0f;
 
     // ========================================================================
     // ========================================================================

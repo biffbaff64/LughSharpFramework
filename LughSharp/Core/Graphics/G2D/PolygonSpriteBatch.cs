@@ -22,11 +22,16 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using JetBrains.Annotations;
+using LughUtils.source.Exceptions;
+using LughUtils.source.Logging;
+using LughUtils.source.Maths;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// A PolygonSpriteBatch is used to Draw 2D polygons that reference a
@@ -74,7 +79,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     private readonly Mesh           _mesh;
     private readonly bool           _ownsShader;
     private readonly ShaderProgram? _shader;
-    private readonly short[]        _triangles;
+    private readonly int[]          _triangles;
     private readonly float[]        _vertices;
 
     private bool           _blendingDisabled;
@@ -146,10 +151,11 @@ public class PolygonSpriteBatch : IPolygonBatch
                           maxTriangles * 3,
                           new VertexAttribute( ( int )VertexConstants.Usage.Position, 4, ShaderConstants.A_POSITION ),
                           new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked, 4, ShaderConstants.A_COLOR ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates, 2, ShaderConstants.A_TEX_COORD0 ) );
+                          new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates, 2,
+                                               ShaderConstants.A_TEX_COORD0 ) );
 
         _vertices  = new float[ maxVertices * Sprite.VERTEX_SIZE ];
-        _triangles = new short[ maxTriangles * 3 ];
+        _triangles = new int[ maxTriangles * 3 ];
 
         if ( defaultShader == null )
         {
@@ -295,7 +301,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-                  || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
+               || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -334,7 +340,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-                  || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
+               || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -387,7 +393,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-                  || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
+               || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -437,7 +443,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + trianglesCount ) > _triangles.Length )
-                  || ( ( _vertexIndex + verticesCount ) > _vertices.Length ) )
+               || ( ( _vertexIndex + verticesCount ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -472,7 +478,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -620,7 +626,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -688,7 +694,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -746,7 +752,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -806,7 +812,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -870,7 +876,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             triangleCount = ( batch / Sprite.SPRITE_SIZE ) * 6;
         }
         else if ( ( ( _triangleIndex + triangleCount ) > _triangles.Length )
-                  || ( ( _vertexIndex + count ) > _vertices.Length ) )
+               || ( ( _vertexIndex + count ) > _vertices.Length ) )
         {
             Flush();
             batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite.SPRITE_SIZE ) ),
@@ -945,7 +951,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) ) //
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) ) //
         {
             Flush();
         }
@@ -1014,7 +1020,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( textureRegion.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) ) //
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) ) //
         {
             Flush();
         }
@@ -1160,7 +1166,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( textureRegion.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -1321,7 +1327,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -1439,9 +1445,9 @@ public class PolygonSpriteBatch : IPolygonBatch
     public void SetBlendFunctionSeparate( int srcFuncColor, int dstFuncColor, int srcFuncAlpha, int dstFuncAlpha )
     {
         if ( ( BlendSrcFunc == srcFuncColor )
-             && ( BlendDstFunc == dstFuncColor )
-             && ( BlendSrcFuncAlpha == srcFuncAlpha )
-             && ( BlendDstFuncAlpha == dstFuncAlpha ) )
+          && ( BlendDstFunc == dstFuncColor )
+          && ( BlendSrcFuncAlpha == srcFuncAlpha )
+          && ( BlendDstFuncAlpha == dstFuncAlpha ) )
         {
             return;
         }

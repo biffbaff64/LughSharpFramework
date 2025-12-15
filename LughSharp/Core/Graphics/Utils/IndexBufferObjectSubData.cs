@@ -43,7 +43,7 @@ using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
 [PublicAPI]
 public class IndexBufferObjectSubData : IIndexData
 {
-    private readonly Buffer< short > _buffer;
+    private readonly Buffer< int > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
     private readonly int             _usage;
     private          int             _bufferHandle;
@@ -59,9 +59,9 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( bool isStatic, int maxIndices )
     {
-        _byteBuffer = new Buffer< byte >( maxIndices * 2 );
+        _byteBuffer = new Buffer< byte >( maxIndices * sizeof( int ) );
         _usage      = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
-        _buffer     = _byteBuffer.AsShortBuffer();
+        _buffer     = _byteBuffer.AsIntBuffer();
 
         _buffer.Flip();
         _byteBuffer.Flip();
@@ -75,9 +75,9 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( int maxIndices )
     {
-        _byteBuffer = new Buffer< byte >( maxIndices * 2 );
+        _byteBuffer = new Buffer< byte >( maxIndices * sizeof( int ) );
         _usage      = IGL.GL_STATIC_DRAW;
-        _buffer     = _byteBuffer.AsShortBuffer();
+        _buffer     = _byteBuffer.AsIntBuffer();
 
         _buffer.Flip();
         _byteBuffer.Flip();
@@ -99,7 +99,7 @@ public class IndexBufferObjectSubData : IIndexData
         _isDirty = true;
 
         _buffer.Clear();
-        _buffer.PutShorts( indices, offset, count );
+        _buffer.PutInts( indices, offset, count );
         _buffer.Flip();
 
         _byteBuffer.Position = 0;
@@ -117,14 +117,14 @@ public class IndexBufferObjectSubData : IIndexData
     }
 
     /// <inheritdoc />
-    public unsafe void SetIndices( Buffer< short > indices )
+    public unsafe void SetIndices( Buffer< int > indices )
     {
         var pos = indices.Position;
 
         _isDirty = true;
 
         _buffer.Clear();
-        _buffer.PutShorts( indices.ToArray() );
+        _buffer.PutInts( indices.ToArray() );
         _buffer.Flip();
 
         indices.Position = pos;
@@ -144,13 +144,13 @@ public class IndexBufferObjectSubData : IIndexData
     }
 
     /// <inheritdoc />
-    public unsafe void UpdateIndices( int targetOffset, short[] indices, int offset, int count )
+    public unsafe void UpdateIndices( int targetOffset, int[] indices, int offset, int count )
     {
         _isDirty = true;
 
         var pos = _byteBuffer.Position;
 
-        _byteBuffer.Position = targetOffset * 2;
+        _byteBuffer.Position = targetOffset * sizeof( int );
 
         BufferUtils.Copy( indices, offset, count, _byteBuffer );
 
@@ -169,7 +169,7 @@ public class IndexBufferObjectSubData : IIndexData
     }
 
     /// <inheritdoc />
-    public Buffer< short > GetBuffer( bool forWriting )
+    public Buffer< int > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting;
 
@@ -188,7 +188,7 @@ public class IndexBufferObjectSubData : IIndexData
 
         if ( _isDirty )
         {
-            _byteBuffer.Limit = _buffer.Limit * 2;
+            _byteBuffer.Limit = _buffer.Limit * sizeof( int );
 
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {

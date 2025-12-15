@@ -836,14 +836,6 @@ public class Mesh : IDisposable
                 {
                     GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4 );
                 }
-
-//                IndexData.Bind();
-//
-//                var offsetInBytes = offset * sizeof( short ); // Calculate byte offset
-//
-//                GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offsetInBytes );
-//
-//                IndexData.Unbind();
             }
             else
             {

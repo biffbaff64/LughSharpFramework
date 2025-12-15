@@ -292,10 +292,10 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Sets an integer uniform variable in the shader program by its name.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
+    /// <param name="name">The name of the uniform variable in the shader program.</param>
+    /// <param name="value">The integer value to set for the specified uniform variable.</param>
     public virtual void SetUniformi( string name, int value )
     {
         var location = GetUniformLocation( name );

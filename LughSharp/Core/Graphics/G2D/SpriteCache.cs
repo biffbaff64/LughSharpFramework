@@ -150,16 +150,16 @@ public class SpriteCache
         if ( useIndices )
         {
             var   length  = size * 6;
-            var   indices = new short[ length ];
+            var   indices = new int[ length ];
             short j       = 0;
 
             for ( var i = 0; i < length; i += 6, j += 4 )
             {
                 indices[ i + 0 ] = j;
-                indices[ i + 1 ] = ( short )( j + 1 );
-                indices[ i + 2 ] = ( short )( j + 2 );
-                indices[ i + 3 ] = ( short )( j + 2 );
-                indices[ i + 4 ] = ( short )( j + 3 );
+                indices[ i + 1 ] = ( int )( j + 1 );
+                indices[ i + 2 ] = ( int )( j + 2 );
+                indices[ i + 3 ] = ( int )( j + 2 );
+                indices[ i + 4 ] = ( int )( j + 3 );
                 indices[ i + 5 ] = j;
             }
 
