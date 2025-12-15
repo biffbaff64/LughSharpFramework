@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics;
 
 [PublicAPI]
 public abstract class GraphicsDevice : IGraphicsDevice

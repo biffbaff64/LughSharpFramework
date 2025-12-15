@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Viewports;
+namespace LughSharp.Core.Graphics.Viewports;
 
 /// <summary>
 /// A ScalingViewport that uses <see cref="Scaling.Fill"/> so it keeps the aspect

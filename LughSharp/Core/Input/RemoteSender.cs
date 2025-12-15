@@ -24,7 +24,7 @@
 
 using Exception = System.Exception;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Input;
+namespace LughSharp.Core.Input;
 
 /// <summary>
 /// Sends all inputs from touch, key, accelerometer and compass to

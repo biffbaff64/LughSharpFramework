@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
+namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>
 /// Sets the alpha for an actor's color (or a specified color), from the current alpha

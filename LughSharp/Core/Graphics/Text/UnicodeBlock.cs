@@ -24,7 +24,7 @@
 
 using System.Globalization;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
+namespace LughSharp.Core.Graphics.Text;
 
 /// <summary>
 /// A family of character subsets representing the character blocks in the

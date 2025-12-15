@@ -27,7 +27,7 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Loaders;
+namespace LughSharp.Core.Maps.Tiled.Loaders;
 
 [PublicAPI]
 public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >

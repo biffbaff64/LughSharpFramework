@@ -24,7 +24,7 @@
 
 using Color = LughSharp.Core.Graphics.Color;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
+namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>
 /// Sets the actor's color (or a specified color), from the current to the new

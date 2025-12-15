@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Viewports;
+namespace LughSharp.Core.Graphics.Viewports;
 
 /// <summary>
 /// A viewport that scales the world using <see cref="Scaling"/>.

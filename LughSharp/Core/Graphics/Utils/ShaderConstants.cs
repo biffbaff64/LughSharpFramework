@@ -25,7 +25,7 @@
 using System.Reflection;
 using LughSharp.Core.Files;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 [PublicAPI]
 public class ShaderConstants

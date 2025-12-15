@@ -27,8 +27,6 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
-using LughSharp.Core.Graphics;
-using LughUtils.source.Maths;
 using LughUtils.source;
 
 using Platform = LughSharp.Core.Main.Platform;

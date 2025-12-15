@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.IO;
+namespace LughSharp.Core.Audio.Maponus.IO;
 
 [PublicAPI]
 public class RandomAccessFileStream

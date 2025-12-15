@@ -24,7 +24,7 @@
 
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
+namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// Allows a parent to set the area that is visible on a child actor to

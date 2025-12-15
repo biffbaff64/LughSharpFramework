@@ -26,7 +26,6 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
-using LughSharp.Core.Graphics.OpenGL;
 using LughUtils.source;
 using LughUtils.source.Collections;
 using LughUtils.source.Exceptions;

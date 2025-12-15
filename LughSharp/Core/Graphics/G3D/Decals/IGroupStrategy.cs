@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Decals;
+namespace LughSharp.Core.Graphics.G3D.Decals;
 
 public interface IGroupStrategy
 {

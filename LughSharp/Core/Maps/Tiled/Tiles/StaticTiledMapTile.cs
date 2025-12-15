@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Tiles;
+namespace LughSharp.Core.Maps.Tiled.Tiles;
 
 /// <summary>
 /// Represents a non changing <see cref="ITiledMapTile"/> (can be cached)

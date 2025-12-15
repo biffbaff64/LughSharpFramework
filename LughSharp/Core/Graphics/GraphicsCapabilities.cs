@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.OpenGL;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics;
 
 [PublicAPI]
 public unsafe class GraphicsCapabilities

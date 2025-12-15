@@ -23,11 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using Extensions.Source.Freetype;
-using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
-using LughSharp.Core.Graphics.Text;
-using LughUtils.source.Logging;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Drawing;

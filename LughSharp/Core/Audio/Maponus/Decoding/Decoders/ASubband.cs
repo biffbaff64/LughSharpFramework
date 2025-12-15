@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
+namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 
 /// <summary>
 /// Abstract base class for subband classes of layer I and II

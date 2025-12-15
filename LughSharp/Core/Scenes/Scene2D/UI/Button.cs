@@ -27,7 +27,7 @@ using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughUtils.source.Pooling;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A button is a <see cref="Table"/> with a checked state and additional

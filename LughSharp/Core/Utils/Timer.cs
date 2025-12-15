@@ -26,7 +26,6 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Main;
 using Exception = System.Exception;
 using Monitor = System.Threading.Monitor;
-using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
 

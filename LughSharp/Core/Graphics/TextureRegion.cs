@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// Defines a rectangular area of a texture. The coordinate system used has

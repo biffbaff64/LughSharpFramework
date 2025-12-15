@@ -24,7 +24,7 @@
 
 using LughUtils.source.Pooling;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
+namespace LughSharp.Core.Graphics.Text;
 
 /// <summary>
 /// Stores <see cref="GlyphRun"/> runs of glyphs for a piece of text. The text may contain

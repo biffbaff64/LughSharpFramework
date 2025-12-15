@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Env;
+namespace LughSharp.Core.Graphics.G3D.Env;
 
 public class PointLight : BaseLight
 {

@@ -22,17 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils;
-using LughSharp.Core.Graphics;
-using LughUtils.source;
-
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Freetype;

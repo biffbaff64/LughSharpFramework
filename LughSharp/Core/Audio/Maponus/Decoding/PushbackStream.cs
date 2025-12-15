@@ -24,7 +24,7 @@
 
 using Exception = System.Exception;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding;
+namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 /// <summary>
 /// A PushbackStream is a stream that can "push back" or "unread" data. This is useful in

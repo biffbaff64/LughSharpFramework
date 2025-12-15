@@ -11,6 +11,7 @@ namespace Template.Source;
 /// <summary>
 /// Example DesktopLauncher class which is the entry point for the desktop application.
 /// </summary>
+[SupportedOSPlatform( "windows" )]
 public static class DesktopLauncher
 {
     /// <summary>
@@ -22,20 +23,20 @@ public static class DesktopLauncher
     {
         var config = new DesktopGLApplicationConfiguration
         {
-            Title                 = "LughSharp Template",
-            VSyncEnabled          = true,
-            WindowWidth           = 480,
-            WindowHeight          = 320,
-            ForegroundFPS         = 60,
-            DisableAudio          = true,
-            Debug                 = true,
-            GLProfilingEnabled    = true,
+            Title              = "LughSharp Template",
+            VSyncEnabled       = true,
+            WindowWidth        = 480,
+            WindowHeight       = 320,
+            ForegroundFPS      = 60,
+            DisableAudio       = true,
+            Debug              = true,
+            GLProfilingEnabled = true,
         };
 
         Engine.Api.CheckEnableDevMode().CheckEnableGodMode();
 
-//        BuildTextureAtlases();
-        
+        BuildTextureAtlases();
+
         var game = new DesktopGLApplication( new MainGame(), config );
 
         game.Run();
@@ -45,25 +46,24 @@ public static class DesktopLauncher
     private const bool KEEP_DUPLICATE_IMAGES   = false;
     private const bool DRAW_DEBUG_LINES        = false;
 
-    [SupportedOSPlatform( "windows" )]
     private static void BuildTextureAtlases()
     {
         var settings = new TexturePackerSettings
-                       {
-                           MaxWidth         = 2048,                  // Maximum Width of final atlas image
-                           MaxHeight        = 2048,                  // Maximum Height of final atlas image
-                           PowerOfTwo       = true,                  // 
-                           Debug            = DRAW_DEBUG_LINES,      // 
-                           IsAlias          = KEEP_DUPLICATE_IMAGES, // 
-                           Silent           = false,                 // 
-                           PaddingX         = 2,                     // Increase padding
-                           PaddingY         = 2,                     // Increase padding
-                           EdgePadding      = true,                  // Disable edge padding initially
-                           DuplicatePadding = false,                 // Disable duplicate padding
-                           MinWidth         = 16,                    // 
-                           MinHeight        = 16,                    // 
-                           Grid             = false,                 // Use GridPacker over MaxRectsPacker
-                       };
+        {
+            MaxWidth         = 2048,                  // Maximum Width of final atlas image
+            MaxHeight        = 2048,                  // Maximum Height of final atlas image
+            PowerOfTwo       = true,                  // 
+            Debug            = DRAW_DEBUG_LINES,      // 
+            IsAlias          = KEEP_DUPLICATE_IMAGES, // 
+            Silent           = false,                 // 
+            PaddingX         = 2,                     // Increase padding
+            PaddingY         = 2,                     // Increase padding
+            EdgePadding      = true,                  // Disable edge padding initially
+            DuplicatePadding = false,                 // Disable duplicate padding
+            MinWidth         = 16,                    // 
+            MinHeight        = 16,                    // 
+            Grid             = false,                 // Use GridPacker over MaxRectsPacker
+        };
 
         // Build the Atlases from the specified parameters :-
         // 1. source folder
@@ -79,7 +79,8 @@ public static class DesktopLauncher
         var settingsFilePath = IOUtils.NormalizePath( Path.Combine( inputFolder, "pack.json" ) );
         settings.WriteToJsonFile( settingsFilePath );
 
-        TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\animations" ), outputFolder, "animations", settings );
+        TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\animations" ), outputFolder, "animations",
+                               settings );
         TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\input" ), outputFolder, "input", settings );
         TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\objects" ), outputFolder, "objects", settings );
         TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\text" ), outputFolder, "text", settings );

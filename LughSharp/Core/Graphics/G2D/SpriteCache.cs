@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// Draws 2D images, optimized for geometry that does not change. Sprites and/or

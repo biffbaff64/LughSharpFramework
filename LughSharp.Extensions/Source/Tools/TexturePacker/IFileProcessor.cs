@@ -22,13 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-
-using JetBrains.Annotations;
-
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]

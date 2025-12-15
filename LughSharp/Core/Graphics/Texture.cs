@@ -31,7 +31,9 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+using GLenum = int;
+
+namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// A Texture wraps a standard OpenGL texture.
@@ -59,14 +61,14 @@ using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public class Texture : GLTexture, IManaged
 {
-    public ITextureData? TextureData  { get; set; }
+    public ITextureData TextureData  { get; set; }
 
     // ========================================================================
 
-    public int  Width              => TextureData?.Width ?? 0;
-    public int  Height             => TextureData?.Height ?? 0;
-    public int  ColorFormat        => TextureData?.GetPixelFormat() ?? LughFormat.RGBA8888;
-    public int  BitDepth           => TextureData?.BitDepth ?? 32;
+    public int  Width              => TextureData.Width;
+    public int  Height             => TextureData.Height;
+    public int  ColorFormat        => TextureData.GetPixelFormat();
+    public int  BitDepth           => TextureData.BitDepth;
     public int  NumManagedTextures => _managedTextures.Count;
     public uint TextureID          => GLTextureHandle;
     public bool IsManaged          => TextureData is { IsManaged: true };
@@ -129,7 +131,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    /// Creates a new Texture from the supplied <see cref="Pixmap"/> and <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>
+    /// Creates a new Texture from the supplied <see cref="Pixmap"/> and <c>LughFormat</c>
     /// </summary>
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="format"> The pixmap format to use. </param>
@@ -175,6 +177,8 @@ public class Texture : GLTexture, IManaged
     {
         Guard.Against.Null( data );
 
+        TextureData = data;
+        
         Load( data );
 
         if ( data.IsManaged )
@@ -225,7 +229,7 @@ public class Texture : GLTexture, IManaged
 
         GLTextureHandle = GL.GenTexture();
 
-        Load( TextureData! );
+        Load( TextureData );
     }
 
     /// <summary>

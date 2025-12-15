@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Particles;
+namespace LughSharp.Core.Graphics.G3D.Particles;
 
 public class ParticleSorter
 {

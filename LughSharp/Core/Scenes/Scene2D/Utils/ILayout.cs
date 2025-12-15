@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
+namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// Provides methods for an actor to participate in layout and to provide

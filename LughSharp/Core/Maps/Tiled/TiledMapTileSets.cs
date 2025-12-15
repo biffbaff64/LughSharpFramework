@@ -24,7 +24,7 @@
 
 using System.Collections;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled;
+namespace LughSharp.Core.Maps.Tiled;
 
 /// <summary>
 /// A Collection of <see cref="TiledMapTileSet"/> objects.

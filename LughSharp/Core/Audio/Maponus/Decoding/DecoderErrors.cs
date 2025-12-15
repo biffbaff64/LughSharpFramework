@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding;
+namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 /// <summary>
 /// Defines error codes for decoder-related errors.

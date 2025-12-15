@@ -22,10 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
 using LughSharp.Core.Main;
 using NUnit.Framework;
-using LughUtils.source.Logging;
 
 namespace LughSharp.Tests.Source;
 

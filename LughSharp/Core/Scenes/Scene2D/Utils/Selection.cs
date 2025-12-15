@@ -26,7 +26,7 @@ using LughSharp.Core.Input;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughUtils.source.Pooling;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
+namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// Manages selected objects. Optionally fires a <see cref="ChangeListener.ChangeEvent"/>

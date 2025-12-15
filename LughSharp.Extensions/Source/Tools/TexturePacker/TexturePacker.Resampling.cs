@@ -25,8 +25,6 @@
 using System.Drawing.Drawing2D;
 using System.Runtime.Versioning;
 
-using JetBrains.Annotations;
-
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]

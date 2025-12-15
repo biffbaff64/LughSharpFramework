@@ -25,7 +25,7 @@
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Atlases;
+namespace LughSharp.Core.Graphics.Atlases;
 
 [PublicAPI]
 public class TextureAtlas : IDisposable
@@ -84,25 +84,13 @@ public class TextureAtlas : IDisposable
     /// If true, all regions loaded will be flipped for use with a perspective
     /// where 0,0 is the upper left corner.
     /// </param>
-    public TextureAtlas( FileInfo packFile, DirectoryInfo imagesDir, bool flip = false )
+    public TextureAtlas( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
     {
-        Logger.Debug( $"packFile Name: {packFile.FullName}" );
-        Logger.Debug( $"imagesDir Name: {imagesDir.FullName}" );
-
+        Guard.Against.Null( imagesDir );
+        
         var atlasData = new TextureAtlasData( packFile, imagesDir, flip );
 
-        Logger.Debug( $"packFile Name: {packFile.FullName}" );
-        Logger.Debug( $"imagesDir Name: {imagesDir.FullName}" );
-
-        foreach ( var page in atlasData.Pages )
-        {
-            Logger.Debug( $"page.TextureFile: {page.TextureFile?.FullName}" );
-        }
-
         Load( atlasData );
-
-        Logger.Debug( $"packFile Name: {packFile.FullName}" );
-        Logger.Debug( $"imagesDir Name: {imagesDir.FullName}" );
     }
 
     /// <summary>
@@ -119,16 +107,10 @@ public class TextureAtlas : IDisposable
     /// </summary>
     public void Load( TextureAtlasData data )
     {
-        Logger.Checkpoint();
-
         Textures.EnsureCapacity( data.Pages.Count );
 
         foreach ( var page in data.Pages )
         {
-            Logger.Debug( $"page.Format: {page.Format}" );
-            Logger.Debug( $"page.TextureFile.FullName: {page.TextureFile?.FullName}" );
-            Logger.Debug( $"page.UseMipMaps: {page.UseMipMaps}" );
-
             page.Texture ??= new Texture( page.TextureFile!, page.Format, page.UseMipMaps );
             page.Texture.SetFilter( page.MinFilter, page.MagFilter );
             page.Texture.SetWrap( page.UWrap, page.VWrap );
@@ -191,10 +173,7 @@ public class TextureAtlas : IDisposable
     /// </summary>
     public AtlasRegion AddRegion( string name, TextureRegion textureRegion )
     {
-        if ( textureRegion.Texture == null )
-        {
-            throw new GdxRuntimeException( "cannot add null texture!" );
-        }
+        Guard.Against.Null( textureRegion.Texture );
 
         Textures.Add( textureRegion.Texture );
 
@@ -362,7 +341,7 @@ public class TextureAtlas : IDisposable
     /// <returns></returns>
     private static Sprite NewSprite( AtlasRegion? region )
     {
-        Guard.ThrowIfNull( region );
+        Guard.Against.Null( region );
 
         if ( ( region.PackedWidth == region.OriginalWidth )
              && ( region.PackedHeight == region.OriginalHeight ) )

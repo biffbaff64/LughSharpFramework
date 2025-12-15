@@ -22,14 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
-using JetBrains.Annotations;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
-using LughUtils.source.Maths;
 
 namespace LughSharp.Core.Graphics.G2D;
 

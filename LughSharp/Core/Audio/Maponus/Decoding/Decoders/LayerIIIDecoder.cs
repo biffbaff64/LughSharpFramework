@@ -26,7 +26,7 @@ using LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 using LughSharp.Core.Audio.Maponus.Support;
 using OutputChannelsEnum = LughSharp.Core.Audio.Maponus.Decoding.OutputChannels.OutputChannelsEnum;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
+namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 
 /// <summary>
 /// Implements decoding of MPEG Audio Layer 3 frames.

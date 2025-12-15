@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL.Enums;
+namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
 public enum VertexAttribParameter

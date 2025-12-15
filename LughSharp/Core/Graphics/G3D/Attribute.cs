@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D;
+namespace LughSharp.Core.Graphics.G3D;
 
 /// <summary>
 /// Extend this class to implement a material attribute. Register the attribute type by

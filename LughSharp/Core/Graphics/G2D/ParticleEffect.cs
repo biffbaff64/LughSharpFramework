@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Atlases;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.G2D;
 
 [PublicAPI]
 public class ParticleEffect : IDisposable

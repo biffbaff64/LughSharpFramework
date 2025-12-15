@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
+namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>
 /// Adds an action to an actor.

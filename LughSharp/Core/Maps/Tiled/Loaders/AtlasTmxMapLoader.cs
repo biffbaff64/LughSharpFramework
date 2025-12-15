@@ -30,7 +30,7 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Loaders;
+namespace LughSharp.Core.Maps.Tiled.Loaders;
 
 /// <summary>
 /// A TiledMap Loader which loads tiles from a TextureAtlas instead of separate images.

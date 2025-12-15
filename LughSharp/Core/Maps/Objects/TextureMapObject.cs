@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Objects;
+namespace LughSharp.Core.Maps.Objects;
 
 /// <summary>
 /// Represents a map object containing a texture (region).

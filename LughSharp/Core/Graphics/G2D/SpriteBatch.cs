@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DotGLFW;
-using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -266,6 +265,7 @@ public class SpriteBatch : IBatch, IDisposable
 
             // Handle Depth state
             _originalDepthTestEnabled = GL.IsEnabled( ( int )EnableCap.DepthTest );
+            _initialBlendingState     = GL.IsEnabled( ( int )EnableCap.Blend );
 
             if ( depthMaskEnabled )
             {
@@ -320,8 +320,9 @@ public class SpriteBatch : IBatch, IDisposable
             CurrentBatchState = BatchState.Ready;
             LastTexture       = null;
 
-            // Restore Depth State
-            GL.DepthMask( _originalDepthMask );
+            // Instead of a mysterious variable, restore to the "Standard" 
+            // engine default (usually true for 3D, false for 2D).
+            GL.DepthMask( true );
 
             // Restore the EnableCap.DepthTest state we saved in Begin()
             if ( _originalDepthTestEnabled )
@@ -338,6 +339,7 @@ public class SpriteBatch : IBatch, IDisposable
             if ( _initialBlendingState )
             {
                 GL.Enable( ( int )EnableCap.Blend );
+                GL.BlendFunc( (int)BlendMode.SrcAlpha, (int)BlendMode.OneMinusSrcAlpha );
             }
             else
             {
@@ -411,7 +413,7 @@ public class SpriteBatch : IBatch, IDisposable
 
             // 4. Final State Assertions (Critical for Core Profile)
             _shader?.Bind();
-            
+
             GL.BindVertexArray( _vao );
             GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo ); // Links indices to VAO
 
@@ -431,7 +433,8 @@ public class SpriteBatch : IBatch, IDisposable
 
             // 6. Draw
             // 4 = Triangles, 5125 = Unsigned Int
-            GL.DrawElements( ( int )PrimitiveType.Triangles, spritesInBatch * 6, ( int )DrawElementsType.UnsignedInt, IntPtr.Zero );
+            GL.DrawElements( ( int )PrimitiveType.Triangles, spritesInBatch * 6, ( int )DrawElementsType.UnsignedInt,
+                             IntPtr.Zero );
 
             // 7. Reset
             Idx = 0;

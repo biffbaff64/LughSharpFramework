@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled;
+namespace LughSharp.Core.Maps.Tiled;
 
 [PublicAPI]
 public class TiledMapTileLayer : MapLayer

@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughUtils.source.Maths;
-
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;

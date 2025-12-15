@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Cameras;
+namespace LughSharp.Core.Graphics.Cameras;
 
 /// <summary>
 /// Represents a screen shake effect for use with cameras. Provides methods

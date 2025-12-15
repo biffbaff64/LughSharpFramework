@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 [PublicAPI]
 public enum HdpiMode

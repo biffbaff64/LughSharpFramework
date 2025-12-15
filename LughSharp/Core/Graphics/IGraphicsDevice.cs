@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// An interface representing the graphics context of the application.

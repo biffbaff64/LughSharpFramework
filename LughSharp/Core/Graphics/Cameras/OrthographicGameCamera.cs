@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Cameras;
+namespace LughSharp.Core.Graphics.Cameras;
 
 /// <summary>
 /// Represents a 2D orthographic game camera that handles camera configuration,

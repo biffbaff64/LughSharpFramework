@@ -42,7 +42,7 @@ using GLint64 = long;
 
 // ============================================================================
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL.Bindings;
+namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial class GLBindings

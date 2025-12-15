@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
+namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 
 /// <summary>
 /// Implementations of FrameDecoder are responsible for decoding

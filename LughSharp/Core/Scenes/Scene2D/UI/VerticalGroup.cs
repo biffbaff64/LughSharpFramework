@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A group that lays out its children top to bottom vertically, with optional wrapping.

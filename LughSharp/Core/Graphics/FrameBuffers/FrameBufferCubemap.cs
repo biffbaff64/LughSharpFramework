@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.FrameBuffers;
+namespace LughSharp.Core.Graphics.FrameBuffers;
 
 [PublicAPI]
 public class FrameBufferCubemap : GLFrameBuffer< Cubemap >

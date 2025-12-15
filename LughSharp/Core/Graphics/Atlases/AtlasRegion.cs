@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Atlases;
+namespace LughSharp.Core.Graphics.Atlases;
 
 [PublicAPI]
 public class AtlasRegion : TextureRegion, IDisposable

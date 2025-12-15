@@ -30,7 +30,7 @@ using LughUtils.source.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public class Table : WidgetGroup

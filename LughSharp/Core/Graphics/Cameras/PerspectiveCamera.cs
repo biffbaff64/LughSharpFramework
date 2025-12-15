@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Cameras;
+namespace LughSharp.Core.Graphics.Cameras;
 
 /// <summary>
 /// A Camera with Perspective Projection.

@@ -26,7 +26,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using ByteOrder = LughUtils.source.ByteOrder;
 using Exception = System.Exception;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// A KTXTextureData holds the data from a KTX (or zipped KTX file, aka ZKTX).

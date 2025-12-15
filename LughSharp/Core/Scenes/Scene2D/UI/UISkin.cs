@@ -22,9 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text.Json.Serialization;
-
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public class UISkin

@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL;
+namespace LughSharp.Core.Graphics.OpenGL;
 
 /// <summary>
 /// Represents an image with specified dimensions and GLFW pixel data.

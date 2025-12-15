@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// Renders polygon filled with a repeating TextureRegion with specified

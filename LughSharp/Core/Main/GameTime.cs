@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Main;
+namespace LughSharp.Core.Main;
 
 [PublicAPI]
 public class GameTime

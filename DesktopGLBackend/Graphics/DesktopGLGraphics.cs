@@ -28,8 +28,6 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.OpenGL;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 

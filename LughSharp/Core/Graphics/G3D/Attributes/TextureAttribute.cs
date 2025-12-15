@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Attributes;
+namespace LughSharp.Core.Graphics.G3D.Attributes;
 
 public class TextureAttribute
 {

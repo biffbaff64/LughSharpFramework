@@ -24,7 +24,7 @@
 
 using Exception = System.Exception;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// Class for encoding and decoding ETC1 compressed images.

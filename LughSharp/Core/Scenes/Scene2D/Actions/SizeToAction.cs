@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Actions;
+namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>
 /// Moves an actor from its current size to a specific size.

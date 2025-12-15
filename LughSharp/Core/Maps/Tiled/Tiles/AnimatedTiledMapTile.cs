@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics;
 using Blendmode = LughSharp.Core.Maps.Tiled.ITiledMapTile.Blendmode;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled.Tiles;
+namespace LughSharp.Core.Maps.Tiled.Tiles;
 
 /// <summary>
 /// Represents an animating <see cref="ITiledMapTile"/>.

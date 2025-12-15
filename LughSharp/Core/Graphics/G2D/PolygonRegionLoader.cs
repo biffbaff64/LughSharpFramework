@@ -26,7 +26,7 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>
 /// loads <see cref="PolygonRegion"/>s.

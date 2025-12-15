@@ -27,7 +27,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
+namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// A stack of {@link Rectangle} objects to be used for clipping via

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Loader;
+namespace LughSharp.Core.Graphics.G3D.Loader;
 
 public class G3ModelLoader
 {

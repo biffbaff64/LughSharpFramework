@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Audio.Maponus.Decoding;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.IO;
+namespace LughSharp.Core.Audio.Maponus.IO;
 
 /// <summary>
 /// Implements an Obuffer by writing the data to a file in RIFF WAVE format.

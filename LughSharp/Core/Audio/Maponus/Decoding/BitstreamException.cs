@@ -24,7 +24,7 @@
 
 using Exception = System.Exception;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding;
+namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 /// <summary>
 /// Instances of BitstreamException are thrown

@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.G2D;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Atlases;
+namespace LughSharp.Core.Graphics.Atlases;
 
 /// <summary>
 /// A sprite that, if whitespace was stripped from the region when it was packed,

@@ -24,7 +24,7 @@
 
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Objects;
+namespace LughSharp.Core.Maps.Objects;
 
 [PublicAPI]
 public class RectangleMapObject : MapObject

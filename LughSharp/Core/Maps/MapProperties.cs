@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps;
+namespace LughSharp.Core.Maps;
 
 /// <summary>
 /// Set of string indexed values representing map elements' properties, allowing

@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Input;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D;
+namespace LughSharp.Core.Scenes.Scene2D;
 
 /// <summary>
 /// The base class for all events.

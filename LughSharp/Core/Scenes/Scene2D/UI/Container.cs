@@ -27,7 +27,7 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A group with a single child that sizes and positions the child using constraints.

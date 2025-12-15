@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]

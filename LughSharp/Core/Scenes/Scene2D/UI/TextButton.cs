@@ -27,7 +27,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using Color = LughSharp.Core.Graphics.Color;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public class TextButton : Button

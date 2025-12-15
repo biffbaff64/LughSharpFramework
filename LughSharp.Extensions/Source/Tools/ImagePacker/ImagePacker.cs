@@ -22,11 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
-using JetBrains.Annotations;
-using LughUtils.source.Exceptions;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.ImagePacker;

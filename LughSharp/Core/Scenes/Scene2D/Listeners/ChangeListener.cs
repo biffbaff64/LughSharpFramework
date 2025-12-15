@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Listeners;
+namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
 /// <summary>
 /// Listener for <see cref="ChangeEvent"/>s.

@@ -27,7 +27,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using Platform = LughSharp.Core.Main.Platform;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// A <see cref="ITextureData"/> implementation which should be used

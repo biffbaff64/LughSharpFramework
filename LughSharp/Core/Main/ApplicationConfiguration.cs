@@ -28,7 +28,7 @@ using LughSharp.Core.Graphics.Utils;
 using static LughSharp.Core.Graphics.GraphicsBackend;
 using Color = LughSharp.Core.Graphics.Color;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Main;
+namespace LughSharp.Core.Main;
 
 [PublicAPI]
 public class ApplicationConfiguration

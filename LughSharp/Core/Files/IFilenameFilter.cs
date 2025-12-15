@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Files;
+namespace LughSharp.Core.Files;
 
 /// <summary>
 /// Instances of classes that implement this interface are used to filter filenames.

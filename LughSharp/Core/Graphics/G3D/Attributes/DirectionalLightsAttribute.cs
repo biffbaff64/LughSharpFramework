@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.G3D.Env;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Attributes;
+namespace LughSharp.Core.Graphics.G3D.Attributes;
 
 [PublicAPI]
 public class DirectionalLightsAttribute : Attribute

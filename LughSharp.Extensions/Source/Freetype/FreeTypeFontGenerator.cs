@@ -22,14 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
-using LughUtils.source.Maths;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Freetype;

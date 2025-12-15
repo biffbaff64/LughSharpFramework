@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
 /// A <see cref="ITextureData"/> implementation which should be used to create

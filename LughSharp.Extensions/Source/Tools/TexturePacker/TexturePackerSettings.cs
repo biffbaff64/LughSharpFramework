@@ -1,17 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using JetBrains.Annotations;
+﻿using System.Reflection;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL.Enums;
-using LughSharp.Core.Graphics;
-using LughUtils.source.Logging;
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

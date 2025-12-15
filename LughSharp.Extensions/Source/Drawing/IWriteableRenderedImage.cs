@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
-
-using JetBrains.Annotations;
-
 namespace Extensions.Source.Drawing;
 
 [PublicAPI]

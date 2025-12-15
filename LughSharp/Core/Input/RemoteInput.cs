@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Input;
+namespace LughSharp.Core.Input;
 
 public class RemoteInput
 {

@@ -24,7 +24,7 @@
 
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.G2D;
 
 [PublicAPI]
 public class Sprite : TextureRegion

@@ -26,7 +26,7 @@ using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Listeners;
+namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
 /// <summary>
 /// Causes a scroll pane to scroll when a drag goes outside the bounds of the scroll pane.

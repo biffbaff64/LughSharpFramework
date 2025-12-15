@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Main;
+namespace LughSharp.Core.Main;
 
 /// <summary>
 /// An ILifecycleListener can be added to an Application via

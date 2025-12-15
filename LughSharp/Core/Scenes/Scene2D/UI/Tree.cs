@@ -28,7 +28,7 @@ using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using Platform = LughSharp.Core.Main.Platform;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A tree widget where each node has an icon, actor, and child nodes.

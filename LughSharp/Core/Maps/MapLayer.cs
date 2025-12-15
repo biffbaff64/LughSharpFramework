@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps;
+namespace LughSharp.Core.Maps;
 
 /// <summary>
 /// Map layer containing a set of objects and properties.

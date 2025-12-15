@@ -24,7 +24,7 @@
 
 using static LughSharp.Core.Network.INet;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Network;
+namespace LughSharp.Core.Network;
 
 [PublicAPI]
 public abstract class 

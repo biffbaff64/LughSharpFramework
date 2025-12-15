@@ -23,14 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
-using System.Text.RegularExpressions;
-using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Graphics.Text;
-
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

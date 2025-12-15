@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Objects;
+namespace LughSharp.Core.Maps.Objects;
 
 [PublicAPI]
 public class CircleMapObject : MapObject

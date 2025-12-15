@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Input;
+namespace LughSharp.Core.Input;
 
 /// <summary>
 /// Interface to the input facilities. This allows polling the state of the keyboard, the

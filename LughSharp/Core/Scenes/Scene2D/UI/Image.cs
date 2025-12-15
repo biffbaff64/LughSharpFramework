@@ -27,7 +27,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// Displays a <see cref="ISceneDrawable"/>, scaled various way within the widgets

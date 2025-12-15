@@ -27,7 +27,7 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D;
+namespace LughSharp.Core.Scenes.Scene2D;
 
 /// <summary>
 /// 2D scene graph node that may contain other actors.

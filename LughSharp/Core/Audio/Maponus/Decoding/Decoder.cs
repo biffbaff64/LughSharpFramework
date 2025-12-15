@@ -26,7 +26,7 @@ using LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 using Exception = System.Exception;
 using OutputChannelsEnum = LughSharp.Core.Audio.Maponus.Decoding.OutputChannels.OutputChannelsEnum;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding;
+namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 /// <summary>
 /// Encapsulates the details of decoding an MPEG audio frame.

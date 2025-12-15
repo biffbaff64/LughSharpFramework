@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// ParticleEffectActor holds an ParticleEffect to use in Scene2d applications.

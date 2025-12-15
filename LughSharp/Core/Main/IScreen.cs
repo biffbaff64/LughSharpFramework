@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Main;
+namespace LughSharp.Core.Main;
 
 /// <summary>
 /// Represents one of many application screens, such as a main menu,

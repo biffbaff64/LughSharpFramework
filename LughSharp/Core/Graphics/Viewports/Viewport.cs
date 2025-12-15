@@ -28,7 +28,7 @@ using LughSharp.Core.Main;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Viewports;
+namespace LughSharp.Core.Graphics.Viewports;
 
 /// <summary>
 /// Manages a <see cref="Camera"/> and determines how world coordinates

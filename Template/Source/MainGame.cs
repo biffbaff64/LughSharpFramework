@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.Versioning;
 using System.Text;
-using Extensions.Source.Tools;
 using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
@@ -10,7 +9,6 @@ using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
-using LughSharp.Core.Graphics;
 using LughUtils.source.Maths;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
@@ -53,7 +51,6 @@ public partial class MainGame : Game
         
         _image1 = new Texture( Assets.BACKGROUND_IMAGE );
         
-//        RunTests();
         
         Logger.Debug( "Done" );
     }
@@ -63,7 +60,6 @@ public partial class MainGame : Game
     /// <inheritdoc />
     public override void Update()
     {
-//        UpdateTests();
     }
 
     /// <inheritdoc />
@@ -71,8 +67,6 @@ public partial class MainGame : Game
     {
         // Clear and set viewport
         ScreenUtils.Clear( color: Color.Blue, clearDepth: true );
-
-//        RenderTests();
 
         if ( _orthoGameCam is { IsInUse: true } )
         {
@@ -82,7 +76,7 @@ public partial class MainGame : Game
 
             if ( _image1 != null )
             {
-                _spriteBatch?.Draw( _image1, 100, 100 );
+                _spriteBatch?.Draw( _image1, -(_image1.Width / 2), -(_image1.Height / 2) );
             }
 
             _spriteBatch?.End();

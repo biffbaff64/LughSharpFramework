@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Particles.Influencers;
+namespace LughSharp.Core.Graphics.G3D.Particles.Influencers;
 
 public class DynamicsInfluencer
 {

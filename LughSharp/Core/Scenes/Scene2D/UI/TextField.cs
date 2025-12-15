@@ -32,7 +32,7 @@ using LughUtils.source.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 using Platform = LughSharp.Core.Main.Platform;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// A single-line text input field.
 /// <para>

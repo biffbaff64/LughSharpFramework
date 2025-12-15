@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Particles.Values;
+namespace LughSharp.Core.Graphics.G3D.Particles.Values;
 
 public class LineSpawnShapeValue
 {

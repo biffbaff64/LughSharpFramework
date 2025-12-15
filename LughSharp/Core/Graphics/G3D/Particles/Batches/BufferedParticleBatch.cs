@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Particles.Batches;
+namespace LughSharp.Core.Graphics.G3D.Particles.Batches;
 
 public class BufferedParticleBatch
 {

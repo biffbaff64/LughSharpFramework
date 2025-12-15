@@ -24,7 +24,7 @@
 
 using System.Globalization;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
+namespace LughSharp.Core.Graphics.Text;
 
 /// <summary>
 /// Provides utility methods and constants for character-related operations.

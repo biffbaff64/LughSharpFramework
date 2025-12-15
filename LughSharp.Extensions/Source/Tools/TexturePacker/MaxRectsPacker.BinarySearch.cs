@@ -22,9 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-using LughUtils.source.Maths;
-
 namespace Extensions.Source.Tools.TexturePacker;
 
 public partial class MaxRectsPacker

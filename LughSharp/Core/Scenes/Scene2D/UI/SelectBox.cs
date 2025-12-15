@@ -30,7 +30,7 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughUtils.source.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A select box (aka a drop-down list) allows a user to choose one of a number of values

@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Audio.Maponus.Support;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.IO;
+namespace LughSharp.Core.Audio.Maponus.IO;
 
 /// <summary>
 /// public class allowing WaveFormat Access

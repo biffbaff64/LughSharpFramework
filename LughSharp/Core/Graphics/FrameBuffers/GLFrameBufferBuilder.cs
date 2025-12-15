@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.OpenGL;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.FrameBuffers;
+namespace LughSharp.Core.Graphics.FrameBuffers;
 
 [PublicAPI]
 public class GLFrameBufferBuilder< TU >( int width, int height )

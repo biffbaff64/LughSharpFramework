@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps.Tiled;
+namespace LughSharp.Core.Maps.Tiled;
 
 /// <summary>
 /// Generalises the concept of tile in a TiledMap

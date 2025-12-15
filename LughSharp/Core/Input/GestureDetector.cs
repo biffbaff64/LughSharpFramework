@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Input;
+namespace LughSharp.Core.Input;
 
 /// <summary>
 /// <see cref="IInputProcessor"/> implementation that detects gestures

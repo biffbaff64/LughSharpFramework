@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D;
+namespace LughSharp.Core.Scenes.Scene2D;
 
 [PublicAPI]
 public interface IActor;

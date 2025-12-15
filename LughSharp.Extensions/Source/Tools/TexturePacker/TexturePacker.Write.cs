@@ -22,20 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.Versioning;
-
-using Extensions.Source.Drawing;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
-using LughUtils.source.Maths;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
-
 using Bitmap = System.Drawing.Bitmap;
 using Encoder = System.Drawing.Imaging.Encoder;
 using Pen = System.Drawing.Pen;

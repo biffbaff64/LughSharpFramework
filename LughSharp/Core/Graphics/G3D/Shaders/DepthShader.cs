@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Shaders;
+namespace LughSharp.Core.Graphics.G3D.Shaders;
 
 public class DepthShader
 {

@@ -31,7 +31,7 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 using Color = LughSharp.Core.Graphics.Color;
 using Exception = System.Exception;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
 /// A skin stores resources for UI widgets to use (texture regions, ninepatches,

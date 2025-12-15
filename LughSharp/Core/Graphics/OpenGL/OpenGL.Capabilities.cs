@@ -26,7 +26,7 @@ using DotGLFW;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL;
+namespace LughSharp.Core.Graphics.OpenGL;
 
 [PublicAPI]
 public partial class OpenGL

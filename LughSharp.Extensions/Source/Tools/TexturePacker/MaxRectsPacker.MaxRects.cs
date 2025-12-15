@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughUtils.source.Collections;
-
 namespace Extensions.Source.Tools.TexturePacker;
 
 public partial class MaxRectsPacker

@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Viewports;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Cameras;
+namespace LughSharp.Core.Graphics.Cameras;
 
 [PublicAPI]
 public interface IGameCamera

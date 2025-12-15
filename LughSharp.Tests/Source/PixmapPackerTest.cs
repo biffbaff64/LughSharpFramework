@@ -22,33 +22,30 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Graphics.G3D.Env;
+using NUnit.Framework;
 
-namespace LughSharp.Core.Graphics.G3D.Attributes;
+namespace LughSharp.Tests.Source;
 
-[PublicAPI]
-public class SpotLightsAttribute : Attribute
+[TestFixture]
+public class PixmapPackerTest : ILughTest
 {
-    public readonly List< SpotLight > Lights;
-
-    // ========================================================================
-
-    public SpotLightsAttribute() : base( Type )
+    [SetUp]
+    public void Setup()
     {
-        Lights = new List< SpotLight >( 1 );
+        
     }
 
-    public SpotLightsAttribute( SpotLightsAttribute copyFrom ) : this()
+    [Test]
+    public void Run()
     {
-        Lights.AddAll( copyFrom.Lights );
     }
 
-    public static string Alias => "spotLights";
-    public static long   Type  => Register( Alias );
-
-    /// <inheritdoc />
-    public override Attribute Copy()
+    public void Render()
     {
-        return this;
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
     }
 }

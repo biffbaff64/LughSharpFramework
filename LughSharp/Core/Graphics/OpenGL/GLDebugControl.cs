@@ -23,8 +23,6 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
-
-using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 
 namespace LughSharp.Core.Graphics.OpenGL;

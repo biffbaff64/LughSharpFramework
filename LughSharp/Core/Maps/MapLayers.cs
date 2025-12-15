@@ -24,7 +24,7 @@
 
 using System.Collections;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Maps;
+namespace LughSharp.Core.Maps;
 
 /// <summary>
 /// Ordered list of <see cref="MapLayer"/> instances owned by a <see cref="Map"/>.

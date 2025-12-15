@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Graphics.OpenGL.Bindings;
-
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 /// <summary>

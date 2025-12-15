@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Utils;
+namespace LughSharp.Core.Graphics.G3D.Utils;
 
 public class CameraInputController
 {

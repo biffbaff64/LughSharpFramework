@@ -26,7 +26,7 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics.G3D.Models.Data;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Utils;
+namespace LughSharp.Core.Graphics.G3D.Utils;
 
 /// <summary>
 /// Used by <see cref="Model"/> to load textures from <see cref="ModelData"/>.

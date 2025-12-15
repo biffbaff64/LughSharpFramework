@@ -6,12 +6,9 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Tests.Source;
 using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
-using StbiSharp;
 
 namespace Template.Source;
 

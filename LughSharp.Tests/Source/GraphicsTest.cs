@@ -25,9 +25,6 @@
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Main;
-using LughSharp.Core.Graphics;
-using LughUtils.source.Logging;
-
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;

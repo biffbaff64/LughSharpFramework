@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Scenes.Scene2D.Utils;
+namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// A drawable that supports scale and rotation.

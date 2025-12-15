@@ -25,11 +25,6 @@
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Graphics;
-using LughUtils.source.Maths;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
-
 using NUnit.Framework;
 using Color = LughSharp.Core.Graphics.Color;
 

@@ -25,7 +25,7 @@
 using System.Reflection;
 using Environment = System.Environment;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.OpenAL;
+namespace LughSharp.Core.Audio.OpenAL;
 
 [PublicAPI]
 public class ALC

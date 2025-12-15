@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Utils.ShapeBuilders;
+namespace LughSharp.Core.Graphics.G3D.Utils.ShapeBuilders;
 
 public class EllipseShapeBuilder
 {

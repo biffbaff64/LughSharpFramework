@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
+namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 
 [PublicAPI]
 public class Layer3SideInfo

@@ -25,7 +25,7 @@
 using System.Runtime.Versioning;
 using LughSharp.Core.Graphics.OpenGL;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics;
 
 [PublicAPI]
 public class PixelFormat

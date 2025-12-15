@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.Utils;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// Factory class for creating instances of ITextureData based on file types.

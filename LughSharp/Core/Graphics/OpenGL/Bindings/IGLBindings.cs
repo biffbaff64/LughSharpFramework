@@ -34,7 +34,7 @@ using GLboolean = bool;
 
 using static LughSharp.Core.Graphics.OpenGL.IGL;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.OpenGL.Bindings;
+namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
 [PublicAPI]
 public partial interface IGLBindings

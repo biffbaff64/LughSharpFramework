@@ -25,7 +25,7 @@
 using LughSharp.Core.Audio.Maponus.Support;
 using Exception = System.Exception;
 
-using JetBrains.Annotations; namespace LughSharp.Core.Audio.Maponus.Decoding;
+namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 /// <summary>
 /// The Bistream class is responsible for parsing an MPEG audio bitstream.

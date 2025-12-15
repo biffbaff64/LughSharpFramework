@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.FrameBuffers;
+namespace LughSharp.Core.Graphics.FrameBuffers;
 
 [PublicAPI]
 public class FrameBufferCubemapBuilder : GLFrameBufferBuilder< GLFrameBuffer< GLTexture > >

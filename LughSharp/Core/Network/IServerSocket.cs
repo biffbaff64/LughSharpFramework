@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Network;
+namespace LughSharp.Core.Network;
 
 public interface IServerSocket
 {

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D.Models.Data;
+namespace LughSharp.Core.Graphics.G3D.Models.Data;
 
 public class ModelMesh
 {

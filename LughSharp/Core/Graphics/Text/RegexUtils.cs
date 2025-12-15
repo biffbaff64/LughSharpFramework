@@ -22,9 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text.RegularExpressions;
-
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.Text;
+namespace LughSharp.Core.Graphics.Text;
 
 [PublicAPI]
 public partial class RegexUtils

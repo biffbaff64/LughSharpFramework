@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Audio;
 

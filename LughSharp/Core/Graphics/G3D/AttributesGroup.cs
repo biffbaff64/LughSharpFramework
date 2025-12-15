@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations; namespace LughSharp.Core.Graphics.G3D;
+namespace LughSharp.Core.Graphics.G3D;
 
 public class AttributesGroup : IComparer< Attribute >
 {
