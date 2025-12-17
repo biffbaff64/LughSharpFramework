@@ -27,6 +27,8 @@ namespace LughSharp.Core.Graphics.Cameras;
 [PublicAPI]
 public class CameraData
 {
+    public const float DEFAULT_NEAR_PLANE   = -100.0f;
+    public const float DEFAULT_FAR_PLANE    = 100.0f;
     public const float DEFAULT_PPM          = 1.0f;
     public const float DEFAULT_ZOOM         = 1.0f;
     public const float DEFAULT_SCENE_WIDTH  = 640.0f;

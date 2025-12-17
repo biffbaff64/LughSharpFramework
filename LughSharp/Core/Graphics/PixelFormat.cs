@@ -31,156 +31,120 @@ namespace LughSharp.Core.Graphics;
 public class PixelFormat
 {
     /// <summary>
-    /// Converts a GL format to a LughFormat value.
+    /// Returns the Internal Format (how GPU stores the data).
+    /// Modern GL requires sized formats for consistency.
     /// </summary>
-    public static int GLFormatToLughFormat( int format )
+    public static int ToGLInternalFormat( int format )
     {
         return format switch
                {
-                   IGL.GL_ALPHA           => LughFormat.ALPHA,
-                   IGL.GL_LUMINANCE_ALPHA => LughFormat.LUMINANCE_ALPHA,
-                   IGL.GL_RGB565          => LughFormat.RGB565,
-                   IGL.GL_RGBA4           => LughFormat.RGBA4444,
-                   IGL.GL_RGB             => LughFormat.RGB888,
-                   IGL.GL_RGBA            => LughFormat.RGBA8888,
-                   IGL.GL_COLOR_INDEX     => LughFormat.INDEXED_COLOR,
+                   // Color data should use SRGB for automatic gamma correction
+                   LughFormat.RGB888   => IGL.GL_SRGB8,
+                   LughFormat.RGBA8888 => IGL.GL_SRGB8_ALPHA8,
 
-                   // ----------------------------------
+                   // Modern GL Core uses R8 for single channel. 
+                   // We use Swizzle on the texture unit to treat Red as Alpha.
+                   LughFormat.ALPHA           => IGL.GL_R8,
+                   LughFormat.LUMINANCE_ALPHA => IGL.GL_RG8, // R=Luminance, G=Alpha
 
-                   var _ => throw new GdxRuntimeException( "Unknown Gdx2DPixmap Format: " + format ),
+                   // Legacy packed formats (Optional, but better as RGBA8)
+                   LughFormat.RGB565   => IGL.GL_RGB565,
+                   LughFormat.RGBA4444 => IGL.GL_RGBA4,
+
+                   // ---------------------------
+                   
+                   var _ => throw new GdxRuntimeException( $"Unsupported internal format: {format}" )
                };
     }
 
     /// <summary>
-    /// Converts a PixelFormat value to a GL format.
+    /// Returns the External Format (how the C# data is laid out).
     /// </summary>
-    public static int LughFormatToGLFormat( int format )
+    public static int ToGLFormat( int format )
     {
         return format switch
                {
-                   LughFormat.ALPHA           => IGL.GL_ALPHA,
-                   LughFormat.LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
                    LughFormat.RGB888          => IGL.GL_RGB,
                    LughFormat.RGBA8888        => IGL.GL_RGBA,
-                   LughFormat.RGB565          => IGL.GL_RGB565,
-                   LughFormat.RGBA4444        => IGL.GL_RGBA4,
-                   LughFormat.INDEXED_COLOR   => IGL.GL_COLOR_INDEX,
+                   LughFormat.ALPHA           => IGL.GL_RED, // Data comes in as 1 channel
+                   LughFormat.LUMINANCE_ALPHA => IGL.GL_RG,  // Data comes in as 2 channels
+                   LughFormat.RGB565          => IGL.GL_RGB,
+                   LughFormat.RGBA4444        => IGL.GL_RGBA,
 
-                   // ----------------------------------
-
-                   var _ => throw new GdxRuntimeException( $"Unsupported format: {format}" ),
+                   // ---------------------------
+                   
+                   var _ => throw new GdxRuntimeException( $"Unsupported data format: {format}" )
                };
     }
 
     /// <summary>
-    /// Converts a PixelFormat value to a GL format.
+    /// Returns the OpenGL Data Type (the "bucket" size for each channel).
     /// </summary>
-    public static int LughFormatToGLInternalFormat( int format )
+    public static int ToGLDataType( int format )
     {
         return format switch
                {
-                   LughFormat.ALPHA           => IGL.GL_ALPHA,
-                   LughFormat.LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-                   LughFormat.RGB888          => IGL.GL_RGB,
-                   LughFormat.RGBA8888        => IGL.GL_RGBA,
-                   LughFormat.RGB565          => IGL.GL_RGB565,
-                   LughFormat.RGBA4444        => IGL.GL_RGBA4,
-                   LughFormat.INDEXED_COLOR   => IGL.GL_COLOR_INDEX,
+                   LughFormat.RGB565   => IGL.GL_UNSIGNED_SHORT_5_6_5,
+                   LughFormat.RGBA4444 => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
 
-                   // ----------------------------------
+                   // ---------------------------
 
-                   var _ => throw new GdxRuntimeException( $"Unsupported format: {format}" ),
+                   // Standard 8-bit per channel
+                   var _ => IGL.GL_UNSIGNED_BYTE
                };
     }
 
     /// <summary>
-    /// Converts a PixelFormat value to a PNG Color Type value.
+    /// Gets the number of bytes required for 1 pixel.
+    /// Used for buffer allocation and stride calculations.
     /// </summary>
-    public static byte LughFormatToPNGColorType( int format )
+    public static int BytesPerPixel( int format )
     {
         return format switch
                {
-                   LughFormat.ALPHA           => 0,
-                   LughFormat.LUMINANCE_ALPHA => 4,
+                   LughFormat.ALPHA           => 1,
+                   LughFormat.LUMINANCE_ALPHA => 2,
                    LughFormat.RGB565          => 2,
                    LughFormat.RGBA4444        => 2,
-                   LughFormat.RGB888          => 2,
-                   LughFormat.RGBA8888        => 6,
-                   LughFormat.INDEXED_COLOR   => 3,
+                   LughFormat.RGB888          => 3,
+                   LughFormat.RGBA8888        => 4,
 
-                   // ----------------------------------
+                   // ---------------------------
 
-                   var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
+                   var _ => throw new GdxRuntimeException( $"Invalid format: {format}" )
                };
     }
 
-    /// <summary>
-    /// Converts a PNG Color Type value to a PixelFormat value.
-    /// </summary>
-    public static int PNGColorToLughFormat( int colorType )
+    public static int GetAlignment( Pixmap pixmap )
     {
-        return colorType switch
-               {
-                   1 => LughFormat.ALPHA,
-                   2 => LughFormat.LUMINANCE_ALPHA,
-                   3 => LughFormat.RGB888,
-                   4 => LughFormat.RGBA8888,
-                   5 => LughFormat.RGB565,
-                   6 => LughFormat.RGBA4444,
-
-                   // ----------------------------------
-
-                   var _ => throw new GdxRuntimeException( $"Unknown PNG Color Type: {colorType}" ),
-               };
+        //TODO:
+        return GetAlignment( pixmap.Width * BytesPerPixel( pixmap.GetColorFormat()) );
     }
-
+    
     /// <summary>
-    /// 
+    /// Computes the GL_UNPACK_ALIGNMENT. 
+    /// Very important for textures with 3 bytes per pixel (RGB888).
     /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
-    public static int GLFormatToPNGFormat( int format )
+    public static int GetAlignment( int rowStrideBytes )
     {
-        return format switch
-               {
-                   IGL.GL_ALPHA           => 0, // ALPHA,
-                   IGL.GL_LUMINANCE_ALPHA => 4, // LUMINANCE_ALPHA,
-                   IGL.GL_RGB565          => 2, // RGB565,
-                   IGL.GL_RGBA4           => 2, // RGBA4444,
-                   IGL.GL_RGB             => 2, // RGB888,
-                   IGL.GL_RGBA            => 6, // RGBA8888,
-                   IGL.GL_COLOR_INDEX     => 3, // INDEXED_COLOR,
+        if ( ( rowStrideBytes % 8 ) == 0 )
+        {
+            return 8;
+        }
 
-                   // ----------------------------------
+        if ( ( rowStrideBytes % 4 ) == 0 )
+        {
+            return 4;
+        }
 
-                   var _ => throw new GdxRuntimeException( $"Unknown GL Format: {format}" ),
-               };
+        if ( ( rowStrideBytes % 2 ) == 0 )
+        {
+            return 2;
+        }
+
+        return 1;
     }
-
-    /// <summary>
-    /// Converts a PNG color type and bit depth to a PixelFormat value.
-    /// </summary>
-    public static int FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
-    {
-        // Map PNG color type and bit depth to the format
-        var format = ( colorType, bitDepth ) switch
-                     {
-                         (6, 8) => LughFormat.RGBA8888,        // Truecolor with alpha, 8 bits
-                         (6, 4) => LughFormat.RGBA4444,        // Truecolor with alpha, 4 bits
-                         (2, 8) => LughFormat.RGB888,          // Truecolor, 8 bits
-                         (0, 8) => LughFormat.ALPHA,           // Grayscale, 8 bits
-                         (4, 8) => LughFormat.LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
-                         (2, 5) => LughFormat.RGB565,          // Truecolor, 5 bits
-                         (3, 8) => LughFormat.INDEXED_COLOR,   // Indexed color, 8 bits
-
-                         // ----------------------------------
-
-                         var _ => LughFormat.INVALID, // Invalid format, handled by caller
-                     };
-
-        return format;
-    }
+    
 
     /// <summary>
     /// Retrieves the OpenGL data type name corresponding to the given format.
@@ -325,70 +289,22 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a color to the specified pixel format
+    /// Converts a PNG Color Type value to a PixelFormat value.
     /// </summary>
-    public static uint RGBAToLughFormat( int requestedFormat, uint color )
+    public static int PNGColorToLughFormat( int colorType )
     {
-        uint r, g, b, a;
-
-        switch ( requestedFormat )
-        {
-            case LughFormat.ALPHA:
-                return color & 0xff;
-
-            case LughFormat.LUMINANCE_ALPHA:
-                r = ( color & 0xff000000 ) >> 24;
-                g = ( color & 0xff0000 ) >> 16;
-                b = ( color & 0xff00 ) >> 8;
-                a = color & 0xff;
-                var l = ( ( uint )( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
-
-                return ( l & 0xffffff00 ) | a;
-
-            case LughFormat.RGB888:
-                return color >> 8;
-
-            case LughFormat.RGBA8888:
-                return color;
-
-            case LughFormat.RGB565:
-                r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
-                g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
-                b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
-
-                return r | g | b;
-
-            case LughFormat.RGBA4444:
-                r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
-                g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
-                b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
-                a = ( ( color & 0xff ) >> 4 ) & 0xf;
-
-                return r | g | b | a;
-
-            case LughFormat.INDEXED_COLOR:
-                return color;
-
-            default:
-                return 0;
-        }
-    }
-
-    public static int LughFormatToGLDataType( int format )
-    {
-        return format switch
+        return colorType switch
                {
-                   LughFormat.ALPHA           => IGL.GL_ALPHA,
-                   LughFormat.LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-                   LughFormat.RGB888          => IGL.GL_RGB,
-                   LughFormat.RGBA8888        => IGL.GL_RGBA,
-                   LughFormat.RGB565          => IGL.GL_RGB,
-                   LughFormat.RGBA4444        => IGL.GL_RGBA,
-                   LughFormat.INDEXED_COLOR   => IGL.GL_COLOR_INDEX,
+                   1 => LughFormat.ALPHA,
+                   2 => LughFormat.LUMINANCE_ALPHA,
+                   3 => LughFormat.RGB888,
+                   4 => LughFormat.RGBA8888,
+                   5 => LughFormat.RGB565,
+                   6 => LughFormat.RGBA4444,
 
                    // ----------------------------------
 
-                   var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+                   var _ => throw new GdxRuntimeException( $"Unknown PNG Color Type: {colorType}" ),
                };
     }
 
@@ -419,126 +335,28 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Returns the pixel format from a valid named string.
+    /// Converts a PNG color type and bit depth to a PixelFormat value.
     /// </summary>
-    public static int GetFormatFromString( string str )
+    public static int FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
     {
-        str = str.ToLower();
+        // Map PNG color type and bit depth to the format
+        var format = ( colorType, bitDepth ) switch
+                     {
+                         (6, 8) => LughFormat.RGBA8888,        // Truecolor with alpha, 8 bits
+                         (6, 4) => LughFormat.RGBA4444,        // Truecolor with alpha, 4 bits
+                         (2, 8) => LughFormat.RGB888,          // Truecolor, 8 bits
+                         (0, 8) => LughFormat.ALPHA,           // Grayscale, 8 bits
+                         (4, 8) => LughFormat.LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
+                         (2, 5) => LughFormat.RGB565,          // Truecolor, 5 bits
+                         (3, 8) => LughFormat.INDEXED_COLOR,   // Indexed color, 8 bits
 
-        return str switch
-               {
-                   "alpha"          => LughFormat.ALPHA,
-                   "luminancealpha" => LughFormat.LUMINANCE_ALPHA,
-                   "rgb565"         => LughFormat.RGB565,
-                   "rgba4444"       => LughFormat.RGBA4444,
-                   "rgb888"         => LughFormat.RGB888,
-                   "rgba8888"       => LughFormat.RGBA8888,
-                   "indexedcolor"   => LughFormat.INDEXED_COLOR,
+                         // ----------------------------------
 
-                   // ----------------------------------
+                         var _ => LughFormat.INVALID, // Invalid format, handled by caller
+                     };
 
-                   var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
-               };
+        return format;
     }
-
-    // ========================================================================
-    // ========================================================================
-    // ========================================================================
-
-    #region Bytes Per Pixel Methods
-
-    /// <summary>
-    /// Gets the number of bytes required for 1 pixel of the specified format.
-    /// </summary>
-    public static int BytesPerPixel( int format )
-    {
-        //TODO: I might have to revisit this, it doesn't feel right
-        //      but I'm not sure how else I want to do it just yet.
-        return format switch
-               {
-                   // GL Formats
-                   IGL.GL_ALPHA           => 1,
-                   IGL.GL_LUMINANCE       => 1,
-                   IGL.GL_LUMINANCE_ALPHA => 2,
-                   IGL.GL_RGB565          => 2,
-                   IGL.GL_RGBA4           => 2,
-                   IGL.GL_RGB             => 3,
-                   IGL.GL_RGBA            => 4,
-                   IGL.GL_COLOR_INDEX     => 1,
-
-                   // ----------------------------------
-
-                   LughFormat.ALPHA           => 1,
-                   LughFormat.LUMINANCE_ALPHA => 2,
-                   LughFormat.RGB565          => 2,
-                   LughFormat.RGBA4444        => 2,
-                   LughFormat.RGB888          => 3,
-                   LughFormat.RGBA8888        => 4,
-                   LughFormat.INDEXED_COLOR   => 1,
-
-                   // ----------------------------------
-
-                   var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-               };
-    }
-
-    #endregion Bytes Per Pixel Methods
-
-    // ========================================================================
-
-    #region Miscellaneous Methods
-
-    /// <summary>
-    /// Computes the alignment for a given row stride in bytes.
-    /// </summary>
-    /// <param name="rowStrideBytes">The stride of a row in bytes.</param>
-    /// <returns>
-    /// The computed alignment value, which can be 8, 4, 2, or 1 depending on the input.
-    /// </returns>
-    public static int ComputeAlignment( int rowStrideBytes )
-    {
-        if ( ( rowStrideBytes % 8 ) == 0 )
-        {
-            return 8;
-        }
-
-        if ( ( rowStrideBytes % 4 ) == 0 )
-        {
-            return 4;
-        }
-
-        return ( rowStrideBytes % 2 ) == 0 ? 2 : 1;
-    }
-
-    /// <summary>
-    /// Calculates the pixel data alignment value for OpenGL based on the given pixmap.
-    /// </summary>
-    /// <param name="pixmap">The pixmap containing information about the pixel format. May be null.</param>
-    /// <returns>The alignment value required for OpenGL pixel data operations.</returns>
-    public static int GetAlignment( Pixmap? pixmap )
-    {
-        if ( pixmap == null )
-        {
-            return 1;
-        }
-
-        return pixmap.GLPixelFormat switch
-               {
-                   IGL.GL_RGB         => 1, // 3 Bpp => use 1 unless you know rowStride % 4 == 0
-                   IGL.GL_RGBA        => 4, // 4 Bpp (for UNSIGNED_BYTE); otherwise compute from the actual type
-                   IGL.GL_RGBA4       => 2, // 16-bit packed
-                   IGL.GL_RGB565      => 2, // 16-bit packed
-                   IGL.GL_ALPHA       => 1,
-                   IGL.GL_LUMINANCE   => 1,
-                   IGL.GL_COLOR_INDEX => 1,
-
-                   // ----------------------------------
-
-                   var _ => 1,
-               };
-    }
-
-    #endregion Miscellaneous Methods
 }
 
 // ========================================================================

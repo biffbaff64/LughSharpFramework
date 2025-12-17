@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Graphics.G2D;
@@ -321,15 +322,15 @@ public class ParticleEmitter
     {
         if ( PremultipliedAlpha )
         {
-            batch.SetBlendFunction( IGL.GL_ONE, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            batch.SetBlendFunction( BlendMode.One, BlendMode.OneMinusSrcAlpha );
         }
         else if ( Additive )
         {
-            batch.SetBlendFunction( IGL.GL_SRC_ALPHA, IGL.GL_ONE );
+            batch.SetBlendFunction( BlendMode.SrcAlpha, BlendMode.One );
         }
         else
         {
-            batch.SetBlendFunction( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            batch.SetBlendFunction( BlendMode.SrcAlpha, BlendMode.OneMinusSrcAlpha );
         }
 
         for ( int i = 0, n = IsActive.Length; i < n; i++ )
@@ -342,7 +343,7 @@ public class ParticleEmitter
 
         if ( CleansUpBlendFunction && ( Additive || PremultipliedAlpha ) )
         {
-            batch.SetBlendFunction( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            batch.SetBlendFunction( BlendMode.SrcAlpha, BlendMode.OneMinusSrcAlpha );
         }
     }
 
@@ -367,15 +368,15 @@ public class ParticleEmitter
 
         if ( PremultipliedAlpha )
         {
-            batch.SetBlendFunction( IGL.GL_ONE, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            batch.SetBlendFunction( BlendMode.One, BlendMode.OneMinusSrcAlpha );
         }
         else if ( Additive )
         {
-            batch.SetBlendFunction( IGL.GL_SRC_ALPHA, IGL.GL_ONE );
+            batch.SetBlendFunction( BlendMode.SrcAlpha, BlendMode.One );
         }
         else
         {
-            batch.SetBlendFunction( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            batch.SetBlendFunction( BlendMode.SrcAlpha, BlendMode.OneMinusSrcAlpha );
         }
 
         var active      = IsActive;
@@ -401,7 +402,7 @@ public class ParticleEmitter
 
         if ( CleansUpBlendFunction && ( Additive || PremultipliedAlpha ) )
         {
-            batch.SetBlendFunction( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            batch.SetBlendFunction( BlendMode.SrcAlpha, BlendMode.OneMinusSrcAlpha );
         }
 
         if ( _delayTimer < _delay )

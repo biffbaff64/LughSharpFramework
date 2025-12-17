@@ -67,7 +67,6 @@ public class VertexBufferObject : IVertexData
     private bool             _isBound = false;
     private bool             _isDirty = true;
     private bool             _ownsBuffer;
-    private int              _usage;
 
     // ========================================================================
     // ========================================================================
@@ -97,7 +96,7 @@ public class VertexBufferObject : IVertexData
 
         SetBuffer( _byteBuffer, true, attributes );
 
-        Usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        Usage = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
     }
 
     /// <summary>
@@ -111,7 +110,7 @@ public class VertexBufferObject : IVertexData
     /// <param name="data">The byte buffer containing the vertex data.</param>
     /// <param name="ownsBuffer">Indicates whether this object should take ownership of the buffer.</param>
     /// <param name="attributes">The vertex attributes that define the structure of the vertex data.</param>
-    public VertexBufferObject( int usage, Buffer< byte > data, bool ownsBuffer, VertexAttributes attributes )
+    public VertexBufferObject( BufferUsageHint usage, Buffer< byte > data, bool ownsBuffer, VertexAttributes attributes )
     {
         // Generate a new buffer handle using OpenGL and assign it to _bufferHandle.
         _bufferHandle = ( int )GL.GenBuffer();
@@ -128,9 +127,9 @@ public class VertexBufferObject : IVertexData
     /// The usage pattern for the vertex buffer object, which hints to the GPU how the
     /// data will be used (e.g., GL_STATIC_DRAW for data that doesn't change often).
     /// </summary>
-    public int Usage
+    public BufferUsageHint Usage
     {
-        get => _usage;
+        get;
         init
         {
             if ( _isBound )
@@ -138,7 +137,7 @@ public class VertexBufferObject : IVertexData
                 throw new GdxRuntimeException( "Cannot change usage while VBO is bound" );
             }
 
-            _usage = value;
+            field = value;
         }
     }
 
@@ -230,7 +229,7 @@ public class VertexBufferObject : IVertexData
     /// <param name="locations"> array containing the attribute locations.  </param>
     public void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -245,7 +244,7 @@ public class VertexBufferObject : IVertexData
 
                 fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
-                    GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
+                    GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
                 }
 
                 _isDirty = false;
@@ -318,7 +317,7 @@ public class VertexBufferObject : IVertexData
         }
 
         // Unbind the buffer from the GL_ARRAY_BUFFER target.
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
 
         // SetMark the buffer as unbound.
         _isBound = false;
@@ -339,7 +338,7 @@ public class VertexBufferObject : IVertexData
     /// </summary>
     public void Dispose()
     {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         GL.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
@@ -395,7 +394,7 @@ public class VertexBufferObject : IVertexData
         {
             fixed ( void* ptr = &_byteBuffer!.BackingArray()[ 0 ] )
             {
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer!.Limit, ( IntPtr )ptr, Usage );
+                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer!.Limit, ( IntPtr )ptr, Usage );
             }
 
             _isDirty = false;

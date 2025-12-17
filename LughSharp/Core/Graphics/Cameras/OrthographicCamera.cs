@@ -30,10 +30,6 @@ namespace LughSharp.Core.Graphics.Cameras;
 [PublicAPI]
 public class OrthographicCamera : Camera
 {
-    protected const float DEFAULT_ZOOM = 1.0f;
-
-    // ========================================================================
-
     private readonly Vector3 _tmp = new();
 
     // ========================================================================
@@ -46,7 +42,7 @@ public class OrthographicCamera : Camera
     {
         Near = 0f;
         Far  = 1f;
-        Zoom = DEFAULT_ZOOM;
+        Zoom = CameraData.DEFAULT_ZOOM;
     }
 
     /// <summary>
@@ -66,7 +62,7 @@ public class OrthographicCamera : Camera
         ViewportHeight = viewportHeight;
         Near           = 0f;
         Far            = 1f;
-        Zoom           = DEFAULT_ZOOM;
+        Zoom           = CameraData.DEFAULT_ZOOM;
     }
 
     // ========================================================================

@@ -34,9 +34,11 @@ public static class CIM
 {
     private const int BUFFER_SIZE = 32000;
 
-    private static readonly byte[] _writeBuffer = new byte[ BUFFER_SIZE ];
-    private static readonly byte[] _readBuffer  = new byte[ BUFFER_SIZE ];
+    private static readonly byte[] WriteBuffer = new byte[ BUFFER_SIZE ];
+    private static readonly byte[] ReadBuffer  = new byte[ BUFFER_SIZE ];
 
+    // ========================================================================
+    
     /// <summary>
     /// </summary>
     /// <param name="file"></param>
@@ -61,16 +63,16 @@ public static class CIM
             var remainingBytes = pixelBuf.Capacity % BUFFER_SIZE;
             var iterations     = pixelBuf.Capacity / BUFFER_SIZE;
 
-            lock ( _writeBuffer )
+            lock ( WriteBuffer )
             {
                 for ( var i = 0; i < iterations; i++ )
                 {
-                    pixelBuf.GetBytes( _writeBuffer );
-                    output.Write( _writeBuffer );
+                    pixelBuf.GetBytes( WriteBuffer );
+                    output.Write( WriteBuffer );
                 }
 
-                pixelBuf.GetBytes( _writeBuffer, 0, remainingBytes );
-                output.Write( _writeBuffer, 0, remainingBytes );
+                pixelBuf.GetBytes( WriteBuffer, 0, remainingBytes );
+                output.Write( WriteBuffer, 0, remainingBytes );
             }
 
             pixelBuf.Position = 0;
@@ -101,13 +103,13 @@ public static class CIM
             pixelBuf.Position = 0;
             pixelBuf.Limit    = pixelBuf.Capacity;
 
-            lock ( _readBuffer )
+            lock ( ReadBuffer )
             {
                 int readBytes;
 
-                while ( ( readBytes = input.Read( _readBuffer ) ) > 0 )
+                while ( ( readBytes = input.Read( ReadBuffer ) ) > 0 )
                 {
-                    pixelBuf.PutBytes( _readBuffer, 0, 0, readBytes );
+                    pixelBuf.PutBytes( ReadBuffer, 0, 0, readBytes );
                 }
             }
 
@@ -122,3 +124,6 @@ public static class CIM
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

@@ -251,7 +251,7 @@ public class ArrayList< T >
             throw new IndexOutOfRangeException( $"index can't be > size - {index} > {Count}" );
         }
 
-        Guard.ThrowIfNull( Items );
+        Guard.Against.Null( Items );
 
         var sizeNeeded = Count + count;
 

@@ -175,27 +175,27 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Disable( GLenum cap )
+    public void Disable( EnableCap cap )
     {
         GetDelegateForFunction< PFNGLDISABLEPROC >( "glDisable", out _glDisable );
 
-        _glDisable( cap );
+        _glDisable( ( GLenum )cap );
     }
 
     // ========================================================================
 
     /// <inheritdoc />
-    public void Enable( GLenum cap )
+    public void Enable( EnableCap cap )
     {
         GetDelegateForFunction< PFNGLENABLEPROC >( "glEnable", out _glEnable );
 
-        _glEnable( cap );
+        _glEnable( ( GLenum )cap );
     }
 
     // ========================================================================
 
     /// <inheritdoc />
-    public void EnableOrDisable( int cap, GLboolean enable )
+    public void EnableOrDisable( EnableCap cap, GLboolean enable )
     {
         if ( enable )
         {
@@ -220,11 +220,11 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsEnabled( GLenum cap )
+    public GLboolean IsEnabled( EnableCap cap )
     {
         GetDelegateForFunction< PFNGLISENABLEDPROC >( "glIsEnabled", out _glIsEnabled );
 
-        return _glIsEnabled( cap );
+        return _glIsEnabled( ( GLenum )cap );
     }
 
     // ========================================================================
@@ -729,11 +729,11 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void BlendFuncSeparate( GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha )
+    public void BlendFuncSeparate( BlendMode sfactorRGB, BlendMode dfactorRGB, BlendMode sfactorAlpha, BlendMode dfactorAlpha )
     {
         GetDelegateForFunction< PFNGLBLENDFUNCSEPARATEPROC >( "glBlendFuncSeparate", out _glBlendFuncSeparate );
 
-        _glBlendFuncSeparate( sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha );
+        _glBlendFuncSeparate( ( GLenum )sfactorRGB, ( GLenum )dfactorRGB, ( GLenum )sfactorAlpha, ( GLenum )dfactorAlpha );
     }
 
     // ========================================================================

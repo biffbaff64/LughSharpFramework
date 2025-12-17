@@ -76,27 +76,27 @@ public unsafe class OpenGLTest : ILughTest
 
         fixed ( float* ptr = _vertices )
         {
-            _gl.BufferData( ( int )BufferTarget.ArrayBuffer,
+            _gl.BufferData( BufferTarget.ArrayBuffer,
                             _vertices.Length * sizeof( float ),
-                            ( IntPtr )ptr, IGL.GL_STATIC_DRAW );
+                            ( IntPtr )ptr, BufferUsageHint.StaticDraw );
         }
 
         _gl.VertexAttribPointer( 0, 3, IGL.GL_FLOAT, false, 3 * sizeof( float ), 0u );
         _gl.EnableVertexAttribArray( 0 );
 
         _ibo = _gl.GenBuffer();
-        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, _ibo );
+        _gl.BindBuffer( BufferTarget.ElementArrayBuffer, _ibo );
 
         fixed ( short* ptr = _indices )
         {
-            _gl.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER,
+            _gl.BufferData( BufferTarget.ElementArrayBuffer,
                             _indices.Length * sizeof( short ),
-                            ( IntPtr )ptr, IGL.GL_STATIC_DRAW );
+                            ( IntPtr )ptr, BufferUsageHint.StaticDraw );
         }
 
         _gl.BindVertexArray( 0 );
-        _gl.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
+        _gl.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        _gl.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
     }
 
     [Test]
@@ -113,7 +113,7 @@ public unsafe class OpenGLTest : ILughTest
     {
         _gl.UseProgram( ( int )_shaderProgram );
         _gl.BindVertexArray( _vao );
-        _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, _ibo );
+        _gl.BindBuffer( BufferTarget.ElementArrayBuffer, _ibo );
 
 //        var offsetInBytes = 0; //offset * sizeof( short );
         _gl.DrawElements( IGL.GL_TRIANGLES, _indices.Length, IGL.GL_UNSIGNED_SHORT, 0 );

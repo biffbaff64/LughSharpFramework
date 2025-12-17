@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Runtime.Versioning;
-using System.Text;
 using JetBrains.Annotations;
 using LughSharp.Core.Assets;
-using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
+using LughSharp.Core.Scenes.Scene2D;
+using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
 using LughUtils.source.Maths;
-using LughUtils.source.Exceptions;
 using LughUtils.source.Logging;
 using Color = LughSharp.Core.Graphics.Color;
 
@@ -20,7 +19,7 @@ namespace Template.Source;
 /// TEST class, used for testing the framework.
 /// </summary>
 [PublicAPI]
-public partial class MainGame : Game
+public class MainGame : Game
 {
     private const string TEST_ASSET1 = Assets.BACKGROUND_IMAGE;
     private const int    TEST_WIDTH  = 64;
@@ -31,11 +30,13 @@ public partial class MainGame : Game
     private readonly Vector3 _cameraPos = Vector3.Zero;
 
     private OrthographicGameCamera? _orthoGameCam;
+    private OrthographicGameCamera? _hudCam;
     private SpriteBatch?            _spriteBatch;
     private AssetManager?           _assetManager;
     private Texture?                _image1;
-    private Texture?                _whitePixelTexture;
+    private Texture?                _hudImage;
     private bool                    _disposed;
+    private Stage?                  _stage;
 
     // ========================================================================
     // ========================================================================
@@ -47,11 +48,10 @@ public partial class MainGame : Game
         _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
 
-        CreateCamera();
-        
-        _image1 = new Texture( Assets.BACKGROUND_IMAGE );
-        
-        
+        CreateCameras();
+
+        _stage    = new Stage( _hudCam?.Viewport, _spriteBatch );
+
         Logger.Debug( "Done" );
     }
 
@@ -68,18 +68,41 @@ public partial class MainGame : Game
         // Clear and set viewport
         ScreenUtils.Clear( color: Color.Blue, clearDepth: true );
 
+        _spriteBatch?.EnableBlending();
+
         if ( _orthoGameCam is { IsInUse: true } )
         {
-            _orthoGameCam.Viewport?.Apply();
+            _orthoGameCam.Viewport?.Apply( centerCamera: true );
             _spriteBatch?.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
             _spriteBatch?.Begin();
 
             if ( _image1 != null )
             {
-                _spriteBatch?.Draw( _image1, -(_image1.Width / 2), -(_image1.Height / 2) );
+                _spriteBatch?.Draw( _image1, 0, 0 );
             }
 
             _spriteBatch?.End();
+        }
+
+        if ( _hudCam is { IsInUse: true } )
+        {
+            _hudCam.Viewport?.Apply( centerCamera: true );
+            _spriteBatch?.SetProjectionMatrix( _hudCam.Camera.Combined );
+            _spriteBatch?.Begin();
+
+            if ( _hudImage != null )
+            {
+                _spriteBatch?.Draw( _hudImage, 0, 0 );
+            }
+
+            _spriteBatch?.End();
+        }
+        
+        // ----- Draw the Stage, if enabled -----
+        if ( _stage != null )
+        {
+            _stage.Act( Math.Min( Engine.Api.DeltaTime, ( 1.0f / 60.0f ) ) );
+            _stage.Draw();
         }
     }
 
@@ -117,9 +140,10 @@ public partial class MainGame : Game
             {
                 _spriteBatch?.Dispose();
                 _image1?.Dispose();
-                _whitePixelTexture?.Dispose();
+                _hudImage?.Dispose();
                 _assetManager?.Dispose();
                 _orthoGameCam?.Dispose();
+                _hudCam?.Dispose();
             }
 
             _disposed = true;
@@ -132,72 +156,49 @@ public partial class MainGame : Game
     // ========================================================================
     // ========================================================================
 
-    private void CreateCamera()
+    private void CreateCameras()
     {
         _orthoGameCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
                                                     Engine.Api.Graphics.Height,
-                                                    ppm: 1f );
-        _orthoGameCam.Camera.Near = 1.0f;
-        _orthoGameCam.Camera.Far  = 100.0f;
+                                                    name: "MainCamera" );
+
+        _orthoGameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
+        _orthoGameCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _orthoGameCam.IsInUse     = true;
         _orthoGameCam.SetZoomDefault( CameraData.DEFAULT_ZOOM );
 
         // Set initial camera position
-        _cameraPos.X = 0f;
-        _cameraPos.Y = 0f;
-        _cameraPos.Z = 0f;
-        _orthoGameCam.SetPosition( _cameraPos );
+        _orthoGameCam.SetPosition( Vector3.Zero );
         _orthoGameCam.Update();
+
+        // --------------------------------------
+
+        _hudCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
+                                              Engine.Api.Graphics.Height,
+                                              name: "HUDCamera" );
+
+        _hudCam.SetZoomDefault( CameraData.DEFAULT_ZOOM );
+
+        _hudCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
+        _hudCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
+        _hudCam.IsInUse     = true;
+
+        // Set initial camera position
+        _hudCam.SetPosition( Vector3.Zero );
+        _hudCam.Update();
     }
 
-    private void LoadAssets()
+    private Actor? _hudActor;
+    
+    private void CreateAssets()
     {
-        Guard.Against.Null( _assetManager );
+        _image1   = new Texture( Assets.BACKGROUND_IMAGE );
+        _hudImage = new Texture( Assets.COMPLETE_STAR );
 
-        Logger.Divider();
-        Logger.Debug( "Loading assets...", true );
-        Logger.Divider();
-
-        _assetManager.Load< Texture >( TEST_ASSET1, new TextureLoader.TextureLoaderParameters() );
-        _assetManager.FinishLoading();
-
-        if ( _assetManager.Contains( TEST_ASSET1 ) )
-        {
-            _image1 = _assetManager.Get< Texture >( TEST_ASSET1 );
-        }
-
-        if ( _image1 == null )
-        {
-            Logger.Debug( "Asset loading failed" );
-        }
-        else
-        {
-            Logger.Debug( "Asset loaded" );
-
-            #if DEBUG
-            Logger.Debug( $"Loaded image type: {_image1.GetType()}" );
-
-            var data = _image1.GetImageData();
-            var sb   = new StringBuilder();
-
-            if ( data != null )
-            {
-                sb.AppendLine();
-
-                for ( var i = 0; i < 20; i++ )
-                {
-                    for ( var j = 0; j < 20; j++ )
-                    {
-                        sb.Append( $"[{data[ ( i * 20 ) + j ]:X}]" );
-                    }
-
-                    sb.AppendLine();
-                }
-
-                Logger.Debug( sb.ToString() );
-            }
-            #endif
-        }
+        var hudScene = new Texture( Assets.HUD_PANEL );
+        _hudActor = new Image( hudScene );
+        
+        _stage?.AddActor( _hudActor );
     }
 }
 

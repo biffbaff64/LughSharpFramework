@@ -55,6 +55,7 @@ public partial class Pixmap : IDisposable
     public int         Scale       { get; set; } = 1;           // 
     public Color       Color       { get; set; } = Color.Clear; // 
     public Gdx2DPixmap Gdx2DPixmap { get; set; }                // 
+    public int         Stride      { get; set; }
 
     // ========================================================================
 
@@ -179,13 +180,13 @@ public partial class Pixmap : IDisposable
     /// Returns the OpenGL pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
-    public int GLPixelFormat => PixelFormat.LughFormatToGLFormat( Gdx2DPixmap.ColorFormat );
+    public int GLPixelFormat => PixelFormat.ToGLFormat( Gdx2DPixmap.ColorFormat );
 
     /// <summary>
     /// Returns the OpenGL internal pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_LUMINANCE_ALPHA, GL_RGB8, GL_RGBA8, GL_RGB565, or GL_RGBA4.</returns>
-    public int GLInternalPixelFormat => PixelFormat.LughFormatToGLInternalFormat( Gdx2DPixmap.ColorFormat );
+    public int GLInternalPixelFormat => PixelFormat.ToGLInternalFormat( Gdx2DPixmap.ColorFormat );
 
     /// <summary>
     /// Returns the OpenGL Data Type of this Pixmap.
@@ -573,7 +574,7 @@ public partial class Pixmap : IDisposable
 
         var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
 
-        Guard.ThrowIfNull( a );
+        Guard.Against.Null( a );
 
         Logger.Debug( $"Buffer Length : {a.Length}" );
 

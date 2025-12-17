@@ -27,7 +27,7 @@ using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 using Bitmap = System.Drawing.Bitmap;
 
-namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.ImageDecoders;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]

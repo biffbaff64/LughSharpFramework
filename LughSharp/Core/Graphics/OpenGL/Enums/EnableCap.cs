@@ -57,6 +57,9 @@ public enum EnableCap : int
     DepthTest   = IGL.GL_DEPTH_TEST,
 
     // --------------------------------
+    FramebufferSrgb = IGL.GL_FRAMEBUFFER_SRGB,
+    
+    // --------------------------------
     NormalArray = IGL.GL_NORMAL_ARRAY,
     Normalize   = IGL.GL_NORMALIZE,
 

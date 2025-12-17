@@ -65,7 +65,7 @@ public partial interface IGLBindings
     /// Specifies a symbolic constant indicating a  capability to be disabled. Refer to
     /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible values.
     /// </param>
-    void Disable( int cap );
+    void Disable( EnableCap cap );
 
     /// <summary>
     /// Enable  capabilities.
@@ -74,7 +74,7 @@ public partial interface IGLBindings
     /// Specifies a symbolic constant indicating a  capability to be enabled. Refer to
     /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible values.
     /// </param>
-    void Enable( int cap );
+    void Enable( EnableCap cap );
 
     /// <summary>
     /// Wrapper method for <see cref="Enable"/> and <see cref="Disable"/>.
@@ -84,7 +84,7 @@ public partial interface IGLBindings
     /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible values.
     /// </param>
     /// <param name="enable"> True or false as appropriate. </param>
-    void EnableOrDisable( int cap, GLboolean enable );
+    void EnableOrDisable( EnableCap cap, GLboolean enable );
 
     /// <summary>
     /// Test whether a capability is enabled.
@@ -93,7 +93,7 @@ public partial interface IGLBindings
     /// Specifies a symbolic constant indicating a  capability. Refer to
     /// <see href="https://docs.gl/gl4/glIsEnabled"/> for a list of possible capabilities.
     /// </param>
-    bool IsEnabled( int cap );
+    bool IsEnabled( EnableCap cap );
 
     /// <summary>
     /// Set texture parameters
@@ -2469,7 +2469,7 @@ public partial interface IGLBindings
     /// Specifies how the alpha destination blending factor is computed. The initial value is
     /// <see cref="GL_ZERO"/>.
     /// </param>
-    void BlendFuncSeparate( int sfactorRGB, int dfactorRGB, int sfactorAlpha, int dfactorAlpha );
+    void BlendFuncSeparate( BlendMode sfactorRGB, BlendMode dfactorRGB, BlendMode sfactorAlpha, BlendMode dfactorAlpha );
 
     /// <summary>
     /// Render multiple sets of primitives from array data.
@@ -2778,15 +2778,11 @@ public partial interface IGLBindings
     /// Bind a named buffer object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target to which the buffer object is bound. The symbolic constant must be
-    /// <see cref="GL_ARRAY_BUFFER"/>, <see cref="GL_ATOMIC_COUNTER_BUFFER"/>, <see cref="GL_COPY_READ_BUFFER"/>,
-    /// <see cref="GL_COPY_WRITE_BUFFER"/>, <see cref="GL_DISPATCH_INDIRECT_BUFFER"/>,
-    /// <see cref="GL_DRAW_INDIRECT_BUFFER"/>, <see cref="GL_ELEMENT_ARRAY_BUFFER"/>, <see cref="GL_PIXEL_PACK_BUFFER"/>
-    /// , <see cref="GL_PIXEL_UNPACK_BUFFER"/>, <see cref="GL_QUERY_BUFFER"/>, <see cref="GL_SHADER_STORAGE_BUFFER"/>,
-    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="GL_TRANSFORM_FEEDBACK_BUFFER"/> or <see cref="GL_UNIFORM_BUFFER"/>.
+    /// Specifies the target buffer object of the binding point to be modified. This buffer is
+    /// one of those named in the <see cref="BufferTarget"/> enum.
     /// </param>
     /// <param name="buffer">Specifies the name of a buffer object.</param>
-    void BindBuffer( int target, uint buffer );
+    void BindBuffer( BufferTarget target, GLuint buffer );
 
     /// <summary>
     /// Delete named buffer objects.
@@ -2832,6 +2828,15 @@ public partial interface IGLBindings
     bool IsBuffer( uint buffer );
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="size"></param>
+    /// <param name="data"></param>
+    /// <param name="usage"></param>
+    void BufferData( BufferTarget target, int size, IntPtr data, BufferUsageHint usage );
+    
+    /// <summary>
     /// Create and initialize a buffer object's data store.
     /// </summary>
     /// <param name="target">
@@ -2855,6 +2860,15 @@ public partial interface IGLBindings
     /// </param>
     void BufferData( int target, int size, IntPtr data, int usage );
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="data"></param>
+    /// <param name="usage"></param>
+    /// <typeparam name="T"></typeparam>
+    void BufferData< T >( BufferTarget target, T[] data, BufferUsageHint usage ) where T : unmanaged;
+    
     /// <summary>
     /// Create and initialize a buffer object's data store.
     /// </summary>

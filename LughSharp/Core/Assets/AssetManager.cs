@@ -997,7 +997,7 @@ public partial class AssetManager : IDisposable
         {
             foreach ( var desc in dependendAssetDescs )
             {
-                Guard.ThrowIfNull( desc.AssetName );
+                Guard.Against.Null( desc.AssetName );
 
                 if ( _injected.Contains( desc.AssetName ) )
                 {

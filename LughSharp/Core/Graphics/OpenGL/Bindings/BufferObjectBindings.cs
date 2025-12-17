@@ -24,6 +24,7 @@
 
 // ============================================================================
 
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -40,6 +41,14 @@ namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings
 {
+    /// <inheritdoc />
+    public void BindBuffer( BufferTarget target, GLuint buffer )
+    {
+        GetDelegateForFunction< PFNGLBINDBUFFERPROC >( "glBindBuffer", out _glBindBuffer );
+
+        _glBindBuffer( ( GLenum )target, buffer );
+    }
+
     /// <inheritdoc />
     public void BindBuffer( GLenum target, GLuint buffer )
     {
@@ -112,14 +121,34 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
+    public void BufferData( BufferTarget target, int size, IntPtr data, BufferUsageHint usage )
+    {
+        GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
+
+        _glBufferData( ( GLenum )target, size, data, ( GLenum )usage );
+
+        CheckErrors();
+    }
+    
     /// <inheritdoc />
-    public void BufferData( GLenum target, GLsizeiptr size, IntPtr data, GLenum usage )
+    public void BufferData( GLenum target, int size, IntPtr data, GLenum usage )
     {
         GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
 
         _glBufferData( target, size, data, usage );
 
         CheckErrors();
+    }
+
+    /// <inheritdoc />
+    public void BufferData< T >( BufferTarget target, T[] data, BufferUsageHint usage ) where T : unmanaged
+    {
+        GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
+
+        fixed ( T* p = &data[ 0 ] )
+        {
+            _glBufferData( ( GLenum )target, sizeof( T ) * data.Length, ( IntPtr )p, ( GLenum )usage );
+        }
     }
 
     /// <inheritdoc />
@@ -249,7 +278,7 @@ public unsafe partial class GLBindings
 
         fixed ( IntPtr* p = &parameters[ 0 ] )
         {
-            _glGetBufferPointerv( target, pname, ( IntPtr* )p );
+            _glGetBufferPointerv( target, pname, p );
         }
     }
 

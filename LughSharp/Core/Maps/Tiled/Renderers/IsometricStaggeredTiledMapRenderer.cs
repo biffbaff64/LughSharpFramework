@@ -98,7 +98,7 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
                     var rotations = cell.GetRotation();
                     var region    = tile.TextureRegion;
 
-                    Guard.ThrowIfNull( region.Texture );
+                    Guard.Against.Null( region.Texture );
 
                     var x1 = ( ( x * layerTileWidth ) - offsetX ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
                     var y1 = ( y * layerTileHeight50 ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;

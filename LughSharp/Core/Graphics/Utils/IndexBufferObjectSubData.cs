@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -43,9 +44,9 @@ namespace LughSharp.Core.Graphics.Utils;
 [PublicAPI]
 public class IndexBufferObjectSubData : IIndexData
 {
-    private readonly Buffer< int > _buffer;
+    private readonly Buffer< int >   _buffer;
     private readonly Buffer< byte >  _byteBuffer;
-    private readonly int             _usage;
+    private readonly BufferUsageHint _usage;
     private          int             _bufferHandle;
     private          bool            _isBound = false;
     private          bool            _isDirty = true;
@@ -60,7 +61,7 @@ public class IndexBufferObjectSubData : IIndexData
     public IndexBufferObjectSubData( bool isStatic, int maxIndices )
     {
         _byteBuffer = new Buffer< byte >( maxIndices * sizeof( int ) );
-        _usage      = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        _usage      = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
         _buffer     = _byteBuffer.AsIntBuffer();
 
         _buffer.Flip();
@@ -76,7 +77,7 @@ public class IndexBufferObjectSubData : IIndexData
     public IndexBufferObjectSubData( int maxIndices )
     {
         _byteBuffer = new Buffer< byte >( maxIndices * sizeof( int ) );
-        _usage      = IGL.GL_STATIC_DRAW;
+        _usage      = BufferUsageHint.StaticDraw;
         _buffer     = _byteBuffer.AsIntBuffer();
 
         _buffer.Flip();
@@ -184,7 +185,7 @@ public class IndexBufferObjectSubData : IIndexData
             throw new GdxRuntimeException( "IndexBufferObject cannot be used after it has been disposed." );
         }
 
-        GL.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, ( uint )_bufferHandle );
+        GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -204,7 +205,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <inheritdoc />
     public void Unbind()
     {
-        GL.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
+        GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
         _isBound = false;
     }
 
@@ -218,7 +219,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <inheritdoc />
     public void Dispose()
     {
-        GL.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
+        GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
         GL.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
@@ -228,9 +229,9 @@ public class IndexBufferObjectSubData : IIndexData
     {
         var result = GL.GenBuffer();
 
-        GL.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, result );
-        GL.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Capacity, 0, _usage );
-        GL.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
+        GL.BindBuffer( BufferTarget.ElementArrayBuffer, result );
+        GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Capacity, 0, _usage );
+        GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
 
         return ( int )result;
     }

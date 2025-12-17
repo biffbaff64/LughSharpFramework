@@ -425,7 +425,7 @@ public partial class TexturePacker
 
             foreach ( var page in pages )
             {
-                Guard.ThrowIfNull( page );
+                Guard.Against.Null( page );
 
                 foreach ( var rect in page.OutputRects )
                 {
@@ -454,8 +454,8 @@ public partial class TexturePacker
             {
                 var page = pages[ i ];
 
-                Guard.ThrowIfNull( page );
-                Guard.ThrowIfNull( page.OutputRects );
+                Guard.Against.Null( page );
+                Guard.Against.Null( page.OutputRects );
 
                 // ---------- Writing Atlas Header ----------
 

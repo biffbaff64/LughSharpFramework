@@ -30,7 +30,6 @@ using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
-
 using GLenum = int;
 
 namespace LughSharp.Core.Graphics;
@@ -61,7 +60,7 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public class Texture : GLTexture, IManaged
 {
-    public ITextureData TextureData  { get; set; }
+    public ITextureData TextureData { get; set; }
 
     // ========================================================================
 
@@ -178,7 +177,7 @@ public class Texture : GLTexture, IManaged
         Guard.Against.Null( data );
 
         TextureData = data;
-        
+
         Load( data );
 
         if ( data.IsManaged )
@@ -212,8 +211,21 @@ public class Texture : GLTexture, IManaged
         UnsafeSetFilter( MinFilter, MagFilter, true );
         UnsafeSetWrap( UWrap, VWrap, true );
         UnsafeSetAnisotropicFilter( AnisotropicFilterLevel, true );
-        
-        GL.BindTexture( GLTarget, 0 );
+
+        GL.BindTexture( GLTarget, 0 ); 
+
+        if ( ColorFormat == LughFormat.ALPHA )
+        {
+            // Map Red -> Alpha, and force RGB to 1.0 (White)
+            GLenum[] swizzle = { IGL.GL_ONE, IGL.GL_ONE, IGL.GL_ONE, IGL.GL_RED };
+            GL.TexParameteriv( ( GLenum )TextureTarget.Texture2D, ( GLenum )TextureParameter.TextureSwizzleRgba, swizzle );
+        }
+        else if ( ColorFormat == LughFormat.LUMINANCE_ALPHA )
+        {
+            // Map Red -> RGB (Luminance), Green -> Alpha
+            GLenum[] swizzle = { IGL.GL_RED, IGL.GL_RED, IGL.GL_RED, IGL.GL_GREEN };
+            GL.TexParameteriv( ( GLenum )TextureTarget.Texture2D, ( GLenum )TextureParameter.TextureSwizzleRgba, swizzle );
+        }
     }
 
     /// <summary>
@@ -389,7 +401,7 @@ public class Texture : GLTexture, IManaged
     public static bool IsMipMap( TextureFilterMode filter )
     {
         return ( filter != TextureFilterMode.Nearest )
-               && ( filter != TextureFilterMode.Linear );
+            && ( filter != TextureFilterMode.Linear );
     }
 
     // ========================================================================
@@ -429,7 +441,7 @@ public class Texture : GLTexture, IManaged
         }
 
         var pixmap = TextureData.ConsumePixmap();
-        
+
         Logger.Debug( $"Dimensions        : {Width} x {Height} = {Width * Height}" );
         Logger.Debug( $"Format            : {TextureData.GetPixelFormat()}" );
         Logger.Debug( $"IsManaged         : {IsManaged}" );

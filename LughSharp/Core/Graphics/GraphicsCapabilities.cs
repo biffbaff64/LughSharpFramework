@@ -87,6 +87,10 @@ public unsafe class GraphicsCapabilities
         return false;
     }
 
+    /// <summary>
+    /// Returns <c>true</c> if the provided (major, minor) version is at least the
+    /// version specified by (mj, mn).
+    /// </summary>
     private static bool VersionAtLeast( int mj, int mn, int major, int minor )
     {
         return ( major > mj ) || ( ( major == mj ) && ( minor >= mn ) );

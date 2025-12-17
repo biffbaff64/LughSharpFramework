@@ -36,14 +36,19 @@ namespace LughSharp.Core.Graphics.Utils;
 [PublicAPI]
 public class InstanceBufferObjectSubData : IInstanceData
 {
+    public int              BufferHandle { get; set; }
+    public VertexAttributes Attributes   { get; set; }
+
+    // ========================================================================
+    
     private readonly Buffer< float > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
     private readonly bool            _isDirect;
+    private readonly BufferUsageHint _usage;
 
-    private readonly int  _usage;
-    private          bool _isBound = false;
-    private          bool _isDirty = false;
-    private          bool _isStatic;
+    private bool _isBound = false;
+    private bool _isDirty = false;
+    private bool _isStatic;
 
     // ========================================================================
 
@@ -73,16 +78,13 @@ public class InstanceBufferObjectSubData : IInstanceData
         _byteBuffer = new Buffer< byte >( Attributes.VertexSize * numInstances );
         _isDirect   = true;
 
-        _usage       = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        _usage       = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
         _buffer      = _byteBuffer.AsFloatBuffer();
         BufferHandle = CreateBufferObject();
 
         _buffer.Flip();
         _byteBuffer.Flip();
     }
-
-    public int              BufferHandle { get; set; }
-    public VertexAttributes Attributes   { get; set; }
 
     /// <summary>
     /// Returns the number of instances in this buffer.
@@ -204,7 +206,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     /// <param name="locations"></param>
     public void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )BufferHandle );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )BufferHandle );
 
         if ( _isDirty )
         {
@@ -213,7 +215,7 @@ public class InstanceBufferObjectSubData : IInstanceData
                 fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
                     _byteBuffer.Limit = _buffer.Limit * 4;
-                    GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                    GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
                     _isDirty = false;
                 }
             }
@@ -317,7 +319,7 @@ public class InstanceBufferObjectSubData : IInstanceData
             }
         }
 
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         _isBound = false;
     }
 
@@ -336,7 +338,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     /// </summary>
     public void Dispose()
     {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         GL.DeleteBuffers( ( uint )BufferHandle );
         BufferHandle = 0;
     }
@@ -345,9 +347,9 @@ public class InstanceBufferObjectSubData : IInstanceData
     {
         var result = GL.GenBuffer();
 
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, result );
-        GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Capacity, 0, _usage );
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, result );
+        GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Capacity, 0, _usage );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
 
         return ( int )result;
     }
@@ -358,10 +360,13 @@ public class InstanceBufferObjectSubData : IInstanceData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, 0, _usage );
+                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, 0, _usage );
                 GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, _byteBuffer.Limit, ( IntPtr )ptr );
                 _isDirty = false;
             }
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

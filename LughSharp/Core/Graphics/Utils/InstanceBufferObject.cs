@@ -41,7 +41,6 @@ public class InstanceBufferObject : IInstanceData
     private bool _isBound = false;
     private bool _isDirty = false;
     private bool _ownsBuffer;
-    private int  _usage;
 
     // ========================================================================
 
@@ -61,16 +60,16 @@ public class InstanceBufferObject : IInstanceData
 
         SetBuffer( data, true, instanceAttributes );
 
-        Usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        Usage = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
     }
 
     /// <summary>
     /// The GL enum used in the call to <see cref="GLBindings.BufferData"/>,
     /// e.g. GL_STATIC_DRAW or GL_DYNAMIC_DRAW. It can only be called when the VBO is not bound.
     /// </summary>
-    public int Usage
+    public BufferUsageHint Usage
     {
-        get => _usage;
+        get;
         set
         {
             if ( _isBound )
@@ -78,7 +77,7 @@ public class InstanceBufferObject : IInstanceData
                 throw new GdxRuntimeException( "Cannot change _usage while VBO is bound" );
             }
 
-            _usage = value;
+            field = value;
         }
     }
 
@@ -170,7 +169,7 @@ public class InstanceBufferObject : IInstanceData
     {
         Debug.Assert( _byteBuffer != null, "Bind(ShaderProgram, int[]) fail: _byteBuffer is NULL" );
 
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -178,7 +177,7 @@ public class InstanceBufferObject : IInstanceData
 
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
+                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
             }
 
             _isDirty = false;
@@ -281,7 +280,7 @@ public class InstanceBufferObject : IInstanceData
             }
         }
 
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         _isBound = false;
     }
 
@@ -300,7 +299,7 @@ public class InstanceBufferObject : IInstanceData
     /// </summary>
     public void Dispose()
     {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         GL.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
@@ -359,8 +358,8 @@ public class InstanceBufferObject : IInstanceData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, 0, Usage );
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
+                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, 0, Usage );
+                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
                 _isDirty = false;
             }
         }

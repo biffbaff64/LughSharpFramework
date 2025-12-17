@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
@@ -68,7 +69,7 @@ public class ScissorStack
                 return false;
             }
 
-            GL.Enable( IGL.GL_SCISSOR_TEST );
+            GL.Enable( EnableCap.ScissorTest );
         }
         else
         {
@@ -121,7 +122,7 @@ public class ScissorStack
 
         if ( _scissors.Count == 0 )
         {
-            GL.Disable( IGL.GL_SCISSOR_TEST );
+            GL.Disable( EnableCap.ScissorTest );
         }
         else
         {

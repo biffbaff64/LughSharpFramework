@@ -42,6 +42,7 @@ public enum TextureParameter : int
     TextureSwizzleG       = IGL.GL_TEXTURE_SWIZZLE_G,
     TextureSwizzleB       = IGL.GL_TEXTURE_SWIZZLE_B,
     TextureSwizzleA       = IGL.GL_TEXTURE_SWIZZLE_A,
+    TextureSwizzleRgba    = IGL.GL_TEXTURE_SWIZZLE_RGBA,
     TextureWidth          = IGL.GL_TEXTURE_WIDTH,
     TextureHeight         = IGL.GL_TEXTURE_HEIGHT,
     TextureDepth          = IGL.GL_TEXTURE_DEPTH,

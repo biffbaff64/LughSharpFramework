@@ -1149,7 +1149,10 @@ public class Color : ICloneable, IEquatable< Color >
 
     #region From ICloneable Interface
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Creates a new object that is a copy of the current instance.
+    /// </summary>
+    /// <returns>A new object that is a copy of this instance.</returns>
     public object Clone()
     {
         return new Color( this );
@@ -1162,7 +1165,13 @@ public class Color : ICloneable, IEquatable< Color >
 
     #region From IEquatable Interface
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    /// <param name="other">An object to compare with this object.</param>
+    /// <returns>
+    /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise false .
+    /// </returns>
     public bool Equals( Color? other )
     {
         if ( other is null )
@@ -1173,7 +1182,11 @@ public class Color : ICloneable, IEquatable< Color >
         return PackedColorABGR() == other.PackedColorABGR();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Determines whether the specified object is equal to the current object.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current object.</param>
+    /// <returns> true if the specified object  is equal to the current object; otherwise false. </returns>
     public override bool Equals( object? obj )
     {
         if ( ( obj == null ) || ( GetType() != obj.GetType() ) )
@@ -1203,6 +1216,8 @@ public class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
+    #region operator overloads
+    
     /// <summary>
     /// Determines whether two <see cref="Color"/> objects are equal.
     /// </summary>
@@ -1249,6 +1264,8 @@ public class Color : ICloneable, IEquatable< Color >
         return c1;
     }
 
+    #endregion operator overloads
+    
     // ========================================================================
     // ========================================================================
 
@@ -1270,3 +1287,6 @@ public class Color : ICloneable, IEquatable< Color >
         Logger.Divider();
     }
 }
+
+// ============================================================================
+// ============================================================================

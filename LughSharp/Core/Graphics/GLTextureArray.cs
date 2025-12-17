@@ -33,7 +33,7 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public class GLTextureArray : GLTexture, IManaged
 {
-    private static readonly Dictionary< IApplication, List< GLTextureArray > > _managedTextureArrays = new();
+    private static readonly Dictionary< IApplication, List< GLTextureArray > > ManagedTextureArrays = new();
 
     private ITextureArrayData _data;
 
@@ -49,9 +49,9 @@ public class GLTextureArray : GLTexture, IManaged
         {
             var builder = new StringBuilder( "Managed TextureArrays/app: { " );
 
-            foreach ( var app in _managedTextureArrays.Keys )
+            foreach ( var app in ManagedTextureArrays.Keys )
             {
-                builder.Append( _managedTextureArrays[ app ].Count );
+                builder.Append( ManagedTextureArrays[ app ].Count );
                 builder.Append( ' ' );
             }
 
@@ -64,7 +64,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// Gets the number of managed TextureArrays currently loaded.
     /// </summary>
-    public int NumManagedTextureArrays => _managedTextureArrays[ Api.App ].Count;
+    public int NumManagedTextureArrays => ManagedTextureArrays[ Api.App ].Count;
 
     // ========================================================================
 
@@ -213,10 +213,10 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="texture"></param>
     private static void AddManagedTexture( IApplication app, GLTextureArray texture )
     {
-        var managedTextureArray = _managedTextureArrays[ app ];
+        var managedTextureArray = ManagedTextureArrays[ app ];
 
-        _managedTextureArrays[ app ].Add( texture );
-        _managedTextureArrays[ app ] = managedTextureArray;
+        ManagedTextureArrays[ app ].Add( texture );
+        ManagedTextureArrays[ app ] = managedTextureArray;
     }
 
     // ========================================================================
@@ -226,7 +226,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// </summary>
     internal static void ClearAllTextureArrays( IApplication app )
     {
-        _managedTextureArrays.Remove( app );
+        ManagedTextureArrays.Remove( app );
     }
 
     /// <summary>
@@ -234,7 +234,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// </summary>
     internal static void InvalidateAllTextureArrays( IApplication app )
     {
-        foreach ( var textureArray in _managedTextureArrays[ app ] )
+        foreach ( var textureArray in ManagedTextureArrays[ app ] )
         {
             textureArray.Reload();
         }
@@ -263,3 +263,6 @@ public class GLTextureArray : GLTexture, IManaged
         throw new NotImplementedException();
     }
 }
+
+// ============================================================================
+// ============================================================================

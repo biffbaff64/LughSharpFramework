@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 
 namespace LughSharp.Core.Graphics.G2D;
@@ -81,39 +82,6 @@ public interface IBatch
     const int U4 = 18;
     const int V4 = 19;
 
-//    const int X1   = 0;
-//    const int Y1   = 1;
-//    const int C1_R = 2;
-//    const int C1_G = 3;
-//    const int C1_B = 4;
-//    const int C1_A = 5;
-//    const int U1   = 6;
-//    const int V1   = 7;
-//    const int X2   = 8;
-//    const int Y2   = 9;
-//    const int C2_R = 10;
-//    const int C2_G = 11;
-//    const int C2_B = 12;
-//    const int C2_A = 13;
-//    const int U2   = 14;
-//    const int V2   = 15;
-//    const int X3   = 16;
-//    const int Y3   = 17;
-//    const int C3_R = 18;
-//    const int C3_G = 19;
-//    const int C3_B = 20;
-//    const int C3_A = 21;
-//    const int U3   = 22;
-//    const int V3   = 23;
-//    const int X4   = 24;
-//    const int Y4   = 25;
-//    const int C4_R = 26;
-//    const int C4_G = 27;
-//    const int C4_B = 28;
-//    const int C4_A = 29;
-//    const int U4   = 30;
-//    const int V4   = 31;
-
     // ========================================================================
     // ========================================================================
 
@@ -132,10 +100,10 @@ public interface IBatch
     /// </returns>
     float ColorPackedRGBA { get; }
 
-    int BlendSrcFunc      { get; }
-    int BlendDstFunc      { get; }
-    int BlendSrcFuncAlpha { get; }
-    int BlendDstFuncAlpha { get; }
+    BlendMode BlendSrcFunc      { get; }
+    BlendMode BlendDstFunc      { get; }
+    BlendMode BlendSrcFuncAlpha { get; }
+    BlendMode BlendDstFuncAlpha { get; }
 
     /// <summary>
     /// Returns the current projection matrix.
@@ -382,7 +350,7 @@ public interface IBatch
     /// If set to -1, Batch won't change the blending function.
     /// </param>
     /// <param name="dstFunc"> the destination function, e.g. GL20.GL_ONE_MINUS_SRC_ALPHA </param>
-    void SetBlendFunction( int srcFunc, int dstFunc );
+    void SetBlendFunction( BlendMode srcFunc, BlendMode dstFunc );
 
     /// <summary>
     /// Sets separate (color/alpha) blending function to be used when rendering sprites.
@@ -398,7 +366,7 @@ public interface IBatch
     /// <param name="dstFuncAlpha">
     /// the destination alpha function, e.g. GL20.GL_ONE_MINUS_SRC_ALPHA.
     /// </param>
-    void SetBlendFunctionSeparate( int srcFuncColor, int dstFuncColor, int srcFuncAlpha, int dstFuncAlpha );
+    void SetBlendFunctionSeparate( BlendMode srcFuncColor, BlendMode dstFuncColor, BlendMode srcFuncAlpha, BlendMode dstFuncAlpha );
 
     /// <summary>
     /// Sets the projection matrix to be used by this Batch.

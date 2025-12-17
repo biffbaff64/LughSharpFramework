@@ -25,6 +25,7 @@
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -162,6 +163,8 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
             Samples          = GLWindow.AppConfig.Samples,
             CoverageSampling = false,
         };
+        
+        GL.Enable( EnableCap.FramebufferSrgb );
     }
 
     /// <summary>
@@ -209,7 +212,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         if ( SupportsCubeMapSeamless() )
         {
-            Engine.GL.EnableOrDisable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS, enable );
+            Engine.GL.EnableOrDisable( EnableCap.TextureCubemapSeamless, enable );
         }
     }
 
@@ -356,7 +359,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
-        Guard.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         return GLWindow.AppConfig.GetDisplayModes( DotGLFW.Glfw.GetPrimaryMonitor() );
     }
@@ -364,7 +367,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {
-        Guard.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         return GLWindow.AppConfig.GetDisplayModes( monitor );
     }
@@ -372,7 +375,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode GetDisplayMode()
     {
-        Guard.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         return GLWindow.AppConfig.GetDisplayMode( DotGLFW.Glfw.GetPrimaryMonitor() );
     }
@@ -380,7 +383,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
-        Guard.ThrowIfNull( GLWindow );
+        Guard.Against.Null( GLWindow );
 
         return GLWindow.AppConfig.GetDisplayMode( monitor );
     }

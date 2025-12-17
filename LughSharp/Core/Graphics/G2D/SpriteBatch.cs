@@ -45,21 +45,21 @@ public class SpriteBatch : IBatch, IDisposable
 
     // ========================================================================
 
-    public bool    BlendingEnabled   { get; set; }
-    public float   InvTexHeight      { get; set; }
-    public float   InvTexWidth       { get; set; }
-    public Matrix4 CombinedMatrix    { get; set; } = new();
-    public Matrix4 ProjectionMatrix  { get; set; } = new();
-    public Matrix4 TransformMatrix   { get; set; } = new();
-    public int     RenderCalls       { get; set; }
-    public long    TotalRenderCalls  { get; set; }
-    public int     MaxSpritesInBatch { get; set; }
-    public int     BlendSrcFunc      { get; private set; } = ( int )BlendMode.SrcAlpha;
-    public int     BlendDstFunc      { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
-    public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.One;
-    public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
-    public float[] Vertices          { get; set; }         = [ ];
-    public int     TextureOffset     { get; set; }
+    public bool      BlendingEnabled   { get; set; }
+    public float     InvTexHeight      { get; set; }
+    public float     InvTexWidth       { get; set; }
+    public Matrix4   CombinedMatrix    { get; set; } = new();
+    public Matrix4   ProjectionMatrix  { get; set; } = new();
+    public Matrix4   TransformMatrix   { get; set; } = new();
+    public int       RenderCalls       { get; set; }
+    public long      TotalRenderCalls  { get; set; }
+    public int       MaxSpritesInBatch { get; set; }
+    public BlendMode BlendSrcFunc      { get; private set; } = BlendMode.SrcAlpha;
+    public BlendMode BlendDstFunc      { get; private set; } = BlendMode.OneMinusSrcAlpha;
+    public BlendMode BlendSrcFuncAlpha { get; private set; } = BlendMode.One;
+    public BlendMode BlendDstFuncAlpha { get; private set; } = BlendMode.OneMinusDstAlpha;
+    public float[]   Vertices          { get; set; }         = [ ];
+    public int       TextureOffset     { get; set; }
 
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
@@ -105,6 +105,10 @@ public class SpriteBatch : IBatch, IDisposable
     private bool _disposed;
     private bool _initialBlendingState;
     private bool _originalDepthTestEnabled;
+    private bool _originalColorMaskR;
+    private bool _originalColorMaskG;
+    private bool _originalColorMaskB;
+    private bool _originalColorMaskA;
 
     // ========================================================================
     // ========================================================================
@@ -259,27 +263,38 @@ public class SpriteBatch : IBatch, IDisposable
             CurrentBatchState = BatchState.Drawing;
             RenderCalls       = 0;
 
-            GL.Disable( ( int )EnableCap.CullFace );
-            GL.Disable( ( int )EnableCap.ScissorTest );
-            GL.Disable( ( int )EnableCap.StencilTest );
+            // Capture the original color mask state
+            var mask = new bool[ 4 ];
+            GL.GetBooleanv( ( int )GLParameter.ColorWritemask, ref mask );
+            _originalColorMaskR = mask[ 0 ];
+            _originalColorMaskG = mask[ 1 ];
+            _originalColorMaskB = mask[ 2 ];
+            _originalColorMaskA = mask[ 3 ];
+
+            // Set for SpriteBatch
+            GL.ColorMask( true, true, true, true );
+
+            GL.Disable( EnableCap.CullFace );
+            GL.Disable( EnableCap.ScissorTest );
+            GL.Disable( EnableCap.StencilTest );
 
             // Handle Depth state
-            _originalDepthTestEnabled = GL.IsEnabled( ( int )EnableCap.DepthTest );
-            _initialBlendingState     = GL.IsEnabled( ( int )EnableCap.Blend );
+            _originalDepthTestEnabled = GL.IsEnabled( EnableCap.DepthTest );
+            _initialBlendingState     = GL.IsEnabled( EnableCap.Blend );
 
             if ( depthMaskEnabled )
             {
-                GL.Enable( ( int )EnableCap.DepthTest );
+                GL.Enable( EnableCap.DepthTest );
             }
             else
             {
-                GL.Disable( ( int )EnableCap.DepthTest );
+                GL.Disable( EnableCap.DepthTest );
             }
 
             GL.DepthMask( depthMaskEnabled );
 
             // Ensure Blending is ready
-            GL.Enable( ( int )EnableCap.Blend );
+            GL.Enable( EnableCap.Blend );
             GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
 
             // Use your actual window width and height
@@ -320,6 +335,9 @@ public class SpriteBatch : IBatch, IDisposable
             CurrentBatchState = BatchState.Ready;
             LastTexture       = null;
 
+            // Restore the original color mask state
+            GL.ColorMask(_originalColorMaskR, _originalColorMaskG, _originalColorMaskB, _originalColorMaskA);
+            
             // Instead of a mysterious variable, restore to the "Standard" 
             // engine default (usually true for 3D, false for 2D).
             GL.DepthMask( true );
@@ -327,23 +345,23 @@ public class SpriteBatch : IBatch, IDisposable
             // Restore the EnableCap.DepthTest state we saved in Begin()
             if ( _originalDepthTestEnabled )
             {
-                GL.Enable( ( int )EnableCap.DepthTest );
+                GL.Enable( EnableCap.DepthTest );
             }
             else
             {
-                GL.Disable( ( int )EnableCap.DepthTest );
+                GL.Disable( EnableCap.DepthTest );
             }
 
             // Restore Blending state
             // Only modify blending if current state differs from initial state
             if ( _initialBlendingState )
             {
-                GL.Enable( ( int )EnableCap.Blend );
-                GL.BlendFunc( (int)BlendMode.SrcAlpha, (int)BlendMode.OneMinusSrcAlpha );
+                GL.Enable( EnableCap.Blend );
+                GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
             }
             else
             {
-                GL.Disable( ( int )EnableCap.Blend );
+                GL.Disable( EnableCap.Blend );
             }
 
             // Reset index for safety
@@ -401,7 +419,7 @@ public class SpriteBatch : IBatch, IDisposable
 
             // 3. Sync CPU Data to GPU (The Missing Link)
             // We use the raw VBO handle directly to ensure it works regardless of Mesh state
-            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+            GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
             unsafe
             {
@@ -415,25 +433,24 @@ public class SpriteBatch : IBatch, IDisposable
             _shader?.Bind();
 
             GL.BindVertexArray( _vao );
-            GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo ); // Links indices to VAO
+            GL.BindBuffer( BufferTarget.ElementArrayBuffer, _ebo ); // Links indices to VAO
 
             // 5. Blending
             if ( BlendingEnabled )
             {
-                GL.Enable( ( int )EnableCap.Blend );
-                GL.BlendFuncSeparate( BlendSrcFunc != -1 ? BlendSrcFunc : ( int )BlendMode.SrcAlpha,
-                                      BlendDstFunc != -1 ? BlendDstFunc : ( int )BlendMode.OneMinusSrcAlpha,
-                                      BlendSrcFuncAlpha != -1 ? BlendSrcFuncAlpha : ( int )BlendMode.One,
-                                      BlendDstFuncAlpha != -1 ? BlendDstFuncAlpha : ( int )BlendMode.OneMinusSrcAlpha );
+                GL.Enable( EnableCap.Blend );
+                GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendMode.OneMinusSrcAlpha );
             }
             else
             {
-                GL.Disable( ( int )EnableCap.Blend );
+                GL.Disable( EnableCap.Blend );
             }
 
             // 6. Draw
             // 4 = Triangles, 5125 = Unsigned Int
-            GL.DrawElements( ( int )PrimitiveType.Triangles, spritesInBatch * 6, ( int )DrawElementsType.UnsignedInt,
+            GL.DrawElements( ( int )PrimitiveType.Triangles,
+                             spritesInBatch * 6,
+                             ( int )DrawElementsType.UnsignedInt,
                              IntPtr.Zero );
 
             // 7. Reset
@@ -463,7 +480,7 @@ public class SpriteBatch : IBatch, IDisposable
             }
 
             BlendingEnabled = true;
-            GL.Enable( IGL.GL_BLEND );
+            GL.Enable( EnableCap.Blend );
 
             // Restore blend function state
             GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
@@ -490,7 +507,7 @@ public class SpriteBatch : IBatch, IDisposable
             }
 
             BlendingEnabled = false;
-            GL.Disable( IGL.GL_BLEND );
+            GL.Disable( EnableCap.Blend );
         }
     }
 
@@ -500,7 +517,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// </summary>
     /// <param name="srcFunc"> Source Function for Color and Alpha. </param>
     /// <param name="dstFunc"> Destination Function for Color and Alpha. </param>
-    public void SetBlendFunction( int srcFunc, int dstFunc )
+    public void SetBlendFunction( BlendMode srcFunc, BlendMode dstFunc )
     {
         SetBlendFunctionSeparate( srcFunc, dstFunc, srcFunc, dstFunc );
     }
@@ -513,7 +530,8 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="dstFuncColor"> Destination Function for Color. </param>
     /// <param name="srcFuncAlpha"> Source Function for Alpha. </param>
     /// <param name="dstFuncAlpha"> Destination Function for Alpha. </param>
-    public void SetBlendFunctionSeparate( int srcFuncColor, int dstFuncColor, int srcFuncAlpha, int dstFuncAlpha )
+    public void SetBlendFunctionSeparate( BlendMode srcFuncColor, BlendMode dstFuncColor, BlendMode srcFuncAlpha,
+                                          BlendMode dstFuncAlpha )
     {
         if ( ( BlendSrcFunc == srcFuncColor )
           && ( BlendDstFunc == dstFuncColor )
@@ -576,7 +594,7 @@ public class SpriteBatch : IBatch, IDisposable
 
             // 1. Bind the VAO and VBO so these settings "stick" to this batch
             GL.BindVertexArray( _vao );
-            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+            GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
             // 2. Define constants in BYTES
             const int F_SIZE = sizeof( float );
@@ -658,8 +676,11 @@ public class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.vert" );
-        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.frag" );
+//        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/GdxDefault.glsl.vert" );
+//        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/GdxDefault.glsl.frag" );
+
+        var vertexShader = Shaders.Shaders.DEFAULT_VERTEX_SHADER;
+        var fragShader   = Shaders.Shaders.DEFAULT_FRAGMENT_SHADER;
 
         return new ShaderProgram( vertexShader, fragShader );
     }
@@ -698,7 +719,7 @@ public class SpriteBatch : IBatch, IDisposable
         LastTexture            = texture;
         _lastSuccessfulTexture = LastTexture;
         InvTexWidth            = 1.0f / texture!.Width;
-        InvTexHeight           = 1.0f / texture!.Height;
+        InvTexHeight           = 1.0f / texture.Height;
     }
 
     // ========================================================================
@@ -784,16 +805,10 @@ public class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public virtual void SetupMatrices()
     {
-        while ( GL.GetError() != ( int )ErrorCode.NoError )
-        {
-            Logger.Debug( $"GL Error: {GL.GetError()}" );
-        }
-
-        // Note: Do not use the property 'Shader' here as its setter calls
-        // this method, which would cause an infinite loop.
+        // Combine matrices (Column-Major Proj * View order)
         CombinedMatrix = ProjectionMatrix.Mul( TransformMatrix );
 
-        if ( _shader != null )
+        if ( _shader is { IsCompiled: true } )
         {
             if ( !_shader.IsCompiled )
             {
@@ -802,24 +817,10 @@ public class SpriteBatch : IBatch, IDisposable
                 return;
             }
 
-            // DETECTION LOGIC:
-            // In a standard Ortho matrix, the scaling factors should be on the diagonal.
-            // For 480x320, we expect ~0.004 and ~0.006.
-            // If index 4 (Row 1, Col 0) is 0, it's likely Row Major
-            var isRowMajor = Math.Abs( CombinedMatrix.Val[ 4 ] ) < 0.0001f;
-
-            // If the diagonal values are at index 0, 5, 10, 15 -> Column Major (OpenGL Default)
-            // If the diagonal values are at index 0, 1, 2, 3 -> Something is very wrong
-
-//            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix, isRowMajor );
-            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix, true );
+            // 'false' tells OpenGL NOT to transpose, because the Val[] 
+            // array is already in the Column-Major order it expects.
+            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix, false );
             _shader.SetUniformi( "u_texture", 0 );
-
-//            int location = GL.GetUniformLocation( _shader.ShaderProgramHandle, "u_combinedMatrix" );
-//            Logger.Debug( $"Uniform 'u_combinedMatrix' location: {location}" );
-
-            // Output is:-
-            // Uniform 'u_combinedMatrix' location: -1
         }
     }
 
@@ -854,7 +855,7 @@ public class SpriteBatch : IBatch, IDisposable
     private static void UnbindBuffers()
     {
         GL.BindVertexArray( 0 );
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
     }
 
     // ========================================================================
@@ -904,14 +905,14 @@ public class SpriteBatch : IBatch, IDisposable
     private void CreateVbo( int size )
     {
         _vbo = GL.GenBuffer();
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
         Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
 
-        GL.BufferData( ( int )BufferTarget.ArrayBuffer,
+        GL.BufferData( BufferTarget.ArrayBuffer,
                        Vertices.Length * sizeof( float ),
                        0,
-                       ( int )BufferUsageHint.DynamicDraw );
+                       BufferUsageHint.DynamicDraw );
     }
 
     /// <summary>
@@ -937,14 +938,14 @@ public class SpriteBatch : IBatch, IDisposable
         }
 
         _ebo = GL.GenBuffer();
-        GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
+        GL.BindBuffer( BufferTarget.ElementArrayBuffer, _ebo );
 
         fixed ( uint* ptr = indices )
         {
-            GL.BufferData( ( int )BufferTarget.ElementArrayBuffer,
+            GL.BufferData( BufferTarget.ElementArrayBuffer,
                            indices.Length * sizeof( uint ),
                            ( IntPtr )ptr,
-                           ( int )BufferUsageHint.DynamicDraw );
+                           BufferUsageHint.DynamicDraw );
         }
     }
 

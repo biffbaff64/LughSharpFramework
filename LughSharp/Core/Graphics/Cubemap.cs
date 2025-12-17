@@ -41,7 +41,7 @@ public class Cubemap : GLTexture, IManaged
 
     // ========================================================================
 
-    private static readonly Dictionary< IApplication, List< Cubemap >? > _managedCubemaps = new();
+    private static readonly Dictionary< IApplication, List< Cubemap >? > ManagedCubemaps = new();
 
     // ========================================================================
 
@@ -137,9 +137,11 @@ public class Cubemap : GLTexture, IManaged
     /// <summary>
     /// return the number of managed cubemaps currently loaded
     /// </summary>
-    public static int NumManagedCubemaps => _managedCubemaps[ Api.App ]?.Count ?? 0;
+    public static int NumManagedCubemaps => ManagedCubemaps[ Api.App ]?.Count ?? 0;
 
     public bool IsManaged => Data.IsManaged;
+
+    // ========================================================================
 
     /// <summary>
     /// Sets the sides of this cubemap to the specified <see cref="ICubemapData"/>.
@@ -185,10 +187,10 @@ public class Cubemap : GLTexture, IManaged
     /// <param name="cubemap"></param>
     private static void AddManagedCubemap( IApplication app, Cubemap cubemap )
     {
-        var managedCubemapArray = _managedCubemaps[ app ] ?? new List< Cubemap >();
+        var managedCubemapArray = ManagedCubemaps[ app ] ?? new List< Cubemap >();
 
         managedCubemapArray.Add( cubemap );
-        _managedCubemaps.Put( app, managedCubemapArray );
+        ManagedCubemaps.Put( app, managedCubemapArray );
     }
 
     /// <summary>
@@ -196,7 +198,7 @@ public class Cubemap : GLTexture, IManaged
     /// </summary>
     public static void ClearAllCubemaps( IApplication app )
     {
-        _managedCubemaps.Remove( app );
+        ManagedCubemaps.Remove( app );
     }
 
     /// <summary>
@@ -204,7 +206,7 @@ public class Cubemap : GLTexture, IManaged
     /// </summary>
     public static void InvalidateAllCubemaps( IApplication app )
     {
-        var managedCubemapArray = _managedCubemaps[ app ];
+        var managedCubemapArray = ManagedCubemaps[ app ];
 
         if ( managedCubemapArray == null )
         {
@@ -284,9 +286,9 @@ public class Cubemap : GLTexture, IManaged
     {
         var builder = new StringBuilder( "Managed cubemap/app: { " );
 
-        foreach ( var app in _managedCubemaps.Keys )
+        foreach ( var app in ManagedCubemaps.Keys )
         {
-            builder.Append( _managedCubemaps[ app ]!.Count );
+            builder.Append( ManagedCubemaps[ app ]!.Count );
             builder.Append( ' ' );
         }
 
@@ -299,19 +301,23 @@ public class Cubemap : GLTexture, IManaged
 
     public void ClearWithColor( Color color )
     {
+        //TODO:
     }
 
     public int GetPixel( int x, int y )
     {
+        //TODO:
         return 0;
     }
 
     public void SetPixel( int x, int y, Color color )
     {
+        //TODO:
     }
 
     public void SetPixel( int x, int y, int color )
     {
+        //TODO:
     }
 
     // ========================================================================
@@ -334,9 +340,9 @@ public class Cubemap : GLTexture, IManaged
 
             if ( Data.IsManaged )
             {
-                if ( _managedCubemaps[ Api.App ] != null )
+                if ( ManagedCubemaps[ Api.App ] != null )
                 {
-                    _managedCubemaps[ Api.App ]?.Remove( this );
+                    ManagedCubemaps[ Api.App ]?.Remove( this );
                 }
             }
         }
@@ -365,6 +371,8 @@ public class Cubemap : GLTexture, IManaged
         public InnerEnum InnerEnumValue { get; private set; }
         public int       OrdinalValue   { get; private set; }
 
+        // ====================================================================
+
         /// <summary>
         /// The zero based index of the side in the cubemap
         /// </summary>
@@ -389,8 +397,7 @@ public class Cubemap : GLTexture, IManaged
 
         private static List< CubemapSide > _valueList   = new();
         private static int                 _nextOrdinal = 0;
-
-        private string _nameValue;
+        private        string              _nameValue;
 
         // ====================================================================
 
@@ -513,3 +520,6 @@ public class Cubemap : GLTexture, IManaged
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

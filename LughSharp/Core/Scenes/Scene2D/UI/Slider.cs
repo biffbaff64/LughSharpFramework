@@ -385,7 +385,7 @@ public class Slider : ProgressBar
                 // listeners can see when a drag ends via isDragging.
                 var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
-                Guard.ThrowIfNull( changeEvent );
+                Guard.Against.Null( changeEvent );
 
                 _parent.Fire( changeEvent );
                 Pools.Free< ChangeListener.ChangeEvent >( changeEvent );

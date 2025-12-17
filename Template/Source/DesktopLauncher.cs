@@ -25,8 +25,8 @@ public static class DesktopLauncher
         {
             Title              = "LughSharp Template",
             VSyncEnabled       = true,
-            WindowWidth        = 480,
-            WindowHeight       = 320,
+            WindowWidth        = 640,
+            WindowHeight       = 480,
             ForegroundFPS      = 60,
             DisableAudio       = true,
             Debug              = true,
@@ -42,12 +42,18 @@ public static class DesktopLauncher
         game.Run();
     }
 
+    private const bool BUILD_ATLASES           = false;
     private const bool REMOVE_DUPLICATE_IMAGES = true;
     private const bool KEEP_DUPLICATE_IMAGES   = false;
     private const bool DRAW_DEBUG_LINES        = false;
 
     private static void BuildTextureAtlases()
     {
+        if ( !BUILD_ATLASES )
+        {
+            return;
+        }
+
         var settings = new TexturePackerSettings
         {
             MaxWidth         = 2048,                  // Maximum Width of final atlas image
@@ -86,3 +92,6 @@ public static class DesktopLauncher
         TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\text" ), outputFolder, "text", settings );
     }
 }
+
+// ============================================================================
+// ============================================================================

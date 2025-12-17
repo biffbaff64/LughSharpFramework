@@ -27,6 +27,7 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Input;
@@ -59,12 +60,20 @@ namespace LughSharp.Core.Scenes.Scene2D;
 [PublicAPI]
 public class Stage : InputAdapter, IDisposable
 {
+    public Core.Utils.SnapshotArrayList< TouchFocus > TouchFocuses { get; } = new( true, 4 );
+
+    public Camera?  Camera   { get; set; } = null!;
+    public Viewport Viewport { get; }
+    public IBatch   Batch    { get; }
+    public bool     Debug    { get; set; } // True if any actor has ever had debug enabled.
+
+    // ========================================================================
+    
     private readonly bool     _ownsBatch;
     private readonly Actor?[] _pointerOverActors = new Actor?[ 20 ];
     private readonly int[]    _pointerScreenX    = new int[ 20 ];
     private readonly int[]    _pointerScreenY    = new int[ 20 ];
     private readonly bool[]   _pointerTouched    = new bool[ 20 ];
-    private readonly Group    _root              = null!;
     private readonly Vector2  _tempCoords        = new();
 
     private bool            _debugAll;
@@ -76,7 +85,6 @@ public class Stage : InputAdapter, IDisposable
     private Actor?          _mouseOverActor;
     private int             _mouseScreenX;
     private int             _mouseScreenY;
-    private Actor?          _scrollFocus;
 
     // ========================================================================
     // ========================================================================
@@ -124,13 +132,6 @@ public class Stage : InputAdapter, IDisposable
 
         viewport.Update( Api.Graphics.Width, Api.Graphics.Height, true );
     }
-
-    public Core.Utils.SnapshotArrayList< TouchFocus > TouchFocuses { get; } = new( true, 4 );
-
-    public Camera?  Camera   { get; set; } = null!;
-    public Viewport Viewport { get; }
-    public IBatch   Batch    { get; }
-    public bool     Debug    { get; set; } // True if any actor has ever had debug enabled.
 
     public float Width  => Viewport.WorldWidth;
     public float Height => Viewport.WorldHeight;
@@ -207,10 +208,10 @@ public class Stage : InputAdapter, IDisposable
     /// </returns>
     public Actor? ScrollFocus
     {
-        get => _scrollFocus;
+        get;
         set
         {
-            if ( _scrollFocus == value )
+            if ( field == value )
             {
                 return;
             }
@@ -238,7 +239,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( success )
             {
-                _scrollFocus = value;
+                field = value;
 
                 if ( value != null )
                 {
@@ -250,7 +251,7 @@ public class Stage : InputAdapter, IDisposable
 
                     if ( !success )
                     {
-                        _scrollFocus = oldScrollFocus;
+                        field = oldScrollFocus;
                     }
                 }
             }
@@ -264,17 +265,17 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public Group Root
     {
-        get => _root;
+        get;
         private init
         {
             value.Parent?.RemoveActor( value, false );
 
-            _root = value;
+            field = value;
 
             value.Parent = null;
             value.Stage  = this;
         }
-    }
+    } = null!;
 
     /// <summary>
     /// Returns the root's child actors.
@@ -1355,7 +1356,7 @@ public class Stage : InputAdapter, IDisposable
             }
         }
 
-        GL.Enable( IGL.GL_BLEND );
+        GL.Enable( EnableCap.Blend );
 
         _debugShapes.ProjectionMatrix = Camera!.Combined;
         _debugShapes.Begin();
@@ -1364,7 +1365,7 @@ public class Stage : InputAdapter, IDisposable
 
         _debugShapes.End();
 
-        GL.Disable( IGL.GL_BLEND );
+        GL.Disable( EnableCap.Blend );
     }
 
     /// <summary>

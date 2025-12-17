@@ -132,7 +132,7 @@ public static class GLUtils
     /// <returns></returns>
     public static float[]? GetVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
     {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, vbo );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, vbo );
 
         var dataPtr = GL.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
 
@@ -147,7 +147,7 @@ public static class GLUtils
         Marshal.Copy( dataPtr, data, 0, data.Length );
 
         GL.UnmapBuffer( ( int )BufferTarget.ArrayBuffer );
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
 
         return data;
     }

@@ -48,12 +48,12 @@ public class VertexBufferObjectSubData : IVertexData
 
     private readonly Buffer< float > _floatBuffer;
     private readonly bool            _isDirect;
-    private readonly int             _usage;
+    private readonly BufferUsageHint _usage;
     private readonly bool            _isStatic;
 
     private int  _bufferHandle;
-    private bool _isDirty = false;
-    private bool _isBound = false;
+    private bool _isDirty;
+    private bool _isBound;
 
     // ========================================================================
 
@@ -82,7 +82,7 @@ public class VertexBufferObjectSubData : IVertexData
         ByteBuffer = new Buffer< byte >( Attributes.VertexSize * numVertices );
         _isDirect  = true;
 
-        _usage       = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        _usage       = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
         _floatBuffer = ByteBuffer.AsFloatBuffer();
 
         _bufferHandle = CreateBufferObject();
@@ -187,7 +187,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// <param name="locations"> array containing the attribute locations.</param>
     public unsafe void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -195,7 +195,7 @@ public class VertexBufferObjectSubData : IVertexData
 
             fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, ByteBuffer.Limit, ( IntPtr )ptr, _usage );
+                GL.BufferData( BufferTarget.ArrayBuffer, ByteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -282,7 +282,7 @@ public class VertexBufferObjectSubData : IVertexData
             }
         }
 
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         _isBound = false;
     }
 
@@ -301,7 +301,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// </summary>
     public void Dispose()
     {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         GL.DeleteBuffers( ( uint )_bufferHandle );
         _bufferHandle = 0;
     }
@@ -313,9 +313,9 @@ public class VertexBufferObjectSubData : IVertexData
     {
         var result = GL.GenBuffer();
 
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, result );
-        GL.BufferData( ( int )BufferTarget.ArrayBuffer, ByteBuffer.Capacity, 0, _usage );
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, result );
+        GL.BufferData( BufferTarget.ArrayBuffer, ByteBuffer.Capacity, 0, _usage );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
 
         return ( int )result;
     }

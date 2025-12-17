@@ -254,7 +254,7 @@ public class RepeatablePolygonSprite
 
     public void Draw( PolygonSpriteBatch batch )
     {
-        Guard.ThrowIfNull( _region?.Texture );
+        Guard.Against.Null( _region?.Texture );
 
         if ( _dirty )
         {

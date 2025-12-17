@@ -66,6 +66,22 @@ namespace LughSharp.Core.Graphics.G2D;
 [PublicAPI]
 public class PolygonSpriteBatch : IPolygonBatch
 {
+    // The maximum number of triangles rendered in one batch so far.
+    public int MaxTrianglesInBatch { get; set; } = 0;
+
+    // Number of render calls since the last call to Begin()
+    public int RenderCalls { get; set; } = 0;
+
+    // Number of rendering calls, ever. Will not be reset unless set manually.
+    public int       TotalRenderCalls  { get; set; }         = 0;
+    public BlendMode BlendSrcFunc      { get; private set; } = BlendMode.SrcAlpha;
+    public BlendMode BlendDstFunc      { get; private set; } = BlendMode.OneMinusSrcAlpha;
+    public BlendMode BlendSrcFuncAlpha { get; private set; } = BlendMode.SrcAlpha;
+    public BlendMode BlendDstFuncAlpha { get; private set; } = BlendMode.OneMinusSrcAlpha;
+    public Matrix4   ProjectionMatrix  { get; set; }         = new();
+    public Matrix4   TransformMatrix   { get; set; }         = new();
+    public bool      IsDrawing         { get; set; }
+
     // ========================================================================
     // ========================================================================
 
@@ -165,22 +181,6 @@ public class PolygonSpriteBatch : IPolygonBatch
         ProjectionMatrix.SetToOrtho2D( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
     }
 
-    // The maximum number of triangles rendered in one batch so far.
-    public int MaxTrianglesInBatch { get; set; } = 0;
-
-    // Number of render calls since the last call to Begin()
-    public int RenderCalls { get; set; } = 0;
-
-    // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int     TotalRenderCalls  { get; set; }         = 0;
-    public int     BlendSrcFunc      { get; private set; } = IGL.GL_SRC_ALPHA;
-    public int     BlendDstFunc      { get; private set; } = IGL.GL_ONE_MINUS_SRC_ALPHA;
-    public int     BlendSrcFuncAlpha { get; private set; } = IGL.GL_SRC_ALPHA;
-    public int     BlendDstFuncAlpha { get; private set; } = IGL.GL_ONE_MINUS_SRC_ALPHA;
-    public Matrix4 ProjectionMatrix  { get; set; }         = new();
-    public Matrix4 TransformMatrix   { get; set; }         = new();
-    public bool    IsDrawing         { get; set; }
-
     public void Begin( bool depthMaskEnabled = false )
     {
         if ( IsDrawing )
@@ -190,7 +190,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         RenderCalls = 0;
 
-        _originalDepthMask = GL.IsEnabled( ( int )EnableCap.DepthTest );
+        _originalDepthMask = GL.IsEnabled( EnableCap.DepthTest );
         GL.DepthMask( depthMaskEnabled );
 
         if ( _customShader != null )
@@ -226,7 +226,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( IsBlendingEnabled() )
         {
-            GL.Disable( IGL.GL_BLEND );
+            GL.Disable( EnableCap.Blend );
         }
     }
 
@@ -1402,16 +1402,13 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( _blendingDisabled )
         {
-            GL.Disable( IGL.GL_BLEND );
+            GL.Disable( EnableCap.Blend );
         }
         else
         {
-            GL.Enable( IGL.GL_BLEND );
+            GL.Enable( EnableCap.Blend );
 
-            if ( BlendSrcFunc != -1 )
-            {
-                GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
-            }
+            GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
         }
 
         mesh.Render( _customShader ?? _shader, IGL.GL_TRIANGLES, 0, trianglesInBatch );
@@ -1432,12 +1429,12 @@ public class PolygonSpriteBatch : IPolygonBatch
         _blendingDisabled = false;
     }
 
-    public void SetBlendFunction( int srcFunc, int dstFunc )
+    public void SetBlendFunction( BlendMode srcFunc, BlendMode dstFunc )
     {
         SetBlendFunctionSeparate( srcFunc, dstFunc, srcFunc, dstFunc );
     }
 
-    public void SetBlendFunctionSeparate( int srcFuncColor, int dstFuncColor, int srcFuncAlpha, int dstFuncAlpha )
+    public void SetBlendFunctionSeparate( BlendMode srcFuncColor, BlendMode dstFuncColor, BlendMode srcFuncAlpha, BlendMode dstFuncAlpha )
     {
         if ( ( BlendSrcFunc == srcFuncColor )
           && ( BlendDstFunc == dstFuncColor )

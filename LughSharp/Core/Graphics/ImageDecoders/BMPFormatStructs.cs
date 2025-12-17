@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.ImageDecoders;
 
 // ========================================================================
 /// <summary>

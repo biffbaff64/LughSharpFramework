@@ -42,8 +42,8 @@ public class GLDebugControl
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLDebugContext, true );
 
         _debugCallback = GL.MessageCallback;
-        GL.Enable( ( int )EnableCap.DebugOutput );
-        GL.Enable( ( int )EnableCap.DebugOutputSynchronous );
+        GL.Enable( EnableCap.DebugOutput );
+        GL.Enable( EnableCap.DebugOutputSynchronous );
         GL.DebugMessageCallback( _debugCallback, null );
 
         var array = new uint[ 1 ];

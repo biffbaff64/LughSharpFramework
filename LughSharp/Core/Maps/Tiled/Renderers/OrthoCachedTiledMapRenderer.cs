@@ -25,6 +25,7 @@
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughUtils.source.Maths.Rectangle;
 
@@ -169,7 +170,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         if ( Blending )
         {
-            GL.Enable( IGL.GL_BLEND );
+            GL.Enable( EnableCap.Blend );
             GL.BlendFunc( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
         }
 
@@ -192,7 +193,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         if ( Blending )
         {
-            GL.Disable( IGL.GL_BLEND );
+            GL.Disable( EnableCap.Blend );
         }
     }
 
@@ -231,7 +232,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         if ( Blending )
         {
-            GL.Enable( IGL.GL_BLEND );
+            GL.Enable( EnableCap.Blend );
             GL.BlendFunc( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
         }
 
@@ -252,7 +253,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         if ( Blending )
         {
-            GL.Disable( IGL.GL_BLEND );
+            GL.Disable( EnableCap.Blend );
         }
     }
 

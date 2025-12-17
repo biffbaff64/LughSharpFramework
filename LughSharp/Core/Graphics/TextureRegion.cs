@@ -300,7 +300,7 @@ public class TextureRegion
     /// </param>
     public virtual void Scroll( float xAmount, float yAmount )
     {
-        Guard.ThrowIfNull( Texture );
+        Guard.Against.Null( Texture );
 
         if ( xAmount != 0 )
         {
@@ -383,7 +383,7 @@ public class TextureRegion
     {
         get
         {
-            Guard.ThrowIfNull( Texture );
+            Guard.Against.Null( Texture );
 
             if ( ( Texture == null ) || ( Texture.Width == 0 ) )
             {
@@ -403,7 +403,7 @@ public class TextureRegion
     {
         get
         {
-            Guard.ThrowIfNull( Texture );
+            Guard.Against.Null( Texture );
 
             if ( ( Texture == null ) || ( Texture.Height == 0 ) )
             {

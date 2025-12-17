@@ -107,9 +107,9 @@ public partial class AssetManager
     {
         lock ( this )
         {
-            Guard.ThrowIfNull( _assets );
-            Guard.ThrowIfNull( _loaders );
-            Guard.ThrowIfNull( _assetTypes );
+            Guard.Against.Null( _assets );
+            Guard.Against.Null( _loaders );
+            Guard.Against.Null( _assetTypes );
 
             Logger.Debug( $"Number of Assets: {_assets.Count}" );
             Logger.Debug( $"Number of Types: {_assetTypes.Count}" );

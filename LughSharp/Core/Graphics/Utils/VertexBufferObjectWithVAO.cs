@@ -37,13 +37,13 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     // ========================================================================
 
-    private static readonly Buffer< int > _tmpHandle = new( 1 );
+    private static readonly Buffer< int > TmpHandle = new( 1 );
 
     private readonly Buffer< float > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
     private readonly List< int >     _cachedLocations = [ ];
     private readonly bool            _ownsBuffer;
-    private readonly int             _usage;
+    private readonly BufferUsageHint _usage;
 
     private int  _bufferHandle;
     private bool _isBound = false;
@@ -84,7 +84,7 @@ public class VertexBufferObjectWithVAO : IVertexData
         _byteBuffer.Flip();
 
         _bufferHandle = ( int )GL.GenBuffer();
-        _usage        = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        _usage        = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
 
         CreateVAO();
     }
@@ -107,7 +107,7 @@ public class VertexBufferObjectWithVAO : IVertexData
         _byteBuffer.Flip();
 
         _bufferHandle = ( int )GL.GenBuffer();
-        _usage        = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        _usage        = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
 
         CreateVAO();
     }
@@ -264,13 +264,13 @@ public class VertexBufferObjectWithVAO : IVertexData
     private unsafe void BufferChanged()
     {
         // Bind the buffer regardless of _isBound to ensure the upload happens
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
         {
             // Use BufferSubData if you already allocated memory in Initialise, 
             // otherwise BufferData is fine for now.
-            GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+            GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
         }
 
         _isDirty = false;
@@ -306,7 +306,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
         if ( !stillValid )
         {
-            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+            GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
             UnbindAttributes( shader );
 
@@ -365,13 +365,13 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         if ( _isDirty )
         {
-            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+            GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
             _byteBuffer.Limit = _buffer.Limit * 4;
 
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -387,11 +387,11 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         if ( _vaoHandle != -1 )
         {
-            _tmpHandle.Clear();
-            _tmpHandle.PutInt( _vaoHandle );
-            _tmpHandle.Flip();
+            TmpHandle.Clear();
+            TmpHandle.PutInt( _vaoHandle );
+            TmpHandle.Flip();
 
-            fixed ( int* intptr = &_tmpHandle.ToArray()[ 0 ] )
+            fixed ( int* intptr = &TmpHandle.ToArray()[ 0 ] )
             {
                 GL.DeleteVertexArrays( 1, ( uint* )intptr );
             }
@@ -416,7 +416,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         if ( disposing )
         {
-            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+            GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
             GL.DeleteBuffers( ( uint )_bufferHandle );
 
             _bufferHandle = 0;

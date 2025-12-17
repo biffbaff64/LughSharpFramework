@@ -24,7 +24,6 @@
 
 namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
-[SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial interface IGLBindings
 {
     /// <summary>

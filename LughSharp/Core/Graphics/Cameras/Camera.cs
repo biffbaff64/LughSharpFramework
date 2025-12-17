@@ -56,8 +56,16 @@ public abstract class Camera
     public float Near
     {
         get;
-        set => field = value >= 0 ? value : throw new ArgumentException( "Near must be >= 0" );
-    } = -1.0f;
+        set
+        {
+            if ( field >= Far )
+            {
+                throw new ArgumentException( $"Near must be < Far: {field}, {Far}" );
+            }
+            
+            field = value;
+        }
+    } = CameraData.DEFAULT_NEAR_PLANE;
 
     /// <summary>
     /// the far clipping plane distance, has to be positive
@@ -65,8 +73,16 @@ public abstract class Camera
     public float Far
     {
         get;
-        set => field = value > Near ? value : throw new ArgumentException( "Far must be > Near" );
-    } = 1.0f;
+        set
+        {
+            if ( field <= Near )
+            {
+                throw new ArgumentException( $"Far must be > Near: {field}, {Near}" );
+            }
+            
+            field = value;
+        }
+    } = CameraData.DEFAULT_FAR_PLANE;
 
     // ========================================================================
     // ========================================================================

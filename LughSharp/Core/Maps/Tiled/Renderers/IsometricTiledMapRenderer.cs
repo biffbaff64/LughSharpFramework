@@ -163,7 +163,7 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
 
                     var region = tile.TextureRegion;
 
-                    Guard.ThrowIfNull( region.Texture );
+                    Guard.Against.Null( region.Texture );
 
                     var x1 = x + ( tile.OffsetX * UnitScale ) + layerOffsetX;
                     var y1 = y + ( tile.OffsetY * UnitScale ) + layerOffsetY;

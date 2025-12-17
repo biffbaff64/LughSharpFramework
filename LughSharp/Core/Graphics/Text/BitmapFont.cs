@@ -615,7 +615,7 @@ public partial class BitmapFont
     /// <param name="y"> Y coordinate. </param>
     public GlyphLayout? Draw( IBatch batch, string str, float x, float y )
     {
-        Guard.ThrowIfNull( Cache );
+        Guard.Against.Null( Cache );
 
         Cache?.Clear();
 
