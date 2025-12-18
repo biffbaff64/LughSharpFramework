@@ -328,7 +328,7 @@ public class TextArea : TextField
         return index;
     }
 
-    public override void SizeChanged()
+    public override void OnSizeChanged()
     {
         // Cause calculateOffsets to recalculate the line breaks.
         _lastText = null;

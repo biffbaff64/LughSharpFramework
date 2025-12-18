@@ -40,14 +40,7 @@ namespace LughSharp.Core.Scenes.Scene2D;
 [PublicAPI]
 public class Group : Actor, ICullable
 {
-    // ========================================================================
-
     public Core.Utils.SnapshotArrayList< Actor > Children { get; set; } = new( 4 );
-
-    private readonly Matrix4 _computedTransform = new();
-    private readonly Matrix4 _oldTransform      = new();
-    private readonly Vector2 _tmp               = new();
-    private readonly Affine2 _worldTransform    = new();
 
     /// <summary>
     /// When true (the default), the Batch is transformed so children are drawn
@@ -61,6 +54,13 @@ public class Group : Actor, ICullable
     public bool Transform { get; set; } = true;
 
     public Rectangle? CullingArea { get; set; }
+
+    // ========================================================================
+
+    private readonly Matrix4 _computedTransform = new();
+    private readonly Matrix4 _oldTransform      = new();
+    private readonly Vector2 _tmp               = new();
+    private readonly Affine2 _worldTransform    = new();
 
     // ========================================================================
 

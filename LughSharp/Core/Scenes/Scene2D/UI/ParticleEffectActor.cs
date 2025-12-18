@@ -130,9 +130,9 @@ public class ParticleEffectActor : Actor, IDisposable
         return this;
     }
 
-    public override void ScaleChanged()
+    public override void OnScaleChanged()
     {
-        base.ScaleChanged();
+        base.OnScaleChanged();
 
         ParticleEffect.ScaleEffect( ScaleX, ScaleY, ScaleY );
     }

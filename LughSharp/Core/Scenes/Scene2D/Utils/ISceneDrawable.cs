@@ -47,3 +47,6 @@ public interface ISceneDrawable
     /// </summary>
     void Draw( IBatch batch, float x, float y, float width, float height );
 }
+
+// ============================================================================
+// ============================================================================

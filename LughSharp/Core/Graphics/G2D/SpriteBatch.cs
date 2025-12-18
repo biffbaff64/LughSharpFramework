@@ -27,6 +27,7 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Scenes.Scene2D.UI;
 
 namespace LughSharp.Core.Graphics.G2D;
 
@@ -733,19 +734,23 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="texture"> The Texture to check for null. </param>
     private void Validate< T >( T? texture )
     {
-        if ( texture is not Texture or TextureRegion )
-        {
-            throw new GdxRuntimeException( "Invalid Texture or TextureRegion" );
-        }
-
-        if ( texture == null )
-        {
-            throw new ArgumentException( $"Texture is null: {texture}" );
-        }
-
+        Guard.Against.Null( texture );
+        
         if ( CurrentBatchState != BatchState.Drawing )
         {
             throw new InvalidOperationException( "Begin() must be called before Draw()." );
+        }
+        
+        var textureList = new List< object? >()
+        {
+            typeof( Texture ),
+            typeof( TextureRegion ),
+            typeof( Scene2DImage),
+        };
+
+        if ( !textureList.Contains( texture?.GetType() ) )
+        {
+            throw new GdxRuntimeException( "Invalid image type" );
         }
     }
 

@@ -33,7 +33,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ImageTextButton : Button
 {
-    private readonly Image?                _image;
+    private readonly Scene2DImage?                _image;
     private          Label?                _label;
     private          ImageTextButtonStyle? _style;
 
@@ -60,7 +60,7 @@ public class ImageTextButton : Button
 
         CellDefaults.Space( 3 );
 
-        _image = new Image();
+        _image = new Scene2DImage();
         _image.SetScaling( Scaling.Fit );
 
         _label = new Label( text, new Label.LabelStyle( style.Font!, style.FontColor! ) );
@@ -252,7 +252,7 @@ public class ImageTextButton : Button
         base.Draw( batch, parentAlpha );
     }
 
-    public Image? GetImage()
+    public Scene2DImage? GetImage()
     {
         return _image;
     }

@@ -99,7 +99,7 @@ public class WidgetGroup : Group, ILayout
             float parentWidth, parentHeight;
             var   stage = Stage;
 
-            if ( ( stage != null ) && ( parent == stage.Root ) )
+            if ( ( stage != null ) && ( parent == stage.RootGroup ) )
             {
                 parentWidth  = stage.Width;
                 parentHeight = stage.Height;
@@ -205,7 +205,7 @@ public class WidgetGroup : Group, ILayout
     }
 
     /// <inheritdoc />
-    public override void SizeChanged()
+    public override void OnSizeChanged()
     {
         Invalidate();
     }

@@ -86,7 +86,7 @@ public class Widget : Actor, ILayout
         {
             float parentWidth, parentHeight;
 
-            if ( ( Stage != null ) && ( parent == Stage.Root ) )
+            if ( ( Stage != null ) && ( parent == Stage.RootGroup ) )
             {
                 parentWidth  = Stage.Width;
                 parentHeight = Stage.Height;
@@ -193,7 +193,7 @@ public class Widget : Actor, ILayout
     }
 
     /// <inheritdoc />
-    public override void SizeChanged()
+    public override void OnSizeChanged()
     {
         Invalidate();
     }

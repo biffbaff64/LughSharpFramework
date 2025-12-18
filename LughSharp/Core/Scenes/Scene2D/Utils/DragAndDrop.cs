@@ -468,7 +468,7 @@ public class DragAndDrop
             Actor = actor;
             var stage = actor.Stage;
 
-            if ( ( stage != null ) && ( actor == stage.Root ) )
+            if ( ( stage != null ) && ( actor == stage.RootGroup ) )
             {
                 throw new ArgumentException( "The stage root cannot be a drag and drop target." );
             }

@@ -36,11 +36,16 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// origin be used when drawing.
 /// </summary>
 [PublicAPI]
-public class Image : Widget
+public class Scene2DImage : Widget
 {
+    public float           ImageX      { get; set; }
+    public float           ImageY      { get; set; }
+    public float           ImageWidth  { get; set; }
+    public float           ImageHeight { get; set; }
+    public ISceneDrawable? Drawable    { get; private set; }
+
     // ========================================================================
 
-    private int     _alignment; // Backing value for Alignment property
     private Scaling _scaling;
 
     // ========================================================================
@@ -49,62 +54,55 @@ public class Image : Widget
     /// <summary>
     /// Creates a new, unitialised, Image instance.
     /// </summary>
-    public Image() : this( ( ISceneDrawable )null! )
+    public Scene2DImage() : this( ( ISceneDrawable )null! )
     {
     }
 
-    public Image( NinePatch patch )
+    public Scene2DImage( NinePatch patch )
         : this( new NinePatchSceneDrawable( patch ), Scaling.Stretch )
     {
     }
 
-    public Image( TextureRegion region )
+    public Scene2DImage( TextureRegion region )
         : this( new TextureRegionSceneDrawable( region ), Scaling.Stretch )
     {
     }
 
-    public Image( Texture texture )
+    public Scene2DImage( Texture texture )
         : this( new TextureRegionSceneDrawable( new TextureRegion( texture ) ) )
     {
     }
 
-    public Image( Skin skin, string drawableName )
+    public Scene2DImage( Skin skin, string drawableName )
         : this( skin.GetDrawable( drawableName ), Scaling.Stretch )
     {
     }
 
-    public Image( ISceneDrawable? drawable )
+    public Scene2DImage( ISceneDrawable? drawable )
         : this( drawable, Scaling.Stretch )
     {
     }
 
-    public Image( ISceneDrawable? drawable, Scaling scaling, int align = LughUtils.source.Alignment.CENTER )
+    public Scene2DImage( ISceneDrawable? drawable, Scaling scaling, int align = LughUtils.source.Alignment.CENTER )
     {
         SetDrawable( drawable );
 
         _scaling  = scaling;
         Alignment = align;
 
-        NonVirtualConstructorHelper();
+        SafeConstructorHelper();
     }
-
-    public float           ImageX      { get; set; }
-    public float           ImageY      { get; set; }
-    public float           ImageWidth  { get; set; }
-    public float           ImageHeight { get; set; }
-    public ISceneDrawable? Drawable    { get; private set; }
 
     public int Alignment
     {
-        get => _alignment;
+        get;
         set
         {
-            _alignment = value;
+            field = value;
             Invalidate();
         }
     }
 
-    /// <inheritdoc />
     public override float PrefWidth
     {
         get
@@ -137,12 +135,18 @@ public class Image : Widget
     /// Helper method for constructors, allowing access to virtual members which are
     /// unsafe to be referenced from constructors.
     /// </summary>
-    private void NonVirtualConstructorHelper()
+    private void SafeConstructorHelper()
     {
         SetSize( PrefWidth, PrefHeight );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Computes and caches any information needed for drawing and, if this actor
+    /// has children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
+    /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
+    /// on each child. This method should almost never be called directly, instead
+    /// <see cref="ILayout.Validate"/> should be used.
+    /// </summary>
     public override void SetLayout()
     {
         if ( Drawable == null )

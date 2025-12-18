@@ -108,9 +108,10 @@ public abstract class Game : IApplicationListener
     }
 
     // ========================================================================
-    
+
     /// <summary>
-    /// Called when the <see cref="IApplication"/> is destroyed. Preceded by a call to <see cref="Pause"/>.
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
     /// </summary>
     public virtual void Dispose()
     {
@@ -120,14 +121,15 @@ public abstract class Game : IApplicationListener
 
     protected virtual void Dispose( bool disposing )
     {
-        if ( _isDisposed ) return;
-        
-        if ( disposing )
+        if ( !_isDisposed )
         {
-            Screen?.Hide();
-        }
+            if ( disposing )
+            {
+                Screen?.Hide();
+            }
         
-        _isDisposed = true;
+            _isDisposed = true;
+        }
     }
 }
 

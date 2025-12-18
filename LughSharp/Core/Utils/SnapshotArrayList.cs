@@ -111,13 +111,22 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
         set => Items[ index ] = value;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns an enumerator that iterates through a collection.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to
+    /// iterate through the collection.
+    /// </returns>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns an enumerator that iterates through the collection.
+    /// </summary>
+    /// <returns>An enumerator that can be used to iterate through the collection.</returns>
     public IEnumerator< T > GetEnumerator()
     {
         return new SnapshotEnumerator< T >( Items );

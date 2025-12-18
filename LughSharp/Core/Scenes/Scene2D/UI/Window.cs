@@ -177,7 +177,7 @@ public class Window : Table
                              Alignment.BOTTOM );
             }
         }
-        else if ( Parent == Stage.Root )
+        else if ( Parent == Stage.RootGroup )
         {
             var parentWidth  = Stage.Width;
             var parentHeight = Stage.Height;
@@ -472,7 +472,7 @@ public class Window : Table
 
             var clampPosition = _window.KeepWithinStage
                                 && ( stage != null )
-                                && ( _window.Parent == stage.Root );
+                                && ( _window.Parent == stage.RootGroup );
 
             if ( ( _window.Edge & MOVE ) != 0 )
             {

@@ -26,7 +26,6 @@ using System.Reflection.Metadata;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Graphics.Viewports;
@@ -62,10 +61,30 @@ public class Stage : InputAdapter, IDisposable
 {
     public Core.Utils.SnapshotArrayList< TouchFocus > TouchFocuses { get; } = new( true, 4 );
 
-    public Camera?  Camera   { get; set; } = null!;
+    public Camera?  Camera   { get; set; }
     public Viewport Viewport { get; }
     public IBatch   Batch    { get; }
-    public bool     Debug    { get; set; } // True if any actor has ever had debug enabled.
+    public bool     Debug    { get; set; }
+
+    /// <summary>
+    /// If true, any actions executed during a call to <see cref="Act()"/>)
+    /// will result in a call to <see cref="IGraphicsDevice.RequestRendering"/>.
+    /// Widgets that animate or otherwise require additional rendering may check
+    /// this setting before calling <see cref="IGraphicsDevice.RequestRendering()"/>.
+    /// Default is true.
+    /// </summary>
+    public bool ActionsRequestRendering { get; set; } = true;
+
+    /// <summary>
+    /// The default color that can be used by actors to draw debug lines.
+    /// </summary>
+    public Color DebugColor { get; } = new( 0, 1, 0, 0.85f );
+
+    /// <summary>
+    /// If true, debug lines are shown for actors even when
+    /// <see cref="Actor.IsVisible"/> is false.
+    /// </summary>
+    public bool DebugInvisibleActors { get; set; }
 
     // ========================================================================
     
@@ -76,16 +95,12 @@ public class Stage : InputAdapter, IDisposable
     private readonly bool[]   _pointerTouched    = new bool[ 20 ];
     private readonly Vector2  _tempCoords        = new();
 
-    private bool            _debugAll;
-    private bool            _debugParentUnderMouse;
     private ShapeRenderer?  _debugShapes;
     private Table.DebugType _debugTableUnderMouse = Table.DebugType.None;
-    private bool            _debugUnderMouse;
-    private Actor?          _keyboardFocus;
     private Actor?          _mouseOverActor;
     private int             _mouseScreenX;
     private int             _mouseScreenY;
-
+    
     // ========================================================================
     // ========================================================================
 
@@ -127,303 +142,14 @@ public class Stage : InputAdapter, IDisposable
         Viewport = viewport ?? throw new ArgumentException( "viewport cannot be null." );
         Batch    = batch ?? throw new ArgumentException( "batch cannot be null." );
 
-        Root = new Group();
-        Root.SetStage( this );
+        RootGroup = new Group();
+        RootGroup.SetStage( this );
 
         viewport.Update( Api.Graphics.Width, Api.Graphics.Height, true );
     }
 
-    public float Width  => Viewport.WorldWidth;
-    public float Height => Viewport.WorldHeight;
-
     /// <summary>
-    /// Sets the actor that will receive key events.
-    /// </summary>
-    /// <param name="value"> May be null. </param>
-    /// <returns>
-    /// true if the unfocus and focus events were not cancelled by a <see cref="FocusListener"/>.
-    /// </returns>
-    public Actor? KeyboardFocus
-    {
-        get => _keyboardFocus;
-        set
-        {
-            if ( _keyboardFocus == value )
-            {
-                return;
-            }
-
-            var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
-
-            if ( focusEvent == null )
-            {
-                return;
-            }
-
-            focusEvent.Stage = this;
-            focusEvent.Type  = FocusListener.FocusEvent.FeType.Keyboard;
-
-            var oldKeyboardFocus = _keyboardFocus;
-
-            if ( oldKeyboardFocus != null )
-            {
-                focusEvent.Focused      = false;
-                focusEvent.RelatedActor = value;
-
-                oldKeyboardFocus.Fire( focusEvent );
-            }
-
-            var success = !focusEvent.IsCancelled;
-
-            if ( success )
-            {
-                _keyboardFocus = value;
-
-                if ( value != null )
-                {
-                    focusEvent.Focused      = true;
-                    focusEvent.RelatedActor = oldKeyboardFocus;
-
-                    value.Fire( focusEvent );
-                    success = !focusEvent.IsCancelled;
-
-                    if ( !success )
-                    {
-                        _keyboardFocus = oldKeyboardFocus;
-                    }
-                }
-            }
-
-            Pools.Free< FocusListener.FocusEvent >( focusEvent );
-        }
-    }
-
-    /// <summary>
-    /// Sets the actor that will receive scroll events.
-    /// </summary>
-    /// <param name="value"> May be null. </param>
-    /// <returns>
-    /// true if the unfocus and focus events were not cancelled
-    /// by a <see cref="FocusListener"/>.
-    /// </returns>
-    public Actor? ScrollFocus
-    {
-        get;
-        set
-        {
-            if ( field == value )
-            {
-                return;
-            }
-
-            var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
-
-            if ( focusEvent == null )
-            {
-                return;
-            }
-
-            focusEvent.Stage = this;
-            focusEvent.Type  = FocusListener.FocusEvent.FeType.Scroll;
-
-            var oldScrollFocus = ScrollFocus;
-
-            if ( oldScrollFocus != null )
-            {
-                focusEvent.Focused      = false;
-                focusEvent.RelatedActor = value;
-                oldScrollFocus.Fire( focusEvent );
-            }
-
-            var success = !focusEvent.IsCancelled;
-
-            if ( success )
-            {
-                field = value;
-
-                if ( value != null )
-                {
-                    focusEvent.Focused      = true;
-                    focusEvent.RelatedActor = oldScrollFocus;
-                    value.Fire( focusEvent );
-
-                    success = !focusEvent.IsCancelled;
-
-                    if ( !success )
-                    {
-                        field = oldScrollFocus;
-                    }
-                }
-            }
-
-            Pools.Free< FocusListener.FocusEvent >( focusEvent );
-        }
-    }
-
-    /// <summary>
-    /// Returns the root group which holds all actors in the stage.
-    /// </summary>
-    public Group Root
-    {
-        get;
-        private init
-        {
-            value.Parent?.RemoveActor( value, false );
-
-            field = value;
-
-            value.Parent = null;
-            value.Stage  = this;
-        }
-    } = null!;
-
-    /// <summary>
-    /// Returns the root's child actors.
-    /// </summary>
-    /// <see cref="Group.Children "/>
-    public Core.Utils.SnapshotArrayList< Actor > Actors => Root.Children;
-
-    /// <summary>
-    /// If true, any actions executed during a call to <see cref="Act()"/>)
-    /// will result in a call to <see cref="IGraphicsDevice.RequestRendering"/>.
-    /// Widgets that animate or otherwise require additional rendering may check
-    /// this setting before calling <see cref="IGraphicsDevice.RequestRendering()"/>.
-    /// Default is true.
-    /// </summary>
-    public bool ActionsRequestRendering { get; set; } = true;
-
-    /// <summary>
-    /// The default color that can be used by actors to draw debug lines.
-    /// </summary>
-    public Color DebugColor { get; } = new( 0, 1, 0, 0.85f );
-
-    /// <summary>
-    /// If true, debug lines are shown for actors even when
-    /// <see cref="Actor.IsVisible"/> is false.
-    /// </summary>
-    public bool DebugInvisibleActors { get; set; }
-
-    /// <summary>
-    /// If true, debug lines are shown for all actors.
-    /// </summary>
-    public bool DebugAll
-    {
-        get => _debugAll;
-        set
-        {
-            if ( _debugAll == value )
-            {
-                return;
-            }
-
-            _debugAll = value;
-
-            if ( value )
-            {
-                Debug = true;
-            }
-            else
-            {
-                Root.SetDebug( false, true );
-            }
-        }
-    }
-
-    /// <summary>
-    /// If true, debug is enabled only for the actor under the mouse.
-    /// Can be combined with <see cref="DebugAll"/>.
-    /// </summary>
-    public bool DebugUnderMouse
-    {
-        set
-        {
-            if ( _debugUnderMouse == value )
-            {
-                return;
-            }
-
-            _debugUnderMouse = value;
-
-            if ( value )
-            {
-                Debug = true;
-            }
-            else
-            {
-                Root.SetDebug( false, true );
-            }
-        }
-    }
-
-    /// <summary>
-    /// If true, debug is enabled only for the parent of the actor under
-    /// the mouse. Can be combined with <see cref="DebugAll"/>.
-    /// </summary>
-    public bool DebugParentUnderMouse
-    {
-        set
-        {
-            if ( _debugParentUnderMouse == value )
-            {
-                return;
-            }
-
-            _debugParentUnderMouse = value;
-
-            if ( value )
-            {
-                Debug = true;
-            }
-            else
-            {
-                Root.SetDebug( false, true );
-            }
-        }
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        Clear();
-
-        if ( _ownsBatch && Batch is IDisposable disposableBatch )
-        {
-            disposableBatch.Dispose();
-        }
-
-        _debugShapes?.Dispose();
-
-        GC.SuppressFinalize( this );
-    }
-
-    /// <summary>
-    /// Draw the stage. If the Viewport camera has not been set, or the
-    /// root <see cref="Group"/> is invisible, the stage will not draw.
-    /// </summary>
-    public virtual void Draw()
-    {
-        Camera = Viewport.Camera;
-
-        if ( ( Camera == null ) || !Root.IsVisible )
-        {
-            return;
-        }
-
-        Camera.Update();
-
-        Batch.SetProjectionMatrix( Camera.Combined );
-        Batch.Begin();
-        Root.Draw( Batch, 1 );
-        Batch.End();
-
-        if ( Debug )
-        {
-            DrawDebug();
-        }
-    }
-
-    /// <summary>
-    /// Calls <see cref="Act(float)"/> with GdxApi.Graphics.GetDeltaTime(),
+    /// Calls <see cref="Act(float)"/> with the DeltaTime,
     /// limited to a minimum of 30fps.
     /// </summary>
     public virtual void Act()
@@ -493,8 +219,53 @@ public class Stage : InputAdapter, IDisposable
             _mouseOverActor = FireEnterAndExit( _mouseOverActor, _mouseScreenX, _mouseScreenY, -1 );
         }
 
-        Root.Act( delta );
+        RootGroup.Act( delta );
     }
+
+    /// <summary>
+    /// Draw the stage. If the Viewport camera has not been set, or the
+    /// root <see cref="Group"/> is invisible, the stage will not draw.
+    /// </summary>
+    public virtual void Draw()
+    {
+        Camera = Viewport.Camera;
+
+        if ( ( Camera == null ) || !RootGroup.IsVisible )
+        {
+            return;
+        }
+
+        Camera.Update();
+
+        Batch.SetProjectionMatrix( Camera.Combined );
+        Batch.Begin();
+        RootGroup.Draw( Batch, 1 );
+        Batch.End();
+
+        if ( Debug )
+        {
+            DrawDebug();
+        }
+    }
+
+    /// <summary>
+    /// Adds an actor to the root of the stage.
+    /// </summary>
+    /// <see cref="Group.AddActor "/>
+    public virtual void AddActor( Actor actor )
+    {
+        RootGroup.AddActor( actor );
+    }
+
+    /// <summary>
+    /// Adds an action to the root of the stage.
+    /// </summary>
+    /// <see cref="Group.AddAction(Action) "/>
+    public virtual void AddAction( Action action )
+    {
+        RootGroup.AddAction( action );
+    }
+
 
     /// <summary>
     /// </summary>
@@ -591,9 +362,9 @@ public class Stage : InputAdapter, IDisposable
 
         if ( target == null )
         {
-            if ( Root.Touchable == Touchable.Enabled )
+            if ( RootGroup.Touchable == Touchable.Enabled )
             {
-                Root.Fire( inputEvent );
+                RootGroup.Fire( inputEvent );
             }
         }
         else
@@ -777,7 +548,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( ( target = Hit( _tempCoords.X, _tempCoords.Y, true ) ) == null )
         {
-            target = Root;
+            target = RootGroup;
         }
 
         target.Fire( inputEvent );
@@ -795,7 +566,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool Scrolled( float amountX, float amountY )
     {
-        var target = ScrollFocus ?? Root;
+        var target = ScrollFocus ?? RootGroup;
 
         ScreenToStageCoordinates( _tempCoords.Set( _mouseScreenX, _mouseScreenY ) );
 
@@ -827,7 +598,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool KeyDown( int keyCode )
     {
-        var target     = _keyboardFocus ?? Root;
+        var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
@@ -852,7 +623,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool KeyUp( int keyCode )
     {
-        var target     = _keyboardFocus ?? Root;
+        var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
@@ -877,7 +648,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool KeyTyped( char character )
     {
-        var target     = _keyboardFocus ?? Root;
+        var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
@@ -1077,32 +848,13 @@ public class Stage : InputAdapter, IDisposable
 
         Pools.Free< InputEvent >( inputEvent );
     }
-
-    /// <summary>
-    /// Adds an actor to the root of the stage.
-    /// </summary>
-    /// <see cref="Group.AddActor "/>
-    public virtual void AddActor( Actor actor )
-    {
-        Root.AddActor( actor );
-    }
-
-    /// <summary>
-    /// Adds an action to the root of the stage.
-    /// </summary>
-    /// <see cref="Group.AddAction(Action) "/>
-    public virtual void AddAction( Action action )
-    {
-        Root.AddAction( action );
-    }
-
     /// <summary>
     /// Adds a listener to the root.
     /// </summary>
     /// <see cref="Actor.AddListener(IEventListener) "/>
     public bool AddListener( IEventListener listener )
     {
-        return Root.AddListener( listener );
+        return RootGroup.AddListener( listener );
     }
 
     /// <summary>
@@ -1111,7 +863,7 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="Actor.RemoveListener(IEventListener) "/>
     public bool RemoveListener( IEventListener listener )
     {
-        return Root.RemoveListener( listener );
+        return RootGroup.RemoveListener( listener );
     }
 
     /// <summary>
@@ -1120,7 +872,7 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="Actor.AddCaptureListener(IEventListener) "/>
     public bool AddCaptureListener( IEventListener listener )
     {
-        return Root.AddCaptureListener( listener );
+        return RootGroup.AddCaptureListener( listener );
     }
 
     /// <summary>
@@ -1129,7 +881,7 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="Actor.RemoveCaptureListener(IEventListener) "/>
     public bool RemoveCaptureListener( IEventListener listener )
     {
-        return Root.RemoveCaptureListener( listener );
+        return RootGroup.RemoveCaptureListener( listener );
     }
 
     /// <summary>
@@ -1138,7 +890,7 @@ public class Stage : InputAdapter, IDisposable
     public virtual void Clear()
     {
         UnfocusAll();
-        Root.Clear();
+        RootGroup.Clear();
     }
 
     /// <summary>
@@ -1164,7 +916,7 @@ public class Stage : InputAdapter, IDisposable
             ScrollFocus = null;
         }
 
-        if ( ( _keyboardFocus != null ) && _keyboardFocus.IsDescendantOf( actor ) )
+        if ( ( KeyboardFocus != null ) && KeyboardFocus.IsDescendantOf( actor ) )
         {
             KeyboardFocus = null;
         }
@@ -1184,9 +936,9 @@ public class Stage : InputAdapter, IDisposable
     /// <returns> May be null if no actor was hit.  </returns>
     public virtual Actor? Hit( float stageX, float stageY, bool touchable )
     {
-        Root.ParentToLocalCoordinates( _tempCoords.Set( stageX, stageY ) );
+        RootGroup.ParentToLocalCoordinates( _tempCoords.Set( stageX, stageY ) );
 
-        return Root.Hit( _tempCoords.X, _tempCoords.Y, touchable );
+        return RootGroup.Hit( _tempCoords.X, _tempCoords.Y, touchable );
     }
 
     /// <summary>
@@ -1275,8 +1027,180 @@ public class Stage : InputAdapter, IDisposable
         }
         else
         {
-            Root.SetDebug( false, true );
+            RootGroup.SetDebug( false, true );
         }
+    }
+
+    /// <summary>
+    /// Sets the actor that will receive key events.
+    /// </summary>
+    /// <param name="value"> May be null. </param>
+    /// <returns>
+    /// true if the unfocus and focus events were not cancelled by a <see cref="FocusListener"/>.
+    /// </returns>
+    public Actor? KeyboardFocus
+    {
+        get;
+        set
+        {
+            if ( field == value )
+            {
+                return;
+            }
+
+            var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
+
+            if ( focusEvent == null )
+            {
+                return;
+            }
+
+            focusEvent.Stage = this;
+            focusEvent.Type  = FocusListener.FocusEvent.FeType.Keyboard;
+
+            var oldKeyboardFocus = field;
+
+            if ( oldKeyboardFocus != null )
+            {
+                focusEvent.Focused      = false;
+                focusEvent.RelatedActor = value;
+
+                oldKeyboardFocus.Fire( focusEvent );
+            }
+
+            var success = !focusEvent.IsCancelled;
+
+            if ( success )
+            {
+                field = value;
+
+                if ( value != null )
+                {
+                    focusEvent.Focused      = true;
+                    focusEvent.RelatedActor = oldKeyboardFocus;
+
+                    value.Fire( focusEvent );
+                    success = !focusEvent.IsCancelled;
+
+                    if ( !success )
+                    {
+                        field = oldKeyboardFocus;
+                    }
+                }
+            }
+
+            Pools.Free< FocusListener.FocusEvent >( focusEvent );
+        }
+    }
+
+    /// <summary>
+    /// Sets the actor that will receive scroll events.
+    /// </summary>
+    /// <param name="value"> May be null. </param>
+    /// <returns>
+    /// true if the unfocus and focus events were not cancelled
+    /// by a <see cref="FocusListener"/>.
+    /// </returns>
+    public Actor? ScrollFocus
+    {
+        get;
+        set
+        {
+            if ( field == value )
+            {
+                return;
+            }
+
+            var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
+
+            if ( focusEvent == null )
+            {
+                return;
+            }
+
+            focusEvent.Stage = this;
+            focusEvent.Type  = FocusListener.FocusEvent.FeType.Scroll;
+
+            var oldScrollFocus = ScrollFocus;
+
+            if ( oldScrollFocus != null )
+            {
+                focusEvent.Focused      = false;
+                focusEvent.RelatedActor = value;
+                oldScrollFocus.Fire( focusEvent );
+            }
+
+            var success = !focusEvent.IsCancelled;
+
+            if ( success )
+            {
+                field = value;
+
+                if ( value != null )
+                {
+                    focusEvent.Focused      = true;
+                    focusEvent.RelatedActor = oldScrollFocus;
+                    value.Fire( focusEvent );
+
+                    success = !focusEvent.IsCancelled;
+
+                    if ( !success )
+                    {
+                        field = oldScrollFocus;
+                    }
+                }
+            }
+
+            Pools.Free< FocusListener.FocusEvent >( focusEvent );
+        }
+    }
+
+    /// <summary>
+    /// Returns the root group which holds all actors in the stage.
+    /// </summary>
+    public Group RootGroup
+    {
+        get;
+        private init
+        {
+            value.Parent?.RemoveActor( value, false );
+
+            field = value;
+
+            value.Parent = null;
+            value.Stage  = this;
+        }
+    }
+
+    /// <summary>
+    /// Returns the stage width, as the Viewport's world width.'
+    /// </summary>
+    public float Width  => Viewport.WorldWidth;
+    
+    /// <summary>
+    /// Returns the stage height, as the Viewport's world height.'
+    /// </summary>
+    public float Height => Viewport.WorldHeight;
+    
+    /// <summary>
+    /// Returns the root's child actors.
+    /// </summary>
+    /// <see cref="Group.Children "/>
+    public Core.Utils.SnapshotArrayList< Actor > Actors => RootGroup.Children;
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Clear();
+
+        if ( _ownsBatch && Batch is IDisposable disposableBatch )
+        {
+            disposableBatch.Dispose();
+        }
+
+        _debugShapes?.Dispose();
+
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>
@@ -1300,7 +1224,7 @@ public class Stage : InputAdapter, IDisposable
             _debugShapes.AutoShapeType = true;
         }
 
-        if ( _debugUnderMouse || _debugParentUnderMouse || ( _debugTableUnderMouse != Table.DebugType.None ) )
+        if ( DebugUnderMouse || DebugParentUnderMouse || ( _debugTableUnderMouse != Table.DebugType.None ) )
         {
             ScreenToStageCoordinates( _tempCoords.Set( Api.Input.GetX(), Api.Input.GetY() ) );
 
@@ -1311,7 +1235,7 @@ public class Stage : InputAdapter, IDisposable
                 return;
             }
 
-            if ( _debugParentUnderMouse && ( actor.Parent != null ) )
+            if ( DebugParentUnderMouse && ( actor.Parent != null ) )
             {
                 actor = actor.Parent;
             }
@@ -1341,18 +1265,18 @@ public class Stage : InputAdapter, IDisposable
                 ( ( Table )actor ).DebugLines( _debugTableUnderMouse );
             }
 
-            if ( _debugAll && actor is Group group )
+            if ( DebugAll && actor is Group group )
             {
                 group.DebugAll();
             }
 
-            DisableDebug( Root, actor );
+            DisableDebug( RootGroup, actor );
         }
         else
         {
-            if ( _debugAll )
+            if ( DebugAll )
             {
-                Root.DebugAll();
+                RootGroup.DebugAll();
             }
         }
 
@@ -1361,7 +1285,7 @@ public class Stage : InputAdapter, IDisposable
         _debugShapes.ProjectionMatrix = Camera!.Combined;
         _debugShapes.Begin();
 
-        Root.DrawDebug( _debugShapes );
+        RootGroup.DrawDebug( _debugShapes );
 
         _debugShapes.End();
 
@@ -1412,6 +1336,99 @@ public class Stage : InputAdapter, IDisposable
                                  && ( screenY >= y0 ) && ( screenY < y1 );
     }
 
+    
+    /// <summary>
+    /// If true, debug lines are shown for all actors.
+    /// </summary>
+    public bool DebugAll
+    {
+        get;
+        set
+        {
+            if ( field == value )
+            {
+                return;
+            }
+
+            field = value;
+
+            if ( value )
+            {
+                Debug = true;
+            }
+            else
+            {
+                RootGroup.SetDebug( false, true );
+            }
+        }
+    }
+
+    /// <summary>
+    /// If true, debug is enabled only for the actor under the mouse.
+    /// Can be combined with <see cref="DebugAll"/>.
+    /// </summary>
+    public bool DebugUnderMouse
+    {
+        get;
+        set
+        {
+            if ( field == value )
+            {
+                return;
+            }
+
+            field = value;
+
+            if ( value )
+            {
+                Debug = true;
+            }
+            else
+            {
+                RootGroup.SetDebug( false, true );
+            }
+        }
+    }
+
+    /// <summary>
+    /// If true, debug is enabled only for the parent of the actor under
+    /// the mouse. Can be combined with <see cref="DebugAll"/>.
+    /// </summary>
+    public bool DebugParentUnderMouse
+    {
+        get;
+        set
+        {
+            if ( field == value )
+            {
+                return;
+            }
+
+            field = value;
+
+            if ( value )
+            {
+                Debug = true;
+            }
+            else
+            {
+                RootGroup.SetDebug( false, true );
+            }
+        }
+    }
+
+    // ========================================================================
+
+    public void DebugPrint()
+    {
+        Logger.Block();
+        Logger.Debug( "Camera:" );
+        Camera?.Debug();
+        Logger.Debug( $"Width: {Width}, Height: {Height}" );
+        Logger.Debug( $"Num Actors: {Actors.Count}" );
+        Logger.EndBlock();
+    }
+    
     // ========================================================================
     // ========================================================================
 
@@ -1420,11 +1437,11 @@ public class Stage : InputAdapter, IDisposable
     [PublicAPI]
     public class TouchFocus //: IComparable< TouchFocus >
     {
-        public IEventListener? Listener      { get; set; } = null;
-        public Actor?          ListenerActor { get; set; } = null;
-        public Actor?          Target        { get; set; } = null;
-        public int             Button        { get; set; } = 0;
-        public int             Pointer       { get; set; } = 0;
+        public IEventListener? Listener      { get; set; }
+        public Actor?          ListenerActor { get; set; }
+        public Actor?          Target        { get; set; }
+        public int             Button        { get; set; }
+        public int             Pointer       { get; set; }
 
         public void Reset()
         {
@@ -1436,3 +1453,6 @@ public class Stage : InputAdapter, IDisposable
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

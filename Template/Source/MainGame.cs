@@ -21,12 +21,10 @@ namespace Template.Source;
 [PublicAPI]
 public class MainGame : Game
 {
-    private const string TEST_ASSET1 = Assets.BACKGROUND_IMAGE;
-    private const int    TEST_WIDTH  = 64;
-    private const int    TEST_HEIGHT = 64;
+    public bool IsDrawingStage { get; set; } = true;
 
     // ========================================================================
-
+    
     private readonly Vector3 _cameraPos = Vector3.Zero;
 
     private OrthographicGameCamera? _orthoGameCam;
@@ -37,6 +35,7 @@ public class MainGame : Game
     private Texture?                _hudImage;
     private bool                    _disposed;
     private Stage?                  _stage;
+    private Actor?                  _hudActor;
 
     // ========================================================================
     // ========================================================================
@@ -49,9 +48,17 @@ public class MainGame : Game
         _assetManager = new AssetManager();
 
         CreateCameras();
+        CreateAssets();
 
-        _stage    = new Stage( _hudCam?.Viewport, _spriteBatch );
+        _stage           = new Stage( _hudCam?.Viewport, _spriteBatch );
+//        _stage?.Debug    = true;
+//        _stage?.DebugAll = false;
 
+        _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
+        _stage?.AddActor( _hudActor );
+
+        _stage?.DebugPrint();
+        
         Logger.Debug( "Done" );
     }
 
@@ -97,9 +104,9 @@ public class MainGame : Game
 
             _spriteBatch?.End();
         }
-        
+
         // ----- Draw the Stage, if enabled -----
-        if ( _stage != null )
+        if ( _stage != null && IsDrawingStage )
         {
             _stage.Act( Math.Min( Engine.Api.DeltaTime, ( 1.0f / 60.0f ) ) );
             _stage.Draw();
@@ -116,13 +123,16 @@ public class MainGame : Game
     public override void Resize( int width, int height )
     {
         _orthoGameCam?.ResizeViewport( width, height );
+        _hudCam?.ResizeViewport( width, height );
+
+        _stage?.Viewport.Update( width, height );
     }
 
     // ========================================================================
 
     /// <summary>
-    /// Called when the <see cref="IApplication"/> is destroyed. Preceded by a
-    /// call to <see cref="Game.Pause"/>.
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
     /// </summary>
     public override void Dispose()
     {
@@ -188,17 +198,10 @@ public class MainGame : Game
         _hudCam.Update();
     }
 
-    private Actor? _hudActor;
-    
     private void CreateAssets()
     {
         _image1   = new Texture( Assets.BACKGROUND_IMAGE );
         _hudImage = new Texture( Assets.COMPLETE_STAR );
-
-        var hudScene = new Texture( Assets.HUD_PANEL );
-        _hudActor = new Image( hudScene );
-        
-        _stage?.AddActor( _hudActor );
     }
 }
 

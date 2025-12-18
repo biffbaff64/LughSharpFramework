@@ -29,7 +29,7 @@ using LughSharp.Core.Utils;
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A button with a child <see cref="UI.Image"/> to display an image. This is useful when
+/// A button with a child <see cref="Scene2DImage"/> to display an image. This is useful when
 /// the button must be larger than the image and the image centered on the button. If
 /// the image is the size of the button, a Button without any children can be used,
 /// where the <see cref="Button.ButtonStyle.Up"/>, <see cref="Button.ButtonStyle.Down"/>,
@@ -68,10 +68,10 @@ public class ImageButton : Button
     public ImageButton( ImageButtonStyle style )
         : base( style )
     {
-        Image = new Image();
-        Image.SetScaling( Scaling.Fit );
+        Scene2DImage = new Scene2DImage();
+        Scene2DImage.SetScaling( Scaling.Fit );
 
-        Add( Image );
+        Add( Scene2DImage );
         SetStyle( style );
 
         ConstructorHelper();
@@ -104,7 +104,7 @@ public class ImageButton : Button
     {
     }
 
-    public     Image            Image { get; }
+    public     Scene2DImage            Scene2DImage { get; }
     public new ImageButtonStyle Style { get; private set; } = null!;
 
     private void ConstructorHelper()
@@ -187,7 +187,7 @@ public class ImageButton : Button
     /// </summary>
     protected void UpdateImage()
     {
-        Image.SetDrawable( GetImageDrawable() );
+        Scene2DImage.SetDrawable( GetImageDrawable() );
     }
 
     /// <summary>
@@ -220,7 +220,7 @@ public class ImageButton : Button
             className = className.Substring( dotIndex + 1 );
         }
 
-        return ( className.IndexOf( '$' ) != -1 ? "ImageButton " : "" ) + className + ": " + Image.Drawable;
+        return ( className.IndexOf( '$' ) != -1 ? "ImageButton " : "" ) + className + ": " + Scene2DImage.Drawable;
     }
 
     // ========================================================================

@@ -35,29 +35,6 @@ namespace LughSharp.Core.Scenes.Scene2D;
 [PublicAPI]
 public class Actor : IActor, IComparable< Actor >
 {
-    private Color _color = new( 1, 1, 1, 1 );
-    private bool  _debug = false;
-    private float _height;
-    private float _rotation = 0.0f;
-    private float _scaleX;
-    private float _scaleY;
-    private float _width;
-
-    // ========================================================================
-
-    // Backing values for properties
-    private float _x;
-    private float _y;
-
-    // ========================================================================
-
-    /// <summary>
-    /// Default Constructor.
-    /// </summary>
-    protected Actor()
-    {
-    }
-
     public Stage?    Stage      { get; set; }
     public Group?    Parent     { get; set; }
     public string?   Name       { get; set; }
@@ -65,12 +42,12 @@ public class Actor : IActor, IComparable< Actor >
     public Touchable Touchable  { get; set; } = Touchable.Enabled;
     public bool      IsVisible  { get; set; } = true;
 
-    public virtual float MinWidth   { get; set; } = 0;
-    public virtual float MinHeight  { get; set; } = 0;
-    public virtual float MaxWidth   { get; set; } = 0;
-    public virtual float MaxHeight  { get; set; } = 0;
-    public virtual float PrefWidth  { get; set; } = 0;
-    public virtual float PrefHeight { get; set; } = 0;
+    public virtual float MinWidth   { get; set; }
+    public virtual float MinHeight  { get; set; }
+    public virtual float MaxWidth   { get; set; }
+    public virtual float MaxHeight  { get; set; }
+    public virtual float PrefWidth  { get; set; }
+    public virtual float PrefHeight { get; set; }
 
     public DelayedRemovalList< IEventListener > Listeners        { get; }      = [ ];
     public DelayedRemovalList< IEventListener > CaptureListeners { get; }      = [ ];
@@ -81,18 +58,27 @@ public class Actor : IActor, IComparable< Actor >
     protected float OriginX { get; set; }
     protected float OriginY { get; set; }
 
+    // ========================================================================
+
+    /// <summary>
+    /// Default Constructor.
+    /// </summary>
+    protected Actor()
+    {
+    }
+
     /// <summary>
     /// The X coordinate of the actor's left edge.
     /// </summary>
     public float X
     {
-        get => _x;
+        get;
         set
         {
-            if ( MathUtils.IsNotEqual( _x, value ) )
+            if ( MathUtils.IsNotEqual( field, value ) )
             {
-                _x = value;
-                PositionChanged();
+                field = value;
+                OnPositionChanged();
             }
         }
     }
@@ -102,13 +88,13 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float Y
     {
-        get => _y;
+        get;
         set
         {
-            if ( MathUtils.IsNotEqual( _y, value ) )
+            if ( MathUtils.IsNotEqual( field, value ) )
             {
-                _y = value;
-                PositionChanged();
+                field = value;
+                OnPositionChanged();
             }
         }
     }
@@ -118,13 +104,13 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float Width
     {
-        get => _width;
+        get;
         set
         {
-            if ( MathUtils.IsNotEqual( _width, value ) )
+            if ( MathUtils.IsNotEqual( field, value ) )
             {
-                _width = value;
-                SizeChanged();
+                field = value;
+                OnSizeChanged();
             }
         }
     }
@@ -134,13 +120,13 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float Height
     {
-        get => _height;
+        get;
         set
         {
-            if ( MathUtils.IsNotEqual( _height, value ) )
+            if ( MathUtils.IsNotEqual( field, value ) )
             {
-                _height = value;
-                SizeChanged();
+                field = value;
+                OnSizeChanged();
             }
         }
     }
@@ -148,25 +134,25 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// Top edge of this actor.
     /// </summary>
-    public float TopEdge => _y + _height;
+    public float TopEdge => Y + Height;
 
     /// <summary>
     /// Right side edge of this actor.
     /// </summary>
-    public float RightEdge => _x + _width;
+    public float RightEdge => X + Width;
 
     /// <summary>
     /// The X Scaling factor
     /// </summary>
     public float ScaleX
     {
-        get => _scaleX;
+        get;
         set
         {
-            if ( !_scaleX.Equals( value ) )
+            if ( !field.Equals( value ) )
             {
-                _scaleX = value;
-                ScaleChanged();
+                field = value;
+                OnScaleChanged();
             }
         }
     }
@@ -176,13 +162,13 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float ScaleY
     {
-        get => _scaleY;
+        get;
         set
         {
-            if ( !_scaleY.Equals( value ) )
+            if ( !field.Equals( value ) )
             {
-                _scaleY = value;
-                ScaleChanged();
+                field = value;
+                OnScaleChanged();
             }
         }
     }
@@ -192,37 +178,37 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float Rotation
     {
-        get => _rotation;
+        get;
         set
         {
-            if ( !_rotation.Equals( value ) )
+            if ( !field.Equals( value ) )
             {
-                _rotation = value;
-                RotationChanged();
+                field = value;
+                OnRotationChanged();
             }
         }
-    }
+    } = 0.0f;
 
     /// <summary>
     /// This actors Color.
     /// </summary>
     public Color Color
     {
-        get => _color;
-        set => _color.Set( value );
-    }
+        get;
+        set => field.Set( value );
+    } = new( 1, 1, 1, 1 );
 
     /// <summary>
     /// If true, <see cref="DrawDebug(ShapeRenderer)"/> will be called for this actor.
     /// </summary>
     public bool DebugActive
     {
-        get => _debug;
+        get;
         set
         {
             if ( Stage != null )
             {
-                _debug = value;
+                field = value;
 
                 if ( value )
                 {
@@ -230,9 +216,29 @@ public class Actor : IActor, IComparable< Actor >
                 }
             }
         }
-    }
+    } = false;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Compares the current instance with another object of the same type and returns
+    /// an integer that indicates whether the current instance precedes, follows, or
+    /// occurs in the same position in the sort order as the other object.
+    /// </summary>
+    /// <param name="other">An object to compare with this instance.</param>
+    /// <returns>
+    /// A value that indicates the relative order of the objects being compared.
+    /// The return value has these meanings:
+    /// <list type="table">
+    /// <listheader><term>Value</term><description>Meaning</description></listheader>
+    /// <item><term> Less than zero</term>
+    /// <description> This instance precedes <paramref name="other" /> in the sort order.</description>
+    /// </item>
+    /// <item><term> Zero</term>
+    /// <description> This instance occurs in the same position in the sort order as <paramref name="other" />.</description>
+    /// </item>
+    /// <item><term> Greater than zero</term>
+    /// <description> This instance follows <paramref name="other" /> in the sort order.</description></item>
+    /// </list>
+    /// </returns>
     public int CompareTo( Actor? other )
     {
         //TODO:
@@ -506,7 +512,7 @@ public class Actor : IActor, IComparable< Actor >
             return null;
         }
 
-        return ( x >= 0 ) && ( x < _width ) && ( y >= 0 ) && ( y < _height ) ? this : null;
+        return ( x >= 0 ) && ( x < Width ) && ( y >= 0 ) && ( y < Height ) ? this : null;
     }
 
     /// <summary>
@@ -808,15 +814,15 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float GetX( int alignment )
     {
-        var x = _x;
+        var x = X;
 
         if ( ( alignment & Alignment.RIGHT ) != 0 )
         {
-            x += _width;
+            x += Width;
         }
         else if ( ( alignment & Alignment.LEFT ) == 0 )
         {
-            x += _width / 2;
+            x += Width / 2;
         }
 
         return x;
@@ -830,17 +836,17 @@ public class Actor : IActor, IComparable< Actor >
     {
         if ( ( alignment & Alignment.RIGHT ) != 0 )
         {
-            x -= _width;
+            x -= Width;
         }
         else if ( ( alignment & Alignment.LEFT ) == 0 )
         {
-            x -= _width / 2;
+            x -= Width / 2;
         }
 
-        if ( MathUtils.IsNotEqual( _x, x ) )
+        if ( MathUtils.IsNotEqual( X, x ) )
         {
-            _x = x;
-            PositionChanged();
+            X = x;
+            OnPositionChanged();
         }
     }
 
@@ -853,17 +859,17 @@ public class Actor : IActor, IComparable< Actor >
     {
         if ( ( alignment & Alignment.TOP ) != 0 )
         {
-            y -= _height;
+            y -= Height;
         }
         else if ( ( alignment & Alignment.BOTTOM ) == 0 )
         {
-            y -= _height / 2;
+            y -= Height / 2;
         }
 
-        if ( MathUtils.IsNotEqual( _y, y ) )
+        if ( MathUtils.IsNotEqual( Y, y ) )
         {
-            _y = y;
-            PositionChanged();
+            Y = y;
+            OnPositionChanged();
         }
     }
 
@@ -872,15 +878,15 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float GetY( int alignment )
     {
-        var y = _y;
+        var y = Y;
 
         if ( ( alignment & Alignment.TOP ) != 0 )
         {
-            y += _height;
+            y += Height;
         }
         else if ( ( alignment & Alignment.BOTTOM ) == 0 )
         {
-            y += _height / 2;
+            y += Height / 2;
         }
 
         return y;
@@ -895,7 +901,7 @@ public class Actor : IActor, IComparable< Actor >
         {
             X = x;
             Y = y;
-            PositionChanged();
+            OnPositionChanged();
         }
     }
 
@@ -927,7 +933,7 @@ public class Actor : IActor, IComparable< Actor >
         {
             X = x;
             Y = y;
-            PositionChanged();
+            OnPositionChanged();
         }
     }
 
@@ -938,37 +944,38 @@ public class Actor : IActor, IComparable< Actor >
     {
         if ( ( x != 0 ) || ( y != 0 ) )
         {
-            _x += x;
-            _y += y;
-            PositionChanged();
+            X += x;
+            Y += y;
+
+            OnPositionChanged();
         }
     }
 
     /// <summary>
     /// Called when the actor's position has been changed.
     /// </summary>
-    public virtual void PositionChanged()
+    public virtual void OnPositionChanged()
     {
     }
 
     /// <summary>
     /// Called when the actor's size has been changed.
     /// </summary>
-    public virtual void SizeChanged()
+    public virtual void OnSizeChanged()
     {
     }
 
     /// <summary>
     /// Called when the actor's scale has been changed.
     /// </summary>
-    public virtual void ScaleChanged()
+    public virtual void OnScaleChanged()
     {
     }
 
     /// <summary>
     /// Called when the actor's rotation has been changed.
     /// </summary>
-    public virtual void RotationChanged()
+    public virtual void OnRotationChanged()
     {
     }
 
@@ -977,12 +984,12 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public void SetSize( float width, float height )
     {
-        if ( MathUtils.IsNotEqual( _width, width )
-             || MathUtils.IsNotEqual( _height, height ) )
+        if ( MathUtils.IsNotEqual( Width, width )
+             || MathUtils.IsNotEqual( Height, height ) )
         {
-            _width  = width;
-            _height = height;
-            SizeChanged();
+            Width = width;
+            Height = height;
+            OnSizeChanged();
         }
     }
 
@@ -993,9 +1000,9 @@ public class Actor : IActor, IComparable< Actor >
     {
         if ( size != 0 )
         {
-            _width  += size;
-            _height += size;
-            SizeChanged();
+            Width  += size;
+            Height += size;
+            OnSizeChanged();
         }
     }
 
@@ -1006,9 +1013,9 @@ public class Actor : IActor, IComparable< Actor >
     {
         if ( ( width != 0 ) || ( height != 0 ) )
         {
-            _width  += width;
-            _height += height;
-            SizeChanged();
+            Width  += width;
+            Height += height;
+            OnSizeChanged();
         }
     }
 
@@ -1017,18 +1024,18 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public virtual void SetBounds( float x, float y, float width, float height )
     {
-        if ( MathUtils.IsNotEqual( _x, x ) || MathUtils.IsNotEqual( _y, y ) )
+        if ( MathUtils.IsNotEqual( X, x ) || MathUtils.IsNotEqual( Y, y ) )
         {
-            _x = x;
-            _y = y;
-            PositionChanged();
+            X = x;
+            Y = y;
+            OnPositionChanged();
         }
 
-        if ( MathUtils.IsNotEqual( _width, width ) || MathUtils.IsNotEqual( _height, height ) )
+        if ( MathUtils.IsNotEqual( Width, width ) || MathUtils.IsNotEqual( Height, height ) )
         {
-            _width  = width;
-            _height = height;
-            SizeChanged();
+            Width  = width;
+            Height = height;
+            OnSizeChanged();
         }
     }
 
@@ -1083,7 +1090,7 @@ public class Actor : IActor, IComparable< Actor >
         {
             ScaleX = scaleXY;
             ScaleY = scaleXY;
-            ScaleChanged();
+            OnScaleChanged();
         }
     }
 
@@ -1098,7 +1105,7 @@ public class Actor : IActor, IComparable< Actor >
         {
             ScaleX = scaleX;
             ScaleY = scaleY;
-            ScaleChanged();
+            OnScaleChanged();
         }
     }
 
@@ -1111,7 +1118,7 @@ public class Actor : IActor, IComparable< Actor >
         {
             ScaleX += scale;
             ScaleY += scale;
-            ScaleChanged();
+            OnScaleChanged();
         }
     }
 
@@ -1124,7 +1131,7 @@ public class Actor : IActor, IComparable< Actor >
         {
             ScaleX += scaleX;
             ScaleY += scaleY;
-            ScaleChanged();
+            OnScaleChanged();
         }
     }
 
@@ -1136,7 +1143,7 @@ public class Actor : IActor, IComparable< Actor >
         if ( amountInDegrees != 0 )
         {
             Rotation = ( Rotation + amountInDegrees ) % 360;
-            RotationChanged();
+            OnRotationChanged();
         }
     }
 
@@ -1148,7 +1155,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <param name="a"></param>
     public void SetColor( float r, float g, float b, float a )
     {
-        _color.Set( r, g, b, a );
+        Color.Set( r, g, b, a );
     }
 
     /// <summary>
@@ -1223,7 +1230,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public bool ClipBegin()
     {
-        return ClipBegin( _x, _y, _width, _height );
+        return ClipBegin( X, Y, Width, Height );
     }
 
     /// <summary>
@@ -1314,8 +1321,8 @@ public class Actor : IActor, IComparable< Actor >
         var rotation = Rotation;
         var scaleX   = ScaleX;
         var scaleY   = ScaleY;
-        var childX   = _x;
-        var childY   = _y;
+        var childX   = X;
+        var childY   = Y;
 
         if ( rotation == 0 )
         {
@@ -1380,8 +1387,8 @@ public class Actor : IActor, IComparable< Actor >
         var rotation = -Rotation;
         var scaleX   = ScaleX;
         var scaleY   = ScaleY;
-        var x        = _x;
-        var y        = _y;
+        var x        = X;
+        var y        = Y;
 
         if ( rotation == 0 )
         {
@@ -1480,7 +1487,7 @@ public class Actor : IActor, IComparable< Actor >
             shapes.Color = Stage.DebugColor;
         }
 
-        shapes.Rect( _x, _y, OriginX, OriginY, _width, _height, ScaleX, ScaleY, Rotation );
+        shapes.Rect( X, Y, OriginX, OriginY, Width, Height, ScaleX, ScaleY, Rotation );
     }
 
     /// <summary>

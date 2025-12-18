@@ -52,7 +52,7 @@ public class CheckBox : TextButton
         NonVirtualSetup( style );
     }
 
-    public Image? Image     { get; set; }
+    public Scene2DImage? Image     { get; set; }
     public Cell?  ImageCell { get; set; }
 
     public new ButtonStyle? Style
@@ -80,7 +80,7 @@ public class CheckBox : TextButton
 
         var label = Label;
 
-        Image = new Image( style.CheckboxOff, Scaling.None );
+        Image = new Scene2DImage( style.CheckboxOff, Scaling.None );
 
         ImageCell = Add( Image );
 
