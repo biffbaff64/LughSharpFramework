@@ -5,6 +5,7 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
@@ -24,7 +25,7 @@ public class MainGame : Game
     public bool IsDrawingStage { get; set; } = true;
 
     // ========================================================================
-    
+
     private readonly Vector3 _cameraPos = Vector3.Zero;
 
     private OrthographicGameCamera? _orthoGameCam;
@@ -36,6 +37,7 @@ public class MainGame : Game
     private bool                    _disposed;
     private Stage?                  _stage;
     private Actor?                  _hudActor;
+    private BitmapFont?             _font;
 
     // ========================================================================
     // ========================================================================
@@ -50,14 +52,22 @@ public class MainGame : Game
         CreateCameras();
         CreateAssets();
 
-        _stage           = new Stage( _hudCam?.Viewport, _spriteBatch );
-//        _stage?.Debug    = true;
-//        _stage?.DebugAll = false;
+        // --------------------------------------
 
-        _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
+        _stage              = new Stage( _hudCam?.Viewport, _spriteBatch );
+        _hudActor           = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
+        _hudActor.IsVisible = true;
+        _hudActor.SetPosition( 0, 0 );
         _stage?.AddActor( _hudActor );
 
-        _stage?.DebugPrint();
+        // --------------------------------------
+
+        var fontPath = Engine.Api.Files.Internal( Assets.ARIAL_FONT );
+        
+        Logger.Debug( $"Loading font from: {fontPath.FullName}" );
+        
+        _font = new BitmapFont();
+        _font.SetColor( Color.White );
         
         Logger.Debug( "Done" );
     }
@@ -88,6 +98,10 @@ public class MainGame : Game
                 _spriteBatch?.Draw( _image1, 0, 0 );
             }
 
+            if ( _font != null )
+            {
+            }
+            
             _spriteBatch?.End();
         }
 
@@ -101,7 +115,7 @@ public class MainGame : Game
             {
                 _spriteBatch?.Draw( _hudImage, 0, 0 );
             }
-
+            
             _spriteBatch?.End();
         }
 

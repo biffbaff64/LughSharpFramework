@@ -32,7 +32,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// <summary>
 /// Displays a <see cref="ISceneDrawable"/>, scaled various way within the widgets
 /// bounds. The preferred size is the min size of the drawable. Only when using
-/// a <see cref="TextureRegionSceneDrawable"/> will the actor's scale, rotation, and
+/// a <see cref="TextureRegionDrawable"/> will the actor's scale, rotation, and
 /// origin be used when drawing.
 /// </summary>
 [PublicAPI]
@@ -64,12 +64,12 @@ public class Scene2DImage : Widget
     }
 
     public Scene2DImage( TextureRegion region )
-        : this( new TextureRegionSceneDrawable( region ), Scaling.Stretch )
+        : this( new TextureRegionDrawable( region ), Scaling.Stretch )
     {
     }
 
     public Scene2DImage( Texture texture )
-        : this( new TextureRegionSceneDrawable( new TextureRegion( texture ) ) )
+        : this( new TextureRegionDrawable( new TextureRegion( texture ) ) )
     {
     }
 

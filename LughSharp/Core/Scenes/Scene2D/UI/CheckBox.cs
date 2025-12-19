@@ -33,10 +33,11 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class CheckBox : TextButton
 {
-    private CheckBoxStyle? _style;
+    public Scene2DImage? Image     { get; set; }
+    public Cell?         ImageCell { get; set; }
 
     // ========================================================================
-
+    
     public CheckBox( string text, Skin skin )
         : this( text, skin.Get< CheckBoxStyle >() )
     {
@@ -49,24 +50,16 @@ public class CheckBox : TextButton
 
     public CheckBox( string text, CheckBoxStyle style ) : base( text, style )
     {
-        NonVirtualSetup( style );
+        Setup( style );
     }
 
-    public Scene2DImage? Image     { get; set; }
-    public Cell?  ImageCell { get; set; }
-
-    public new ButtonStyle? Style
+    public new CheckBoxStyle? Style
     {
-        get => _style;
+        get;
         set
         {
-            if ( value is not CheckBoxStyle style )
-            {
-                throw new ArgumentException( "style must be a CheckBoxStyle." );
-            }
-
-            _style     = style;
-            base.Style = style;
+            field      = value ?? throw new ArgumentException( "style must be a CheckBoxStyle." );
+            base.Style = value;
         }
     }
 
@@ -74,7 +67,7 @@ public class CheckBox : TextButton
     /// Private setup method to allow calls to virtual methods that can't
     /// be called from constructors.
     /// </summary>
-    private void NonVirtualSetup( CheckBoxStyle style )
+    private void Setup( CheckBoxStyle style )
     {
         ClearChildren();
 
@@ -97,13 +90,13 @@ public class CheckBox : TextButton
 
         if ( IsDisabled )
         {
-            if ( IsChecked && ( _style?.CheckboxOnDisabled != null ) )
+            if ( IsChecked && ( Style?.CheckboxOnDisabled != null ) )
             {
-                checkbox = _style.CheckboxOnDisabled;
+                checkbox = Style.CheckboxOnDisabled;
             }
             else
             {
-                checkbox = _style?.CheckboxOffDisabled;
+                checkbox = Style?.CheckboxOffDisabled;
             }
         }
 
@@ -111,19 +104,19 @@ public class CheckBox : TextButton
         {
             var over = IsOver() && !IsDisabled;
 
-            if ( IsChecked && ( _style?.CheckboxOn != null ) )
+            if ( IsChecked && ( Style?.CheckboxOn != null ) )
             {
-                checkbox = over && ( _style.CheckboxOnOver != null )
-                    ? _style.CheckboxOnOver
-                    : _style.CheckboxOn;
+                checkbox = over && ( Style.CheckboxOnOver != null )
+                    ? Style.CheckboxOnOver
+                    : Style.CheckboxOn;
             }
-            else if ( over && ( _style?.CheckboxOver != null ) )
+            else if ( over && ( Style?.CheckboxOver != null ) )
             {
-                checkbox = _style.CheckboxOver;
+                checkbox = Style.CheckboxOver;
             }
             else
             {
-                checkbox = _style?.CheckboxOff;
+                checkbox = Style?.CheckboxOff;
             }
         }
 
@@ -141,6 +134,13 @@ public class CheckBox : TextButton
     [PublicAPI]
     public class CheckBoxStyle : TextButtonStyle
     {
+        public ISceneDrawable? CheckboxOn          { get; set; }
+        public ISceneDrawable? CheckboxOff         { get; set; }
+        public ISceneDrawable? CheckboxOnOver      { get; set; }
+        public ISceneDrawable? CheckboxOver        { get; set; }
+        public ISceneDrawable? CheckboxOnDisabled  { get; set; }
+        public ISceneDrawable? CheckboxOffDisabled { get; set; }
+
         public CheckBoxStyle()
         {
         }
@@ -163,12 +163,5 @@ public class CheckBox : TextButton
             CheckboxOnDisabled  = style.CheckboxOnDisabled;
             CheckboxOffDisabled = style.CheckboxOffDisabled;
         }
-
-        public ISceneDrawable? CheckboxOn          { get; set; }
-        public ISceneDrawable? CheckboxOff         { get; set; }
-        public ISceneDrawable? CheckboxOnOver      { get; set; }
-        public ISceneDrawable? CheckboxOver        { get; set; }
-        public ISceneDrawable? CheckboxOnDisabled  { get; set; }
-        public ISceneDrawable? CheckboxOffDisabled { get; set; }
     }
 }

@@ -2243,7 +2243,7 @@ public class UnicodeBlock : Subset
     {
         var block = _map[ blockName.ToUpper( CultureInfo.InvariantCulture ) ];
 
-        Guard.Against.Null( block );
+        Guard.ThrowIfNull( block );
 
         return block;
     }

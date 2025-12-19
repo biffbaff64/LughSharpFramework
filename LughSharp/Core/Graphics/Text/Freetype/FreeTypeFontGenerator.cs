@@ -22,13 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
-using LughSharp.Core.Graphics.Text;
-using Color = LughSharp.Core.Graphics.Color;
 
-namespace Extensions.Source.Freetype;
+namespace LughSharp.Core.Graphics.Text.Freetype;
 
 [PublicAPI]
 public class FreeTypeFontGenerator : IDisposable
@@ -1008,9 +1005,9 @@ public class FreeTypeFontGenerator : IDisposable
 
             if ( ( glyph == null ) && ( Generator != null ) )
             {
-                Guard.Against.Null( Stroker );
-                Guard.Against.Null( Packer );
-                Guard.Against.Null( Regions );
+                GdxRuntimeException.ThrowIfNull( Stroker );
+                GdxRuntimeException.ThrowIfNull( Packer );
+                GdxRuntimeException.ThrowIfNull( Regions );
 
                 Generator.SetPixelSizes( 0, Parameter.Size );
                 var baseline = ( ( Flipped ? -Ascent : Ascent ) + CapHeight ) / ScaleY;

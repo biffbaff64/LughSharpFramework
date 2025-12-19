@@ -424,7 +424,6 @@ public abstract class Camera
 
     // ========================================================================
 
-    #if DEBUG
     public void Debug()
     {
         Logger.Divider();
@@ -438,7 +437,6 @@ public abstract class Camera
         Logger.Debug( $"View Matrix:\n {ViewMatrix.ToString()}" );
         Logger.Debug( $"Combined Matrix:\n {Combined.ToString()}" );
     }
-    #endif
 }
 
 // ============================================================================

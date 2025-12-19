@@ -258,11 +258,23 @@ public class TextButton : Button
     [PublicAPI]
     public class TextButtonStyle : ButtonStyle
     {
+        public BitmapFont? Font                    { get; set; }
+        public Color?      FontColor               { get; set; }
+        public Color?      DownFontColor           { get; set; }
+        public Color?      OverFontColor           { get; set; }
+        public Color?      FocusedFontColor        { get; set; }
+        public Color?      DisabledFontColor       { get; set; }
+        public Color?      CheckedFontColor        { get; set; }
+        public Color?      CheckedDownFontColor    { get; set; }
+        public Color?      CheckedOverFontColor    { get; set; }
+        public Color?      CheckedFocusedFontColor { get; set; }
+
         protected TextButtonStyle()
         {
         }
 
-        public TextButtonStyle( ISceneDrawable upImage, ISceneDrawable downImage, ISceneDrawable checkedImage, BitmapFont font )
+        public TextButtonStyle( ISceneDrawable upImage, ISceneDrawable downImage, ISceneDrawable checkedImage,
+                                BitmapFont font )
             : base( upImage, downImage, checkedImage )
         {
             Font = font;
@@ -317,17 +329,5 @@ public class TextButton : Button
                 CheckedFocusedFontColor = new Color( style.CheckedFocusedFontColor );
             }
         }
-
-        public BitmapFont? Font      { get; protected init; }
-        public Color?      FontColor { get; protected init; }
-
-        public Color? DownFontColor           { get; set; }
-        public Color? OverFontColor           { get; set; }
-        public Color? FocusedFontColor        { get; set; }
-        public Color? DisabledFontColor       { get; set; }
-        public Color? CheckedFontColor        { get; set; }
-        public Color? CheckedDownFontColor    { get; set; }
-        public Color? CheckedOverFontColor    { get; set; }
-        public Color? CheckedFocusedFontColor { get; set; }
     }
 }

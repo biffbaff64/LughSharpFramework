@@ -301,6 +301,17 @@ public class Slider : ProgressBar
     [PublicAPI]
     public class SliderStyle : ProgressBarStyle
     {
+        public ISceneDrawable? BackgroundOver { get; set; }
+        public ISceneDrawable? BackgroundDown { get; set; }
+        public ISceneDrawable? KnobBeforeOver { get; set; }
+        public ISceneDrawable? KnobOver       { get; set; }
+        public ISceneDrawable? KnobAfterOver  { get; set; }
+        public ISceneDrawable? KnobBeforeDown { get; set; }
+        public ISceneDrawable? KnobDown       { get; set; }
+        public ISceneDrawable? KnobAfterDown  { get; set; }
+
+        // ====================================================================
+        
         public SliderStyle()
         {
         }
@@ -324,15 +335,6 @@ public class Slider : ProgressBar
             KnobAfterOver = style.KnobAfterOver;
             KnobAfterDown = style.KnobAfterDown;
         }
-
-        public ISceneDrawable? BackgroundOver { get; set; }
-        public ISceneDrawable? BackgroundDown { get; set; }
-        public ISceneDrawable? KnobBeforeOver { get; set; }
-        public ISceneDrawable? KnobOver       { get; set; }
-        public ISceneDrawable? KnobAfterOver  { get; set; }
-        public ISceneDrawable? KnobBeforeDown { get; set; }
-        public ISceneDrawable? KnobDown       { get; set; }
-        public ISceneDrawable? KnobAfterDown  { get; set; }
     }
 
     // ========================================================================
@@ -414,3 +416,6 @@ public class Slider : ProgressBar
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

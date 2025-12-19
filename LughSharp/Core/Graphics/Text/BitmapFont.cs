@@ -70,10 +70,7 @@ public partial class BitmapFont
         {
             _integer = value;
 
-            if ( Cache != null )
-            {
-                Cache.UseIntegerPositions = value;
-            }
+            Cache?.UseIntegerPositions = value;
         }
     }
 
@@ -111,7 +108,7 @@ public partial class BitmapFont
     }
 
     /// <summary>
-    /// Creates a BitmapFont using the default 15pt Arial font included in the LughSharp project.
+    /// Creates a BitmapFont using the default 15pt Arial font included in the Arcus project.
     /// This is convenient to easily display text without bothering without generating a bitmap
     /// font yourself.
     /// </summary>
@@ -615,7 +612,7 @@ public partial class BitmapFont
     /// <param name="y"> Y coordinate. </param>
     public GlyphLayout? Draw( IBatch batch, string str, float x, float y )
     {
-        Guard.Against.Null( Cache );
+        Guard.ThrowIfNull( Cache );
 
         Cache?.Clear();
 

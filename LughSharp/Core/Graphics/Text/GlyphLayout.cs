@@ -143,7 +143,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)"/>
+    /// Calls <see cref="SetText(LughSharp.Core.Graphics.Text.BitmapFont,string,int,int,Color,float,int,bool,string?)"/>
     /// with the whole string, the font's current color, and with no alignment or wrapping.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -154,7 +154,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)"/>
+    /// Calls <see cref="SetText(LughSharp.Core.Graphics.Text.BitmapFont,string,int,int,Color,float,int,bool,string?)"/>
     /// with the whole string and no truncation.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -386,7 +386,7 @@ public class GlyphLayout : IResetable
         }
 
         var run = _glyphRunPool.Obtain();
-        Guard.Against.Null( run, "Unable to obtain a GlyphRun!" );
+        GdxRuntimeException.ThrowIfNull( run, "Unable to obtain a GlyphRun!" );
 
         run.Color.Set( nextColor );
         fontData.GetGlyphs( run, str, runStart, runEnd, lastGlyph! );
@@ -428,7 +428,8 @@ public class GlyphLayout : IResetable
     /// <param name="fontData">Font data containing font-specific information.</param>
     /// <param name="x">Current x position.</param>
     /// <param name="lastGlyph">Last processed glyph.</param>
-    private void AdjustRunStartPosition( GlyphRun run, BitmapFont.BitmapFontData fontData, ref float x, ref BitmapFont.Glyph? lastGlyph )
+    private void AdjustRunStartPosition( GlyphRun run, BitmapFont.BitmapFontData fontData, ref float x,
+                                         ref BitmapFont.Glyph? lastGlyph )
     {
         if ( lastGlyph != null )
         {
@@ -464,7 +465,8 @@ public class GlyphLayout : IResetable
     /// <param name="y">Current y position.</param>
     /// <param name="targetWidth">Target width for text wrapping.</param>
     /// <param name="truncate">String for truncation if needed.</param>
-    private void HandleWrapping( BitmapFont.BitmapFontData fontData, GlyphRun run, ref float x, ref float y, float targetWidth,
+    private void HandleWrapping( BitmapFont.BitmapFontData fontData, GlyphRun run, ref float x, ref float y,
+                                 float targetWidth,
                                  string? truncate )
     {
         var xAdvances = run.XAdvances.ToArray();
@@ -502,7 +504,8 @@ public class GlyphLayout : IResetable
     /// <param name="y">Current y position.</param>
     /// <param name="targetWidth">Target width for text wrapping.</param>
     /// <param name="wrapIndex">Index at which to wrap the text.</param>
-    private void WrapRun( BitmapFont.BitmapFontData fontData, GlyphRun run, ref float x, ref float y, float targetWidth, int wrapIndex )
+    private void WrapRun( BitmapFont.BitmapFontData fontData, GlyphRun run, ref float x, ref float y, float targetWidth,
+                          int wrapIndex )
     {
         y += fontData.Down;
 

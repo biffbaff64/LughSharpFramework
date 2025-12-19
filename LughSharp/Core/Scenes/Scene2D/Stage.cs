@@ -87,7 +87,7 @@ public class Stage : InputAdapter, IDisposable
     public bool DebugInvisibleActors { get; set; }
 
     // ========================================================================
-    
+
     private readonly bool     _ownsBatch;
     private readonly Actor?[] _pointerOverActors = new Actor?[ 20 ];
     private readonly int[]    _pointerScreenX    = new int[ 20 ];
@@ -100,7 +100,7 @@ public class Stage : InputAdapter, IDisposable
     private Actor?          _mouseOverActor;
     private int             _mouseScreenX;
     private int             _mouseScreenY;
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -145,7 +145,7 @@ public class Stage : InputAdapter, IDisposable
         RootGroup = new Group();
         RootGroup.SetStage( this );
 
-        viewport.Update( Api.Graphics.Width, Api.Graphics.Height, true );
+        Viewport.Update( Api.Graphics.Width, Api.Graphics.Height, true );
     }
 
     /// <summary>
@@ -712,10 +712,10 @@ public class Stage : InputAdapter, IDisposable
             var focus = TouchFocuses.GetAt( i );
 
             if ( ( focus.Listener == listener )
-                 && ( focus.ListenerActor == listenerActor )
-                 && ( focus.Target == target )
-                 && ( focus.Pointer == pointer )
-                 && ( focus.Button == button ) )
+              && ( focus.ListenerActor == listenerActor )
+              && ( focus.Target == target )
+              && ( focus.Pointer == pointer )
+              && ( focus.Button == button ) )
             {
                 TouchFocuses.RemoveAt( i );
                 Pools.Free< TouchFocus >( focus );
@@ -820,7 +820,7 @@ public class Stage : InputAdapter, IDisposable
             var focus = items[ i ];
 
             if ( ( focus?.Listener == exceptListener )
-                 && ( focus?.ListenerActor == exceptActor ) )
+              && ( focus?.ListenerActor == exceptActor ) )
             {
                 continue;
             }
@@ -848,6 +848,7 @@ public class Stage : InputAdapter, IDisposable
 
         Pools.Free< InputEvent >( inputEvent );
     }
+
     /// <summary>
     /// Adds a listener to the root.
     /// </summary>
@@ -1175,13 +1176,13 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Returns the stage width, as the Viewport's world width.'
     /// </summary>
-    public float Width  => Viewport.WorldWidth;
-    
+    public float Width => Viewport.WorldWidth;
+
     /// <summary>
     /// Returns the stage height, as the Viewport's world height.'
     /// </summary>
     public float Height => Viewport.WorldHeight;
-    
+
     /// <summary>
     /// Returns the root's child actors.
     /// </summary>
@@ -1336,7 +1337,7 @@ public class Stage : InputAdapter, IDisposable
                                  && ( screenY >= y0 ) && ( screenY < y1 );
     }
 
-    
+
     /// <summary>
     /// If true, debug lines are shown for all actors.
     /// </summary>
@@ -1423,12 +1424,12 @@ public class Stage : InputAdapter, IDisposable
     {
         Logger.Block();
         Logger.Debug( "Camera:" );
-        Camera?.Debug();
+        Viewport.Camera?.Debug();
         Logger.Debug( $"Width: {Width}, Height: {Height}" );
         Logger.Debug( $"Num Actors: {Actors.Count}" );
         Logger.EndBlock();
     }
-    
+
     // ========================================================================
     // ========================================================================
 

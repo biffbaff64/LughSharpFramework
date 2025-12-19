@@ -22,11 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils;
-using Color = LughSharp.Core.Graphics.Color;
 
-namespace Extensions.Source.Freetype;
+namespace LughSharp.Core.Graphics.Text.Freetype;
 
 [PublicAPI]
 public partial class FreeType
@@ -114,7 +112,7 @@ public partial class FreeType
 //            try
 //            {
 //                // Attempt to map the file, if supported and safe.
-//                // This is a placeholder for your LughSharp file mapping logic.
+//                // This is a placeholder for your Arcus file mapping logic.
 //                // In a real scenario, FileHandle.Map() might return a byte[] directly or an IntPtr.
 //                // For now, let's assume it attempts to read into a byte array.
 //                // If file mapping isn't truly supported or efficient, reading the stream is the fallback.

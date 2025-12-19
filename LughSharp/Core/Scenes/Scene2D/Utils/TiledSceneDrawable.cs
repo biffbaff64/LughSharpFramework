@@ -33,7 +33,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Utils;
 /// instead of stretching it.
 /// </summary>
 [PublicAPI]
-public class TiledSceneDrawable : TextureRegionSceneDrawable
+public class TiledSceneDrawable : TextureRegionDrawable
 {
     // ========================================================================
 
@@ -46,9 +46,9 @@ public class TiledSceneDrawable : TextureRegionSceneDrawable
     }
 
     /// <summary>
-    /// Creates a new TiledDrawable, using the given <see cref="TextureRegionSceneDrawable"/>
+    /// Creates a new TiledDrawable, using the given <see cref="TextureRegionDrawable"/>
     /// </summary>
-    public TiledSceneDrawable( TextureRegionSceneDrawable drawable )
+    public TiledSceneDrawable( TextureRegionDrawable drawable )
         : base( drawable )
     {
     }

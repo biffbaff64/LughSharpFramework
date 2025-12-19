@@ -62,9 +62,9 @@ public class BitmapFontCache
 
     // ========================================================================
 
-    private readonly Color                _color         = new( 1, 1, 1, 1 );
+    private readonly Color _color         = new( 1, 1, 1, 1 );
     private readonly List< GlyphLayout? > _pooledLayouts = [ ];
-    private readonly Color                _tempColor     = new( 1, 1, 1, 1 );
+    private readonly Color _tempColor     = new( 1, 1, 1, 1 );
 
     private float _currentTint;
     private int   _glyphCount;

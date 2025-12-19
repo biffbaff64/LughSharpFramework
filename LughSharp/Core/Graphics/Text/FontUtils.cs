@@ -1,4 +1,4 @@
-﻿// /////////////////////////////////////////////////////////////////////////////
+﻿﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
 //  Copyright (c) 2024 Richard Ikin / Red 7 Projects
@@ -22,8 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using Extensions.Source.Freetype;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Graphics.Text.Freetype;
 using LughSharp.Core.Main;
 using Color = LughSharp.Core.Graphics.Color;
 
@@ -39,14 +39,14 @@ public class FontUtils
     /// <param name="size"></param>
     /// <param name="color"></param>
     /// <returns></returns>
-    public BitmapFont? CreateFont( string fontFile, int size, Color color )
+    public BitmapFont CreateFont( string fontFile, int size, Color color )
     {
-        BitmapFont? font;
+        BitmapFont font;
 
         try
         {
             font = CreateFont( fontFile, size );
-            font?.SetColor( color );
+            font.SetColor( color );
         }
         catch ( Exception e )
         {
@@ -66,7 +66,7 @@ public class FontUtils
     /// <returns></returns>
     public BitmapFont CreateFont( string fontFile, int size )
     {
-        BitmapFont? font = null;
+        BitmapFont font;
 
         try
         {

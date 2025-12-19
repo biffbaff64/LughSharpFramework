@@ -60,7 +60,7 @@ public class Skin : IDisposable
         typeof( TintedDrawable ),
         typeof( NinePatchSceneDrawable ),
         typeof( SpriteSceneDrawable ),
-        typeof( TextureRegionSceneDrawable ),
+        typeof( TextureRegionDrawable ),
         typeof( TiledSceneDrawable ),
         typeof( Button.ButtonStyle ),
         typeof( TextButton.TextButtonStyle ),
@@ -570,7 +570,7 @@ public class Skin : IDisposable
 
             if ( drawable == null )
             {
-                drawable = new TextureRegionSceneDrawable( textureRegion );
+                drawable = new TextureRegionDrawable( textureRegion );
 
                 if ( Scale is not 1.0f )
                 {
@@ -667,7 +667,7 @@ public class Skin : IDisposable
         return drawable switch
         {
             TiledSceneDrawable tiledDrawable          => new TiledSceneDrawable( tiledDrawable ),
-            TextureRegionSceneDrawable regionDrawable => new TextureRegionSceneDrawable( regionDrawable ),
+            TextureRegionDrawable regionDrawable => new TextureRegionDrawable( regionDrawable ),
             NinePatchSceneDrawable patchDrawable      => new NinePatchSceneDrawable( patchDrawable ),
             SpriteSceneDrawable spriteDrawable        => new SpriteSceneDrawable( spriteDrawable ),
 
@@ -690,7 +690,7 @@ public class Skin : IDisposable
     {
         var newDrawable = drawable switch
         {
-            TextureRegionSceneDrawable regionDrawable => regionDrawable.Tint( tint ),
+            TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
             NinePatchSceneDrawable patchDrawable      => patchDrawable.Tint( tint ),
             SpriteSceneDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
 

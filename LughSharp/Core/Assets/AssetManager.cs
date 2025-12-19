@@ -33,6 +33,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
+using BitmapFontLoader = LughSharp.Core.Assets.Loaders.BitmapFontLoader;
 
 namespace LughSharp.Core.Assets;
 

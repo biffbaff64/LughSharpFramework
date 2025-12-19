@@ -33,17 +33,13 @@ namespace LughSharp.Core.Scenes.Scene2D.Utils;
 /// Drawable for a <see cref="TextureRegion"/>.
 /// </summary>
 [PublicAPI]
-public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
+public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
 {
-    private readonly TextureRegion? _region;
-
-    // ========================================================================
-
     /// <summary>
     /// Creates an uninitialized TextureRegionDrawable.
     /// The texture region must be set before use.
     /// </summary>
-    public TextureRegionSceneDrawable()
+    public TextureRegionDrawable()
     {
     }
 
@@ -51,7 +47,7 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
     /// Creates a new TextureRegionDrawable, initialised with a new <see cref="TextureRegion"/>
     /// from the supplied <see cref="Texture"/>
     /// </summary>
-    public TextureRegionSceneDrawable( Texture texture )
+    public TextureRegionDrawable( Texture? texture )
         : this( new TextureRegion( texture ) )
     {
     }
@@ -59,7 +55,7 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
     /// <summary>
     /// Creates a new TextureRegionDrawable, initialised with the supplied <see cref="TextureRegion"/>
     /// </summary>
-    public TextureRegionSceneDrawable( TextureRegion region )
+    public TextureRegionDrawable( TextureRegion? region )
     {
         Region = region;
     }
@@ -69,7 +65,7 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
     /// the given TextureRegionDrawable.
     /// </summary>
     /// <param name="drawable"></param>
-    public TextureRegionSceneDrawable( TextureRegionSceneDrawable drawable ) : base( drawable )
+    public TextureRegionDrawable( TextureRegionDrawable? drawable ) : base( drawable )
     {
         Region = drawable.Region;
     }
@@ -79,20 +75,24 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
     /// </summary>
     protected TextureRegion? Region
     {
-        get => _region;
+        get;
         private init
         {
-            _region = value;
+            field = value;
 
-            if ( _region != null )
+            if ( field != null )
             {
-                MinWidth  = _region.RegionWidth;
-                MinHeight = _region.RegionHeight;
+                MinWidth  = field.RegionWidth;
+                MinHeight = field.RegionHeight;
             }
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws this drawable at the specified bounds. The drawable should be tinted
+    /// with <see cref="IBatch.Color"/>, possibly by mixing its own color.
+    /// The default implementation does nothing.
+    /// </summary>
     public override void Draw( IBatch batch, float x, float y, float width, float height )
     {
         if ( Region != null )
@@ -145,3 +145,6 @@ public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDraw
         return drawable;
     }
 }
+
+// ============================================================================
+// ============================================================================
