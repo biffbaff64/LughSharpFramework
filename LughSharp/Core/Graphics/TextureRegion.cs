@@ -375,7 +375,6 @@ public class TextureRegion
 
     // ========================================================================
     // ========================================================================
-    // Properties with detailed getters and setters.
 
     /// <summary>
     /// </summary>
@@ -383,8 +382,6 @@ public class TextureRegion
     {
         get
         {
-            Guard.Against.Null( Texture );
-
             if ( ( Texture == null ) || ( Texture.Width == 0 ) )
             {
                 // Handle cases where Texture or its Width is not valid yet
@@ -403,8 +400,6 @@ public class TextureRegion
     {
         get
         {
-            Guard.Against.Null( Texture );
-
             if ( ( Texture == null ) || ( Texture.Height == 0 ) )
             {
                 // Handle cases where Texture or its Height is not valid yet

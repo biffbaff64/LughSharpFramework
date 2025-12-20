@@ -260,21 +260,21 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void CullFace( GLenum mode )
+    public void CullFace( CullFaceMode mode )
     {
         GetDelegateForFunction< PFNGLCULLFACEPROC >( "glCullFace", out _glCullFace );
 
-        _glCullFace( mode );
+        _glCullFace( ( int )mode );
     }
 
     // ========================================================================
 
     /// <inheritdoc />
-    public void FrontFace( GLenum mode )
+    public void FrontFace( FrontFaceDirection mode )
     {
         GetDelegateForFunction< PFNGLFRONTFACEPROC >( "glFrontFace", out _glFrontFace );
 
-        _glFrontFace( mode );
+        _glFrontFace( ( int )mode );
     }
 
     // ========================================================================

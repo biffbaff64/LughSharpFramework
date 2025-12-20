@@ -247,7 +247,7 @@ public partial interface IGLBindings
     /// <see cref="GL_FRONT"/>, <see cref="GL_BACK"/>, and <see cref="GL_FRONT_AND_BACK"/> are accepted.
     /// The initial value is <see cref="GL_BACK"/>.
     /// </param>
-    void CullFace( int mode );
+    void CullFace( CullFaceMode mode );
 
     /// <summary>
     /// Define front- and back-facing polygons
@@ -256,7 +256,7 @@ public partial interface IGLBindings
     /// Specifies the orientation of front-facing polygons. Symbolic constants <see cref="GL_CW"/> and
     /// <see cref="GL_CCW"/> are accepted. The initial value is <see cref="GL_CCW"/>.
     /// </param>
-    void FrontFace( int mode );
+    void FrontFace( FrontFaceDirection mode );
 
     /// <summary>
     /// Specify implementation-specific hints

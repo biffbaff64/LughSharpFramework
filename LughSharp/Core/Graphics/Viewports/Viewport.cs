@@ -113,7 +113,7 @@ public abstract class Viewport
 
         if ( centerCamera )
         {
-            Camera.Position.Set( WorldWidth / 2, WorldHeight / 2, 0 );
+            Camera.Position.Set( WorldWidth / 2, WorldHeight / 2, CameraData.DEFAULT_Z );
         }
 
         Camera.Update();

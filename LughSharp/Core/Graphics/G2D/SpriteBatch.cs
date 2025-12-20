@@ -275,7 +275,10 @@ public class SpriteBatch : IBatch, IDisposable
             // Set for SpriteBatch
             GL.ColorMask( true, true, true, true );
 
-            GL.Disable( EnableCap.CullFace );
+            GL.Enable( EnableCap.CullFace );
+            GL.CullFace( CullFaceMode.Back );
+            GL.FrontFace( FrontFaceDirection.Clockwise );
+
             GL.Disable( EnableCap.ScissorTest );
             GL.Disable( EnableCap.StencilTest );
 
@@ -337,8 +340,8 @@ public class SpriteBatch : IBatch, IDisposable
             LastTexture       = null;
 
             // Restore the original color mask state
-            GL.ColorMask(_originalColorMaskR, _originalColorMaskG, _originalColorMaskB, _originalColorMaskA);
-            
+            GL.ColorMask( _originalColorMaskR, _originalColorMaskG, _originalColorMaskB, _originalColorMaskA );
+
             // Instead of a mysterious variable, restore to the "Standard" 
             // engine default (usually true for 3D, false for 2D).
             GL.DepthMask( true );
@@ -735,17 +738,17 @@ public class SpriteBatch : IBatch, IDisposable
     private void Validate< T >( T? texture )
     {
         Guard.Against.Null( texture );
-        
+
         if ( CurrentBatchState != BatchState.Drawing )
         {
             throw new InvalidOperationException( "Begin() must be called before Draw()." );
         }
-        
+
         var textureList = new List< object? >()
         {
             typeof( Texture ),
             typeof( TextureRegion ),
-            typeof( Scene2DImage),
+            typeof( Scene2DImage ),
         };
 
         if ( !textureList.Contains( texture?.GetType() ) )
@@ -1287,20 +1290,25 @@ public class SpriteBatch : IBatch, IDisposable
                 remainingVertices = verticesLength;
             }
 
+            var copyCount = Math.Min( remainingVertices, count );
+
+            Array.Copy( spriteVertices, offset, Vertices, Idx, copyCount );
+
+            Idx   += copyCount;
+            count -= copyCount;
+
             while ( count > 0 )
             {
-                var copyCount = Math.Min( remainingVertices, count );
-                Array.Copy( spriteVertices, offset, Vertices, Idx, copyCount );
-
-                Idx    += copyCount;
-                count  -= copyCount;
                 offset += copyCount;
 
-                if ( count > 0 )
-                {
-                    Flush();
-                    remainingVertices = verticesLength;
-                }
+                Flush();
+
+                copyCount = Math.Min( remainingVertices, count );
+
+                Array.Copy( spriteVertices, offset, Vertices, Idx, copyCount );
+
+                Idx   += copyCount;
+                count -= copyCount;
             }
         }
     }

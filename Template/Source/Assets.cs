@@ -30,4 +30,5 @@ public static class Assets
     public const string HUD_PANEL        = @"Assets\hud_panel.png";
     public const string COMPLETE_STAR    = @"Assets\complete_star.png";
     public const string ARIAL_FONT       = @"Assets\Fonts\arial-15.fnt";
+    public const string KEY_COLLECTED    = @"Assets\key_collected.png";
 }

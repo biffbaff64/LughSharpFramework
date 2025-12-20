@@ -33,11 +33,14 @@ public class MainGame : Game
     private SpriteBatch?            _spriteBatch;
     private AssetManager?           _assetManager;
     private Texture?                _image1;
-    private Texture?                _hudImage;
-    private bool                    _disposed;
+    private Texture?                _star;
+    private Texture?                _star2;
     private Stage?                  _stage;
     private Actor?                  _hudActor;
     private BitmapFont?             _font;
+    private Sprite?                 _sprite;
+    private bool                    _disposed;
+    private Vector2                 _spritePosition;
 
     // ========================================================================
     // ========================================================================
@@ -62,12 +65,15 @@ public class MainGame : Game
 
         // --------------------------------------
 
-        var fontPath = Engine.Api.Files.Internal( Assets.ARIAL_FONT );
+        var spriteImage = new Texture( Assets.KEY_COLLECTED );
         
-        Logger.Debug( $"Loading font from: {fontPath.FullName}" );
-        
-        _font = new BitmapFont();
-        _font.SetColor( Color.White );
+        _spritePosition = new Vector2( 40, 140 );
+        _sprite = new Sprite( new TextureRegion( spriteImage ) );
+        _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
+        _sprite.SetBounds( 100, 100, spriteImage!.Width, spriteImage!.Height );
+        _sprite.SetOriginCenter();
+        _sprite.SetColor( Color.White );
+        _sprite?.SetFlip( true, true );
         
         Logger.Debug( "Done" );
     }
@@ -77,6 +83,15 @@ public class MainGame : Game
     /// <inheritdoc />
     public override void Update()
     {
+//        _spritePosition.X += 4;
+//        if ( _spritePosition.X > 640 )
+//        {
+//            _spritePosition.X = -_sprite!.Width;
+//        }
+
+//        _sprite?.Rotate( -1.0f );
+//        _sprite?.SetScale( 0.5f );
+        _sprite?.Scroll( 0.001f, 0.0f );
     }
 
     /// <inheritdoc />
@@ -98,10 +113,9 @@ public class MainGame : Game
                 _spriteBatch?.Draw( _image1, 0, 0 );
             }
 
-            if ( _font != null )
-            {
-            }
-            
+            _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
+            _sprite?.Draw( _spriteBatch! );
+
             _spriteBatch?.End();
         }
 
@@ -111,11 +125,16 @@ public class MainGame : Game
             _spriteBatch?.SetProjectionMatrix( _hudCam.Camera.Combined );
             _spriteBatch?.Begin();
 
-            if ( _hudImage != null )
+            if ( _star != null )
             {
-                _spriteBatch?.Draw( _hudImage, 0, 0 );
+                _spriteBatch?.Draw( _star, 0, 0 );
             }
-            
+
+            if ( _star2 != null )
+            {
+                _spriteBatch?.Draw( _star2, 320, 240 );
+            }
+
             _spriteBatch?.End();
         }
 
@@ -164,7 +183,8 @@ public class MainGame : Game
             {
                 _spriteBatch?.Dispose();
                 _image1?.Dispose();
-                _hudImage?.Dispose();
+                _star?.Dispose();
+                _star2?.Dispose();
                 _assetManager?.Dispose();
                 _orthoGameCam?.Dispose();
                 _hudCam?.Dispose();
@@ -192,7 +212,7 @@ public class MainGame : Game
         _orthoGameCam.SetZoomDefault( CameraData.DEFAULT_ZOOM );
 
         // Set initial camera position
-        _orthoGameCam.SetPosition( Vector3.Zero );
+        _orthoGameCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
         _orthoGameCam.Update();
 
         // --------------------------------------
@@ -201,21 +221,21 @@ public class MainGame : Game
                                               Engine.Api.Graphics.Height,
                                               name: "HUDCamera" );
 
-        _hudCam.SetZoomDefault( CameraData.DEFAULT_ZOOM );
-
         _hudCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _hudCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _hudCam.IsInUse     = true;
+        _hudCam.SetZoomDefault( CameraData.DEFAULT_ZOOM );
 
         // Set initial camera position
-        _hudCam.SetPosition( Vector3.Zero );
+        _hudCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
         _hudCam.Update();
     }
 
     private void CreateAssets()
     {
-        _image1   = new Texture( Assets.BACKGROUND_IMAGE );
-        _hudImage = new Texture( Assets.COMPLETE_STAR );
+        _image1 = new Texture( Assets.BACKGROUND_IMAGE );
+        _star   = new Texture( Assets.COMPLETE_STAR );
+        _star2  = new Texture( Assets.COMPLETE_STAR );
     }
 }
 

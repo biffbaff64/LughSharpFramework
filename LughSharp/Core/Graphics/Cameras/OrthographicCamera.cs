@@ -40,8 +40,8 @@ public class OrthographicCamera : Camera
     /// </summary>
     public OrthographicCamera() : base()
     {
-        Near = 0f;
-        Far  = 1f;
+        Near = CameraData.DEFAULT_NEAR_PLANE;
+        Far  = CameraData.DEFAULT_FAR_PLANE;
         Zoom = CameraData.DEFAULT_ZOOM;
     }
 
@@ -60,8 +60,8 @@ public class OrthographicCamera : Camera
     {
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
-        Near           = 0f;
-        Far            = 1f;
+        Near           = CameraData.DEFAULT_NEAR_PLANE;
+        Far            = CameraData.DEFAULT_FAR_PLANE;
         Zoom           = CameraData.DEFAULT_ZOOM;
     }
 
@@ -88,9 +88,12 @@ public class OrthographicCamera : Camera
     /// <param name="yDown">whether y should be pointing down.</param>
     public void SetToOrtho( float viewportWidth, float viewportHeight, bool yDown )
     {
-        Up.Set( 0f, yDown ? -1f : 1f, 0 );
-        Direction.Set( 0f, 0f, yDown ? 1f : -1f );
-        Position.Set( ( Zoom * viewportWidth ) / 2.0f, ( Zoom * viewportHeight ) / 2.0f, 0f );
+//        Up.Set( 0f, yDown ? -1f : 1f, 0 );
+//        Direction.Set( 0f, 0f, yDown ? 1f : -1f );
+
+        Up.Set( 0f, 1f, 0f );
+        Direction.Set( 0f, 0f, -1f );
+        Position.Set( ( Zoom * viewportWidth ) / 2.0f, ( Zoom * viewportHeight ) / 2.0f, CameraData.DEFAULT_Z );
 
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;

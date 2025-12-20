@@ -33,6 +33,7 @@ public class CameraData
     public const float DEFAULT_ZOOM         = 1.0f;
     public const float DEFAULT_SCENE_WIDTH  = 640.0f;
     public const float DEFAULT_SCENE_HEIGHT = 480.0f;
+    public const float DEFAULT_Z            = 1.0f;
 }
 
 // ========================================================================

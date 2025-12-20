@@ -86,8 +86,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// and supports disposal.
     /// </para>
     /// </summary>
-    /// <param name="sceneWidth"> The width of the scene. Will be divided by ppm. </param>
-    /// <param name="sceneHeight"> The height of the scene. Will be divided by ppm. </param>
+    /// <param name="sceneWidth"> The width of the scene, in pixels. Will be divided by ppm. </param>
+    /// <param name="sceneHeight"> The height of the scene, in pixels. Will be divided by ppm. </param>
     /// <param name="viewportType"> The type of viewport to use. </param>
     /// <param name="ppm"> The pixels-per-meter value to use for scaling. </param>
     /// <param name="name"> The name of the camera. </param>
@@ -107,7 +107,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         // Create the camera instance.
         Camera = new OrthographicCamera( sceneWidth / ppm, sceneHeight / ppm );
         Camera.SetToOrtho( sceneWidth / ppm, sceneHeight / ppm, false );
-        Camera.Position.Set( sceneWidth / 2, sceneHeight / 2, 0 );
         Camera.Update();
 
         // Add the viewport
@@ -238,6 +237,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
             temp.X = Camera.Position.X + ( ( x - Camera.Position.X ) * 0.1f );
             temp.Y = Camera.Position.Y + ( ( y - Camera.Position.Y ) * 0.1f );
+            temp.Z = Camera.Position.Z;
 
             Camera.Position.Set( temp );
             Camera.Update();
@@ -337,11 +337,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </summary>
     public void SetStretchViewport()
     {
-        Logger.Debug( $"PPM: {PPM}, "
-                      + $"Camera: X:{Camera.Position.X}, Y:{Camera.Position.Y}, Z:{Camera.Position.Z},"
-                      + $" {Camera.ViewportWidth * PPM}x{Camera.ViewportHeight * PPM}"
-                      + $" ( {Camera.ViewportWidth}x{Camera.ViewportHeight} Units )" );
-
         Viewport = new StretchViewport( Camera.ViewportWidth * PPM,
                                         Camera.ViewportHeight * PPM,
                                         Camera );
