@@ -22,9 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils;
+using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Graphics.Text.Freetype;
+namespace Extensions.Source.Drawing.Freetype;
 
 [PublicAPI]
 public partial class FreeType

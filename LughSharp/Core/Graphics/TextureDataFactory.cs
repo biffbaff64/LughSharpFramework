@@ -77,17 +77,14 @@ public static class TextureDataFactory
 
                 break;
 
-            // Other supported image file formats, PNG, BMP
+            // Other supported image file formats, PNG, BMP, FNT
             case ".bmp":
             case ".png":
+            default:
                 var pixmap = new Pixmap( file );
                 
                 data = new FileTextureData( file, pixmap, format, useMipMaps );
                 break;
-            
-            case var _:
-
-                throw new NotSupportedException( $"File extension '{file.Extension}' is not supported." );
         }
 
         return data;

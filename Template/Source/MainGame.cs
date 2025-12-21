@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Versioning;
+using Extensions.Source.Drawing.Freetype;
 using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
@@ -55,26 +57,10 @@ public class MainGame : Game
         CreateCameras();
         CreateAssets();
 
-        // --------------------------------------
+//        CreateStage();
+//        CreateSprite();
+        CreateFont();
 
-        _stage              = new Stage( _hudCam?.Viewport, _spriteBatch );
-        _hudActor           = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
-        _hudActor.IsVisible = true;
-        _hudActor.SetPosition( 0, 0 );
-        _stage?.AddActor( _hudActor );
-
-        // --------------------------------------
-
-        var spriteImage = new Texture( Assets.KEY_COLLECTED );
-        
-        _spritePosition = new Vector2( 40, 140 );
-        _sprite = new Sprite( new TextureRegion( spriteImage ) );
-        _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
-        _sprite.SetBounds( 100, 100, spriteImage!.Width, spriteImage!.Height );
-        _sprite.SetOriginCenter();
-        _sprite.SetColor( Color.White );
-        _sprite?.SetFlip( true, true );
-        
         Logger.Debug( "Done" );
     }
 
@@ -83,15 +69,18 @@ public class MainGame : Game
     /// <inheritdoc />
     public override void Update()
     {
-//        _spritePosition.X += 4;
-//        if ( _spritePosition.X > 640 )
-//        {
-//            _spritePosition.X = -_sprite!.Width;
-//        }
+        if ( _sprite != null )
+        {
+            _spritePosition.X += 4;
+            if ( _spritePosition.X > 640 )
+            {
+                _spritePosition.X = -_sprite!.Width;
+            }
 
-//        _sprite?.Rotate( -1.0f );
-//        _sprite?.SetScale( 0.5f );
-        _sprite?.Scroll( 0.001f, 0.0f );
+            _sprite?.Rotate( -1.0f );
+            _sprite?.SetScale( 0.5f );
+//        _sprite?.Scroll( 0.001f, 0.0f );
+        }
     }
 
     /// <inheritdoc />
@@ -113,9 +102,12 @@ public class MainGame : Game
                 _spriteBatch?.Draw( _image1, 0, 0 );
             }
 
-            _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
-            _sprite?.Draw( _spriteBatch! );
-
+            if ( _sprite != null )
+            {
+                _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
+                _sprite?.Draw( _spriteBatch! );
+            }
+            
             _spriteBatch?.End();
         }
 
@@ -236,6 +228,49 @@ public class MainGame : Game
         _image1 = new Texture( Assets.BACKGROUND_IMAGE );
         _star   = new Texture( Assets.COMPLETE_STAR );
         _star2  = new Texture( Assets.COMPLETE_STAR );
+    }
+
+    private void CreateStage()
+    {
+        _stage    = new Stage( _hudCam?.Viewport, _spriteBatch );
+        _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
+
+        _hudActor.IsVisible = true;
+        _hudActor.SetPosition( 0, 0 );
+        _stage?.AddActor( _hudActor );
+    }
+
+    private void CreateSprite()
+    {
+        var spriteImage = new Texture( Assets.KEY_COLLECTED );
+
+        _spritePosition = new Vector2( 40, 140 );
+        _sprite         = new Sprite( new TextureRegion( spriteImage ) );
+
+        _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
+        _sprite.SetBounds( 100, 100, spriteImage!.Width, spriteImage!.Height );
+        _sprite.SetOriginCenter();
+        _sprite.SetColor( Color.White );
+        _sprite?.SetFlip( true, true );
+    }
+
+    private void CreateFont()
+    {
+        var fontData = new BitmapFont.BitmapFontData( Engine.Api.Files.Internal( Assets.ARIAL_LATIN_FONT ), false );
+        
+        _font = new BitmapFont( fontData, default( List<TextureRegion> ), false );
+    }
+
+    private void CreateFreeTypeFont()
+    {
+        var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.ARIAL_LATIN_FONT ) );
+        var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
+        {
+            Size = 20,
+        };
+
+        _font = generator.GenerateFont( parameter );
+        _font.SetColor( Color.White );
     }
 }
 

@@ -27,10 +27,12 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
+using LughSharp.Core.Scenes.Scene2D.Utils;
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Scenes.Scene2D.Utils;
+namespace Extensions.Source;
 
 [PublicAPI]
 public class Scene2DUtils
@@ -110,7 +112,7 @@ public class Scene2DUtils
     /// <param name="pos"> X, Y Display coordinates. </param>
     /// <param name="size"></param>
     /// <param name="color"> The Tint. </param>
-    /// <param name="fontName"> The <see cref="Core.Graphics.Text.BitmapFont"/> to use. </param>
+    /// <param name="fontName"> The <see cref="BitmapFont"/> to use. </param>
     /// <returns> The label. </returns>
     public Label AddLabel( string labelText, Vector2 pos, int size, Color color, string fontName )
     {

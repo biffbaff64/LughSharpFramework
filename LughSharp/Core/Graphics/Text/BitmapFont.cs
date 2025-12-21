@@ -96,9 +96,9 @@ public partial class BitmapFont
     // ========================================================================
 
     /// <summary>
-    /// Creates a BitmapFont using the default 15pt Arial font included in the library.
-    /// This is convenient to easily display text without bothering without generating
-    /// a bitmap font yourself.
+    /// Creates a BitmapFont using the default 15pt Arial font included in the
+    /// library. This is convenient to easily display text without having to
+    /// generate a bitmap font yourself.
     /// </summary>
     public BitmapFont() : this( Api.Files.Internal( DEFAULT_FONT ),
                                 Api.Files.Internal( DEFAULT_FONT_IMAGE ),
@@ -108,7 +108,7 @@ public partial class BitmapFont
     }
 
     /// <summary>
-    /// Creates a BitmapFont using the default 15pt Arial font included in the Arcus project.
+    /// Creates a BitmapFont using the default 15pt Arial font included in the Library.
     /// This is convenient to easily display text without bothering without generating a bitmap
     /// font yourself.
     /// </summary>
@@ -257,7 +257,7 @@ public partial class BitmapFont
 
         Cache = new BitmapFontCache( this, UseIntegerPositions );
 
-        InitialLoad( data );
+        SafeLoad( data );
     }
 
     /// <summary>
@@ -282,7 +282,7 @@ public partial class BitmapFont
     /// Helper method, allowing a call to <see cref="Load(BitmapFontData)"/>,
     /// which is a <b>virtual</b> method, from constructors.
     /// </summary>
-    private void InitialLoad( BitmapFontData data )
+    private void SafeLoad( BitmapFontData data )
     {
         Load( data );
     }
@@ -365,71 +365,47 @@ public partial class BitmapFont
     /// Returns the array of TextureRegions that represents each texture page of glyphs.
     /// </summary>
     /// <returns> The array of texture regions; modifying it may produce undesirable results </returns>
-    public List< TextureRegion > GetRegions()
-    {
-        return _regions;
-    }
+    public List< TextureRegion > GetRegions() => _regions;
 
     /// <summary>
     /// Returns the texture page at the given index.
     /// </summary>
-    public TextureRegion GetRegion( int index )
-    {
-        return _regions[ index ];
-    }
+    public TextureRegion GetRegion( int index ) => _regions[ index ];
 
     /// <summary>
     /// Returns the line height, which is the distance from one line of text to the next.
     /// </summary>
-    public float GetLineHeight()
-    {
-        return Data.LineHeight;
-    }
+    public float GetLineHeight() => Data.LineHeight;
 
     /// <summary>
     /// Returns the x-advance of the space character.
     /// </summary>
-    public virtual float GetSpaceXadvance()
-    {
-        return Data.SpaceXadvance;
-    }
+    public virtual float GetSpaceXadvance() => Data.SpaceXadvance;
 
     /// <summary>
     /// Returns the x-height, which is the distance from the top of most lowercase
     /// characters to the baseline.
     /// </summary>
-    public float GetXHeight()
-    {
-        return Data.XHeight;
-    }
+    public float GetXHeight() => Data.XHeight;
 
     /// <summary>
     /// Returns the cap height, which is the distance from the top of most uppercase
     /// characters to the baseline. Since the drawing position is the cap height of
     /// the first line, the cap height can be used to get the location of the baseline.
     /// </summary>
-    public float GetCapHeight()
-    {
-        return Data.CapHeight;
-    }
+    public float GetCapHeight() => Data.CapHeight;
 
     /// <summary>
     /// Returns the ascent, which is the distance from the cap height to the top of
     /// the tallest glyph.
     /// </summary>
-    public float GetAscent()
-    {
-        return Data.Ascent;
-    }
+    public float GetAscent() => Data.Ascent;
 
     /// <summary>
     /// Returns the descent, which is the distance from the bottom of the glyph that
     /// extends the lowest to the baseline. This number is negative.
     /// </summary>
-    public float GetDescent()
-    {
-        return Data.Descent;
-    }
+    public float GetDescent() => Data.Descent;
 
     /// <summary>
     /// Makes the specified glyphs fixed width. This can be useful to make the numbers
@@ -694,3 +670,6 @@ public partial class BitmapFont
 
     #endregion font drawing
 }
+
+// ============================================================================
+// ============================================================================

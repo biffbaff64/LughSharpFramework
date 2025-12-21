@@ -22,8 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.Text.Freetype;
+namespace Extensions.Source.Drawing.Freetype;
 
-public class FreeTypeFontLoader
+public class FreeTypeFontGeneratorLoader
 {
 }

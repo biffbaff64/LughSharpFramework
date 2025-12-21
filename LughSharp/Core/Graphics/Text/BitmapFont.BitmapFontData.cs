@@ -465,6 +465,8 @@ public partial class BitmapFont
                         break;
                     }
 
+                    Logger.Debug( line );
+                    
                     if ( !line.StartsWith( "kerning " ) )
                     {
                         break;

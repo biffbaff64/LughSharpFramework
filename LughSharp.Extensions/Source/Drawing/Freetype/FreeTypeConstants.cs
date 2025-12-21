@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics.Text.Freetype;
+namespace Extensions.Source.Drawing.Freetype;
 
 public partial class FreeType
 {

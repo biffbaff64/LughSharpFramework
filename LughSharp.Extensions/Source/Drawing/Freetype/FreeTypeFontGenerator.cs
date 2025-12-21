@@ -22,10 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Graphics.Text;
+using Color = LughSharp.Core.Graphics.Color;
 
-namespace LughSharp.Core.Graphics.Text.Freetype;
+namespace Extensions.Source.Drawing.Freetype;
 
 [PublicAPI]
 public class FreeTypeFontGenerator : IDisposable
