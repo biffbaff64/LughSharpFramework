@@ -52,7 +52,8 @@ public class GlyphLayout : IResetable
     public List< GlyphRun > Runs   { get; set; } = new( 1 );
     public float            Width  { get; set; }
     public float            Height { get; set; }
-
+    public string?          Text   { get; set; }    // For debugging
+    
     // ========================================================================
 
     private const float EPSILON = 0.0001f;
@@ -201,6 +202,8 @@ public class GlyphLayout : IResetable
     public void SetText( BitmapFont font, string str, int start, int end, Color color,
                          float targetWidth, int halign, bool wrap, string? truncate )
     {
+        Text = str;
+        
         _glyphRunPool.FreeAll( Runs );
         Runs.Clear();
 
@@ -217,7 +220,7 @@ public class GlyphLayout : IResetable
 
         PrepareForTextProcessing( fontData, color, targetWidth, ref wrap, truncate );
 
-        BitmapFont.Glyph? lastGlyph = null;
+        Glyph? lastGlyph = null;
 
         var x        = 0f;
         var y        = 0f;
@@ -279,6 +282,7 @@ public class GlyphLayout : IResetable
     /// Clears the color stack and sets the initial color.
     /// </summary>
     /// <param name="color">Initial color to set.</param>
+    /// <param name="fontData"></param>
     private void ClearColorStack( Color color, BitmapFont.BitmapFontData fontData )
     {
         var markupEnabled = fontData.MarkupEnabled;
@@ -374,7 +378,7 @@ public class GlyphLayout : IResetable
                              int runEnd,
                              ref float x,
                              ref float y,
-                             ref BitmapFont.Glyph? lastGlyph,
+                             ref Glyph? lastGlyph,
                              bool newline,
                              bool wrap,
                              float targetWidth,
@@ -429,7 +433,7 @@ public class GlyphLayout : IResetable
     /// <param name="x">Current x position.</param>
     /// <param name="lastGlyph">Last processed glyph.</param>
     private void AdjustRunStartPosition( GlyphRun run, BitmapFont.BitmapFontData fontData, ref float x,
-                                         ref BitmapFont.Glyph? lastGlyph )
+                                         ref Glyph? lastGlyph )
     {
         if ( lastGlyph != null )
         {
@@ -1016,12 +1020,12 @@ public class GlyphLayout : IResetable
     [PublicAPI]
     public class GlyphRun : IResetable
     {
-        public List< BitmapFont.Glyph > Glyphs    { get; set; } = [ ];
-        public List< float >            XAdvances { get; set; } = [ ];
-        public float                    X         { get; set; }
-        public float                    Y         { get; set; }
-        public float                    Width     { get; set; }
-        public Color                    Color     { get; set; } = new();
+        public List< Glyph > Glyphs    { get; set; } = [ ];
+        public List< float > XAdvances { get; set; } = [ ];
+        public float         X         { get; set; }
+        public float         Y         { get; set; }
+        public float         Width     { get; set; }
+        public Color         Color     { get; set; } = new();
 
         /// <summary>
         /// Resets the object for reuse. Object references should be nulled and fields

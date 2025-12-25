@@ -36,13 +36,13 @@ public class MainGame : Game
     private AssetManager?           _assetManager;
     private Texture?                _image1;
     private Texture?                _star;
-    private Texture?                _star2;
+//    private Texture?                _star2;
     private Stage?                  _stage;
     private Actor?                  _hudActor;
     private BitmapFont?             _font;
     private Sprite?                 _sprite;
     private bool                    _disposed;
-    private Vector2                 _spritePosition;
+    private Vector2                 _spritePosition = Vector2.Zero;
 
     // ========================================================================
     // ========================================================================
@@ -59,6 +59,7 @@ public class MainGame : Game
 
 //        CreateStage();
 //        CreateSprite();
+//        CreateFreeTypeFont();
         CreateFont();
 
         Logger.Debug( "Done" );
@@ -107,6 +108,8 @@ public class MainGame : Game
                 _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
                 _sprite?.Draw( _spriteBatch! );
             }
+
+            _ = _font?.Draw( _spriteBatch!, "HELLO WORLD", 320, 240 );
             
             _spriteBatch?.End();
         }
@@ -122,10 +125,10 @@ public class MainGame : Game
                 _spriteBatch?.Draw( _star, 0, 0 );
             }
 
-            if ( _star2 != null )
-            {
-                _spriteBatch?.Draw( _star2, 320, 240 );
-            }
+//            if ( _star2 != null )
+//            {
+//                _spriteBatch?.Draw( _star2, 320, 240 );
+//            }
 
             _spriteBatch?.End();
         }
@@ -176,10 +179,11 @@ public class MainGame : Game
                 _spriteBatch?.Dispose();
                 _image1?.Dispose();
                 _star?.Dispose();
-                _star2?.Dispose();
+//                _star2?.Dispose();
                 _assetManager?.Dispose();
                 _orthoGameCam?.Dispose();
                 _hudCam?.Dispose();
+                _font?.Dispose();
             }
 
             _disposed = true;
@@ -201,7 +205,7 @@ public class MainGame : Game
         _orthoGameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _orthoGameCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _orthoGameCam.IsInUse     = true;
-        _orthoGameCam.SetZoomDefault( CameraData.DEFAULT_ZOOM );
+        _orthoGameCam.SetZoomDefault( 1.75f );
 
         // Set initial camera position
         _orthoGameCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
@@ -216,7 +220,7 @@ public class MainGame : Game
         _hudCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _hudCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _hudCam.IsInUse     = true;
-        _hudCam.SetZoomDefault( CameraData.DEFAULT_ZOOM );
+        _hudCam.SetZoomDefault( 1.75f );
 
         // Set initial camera position
         _hudCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
@@ -227,7 +231,7 @@ public class MainGame : Game
     {
         _image1 = new Texture( Assets.BACKGROUND_IMAGE );
         _star   = new Texture( Assets.COMPLETE_STAR );
-        _star2  = new Texture( Assets.COMPLETE_STAR );
+//        _star2  = new Texture( Assets.COMPLETE_STAR );
     }
 
     private void CreateStage()
@@ -244,11 +248,12 @@ public class MainGame : Game
     {
         var spriteImage = new Texture( Assets.KEY_COLLECTED );
 
-        _spritePosition = new Vector2( 40, 140 );
-        _sprite         = new Sprite( new TextureRegion( spriteImage ) );
+        _spritePosition.Set( 40, 120 );
+
+        _sprite = new Sprite( new TextureRegion( spriteImage ) );
 
         _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
-        _sprite.SetBounds( 100, 100, spriteImage!.Width, spriteImage!.Height );
+        _sprite.SetBounds( 100, 100, spriteImage.Width, spriteImage.Height );
         _sprite.SetOriginCenter();
         _sprite.SetColor( Color.White );
         _sprite?.SetFlip( true, true );
@@ -257,8 +262,9 @@ public class MainGame : Game
     private void CreateFont()
     {
         var fontData = new BitmapFont.BitmapFontData( Engine.Api.Files.Internal( Assets.ARIAL_LATIN_FONT ), false );
-        
-        _font = new BitmapFont( fontData, default( List<TextureRegion> ), false );
+
+        _font = new BitmapFont( fontData, default( List< TextureRegion > ), false );
+        _font.SetColor( Color.White );
     }
 
     private void CreateFreeTypeFont()
@@ -266,7 +272,7 @@ public class MainGame : Game
         var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.ARIAL_LATIN_FONT ) );
         var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
         {
-            Size = 20,
+            Size = 40,
         };
 
         _font = generator.GenerateFont( parameter );

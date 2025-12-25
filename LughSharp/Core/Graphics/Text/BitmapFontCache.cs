@@ -62,9 +62,9 @@ public class BitmapFontCache
 
     // ========================================================================
 
-    private readonly Color _color         = new( 1, 1, 1, 1 );
+    private readonly Color                _color         = new( 1, 1, 1, 1 );
     private readonly List< GlyphLayout? > _pooledLayouts = [ ];
-    private readonly Color _tempColor     = new( 1, 1, 1, 1 );
+    private readonly Color                _tempColor     = new( 1, 1, 1, 1 );
 
     private float _currentTint;
     private int   _glyphCount;
@@ -83,7 +83,7 @@ public class BitmapFontCache
     /// <summary>
     /// Vertex data per page.
     /// </summary>
-    private float[]?[] _pageVertices;
+    private float[][] _pageVertices;
 
     /// <summary>
     /// Used internally to ensure a correct capacity for multi-page font vertex data.
@@ -171,12 +171,10 @@ public class BitmapFontCache
 
         for ( int i = 0, n = _pageVertices.Length; i < n; i++ )
         {
-            var vertices = _pageVertices[ i ];
-
             for ( int ii = 0, nn = _idx[ i ]; ii < nn; ii += 5 )
             {
-                vertices![ ii ]    += xAmount;
-                vertices[ ii + 1 ] += yAmount;
+                _pageVertices[ i ][ ii ]     += xAmount;
+                _pageVertices[ i ][ ii + 1 ] += yAmount;
             }
         }
     }
@@ -220,11 +218,9 @@ public class BitmapFontCache
 
                     tempGlyphCount[ page ]++;
 
-                    var vertices = _pageVertices[ page ];
-
                     for ( var v = 0; v < 20; v += 5 )
                     {
-                        vertices![ offset + v ] = colorFloat;
+                        _pageVertices[ page ][ offset + v ] = colorFloat;
                     }
                 }
             }
@@ -237,16 +233,15 @@ public class BitmapFontCache
     /// </summary>
     public void SetAlphas( float alpha )
     {
-        var   alphaBits = ( int )( 254 * alpha ) << 24;
-        float prev      = 0, newColor = 0;
+        var    alphaBits = ( int )( 254 * alpha ) << 24;
+        float? prev      = 0;
+        float  newColor  = 0;
 
         for ( int j = 0, length = _pageVertices.Length; j < length; j++ )
         {
-            var vertices = _pageVertices[ j ];
-
             for ( int i = 2, n = _idx[ j ]; i < n; i += 5 )
             {
-                var c = vertices![ i ];
+                var c = _pageVertices[ j ][ i ];
 
                 if ( !c.Equals( prev ) || ( ( float )i ).Equals( 2f ) )
                 {
@@ -258,7 +253,7 @@ public class BitmapFontCache
                     newColor = NumberUtils.IntToFloatColor( rgba );
                 }
 
-                vertices[ i ] = newColor;
+                _pageVertices[ j ][ i ] = newColor;
             }
         }
     }
@@ -271,11 +266,9 @@ public class BitmapFontCache
     {
         for ( int j = 0, length = _pageVertices.Length; j < length; j++ )
         {
-            var vertices = _pageVertices[ j ];
-
             for ( int i = 2, n = _idx[ j ]; i < n; i += 5 )
             {
-                vertices![ i ] = color;
+                _pageVertices[ j ][ i ] = color;
             }
         }
     }
@@ -300,9 +293,9 @@ public class BitmapFontCache
     public void SetColors( float r, float g, float b, float a )
     {
         var intBits = ( ( int )( 255 * a ) << 24 )
-                      | ( ( int )( 255 * b ) << 16 )
-                      | ( ( int )( 255 * g ) << 8 )
-                      | ( int )( 255 * r );
+                    | ( ( int )( 255 * b ) << 16 )
+                    | ( ( int )( 255 * g ) << 8 )
+                    | ( int )( 255 * r );
 
         SetColors( NumberUtils.IntToFloatColor( intBits ) );
     }
@@ -327,11 +320,9 @@ public class BitmapFontCache
         if ( _pageVertices.Length == 1 )
         {
             // One page.
-            var vertices = _pageVertices[ 0 ];
-
             for ( int i = ( start * 20 ) + 2, n = Math.Min( end * 20, _idx[ 0 ] ); i < n; i += 5 )
             {
-                vertices![ i ] = color;
+                _pageVertices[ 0 ][ i ] = color;
             }
 
             return;
@@ -341,7 +332,6 @@ public class BitmapFontCache
 
         for ( var i = 0; i < pageCount; i++ )
         {
-            var vertices     = _pageVertices[ i ];
             var glyphIndices = _pageGlyphIndices![ i ];
 
             // Loop through the indices and determine whether the glyph is inside begin/end.
@@ -361,7 +351,7 @@ public class BitmapFontCache
                     // && glyphIndex < end
                     for ( var off = 0; off < 20; off += 5 )
                     {
-                        vertices![ off + ( j * 20 ) + 2 ] = color;
+                        _pageVertices[ i ][ off + ( j * 20 ) + 2 ] = color;
                     }
                 }
             }
@@ -409,11 +399,9 @@ public class BitmapFontCache
             if ( ( _idx[ j ] > 0 ) && ( regions[ j ].Texture != null ) )
             {
                 // ignore if this texture has no glyphs
-                var vertices = _pageVertices[ j ];
-
-                if ( vertices != null )
+//                if ( _pageVertices[ j ] != null )
                 {
-                    spriteBatch.Draw( regions[ j ].Texture!, vertices, 0, _idx[ j ] );
+                    spriteBatch.Draw( regions[ j ].Texture!, _pageVertices[ j ], 0, _idx[ j ] );
                 }
             }
         }
@@ -435,7 +423,7 @@ public class BitmapFontCache
         {
             // 1 page.
             spriteBatch.Draw( Font.GetRegion().Texture!,
-                              _pageVertices[ 0 ]!,
+                              _pageVertices[ 0 ],
                               start * 20,
                               ( end - start ) * 20 );
 
@@ -483,7 +471,7 @@ public class BitmapFontCache
             }
 
             // Render the page vertex data with the offset and count.
-            spriteBatch.Draw( regions[ i ].Texture!, _pageVertices[ i ]!, offset * 20, count * 20 );
+            spriteBatch.Draw( regions[ i ].Texture!, _pageVertices[ i ], offset * 20, count * 20 );
         }
     }
 
@@ -589,16 +577,17 @@ public class BitmapFontCache
         }
 
         var vertexCount = _idx[ page ] + ( glyphCount * 20 );
-        var vertices    = _pageVertices[ page ];
 
-        if ( vertices == null )
+        if ( _pageVertices[ page ] == null )
         {
             _pageVertices[ page ] = new float[ vertexCount ];
         }
-        else if ( vertices.Length < vertexCount )
+        else if ( _pageVertices[ page ].Length < vertexCount )
         {
             var newVertices = new float[ vertexCount ];
-            Array.Copy( vertices, 0, newVertices, 0, _idx[ page ] );
+            
+            Array.Copy( _pageVertices[ page ], 0, newVertices, 0, _idx[ page ] );
+
             _pageVertices[ page ] = newVertices;
         }
     }
@@ -675,7 +664,7 @@ public class BitmapFontCache
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="color"></param>
-    private void AddGlyph( BitmapFont.Glyph glyph, float x, float y, float color )
+    private void AddGlyph( Glyph glyph, float x, float y, float color )
     {
         var scaleX = Font.Data.ScaleX;
         var scaleY = Font.Data.ScaleY;
@@ -706,34 +695,31 @@ public class BitmapFontCache
 
         _idx[ page ] += 20;
 
-        if ( _pageGlyphIndices != null )
-        {
-            _pageGlyphIndices[ page ].Add( _glyphCount++ );
-        }
+        _pageGlyphIndices?[ page ].Add( _glyphCount++ );
 
-        _pageVertices[ page ]![ idx++ ] = x;
-        _pageVertices[ page ]![ idx++ ] = y;
-        _pageVertices[ page ]![ idx++ ] = color;
-        _pageVertices[ page ]![ idx++ ] = u;
-        _pageVertices[ page ]![ idx++ ] = v;
+        _pageVertices[ page ][ idx++ ] = x;
+        _pageVertices[ page ][ idx++ ] = y;
+        _pageVertices[ page ][ idx++ ] = color;
+        _pageVertices[ page ][ idx++ ] = u;
+        _pageVertices[ page ][ idx++ ] = v;
 
-        _pageVertices[ page ]![ idx++ ] = x;
-        _pageVertices[ page ]![ idx++ ] = y2;
-        _pageVertices[ page ]![ idx++ ] = color;
-        _pageVertices[ page ]![ idx++ ] = u;
-        _pageVertices[ page ]![ idx++ ] = v2;
+        _pageVertices[ page ][ idx++ ] = x;
+        _pageVertices[ page ][ idx++ ] = y2;
+        _pageVertices[ page ][ idx++ ] = color;
+        _pageVertices[ page ][ idx++ ] = u;
+        _pageVertices[ page ][ idx++ ] = v2;
 
-        _pageVertices[ page ]![ idx++ ] = x2;
-        _pageVertices[ page ]![ idx++ ] = y2;
-        _pageVertices[ page ]![ idx++ ] = color;
-        _pageVertices[ page ]![ idx++ ] = u2;
-        _pageVertices[ page ]![ idx++ ] = v2;
+        _pageVertices[ page ][ idx++ ] = x2;
+        _pageVertices[ page ][ idx++ ] = y2;
+        _pageVertices[ page ][ idx++ ] = color;
+        _pageVertices[ page ][ idx++ ] = u2;
+        _pageVertices[ page ][ idx++ ] = v2;
 
-        _pageVertices[ page ]![ idx++ ] = x2;
-        _pageVertices[ page ]![ idx++ ] = y;
-        _pageVertices[ page ]![ idx++ ] = color;
-        _pageVertices[ page ]![ idx++ ] = u2;
-        _pageVertices[ page ]![ idx ]   = v;
+        _pageVertices[ page ][ idx++ ] = x2;
+        _pageVertices[ page ][ idx++ ] = y;
+        _pageVertices[ page ][ idx++ ] = color;
+        _pageVertices[ page ][ idx++ ] = u2;
+        _pageVertices[ page ][ idx ]   = v;
     }
 
     /// <summary>
@@ -790,6 +776,14 @@ public class BitmapFontCache
     /// <summary>
     /// Adds glyphs for the specified text.
     /// </summary>
+    public GlyphLayout AddText( string str, float x, float y )
+    {
+        return AddText( str, x, y, 0, str.Length, 0, Alignment.LEFT, false );
+    }
+
+    /// <summary>
+    /// Adds glyphs for the specified text.
+    /// </summary>
     public GlyphLayout AddText( string str, float x, float y, float targetWidth, int halign, bool wrap )
     {
         return AddText( str, x, y, 0, str.Length, targetWidth, halign, wrap );
@@ -838,14 +832,6 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    /// Adds glyphs for the specified text.
-    /// </summary>
-    public GlyphLayout AddText( string str, float x, float y )
-    {
-        return AddText( str, x, y, 0, str.Length, 0, Alignment.LEFT, false );
-    }
-
-    /// <summary>
     /// Adds the specified glyphs.
     /// </summary>
     public void AddText( GlyphLayout? layout, float x, float y )
@@ -855,22 +841,7 @@ public class BitmapFontCache
             AddToCache( layout, x, y + Font.Data.Ascent );
         }
     }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="page"></param>
-    /// <returns></returns>
-    public float[]? GetVertices( int page = 0 )
-    {
-        return _pageVertices[ page ];
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="page"></param>
-    /// <returns></returns>
-    public int GetVertexCount( int page )
-    {
-        return _idx[ page ];
-    }
 }
+
+// ============================================================================
+// ============================================================================

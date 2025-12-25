@@ -127,7 +127,7 @@ public class FreeTypeFontGenerator : IDisposable
     private FreeType.Face    _face;
     private FreeType.Library _library;
 
-    private bool   _bitmapped = false;
+    private bool   _bitmapped;
     private string _name;
     private int    _pixelHeight;
     private int    _pixelWidth;
@@ -144,7 +144,7 @@ public class FreeTypeFontGenerator : IDisposable
     {
         Logger.Checkpoint();
         _name = Path.GetFileNameWithoutExtension( fontFile.Name );
-        Logger.Debug( $"fontFile Name: {fontFile.Name}" );
+        Logger.Debug( $"fontFile Name: {fontFile.FullName}" );
         _library = FreeType.InitFreeType();
         Logger.Checkpoint();
         _face = _library.NewFace( fontFile, faceIndex );
@@ -307,7 +307,7 @@ public class FreeTypeFontGenerator : IDisposable
         }
 
         var metrics = slot.GetMetrics();
-        var glyph   = new BitmapFont.Glyph();
+        var glyph   = new Glyph();
 
         if ( bitmap != null )
         {
@@ -487,7 +487,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( incremental )
         {
-            data.GlyphsList = new List< BitmapFont.Glyph >( charactersLength + 32 );
+            data.GlyphsList = new List< Glyph >( charactersLength + 32 );
         }
 
         FreeType.Stroker? stroker = null;
@@ -638,10 +638,10 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( spaceGlyph == null )
         {
-            spaceGlyph = new BitmapFont.Glyph
+            spaceGlyph = new Glyph
             {
                 Xadvance = ( int )data.SpaceXadvance + parameter.SpaceX,
-                ID       = ( int )' ',
+                ID       = ' ',
             };
 
             data.SetGlyph( ' ', spaceGlyph );
@@ -655,7 +655,7 @@ public class FreeTypeFontGenerator : IDisposable
         return data;
     }
 
-    protected BitmapFont.Glyph? CreateGlyph( char c,
+    protected Glyph? CreateGlyph( char c,
                                              FreeTypeBitmapFontData data,
                                              FreeTypeFontParameter parameter,
                                              FreeType.Stroker? stroker,
@@ -801,7 +801,7 @@ public class FreeTypeFontGenerator : IDisposable
         }
 
         var metrics = slot.GetMetrics();
-        var glyph = new BitmapFont.Glyph
+        var glyph = new Glyph
         {
             ID      = c,
             Width   = mainPixmap.Width,
@@ -975,7 +975,7 @@ public class FreeTypeFontGenerator : IDisposable
     [PublicAPI]
     public class GlyphAndBitmap
     {
-        public BitmapFont.Glyph? Glyph  { get; set; }
+        public Glyph? Glyph  { get; set; }
         public FreeType.Bitmap?  Bitmap { get; set; }
     }
 
@@ -996,13 +996,13 @@ public class FreeTypeFontGenerator : IDisposable
         public FreeTypeFontParameter    Parameter  { get; set; } = new();
         public FreeType.Stroker?        Stroker    { get; set; }
         public PixmapPacker?            Packer     { get; set; }
-        public List< BitmapFont.Glyph > GlyphsList { get; set; } = [ ];
+        public List< Glyph > GlyphsList { get; set; } = [ ];
 
         private bool _dirty;
 
         // ====================================================================
 
-        public override BitmapFont.Glyph? GetGlyph( char ch )
+        public override Glyph? GetGlyph( char ch )
         {
             var glyph = base.GetGlyph( ch );
 
@@ -1058,7 +1058,7 @@ public class FreeTypeFontGenerator : IDisposable
             return glyph;
         }
 
-        public override void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end, BitmapFont.Glyph? lastGlyph )
+        public override void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end, Glyph? lastGlyph )
         {
             if ( Packer != null )
             {
@@ -1149,7 +1149,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// Border width in pixels, 0 to disable
         /// </summary>
-        public float BorderWidth { get; set; } = 0;
+        public float BorderWidth { get; set; }
 
         /// <summary>
         /// Border color; only used if borderWidth &gt; 0
@@ -1159,7 +1159,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// true for straight (mitered), false for rounded borders
         /// </summary>
-        public bool BorderStraight { get; set; } = false;
+        public bool BorderStraight { get; set; }
 
         /// <summary>
         /// Values &lt; 1 increase the border size.
@@ -1169,12 +1169,12 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// Offset of text shadow on X axis in pixels, 0 to disable
         /// </summary>
-        public int ShadowOffsetX { get; set; } = 0;
+        public int ShadowOffsetX { get; set; }
 
         /// <summary>
         /// Offset of text shadow on Y axis in pixels, 0 to disable
         /// </summary>
-        public int ShadowOffsetY { get; set; } = 0;
+        public int ShadowOffsetY { get; set; }
 
         /// <summary>
         /// Shadow color; only used if shadowOffset > 0. If alpha component is 0, no shadow
@@ -1217,17 +1217,17 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// The optional PixmapPacker to use for packing multiple fonts into a single texture.
         /// </summary>
-        public PixmapPacker? Packer { get; set; } = null!;
+        public PixmapPacker? Packer { get; set; }
 
         /// <summary>
         /// Whether to flip the font vertically
         /// </summary>
-        public bool Flip { get; set; } = false;
+        public bool Flip { get; set; }
 
         /// <summary>
         /// Whether to generate mip maps for the resulting texture
         /// </summary>
-        public bool GenMipMaps { get; set; } = false;
+        public bool GenMipMaps { get; set; }
 
         /// <summary>
         /// Minification filter

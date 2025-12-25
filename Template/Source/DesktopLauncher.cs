@@ -25,8 +25,8 @@ public static class DesktopLauncher
         {
             Title              = "LughSharp Template",
             VSyncEnabled       = true,
-            WindowWidth        = 640,
-            WindowHeight       = 480,
+            WindowWidth        = 960,
+            WindowHeight       = 720,
             ForegroundFPS      = 60,
             DisableAudio       = true,
             Debug              = true,

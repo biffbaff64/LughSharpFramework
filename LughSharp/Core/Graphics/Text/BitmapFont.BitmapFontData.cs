@@ -1,18 +1,18 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
-// 
+//
 //  Copyright (c) 2024 Richard Ikin / Red 7 Projects
-// 
+//
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-// 
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-// 
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -229,8 +229,7 @@ public partial class BitmapFont
 
                 var pageCount = 1;
 
-                if ( common is [ var _, var _, var _, var _, var _, not null, .. ]
-                     && common[ 5 ].StartsWith( "pages=" ) )
+                if ( common[ 5 ].StartsWith( "pages=" ) )
                 {
                     try
                     {
@@ -282,13 +281,15 @@ public partial class BitmapFont
                     rx = new Regex( ".*file=\"?([^\"]+)\"?" );
 
                     matches = rx.Matches( line );
-
+                    
                     if ( matches.Count <= 0 )
                     {
                         throw new GdxRuntimeException( "Missing: file" );
                     }
 
-                    ImagePaths[ p ] = FontFile.FullName.Replace( @"\\\\", "/" );
+                    var fileName = matches[ 0 ].Groups[ 1 ].Value;
+
+                    ImagePaths[ p ] = string.Join( separator: "\\", FontFile.DirectoryName, fileName );
                 }
 
                 Descent = 0;
@@ -465,8 +466,6 @@ public partial class BitmapFont
                         break;
                     }
 
-                    Logger.Debug( line );
-                    
                     if ( !line.StartsWith( "kerning " ) )
                     {
                         break;
@@ -678,7 +677,7 @@ public partial class BitmapFont
 
                 x2 -= offsetX;
 
-                if ( x2 > region?.RegionWidth )
+                if ( x2 > region.RegionWidth )
                 {
                     glyph.Width -= x2 - region.RegionWidth;
 
@@ -704,7 +703,7 @@ public partial class BitmapFont
 
                 y2 -= offsetY;
 
-                if ( y2 > region?.RegionHeight )
+                if ( y2 > region.RegionHeight )
                 {
                     var amount = y2 - region.RegionHeight;
 

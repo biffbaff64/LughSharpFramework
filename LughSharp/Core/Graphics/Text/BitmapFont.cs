@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics.Text;
 
@@ -65,10 +66,10 @@ public partial class BitmapFont
     /// </summary>
     public bool UseIntegerPositions
     {
-        get => _integer;
+        get;
         set
         {
-            _integer = value;
+            field = value;
 
             Cache?.UseIntegerPositions = value;
         }
@@ -79,19 +80,17 @@ public partial class BitmapFont
 
     // ========================================================================
 
-    private const string REGEX_PATTERN      = ".*id=(\\d+)";
-    private const string DEFAULT_FONT       = "Assets/Fonts/arial-15.fnt";
-    private const string DEFAULT_FONT_IMAGE = "Assets/Fonts/arial-15.png";
-    private const int    LOG2_PAGE_SIZE     = 9;
-    private const int    PAGE_SIZE          = 1 << LOG2_PAGE_SIZE;
-    private const int    PAGES              = 0x10000 / PAGE_SIZE;
+    public const string REGEX_PATTERN      = ".*id=(\\d+)";
+    public const string DEFAULT_FONT       = "Assets/Fonts/arial-15.fnt";
+    public const string DEFAULT_FONT_IMAGE = "Assets/Fonts/arial-15.png";
+    public const int    LOG2_PAGE_SIZE     = 9;
+    public const int    PAGE_SIZE          = 1 << LOG2_PAGE_SIZE;
+    public const int    PAGES              = 0x10000 / PAGE_SIZE;
 
     // ========================================================================
 
     private readonly PathTypes             _fileType;
     private readonly List< TextureRegion > _regions;
-
-    private bool _integer;
 
     // ========================================================================
 
@@ -154,8 +153,7 @@ public partial class BitmapFont
     /// is the upper left corner.
     /// </param>
     public BitmapFont( FileInfo fontFile, bool flip = false )
-        : this( new BitmapFontData( fontFile, flip ),
-                ( TextureRegion? )null, true )
+        : this( new BitmapFontData( fontFile, flip ), ( TextureRegion? )null, true )
     {
         _fileType = PathTypes.Local;
     }
@@ -456,12 +454,6 @@ public partial class BitmapFont
         return new BitmapFontCache( this, UseIntegerPositions );
     }
 
-    /// <inheritdoc />
-    public override string? ToString()
-    {
-        return Data.Name ?? base.ToString();
-    }
-
     /// <summary>
     /// Returns the index of the character 'ch' in the supplied text string.
     /// Scanning for the character begins at the index specified by 'start'.
@@ -496,89 +488,6 @@ public partial class BitmapFont
         }
     }
 
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Represents a single character in a font page.
-    /// </summary>
-    [PublicAPI]
-    public class Glyph
-    {
-        public bool       FixedWidth { get; set; }
-        public int        Height     { get; set; }
-        public int        ID         { get; set; }
-        public byte[]?[]? Kerning    { get; set; }
-        public int        SrcX       { get; set; }
-        public int        SrcY       { get; set; }
-        public float      U          { get; set; }
-        public float      U2         { get; set; }
-        public float      V          { get; set; }
-        public float      V2         { get; set; }
-        public int        Width      { get; set; }
-        public int        Xadvance   { get; set; }
-        public int        Xoffset    { get; set; }
-        public int        Yoffset    { get; set; }
-
-        /// <summary>
-        /// The index to the texture page that holds this glyph.
-        /// </summary>
-        public int Page { get; set; }
-
-        // ====================================================================
-
-        /// <summary>
-        /// Retrieves the kerning value for the specified character. Kerning adjusts the spacing
-        /// between the current glyph and the specified character, helping to enhance the visual
-        /// appearance of text rendering.
-        /// </summary>
-        /// <param name="ch">The character for which to retrieve the kerning value.</param>
-        /// <returns>
-        /// The kerning value for the specified character. Returns 0 if no kerning data is available.
-        /// </returns>
-        public int GetKerning( char ch )
-        {
-            if ( Kerning != null )
-            {
-                var page = Kerning[ ch >>> LOG2_PAGE_SIZE ];
-
-                return page != null ? page[ ch & ( PAGE_SIZE - 1 ) ] : 0;
-            }
-
-            return 0;
-        }
-
-        /// <summary>
-        /// Sets the kerning value for a specified character. This adjusts the spacing
-        /// between the current glyph and the given character to achieve optimal visual appearance.
-        /// </summary>
-        /// <param name="ch">The Unicode value of the character for which kerning is to be set.</param>
-        /// <param name="value">The kerning value to be applied, typically in pixel units.</param>
-        public void SetKerning( int ch, int value )
-        {
-            Kerning ??= new byte[ PAGES ][];
-
-            var page = Kerning[ ch >>> LOG2_PAGE_SIZE ];
-
-            if ( page == null )
-            {
-                Kerning[ ch >>> LOG2_PAGE_SIZE ] = page = new byte[ PAGE_SIZE ];
-            }
-
-            page[ ch & ( PAGE_SIZE - 1 ) ] = ( byte )value;
-        }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return ID.ToString();
-        }
-    }
-
-    // ========================================================================
-
-    #region font drawing
-
     /// <summary>
     /// Draws text at the specified position.
     /// </summary>
@@ -586,15 +495,15 @@ public partial class BitmapFont
     /// <param name="str"> The text message to draw. </param>
     /// <param name="x"> X coordinate. </param>
     /// <param name="y"> Y coordinate. </param>
-    public GlyphLayout? Draw( IBatch batch, string str, float x, float y )
+    public GlyphLayout Draw( IBatch batch, string str, float x, float y )
     {
         Guard.ThrowIfNull( Cache );
 
-        Cache?.Clear();
+        Cache.Clear();
 
-        var layout = Cache?.AddText( str, x, y );
+        var layout = Cache.AddText( str, x, y );
 
-        Cache?.Draw( batch );
+        Cache.Draw( batch );
 
         return layout;
     }
@@ -668,7 +577,11 @@ public partial class BitmapFont
         Cache?.Draw( batch );
     }
 
-    #endregion font drawing
+    /// <inheritdoc />
+    public override string? ToString()
+    {
+        return Data.Name ?? base.ToString();
+    }
 }
 
 // ============================================================================

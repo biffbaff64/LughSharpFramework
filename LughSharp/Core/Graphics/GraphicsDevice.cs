@@ -35,9 +35,9 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
     public int   LogicalWidth          { get; set; } = 0;
     public int   LogicalHeight         { get; set; } = 0;
-    public Color WindowBackgroundColor { get; set; } = Color.Blue;
     public int   BackBufferWidth       { get; set; } = 0;
     public int   BackBufferHeight      { get; set; } = 0;
+    public Color WindowBackgroundColor { get; set; } = Color.Blue;
 
     // ========================================================================
 

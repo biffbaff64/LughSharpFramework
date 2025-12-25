@@ -51,14 +51,16 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     private IGraphicsDevice.DisplayMode? _displayModeBeforeFullscreen;
 
     private int  _fps;
-    private long _frameCounterStart = 0;
     private long _frameId;
     private int  _frames;
+    private long _frameCounterStart;
     private long _lastFrameTime = -1;
+
     private int  _windowHeightBeforeFullscreen;
     private int  _windowPosXBeforeFullscreen;
     private int  _windowPosYBeforeFullscreen;
     private int  _windowWidthBeforeFullscreen;
+    private bool _isDisposed;
 
     // ========================================================================
     // ========================================================================
@@ -79,17 +81,23 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Gets the current width of the application window in pixels.
+    /// </summary>
     public override int Width => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
         ? BackBufferWidth
         : LogicalWidth;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Gets the current height of the application window in pixels.
+    /// </summary>
     public override int Height => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
         ? BackBufferHeight
         : LogicalHeight;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Gets the type of graphics backend being used.
+    /// </summary>
     public override GraphicsBackend.BackendType GraphicsType => GraphicsBackend.BackendType.OpenGLES;
 
     // ========================================================================
@@ -163,7 +171,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
             Samples          = GLWindow.AppConfig.Samples,
             CoverageSampling = false,
         };
-        
+
         GL.Enable( EnableCap.FramebufferSrgb );
     }
 
@@ -248,22 +256,22 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
                 DotGLFW.Glfw.GetMonitorWorkarea( monitor, out var x, out var y, out var w, out var h );
 
                 DotGLFW.Glfw.SetWindowMonitor( GLWindow!.GlfwWindow,
-                                       monitor,
-                                       x + ( ( w - width ) / 2 ),
-                                       y + ( ( h - height ) / 2 ),
-                                       width,
-                                       height,
-                                       _displayModeBeforeFullscreen!.RefreshRate );
+                                               monitor,
+                                               x + ( ( w - width ) / 2 ),
+                                               y + ( ( h - height ) / 2 ),
+                                               width,
+                                               height,
+                                               _displayModeBeforeFullscreen!.RefreshRate );
             }
             else
             {
                 DotGLFW.Glfw.SetWindowMonitor( GLWindow!.GlfwWindow,
-                                       monitor,
-                                       _windowPosXBeforeFullscreen,
-                                       _windowPosYBeforeFullscreen,
-                                       width,
-                                       height,
-                                       _displayModeBeforeFullscreen!.RefreshRate );
+                                               monitor,
+                                               _windowPosXBeforeFullscreen,
+                                               _windowPosYBeforeFullscreen,
+                                               width,
+                                               height,
+                                               _displayModeBeforeFullscreen!.RefreshRate );
             }
         }
 
@@ -408,7 +416,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
             var currentMode = ( DesktopGLDisplayMode )GetDisplayMode();
 
             if ( ( currentMode.MonitorHandle == newMode.MonitorHandle )
-                 && ( currentMode.RefreshRate == newMode.RefreshRate ) )
+              && ( currentMode.RefreshRate == newMode.RefreshRate ) )
             {
                 // same monitor and refresh rate
                 DotGLFW.Glfw.SetWindowSize( GLWindow.GlfwWindow, newMode.Width, newMode.Height );
@@ -417,12 +425,12 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
             {
                 // different monitor and/or refresh rate
                 DotGLFW.Glfw.SetWindowMonitor( GLWindow.GlfwWindow,
-                                       newMode.MonitorHandle,
-                                       0,
-                                       0,
-                                       newMode.Width,
-                                       newMode.Height,
-                                       newMode.RefreshRate );
+                                               newMode.MonitorHandle,
+                                               0,
+                                               0,
+                                               newMode.Width,
+                                               newMode.Height,
+                                               newMode.RefreshRate );
             }
         }
         else
@@ -433,12 +441,12 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
             // switch from windowed to fullscreen
             DotGLFW.Glfw.SetWindowMonitor( GLWindow.GlfwWindow,
-                                   newMode.MonitorHandle,
-                                   0,
-                                   0,
-                                   newMode.Width,
-                                   newMode.Height,
-                                   newMode.RefreshRate );
+                                           newMode.MonitorHandle,
+                                           0,
+                                           0,
+                                           newMode.Width,
+                                           newMode.Height,
+                                           newMode.RefreshRate );
         }
 
         UpdateFramebufferInfo();
@@ -469,9 +477,9 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
              ( viewport[ 2 ] != width ) || ( viewport[ 3 ] != height ) )
         {
             Logger.Error( "Viewport dimensions mismatch!"
-                            + $"\nRequested: [{x}, {y}, {width}, {height}]"
-                            + $"\nActual: [{viewport[ 0 ]}, {viewport[ 1 ]}, "
-                            + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
+                        + $"\nRequested: [{x}, {y}, {width}, {height}]"
+                        + $"\nActual: [{viewport[ 0 ]}, {viewport[ 1 ]}, "
+                        + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
         }
 
         // --------------------------------------------------------------------
@@ -546,51 +554,76 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
     // ========================================================================
 
-    public override int GetSafeInsetLeft()
-    {
-        return 0;
-    }
+    /// <summary>
+    /// Returns the left safe area inset in pixels.
+    /// Safe area insets represent regions of the screen that might be obscured by
+    /// system UI elements or device bezels (e.g., notches, rounded corners).
+    /// </summary>
+    /// <returns>The left safe area inset in pixels.</returns>
+    public override int GetSafeInsetLeft() => 0;
 
-    public override int GetSafeInsetTop()
-    {
-        return 0;
-    }
+    /// <summary>
+    /// Returns the top safe area inset in pixels.
+    /// Safe area insets represent regions of the screen that might be obscured by
+    /// system UI elements or device bezels (e.g., notches, rounded corners).
+    /// </summary>
+    /// <returns>The top safe area inset in pixels.</returns>
+    public override int GetSafeInsetTop() => 0;
 
-    public override int GetSafeInsetBottom()
-    {
-        return 0;
-    }
+    /// <summary>
+    /// Returns the bottom safe area inset in pixels.
+    /// Safe area insets represent regions of the screen that might be obscured by
+    /// system UI elements or device bezels (e.g., notches, rounded corners).
+    /// </summary>
+    /// <returns>The bottom safe area inset in pixels.</returns>
+    public override int GetSafeInsetBottom() => 0;
 
-    public override int GetSafeInsetRight()
-    {
-        return 0;
-    }
+    /// <summary>
+    /// Returns the right safe area inset in pixels.
+    /// Safe area insets represent regions of the screen that might be obscured by
+    /// system UI elements or device bezels (e.g., notches, rounded corners).
+    /// </summary>
+    /// <returns>The right safe area inset in pixels.</returns>
+    public override int GetSafeInsetRight() => 0;
 
-    public override long GetFrameID()
-    {
-        return _frameId;
-    }
+    /// <summary>
+    /// Returns the current frame ID. The frame ID is typically incremented with each rendered frame.
+    /// </summary>
+    /// <returns>The current frame ID.</returns>
+    public override long GetFrameID() => _frameId;
 
-    public override int GetFramesPerSecond()
-    {
-        return _fps;
-    }
+    /// <summary>
+    /// Returns the current frames per second (FPS). This value is usually calculated as a moving
+    /// average over a short period to provide a smooth FPS reading.
+    /// </summary>
+    /// <returns>The current frames per second.</returns>
+    public override int GetFramesPerSecond() => _fps;
 
     // ========================================================================
 
     #region IDisposable implementation
 
-    protected static void Dispose( bool disposing )
-    {
-        if ( disposing )
-        {
-            //TODO:
-        }
-    }
-
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing,
+    /// or resetting unmanaged resources.
+    /// </summary>
     public void Dispose()
     {
         Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected void Dispose( bool disposing )
+    {
+        if ( !_isDisposed )
+        {
+            if ( disposing )
+            {
+                //TODO:
+            }
+            
+            _isDisposed =  true;
+        }
     }
 
     #endregion IDisposable implementation
