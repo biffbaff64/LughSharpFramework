@@ -22,6 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JetBrains.Annotations;
+using LughUtils.source;
+using LughUtils.source.Collections;
+using LughUtils.source.Exceptions;
+using LughUtils.source.Maths;
 using LughUtils.source.Pooling;
 
 namespace LughSharp.Core.Graphics.Text;
@@ -52,7 +61,6 @@ public class GlyphLayout : IResetable
     public List< GlyphRun > Runs   { get; set; } = new( 1 );
     public float            Width  { get; set; }
     public float            Height { get; set; }
-    public string?          Text   { get; set; }    // For debugging
     
     // ========================================================================
 
@@ -202,8 +210,6 @@ public class GlyphLayout : IResetable
     public void SetText( BitmapFont font, string str, int start, int end, Color color,
                          float targetWidth, int halign, bool wrap, string? truncate )
     {
-        Text = str;
-        
         _glyphRunPool.FreeAll( Runs );
         Runs.Clear();
 
@@ -390,6 +396,7 @@ public class GlyphLayout : IResetable
         }
 
         var run = _glyphRunPool.Obtain();
+        
         GdxRuntimeException.ThrowIfNull( run, "Unable to obtain a GlyphRun!" );
 
         run.Color.Set( nextColor );

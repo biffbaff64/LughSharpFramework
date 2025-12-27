@@ -144,7 +144,7 @@ public partial class BitmapFont
         /// </summary>
         /// <param name="fontFile"></param>
         /// <param name="flip"></param>
-        public BitmapFontData( FileInfo fontFile, bool flip )
+        public BitmapFontData( FileInfo fontFile, bool flip = false )
         {
             FontFile = fontFile;
             Flipped  = flip;
@@ -281,7 +281,7 @@ public partial class BitmapFont
                     rx = new Regex( ".*file=\"?([^\"]+)\"?" );
 
                     matches = rx.Matches( line );
-                    
+
                     if ( matches.Count <= 0 )
                     {
                         throw new GdxRuntimeException( "Missing: file" );
@@ -363,8 +363,6 @@ public partial class BitmapFont
 
                     // Now, map the remaining parts to glyph properties.
                     // This assumes a strict order as in the original `tokens.NextToken()` calls.
-                    // It's a bit brittle if the order changes, but mimics the original behavior.
-                    // Be careful with index if any fields are missing in the input line.
                     var currentPartIndex = 3; // Start after "char id N"
 
                     glyph.SrcX    = GetNextInt(); // Gets the value after "x="
@@ -400,12 +398,13 @@ public partial class BitmapFont
                                 {
                                     if ( !int.TryParse( parts[ currentPartIndex ], out var parsedPage ) )
                                     {
-                                        Logger.Error( $"IGNORED NumberFormatException: Invalid page ID: {parts[ currentPartIndex ]} on line: {line}" );
+                                        Logger
+                                            .Error( $"IGNORED NumberFormatException: Invalid page ID: {parts[ currentPartIndex ]} on line: {line}" );
                                     }
 
                                     glyph.Page = parsedPage;
                                 }
-                                catch ( Exception ignored ) // Catching general exception for old code compatibility
+                                catch ( Exception ignored )
                                 {
                                     Logger.Error( $"IGNORED Exception parsing page ID: {ignored.Message}" );
                                 }
@@ -414,8 +413,8 @@ public partial class BitmapFont
                             }
                         }
 
-                        // You might also have "chnl" after "page" or "xadvance"
-                        // If you need "chnl", you'd add similar logic here:
+                        // We might also have "chnl" after "page" or "xadvance"
+                        // If we need "chnl", you'd add similar logic here:
                         if ( ( currentPartIndex < parts.Length ) && ( parts[ currentPartIndex ] == "chnl" ) )
                         {
                             // Handle chnl if needed, e.g., currentPartIndex + 1 for its value
@@ -476,9 +475,9 @@ public partial class BitmapFont
                     var second = int.Parse( parts[ 4 ] );
 
                     if ( ( first < 0 )
-                         || ( first > CharacterUtils.MAX_VALUE )
-                         || ( second < 0 )
-                         || ( second > CharacterUtils.MAX_VALUE ) )
+                      || ( first > CharacterUtils.MAX_VALUE )
+                      || ( second < 0 )
+                      || ( second > CharacterUtils.MAX_VALUE ) )
                     {
                         continue;
                     }
@@ -491,13 +490,13 @@ public partial class BitmapFont
                 }
 
                 var hasMetricsOverride    = false;
-                var overrideAscent        = 0f;
-                var overrideDescent       = 0f;
-                var overrideDown          = 0f;
-                var overrideCapHeight     = 0f;
-                var overrideLineHeight    = 0f;
-                var overrideSpaceXAdvance = 0f;
-                var overrideXHeight       = 0f;
+                var overrideAscent        = 0.0f;
+                var overrideDescent       = 0.0f;
+                var overrideDown          = 0.0f;
+                var overrideCapHeight     = 0.0f;
+                var overrideLineHeight    = 0.0f;
+                var overrideSpaceXAdvance = 0.0f;
+                var overrideXHeight       = 0.0f;
 
                 // Metrics override
                 if ( ( line != null ) && line.StartsWith( "metrics " ) )
@@ -576,8 +575,8 @@ public partial class BitmapFont
                         foreach ( var glyph in page )
                         {
                             if ( ( glyph == null )
-                                 || ( glyph.Height == 0 )
-                                 || ( glyph.Width == 0 ) )
+                              || ( glyph.Height == 0 )
+                              || ( glyph.Width == 0 ) )
                             {
                                 continue;
                             }
@@ -638,12 +637,10 @@ public partial class BitmapFont
 
             var invTexWidth  = 1.0f / region.Texture.Width;
             var invTexHeight = 1.0f / region.Texture.Height;
-
-            var u = region.U;
-            var v = region.V;
-
-            var offsetX = 0;
-            var offsetY = 0;
+            var u            = region.U;
+            var v            = region.V;
+            var offsetX      = 0;
+            var offsetY      = 0;
 
             if ( region is AtlasRegion atlasRegion )
             {
@@ -651,8 +648,8 @@ public partial class BitmapFont
                 offsetX = ( int )atlasRegion.OffsetX;
 
                 offsetY = ( int )( atlasRegion.OriginalHeight
-                                   - atlasRegion.PackedHeight
-                                   - atlasRegion.OffsetY );
+                                 - atlasRegion.PackedHeight
+                                 - atlasRegion.OffsetY );
             }
 
             var x  = glyph.SrcX;
@@ -824,7 +821,8 @@ public partial class BitmapFont
         /// The glyph immediately before this run, or null if this is run is the
         /// first on a line of text.
         /// </param>
-        public virtual void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end, Glyph? lastGlyph )
+        public virtual void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end,
+                                       Glyph? lastGlyph )
         {
             Guard.Against.Null( glyphRun );
 
@@ -868,7 +866,8 @@ public partial class BitmapFont
 
                 glyphs.Add( glyph );
 
-                xAdvances.Add( lastGlyph == null // First glyph on line, adjust the position so it isn't drawn left of 0.
+                xAdvances.Add( lastGlyph ==
+                               null // First glyph on line, adjust the position so it isn't drawn left of 0.
                                    ? glyph.FixedWidth ? 0 : ( -glyph.Xoffset * scaleX ) - PadLeft
                                    : ( lastGlyph.Xadvance + lastGlyph.GetKerning( ch ) ) * scaleX );
 
@@ -876,14 +875,13 @@ public partial class BitmapFont
 
                 // "[[" is an escaped left square bracket, skip second character.
                 if ( markupEnabled
-                     && ( ch == '[' )
-                     && ( start < end )
-                     && ( str[ start ] == '[' ) )
+                  && ( ch == '[' )
+                  && ( start < end )
+                  && ( str[ start ] == '[' ) )
                 {
                     start++;
                 }
-            }
-            while ( start < end );
+            } while ( start < end );
 
             if ( lastGlyph != null )
             {
@@ -1051,6 +1049,24 @@ public partial class BitmapFont
             SetScale( ScaleX + amount, ScaleY + amount );
         }
 
+        /// <summary>
+        /// Returns a List of the images files holding the glyphs for each page of the font.
+        /// </summary>
+        public List< TextureRegion > GetPageRegions()
+        {
+            var pageRegions = new List< TextureRegion >();
+
+            if ( ImagePaths?.Length > 0 )
+            {
+                foreach ( var path in ImagePaths )
+                {
+                    pageRegions.Add( new TextureRegion( new Texture( path ) ) );
+                }
+            }
+
+            return pageRegions;
+        }
+
         /// <inheritdoc />
         public override string? ToString()
         {
@@ -1058,3 +1074,6 @@ public partial class BitmapFont
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

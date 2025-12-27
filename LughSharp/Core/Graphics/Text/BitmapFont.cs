@@ -99,8 +99,8 @@ public partial class BitmapFont
     /// library. This is convenient to easily display text without having to
     /// generate a bitmap font yourself.
     /// </summary>
-    public BitmapFont() : this( Api.Files.Internal( DEFAULT_FONT ),
-                                Api.Files.Internal( DEFAULT_FONT_IMAGE ),
+    public BitmapFont() : this( Engine.Api.Files.Internal( DEFAULT_FONT ),
+                                Engine.Api.Files.Internal( DEFAULT_FONT_IMAGE ),
                                 false )
     {
         _fileType = PathTypes.Internal;
@@ -114,8 +114,8 @@ public partial class BitmapFont
     /// <param name="flip">
     /// If true, the glyphs will be flipped for use with a perspective where 0,0 is the upper left corner.
     /// </param>
-    public BitmapFont( bool flip ) : this( Api.Files.Internal( DEFAULT_FONT ),
-                                           Api.Files.Internal( DEFAULT_FONT ),
+    public BitmapFont( bool flip ) : this( Engine.Api.Files.Internal( DEFAULT_FONT ),
+                                           Engine.Api.Files.Internal( DEFAULT_FONT ),
                                            flip )
     {
         _fileType = PathTypes.Internal;
@@ -497,7 +497,7 @@ public partial class BitmapFont
     /// <param name="y"> Y coordinate. </param>
     public GlyphLayout Draw( IBatch batch, string str, float x, float y )
     {
-        Guard.ThrowIfNull( Cache );
+        Guard.Against.Null( Cache );
 
         Cache.Clear();
 
