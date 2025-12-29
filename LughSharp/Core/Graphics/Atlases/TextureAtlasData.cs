@@ -326,6 +326,7 @@ public class TextureAtlasData
     }
 
     /// <summary>
+    /// 
     /// </summary>
     /// <param name="entry"></param>
     /// <param name="line"></param>

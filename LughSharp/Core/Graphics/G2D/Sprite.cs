@@ -248,6 +248,18 @@ public class Sprite : TextureRegion
 
     /// <summary>
     /// Sets the position and size of the sprite when drawn, before scaling
+    /// and rotation are applied, using the current values for <c>X</c>,
+    /// <c>Y</c>, <c>Width</c>, and <c>Height</c>. If origin, rotation, or
+    /// scale are changed, it is slightly more efficient to set the bounds
+    /// after those operations.
+    /// </summary>
+    public virtual void SetBounds()
+    {
+        SetBounds( X, Y, Width, Height );
+    }
+    
+    /// <summary>
+    /// Sets the position and size of the sprite when drawn, before scaling
     /// and rotation are applied. If origin, rotation, or scale are changed,
     /// it is slightly more efficient to set the bounds after those operations.
     /// </summary>

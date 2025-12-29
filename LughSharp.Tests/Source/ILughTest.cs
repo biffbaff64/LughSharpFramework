@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Graphics.G2D;
+
 namespace LughSharp.Tests.Source;
 
 [PublicAPI]
@@ -29,7 +31,7 @@ public interface ILughTest
 {
     void Setup();
     void Run();
-    void Render();
+    void Render( SpriteBatch spriteBatch );
     void TearDown();
 }
 

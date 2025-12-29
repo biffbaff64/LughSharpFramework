@@ -12,6 +12,7 @@ using LughSharp.Core.Main;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
+using LughSharp.Tests.Source;
 using LughUtils.source.Maths;
 using LughUtils.source.Logging;
 using Color = LughSharp.Core.Graphics.Color;
@@ -44,6 +45,7 @@ public class MainGame : Game
     private bool                       _disposed;
     private Vector2                    _spritePosition = Vector2.Zero;
     private BitmapFont.BitmapFontData? _fontData;
+    private ILughTest?                 _test;
 
     // ========================================================================
     // ========================================================================
@@ -60,9 +62,13 @@ public class MainGame : Game
         CreateStage();
         CreateFont();
         CreateAssets();
-//        CreateSprite();
+        CreateSprite();
 //        CreateFreeTypeFont();
-        
+
+        _test = new TextureAtlasTest();
+        _test.Setup();
+        _test.Run();
+
         Logger.Debug( "Done" );
     }
 
@@ -73,11 +79,11 @@ public class MainGame : Game
     {
         if ( _sprite != null )
         {
-            _spritePosition.X += 4;
-            if ( _spritePosition.X > 640 )
-            {
-                _spritePosition.X = -_sprite!.Width;
-            }
+//            _spritePosition.X += 4;
+//            if ( _spritePosition.X > Engine.Api.Graphics.Width )
+//            {
+//                _spritePosition.X = -_sprite!.Width;
+//            }
 
             _sprite?.Rotate( -1.0f );
             _sprite?.SetScale( 0.5f );
@@ -101,25 +107,10 @@ public class MainGame : Game
 
             if ( _image1 != null )
             {
-                _spriteBatch?.Draw( _image1, 0, 0 );
+                _spriteBatch?.Draw( _image1,
+                                    ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
+                                    ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
             }
-
-            if ( _sprite != null )
-            {
-                _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
-                _sprite?.Draw( _spriteBatch! );
-            }
-
-            _ = _font?.Draw( _spriteBatch!, "HELLO WORLD", 100, 100 );
-            
-            _spriteBatch?.End();
-        }
-
-        if ( _hudCam is { IsInUse: true } )
-        {
-            _hudCam.Viewport?.Apply( centerCamera: true );
-            _spriteBatch?.SetProjectionMatrix( _hudCam.Camera.Combined );
-            _spriteBatch?.Begin();
 
             if ( _star != null )
             {
@@ -130,6 +121,25 @@ public class MainGame : Game
             {
                 _spriteBatch?.Draw( _star2, 320, 240 );
             }
+
+            if ( _sprite != null )
+            {
+                _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
+                _sprite?.Draw( _spriteBatch! );
+            }
+
+            _test?.Render( _spriteBatch! );
+            
+            _spriteBatch?.End();
+        }
+
+        if ( _hudCam is { IsInUse: true } )
+        {
+            _hudCam.Viewport?.Apply( centerCamera: true );
+            _spriteBatch?.SetProjectionMatrix( _hudCam.Camera.Combined );
+            _spriteBatch?.Begin();
+
+            _ = _font?.Draw( _spriteBatch!, "HELLO WORLD", 100, 100 );
 
             _spriteBatch?.End();
         }
@@ -232,10 +242,7 @@ public class MainGame : Game
     {
         _image1 = new Texture( Assets.BACKGROUND_IMAGE );
         _star   = new Texture( Assets.COMPLETE_STAR );
-
-        _star2 = ( _fontData?.ImagePaths != null )
-            ? new Texture( _fontData.ImagePaths[ 0 ] )
-            : new Texture( Assets.COMPLETE_STAR );
+        _star2  = new Texture( Assets.COMPLETE_STAR );
     }
 
     private void CreateStage()
@@ -243,7 +250,8 @@ public class MainGame : Game
         _stage    = new Stage( _hudCam?.Viewport, _spriteBatch );
         _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
 
-        _hudActor.IsVisible = true;
+        _hudActor.IsVisible   = true;
+        _hudActor.DebugActive = true;
         _hudActor.SetPosition( 0, 0 );
         _stage?.AddActor( _hudActor );
     }
@@ -257,7 +265,7 @@ public class MainGame : Game
         _sprite = new Sprite( new TextureRegion( spriteImage ) );
 
         _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
-        _sprite.SetBounds( 100, 100, spriteImage.Width, spriteImage.Height );
+        _sprite.SetBounds();
         _sprite.SetOriginCenter();
         _sprite.SetColor( Color.White );
         _sprite?.SetFlip( true, true );
@@ -267,7 +275,7 @@ public class MainGame : Game
     {
         _fontData = new BitmapFont.BitmapFontData( Engine.Api.Files.Internal( Assets.ARIAL_15_FONT ) );
 
-        _font = new BitmapFont( _fontData, _fontData.GetPageRegions(), false );
+        _font = new BitmapFont( _fontData, _fontData.GetPageRegions() );
         _font.SetColor( Color.White );
     }
 

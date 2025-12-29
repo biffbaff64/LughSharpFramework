@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using NUnit.Framework;
@@ -109,7 +110,7 @@ public unsafe class OpenGLTest : ILughTest
     {
     }
     
-    public void Render()
+    public void Render( SpriteBatch spriteBatch )
     {
         _gl.UseProgram( ( int )_shaderProgram );
         _gl.BindVertexArray( _vao );

@@ -1,0 +1,286 @@
+﻿
+objects.png
+size: 2048, 2048
+format: 4
+filter: Nearest, Nearest
+repeat: none
+bar
+  rotate: False
+  xy: 1694, 1966
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+bar9
+  rotate: False
+  xy: 636, 962
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+bar9patch
+  rotate: False
+  xy: 836, 1721
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+bar_black
+  rotate: False
+  xy: 1028, 1874
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+bar_green
+  rotate: False
+  xy: 670, 968
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+bar_green9
+  rotate: False
+  xy: 836, 1693
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+bar_grey
+  rotate: False
+  xy: 870, 1727
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+bar_orange
+  rotate: False
+  xy: 1062, 1880
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+bar_orange9
+  rotate: False
+  xy: 2, 484
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+bar_red
+  rotate: False
+  xy: 36, 518
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+bar_red9
+  rotate: False
+  xy: 68, 550
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+bar_yellow
+  rotate: False
+  xy: 102, 584
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+bar_yellow9
+  rotate: False
+  xy: 2010, 2022
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+complete_star
+  rotate: False
+  xy: 2, 546
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+completed_panel
+  rotate: False
+  xy: 2, 1602
+  size: 832, 264
+  orig: 832, 264
+  offset: 0, 0
+  index: -1
+dev_button_panel
+  rotate: False
+  xy: 2, 612
+  size: 334, 110
+  orig: 334, 110
+  offset: 0, 0
+  index: -1
+divider
+  rotate: False
+  xy: 1028, 1908
+  size: 211, 40
+  orig: 211, 40
+  offset: 0, 0
+  index: -1
+itembar_highlight
+  rotate: False
+  xy: 1926, 2000
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+life
+  rotate: False
+  xy: 636, 924
+  size: 24, 36
+  orig: 24, 36
+  offset: 0, 0
+  index: -1
+loadbar_background
+  rotate: False
+  xy: 1284, 1962
+  size: 408, 36
+  orig: 408, 36
+  offset: 0, 0
+  index: -1
+menu_arrows_green
+  rotate: False
+  xy: 1284, 2000
+  size: 640, 48
+  orig: 640, 48
+  offset: 0, 0
+  index: -1
+menu_glow_blue01
+  rotate: False
+  xy: 2, 1868
+  size: 1024, 80
+  orig: 1024, 80
+  offset: 0, 0
+  index: -1
+menu_glow_green01
+  rotate: False
+  xy: 2, 1950
+  size: 1280, 98
+  orig: 1280, 98
+  offset: 0, 0
+  index: -1
+message_panel1
+  rotate: False
+  xy: 2, 1400
+  size: 885, 200
+  orig: 885, 200
+  offset: 0, 0
+  index: -1
+message_panel2
+  rotate: False
+  xy: 2, 1198
+  size: 885, 200
+  orig: 885, 200
+  offset: 0, 0
+  index: -1
+message_panel3
+  rotate: False
+  xy: 2, 996
+  size: 885, 200
+  orig: 885, 200
+  offset: 0, 0
+  index: -1
+red7logo
+  rotate: False
+  xy: 404, 839
+  size: 230, 155
+  orig: 230, 155
+  offset: 0, 0
+  index: -1
+red7logo_large
+  rotate: False
+  xy: 2, 724
+  size: 400, 270
+  orig: 400, 270
+  offset: 0, 0
+  index: -1
+red7logo_small
+  rotate: False
+  xy: 836, 1755
+  size: 165, 111
+  orig: 165, 111
+  offset: 0, 0
+  index: -1
+single_coin42x42
+  rotate: False
+  xy: 338, 680
+  size: 42, 42
+  orig: 42, 42
+  offset: 0, 0
+  index: -1
+single_gem42x42
+  rotate: False
+  xy: 404, 795
+  size: 42, 42
+  orig: 42, 42
+  offset: 0, 0
+  index: -1
+smallbar9
+  rotate: False
+  xy: 1003, 1850
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+solid_black32x32
+  rotate: False
+  xy: 1241, 1916
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+solid_blue32x32
+  rotate: False
+  xy: 2, 512
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+solid_clear32x32
+  rotate: False
+  xy: 68, 578
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+solid_green32x32
+  rotate: False
+  xy: 1976, 2016
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+solid_lime32x32
+  rotate: False
+  xy: 338, 646
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+solid_red32x32
+  rotate: False
+  xy: 404, 761
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+solid_white32x32
+  rotate: False
+  xy: 448, 805
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+solid_yellow32x32
+  rotate: False
+  xy: 1728, 1966
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

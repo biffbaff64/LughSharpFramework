@@ -89,7 +89,7 @@ public partial class BitmapFont
 
     // ========================================================================
 
-    private readonly PathTypes             _fileType;
+    private readonly PathTypes             _pathType;
     private readonly List< TextureRegion > _regions;
 
     // ========================================================================
@@ -99,11 +99,11 @@ public partial class BitmapFont
     /// library. This is convenient to easily display text without having to
     /// generate a bitmap font yourself.
     /// </summary>
-    public BitmapFont() : this( Engine.Api.Files.Internal( DEFAULT_FONT ),
-                                Engine.Api.Files.Internal( DEFAULT_FONT_IMAGE ),
+    public BitmapFont() : this( Api.Files.Internal( DEFAULT_FONT ),
+                                Api.Files.Internal( DEFAULT_FONT_IMAGE ),
                                 false )
     {
-        _fileType = PathTypes.Internal;
+        _pathType = PathTypes.Internal;
     }
 
     /// <summary>
@@ -114,11 +114,11 @@ public partial class BitmapFont
     /// <param name="flip">
     /// If true, the glyphs will be flipped for use with a perspective where 0,0 is the upper left corner.
     /// </param>
-    public BitmapFont( bool flip ) : this( Engine.Api.Files.Internal( DEFAULT_FONT ),
-                                           Engine.Api.Files.Internal( DEFAULT_FONT ),
+    public BitmapFont( bool flip ) : this( Api.Files.Internal( DEFAULT_FONT ),
+                                           Api.Files.Internal( DEFAULT_FONT ),
                                            flip )
     {
-        _fileType = PathTypes.Internal;
+        _pathType = PathTypes.Internal;
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ public partial class BitmapFont
     public BitmapFont( FileInfo fontFile, TextureRegion region, bool flip = false )
         : this( new BitmapFontData( fontFile, flip ), region, true )
     {
-        _fileType = PathTypes.Local;
+        _pathType = PathTypes.Local;
     }
 
     /// <summary>
@@ -155,7 +155,7 @@ public partial class BitmapFont
     public BitmapFont( FileInfo fontFile, bool flip = false )
         : this( new BitmapFontData( fontFile, flip ), ( TextureRegion? )null, true )
     {
-        _fileType = PathTypes.Local;
+        _pathType = PathTypes.Local;
     }
 
     /// <summary>
@@ -175,7 +175,7 @@ public partial class BitmapFont
                 integer )
     {
         OwnsTexture = true;
-        _fileType   = PathTypes.Local;
+        _pathType   = PathTypes.Local;
     }
 
     /// <summary>
@@ -200,7 +200,7 @@ public partial class BitmapFont
     public BitmapFont( BitmapFontData data, TextureRegion? region, bool integer )
         : this( data, region != null ? ListExtensions.New( region ) : null, integer )
     {
-        _fileType = PathTypes.Local;
+        _pathType = PathTypes.Local;
     }
 
     /// <summary>
@@ -214,14 +214,14 @@ public partial class BitmapFont
     /// <param name="useIntegerPositions">
     /// If true, rendering positions will be at integer values to avoid filtering artifacts.
     /// </param>
-    public BitmapFont( BitmapFontData data, List< TextureRegion >? pageRegions, bool useIntegerPositions )
+    public BitmapFont( BitmapFontData data, List< TextureRegion >? pageRegions, bool useIntegerPositions = true )
     {
         Guard.Against.Null( data );
 
         UseIntegerPositions = useIntegerPositions;
         Flipped             = data.Flipped;
         Data                = data;
-        _fileType           = PathTypes.Local;
+        _pathType           = PathTypes.Local;
 
         if ( ( pageRegions == null ) || ( pageRegions.Count == 0 ) )
         {
@@ -240,7 +240,7 @@ public partial class BitmapFont
             {
                 var file = data.FontFile == null
                     ? Api.Files.Internal( data.ImagePaths[ i ] )
-                    : Api.Files.GetFileHandle( data.ImagePaths[ i ], _fileType );
+                    : Api.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
 
                 _regions.Add( new TextureRegion( new Texture( file, false ) ) );
             }
@@ -256,22 +256,6 @@ public partial class BitmapFont
         Cache = new BitmapFontCache( this, UseIntegerPositions );
 
         SafeLoad( data );
-    }
-
-    /// <summary>
-    /// Returns the <see cref="BitmapFontData.ScaleX"/> value.
-    /// </summary>
-    public float GetScaleX()
-    {
-        return Data.ScaleX;
-    }
-
-    /// <summary>
-    /// Returns the <see cref="BitmapFontData.ScaleY"/> value.
-    /// </summary>
-    public float GetScaleY()
-    {
-        return Data.ScaleY;
     }
 
     // ========================================================================
@@ -325,18 +309,12 @@ public partial class BitmapFont
     /// <summary>
     /// Returns the color of text drawn with this font.
     /// </summary>
-    public Color GetColor()
-    {
-        return Cache?.GetColor() ?? Color.White;
-    }
+    public Color GetColor() => Cache?.GetColor() ?? Color.White;
 
     /// <summary>
     /// A convenience method for setting the font color.
     /// </summary>
-    public void SetColor( Color color )
-    {
-        Cache?.GetColor().Set( color );
-    }
+    public void SetColor( Color color ) => Cache?.GetColor().Set( color );
 
     /// <summary>
     /// A convenience method for setting the font color.
@@ -347,6 +325,19 @@ public partial class BitmapFont
     }
 
     /// <summary>
+    /// Returns the alpha of text drawn with this font.
+    /// </summary>
+    public float GetAlpha() => Cache?.GetColor().A ?? 1f;
+    
+    /// <summary>
+    /// A covenience method for setting the font alpha.
+    /// </summary>
+    public void SetAlpha( float a )
+    {
+        Cache?.GetColor().A = a;
+    }
+    
+    /// <summary>
     /// Returns the first texture region. This is included for backwards compatibility,
     /// and for convenience since most fonts only use one texture page.
     /// <para>
@@ -354,10 +345,7 @@ public partial class BitmapFont
     /// </para>
     /// </summary>
     /// <returns>the first texture region</returns>
-    public TextureRegion GetRegion()
-    {
-        return _regions.First();
-    }
+    public TextureRegion GetRegion() => _regions.First();
 
     /// <summary>
     /// Returns the array of TextureRegions that represents each texture page of glyphs.
@@ -404,6 +392,16 @@ public partial class BitmapFont
     /// extends the lowest to the baseline. This number is negative.
     /// </summary>
     public float GetDescent() => Data.Descent;
+
+    /// <summary>
+    /// Returns the <see cref="BitmapFontData.ScaleX"/> value.
+    /// </summary>
+    public float GetScaleX() => Data.ScaleX;
+
+    /// <summary>
+    /// Returns the <see cref="BitmapFontData.ScaleY"/> value.
+    /// </summary>
+    public float GetScaleY() => Data.ScaleY;
 
     /// <summary>
     /// Makes the specified glyphs fixed width. This can be useful to make the numbers
