@@ -75,10 +75,9 @@ public partial class BitmapFont
         public float LineHeight { get; set; }
 
         /// <summary>
-        /// The distance from the top of most uppercase characters to the
-        /// baseline. Since the drawing position is the cap height of the
-        /// first line, the cap height can be used to get the location of
-        /// the baseline.
+        /// The distance from the top of most uppercase characters to the baseline.
+        /// Since the drawing position is the cap height of the first line, the cap
+        /// height can be used to get the location of the baseline.
         /// </summary>
         public float CapHeight { get; set; } = 1;
 
@@ -398,8 +397,8 @@ public partial class BitmapFont
                                 {
                                     if ( !int.TryParse( parts[ currentPartIndex ], out var parsedPage ) )
                                     {
-                                        Logger
-                                            .Error( $"IGNORED NumberFormatException: Invalid page ID: {parts[ currentPartIndex ]} on line: {line}" );
+                                        Logger.Error( $"IGNORED NumberFormatException: Invalid page ID: " +
+                                                      $"{parts[ currentPartIndex ]} on line: {line}" );
                                     }
 
                                     glyph.Page = parsedPage;
@@ -794,13 +793,10 @@ public partial class BitmapFont
         }
 
         /// <summary>
-        /// Returns the glyph for the specified character, or null if no such
-        /// glyph exists. Note that
+        /// Returns the glyph for the specified character, or null if no such glyph exists.
+        /// Note that <see cref="GetGlyphs"/> should be be used to shape a string of
+        /// characters into a list of glyphs.
         /// </summary>
-        /// See also
-        /// <see cref="GetGlyphs"/>
-        /// should be be used to shape a string
-        /// of characters into a list of glyphs.
         public virtual Glyph? GetGlyph( char ch )
         {
             return Glyphs[ ch / PAGE_SIZE ]?[ ch & ( PAGE_SIZE - 1 ) ];
@@ -821,7 +817,8 @@ public partial class BitmapFont
         /// The glyph immediately before this run, or null if this is run is the
         /// first on a line of text.
         /// </param>
-        public virtual void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end,
+        public virtual void GetGlyphs( GlyphLayout.GlyphRun? glyphRun,
+                                       string str, int start, int end,
                                        Glyph? lastGlyph )
         {
             Guard.Against.Null( glyphRun );

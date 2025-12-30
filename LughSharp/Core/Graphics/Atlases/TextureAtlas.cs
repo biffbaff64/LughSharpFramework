@@ -343,11 +343,6 @@ public class TextureAtlas : IDisposable
     {
         Guard.Against.Null( region );
 
-        Logger.Debug( $"region.PackedWidth   : {region.PackedWidth}" );
-        Logger.Debug( $"region.PackedHeight  : {region.PackedHeight}" );
-        Logger.Debug( $"region.OriginalWidth : {region.OriginalWidth}" );
-        Logger.Debug( $"region.OriginalHeight: {region.OriginalHeight}" );
-        
         if ( ( region.PackedWidth == region.OriginalWidth )
              && ( region.PackedHeight == region.OriginalHeight ) )
         {

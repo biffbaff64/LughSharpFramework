@@ -33,10 +33,10 @@ using LughSharp.Core.Input;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
-using LughUtils.source.Pooling;
+using LughSharp.Utils.source.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 using Platform = LughSharp.Core.Main.Platform;
-using Rectangle = LughUtils.source.Maths.Rectangle;
+using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D;
 

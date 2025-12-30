@@ -27,11 +27,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
-using LughUtils.source;
-using LughUtils.source.Collections;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Maths;
-using LughUtils.source.Pooling;
+using LughSharp.Utils.source;
+using LughSharp.Utils.source.Collections;
+using LughSharp.Utils.source.Exceptions;
+using LughSharp.Utils.source.Maths;
+using LughSharp.Utils.source.Pooling;
 
 namespace LughSharp.Core.Graphics.Text;
 
@@ -211,6 +211,7 @@ public class GlyphLayout : IResetable
                          float targetWidth, int halign, bool wrap, string? truncate )
     {
         _glyphRunPool.FreeAll( Runs );
+        
         Runs.Clear();
 
         var fontData = font.Data;

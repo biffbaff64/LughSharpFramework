@@ -27,7 +27,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
-using LughUtils.source.Pooling;
+using LughSharp.Utils.source.Pooling;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 

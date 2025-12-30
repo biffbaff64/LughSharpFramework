@@ -115,8 +115,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="LughUtils">
-        <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\LughSharp.Utils\LughSharp.Utils.csproj" />
     </ItemGroup>
 </Project>

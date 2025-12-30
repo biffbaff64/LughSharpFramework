@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
-using Quaternion = LughUtils.source.Maths.Quaternion;
+using Quaternion = LughSharp.Utils.source.Maths.Quaternion;
 
 namespace LughSharp.Core.Graphics.Cameras;
 

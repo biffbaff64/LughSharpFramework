@@ -66,7 +66,7 @@ public class HorizontalGroup : WidgetGroup
     public bool  Wrap      { get; set; }
     public float Fill      { get; set; }
     public bool  Expand    { get; set; }
-    public int   Alignment { get; set; } = LughUtils.source.Alignment.LEFT;
+    public int   Alignment { get; set; } = LughSharp.Utils.source.Alignment.LEFT;
     public float PadTop    { get; set; }
     public float PadLeft   { get; set; }
     public float PadBottom { get; set; }
@@ -294,22 +294,22 @@ public class HorizontalGroup : WidgetGroup
         var rowHeight = ( Expand ? Height : _prefHeight ) - PadTop - padBottom;
         var x         = PadLeft;
 
-        if ( ( align & LughUtils.source.Alignment.RIGHT ) != 0 )
+        if ( ( align & LughSharp.Utils.source.Alignment.RIGHT ) != 0 )
         {
             x += Width - _prefWidth;
         }
-        else if ( ( align & LughUtils.source.Alignment.LEFT ) == 0 ) // center
+        else if ( ( align & LughSharp.Utils.source.Alignment.LEFT ) == 0 ) // center
         {
             x += ( Width - _prefWidth ) / 2;
         }
 
         float startY;
 
-        if ( ( align & LughUtils.source.Alignment.BOTTOM ) != 0 )
+        if ( ( align & LughSharp.Utils.source.Alignment.BOTTOM ) != 0 )
         {
             startY = padBottom;
         }
-        else if ( ( align & LughUtils.source.Alignment.TOP ) != 0 )
+        else if ( ( align & LughSharp.Utils.source.Alignment.TOP ) != 0 )
         {
             startY = Height - PadTop - rowHeight;
         }
@@ -373,11 +373,11 @@ public class HorizontalGroup : WidgetGroup
 
             var y = startY;
 
-            if ( ( align & LughUtils.source.Alignment.TOP ) != 0 )
+            if ( ( align & LughSharp.Utils.source.Alignment.TOP ) != 0 )
             {
                 y += rowHeight - height;
             }
-            else if ( ( align & LughUtils.source.Alignment.BOTTOM ) == 0 ) // center
+            else if ( ( align & LughSharp.Utils.source.Alignment.BOTTOM ) == 0 ) // center
             {
                 y += ( rowHeight - height ) / 2;
             }
@@ -433,11 +433,11 @@ public class HorizontalGroup : WidgetGroup
             throw new GdxRuntimeException( "_rowSizes cannot be null!" );
         }
 
-        if ( ( align & LughUtils.source.Alignment.TOP ) != 0 )
+        if ( ( align & LughSharp.Utils.source.Alignment.TOP ) != 0 )
         {
             rowY += Height - prefHeight;
         }
-        else if ( ( align & LughUtils.source.Alignment.BOTTOM ) == 0 ) // center
+        else if ( ( align & LughSharp.Utils.source.Alignment.BOTTOM ) == 0 ) // center
         {
             rowY += ( Height - prefHeight ) / 2;
         }
@@ -448,11 +448,11 @@ public class HorizontalGroup : WidgetGroup
             rowDir =  1;
         }
 
-        if ( ( align & LughUtils.source.Alignment.RIGHT ) != 0 )
+        if ( ( align & LughSharp.Utils.source.Alignment.RIGHT ) != 0 )
         {
             xStart += groupWidth - _prefWidth;
         }
-        else if ( ( align & LughUtils.source.Alignment.LEFT ) == 0 ) // center
+        else if ( ( align & LughSharp.Utils.source.Alignment.LEFT ) == 0 ) // center
         {
             xStart += ( groupWidth - _prefWidth ) / 2;
         }
@@ -506,11 +506,11 @@ public class HorizontalGroup : WidgetGroup
                 r = Math.Min( r, rowSizes.Count - 2 ); // In case an actor changed size without invalidating this layout.
                 x = xStart;
 
-                if ( ( align & LughUtils.source.Alignment.RIGHT ) != 0 )
+                if ( ( align & LughSharp.Utils.source.Alignment.RIGHT ) != 0 )
                 {
                     x += maxWidth - rowSizes[ r ];
                 }
-                else if ( ( align & LughUtils.source.Alignment.LEFT ) == 0 ) // center
+                else if ( ( align & LughSharp.Utils.source.Alignment.LEFT ) == 0 ) // center
                 {
                     x += ( maxWidth - rowSizes[ r ] ) / 2;
                 }
@@ -545,11 +545,11 @@ public class HorizontalGroup : WidgetGroup
 
             var y = rowY;
 
-            if ( ( align & LughUtils.source.Alignment.TOP ) != 0 )
+            if ( ( align & LughSharp.Utils.source.Alignment.TOP ) != 0 )
             {
                 y += rowHeight - height;
             }
-            else if ( ( align & LughUtils.source.Alignment.BOTTOM ) == 0 ) // center
+            else if ( ( align & LughSharp.Utils.source.Alignment.BOTTOM ) == 0 ) // center
             {
                 y += ( rowHeight - height ) / 2;
             }
@@ -727,9 +727,9 @@ public class HorizontalGroup : WidgetGroup
     /// <summary>
     /// Sets the alignment of all widgets within the horizontal group.
     /// <para>
-    /// Set to <see cref="LughUtils.source.Alignment.CENTER"/>, <see cref="LughUtils.source.Alignment.LEFT"/>,
-    /// <see cref="LughUtils.source.Alignment.RIGHT"/>, <see cref="LughUtils.source.Alignment.TOP"/>,
-    /// <see cref="LughUtils.source.Alignment.BOTTOM"/>, or any combination of those.
+    /// Set to <see cref="LughSharp.Utils.source.Alignment.CENTER"/>, <see cref="LughSharp.Utils.source.Alignment.LEFT"/>,
+    /// <see cref="LughSharp.Utils.source.Alignment.RIGHT"/>, <see cref="LughSharp.Utils.source.Alignment.TOP"/>,
+    /// <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/>, or any combination of those.
     /// </para>
     /// </summary>
     public HorizontalGroup SetAlign( int align )
@@ -741,59 +741,59 @@ public class HorizontalGroup : WidgetGroup
 
     /// <summary>
     /// Sets the alignment of all widgets within the horizontal group to
-    /// <see cref="LughUtils.source.Alignment.CENTER"/>. This clears any other alignment.
+    /// <see cref="LughSharp.Utils.source.Alignment.CENTER"/>. This clears any other alignment.
     /// </summary>
     public HorizontalGroup AlignCenter()
     {
-        Alignment = LughUtils.source.Alignment.CENTER;
+        Alignment = LughSharp.Utils.source.Alignment.CENTER;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="LughUtils.source.Alignment.TOP"/> and clears <see cref="LughUtils.source.Alignment.BOTTOM"/> for
+    /// Sets <see cref="LughSharp.Utils.source.Alignment.TOP"/> and clears <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignTop()
     {
-        Alignment |= LughUtils.source.Alignment.TOP;
-        Alignment &= ~LughUtils.source.Alignment.BOTTOM;
+        Alignment |= LughSharp.Utils.source.Alignment.TOP;
+        Alignment &= ~LughSharp.Utils.source.Alignment.BOTTOM;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="LughUtils.source.Alignment.BOTTOM"/> and clears <see cref="LughUtils.source.Alignment.TOP"/> for
+    /// Sets <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/> and clears <see cref="LughSharp.Utils.source.Alignment.TOP"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignBottom()
     {
-        Alignment |= LughUtils.source.Alignment.BOTTOM;
-        Alignment &= ~LughUtils.source.Alignment.TOP;
+        Alignment |= LughSharp.Utils.source.Alignment.BOTTOM;
+        Alignment &= ~LughSharp.Utils.source.Alignment.TOP;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="LughUtils.source.Alignment.LEFT"/> and clears <see cref="LughUtils.source.Alignment.RIGHT"/> for
+    /// Sets <see cref="LughSharp.Utils.source.Alignment.LEFT"/> and clears <see cref="LughSharp.Utils.source.Alignment.RIGHT"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignLeft()
     {
-        Alignment |= LughUtils.source.Alignment.LEFT;
-        Alignment &= ~LughUtils.source.Alignment.RIGHT;
+        Alignment |= LughSharp.Utils.source.Alignment.LEFT;
+        Alignment &= ~LughSharp.Utils.source.Alignment.RIGHT;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="LughUtils.source.Alignment.RIGHT"/> and clears <see cref="LughUtils.source.Alignment.LEFT"/> for
+    /// Adds <see cref="LughSharp.Utils.source.Alignment.RIGHT"/> and clears <see cref="LughSharp.Utils.source.Alignment.LEFT"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignRight()
     {
-        Alignment |= LughUtils.source.Alignment.RIGHT;
-        Alignment &= ~LughUtils.source.Alignment.LEFT;
+        Alignment |= LughSharp.Utils.source.Alignment.RIGHT;
+        Alignment &= ~LughSharp.Utils.source.Alignment.LEFT;
 
         return this;
     }
@@ -803,9 +803,9 @@ public class HorizontalGroup : WidgetGroup
     /// is enabled and sets the vertical alignment of widgets within each row.
     /// </summary>
     /// <param name="rowAlign">
-    /// Set to <see cref="LughUtils.source.Alignment.CENTER"/>, <see cref="LughUtils.source.Alignment.LEFT"/>,
-    /// <see cref="LughUtils.source.Alignment.RIGHT"/>,
-    /// <see cref="LughUtils.source.Alignment.TOP"/>, <see cref="LughUtils.source.Alignment.BOTTOM"/> or any combination of those.
+    /// Set to <see cref="LughSharp.Utils.source.Alignment.CENTER"/>, <see cref="LughSharp.Utils.source.Alignment.LEFT"/>,
+    /// <see cref="LughSharp.Utils.source.Alignment.RIGHT"/>,
+    /// <see cref="LughSharp.Utils.source.Alignment.TOP"/>, <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/> or any combination of those.
     /// </param>
     /// <returns></returns>
     public HorizontalGroup RowAlign( int rowAlign )
@@ -816,60 +816,60 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the alignment of widgets within each row to <see cref="LughUtils.source.Alignment.CENTER"/>.
+    /// Sets the alignment of widgets within each row to <see cref="LughSharp.Utils.source.Alignment.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public HorizontalGroup RowCenter()
     {
-        _rowAlign = LughUtils.source.Alignment.CENTER;
+        _rowAlign = LughSharp.Utils.source.Alignment.CENTER;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="LughUtils.source.Alignment.TOP"/> and clears <see cref="LughUtils.source.Alignment.BOTTOM"/> for
+    /// Sets <see cref="LughSharp.Utils.source.Alignment.TOP"/> and clears <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/> for
     /// the alignment of widgets within each row.
     /// </summary>
     public HorizontalGroup RowTop()
     {
-        _rowAlign |= LughUtils.source.Alignment.TOP;
-        _rowAlign &= ~LughUtils.source.Alignment.BOTTOM;
+        _rowAlign |= LughSharp.Utils.source.Alignment.TOP;
+        _rowAlign &= ~LughSharp.Utils.source.Alignment.BOTTOM;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="LughUtils.source.Alignment.LEFT"/> and clears <see cref="LughUtils.source.Alignment.RIGHT"/> for
+    /// Adds <see cref="LughSharp.Utils.source.Alignment.LEFT"/> and clears <see cref="LughSharp.Utils.source.Alignment.RIGHT"/> for
     /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
     /// </summary>
     public HorizontalGroup RowLeft()
     {
-        _rowAlign |= LughUtils.source.Alignment.LEFT;
-        _rowAlign &= ~LughUtils.source.Alignment.RIGHT;
+        _rowAlign |= LughSharp.Utils.source.Alignment.LEFT;
+        _rowAlign &= ~LughSharp.Utils.source.Alignment.RIGHT;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="LughUtils.source.Alignment.BOTTOM"/> and clears <see cref="LughUtils.source.Alignment.TOP"/> for
+    /// Sets <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/> and clears <see cref="LughSharp.Utils.source.Alignment.TOP"/> for
     /// the alignment of widgets within each row.
     /// </summary>
     public HorizontalGroup RowBottom()
     {
-        _rowAlign |= LughUtils.source.Alignment.BOTTOM;
-        _rowAlign &= ~LughUtils.source.Alignment.TOP;
+        _rowAlign |= LughSharp.Utils.source.Alignment.BOTTOM;
+        _rowAlign &= ~LughSharp.Utils.source.Alignment.TOP;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="LughUtils.source.Alignment.RIGHT"/> and clears <see cref="LughUtils.source.Alignment.LEFT"/> for
+    /// Adds <see cref="LughSharp.Utils.source.Alignment.RIGHT"/> and clears <see cref="LughSharp.Utils.source.Alignment.LEFT"/> for
     /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
     /// </summary>
     public HorizontalGroup RowRight()
     {
-        _rowAlign |= LughUtils.source.Alignment.RIGHT;
-        _rowAlign &= ~LughUtils.source.Alignment.LEFT;
+        _rowAlign |= LughSharp.Utils.source.Alignment.RIGHT;
+        _rowAlign &= ~LughSharp.Utils.source.Alignment.LEFT;
 
         return this;
     }

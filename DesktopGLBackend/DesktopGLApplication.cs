@@ -26,10 +26,10 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
-using LughUtils.source;
-using LughUtils.source.Collections;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
+using LughSharp.Utils.source;
+using LughSharp.Utils.source.Collections;
+using LughSharp.Utils.source.Exceptions;
+using LughSharp.Utils.source.Logging;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace DesktopGLBackend;

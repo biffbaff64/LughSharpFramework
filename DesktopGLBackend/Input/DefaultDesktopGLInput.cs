@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Input;
 using LughSharp.Core.Utils;
-using LughUtils.source.Exceptions;
+using LughSharp.Utils.source.Exceptions;
 
 namespace DesktopGLBackend.Input;
 

@@ -20,179 +20,48 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <None Remove="Data\objects\bar.png" />
-        <Content Include="Data\objects\bar.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar9.png" />
-        <Content Include="Data\objects\bar9.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar9patch.png" />
-        <Content Include="Data\objects\bar9patch.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_black.png" />
-        <Content Include="Data\objects\bar_black.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_green.png" />
-        <Content Include="Data\objects\bar_green.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_green9.png" />
-        <Content Include="Data\objects\bar_green9.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_grey.png" />
-        <Content Include="Data\objects\bar_grey.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_orange.png" />
-        <Content Include="Data\objects\bar_orange.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_orange9.png" />
-        <Content Include="Data\objects\bar_orange9.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_red.png" />
-        <Content Include="Data\objects\bar_red.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_red9.png" />
-        <Content Include="Data\objects\bar_red9.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_yellow.png" />
-        <Content Include="Data\objects\bar_yellow.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\bar_yellow9.png" />
-        <Content Include="Data\objects\bar_yellow9.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\complete_star.png" />
-        <Content Include="Data\objects\complete_star.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\completed_panel.png" />
-        <Content Include="Data\objects\completed_panel.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\dev_button_panel.png" />
-        <Content Include="Data\objects\dev_button_panel.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\divider.png" />
-        <Content Include="Data\objects\divider.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\itembar_highlight.png" />
-        <Content Include="Data\objects\itembar_highlight.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\life.png" />
-        <Content Include="Data\objects\life.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\loadbar_background.png" />
-        <Content Include="Data\objects\loadbar_background.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\menu_arrows_green.png" />
-        <Content Include="Data\objects\menu_arrows_green.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\menu_glow_blue01.png" />
-        <Content Include="Data\objects\menu_glow_blue01.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\menu_glow_green01.png" />
-        <Content Include="Data\objects\menu_glow_green01.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\message_panel1.png" />
-        <Content Include="Data\objects\message_panel1.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\message_panel2.png" />
-        <Content Include="Data\objects\message_panel2.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\message_panel3.png" />
-        <Content Include="Data\objects\message_panel3.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\pack.atlas" />
-        <Content Include="Data\objects\pack.atlas">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\red7logo.png" />
-        <Content Include="Data\objects\red7logo.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\red7logo_large.png" />
-        <Content Include="Data\objects\red7logo_large.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\red7logo_small.png" />
-        <Content Include="Data\objects\red7logo_small.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\single_coin42x42.png" />
-        <Content Include="Data\objects\single_coin42x42.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\single_gem42x42.png" />
-        <Content Include="Data\objects\single_gem42x42.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\smallbar9.png" />
-        <Content Include="Data\objects\smallbar9.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\solid_black32x32.png" />
-        <Content Include="Data\objects\solid_black32x32.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\solid_blue32x32.png" />
-        <Content Include="Data\objects\solid_blue32x32.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\solid_clear32x32.png" />
-        <Content Include="Data\objects\solid_clear32x32.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\solid_green32x32.png" />
-        <Content Include="Data\objects\solid_green32x32.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\solid_lime32x32.png" />
-        <Content Include="Data\objects\solid_lime32x32.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\solid_red32x32.png" />
-        <Content Include="Data\objects\solid_red32x32.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\solid_white32x32.png" />
-        <Content Include="Data\objects\solid_white32x32.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\solid_yellow32x32.png" />
-        <Content Include="Data\objects\solid_yellow32x32.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
         <None Remove="Data\objects\objects.png" />
-        <Content Include="Data\objects\objects.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
+        <None Remove="Data\Input\input.png" />
+        <None Remove="Data\Input\pack.atlas" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="LughUtils">
-        <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>

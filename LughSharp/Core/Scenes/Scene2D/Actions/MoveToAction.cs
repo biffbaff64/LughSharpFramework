@@ -33,7 +33,7 @@ public class MoveToAction : TemporalAction
     public float StartY    { get; set; }
     public float EndX      { get; set; }
     public float EndY      { get; set; }
-    public int   Alignment { get; set; } = LughUtils.source.Alignment.BOTTOM_LEFT;
+    public int   Alignment { get; set; } = LughSharp.Utils.source.Alignment.BOTTOM_LEFT;
 
     protected override void Begin()
     {
@@ -72,7 +72,7 @@ public class MoveToAction : TemporalAction
     public override void Reset()
     {
         base.Reset();
-        Alignment = LughUtils.source.Alignment.BOTTOM_LEFT;
+        Alignment = LughSharp.Utils.source.Alignment.BOTTOM_LEFT;
     }
 
     public void SetStartPosition( float x, float y )

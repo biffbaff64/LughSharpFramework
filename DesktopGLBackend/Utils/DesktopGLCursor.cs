@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics;
-using LughUtils.source.Exceptions;
+using LughSharp.Utils.source.Exceptions;
 
 namespace DesktopGLBackend.Utils;
 

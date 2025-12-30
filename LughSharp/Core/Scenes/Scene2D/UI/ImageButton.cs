@@ -192,7 +192,7 @@ public class ImageButton : Button
 
     /// <summary>
     /// Draws the group and its children. The default implementation calls
-    /// <see cref="Group.ApplyTransform(LughSharp.Core.Graphics.G2D.IBatch,LughUtils.source.Maths.Matrix4)"/> if needed, then
+    /// <see cref="Group.ApplyTransform(LughSharp.Core.Graphics.G2D.IBatch,LughSharp.Utils.source.Maths.Matrix4)"/> if needed, then
     /// <see cref="Button.DrawChildren(IBatch, float)"/>, followed by
     /// <see cref="Button.ResetTransform(IBatch)"/> if needed.
     /// </summary>

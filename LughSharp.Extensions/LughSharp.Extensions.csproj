@@ -21,12 +21,6 @@
         <ProjectReference Include="..\LughSharp\LughSharp.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="LughUtils">
-        <HintPath>..\..\LughUtils\bin\Debug\net8.0\LughUtils.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU'">
         <OutputPath>$(SolutionDir)bin\$(Configuration)\$(TargetFramework)\</OutputPath>
     </PropertyGroup>

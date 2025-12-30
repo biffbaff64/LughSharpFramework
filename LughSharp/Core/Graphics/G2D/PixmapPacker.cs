@@ -25,7 +25,7 @@
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
-using Rectangle = LughUtils.source.Maths.Rectangle;
+using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
 
 namespace LughSharp.Core.Graphics.G2D;
 

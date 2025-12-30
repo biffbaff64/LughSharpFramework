@@ -271,7 +271,7 @@ public class Dialog : Window
 
     /// <summary>
     /// Centers the dialog in the stage and calls <see cref="Show(Stage, Action)"/>
-    /// with a <see cref="Actions.FadeIn(float,LughUtils.source.Maths.IInterpolation)"/> action.
+    /// with a <see cref="Actions.FadeIn(float,LughSharp.Utils.source.Maths.IInterpolation)"/> action.
     /// </summary>
     public Dialog Show( Stage stage )
     {

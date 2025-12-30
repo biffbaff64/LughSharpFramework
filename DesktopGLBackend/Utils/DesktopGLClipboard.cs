@@ -24,7 +24,7 @@
 
 using DesktopGLBackend.Graphics;
 using LughSharp.Core.Main;
-using LughUtils.source;
+using LughSharp.Utils.source;
 
 namespace DesktopGLBackend.Utils;
 

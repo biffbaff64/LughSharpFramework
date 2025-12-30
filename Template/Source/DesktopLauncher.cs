@@ -62,8 +62,8 @@ public static class DesktopLauncher
             Debug            = DRAW_DEBUG_LINES,      // 
             IsAlias          = KEEP_DUPLICATE_IMAGES, // 
             Silent           = false,                 // 
-            PaddingX         = 2,                     // Increase padding
-            PaddingY         = 2,                     // Increase padding
+            PaddingX         = 0,                     // Increase padding
+            PaddingY         = 0,                     // Increase padding
             EdgePadding      = true,                  // Disable edge padding initially
             DuplicatePadding = false,                 // Disable duplicate padding
             MinWidth         = 16,                    // 

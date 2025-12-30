@@ -45,8 +45,6 @@ public class BitmapFontCache
     /// </summary>
     public float Y { get; private set; }
 
-    public BitmapFont Font { get; }
-
     /// <summary>
     /// Specifies whether to use integer positions or not.
     /// Default is to use them so filtering doesn't kick in as badly.
@@ -59,6 +57,11 @@ public class BitmapFontCache
     /// allowing text to be efficiently rendered or manipulated.
     /// </summary>
     public List< GlyphLayout > Layouts { get; set; } = [ ];
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public BitmapFont Font { get; }
 
     // ========================================================================
 
@@ -96,8 +99,7 @@ public class BitmapFontCache
     /// 
     /// </summary>
     /// <param name="font"></param>
-    public BitmapFontCache( BitmapFont font )
-        : this( font, font.UseIntegerPositions )
+    public BitmapFontCache( BitmapFont font ) : this( font, font.UseIntegerPositions )
     {
     }
 
@@ -392,6 +394,8 @@ public class BitmapFontCache
     /// <param name="spriteBatch">The sprite batch used to draw the cached text.</param>
     public virtual void Draw( IBatch spriteBatch )
     {
+        Logger.Checkpoint();
+
         var regions = Font.GetRegions();
 
         for ( int j = 0, n = _pageVertices.Length; j < n; j++ )
@@ -401,6 +405,7 @@ public class BitmapFontCache
                 // ignore if this texture has no glyphs
                 if ( _pageVertices[ j ] != null )
                 {
+                    Logger.Checkpoint();
                     spriteBatch.Draw( regions[ j ].Texture!, _pageVertices[ j ]!, 0, _idx[ j ] );
                 }
             }
@@ -585,7 +590,7 @@ public class BitmapFontCache
         else if ( _pageVertices[ page ]?.Length < vertexCount )
         {
             var newVertices = new float[ vertexCount ];
-            
+
             Array.Copy( _pageVertices[ page ]!, 0, newVertices, 0, _idx[ page ] );
 
             _pageVertices[ page ] = newVertices;

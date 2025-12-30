@@ -46,7 +46,7 @@ public class Cell : IResetable
     public Value? PadLeft     { get; set; }
     public Value? PadBottom   { get; set; }
     public Value? PadRight    { get; set; }
-    public int    Alignment   { get; set; } = LughUtils.source.Alignment.NONE;
+    public int    Alignment   { get; set; } = LughSharp.Utils.source.Alignment.NONE;
     public int    ExpandX     { get; set; }
     public int    ExpandY     { get; set; }
     public int    Colspan     { get; set; }
@@ -82,10 +82,10 @@ public class Cell : IResetable
     private const int   ZEROI   = 0;
     private const int   ONEI    = 1;
     private const int   CENTERI = ONEI;
-    private const int   TOPI    = LughUtils.source.Alignment.TOP;
-    private const int   BOTTOMI = LughUtils.source.Alignment.BOTTOM;
-    private const int   LEFTI   = LughUtils.source.Alignment.LEFT;
-    private const int   RIGHTI  = LughUtils.source.Alignment.RIGHT;
+    private const int   TOPI    = LughSharp.Utils.source.Alignment.TOP;
+    private const int   BOTTOMI = LughSharp.Utils.source.Alignment.BOTTOM;
+    private const int   LEFTI   = LughSharp.Utils.source.Alignment.LEFT;
+    private const int   RIGHTI  = LughSharp.Utils.source.Alignment.RIGHT;
 
     // ========================================================================
 
@@ -977,10 +977,10 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the cell. Set to <see cref="LughUtils.source.Alignment.CENTER"/>,
-    /// <see cref="LughUtils.source.Alignment.TOP"/>, <see cref="LughUtils.source.Alignment.BOTTOM"/>,
-    /// <see cref="LughUtils.source.Alignment.LEFT"/>,
-    /// <see cref="LughUtils.source.Alignment.RIGHT"/>, or any combination of those.
+    /// Sets the alignment of the actor within the cell. Set to <see cref="LughSharp.Utils.source.Alignment.CENTER"/>,
+    /// <see cref="LughSharp.Utils.source.Alignment.TOP"/>, <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/>,
+    /// <see cref="LughSharp.Utils.source.Alignment.LEFT"/>,
+    /// <see cref="LughSharp.Utils.source.Alignment.RIGHT"/>, or any combination of those.
     /// </summary>
     public Cell SetAlignment( int align )
     {
@@ -990,7 +990,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the cell to <see cref="LughUtils.source.Alignment.CENTER"/>.
+    /// Sets the alignment of the actor within the cell to <see cref="LughSharp.Utils.source.Alignment.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public Cell Center()
@@ -1001,72 +1001,72 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Adds <see cref="LughUtils.source.Alignment.TOP"/> and clears <see cref="LughUtils.source.Alignment.BOTTOM"/> for
+    /// Adds <see cref="LughSharp.Utils.source.Alignment.TOP"/> and clears <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Top()
     {
-        if ( Alignment == LughUtils.source.Alignment.NONE )
+        if ( Alignment == LughSharp.Utils.source.Alignment.NONE )
         {
             Alignment = TOPI;
         }
         else
         {
-            Alignment = ( Alignment | LughUtils.source.Alignment.TOP ) & ~LughUtils.source.Alignment.BOTTOM;
+            Alignment = ( Alignment | LughSharp.Utils.source.Alignment.TOP ) & ~LughSharp.Utils.source.Alignment.BOTTOM;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="LughUtils.source.Alignment.LEFT"/> and clears <see cref="LughUtils.source.Alignment.RIGHT"/> for
+    /// Adds <see cref="LughSharp.Utils.source.Alignment.LEFT"/> and clears <see cref="LughSharp.Utils.source.Alignment.RIGHT"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Left()
     {
-        if ( Alignment == LughUtils.source.Alignment.NONE )
+        if ( Alignment == LughSharp.Utils.source.Alignment.NONE )
         {
             Alignment = LEFTI;
         }
         else
         {
-            Alignment = ( Alignment | LughUtils.source.Alignment.LEFT ) & ~LughUtils.source.Alignment.RIGHT;
+            Alignment = ( Alignment | LughSharp.Utils.source.Alignment.LEFT ) & ~LughSharp.Utils.source.Alignment.RIGHT;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="LughUtils.source.Alignment.BOTTOM"/> and clears <see cref="LughUtils.source.Alignment.TOP"/> for
+    /// Adds <see cref="LughSharp.Utils.source.Alignment.BOTTOM"/> and clears <see cref="LughSharp.Utils.source.Alignment.TOP"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Bottom()
     {
-        if ( Alignment == LughUtils.source.Alignment.NONE )
+        if ( Alignment == LughSharp.Utils.source.Alignment.NONE )
         {
             Alignment = BOTTOMI;
         }
         else
         {
-            Alignment = ( Alignment | LughUtils.source.Alignment.BOTTOM ) & ~LughUtils.source.Alignment.TOP;
+            Alignment = ( Alignment | LughSharp.Utils.source.Alignment.BOTTOM ) & ~LughSharp.Utils.source.Alignment.TOP;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="LughUtils.source.Alignment.RIGHT"/> and clears <see cref="LughUtils.source.Alignment.LEFT"/> for
+    /// Adds <see cref="LughSharp.Utils.source.Alignment.RIGHT"/> and clears <see cref="LughSharp.Utils.source.Alignment.LEFT"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Right()
     {
-        if ( Alignment == LughUtils.source.Alignment.NONE )
+        if ( Alignment == LughSharp.Utils.source.Alignment.NONE )
         {
             Alignment = RIGHTI;
         }
         else
         {
-            Alignment = ( Alignment | LughUtils.source.Alignment.RIGHT ) & ~LughUtils.source.Alignment.LEFT;
+            Alignment = ( Alignment | LughSharp.Utils.source.Alignment.RIGHT ) & ~LughSharp.Utils.source.Alignment.LEFT;
         }
 
         return this;
@@ -1340,7 +1340,7 @@ public class Cell : IResetable
         PadRight    = null;
         FillX       = 0f;
         FillY       = 0f;
-        Alignment   = LughUtils.source.Alignment.NONE;
+        Alignment   = LughSharp.Utils.source.Alignment.NONE;
         ExpandX     = 0;
         ExpandY     = 0;
         Colspan     = 0;

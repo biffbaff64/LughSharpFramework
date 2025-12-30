@@ -26,9 +26,7 @@ using System.Runtime.Versioning;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Main;
 using NUnit.Framework;
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Tests.Source;
 
@@ -37,7 +35,7 @@ namespace LughSharp.Tests.Source;
 [SupportedOSPlatform( "windows" )]
 public class TextureAtlasTest : ILughTest
 {
-    private Sprite? _star;
+    private Sprite? _sprite;
     
     [SetUp]
     public void Setup()
@@ -47,24 +45,22 @@ public class TextureAtlasTest : ILughTest
     [Test]
     public void Run()
     {
-        var atlasData = new TextureAtlasData( Api.Files.Internal( @"Data\objects\pack.atlas" ),
+        var atlasData = new TextureAtlasData( Api.Files.Internal( @"Assets\PackedImages\Output\input.atlas" ),
                                               new DirectoryInfo( IOUtils.InternalPath +
-                                                                 @"\Data\objects" ) );
+                                                                 @"\Assets\PackedImages\Output" ) );
         
         var atlas = new TextureAtlas( atlasData );
 
-        _star = atlas.CreateSprite( "complete_star" );
-        _star?.SetPosition( 300, 300 );
-        _star?.SetBounds();
-        _star?.SetOriginCenter();
-        _star?.SetColor( Color.White );
-        _star?.SetFlip( false, false );
+        _sprite = atlas.CreateSprite( "button_b" );
+        _sprite?.SetPosition( 300, 300 );
+        _sprite?.SetBounds();
+        _sprite?.SetOriginCenter();
+        _sprite?.SetFlip( false, false );
     }
 
     public void Render( SpriteBatch spriteBatch )
     {
-        _star?.SetPosition( 200, 200 );
-        _star?.Draw( spriteBatch );
+        _sprite?.Draw( spriteBatch );
     }
     
     [TearDown]

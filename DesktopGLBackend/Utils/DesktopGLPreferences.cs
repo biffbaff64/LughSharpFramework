@@ -25,8 +25,8 @@
 using System.Globalization;
 using System.Xml.Linq;
 
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
+using LughSharp.Utils.source.Exceptions;
+using LughSharp.Utils.source.Logging;
 
 namespace DesktopGLBackend.Utils;
 

@@ -29,8 +29,8 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
-using LughUtils.source.Exceptions;
-using LughUtils.source.Logging;
+using LughSharp.Utils.source.Exceptions;
+using LughSharp.Utils.source.Logging;
 
 namespace DesktopGLBackend.Graphics;
 

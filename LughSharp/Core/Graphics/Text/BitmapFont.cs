@@ -332,11 +332,8 @@ public partial class BitmapFont
     /// <summary>
     /// A covenience method for setting the font alpha.
     /// </summary>
-    public void SetAlpha( float a )
-    {
-        Cache?.GetColor().A = a;
-    }
-    
+    public void SetAlpha( float a ) => Cache?.GetColor().A = a;
+
     /// <summary>
     /// Returns the first texture region. This is included for backwards compatibility,
     /// and for convenience since most fonts only use one texture page.

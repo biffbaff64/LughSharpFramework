@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Versioning;
 using Extensions.Source.Drawing.Freetype;
 using JetBrains.Annotations;
@@ -13,8 +12,8 @@ using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
 using LughSharp.Tests.Source;
-using LughUtils.source.Maths;
-using LughUtils.source.Logging;
+using LughSharp.Utils.source.Maths;
+using LughSharp.Utils.source.Logging;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Template.Source;
@@ -64,10 +63,6 @@ public class MainGame : Game
         CreateAssets();
         CreateSprite();
 //        CreateFreeTypeFont();
-
-        _test = new TextureAtlasTest();
-        _test.Setup();
-        _test.Run();
 
         Logger.Debug( "Done" );
     }
@@ -129,20 +124,20 @@ public class MainGame : Game
             }
 
             _test?.Render( _spriteBatch! );
+
+            _ = _font?.Draw( _spriteBatch!, "HELLO WORLD", 100, 100 );
             
             _spriteBatch?.End();
         }
 
-        if ( _hudCam is { IsInUse: true } )
-        {
-            _hudCam.Viewport?.Apply( centerCamera: true );
-            _spriteBatch?.SetProjectionMatrix( _hudCam.Camera.Combined );
-            _spriteBatch?.Begin();
-
-            _ = _font?.Draw( _spriteBatch!, "HELLO WORLD", 100, 100 );
-
-            _spriteBatch?.End();
-        }
+//        if ( _hudCam is { IsInUse: true } )
+//        {
+//            _hudCam.Viewport?.Apply( centerCamera: true );
+//            _spriteBatch?.SetProjectionMatrix( _hudCam.Camera.Combined );
+//            _spriteBatch?.Begin();
+//
+//            _spriteBatch?.End();
+//        }
 
         // ----- Draw the Stage, if enabled -----
         if ( _stage != null && IsDrawingStage )
@@ -273,15 +268,16 @@ public class MainGame : Game
 
     private void CreateFont()
     {
-        _fontData = new BitmapFont.BitmapFontData( Engine.Api.Files.Internal( Assets.ARIAL_15_FONT ) );
+        _fontData = new BitmapFont.BitmapFontData( Engine.Api.Files.Internal( Assets.AMBLE_REGULAR_26_FONT ) );
 
         _font = new BitmapFont( _fontData, _fontData.GetPageRegions() );
         _font.SetColor( Color.White );
+        _font.SetAlpha( 1 );    // force it
     }
 
     private void CreateFreeTypeFont()
     {
-        var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.ARIAL_15_FONT ) );
+        var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AMBLE_REGULAR_26_FONT ) );
         var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
         {
             Size = 40,
