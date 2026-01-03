@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Logging;
+
 namespace LughSharp.Core.Main;
 
 /// <summary>

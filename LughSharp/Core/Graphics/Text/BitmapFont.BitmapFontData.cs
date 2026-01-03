@@ -24,6 +24,8 @@
 
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.Text;
 

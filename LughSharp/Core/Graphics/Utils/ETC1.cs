@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Graphics.Utils;

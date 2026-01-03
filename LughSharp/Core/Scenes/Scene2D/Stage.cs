@@ -30,13 +30,16 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Input;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
-using LughSharp.Utils.source.Pooling;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
+using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 using Platform = LughSharp.Core.Main.Platform;
-using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
+using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D;
 

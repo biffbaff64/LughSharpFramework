@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Utils.source.Pooling;
+using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Graphics.G2D;
 
@@ -31,35 +31,47 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
 {
     private static ParticleEffect? _effect;
 
+    // ========================================================================
+
+    /// <summary>
+    /// A pool for managing instances of <see cref="ParticleEffectPool.PooledEffect"/>,
+    /// which are extensions of the <see cref="ParticleEffect"/> class. Facilitates
+    /// recycling and efficient reuse of particle effects, reducing the need for frequent
+    /// allocations and deallocations.
+    /// </summary>
     public ParticleEffectPool( ParticleEffect effect, int initialCapacity, int max )
-        : base( NewObject, initialCapacity, max )
+        : base( initialCapacity, max )
     {
         _effect = effect;
     }
 
-    //TODO: Tests needed for this method, check it's called properly
-    public static PooledEffect NewObject()
+    /// <summary>
+    /// Creates a new particle effect.
+    /// </summary>
+    /// <returns></returns>
+    public PooledEffect NewObject()
     {
-//        var pooledEffect = new PooledEffect( _effect, this );
-//        pooledEffect.Start();
+        var pooledEffect = new PooledEffect( _effect, this );
+        pooledEffect.Start();
 
-//        return pooledEffect;
-
-        return null!;
+        return pooledEffect;
     }
 
+    /// <summary>
+    /// Resets the specified particle effect to its initial state.
+    /// </summary>
     public override void Free( PooledEffect effect1 )
     {
         base.Free( effect1 );
 
         effect1.Reset( false ); // copy parameters exactly to avoid introducing error
 
-        if ( !effect1.XSizeScale.Equals( _effect?.XSizeScale )
+        if ( !effect1.XSizeScale.Equals( _effect!.XSizeScale )
              || !effect1.YSizeScale.Equals( _effect.YSizeScale )
              || !effect1.MotionScale.Equals( _effect.MotionScale ) )
         {
             var emitters         = effect1.GetEmitters();
-            var templateEmitters = _effect?.GetEmitters();
+            var templateEmitters = _effect.GetEmitters();
 
             for ( var i = 0; i < emitters.Count; i++ )
             {
@@ -79,6 +91,12 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
         }
     }
 
+    // ========================================================================
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [PublicAPI]
     public class PooledEffect : ParticleEffect
     {
         private readonly ParticleEffectPool _effectPool;

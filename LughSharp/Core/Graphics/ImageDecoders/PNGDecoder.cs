@@ -23,6 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.ImageDecoders;
 

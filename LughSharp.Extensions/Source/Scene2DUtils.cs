@@ -30,6 +30,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Utils;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source;

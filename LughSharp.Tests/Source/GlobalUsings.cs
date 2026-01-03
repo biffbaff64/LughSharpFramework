@@ -36,11 +36,8 @@ global using JetBrains.Annotations;
 global using static LughSharp.Core.Main.Engine;
 
 // ============================================================================
-global using Vector3 = LughSharp.Utils.source.Maths.Vector3;
+global using Vector3 = LughSharp.Core.Maths.Vector3;
 
 // ============================================================================
-global using LughSharp.Utils.source.Exceptions;
-global using LughSharp.Utils.source.Logging;
-global using LughSharp.Utils.source.Maths;
 
 // ============================================================================

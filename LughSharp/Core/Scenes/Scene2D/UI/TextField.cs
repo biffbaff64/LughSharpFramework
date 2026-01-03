@@ -25,10 +25,12 @@
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
-using LughSharp.Utils.source.Pooling;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 using Platform = LughSharp.Core.Main.Platform;
 

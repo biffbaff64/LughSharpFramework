@@ -29,6 +29,8 @@ using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maps.Tiled.Loaders;
 

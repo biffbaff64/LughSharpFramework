@@ -26,6 +26,9 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Drawing.Freetype;

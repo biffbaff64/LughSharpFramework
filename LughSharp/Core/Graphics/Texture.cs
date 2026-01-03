@@ -30,6 +30,10 @@ using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using GLenum = int;
 
 namespace LughSharp.Core.Graphics;

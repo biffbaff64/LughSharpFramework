@@ -24,6 +24,9 @@
 
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.FrameBuffers;
 

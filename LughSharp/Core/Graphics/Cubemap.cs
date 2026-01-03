@@ -27,6 +27,10 @@ using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics;
 
@@ -433,7 +437,7 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        /// Sets the supplied <see cref="Vector3"/> to the contents of
+        /// Sets the supplied <see cref="Maths.Vector3"/> to the contents of
         /// <see cref="Up"/> and returns it to the caller.
         /// </summary>
         public Vector3 GetUp( Vector3 vec3 )
@@ -442,7 +446,7 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        /// Sets the supplied <see cref="Vector3"/> to the contents of
+        /// Sets the supplied <see cref="Maths.Vector3"/> to the contents of
         /// <see cref="Direction"/> and returns it to the caller.
         /// </summary>
         public Vector3 GetDirection( Vector3 vec3 )

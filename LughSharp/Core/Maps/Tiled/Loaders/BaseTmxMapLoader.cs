@@ -32,6 +32,8 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Maps.Objects;
 using LughSharp.Core.Maps.Tiled.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Exceptions;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Maps.Tiled.Loaders;

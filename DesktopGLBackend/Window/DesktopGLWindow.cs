@@ -27,8 +27,7 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
-using LughSharp.Utils.source;
-
+using LughSharp.Core.Utils;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace DesktopGLBackend.Window;

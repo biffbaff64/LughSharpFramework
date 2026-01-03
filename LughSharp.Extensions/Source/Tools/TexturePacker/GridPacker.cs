@@ -28,14 +28,14 @@ namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacker
+public class GridPacker( TexturePackerSettings settings ) : IPacker
 {
     /// <summary>
     /// Performs a grid packing of the input rects without a progress listener.
     /// </summary>
     /// <param name="inputRects">The list of rectangles to pack.</param>
     /// <returns>A list of packed pages.</returns>
-    public List< TexturePacker.Page > Pack( List< TexturePacker.Rect > inputRects )
+    public List< TexturePackerPage > Pack( List< TexturePackerRect > inputRects )
     {
         // Pass null safely to the main Pack method.
         return Pack( null, inputRects );
@@ -47,8 +47,8 @@ public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacke
     /// <param name="progress">The progress listener to report packing status. Can be null.</param>
     /// <param name="inputRects">The list of rectangles to pack.</param>
     /// <returns>A list of packed pages.</returns>
-    public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress,
-                                            List< TexturePacker.Rect > inputRects )
+    public List< TexturePackerPage > Pack( TexturePackerProgressListener? progress,
+                                           List< TexturePackerRect > inputRects )
     {
         // Check for null only if the progress listener is actually used.
         // We'll trust the user to handle the null checks inside the loop or caller if needed.
@@ -97,8 +97,8 @@ public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacke
         cellWidth  += paddingX;
         cellHeight += paddingY;
 
-        List< TexturePacker.Page > pages          = [ ];
-        List< TexturePacker.Rect > remainingRects = new( inputRects );
+        List< TexturePackerPage > pages          = [ ];
+        List< TexturePackerRect > remainingRects = new( inputRects );
 
         while ( remainingRects.Count > 0 )
         {
@@ -137,18 +137,18 @@ public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacke
     /// <param name="maxWidth">The maximum allowed width for the page (adjusted for padding).</param>
     /// <param name="maxHeight">The maximum allowed height for the page (adjusted for padding).</param>
     /// <returns>A tuple containing the packed page object and the list of rectangles that were successfully packed.</returns>
-    private (TexturePacker.Page page, List< TexturePacker.Rect > packedRects) PackPage(
-        List< TexturePacker.Rect > inputRects,
+    private (TexturePackerPage page, List< TexturePackerRect > packedRects) PackPage(
+        List< TexturePackerRect > inputRects,
         int cellWidth,
         int cellHeight,
         int maxWidth,
         int maxHeight )
     {
-        TexturePacker.Page page = new()
+        TexturePackerPage page = new()
         {
             OutputRects = [ ],
         };
-        List< TexturePacker.Rect > packedRects = [ ];
+        List< TexturePackerRect > packedRects = [ ];
 
         var n = inputRects.Count;
         var x = 0;
@@ -178,7 +178,7 @@ public class GridPacker( TexturePackerSettings settings ) : TexturePacker.IPacke
             // Assign position and size (with padding).
             rect.X = x;
             rect.Y = y;
-            
+
             // NOTE: The rect's own Width/Height properties are being changed to include padding.
             rect.Width  += settings.PaddingX;
             rect.Height += settings.PaddingY;

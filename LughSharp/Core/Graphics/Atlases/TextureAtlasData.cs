@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Graphics.Atlases;

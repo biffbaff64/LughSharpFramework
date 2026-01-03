@@ -23,6 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 
+using LughSharp.Core.Utils.Exceptions;
+
 namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
 public partial class GLBindings

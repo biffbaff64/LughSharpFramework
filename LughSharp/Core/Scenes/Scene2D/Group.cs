@@ -24,8 +24,9 @@
 
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
-using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
+using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D;
 

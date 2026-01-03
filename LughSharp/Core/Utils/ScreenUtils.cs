@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Maths;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Utils;

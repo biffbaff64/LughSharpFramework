@@ -26,6 +26,7 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Utils;
 

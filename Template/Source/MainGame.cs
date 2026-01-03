@@ -8,12 +8,12 @@ using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
-using LughSharp.Utils.source.Maths;
-using LughSharp.Utils.source.Logging;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Template.Source;
@@ -59,7 +59,7 @@ public class MainGame : Game
         CreateCameras();
 
         CreateStage();
-        CreateFont();
+        CreateFont();       // Not working yet
         CreateAssets();
         CreateSprite();
 //        CreateFreeTypeFont();
@@ -270,9 +270,9 @@ public class MainGame : Game
     {
         _fontData = new BitmapFont.BitmapFontData( Engine.Api.Files.Internal( Assets.AMBLE_REGULAR_26_FONT ) );
 
-        _font = new BitmapFont( _fontData, _fontData.GetPageRegions() );
+        _font = new BitmapFont();
         _font.SetColor( Color.White );
-        _font.SetAlpha( 1 );    // force it
+        _font.UseIntegerPositions = true;
     }
 
     private void CreateFreeTypeFont()

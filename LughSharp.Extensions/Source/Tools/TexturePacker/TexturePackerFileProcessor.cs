@@ -25,6 +25,8 @@
 using System.Runtime.Versioning;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -32,7 +34,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 [SupportedOSPlatform( "windows" )]
 public class TexturePackerFileProcessor : FileProcessor
 {
-    public TexturePacker.TexturePackerProgressListener? ProgressListener { get; set; }
+    public TexturePackerProgressListener? ProgressListener { get; set; }
     public List< DirectoryInfo? >                       DirsToIgnore     { get; set; }
     public string                                       PackFileName     { get; set; }
     public bool                                         CountOnly        { get; set; } = false;
@@ -68,7 +70,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="progress"> The ProgressListener to use. Can be null. </param>
     public TexturePackerFileProcessor( TexturePackerSettings? packerSettings,
                                        string packFileName,
-                                       TexturePacker.TexturePackerProgressListener? progress = null )
+                                       TexturePackerProgressListener? progress = null )
     {
         _defaultSettings = packerSettings ?? new TexturePackerSettings();
         ProgressListener = progress;
@@ -416,7 +418,7 @@ public class TexturePackerFileProcessor : FileProcessor
         .ToList();
         //@formatter:on
 
-        ProgressListener ??= new TexturePacker.TexturePackerProgressListener();
+        ProgressListener ??= new TexturePackerProgressListener();
 
         if ( settingsFiles.Count == 0 )
         {

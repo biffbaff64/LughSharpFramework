@@ -24,6 +24,7 @@
 
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
+using LughSharp.Core.Utils.Exceptions;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.ImagePacker;

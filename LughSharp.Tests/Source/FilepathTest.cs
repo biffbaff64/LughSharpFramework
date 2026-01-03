@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Main;
+using LughSharp.Core.Utils.Logging;
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;

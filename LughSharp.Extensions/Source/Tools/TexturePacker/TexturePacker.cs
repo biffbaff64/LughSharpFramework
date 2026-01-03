@@ -25,6 +25,8 @@
 using System.Runtime.Versioning;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Exceptions;
 using Bitmap = System.Drawing.Bitmap;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -128,9 +130,10 @@ public partial class TexturePacker
 
     // ========================================================================
 
-    private TexturePackerSettings _settings;
-    private ImageProcessor        _imageProcessor;
-    private List< InputImage >    _inputImages;
+    private TexturePackerSettings           _settings;
+    private ImageProcessor                  _imageProcessor;
+    private List< TexturePackerInputImage > _inputImages;
+    private TexturePackerWriter             _writer;
 
     // ========================================================================
     // ========================================================================
@@ -144,6 +147,8 @@ public partial class TexturePacker
         _settings       = null!;
         _imageProcessor = null!;
         _inputImages    = [ ];
+
+        _writer = new TexturePackerWriter( _settings, null, _imageProcessor );
     }
 
     /// <summary>
@@ -171,13 +176,13 @@ public partial class TexturePacker
             if ( settings.MaxWidth != MathUtils.NextPowerOfTwo( settings.MaxWidth ) )
             {
                 throw new GdxRuntimeException( $"If pot is true, maxWidth must be a power "
-                                               + $"of two: {settings.MaxWidth}" );
+                                             + $"of two: {settings.MaxWidth}" );
             }
 
             if ( settings.MaxHeight != MathUtils.NextPowerOfTwo( settings.MaxHeight ) )
             {
                 throw new GdxRuntimeException( $"If pot is true, maxHeight must be a power "
-                                               + $"of two: {settings.MaxHeight}" );
+                                             + $"of two: {settings.MaxHeight}" );
             }
         }
 
@@ -186,19 +191,20 @@ public partial class TexturePacker
             if ( ( settings.MaxWidth % 4 ) != 0 )
             {
                 throw new GdxRuntimeException( $"If MultipleOfFour is true, maxWidth must be evenly "
-                                               + $"divisible by 4: {settings.MaxWidth}" );
+                                             + $"divisible by 4: {settings.MaxWidth}" );
             }
 
             if ( ( settings.MaxHeight % 4 ) != 0 )
             {
                 throw new GdxRuntimeException( $"If MultipleOfFour is true, maxHeight must be evenly "
-                                               + $"divisible by 4: {settings.MaxHeight}" );
+                                             + $"divisible by 4: {settings.MaxHeight}" );
             }
         }
 
         Packer = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
-        
+
         _imageProcessor = new ImageProcessor( settings );
+        _writer = new TexturePackerWriter( _settings, null, _imageProcessor );
 
         SetRootDir( rootDir );
     }
@@ -262,9 +268,9 @@ public partial class TexturePacker
         // All other Process() methods call this one, so this is the best place to do the
         // conversion of the input and output paths ao that they are guaranteed to be
         // pointing to the correct assets folder.
-        inputFolder = IOUtils.AssetPath( inputFolder );
+        inputFolder  = IOUtils.AssetPath( inputFolder );
         outputFolder = IOUtils.AssetPath( outputFolder );
-        
+
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
@@ -306,8 +312,8 @@ public partial class TexturePacker
             _imageProcessor.Scale = _settings.Scale[ i ];
 
             if ( ( _settings.ScaleResampling != null )
-                 && ( _settings.ScaleResampling.Count > i )
-                 && ( _settings.ScaleResampling[ i ] != Resampling.None ) )
+              && ( _settings.ScaleResampling.Count > i )
+              && ( _settings.ScaleResampling[ i ] != Resampling.None ) )
             {
                 _imageProcessor.Resampling = _settings.ScaleResampling[ i ];
             }
@@ -353,7 +359,7 @@ public partial class TexturePacker
             ProgressListener.Count = 0;
             ProgressListener.Total = pages.Count;
 
-            WriteImages( outputDir.FullName, scaledPackFileName, pages );
+            _writer.WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
             ProgressListener.End();
 
@@ -365,7 +371,7 @@ public partial class TexturePacker
 
             try
             {
-                WritePackFile( outputDir, scaledPackFileName, pages );
+                _writer.WritePackFile( outputDir, scaledPackFileName, pages );
             }
             catch ( IOException ex )
             {
@@ -414,7 +420,7 @@ public partial class TexturePacker
     /// <param name="file"></param>
     public void AddImage( FileInfo file )
     {
-        var inputImage = new InputImage
+        var inputImage = new TexturePackerInputImage
         {
             FileInfo = file,
             RootPath = RootPath,
@@ -431,7 +437,7 @@ public partial class TexturePacker
     /// <param name="name"> The name for this image. </param>
     public void AddImage( Bitmap image, string name )
     {
-        var inputImage = new InputImage
+        var inputImage = new TexturePackerInputImage()
         {
             Image = image,
             Name  = name,

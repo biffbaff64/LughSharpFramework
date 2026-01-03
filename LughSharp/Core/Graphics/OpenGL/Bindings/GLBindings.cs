@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;

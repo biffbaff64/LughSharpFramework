@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Actions;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -271,7 +273,7 @@ public class Dialog : Window
 
     /// <summary>
     /// Centers the dialog in the stage and calls <see cref="Show(Stage, Action)"/>
-    /// with a <see cref="Actions.FadeIn(float,LughSharp.Utils.source.Maths.IInterpolation)"/> action.
+    /// with a <see cref="Actions.FadeIn(float,IInterpolation)"/> action.
     /// </summary>
     public Dialog Show( Stage stage )
     {

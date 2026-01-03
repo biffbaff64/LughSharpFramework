@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Input;
+using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Scenes.Scene2D;
 

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using Platform = LughSharp.Core.Main.Platform;
 using Capabilities = LughSharp.Core.Graphics.OpenGL.OpenGL.Capabilities;
 

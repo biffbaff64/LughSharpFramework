@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.G2D;
 

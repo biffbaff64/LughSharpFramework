@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Utils;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;

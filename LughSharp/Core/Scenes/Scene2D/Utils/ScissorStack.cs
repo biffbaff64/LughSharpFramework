@@ -26,7 +26,9 @@ using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
-using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Collections;
+using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
 

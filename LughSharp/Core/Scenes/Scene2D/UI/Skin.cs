@@ -28,6 +28,8 @@ using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
 using Color = LughSharp.Core.Graphics.Color;
 using Exception = System.Exception;
 

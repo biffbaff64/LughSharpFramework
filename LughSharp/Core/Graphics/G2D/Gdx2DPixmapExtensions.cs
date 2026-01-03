@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Utils.Exceptions;
+
 namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>

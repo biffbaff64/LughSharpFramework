@@ -26,6 +26,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Input;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Utils.Exceptions;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;

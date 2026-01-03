@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.Utils;
 

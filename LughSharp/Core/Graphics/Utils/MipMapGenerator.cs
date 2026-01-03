@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Utils.Exceptions;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace LughSharp.Core.Graphics.Utils;

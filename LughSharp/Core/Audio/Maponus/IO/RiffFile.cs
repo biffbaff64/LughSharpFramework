@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Audio.Maponus.Support;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Audio.Maponus.IO;
 

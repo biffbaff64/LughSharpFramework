@@ -33,6 +33,9 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using BitmapFontLoader = LughSharp.Core.Assets.Loaders.BitmapFontLoader;
 
 namespace LughSharp.Core.Assets;
@@ -43,7 +46,7 @@ namespace LughSharp.Core.Assets;
 /// C won’t be disposed until A and B have been disposed.
 /// </summary>
 [PublicAPI]
-public partial class AssetManager : IDisposable
+public class AssetManager : IDisposable
 {
     //TODO: implement this
     [PublicAPI]
@@ -56,6 +59,23 @@ public partial class AssetManager : IDisposable
         public RefCountedContainer? RefCountedContainer { get; set; } // Reference counted container holding the asset
         public List< string >?      Dependencies        { get; set; } // List of dependencies
     }
+
+    // ========================================================================
+
+    protected readonly HashSet< Type > TypeList =
+    [
+        typeof( BitmapFont ),
+        typeof( Cubemap ),
+        typeof( IMusic ),
+        typeof( ISound ),
+        typeof( ParticleEffect ),
+        typeof( Pixmap ),
+        typeof( PolygonRegion ),
+        typeof( ShaderProgram ),
+        typeof( Skin ),
+        typeof( Texture ),
+        typeof( TextureAtlas ),
+    ];
 
     // ========================================================================
 
@@ -112,7 +132,7 @@ public partial class AssetManager : IDisposable
     private int                  _loaded;
     private int                  _toLoad;
     private int                  _peakTasks;
-    private bool                 _disposed = false;
+    private bool                 _disposed;
 
     // ========================================================================
     // ========================================================================
@@ -1602,6 +1622,120 @@ public partial class AssetManager : IDisposable
     }
 
     // ========================================================================
+ 
+    [Conditional( "DEBUG" )]
+    public void DisplayMetrics()
+    {
+        lock ( this )
+        {
+            Logger.Divider();
+            Logger.Debug( $"_assetTypes[].Count: {_assetTypes.Count}" );
+
+            foreach ( var key in _assetTypes.Keys )
+            {
+                Logger.Debug( $"Key: {key}: " );
+
+                foreach ( var value in _assetTypes.Values )
+                {
+                    Logger.Debug( $"Value: {value}" );
+                }
+            }
+
+            Logger.Debug( $"_assets Count       : {_assets.Count}" );
+            Logger.Debug( $"_loaders Count      : {_loaders?.Count}" );
+            Logger.Debug( $"_loaded             : {_loaded}" );
+            Logger.Debug( $"_toLoad             : {_toLoad}" );
+            Logger.Debug( $"_loadQueue Count    : {_loadQueue.Count}" );
+            Logger.Debug( $"_tasks Count        : {_tasks.Count}" );
+            Logger.Divider();
+
+            var names = GetAssetNames();
+
+            if ( names.Count == 0 )
+            {
+                Logger.Debug( "No assets loaded." );
+
+                return;
+            }
+
+            foreach ( var name in names )
+            {
+                if ( name != null )
+                {
+                    var type  = GetAssetType( name );
+                    var asset = Get( name );
+
+                    Logger.Debug( $"Asset: {name}, Type: {type.Name}, " +
+                                  $"Asset: {( asset != null ? "Loaded" : "NULL" )}" );
+                }
+            }
+        }
+    }
+
+    public void DebugPrint()
+    {
+        lock ( this )
+        {
+            Guard.Against.Null( _assets );
+            Guard.Against.Null( _loaders );
+            Guard.Against.Null( _assetTypes );
+
+            Logger.Debug( $"Number of Assets: {_assets.Count}" );
+            Logger.Debug( $"Number of Types: {_assetTypes.Count}" );
+
+            Logger.Debug( $"\n--- Asset Loader Debug Dump ({_loaders.Count} Asset Types Registered) ---" );
+
+            // Iterate over the outer Dictionary (Key: Asset Type)
+            foreach ( var outerEntry in _loaders )
+            {
+                var assetType    = outerEntry.Key;
+                var innerLoaders = outerEntry.Value;
+
+                Logger.Debug( $"\n[ASSET TYPE]: {assetType.Name} (Total Loaders: {innerLoaders.Count})" );
+                Logger.Debug( "--------------------------------------------------" );
+
+                // Iterate over the inner Dictionary (Key: Asset Name, Value: Concrete Loader)
+                foreach ( var innerEntry in innerLoaders )
+                {
+                    var assetName = innerEntry.Key;
+                    var loader    = innerEntry.Value;
+
+                    if ( assetName == string.Empty )
+                    {
+                        assetName = "(default)";
+                    }
+
+                    // Get the actual derived class name (e.g., "TextureLoader" or "SoundLoader")
+                    var concreteType = loader.GetType();
+
+                    Logger.Debug( $"  - Suffix        : '{assetName}'" );
+                    Logger.Debug( $"    [Loader Class]: {concreteType.Name}" );
+                }
+            }
+
+            Logger.Debug( "\n--- End of Debug Dump ---" );
+        }
+    }
+
+    [Conditional( "DEBUG" )]
+    protected void DebugAssetLoaders()
+    {
+        lock ( this )
+        {
+            foreach ( var loader in _loaders! )
+            {
+                Logger.Debug( $"Type: {loader.Key.Name}" );
+
+                foreach ( var entry in loader.Value )
+                {
+                    var suffix = string.IsNullOrEmpty( entry.Key ) ? "(default)" : entry.Key;
+
+                    Logger.Debug( $"  Suffix: '{suffix}' => Loader class: {entry.Value.GetType().Name}" );
+                }
+            }
+        }
+    }
+
     // ========================================================================
 
     /// <summary>

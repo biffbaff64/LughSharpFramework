@@ -25,6 +25,7 @@
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maps;
 

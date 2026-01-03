@@ -25,6 +25,10 @@
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Maths.Collision;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics;
 

@@ -26,6 +26,8 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.TexturePacker;

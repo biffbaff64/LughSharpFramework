@@ -26,6 +26,8 @@ using System.Xml;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maps.Tiled.Loaders;
 

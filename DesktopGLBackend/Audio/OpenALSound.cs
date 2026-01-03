@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Audio;
 using LughSharp.Core.Audio.OpenAL;
-using LughSharp.Utils.source;
+using LughSharp.Core.Utils;
 
 namespace DesktopGLBackend.Audio;
 

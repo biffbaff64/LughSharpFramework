@@ -25,6 +25,7 @@
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Utils.Exceptions;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace LughSharp.Core.Graphics.FrameBuffers;

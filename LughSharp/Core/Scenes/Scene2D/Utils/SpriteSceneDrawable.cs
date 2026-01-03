@@ -25,6 +25,7 @@
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Maths;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;

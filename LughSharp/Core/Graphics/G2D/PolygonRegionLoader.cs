@@ -25,6 +25,8 @@
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.G2D;
 

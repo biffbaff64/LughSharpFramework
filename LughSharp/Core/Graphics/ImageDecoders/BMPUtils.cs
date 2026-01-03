@@ -25,6 +25,7 @@
 
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
+using LughSharp.Core.Utils.Logging;
 using Bitmap = System.Drawing.Bitmap;
 
 namespace LughSharp.Core.Graphics.ImageDecoders;

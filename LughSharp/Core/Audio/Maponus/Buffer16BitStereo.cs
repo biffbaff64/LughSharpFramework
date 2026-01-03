@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Audio.Maponus.Decoding;
+using LughSharp.Core.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Audio.Maponus;

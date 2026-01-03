@@ -28,9 +28,11 @@ using LughSharp.Core.Input;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
-using LughSharp.Utils.source.Pooling;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
-using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
+using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -52,7 +54,7 @@ public class ListBox< T > : Widget
     public ArraySelection< T > Selection    { get; set; } = null!;
     public List< T >           Items        { get; set; } = [ ];
     public float               ItemHeight   { get; set; }
-    public int                 Alignment    { get; set; } = LughSharp.Utils.source.Alignment.LEFT;
+    public int                 Alignment    { get; set; } = Core.Utils.Alignment.LEFT;
     public bool                TypeToSelect { get; set; }
 
     // ========================================================================

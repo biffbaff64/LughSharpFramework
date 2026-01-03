@@ -26,6 +26,9 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
 using Exception = System.Exception;
 using LughSharp.Core.Graphics.ImageDecoders;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics;
 

@@ -24,7 +24,8 @@
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Main;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.Text;
 
@@ -95,30 +96,18 @@ public partial class BitmapFont
     // ========================================================================
 
     /// <summary>
-    /// Creates a BitmapFont using the default 15pt Arial font included in the
-    /// library. This is convenient to easily display text without having to
-    /// generate a bitmap font yourself.
-    /// </summary>
-    public BitmapFont() : this( Api.Files.Internal( DEFAULT_FONT ),
-                                Api.Files.Internal( DEFAULT_FONT_IMAGE ),
-                                false )
-    {
-        _pathType = PathTypes.Internal;
-    }
-
-    /// <summary>
     /// Creates a BitmapFont using the default 15pt Arial font included in the Library.
-    /// This is convenient to easily display text without bothering without generating a bitmap
-    /// font yourself.
+    /// This is convenient to easily display text without bothering without generating
+    /// a bitmap font yourself.
     /// </summary>
     /// <param name="flip">
-    /// If true, the glyphs will be flipped for use with a perspective where 0,0 is the upper left corner.
+    /// False by default. If true, the glyphs will be flipped for use with a perspective
+    /// where 0,0 is the upper left corner.
     /// </param>
-    public BitmapFont( bool flip ) : this( Api.Files.Internal( DEFAULT_FONT ),
-                                           Api.Files.Internal( DEFAULT_FONT ),
-                                           flip )
+    public BitmapFont( bool flip = false ) : this( Api.Files.Internal( DEFAULT_FONT ),
+                                                   Api.Files.Internal( DEFAULT_FONT_IMAGE ),
+                                                   flip )
     {
-        _pathType = PathTypes.Internal;
     }
 
     /// <summary>
@@ -140,7 +129,6 @@ public partial class BitmapFont
     public BitmapFont( FileInfo fontFile, TextureRegion region, bool flip = false )
         : this( new BitmapFontData( fontFile, flip ), region, true )
     {
-        _pathType = PathTypes.Local;
     }
 
     /// <summary>
@@ -155,7 +143,6 @@ public partial class BitmapFont
     public BitmapFont( FileInfo fontFile, bool flip = false )
         : this( new BitmapFontData( fontFile, flip ), ( TextureRegion? )null, true )
     {
-        _pathType = PathTypes.Local;
     }
 
     /// <summary>
@@ -175,7 +162,6 @@ public partial class BitmapFont
                 integer )
     {
         OwnsTexture = true;
-        _pathType   = PathTypes.Local;
     }
 
     /// <summary>
@@ -198,9 +184,8 @@ public partial class BitmapFont
     /// If true, rendering positions will be at integer values to avoid filtering artifacts.
     /// </param>
     public BitmapFont( BitmapFontData data, TextureRegion? region, bool integer )
-        : this( data, region != null ? ListExtensions.New( region ) : null, integer )
+        : this( data, region != null ? new List< TextureRegion >(){ region } : null, integer )
     {
-        _pathType = PathTypes.Local;
     }
 
     /// <summary>
@@ -253,6 +238,8 @@ public partial class BitmapFont
             OwnsTexture = false;
         }
 
+        Logger.Debug( $"_regions.Count = {_regions.Count}" );
+        
         Cache = new BitmapFontCache( this, UseIntegerPositions );
 
         SafeLoad( data );
@@ -328,7 +315,7 @@ public partial class BitmapFont
     /// Returns the alpha of text drawn with this font.
     /// </summary>
     public float GetAlpha() => Cache?.GetColor().A ?? 1f;
-    
+
     /// <summary>
     /// A covenience method for setting the font alpha.
     /// </summary>

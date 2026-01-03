@@ -25,6 +25,7 @@
 using Extensions.Source.Drawing.Freetype;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
+using LughSharp.Core.Utils.Logging;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Drawing;

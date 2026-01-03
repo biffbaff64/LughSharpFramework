@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics;
 

@@ -24,6 +24,8 @@
 
 using System.Reflection;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Main;
 

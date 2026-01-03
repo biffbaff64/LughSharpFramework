@@ -22,16 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
-using LughSharp.Utils.source;
-using LughSharp.Utils.source.Collections;
-using LughSharp.Utils.source.Exceptions;
-using LughSharp.Utils.source.Maths;
-using LughSharp.Utils.source.Pooling;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Graphics.Text;
 
@@ -56,7 +51,7 @@ namespace LughSharp.Core.Graphics.Text;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class GlyphLayout : IResetable
+public class GlyphLayout : IResetable, IPoolable
 {
     public List< GlyphRun > Runs   { get; set; } = new( 1 );
     public float            Width  { get; set; }
@@ -66,7 +61,7 @@ public class GlyphLayout : IResetable
 
     private const float EPSILON = 0.0001f;
 
-    private readonly Pool< Color >    _colorPool    = Pools.Get( () => new Color() );
+    private readonly Pool< Color >    _colorPool    = Pools.Get< Color >( () => new Color() );
     private readonly List< Color >    _colorStack   = new( 4 );
     private readonly Pool< GlyphRun > _glyphRunPool = Pools.Get( () => new GlyphRun() );
 
@@ -142,9 +137,10 @@ public class GlyphLayout : IResetable
     /// </summary>
     public void Reset()
     {
-        _glyphRunPool.FreeAll( Runs );
-        _colorPool.FreeAll( _colorStack );
+        _glyphRunPool.FreeAll( Runs! );
+        _colorPool.FreeAll( _colorStack! );
         _colorStack.Clear();
+        
         Runs.Clear();
 
         Width  = 0;
@@ -210,7 +206,7 @@ public class GlyphLayout : IResetable
     public void SetText( BitmapFont font, string str, int start, int end, Color color,
                          float targetWidth, int halign, bool wrap, string? truncate )
     {
-        _glyphRunPool.FreeAll( Runs );
+        _glyphRunPool.FreeAll( Runs! );
         
         Runs.Clear();
 

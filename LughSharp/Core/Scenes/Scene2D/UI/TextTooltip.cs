@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 

@@ -25,6 +25,8 @@
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Assets.Loaders;
 

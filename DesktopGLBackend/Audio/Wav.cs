@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Utils.source.Exceptions;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace DesktopGLBackend.Audio;
 

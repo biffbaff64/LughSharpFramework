@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Cameras;
 

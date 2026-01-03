@@ -24,6 +24,9 @@
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -41,7 +44,7 @@ public partial class FileProcessor
     // Delegate to process a directory
     public Action< Entry, List< Entry > >? ProcessDirDelegate { get; set; }
 
-    public delegate void ProcessEntryDelegate( Entry entry );
+//    public delegate void ProcessEntryDelegate( Entry entry );
 
     // ========================================================================
 
@@ -461,6 +464,91 @@ public partial class FileProcessor
         foreach ( var regex in regexes )
         {
             InputRegex.Add( new Regex( regex ) );
+        }
+    }
+    
+    // ========================================================================
+    // ========================================================================
+    
+    /// <summary>
+    /// File processing information, detauiling:-
+    /// <li>The input file, or directory, to be processed.</li>
+    /// <li>The name of the final output file.</li>
+    /// <li>The output directory, where the final output file will be stored.</li>
+    /// <li>tbc</li>
+    /// </summary>
+    [PublicAPI]
+    public class Entry
+    {
+        /// <summary>
+        /// The input file, or directory, to be processed.
+        /// </summary>
+        public FileSystemInfo? InputFile { get; set; } = null!;
+
+        /// <summary>
+        /// The name of the final output file.
+        /// </summary>
+        public string? OutputFileName { get; set; } = null!;
+
+        /// <summary>
+        /// The output directory, where the final output file will be stored.
+        /// </summary>
+        public DirectoryInfo? OutputDirectory { get; set; } = null!;
+
+        /// <summary>
+        /// The nesting depth of the folder.
+        /// </summary>
+        public int Depth { get; set; } = 0;
+
+        // ====================================================================
+
+        /// <summary>
+        /// Logs debugging information. Handles different parameter types and outputs
+        /// their details to the debug logger.
+        /// </summary>
+        /// <param name="args">
+        /// An optional array of objects to log. Supports tuples in the formats
+        /// (string, string), (string, FileInfo), and (string, DirectoryInfo). If no
+        /// arguments are provided, the default debug information is logged.
+        /// </param>
+        public virtual void DebugPrint( params object?[]? args )
+        {
+            if ( args is { Length: > 0 } )
+            {
+                foreach ( var t in args )
+                {
+                    switch ( t )
+                    {
+                        case (string name, string value):
+                            Logger.Debug( $"{name}: {value}" );
+
+                            break;
+
+                        case (string infoName, FileInfo info):
+                            Logger.Debug( $"{infoName}: {info.Name}" );
+
+                            break;
+
+                        case (string dirName, DirectoryInfo directoryInfo):
+                            Logger.Debug( $"{dirName}: {directoryInfo.Name}" );
+
+                            break;
+
+                        default:
+                            if ( t != null )
+                            {
+                                Logger.Debug( t.ToString()! );
+                            }
+
+                            break;
+                    }
+                }
+            }
+
+            Logger.Debug( $"InputFile      : {InputFile?.FullName ?? "null"}" );
+            Logger.Debug( $"OutputFileName : {OutputFileName ?? "null"}" );
+            Logger.Debug( $"OutputDirectory: {OutputDirectory?.FullName ?? "null"}" );
+            Logger.Debug( $"Depth          : {Depth}" );
         }
     }
 }

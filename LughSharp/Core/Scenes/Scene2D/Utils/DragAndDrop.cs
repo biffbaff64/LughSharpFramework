@@ -25,6 +25,7 @@
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
 

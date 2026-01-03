@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.OpenGL;
-using ByteOrder = LughSharp.Utils.source.ByteOrder;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
+using ByteOrder = LughSharp.Core.Utils.ByteOrder;
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Graphics.Utils;

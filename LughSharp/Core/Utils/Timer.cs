@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Main;
+using LughSharp.Core.Utils.Exceptions;
 using Exception = System.Exception;
 using Monitor = System.Threading.Monitor;
 

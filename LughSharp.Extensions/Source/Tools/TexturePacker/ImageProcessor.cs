@@ -28,6 +28,9 @@ using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 using Rectangle = System.Drawing.Rectangle;
@@ -41,9 +44,9 @@ namespace Extensions.Source.Tools.TexturePacker;
 [SupportedOSPlatform( "windows" )]
 public class ImageProcessor
 {
-    public Resampling                 Resampling { get; set; } = Resampling.Bicubic;
-    public List< TexturePacker.Rect > ImageRects { get; set; } = [ ];
-    public TexturePackerSettings      Settings   { get; }
+    public Resampling                Resampling { get; set; } = Resampling.Bicubic;
+    public List< TexturePackerRect > ImageRects { get; set; } = [ ];
+    public TexturePackerSettings     Settings   { get; }
 
     public float Scale
     {
@@ -60,7 +63,7 @@ public class ImageProcessor
     private static readonly Bitmap EmptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
     private static readonly Regex  IndexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
 
-    private readonly Dictionary< string, TexturePacker.Rect? > _crcs = [ ];
+    private readonly Dictionary< string, TexturePackerRect? > _crcs = [ ];
 
     // ========================================================================
     // ========================================================================
@@ -79,7 +82,7 @@ public class ImageProcessor
     /// <param name="rootPath">
     /// Used to strip the root directory prefix from image file names, can be null.
     /// </param>
-    public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
+    public TexturePackerRect? AddImage( FileInfo? file, string? rootPath )
     {
         Guard.Against.Null( file );
 
@@ -115,7 +118,7 @@ public class ImageProcessor
     /// <param name="image"> The Image. </param>
     /// <param name="name"> The Image name, without patch or extension! </param>
     /// <returns></returns>
-    public TexturePacker.Rect? AddImage( Bitmap? image, string? name )
+    public TexturePackerRect? AddImage( Bitmap? image, string? name )
     {
         var rect = ProcessImage( image, name );
 
@@ -131,7 +134,7 @@ public class ImageProcessor
             if ( _crcs.TryGetValue( crc, out var existing ) )
             {
                 // Image already exists, add current rect as an alias to the existing one.
-                existing?.Aliases.Add( new TexturePacker.Alias( rect ) );
+                existing?.Aliases.Add( new TexturePackerAlias( rect ) );
 
                 return null;
             }
@@ -151,7 +154,7 @@ public class ImageProcessor
     {
         // Only clear the image rectangles processed for the current scale.
         ImageRects.Clear();
-    
+
         // The CRC dictionary (_crcs) must REMAIN POPULATED to track aliased 
         // images across all scale iterations defined in settings.
         // DO NOT CALL: _crcs.Clear();
@@ -161,7 +164,7 @@ public class ImageProcessor
     /// Returns a rect for the image describing the texture region to be packed,
     /// or null if the image should not be packed.
     /// </summary>
-    public TexturePacker.Rect? ProcessImage( Bitmap? image, string? name )
+    public TexturePackerRect? ProcessImage( Bitmap? image, string? name )
     {
         if ( image == null )
         {
@@ -184,7 +187,7 @@ public class ImageProcessor
         int[]? splits  = null;
         int[]? pads    = null;
 
-        TexturePacker.Rect? rect;
+        TexturePackerRect? rect;
 
         if ( isPatch )
         {
@@ -269,7 +272,7 @@ public class ImageProcessor
         if ( isPatch )
         {
             // Ninepatches aren't rotated or whitespace stripped.
-            rect = new TexturePacker.Rect( image, 0, 0, width, height, true )
+            rect = new TexturePackerRect( image, 0, 0, width, height, true )
             {
                 Splits    = splits,
                 Pads      = pads,
@@ -295,7 +298,7 @@ public class ImageProcessor
     /// <summary>
     /// Strips whitespace and returns the rect, or null if the image should be ignored.
     /// </summary>
-    protected TexturePacker.Rect? StripWhitespace( string name, Bitmap source )
+    protected TexturePackerRect? StripWhitespace( string name, Bitmap source )
     {
         int width;
         int height;
@@ -322,9 +325,9 @@ public class ImageProcessor
         // or if both StripWhitespaceX and StripWhitespaceY are false, a new Rect
         // encompassing the entire source image is returned.
         if ( !Image.IsAlphaPixelFormat( source.PixelFormat )
-             || Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
+          || Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
         {
-            return new TexturePacker.Rect( source, 0, 0, width, height, false );
+            return new TexturePackerRect( source, 0, 0, width, height, false );
         }
 
         var bitmapData = source.LockBits( new Rectangle( 0, 0, width, height ),
@@ -458,7 +461,7 @@ public class ImageProcessor
                 {
                     return Settings.IgnoreBlankImages
                         ? null
-                        : new TexturePacker.Rect( EmptyImage, 0, 0, 1, 1, false );
+                        : new TexturePackerRect( EmptyImage, 0, 0, 1, 1, false );
                 }
 
                 // Create a new Bitmap representing the stripped area
@@ -472,7 +475,7 @@ public class ImageProcessor
                                  GraphicsUnit.Pixel );
                 }
 
-                return new TexturePacker.Rect( strippedImage, 0, 0, newWidth, newHeight, false );
+                return new TexturePackerRect( strippedImage, 0, 0, newWidth, newHeight, false );
             }
         }
         finally
@@ -701,9 +704,9 @@ public class ImageProcessor
                     }
 
                     if ( !startPoint && ( ( rgba[ 0 ] != 0 )
-                                          || ( rgba[ 1 ] != 0 )
-                                          || ( rgba[ 2 ] != 0 )
-                                          || ( rgba[ 3 ] != 255 ) ) )
+                                       || ( rgba[ 1 ] != 0 )
+                                       || ( rgba[ 2 ] != 0 )
+                                       || ( rgba[ 3 ] != 255 ) ) )
                     {
                         throw new
                             GdxRuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
@@ -790,7 +793,7 @@ public class ImageProcessor
     {
         // The TransformBlock method with an output buffer set to null is fine for 
         // feeding data sequentially before the final block.
-        digest.TransformBlock( BitConverter.GetBytes( value ), 0, 4, null!, 0 ); 
+        digest.TransformBlock( BitConverter.GetBytes( value ), 0, 4, null!, 0 );
     }
 }
 

@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Utils.Exceptions;
 using Environment = System.Environment;
 
 namespace LughSharp.Core.Main;

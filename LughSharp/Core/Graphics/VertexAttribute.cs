@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics;
 

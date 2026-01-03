@@ -25,8 +25,9 @@
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maps.Tiled.Tiles;
+using LughSharp.Core.Maths;
 using Color = LughSharp.Core.Graphics.Color;
-using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
+using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;
 

@@ -24,11 +24,15 @@
 
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
-using LughSharp.Utils.source.Pooling;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
-using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
+using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D;
 
@@ -1291,7 +1295,7 @@ public class Actor : IActor, IComparable< Actor >
     /// Transforms the specified point in screen coordinates to the actor's
     /// local coordinate system.
     /// </summary>
-    /// <see cref="Stage.ScreenToStageCoordinates(Vector2)"/>
+    /// <see cref="Stage.ScreenToStageCoordinates(Maths.Vector2)"/>
     public virtual Vector2 ScreenToLocalCoordinates( Vector2 screenCoords )
     {
         return Stage == null
@@ -1361,7 +1365,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// Transforms the specified point in the actor's coordinates to be in screen coordinates.
     /// </summary>
-    /// <see cref="Stage.StageToScreenCoordinates(Vector2)"/>
+    /// <see cref="Stage.StageToScreenCoordinates(Maths.Vector2)"/>
     public virtual Vector2 LocalToScreenCoordinates( Vector2 localCoords )
     {
         return Stage == null

@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
+
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>

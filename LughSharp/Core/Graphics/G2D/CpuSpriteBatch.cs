@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.G2D;
 

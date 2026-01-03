@@ -25,6 +25,7 @@
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Utils.Logging;
 using static LughSharp.Core.Graphics.GraphicsBackend;
 using Color = LughSharp.Core.Graphics.Color;
 

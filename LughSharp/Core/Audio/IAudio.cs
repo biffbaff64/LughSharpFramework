@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Main;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Audio;
 

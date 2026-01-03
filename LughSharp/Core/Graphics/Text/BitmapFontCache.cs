@@ -23,6 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Logging;
+using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Graphics.Text;
 
@@ -65,9 +69,13 @@ public class BitmapFontCache
 
     // ========================================================================
 
-    private readonly Color                _color         = new( 1, 1, 1, 1 );
-    private readonly List< GlyphLayout? > _pooledLayouts = [ ];
-    private readonly Color                _tempColor     = new( 1, 1, 1, 1 );
+    private readonly FlushablePool<GlyphLayout> _pooledLayouts = new( Pool<GlyphLayout>.DEFAULT_INITIAL_CAPACITY )
+    {
+        NewObjectFactory = () => new GlyphLayout()
+    };
+    
+    private readonly Color     _color         = new( 1, 1, 1, 1 );
+    private readonly Color     _tempColor     = new( 1, 1, 1, 1 );
 
     private float _currentTint;
     private int   _glyphCount;
@@ -365,19 +373,13 @@ public class BitmapFontCache
     /// affects text subsequently added to the cache, but does not affect existing
     /// text currently in the cache.
     /// </summary>
-    public Color GetColor()
-    {
-        return _color;
-    }
+    public Color GetColor() => _color;
 
     /// <summary>
     /// A convenience method for setting the cache color. The color can also
     /// be set by modifying <see cref="GetColor()"/>.
     /// </summary>
-    public void SetColor( Color col )
-    {
-        _color.Set( col );
-    }
+    public void SetColor( Color col ) => _color.Set( col );
 
     /// <summary>
     /// A convenience method for setting the cache color. The color can
@@ -394,8 +396,6 @@ public class BitmapFontCache
     /// <param name="spriteBatch">The sprite batch used to draw the cached text.</param>
     public virtual void Draw( IBatch spriteBatch )
     {
-        Logger.Checkpoint();
-
         var regions = Font.GetRegions();
 
         for ( int j = 0, n = _pageVertices.Length; j < n; j++ )
@@ -511,7 +511,7 @@ public class BitmapFontCache
         X = 0;
         Y = 0;
 
-        _pooledLayouts.Clear();
+        _pooledLayouts.Flush();
         Layouts.Clear();
 
         for ( int i = 0, n = _idx.Length; i < n; i++ )
@@ -598,12 +598,18 @@ public class BitmapFontCache
     }
 
     /// <summary>
+    /// Adds the specified <see cref="GlyphLayout"/> to the font cache at the specified position.
     /// </summary>
-    /// <param name="layout"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="layout">The <see cref="GlyphLayout"/> object representing the glyphs to be cached.</param>
+    /// <param name="x">The x coordinate where the glyphs should be positioned.</param>
+    /// <param name="y">The y coordinate where the glyphs should be positioned.</param>
     private void AddToCache( GlyphLayout layout, float x, float y )
     {
+        Logger.Checkpoint();
+        Logger.Debug( $"layout Width     : {layout.Width}" );
+        Logger.Debug( $"layout Height    : {layout.Height}" );
+        Logger.Debug( $"layout Runs.Count: {layout.Runs.Count}" );
+
         // Check if the number of font pages has changed.
         var pageCount = Font.GetRegions().Count;
 
@@ -639,8 +645,12 @@ public class BitmapFontCache
 
         RequireGlyphs( layout );
 
+        Logger.Debug( $"layout.Runs.Count: {layout.Runs.Count}" );
+
         for ( int i = 0, n = layout.Runs.Count; i < n; i++ )
         {
+            Logger.Checkpoint();
+
             var run       = layout.Runs[ i ];
             var glyphs    = run.Glyphs;
             var xAdvances = run.XAdvances;
@@ -671,6 +681,8 @@ public class BitmapFontCache
     /// <param name="color"></param>
     private void AddGlyph( Glyph glyph, float x, float y, float color )
     {
+        Logger.Checkpoint();
+
         var scaleX = Font.Data.ScaleX;
         var scaleY = Font.Data.ScaleY;
 
@@ -825,9 +837,7 @@ public class BitmapFontCache
                                 bool wrap,
                                 string? truncate = null )
     {
-        var layout = new GlyphLayout();
-
-        _pooledLayouts.Add( layout );
+        var layout = _pooledLayouts.Obtain() ?? new GlyphLayout();
 
         layout.SetText( Font, str, start, end, _color, targetWidth, halign, wrap, truncate );
 

@@ -24,8 +24,10 @@
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -83,7 +85,7 @@ public class Scene2DImage : Widget
     {
     }
 
-    public Scene2DImage( ISceneDrawable? drawable, Scaling scaling, int align = LughSharp.Utils.source.Alignment.CENTER )
+    public Scene2DImage( ISceneDrawable? drawable, Scaling scaling, int align = Core.Utils.Alignment.CENTER )
     {
         SetDrawable( drawable );
 
@@ -164,11 +166,11 @@ public class Scene2DImage : Widget
         ImageWidth  = size.X;
         ImageHeight = size.Y;
 
-        if ( ( Alignment & LughSharp.Utils.source.Alignment.LEFT ) != 0 )
+        if ( ( Alignment & Core.Utils.Alignment.LEFT ) != 0 )
         {
             ImageX = 0;
         }
-        else if ( ( Alignment & LughSharp.Utils.source.Alignment.RIGHT ) != 0 )
+        else if ( ( Alignment & Core.Utils.Alignment.RIGHT ) != 0 )
         {
             ImageX = ( int )( width - ImageWidth );
         }
@@ -177,11 +179,11 @@ public class Scene2DImage : Widget
             ImageX = ( int )( ( width / 2 ) - ( ImageWidth / 2 ) );
         }
 
-        if ( ( Alignment & LughSharp.Utils.source.Alignment.TOP ) != 0 )
+        if ( ( Alignment & Core.Utils.Alignment.TOP ) != 0 )
         {
             ImageY = ( int )( height - ImageHeight );
         }
-        else if ( ( Alignment & LughSharp.Utils.source.Alignment.BOTTOM ) != 0 )
+        else if ( ( Alignment & Core.Utils.Alignment.BOTTOM ) != 0 )
         {
             ImageY = 0;
         }

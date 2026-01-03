@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 
@@ -192,7 +193,7 @@ public class ImageButton : Button
 
     /// <summary>
     /// Draws the group and its children. The default implementation calls
-    /// <see cref="Group.ApplyTransform(LughSharp.Core.Graphics.G2D.IBatch,LughSharp.Utils.source.Maths.Matrix4)"/> if needed, then
+    /// <see cref="Group.ApplyTransform(LughSharp.Core.Graphics.G2D.IBatch,Matrix4)"/> if needed, then
     /// <see cref="Button.DrawChildren(IBatch, float)"/>, followed by
     /// <see cref="Button.ResetTransform(IBatch)"/> if needed.
     /// </summary>

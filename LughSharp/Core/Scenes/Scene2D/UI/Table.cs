@@ -26,9 +26,12 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
-using LughSharp.Utils.source.Pooling;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
-using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
+using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -76,8 +79,12 @@ public class Table : WidgetGroup
 
     public int          Rows         { get; private set; }
     public int          Columns      { get; set; }
-    public Pool< Cell > CellPool     { get; } = new( GetNewObject );
     public Cell         CellDefaults { get; set; }
+
+    public Pool< Cell > CellPool { get; } = new()
+    {
+        NewObjectFactory = GetNewObject
+    };
 
     // ========================================================================
 
@@ -104,7 +111,7 @@ public class Table : WidgetGroup
     private List< DebugRect >? _debugRects;
     private float[]            _expandHeight;
     private float[]            _expandWidth;
-    private bool               _implicitEndRow = false;
+    private bool               _implicitEndRow;
 
     private Value _padBottom = BackgroundBottom;
     private Value _padLeft   = BackgroundLeft;
@@ -1862,17 +1869,23 @@ public class Table : WidgetGroup
 
     // ========================================================================
 
-    internal class DebugRect : Rectangle
+    [PublicAPI]
+    public class DebugRect : Rectangle
     {
-        internal Pool< DebugRect > Pool  { get; }
-        internal Color             Color { get; set; } = null!;
+        public Pool< DebugRect > Pool  { get; }
+        public Color             Color { get; set; }
 
-        internal DebugRect()
+        public DebugRect()
         {
-            Pool = new Pool< DebugRect >( GetNewDebugRect );
+            Color = Color.Red;
+            
+            Pool = new Pool< DebugRect >()
+            {
+                NewObjectFactory = GetNewDebugRect
+            };
         }
 
-        internal static DebugRect GetNewDebugRect()
+        public DebugRect GetNewDebugRect()
         {
             return new DebugRect();
         }
@@ -1975,11 +1988,11 @@ public class Table : WidgetGroup
 
     private void ClearDebugRects()
     {
-        _debugRects ??= [ ];
+//        _debugRects ??= [ ];
 
 //TODO:        DebugRect.Pool.FreeAll( _debugRects );
 
-        _debugRects.Clear();
+        _debugRects?.Clear();
     }
 
     private void AddDebugRect( float x, float y, float w, float h, Color color )
@@ -2184,3 +2197,6 @@ public class Table : WidgetGroup
 
     #endregion
 }
+
+// ============================================================================
+// ============================================================================

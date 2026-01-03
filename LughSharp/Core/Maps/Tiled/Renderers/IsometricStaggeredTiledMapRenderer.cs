@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Utils.Exceptions;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;

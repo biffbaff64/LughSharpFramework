@@ -29,6 +29,7 @@ using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Input;
 using LughSharp.Core.Network;
+using LughSharp.Core.Utils.Logging;
 using GLBindings = LughSharp.Core.Graphics.OpenGL.Bindings.GLBindings;
 
 namespace LughSharp.Core.Main;

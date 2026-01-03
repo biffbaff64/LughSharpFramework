@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Utils.Exceptions;
+
 namespace LughSharp.Core.Graphics.G3D;
 
 public class AttributesGroup : IComparer< Attribute >

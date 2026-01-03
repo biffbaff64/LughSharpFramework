@@ -26,10 +26,10 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
-using LughSharp.Utils.source;
-using LughSharp.Utils.source.Collections;
-using LughSharp.Utils.source.Exceptions;
-using LughSharp.Utils.source.Logging;
+using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace DesktopGLBackend;
@@ -154,10 +154,10 @@ public class DesktopGLApplication : IApplication, IDisposable
             Loop();
             CleanupWindows();
         }
-        catch ( Exception e )
-        {
-            throw e is SystemException ? e : new GdxRuntimeException( e );
-        }
+//        catch ( Exception e )
+//        {
+//            throw e is SystemException ? e : new GdxRuntimeException( e );
+//        }
         finally
         {
             Cleanup();

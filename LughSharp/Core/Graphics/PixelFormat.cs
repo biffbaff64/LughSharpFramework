@@ -24,6 +24,7 @@
 
 using System.Runtime.Versioning;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics;
 

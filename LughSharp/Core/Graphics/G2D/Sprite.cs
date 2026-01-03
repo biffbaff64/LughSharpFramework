@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using Rectangle = LughSharp.Utils.source.Maths.Rectangle;
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
+using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Graphics.G2D;
 

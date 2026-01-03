@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Maps;
 

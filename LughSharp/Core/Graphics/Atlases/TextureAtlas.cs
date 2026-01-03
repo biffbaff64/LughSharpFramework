@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Atlases;
 

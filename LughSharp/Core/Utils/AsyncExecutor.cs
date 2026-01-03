@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Assets;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils;
 

@@ -51,19 +51,11 @@ global using static LughSharp.Core.Main.Engine;
 
 // ============================================================================
 
-global using Vector2 = LughSharp.Utils.source.Maths.Vector2;
-global using Vector3 = LughSharp.Utils.source.Maths.Vector3;
-global using Vector4 = LughSharp.Utils.source.Maths.Vector4;
+global using Vector2 = LughSharp.Core.Maths.Vector2;
+global using Vector3 = LughSharp.Core.Maths.Vector3;
+global using Vector4 = LughSharp.Core.Maths.Vector4;
 
 // ============================================================================
-
-global using LughSharp.Utils.source;
-global using LughSharp.Utils.source.Collections;
-global using LughSharp.Utils.source.Exceptions;
-global using LughSharp.Utils.source.Logging;
-global using LughSharp.Utils.source.Maths;
-global using LughSharp.Utils.source.Maths.Collision;
-
 global using SerializationException = LughSharp.Core.Utils.SerializationException;
 
 // ============================================================================

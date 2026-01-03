@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Utils;
 using Exception = System.Exception;
 using Platform = LughSharp.Core.Main.Platform;
 
