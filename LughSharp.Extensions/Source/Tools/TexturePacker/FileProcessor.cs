@@ -31,7 +31,7 @@ using LughSharp.Core.Utils.Logging;
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
-public partial class FileProcessor
+public class FileProcessor
 {
     public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
 

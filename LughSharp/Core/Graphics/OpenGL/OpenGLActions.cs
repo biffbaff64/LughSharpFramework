@@ -22,9 +22,14 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using DotGLFW;
+using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Utils;
+
 namespace LughSharp.Core.Graphics.OpenGL;
 
-public static partial class OpenGL
+[PublicAPI]
+public class OpenGL
 {
     public class Initialisation
     {
@@ -44,7 +49,7 @@ public static partial class OpenGL
             var minorVersion    = 0;
             var revisionVersion = 0;
 
-            var version = GL.GetString( IGL.GL_VERSION ) -> ToString();
+            var version = GL.GetString( IGL.GL_VERSION )->ToString();
 
             Capabilities.IsGLES     = version.StartsWith( "OpenGL ES" );
             Capabilities.IsEmulated = false;
@@ -78,13 +83,13 @@ public static partial class OpenGL
             // with native GPU enabled - so try to account for that case.
             if ( Capabilities.IsGLES )
             {
-                if ( TryParseOpenGLVersionFromString( GL.GetString( IGL.GL_VERSION ) -> ToString(),
+                if ( TryParseOpenGLVersionFromString( GL.GetString( IGL.GL_VERSION )->ToString(),
                                                       out var glesMajorVersion,
                                                       out var glesMinorVersion,
                                                       out var glesRevisionVersion ) )
                 {
                     if ( ( glesMajorVersion != Capabilities.MajorVersion )
-                         || ( glesMinorVersion != Capabilities.MinorVersion ) )
+                      || ( glesMinorVersion != Capabilities.MinorVersion ) )
                     {
                         Capabilities.IsEmulated      = true;
                         Capabilities.MajorVersion    = glesMajorVersion;
@@ -109,9 +114,9 @@ public static partial class OpenGL
         var components = str.Split( [ ' ', '.' ], StringSplitOptions.RemoveEmptyEntries );
 
         if ( ( components.Length < 2 )
-             || !int.TryParse( components[ 0 ], out major )
-             || !int.TryParse( components[ 1 ], out minor )
-             || !int.TryParse( components[ 2 ], out revision ) )
+          || !int.TryParse( components[ 0 ], out major )
+          || !int.TryParse( components[ 1 ], out minor )
+          || !int.TryParse( components[ 2 ], out revision ) )
         {
             major    = 0;
             minor    = 0;
@@ -121,6 +126,83 @@ public static partial class OpenGL
         }
 
         return true;
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    [PublicAPI]
+    public class Capabilities
+    {
+        public static bool IsDebugContext      { get; set; }
+        public static bool IsGLES              { get; set; }
+        public static bool IsEmulated          { get; set; }
+        public static bool IsCoreProfile       { get; set; }
+        public static bool IsForwardCompatible { get; set; }
+
+        // --------------------------------------
+
+        public static int MajorVersion    { get; set; }
+        public static int MinorVersion    { get; set; }
+        public static int RevisionVersion { get; set; }
+
+        // --------------------------------------
+
+        public static OpenGLProfile OpenGLProfile { get; set; } = OpenGLProfile.CoreProfile;
+
+        // ====================================================================
+
+        /// <summary>
+        /// A string describing the graphics vendor, i.e. "Intel Corporation"
+        /// </summary>
+        public static unsafe string VendorString
+        {
+            get
+            {
+                field = BytePointerToString.Convert( GL.GetString( ( int )StringName.Vendor ) );
+
+                return field;
+            }
+        } = "";
+
+        /// <summary>
+        /// A string describing the graphics hardware, i.e. "Intel(R) UHD Graphics 620"
+        /// </summary>
+        public static unsafe string RendererString
+        {
+            get
+            {
+                field = BytePointerToString.Convert( GL.GetString( ( int )StringName.Renderer ) );
+
+                return field;
+            }
+        } = "";
+
+        /// <summary>
+        /// A string describing the OpenGL version, i.e. "4.6.0"
+        /// </summary>
+        public static unsafe string VersionString
+        {
+            get
+            {
+                field = BytePointerToString.Convert( GL.GetString( ( int )StringName.Version ) );
+
+                return field;
+            }
+        } = "";
+
+        /// <summary>
+        /// A string describing the shading language version, i.e. "4.60"
+        /// </summary>
+        public static unsafe string ShadingLanguageVersionString
+        {
+            get
+            {
+                field = BytePointerToString.Convert( GL.GetString( ( int )StringName.ShadingLanguageVersion ) );
+
+                return field;
+            }
+        } = "";
     }
 }
 

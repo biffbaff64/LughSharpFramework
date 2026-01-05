@@ -52,7 +52,7 @@ namespace LughSharp.Core.Graphics;
 /// </para>
 /// </summary>
 [PublicAPI]
-public partial class Pixmap : IDisposable
+public class Pixmap : IDisposable
 {
     public bool        IsDisposed  { get; set; }                // 
     public int         Scale       { get; set; } = 1;           // 

@@ -32,11 +32,11 @@ namespace LughSharp.Core.Audio.Maponus.Decoding;
 /// Encapsulates the details of decoding an MPEG audio frame.
 /// </summary>
 [PublicAPI]
-public partial class Decoder
+public class Decoder
 {
     private const float DEFAULT_SCALE_FACTOR = 32700.0f;
 
-    private static readonly Parameters _decoderDefaultParams = new();
+    private static readonly Parameters DecoderDefaultParams = new();
 
     // ========================================================================
     // ========================================================================
@@ -66,7 +66,7 @@ public partial class Decoder
     {
         _equalizer = new Equalizer();
 
-        parameters ??= _decoderDefaultParams;
+        parameters ??= DecoderDefaultParams;
 
         var eq = parameters.InitialEqualizerSettings;
 
@@ -167,7 +167,7 @@ public partial class Decoder
     /// <exception cref="InvalidCastException">
     /// Thrown if the cloning process does not return an object of type <see cref="Parameters"/>.
     /// </exception>
-    public static Parameters DefaultParams => ( Parameters )_decoderDefaultParams.Clone();
+    public static Parameters DefaultParams => ( Parameters )DecoderDefaultParams.Clone();
 
     /// <summary>
     /// Decodes one frame from an MPEG audio bitstream.
@@ -254,7 +254,7 @@ public partial class Decoder
     /// </remarks>
     protected virtual IFrameDecoder RetrieveDecoder( Header header, Bitstream stream, int layer )
     {
-        IFrameDecoder? decoder = null;
+        IFrameDecoder? decoder;
 
         // TODO: allow channel output selection type (LEFT, RIGHT, BOTH, DOWNMIX)
         switch ( layer )
@@ -349,4 +349,47 @@ public partial class Decoder
 
         _isInitialized = true;
     }
+    
+    // ========================================================================
+    
+    /// <summary>
+    /// The Parameters class presents the customizable aspects of the decoder.
+    /// Instances of this class are not thread safe.
+    /// </summary>
+    [PublicAPI]
+    public class Parameters : ICloneable
+    {
+        public virtual OutputChannels? OutputChannels { get; set; }
+
+        /// <summary>
+        /// Retrieves the equalizer settings that the decoder's equalizer will be
+        /// initialized from. The Equalizer instance returned cannot be changed in
+        /// real time to affect the decoder output as it is used only to initialize
+        /// the decoders EQ settings. To affect the decoder's output in realtime,
+        /// use the Equalizer returned from the getEqualizer() method on the decoder.
+        /// </summary>
+        /// <returns>
+        /// The Equalizer used to initialize the EQ settings of the decoder.
+        /// </returns>
+        public virtual Equalizer? InitialEqualizerSettings => null;
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns> A new object that is a copy of this instance. </returns>
+        public object Clone()
+        {
+            try
+            {
+                return MemberwiseClone();
+            }
+            catch ( Exception ex )
+            {
+                throw new ApplicationException( this + ": " + ex );
+            }
+        }
+    }
 }
+
+// ============================================================================
+// ============================================================================

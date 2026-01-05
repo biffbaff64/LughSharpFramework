@@ -39,7 +39,7 @@ namespace LughSharp.Core.Graphics;
 /// </para>
 /// </summary>
 [PublicAPI]
-public partial interface IGraphicsDevice
+public interface IGraphicsDevice
 {
     /// <summary>
     /// Gets or sets the OpenGL version information.
@@ -386,6 +386,84 @@ public partial interface IGraphicsDevice
     /// </summary>
     /// <param name="systemCursor"> The system cursor to use. </param>
     void SetSystemCursor( ICursor.SystemCursor systemCursor );
+    
+    /// <summary>
+    /// Describes a monitor.
+    /// </summary>
+    [PublicAPI]
+    public class Monitor
+    {
+        public readonly string Name;
+        public readonly int    VirtualX;
+        public readonly int    VirtualY;
+
+        protected Monitor( int virtualX, int virtualY, string name )
+        {
+            VirtualX = virtualX;
+            VirtualY = virtualY;
+            Name     = name;
+        }
+    }
+    
+    /// <summary>
+    /// Describes a fullscreen display mode, having the properties <see cref="Width"/>,
+    /// <see cref="Height"/>, <see cref="RefreshRate"/>, and <see cref="BitsPerPixel"/>.
+    /// <para>
+    /// Display modes represent different configurations for fullscreen rendering,
+    /// allowing you to choose between resolutions, refresh rates, and color depths
+    /// supported by the monitor.
+    /// </para>
+    /// </summary>
+    [PublicAPI]
+    public class DisplayMode
+    {
+        /// <summary>
+        /// Width of this display mode in pixels.
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// Height of this display mode in pixels.
+        /// </summary>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// The refresh rate of this display mode in Hertz (Hz).
+        /// Refresh rate indicates how many times per second the monitor redraws the image.
+        /// Common values are 60Hz, 75Hz, 144Hz, etc. Higher refresh rates can result in
+        /// smoother visuals.
+        /// </summary>
+        public int RefreshRate { get; set; }
+
+        /// <summary>
+        /// Bits per Pixel for this display mode, indicating the color depth.
+        /// Common values are 16-bit, 24-bit, and 32-bit. Higher bit depths allow for
+        /// more colors to be displayed.
+        /// </summary>
+        public int BitsPerPixel { get; set; }
+
+        /// <summary>
+        /// Creates a new DisplayMode object, using the specified width, height, refresh rate and
+        /// bits per pixel values.
+        /// </summary>
+        /// <param name="width"> Width of this display mode in pixels. </param>
+        /// <param name="height"> Height of this display mode in pixels. </param>
+        /// <param name="refreshRate"> The refresh rate. </param>
+        /// <param name="bitsPerPixel"> Bits per Pixel. </param>
+        public DisplayMode( int width, int height, int refreshRate, int bitsPerPixel )
+        {
+            Width        = width;
+            Height       = height;
+            RefreshRate  = refreshRate;
+            BitsPerPixel = bitsPerPixel;
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"{Width}x{Height}, bpp: {BitsPerPixel}, hz: {RefreshRate}";
+        }
+    }
 }
 
 // ============================================================================

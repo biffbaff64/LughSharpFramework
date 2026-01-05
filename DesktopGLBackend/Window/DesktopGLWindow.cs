@@ -23,11 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Graphics;
+using DotGLFW;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
+using Image = DotGLFW.Image;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace DesktopGLBackend.Window;
@@ -36,7 +38,7 @@ namespace DesktopGLBackend.Window;
 /// Wrapper/Manager class for a <see cref="DotGLFW.Window"/>.
 /// </summary>
 [PublicAPI]
-public partial class DesktopGLWindow : IDisposable
+public class DesktopGLWindow : IDisposable
 {
     /// <summary>
     /// Represents the underlying DotGLFW window used by the DesktopGL backend.
@@ -95,7 +97,7 @@ public partial class DesktopGLWindow : IDisposable
     /// This property ensures that the <see cref="IApplicationListener"/> has been
     /// properly set up prior to performing operations that require it.
     /// </summary>
-    public bool ListenerInitialised { get; set; } = false;
+    public bool ListenerInitialised { get; set; }
 
     // ========================================================================
 
@@ -103,10 +105,10 @@ public partial class DesktopGLWindow : IDisposable
     private List< IRunnable.Runnable > _runnables         = [ ];
 
     private Vector2 _tmpV2            = new();
-    private bool    _focused          = false;
-    private bool    _iconified        = false;
-    private bool    _requestRendering = false;
-    private bool    _disposed         = false;
+    private bool    _focused;
+    private bool    _iconified;
+    private bool    _requestRendering;
+    private bool    _disposed;
 
     // ========================================================================
     // ========================================================================
@@ -141,15 +143,15 @@ public partial class DesktopGLWindow : IDisposable
         Graphics           = new DesktopGLGraphics( this );
         Graphics.GLVersion = Application.GLVersion;
 
-        Engine.Api.Input    = Input;
-        Engine.Api.Graphics = Graphics;
+        Api.Input    = Input;
+        Api.Graphics = Graphics;
 
-        DotGLFW.Glfw.SetWindowFocusCallback( window, GdxFocusCallback );
-        DotGLFW.Glfw.SetWindowIconifyCallback( window, GdxIconifyCallback );
-        DotGLFW.Glfw.SetWindowMaximizeCallback( window, GdxMaximizeCallback );
-        DotGLFW.Glfw.SetWindowCloseCallback( window, GdxWindowCloseCallback );
-        DotGLFW.Glfw.SetDropCallback( window, GdxDropCallback );
-        DotGLFW.Glfw.SetWindowRefreshCallback( window, GdxRefreshCallback );
+        Glfw.SetWindowFocusCallback( window, GdxFocusCallback );
+        Glfw.SetWindowIconifyCallback( window, GdxIconifyCallback );
+        Glfw.SetWindowMaximizeCallback( window, GdxMaximizeCallback );
+        Glfw.SetWindowCloseCallback( window, GdxWindowCloseCallback );
+        Glfw.SetDropCallback( window, GdxDropCallback );
+        Glfw.SetWindowRefreshCallback( window, GdxRefreshCallback );
 
         WindowListener?.Created( this );
     }
@@ -216,7 +218,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <summary>
     /// Post a <see cref="IRunnable.Runnable"/> to this window's event queue. Use this if
     /// you access statics like <see cref="Engine.Graphics"/> in your runnable instead
-    /// of <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)"/>.
+    /// of <see cref="DesktopGLApplication.PostRunnable(Action)"/>.
     /// </summary>
     public void PostRunnable( IRunnable.Runnable runnable )
     {
@@ -231,12 +233,12 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public void MakeCurrent()
     {
-        Engine.Api.Graphics = Graphics;
-        Engine.Api.Input    = Input;
+        Api.Graphics = Graphics;
+        Api.Input    = Input;
 
-        DotGLFW.Glfw.MakeContextCurrent( GlfwWindow );
+        Glfw.MakeContextCurrent( GlfwWindow );
 
-        Graphics.CurrentContext = DotGLFW.Glfw.GetCurrentContext();
+        Graphics.CurrentContext = Glfw.GetCurrentContext();
     }
 
     /// <summary>
@@ -257,7 +259,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <returns></returns>
     public bool ShouldClose()
     {
-        return DotGLFW.Glfw.WindowShouldClose( GlfwWindow );
+        return Glfw.WindowShouldClose( GlfwWindow );
     }
 
     /// <summary>
@@ -277,7 +279,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <inheritdoc cref="DotGLFW.Glfw.SetWindowPos(DotGLFW.Window,int,int)"/>
     public void SetPosition( int x, int y )
     {
-        DotGLFW.Glfw.SetWindowPos( GlfwWindow, x, y );
+        Glfw.SetWindowPos( GlfwWindow, x, y );
     }
 
     /// <summary>
@@ -288,7 +290,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <returns>A Vector2 holding the window X and Y.</returns>
     public Vector2 GetPosition()
     {
-        DotGLFW.Glfw.GetWindowPos( GlfwWindow, out var xPos, out var yPos );
+        Glfw.GetWindowPos( GlfwWindow, out var xPos, out var yPos );
 
         return _tmpV2.Set( xPos, yPos );
     }
@@ -301,11 +303,11 @@ public partial class DesktopGLWindow : IDisposable
     {
         if ( visible )
         {
-            DotGLFW.Glfw.ShowWindow( GlfwWindow );
+            Glfw.ShowWindow( GlfwWindow );
         }
         else
         {
-            DotGLFW.Glfw.HideWindow( GlfwWindow );
+            Glfw.HideWindow( GlfwWindow );
         }
     }
 
@@ -316,7 +318,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public void CloseWindow()
     {
-        DotGLFW.Glfw.SetWindowShouldClose( GlfwWindow, true );
+        Glfw.SetWindowShouldClose( GlfwWindow, true );
     }
 
     /// <summary>
@@ -325,7 +327,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public void IconifyWindow()
     {
-        DotGLFW.Glfw.IconifyWindow( GlfwWindow );
+        Glfw.IconifyWindow( GlfwWindow );
     }
 
     /// <summary>
@@ -334,12 +336,9 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     /// <param name="images">
     /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888"/>
-    /// is preferred so the images will not have to be copied and converted.
-    /// <b>
-    /// The chosen image
-    /// is copied, and the provided Pixmaps are not disposed.
-    /// </b>
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format is preferred so the images
+    /// will not have to be copied and converted.
+    /// <b>The chosen image is copied, and the provided Pixmaps are not disposed.</b>
     /// </param>
     public void SetIcon( params Pixmap[] images )
     {
@@ -357,7 +356,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public void RestoreWindow()
     {
-        DotGLFW.Glfw.RestoreWindow( GlfwWindow );
+        Glfw.RestoreWindow( GlfwWindow );
     }
 
     /// <summary>
@@ -367,7 +366,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public void MaximizeWindow()
     {
-        DotGLFW.Glfw.MaximizeWindow( GlfwWindow );
+        Glfw.MaximizeWindow( GlfwWindow );
     }
 
     /// <summary>
@@ -376,7 +375,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public void FocusWindow()
     {
-        DotGLFW.Glfw.FocusWindow( GlfwWindow );
+        Glfw.FocusWindow( GlfwWindow );
     }
 
     /// <summary>
@@ -385,7 +384,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <param name="title"> String holding the Title text. </param>
     public void SetTitle( string title )
     {
-        DotGLFW.Glfw.SetWindowTitle( GlfwWindow, title );
+        Glfw.SetWindowTitle( GlfwWindow, title );
     }
 
     /// <summary>
@@ -410,7 +409,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <param name="maxHeight"> The maximum window height. </param>
     public static void SetSizeLimits( DotGLFW.Window? handle, int minWidth, int minHeight, int maxWidth, int maxHeight )
     {
-        DotGLFW.Glfw.SetWindowSizeLimits( handle,
+        Glfw.SetWindowSizeLimits( handle,
                                   minWidth > -1 ? minWidth : -1,
                                   minHeight > -1 ? minHeight : -1,
                                   maxWidth > -1 ? maxWidth : -1,
@@ -432,7 +431,7 @@ public partial class DesktopGLWindow : IDisposable
 
         for ( var i = 0; i < imagePaths.Length; i++ )
         {
-            pixmaps[ i ] = new Pixmap( Engine.Api.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
+            pixmaps[ i ] = new Pixmap( Api.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
         }
 
         SetIcon( window, pixmaps );
@@ -450,12 +449,9 @@ public partial class DesktopGLWindow : IDisposable
     /// <param name="window"> The applicable window. </param>
     /// <param name="images">
     /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888"/>
-    /// is preferred so the images will not have to be copied and converted.
-    /// <b>
-    /// The chosen image
-    /// is copied, and the provided Pixmaps are not disposed.
-    /// </b>
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format is preferred so the images
+    /// will not have to be copied and converted.
+    /// <b>The chosen image is copied, and the provided Pixmaps are not disposed.</b>
     /// </param>
     public static void SetIcon( DotGLFW.Window window, Pixmap[] images )
     {
@@ -464,7 +460,7 @@ public partial class DesktopGLWindow : IDisposable
             return;
         }
 
-        List< DotGLFW.Image > buffer = new( images.Length );
+        List< Image > buffer = new( images.Length );
 
         Pixmap?[] tmpPixmaps = new Pixmap[ images.Length ];
 
@@ -480,7 +476,7 @@ public partial class DesktopGLWindow : IDisposable
                 tmpPixmaps[ i ] = rgba;
             }
 
-            DotGLFW.Image icon = new()
+            Image icon = new()
             {
                 Width  = images[ i ].Width,
                 Height = images[ i ].Height,
@@ -490,7 +486,7 @@ public partial class DesktopGLWindow : IDisposable
             buffer.Add( icon );
         }
 
-        DotGLFW.Glfw.SetWindowIcon( window, buffer.ToArray() );
+        Glfw.SetWindowIcon( window, buffer.ToArray() );
 
         foreach ( var pixmap in tmpPixmaps )
         {
@@ -536,7 +532,7 @@ public partial class DesktopGLWindow : IDisposable
                 Graphics.Dispose();
                 Input.Dispose();
 
-                DotGLFW.Glfw.DestroyWindow( GlfwWindow );
+                Glfw.DestroyWindow( GlfwWindow );
             }
 
             _disposed = true;
@@ -544,6 +540,115 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     #endregion dispose pattern
+
+    // ========================================================================
+    
+    #region Window callbacks
+    
+    /// <summary>
+    /// Callback method invoked when the focus state of the associated window changes.
+    /// </summary>
+    /// <param name="windowHandle">The handle to the GLFW window whose focus state has changed.</param>
+    /// <param name="focused">
+    /// A boolean indicating the new focus state; true if the window gained focus,
+    /// otherwise false.
+    /// </param>
+    public void GdxFocusCallback( DotGLFW.Window windowHandle, bool focused )
+    {
+        if ( WindowListener != null )
+        {
+            if ( focused )
+            {
+                WindowListener.FocusGained();
+            }
+            else
+            {
+                WindowListener.FocusLost();
+            }
+
+            _focused = focused;
+        }
+    }
+
+    /// <summary>
+    /// Callback method invoked when the iconification state of the associated window changes.
+    /// </summary>
+    /// <param name="windowHandle">The handle to the GLFW window whose iconification state has changed.</param>
+    /// <param name="iconified">
+    /// A boolean indicating the new iconification state; true if the window was minimized,
+    /// otherwise false.
+    /// </param>
+    public void GdxIconifyCallback( DotGLFW.Window windowHandle, bool iconified )
+    {
+        WindowListener?.Iconified( iconified );
+
+        _iconified = iconified;
+
+        if ( iconified )
+        {
+            ApplicationListener?.Pause();
+        }
+        else
+        {
+            ApplicationListener?.Resume();
+        }
+    }
+
+    /// <summary>
+    /// Callback method invoked when the maximization state of the associated window changes.
+    /// </summary>
+    /// <param name="windowHandle">The handle to the GLFW window whose maximization state has changed.</param>
+    /// <param name="maximized">
+    /// A boolean indicating the new maximization state; true if the window is maximized,
+    /// otherwise false.
+    /// </param>
+    public void GdxMaximizeCallback( DotGLFW.Window windowHandle, bool maximized )
+    {
+        WindowListener?.Maximized( maximized );
+    }
+
+    /// <summary>
+    /// Callback method invoked when a close request is made for the associated GLFW window.
+    /// </summary>
+    /// <param name="windowHandle">
+    /// The handle to the GLFW window for which the close request is received.
+    /// </param>
+    public void GdxWindowCloseCallback( DotGLFW.Window windowHandle )
+    {
+        if ( WindowListener != null )
+        {
+            if ( !WindowListener.CloseRequested() )
+            {
+                Glfw.SetWindowShouldClose( windowHandle, false );
+            }
+        }
+    }
+
+    /// <summary>
+    /// Callback method invoked when files are dropped onto the associated window.
+    /// </summary>
+    /// <param name="window">The handle to the GLFW window on which files were dropped.</param>
+    /// <param name="paths">An array of file paths representing the dropped files.</param>
+    public void GdxDropCallback( DotGLFW.Window window, string[] paths )
+    {
+        var files = new string[ paths.Length ];
+
+        Array.Copy( paths, 0, files, 0, paths.Length );
+
+        WindowListener?.FilesDropped( files );
+    }
+
+    /// <summary>
+    /// Callback method invoked when the associated window requires a refresh,
+    /// typically used to redraw or re-render the window's content.
+    /// </summary>
+    /// <param name="window">The handle to the GLFW window that requires a refresh.</param>
+    public void GdxRefreshCallback( DotGLFW.Window window )
+    {
+        WindowListener?.RefreshRequested();
+    }
+    
+    #endregion Window callbacks
 }
 
 // ============================================================================

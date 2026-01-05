@@ -32,7 +32,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public partial class MaxRectsPacker : IPacker
+public class MaxRectsPacker : IPacker
 {
     private static   TexturePackerSettings     _settings = null!;
     private readonly FreeRectChoiceHeuristic[] _methods;

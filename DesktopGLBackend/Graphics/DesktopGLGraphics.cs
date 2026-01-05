@@ -42,7 +42,7 @@ namespace DesktopGLBackend.Graphics;
 /// </para>
 /// </summary>
 [PublicAPI]
-public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
+public class DesktopGLGraphics : GraphicsDevice, IDisposable
 {
     public DesktopGLWindow? GLWindow { get; set; }
 
@@ -627,6 +627,57 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     }
 
     #endregion IDisposable implementation
+    
+    // ========================================================================
+    
+    /// <summary>
+    /// Describes a Display Mode for a <see cref="DotGLFW.Monitor"/>
+    /// </summary>
+    [PublicAPI]
+    public class DesktopGLDisplayMode : IGraphicsDevice.DisplayMode
+    {
+        /// <summary>
+        /// The <see cref="DotGLFW.Monitor"/> this <see cref="IGraphicsDevice.DisplayMode"/> applies to.
+        /// </summary>
+        public DotGLFW.Monitor MonitorHandle { get; set; }
+
+        /// <summary>
+        /// Creates a new Display Mode and its properties.
+        /// </summary>
+        /// <param name="monitor"> The target monitor. </param>
+        /// <param name="width"> Monitor display width. </param>
+        /// <param name="height"> Monior display height. </param>
+        /// <param name="refreshRate"> The refresh rate. </param>
+        /// <param name="bitsPerPixel"> The bits per pixel. </param>
+        public DesktopGLDisplayMode( DotGLFW.Monitor monitor,
+                                     int width,
+                                     int height,
+                                     int refreshRate,
+                                     int bitsPerPixel )
+            : base( width, height, refreshRate, bitsPerPixel )
+        {
+            MonitorHandle = monitor;
+        }
+    }
+
+    // ========================================================================
+    
+    /// <summary>
+    /// Wrapper for a <see cref="DotGLFW.Monitor"/> which adds virtual X & Y, plus a name.
+    /// Virtual positions are for multiple monitors.
+    /// </summary>
+    [PublicAPI]
+    public class DesktopGLMonitor( DotGLFW.Monitor monitor, int virtualX, int virtualY, string name )
+    {
+        /// <summary>
+        /// The <see cref="DotGLFW.Monitor"/>.
+        /// </summary>
+        public DotGLFW.Monitor MonitorHandle { get; private set; } = monitor;
+
+        public int    VirtualX { get; set; } = virtualX;
+        public int    VirtualY { get; set; } = virtualY;
+        public string Name     { get; set; } = name;
+    }
 }
 
 // ============================================================================

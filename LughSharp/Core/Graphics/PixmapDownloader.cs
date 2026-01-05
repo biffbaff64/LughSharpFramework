@@ -24,24 +24,39 @@
 
 namespace LughSharp.Core.Graphics;
 
-public partial interface IGraphicsDevice
+[PublicAPI]
+public class PixmapDownloader
 {
     /// <summary>
-    /// Describes a monitor.
+    /// Downloads an image from http(s) url and passes it as a Pixmap to the
+    /// specified <see cref="IDownloadPixmapResponseListener"/>.
+    /// </summary>
+    /// <param name="url">http url to download the image from.</param>
+    /// <param name="responseListener"> The listener to call once the image is available as a Pixmap</param>
+    /// <remarks> NOT YET IMPLEMENTED. </remarks>
+    public static void DownloadFromUrl( string url, IDownloadPixmapResponseListener responseListener )
+    {
+        //TODO:
+        throw new NotImplementedException( "Pixmap#DownloadFromUrl is not currently implemented." );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Response listener for <see cref="PixmapDownloader.DownloadFromUrl(String, IDownloadPixmapResponseListener)"/>
     /// </summary>
     [PublicAPI]
-    public class Monitor
+    public interface IDownloadPixmapResponseListener
     {
-        public readonly string Name;
-        public readonly int    VirtualX;
-        public readonly int    VirtualY;
+        /// <summary>
+        /// Called on the render thread when image was downloaded successfully.
+        /// </summary>
+        void DownloadComplete( Pixmap pixmap );
 
-        protected Monitor( int virtualX, int virtualY, string name )
-        {
-            VirtualX = virtualX;
-            VirtualY = virtualY;
-            Name     = name;
-        }
+        /// <summary>
+        /// Called when image download failed. This might get called on a background thread.
+        /// </summary>
+        void DownloadFailed( Exception e );
     }
 }
 

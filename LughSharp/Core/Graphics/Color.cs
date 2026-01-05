@@ -146,13 +146,13 @@ public class Color : ICloneable, IEquatable< Color >
     /// Constructor, sets the Color components using the specified integer value in
     /// the format RGBA8888.
     /// </summary>
-    /// <param name="rgba8888"> An uint color value in RGBA8888 format. </param>
+    /// <param name="rgba8888"> A uint color value in RGBA8888 format. </param>
     public Color( uint rgba8888 )
     {
-        R = ( float )( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
-        G = ( float )( ( rgba8888 & 0x00ff0000 ) >> 16 ) / 255.0f;
-        B = ( float )( ( rgba8888 & 0x0000ff00 ) >> 8 ) / 255.0f;
-        A = ( float )( rgba8888 & 0x000000ff ) / 255.0f;
+        R = (( rgba8888 & 0xff000000 ) >> 24) / 255.0f;
+        G = (( rgba8888 & 0x00ff0000 ) >> 16) / 255.0f;
+        B = (( rgba8888 & 0x0000ff00 ) >> 8) / 255.0f;
+        A = (rgba8888 & 0x000000ff) / 255.0f;
 
         Clamp();
     }
@@ -599,7 +599,7 @@ public class Color : ICloneable, IEquatable< Color >
         var b = ( uint )( 255f * B ) << 8;
         var a = ( uint )( 255f * A );
 
-        var intBits = ( uint )( r | g | b | a );
+        var intBits = r | g | b | a;
 
         return NumberUtils.UIntToFloatColor( intBits );
     }
@@ -624,9 +624,9 @@ public class Color : ICloneable, IEquatable< Color >
         var bf = ( uint )( 255f * b ) << 8;
         var af = ( uint )( 255f * a );
 
-        var intBits = ( uint )( rf | gf | bf | af );
+        var intBits = rf | gf | bf | af;
 
-        return ( float )intBits;
+        return intBits;
     }
 
     /// <summary>
@@ -870,7 +870,7 @@ public class Color : ICloneable, IEquatable< Color >
         var g = ( uint )( 255f * G ) << 8;
         var r = ( uint )( 255f * R );
 
-        var intBits = ( uint )( a | b | g | r );
+        var intBits = a | b | g | r;
 
         return NumberUtils.UIntToFloatColor( intBits );
     }
@@ -895,9 +895,9 @@ public class Color : ICloneable, IEquatable< Color >
         var gf = ( uint )( g * 255f ) << 8;
         var rf = ( uint )( r * 255f );
 
-        var intBits = ( uint )( af | bf | gf | rf );
+        var intBits = af | bf | gf | rf;
 
-        return ( float )intBits;
+        return intBits;
     }
 
     public static float ToFloatBitsABGR( byte a, byte b, byte g, byte r )

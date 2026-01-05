@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Shaders;
 
 [PublicAPI]
 public class ShaderLoader

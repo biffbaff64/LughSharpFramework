@@ -122,7 +122,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 /// </summary>
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public partial class TexturePacker
+public class TexturePacker
 {
     public string?                        RootPath         { get; set; }
     public IPacker                        Packer           { get; set; }
