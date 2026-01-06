@@ -293,7 +293,7 @@ public class Gdx2DPixmap : IDisposable
     {
         var rgba = new Color();
 
-        Color.RGBA8888ToColor( ref rgba, ( uint )color );
+        Color.Rgba8888ToColor( ref rgba, ( uint )color );
 
         SetPixelNative( x, y, rgba );
     }
@@ -334,7 +334,7 @@ public class Gdx2DPixmap : IDisposable
     {
         var colorObj = new Color();
         
-        Color.RGBA8888ToColor( ref colorObj, ( uint )color );
+        Color.Rgba8888ToColor( ref colorObj, ( uint )color );
 
         ClearWithColor( colorObj );
     }
@@ -427,7 +427,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="size">The size of the pixmap data in bytes.</param>
     private void ClearRGB888( Color color, uint size )
     {
-        var col = Color.RGB888( color );
+        var col = Color.Rgb888( color );
         var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
         var g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
         var r   = ( byte )( ( col & 0xff000000 ) >> 24 );
@@ -452,7 +452,7 @@ public class Gdx2DPixmap : IDisposable
             throw new GdxRuntimeException( "Invalid size for RGBA8888 format" );
         }
 
-        var col = Color.RGBA8888( color );
+        var col = Color.ToRgba8888( color );
         var a   = ( byte )( col & 0x000000ff );
         var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
         var g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
@@ -474,7 +474,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="size">The total size of the pixmap data to be cleared.</param>
     private void ClearRGB565( Color color, uint size )
     {
-        var col = Color.RGB565( color );
+        var col = Color.Rgb565( color );
 
         for ( var i = 0; i < size; i += 2 )
         {
@@ -490,7 +490,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="size">The size of the pixmap data in bytes.</param>
     private void ClearRGBA4444( Color color, uint size )
     {
-        var col = Color.RGBA4444( color );
+        var col = Color.Rgba4444( color );
 
         for ( var i = 0; i < size; i += 2 )
         {
@@ -588,7 +588,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="color">The color to set</param>
     public void SetPixelNative( int x, int y, Color color )
     {
-        gdx2d_set_pixel( x, y, color.PackedColorABGR() );
+        gdx2d_set_pixel( x, y, color.PackedColorAbgr() );
     }
 
     /// <summary>
@@ -601,7 +601,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="color">Line color</param>
     public void DrawLineNative( int x, int y, int x2, int y2, Color color )
     {
-        gdx2d_draw_line( x, y, x2, y2, color.PackedColorABGR() );
+        gdx2d_draw_line( x, y, x2, y2, color.PackedColorAbgr() );
     }
 
     /// <summary>
@@ -614,7 +614,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="color">The outline color</param>
     public void DrawRectNative( int x, int y, uint width, uint height, Color color )
     {
-        gdx2d_draw_rect( x, y, width, height, color.PackedColorABGR() );
+        gdx2d_draw_rect( x, y, width, height, color.PackedColorAbgr() );
     }
 
     /// <summary>
@@ -626,7 +626,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="color">The outline color</param>
     public void DrawCircleNative( int x, int y, uint radius, Color color )
     {
-        gdx2d_draw_circle( x, y, radius, color.PackedColorABGR() );
+        gdx2d_draw_circle( x, y, radius, color.PackedColorAbgr() );
     }
 
     /// <summary>
@@ -639,7 +639,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="color">The fill color</param>
     public void FillRectNative( int x, int y, uint width, uint height, Color color )
     {
-        gdx2d_fill_rect( x, y, width, height, color.PackedColorABGR() );
+        gdx2d_fill_rect( x, y, width, height, color.PackedColorAbgr() );
     }
 
     /// <summary>
@@ -651,7 +651,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="color">The fill color</param>
     public void FillCircleNative( int x, int y, uint radius, Color color )
     {
-        gdx2d_fill_circle( x, y, radius, color.PackedColorABGR() );
+        gdx2d_fill_circle( x, y, radius, color.PackedColorAbgr() );
     }
 
     /// <summary>
@@ -666,7 +666,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="color">The fill color</param>
     public void FillTriangleNative( int x1, int y1, int x2, int y2, int x3, int y3, Color color )
     {
-        gdx2d_fill_triangle( new NativePixmapStruct(), x1, y1, x2, y2, x3, y3, color.PackedColorABGR() );
+        gdx2d_fill_triangle( new NativePixmapStruct(), x1, y1, x2, y2, x3, y3, color.PackedColorAbgr() );
     }
 
     /// <summary>

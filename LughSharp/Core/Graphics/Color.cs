@@ -87,7 +87,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <summary>
     /// Convenience for frequently used <tt>White.ToFloatBits()</tt>
     /// </summary>
-    public static float WhiteFloatBits => White.ToFloatBitsABGR();
+    public static float WhiteFloatBits => White.ToFloatBitsAbgr();
 
     // ========================================================================
     // ========================================================================
@@ -149,10 +149,10 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="rgba8888"> A uint color value in RGBA8888 format. </param>
     public Color( uint rgba8888 )
     {
-        R = (( rgba8888 & 0xff000000 ) >> 24) / 255.0f;
-        G = (( rgba8888 & 0x00ff0000 ) >> 16) / 255.0f;
-        B = (( rgba8888 & 0x0000ff00 ) >> 8) / 255.0f;
-        A = (rgba8888 & 0x000000ff) / 255.0f;
+        R = ( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
+        G = ( ( rgba8888 & 0x00ff0000 ) >> 16 ) / 255.0f;
+        B = ( ( rgba8888 & 0x0000ff00 ) >> 8 ) / 255.0f;
+        A = ( rgba8888 & 0x000000ff ) / 255.0f;
 
         Clamp();
     }
@@ -183,6 +183,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// Sets this colors components using the components from the supplied color.
@@ -207,7 +208,7 @@ public class Color : ICloneable, IEquatable< Color >
     {
         var color = this;
 
-        RGBA8888ToColor( ref color, rgba );
+        Rgba8888ToColor( ref color, rgba );
 
         R = color.R;
         G = color.G;
@@ -249,6 +250,19 @@ public class Color : ICloneable, IEquatable< Color >
         A *= color.A;
 
         return Clamp();
+    }
+
+    /// <summary>
+    /// Multiplies the components of this Color object by the components
+    /// of the supplied Color object and returns the result as a NEW Color
+    /// object.
+    /// </summary>
+    public Color MulNew( Color color )
+    {
+        return new Color( R * color.R,
+                          G * color.G,
+                          B * color.B,
+                          A * color.A ).Clamp();
     }
 
     /// <summary>
@@ -300,6 +314,18 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
+    /// Adds the components of the supplied Color object to the components
+    /// of this Color object and returns the result as a NEW Color object.
+    /// </summary>
+    public Color AddNew( Color color )
+    {
+        return new Color( R + color.R,
+                          G + color.G,
+                          B + color.B,
+                          A + color.A ).Clamp();
+    }
+
+    /// <summary>
     /// Adds the supplied Color components to the corresponding components of this Color.
     /// </summary>
     /// <param name="r"> Red component </param>
@@ -334,6 +360,19 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
+    /// Subtracts the components of the supplied Color object from the
+    /// components of this Color object and returns the result as a NEW
+    /// Color object.
+    /// </summary>
+    public Color SubNew( Color color )
+    {
+        return new Color( R - color.R,
+                          G - color.G,
+                          B - color.B,
+                          A - color.A ).Clamp();
+    }
+
+    /// <summary>
     /// Subtracts the supplied elements from the equivalent elements in this Color.
     /// </summary>
     /// <param name="r"> Red component. </param>
@@ -365,44 +404,6 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Adds the components of the supplied Color object to the components
-    /// of this Color object and returns the result as a new Color object.
-    /// </summary>
-    public Color AddNew( Color color )
-    {
-        return new Color( R + color.R,
-                          G + color.G,
-                          B + color.B,
-                          A + color.A ).Clamp();
-    }
-
-    /// <summary>
-    /// Subtracts the components of the supplied Color object from the
-    /// components of this Color object and returns the result as a new
-    /// Color object.
-    /// </summary>
-    public Color SubNew( Color color )
-    {
-        return new Color( R - color.R,
-                          G - color.G,
-                          B - color.B,
-                          A - color.A ).Clamp();
-    }
-
-    /// <summary>
-    /// Multiplies the components of this Color object by the components
-    /// of the supplied Color object and returns the result as a new Color
-    /// object.
-    /// </summary>
-    public Color MulNew( Color color )
-    {
-        return new Color( R * color.R,
-                          G * color.G,
-                          B * color.B,
-                          A * color.A ).Clamp();
-    }
-
-    /// <summary>
     /// Clamps this Colors RGBA components to a valid range [0 - 1]
     /// </summary>
     /// <returns> This Color for chaining. </returns>
@@ -413,11 +414,11 @@ public class Color : ICloneable, IEquatable< Color >
         B = B < 0f ? 0f : B > 1f ? 1f : B;
         A = A < 0f ? 0f : A > 1f ? 1f : A;
 
-        RGBAPackedColor = RGBA8888( R, G, B, A );
-        ABGRPackedColor = ABGR8888( A, B, G, R );
+        RGBAPackedColor = ToRgba8888( R, G, B, A );
+        ABGRPackedColor = ToAbgr8888( A, B, G, R );
 
-        RGBAFloatPack = ToFloatBitsABGR( R, G, B, A );
-        ABGRFloatPack = ToFloatBitsABGR( A, B, G, R );
+        RGBAFloatPack = ToFloatBitsAbgr( R, G, B, A );
+        ABGRFloatPack = ToFloatBitsAbgr( A, B, G, R );
 
         if ( showDebug )
         {
@@ -573,6 +574,8 @@ public class Color : ICloneable, IEquatable< Color >
         return ( ( uint )( luminance * 255.0f ) << 8 ) | ( uint )( alpha * 255 );
     }
 
+    public static Color FromHex( uint hex ) => new( hex );
+
     // ========================================================================
     // ========================================================================
 
@@ -581,6 +584,10 @@ public class Color : ICloneable, IEquatable< Color >
     // RGBA and RGB ( Methods only )
     // ========================================================================
     // ========================================================================
+
+    public static Color FromRgba( float r, float g, float b, float a ) => new( r, g, b, a );
+
+    public static Color FromRgb( float r, float g, float b ) => new( r, g, b, 1.0f );
 
     /// <summary>
     /// Packs the color components into a 32-bit integer with the format ABGR and then converts it
@@ -592,7 +599,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <returns> The resulting float. </returns>
     /// <seealso cref="NumberUtils.UIntToFloatColor"/>
-    public float ToFloatBitsRGBA()
+    public float ToFloatBitsRgba()
     {
         var r = ( uint )( 255f * R ) << 24;
         var g = ( uint )( 255f * G ) << 16;
@@ -617,7 +624,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <returns></returns>
-    public static float ToFloatBitsRGBA( float r, float g, float b, float a )
+    public static float ToFloatBitsRgba( float r, float g, float b, float a )
     {
         var rf = ( uint )( 255f * r ) << 24;
         var gf = ( uint )( 255f * g ) << 16;
@@ -633,12 +640,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// Packs the color components into a 32-bit integer with the format RGBA.
     /// </summary>
     /// <returns> the packed color as a 32-bit int. </returns>
-    public uint PackedColorRGBA()
+    public uint PackedColorRgba()
     {
         return ( ( uint )( 255f * R ) << 24 )
-               | ( ( uint )( 255f * G ) << 16 )
-               | ( ( uint )( 255f * B ) << 8 )
-               | ( uint )( 255f * A );
+             | ( ( uint )( 255f * G ) << 16 )
+             | ( ( uint )( 255f * B ) << 8 )
+             | ( uint )( 255f * A );
     }
 
     /// <summary>
@@ -649,12 +656,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component. </param>
     /// <param name="a"> Alpha component. </param>
     /// <returns></returns>
-    public static uint RGBA8888ToUInt( float r, float g, float b, float a )
+    public static uint Rgba8888ToUInt( float r, float g, float b, float a )
     {
         return ( ( uint )( 255f * r ) << 24 )
-               | ( ( uint )( 255f * g ) << 16 )
-               | ( ( uint )( 255f * b ) << 8 )
-               | ( uint )( 255f * a );
+             | ( ( uint )( 255f * g ) << 16 )
+             | ( ( uint )( 255f * b ) << 8 )
+             | ( uint )( 255f * a );
     }
 
     /// <summary>
@@ -667,7 +674,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
-    public static uint RGB565( float r, float g, float b )
+    public static uint Rgb565( float r, float g, float b )
     {
         return ( ( uint )( r * 31 ) << 11 ) | ( ( uint )( g * 63 ) << 5 ) | ( uint )( b * 31 );
     }
@@ -684,12 +691,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
-    public static uint RGBA4444( float r, float g, float b, float a )
+    public static uint Rgba4444( float r, float g, float b, float a )
     {
         return ( ( uint )( r * 15 ) << 12 )
-               | ( ( uint )( g * 15 ) << 8 )
-               | ( ( uint )( b * 15 ) << 4 )
-               | ( uint )( a * 15 );
+             | ( ( uint )( g * 15 ) << 8 )
+             | ( ( uint )( b * 15 ) << 4 )
+             | ( uint )( a * 15 );
     }
 
     /// <summary>
@@ -702,7 +709,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
-    public static uint RGB888( float r, float g, float b )
+    public static uint Rgb888( float r, float g, float b )
     {
         return ( ( uint )( r * 255 ) << 16 ) | ( ( uint )( g * 255 ) << 8 ) | ( uint )( b * 255 );
     }
@@ -719,12 +726,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
-    public static uint RGBA8888( float r, float g, float b, float a )
+    public static uint ToRgba8888( float r, float g, float b, float a )
     {
         return ( ( uint )( r * 255 ) << 24 )
-               | ( ( uint )( g * 255 ) << 16 )
-               | ( ( uint )( b * 255 ) << 8 )
-               | ( uint )( a * 255 );
+             | ( ( uint )( g * 255 ) << 16 )
+             | ( ( uint )( b * 255 ) << 8 )
+             | ( uint )( a * 255 );
     }
 
     /// <summary>
@@ -736,11 +743,11 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 16 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint RGB565( Color color )
+    public static uint Rgb565( Color color )
     {
         return ( ( uint )( color.R * 31 ) << 11 )
-               | ( ( uint )( color.G * 63 ) << 5 )
-               | ( uint )( color.B * 31 );
+             | ( ( uint )( color.G * 63 ) << 5 )
+             | ( uint )( color.B * 31 );
     }
 
     /// <summary>
@@ -753,12 +760,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 16 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint RGBA4444( Color color )
+    public static uint Rgba4444( Color color )
     {
         return ( ( uint )( color.R * 15 ) << 12 )
-               | ( ( uint )( color.G * 15 ) << 8 )
-               | ( ( uint )( color.B * 15 ) << 4 )
-               | ( uint )( color.A * 15 );
+             | ( ( uint )( color.G * 15 ) << 8 )
+             | ( ( uint )( color.B * 15 ) << 4 )
+             | ( uint )( color.A * 15 );
     }
 
     /// <summary>
@@ -770,11 +777,11 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 24 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint RGB888( Color color )
+    public static uint Rgb888( Color color )
     {
         return ( ( uint )( color.R * 255 ) << 16 )
-               | ( ( uint )( color.G * 255 ) << 8 )
-               | ( uint )( color.B * 255 );
+             | ( ( uint )( color.G * 255 ) << 8 )
+             | ( uint )( color.B * 255 );
     }
 
     /// <summary>
@@ -786,12 +793,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 24 - 31 : Red component</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint RGBA8888( Color color )
+    public static uint ToRgba8888( Color color )
     {
         return ( ( uint )( color.R * 255 ) << 24 )
-               | ( ( uint )( color.G * 255 ) << 16 )
-               | ( ( uint )( color.B * 255 ) << 8 )
-               | ( uint )( color.A * 255 );
+             | ( ( uint )( color.G * 255 ) << 16 )
+             | ( ( uint )( color.B * 255 ) << 8 )
+             | ( uint )( color.A * 255 );
     }
 
     /// <summary>
@@ -799,7 +806,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 32-bit RGBA8888 integer value. </param>
-    public static void RGBA8888ToColor( ref Color color, uint value )
+    public static void Rgba8888ToColor( ref Color color, uint value )
     {
         color.R = ( ( value & 0xff000000 ) >>> 24 ) / 255f;
         color.G = ( ( value & 0x00ff0000 ) >>> 16 ) / 255f;
@@ -812,7 +819,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 16-bit RGB565 integer value. </param>
-    public static void RGB565ToColor( ref Color color, uint value )
+    public static void Rgb565ToColor( ref Color color, uint value )
     {
         // Ensure the value is within the valid range for 16-bit RGB565
         if ( value > 0xFFFF )
@@ -831,7 +838,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 16-bit RGBA4444 integer value. </param>
-    public static void RGBA4444ToColor( ref Color color, uint value )
+    public static void Rgba4444ToColor( ref Color color, uint value )
     {
         color.R = ( ( value & 0xF000 ) >> 12 ) / 15f;
         color.G = ( ( value & 0x0F00 ) >> 8 ) / 15f;
@@ -842,7 +849,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <summary>
     /// Returns a string representation of the Color components RGBA.
     /// </summary>
-    public string RGBAToString()
+    public string RgbaToString()
     {
         return $"R:{R},G:{G},B:{B},A:{A}";
     }
@@ -863,7 +870,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <returns> The resulting float. </returns>
     /// <seealso cref="NumberUtils.UIntToFloatColor(uint)"/>
-    public float ToFloatBitsABGR()
+    public float ToFloatBitsAbgr()
     {
         var a = ( uint )( 255f * A ) << 24;
         var b = ( uint )( 255f * B ) << 16;
@@ -888,7 +895,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <returns></returns>
-    public static float ToFloatBitsABGR( float a, float b, float g, float r )
+    public static float ToFloatBitsAbgr( float a, float b, float g, float r )
     {
         var af = ( uint )( a * 255f ) << 24;
         var bf = ( uint )( b * 255f ) << 16;
@@ -900,7 +907,7 @@ public class Color : ICloneable, IEquatable< Color >
         return intBits;
     }
 
-    public static float ToFloatBitsABGR( byte a, byte b, byte g, byte r )
+    public static float ToFloatBitsAbgr( byte a, byte b, byte g, byte r )
     {
         return BitConverter.Int32BitsToSingle( ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | r );
     }
@@ -917,12 +924,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
-    public static uint ABGR8888( float a, float b, float g, float r )
+    public static uint ToAbgr8888( float a, float b, float g, float r )
     {
         return ( ( uint )( a * 255 ) << 24 )
-               | ( ( uint )( b * 255 ) << 16 )
-               | ( ( uint )( g * 255 ) << 8 )
-               | ( uint )( r * 255 );
+             | ( ( uint )( b * 255 ) << 16 )
+             | ( ( uint )( g * 255 ) << 8 )
+             | ( uint )( r * 255 );
     }
 
     /// <summary>
@@ -930,7 +937,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color">The Color object to assign the converted values to.</param>
     /// <param name="value">The float value representing the color in ABGR8888 format.</param>
-    public static void ABGR8888ToColor( ref Color color, float value )
+    public static void Abgr8888ToColor( ref Color color, float value )
     {
         // Convert the float value to an integer representing the color
         var c = NumberUtils.FloatToIntColor( value );
@@ -951,7 +958,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <returns> the packed color as a 32-bit int. </returns>
-    public static uint PackedColorABGR( uint a, uint b, uint g, uint r )
+    public static uint PackedColorAbgr( uint a, uint b, uint g, uint r )
     {
         return ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
     }
@@ -960,18 +967,18 @@ public class Color : ICloneable, IEquatable< Color >
     /// Packs the color components into a 32-bit integer with the format ABGR.
     /// </summary>
     /// <returns> the packed color as a 32-bit int. </returns>
-    public uint PackedColorABGR()
+    public uint PackedColorAbgr()
     {
         return ( ( uint )( 255f * A ) << 24 )
-               | ( ( uint )( 255f * B ) << 16 )
-               | ( ( uint )( 255f * G ) << 8 )
-               | ( uint )( 255f * R );
+             | ( ( uint )( 255f * B ) << 16 )
+             | ( ( uint )( 255f * G ) << 8 )
+             | ( uint )( 255f * R );
     }
 
     /// <summary>
     /// Returns a string representation of the Color components ABGR.
     /// </summary>
-    public string ABGRToString()
+    public string AbgrToString()
     {
         return $"A:{A},B:{B},G:{G},R:{R}";
     }
@@ -981,6 +988,8 @@ public class Color : ICloneable, IEquatable< Color >
     // ARGB ( Methods only )
     // ========================================================================
     // ========================================================================
+
+    public static Color FromArgb( float a, float r, float g, float b ) => new( r, g, b, a );
 
     /// <summary>
     /// Converts a 32-bit ARGB8888 integer value to a Color object.
@@ -1007,12 +1016,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="g"> Green component </param>
     /// <param name="r"> Red component </param>
-    public static uint Argb8888( float a, float r, float g, float b )
+    public static uint ToArgb8888( float a, float r, float g, float b )
     {
         return ( ( uint )( a * 255 ) << 24 )
-               | ( ( uint )( r * 255 ) << 16 )
-               | ( ( uint )( g * 255 ) << 8 )
-               | ( uint )( b * 255 );
+             | ( ( uint )( r * 255 ) << 16 )
+             | ( ( uint )( g * 255 ) << 8 )
+             | ( uint )( b * 255 );
     }
 
     /// <summary>
@@ -1024,12 +1033,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 24 - 31 : Alpha component</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint Argb8888( Color color )
+    public static uint ToArgb8888( Color color )
     {
         return ( ( uint )( color.A * 255 ) << 24 )
-               | ( ( uint )( color.R * 255 ) << 16 )
-               | ( ( uint )( color.G * 255 ) << 8 )
-               | ( uint )( color.B * 255 );
+             | ( ( uint )( color.R * 255 ) << 16 )
+             | ( ( uint )( color.G * 255 ) << 8 )
+             | ( uint )( color.B * 255 );
     }
 
     // ========================================================================
@@ -1063,14 +1072,14 @@ public class Color : ICloneable, IEquatable< Color >
         var t = v * ( 1 - ( s * ( 1 - f ) ) );
 
         ( R, G, B ) = i switch
-        {
-            0     => ( v, t, p ),
-            1     => ( q, v, p ),
-            2     => ( p, v, t ),
-            3     => ( p, q, v ),
-            4     => ( t, p, v ),
-            var _ => ( v, p, q ),
-        };
+                      {
+                          0     => ( v, t, p ),
+                          1     => ( q, v, p ),
+                          2     => ( p, v, t ),
+                          3     => ( p, q, v ),
+                          4     => ( t, p, v ),
+                          var _ => ( v, p, q ),
+                      };
 
         return Clamp();
     }
@@ -1136,21 +1145,6 @@ public class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
-    /// <summary>
-    /// Converts this Color to a System.Drawing.Color.
-    /// </summary>
-    /// <returns></returns>
-    public System.Drawing.Color ToSystemColor()
-    {
-        return System.Drawing.Color.FromArgb( ( int )( A * 255 ),
-                                              ( int )( R * 255 ),
-                                              ( int )( G * 255 ),
-                                              ( int )( B * 255 ) );
-    }
-    
-    // ========================================================================
-    // ========================================================================
-
     #region From ICloneable Interface
 
     /// <summary>
@@ -1183,7 +1177,7 @@ public class Color : ICloneable, IEquatable< Color >
             return false;
         }
 
-        return PackedColorABGR() == other.PackedColorABGR();
+        return PackedColorAbgr() == other.PackedColorAbgr();
     }
 
     /// <summary>
@@ -1205,14 +1199,14 @@ public class Color : ICloneable, IEquatable< Color >
 
         var color = ( Color )obj;
 
-        return PackedColorABGR() == color.PackedColorABGR();
+        return PackedColorAbgr() == color.PackedColorAbgr();
     }
 
     /// Not from IEquatable, but connected to it because of Equals()
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return PackedColorABGR().GetHashCode();
+        return PackedColorAbgr().GetHashCode();
     }
 
     #endregion From IEquatable Interface
@@ -1221,7 +1215,7 @@ public class Color : ICloneable, IEquatable< Color >
     // ========================================================================
 
     #region operator overloads
-    
+
     /// <summary>
     /// Determines whether two <see cref="Color"/> objects are equal.
     /// </summary>
@@ -1269,7 +1263,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     #endregion operator overloads
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -1283,11 +1277,11 @@ public class Color : ICloneable, IEquatable< Color >
         Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
         Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );
         Logger.Debug( $"RGBAFloatPack: {RGBAFloatPack}" );
-        Logger.Debug( $"RGBA8888ToUInt(R, G, B, A): {RGBA8888ToUInt( R, G, B, A ):X}" );
-        Logger.Debug( $"ToFloatBitsABGR(): {ToFloatBitsABGR()}" );
-        Logger.Debug( $"ToFloatBitsRGBA(): {ToFloatBitsRGBA()}" );
-        Logger.Debug( $"ToFloatBitsABGR(F,F,F,F): {ToFloatBitsABGR( A, B, G, R )}" );
-        Logger.Debug( $"ToFloatBitsRGBA(F,F,F,F): {ToFloatBitsRGBA( R, G, B, A )}" );
+        Logger.Debug( $"RGBA8888ToUInt(R, G, B, A): {Rgba8888ToUInt( R, G, B, A ):X}" );
+        Logger.Debug( $"ToFloatBitsABGR(): {ToFloatBitsAbgr()}" );
+        Logger.Debug( $"ToFloatBitsRGBA(): {ToFloatBitsRgba()}" );
+        Logger.Debug( $"ToFloatBitsABGR(F,F,F,F): {ToFloatBitsAbgr( A, B, G, R )}" );
+        Logger.Debug( $"ToFloatBitsRGBA(F,F,F,F): {ToFloatBitsRgba( R, G, B, A )}" );
         Logger.Divider();
     }
 }

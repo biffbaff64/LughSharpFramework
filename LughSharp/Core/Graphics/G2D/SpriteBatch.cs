@@ -1759,12 +1759,12 @@ public class SpriteBatch : IBatch, IDisposable
     /// <summary>
     /// This batch's Color packed into a float ABGR format.
     /// </summary>
-    public float ColorPackedABGR => Color.ToFloatBitsABGR( Color.A, Color.B, Color.G, Color.R );
+    public float ColorPackedABGR => Color.ToFloatBitsAbgr( Color.A, Color.B, Color.G, Color.R );
 
     /// <summary>
     /// This batch's Color packed into a float RGBA format.
     /// </summary>
-    public float ColorPackedRGBA => Color.ToFloatBitsRGBA( Color.R, Color.G, Color.B, Color.A );
+    public float ColorPackedRGBA => Color.ToFloatBitsRgba( Color.R, Color.G, Color.B, Color.A );
 
     public void DebugVertices()
     {

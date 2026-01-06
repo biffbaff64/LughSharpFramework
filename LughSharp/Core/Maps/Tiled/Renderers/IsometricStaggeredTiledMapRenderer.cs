@@ -53,7 +53,7 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
 
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
-        var color = Color.ToFloatBitsABGR( Batch.Color.R,
+        var color = Color.ToFloatBitsAbgr( Batch.Color.R,
                                            Batch.Color.G,
                                            Batch.Color.B,
                                            Batch.Color.A * layer.Opacity );

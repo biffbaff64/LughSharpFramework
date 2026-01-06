@@ -496,7 +496,7 @@ public class Pixmap : IDisposable
     /// <param name="color"> The color in RGBA8888 format. </param>
     public void SetPixel( int x, int y, Color color )
     {
-        Gdx2DPixmap.SetPixel( x, y, ( int )color.PackedColorRGBA() );
+        Gdx2DPixmap.SetPixel( x, y, ( int )color.PackedColorRgba() );
     }
 
     /// <summary>

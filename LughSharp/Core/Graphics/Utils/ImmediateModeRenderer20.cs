@@ -181,7 +181,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <param name="color"></param>
     public void SetColor( Color color )
     {
-        _vertices[ _vertexIdx + _colorOffset ] = color.ToFloatBitsABGR();
+        _vertices[ _vertexIdx + _colorOffset ] = color.ToFloatBitsAbgr();
     }
 
     /// <summary>
@@ -192,7 +192,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <param name="a"></param>
     public void SetColor( float r, float g, float b, float a )
     {
-        _vertices[ _vertexIdx + _colorOffset ] = Color.ToFloatBitsABGR( r, g, b, a );
+        _vertices[ _vertexIdx + _colorOffset ] = Color.ToFloatBitsAbgr( r, g, b, a );
     }
 
     /// <summary>

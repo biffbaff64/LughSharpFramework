@@ -54,14 +54,6 @@ public static class ListExtensions
         }
     }
 
-    /// <summary>
-    /// Returns a new List of the required type.
-    /// </summary>
-    public static List< T > New< T >( T t )
-    {
-        return new List< T >();
-    }
-
     /// <param name="target"></param>
     /// <typeparam name="T"></typeparam>
     extension< T >( List< T > target )

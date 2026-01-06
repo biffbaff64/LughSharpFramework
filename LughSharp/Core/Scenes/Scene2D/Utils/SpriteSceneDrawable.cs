@@ -79,7 +79,7 @@ public class SpriteSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
         }
 
         var spriteColor = Sprite.Color;
-        var oldColor    = spriteColor.ToFloatBitsABGR();
+        var oldColor    = spriteColor.ToFloatBitsAbgr();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
 
@@ -106,7 +106,7 @@ public class SpriteSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
         }
 
         var spriteColor = Sprite.Color;
-        var oldColor    = spriteColor.ToFloatBitsABGR();
+        var oldColor    = spriteColor.ToFloatBitsAbgr();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
 

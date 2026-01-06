@@ -511,7 +511,7 @@ public class Sprite : TextureRegion
     {
         Color.Set( tint );
 
-        var color = tint.ToFloatBitsABGR();
+        var color = tint.ToFloatBitsAbgr();
 
         Vertices[ IBatch.C1 ] = color;
         Vertices[ IBatch.C2 ] = color;
@@ -526,7 +526,7 @@ public class Sprite : TextureRegion
     {
         Color.Set( r, g, b, a );
 
-        var color = Color.ToFloatBitsABGR();
+        var color = Color.ToFloatBitsAbgr();
 
         Vertices[ IBatch.C1 ] = color;
         Vertices[ IBatch.C2 ] = color;
@@ -925,7 +925,7 @@ public class Sprite : TextureRegion
         {
             var color = Color;
 
-            Color.ABGR8888ToColor( ref color, value );
+            Color.Abgr8888ToColor( ref color, value );
 
             Vertices[ IBatch.C1 ] = value;
             Vertices[ IBatch.C2 ] = value;
@@ -986,7 +986,7 @@ public class Sprite : TextureRegion
         {
             _color.A = value;
 
-            var color = Color.ToFloatBitsABGR();
+            var color = Color.ToFloatBitsAbgr();
 
             Vertices[ IBatch.C1 ] = color;
             Vertices[ IBatch.C2 ] = color;

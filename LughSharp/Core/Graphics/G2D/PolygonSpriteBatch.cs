@@ -239,14 +239,14 @@ public class PolygonSpriteBatch : IPolygonBatch
         set
         {
             _color.Set( value );
-            _colorPacked = value.ToFloatBitsABGR();
+            _colorPacked = value.ToFloatBitsAbgr();
         }
     }
 
     public void SetColor( float r, float g, float b, float a )
     {
         _color.Set( r, g, b, a );
-        _colorPacked = _color.ToFloatBitsABGR();
+        _colorPacked = _color.ToFloatBitsAbgr();
     }
 
     public float ColorPackedABGR
@@ -256,7 +256,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         {
             var color = Color;
 
-            Color.ABGR8888ToColor( ref color, value );
+            Color.Abgr8888ToColor( ref color, value );
             _colorPacked = value;
         }
     }
@@ -268,7 +268,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         {
             var color = Color;
 
-            Color.RGBA8888ToColor( ref color, ( uint )value );
+            Color.Rgba8888ToColor( ref color, ( uint )value );
             _colorPacked = value;
         }
     }

@@ -191,7 +191,7 @@ public class SpriteCache
         set
         {
             var color = Color;
-            Color.ABGR8888ToColor( ref color, value );
+            Color.Abgr8888ToColor( ref color, value );
 
             _colorPacked = value;
 
@@ -206,7 +206,7 @@ public class SpriteCache
     public void SetColor( Color tint )
     {
         Color.Set( tint );
-        PackedColor = tint.ToFloatBitsABGR();
+        PackedColor = tint.ToFloatBitsAbgr();
     }
 
     /// <summary>
@@ -215,7 +215,7 @@ public class SpriteCache
     public void SetColor( float r, float g, float b, float a )
     {
         Color.Set( r, g, b, a );
-        PackedColor = Color.ToFloatBitsABGR();
+        PackedColor = Color.ToFloatBitsAbgr();
     }
 
     /// <summary>

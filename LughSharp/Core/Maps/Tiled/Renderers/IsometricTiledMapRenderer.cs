@@ -106,7 +106,7 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
     {
         var batchColor = Batch.Color;
 
-        var color = Color.ToFloatBitsABGR( batchColor.R,
+        var color = Color.ToFloatBitsAbgr( batchColor.R,
                                            batchColor.G,
                                            batchColor.B,
                                            batchColor.A * layer.Opacity );
