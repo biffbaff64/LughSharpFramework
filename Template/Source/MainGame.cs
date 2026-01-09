@@ -92,51 +92,51 @@ public class MainGame : Game
         // Clear and set viewport
         ScreenUtils.Clear( color: Color.Blue, clearDepth: true );
 
-        _spriteBatch?.EnableBlending();
+        _spriteBatch.EnableBlending();
 
         if ( _orthoGameCam is { IsInUse: true } )
         {
             _orthoGameCam.Viewport?.Apply( centerCamera: true );
-            _spriteBatch?.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
-            _spriteBatch?.Begin();
+            _spriteBatch.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
+            _spriteBatch.Begin();
 
             if ( _image1 != null )
             {
-                _spriteBatch?.Draw( _image1,
+                _spriteBatch.Draw( _image1,
                                     ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
                                     ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
             }
 
             if ( _star != null )
             {
-                _spriteBatch?.Draw( _star, 0, 0 );
+                _spriteBatch.Draw( _star, 0, 0 );
             }
 
             if ( _star2 != null )
             {
-                _spriteBatch?.Draw( _star2, 320, 240 );
+                _spriteBatch.Draw( _star2, 320, 240 );
             }
 
             if ( _sprite != null )
             {
                 _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
-                _sprite?.Draw( _spriteBatch! );
+                _sprite?.Draw( _spriteBatch );
             }
 
-            _test?.Render( _spriteBatch! );
+            _test?.Render( _spriteBatch );
 
-            _ = _font?.Draw( _spriteBatch!, "HELLO WORLD", 100, 100 );
+//            _ = _font?.Draw( _spriteBatch, "HELLO WORLD", 100, 100 );
             
-            _spriteBatch?.End();
+            _spriteBatch.End();
         }
 
 //        if ( _hudCam is { IsInUse: true } )
 //        {
 //            _hudCam.Viewport?.Apply( centerCamera: true );
-//            _spriteBatch?.SetProjectionMatrix( _hudCam.Camera.Combined );
-//            _spriteBatch?.Begin();
+//            _spriteBatch.SetProjectionMatrix( _hudCam.Camera.Combined );
+//            _spriteBatch.Begin();
 //
-//            _spriteBatch?.End();
+//            _spriteBatch.End();
 //        }
 
         // ----- Draw the Stage, if enabled -----
@@ -182,7 +182,7 @@ public class MainGame : Game
         {
             if ( disposing )
             {
-                _spriteBatch?.Dispose();
+                _spriteBatch.Dispose();
                 _image1?.Dispose();
                 _star?.Dispose();
                 _star2?.Dispose();

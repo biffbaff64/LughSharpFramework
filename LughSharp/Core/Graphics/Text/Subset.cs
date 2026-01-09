@@ -34,6 +34,8 @@ namespace LughSharp.Core.Graphics.Text;
 public class Subset
 {
     private readonly string _name;
+    
+    // ========================================================================
 
     /// <summary>
     /// Constructs a new <c>Subset</c> instance.
@@ -55,3 +57,7 @@ public class Subset
         return _name;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

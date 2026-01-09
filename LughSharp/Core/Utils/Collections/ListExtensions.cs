@@ -56,7 +56,7 @@ public static class ListExtensions
 
     /// <param name="target"></param>
     /// <typeparam name="T"></typeparam>
-    extension< T >( List< T > target )
+    extension<T>( List<T> target )
     {
         /// <summary>
         /// Adds <paramref name="count" /> elements in the source Array, starting at position
@@ -64,9 +64,9 @@ public static class ListExtensions
         /// </summary>
         public void AddAll( T[] source, int start, int count )
         {
-            for ( var i = start; i < count; i++ )
+            for (var i = start; i < count; i++)
             {
-                target.Add( source[ i ] );
+                target.Add(source[ i ]);
             }
         }
 
@@ -74,36 +74,56 @@ public static class ListExtensions
         /// Adds <paramref name="count" /> elements in the source List, starting at position
         /// <paramref name="start" /> to the target List.
         /// </summary>
-        public void AddAll( List< T > source, int start, int count )
+        public void AddAll( List<T> source, int start, int count )
         {
-            for ( var i = start; i < count; i++ )
+            for (var i = start; i < count; i++)
             {
-                target.Add( source[ i ] );
+                target.Add(source[ i ]);
+            }
+        }
+
+        /// <summary>
+        /// Adds all elements from the specified collection to the target list.
+        /// </summary>
+        /// <param name="source">
+        /// The collection of elements to add to the target list. Cannot be null.
+        /// </param>
+        public void AddAll( IEnumerable<T> source )
+        {
+            foreach (var item in source)
+            {
+                target.Add(item);
             }
         }
 
         /// <summary>
         /// Adds all elements in the source List to the target List.
         /// </summary>
-        public void AddAll( List< T > source )
+        public void AddAll( List<T> source )
         {
-            foreach ( var tex in source )
+            foreach (var tex in source)
             {
-                target.Add( tex );
+                target.Add(tex);
             }
         }
+    }
 
-        /// <summary>
-        /// Adds all elements in the array 'items' to the target List.
-        /// </summary>
-        public void AddAll( params T[] items )
+    /// <summary>
+    /// Adds all elements in the array 'items' to the target List.
+    /// Elements are added in the order they appear in the array, and cannot be null.
+    /// </summary>
+    public static void AddAll< T >( this List< T > target, params T[] items ) where T : notnull
+    {
+        foreach (var item in items)
         {
-            foreach ( var item in items )
-            {
-                target.Add( item );
-            }
+            target.Add(item);
         }
+    }
 
+    /// <param name="target"></param>
+    /// <typeparam name="T"></typeparam>
+    extension<T>( List<T> target )
+    {
         /// <summary>
         /// Shuffles the element order of the specified list.
         /// </summary>

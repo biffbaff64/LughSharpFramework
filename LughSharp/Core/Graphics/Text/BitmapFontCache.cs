@@ -649,28 +649,7 @@ public class BitmapFontCache
         Logger.Debug( $"layout Height    : {layout.Height}" );
         Logger.Debug( $"layout Runs.Count: {layout.Runs.Count}" );
 
-        int runCount;
-
-        if ( ( runCount = layout.Runs.Count ) == 0 )
-        {
-            return;
-        }
-
         // Check if the number of font pages has changed.
-        if ( _pageVertices.Length < Font.GetRegions().Count )
-        {
-            SetPageCount( Font.GetRegions().Count );
-        }
-
-        var colors = layout.Colors;
-        
-        
-        
-        
-        
-        
-        
-
         var pageCount = Font.GetRegions().Count;
 
         if ( _pageVertices.Length < pageCount )
