@@ -6,6 +6,7 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
@@ -30,21 +31,20 @@ public class MainGame : Game
 
     private readonly Vector3 _cameraPos = Vector3.Zero;
 
-    private OrthographicGameCamera?    _orthoGameCam;
-    private OrthographicGameCamera?    _hudCam;
-    private SpriteBatch?               _spriteBatch;
-    private AssetManager?              _assetManager;
-    private Texture?                   _image1;
-    private Texture?                   _star;
-    private Texture?                   _star2;
-    private Stage?                     _stage;
-    private Actor?                     _hudActor;
-    private BitmapFont?                _font;
-    private Sprite?                    _sprite;
-    private bool                       _disposed;
-    private Vector2                    _spritePosition = Vector2.Zero;
-    private BitmapFont.BitmapFontData? _fontData;
-    private ILughTest?                 _test;
+    private OrthographicGameCamera? _orthoGameCam;
+    private OrthographicGameCamera? _hudCam;
+    private SpriteBatch?            _spriteBatch;
+    private AssetManager?           _assetManager;
+    private Texture?                _image1;
+    private Texture?                _star;
+    private Texture?                _star2;
+    private Stage?                  _stage;
+    private Actor?                  _hudActor;
+    private BitmapFont?             _font;
+    private Sprite?                 _sprite;
+    private bool                    _disposed;
+    private Vector2                 _spritePosition = Vector2.Zero;
+    private ILughTest?              _test;
 
     // ========================================================================
     // ========================================================================
@@ -59,10 +59,10 @@ public class MainGame : Game
         CreateCameras();
 
         CreateStage();
-        CreateFont();       // Not working yet
+        CreateFont();         // Not working yet
+//        CreateFreeTypeFont(); // Not working yet
         CreateAssets();
         CreateSprite();
-//        CreateFreeTypeFont();
 
         Logger.Debug( "Done" );
     }
@@ -92,52 +92,55 @@ public class MainGame : Game
         // Clear and set viewport
         ScreenUtils.Clear( color: Color.Blue, clearDepth: true );
 
-        _spriteBatch.EnableBlending();
-
-        if ( _orthoGameCam is { IsInUse: true } )
+        if ( _spriteBatch != null )
         {
-            _orthoGameCam.Viewport?.Apply( centerCamera: true );
-            _spriteBatch.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
-            _spriteBatch.Begin();
+            _spriteBatch.EnableBlending();
 
-            if ( _image1 != null )
+            if ( _orthoGameCam is { IsInUse: true } )
             {
-                _spriteBatch.Draw( _image1,
-                                    ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
-                                    ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
+                _orthoGameCam.Viewport?.Apply( centerCamera: true );
+                _spriteBatch.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
+                _spriteBatch.Begin();
+
+                if ( _image1 != null )
+                {
+                    _spriteBatch.Draw( _image1,
+                                       ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
+                                       ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
+                }
+
+                if ( _star != null )
+                {
+                    _spriteBatch.Draw( _star, 0, 0 );
+                }
+
+                if ( _star2 != null )
+                {
+                    _spriteBatch.Draw( _star2, 320, 240 );
+                }
+
+                if ( _sprite != null )
+                {
+                    _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
+                    _sprite?.Draw( _spriteBatch );
+                }
+
+                _test?.Render( _spriteBatch );
+
+                _ = _font?.Draw( _spriteBatch, "HELLO WORLD", 100, 100 );
+
+                _spriteBatch.End();
             }
 
-            if ( _star != null )
-            {
-                _spriteBatch.Draw( _star, 0, 0 );
-            }
-
-            if ( _star2 != null )
-            {
-                _spriteBatch.Draw( _star2, 320, 240 );
-            }
-
-            if ( _sprite != null )
-            {
-                _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
-                _sprite?.Draw( _spriteBatch );
-            }
-
-            _test?.Render( _spriteBatch );
-
-//            _ = _font?.Draw( _spriteBatch, "HELLO WORLD", 100, 100 );
-            
-            _spriteBatch.End();
+//            if ( _hudCam is { IsInUse: true } )
+//            {
+//                _hudCam.Viewport?.Apply( centerCamera: true );
+//                _spriteBatch.SetProjectionMatrix( _hudCam.Camera.Combined );
+//                _spriteBatch.Begin();
+// 
+//                _spriteBatch.End();
+//            }
         }
-
-//        if ( _hudCam is { IsInUse: true } )
-//        {
-//            _hudCam.Viewport?.Apply( centerCamera: true );
-//            _spriteBatch.SetProjectionMatrix( _hudCam.Camera.Combined );
-//            _spriteBatch.Begin();
-//
-//            _spriteBatch.End();
-//        }
 
         // ----- Draw the Stage, if enabled -----
         if ( _stage != null && IsDrawingStage )
@@ -182,7 +185,7 @@ public class MainGame : Game
         {
             if ( disposing )
             {
-                _spriteBatch.Dispose();
+                _spriteBatch?.Dispose();
                 _image1?.Dispose();
                 _star?.Dispose();
                 _star2?.Dispose();
@@ -268,11 +271,10 @@ public class MainGame : Game
 
     private void CreateFont()
     {
-        _fontData = new BitmapFont.BitmapFontData( Engine.Api.Files.Internal( Assets.AMBLE_REGULAR_26_FONT ) );
-
         _font = new BitmapFont();
         _font.SetColor( Color.White );
-        _font.UseIntegerPositions = true;
+        _font.FontData.MarkupEnabled = true;
+        _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
     }
 
     private void CreateFreeTypeFont()

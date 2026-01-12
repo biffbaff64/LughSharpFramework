@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Utils.Pooling;
 
 /// <summary>
@@ -35,13 +39,13 @@ public class Pool< T > where T : class
     public int MaxFreeObjects  { get; private set; }
     public int PeakFreeObjects { get; set; }
 
-    public delegate T? PoolObjectFactory();
+    public delegate T PoolObjectFactory();
 
     public required PoolObjectFactory NewObjectFactory;
-    
+
     // ========================================================================
 
-    private readonly Stack< T? > _freeObjects;
+    private readonly Stack< T > _freeObjects;
 
     // ========================================================================
 
@@ -55,15 +59,15 @@ public class Pool< T > where T : class
     /// <param name="max">The maximum number of free objects to store in this pool.</param>
     public Pool( int initialCapacity = DEFAULT_INITIAL_CAPACITY, int max = int.MaxValue )
     {
-        _freeObjects = new Stack< T? >( initialCapacity );
-        MaxFreeObjects     = max;
+        _freeObjects   = new Stack< T >( initialCapacity );
+        MaxFreeObjects = max;
     }
 
     /// <summary>
     /// Returns an object from this pool. The object may be new (from <see cref="NewObjectFactory"/>)
     /// or reused (previously
     /// </summary>
-    public virtual T? Obtain()
+    public virtual T Obtain()
     {
         return _freeObjects.Count == 0 ? NewObjectFactory() : _freeObjects.Pop();
     }
@@ -116,9 +120,9 @@ public class Pool< T > where T : class
     /// later reuse. The default implementation calls <see cref="IPoolable.Reset()"/>
     /// if the object is Poolable.
     /// </summary>
-    protected virtual void Reset( T? obj )
+    protected virtual void Reset( T obj )
     {
-        if ( ( obj != null ) && ( obj is IPoolable poolable ) )
+        if ( obj is IPoolable poolable )
         {
             poolable.Reset();
         }
@@ -128,7 +132,7 @@ public class Pool< T > where T : class
     /// Called when an object is discarded. This is the case when an object is freed,
     /// but the maximum capacity of the pool is reached, and when the pool is cleared.
     /// </summary>
-    protected void Discard( T? obj )
+    protected void Discard( T obj )
     {
         Reset( obj );
     }
@@ -138,16 +142,11 @@ public class Pool< T > where T : class
     /// silently ignored. The pool does not check if an object is already freed, so
     /// the same object must not be freed multiple times.
     /// </summary>
-    public virtual void FreeAll( List< T? > objects )
+    public virtual void FreeAll( List< T > objects )
     {
         for ( int i = 0, n = objects.Count; i < n; i++ )
         {
             var obj = objects[ i ];
-
-            if ( obj == null )
-            {
-                continue;
-            }
 
             if ( _freeObjects.Count < MaxFreeObjects )
             {

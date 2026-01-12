@@ -23,6 +23,10 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.OpenGL.Bindings;

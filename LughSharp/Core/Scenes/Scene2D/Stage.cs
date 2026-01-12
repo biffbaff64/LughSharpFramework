@@ -174,44 +174,20 @@ public class Stage : InputAdapter, IDisposable
         {
             var overLast = _pointerOverActors[ pointer ];
 
-            // Check if pointer is gone.
-            if ( !_pointerTouched[ pointer ] )
+            if ( _pointerTouched[ pointer ] )
             {
-                if ( overLast != null )
-                {
-                    _pointerOverActors[ pointer ] = null;
-
-                    ScreenToStageCoordinates( _tempCoords.Set( _pointerScreenX[ pointer ],
-                                                               _pointerScreenY[ pointer ] ) );
-
-                    // Exit over last.
-                    var inputEvent = Pools.Obtain< InputEvent >();
-
-                    if ( inputEvent == null )
-                    {
-                        continue;
-                    }
-
-                    inputEvent.Type         = InputEvent.EventType.Exit;
-                    inputEvent.Stage        = this;
-                    inputEvent.StageX       = _tempCoords.X;
-                    inputEvent.StageY       = _tempCoords.Y;
-                    inputEvent.RelatedActor = overLast;
-                    inputEvent.Pointer      = pointer;
-
-                    overLast.Fire( inputEvent );
-
-                    Pools.Free< InputEvent >( inputEvent );
-                }
-
-                continue;
+                // Update the over actor for the pointer if it's still touched.
+                _pointerOverActors[ pointer ] = FireEnterAndExit( overLast,
+                                                                  _pointerScreenX[ pointer ],
+                                                                  _pointerScreenY[ pointer ],
+                                                                  pointer );
             }
-
-            // Update over actor for the pointer.
-            _pointerOverActors[ pointer ] = FireEnterAndExit( overLast,
-                                                              _pointerScreenX[ pointer ],
-                                                              _pointerScreenY[ pointer ],
-                                                              pointer );
+            else if ( overLast != null )
+            {
+                // The pointer is gone, exit the over actor for the pointer, if any.
+                _pointerOverActors[ pointer ] = null;
+                FireExit( overLast, _pointerScreenX[ pointer ], _pointerScreenY[ pointer ], pointer );
+            }
         }
 
         // Update over actor for the mouse on the desktop.
@@ -231,14 +207,18 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public virtual void Draw()
     {
-        Camera = Viewport.Camera;
-
-        if ( ( Camera == null ) || !RootGroup.IsVisible )
+        if ( Viewport.Camera == null )
         {
             return;
         }
-
+        
+        Camera = Viewport.Camera;
         Camera.Update();
+
+        if ( !RootGroup.IsVisible )
+        {
+            return;
+        }
 
         Batch.SetProjectionMatrix( Camera.Combined );
         Batch.Begin();
@@ -294,18 +274,15 @@ public class Stage : InputAdapter, IDisposable
         {
             var inputEvent = Pools.Obtain< InputEvent >();
 
-            if ( inputEvent != null )
-            {
-                inputEvent.Stage        = this;
-                inputEvent.StageX       = _tempCoords.Y;
-                inputEvent.StageY       = _tempCoords.Y;
-                inputEvent.Pointer      = pointer;
-                inputEvent.Type         = InputEvent.EventType.Exit;
-                inputEvent.RelatedActor = over;
+            inputEvent.Type         = InputEvent.EventType.Exit;
+            inputEvent.Stage        = this;
+            inputEvent.StageX       = _tempCoords.Y;
+            inputEvent.StageY       = _tempCoords.Y;
+            inputEvent.Pointer      = pointer;
+            inputEvent.RelatedActor = over;
 
-                overLast.Fire( inputEvent );
-                Pools.Free< InputEvent >( inputEvent );
-            }
+            overLast.Fire( inputEvent );
+            Pools.Free< InputEvent >( inputEvent );
         }
 
         // Enter over.
@@ -313,21 +290,35 @@ public class Stage : InputAdapter, IDisposable
         {
             var inputEvent = Pools.Obtain< InputEvent >();
 
-            if ( inputEvent != null )
-            {
-                inputEvent.Stage        = this;
-                inputEvent.StageX       = _tempCoords.X;
-                inputEvent.StageY       = _tempCoords.Y;
-                inputEvent.Pointer      = pointer;
-                inputEvent.Type         = InputEvent.EventType.Enter;
-                inputEvent.RelatedActor = overLast;
+            inputEvent.Stage        = this;
+            inputEvent.StageX       = _tempCoords.X;
+            inputEvent.StageY       = _tempCoords.Y;
+            inputEvent.Pointer      = pointer;
+            inputEvent.Type         = InputEvent.EventType.Enter;
+            inputEvent.RelatedActor = overLast;
 
-                over.Fire( inputEvent );
-                Pools.Free< InputEvent >( inputEvent );
-            }
+            over.Fire( inputEvent );
+            Pools.Free< InputEvent >( inputEvent );
         }
 
         return over;
+    }
+
+    private void FireExit( Actor actor, int screenX, int screenY, int pointer )
+    {
+        ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
+
+        var inputEvent = Pools.Obtain< InputEvent >();
+
+        inputEvent.Type         = InputEvent.EventType.Exit;
+        inputEvent.Stage        = this;
+        inputEvent.StageX       = _tempCoords.X;
+        inputEvent.StageY       = _tempCoords.Y;
+        inputEvent.Pointer      = pointer;
+        inputEvent.RelatedActor = actor;
+
+        actor.Fire( inputEvent );
+        Pools.Free( inputEvent );
     }
 
     /// <summary>

@@ -215,7 +215,8 @@ public class FreeTypeFontGenerator : IDisposable
     /// Called by generateFont to create a new <see cref="BitmapFont"/> instance. This allows
     /// injecting a customized <see cref="BitmapFont"/>, eg for a RTL font.
     /// </summary>
-    protected static BitmapFont NewBitmapFont( BitmapFont.BitmapFontData data, List< TextureRegion > pageRegions, bool integer )
+    protected static BitmapFont NewBitmapFont( BitmapFont.BitmapFontData data, List< TextureRegion > pageRegions,
+                                               bool integer )
     {
         return new BitmapFont( data, pageRegions, integer );
     }
@@ -435,7 +436,8 @@ public class FreeTypeFontGenerator : IDisposable
                 continue;
             }
 
-            data.CapHeight = FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHeight() ) + Math.Abs( parameter.ShadowOffsetY );
+            data.CapHeight = FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHeight() ) +
+                             Math.Abs( parameter.ShadowOffsetY );
 
             break;
         }
@@ -471,7 +473,8 @@ public class FreeTypeFontGenerator : IDisposable
             else
             {
                 var maxGlyphHeight = ( int )Math.Ceiling( data.LineHeight );
-                size = MathUtils.NextPowerOfTwo( ( int )Math.Sqrt( maxGlyphHeight * maxGlyphHeight * charactersLength ) );
+                size =
+                    MathUtils.NextPowerOfTwo( ( int )Math.Sqrt( maxGlyphHeight * maxGlyphHeight * charactersLength ) );
 
                 if ( _maxTextureSize > 0 )
                 {
@@ -499,8 +502,12 @@ public class FreeTypeFontGenerator : IDisposable
         {
             stroker = _library.CreateStroker();
             stroker.Set( ( int )( parameter.BorderWidth * 64f ),
-                         parameter.BorderStraight ? FreeType.FT_STROKER_LINECAP_BUTT : FreeType.FT_STROKER_LINECAP_ROUND,
-                         parameter.BorderStraight ? FreeType.FT_STROKER_LINEJOIN_MITER_FIXED : FreeType.FT_STROKER_LINEJOIN_ROUND, 0 );
+                         parameter.BorderStraight
+                             ? FreeType.FT_STROKER_LINECAP_BUTT
+                             : FreeType.FT_STROKER_LINECAP_ROUND,
+                         parameter.BorderStraight
+                             ? FreeType.FT_STROKER_LINEJOIN_MITER_FIXED
+                             : FreeType.FT_STROKER_LINEJOIN_ROUND, 0 );
         }
 
         // Create glyphs largest height first for best packing.
@@ -612,14 +619,16 @@ public class FreeTypeFontGenerator : IDisposable
 
                     var secondIndex = _face.GetCharIndex( secondChar );
 
-                    var kerning = _face.GetKerning( firstIndex, secondIndex, 0 ); // FT_KERNING_DEFAULT (scaled then rounded).
+                    var kerning =
+                        _face.GetKerning( firstIndex, secondIndex, 0 ); // FT_KERNING_DEFAULT (scaled then rounded).
 
                     if ( kerning != 0 )
                     {
                         first.SetKerning( secondChar, FreeType.ToInt( kerning ) );
                     }
 
-                    kerning = _face.GetKerning( secondIndex, firstIndex, 0 ); // FT_KERNING_DEFAULT (scaled then rounded).
+                    kerning = _face.GetKerning( secondIndex, firstIndex,
+                                                0 ); // FT_KERNING_DEFAULT (scaled then rounded).
 
                     if ( kerning != 0 )
                     {
@@ -659,11 +668,11 @@ public class FreeTypeFontGenerator : IDisposable
     }
 
     protected Glyph? CreateGlyph( char c,
-                                             FreeTypeBitmapFontData data,
-                                             FreeTypeFontParameter parameter,
-                                             FreeType.Stroker? stroker,
-                                             float baseLine,
-                                             PixmapPacker packer )
+                                  FreeTypeBitmapFontData data,
+                                  FreeTypeFontParameter parameter,
+                                  FreeType.Stroker? stroker,
+                                  float baseLine,
+                                  PixmapPacker packer )
     {
         var missing = ( _face.GetCharIndex( c ) == 0 ) && ( c != 0 );
 
@@ -742,7 +751,9 @@ public class FreeTypeFontGenerator : IDisposable
 
                 if ( a != 0 )
                 {
-                    byte r = ( byte )( shadowColor.R * 255 ), g = ( byte )( shadowColor.G * 255 ), b = ( byte )( shadowColor.B * 255 );
+                    byte r = ( byte )( shadowColor.R * 255 ),
+                         g = ( byte )( shadowColor.G * 255 ),
+                         b = ( byte )( shadowColor.B * 255 );
 
                     var mainPixels   = mainPixmap.ByteBuffer;
                     var shadowPixels = shadowPixmap.ByteBuffer;
@@ -790,7 +801,8 @@ public class FreeTypeFontGenerator : IDisposable
                 }
             }
 
-            if ( ( parameter.PadTop > 0 ) || ( parameter.PadLeft > 0 ) || ( parameter.PadBottom > 0 ) || ( parameter.PadRight > 0 ) )
+            if ( ( parameter.PadTop > 0 ) || ( parameter.PadLeft > 0 ) || ( parameter.PadBottom > 0 ) ||
+                 ( parameter.PadRight > 0 ) )
             {
                 var padPixmap = new Pixmap( mainPixmap.Width + parameter.PadLeft + parameter.PadRight,
                                             mainPixmap.Height + parameter.PadTop + parameter.PadBottom,
@@ -903,16 +915,16 @@ public class FreeTypeFontGenerator : IDisposable
         var loadingFlags = FreeType.FT_LOAD_DEFAULT;
 
         loadingFlags |= parameter.Hinting switch
-        {
-            Hinting.None       => FreeType.FT_LOAD_NO_HINTING,
-            Hinting.Slight     => FreeType.FT_LOAD_TARGET_LIGHT,
-            Hinting.Medium     => FreeType.FT_LOAD_TARGET_NORMAL,
-            Hinting.Full       => FreeType.FT_LOAD_TARGET_MONO,
-            Hinting.AutoSlight => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_LIGHT,
-            Hinting.AutoMedium => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_NORMAL,
-            Hinting.AutoFull   => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_MONO,
-            var _              => 0,
-        };
+                        {
+                            Hinting.None       => FreeType.FT_LOAD_NO_HINTING,
+                            Hinting.Slight     => FreeType.FT_LOAD_TARGET_LIGHT,
+                            Hinting.Medium     => FreeType.FT_LOAD_TARGET_NORMAL,
+                            Hinting.Full       => FreeType.FT_LOAD_TARGET_MONO,
+                            Hinting.AutoSlight => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_LIGHT,
+                            Hinting.AutoMedium => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_NORMAL,
+                            Hinting.AutoFull   => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_MONO,
+                            var _              => 0,
+                        };
 
         return loadingFlags;
     }
@@ -938,7 +950,7 @@ public class FreeTypeFontGenerator : IDisposable
         var faceFlags = _face.GetFaceFlags();
 
         if ( ( ( faceFlags & FreeType.FT_FACE_FLAG_FIXED_SIZES ) == FreeType.FT_FACE_FLAG_FIXED_SIZES )
-             && ( ( faceFlags & FreeType.FT_FACE_FLAG_HORIZONTAL ) == FreeType.FT_FACE_FLAG_HORIZONTAL ) )
+          && ( ( faceFlags & FreeType.FT_FACE_FLAG_HORIZONTAL ) == FreeType.FT_FACE_FLAG_HORIZONTAL ) )
         {
             if ( LoadChar( 32 ) ) //TODO:
             {
@@ -978,8 +990,8 @@ public class FreeTypeFontGenerator : IDisposable
     [PublicAPI]
     public class GlyphAndBitmap
     {
-        public Glyph? Glyph  { get; set; }
-        public FreeType.Bitmap?  Bitmap { get; set; }
+        public Glyph?           Glyph  { get; set; }
+        public FreeType.Bitmap? Bitmap { get; set; }
     }
 
     // ========================================================================
@@ -994,12 +1006,12 @@ public class FreeTypeFontGenerator : IDisposable
     [PublicAPI]
     public class FreeTypeBitmapFontData : BitmapFont.BitmapFontData, IDisposable
     {
-        public List< TextureRegion >?   Regions    { get; set; }
-        public FreeTypeFontGenerator?   Generator  { get; set; }
-        public FreeTypeFontParameter    Parameter  { get; set; } = new();
-        public FreeType.Stroker?        Stroker    { get; set; }
-        public PixmapPacker?            Packer     { get; set; }
-        public List< Glyph > GlyphsList { get; set; } = [ ];
+        public List< TextureRegion >? Regions    { get; set; }
+        public FreeTypeFontGenerator? Generator  { get; set; }
+        public FreeTypeFontParameter  Parameter  { get; set; } = new();
+        public FreeType.Stroker?      Stroker    { get; set; }
+        public PixmapPacker?          Packer     { get; set; }
+        public List< Glyph >          GlyphsList { get; set; } = [ ];
 
         private bool _dirty;
 
@@ -1061,7 +1073,8 @@ public class FreeTypeFontGenerator : IDisposable
             return glyph;
         }
 
-        public override void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end, Glyph? lastGlyph )
+        public override void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end,
+                                        Glyph? lastGlyph )
         {
             if ( Packer != null )
             {

@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Utils;
 
 namespace LughSharp.Core.Graphics;

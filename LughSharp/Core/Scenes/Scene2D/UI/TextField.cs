@@ -364,7 +364,7 @@ public class TextField : Widget
             var maxX     = Math.Min( glyphPositions[ maxIndex ] - glyphPositions[ _visibleTextStart ], visibleWidth - TextOffset );
 
             _selectionX     = minX;
-            _selectionWidth = maxX - minX - Style!.Font!.Data.CursorX;
+            _selectionWidth = maxX - minX - Style!.Font!.FontData.CursorX;
         }
     }
 
@@ -375,7 +375,7 @@ public class TextField : Widget
             return GlyphPositions.Count - 1;
         }
 
-        x -= ( TextOffset + FontOffset ) - Style.Font!.Data.CursorX - GlyphPositions[ _visibleTextStart ];
+        x -= ( TextOffset + FontOffset ) - Style.Font!.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
 
         var background = GetBackgroundDrawable();
 
@@ -632,7 +632,7 @@ public class TextField : Widget
                           ( ( x + TextOffset + GlyphPositions[ Cursor ] )
                             - GlyphPositions[ _visibleTextStart ] )
                           + FontOffset
-                          + font.Data.CursorX,
+                          + font.FontData.CursorX,
                           y - TextHeight - font.GetDescent(),
                           cursorPatch.MinWidth,
                           TextHeight );
@@ -641,7 +641,7 @@ public class TextField : Widget
     public virtual void UpdateDisplayText()
     {
         var font       = Style?.Font ?? new BitmapFont();
-        var data       = font.Data;
+        var data       = font.FontData;
         var text       = Text ?? string.Empty;
         var textLength = text.Length;
         var buffer     = new StringBuilder();
@@ -784,7 +784,7 @@ public class TextField : Widget
             textLength -= Math.Abs( Cursor - SelectionStart );
         }
 
-        var data = Style!.Font!.Data;
+        var data = Style!.Font!.FontData;
 
         for ( int i = 0, n = content.Length; i < n; i++ )
         {
@@ -1633,7 +1633,7 @@ public class TextField : Widget
 
                 var add = enter
                     ? _tf.WriteEnters
-                    : !_tf._onlyFontChars || _tf.Style!.Font!.Data.HasGlyph( character );
+                    : !_tf._onlyFontChars || _tf.Style!.Font!.FontData.HasGlyph( character );
 
                 var remove = backspace || delete;
 

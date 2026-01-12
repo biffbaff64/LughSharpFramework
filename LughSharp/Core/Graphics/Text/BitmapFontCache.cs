@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
@@ -190,7 +193,7 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    /// Tints all text currently in the cache.Does not affect subsequently added text.
+    /// Tints all text currently in the cache. Does not affect subsequently added text.
     /// </summary>
     public void Tint( Color tint )
     {
@@ -643,12 +646,6 @@ public class BitmapFontCache
     /// <param name="y">The y coordinate where the glyphs should be positioned.</param>
     private void AddToCache( GlyphLayout layout, float x, float y )
     {
-        Logger.Block();
-        Logger.Debug( "BEFORE:" );
-        Logger.Debug( $"layout Width     : {layout.Width}" );
-        Logger.Debug( $"layout Height    : {layout.Height}" );
-        Logger.Debug( $"layout Runs.Count: {layout.Runs.Count}" );
-
         // Check if the number of font pages has changed.
         var pageCount = Font.GetRegions().Count;
 
@@ -707,12 +704,6 @@ public class BitmapFontCache
 
         // Cached glyphs have changed, reset the current tint.
         _currentTint = Color.WhiteFloatBits;
-
-        Logger.Debug( "AFTER:" );
-        Logger.Debug( $"layout Width     : {layout.Width}" );
-        Logger.Debug( $"layout Height    : {layout.Height}" );
-        Logger.Debug( $"layout Runs.Count: {layout.Runs.Count}" );
-        Logger.EndBlock();
     }
 
     /// <summary>
@@ -725,8 +716,8 @@ public class BitmapFontCache
     {
         Logger.Checkpoint();
 
-        var scaleX = Font.Data.ScaleX;
-        var scaleY = Font.Data.ScaleY;
+        var scaleX = Font.FontData.ScaleX;
+        var scaleY = Font.FontData.ScaleY;
 
         x += glyph.Xoffset * scaleX;
         y += glyph.Yoffset * scaleY;
@@ -879,7 +870,7 @@ public class BitmapFontCache
                                 bool wrap,
                                 string? truncate = null )
     {
-        var layout = _pooledLayouts.Obtain() ?? new GlyphLayout();
+        var layout = _pooledLayouts.Obtain();
 
         layout.SetText( Font, str, start, end, _color, targetWidth, halign, wrap, truncate );
 
@@ -895,7 +886,7 @@ public class BitmapFontCache
     {
         if ( layout != null )
         {
-            AddToCache( layout, x, y + Font.Data.Ascent );
+            AddToCache( layout, x, y + Font.FontData.Ascent );
         }
     }
 }

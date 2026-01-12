@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Pooling;
 
@@ -87,7 +90,7 @@ public static class Pools
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static T? Obtain< T >() where T : class
+    public static T Obtain< T >() where T : class
     {
         if ( !TypePools.TryGetValue( typeof( T ), out var poolObject ) )
         {
@@ -144,7 +147,7 @@ public static class Pools
         }
 
         var pool = ( Pool< T > )poolObject;
-        pool.FreeAll( ( List< T? > )objects );
+        pool.FreeAll( ( List< T > )objects );
     }
 
     /// <summary>

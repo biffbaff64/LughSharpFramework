@@ -22,11 +22,17 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Buffers.Binary;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Graphics.Text;
@@ -134,7 +140,7 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(LughSharp.Core.Graphics.Text.BitmapFont,string,int,int,Color,float,int,bool,string?)"/>
+    /// Calls <see cref="SetText(BitmapFont,string,int,int,Color,float,int,bool,string?)"/>
     /// with the whole string, the font's current color, and with no alignment or wrapping.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -145,7 +151,7 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(LughSharp.Core.Graphics.Text.BitmapFont,string,int,int,Color,float,int,bool,string?)"/>
+    /// Calls <see cref="SetText(BitmapFont,string,int,int,Color,float,int,bool,string?)"/>
     /// with the whole string and no truncation.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -192,11 +198,9 @@ public class GlyphLayout : IResetable, IPoolable
     public void SetText( BitmapFont font, string str, int start, int end, Color color,
                          float targetWidth, int halign, bool wrap, string? truncate )
     {
-        _glyphRunPool.FreeAll( Runs! );
+        Reset();
 
-        Runs.Clear();
-
-        var fontData = font.Data;
+        var fontData = font.FontData;
 
         if ( start == end )
         {
@@ -231,12 +235,12 @@ public class GlyphLayout : IResetable, IPoolable
         GlyphRun? lineRun   = null;
         Glyph?    lastGlyph = null;
         var       runStart  = start;
+        var       runEnd    = start;
+        var       newline   = false;
 
-    outer:
         while ( true )
         {
-            int runEnd;
-            var newline = false;
+            var breakToOuter = false;
 
             if ( start == end )
             {
@@ -251,54 +255,25 @@ public class GlyphLayout : IResetable, IPoolable
             }
             else
             {
-                // Each run is delimited by newline or left square bracket.
-                switch ( str[ start++ ] )
-                {
-                    case '\n': // End of line.
-                        runEnd  = start - 1;
-                        newline = true;
-                        break;
-
-                    case '[': // Possible color tag.
-                        if ( markupEnabled )
-                        {
-                            var length = ParseColorMarkup( str, start, end );
-
-                            if ( length >= 0 )
-                            {
-                                runEnd =  start - 1;
-                                start  += length + 1;
-
-                                if ( start == end )
-                                {
-                                    isLastRun = true; // Color tag is the last element in the string.
-                                }
-                                else
-                                {
-                                    nextColor = _colorStack.Peek();
-                                }
-
-                                break;
-                            }
-
-                            if ( length == -2 )
-                            {
-                                start++; // Skip first of "[[" escape sequence.
-                            }
-                        }
-
-                        goto outer;
-
-                    // Fall through.
-                    default:
-                        goto outer;
-                }
+                breakToOuter = ParseDelimiters( str,
+                                                ref start,
+                                                end,
+                                                ref newline,
+                                                ref runEnd,
+                                                ref isLastRun,
+                                                ref nextColor,
+                                                ref markupEnabled );
             }
 
-        runEnded:
+            if ( breakToOuter )
+            {
+                goto outer;
+            }
+
+            // Handle run end
             {
                 // Store the run that has ended.
-                var run = _glyphRunPool.Obtain() ?? new GlyphRun();
+                var run = _glyphRunPool.Obtain();
                 run.X = 0;
                 run.Y = y;
 
@@ -358,7 +333,8 @@ public class GlyphLayout : IResetable, IPoolable
 
                 if ( !wrapOrTruncate || lineRun.Glyphs.Count == 0 )
                 {
-                    goto runEnded; // No wrap or truncate, or no glyphs.
+                    // No wrap or truncate, or no glyphs.
+                    goto runEnded;
                 }
 
                 if ( newline || isLastRun )
@@ -378,6 +354,7 @@ public class GlyphLayout : IResetable, IPoolable
                         {
                             // Glyph fits.
                             runWidth += lineRun.XAdvances[ i ];
+
                             continue;
                         }
 
@@ -385,12 +362,13 @@ public class GlyphLayout : IResetable, IPoolable
                         {
                             // Truncate.
                             Truncate( fontData, lineRun, targetWidth, truncate );
+
                             goto outer;
                         }
 
                         // Wrap.
                         var wrapIndex = fontData.GetWrapIndex( lineRun.Glyphs, i );
-                        
+
                         // Require at least one glyph per line.
                         if ( ( wrapIndex == 0 && lineRun.X == 0 )
                           || wrapIndex >= lineRun.Glyphs.Count )
@@ -400,12 +378,12 @@ public class GlyphLayout : IResetable, IPoolable
                         }
 
                         lineRun = Wrap( fontData, lineRun, wrapIndex );
-                        
+
                         if ( lineRun == null )
                         {
                             goto runEnded; // All wrapped glyphs were whitespace.
                         }
-                        
+
                         Runs.Add( lineRun );
 
                         y         += down;
@@ -419,7 +397,10 @@ public class GlyphLayout : IResetable, IPoolable
                         i = 1;
                     }
                 }
+
+                Logger.Debug( run.ToString() );
             }
+        runEnded:
 
             if ( newline )
             {
@@ -440,6 +421,76 @@ public class GlyphLayout : IResetable, IPoolable
             runStart = start;
         }
 
+    outer:
+
+        FinalizeRun( fontData, y, targetWidth, halign, markupEnabled );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private bool ParseDelimiters( string str,
+                                  ref int start,
+                                  int end,
+                                  ref bool newline,
+                                  ref int runEnd,
+                                  ref bool isLastRun,
+                                  ref int nextColor,
+                                  ref bool markupEnabled )
+    {
+        var character = str[ start++ ];
+
+        // Each run is delimited by newline or left square bracket.
+        if ( character == '\n' ) // End of line.
+        {
+            runEnd  = start - 1;
+            newline = true;
+
+            return false;
+        }
+
+        if ( character == '[' ) // Possible color tag.
+        {
+            if ( markupEnabled )
+            {
+                var length = ParseColorMarkup( str, start, end );
+
+                if ( length >= 0 )
+                {
+                    runEnd =  start - 1;
+                    start  += length + 1;
+
+                    if ( start == end )
+                    {
+                        isLastRun = true; // Color tag is the last element in the string.
+                    }
+                    else
+                    {
+                        nextColor = _colorStack.Peek();
+                    }
+
+                    return false;
+                }
+
+                if ( length == -2 )
+                {
+                    start++; // Skip first of "[[" escape sequence.
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void FinalizeRun( BitmapFont.BitmapFontData fontData,
+                              float y,
+                              float targetWidth,
+                              int halign,
+                              bool markupEnabled )
+    {
         Height = fontData.CapHeight + Math.Abs( y );
 
         CalculateRunWidths( fontData );
@@ -473,7 +524,7 @@ public class GlyphLayout : IResetable, IPoolable
 
             for ( int ii = 0, nn = glyphs.Length; ii < nn; )
             {
-                var   glyph      = glyphs[ ii ];
+                var glyph      = glyphs[ ii ];
                 var glyphWidth = GetGlyphWidth( glyph, fontData );
 
                 // A glyph can extend past the right edge of subsequent glyphs.
@@ -673,13 +724,13 @@ public class GlyphLayout : IResetable, IPoolable
         {
             second = _glyphRunPool.Obtain();
 
-            var glyphs1 = second?.Glyphs; // Starts empty.
+            var glyphs1 = second.Glyphs; // Starts empty.
 
-            glyphs1?.AddAll( glyphs2, 0, firstEnd );
+            glyphs1.AddAll( glyphs2, 0, firstEnd );
             glyphs2.RemoveRange( 0, secondStart - 1 );
 
-            first.Glyphs   = glyphs1!;
-            second!.Glyphs = glyphs2;
+            first.Glyphs  = glyphs1;
+            second.Glyphs = glyphs2;
 
             var xAdvances1 = second.XAdvances; // Starts empty.
 
@@ -922,7 +973,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// </summary>
     public void Reset()
     {
-        _glyphRunPool.FreeAll( Runs! );
+        _glyphRunPool.FreeAll( Runs );
         _colorStack.Clear();
 
         Runs.Clear();
@@ -933,8 +984,8 @@ public class GlyphLayout : IResetable, IPoolable
         Height     = 0;
     }
 
-    // ========================================================================
-    // ========================================================================
+// ========================================================================
+// ========================================================================
 
     /// <summary>
     /// Stores glyphs and positions for a piece of text which is a single color and

@@ -22,7 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Viewports;
+using LughSharp.Core.Main;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -207,7 +211,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
             if ( shake )
             {
-                _shake.Update( Api.DeltaTime, Camera );
+                _shake.Update( Engine.Api.DeltaTime, Camera );
             }
         }
     }
@@ -298,7 +302,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
             if ( shake )
             {
-                _shake.Update( Api.DeltaTime, Camera );
+                _shake.Update( Engine.Api.DeltaTime, Camera );
             }
 
             Camera.Update();

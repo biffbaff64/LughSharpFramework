@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Utils.Pooling;
 
 /// <summary>
@@ -60,14 +64,11 @@ public class FlushablePool< T > : Pool< T > where T : class
     /// Obtains an instance from the pool.
     /// </summary>
     /// <returns> The instance, or null if it was not possible to obtain one. </returns>
-    public override T? Obtain()
+    public override T Obtain()
     {
         var result = base.Obtain();
 
-        if ( result != null )
-        {
-            Obtained.Add( result );
-        }
+        Obtained.Add( result );
 
         return result;
     }
@@ -99,7 +100,7 @@ public class FlushablePool< T > : Pool< T > where T : class
     /// objects from the list of currently obtained items.
     /// </summary>
     /// <param name="objects">The list of objects to be freed.</param>
-    public override void FreeAll( List< T? > objects )
+    public override void FreeAll( List< T > objects )
     {
         // If we are freeing everything, just clear the list!
         if ( objects.Count == Obtained.Count )
@@ -108,7 +109,7 @@ public class FlushablePool< T > : Pool< T > where T : class
         }
         else
         {
-            var hashSet = new HashSet< T? >( objects );
+            var hashSet = new HashSet< T >( objects );
 
             // Iterate backwards when removing to keep indices stable
             for ( var i = Obtained.Count - 1; i >= 0; i-- )

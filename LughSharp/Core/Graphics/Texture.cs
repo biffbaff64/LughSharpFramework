@@ -22,6 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Files;
@@ -94,7 +100,7 @@ public class Texture : GLTexture, IManaged
     /// <see cref="PathTypes.Internal"/>.
     /// </param>
     public Texture( string internalPath )
-        : this( Api.Files.Internal( internalPath ), false )
+        : this( Engine.Api.Files.Internal( internalPath ), false )
     {
     }
 

@@ -373,7 +373,7 @@ public class TextArea : TextField
         var maxIndex   = Math.Max( Cursor, SelectionStart );
         var lineHeight = Style!.Font!.GetLineHeight();
 
-        var fontData = font.Data;
+        var fontData = font.FontData;
 
         while ( ( ( i + 1 ) < LinesBreak?.Count ) && ( i < ( ( FirstLineShowing + LinesShowing ) * 2 ) ) )
         {
@@ -580,7 +580,7 @@ public class TextArea : TextField
     public float GetCursorX()
     {
         float textOffset = 0;
-        var   fontData   = Style?.Font?.Data;
+        var   fontData   = Style?.Font?.FontData;
 
         if ( DisplayText != null )
         {

@@ -36,22 +36,33 @@ namespace LughSharp.Core.Graphics;
 public class TextureRegion
 {
     /// <summary>
+    /// Represents the texture associated with a texture region.
     /// </summary>
     public Texture? Texture { get; set; }
 
     /// <summary>
+    /// Represents the horizontal texture coordinate of the region's
+    /// starting point in the texture.
     /// </summary>
     public virtual float U { get; set; }
 
     /// <summary>
+    /// Represents the texture coordinate on the horizontal axis of the
+    /// bottom-right corner of the texture region.
     /// </summary>
     public virtual float U2 { get; set; }
 
     /// <summary>
+    /// Represents the vertical coordinate of a texture region in normalized
+    /// texture space.
     /// </summary>
     public virtual float V { get; set; }
 
     /// <summary>
+    /// Represents the V2 coordinate of a texture region.
+    /// This property typically corresponds to the vertical texture coordinate
+    /// used for rendering operations in graphical systems.
+    /// The specific usage of this coordinate may vary depending on the rendering context.
     /// </summary>
     public virtual float V2 { get; set; }
     
@@ -139,12 +150,10 @@ public class TextureRegion
     }
 
     /// <summary>
+    /// Represents a region of a texture, defined by specific coordinates and dimensions.
+    /// Provides functionality to manipulate these regions, such as flipping, scrolling,
+    /// or splitting them into tiles.
     /// </summary>
-    /// <param name="region"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
     public TextureRegion( TextureRegion region, int x, int y, int width, int height )
     {
         SetRegion( region, x, y, width, height );

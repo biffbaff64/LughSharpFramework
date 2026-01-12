@@ -103,7 +103,7 @@ public class Glyph
     /// <inheritdoc />
     public override string ToString()
     {
-        return ID.ToString();
+        return $"ID: {ID.ToString()}";
     }
 }
 

@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Diagnostics;
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -33,22 +36,8 @@ namespace LughSharp.Core.Graphics;
 /// All methods perform clamping on the internal values after execution.
 /// </summary>
 [PublicAPI]
-[DebuggerDisplay( "RGBADebugString" )]
 public class Color : ICloneable, IEquatable< Color >
 {
-    /// <summary>
-    /// Debug string for DebuggerDisplay attribute.
-    /// </summary>
-    internal string RGBADebugString => $"R: {R}. G: {G}. B: {B}. A: {A}";
-
-    // ========================================================================
-    // ========================================================================
-
-    private static Color _color = new();
-
-    // ========================================================================
-    // ========================================================================
-
     public static readonly Color Red        = new( 0xff0000ff );
     public static readonly Color Green      = new( 0x00ff00ff );
     public static readonly Color Blue       = new( 0x0000ff00 );
@@ -88,6 +77,11 @@ public class Color : ICloneable, IEquatable< Color >
     /// Convenience for frequently used <tt>White.ToFloatBits()</tt>
     /// </summary>
     public static float WhiteFloatBits => White.ToFloatBitsAbgr();
+
+    // ========================================================================
+    // ========================================================================
+
+    private static Color _color = new();
 
     // ========================================================================
     // ========================================================================
@@ -1272,7 +1266,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     public void Debug()
     {
-        Logger.Debug( RGBADebugString );
+        Logger.Debug( $"R: {R}. G: {G}. B: {B}. A: {A}" );
         Logger.Debug( $"PackedColorABGR: {ABGRPackedColor} :: {ABGRPackedColor:X}" );
         Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
         Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );

@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Drawing.Freetype;
@@ -905,18 +906,18 @@ public partial class FreeType
 
     public static Library InitFreeType()
     {
-//        new SharedLibraryLoader().load("gdx-freetype");
-//        long address;   // = initFreeTypeJni();
-//
-//        if ( address == 0 )
-//        {
-//            throw new GdxRuntimeException( $"Couldn't initialize FreeType library, " +
-//                                           $"FreeType error code: {GetLastErrorCode()}" );
-//        }
-//
-//        return new Library(address);
+        var address = InitFreeTypeNative();
+        
+        if ( address == 0 )
+        {
+            throw new GdxRuntimeException( $"Couldn't initialize FreeType library, " +
+                                           $"FreeType error code: {GetLastErrorCode()}" );
+        }
 
-        throw new NotImplementedException();
+        return new Library( address );
+
+        [DllImport( FREETYPE_DLL_PATH, EntryPoint = "FT_Init_FreeType", CallingConvention = CallingConvention.Cdecl)]
+        static extern long InitFreeTypeNative();
     }
 
     public static int ToInt( int value )
@@ -965,10 +966,8 @@ public partial class FreeType
 
         public Face NewFace( FileInfo fontFile, int faceIndex )
         {
-            throw new NotImplementedException();
+            Buffer< byte >? buffer = null;
 
-//            Buffer< byte >? buffer = null;
-//
 //            try
 //            {
 //                buffer = fontFile.Map();
@@ -977,9 +976,9 @@ public partial class FreeType
 //            {
 //                // OK to ignore, some platforms do not support file mapping.
 //            }
-//
-//            if ( buffer == null )
-//            {
+
+            if ( buffer == null )
+            {
 //                InputStream input = fontFile.Read();
 //
 //                try
@@ -1009,8 +1008,10 @@ public partial class FreeType
 //                {
 //                    StreamUtils.CloseQuietly( input );
 //                }
-//            }
-//
+            }
+            
+            throw new NotImplementedException();
+
 //            return NewMemoryFace( buffer, faceIndex );
         }
 
@@ -1095,9 +1096,7 @@ public partial class FreeType
 
         public Size GetSize()
         {
-            throw new NotImplementedException();
-
-//            return new Size( _getSize( Address ) );
+            return new Size( _getSize( Address ) );
         }
 
         public int GetCharIndex( int i )
@@ -1110,7 +1109,7 @@ public partial class FreeType
             throw new NotImplementedException();
         }
 
-//        private static extern long _getSize( long face );
+        private static extern long _getSize( long face );
 
         public bool SetPixelSizes( int pixelWidth, int pixelHeight )
         {
