@@ -66,9 +66,10 @@ public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
     /// the given TextureRegionDrawable.
     /// </summary>
     /// <param name="drawable"></param>
-    public TextureRegionDrawable( TextureRegionDrawable? drawable ) : base( drawable )
+    public TextureRegionDrawable( TextureRegionDrawable? drawable )
+        : base( drawable )
     {
-        Region = drawable.Region;
+        Region = drawable?.Region;
     }
 
     /// <summary>

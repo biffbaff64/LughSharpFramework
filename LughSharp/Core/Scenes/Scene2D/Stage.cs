@@ -49,7 +49,7 @@ namespace LughSharp.Core.Scenes.Scene2D;
 /// the stage and sets up the camera used to convert between stage coordinates and screen
 /// coordinates.
 /// A stage must receive input events so it can distribute them to actors. This is
-/// typically done by passing the stage to GdxApi.Input.SetInputProcessor.
+/// typically done by passing the stage to Api.Input.SetInputProcessor.
 /// An InputMultiplexer may be used to handle input events before or after the stage does.
 /// If an actor handles an event by returning true from the input method, then the stage's
 /// input method will also return true, causing subsequent InputProcessors to not receive
@@ -81,7 +81,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// The default color that can be used by actors to draw debug lines.
     /// </summary>
-    public Color DebugColor { get; } = new( 0, 1, 0, 0.85f );
+    public Color DebugColor { get; } = new( 1, 0, 0, 0.85f );
 
     /// <summary>
     /// If true, debug lines are shown for actors even when
@@ -112,15 +112,25 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="Scaling.Stretch"/>. The stage will use its own <see cref="IBatch"/>
     /// which will be disposed when the stage is disposed.
     /// </summary>
-    public Stage()
-        : this( new ScalingViewport( Scaling.Stretch,
-                                     Api.Graphics.Width,
-                                     Api.Graphics.Height,
-                                     new OrthographicCamera() ), new SpriteBatch() )
+    public Stage() : this( new SpriteBatch() )
     {
         _ownsBatch = true;
     }
 
+    /// <summary>
+    /// Creates a stage with a <see cref="ScalingViewport"/> set to
+    /// <see cref="Scaling.Stretch"/>. The stage will use the specified <see cref="IBatch"/>.
+    /// </summary>
+    /// <param name="batch"></param>
+    public Stage( IBatch? batch )
+        : this( new ScalingViewport( Scaling.Stretch,
+                                    Api.Graphics.Width,
+                                    Api.Graphics.Height,
+                                    new OrthographicCamera() ), batch )
+    {
+        _ownsBatch = false;
+    }
+    
     /// <summary>
     /// Creates a stage with the specified viewport. The stage will use its own
     /// <see cref="IBatch"/> which will be disposed when the stage is disposed.
@@ -191,9 +201,7 @@ public class Stage : InputAdapter, IDisposable
         }
 
         // Update over actor for the mouse on the desktop.
-        var type = Api.App.AppType;
-
-        if ( type is Platform.ApplicationType.WindowsGL or Platform.ApplicationType.WebGL )
+        if ( Api.App.AppType is Platform.ApplicationType.WindowsGL or Platform.ApplicationType.WebGL )
         {
             _mouseOverActor = FireEnterAndExit( _mouseOverActor, _mouseScreenX, _mouseScreenY, -1 );
         }
@@ -220,9 +228,13 @@ public class Stage : InputAdapter, IDisposable
             return;
         }
 
+        Batch.EnableBlending();
+        Viewport.Apply( true );
         Batch.SetProjectionMatrix( Camera.Combined );
         Batch.Begin();
+
         RootGroup.Draw( Batch, 1 );
+        
         Batch.End();
 
         if ( Debug )

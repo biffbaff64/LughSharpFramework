@@ -36,3 +36,6 @@ public interface ITransformSceneDrawable : ISceneDrawable
 {
     void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation );
 }
+
+// ============================================================================
+// ============================================================================

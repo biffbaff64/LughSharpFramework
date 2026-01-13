@@ -60,31 +60,58 @@ public class Scene2DImage : Widget
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="patch"></param>
     public Scene2DImage( NinePatch patch )
         : this( new NinePatchSceneDrawable( patch ), Scaling.Stretch )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="region"></param>
     public Scene2DImage( TextureRegion region )
         : this( new TextureRegionDrawable( region ), Scaling.Stretch )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="texture"></param>
     public Scene2DImage( Texture texture )
         : this( new TextureRegionDrawable( new TextureRegion( texture ) ) )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="skin"></param>
+    /// <param name="drawableName"></param>
     public Scene2DImage( Skin skin, string drawableName )
         : this( skin.GetDrawable( drawableName ), Scaling.Stretch )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="drawable"></param>
     public Scene2DImage( ISceneDrawable? drawable )
         : this( drawable, Scaling.Stretch )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="drawable"></param>
+    /// <param name="scaling"></param>
+    /// <param name="align"></param>
     public Scene2DImage( ISceneDrawable? drawable, Scaling scaling, int align = Core.Utils.Alignment.CENTER )
     {
         SetDrawable( drawable );
@@ -95,6 +122,9 @@ public class Scene2DImage : Widget
         SafeConstructorHelper();
     }
 
+    /// <summary>
+    /// The alignment of the image within the widget.
+    /// </summary>
     public int Alignment
     {
         get;
@@ -105,6 +135,9 @@ public class Scene2DImage : Widget
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override float PrefWidth
     {
         get
@@ -119,6 +152,9 @@ public class Scene2DImage : Widget
         set { }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override float PrefHeight
     {
         get

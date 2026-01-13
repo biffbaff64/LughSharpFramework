@@ -8,10 +8,12 @@ using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
+using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
@@ -125,6 +127,11 @@ public class MainGame : Game
                     _sprite?.Draw( _spriteBatch );
                 }
 
+                if ( _hudActor is { UserObject: Texture } )
+                {
+                    _spriteBatch.Draw( (Texture)_hudActor.UserObject, 0, 0 );
+                }
+                
                 _test?.Render( _spriteBatch );
 
                 _ = _font?.Draw( _spriteBatch, "HELLO WORLD", 100, 100 );
@@ -245,12 +252,17 @@ public class MainGame : Game
 
     private void CreateStage()
     {
-        _stage    = new Stage( _hudCam?.Viewport, _spriteBatch );
+        if ( _hudCam == null )
+        {
+            throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
+        }
+        
+        _stage    = new Stage( new ScreenViewport() );
         _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
 
         _hudActor.IsVisible   = true;
         _hudActor.DebugActive = true;
-        _hudActor.SetPosition( 0, 0 );
+        _hudActor.SetPosition( 100, 100 );
         _stage?.AddActor( _hudActor );
     }
 

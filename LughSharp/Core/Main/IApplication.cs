@@ -93,7 +93,7 @@ public interface IApplication
     /// <summary>
     /// What <see cref="Platform.ApplicationType"/> the application has.
     /// </summary>
-    Platform.ApplicationType AppType { get; set; }
+    Platform.ApplicationType AppType { get; }
 
     /// <summary>
     /// </summary>

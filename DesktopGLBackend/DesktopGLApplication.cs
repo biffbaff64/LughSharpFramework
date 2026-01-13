@@ -414,11 +414,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// <summary>
     /// What <see cref="Platform.ApplicationType"/> the application has.
     /// </summary>
-    public Platform.ApplicationType AppType
-    {
-        get => Platform.ApplicationType.WindowsGL;
-        set { }
-    }
+    public Platform.ApplicationType AppType => Platform.ApplicationType.WindowsGL;
 
     /// <summary>
     /// Creates the input device for this application window.

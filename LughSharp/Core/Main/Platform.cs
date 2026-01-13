@@ -40,77 +40,77 @@ public static class Platform
     /// Target application backends.
     /// </summary>
     [PublicAPI]
-    public enum ApplicationType : int
+    public enum ApplicationType
     {
         /// <summary>
-        /// LughSharp Windows32 Platform
+        /// Windows32 Platform
         /// </summary>
         Windows,
 
         /// <summary>
-        /// LughSharp Windows Cross Platform Opengl Platform
+        /// Windows Cross Platform Opengl Platform
         /// </summary>
         WindowsGL,
 
         /// <summary>
-        /// LughSharp Windows Cross Platform Opengles Platform
+        /// Windows Cross Platform Opengles Platform
         /// </summary>
         WindowsGles,
 
         /// <summary>
-        /// LughSharp Windows Vulkan Platform
+        /// Windows Vulkan Platform
         /// </summary>
-        WindowsVK,
+        WindowsVk,
 
         /// <summary>
-        /// LughSharp Windows Game Development Kit Platform
+        /// Windows Game Development Kit Platform
         /// </summary>
         WindowsGdk,
 
         /// <summary>
-        /// LughSharp Windows32 Platform
+        /// Web-based Graphics Library platform.
         /// </summary>
         WebGL,
 
         /// <summary>
-        /// LughSharp XBox One Platform
+        /// XBox One Platform
         /// </summary>
         XBoxOne,
 
         /// <summary>
-        /// LughSharp XBox Series Platform
+        /// XBox Series Platform
         /// </summary>
         XBoxSeries,
 
         /// <summary>
-        /// LughSharp Nintendo Switch Platform
+        /// Nintendo Switch Platform
         /// </summary>
         NintendoSwitch,
 
         /// <summary>
-        /// LughSharp PlayStation 4 Platform
+        /// PlayStation 4 Platform
         /// </summary>
         PlayStation4,
 
         /// <summary>
-        /// LughSharp PlayStation 5 Platform
+        /// PlayStation 5 Platform
         /// </summary>
         PlayStation5,
 
         /// <summary>
-        /// LughSharp Android Platform
+        /// Android Platform
         /// </summary>
         Android,
 
         /// <summary>
-        /// LughSharp Apple iOS Platform
+        /// Apple iOS Platform
         /// </summary>
         IOS,
 
         /// <summary>
-        /// LughSharp Mac OS Platform
+        /// Mac OS Platform
         /// </summary>
-        MacOS,
+        MacOs,
 
         Default = WindowsGL,
     }
@@ -159,7 +159,7 @@ public static class Platform
                            ApplicationType.Windows
                                or ApplicationType.WindowsGL
                                or ApplicationType.WindowsGles
-                               or ApplicationType.WindowsVK
+                               or ApplicationType.WindowsVk
                                or ApplicationType.WindowsGdk
                                or ApplicationType.WebGL
                                or ApplicationType.XBoxOne
@@ -169,7 +169,7 @@ public static class Platform
                                or ApplicationType.PlayStation5
                                or ApplicationType.Android
                                or ApplicationType.IOS
-                               or ApplicationType.MacOS => value,
+                               or ApplicationType.MacOs => value,
 
                            // ----------------------------------------
 
