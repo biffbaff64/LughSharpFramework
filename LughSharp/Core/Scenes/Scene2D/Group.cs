@@ -41,7 +41,7 @@ namespace LughSharp.Core.Scenes.Scene2D;
 [PublicAPI]
 public class Group : Actor, ICullable
 {
-    public Core.Utils.SnapshotArrayList< Actor > Children { get; set; } = new( 4 );
+    public Core.Utils.SnapshotArrayList< Actor? > Children { get; set; } = new( 4 );
 
     /// <summary>
     /// When true (the default), the Batch is transformed so children are drawn
@@ -464,6 +464,11 @@ public class Group : Actor, ICullable
         {
             var child = Children.GetAt( i );
 
+            if ( child == null )
+            {
+                continue;
+            }
+            
             child.ParentToLocalCoordinates( _tmp.Set( x, y ) );
 
             var hit = child.Hit( _tmp.X, _tmp.Y, touchable );
@@ -625,25 +630,28 @@ public class Group : Actor, ICullable
 
     /// <summary>
     /// Removes an actor from this group. If the actor will not be used again and
-    /// has actions, they should be <see cref="Actor.ClearActions()"/>  cleared so
-    /// the actions will be returned to their <see cref="Action.Pool"/>, if
+    /// has actions, they should be cleared using <see cref="Actor.ClearActions()"/>
+    /// so the actions will be returned to their <see cref="Action.Pool"/>, if
     /// any. This is not done automatically.
     /// </summary>
     /// <param name="index"> The group index of the actor to remove. </param>
     /// <param name="unfocus"> Unfocuses the actor if true. </param>
     /// <returns> The actor removed from this group. </returns>
-    public virtual Actor RemoveActorAt( int index, bool unfocus )
+    public virtual Actor? RemoveActorAt( int index, bool unfocus )
     {
         var actor = Children.RemoveAt( index );
 
-        if ( unfocus )
+        if ( actor != null )
         {
-            Stage?.Unfocus( actor );
+            if ( unfocus )
+            {
+                Stage?.Unfocus( actor );
+            }
+
+            actor.Parent = null;
+            actor.Stage  = null;
         }
-
-        actor.Parent = null;
-        actor.Stage  = null;
-
+        
         ChildrenChanged();
 
         return actor;
@@ -654,7 +662,7 @@ public class Group : Actor, ICullable
     /// </summary>
     public virtual void ClearChildren()
     {
-        Actor?[] actors = Children.Begin();
+        var actors = Children.Begin();
 
         for ( int i = 0, n = Children.Count; i < n; i++ )
         {
@@ -685,9 +693,11 @@ public class Group : Actor, ICullable
     {
         for ( int i = 0, n = Children.Count; i < n; i++ )
         {
-            if ( name.Equals( Children.GetAt( i ).Name ) )
+            var child = Children.GetAt( i );
+            
+            if ( name.Equals( child?.Name ) )
             {
-                return ( T )Children.GetAt( i );
+                return ( T )child;
             }
         }
 
@@ -718,7 +728,7 @@ public class Group : Actor, ICullable
 
         for ( int i = 0, n = Children.Count; i < n; i++ )
         {
-            Children.GetAt( i ).Stage = stage; // StackOverflowError here means the group is its own ascendant.
+            Children.GetAt( i )?.Stage = stage;
         }
     }
 
@@ -767,7 +777,7 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Returns the child at the specified index.
     /// </summary>
-    public Actor GetChild( int index )
+    public Actor? GetChild( int index )
     {
         return Children.GetAt( index );
     }
@@ -826,7 +836,7 @@ public class Group : Actor, ICullable
                 }
                 else
                 {
-                    child.DebugActive = enabled;
+                    child?.DebugActive = enabled;
                 }
             }
         }

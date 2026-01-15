@@ -473,11 +473,6 @@ public class Stage : InputAdapter, IDisposable
 
         var inputEvent = Pools.Obtain< InputEvent >();
 
-        if ( inputEvent == null )
-        {
-            return false;
-        }
-
         inputEvent.Type    = InputEvent.EventType.TouchUp;
         inputEvent.Stage   = this;
         inputEvent.StageX  = _tempCoords.X;
@@ -540,11 +535,6 @@ public class Stage : InputAdapter, IDisposable
 
         var inputEvent = Pools.Obtain< InputEvent >();
 
-        if ( inputEvent == null )
-        {
-            return false;
-        }
-
         inputEvent.Stage  = this;
         inputEvent.Type   = InputEvent.EventType.MouseMoved;
         inputEvent.StageX = _tempCoords.X;
@@ -578,11 +568,6 @@ public class Stage : InputAdapter, IDisposable
 
         var inputEvent = Pools.Obtain< InputEvent >();
 
-        if ( inputEvent == null )
-        {
-            return false;
-        }
-
         inputEvent.Stage         = this;
         inputEvent.Type          = InputEvent.EventType.Scrolled;
         inputEvent.ScrollAmountX = amountX;
@@ -607,11 +592,6 @@ public class Stage : InputAdapter, IDisposable
         var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
 
-        if ( inputEvent == null )
-        {
-            return false;
-        }
-
         inputEvent.Stage   = this;
         inputEvent.Type    = InputEvent.EventType.KeyDown;
         inputEvent.KeyCode = keyCode;
@@ -632,11 +612,6 @@ public class Stage : InputAdapter, IDisposable
         var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
 
-        if ( inputEvent == null )
-        {
-            return false;
-        }
-
         inputEvent.Stage   = this;
         inputEvent.Type    = InputEvent.EventType.KeyUp;
         inputEvent.KeyCode = keyCode;
@@ -656,11 +631,6 @@ public class Stage : InputAdapter, IDisposable
     {
         var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
-
-        if ( inputEvent == null )
-        {
-            return false;
-        }
 
         inputEvent.Stage     = this;
         inputEvent.Type      = InputEvent.EventType.KeyTyped;
@@ -687,11 +657,6 @@ public class Stage : InputAdapter, IDisposable
                                int button )
     {
         var focus = Pools.Obtain< TouchFocus >();
-
-        if ( focus == null )
-        {
-            return;
-        }
 
         focus.ListenerActor = listenerActor;
         focus.Target        = target;
@@ -758,11 +723,6 @@ public class Stage : InputAdapter, IDisposable
             {
                 inputEvent = Pools.Obtain< InputEvent >();
 
-                if ( inputEvent == null )
-                {
-                    continue;
-                }
-
                 inputEvent.Stage  = this;
                 inputEvent.Type   = InputEvent.EventType.TouchUp;
                 inputEvent.StageX = int.MinValue;
@@ -806,11 +766,6 @@ public class Stage : InputAdapter, IDisposable
     public void CancelTouchFocusExcept( IEventListener? exceptListener, Actor? exceptActor )
     {
         var inputEvent = Pools.Obtain< InputEvent >();
-
-        if ( inputEvent == null )
-        {
-            return;
-        }
 
         inputEvent.Stage  = this;
         inputEvent.Type   = InputEvent.EventType.TouchUp;
@@ -1057,11 +1012,6 @@ public class Stage : InputAdapter, IDisposable
 
             var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
 
-            if ( focusEvent == null )
-            {
-                return;
-            }
-
             focusEvent.Stage = this;
             focusEvent.Type  = FocusListener.FocusEvent.FeType.Keyboard;
 
@@ -1119,11 +1069,6 @@ public class Stage : InputAdapter, IDisposable
             }
 
             var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
-
-            if ( focusEvent == null )
-            {
-                return;
-            }
 
             focusEvent.Stage = this;
             focusEvent.Type  = FocusListener.FocusEvent.FeType.Scroll;
@@ -1193,7 +1138,7 @@ public class Stage : InputAdapter, IDisposable
     /// Returns the root's child actors.
     /// </summary>
     /// <see cref="Group.Children "/>
-    public Core.Utils.SnapshotArrayList< Actor > Actors => RootGroup.Children;
+    public Core.Utils.SnapshotArrayList< Actor? > Actors => RootGroup.Children;
 
     /// <inheritdoc />
     public void Dispose()
@@ -1321,7 +1266,7 @@ public class Stage : InputAdapter, IDisposable
             {
                 if ( group.Children.GetAt( i ) != except )
                 {
-                    group.Children.GetAt( i ).DebugActive = false;
+                    group.Children.GetAt( i )?.DebugActive = false;
                 }
             }
         }

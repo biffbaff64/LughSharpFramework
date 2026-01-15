@@ -347,13 +347,7 @@ public class Actor : IActor, IComparable< Actor >
         // Collect ascendants so event propagation is unaffected by
         // hierarchy changes.
         var ascendants = Pools.Obtain< List< Group > >();
-
-        if ( ascendants == null )
-        {
-            return ev.IsCancelled;
-        }
-
-        var parent = Parent;
+        var parent     = Parent;
 
         while ( parent != null )
         {
@@ -989,9 +983,9 @@ public class Actor : IActor, IComparable< Actor >
     public void SetSize( float width, float height )
     {
         if ( MathUtils.IsNotEqual( Width, width )
-             || MathUtils.IsNotEqual( Height, height ) )
+          || MathUtils.IsNotEqual( Height, height ) )
         {
-            Width = width;
+            Width  = width;
             Height = height;
             OnSizeChanged();
         }
@@ -1266,11 +1260,6 @@ public class Actor : IActor, IComparable< Actor >
 
         var scissorBounds = Pools.Obtain< Rectangle >();
 
-        if ( scissorBounds == null )
-        {
-            return false;
-        }
-
         Stage.CalculateScissors( tableBounds, scissorBounds );
 
         if ( ScissorStack.PushScissors( scissorBounds ) )
@@ -1331,7 +1320,7 @@ public class Actor : IActor, IComparable< Actor >
         if ( rotation == 0 )
         {
             if ( ( Math.Abs( scaleX - 1f ) < 0.001f )
-                 && ( Math.Abs( scaleY - 1f ) < 0.001f ) )
+              && ( Math.Abs( scaleY - 1f ) < 0.001f ) )
             {
                 parentCoords.X -= childX;
                 parentCoords.Y -= childY;
@@ -1397,7 +1386,7 @@ public class Actor : IActor, IComparable< Actor >
         if ( rotation == 0 )
         {
             if ( ( Math.Abs( scaleX - 1f ) < 0.001f )
-                 && ( Math.Abs( scaleY - 1f ) < 0.001f ) )
+              && ( Math.Abs( scaleY - 1f ) < 0.001f ) )
             {
                 localCoords.X += x;
                 localCoords.Y += y;

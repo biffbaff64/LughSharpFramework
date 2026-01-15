@@ -706,10 +706,10 @@ public class Sprite : TextureRegion
 
         // --- 2. UV (TEXTURE) CALCULATIONS ---
         // Start with the base region coordinates + our scroll offsets
-        float u  = U + _uScrollOffset;
-        float v  = V + _vScrollOffset;
-        float u2 = U2 + _uScrollOffset;
-        float v2 = V2 + _vScrollOffset;
+        var u  = U + _uScrollOffset;
+        var v  = V + _vScrollOffset;
+        var u2 = U2 + _uScrollOffset;
+        var v2 = V2 + _vScrollOffset;
 
         if ( _flipX )
         {
@@ -721,17 +721,21 @@ public class Sprite : TextureRegion
             ( v, v2 ) = ( v2, v );
         }
 
-        // Assign UVs to the vertex array
-        // Matches the order of X/Y (V1: BL, V2: TL, V3: TR, V4: BR)
+        // Assign UVs to the vertex array in GetVertices()
+        // Match the Bottom-Up geometry (V1=BL, V2=TL, V3=TR, V4=BR) 
+        // to the coordinate system of the texture
         Vertices[ IBatch.U1 ] = u;
-        Vertices[ IBatch.V1 ] = v;
-        Vertices[ IBatch.U2 ] = u;
-        Vertices[ IBatch.V2 ] = v2;
-        Vertices[ IBatch.U3 ] = u2;
-        Vertices[ IBatch.V3 ] = v2;
-        Vertices[ IBatch.U4 ] = u2;
-        Vertices[ IBatch.V4 ] = v;
+        Vertices[ IBatch.V1 ] = v2;
 
+        Vertices[ IBatch.U2 ] = u;
+        Vertices[ IBatch.V2 ] = v;
+
+        Vertices[ IBatch.U3 ] = u2;
+        Vertices[ IBatch.V3 ] = v;
+
+        Vertices[ IBatch.U4 ] = u2;
+        Vertices[ IBatch.V4 ] = v2;
+        
         return Vertices;
     }
 

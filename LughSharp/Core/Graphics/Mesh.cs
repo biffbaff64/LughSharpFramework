@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -1347,18 +1351,18 @@ public class Mesh : IDisposable
     {
         List< Mesh >? managedResources;
 
-        if ( !Meshes.ContainsKey( app ) || ( Meshes[ app ] == null ) )
+        if ( !Meshes.TryGetValue( app, out var value) || (value == null ) )
         {
             managedResources = [ ];
         }
         else
         {
-            managedResources = Meshes[ app ];
+            managedResources = value;
         }
 
-        managedResources?.Add( mesh );
+        managedResources.Add( mesh );
 
-        Meshes.Add( app, managedResources );
+        Meshes[ app ] = managedResources;
     }
 
     /// <summary>

@@ -287,7 +287,7 @@ public class Container< T > : WidgetGroup where T : Actor
         return base.RemoveActor( actor, unfocus );
     }
 
-    public override Actor RemoveActorAt( int index, bool unfocus )
+    public override Actor? RemoveActorAt( int index, bool unfocus )
     {
         var actor = base.RemoveActorAt( index, unfocus );
 

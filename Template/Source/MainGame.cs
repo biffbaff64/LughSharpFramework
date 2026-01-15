@@ -33,20 +33,23 @@ public class MainGame : Game
 
     private readonly Vector3 _cameraPos = Vector3.Zero;
 
+    private SpriteBatch?            _spriteBatch1;
+    private SpriteBatch?            _spriteBatch2;
+    private AssetManager?           _assetManager;
     private OrthographicGameCamera? _orthoGameCam;
     private OrthographicGameCamera? _hudCam;
-    private SpriteBatch?            _spriteBatch;
-    private AssetManager?           _assetManager;
     private Texture?                _image1;
     private Texture?                _star;
-    private Texture?                _star2;
     private Stage?                  _stage;
     private Actor?                  _hudActor;
     private BitmapFont?             _font;
     private Sprite?                 _sprite;
+    private Sprite?                 _star2;
     private bool                    _disposed;
-    private Vector2                 _spritePosition = Vector2.Zero;
     private ILughTest?              _test;
+    private Vector2                 _spritePosition = Vector2.Zero;
+    private float                   _scale          = 1.0f;
+    private int                     _direction      = -1;
 
     // ========================================================================
     // ========================================================================
@@ -55,13 +58,14 @@ public class MainGame : Game
     [SupportedOSPlatform( "windows" )]
     public override void Create()
     {
-        _spriteBatch  = new SpriteBatch();
+        _spriteBatch1 = new SpriteBatch();
+        _spriteBatch2 = new SpriteBatch();
         _assetManager = new AssetManager();
 
         CreateCameras();
 
         CreateStage();
-        CreateFont();         // Not working yet
+        CreateFont(); // Not working yet
 //        CreateFreeTypeFont(); // Not working yet
         CreateAssets();
         CreateSprite();
@@ -76,14 +80,37 @@ public class MainGame : Game
     {
         if ( _sprite != null )
         {
-//            _spritePosition.X += 4;
-//            if ( _spritePosition.X > Engine.Api.Graphics.Width )
+//            if ( ++_spritePosition.X > Engine.Api.Graphics.Width )
 //            {
 //                _spritePosition.X = -_sprite!.Width;
 //            }
 
-            _sprite?.Rotate( -1.0f );
-            _sprite?.SetScale( 0.5f );
+            if ( _direction == -1 )
+            {
+                _scale -= 0.01f;
+
+                if ( _scale <= 0.25f )
+                {
+                    _direction = 1;
+                    _scale     = 0.25f;
+                }
+            }
+
+            if ( _direction == 1 )
+            {
+                _scale += 0.01f;
+
+                if ( _scale >= 1.0f )
+                {
+                    _direction = -1;
+                    _scale     = 1.0f;
+                }
+            }
+
+            _sprite?.SetScale( _scale );
+
+//            _sprite?.Rotate( -1.0f );
+//            _sprite?.SetScale( 0.5f );
 //        _sprite?.Scroll( 0.001f, 0.0f );
         }
     }
@@ -94,59 +121,65 @@ public class MainGame : Game
         // Clear and set viewport
         ScreenUtils.Clear( color: Color.Blue, clearDepth: true );
 
-        if ( _spriteBatch != null )
+        if ( _spriteBatch1 != null )
         {
-            _spriteBatch.EnableBlending();
+            _spriteBatch1.EnableBlending();
 
             if ( _orthoGameCam is { IsInUse: true } )
             {
                 _orthoGameCam.Viewport?.Apply( centerCamera: true );
-                _spriteBatch.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
-                _spriteBatch.Begin();
+                _spriteBatch1.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
+                _spriteBatch1.Begin();
 
                 if ( _image1 != null )
                 {
-                    _spriteBatch.Draw( _image1,
-                                       ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
-                                       ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
+                    _spriteBatch1.Draw( _image1,
+                                        ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
+                                        ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
                 }
+
+                _spriteBatch1.End();
+            }
+        }
+
+        if ( _spriteBatch2 != null )
+        {
+            _spriteBatch2.EnableBlending();
+
+            if ( _hudCam is { IsInUse: true } )
+            {
+                _hudCam.Viewport?.Apply( centerCamera: true );
+                _spriteBatch2.SetProjectionMatrix( _hudCam.Camera.Combined );
+                _spriteBatch2.Begin();
 
                 if ( _star != null )
                 {
-                    _spriteBatch.Draw( _star, 0, 0 );
-                }
-
-                if ( _star2 != null )
-                {
-                    _spriteBatch.Draw( _star2, 320, 240 );
+                    _spriteBatch2.Draw( _star, 0, 0 );
                 }
 
                 if ( _sprite != null )
                 {
                     _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
-                    _sprite?.Draw( _spriteBatch );
+                    _sprite?.Draw( _spriteBatch2 );
+                }
+
+                if ( _star2 != null )
+                {
+                    _star2.SetPosition( 320, 240 );
+                    _star2.Draw( _spriteBatch2 );
                 }
 
                 if ( _hudActor is { UserObject: Texture } )
                 {
-                    _spriteBatch.Draw( (Texture)_hudActor.UserObject, 0, 0 );
+                    _spriteBatch2.Draw( ( Texture )_hudActor.UserObject, 0, 0 );
                 }
-                
-                _test?.Render( _spriteBatch );
 
-                _ = _font?.Draw( _spriteBatch, "HELLO WORLD", 100, 100 );
+                _test?.Render( _spriteBatch2 );
 
-                _spriteBatch.End();
+                _ = _font?.Draw( _spriteBatch2, "HELLO WORLD", 100, 100 );
+
+                _spriteBatch2.End();
             }
-
-//            if ( _hudCam is { IsInUse: true } )
-//            {
-//                _hudCam.Viewport?.Apply( centerCamera: true );
-//                _spriteBatch.SetProjectionMatrix( _hudCam.Camera.Combined );
-//                _spriteBatch.Begin();
-// 
-//                _spriteBatch.End();
-//            }
         }
 
         // ----- Draw the Stage, if enabled -----
@@ -192,14 +225,17 @@ public class MainGame : Game
         {
             if ( disposing )
             {
-                _spriteBatch?.Dispose();
+                _spriteBatch1?.Dispose();
+                _spriteBatch2?.Dispose();
                 _image1?.Dispose();
                 _star?.Dispose();
-                _star2?.Dispose();
                 _assetManager?.Dispose();
                 _orthoGameCam?.Dispose();
                 _hudCam?.Dispose();
                 _font?.Dispose();
+                
+                _sprite = null;
+                _star2  = null;
             }
 
             _disposed = true;
@@ -247,7 +283,6 @@ public class MainGame : Game
     {
         _image1 = new Texture( Assets.BACKGROUND_IMAGE );
         _star   = new Texture( Assets.COMPLETE_STAR );
-        _star2  = new Texture( Assets.COMPLETE_STAR );
     }
 
     private void CreateStage()
@@ -256,29 +291,27 @@ public class MainGame : Game
         {
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
-        
-        _stage    = new Stage( new ScreenViewport() );
-        _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
 
-        _hudActor.IsVisible   = true;
-        _hudActor.DebugActive = true;
+        _stage = new Stage( _hudCam.Viewport, _spriteBatch2 );
+
+        _hudActor           = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
+        _hudActor.IsVisible = true;
         _hudActor.SetPosition( 100, 100 );
+
         _stage?.AddActor( _hudActor );
+        _stage?.DebugAll = true;
     }
 
     private void CreateSprite()
     {
-        var spriteImage = new Texture( Assets.KEY_COLLECTED );
+        _sprite = new Sprite( new TextureRegion( new Texture( Assets.KEY_COLLECTED ) ) );
+        _star2  = new Sprite( new TextureRegion( new Texture( Assets.COMPLETE_STAR ) ) );
 
         _spritePosition.Set( 40, 120 );
-
-        _sprite = new Sprite( new TextureRegion( spriteImage ) );
-
-        _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
-        _sprite.SetBounds();
-        _sprite.SetOriginCenter();
-        _sprite.SetColor( Color.White );
-        _sprite?.SetFlip( true, true );
+//        _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
+//        _sprite.SetBounds();
+//        _sprite.SetOriginCenter();
+//        _sprite.SetColor( Color.White );
     }
 
     private void CreateFont()
