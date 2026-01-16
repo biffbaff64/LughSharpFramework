@@ -253,7 +253,7 @@ public class ParticleEffect : IDisposable
     /// before adding the newly loaded ones.
     /// </para>
     /// </remarks>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown if an error occurs while loading the effect from the <paramref name="effectFile"/>.
     /// </exception>
     public void LoadEmitters( FileInfo effectFile )
@@ -279,7 +279,7 @@ public class ParticleEffect : IDisposable
         }
         catch ( IOException ex )
         {
-            throw new GdxRuntimeException( "Error loading effect: " + effectFile, ex );
+            throw new RuntimeException( "Error loading effect: " + effectFile, ex );
         }
     }
 

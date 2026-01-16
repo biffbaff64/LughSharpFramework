@@ -54,7 +54,7 @@ public class PixelFormat
 
                    // ---------------------------
                    
-                   var _ => throw new GdxRuntimeException( $"Unsupported internal format: {format}" )
+                   var _ => throw new RuntimeException( $"Unsupported internal format: {format}" )
                };
     }
 
@@ -74,7 +74,7 @@ public class PixelFormat
 
                    // ---------------------------
                    
-                   var _ => throw new GdxRuntimeException( $"Unsupported data format: {format}" )
+                   var _ => throw new RuntimeException( $"Unsupported data format: {format}" )
                };
     }
 
@@ -112,7 +112,7 @@ public class PixelFormat
 
                    // ---------------------------
 
-                   var _ => throw new GdxRuntimeException( $"Invalid format: {format}" )
+                   var _ => throw new RuntimeException( $"Invalid format: {format}" )
                };
     }
 
@@ -219,7 +219,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => throw new GdxRuntimeException( $"Unknown Format: {format}" ),
+                   var _ => throw new RuntimeException( $"Unknown Format: {format}" ),
                };
     }
 
@@ -305,7 +305,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => throw new GdxRuntimeException( $"Unknown PNG Color Type: {colorType}" ),
+                   var _ => throw new RuntimeException( $"Unknown PNG Color Type: {colorType}" ),
                };
     }
 
@@ -314,7 +314,7 @@ public class PixelFormat
     /// </summary>
     /// <param name="format">The pixel format of type <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>.</param>
     /// <returns>The corresponding <see cref="System.Drawing.Imaging.PixelFormat"/>.</returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
     [SupportedOSPlatform( "windows" )]
@@ -331,7 +331,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+                   var _ => throw new RuntimeException( $"Invalid format: {format}" ),
                };
     }
 

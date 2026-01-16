@@ -44,7 +44,7 @@ public class AlphaAction : TemporalAction
     {
         if ( Target == null )
         {
-            throw new GdxRuntimeException( "Cannot begin with a null Target!" );
+            throw new RuntimeException( "Cannot begin with a null Target!" );
         }
 
         _start = Target.Color.A;

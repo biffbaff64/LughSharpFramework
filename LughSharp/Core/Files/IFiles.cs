@@ -36,7 +36,7 @@ public interface IFiles
     /// </summary>
     /// <param name="path"></param>
     /// <param name="type">Determines how the path is resolved.</param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// if the type is classpath or internal and the file does not exist.
     /// </exception>
     FileInfo GetFileHandle( string path, PathTypes type );

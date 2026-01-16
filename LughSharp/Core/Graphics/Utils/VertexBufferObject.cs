@@ -136,7 +136,7 @@ public class VertexBufferObject : IVertexData
         {
             if ( _isBound )
             {
-                throw new GdxRuntimeException( "Cannot change usage while VBO is bound" );
+                throw new RuntimeException( "Cannot change usage while VBO is bound" );
             }
 
             field = value;
@@ -154,7 +154,7 @@ public class VertexBufferObject : IVertexData
     {
         _isDirty |= forWriting;
 
-        return _floatBuffer ?? throw new GdxRuntimeException( "_buffer is null" );
+        return _floatBuffer ?? throw new RuntimeException( "_buffer is null" );
     }
 
     /// <summary>
@@ -359,7 +359,7 @@ public class VertexBufferObject : IVertexData
     {
         if ( _isBound )
         {
-            throw new GdxRuntimeException( "Cannot change attributes while VBO is bound" );
+            throw new RuntimeException( "Cannot change attributes while VBO is bound" );
         }
 
         if ( _ownsBuffer && ( _byteBuffer != null ) )
@@ -375,7 +375,7 @@ public class VertexBufferObject : IVertexData
         }
         else
         {
-            throw new GdxRuntimeException( "Only Buffer< byte > is currently supported" );
+            throw new RuntimeException( "Only Buffer< byte > is currently supported" );
         }
 
         var lim = _byteBuffer.Limit;

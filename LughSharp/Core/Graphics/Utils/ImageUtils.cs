@@ -44,7 +44,7 @@ public class ImageUtils
     // ========================================================================
 
     /// <summary>
-    /// Rejects an invalid PNG image, throwing a GdxRuntimeException with a suitable message.
+    /// Rejects an invalid PNG image, throwing a RuntimeException with a suitable message.
     /// <br/>
     /// <para>
     /// <b>ColorTypeBitDepthMismatch.</b>
@@ -98,7 +98,7 @@ public class ImageUtils
             sb.Append( "Unknown reason" );
         }
 
-        throw new GdxRuntimeException( sb.ToString() );
+        throw new RuntimeException( sb.ToString() );
     }
 }
 

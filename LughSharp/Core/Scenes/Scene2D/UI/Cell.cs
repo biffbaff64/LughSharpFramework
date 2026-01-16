@@ -1290,14 +1290,14 @@ public class Cell : IResetable
     /// and <see cref="PadRight"/>.
     /// </summary>
     /// <returns> The X-padding value. </returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If either <see cref="PadLeft"/> or <see cref="PadRight"/> is null.
     /// </exception>
     public float GetPadX()
     {
         if ( ( PadLeft == null ) || ( PadRight == null ) )
         {
-            throw new GdxRuntimeException( "PadLeft / PadRight cannot be null!" );
+            throw new RuntimeException( "PadLeft / PadRight cannot be null!" );
         }
 
         return PadLeft.Get( Actor ) + PadRight.Get( Actor );
@@ -1308,14 +1308,14 @@ public class Cell : IResetable
     /// and <see cref="PadBottom"/>.
     /// </summary>
     /// <returns> The Y-padding value. </returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If either <see cref="PadTop"/> or <see cref="PadBottom"/> is null.
     /// </exception>
     public float GetPadY()
     {
         if ( ( PadTop == null ) || ( PadBottom == null ) )
         {
-            throw new GdxRuntimeException( "PadTop / PadBottom cannot be null!" );
+            throw new RuntimeException( "PadTop / PadBottom cannot be null!" );
         }
 
         return PadTop.Get( Actor ) + PadBottom.Get( Actor );

@@ -161,12 +161,12 @@ public static class ListExtensions
         /// Removes and returns the last item in the list.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="GdxRuntimeException"></exception>
+        /// <exception cref="RuntimeException"></exception>
         public T Pop()
         {
             if ( target.Count == 0 )
             {
-                throw new GdxRuntimeException( "List is empty." );
+                throw new RuntimeException( "List is empty." );
             }
 
             var item = target[ ^1 ];

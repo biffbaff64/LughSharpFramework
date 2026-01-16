@@ -161,7 +161,7 @@ public class VertexBufferObjectSubData : IVertexData
         }
         else
         {
-            throw new GdxRuntimeException( "Buffer must be allocated direct." );
+            throw new RuntimeException( "Buffer must be allocated direct." );
         }
 
         BufferChanged();

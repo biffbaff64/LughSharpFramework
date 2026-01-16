@@ -114,7 +114,7 @@ public class MapLayer
         {
             if ( value == this )
             {
-                throw new GdxRuntimeException( "Can't set self as the parent" );
+                throw new RuntimeException( "Can't set self as the parent" );
             }
 
             _parent = value;

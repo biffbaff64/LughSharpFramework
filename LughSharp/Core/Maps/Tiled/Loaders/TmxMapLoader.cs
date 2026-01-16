@@ -161,7 +161,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     /// </summary>
     /// <param name="tmxFile"></param>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     protected List< FileInfo > GetDependencyFileHandles( FileInfo tmxFile )
     {
         var fileHandles = new List< FileInfo >();
@@ -171,7 +171,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
         if ( ( tilesetNodeList = XmlDocument.SelectNodes( "tileset" ) ) == null )
         {
-            throw new GdxRuntimeException( "Error: Map does not contain tileset nodes." );
+            throw new RuntimeException( "Error: Map does not contain tileset nodes." );
         }
 
         foreach ( XmlNode? tileset in tilesetNodeList )
@@ -195,7 +195,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
                 {
                     if ( tset == null )
                     {
-                        throw new GdxRuntimeException();
+                        throw new RuntimeException();
                     }
 
                     var tileNodes = tset.SelectNodes( "tile" );
@@ -295,7 +295,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
             if ( texture == null )
             {
-                throw new GdxRuntimeException( $"Tileset image not found: {image.Name}" );
+                throw new RuntimeException( $"Tileset image not found: {image.Name}" );
             }
 
             props.Put( "imagesource", imageSource );
@@ -326,7 +326,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
         {
             if ( tileElements == null )
             {
-                throw new GdxRuntimeException( "Error: Tile Elements List is null!" );
+                throw new RuntimeException( "Error: Tile Elements List is null!" );
             }
 
             // Every tile has its own image source

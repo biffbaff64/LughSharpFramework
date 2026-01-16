@@ -73,7 +73,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// </para>
     /// <para>
     /// Note: The real transform matrix <em>must</em> be invertible. If a singular
-    /// matrix is detected, GdxRuntimeException will be thrown.
+    /// matrix is detected, RuntimeException will be thrown.
     /// </para>
     /// </summary>
     public virtual void FlushAndSyncTransformMatrix()
@@ -87,7 +87,7 @@ public class CpuSpriteBatch : SpriteBatch
 
             if ( !_haveIdentityRealMatrix && ( _virtualMatrix.Determinant() == 0 ) )
             {
-                throw new GdxRuntimeException( "Transform matrix is singular, can't sync" );
+                throw new RuntimeException( "Transform matrix is singular, can't sync" );
             }
 
             _adjustNeeded = false;
@@ -454,7 +454,7 @@ public class CpuSpriteBatch : SpriteBatch
 
         if ( ( count % Sprite.SPRITE_SIZE ) != 0 )
         {
-            throw new GdxRuntimeException( "invalid vertex count" );
+            throw new RuntimeException( "invalid vertex count" );
         }
 
         if ( !_adjustNeeded )
@@ -722,7 +722,7 @@ public class CpuSpriteBatch : SpriteBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "CpuSpriteBatch.begin must be called before draw." );
+            throw new RuntimeException( "CpuSpriteBatch.begin must be called before draw." );
         }
 
         Guard.Against.Null( region );

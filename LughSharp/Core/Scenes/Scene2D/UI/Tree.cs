@@ -214,7 +214,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     {
         if ( Style == null )
         {
-            throw new GdxRuntimeException( "Style should not be null!" );
+            throw new RuntimeException( "Style should not be null!" );
         }
 
         var width = Math.Max( Style.Plus.MinWidth, Style.Minus.MinWidth );
@@ -382,7 +382,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         for ( int i = 0, n = nodes.Count; i < n; i++ )
         {
             var node   = nodes[ i ];
-            var actor  = node.Actor ?? throw new GdxRuntimeException( "node.Actor cannot be null!" );
+            var actor  = node.Actor ?? throw new RuntimeException( "node.Actor cannot be null!" );
             var actorY = actor.Y;
             var height = node.Height;
 
@@ -477,7 +477,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
         if ( Style == null )
         {
-            throw new GdxRuntimeException( "Style is NULL!" );
+            throw new RuntimeException( "Style is NULL!" );
         }
 
         if ( over )

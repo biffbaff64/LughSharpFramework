@@ -105,7 +105,7 @@ public class TextArea : TextField
 
         if ( ( CursorLine * 2 ) >= LinesBreak?.Count )
         {
-            return Text?.Length ?? throw new GdxRuntimeException( "member 'text' is null!" );
+            return Text?.Length ?? throw new RuntimeException( "member 'text' is null!" );
         }
 
         var glyphPos = GlyphPositions.ToArray();

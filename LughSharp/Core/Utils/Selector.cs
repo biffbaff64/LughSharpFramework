@@ -33,7 +33,7 @@ namespace LughSharp.Core.Utils;
 /// to run as often as every x frames. Certain values of k will result in a partial
 /// sorting of the Array.
 /// The lowest ranking element starts at 1, not 0. 1 = first, 2 = second, 3 = third,
-/// etc. Calling with a value of zero will result in a GdxRuntimeException
+/// etc. Calling with a value of zero will result in a RuntimeException
 /// This class uses very minimal extra memory, as it makes no copies of the array.
 /// The underlying algorithms used are a naive single-pass for k = min and k =max, and
 /// Hoare's quickselect for values in between.
@@ -55,12 +55,12 @@ public class Selector< T >
     {
         if ( size < 1 )
         {
-            throw new GdxRuntimeException( "cannot select from empty array (size < 1)" );
+            throw new RuntimeException( "cannot select from empty array (size < 1)" );
         }
 
         if ( kthLowest > size )
         {
-            throw new GdxRuntimeException
+            throw new RuntimeException
                 ( $"Kth rank is larger than size. k: {kthLowest}, size: {size}" );
         }
 

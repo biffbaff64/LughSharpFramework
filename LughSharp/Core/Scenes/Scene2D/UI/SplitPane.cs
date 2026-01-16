@@ -411,7 +411,7 @@ public class SplitPane : WidgetGroup
     {
         if ( minAmount is < 0 or > 1 )
         {
-            throw new GdxRuntimeException( "minAmount has to be >= 0 and <= 1" );
+            throw new RuntimeException( "minAmount has to be >= 0 and <= 1" );
         }
 
         _minAmount = minAmount;
@@ -426,7 +426,7 @@ public class SplitPane : WidgetGroup
     {
         if ( maxAmount is < 0 or > 1 )
         {
-            throw new GdxRuntimeException( "maxAmount has to be >= 0 and <= 1" );
+            throw new RuntimeException( "maxAmount has to be >= 0 and <= 1" );
         }
 
         _maxAmount = maxAmount;

@@ -54,7 +54,7 @@ public class TextureAtlasData
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( $"Error reading texture atlas file: {packFile}", ex );
+            throw new RuntimeException( $"Error reading texture atlas file: {packFile}", ex );
         }
     }
 
@@ -66,7 +66,7 @@ public class TextureAtlasData
     /// <param name="packFile"></param>
     /// <param name="imagesDir"></param>
     /// <param name="flip"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public void Load( FileInfo packFile, DirectoryInfo imagesDir, bool flip )
     {
         var entry = new string[ 5 ];
@@ -310,7 +310,7 @@ public class TextureAtlasData
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( $"Error reading texture atlas file: {packFile}", ex );
+            throw new RuntimeException( $"Error reading texture atlas file: {packFile}", ex );
         }
 
         // Sort regions by index if needed

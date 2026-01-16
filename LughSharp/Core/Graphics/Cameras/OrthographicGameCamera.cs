@@ -148,7 +148,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                 break;
 
             default:
-                throw new GdxRuntimeException( $"Unknown Viewport Type: {viewportType}" );
+                throw new RuntimeException( $"Unknown Viewport Type: {viewportType}" );
         }
     }
 

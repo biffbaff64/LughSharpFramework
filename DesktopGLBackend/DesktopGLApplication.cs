@@ -156,7 +156,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         }
 //        catch ( Exception e )
 //        {
-//            throw e is SystemException ? e : new GdxRuntimeException( e );
+//            throw e is SystemException ? e : new RuntimeException( e );
 //        }
         finally
         {
@@ -298,7 +298,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     /// <summary>
     /// </summary>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public void InitialiseGlfw()
     {
         try
@@ -656,7 +656,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// <param name="config"></param>
     /// <param name="sharedContextWindow"></param>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     private DotGLFW.Window CreateGlfwWindow( DesktopGLApplicationConfiguration config, long sharedContextWindow )
     {
         SetWindowHints( config );

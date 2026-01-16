@@ -125,7 +125,7 @@ public class OpenALAudio : IAudio
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     /// <exception cref="NullReferenceException"></exception>
     public ISound NewSound( FileInfo? file )
     {
@@ -135,7 +135,7 @@ public class OpenALAudio : IAudio
 
         if ( soundClass == null )
         {
-            throw new GdxRuntimeException( $"Unknown file extension for sound: {file}" );
+            throw new RuntimeException( $"Unknown file extension for sound: {file}" );
         }
 
         try
@@ -146,7 +146,7 @@ public class OpenALAudio : IAudio
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( $"Error creating sound {soundClass.Name} for file: {file}", ex );
+            throw new RuntimeException( $"Error creating sound {soundClass.Name} for file: {file}", ex );
         }
     }
 
@@ -155,7 +155,7 @@ public class OpenALAudio : IAudio
     /// <param name="file"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"> If the provided FieHandle is null </exception>
-    /// <exception cref="GdxRuntimeException"> If an unknown file extension is provided </exception>
+    /// <exception cref="RuntimeException"> If an unknown file extension is provided </exception>
     /// <exception cref="NullReferenceException"></exception>
     public IMusic NewMusic( FileInfo? file )
     {
@@ -165,7 +165,7 @@ public class OpenALAudio : IAudio
 
         if ( musicClass == null )
         {
-            throw new GdxRuntimeException( "Unknown file extension for music: " + file );
+            throw new RuntimeException( "Unknown file extension for music: " + file );
         }
 
         try
@@ -176,7 +176,7 @@ public class OpenALAudio : IAudio
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( $"Error creating music {musicClass.Name} for file: {file}", ex );
+            throw new RuntimeException( $"Error creating music {musicClass.Name} for file: {file}", ex );
         }
     }
 

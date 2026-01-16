@@ -228,7 +228,7 @@ public class Table : WidgetGroup
     {
         if ( Skin == null )
         {
-            throw new GdxRuntimeException( "Table must have a skin set to use this method." );
+            throw new RuntimeException( "Table must have a skin set to use this method." );
         }
 
         SetBackground( Skin.GetDrawable( drawableName ) );
@@ -436,7 +436,7 @@ public class Table : WidgetGroup
 
         if ( Skin == null )
         {
-            throw new GdxRuntimeException( "Table must have a skin set to use this method." );
+            throw new RuntimeException( "Table must have a skin set to use this method." );
         }
 
         return Add( new Label( text, Skin ) );
@@ -450,7 +450,7 @@ public class Table : WidgetGroup
     {
         if ( Skin == null )
         {
-            throw new GdxRuntimeException( "Table must have a skin set to use this method." );
+            throw new RuntimeException( "Table must have a skin set to use this method." );
         }
 
         return Add( new Label( text, Skin.Get< Label.LabelStyle >( labelStyleName ) ) );
@@ -464,7 +464,7 @@ public class Table : WidgetGroup
     {
         if ( Skin == null )
         {
-            throw new GdxRuntimeException( "Table must have a skin set to use this method." );
+            throw new RuntimeException( "Table must have a skin set to use this method." );
         }
 
         return Add( new Label( text, new Label.LabelStyle( Skin.GetFont( fontName ), color ) ) );
@@ -478,7 +478,7 @@ public class Table : WidgetGroup
     {
         if ( Skin == null )
         {
-            throw new GdxRuntimeException( "Table must have a skin set to use this method." );
+            throw new RuntimeException( "Table must have a skin set to use this method." );
         }
 
         return Add( new Label( text, new Label.LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );

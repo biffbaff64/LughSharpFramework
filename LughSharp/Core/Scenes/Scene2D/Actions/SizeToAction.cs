@@ -42,7 +42,7 @@ public class SizeToAction : TemporalAction
     {
         if ( Target == null )
         {
-            throw new GdxRuntimeException( "Cannot Begin with null Target Actor!" );
+            throw new RuntimeException( "Cannot Begin with null Target Actor!" );
         }
 
         StartWidth  = Target.Width;

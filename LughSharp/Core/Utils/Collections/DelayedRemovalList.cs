@@ -118,14 +118,14 @@ public class DelayedRemovalList< T > : List< T >
     /// a fuller description.
     /// </para>
     /// </summary>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown if this method is called before calling <see cref="Begin()" />.
     /// </exception>
     public void End()
     {
         if ( _iterating == 0 )
         {
-            throw new GdxRuntimeException( "Begin() must be called before End()!" );
+            throw new RuntimeException( "Begin() must be called before End()!" );
         }
 
         _iterating--;
@@ -279,14 +279,14 @@ public class DelayedRemovalList< T > : List< T >
     /// </summary>
     /// <param name="index"> The index. </param>
     /// <param name="value"> The Value. </param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     public void Set( int index, T value )
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         this[ index ] = value;
@@ -298,14 +298,14 @@ public class DelayedRemovalList< T > : List< T >
     /// </summary>
     /// <param name="index"> The index. </param>
     /// <param name="value"> The Value. </param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     public new void Insert( int index, T value )
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         base.Insert( index, value );
@@ -318,14 +318,14 @@ public class DelayedRemovalList< T > : List< T >
     /// </summary>
     /// <param name="index"></param>
     /// <param name="count"></param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     public void InsertRange( int index, int count )
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         var insertItem = base[ index ];
@@ -341,14 +341,14 @@ public class DelayedRemovalList< T > : List< T >
     /// </summary>
     /// <param name="first"> List position of the first element. </param>
     /// <param name="second"> List position of the second element. </param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     public void Swap( int first, int second )
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         ( this[ first ], this[ second ] ) = ( this[ second ], this[ first ] );
@@ -357,14 +357,14 @@ public class DelayedRemovalList< T > : List< T >
     /// <summary>
     /// Removes and returns the last item in this list.
     /// </summary>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     public T Pop()
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         var t = base[ ^1 ];
@@ -379,8 +379,8 @@ public class DelayedRemovalList< T > : List< T >
     /// was NOT called between <see cref="Begin" /> and <see cref="End" />.
     /// Sorts the elements in this list. Uses Array.Sort with the provided comparer.
     /// </summary>
-    /// <exception cref="GdxRuntimeException"></exception>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     /// <inheritdoc cref="List{T}.Sort()" />
@@ -388,7 +388,7 @@ public class DelayedRemovalList< T > : List< T >
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         base.Sort();
@@ -403,14 +403,14 @@ public class DelayedRemovalList< T > : List< T >
     /// The <see cref="IComparer{T}" /> implementation to use when comparing elements,
     /// or null to use the default comparer Default.
     /// </param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     public new void Sort( IComparer< T > comparator )
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         base.Sort( comparator );
@@ -420,14 +420,14 @@ public class DelayedRemovalList< T > : List< T >
     /// Reverses the order of the elements in the list. Essentially a
     /// wrapper for <see cref="List{T}.Reverse()" /> with error checking.
     /// </summary>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     public new void Reverse()
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         base.Reverse();
@@ -436,14 +436,14 @@ public class DelayedRemovalList< T > : List< T >
     /// <summary>
     /// Shuffles the contents of this list.
     /// </summary>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle.
     /// </exception>
     public void Shuffle()
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         ListExtensions.Shuffle( this );
@@ -453,7 +453,7 @@ public class DelayedRemovalList< T > : List< T >
     /// Truncates the list to the specified new size.
     /// </summary>
     /// <param name="newSize"> The new required size. </param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle,
     /// or the requested new size is invalid.
     /// </exception>
@@ -461,12 +461,12 @@ public class DelayedRemovalList< T > : List< T >
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         if ( newSize < 0 )
         {
-            throw new GdxRuntimeException( "New size must be >= 0: {newSize}" );
+            throw new RuntimeException( "New size must be >= 0: {newSize}" );
         }
 
         if ( Count < newSize )
@@ -486,7 +486,7 @@ public class DelayedRemovalList< T > : List< T >
     /// </summary>
     /// <param name="newSize"> The new required capacity. </param>
     /// <returns> The new capacity </returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// If still between the <see cref="Begin" /> and <see cref="End" /> cycle,
     /// or the requested new size is invalid.
     /// </exception>
@@ -494,12 +494,12 @@ public class DelayedRemovalList< T > : List< T >
     {
         if ( _iterating > 0 )
         {
-            throw new GdxRuntimeException( "Invalid between begin/end." );
+            throw new RuntimeException( "Invalid between begin/end." );
         }
 
         if ( Count >= newSize )
         {
-            throw new GdxRuntimeException( $"Invalid new size: {newSize} (current: {Count} )" );
+            throw new RuntimeException( $"Invalid new size: {newSize} (current: {Count} )" );
         }
 
         return EnsureCapacity( newSize );

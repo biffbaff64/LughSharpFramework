@@ -325,14 +325,14 @@ public class Matrix3
     /// Inverts this matrix given that the determinant is != 0.
     /// </summary>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    /// <exception cref="GdxRuntimeException"> if the matrix is singular (not invertible) </exception>
+    /// <exception cref="RuntimeException"> if the matrix is singular (not invertible) </exception>
     public Matrix3 Invert()
     {
         var det = Determinant();
 
         if (det == 0)
         {
-            throw new GdxRuntimeException("Can't invert a singular matrix");
+            throw new RuntimeException("Can't invert a singular matrix");
         }
 
         var invDet = 1.0f / det;

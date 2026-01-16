@@ -142,7 +142,7 @@ public class FreeTypeFontGenerator : IDisposable
     /// Creates a new generator from the given font file. If the file length could not be
     /// determined (it was 0), an extra copy of the font bytes is performed.
     /// </summary>
-    /// <exception cref="GdxRuntimeException"> Thrown if loading failed. </exception>
+    /// <exception cref="RuntimeException"> Thrown if loading failed. </exception>
     public FreeTypeFontGenerator( FileInfo fontFile, int faceIndex = 0 )
     {
         Logger.Checkpoint();
@@ -176,7 +176,7 @@ public class FreeTypeFontGenerator : IDisposable
 
     /// <summary>
     /// Generates a new <see cref="BitmapFont"/>. The size is expressed in pixels. Throws
-    /// a GdxRuntimeException if the font could not be generated. Using big sizes might
+    /// a RuntimeException if the font could not be generated. Using big sizes might
     /// cause such an exception.
     /// </summary>
     /// <param name="parameter"> configures how the font is generated </param>
@@ -202,7 +202,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( data.Regions?.Count == 0 )
         {
-            throw new GdxRuntimeException( "Unable to create a font with no texture regions." );
+            throw new RuntimeException( "Unable to create a font with no texture regions." );
         }
 
         var font = NewBitmapFont( data, data.Regions!, true );
@@ -215,7 +215,7 @@ public class FreeTypeFontGenerator : IDisposable
     /// Called by generateFont to create a new <see cref="BitmapFont"/> instance. This allows
     /// injecting a customized <see cref="BitmapFont"/>, eg for a RTL font.
     /// </summary>
-    protected static BitmapFont NewBitmapFont( BitmapFont.BitmapFontData data, List< TextureRegion > pageRegions,
+    protected static BitmapFont NewBitmapFont( BitmapFontData data, List< TextureRegion > pageRegions,
                                                bool integer )
     {
         return new BitmapFont( data, pageRegions, integer );
@@ -289,7 +289,7 @@ public class FreeTypeFontGenerator : IDisposable
         // Try to load character
         if ( !LoadChar( c ) )
         {
-            throw new GdxRuntimeException( "Unable to load character!" );
+            throw new RuntimeException( "Unable to load character!" );
         }
 
         var slot = _face.GetGlyph();
@@ -341,8 +341,8 @@ public class FreeTypeFontGenerator : IDisposable
     }
 
     /// <summary>
-    /// Generates a new <see cref="BitmapFont.BitmapFontData"/> instance, expert usage only.
-    /// Throws a <see cref="GdxRuntimeException"/> if something went wrong.
+    /// Generates a new <see cref="BitmapFontData"/> instance, expert usage only.
+    /// Throws a <see cref="RuntimeException"/> if something went wrong.
     /// </summary>
     /// <param name="size"> the size in pixels. </param>
     public FreeTypeBitmapFontData GenerateData( int size )
@@ -361,8 +361,8 @@ public class FreeTypeFontGenerator : IDisposable
     }
 
     /// <summary>
-    /// Generates a new <see cref="BitmapFont.BitmapFontData"/> instance, expert usage
-    /// only.Throws a GdxRuntimeException if something went wrong.
+    /// Generates a new <see cref="BitmapFontData"/> instance, expert usage
+    /// only.Throws a RuntimeException if something went wrong.
     /// </summary>
     /// <param name="parameter"> configures how the font is generated </param>
     /// <param name="data"></param>
@@ -425,7 +425,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( data.XHeight == 0 )
         {
-            throw new GdxRuntimeException( "No x-height character found in font" );
+            throw new RuntimeException( "No x-height character found in font" );
         }
 
         // determine cap height
@@ -444,7 +444,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( !_bitmapped && ( Math.Abs( data.CapHeight - 1.0f ) < NumberUtils.FLOAT_TOLERANCE ) )
         {
-            throw new GdxRuntimeException( "No cap character found in font" );
+            throw new RuntimeException( "No cap character found in font" );
         }
 
         data.Ascent -= data.CapHeight;
@@ -936,7 +936,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( !_bitmapped && !_face.SetPixelSizes( _pixelWidth, _pixelHeight ) )
         {
-            throw new GdxRuntimeException( "Couldn't set size for font" );
+            throw new RuntimeException( "Couldn't set size for font" );
         }
     }
 
@@ -998,13 +998,13 @@ public class FreeTypeFontGenerator : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// <see cref="BitmapFont.BitmapFontData"/> used for fonts generated via the
+    /// <see cref="BitmapFontData"/> used for fonts generated via the
     /// <see cref="FreeTypeFontGenerator"/>. The texture storing the glyphs is held in
-    /// memory, thus the <see cref="BitmapFont.BitmapFontData.ImagePaths"/> and
-    /// <see cref="BitmapFont.BitmapFontData.FontFile"/> methods will return null.
+    /// memory, thus the <see cref="BitmapFontData.ImagePaths"/> and
+    /// <see cref="BitmapFontData.FontFile"/> methods will return null.
     /// </summary>
     [PublicAPI]
-    public class FreeTypeBitmapFontData : BitmapFont.BitmapFontData, IDisposable
+    public class FreeTypeBitmapFontData : BitmapFontData, IDisposable
     {
         public List< TextureRegion >? Regions    { get; set; }
         public FreeTypeFontGenerator? Generator  { get; set; }
@@ -1023,9 +1023,9 @@ public class FreeTypeFontGenerator : IDisposable
 
             if ( ( glyph == null ) && ( Generator != null ) )
             {
-                GdxRuntimeException.ThrowIfNull( Stroker );
-                GdxRuntimeException.ThrowIfNull( Packer );
-                GdxRuntimeException.ThrowIfNull( Regions );
+                RuntimeException.ThrowIfNull( Stroker );
+                RuntimeException.ThrowIfNull( Packer );
+                RuntimeException.ThrowIfNull( Regions );
 
                 Generator.SetPixelSizes( 0, Parameter.Size );
                 var baseline = ( ( Flipped ? -Ascent : Ascent ) + CapHeight ) / ScaleY;
@@ -1220,7 +1220,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         /// <summary>
         /// The characters the font should contain.
-        /// If '\0' is not included then <see cref="BitmapFont.BitmapFontData.MissingGlyph"/>
+        /// If '\0' is not included then <see cref="BitmapFontData.MissingGlyph"/>
         /// is not set.
         /// </summary>
         public string Characters { get; set; } = DefaultChars;

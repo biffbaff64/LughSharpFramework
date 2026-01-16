@@ -643,7 +643,7 @@ public class Matrix4
     /// Inverts the matrix. Stores the result in this matrix.
     /// </summary>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
-    /// <exception cref="GdxRuntimeException"> if the matrix is singular (not invertible)  </exception>
+    /// <exception cref="RuntimeException"> if the matrix is singular (not invertible)  </exception>
     public Matrix4 Invert()
     {
         //@formatter:off
@@ -676,7 +676,7 @@ public class Matrix4
 
         if ( lDet == 0f )
         {
-            throw new GdxRuntimeException( "non-invertible matrix" );
+            throw new RuntimeException( "non-invertible matrix" );
         }
 
         //@formatter:off
@@ -2619,7 +2619,7 @@ public class Matrix4
     /// </summary>
     public Vector4 GetColumn( int index )
     {
-        Guard.InRange( index, 0, 3 );
+        Guard.Against.OutOfRange(  index, 0, 3 );
 
         return new Vector4( Val[ ( index * 4 ) + 0 ],
                             Val[ ( index * 4 ) + 1 ],
@@ -2631,7 +2631,7 @@ public class Matrix4
     /// </summary>
     public Vector4 GetRow( int index )
     {
-        Guard.InRange( index, 0, 3 );
+        Guard.Against.OutOfRange( index, 0, 3 );
 
         return new Vector4( Val[ index ],
                             Val[ index + 4 ],

@@ -85,7 +85,7 @@ public class MipMapTextureData : ITextureData
     /// <returns> the pixmap.</returns>
     public Pixmap ConsumePixmap()
     {
-        throw new GdxRuntimeException( "This Texture is compressed, use the compress method." );
+        throw new RuntimeException( "This Texture is compressed, use the compress method." );
     }
 
     /// <summary>

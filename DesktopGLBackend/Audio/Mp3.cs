@@ -51,7 +51,7 @@ public class Mp3
 //
 //                if ( header == null )
 //                {
-//                    throw new GdxRuntimeException( "Empty MP3" );
+//                    throw new RuntimeException( "Empty MP3" );
 //                }
 //
 //                var channels = header.mode() == Header.SINGLE_CHANNEL ? 1 : 2;
@@ -61,7 +61,7 @@ public class Mp3
 //            }
 //            catch ( BitstreamException e )
 //            {
-//                throw new GdxRuntimeException( "error while preloading mp3", e );
+//                throw new RuntimeException( "error while preloading mp3", e );
 //            }
         }
 
@@ -120,7 +120,7 @@ public class Mp3
 //            {
 //                Reset();
 //
-//                throw new GdxRuntimeException( "Error reading audio data.", ex );
+//                throw new RuntimeException( "Error reading audio data.", ex );
 //            }
 
             return 0;
@@ -203,7 +203,7 @@ public class Mp3
 //            }
 //            catch ( Exception ex )
 //            {
-//                throw new GdxRuntimeException( "Error reading audio data.", ex );
+//                throw new RuntimeException( "Error reading audio data.", ex );
 //            }
         }
     }

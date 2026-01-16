@@ -47,7 +47,7 @@ public class ModelData
         {
             if ( ( other.ID != null ) && other.ID.Equals( mesh.ID ) )
             {
-                throw new GdxRuntimeException( "Mesh with id '" + other.ID + "' already in model" );
+                throw new RuntimeException( "Mesh with id '" + other.ID + "' already in model" );
             }
         }
 

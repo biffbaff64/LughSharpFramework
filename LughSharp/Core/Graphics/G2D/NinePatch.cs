@@ -294,7 +294,7 @@ public class NinePatch
              || ( ( patches[ BOTTOM_LEFT ] != null )
                   && ( Math.Abs( patches[ BOTTOM_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) ) )
         {
-            throw new GdxRuntimeException( "Left side patches must have the same width" );
+            throw new RuntimeException( "Left side patches must have the same width" );
         }
 
         if ( ( ( patches[ TOP_RIGHT ] != null )
@@ -304,7 +304,7 @@ public class NinePatch
              || ( ( patches[ BOTTOM_RIGHT ] != null )
                   && ( Math.Abs( patches[ BOTTOM_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) ) )
         {
-            throw new GdxRuntimeException( "Right side patches must have the same width" );
+            throw new RuntimeException( "Right side patches must have the same width" );
         }
 
         if ( ( ( patches[ BOTTOM_LEFT ] != null )
@@ -314,7 +314,7 @@ public class NinePatch
              || ( ( patches[ BOTTOM_RIGHT ] != null )
                   && ( Math.Abs( patches[ BOTTOM_RIGHT ].RegionHeight - BottomHeight ) > TOLERANCE ) ) )
         {
-            throw new GdxRuntimeException( "Bottom side patches must have the same height" );
+            throw new RuntimeException( "Bottom side patches must have the same height" );
         }
 
         if ( ( ( patches[ TOP_LEFT ] != null )
@@ -324,7 +324,7 @@ public class NinePatch
              || ( ( patches[ TOP_RIGHT ] != null )
                   && ( Math.Abs( patches[ TOP_RIGHT ].RegionHeight - TopHeight ) > TOLERANCE ) ) )
         {
-            throw new GdxRuntimeException( "Top side patches must have the same height" );
+            throw new RuntimeException( "Top side patches must have the same height" );
         }
     }
 

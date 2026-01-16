@@ -22,45 +22,40 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Utils.Exceptions;
 
 /// <summary>
-/// Typed runtime exception used throughout LughSharp.
+/// Typed runtime exception used throughout this framework.
 /// </summary>
 [PublicAPI]
-public class GdxRuntimeException : ApplicationException
+public class RuntimeException : ApplicationException
 {
     /// <summary>
-    /// Initializes a new GdxRuntimeException with a specified error message.
+    /// Initializes a new RuntimeException with a specified error message.
     /// </summary>
     /// <param name="message"> The message that describes the error. </param>
-    public GdxRuntimeException( string? message = "" )
+    public RuntimeException( string? message = "" )
         : base( message )
     {
     }
 
     /// <summary>
-    /// Initializes a new GdxRuntimeException with a reference to the inner exception
+    /// Initializes a new RuntimeException with a reference to the inner exception
     /// that is the cause of this exception.
     /// </summary>
     /// <param name="e">
     /// The exception that is the cause of the current exception, or a null
     /// reference if no inner exception is specified.
     /// </param>
-    public GdxRuntimeException( Exception? e )
+    public RuntimeException( Exception? e )
         : this( "", e )
     {
     }
 
     /// <summary>
-    /// Initializes a new GdxRuntimeException with a specified error message and a
+    /// Initializes a new RuntimeException with a specified error message and a
     /// reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="message">The error message that explains the reason for the exception.</param>
@@ -68,13 +63,13 @@ public class GdxRuntimeException : ApplicationException
     /// The exception that is the cause of the current exception, or a null
     /// reference if no inner exception is specified.
     /// </param>
-    public GdxRuntimeException( string message, Exception? exception )
+    public RuntimeException( string message, Exception? exception )
         : base( message, exception )
     {
     }
 
     /// <summary>
-    /// Throws an GdxRuntimeException if argument is null.
+    /// Throws a RuntimeException if argument is null.
     /// </summary>
     /// <param name="argument">The reference type argument to validate as non-null.</param>
     /// <param name="message"> A message to display when/if the exception is thrown </param>
@@ -88,39 +83,9 @@ public class GdxRuntimeException : ApplicationException
         }
     }
 
-    /// <summary>
-    /// Throws an GdxRuntimeException if the supplied condition is TRUE.
-    /// </summary>
-    /// <param name="condition">The condition to validate as true.</param>
-    /// <param name="message"> A message to display when/if the exception is thrown </param>
-    public static void ThrowIfTrue( bool condition,
-                                    [CallerArgumentExpression( "condition" )]
-                                    string? message = null )
-    {
-        if ( condition )
-        {
-            Throw( message );
-        }
-    }
-
-    /// <summary>
-    /// Throws an GdxRuntimeException if the supplied reference type is ZERO.
-    /// </summary>
-    /// <param name="argument">The reference type argument to validate as zero.</param>
-    /// <param name="message"> A message to display when/if the exception is thrown </param>
-    public static void ThrowIfZero< T >( T argument,
-                                         [CallerArgumentExpression( "argument" )]
-                                         string? message = null )
-    {
-        if ( EqualityComparer< T >.Default.Equals( argument, default( T ) ) )
-        {
-            Throw( message );
-        }
-    }
-
     [DoesNotReturn]
     internal static void Throw( string? message )
     {
-        throw new GdxRuntimeException( message );
+        throw new RuntimeException( message );
     }
 }

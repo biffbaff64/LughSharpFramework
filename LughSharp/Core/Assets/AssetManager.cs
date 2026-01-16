@@ -195,7 +195,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="name">The name of the asset to retrieve.</param>
     /// <returns>The asset of the specified type.</returns>
-    /// <exception cref="GdxRuntimeException">Thrown if the asset is not loaded.</exception>
+    /// <exception cref="RuntimeException">Thrown if the asset is not loaded.</exception>
     public object? Get( string name )
     {
         lock ( this )
@@ -207,7 +207,7 @@ public class AssetManager : IDisposable
 
             return assetContainer != null
                 ? assetContainer.Asset
-                : throw new GdxRuntimeException( $"Asset not loaded: {name}" );
+                : throw new RuntimeException( $"Asset not loaded: {name}" );
         }
     }
 
@@ -303,7 +303,7 @@ public class AssetManager : IDisposable
             // Confirm availability of the loader for the supplied asset.
             if ( GetLoader( type, filename ) == null )
             {
-                throw new GdxRuntimeException( $"No loader for type: {type.Name}" );
+                throw new RuntimeException( $"No loader for type: {type.Name}" );
             }
 
             if ( _loadQueue.Count == 0 )
@@ -330,7 +330,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="filename">The name of the asset to be unloaded.</param>
     /// <returns>A task representing the asynchronous unload operation.</returns>
-    /// <exception cref="GdxRuntimeException">Thrown if the asset is not loaded or cannot be found.</exception>
+    /// <exception cref="RuntimeException">Thrown if the asset is not loaded or cannot be found.</exception>
     public void Unload( string filename )
     {
         filename = IOUtils.NormalizePath( filename );
@@ -345,7 +345,7 @@ public class AssetManager : IDisposable
         // Get the type of the asset
         if ( !_assetTypes.TryGetValue( filename, out var type ) )
         {
-            throw new GdxRuntimeException( $"Asset not loaded: {filename}" );
+            throw new RuntimeException( $"Asset not loaded: {filename}" );
         }
 
         // Check if the asset is in the load queue
@@ -442,7 +442,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="name">The name of the asset to retrieve.</param>
     /// <returns>The asset of the specified type.</returns>
-    /// <exception cref="GdxRuntimeException">Thrown if the asset is not loaded.</exception>
+    /// <exception cref="RuntimeException">Thrown if the asset is not loaded.</exception>
     public T? Get< T >( string name ) where T : class
     {
         lock ( this )
@@ -474,7 +474,7 @@ public class AssetManager : IDisposable
             }
 
             return required
-                ? throw new GdxRuntimeException( $"Asset not loaded: {name}" )
+                ? throw new RuntimeException( $"Asset not loaded: {name}" )
                 : null;
         }
     }
@@ -484,7 +484,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="assetDescriptor">The descriptor containing the filepath and type of the asset.</param>
     /// <returns>The asset of the specified type.</returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown if the asset descriptor is null or if the filepath is null.
     /// </exception>
     public T? Get< T >( AssetDescriptor assetDescriptor ) where T : class
@@ -503,7 +503,7 @@ public class AssetManager : IDisposable
     /// <param name="required">Indicates whether to throw an exception if the asset is not found.</param>
     /// <returns>The requested asset if found; otherwise, null if not required.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the name or type is null.</exception>
-    /// <exception cref="GdxRuntimeException">Thrown if the asset is not found and it is required.</exception>
+    /// <exception cref="RuntimeException">Thrown if the asset is not found and it is required.</exception>
     public T? Get< T >( string name, Type? type, bool required ) where T : class
     {
         Guard.Against.Null( type );
@@ -517,7 +517,7 @@ public class AssetManager : IDisposable
 
             if ( required && ( assetContainer == null ) )
             {
-                throw new GdxRuntimeException( $"Asset not loaded: {name}" );
+                throw new RuntimeException( $"Asset not loaded: {name}" );
             }
 
             return assetContainer?.Asset as T;
@@ -534,7 +534,7 @@ public class AssetManager : IDisposable
     /// <exception cref="ArgumentNullException">
     /// Thrown if the <paramref name="type"/> or <paramref name="outArray"/> is null.
     /// </exception>
-    /// <exception cref="GdxRuntimeException">Thrown if no assets of the specified type are found.</exception>
+    /// <exception cref="RuntimeException">Thrown if no assets of the specified type are found.</exception>
     public List< T > GetAll< T >( Type? type, List< T > outArray )
     {
         Guard.Against.Null( type );
@@ -546,7 +546,7 @@ public class AssetManager : IDisposable
             {
                 if ( !_assets.TryGetValue( type, out var assetsByType ) || ( assetsByType == null ) )
                 {
-                    throw new GdxRuntimeException( $"No assets loaded for type {type.FullName}" );
+                    throw new RuntimeException( $"No assets loaded for type {type.FullName}" );
                 }
 
                 foreach ( var assetContainer in assetsByType.Values )
@@ -661,7 +661,7 @@ public class AssetManager : IDisposable
 
                 if ( assetsByType == null )
                 {
-                    throw new GdxRuntimeException( $"Failed to get assets by type: {assetType}" );
+                    throw new RuntimeException( $"Failed to get assets by type: {assetType}" );
                 }
 
                 foreach ( var entry in assetsByType )
@@ -795,7 +795,7 @@ public class AssetManager : IDisposable
     /// Adds a new asset loading task to the queue using the given asset descriptor.
     /// </summary>
     /// <param name="assetDesc">Descriptor containing information about the asset to be loaded.</param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown if no loader is available for the asset type specified in the asset
     /// descriptor.
     /// </exception>
@@ -805,7 +805,7 @@ public class AssetManager : IDisposable
 
         if ( loader == null )
         {
-            throw new GdxRuntimeException( $"No loader for type: {assetDesc.AssetType}" );
+            throw new RuntimeException( $"No loader for type: {assetDesc.AssetType}" );
         }
 
         _tasks.Push( new AssetLoadingTask( this, assetDesc, loader, _executor ) );
@@ -895,7 +895,7 @@ public class AssetManager : IDisposable
     {
         if ( _tasks.Count == 0 )
         {
-            throw new GdxRuntimeException( t );
+            throw new RuntimeException( t );
         }
 
         // pop the faulty task from the stack
@@ -922,7 +922,7 @@ public class AssetManager : IDisposable
         }
         else
         {
-            throw new GdxRuntimeException( t );
+            throw new RuntimeException( t );
         }
     }
 
@@ -976,7 +976,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="millis">The number of milliseconds to perform updates.</param>
     /// <returns>A task that represents whether the asset manager finished processing all tasks.</returns>
-    /// <exception cref="GdxRuntimeException">Thrown when an error occurs during asset loading.</exception>
+    /// <exception cref="RuntimeException">Thrown when an error occurs during asset loading.</exception>
     public bool Update( int millis )
     {
         try
@@ -1041,7 +1041,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="parentAssetFilename">The file name of the parent asset.</param>
     /// <param name="dependendAssetDesc">The descriptor of the dependent asset to inject.</param>
-    /// <exception cref="GdxRuntimeException">Thrown if the type of the dependent asset is null.</exception>
+    /// <exception cref="RuntimeException">Thrown if the type of the dependent asset is null.</exception>
     public void InjectDependency( string parentAssetFilename, AssetDescriptor dependendAssetDesc )
     {
         lock ( this )
@@ -1087,7 +1087,7 @@ public class AssetManager : IDisposable
     /// <param name="parent">
     /// The file name of the parent asset whose dependencies' reference counts are to be incremented.
     /// </param>
-    /// <exception cref="GdxRuntimeException">Thrown if the type of a dependency is null.</exception>
+    /// <exception cref="RuntimeException">Thrown if the type of a dependency is null.</exception>
     public void IncrementRefCountedDependencies( string parent )
     {
         var stack = new Stack< string >();
@@ -1105,14 +1105,14 @@ public class AssetManager : IDisposable
 
                     if ( type == null )
                     {
-                        throw new GdxRuntimeException( "type cannot be null!" );
+                        throw new RuntimeException( "type cannot be null!" );
                     }
 
                     _assets.TryGetValue( type, out var asset );
 
                     if ( asset == null )
                     {
-                        throw new GdxRuntimeException( "asset cannot be null!" );
+                        throw new RuntimeException( "asset cannot be null!" );
                     }
 
                     asset[ dependency ].RefCount++;
@@ -1133,7 +1133,7 @@ public class AssetManager : IDisposable
     /// <returns>
     /// The loader capable of loading the type and filename, or null if none exists.
     /// </returns>
-    /// <exception cref="GdxRuntimeException"> If no loader was found. </exception>
+    /// <exception cref="RuntimeException"> If no loader was found. </exception>
     public AssetLoader? GetLoader( Type type, string? filename = null )
     {
         // Check if the type exists in _loaders before accessing it.
@@ -1317,7 +1317,7 @@ public class AssetManager : IDisposable
 
             if ( !result || ( assetType == null ) )
             {
-                throw new GdxRuntimeException( $"Assets Container does not hold {name}" );
+                throw new RuntimeException( $"Assets Container does not hold {name}" );
             }
 
             return assetType;
@@ -1399,7 +1399,7 @@ public class AssetManager : IDisposable
 
             if ( type == null )
             {
-                throw new GdxRuntimeException( $"Asset not loaded: {filename}" );
+                throw new RuntimeException( $"Asset not loaded: {filename}" );
             }
 
             _assets[ type ]?[ filename ].RefCount = refCount;
@@ -1418,18 +1418,18 @@ public class AssetManager : IDisposable
 
             if ( type == null )
             {
-                throw new GdxRuntimeException( $"Asset not loaded: {filename}" );
+                throw new RuntimeException( $"Asset not loaded: {filename}" );
             }
 
             if ( _assets == null )
             {
-                throw new GdxRuntimeException( "_assets list is null!" );
+                throw new RuntimeException( "_assets list is null!" );
             }
 
             _assets.TryGetValue( type, out var asset );
 
             return asset == null
-                ? throw new GdxRuntimeException( $"Asset not loaded: {filename}" )
+                ? throw new RuntimeException( $"Asset not loaded: {filename}" )
                 : asset[ filename ].RefCount;
         }
     }
@@ -1441,7 +1441,7 @@ public class AssetManager : IDisposable
     /// <param name="filename">The file name associated with the asset.</param>
     /// <param name="type">The type of the asset.</param>
     /// <param name="asset">The asset to add.</param>
-    /// <exception cref="GdxRuntimeException">Thrown if the asset is null.</exception>
+    /// <exception cref="RuntimeException">Thrown if the asset is null.</exception>
     public void AddAsset( string filename, Type type, object? asset )
     {
         lock ( this )
@@ -1471,14 +1471,14 @@ public class AssetManager : IDisposable
         {
             if ( !File.Exists( filename ) )
             {
-                throw new GdxRuntimeException( $"File '{filename}' not found!" );
+                throw new RuntimeException( $"File '{filename}' not found!" );
             }
 
             foreach ( var desc in _loadQueue )
             {
                 if ( ( desc.AssetName == filename ) && ( desc.AssetType != type ) )
                 {
-                    throw new GdxRuntimeException
+                    throw new RuntimeException
                         ( $"Asset with name '{filename}' already in preload queue, but has different " +
                           $"type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
                 }
@@ -1492,7 +1492,7 @@ public class AssetManager : IDisposable
 
                 if ( ( desc.AssetName == filename ) && ( desc.AssetType != type ) )
                 {
-                    throw new GdxRuntimeException
+                    throw new RuntimeException
                         ( $"Asset with name '{filename}' already in preload queue, but has different " +
                           $"type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
                 }
@@ -1506,7 +1506,7 @@ public class AssetManager : IDisposable
 
                 if ( ( otherType != null ) && ( otherType != type ) )
                 {
-                    throw new GdxRuntimeException
+                    throw new RuntimeException
                         ( $"Asset with name '{filename}' already loaded, but has different " +
                           $"type (expected: {type?.Name}, found: {otherType.Name})" );
                 }
@@ -1553,7 +1553,7 @@ public class AssetManager : IDisposable
     {
         if ( type == null )
         {
-            throw new GdxRuntimeException( $"Asset not loaded: {filename}: Type not specified." );
+            throw new RuntimeException( $"Asset not loaded: {filename}: Type not specified." );
         }
 
         Guard.Against.Null( _assets );
@@ -1563,7 +1563,7 @@ public class AssetManager : IDisposable
         if ( !_assets.TryGetValue( type, out var assetRef )
           && ( ( assetRef != null ) && !assetRef.TryGetValue( filename, out container ) ) )
         {
-            throw new GdxRuntimeException( $"Asset not loaded: {filename}" );
+            throw new RuntimeException( $"Asset not loaded: {filename}" );
         }
 
         if ( container != null )

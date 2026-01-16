@@ -38,7 +38,6 @@ public partial class Guard
     /// Throws ArgumentNullException if obj is null.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNull( [System.Diagnostics.CodeAnalysis.NotNull] object? obj,
                                     [CallerArgumentExpression( nameof( obj ) )]
                                     string argumentName = "" )
@@ -50,7 +49,6 @@ public partial class Guard
     /// Throws ArgumentNullException if any of the objects in the 'objects[]' array is null.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNull( [System.Diagnostics.CodeAnalysis.NotNull] params object?[]? objects )
     {
         ArgumentNullException.ThrowIfNull( objects );
@@ -66,7 +64,6 @@ public partial class Guard
     /// Throws ArgumentException if argumentValue is string.Empty.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNullOrEmpty( [System.Diagnostics.CodeAnalysis.NotNull] string? argumentValue,
                                            [CallerArgumentExpression( nameof( argumentValue ) )]
                                            string argumentName = "" )
@@ -84,12 +81,14 @@ public partial class Guard
     /// Throws ArgumentException if argumentValue is string.Empty or consists only of whitespace characters.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNullOrWhiteSpace( [System.Diagnostics.CodeAnalysis.NotNull] string? argumentValue,
                                                 [CallerArgumentExpression( nameof( argumentValue ) )]
                                                 string argumentName = "" )
     {
-        ArgumentNullException.ThrowIfNull( argumentValue, argumentName );
+        if ( string.IsNullOrWhiteSpace( argumentValue ) )
+        {
+            throw new ArgumentException( argumentName );
+        }
     }
 
     /// <summary>
@@ -100,7 +99,6 @@ public partial class Guard
     /// warnings in the way that <see cref="ThrowIfNull(object?, string)"/> does.
     /// </para>
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WarnIfNull( object? obj,
                                    [CallerArgumentExpression( nameof( obj ) )]
                                    string argumentName = "" )
@@ -119,7 +117,6 @@ public partial class Guard
     /// warnings in the way that <see cref="ThrowIfNull(object?, string)"/> does.
     /// </para>
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WarnIfNull( params object?[]? objects )
     {
         ArgumentNullException.ThrowIfNull( objects );
@@ -145,7 +142,6 @@ public partial class Guard
     /// Throws ArgumentOutOfRangeException if argumentValue is less than minimum or greater than maximum.
     /// Provides a clear error message with the argumentName, minimum, and maximum.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void InRange( int argumentValue, int minimum, int maximum,
                                 [CallerArgumentExpression( nameof( argumentValue ) )]
                                 string argumentName = "" )
@@ -160,7 +156,6 @@ public partial class Guard
     /// Throws ArgumentOutOfRangeException if argumentValue is less than minimum or greater than maximum.
     /// Provides a clear error message with the argumentName, minimum, and maximum.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void InRange( double argumentValue, double minimum, double maximum,
                                 [CallerArgumentExpression( nameof( argumentValue ) )]
                                 string argumentName = "" )
@@ -174,7 +169,6 @@ public partial class Guard
     /// <summary>
     /// Throws ArgumentOutOfRangeException if argumentValue is less than or equal to minimum.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void NotLessThan( int argumentValue, int minimum,
                                     [CallerArgumentExpression( nameof( argumentValue ) )]
                                     string argumentName = "" )
@@ -188,7 +182,6 @@ public partial class Guard
     /// <summary>
     /// Throws ArgumentOutOfRangeException if argumentValue is greater than or equal to maximum.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void NotGreaterThan( int argumentValue, int maximum,
                                        [CallerArgumentExpression( nameof( argumentValue ) )]
                                        string argumentName = "" )
@@ -202,7 +195,6 @@ public partial class Guard
     /// <summary>
     /// Throws ArgumentOutOfRangeException if argumentValue is negative.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNegative( int argumentValue,
                                         [CallerArgumentExpression( nameof( argumentValue ) )]
                                         string argumentName = "" )
@@ -225,7 +217,6 @@ public partial class Guard
     /// Throws ArgumentException if argumentValue is not of type T.
     /// Provides a clear error message with the argumentName and the expected type.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void IsOfType< T >( object argumentValue,
                                       [CallerArgumentExpression( nameof( argumentValue ) )]
                                       string argumentName = "" )
@@ -241,7 +232,6 @@ public partial class Guard
     /// <summary>
     /// Throws ArgumentException if argumentValue is not assignable to type T.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void IsAssignableTo< T >( object argumentValue,
                                             [CallerArgumentExpression( nameof( argumentValue ) )]
                                             string argumentName = "" )
@@ -266,7 +256,6 @@ public partial class Guard
     /// Throws ArgumentException if argumentValue is false.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void IsTrue( [DoesNotReturnIf( false )] bool argumentValue,
                                [CallerArgumentExpression( nameof( argumentValue ) )]
                                string argumentName = "" )
@@ -283,7 +272,6 @@ public partial class Guard
     /// Throws ArgumentException if argumentValue is true.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void IsFalse( [DoesNotReturnIf( true )] bool argumentValue,
                                 [CallerArgumentExpression( nameof( argumentValue ) )]
                                 string argumentName = "" )
@@ -310,7 +298,6 @@ public partial class Guard
     /// </summary>
     /// <param name="argument"></param>
     /// <param name="argumentName"></param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNullOrEmpty( string[]? argument,
                                            [CallerArgumentExpression( nameof( argument ) )]
                                            string argumentName = "" )
@@ -327,7 +314,6 @@ public partial class Guard
     /// </summary>
     /// <param name="collection"></param>
     /// <param name="argumentName"></param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNullOrEmpty( ICollection collection,
                                            [CallerArgumentExpression( nameof( collection ) )]
                                            string argumentName = "" )
@@ -342,7 +328,6 @@ public partial class Guard
     /// Throws ArgumentNullException if argumentValue is null.
     /// Throws ArgumentException if argumentValue is empty.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNullOrEmpty< T >( IEnumerable< T >? enumerable,
                                                 [CallerArgumentExpression( nameof( enumerable ) )]
                                                 string argumentName = "" )
@@ -374,7 +359,6 @@ public partial class Guard
     /// <param name="condition"> The condition to check. </param>
     /// <param name="message"> The message to log if the condition is false. </param>
     [Conditional( "DEBUG" )]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Assert( bool condition, string message )
     {
         if ( !condition )
@@ -396,7 +380,6 @@ public partial class Guard
     /// Throws an ArgumentException if the file specified by the provided FileInfo object
     /// does not exist.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfFileNullOrNotExist( [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
                                                   [CallerArgumentExpression( nameof( argumentValue ) )]
                                                   string argumentName = "" )
@@ -421,7 +404,6 @@ public partial class Guard
     /// Throws an ArgumentException if the file specified by the provided FileSystemInfo object
     /// does not exist.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNotFileOrDirectory( [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
                                                   [CallerArgumentExpression( nameof( argumentValue ) )]
                                                   string argumentName = "" )
@@ -456,7 +438,6 @@ public partial class Guard
     /// <summary>
     /// Throws an exception if the supplied integer is not a valid positive integer value.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ValidPositiveInteger( int value,
                                              [CallerArgumentExpression( nameof( value ) )]
                                              string argumentName = "" )
@@ -481,7 +462,6 @@ public partial class Guard
     /// Throws an <see cref="ArgumentException"/> if the supplied string is either Null, empty or
     /// consists only of whitespace characters.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ValidateString( string? input )
     {
         if ( string.IsNullOrWhiteSpace( input ) )
@@ -494,7 +474,6 @@ public partial class Guard
     /// Throws an <see cref="ArgumentException"/> if the supplied string's length is
     /// greater than the specified maximum length.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ValidateStringLength( string input, int maxLength )
     {
         if ( input.Length <= maxLength )
@@ -507,3 +486,7 @@ public partial class Guard
 
     #endregion
 }
+
+// ============================================================================
+// ============================================================================
+

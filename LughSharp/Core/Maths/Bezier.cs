@@ -218,12 +218,12 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <param name="offset">The offset in the array of points at which to start.</param>
     /// <param name="length">The number of points to use.</param>
     /// <returns>The current instance for chaining.</returns>
-    /// <exception cref="GdxRuntimeException">Thrown if the length is not between 2 and 4.</exception>
+    /// <exception cref="RuntimeException">Thrown if the length is not between 2 and 4.</exception>
     public Bezier< T > Set( in T[] points, in int offset, in int length )
     {
         if ( length is < 2 or > 4 )
         {
-            throw new GdxRuntimeException( "Only first, second and third degree Bezier curves are supported." );
+            throw new RuntimeException( "Only first, second and third degree Bezier curves are supported." );
         }
 
         _tmp  ??= points[ 0 ].Cpy();
@@ -244,12 +244,12 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <param name="offset">The offset in the list of points at which to start.</param>
     /// <param name="length">The number of points to use.</param>
     /// <returns>The current instance for chaining.</returns>
-    /// <exception cref="GdxRuntimeException">Thrown if the length is not between 2 and 4.</exception>
+    /// <exception cref="RuntimeException">Thrown if the length is not between 2 and 4.</exception>
     public Bezier< T > Set( in List< T > points, in int offset, in int length )
     {
         if ( length is < 2 or > 4 )
         {
-            throw new GdxRuntimeException( "Only first, second and third degree Bezier curves are supported." );
+            throw new RuntimeException( "Only first, second and third degree Bezier curves are supported." );
         }
 
         _tmp  ??= points[ 0 ].Cpy();

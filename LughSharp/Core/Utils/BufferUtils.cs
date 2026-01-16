@@ -95,14 +95,14 @@ public class BufferUtils
 
         if ( ( sourceOffset < 0 ) || ( destinationOffset < 0 ) || ( length < 0 ) )
         {
-            throw new GdxRuntimeException( "Offsets and length must be non-negative." );
+            throw new RuntimeException( "Offsets and length must be non-negative." );
         }
 
         destination.EnsureCapacity( destinationOffset + length );
 
         if ( ( sourceOffset + length ) > source.Capacity )
         {
-            throw new GdxRuntimeException( "Cannot copy more than source contents." );
+            throw new RuntimeException( "Cannot copy more than source contents." );
         }
 
         for ( var i = 0; i < length; i++ )
@@ -126,7 +126,7 @@ public class BufferUtils
 
         if ( ( sourceOffset < 0 ) || ( length < 0 ) )
         {
-            throw new GdxRuntimeException( "Offset and length must be non-negative." );
+            throw new RuntimeException( "Offset and length must be non-negative." );
         }
 
         destination.EnsureCapacity( length * sizeof( byte ) );
@@ -152,7 +152,7 @@ public class BufferUtils
 
         if ( ( sourceOffset < 0 ) || ( length < 0 ) )
         {
-            throw new GdxRuntimeException( "Offset and length must be non-negative." );
+            throw new RuntimeException( "Offset and length must be non-negative." );
         }
 
         destination.EnsureCapacity( length * sizeof( short ) );
@@ -178,7 +178,7 @@ public class BufferUtils
 
         if ( ( sourceOffset < 0 ) || ( length < 0 ) )
         {
-            throw new GdxRuntimeException( "Offset and length must be non-negative." );
+            throw new RuntimeException( "Offset and length must be non-negative." );
         }
 
         destination.EnsureCapacity( length * sizeof( float ) );
@@ -204,7 +204,7 @@ public class BufferUtils
 
         if ( ( sourceOffset < 0 ) || ( length < 0 ) )
         {
-            throw new GdxRuntimeException( "Offset and length must be non-negative." );
+            throw new RuntimeException( "Offset and length must be non-negative." );
         }
 
         destination.EnsureCapacity( length * sizeof( int ) );

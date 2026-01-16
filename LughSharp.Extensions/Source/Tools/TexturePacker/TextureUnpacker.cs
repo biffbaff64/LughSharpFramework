@@ -173,7 +173,7 @@ public class TextureUnpacker
     /// Command-line arguments including atlas file path, optional image directory,
     /// and optional output directory.
     /// </param>
-    /// <exception cref="GdxRuntimeException">Thrown if the specified atlas file is not found.</exception>
+    /// <exception cref="RuntimeException">Thrown if the specified atlas file is not found.</exception>
     public static void Entry( string[] args )
     {
         var unpacker = new TextureUnpacker();
@@ -216,7 +216,7 @@ public class TextureUnpacker
 
         if ( !File.Exists( atlasFileHandle ) )
         {
-            throw new GdxRuntimeException( $"Atlas file not found: {atlasFileHandle}" );
+            throw new RuntimeException( $"Atlas file not found: {atlasFileHandle}" );
         }
 
         var atlasParentPath = Path.GetPathRoot( atlasFileHandle );

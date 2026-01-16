@@ -391,7 +391,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
 
         if ( !program.IsCompiled )
         {
-            throw new GdxRuntimeException( "Error compiling shader: " + program.ShaderLog );
+            throw new RuntimeException( "Error compiling shader: " + program.ShaderLog );
         }
 
         return program;

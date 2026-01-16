@@ -478,11 +478,11 @@ public class Vector2 : IVector< Vector2 >
             }
             catch ( Exception ex )
             {
-                throw new GdxRuntimeException( ex.Message );
+                throw new RuntimeException( ex.Message );
             }
         }
 
-        throw new GdxRuntimeException( "Malformed Vector2: " + v );
+        throw new RuntimeException( "Malformed Vector2: " + v );
     }
 
     public Vector2 Mul( Matrix3 mat )

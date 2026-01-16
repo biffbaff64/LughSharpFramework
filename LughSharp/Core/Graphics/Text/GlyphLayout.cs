@@ -22,12 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Buffers.Binary;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -41,16 +36,16 @@ namespace LughSharp.Core.Graphics.Text;
 /// Stores <see cref="GlyphRun"/> runs of glyphs for a piece of text. The text may contain
 /// newlines and color markup tags.
 /// <para>
-/// Where wrapping occurs is determined by <see cref="BitmapFont.BitmapFontData.GetWrapIndex"/>.
-/// Additionally, when <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true wrapping
+/// Where wrapping occurs is determined by <see cref="BitmapFontData.GetWrapIndex"/>.
+/// Additionally, when <see cref="BitmapFontData.MarkupEnabled"/> is true wrapping
 /// can occur at color start or end tags.
 /// </para>
 /// <para>
 /// When wrapping occurs, whitespace is removed before and after the wrap position.
-/// Whitespace is determined by <see cref="BitmapFont.BitmapFontData.IsWhitespace(char)"/>.
+/// Whitespace is determined by <see cref="BitmapFontData.IsWhitespace(char)"/>.
 /// </para>
 /// <para>
-/// Glyphs positions are determined by <see cref="BitmapFont.BitmapFontData.GetGlyphs"/>.
+/// Glyphs positions are determined by <see cref="BitmapFontData.GetGlyphs"/>.
 /// </para>
 /// <para>
 /// This class is not thread safe, even if synchronized externally, and must only
@@ -100,7 +95,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="str"> A string holding the text. </param>
     /// <param name="color">
     /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
-    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true, color
+    /// is not used). If <see cref="BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
@@ -119,7 +114,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="end"></param>
     /// <param name="color">
     /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
-    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true, color
+    /// is not used). If <see cref="BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
@@ -158,7 +153,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="str"> A string holding the text. </param>
     /// <param name="color">
     /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
-    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true, color
+    /// is not used). If <see cref="BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
@@ -177,7 +172,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="end"></param>
     /// <param name="color">
     /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
-    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled"/> is true, color
+    /// is not used). If <see cref="BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="halign">
@@ -213,6 +208,7 @@ public class GlyphLayout : IResetable, IPoolable
 
         if ( wrap )
         {
+    		// Avoid wrapping one line per character, which is very inefficient.
             targetWidth = Math.Max( targetWidth, fontData.SpaceXadvance * 3 );
         }
 
@@ -232,8 +228,8 @@ public class GlyphLayout : IResetable, IPoolable
         var       isLastRun = false;
         var       y         = 0f;
         var       down      = fontData.Down;
-        GlyphRun? lineRun   = null;
-        Glyph?    lastGlyph = null;
+        GlyphRun? lineRun   = null; // Collects glyphs for the current line.
+        Glyph?    lastGlyph = null; // Last glyph of the previous run on the same line, used for kerning between runs.
         var       runStart  = start;
         var       runEnd    = start;
         var       newline   = false;
@@ -419,16 +415,36 @@ public class GlyphLayout : IResetable, IPoolable
             }
 
             runStart = start;
-        }
 
-    outer:
+        outer: ;
+        }
 
         FinalizeRun( fontData, y, targetWidth, halign, markupEnabled );
     }
 
     /// <summary>
-    /// 
+    /// Parses delimiters in a string to identify glyph layout boundaries
+    /// such as newlines or markup tags.
     /// </summary>
+    /// <param name="str">The string to parse for delimiters.</param>
+    /// <param name="start">
+    /// The starting position within the string to begin parsing. Updated after parsing.
+    /// </param>
+    /// <param name="end">The ending position within the string to stop parsing.</param>
+    /// <param name="newline">
+    /// A flag indicating whether a newline character was encountered. Updated after parsing.
+    /// </param>
+    /// <param name="runEnd">The position marking the end of the current run. Updated after parsing.</param>
+    /// <param name="isLastRun">
+    /// A flag indicating whether the current run is the last one. Updated after parsing.
+    /// </param>
+    /// <param name="nextColor">
+    /// The next color to apply to text after parsing a color tag. Updated after parsing.
+    /// </param>
+    /// <param name="markupEnabled">A flag indicating whether text markup is enabled.</param>
+    /// <returns>
+    /// True if parsing should continue, false if a boundary like a newline is encountered.
+    /// </returns>
     private bool ParseDelimiters( string str,
                                   ref int start,
                                   int end,
@@ -485,7 +501,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <summary>
     /// 
     /// </summary>
-    private void FinalizeRun( BitmapFont.BitmapFontData fontData,
+    private void FinalizeRun( BitmapFontData fontData,
                               float y,
                               float targetWidth,
                               int halign,
@@ -506,7 +522,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <summary>
     /// Calculates the widths of all glyph runs.
     /// </summary>
-    private void CalculateRunWidths( BitmapFont.BitmapFontData fontData )
+    private void CalculateRunWidths( BitmapFontData fontData )
     {
         var width     = 0f;
         var runsItems = Runs.ToArray();
@@ -572,8 +588,8 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="run">The glyph run to be truncated.</param>
     /// <param name="targetWidth">The maximum width that the text should occupy.</param>
     /// <param name="truncate">The string to append at the end if truncation is required.</param>
-    /// <exception cref="GdxRuntimeException">Thrown when a GlyphRun cannot be obtained from the pool.</exception>
-    private void Truncate( BitmapFont.BitmapFontData fontData,
+    /// <exception cref="RuntimeException">Thrown when a GlyphRun cannot be obtained from the pool.</exception>
+    private void Truncate( BitmapFontData fontData,
                            GlyphRun run,
                            float targetWidth,
                            string truncate )
@@ -585,7 +601,7 @@ public class GlyphLayout : IResetable, IPoolable
 
         if ( truncateRun == null )
         {
-            throw new GdxRuntimeException( "Unable to obtain a GlyphRun!" );
+            throw new RuntimeException( "Unable to obtain a GlyphRun!" );
         }
 
         // Populate the truncate run with glyphs from the truncate string.
@@ -685,7 +701,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="first"></param>
     /// <param name="wrapIndex"></param>
     /// <returns> May be null if second run is all whitespace. </returns>
-    private GlyphRun? Wrap( BitmapFont.BitmapFontData? fontData, GlyphRun? first, int wrapIndex )
+    private GlyphRun? Wrap( BitmapFontData? fontData, GlyphRun? first, int wrapIndex )
     {
         Guard.Against.Null( fontData );
         Guard.Against.Null( first );
@@ -808,7 +824,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <summary>
     /// Sets the xadvance of the last glyph to use its width instead of xadvance.
     /// </summary>
-    private void SetLastGlyphXAdvance( BitmapFont.BitmapFontData fontData, GlyphRun run )
+    private void SetLastGlyphXAdvance( BitmapFontData fontData, GlyphRun run )
     {
         var last = run.Glyphs.Peek();
 
@@ -821,7 +837,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <summary>
     /// Returns the distance from the glyph's drawing position to the right edge of the glyph.
     /// </summary>
-    private float GetGlyphWidth( Glyph glyph, BitmapFont.BitmapFontData fontData )
+    private float GetGlyphWidth( Glyph glyph, BitmapFontData fontData )
     {
         return ( glyph.FixedWidth
             ? glyph.Xadvance
@@ -831,7 +847,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <summary>
     /// Returns an X offset for the first glyph so when drawn, none of it is left of the line's drawing position.
     /// </summary>
-    private float GetLineOffset( List< Glyph > glyphs, BitmapFont.BitmapFontData fontData )
+    private float GetLineOffset( List< Glyph > glyphs, BitmapFontData fontData )
     {
         var first = glyphs.First();
 

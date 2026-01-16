@@ -77,7 +77,7 @@ public class FloatTextureData : ITextureData
     {
         if ( IsPrepared )
         {
-            throw new GdxRuntimeException( "Already prepared" );
+            throw new RuntimeException( "Already prepared" );
         }
 
         if ( !_isGpuOnly )
@@ -121,7 +121,7 @@ public class FloatTextureData : ITextureData
         {
             if ( !Api.Graphics.SupportsExtension( "OES_texture_float" ) )
             {
-                throw new GdxRuntimeException( "Extension OES_texture_float not supported!" );
+                throw new RuntimeException( "Extension OES_texture_float not supported!" );
             }
 
             // GLES and WebGL defines texture format by 3rd and 8th argument,
@@ -140,7 +140,7 @@ public class FloatTextureData : ITextureData
         {
             if ( !Api.Graphics.SupportsExtension( "GL_ARB_texture_float" ) )
             {
-                throw new GdxRuntimeException( "Extension GL_ARB_texture_float not supported!" );
+                throw new RuntimeException( "Extension GL_ARB_texture_float not supported!" );
             }
 
             // in desktop OpenGL the texture format is defined only by the third argument,
@@ -172,18 +172,18 @@ public class FloatTextureData : ITextureData
 
     public int PixelFormat
     {
-        get => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
-        set => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+        get => throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
+        set => throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     public Pixmap ConsumePixmap()
     {
-        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+        throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     public bool ShouldDisposePixmap()
     {
-        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+        throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     /// <inheritdoc />

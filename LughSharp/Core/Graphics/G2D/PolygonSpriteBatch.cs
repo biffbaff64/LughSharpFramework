@@ -188,7 +188,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.end must be called before begin." );
+            throw new RuntimeException( "PolygonSpriteBatch.end must be called before begin." );
         }
 
         RenderCalls = 0;
@@ -214,7 +214,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before end." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before end." );
         }
 
         if ( _vertexIndex > 0 )
@@ -279,12 +279,12 @@ public class PolygonSpriteBatch : IPolygonBatch
     /// <param name="region"> The Polygon Region to draw </param>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public void Draw( PolygonRegion region, float x, float y )
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Region.Texture == null )
@@ -323,7 +323,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Region.Texture == null )
@@ -376,7 +376,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Region.Texture == null )
@@ -433,7 +433,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -468,7 +468,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -616,7 +616,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -684,7 +684,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -742,7 +742,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -802,7 +802,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -860,7 +860,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         var triangleCount = ( count / Sprite.SPRITE_SIZE ) * 6;
@@ -934,7 +934,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Texture == null )
@@ -1003,7 +1003,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( textureRegion.Texture == null )
@@ -1149,7 +1149,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( textureRegion.Texture == null )
@@ -1310,7 +1310,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Texture == null )

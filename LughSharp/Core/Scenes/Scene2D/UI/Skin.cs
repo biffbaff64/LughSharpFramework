@@ -253,7 +253,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a resource named "default" for the specified type.
     /// </summary>
-    /// <exception cref="GdxRuntimeException">if the resource was not found.</exception>
+    /// <exception cref="RuntimeException">if the resource was not found.</exception>
     public T Get< T >()
     {
         return Get< T >( "default" );
@@ -262,7 +262,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a named resource of the specified type.
     /// </summary>
-    /// <exception cref="GdxRuntimeException">if the resource was not found.</exception>
+    /// <exception cref="RuntimeException">if the resource was not found.</exception>
     public T Get< T >( string name )
     {
         return ( T )Get( name, typeof( T ) );
@@ -271,7 +271,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a named resource of the specified type.
     /// </summary>
-    /// <exception cref="GdxRuntimeException">if the resource was not found.</exception>
+    /// <exception cref="RuntimeException">if the resource was not found.</exception>
     public object Get( string name, Type type )
     {
         Guard.Against.Null( name );
@@ -300,14 +300,14 @@ public class Skin : IDisposable
 
         if ( typeResources == null )
         {
-            throw new GdxRuntimeException( $"No {type.FullName} registered with name: {name}" );
+            throw new RuntimeException( $"No {type.FullName} registered with name: {name}" );
         }
 
         var resource = typeResources[ name ];
 
         if ( resource == null )
         {
-            throw new GdxRuntimeException( $"No {type.FullName} registered with name: {name}" );
+            throw new RuntimeException( $"No {type.FullName} registered with name: {name}" );
         }
 
         return resource;
@@ -371,7 +371,7 @@ public class Skin : IDisposable
 
         if ( texture == null )
         {
-            throw new GdxRuntimeException( "No TextureRegion or Texture registered with name: " + name );
+            throw new RuntimeException( "No TextureRegion or Texture registered with name: " + name );
         }
 
         region = new TextureRegion( texture );
@@ -484,9 +484,9 @@ public class Skin : IDisposable
 
             return patch;
         }
-        catch ( GdxRuntimeException )
+        catch ( RuntimeException )
         {
-            throw new GdxRuntimeException( "No NinePatch, TextureRegion, or Texture registered with name: " + name );
+            throw new RuntimeException( "No NinePatch, TextureRegion, or Texture registered with name: " + name );
         }
     }
 
@@ -530,9 +530,9 @@ public class Skin : IDisposable
 
             return sprite;
         }
-        catch ( GdxRuntimeException )
+        catch ( RuntimeException )
         {
-            throw new GdxRuntimeException( "No NinePatch, TextureRegion, or Texture registered with name: " + name );
+            throw new RuntimeException( "No NinePatch, TextureRegion, or Texture registered with name: " + name );
         }
     }
 
@@ -580,7 +580,7 @@ public class Skin : IDisposable
                 }
             }
         }
-        catch ( GdxRuntimeException )
+        catch ( RuntimeException )
         {
             // TODO:
         }
@@ -604,7 +604,7 @@ public class Skin : IDisposable
                 }
                 else
                 {
-                    throw new GdxRuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion, " +
+                    throw new RuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion, " +
                                                    $"Texture, or Sprite registered with name: {name}" );
                 }
             }
@@ -673,7 +673,7 @@ public class Skin : IDisposable
             NinePatchSceneDrawable patchDrawable      => new NinePatchSceneDrawable( patchDrawable ),
             SpriteSceneDrawable spriteDrawable        => new SpriteSceneDrawable( spriteDrawable ),
 
-            var _ => throw new GdxRuntimeException( "Unable to copy, unknown drawable type: " + drawable.GetType() ),
+            var _ => throw new RuntimeException( "Unable to copy, unknown drawable type: " + drawable.GetType() ),
         };
     }
 
@@ -696,7 +696,7 @@ public class Skin : IDisposable
             NinePatchSceneDrawable patchDrawable      => patchDrawable.Tint( tint ),
             SpriteSceneDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
 
-            var _ => throw new GdxRuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" ),
+            var _ => throw new RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" ),
         };
 
         if ( newDrawable is BaseSceneDrawable named )

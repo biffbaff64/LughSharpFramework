@@ -216,7 +216,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
                         if ( region == null )
                         {
-                            throw new GdxRuntimeException( $"Tileset atlasRegion not found: {regionName}" );
+                            throw new RuntimeException( $"Tileset atlasRegion not found: {regionName}" );
                         }
 
                         AddStaticTiledMapTile( tileSet, region, tileId, offsetX, offsetY );
@@ -232,7 +232,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
         if ( properties == null )
         {
-            throw new GdxRuntimeException( "The map is missing a properties node." );
+            throw new RuntimeException( "The map is missing a properties node." );
         }
 
         string? atlasFilePath = null;
@@ -259,7 +259,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
         if ( atlasFilePath == null )
         {
-            throw new GdxRuntimeException( "The map is missing the 'atlas' property" );
+            throw new RuntimeException( "The map is missing the 'atlas' property" );
         }
 
         var fileHandle = GetRelativeFileHandle( tmxFile, atlasFilePath );
@@ -269,7 +269,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
             return fileHandle;
         }
 
-        throw new GdxRuntimeException( $"The 'atlas' file could not be found: '{atlasFilePath}'" );
+        throw new RuntimeException( $"The 'atlas' file could not be found: '{atlasFilePath}'" );
     }
 
     protected void SetTextureFilters( TextureFilterMode min, TextureFilterMode mag )

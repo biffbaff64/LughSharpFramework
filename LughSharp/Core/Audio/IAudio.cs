@@ -38,7 +38,7 @@ public interface IAudio : IDisposable
     /// <param name="samplingRate">The sampling rate.</param>
     /// <param name="isMono">Whether the AudioDevice should be in mono or stereo mode.</param>
     /// <returns>The AudioDevice.</returns>
-    /// <exception cref="GdxRuntimeException">Thrown if the device could not be created.</exception>
+    /// <exception cref="RuntimeException">Thrown if the device could not be created.</exception>
     IAudioDevice NewAudioDevice( int samplingRate, bool isMono );
 
     /// <summary>
@@ -48,7 +48,7 @@ public interface IAudio : IDisposable
     /// <param name="samplingRate"> the sampling rate in Hertz </param>
     /// <param name="isMono"> whether the recorder records in mono or stereo </param>
     /// <returns> the AudioRecorder </returns>
-    /// <exception cref="GdxRuntimeException"> in case the recorder could not be created</exception>
+    /// <exception cref="RuntimeException"> in case the recorder could not be created</exception>
     IAudioRecorder NewAudioRecorder( int samplingRate, bool isMono );
 
     /// <summary>
@@ -60,7 +60,7 @@ public interface IAudio : IDisposable
     /// The Sound has to be disposed if it is no longer used via the <see cref="IDisposable.Dispose()"/> method.
     /// </summary>
     /// <returns>The new sound.</returns>
-    /// <exception cref="GdxRuntimeException">in case the sound could not be loaded.</exception>
+    /// <exception cref="RuntimeException">in case the sound could not be loaded.</exception>
     ISound NewSound( FileInfo? fileHandle );
 
     /// <summary>
@@ -72,7 +72,7 @@ public interface IAudio : IDisposable
     /// </summary>
     /// <param name="file">The filehandle.</param>
     /// <return>the new Music or null if the Music could not be loaded.</return>
-    /// <exception cref="GdxRuntimeException">in case the music could not be loaded.</exception>
+    /// <exception cref="RuntimeException">in case the music could not be loaded.</exception>
     IMusic NewMusic( FileInfo? file );
 
     /// <summary>

@@ -156,12 +156,12 @@ public class ListBox< T > : Widget
 
         if ( font == null )
         {
-            throw new GdxRuntimeException( "Layout: supplied style has a null font!" );
+            throw new RuntimeException( "Layout: supplied style has a null font!" );
         }
 
         if ( selectedDrawable == null )
         {
-            throw new GdxRuntimeException( "Layout: supplied style has a null selected drawable!" );
+            throw new RuntimeException( "Layout: supplied style has a null selected drawable!" );
         }
 
         ItemHeight =  font.GetCapHeight() - ( font.GetDescent() * 2 );

@@ -61,7 +61,7 @@ public class Wav
             }
             catch ( IOException ex )
             {
-                throw new GdxRuntimeException( "Error reading WAV file: " + File, ex );
+                throw new RuntimeException( "Error reading WAV file: " + File, ex );
             }
         }
 
@@ -91,7 +91,7 @@ public class Wav
 //            }
 //            catch ( IOException ex )
 //            {
-//                throw new GdxRuntimeException( "Error reading WAV file: " + file, ex );
+//                throw new RuntimeException( "Error reading WAV file: " + file, ex );
 //            }
         }
     }
@@ -108,14 +108,14 @@ public class Wav
 //            {
 //                if ( ( Read() != 'R' ) || ( Read() != 'I' ) || ( Read() != 'F' ) || ( Read() != 'F' ) )
 //                {
-//                    throw new GdxRuntimeException( "RIFF header not found: " + file );
+//                    throw new RuntimeException( "RIFF header not found: " + file );
 //                }
 //
 //                SkipFully( 4 );
 //
 //                if ( ( Read() != 'W' ) || ( Read() != 'A' ) || ( Read() != 'V' ) || ( Read() != 'E' ) )
 //                {
-//                    throw new GdxRuntimeException( "Invalid wave file header: " + file );
+//                    throw new RuntimeException( "Invalid wave file header: " + file );
 //                }
 //
 //                var fmtChunkLength = seekToChunk( 'f', 'm', 't', ' ' );
@@ -124,14 +124,14 @@ public class Wav
 //
 //                if ( type != 1 )
 //                {
-//                    throw new GdxRuntimeException( "WAV files must be PCM: " + type );
+//                    throw new RuntimeException( "WAV files must be PCM: " + type );
 //                }
 //
 //                channels = ( Read() & 0xff ) | ( ( Read() & 0xff ) << 8 );
 //
 //                if ( ( channels != 1 ) && ( channels != 2 ) )
 //                {
-//                    throw new GdxRuntimeException( "WAV files must have 1 or 2 channels: " + channels );
+//                    throw new RuntimeException( "WAV files must have 1 or 2 channels: " + channels );
 //                }
 //
 //                sampleRate = ( Read() & 0xff ) | ( ( Read() & 0xff ) << 8 ) | ( ( Read() & 0xff ) << 16 ) | ( ( Read() & 0xff ) << 24 );
@@ -142,7 +142,7 @@ public class Wav
 //
 //                if ( bitsPerSample != 16 )
 //                {
-//                    throw new GdxRuntimeException( "WAV files must have 16 bits per sample: " + bitsPerSample );
+//                    throw new RuntimeException( "WAV files must have 16 bits per sample: " + bitsPerSample );
 //                }
 //
 //                SkipFully( fmtChunkLength - 16 );
@@ -153,7 +153,7 @@ public class Wav
 //            {
 ////    StreamUtils.closeQuietly( this );
 //
-//                throw new GdxRuntimeException( "Error reading WAV file: " + file, ex );
+//                throw new RuntimeException( "Error reading WAV file: " + file, ex );
 //            }
         }
 

@@ -403,12 +403,11 @@ public class BitmapFontCache
 
         for ( int j = 0, n = _pageVertices.Length; j < n; j++ )
         {
-            if ( ( _idx[ j ] > 0 ) && ( regions[ j ].Texture != null ) )
+            if ( _idx[ j ] > 0 )
             {
                 // ignore if this texture has no glyphs
-                if ( _pageVertices[ j ] != null )
+                if ( _pageVertices[ j ] != null && regions[ j ].Texture != null )
                 {
-                    Logger.Checkpoint();
                     spriteBatch.Draw( regions[ j ].Texture!, _pageVertices[ j ]!, 0, _idx[ j ] );
                 }
             }
@@ -683,8 +682,6 @@ public class BitmapFontCache
 
         for ( int i = 0, n = layout.Runs.Count; i < n; i++ )
         {
-            Logger.Checkpoint();
-
             var run       = layout.Runs[ i ];
             var glyphs    = run.Glyphs;
             var xAdvances = run.XAdvances;
@@ -714,8 +711,6 @@ public class BitmapFontCache
     /// <param name="color"></param>
     private void AddGlyph( Glyph glyph, float x, float y, float color )
     {
-        Logger.Checkpoint();
-
         var scaleX = Font.FontData.ScaleX;
         var scaleY = Font.FontData.ScaleY;
 
@@ -846,7 +841,7 @@ public class BitmapFontCache
     /// <param name="x"> The x position for the left most character. </param>
     /// <param name="y">
     /// The y position for the top of most capital letters in the font
-    /// (the <see cref="BitmapFont.BitmapFontData.CapHeight"/>).
+    /// (the <see cref="BitmapFontData.CapHeight"/>).
     /// </param>
     /// <param name="start"> The first character of the string to draw. </param>
     /// <param name="end"> The last character of the string to draw (exclusive). </param>

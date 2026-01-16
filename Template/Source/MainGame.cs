@@ -63,12 +63,7 @@ public class MainGame : Game
         _assetManager = new AssetManager();
 
         CreateCameras();
-
-        CreateStage();
-        CreateFont(); // Not working yet
-//        CreateFreeTypeFont(); // Not working yet
         CreateAssets();
-        CreateSprite();
 
         Logger.Debug( "Done" );
     }
@@ -176,8 +171,13 @@ public class MainGame : Game
 
                 _test?.Render( _spriteBatch2 );
 
-                _ = _font?.Draw( _spriteBatch2, "HELLO WORLD", 100, 100 );
+                if ( _font != null )
+                {
+                    _spriteBatch2.Draw( _font.GetRegion().Texture, 400, 400 );
 
+                    _font.Draw( _spriteBatch2, "HELLO WORLD", 100, 100 );
+                }
+                
                 _spriteBatch2.End();
             }
         }
@@ -234,6 +234,10 @@ public class MainGame : Game
                 _hudCam?.Dispose();
                 _font?.Dispose();
                 
+                // TODO:
+                // Should Sprite() implement IDisposable, or should I leave that up to
+                // any extending classes? Maybe imlplement IDisposable in Sprite() and
+                // allow ( and encouraging ) extending classes to override it?
                 _sprite = null;
                 _star2  = null;
             }
@@ -283,6 +287,12 @@ public class MainGame : Game
     {
         _image1 = new Texture( Assets.BACKGROUND_IMAGE );
         _star   = new Texture( Assets.COMPLETE_STAR );
+
+        CreateStage();
+        CreateFont();
+//        CreateFreeTypeFont(); // Not working yet
+
+        CreateSprite();
     }
 
     private void CreateStage()
@@ -300,18 +310,6 @@ public class MainGame : Game
 
         _stage?.AddActor( _hudActor );
         _stage?.DebugAll = true;
-    }
-
-    private void CreateSprite()
-    {
-        _sprite = new Sprite( new TextureRegion( new Texture( Assets.KEY_COLLECTED ) ) );
-        _star2  = new Sprite( new TextureRegion( new Texture( Assets.COMPLETE_STAR ) ) );
-
-        _spritePosition.Set( 40, 120 );
-//        _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
-//        _sprite.SetBounds();
-//        _sprite.SetOriginCenter();
-//        _sprite.SetColor( Color.White );
     }
 
     private void CreateFont()
@@ -332,6 +330,18 @@ public class MainGame : Game
 
         _font = generator.GenerateFont( parameter );
         _font.SetColor( Color.White );
+    }
+
+    private void CreateSprite()
+    {
+        _sprite = new Sprite( new TextureRegion( new Texture( Assets.KEY_COLLECTED ) ) );
+        _star2  = new Sprite( new TextureRegion( new Texture( Assets.COMPLETE_STAR ) ) );
+
+        _spritePosition.Set( 40, 120 );
+//        _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
+//        _sprite.SetBounds();
+//        _sprite.SetOriginCenter();
+//        _sprite.SetColor( Color.White );
     }
 }
 

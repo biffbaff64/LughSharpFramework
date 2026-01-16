@@ -62,7 +62,7 @@ public class AsyncResult< T >
     /// Waits if necessary for the computation to complete and then returns the result.
     /// </summary>
     /// <returns>The result of the asynchronous computation.</returns>
-    /// <exception cref="GdxRuntimeException">If there was an error during the task execution.</exception>
+    /// <exception cref="RuntimeException">If there was an error during the task execution.</exception>
     public T? Get()
     {
         try
@@ -74,7 +74,7 @@ public class AsyncResult< T >
         catch ( AggregateException ex )
         {
             // C#'s Task<T>.Result throws an AggregateException, which wraps the inner
-            // exception(s). We unwrap the cause and throw a GdxRuntimeException.
+            // exception(s). We unwrap the cause and throw a RuntimeException.
 
             // Get the first inner exception that caused the fault.
             var innerException = ex.InnerException;
@@ -84,12 +84,12 @@ public class AsyncResult< T >
 
             if ( innerException != null )
             {
-                throw new GdxRuntimeException( innerException );
+                throw new RuntimeException( innerException );
             }
 
             // If there's no inner exception (unlikely for a faulted task), throw
             // the AggregateException itself wrapped.
-            throw new GdxRuntimeException( ex );
+            throw new RuntimeException( ex );
         }
 
         // In C#, if a thread is interrupted/canceled while blocking on .Result, a TaskCanceledException

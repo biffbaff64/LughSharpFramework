@@ -103,12 +103,12 @@ public class Etc1TextureData : ITextureData
     {
         if ( IsPrepared )
         {
-            throw new GdxRuntimeException( "Already prepared" );
+            throw new RuntimeException( "Already prepared" );
         }
 
         if ( ( _file == null ) && ( _data == null ) )
         {
-            throw new GdxRuntimeException( "Can only load once from ETC1Data" );
+            throw new RuntimeException( "Can only load once from ETC1Data" );
         }
 
         if ( _file != null )
@@ -118,7 +118,7 @@ public class Etc1TextureData : ITextureData
 
         if ( _data == null )
         {
-            throw new GdxRuntimeException( "No data to prepare!" );
+            throw new RuntimeException( "No data to prepare!" );
         }
 
         Width      = _data.Width;
@@ -139,12 +139,12 @@ public class Etc1TextureData : ITextureData
     {
         if ( !IsPrepared )
         {
-            throw new GdxRuntimeException( "Call prepare() before calling consumeCompressedData()" );
+            throw new RuntimeException( "Call prepare() before calling consumeCompressedData()" );
         }
 
         if ( _data is null )
         {
-            throw new GdxRuntimeException( "No data to consume!" );
+            throw new RuntimeException( "No data to consume!" );
         }
 
         if ( !Engine.Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
@@ -214,7 +214,7 @@ public class Etc1TextureData : ITextureData
     /// <returns> the pixmap.</returns>
     public Pixmap ConsumePixmap()
     {
-        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+        throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     /// <summary>
@@ -223,7 +223,7 @@ public class Etc1TextureData : ITextureData
     /// </summary>
     public bool ShouldDisposePixmap()
     {
-        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+        throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     /// <summary>

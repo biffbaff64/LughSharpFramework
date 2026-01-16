@@ -77,11 +77,11 @@ public partial class GLBindings
             }
             catch ( Exception ex )
             {
-                throw new GdxRuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
+                throw new RuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
             }
         }
 
-        throw new GdxRuntimeException( $"Failed to load {functionName}" );
+        throw new RuntimeException( $"Failed to load {functionName}" );
     }
 
     // ========================================================================
@@ -108,11 +108,11 @@ public partial class GLBindings
             }
             catch ( Exception ex )
             {
-                throw new GdxRuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
+                throw new RuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
             }
         }
 
-        throw new GdxRuntimeException( $"Failed to load {functionName}" );
+        throw new RuntimeException( $"Failed to load {functionName}" );
     }
 
     // ========================================================================

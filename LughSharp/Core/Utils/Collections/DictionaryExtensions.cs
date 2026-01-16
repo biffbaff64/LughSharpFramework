@@ -74,7 +74,7 @@ public static class DictionaryExtension
     {
         if ( key == null )
         {
-            throw new GdxRuntimeException( "key is null" );
+            throw new RuntimeException( "key is null" );
         }
 
         return self.GetValueOrDefault( key, defaultValue );
@@ -92,7 +92,7 @@ public static class DictionaryExtension
     {
         if ( key == null )
         {
-            throw new GdxRuntimeException( "key is null" );
+            throw new RuntimeException( "key is null" );
         }
 
         return self.TryGetValue( key, out var value ) ? value : default( TV );

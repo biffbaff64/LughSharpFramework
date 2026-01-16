@@ -427,7 +427,7 @@ public class ShaderProgram : IDisposable
 
         if ( size == 0 )
         {
-            throw new GdxRuntimeException( "Size cannot be 0." );
+            throw new RuntimeException( "Size cannot be 0." );
         }
 
         GL.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
@@ -580,7 +580,7 @@ public class ShaderProgram : IDisposable
                 }
             }
 
-            throw new GdxRuntimeException( "LogInvalidMatrix found Invalid Matrix." );
+            throw new RuntimeException( "LogInvalidMatrix found Invalid Matrix." );
         }
     }
 

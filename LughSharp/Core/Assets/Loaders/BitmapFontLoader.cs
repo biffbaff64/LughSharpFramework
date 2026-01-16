@@ -44,7 +44,7 @@ namespace LughSharp.Core.Assets.Loaders;
 [PublicAPI]
 public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 {
-    private BitmapFont.BitmapFontData? _data;
+    private BitmapFontData? _data;
 
     // ========================================================================
 
@@ -79,7 +79,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
             return deps;
         }
 
-        _data = new BitmapFont.BitmapFontData( file, p!.Flip );
+        _data = new BitmapFontData( file, p!.Flip );
 
         if ( p.AtlasName != null )
         {
@@ -146,7 +146,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 
             if ( region == null )
             {
-                throw new GdxRuntimeException( $"Could not find font region {name} in atlas {p.AtlasName}" );
+                throw new RuntimeException( $"Could not find font region {name} in atlas {p.AtlasName}" );
             }
 
             return new BitmapFont( file, region );
@@ -212,11 +212,11 @@ public class BitmapFontParameter : AssetLoaderParameters
     public TextureFilterMode MagFilter { get; set; } = TextureFilterMode.Nearest;
 
     /// <summary>
-    /// optional <see cref="BitmapFont.BitmapFontData"/> to be used instead of
+    /// optional <see cref="Core.Graphics.Text.BitmapFontData"/> to be used instead of
     /// loading the <see cref="Texture"/> directly. Use this if your font is
     /// embedded in a <see cref="Skin"/>.
     /// </summary>
-    public BitmapFont.BitmapFontData? BitmapFontData { get; set; } = null;
+    public BitmapFontData? BitmapFontData { get; set; } = null;
 
     /// <summary>
     /// The name of the <see cref="TextureAtlas"/> to load the <see cref="BitmapFont"/>.

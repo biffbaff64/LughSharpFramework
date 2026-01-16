@@ -96,12 +96,12 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
         if ( XmlRootNode == null )
         {
-            throw new GdxRuntimeException( "TMXFile does not contain a 'map' node!" );
+            throw new RuntimeException( "TMXFile does not contain a 'map' node!" );
         }
 
         if ( XmlRootNode.Attributes == null )
         {
-            throw new GdxRuntimeException( "Tmx Map has no attributes!" );
+            throw new RuntimeException( "Tmx Map has no attributes!" );
         }
 
         _tilesetList     = XmlRootNode.SelectNodes( "tileset" );
@@ -480,7 +480,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
                 if ( texture == null )
                 {
-                    throw new GdxRuntimeException( "Image Texture cannot be null!" );
+                    throw new RuntimeException( "Image Texture cannot be null!" );
                 }
 
                 y -= texture.RegionHeight;
@@ -733,7 +733,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     /// <param name="value"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     protected object? CastProperty( string? name, string? value, string? type )
     {
         switch ( type )
@@ -761,7 +761,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
             }
 
             default:
-                throw new GdxRuntimeException( $"Wrong type given for property {name}, given : {type}, "
+                throw new RuntimeException( $"Wrong type given for property {name}, given : {type}, "
                                                + $"supported : string, bool, int, float, color ( or colour )" );
         }
     }
@@ -824,14 +824,14 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     /// <param name="width"></param>
     /// <param name="height"></param>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public int[] GetTileIDs( XmlNode node, int width, int height )
     {
         var data = node.SelectSingleNode( "data" );
 
         if ( data == null )
         {
-            throw new GdxRuntimeException( "data is missing" );
+            throw new RuntimeException( "data is missing" );
         }
 
         var encoding = data.Attributes?[ "encoding" ]?.Value;
@@ -839,7 +839,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
         if ( encoding == null )
         {
             // no 'encoding' attribute means that the encoding is XML
-            throw new GdxRuntimeException( "Unsupported encoding (XML) for TMX Layer Data" );
+            throw new RuntimeException( "Unsupported encoding (XML) for TMX Layer Data" );
         }
 
         var ids = new int[ width * height ];
@@ -885,7 +885,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                                 break;
 
                             default:
-                                throw new GdxRuntimeException
+                                throw new RuntimeException
                                     ( "Unrecognised compression (" + compression + ") for TMX Layer Data" );
                         }
 
@@ -911,7 +911,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
                                 if ( read != temp.Length )
                                 {
-                                    throw new GdxRuntimeException
+                                    throw new RuntimeException
                                         ( "Error Reading TMX Layer Data: Premature end of tile data" );
                                 }
 
@@ -924,7 +924,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                     }
                     catch ( IOException e )
                     {
-                        throw new GdxRuntimeException( "Error Reading TMX Layer Data - IOException: " + e.Message );
+                        throw new RuntimeException( "Error Reading TMX Layer Data - IOException: " + e.Message );
                     }
                     finally
                     {
@@ -935,7 +935,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                 {
                     // any other value of 'encoding' is one we're not aware of, probably
                     // a feature of a future version of Tiled or another editor
-                    throw new GdxRuntimeException( "Unrecognised encoding (" + encoding + ") for TMX Layer Data" );
+                    throw new RuntimeException( "Unrecognised encoding (" + encoding + ") for TMX Layer Data" );
                 }
             }
         }
@@ -975,7 +975,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     /// <param name="tilesetNode"> The node referencing the TSX tileset file. </param>
     /// <param name="tmxFile"> The current TMX file being processed. </param>
     /// <param name="imageResolver"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     protected void LoadTileSet( XmlNode tilesetNode, FileInfo tmxFile, IImageResolver imageResolver )
     {
         if ( tilesetNode.Name.Equals( "tileset" ) )
@@ -1014,7 +1014,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
                         if ( imageSource is null )
                         {
-                            throw new GdxRuntimeException( $"Error: Image source for tileset {tmxFile.Name} is null!" );
+                            throw new RuntimeException( $"Error: Image source for tileset {tmxFile.Name} is null!" );
                         }
 
                         image = GetRelativeFileHandle( new FileInfo( imageSource ), imageSource );
@@ -1022,7 +1022,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                 }
                 catch ( SerializationException )
                 {
-                    throw new GdxRuntimeException( "Error parsing external tileset." );
+                    throw new RuntimeException( "Error parsing external tileset." );
                 }
             }
             else
@@ -1080,7 +1080,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
             if ( tileElements == null )
             {
-                throw new GdxRuntimeException( "Error: No tile elements found!" );
+                throw new RuntimeException( "Error: No tile elements found!" );
             }
 
             //TODO: IMPROVE THIS FORMATTING

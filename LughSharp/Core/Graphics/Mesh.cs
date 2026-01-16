@@ -292,7 +292,7 @@ public class Mesh : IDisposable
         }
         else
         {
-            throw new GdxRuntimeException( "Trying to enable InstancedRendering on same Mesh instance twice."
+            throw new RuntimeException( "Trying to enable InstancedRendering on same Mesh instance twice."
                                          + " Use disableInstancedRendering to clean up old InstanceData first" );
         }
 
@@ -332,7 +332,7 @@ public class Mesh : IDisposable
             return this;
         }
 
-        throw new GdxRuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
+        throw new RuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
     }
 
     /// <summary>
@@ -349,7 +349,7 @@ public class Mesh : IDisposable
             return this;
         }
 
-        throw new GdxRuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
+        throw new RuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
     }
 
     /// <summary>
@@ -367,7 +367,7 @@ public class Mesh : IDisposable
             return this;
         }
 
-        throw new GdxRuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
+        throw new RuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
     }
 
     /// <summary>
@@ -384,7 +384,7 @@ public class Mesh : IDisposable
             return this;
         }
 
-        throw new GdxRuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
+        throw new RuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
     }
 
     /// <summary>
@@ -831,7 +831,7 @@ public class Mesh : IDisposable
 
                 if ( ( count + offset ) > IndexData.NumMaxIndices )
                 {
-                    throw new GdxRuntimeException( $"Mesh attempting to access memory outside " +
+                    throw new RuntimeException( $"Mesh attempting to access memory outside " +
                                                    $"of the index buffer (count: {count}, offset: " +
                                                    $"{offset}, max: {IndexData.NumMaxIndices})" );
                 }
@@ -901,7 +901,7 @@ public class Mesh : IDisposable
 
     /// <summary>
     /// Calculates the <see cref="BoundingBox"/> of the vertices contained in this mesh.
-    /// In case no vertices are defined yet a <see cref="GdxRuntimeException"/> is thrown.
+    /// In case no vertices are defined yet a <see cref="RuntimeException"/> is thrown.
     /// This method creates a new BoundingBox instance.
     /// </summary>
     /// <returns> the bounding box.  </returns>
@@ -916,7 +916,7 @@ public class Mesh : IDisposable
 
     /// <summary>
     /// Calculates the <see cref="BoundingBox"/> of the vertices contained in this mesh.
-    /// In case no vertices are defined yet a <see cref="GdxRuntimeException"/> is thrown.
+    /// In case no vertices are defined yet a <see cref="RuntimeException"/> is thrown.
     /// </summary>
     /// <param name="bbox"> the bounding box to store the result in.  </param>
     public void CalculateBoundingBox( BoundingBox bbox )
@@ -925,7 +925,7 @@ public class Mesh : IDisposable
 
         if ( numVertices == 0 )
         {
-            throw new GdxRuntimeException( "No vertices defined" );
+            throw new RuntimeException( "No vertices defined" );
         }
 
         var verts = _vertices.GetBuffer( false );
@@ -1027,7 +1027,7 @@ public class Mesh : IDisposable
 
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > max ) )
         {
-            throw new GdxRuntimeException( $"Invalid part specified ( offset={offset}, count={count}, max={max} )" );
+            throw new RuntimeException( $"Invalid part specified ( offset={offset}, count={count}, max={max} )" );
         }
 
         var verts      = _vertices.GetBuffer( false );
@@ -1175,7 +1175,7 @@ public class Mesh : IDisposable
 
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > numIndices ) )
         {
-            throw new GdxRuntimeException( "Not enough indices" );
+            throw new RuntimeException( "Not enough indices" );
         }
 
         var verts      = _vertices.GetBuffer( false );

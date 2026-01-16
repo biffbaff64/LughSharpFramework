@@ -245,7 +245,7 @@ public class PixmapPacker : IDisposable
     /// <param name="name"> If null, the image cannot be looked up by name. </param>
     /// <param name="image"></param>
     /// <returns> Rectangle describing the area the pixmap was rendered to. </returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// in case the image did not fit due to the page size being too small
     /// or providing a duplicate name.
     /// </exception>
@@ -258,7 +258,7 @@ public class PixmapPacker : IDisposable
 
         if ( ( name != null ) && ( GetRect( name ) != null ) )
         {
-            throw new GdxRuntimeException( $"Pixmap has already been packed with name: {name}" );
+            throw new RuntimeException( $"Pixmap has already been packed with name: {name}" );
         }
 
         PixmapPackerRectangle rect;
@@ -392,10 +392,10 @@ public class PixmapPacker : IDisposable
         {
             if ( name == null )
             {
-                throw new GdxRuntimeException( "Page size too small for pixmap." );
+                throw new RuntimeException( "Page size too small for pixmap." );
             }
 
-            throw new GdxRuntimeException( "Page size too small for pixmap: " + name );
+            throw new RuntimeException( "Page size too small for pixmap: " + name );
         }
 
         var page = _packStrategy.Pack( this, name, rect );

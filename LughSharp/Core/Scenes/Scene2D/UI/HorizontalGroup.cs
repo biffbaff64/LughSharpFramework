@@ -432,7 +432,7 @@ public class HorizontalGroup : WidgetGroup
 
         if ( _rowSizes is null )
         {
-            throw new GdxRuntimeException( "_rowSizes cannot be null!" );
+            throw new RuntimeException( "_rowSizes cannot be null!" );
         }
 
         if ( ( align & Core.Utils.Alignment.TOP ) != 0 )

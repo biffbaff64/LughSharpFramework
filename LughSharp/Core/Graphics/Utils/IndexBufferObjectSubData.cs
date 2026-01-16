@@ -183,7 +183,7 @@ public class IndexBufferObjectSubData : IIndexData
     {
         if ( _bufferHandle == 0 )
         {
-            throw new GdxRuntimeException( "IndexBufferObject cannot be used after it has been disposed." );
+            throw new RuntimeException( "IndexBufferObject cannot be used after it has been disposed." );
         }
 
         GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )_bufferHandle );

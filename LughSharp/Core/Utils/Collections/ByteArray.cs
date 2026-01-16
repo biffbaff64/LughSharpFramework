@@ -529,7 +529,7 @@ public class ByteArray
     {
         if ( Size == 0 )
         {
-            throw new GdxRuntimeException( "Array is empty." );
+            throw new RuntimeException( "Array is empty." );
         }
 
         return Items[ 0 ];

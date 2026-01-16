@@ -153,7 +153,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     /// </summary>
     protected virtual T CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
     {
-        throw new GdxRuntimeException( "This method must be overriden by derived class(es)" );
+        throw new RuntimeException( "This method must be overriden by derived class(es)" );
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     /// </summary>
     protected virtual void DisposeColorTexture( T colorTexture )
     {
-        throw new GdxRuntimeException( "This method must be overriden by derived class(es)" );
+        throw new RuntimeException( "This method must be overriden by derived class(es)" );
     }
 
     /// <summary>
@@ -171,7 +171,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     /// </summary>
     protected virtual void AttachFrameBufferColorTexture( T texture )
     {
-        throw new GdxRuntimeException( "This method must be overriden by derived class(es)" );
+        throw new RuntimeException( "This method must be overriden by derived class(es)" );
     }
 
     /// <summary>
@@ -468,25 +468,25 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
             // Handle specific incomplete framebuffer scenarios
             if ( result == IGL.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT )
             {
-                throw new GdxRuntimeException( "Frame buffer couldn't be constructed: incomplete attachment" );
+                throw new RuntimeException( "Frame buffer couldn't be constructed: incomplete attachment" );
             }
 
             if ( result == IGL.GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS )
             {
-                throw new GdxRuntimeException( "Frame buffer couldn't be constructed: incomplete dimensions" );
+                throw new RuntimeException( "Frame buffer couldn't be constructed: incomplete dimensions" );
             }
 
             if ( result == IGL.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT )
             {
-                throw new GdxRuntimeException( "Frame buffer couldn't be constructed: missing attachment" );
+                throw new RuntimeException( "Frame buffer couldn't be constructed: missing attachment" );
             }
 
             if ( result == IGL.GL_FRAMEBUFFER_UNSUPPORTED )
             {
-                throw new GdxRuntimeException( "Frame buffer couldn't be constructed: unsupported combination of formats" );
+                throw new RuntimeException( "Frame buffer couldn't be constructed: unsupported combination of formats" );
             }
 
-            throw new GdxRuntimeException( "Frame buffer couldn't be constructed: unknown error " + result );
+            throw new RuntimeException( "Frame buffer couldn't be constructed: unknown error " + result );
         }
     }
 
@@ -589,7 +589,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     {
         if ( Buffers == null )
         {
-            throw new GdxRuntimeException( "Buffers is NULL!" );
+            throw new RuntimeException( "Buffers is NULL!" );
         }
 
         var managedResources = Buffers[ app ] ?? [ ];

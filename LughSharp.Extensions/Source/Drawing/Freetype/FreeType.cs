@@ -128,7 +128,7 @@ public partial class FreeType
 //                    }
 //                }
 //            }
-//            catch ( GdxRuntimeException )
+//            catch ( RuntimeException )
 //            {
 //                // OK to ignore, some platforms do not support file mapping.
 //                // The original Java code has an explicit try-catch for mapping.
@@ -155,7 +155,7 @@ public partial class FreeType
 //                    }
 //                    catch ( IOException ex )
 //                    {
-//                        throw new GdxRuntimeException( ex );
+//                        throw new RuntimeException( ex );
 //                    }
 //                }
 //            }
@@ -199,7 +199,7 @@ public partial class FreeType
 //            {
 //                BufferUtils.DisposeUnsafeByteBuffer( unmanagedBufferAddress ); // Dispose if face creation fails
 //
-//                throw new GdxRuntimeException( "Couldn't load font, FreeType error code: " + GetLastErrorCode() );
+//                throw new RuntimeException( "Couldn't load font, FreeType error code: " + GetLastErrorCode() );
 //            }
 //            else
 //            {
@@ -221,7 +221,7 @@ public partial class FreeType
 //
 //            if ( strokerAddress == IntPtr.Zero )
 //            {
-//                throw new GdxRuntimeException( "Couldn't create FreeType stroker, FreeType error code: " + GetLastErrorCode() );
+//                throw new RuntimeException( "Couldn't create FreeType stroker, FreeType error code: " + GetLastErrorCode() );
 //            }
 //
 //            return new Stroker( strokerAddress );
@@ -508,7 +508,7 @@ public partial class FreeType
 //
 //            if ( glyphAddress == IntPtr.Zero )
 //            {
-//                throw new GdxRuntimeException( "Couldn't get glyph, FreeType error code: " + GetLastErrorCode() );
+//                throw new RuntimeException( "Couldn't get glyph, FreeType error code: " + GetLastErrorCode() );
 //            }
 //
 //            return new Glyph( glyphAddress );
@@ -567,7 +567,7 @@ public partial class FreeType
 //
 //            if ( bitmapAddress == IntPtr.Zero )
 //            {
-//                throw new GdxRuntimeException( "Couldn't render glyph, FreeType error code: " + GetLastErrorCode() );
+//                throw new RuntimeException( "Couldn't render glyph, FreeType error code: " + GetLastErrorCode() );
 //            }
 //
 //            Address   = bitmapAddress;
@@ -581,7 +581,7 @@ public partial class FreeType
 //        {
 //            if ( !_rendered )
 //            {
-//                throw new GdxRuntimeException( "Glyph is not yet rendered" );
+//                throw new RuntimeException( "Glyph is not yet rendered" );
 //            }
 //
 //            return new Bitmap( GetBitmapFromGlyphNative( Address ) );
@@ -594,7 +594,7 @@ public partial class FreeType
 //        {
 //            if ( !_rendered )
 //            {
-//                throw new GdxRuntimeException( "Glyph is not yet rendered" );
+//                throw new RuntimeException( "Glyph is not yet rendered" );
 //            }
 //
 //            return GetLeftNative( Address );
@@ -607,7 +607,7 @@ public partial class FreeType
 //        {
 //            if ( !_rendered )
 //            {
-//                throw new GdxRuntimeException( "Glyph is not yet rendered" );
+//                throw new RuntimeException( "Glyph is not yet rendered" );
 //            }
 //
 //            return GetTopNative( Address );
@@ -883,7 +883,7 @@ public partial class FreeType
 //
 //        if ( address == IntPtr.Zero )
 //        {
-//            throw new GdxRuntimeException( "Couldn't initialize FreeType library, FreeType error code: " + GetLastErrorCode() );
+//            throw new RuntimeException( "Couldn't initialize FreeType library, FreeType error code: " + GetLastErrorCode() );
 //        }
 //        else
 //        {
@@ -910,7 +910,7 @@ public partial class FreeType
         
         if ( address == 0 )
         {
-            throw new GdxRuntimeException( $"Couldn't initialize FreeType library, " +
+            throw new RuntimeException( $"Couldn't initialize FreeType library, " +
                                            $"FreeType error code: {GetLastErrorCode()}" );
         }
 
@@ -972,7 +972,7 @@ public partial class FreeType
 //            {
 //                buffer = fontFile.Map();
 //            }
-//            catch ( GdxRuntimeException )
+//            catch ( RuntimeException )
 //            {
 //                // OK to ignore, some platforms do not support file mapping.
 //            }
@@ -1002,7 +1002,7 @@ public partial class FreeType
 //                }
 //                catch ( IOException ex )
 //                {
-//                    throw new GdxRuntimeException( ex );
+//                    throw new RuntimeException( ex );
 //                }
 //                finally
 //                {
@@ -1036,7 +1036,7 @@ public partial class FreeType
 //                    BufferUtils.DisposeUnsafeByteBuffer( buffer );
 //                }
 //
-//                throw new GdxRuntimeException( $"Couldn't load font, FreeType error code: {_getLastErrorCode()}" );
+//                throw new RuntimeException( $"Couldn't load font, FreeType error code: {_getLastErrorCode()}" );
 //            }
 //
 //            FontData.Put( face, buffer );
@@ -1052,7 +1052,7 @@ public partial class FreeType
 //
 //            if ( stroker == 0 )
 //            {
-//                throw new GdxRuntimeException( $"Couldn't create FreeType stroker, FreeType error code: {_getLastErrorCode()}" );
+//                throw new RuntimeException( $"Couldn't create FreeType stroker, FreeType error code: {_getLastErrorCode()}" );
 //            }
 //
 //            return new Stroker( stroker );

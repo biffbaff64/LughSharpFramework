@@ -124,14 +124,14 @@ public class PNGDecoder
     {
         if ( texture == null )
         {
-            throw new GdxRuntimeException( "Unable to perform analysis, texture is null" );
+            throw new RuntimeException( "Unable to perform analysis, texture is null" );
         }
 
         var data = CreatePNGFromTexture( texture );
 
         if ( data == null )
         {
-            throw new GdxRuntimeException( "WARNING: Unable to analyse Texture. No image data found." );
+            throw new RuntimeException( "WARNING: Unable to analyse Texture. No image data found." );
         }
 
         AnalysePNG( data, verbose );
@@ -362,7 +362,7 @@ public class PNGDecoder
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     private static int FindFirstIDATDataOffset( byte[] data )
     {
         // 1. Initial Position: Skip the PNG Signature (8 bytes)
@@ -401,7 +401,7 @@ public class PNGDecoder
                 // Reached the end marker before finding IDAT. Something is wrong
                 // with the file structure.
 
-                throw new GdxRuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
+                throw new RuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
             }
 
             // Skip the current chunk and move to the next one.
@@ -414,7 +414,7 @@ public class PNGDecoder
         }
 
         // End of file reached without finding IDAT
-        throw new GdxRuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
+        throw new RuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
     }
 
     /// <summary>
@@ -684,7 +684,7 @@ public class PNGDecoder
     {
         if ( !file.Extension.Equals( ".png", StringComparison.CurrentCultureIgnoreCase ) )
         {
-            throw new GdxRuntimeException( $"PNG files ONLY!: ({file.Name})" );
+            throw new RuntimeException( $"PNG files ONLY!: ({file.Name})" );
         }
 
         var widthbytes  = new byte[ sizeof( int ) ];
@@ -739,7 +739,7 @@ public class PNGDecoder
     {
         if ( rawRgba == null )
         {
-            throw new GdxRuntimeException( "Cannot perform PNG conversion as Input data is null." );
+            throw new RuntimeException( "Cannot perform PNG conversion as Input data is null." );
         }
 
         var bytesPerPixel = PixelFormat.BytesPerPixel( format );

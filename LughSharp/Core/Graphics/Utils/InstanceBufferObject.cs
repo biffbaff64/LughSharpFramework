@@ -75,7 +75,7 @@ public class InstanceBufferObject : IInstanceData
         {
             if ( _isBound )
             {
-                throw new GdxRuntimeException( "Cannot change _usage while VBO is bound" );
+                throw new RuntimeException( "Cannot change _usage while VBO is bound" );
             }
 
             field = value;
@@ -126,7 +126,7 @@ public class InstanceBufferObject : IInstanceData
     {
         if ( _byteBuffer == null )
         {
-            throw new GdxRuntimeException( "_byteBuffer cannot be null" );
+            throw new RuntimeException( "_byteBuffer cannot be null" );
         }
 
         _isDirty = true;
@@ -319,7 +319,7 @@ public class InstanceBufferObject : IInstanceData
     {
         if ( _isBound )
         {
-            throw new GdxRuntimeException( "Cannot change _attributes while VBO is bound" );
+            throw new RuntimeException( "Cannot change _attributes while VBO is bound" );
         }
 
         if ( _ownsBuffer && ( _byteBuffer != null ) )
@@ -335,7 +335,7 @@ public class InstanceBufferObject : IInstanceData
         }
         else
         {
-            throw new GdxRuntimeException( "Only Buffer< byte > is currently supported" );
+            throw new RuntimeException( "Only Buffer< byte > is currently supported" );
         }
 
         _ownsBuffer = ownsBuffer;
@@ -352,7 +352,7 @@ public class InstanceBufferObject : IInstanceData
     {
         if ( _byteBuffer == null )
         {
-            throw new GdxRuntimeException( "NULL _byteBuffer not allowed" );
+            throw new RuntimeException( "NULL _byteBuffer not allowed" );
         }
 
         if ( _isBound )

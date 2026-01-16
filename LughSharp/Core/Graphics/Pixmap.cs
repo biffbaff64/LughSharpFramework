@@ -81,7 +81,7 @@ public class Pixmap : IDisposable
         }
         catch ( Exception e )
         {
-            throw new GdxRuntimeException( $"Couldn't create pixmap with width: {width}, " +
+            throw new RuntimeException( $"Couldn't create pixmap with width: {width}, " +
                                            $"height: {height}, format: {format}", e );
         }
     }
@@ -103,7 +103,7 @@ public class Pixmap : IDisposable
         }
         catch ( IOException e )
         {
-            throw new GdxRuntimeException( "Couldn't load pixmap from image data", e );
+            throw new RuntimeException( "Couldn't load pixmap from image data", e );
         }
     }
 
@@ -112,7 +112,7 @@ public class Pixmap : IDisposable
     /// Jpeg or Bitmap. Paletted formats are not supported.
     /// </summary>
     /// <param name="file"> The file. </param>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown if there were errors loading or reading the file.
     /// </exception>
     public Pixmap( FileInfo file )
@@ -135,7 +135,7 @@ public class Pixmap : IDisposable
         }
         catch ( Exception e )
         {
-            throw new GdxRuntimeException( $"Couldn't load file:  {file.FullName}", e );
+            throw new RuntimeException( $"Couldn't load file:  {file.FullName}", e );
         }
     }
 
@@ -146,7 +146,7 @@ public class Pixmap : IDisposable
     /// <param name="buffer"> A Buffer{T} holding the encoded data. </param>
     /// <param name="offset"> The position in the data to start copying from. </param>
     /// <param name="len"> The size of data to copy. </param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public Pixmap( Buffer< byte > buffer, int offset, int len )
         : this( buffer.BackingArray(), offset, len )
     {
@@ -236,10 +236,10 @@ public class Pixmap : IDisposable
         {
             if ( IsDisposed )
             {
-                throw new GdxRuntimeException( "Pixmap already disposed" );
+                throw new RuntimeException( "Pixmap already disposed" );
             }
 
-            return Gdx2DPixmap.PixmapBuffer ?? throw new GdxRuntimeException( "Pixmap buffer is null" );
+            return Gdx2DPixmap.PixmapBuffer ?? throw new RuntimeException( "Pixmap buffer is null" );
         }
 
         set => Gdx2DPixmap.PixmapBuffer = value;
@@ -378,7 +378,7 @@ public class Pixmap : IDisposable
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( "Error occurred while drawing the pixmap.", ex );
+            throw new RuntimeException( "Error occurred while drawing the pixmap.", ex );
         }
     }
 
@@ -412,7 +412,7 @@ public class Pixmap : IDisposable
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( "Error occurred while drawing the pixmap.", ex );
+            throw new RuntimeException( "Error occurred while drawing the pixmap.", ex );
         }
     }
 
@@ -543,7 +543,7 @@ public class Pixmap : IDisposable
     /// <param name="file">The target file where the pixmap will be saved.</param>
     /// <param name="pixmap">The pixmap to be saved.</param>
     /// <exception cref="ArgumentNullException">Thrown when the <paramref name="file"/> or <paramref name="pixmap"/> is null.</exception>
-    /// <exception cref="GdxRuntimeException">Thrown if an error occurs while saving the pixmap.</exception>
+    /// <exception cref="RuntimeException">Thrown if an error occurs while saving the pixmap.</exception>
     public static void SaveToFile( FileInfo file, Pixmap pixmap )
     {
         try
@@ -561,7 +561,7 @@ public class Pixmap : IDisposable
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( "Error occurred while saving the pixmap.", ex );
+            throw new RuntimeException( "Error occurred while saving the pixmap.", ex );
         }
     }
 

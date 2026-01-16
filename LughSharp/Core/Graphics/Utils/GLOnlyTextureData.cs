@@ -101,12 +101,12 @@ public class GLOnlyTextureData : ITextureData
     /// <summary>
     /// 
     /// </summary>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public void Prepare()
     {
         if ( IsPrepared )
         {
-            throw new GdxRuntimeException( "Already prepared" );
+            throw new RuntimeException( "Already prepared" );
         }
 
         IsPrepared = true;
@@ -144,12 +144,12 @@ public class GLOnlyTextureData : ITextureData
 
     public Pixmap ConsumePixmap()
     {
-        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+        throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     public bool ShouldDisposePixmap()
     {
-        throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+        throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 }
 

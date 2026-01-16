@@ -310,7 +310,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
 
         if ( Items == null )
         {
-            throw new GdxRuntimeException( "Items cannot be null!" );
+            throw new RuntimeException( "Items cannot be null!" );
         }
 
         Modified();

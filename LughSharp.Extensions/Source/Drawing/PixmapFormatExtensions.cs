@@ -40,7 +40,7 @@ public static class PixmapFormatExtensions
     /// <returns>
     /// The corresponding <c>PixelFormat</c> value for the given system pixel format.
     /// </returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown if the provided system pixel format is invalid or not supported.
     /// </exception>
     public static int SystemPixelFormatToPixelFormat( System.Drawing.Imaging.PixelFormat format )
@@ -55,7 +55,7 @@ public static class PixmapFormatExtensions
 
             // ----------------------------------
 
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+            var _ => throw new RuntimeException( $"Invalid format: {format}" ),
         };
     }
 
@@ -64,7 +64,7 @@ public static class PixmapFormatExtensions
     /// </summary>
     /// <param name="format">The pixel format of type <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>.</param>
     /// <returns>The corresponding <see cref="System.Drawing.Imaging.PixelFormat"/>.</returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
     public static System.Drawing.Imaging.PixelFormat ToSystemPixelFormat( int format )
@@ -80,7 +80,7 @@ public static class PixmapFormatExtensions
 
             // ----------------------------------
 
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+            var _ => throw new RuntimeException( $"Invalid format: {format}" ),
         };
     }
 }

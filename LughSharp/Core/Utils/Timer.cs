@@ -53,12 +53,12 @@ public class Timer
     /// Static methods on <see cref="Timer"/> make convenient use of this instance.
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public static Timer Instance()
     {
         lock ( _threadLock )
         {
-            var thread = Thread() ?? throw new GdxRuntimeException( "Thread instance is null!" );
+            var thread = Thread() ?? throw new RuntimeException( "Thread instance is null!" );
 
             return thread.ThreadInstance ??= new Timer();
         }
@@ -332,7 +332,7 @@ public class Timer
         {
             if ( Api.App == null )
             {
-                throw new GdxRuntimeException( "GdxApi.App not available!" );
+                throw new RuntimeException( "GdxApi.App not available!" );
             }
 
             App = Api.App;
@@ -490,7 +490,7 @@ public class Timer
                         }
                         catch ( Exception ex )
                         {
-                            throw new GdxRuntimeException( "Task failed: " + Instances[ i ].GetType().Name, ex );
+                            throw new RuntimeException( "Task failed: " + Instances[ i ].GetType().Name, ex );
                         }
                     }
                 }

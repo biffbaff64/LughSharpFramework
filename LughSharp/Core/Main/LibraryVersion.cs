@@ -48,14 +48,14 @@ public class LibraryVersion
     /// <summary>
     /// Gets the Library Version from the Assembly.
     /// </summary>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public LibraryVersion()
     {
         _version = Assembly.GetEntryAssembly()?.GetName().Version;
 
         if ( _version == null )
         {
-            throw new GdxRuntimeException( "NULL Assembly Version!" );
+            throw new RuntimeException( "NULL Assembly Version!" );
         }
 
         try
@@ -76,7 +76,7 @@ public class LibraryVersion
         }
         catch ( Exception e )
         {
-            throw new GdxRuntimeException( $"Invalid version {_version.ToString().Split( "\\." )}", e );
+            throw new RuntimeException( $"Invalid version {_version.ToString().Split( "\\." )}", e );
         }
     }
 

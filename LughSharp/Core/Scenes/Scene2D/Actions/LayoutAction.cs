@@ -35,7 +35,7 @@ public class LayoutAction : Action
     {
         if ( ( actor != null ) && actor is not ILayout )
         {
-            throw new GdxRuntimeException( "Actor must implement layout: " + actor );
+            throw new RuntimeException( "Actor must implement layout: " + actor );
         }
 
         base.Target = actor;

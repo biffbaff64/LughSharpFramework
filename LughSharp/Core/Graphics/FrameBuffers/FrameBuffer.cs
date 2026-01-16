@@ -71,7 +71,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     /// <param name="height"> the height of the framebuffer in pixels </param>
     /// <param name="hasDepth"> whether to attach a depth buffer </param>
     /// <param name="hasStencil"></param>
-    /// <exception cref="GdxRuntimeException"> in case the FrameBuffer could not be created  </exception>
+    /// <exception cref="RuntimeException"> in case the FrameBuffer could not be created  </exception>
     public FrameBuffer( int format, int width, int height, bool hasDepth, bool hasStencil = false )
     {
         var frameBufferBuilder = new FrameBufferBuilder( width, height );

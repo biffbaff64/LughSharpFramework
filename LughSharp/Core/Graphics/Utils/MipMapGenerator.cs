@@ -142,7 +142,7 @@ public class MipMapGenerator
 
         if ( textureWidth != textureHeight )
         {
-            throw new GdxRuntimeException( "texture width and height must be square when using mipmapping." );
+            throw new RuntimeException( "texture width and height must be square when using mipmapping." );
         }
 
         var width  = pixmap.Width / 2;

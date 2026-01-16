@@ -625,7 +625,7 @@ public class SelectBox< T > : Widget, IDisableable
             stage.AddCaptureListener( _hideListener );
 
             stage.AddListener( ListBox.KeyListener
-                               ?? throw new GdxRuntimeException( "No ListBox KeyListener available!" ) );
+                               ?? throw new RuntimeException( "No ListBox KeyListener available!" ) );
 
             SelectBox.LocalToStageCoordinates( _stagePosition.Set( 0, 0 ) );
 

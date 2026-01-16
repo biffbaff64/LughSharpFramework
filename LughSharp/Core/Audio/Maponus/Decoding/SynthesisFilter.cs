@@ -213,7 +213,7 @@ public class SynthesisFilter
     /// the current equalizer settings with a new array of factors. If not set or set to null,
     /// a default equalizer with all factors set to 1.0 will be applied.
     /// </summary>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown when the provided equalizer array has a length less than 32.
     /// </exception>
     public float[]? Eq
@@ -234,7 +234,7 @@ public class SynthesisFilter
 
             if ( _eq.Length < 32 )
             {
-                throw new GdxRuntimeException( "eq0" );
+                throw new RuntimeException( "eq0" );
             }
         }
     }

@@ -1249,7 +1249,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
             if ( i < 0 )
             {
-                throw new GdxRuntimeException( "CurrentIndex must not be < 0!" );
+                throw new RuntimeException( "CurrentIndex must not be < 0!" );
             }
 
             var mask = Map.Mask;
@@ -1306,19 +1306,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         /// Returns the next entry in the iteration.
         /// </summary>
         /// <returns>The next entry in the map.</returns>
-        /// <exception cref="GdxRuntimeException">
+        /// <exception cref="RuntimeException">
         /// Thrown if there are no more entries to iterate over, or if the iterator is nested.
         /// </exception>
         public virtual Entry Next()
         {
             if ( !HasNext )
             {
-                throw new GdxRuntimeException( "No more entries to iterate over!" );
+                throw new RuntimeException( "No more entries to iterate over!" );
             }
 
             if ( !Valid )
             {
-                throw new GdxRuntimeException( "#iterator() cannot be used nested." );
+                throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
             Entry.Key    = Map.KeyTable[ NextIndex ];
@@ -1361,19 +1361,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         /// Returns the next key in the iteration.
         /// </summary>
         /// <returns>The next key in the map.</returns>
-        /// <exception cref="GdxRuntimeException">
+        /// <exception cref="RuntimeException">
         /// Thrown if there are no more values to iterate over, or if the iterator is nested.
         /// </exception>
         public virtual TV? Next()
         {
             if ( !HasNext )
             {
-                throw new GdxRuntimeException( "HasNext : false!" );
+                throw new RuntimeException( "HasNext : false!" );
             }
 
             if ( !Valid )
             {
-                throw new GdxRuntimeException( "#iterator() cannot be used nested." );
+                throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
             var value = Map.ValueTable[ NextIndex ];
@@ -1437,19 +1437,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         /// Returns the next key in the iteration.
         /// </summary>
         /// <returns>The next key in the map.</returns>
-        /// <exception cref="GdxRuntimeException">
+        /// <exception cref="RuntimeException">
         /// Thrown if there are no more keys to iterate over, or if the iterator is nested.
         /// </exception>
         public virtual TK Next()
         {
             if ( !HasNext )
             {
-                throw new GdxRuntimeException( "HasNext : false!" );
+                throw new RuntimeException( "HasNext : false!" );
             }
 
             if ( !Valid )
             {
-                throw new GdxRuntimeException( "#iterator() cannot be used nested." );
+                throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
             var key = Map.KeyTable[ NextIndex ]!;

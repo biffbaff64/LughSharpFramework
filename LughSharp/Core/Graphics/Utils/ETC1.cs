@@ -132,7 +132,7 @@ public class ETC1
 
             // ----------------------------------
 
-            var _ => throw new GdxRuntimeException( "Can only handle RGB565 or RGB888 images" )
+            var _ => throw new RuntimeException( "Can only handle RGB565 or RGB888 images" )
         };
     }
 
@@ -333,7 +333,7 @@ public class ETC1
             }
             catch ( Exception e )
             {
-                throw new GdxRuntimeException( "Couldn't load pkm file '" + pkmFile + "'", e );
+                throw new RuntimeException( "Couldn't load pkm file '" + pkmFile + "'", e );
             }
             finally
             {
@@ -425,7 +425,7 @@ public class ETC1
 //            }
 //            catch ( System.Exception e )
 //            {
-//                throw new GdxRuntimeException( "Couldn't write PKM file to '" + file + "'", e );
+//                throw new RuntimeException( "Couldn't write PKM file to '" + file + "'", e );
 //            }
 //            finally
 //            {

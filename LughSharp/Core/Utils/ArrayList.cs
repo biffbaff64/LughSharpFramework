@@ -223,7 +223,7 @@ public class ArrayList< T >
 
         if ( Items == null )
         {
-            throw new GdxRuntimeException( "Items cannot be null!" );
+            throw new RuntimeException( "Items cannot be null!" );
         }
 
         if ( Count == Items.Length )
@@ -289,7 +289,7 @@ public class ArrayList< T >
 
         if ( Items == null )
         {
-            throw new GdxRuntimeException( "Items cannot be null!" );
+            throw new RuntimeException( "Items cannot be null!" );
         }
 
         ( Items[ first ], Items[ second ] ) = ( Items[ second ], Items[ first ] );
@@ -310,7 +310,7 @@ public class ArrayList< T >
     {
         if ( Items == null )
         {
-            throw new GdxRuntimeException( "Items cannot be null!" );
+            throw new RuntimeException( "Items cannot be null!" );
         }
 
         return Array.IndexOf( Items, value, 0, Count );
@@ -608,12 +608,12 @@ public class ArrayList< T >
     /// <param name="comparator"> The comparer to use. </param>
     /// <param name="kthLowest"> The rank. </param>
     /// <returns> The selected item. </returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public virtual T SelectRanked( IComparer< T > comparator, int kthLowest )
     {
         if ( kthLowest < 1 )
         {
-            throw new GdxRuntimeException( "nth_lowest must be greater than 0, 1 = first, 2 = second..." );
+            throw new RuntimeException( "nth_lowest must be greater than 0, 1 = first, 2 = second..." );
         }
 
         return Selector< T >.Instance.Select( Items, comparator, kthLowest, Count );
@@ -629,12 +629,12 @@ public class ArrayList< T >
     /// in runtime exception.
     /// </param>
     /// <returns> The index of the Nth lowest ranked object. </returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public virtual int SelectRankedIndex( IComparer< T > comparator, int kthLowest )
     {
         if ( kthLowest < 1 )
         {
-            throw new GdxRuntimeException( "nth_lowest must be greater than 0, 1 = first, 2 = second..." );
+            throw new RuntimeException( "nth_lowest must be greater than 0, 1 = first, 2 = second..." );
         }
 
         return Selector< T >.Instance.SelectIndex( Items, comparator, kthLowest, Count );

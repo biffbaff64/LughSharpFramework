@@ -121,7 +121,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// </summary>
     /// <param name="data"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public GLTextureArray( ITextureArrayData data )
         : base( IGL.GL_TEXTURE_2D_ARRAY, GL.GenTexture() )
     {
@@ -156,12 +156,12 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// </summary>
     /// <param name="data"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     private void Load( ITextureArrayData data )
     {
         if ( ( _data != null ) && ( data.Managed != _data.Managed ) )
         {
-            throw new GdxRuntimeException
+            throw new RuntimeException
                 ( "New data must have the same managed status as the old data" );
         }
 
@@ -196,12 +196,12 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// Attempts to reload the TextureArray.
     /// </summary>
-    /// <exception cref="GdxRuntimeException"> If the TextureArray is unmanaged. </exception>
+    /// <exception cref="RuntimeException"> If the TextureArray is unmanaged. </exception>
     public override void Reload()
     {
         if ( !IsManaged )
         {
-            throw new GdxRuntimeException( "Tried to reload an unmanaged TextureArray" );
+            throw new RuntimeException( "Tried to reload an unmanaged TextureArray" );
         }
 
         GLTextureHandle = GL.GenTexture();

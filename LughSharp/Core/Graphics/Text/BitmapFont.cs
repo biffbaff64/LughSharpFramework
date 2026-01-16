@@ -53,7 +53,7 @@ namespace LughSharp.Core.Graphics.Text;
 /// </para>
 /// </summary>
 [PublicAPI]
-public partial class BitmapFont
+public class BitmapFont
 {
     /// <summary>
     /// The BitmapFontCache used by this font, for rendering to a sprite batch.

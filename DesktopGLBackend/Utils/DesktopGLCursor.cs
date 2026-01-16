@@ -50,30 +50,30 @@ public class DesktopGLCursor : ICursor, IDisposable
 
         if ( pixmap.GetColorFormat() != LughFormat.RGBA8888 )
         {
-            throw new GdxRuntimeException( "Cursor image pixmap should be in RGBA8888 format." );
+            throw new RuntimeException( "Cursor image pixmap should be in RGBA8888 format." );
         }
 
         if ( ( pixmap.Width & ( pixmap.Width - 1 ) ) != 0 )
         {
-            throw new GdxRuntimeException( $"Cursor image pixmap width of {pixmap.Width} is "
+            throw new RuntimeException( $"Cursor image pixmap width of {pixmap.Width} is "
                                          + $"not a power-of-two greater than zero." );
         }
 
         if ( ( pixmap.Height & ( pixmap.Height - 1 ) ) != 0 )
         {
-            throw new GdxRuntimeException( $"Cursor image pixmap height of {pixmap.Height} "
+            throw new RuntimeException( $"Cursor image pixmap height of {pixmap.Height} "
                                          + $"is not a power-of-two greater than zero." );
         }
 
         if ( ( xHotspot < 0 ) || ( xHotspot >= pixmap.Width ) )
         {
-            throw new GdxRuntimeException( $"xHotspot coordinate of {xHotspot} is not within "
+            throw new RuntimeException( $"xHotspot coordinate of {xHotspot} is not within "
                                          + $"image width bounds: [0, {pixmap.Width})." );
         }
 
         if ( ( yHotspot < 0 ) || ( yHotspot >= pixmap.Height ) )
         {
-            throw new GdxRuntimeException( $"yHotspot coordinate of {yHotspot} is not within "
+            throw new RuntimeException( $"yHotspot coordinate of {yHotspot} is not within "
                                          + $"image height bounds: [0, {pixmap.Height})." );
         }
 
@@ -135,7 +135,7 @@ public class DesktopGLCursor : ICursor, IDisposable
         {
             if ( PixmapCopy == null )
             {
-                throw new GdxRuntimeException( "Cursor already disposed" );
+                throw new RuntimeException( "Cursor already disposed" );
             }
 
             Cursors.Remove( this );

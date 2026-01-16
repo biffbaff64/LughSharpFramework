@@ -94,7 +94,7 @@ public class ImageProcessor
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( $"Error reading image: {file}", ex );
+            throw new RuntimeException( $"Error reading image: {file}", ex );
         }
 
         var name = IOUtils.NormalizePath( file.FullName );
@@ -168,7 +168,7 @@ public class ImageProcessor
     {
         if ( image == null )
         {
-            throw new GdxRuntimeException( $"Unable to read image: {name}" );
+            throw new RuntimeException( $"Unable to read image: {name}" );
         }
 
         name ??= string.Empty;
@@ -709,7 +709,7 @@ public class ImageProcessor
                                        || ( rgba[ 3 ] != 255 ) ) )
                     {
                         throw new
-                            GdxRuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
+                            RuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
                     }
 
                     next++;

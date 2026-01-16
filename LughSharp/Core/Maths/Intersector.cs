@@ -1274,7 +1274,7 @@ public class Intersector
 
         if ( ( triangles.Length % 9 ) != 0 )
         {
-            throw new GdxRuntimeException( "triangles array size is not a multiple of 9" );
+            throw new RuntimeException( "triangles array size is not a multiple of 9" );
         }
 
         for ( var i = 0; i < triangles.Length; i += 9 )
@@ -1330,7 +1330,7 @@ public class Intersector
 
         if ( ( indices.Length % 3 ) != 0 )
         {
-            throw new GdxRuntimeException( "triangle list size is not a multiple of 3" );
+            throw new RuntimeException( "triangle list size is not a multiple of 3" );
         }
 
         for ( var i = 0; i < indices.Length; i += 3 )
@@ -1384,7 +1384,7 @@ public class Intersector
 
         if ( ( triangles.Count % 3 ) != 0 )
         {
-            throw new GdxRuntimeException( "triangle list size is not a multiple of 3" );
+            throw new RuntimeException( "triangle list size is not a multiple of 3" );
         }
 
         for ( var i = 0; i < triangles.Count; i += 3 )

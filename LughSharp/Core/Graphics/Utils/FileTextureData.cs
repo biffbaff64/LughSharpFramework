@@ -161,14 +161,14 @@ public class FileTextureData : ITextureData
     {
         if ( !IsPrepared )
         {
-            throw new GdxRuntimeException( "Call prepare() before calling FetchPixmap()" );
+            throw new RuntimeException( "Call prepare() before calling FetchPixmap()" );
         }
 
         var pixmap = _pixmap;
 
         if ( pixmap == null )
         {
-            throw new GdxRuntimeException( "FetchPixmap() resulted in a null Pixmap!" );
+            throw new RuntimeException( "FetchPixmap() resulted in a null Pixmap!" );
         }
 
         // Transfer ownership to caller and clear internal reference
@@ -198,7 +198,7 @@ public class FileTextureData : ITextureData
     /// </summary>
     public virtual void ConsumeCustomData( int target )
     {
-        throw new GdxRuntimeException( "This TextureData implementation does not upload data itself" );
+        throw new RuntimeException( "This TextureData implementation does not upload data itself" );
     }
 
     /// <summary>

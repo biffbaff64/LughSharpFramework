@@ -452,12 +452,12 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         {
             if ( !HasNext )
             {
-                throw new GdxRuntimeException( "No Such Element" );
+                throw new RuntimeException( "No Such Element" );
             }
 
             if ( !Valid )
             {
-                throw new GdxRuntimeException( "#iterator() cannot be used nested." );
+                throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
             CurrentIndex = NextIndex;
@@ -513,12 +513,12 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         {
             if ( !HasNext )
             {
-                throw new GdxRuntimeException( "No Such Element." );
+                throw new RuntimeException( "No Such Element." );
             }
 
             if ( !Valid )
             {
-                throw new GdxRuntimeException( "#iterator() cannot be used nested." );
+                throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
             var key = _keys[ NextIndex ];
@@ -589,12 +589,12 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         {
             if ( !HasNext )
             {
-                throw new GdxRuntimeException( "No Such Element" );
+                throw new RuntimeException( "No Such Element" );
             }
 
             if ( !Valid )
             {
-                throw new GdxRuntimeException( "#iterator() cannot be used nested." );
+                throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
             var value = Map.Get( _keys[ NextIndex ] );

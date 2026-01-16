@@ -104,7 +104,7 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
     /// </summary>
     /// <param name="imageProcessor"></param>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public Bitmap GetImage( ImageProcessor imageProcessor )
     {
         if ( _image != null )
@@ -120,19 +120,19 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
         }
         catch ( IOException ex )
         {
-            throw new GdxRuntimeException( $"Error reading image: {_file.FullName}", ex );
+            throw new RuntimeException( $"Error reading image: {_file.FullName}", ex );
         }
 
         if ( bitmap == null )
         {
-            throw new GdxRuntimeException( $"Unable to read image: {_file.FullName}" );
+            throw new RuntimeException( $"Unable to read image: {_file.FullName}" );
         }
 
         var name = _isPatch ? $"{Name}.9" : Name;
         var rect = imageProcessor.ProcessImage( bitmap, name );
 
         return rect == null
-            ? throw new GdxRuntimeException( "ProcessImage returned null" )
+            ? throw new RuntimeException( "ProcessImage returned null" )
             : rect.GetImage( imageProcessor );
     }
 

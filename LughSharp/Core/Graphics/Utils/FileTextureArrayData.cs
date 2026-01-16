@@ -125,7 +125,7 @@ public class FileTextureArrayData : ITextureArrayData
 
             if ( ( width != data.Width ) || ( height != data.Height ) )
             {
-                throw new GdxRuntimeException( "Error whilst preparing TextureArray:"
+                throw new RuntimeException( "Error whilst preparing TextureArray:"
                                                + "TextureArray Textures must have equal dimensions." );
             }
         }

@@ -474,7 +474,7 @@ public unsafe partial class GLBindings
 
         if ( ( value.Length % 16 ) != 0 )
         {
-            throw new GdxRuntimeException( $"Error: value array length ({value.Length}) is not a multiple " +
+            throw new RuntimeException( $"Error: value array length ({value.Length}) is not a multiple " +
                                            $"of 16.  Must provide a whole number of 4x4 matrices." );
         }
 
@@ -490,7 +490,7 @@ public unsafe partial class GLBindings
 
             if ( error != IGL.GL_NO_ERROR )
             {
-                throw new GdxRuntimeException( $"OpenGL Error: {error} after glUniformMatrix4fv. Location: {location}, " +
+                throw new RuntimeException( $"OpenGL Error: {error} after glUniformMatrix4fv. Location: {location}, " +
                                                $"Matrix Count: {matrixCount}, Transpose: {transpose}" );
             }
         }

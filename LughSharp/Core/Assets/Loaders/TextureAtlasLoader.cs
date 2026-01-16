@@ -53,14 +53,14 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
     /// <param name="file">The file information of the texture atlas.</param>
     /// <param name="parameter">The parameters for loading the texture atlas.</param>
     /// <returns>The loaded texture atlas.</returns>
-    /// <exception cref="GdxRuntimeException">Thrown if the texture atlas data is null.</exception>
+    /// <exception cref="RuntimeException">Thrown if the texture atlas data is null.</exception>
     public override TextureAtlas Load( AssetManager assetManager, FileInfo? file, AssetLoaderParameters? parameter )
     {
         Logger.Checkpoint();
         
         if ( _data == null )
         {
-            throw new GdxRuntimeException( "TextureAtlasData cannot be null!" );
+            throw new RuntimeException( "TextureAtlasData cannot be null!" );
         }
 
         foreach ( var page in _data.Pages )

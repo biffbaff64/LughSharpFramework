@@ -44,7 +44,7 @@ public static class CIM
     /// </summary>
     /// <param name="file"></param>
     /// <param name="pixmap"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public static void Write( FileInfo file, Pixmap pixmap )
     {
         try
@@ -81,7 +81,7 @@ public static class CIM
         }
         catch ( Exception e )
         {
-            throw new GdxRuntimeException( "Couldn't write Pixmap to file '" + file + "'", e );
+            throw new RuntimeException( "Couldn't write Pixmap to file '" + file + "'", e );
         }
     }
 
@@ -89,7 +89,7 @@ public static class CIM
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public static Pixmap Read( FileInfo file )
     {
         try
@@ -121,7 +121,7 @@ public static class CIM
         }
         catch ( Exception e )
         {
-            throw new GdxRuntimeException( "Couldn't read Pixmap from file '" + file + "'", e );
+            throw new RuntimeException( "Couldn't read Pixmap from file '" + file + "'", e );
         }
     }
 }

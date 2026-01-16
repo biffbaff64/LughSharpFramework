@@ -64,7 +64,7 @@ public class Files : IFiles
 
             // ----------------------------------
 
-            var _ => throw new GdxRuntimeException( $"Invalid path type: {type}\nValid types are: " +
+            var _ => throw new RuntimeException( $"Invalid path type: {type}\nValid types are: " +
                                                     $"Classpath, Internal, Absolute, " +
                                                     $"Assembly, External, Local" ),
         };
@@ -91,7 +91,7 @@ public class Files : IFiles
         // Prevent path traversal attacks
         if ( path.Contains( ".." ) )
         {
-            throw new GdxRuntimeException( $"Path traversal is not allowed in classpath resources: {path}\n" +
+            throw new RuntimeException( $"Path traversal is not allowed in classpath resources: {path}\n" +
                                            "Example valid path: 'Resources/Textures/sprite.png'\n" +
                                            "Note: '../' is not allowed for security reasons. Use absolute " +
                                            "paths or paths relative to the classpath root." );
@@ -114,7 +114,7 @@ public class Files : IFiles
             {
                 // If found in assembly resources, create a FileInfo pointing to the assembly location
                 var assemblyLocation = Path.GetDirectoryName( assembly.Location )
-                                       ?? throw new GdxRuntimeException( "Unable to determine assembly location" );
+                                       ?? throw new RuntimeException( "Unable to determine assembly location" );
 
                 return new FileInfo( Path.Combine( assemblyLocation, path ) );
             }
@@ -127,14 +127,14 @@ public class Files : IFiles
                 return classpathFile;
             }
 
-            throw new GdxRuntimeException( $"Classpath resource not found: {path}\n" +
+            throw new RuntimeException( $"Classpath resource not found: {path}\n" +
                                            "Example valid path: 'Resources/Textures/sprite.png'\n" +
                                            "Note: Make sure the file exists and is included " +
                                            "as an embedded resource." );
         }
-        catch ( Exception ex ) when ( ex is not GdxRuntimeException )
+        catch ( Exception ex ) when ( ex is not RuntimeException )
         {
-            throw new GdxRuntimeException( $"Error accessing classpath resource: {path}\n" +
+            throw new RuntimeException( $"Error accessing classpath resource: {path}\n" +
                                            "Example valid path: 'Resources/Textures/sprite.png'", ex );
         }
     }
@@ -157,7 +157,7 @@ public class Files : IFiles
 
         if ( !IsInternalStorageAvailable() )
         {
-            throw new GdxRuntimeException( $"Internal storage is not available for path: {path}\n" +
+            throw new RuntimeException( $"Internal storage is not available for path: {path}\n" +
                                            "Example valid path: 'Assets/Config/settings.json'\n" +
                                            "Note: Check if the application has proper permissions " +
                                            "and storage is mounted." );
@@ -167,7 +167,7 @@ public class Files : IFiles
 
         if ( path.Contains( ".." ) )
         {
-            throw new GdxRuntimeException( $"Path traversal is not allowed in internal storage: {path}\n" +
+            throw new RuntimeException( $"Path traversal is not allowed in internal storage: {path}\n" +
                                            "Example valid path: 'Assets/Config/settings.json'\n" +
                                            "Note: '../' is not allowed for security reasons. " +
                                            "Use paths relative to internal storage root." );
@@ -187,7 +187,7 @@ public class Files : IFiles
         var path = IOUtils.InternalPath;
 
         return string.IsNullOrEmpty( path )
-            ? throw new GdxRuntimeException( "Could not determine internal storage path" )
+            ? throw new RuntimeException( "Could not determine internal storage path" )
             : path;
     }
 
@@ -231,7 +231,7 @@ public class Files : IFiles
 
         if ( !Path.IsPathRooted( path ) )
         {
-            throw new GdxRuntimeException( $"Invalid absolute path: {path}\n" +
+            throw new RuntimeException( $"Invalid absolute path: {path}\n" +
                                            "Example Windows: 'C:/Games/MyGame/config.json'\n" +
                                            "Example Unix: '/usr/local/share/game/config.json'\n" +
                                            "Note: Absolute paths must be fully qualified from the root directory." );
@@ -258,7 +258,7 @@ public class Files : IFiles
 
         if ( !IsExternalStorageAvailable() )
         {
-            throw new GdxRuntimeException( $"External storage is not available for path: {path}\n" +
+            throw new RuntimeException( $"External storage is not available for path: {path}\n" +
                                            "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
                                            "Note: Check if external storage is mounted and accessible." );
         }
@@ -267,7 +267,7 @@ public class Files : IFiles
 
         if ( path.Contains( ".." ) )
         {
-            throw new GdxRuntimeException( $"Path traversal is not allowed in external storage: {path}\n" +
+            throw new RuntimeException( $"Path traversal is not allowed in external storage: {path}\n" +
                                            "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
                                            "Note: '../' is not allowed for security reasons. " +
                                            "Use paths relative to external storage root." );
@@ -288,7 +288,7 @@ public class Files : IFiles
 
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new GdxRuntimeException( "Could not determine external storage path" );
+            throw new RuntimeException( "Could not determine external storage path" );
         }
 
         return path;
@@ -333,7 +333,7 @@ public class Files : IFiles
 
         if ( path.Contains( ".." ) )
         {
-            throw new GdxRuntimeException( $"Path traversal is not allowed in assets storage: {path}\n" +
+            throw new RuntimeException( $"Path traversal is not allowed in assets storage: {path}\n" +
                                            "Example valid path: 'Textures/sprite.png'\n" +
                                            "Note: '../' is not allowed for security reasons. " +
                                            "Use paths relative to internal storage root." );
@@ -352,7 +352,7 @@ public class Files : IFiles
         var path = IOUtils.AssetsRoot;
 
         return string.IsNullOrEmpty( path )
-            ? throw new GdxRuntimeException( "Could not determine default assets storage path" )
+            ? throw new RuntimeException( "Could not determine default assets storage path" )
             : path;
     }
     
@@ -376,7 +376,7 @@ public class Files : IFiles
 
         if ( path.Contains( ".." ) )
         {
-            throw new GdxRuntimeException( $"Path traversal is not allowed in assembly resources: {path}\n" +
+            throw new RuntimeException( $"Path traversal is not allowed in assembly resources: {path}\n" +
                                            "Example valid path: 'Resources/Shaders/default.glsl'\n" +
                                            "Note: '../' is not allowed for security reasons. " +
                                            "Use paths relative to assembly location." );
@@ -396,7 +396,7 @@ public class Files : IFiles
         var path = IOUtils.AssemblyDirectory;
 
         return string.IsNullOrEmpty( path )
-            ? throw new GdxRuntimeException( "Could not determine assembly storage path" )
+            ? throw new RuntimeException( "Could not determine assembly storage path" )
             : path;
     }
 
@@ -437,7 +437,7 @@ public class Files : IFiles
 
         if ( !IsLocalStorageAvailable() )
         {
-            throw new GdxRuntimeException( $"Local storage is not available for path: {path}\n" +
+            throw new RuntimeException( $"Local storage is not available for path: {path}\n" +
                                            "Example valid path: 'UserData/preferences.xml'\n" +
                                            "Note: Check if local storage directory exists and is accessible." );
         }
@@ -446,7 +446,7 @@ public class Files : IFiles
 
         if ( path.Contains( ".." ) )
         {
-            throw new GdxRuntimeException( $"Path traversal is not allowed in local storage: {path}\n" +
+            throw new RuntimeException( $"Path traversal is not allowed in local storage: {path}\n" +
                                            "Example valid path: 'UserData/preferences.xml'\n" +
                                            "Note: '../' is not allowed for security reasons. " +
                                            "Use paths relative to local storage root." );
@@ -466,7 +466,7 @@ public class Files : IFiles
         var path = IOUtils.LocalPath;
 
         return string.IsNullOrEmpty( path )
-            ? throw new GdxRuntimeException( "Could not determine local storage path" )
+            ? throw new RuntimeException( "Could not determine local storage path" )
             : path;
     }
 

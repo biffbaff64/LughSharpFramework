@@ -283,7 +283,7 @@ public class FacedCubemapData : ICubemapData
     {
         if ( !IsComplete() )
         {
-            throw new GdxRuntimeException( "Cubemap data must be complete before use!" );
+            throw new RuntimeException( "Cubemap data must be complete before use!" );
         }
 
         foreach ( var data in _data )
@@ -307,11 +307,11 @@ public class FacedCubemapData : ICubemapData
     {
         if ( _data == null )
         {
-            throw new GdxRuntimeException( $"Cannot load {file.Name}, _data is null!" );
+            throw new RuntimeException( $"Cannot load {file.Name}, _data is null!" );
         }
 
         _data[ side.Index ] = TextureDataFactory.LoadFromFile( file, false )
-                              ?? throw new GdxRuntimeException( $"Error loading {file.Name}" );
+                              ?? throw new RuntimeException( $"Error loading {file.Name}" );
     }
 
     /// <summary>
@@ -326,11 +326,11 @@ public class FacedCubemapData : ICubemapData
     {
         if ( _data == null )
         {
-            throw new GdxRuntimeException( "Cannot load pixmap, _data is null!" );
+            throw new RuntimeException( "Cannot load pixmap, _data is null!" );
         }
 
         _data[ side.Index ] = ( pixmap == null ? null : new PixmapTextureData( pixmap, 0, false, false ) )
-                              ?? throw new GdxRuntimeException( "Error loadin pixmap" );
+                              ?? throw new RuntimeException( "Error loadin pixmap" );
     }
 
     /// <summary>

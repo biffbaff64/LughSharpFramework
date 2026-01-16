@@ -1150,7 +1150,7 @@ public class TextField : Widget
         {
             if ( _tf is not { _blinkTask: not null } )
             {
-                throw new GdxRuntimeException( "Unable to start BlinkTask" );
+                throw new RuntimeException( "Unable to start BlinkTask" );
             }
 
             _tf._blinkTask.Start();
@@ -1203,7 +1203,7 @@ public class TextField : Widget
         {
             if ( _tf is not { _keyRepeatTask: not null } )
             {
-                throw new GdxRuntimeException( "Unable to start KeyRepeatTask" );
+                throw new RuntimeException( "Unable to start KeyRepeatTask" );
             }
 
             _tf._keyRepeatTask.Start();

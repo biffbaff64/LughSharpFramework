@@ -157,7 +157,7 @@ public class ShapeRenderer : IDisposable
 
         if ( type == null )
         {
-            throw new GdxRuntimeException( "Cannot BEGIN with NULL shape!" );
+            throw new RuntimeException( "Cannot BEGIN with NULL shape!" );
         }
 
         ShapeType = type;
@@ -1230,7 +1230,7 @@ public class ShapeRenderer : IDisposable
     {
         if ( ShapeType == null )
         {
-            throw new GdxRuntimeException( "Begin() must be called first." );
+            throw new RuntimeException( "Begin() must be called first." );
         }
 
         if ( ( ShapeType != preferred ) && ( ShapeType != other ) )
@@ -1239,10 +1239,10 @@ public class ShapeRenderer : IDisposable
             {
                 if ( other == null )
                 {
-                    throw new GdxRuntimeException( $"Must call Begin(ShapeType.{preferred})." );
+                    throw new RuntimeException( $"Must call Begin(ShapeType.{preferred})." );
                 }
 
-                throw new GdxRuntimeException( $"Must call Begin(ShapeType.{preferred}) or Begin(ShapeType.{other})." );
+                throw new RuntimeException( $"Must call Begin(ShapeType.{preferred}) or Begin(ShapeType.{other})." );
             }
 
             Flush( preferred );

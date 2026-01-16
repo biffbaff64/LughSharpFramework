@@ -354,7 +354,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new GdxRuntimeException( "Null InputEvent for TouchDown!" );
+            throw new RuntimeException( "Null InputEvent for TouchDown!" );
         }
 
         inputEvent.Type    = InputEvent.EventType.TouchDown;
@@ -408,7 +408,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new GdxRuntimeException( "Null InputEvent for TouchDragged!" );
+            throw new RuntimeException( "Null InputEvent for TouchDragged!" );
         }
 
         inputEvent.Type    = InputEvent.EventType.TouchDragged;

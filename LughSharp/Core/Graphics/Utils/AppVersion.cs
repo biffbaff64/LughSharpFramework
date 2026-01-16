@@ -57,7 +57,7 @@ public class AppVersion
             Platform.ApplicationType.WebGL       => GraphicsBackend.BackendType.WebGL,
             Platform.ApplicationType.IOS         => GraphicsBackend.BackendType.IOSGLES,
 
-            var _ => throw new GdxRuntimeException( $"Unknown Platform ApplicationType: {appType}" ),
+            var _ => throw new RuntimeException( $"Unknown Platform ApplicationType: {appType}" ),
         };
 
         OpenGL.OpenGL.Initialisation.LoadVersion();

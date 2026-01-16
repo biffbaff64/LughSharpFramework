@@ -297,8 +297,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     public void Put( T[] array, int srcOffset, int dstOffset, int count )
     {
-        Guard.ThrowIfNull( array );
-
         if ( ( srcOffset < 0 ) || ( ( srcOffset + count ) > array.Length ) )
         {
             throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset is out of range." );

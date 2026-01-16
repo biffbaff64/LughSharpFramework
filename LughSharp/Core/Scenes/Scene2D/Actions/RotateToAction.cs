@@ -63,7 +63,7 @@ public class RotateToAction : TemporalAction
     {
         if ( Target == null )
         {
-            throw new GdxRuntimeException( "Cannot Begin with null Target Actor!" );
+            throw new RuntimeException( "Cannot Begin with null Target Actor!" );
         }
 
         Start = Target.Rotation;

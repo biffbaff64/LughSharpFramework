@@ -85,12 +85,12 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     {
         if ( manager == null )
         {
-            throw new GdxRuntimeException( "NULL AssetManager passed to TextureLoader.loadAsync" );
+            throw new RuntimeException( "NULL AssetManager passed to TextureLoader.loadAsync" );
         }
 
         if ( string.IsNullOrEmpty( filename ) )
         {
-            throw new GdxRuntimeException( "filename cannot be null or empty" );
+            throw new RuntimeException( "filename cannot be null or empty" );
         }
 
         var p = parameter as TextureLoaderParameters;

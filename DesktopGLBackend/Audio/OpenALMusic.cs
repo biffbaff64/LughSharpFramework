@@ -94,7 +94,7 @@ public abstract class OpenALMusic : IMusic
 
                 if ( err != AL.NO_ERROR )
                 {
-                    throw new GdxRuntimeException( $"Unable to allocate audio buffers. AL Error: {err}" );
+                    throw new RuntimeException( $"Unable to allocate audio buffers. AL Error: {err}" );
                 }
             }
 

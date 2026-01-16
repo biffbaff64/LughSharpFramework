@@ -586,7 +586,7 @@ public class ParticleEmitter
 
         if ( sprite == null )
         {
-            throw new GdxRuntimeException( "sprite cannot be null!" );
+            throw new RuntimeException( "sprite cannot be null!" );
         }
 
         if ( _particles[ index ] == null )
@@ -1094,7 +1094,7 @@ public class ParticleEmitter
     {
         if ( Sprites.Count == 0 )
         {
-            throw new GdxRuntimeException( "ParticleEmitter.SetSprites() must have been called before PreAllocateParticles()" );
+            throw new RuntimeException( "ParticleEmitter.SetSprites() must have been called before PreAllocateParticles()" );
         }
 
         for ( var index = 0; index < _particles.Length; index++ )
@@ -1494,7 +1494,7 @@ public class ParticleEmitter
         catch ( Exception ex )
         {
             //TODO: ???
-            throw new GdxRuntimeException( "Error parsing emitter: " + Name, ex );
+            throw new RuntimeException( "Error parsing emitter: " + Name, ex );
         }
     }
 

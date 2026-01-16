@@ -193,12 +193,12 @@ public class PredicateIterator<T> : IEnumerator<T>, IDisposable
     /// <summary>
     /// Removes the current element from the underlying collection.
     /// </summary>
-    /// <exception cref="GdxRuntimeException"> Thrown if called between HasNext() and Next(). </exception>
+    /// <exception cref="RuntimeException"> Thrown if called between HasNext() and Next(). </exception>
     public void Remove()
     {
         if ( Peeked )
         {
-            throw new GdxRuntimeException( "Cannot remove between a call to HasNext() and Next()." );
+            throw new RuntimeException( "Cannot remove between a call to HasNext() and Next()." );
         }
 
         Enumerator.Dispose();

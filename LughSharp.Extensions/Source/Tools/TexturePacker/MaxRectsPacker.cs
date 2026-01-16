@@ -60,12 +60,12 @@ public class MaxRectsPacker : IPacker
 
         if ( settings.MinWidth >= settings.MaxWidth )
         {
-            throw new GdxRuntimeException( "Page min width MUST be less than max width." );
+            throw new RuntimeException( "Page min width MUST be less than max width." );
         }
 
         if ( settings.MinHeight >= settings.MaxHeight )
         {
-            throw new GdxRuntimeException( "Page min height MUST be less than max height." );
+            throw new RuntimeException( "Page min height MUST be less than max height." );
         }
     }
 
@@ -162,7 +162,7 @@ public class MaxRectsPacker : IPacker
     /// Returns a TexturePackerPage instance containing the packed rectangles.
     /// If the packing fails, a fallback empty page may be created and returned.
     /// </returns>
-    /// <exception cref="GdxRuntimeException">
+    /// <exception cref="RuntimeException">
     /// Thrown when an error occurs during the packing process, such as invalid settings
     /// or input data.
     /// </exception>
@@ -218,7 +218,7 @@ public class MaxRectsPacker : IPacker
                         ? $" and edge padding {paddingX} *2, {paddingY} *2"
                         : "";
 
-                    throw new GdxRuntimeException( $"Image does not fit within max page size " +
+                    throw new RuntimeException( $"Image does not fit within max page size " +
                                                    $"{_settings.MaxWidth}x{_settings.MaxHeight}" +
                                                    $"{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
@@ -229,7 +229,7 @@ public class MaxRectsPacker : IPacker
                 {
                     var paddingMessage = edgePadX ? $" and X edge padding {_settings.PaddingX} *2" : "";
 
-                    throw new GdxRuntimeException( $"Image does not fit within max page width " +
+                    throw new RuntimeException( $"Image does not fit within max page width " +
                                                    $"{_settings.MaxWidth}{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
 
@@ -237,7 +237,7 @@ public class MaxRectsPacker : IPacker
                 {
                     var paddingMessage = edgePadY ? $" and Y edge padding {_settings.PaddingY} *2" : "";
 
-                    throw new GdxRuntimeException( $"Image does not fit within max page height " +
+                    throw new RuntimeException( $"Image does not fit within max page height " +
                                                    $"{_settings.MaxHeight}{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
             }

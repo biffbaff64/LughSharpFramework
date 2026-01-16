@@ -174,11 +174,11 @@ public class AssetLoadingTask : IAssetTask
                     }
                     catch ( Exception e )
                     {
-                        // C# interpolated string and retaining GdxRuntimeException
+                        // C# interpolated string and retaining RuntimeException
                         // Get the first inner exception, which is usually the original exception.
                         var inner = e.InnerException ?? e;
 
-                        throw new GdxRuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", inner );
+                        throw new RuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", inner );
                     }
 
                     DependenciesLoaded = true;
@@ -207,7 +207,7 @@ public class AssetLoadingTask : IAssetTask
                 }
                 catch ( Exception e )
                 {
-                    throw new GdxRuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", e );
+                    throw new RuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", e );
                 }
 
                 Asset = asyncLoader.LoadSync( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters );

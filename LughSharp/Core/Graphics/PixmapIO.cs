@@ -39,7 +39,7 @@ public static class PixmapIO
     /// bytes are zlib compressed pixels. To be able to load the Pixmap to a Texture,
     /// use ".cim" as the file suffix.
     /// <para>
-    /// Throws a GdxRuntimeException if the Pixmap couldn't be written to the file.
+    /// Throws a RuntimeException if the Pixmap couldn't be written to the file.
     /// </para>
     /// </summary>
     /// <param name="file">The file to write the Pixmap to.</param>
@@ -53,7 +53,7 @@ public static class PixmapIO
     /// Reads the <see cref="Pixmap"/> from the given file, assuming the Pixmap was
     /// written with the <see cref="PixmapIO.WriteCIM(FileInfo, Pixmap)"/> method.
     /// <para>
-    /// Throws a GdxRuntimeException in case the file couldn't be read.
+    /// Throws a RuntimeException in case the file couldn't be read.
     /// </para>
     /// </summary>
     /// <param name="file"> the file to read the Pixmap from  </param>
@@ -96,7 +96,7 @@ public static class PixmapIO
         }
         catch ( IOException ex )
         {
-            throw new GdxRuntimeException( "Error writing PNG: " + file, ex );
+            throw new RuntimeException( "Error writing PNG: " + file, ex );
         }
     }
 }

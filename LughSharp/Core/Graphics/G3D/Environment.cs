@@ -77,7 +77,7 @@ public class Environment : AttributesGroup
         }
         else
         {
-            throw new GdxRuntimeException( "Unknown light type" );
+            throw new RuntimeException( "Unknown light type" );
         }
 
         return this;
@@ -161,7 +161,7 @@ public class Environment : AttributesGroup
         }
         else
         {
-            throw new GdxRuntimeException( "Unknown light type" );
+            throw new RuntimeException( "Unknown light type" );
         }
 
         return this;

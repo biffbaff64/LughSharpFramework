@@ -83,7 +83,7 @@ public class TextureRegion
     /// </summary>
     public TextureRegion( Texture? texture )
     {
-        Texture = texture ?? throw new GdxRuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
 
         SetRegion( 0, 0, texture.Width, texture.Height );
     }
@@ -120,7 +120,7 @@ public class TextureRegion
     /// </param>
     public TextureRegion( Texture? texture, int x, int y, int width, int height )
     {
-        Texture = texture ?? throw new GdxRuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
         SetRegion( x, y, width, height );
     }
 
@@ -133,10 +133,10 @@ public class TextureRegion
     /// <param name="v"></param>
     /// <param name="u2"></param>
     /// <param name="v2"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public TextureRegion( Texture? texture, float u, float v, float u2, float v2 )
     {
-        Texture = texture ?? throw new GdxRuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
         SafeSetRegion( u, v, u2, v2 );
     }
 
@@ -186,12 +186,12 @@ public class TextureRegion
     /// <param name="y"></param>
     /// <param name="width"></param>
     /// <param name="height"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public void SetRegion( int x, int y, int width, int height )
     {
         if ( Texture == null )
         {
-            throw new GdxRuntimeException( "Texture cannot be null" );
+            throw new RuntimeException( "Texture cannot be null" );
         }
 
         var invTexWidth  = 1f / Texture.Width;
@@ -209,12 +209,12 @@ public class TextureRegion
     /// <param name="v"></param>
     /// <param name="u2"></param>
     /// <param name="v2"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public virtual void SetRegion( float u, float v, float u2, float v2 )
     {
         if ( Texture == null )
         {
-            throw new GdxRuntimeException( "Texture cannot be null" );
+            throw new RuntimeException( "Texture cannot be null" );
         }
 
         var texWidth  = Texture.Width;

@@ -227,7 +227,7 @@ public class IndexBufferObject : IIndexData
     {
         if ( BufferID == 0 )
         {
-            throw new GdxRuntimeException( "No buffer allocated!" );
+            throw new RuntimeException( "No buffer allocated!" );
         }
 
         GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )BufferID );

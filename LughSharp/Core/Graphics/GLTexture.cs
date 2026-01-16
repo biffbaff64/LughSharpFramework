@@ -481,14 +481,14 @@ public abstract class GLTexture : IDisposable
     /// 
     /// </summary>
     /// <param name="operation"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     private static void CheckGLError( string operation )
     {
         var error = GL.GetError();
 
         if ( error != ( int )DotGLFW.ErrorCode.NoError )
         {
-            throw new GdxRuntimeException( $"OpenGL error during {operation}: {error}" );
+            throw new RuntimeException( $"OpenGL error during {operation}: {error}" );
         }
     }
 

@@ -1237,7 +1237,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
@@ -1251,7 +1251,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
@@ -1268,7 +1268,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
@@ -1280,7 +1280,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         var nameBytes = Encoding.UTF8.GetBytes( name );
@@ -1300,7 +1300,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
@@ -1312,7 +1312,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         var name = new GLchar[ bufSize ];
@@ -1336,7 +1336,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
@@ -1349,7 +1349,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
@@ -1377,7 +1377,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         var nameBytes = Encoding.UTF8.GetBytes( name );
@@ -1396,7 +1396,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
@@ -1409,7 +1409,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+            throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
         var nameBytes = Encoding.UTF8.GetBytes( name );

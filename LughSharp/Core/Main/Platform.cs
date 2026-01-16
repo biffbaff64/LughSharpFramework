@@ -147,7 +147,7 @@ public static class Platform
     /// The target platform for the app.
     /// Must be one of the enum <see cref="ApplicationType"/>
     /// </summary>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public static ApplicationType TargetPlatform
     {
         get;
@@ -173,7 +173,7 @@ public static class Platform
 
                            // ----------------------------------------
 
-                           var _ => throw new GdxRuntimeException( $"Unsupported Target Platform: {value.ToString()}" ),
+                           var _ => throw new RuntimeException( $"Unsupported Target Platform: {value.ToString()}" ),
                        };
     }
 
@@ -181,7 +181,7 @@ public static class Platform
     /// The target family group (mobile, console, desktop etc).
     /// Must be one of the enum <see cref="Family"/>.
     /// </summary>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public static Family FamilyGroup
     {
         get;
@@ -196,7 +196,7 @@ public static class Platform
 
                            // ----------------------------------------
 
-                           var _ => throw new GdxRuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
+                           var _ => throw new RuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
                        };
     }
 

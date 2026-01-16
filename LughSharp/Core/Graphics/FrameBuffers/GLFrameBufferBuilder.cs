@@ -193,9 +193,9 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <summary>
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="RuntimeException"></exception>
     public virtual object Build()
     {
-        throw new GdxRuntimeException( "This method must be overriden by derived class(es)" );
+        throw new RuntimeException( "This method must be overriden by derived class(es)" );
     }
 }

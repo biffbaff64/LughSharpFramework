@@ -275,7 +275,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
                    // ----------------------------------
 
-                   var _ => throw new GdxRuntimeException( $"Unknown MouseButton: {button}" ),
+                   var _ => throw new RuntimeException( $"Unknown MouseButton: {button}" ),
                };
     }
 
