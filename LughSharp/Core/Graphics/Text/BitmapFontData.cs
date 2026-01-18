@@ -140,6 +140,7 @@ public class BitmapFontData
     }
 
     /// <summary>
+    /// Creates a new BitmapFontData instance, using the provided fontfile.
     /// </summary>
     /// <param name="fontFile"></param>
     /// <param name="flip"></param>
@@ -154,6 +155,7 @@ public class BitmapFontData
     // ====================================================================
 
     /// <summary>
+    /// 
     /// </summary>
     /// <param name="file"></param>
     /// <param name="flip"></param>
@@ -211,7 +213,7 @@ public class BitmapFontData
             {
                 throw new RuntimeException( "Invalid common header." );
             }
-            
+
             if ( !common[ 1 ].StartsWith( "lineHeight=" ) )
             {
                 throw new RuntimeException( "Missing: lineHeight" );
@@ -443,8 +445,8 @@ public class BitmapFontData
                     if ( !int.TryParse( parts[ currentPartIndex ], out var val ) )
                     {
                         throw new RuntimeException( $"Invalid number format on char " +
-                                                       $"line for {parts[ currentPartIndex - 1 ]}: " +
-                                                       $"{parts[ currentPartIndex ]} in {line}" );
+                                                    $"line for {parts[ currentPartIndex - 1 ]}: " +
+                                                    $"{parts[ currentPartIndex ]} in {line}" );
                     }
 
                     currentPartIndex++; // Move past the value
@@ -863,22 +865,21 @@ public class BitmapFontData
 
             glyphs.Add( glyph );
 
-            xAdvances.Add( lastGlyph ==
-                           null // First glyph on line, adjust the position so it isn't drawn left of 0.
+            // Note: 'lastGlyph == null' means first glyph on line, adjust
+            // the position so it isn't drawn left of 0.
+            xAdvances.Add( lastGlyph == null
                                ? glyph.FixedWidth ? 0 : ( -glyph.Xoffset * scaleX ) - PadLeft
                                : ( lastGlyph.Xadvance + lastGlyph.GetKerning( ch ) ) * scaleX );
 
             lastGlyph = glyph;
 
             // "[[" is an escaped left square bracket, skip second character.
-            if ( markupEnabled
-              && ( ch == '[' )
-              && ( start < end )
-              && ( str[ start ] == '[' ) )
+            if ( markupEnabled && ( ch == '[' ) && ( start < end ) && ( str[ start ] == '[' ) )
             {
                 start++;
             }
-        } while ( start < end );
+        }
+        while ( start < end );
 
         if ( lastGlyph != null )
         {

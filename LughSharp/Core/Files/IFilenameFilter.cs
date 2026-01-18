@@ -38,3 +38,6 @@ public interface IFilenameFilter
     /// <returns></returns>
     bool Accept( DirectoryInfo dir, string filename );
 }
+
+// ============================================================================
+// ============================================================================

@@ -227,7 +227,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <exception cref="NullReferenceException">Thrown when the KeyTable is null.</exception>
     public virtual int LocateKey( TK key )
     {
-        Guard.ThrowIfNull( key );
+        ArgumentNullException.ThrowIfNull( key );
 
         var keyTable = KeyTable;
 
@@ -389,7 +389,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <typeparam name="TV">The type of the value to retrieve.</typeparam>
     public TV? Get< T >( T key ) where T : TK
     {
-        Guard.ThrowIfNull( ValueTable );
+        ArgumentNullException.ThrowIfNull( ValueTable );
 
         return ValueTable[ LocateKey( key ) ];
     }
@@ -876,7 +876,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             Entries2 = new EntriesIterator( this );
         }
 
-        Guard.ThrowIfNull( Entries2 );
+        Guard.Against.Null( Entries2 );
 
         if ( !Entries1.Valid )
         {
@@ -916,8 +916,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             Values2 = new ValuesIterator( this );
         }
 
-        Guard.ThrowIfNull( Values1 );
-        Guard.ThrowIfNull( Values2 );
+        Guard.Against.Null( Values1 );
+        Guard.Against.Null( Values2 );
 
         if ( !Values1.Valid )
         {
@@ -957,8 +957,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             Keys2 = new KeysIterator( this );
         }
 
-        Guard.ThrowIfNull( Keys1 );
-        Guard.ThrowIfNull( Keys2 );
+        Guard.Against.Null( Keys1 );
+        Guard.Against.Null( Keys2 );
 
         if ( !Keys1.Valid )
         {

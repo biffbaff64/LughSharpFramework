@@ -113,8 +113,4 @@
             <PackagePath>runtimes</PackagePath>
         </Content>
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\LughSharp.Utils\LughSharp.Utils.csproj" />
-    </ItemGroup>
 </Project>

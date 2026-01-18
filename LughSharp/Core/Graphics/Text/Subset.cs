@@ -44,7 +44,7 @@ public class Subset
     /// <exception cref="NullReferenceException"> if name is <c>null</c>. </exception>
     protected Subset( string name )
     {
-        Guard.ThrowIfNull( name );
+        Guard.Against.Null( name );
 
         _name = name;
     }

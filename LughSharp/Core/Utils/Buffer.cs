@@ -308,7 +308,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         // Checks that count is positive
-        Guard.ValidPositiveInteger( count );
+//        Guard.ValidPositiveInteger( count );
 
         var dstByteOffset = dstOffset * _elementSize;
         var bytesToWrite  = count * _elementSize;
@@ -1018,7 +1018,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
     /// </summary>
     public void Shrink()
     {
-        Guard.ThrowIfNull( _backingArray );
+        Guard.Against.Null( _backingArray );
 
         var newCapacityInBytes = Limit;
 
@@ -1105,7 +1105,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
                 throw new IndexOutOfRangeException( $"Index '{index}' is out of range. Valid range is 0 to {Capacity - 1}." );
             }
 
-            Guard.ThrowIfNull( _backingArray );
+            Guard.Against.Null( _backingArray );
 
             return _backingArray[ index ];
         }
@@ -1116,7 +1116,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
                 throw new IndexOutOfRangeException( $"Index '{index}' is out of range. Valid range is 0 to {Capacity - 1}." );
             }
 
-            Guard.ThrowIfNull( _backingArray );
+            Guard.Against.Null( _backingArray );
 
             _backingArray[ index ] = value;
         }

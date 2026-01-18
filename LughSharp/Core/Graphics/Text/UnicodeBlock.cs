@@ -689,7 +689,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Tai Le" Unicode character block.
     /// </summary>
-    public static UnicodeBlock TaiLE { get; } =
+    public static UnicodeBlock TaiLe { get; } =
         new( "TAI_LE",
              "TAI LE",
              "TAILE" );
@@ -1936,7 +1936,7 @@ public class UnicodeBlock : Subset
         Mongolian,
         UnifiedCanadianAboriginalSyllabicsExtended,
         Limbu,
-        TaiLE,
+        TaiLe,
         NewTaiLue,
         KhmerSymbols,
         Buginese,
@@ -2244,7 +2244,7 @@ public class UnicodeBlock : Subset
     {
         var block = _map[ blockName.ToUpper( CultureInfo.InvariantCulture ) ];
 
-        Guard.ThrowIfNull( block );
+        Guard.Against.Null( block );
 
         return block;
     }

@@ -144,8 +144,8 @@ public class SpriteBatch : IBatch, IDisposable
     protected SpriteBatch( int size = MAX_QUADS, ShaderProgram? defaultShader = null )
     {
         // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
-        Guard.NotGreaterThan( size, MAX_SPRITES );
-        Guard.ThrowIfNegative( size );
+        Guard.Against.GreaterThan( size, MAX_SPRITES );
+        Guard.Against.Negative( size );
 
         CurrentBatchState = BatchState.Ready;
 
@@ -1287,10 +1287,15 @@ public class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
-            else if ( remainingVertices == 0 )
+            else
             {
-                Flush();
-                remainingVertices = verticesLength;
+                remainingVertices -= Idx;
+
+                if ( remainingVertices == 0 )
+                {
+                    Flush();
+                    remainingVertices = verticesLength;
+                }
             }
 
             var copyCount = Math.Min( remainingVertices, count );
@@ -1308,7 +1313,7 @@ public class SpriteBatch : IBatch, IDisposable
 
                 copyCount = Math.Min( remainingVertices, count );
 
-                Array.Copy( spriteVertices, offset, Vertices, Idx, copyCount );
+                Array.Copy( spriteVertices, offset, Vertices, 0, copyCount );
 
                 Idx   += copyCount;
                 count -= copyCount;

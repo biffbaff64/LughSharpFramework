@@ -55,11 +55,44 @@ namespace LughSharp.Core.Graphics.Text;
 [PublicAPI]
 public class GlyphLayout : IResetable, IPoolable
 {
-    public List< GlyphRun > Runs       { get; set; } = new( 1 );
-    public List< int >      Colors     { get; set; } = new( 1 );
-    public float            Width      { get; set; }
-    public float            Height     { get; set; }
-    public int              GlyphCount { get; set; }
+    public struct GlyphColor( int index, int argb8888 )
+    {
+        public int GlyphIndex { get; } = index;
+        public int Argb8888   { get; } = argb8888;
+    }
+
+    /// <summary>
+    /// Each run has the glyphs for a line of text.
+    /// <para>
+    /// Runs are pooled, so references should not be kept past the next call to
+    /// <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)"/>
+    /// or <see cref="Reset()"/>.
+    /// </para>
+    /// </summary>
+    public List< GlyphRun > Runs { get; set; } = new( 1 );
+
+    /// <summary>
+    /// Determines the colors of the glpyhs in the <see cref="Runs"/>. Entries are
+    /// instances of the <see cref="GlyphColor"/> struct, which holds the glyph index
+    /// (across all runs) where the color starts, and the color encoded as ABGR8888.
+    /// <para>
+    /// For example: <code>[0, WHITE, 4, GREEN, 5, WHITE]</code>
+    /// Glpyhs 0 to 3 are WHITE, 4 is GREEN and 5 to the end are WHITE.
+    /// </para>
+    /// <para>
+    /// The List is empty if there are no runs, otherwise it has at least two entries:
+    /// <code>[0, startColor]</code>
+    /// </para>
+    /// </summary>
+    public List< GlyphColor > Colors { get; set; } = new( 1 );
+
+    /// <summary>
+    /// The number of glyphs across all runs.
+    /// </summary>
+    public int GlyphCount { get; set; }
+
+    public float Width  { get; set; }
+    public float Height { get; set; }
 
     // ========================================================================
 
@@ -208,7 +241,7 @@ public class GlyphLayout : IResetable, IPoolable
 
         if ( wrap )
         {
-    		// Avoid wrapping one line per character, which is very inefficient.
+            // Avoid wrapping one line per character, which is very inefficient.
             targetWidth = Math.Max( targetWidth, fontData.SpaceXadvance * 3 );
         }
 
@@ -216,7 +249,7 @@ public class GlyphLayout : IResetable, IPoolable
         var currentColor   = ( int )color.PackedColorRgba();
         var nextColor      = currentColor;
 
-        Colors.AddAll< int >( 0, currentColor );
+        Colors.Add( new GlyphColor( 0, currentColor ) );
 
         var markupEnabled = fontData.MarkupEnabled;
 
@@ -280,16 +313,15 @@ public class GlyphLayout : IResetable, IPoolable
                 if ( nextColor != currentColor )
                 {
                     // Can only be different if markupEnabled.
-                    if ( Colors[ Colors.Count - 2 ] == GlyphCount )
+                    if ( Colors[ Colors.Count - 1 ].GlyphIndex == GlyphCount )
                     {
                         // Consecutive color changes, or after an empty run,
                         // or at the beginning of the string.
-                        Colors[ Colors.Count - 1 ] = nextColor;
+                        Colors[ Colors.Count - 1 ] = new GlyphColor( GlyphCount, nextColor );
                     }
                     else
                     {
-                        Colors.Add( GlyphCount );
-                        Colors.Add( nextColor );
+                        Colors.Add( new GlyphColor( GlyphCount, nextColor ) );
                     }
 
                     currentColor = nextColor;
@@ -677,7 +709,7 @@ public class GlyphLayout : IResetable, IPoolable
 
             if ( fontData.MarkupEnabled )
             {
-                while ( Colors.Count > 1 && Colors[ Colors.Count - 1 ] >= GlyphCount )
+                while ( Colors.Count > 1 && Colors[ Colors.Count - 1 ].GlyphIndex >= GlyphCount )
                 {
                     Colors.RemoveAt( Colors.Count - 1 );
                 }
@@ -768,14 +800,15 @@ public class GlyphLayout : IResetable, IPoolable
 
                 for ( var i = Colors.Count - 1; i >= 1; i-- )
                 {
-                    var colorChangeIndex = Colors[ i ];
+                    var colorChangeIndex = Colors[ i ].GlyphIndex;
 
                     if ( colorChangeIndex <= reductionThreshold )
                     {
                         break;
                     }
 
-                    Colors[ i ] = colorChangeIndex - droppedGlyphCount;
+                    Colors[ i ] = new GlyphColor( ( colorChangeIndex - droppedGlyphCount ),
+                                                  Colors[ i ].Argb8888 );
                 }
             }
         }
@@ -791,18 +824,18 @@ public class GlyphLayout : IResetable, IPoolable
             {
                 GlyphCount -= droppedGlyphCount;
 
-                if ( fontData.MarkupEnabled && Colors[ Colors.Count - 2 ] > GlyphCount )
+                if ( fontData.MarkupEnabled && Colors[ Colors.Count - 1 ].GlyphIndex > GlyphCount )
                 {
                     // Many color changes can be hidden in the dropped whitespace, so keep only the very last color entry.
-                    var lastColor = Colors.Peek();
+                    var lastColor = Colors.Peek().Argb8888;
 
-                    while ( Colors[ Colors.Count - 2 ] > GlyphCount )
+                    while ( Colors[ Colors.Count - 1 ].GlyphIndex > GlyphCount )
                     {
                         Colors.Pop();
                     }
 
-                    Colors[ Colors.Count - 2 ] = GlyphCount; // Update color change index.
-                    Colors[ Colors.Count - 1 ] = lastColor;  // Update color entry.
+                    // Update the color change index and color entry.
+                    Colors[ Colors.Count - 1 ] = new GlyphColor( GlyphCount, lastColor );
                 }
             }
         }
@@ -1010,12 +1043,19 @@ public class GlyphLayout : IResetable, IPoolable
     [PublicAPI]
     public class GlyphRun : IResetable
     {
-        public List< Glyph > Glyphs    { get; set; } = [ ];
+        /// <summary>
+        /// Contains glyphs.size+1 entries:
+        /// The first entry is the X offset relative to the drawing position.
+        /// Subsequent entries are the X advance relative to previous glyph position.
+        /// The last entry is the width of the last glyph.
+        /// </summary>
         public List< float > XAdvances { get; set; } = [ ];
-        public float         X         { get; set; }
-        public float         Y         { get; set; }
-        public float         Width     { get; set; }
-        public Color         Color     { get; set; } = new();
+
+        public List< Glyph > Glyphs { get; set; } = [ ];
+        public float         X      { get; set; }
+        public float         Y      { get; set; }
+        public float         Width  { get; set; }
+        public Color         Color  { get; set; } = new();
 
         public void AppendRun( GlyphRun run )
         {

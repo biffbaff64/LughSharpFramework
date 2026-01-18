@@ -126,7 +126,7 @@ public class IdentityMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     /// </returns>
     public override int LocateKey( TK key )
     {
-        Guard.ThrowIfNull( key );
+        Guard.Against.Null( key );
 
         var keytab = KeyTable;
 

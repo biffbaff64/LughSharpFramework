@@ -287,7 +287,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             Entries2 = new OrderedMapEntries( this );
         }
 
-        Guard.ThrowIfNull( Entries2 );
+        Guard.Against.Null( Entries2 );
 
         if ( !Entries1.Valid )
         {
@@ -326,7 +326,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             Values2 = new OrderedMapValues( this );
         }
 
-        Guard.ThrowIfNull( Values2 );
+        Guard.Against.Null( Values2 );
 
         if ( !Values1.Valid )
         {
@@ -359,7 +359,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             return new OrderedMapKeys( this );
         }
 
-        Guard.ThrowIfNull( Keys2 );
+        Guard.Against.Null( Keys2 );
 
         if ( Keys1 == null )
         {

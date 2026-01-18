@@ -8,12 +8,10 @@ using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
-using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
@@ -75,11 +73,6 @@ public class MainGame : Game
     {
         if ( _sprite != null )
         {
-//            if ( ++_spritePosition.X > Engine.Api.Graphics.Width )
-//            {
-//                _spritePosition.X = -_sprite!.Width;
-//            }
-
             if ( _direction == -1 )
             {
                 _scale -= 0.01f;
@@ -171,12 +164,7 @@ public class MainGame : Game
 
                 _test?.Render( _spriteBatch2 );
 
-                if ( _font != null )
-                {
-                    _spriteBatch2.Draw( _font.GetRegion().Texture, 400, 400 );
-
-                    _font.Draw( _spriteBatch2, "HELLO WORLD", 100, 100 );
-                }
+                _font?.Draw( _spriteBatch2, "HELLO WORLD", 400, 400 );
                 
                 _spriteBatch2.End();
             }
