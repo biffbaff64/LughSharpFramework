@@ -242,6 +242,8 @@ public class MainGame : Game
 
     private void CreateCameras()
     {
+        var zoom = 1f;
+        
         _orthoGameCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
                                                     Engine.Api.Graphics.Height,
                                                     name: "MainCamera" );
@@ -249,7 +251,7 @@ public class MainGame : Game
         _orthoGameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _orthoGameCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _orthoGameCam.IsInUse     = true;
-        _orthoGameCam.SetZoomDefault( 1f );
+        _orthoGameCam.SetZoomDefault( zoom );
 
         // Set initial camera position
         _orthoGameCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
@@ -264,7 +266,7 @@ public class MainGame : Game
         _hudCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _hudCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _hudCam.IsInUse     = true;
-        _hudCam.SetZoomDefault( 1f );
+        _hudCam.SetZoomDefault( zoom );
 
         // Set initial camera position
         _hudCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
@@ -304,7 +306,6 @@ public class MainGame : Game
     {
         _font = new BitmapFont();
         _font.SetColor( Color.White );
-        _font.FontData.MarkupEnabled = true;
         _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
     }
 

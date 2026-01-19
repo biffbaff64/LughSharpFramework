@@ -69,10 +69,12 @@ public class BitmapFontCache
 
     // ========================================================================
 
-    private readonly FlushablePool< GlyphLayout > _pooledLayouts = new( Pool< GlyphLayout >.DEFAULT_INITIAL_CAPACITY )
-    {
-        NewObjectFactory = () => new GlyphLayout()
-    };
+//    private readonly FlushablePool< GlyphLayout > _pooledLayouts = new( Pool< GlyphLayout >.DEFAULT_INITIAL_CAPACITY )
+//    {
+//        NewObjectFactory = () => new GlyphLayout()
+//    };
+
+    private readonly List< GlyphLayout > _pooledLayouts = new();
 
     private readonly Color _color     = new( 1, 1, 1, 1 );
     private readonly Color _tempColor = new( 1, 1, 1, 1 );
@@ -409,14 +411,6 @@ public class BitmapFontCache
                 // ignore if this texture has no glyphs
                 if ( _pageVertices[ j ] != null && regions[ j ].Texture != null )
                 {
-//                    var sb = new StringBuilder();
-//                    sb.Append( $"_pageVertices ({_pageVertices[j]!.Length}): " );
-//                    foreach ( var pv in _pageVertices[ j ]! )
-//                    {
-//                        sb.Append( pv ).Append( ", " );
-//                    }
-//                    Logger.Debug( sb.ToString() );
-                    
                     spriteBatch.Draw( regions[ j ].Texture!, _pageVertices[ j ]!, 0, _idx[ j ] );
                 }
             }
@@ -522,7 +516,8 @@ public class BitmapFontCache
         X = 0;
         Y = 0;
 
-        _pooledLayouts.Flush();
+        Pools.FreeAll< GlyphLayout >( _pooledLayouts );
+        _pooledLayouts.Clear();
         Layouts.Clear();
 
         for ( int i = 0, n = _idx.Length; i < n; i++ )
@@ -860,7 +855,9 @@ public class BitmapFontCache
                                 bool wrap,
                                 string? truncate = null )
     {
-        var layout = _pooledLayouts.Obtain();
+        var layout = Pools.Obtain< GlyphLayout >();
+        
+        _pooledLayouts.Add( layout );
 
         layout.SetText( Font, str, start, end, _color, targetWidth, halign, wrap, truncate );
 

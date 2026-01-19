@@ -461,21 +461,6 @@ public class BitmapFont
     }
 
     /// <summary>
-    /// Disposes the texture used by this BitmapFont's region IF this BitmapFont
-    /// created the texture.
-    /// </summary>
-    public void Dispose()
-    {
-        if ( OwnsTexture )
-        {
-            foreach ( var t in _regions )
-            {
-                t.Texture?.Dispose();
-            }
-        }
-    }
-
-    /// <summary>
     /// Draws text at the specified position.
     /// </summary>
     /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
@@ -570,6 +555,21 @@ public class BitmapFont
         Cache.Clear();
         Cache.AddText( layout, x, y );
         Cache.Draw( batch );
+    }
+
+    /// <summary>
+    /// Disposes the texture used by this BitmapFont's region IF this BitmapFont
+    /// created the texture.
+    /// </summary>
+    public void Dispose()
+    {
+        if ( OwnsTexture )
+        {
+            foreach ( var t in _regions )
+            {
+                t.Texture?.Dispose();
+            }
+        }
     }
 
     /// <inheritdoc />

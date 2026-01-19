@@ -22,10 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using JetBrains.Annotations;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Pooling;
 
@@ -40,6 +38,33 @@ public static class Pools
     private static readonly ConcurrentDictionary< Type, object > TypePools = new();
 
     // ========================================================================
+
+    /// <summary>
+    /// Obtains an object of the specified type from its corresponding pool.
+    /// The pool must have been registered via Get or Set methods.
+    /// </summary>
+    /// <typeparam name="T">The type of object to obtain.</typeparam>
+    /// <returns>
+    /// An object from the pool, or default(T) if the pool is exhausted or creation failed.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if no pool is registered for the specified type.
+    /// </exception>
+    public static T Obtain< T >() where T : class, new()
+    {
+        return Get< T >( () => new T() ).Obtain();
+
+//        if ( !TypePools.TryGetValue( typeof( T ), out var poolObject ) )
+//        {
+//            throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. " +
+//                                                 $"Call Pools.Get<{typeof( T ).Name}>() first " +
+//                                                 $"with a NewObjectHandler." );
+//        }
+//
+//        var pool = ( Pool< T > )poolObject;
+//
+//        return pool.Obtain();
+    }
 
     /// <summary>
     /// Returns a new or existing pool for the specified type. If a pool for the type
@@ -75,33 +100,9 @@ public static class Pools
     /// <exception cref="ArgumentNullException">Thrown if pool is null.</exception>
     public static void Set< T >( Pool< T > pool ) where T : class
     {
-        ArgumentNullException.ThrowIfNull( pool );
+        Guard.Against.Null( pool );
+
         TypePools[ typeof( T ) ] = pool; // Overwrites if exists, adds if not
-    }
-
-    /// <summary>
-    /// Obtains an object of the specified type from its corresponding pool.
-    /// The pool must have been registered via Get or Set methods.
-    /// </summary>
-    /// <typeparam name="T">The type of object to obtain.</typeparam>
-    /// <returns>
-    /// An object from the pool, or default(T) if the pool is exhausted or creation failed.
-    /// </returns>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown if no pool is registered for the specified type.
-    /// </exception>
-    public static T Obtain< T >() where T : class
-    {
-        if ( !TypePools.TryGetValue( typeof( T ), out var poolObject ) )
-        {
-            throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. " +
-                                                 $"Call Pools.Get<{typeof( T ).Name}>() first " +
-                                                 $"with a NewObjectHandler." );
-        }
-
-        var pool = ( Pool< T > )poolObject;
-
-        return pool.Obtain();
     }
 
     /// <summary>
@@ -133,21 +134,44 @@ public static class Pools
     /// </summary>
     /// <typeparam name="T">The type of the objects to free.</typeparam>
     /// <param name="objects">The collection of objects to free.</param>
+    /// <param name="samePool"></param>
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static void FreeAll< T >( IEnumerable< T > objects ) where T : class
+    public static void FreeAll< T >( IEnumerable< T > objects, bool samePool = true ) where T : class
     {
-        ArgumentNullException.ThrowIfNull( objects );
+        Guard.Against.Null( objects );
 
-        if ( !TypePools.TryGetValue( typeof( T ), out var poolObject ) )
+        Pool< T >? pool = null;
+
+        var enumerable = objects as T?[] ?? objects.ToArray();
+        
+        for ( int i = 0, n = enumerable.Length; i < n; i++ )
         {
-            throw new InvalidOperationException( "No pool registered for type " +
-                                                 $"{typeof( T ).Name}. Cannot free objects." );
-        }
+            var obj = enumerable.ElementAt( i );
 
-        var pool = ( Pool< T > )poolObject;
-        pool.FreeAll( ( List< T > )objects );
+            if ( obj == null )
+            {
+                continue;
+            }
+
+            if ( pool == null )
+            {
+                pool = TypePools[ typeof( T ) ] as Pool< T >;
+
+                if ( pool == null )
+                {
+                    continue;
+                }
+            }
+            
+            pool.Free( obj );
+
+            if ( !samePool )
+            {
+                pool = null;
+            }
+        }
     }
 
     /// <summary>
