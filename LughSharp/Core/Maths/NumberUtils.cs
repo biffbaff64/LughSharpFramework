@@ -55,7 +55,7 @@ public abstract class NumberUtils
         // Check for NaN based on values of bit fields, maximum
         // exponent and nonzero significand.
         if ( ( ( result & EXP_BIT_MASK ) == EXP_BIT_MASK )
-             && ( ( result & SIGNIF_BIT_MASK ) != 0 ) )
+          && ( ( result & SIGNIF_BIT_MASK ) != 0 ) )
         {
             result = 0x7fc00000;
         }
@@ -274,6 +274,20 @@ public abstract class NumberUtils
     public static float Compare( float x, float y )
     {
         return x - y;
+    }
+
+    /// <summary>
+    /// Reverses the byte order of a 32-bit integer, swapping the least significant
+    /// and most significant bytes.
+    /// </summary>
+    /// <param name="i">The 32-bit integer whose byte order is to be reversed.</param>
+    /// <returns>The 32-bit integer with its byte order reversed.</returns>
+    public static int ReverseBytes( int i )
+    {
+        return ( i << 24 ) |
+               ( ( i & 0xff00 ) << 8 ) |
+               ( ( i >>> 8 ) & 0xff00 ) |
+               ( i >>> 24 );
     }
 
     // ========================================================================

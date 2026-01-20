@@ -164,7 +164,7 @@ public class MainGame : Game
 
                 _test?.Render( _spriteBatch2 );
 
-                _font?.Draw( _spriteBatch2, "HELLO WORLD", 400, 400 );
+                _font?.Draw( _spriteBatch2, "[RED]HELLO[] [WHITE]WORLD[]", 400, 400 );
                 
                 _spriteBatch2.End();
             }
@@ -307,6 +307,7 @@ public class MainGame : Game
         _font = new BitmapFont();
         _font.SetColor( Color.White );
         _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
+        _font.FontData.MarkupEnabled = true;
     }
 
     private void CreateFreeTypeFont()

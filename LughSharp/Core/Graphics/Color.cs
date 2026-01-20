@@ -38,45 +38,47 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public class Color : ICloneable, IEquatable< Color >
 {
-    public static readonly Color Red        = new( 0xff0000ff );
-    public static readonly Color Green      = new( 0x00ff00ff );
-    public static readonly Color Blue       = new( 0x0000ff00 );
-    public static readonly Color Clear      = new( 0x00000000 );
-    public static readonly Color White      = new( 0xffffffff );
-    public static readonly Color Black      = new( 0x000000ff );
-    public static readonly Color Gray       = new( 0x7f7f7fff );
-    public static readonly Color LightGray  = new( 0xbfbfbfff );
-    public static readonly Color DarkGray   = new( 0x3f3f3fff );
-    public static readonly Color Slate      = new( 0x708090ff );
-    public static readonly Color Navy       = new( 0x000080ff );
-    public static readonly Color Royal      = new( 0x4169e1ff );
-    public static readonly Color Sky        = new( 0x87ceebff );
-    public static readonly Color Cyan       = new( 0x00ffffff );
-    public static readonly Color Teal       = new( 0x007f7fff );
-    public static readonly Color Chartreuse = new( 0x7fff00ff );
-    public static readonly Color Lime       = new( 0x32cd32ff );
-    public static readonly Color Forest     = new( 0x228b22ff );
-    public static readonly Color Olive      = new( 0x6b8e23ff );
-    public static readonly Color Yellow     = new( 0xffff00ff );
-    public static readonly Color Gold       = new( 0xffd700ff );
-    public static readonly Color Goldenrod  = new( 0xdaa520ff );
-    public static readonly Color Orange     = new( 0xffa500ff );
-    public static readonly Color Brown      = new( 0x8b4513ff );
-    public static readonly Color Tan        = new( 0xd2b48cff );
-    public static readonly Color Firebrick  = new( 0xb22222ff );
-    public static readonly Color Scarlet    = new( 0xff341cff );
-    public static readonly Color Coral      = new( 0xff7f50ff );
-    public static readonly Color Salmon     = new( 0xfa8072ff );
-    public static readonly Color Pink       = new( 0xff69b4ff );
-    public static readonly Color Magenta    = new( 0xff00ffff );
-    public static readonly Color Purple     = new( 0xa020f0ff );
-    public static readonly Color Violet     = new( 0xee82eeff );
-    public static readonly Color Maroon     = new( 0xb03060ff );
+    public static readonly Color Red        = new( 0xff0000ff, "RED" );
+    public static readonly Color Green      = new( 0x00ff00ff, "GREEN" );
+    public static readonly Color Blue       = new( 0x0000ff00, "BLUE" );
+    public static readonly Color Clear      = new( 0x00000000, "CLEAR" );
+    public static readonly Color White      = new( 0xffffffff, "WHITE" );
+    public static readonly Color Black      = new( 0x000000ff, "BLACK" );
+    public static readonly Color Gray       = new( 0x7f7f7fff, "GRAY" );
+    public static readonly Color LightGray  = new( 0xbfbfbfff, "LIGHTGRAY" );
+    public static readonly Color DarkGray   = new( 0x3f3f3fff, "DARKGRAY" );
+    public static readonly Color Slate      = new( 0x708090ff, "SLATE" );
+    public static readonly Color Navy       = new( 0x000080ff, "NAVY" );
+    public static readonly Color Royal      = new( 0x4169e1ff, "ROYAL" );
+    public static readonly Color Sky        = new( 0x87ceebff, "SKY" );
+    public static readonly Color Cyan       = new( 0x00ffffff, "CYAN" );
+    public static readonly Color Teal       = new( 0x007f7fff, "TEAL" );
+    public static readonly Color Chartreuse = new( 0x7fff00ff, "CHARTREUSE" );
+    public static readonly Color Lime       = new( 0x32cd32ff, "LIME" );
+    public static readonly Color Forest     = new( 0x228b22ff, "FOREST" );
+    public static readonly Color Olive      = new( 0x6b8e23ff, "OLIVE" );
+    public static readonly Color Yellow     = new( 0xffff00ff, "YELLOW" );
+    public static readonly Color Gold       = new( 0xffd700ff, "GOLD" );
+    public static readonly Color Goldenrod  = new( 0xdaa520ff, "GOLDENROD" );
+    public static readonly Color Orange     = new( 0xffa500ff, "ORANGE" );
+    public static readonly Color Brown      = new( 0x8b4513ff, "BROWN" );
+    public static readonly Color Tan        = new( 0xd2b48cff, "TAN" );
+    public static readonly Color Firebrick  = new( 0xb22222ff, "FIREBRICK" );
+    public static readonly Color Scarlet    = new( 0xff341cff, "SCARLET" );
+    public static readonly Color Coral      = new( 0xff7f50ff, "CORAL" );
+    public static readonly Color Salmon     = new( 0xfa8072ff, "SALMON" );
+    public static readonly Color Pink       = new( 0xff69b4ff, "PINK" );
+    public static readonly Color Magenta    = new( 0xff00ffff, "MAGENTA" );
+    public static readonly Color Purple     = new( 0xa020f0ff, "PURPLE" );
+    public static readonly Color Violet     = new( 0xee82eeff, "VIOLET" );
+    public static readonly Color Maroon     = new( 0xb03060ff, "MAROON" );
 
     /// <summary>
     /// Convenience for frequently used <tt>White.ToFloatBits()</tt>
     /// </summary>
     public static float WhiteFloatBits => White.ToFloatBitsAbgr();
+
+    public string Name { get; set; } = "";
 
     // ========================================================================
     // ========================================================================
@@ -132,7 +134,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <summary>
     /// Constructor, sets all the components to 0.
     /// </summary>
-    public Color() : this( 0, 0, 0, 0 )
+    public Color( string name = "" ) : this( 0, 0, 0, 0, name )
     {
     }
 
@@ -141,7 +143,8 @@ public class Color : ICloneable, IEquatable< Color >
     /// the format RGBA8888.
     /// </summary>
     /// <param name="rgba8888"> A uint color value in RGBA8888 format. </param>
-    public Color( uint rgba8888 )
+    /// <param name="name"></param>
+    public Color( uint rgba8888, string name = "" )
     {
         R = ( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
         G = ( ( rgba8888 & 0x00ff0000 ) >> 16 ) / 255.0f;
@@ -149,6 +152,8 @@ public class Color : ICloneable, IEquatable< Color >
         A = ( rgba8888 & 0x000000ff ) / 255.0f;
 
         Clamp();
+        
+        Name = name;
     }
 
     /// <summary>
@@ -158,7 +163,8 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
-    public Color( float r, float g, float b, float a )
+    /// <param name="name"></param>
+    public Color( float r, float g, float b, float a, string name = "" )
     {
         R = r;
         G = g;
@@ -166,6 +172,8 @@ public class Color : ICloneable, IEquatable< Color >
         A = a;
 
         Clamp();
+        
+        Name = name;
     }
 
     /// <summary>
@@ -556,6 +564,18 @@ public class Color : ICloneable, IEquatable< Color >
     public static uint AlphaToInt( float alpha )
     {
         return ( uint )( alpha * 255.0f );
+    }
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR.
+    /// </summary>
+    /// <returns> the packed color as a 32-bit int. </returns> 
+    public int ToIntBits()
+    {
+        return ( ( int )( 255 * A ) << 24 )
+             | ( ( int )( 255 * B ) << 16 )
+             | ( ( int )( 255 * G ) << 8 )
+             | ( ( int )( 255 * R ) );
     }
 
     /// <summary>

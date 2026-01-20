@@ -268,8 +268,8 @@ public class GlyphLayout : IResetable, IPoolable
         while ( true )
         {
             var runEnd       = 0;
-            var breakToOuter = false;
             var newline      = false;
+            var breakToOuter = false;
 
             if ( start == end )
             {
@@ -293,8 +293,6 @@ public class GlyphLayout : IResetable, IPoolable
                                                 ref nextColor,
                                                 ref markupEnabled );
             }
-
-//            Logger.Debug( $"breakToOuter: {breakToOuter}" );
 
             if ( breakToOuter )
             {
@@ -338,7 +336,6 @@ public class GlyphLayout : IResetable, IPoolable
                     {
                         // Otherwise wrap and truncate must still
                         // be processed for lineRun.
-                        Logger.Checkpoint();
                         goto runEnded;
                     }
                 }
@@ -366,8 +363,6 @@ public class GlyphLayout : IResetable, IPoolable
                 if ( !wrapOrTruncate || lineRun.Glyphs.Count == 0 )
                 {
                     // No wrap or truncate, or no glyphs.
-//                    Logger.Debug( $"wrapOrTruncate: {wrapOrTruncate}, lineRun.Glyphs.Count: {lineRun.Glyphs.Count}" );
-//                    goto runEnded;
                 }
                 else
                 {
@@ -416,8 +411,6 @@ public class GlyphLayout : IResetable, IPoolable
 
                             if ( lineRun == null )
                             {
-//                                Logger.Checkpoint();
-//                                goto runEnded;
                             }
                             else
                             {
@@ -437,8 +430,8 @@ public class GlyphLayout : IResetable, IPoolable
                     }
                 }
             }
+
         runEnded:
-//            Logger.Debug( "runEnded" );
 
             if ( newline )
             {
@@ -459,7 +452,6 @@ public class GlyphLayout : IResetable, IPoolable
             runStart = start;
 
         outer: ;
-//            Logger.Debug( "outer" );
         }
 
         FinalizeRun( fontData, y, targetWidth, halign, markupEnabled );
@@ -923,11 +915,56 @@ public class GlyphLayout : IResetable, IPoolable
         switch ( str[ start ] )
         {
             case '#':
-                return ParseHexColor( str, start, end );
+                // Parse hex color RRGGBBAA to an ABGR int, where AA
+                // is optional and defaults to FF if omitted.
+                var color = 0;
+                
+                for ( var i = start + 1; i < end; i++ )
+                {
+                    var ch = str[ i ];
+                    
+                    if ( ch == ']' )
+                    {
+                        if ( i < start + 2 || i > start + 9 )
+                        {
+                            break; // Illegal number of hex digits.
+                        }
 
+                        if ( i - start < 8 )
+                        {
+                            color = color << ( 9 - ( i - start ) << 2 ) | 0xff; // RRGGBB or fewer chars.
+                        }
+
+                        _colorStack.Add( NumberUtils.ReverseBytes( color ) );
+                        
+                        return i - start;
+                    }
+
+                    color = ( color << 4 ) + ch;
+                    
+                    if ( ch is >= '0' and <= '9' )
+                    {
+                        color -= '0';
+                    }
+                    else if ( ch is >= 'A' and <= 'F' )
+                    {
+                        color -= 'A' - 10;
+                    }
+                    else if ( ch is >= 'a' and <= 'f' )
+                    {
+                        color -= 'a' - 10;
+                    }
+                    else
+                    {
+                        break; // Unexpected character in hex color.
+                    }
+                }
+
+                return -1;
+            
             case '[': // "[[" is an escaped left square bracket.
                 return -2;
-
+            
             case ']': // "[]" is a "pop" color tag.
                 if ( _colorStack.Count > 1 )
                 {
@@ -935,98 +972,34 @@ public class GlyphLayout : IResetable, IPoolable
                 }
 
                 return 0;
-
-            default:
-                return ParseNamedColor( str, start, end );
         }
-    }
 
-    /// <summary>
-    /// Parses a hexadecimal color markup within the specified string and range.
-    /// </summary>
-    /// <param name="str"> The input string containing the markup. </param>
-    /// <param name="start"> The start index of the markup. </param>
-    /// <param name="end"> The end index of the markup. </param>
-    /// <returns>
-    /// An integer indicating the number of characters processed, or -1 if the markup is invalid.
-    /// </returns>
-    private int ParseHexColor( string str, int start, int end )
-    {
-        uint colorInt = 0;
-
+        // Parse named color.
         for ( var i = start + 1; i < end; i++ )
         {
             var ch = str[ i ];
-
-            if ( ch == ']' )
-            {
-                if ( ( i < ( start + 2 ) ) || ( i > ( start + 9 ) ) )
-                {
-                    break; // Illegal number of hex digits.
-                }
-
-                if ( ( i - start ) < 8 )
-                {
-                    // RRGGBB or fewer chars.
-                    colorInt <<= ( 9 - ( i - start ) << 2 ) | 0xff;
-                }
-
-                _colorStack.Add( ( int )BinaryPrimitives.ReverseEndianness( colorInt ) );
-
-                return i - start;
-            }
-
-            if ( NumberUtils.IsHexDigit( ch ) )
-            {
-                colorInt = ( uint )( ( colorInt * 16 ) + NumberUtils.HexValue( ch ) );
-            }
-            else
-            {
-                break; // Unexpected character in hex color.
-            }
-        }
-
-        return -1;
-    }
-
-    /// <summary>
-    /// Parses a named color markup within the specified string and range.
-    /// </summary>
-    /// <param name="str"> The input string containing the markup. </param>
-    /// <param name="start"> The start index of the markup. </param>
-    /// <param name="end"> The end index of the markup. </param>
-    /// <returns>
-    /// An integer indicating the number of characters processed, or -1 if the markup is invalid.
-    /// </returns>
-    private int ParseNamedColor( string str, int start, int end )
-    {
-        var colorStart = start;
-
-        for ( var i = start + 1; i < end; i++ )
-        {
-            var ch = str[ i ];
-
+            
             if ( ch != ']' )
             {
                 continue;
             }
 
-            var colorName  = str.Substring( colorStart, i - colorStart );
-            var namedColor = Graphics.Colors.Get( colorName );
-
-            if ( namedColor == null )
+            var color = Graphics.Colors.Get( str.Substring( start, i - start ) );
+            
+            if ( color == null )
             {
                 return -1; // Unknown color name.
             }
 
-            _colorStack.Add( ( int )namedColor.PackedColorRgba() );
+            _colorStack.Add( color.ToIntBits() );
+            Logger.Debug( $"color.ToIntBits(): {color.ToIntBits()}" );
 
             return i - start;
         }
 
         return -1; // Unclosed color tag.
     }
-
+    
     /// <summary>
     /// Resets the object for reuse. Object references should be nulled and fields
     /// may be set to default values.
@@ -1052,7 +1025,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// does not span multiple lines.
     /// </summary>
     [PublicAPI]
-    public class GlyphRun : IResetable
+    public class GlyphRun : IResetable, IPoolable
     {
         /// <summary>
         /// Contains glyphs.size+1 entries:
@@ -1067,7 +1040,7 @@ public class GlyphLayout : IResetable, IPoolable
         public float         Y      { get; set; }
         public float         Width  { get; set; }
         public Color         Color  { get; set; } = new();
-        
+
         // ====================================================================
 
         public void AppendRun( GlyphRun run )
