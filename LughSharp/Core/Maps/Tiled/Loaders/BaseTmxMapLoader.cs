@@ -757,7 +757,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                 var opaqueColor = value?.Substring( 3 );
                 var alpha       = value?.Substring( 1, 3 );
 
-                return Color.ValueOf( opaqueColor + alpha );
+                return Color.FromHexString( opaqueColor + alpha );
             }
 
             default:

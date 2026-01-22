@@ -38,47 +38,51 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public class Color : ICloneable, IEquatable< Color >
 {
-    public static readonly Color Red        = new( 0xff0000ff, "RED" );
-    public static readonly Color Green      = new( 0x00ff00ff, "GREEN" );
-    public static readonly Color Blue       = new( 0x0000ff00, "BLUE" );
-    public static readonly Color Clear      = new( 0x00000000, "CLEAR" );
-    public static readonly Color White      = new( 0xffffffff, "WHITE" );
-    public static readonly Color Black      = new( 0x000000ff, "BLACK" );
-    public static readonly Color Gray       = new( 0x7f7f7fff, "GRAY" );
-    public static readonly Color LightGray  = new( 0xbfbfbfff, "LIGHTGRAY" );
-    public static readonly Color DarkGray   = new( 0x3f3f3fff, "DARKGRAY" );
-    public static readonly Color Slate      = new( 0x708090ff, "SLATE" );
-    public static readonly Color Navy       = new( 0x000080ff, "NAVY" );
-    public static readonly Color Royal      = new( 0x4169e1ff, "ROYAL" );
-    public static readonly Color Sky        = new( 0x87ceebff, "SKY" );
-    public static readonly Color Cyan       = new( 0x00ffffff, "CYAN" );
-    public static readonly Color Teal       = new( 0x007f7fff, "TEAL" );
-    public static readonly Color Chartreuse = new( 0x7fff00ff, "CHARTREUSE" );
-    public static readonly Color Lime       = new( 0x32cd32ff, "LIME" );
-    public static readonly Color Forest     = new( 0x228b22ff, "FOREST" );
-    public static readonly Color Olive      = new( 0x6b8e23ff, "OLIVE" );
-    public static readonly Color Yellow     = new( 0xffff00ff, "YELLOW" );
-    public static readonly Color Gold       = new( 0xffd700ff, "GOLD" );
-    public static readonly Color Goldenrod  = new( 0xdaa520ff, "GOLDENROD" );
-    public static readonly Color Orange     = new( 0xffa500ff, "ORANGE" );
-    public static readonly Color Brown      = new( 0x8b4513ff, "BROWN" );
-    public static readonly Color Tan        = new( 0xd2b48cff, "TAN" );
-    public static readonly Color Firebrick  = new( 0xb22222ff, "FIREBRICK" );
-    public static readonly Color Scarlet    = new( 0xff341cff, "SCARLET" );
-    public static readonly Color Coral      = new( 0xff7f50ff, "CORAL" );
-    public static readonly Color Salmon     = new( 0xfa8072ff, "SALMON" );
-    public static readonly Color Pink       = new( 0xff69b4ff, "PINK" );
-    public static readonly Color Magenta    = new( 0xff00ffff, "MAGENTA" );
-    public static readonly Color Purple     = new( 0xa020f0ff, "PURPLE" );
-    public static readonly Color Violet     = new( 0xee82eeff, "VIOLET" );
-    public static readonly Color Maroon     = new( 0xb03060ff, "MAROON" );
+    #region color definitions
+
+    public static readonly Color Red        = new( 0xff, 0x00, 0x00, 0xff, "RED" );
+    public static readonly Color Green      = new( 0x00, 0xff, 0x00, 0xff, "GREEN" );
+    public static readonly Color Blue       = new( 0x00, 0x00, 0xff, 0x00, "BLUE" );
+    public static readonly Color Clear      = new( 0x00, 0x00, 0x00, 0x00, "CLEAR" );
+    public static readonly Color White      = new( 0xff, 0xff, 0xff, 0xff, "WHITE" );
+    public static readonly Color Black      = new( 0x00, 0x00, 0x00, 0xff, "BLACK" );
+    public static readonly Color Gray       = new( 0x7f, 0x7f, 0x7f, 0xff, "GRAY" );
+    public static readonly Color LightGray  = new( 0xbf, 0xbf, 0xbf, 0xff, "LIGHTGRAY" );
+    public static readonly Color DarkGray   = new( 0x3f, 0x3f, 0x3f, 0xff, "DARKGRAY" );
+    public static readonly Color Slate      = new( 0x70, 0x80, 0x90, 0xff, "SLATE" );
+    public static readonly Color Navy       = new( 0x00, 0x00, 0x80, 0xff, "NAVY" );
+    public static readonly Color Royal      = new( 0x41, 0x69, 0xe1, 0xff, "ROYAL" );
+    public static readonly Color Sky        = new( 0x87, 0xce, 0xeb, 0xff, "SKY" );
+    public static readonly Color Cyan       = new( 0x00, 0xff, 0xff, 0xff, "CYAN" );
+    public static readonly Color Teal       = new( 0x00, 0x7f, 0x7f, 0xff, "TEAL" );
+    public static readonly Color Chartreuse = new( 0x7f, 0xff, 0x00, 0xff, "CHARTREUSE" );
+    public static readonly Color Lime       = new( 0x32, 0xcd, 0x32, 0xff, "LIME" );
+    public static readonly Color Forest     = new( 0x22, 0x8b, 0x22, 0xff, "FOREST" );
+    public static readonly Color Olive      = new( 0x6b, 0x8e, 0x23, 0xff, "OLIVE" );
+    public static readonly Color Yellow     = new( 0xff, 0xff, 0x00, 0xff, "YELLOW" );
+    public static readonly Color Gold       = new( 0xff, 0xd7, 0x00, 0xff, "GOLD" );
+    public static readonly Color Goldenrod  = new( 0xda, 0xa5, 0x20, 0xff, "GOLDENROD" );
+    public static readonly Color Orange     = new( 0xff, 0xa5, 0x00, 0xff, "ORANGE" );
+    public static readonly Color Brown      = new( 0x8b, 0x45, 0x13, 0xff, "BROWN" );
+    public static readonly Color Tan        = new( 0xd2, 0xb4, 0x8c, 0xff, "TAN" );
+    public static readonly Color Firebrick  = new( 0xb2, 0x22, 0x22, 0xff, "FIREBRICK" );
+    public static readonly Color Scarlet    = new( 0xff, 0x34, 0x1c, 0xff, "SCARLET" );
+    public static readonly Color Coral      = new( 0xff, 0x7f, 0x50, 0xff, "CORAL" );
+    public static readonly Color Salmon     = new( 0xfa, 0x80, 0x72, 0xff, "SALMON" );
+    public static readonly Color Pink       = new( 0xff, 0x69, 0xb4, 0xff, "PINK" );
+    public static readonly Color Magenta    = new( 0xff, 0x00, 0xff, 0xff, "MAGENTA" );
+    public static readonly Color Purple     = new( 0xa0, 0x20, 0xf0, 0xff, "PURPLE" );
+    public static readonly Color Violet     = new( 0xee, 0x82, 0xee, 0xff, "VIOLET" );
+    public static readonly Color Maroon     = new( 0xb0, 0x30, 0x60, 0xff, "MAROON" );
 
     /// <summary>
     /// Convenience for frequently used <tt>White.ToFloatBits()</tt>
     /// </summary>
     public static float WhiteFloatBits => White.ToFloatBitsAbgr();
 
-    public string Name { get; set; } = "";
+    #endregion color definitions
+
+    public string Name { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -152,7 +156,7 @@ public class Color : ICloneable, IEquatable< Color >
         A = ( rgba8888 & 0x000000ff ) / 255.0f;
 
         Clamp();
-        
+
         Name = name;
     }
 
@@ -172,7 +176,29 @@ public class Color : ICloneable, IEquatable< Color >
         A = a;
 
         Clamp();
-        
+
+        Name = name;
+    }
+
+    /// <summary>
+    /// Constructor, sets the components of the color.
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    /// <param name="name"></param>
+    public Color( int r, int g, int b, int a, string name = "" )
+    {
+        R = r / 255.0f;
+        G = g / 255.0f;
+        B = b / 255.0f;
+        A = a / 255.0f;
+
+        System.Drawing.Color.FromArgb( r, g, b, a );
+
+        Clamp();
+
         Name = name;
     }
 
@@ -186,6 +212,584 @@ public class Color : ICloneable, IEquatable< Color >
 
     // ========================================================================
     // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region float bits conversion
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR and then converts it
+    /// to a float. Alpha is compressed from 0-255 to use only even numbers between 0-254 to avoid
+    /// using float bits in the NaN range.
+    /// <para>
+    /// Note: Converting a color to a float and back can be lossy for alpha.
+    /// </para>
+    /// </summary>
+    /// <returns> The resulting float. </returns>
+    /// <seealso cref="NumberUtils.UIntToFloatColor"/>
+    public float ToFloatBitsRgba()
+    {
+        return ToFloatBitsRgba( R, G, B, A );
+    }
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR and then converts it
+    /// to a float. Alpha is compressed from 0-255 to use only even numbers between 0-254 to avoid
+    /// using float bits in the NaN range.
+    /// <para>
+    /// Note: Converting a color to a float and back can be lossy for alpha.
+    /// </para>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    /// <returns></returns>
+    public static float ToFloatBitsRgba( float r, float g, float b, float a )
+    {
+        var floatBits = ( ( uint )( 255f * r ) << 24 )
+                      | ( ( uint )( 255f * g ) << 16 )
+                      | ( ( uint )( 255f * b ) << 8 )
+                      | ( ( uint )( 255f * a ) );
+
+        return floatBits;
+    }
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR and then
+    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
+    /// between 0-254 to avoid using float bits in the NaN range.
+    /// <para>
+    /// Note: Converting a color to a float and back can be lossy for alpha.
+    /// </para>
+    /// </summary>
+    /// <returns> The resulting float. </returns>
+    /// <seealso cref="NumberUtils.UIntToFloatColor(uint)"/>
+    public float ToFloatBitsAbgr()
+    {
+        return ToFloatBitsAbgr( A, B, G, R );
+    }
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR and then
+    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
+    /// between 0-254 to avoid using float bits in the NaN range.
+    /// <para>
+    /// Note: Converting a color to a float and back can be lossy for alpha.
+    /// </para>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    /// <returns></returns>
+    public static float ToFloatBitsAbgr( float a, float b, float g, float r )
+    {
+        var floatBits = ( ( uint )( a * 255f ) << 24 )
+                      | ( ( uint )( b * 255f ) << 16 )
+                      | ( ( uint )( g * 255f ) << 8 )
+                      | ( ( uint )( r * 255f ) );
+
+        return floatBits;
+    }
+
+    #endregion float bits conversion
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region packed colors
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format RGBA.
+    /// </summary>
+    /// <returns> the packed color as a 32-bit int. </returns>
+    public uint PackedColorRgba()
+    {
+        return ( ( uint )( 255f * R ) << 24 )
+             | ( ( uint )( 255f * G ) << 16 )
+             | ( ( uint )( 255f * B ) << 8 )
+             | ( uint )( 255f * A );
+    }
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR.
+    /// Note that no range checking is performed for higher performance.
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    /// <returns> the packed color as a 32-bit int. </returns>
+    public static uint PackedColorAbgr( uint a, uint b, uint g, uint r )
+    {
+        return ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
+    }
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR.
+    /// </summary>
+    /// <returns> the packed color as a 32-bit int. </returns>
+    public uint PackedColorAbgr()
+    {
+        return ( ( uint )( 255f * A ) << 24 )
+             | ( ( uint )( 255f * B ) << 16 )
+             | ( ( uint )( 255f * G ) << 8 )
+             | ( uint )( 255f * R );
+    }
+
+    #endregion packed colors
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region Component to color methods
+
+    /// <summary>
+    /// Converts the supplied color components to an <b>uint</b>.
+    /// </summary>
+    /// <param name="r"> Red component. </param>
+    /// <param name="g"> Green component. </param>
+    /// <param name="b"> Blue component. </param>
+    /// <param name="a"> Alpha component. </param>
+    /// <returns></returns>
+    public static uint Rgba8888ToUInt( float r, float g, float b, float a )
+    {
+        return ( ( uint )( 255f * r ) << 24 )
+             | ( ( uint )( 255f * g ) << 16 )
+             | ( ( uint )( 255f * b ) << 8 )
+             | ( uint )( 255f * a );
+    }
+
+    /// <summary>
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the following format:-
+    /// <li>Bits  0 - 4  : Blue component</li>
+    /// <li>Bits  5 - 10 : Green component</li>
+    /// <li>Bits 11 - 15 : Red component</li>
+    /// <li>Bits 16 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    public static uint Rgb565( float r, float g, float b )
+    {
+        return ( ( uint )( r * 31 ) << 11 ) | ( ( uint )( g * 63 ) << 5 ) | ( uint )( b * 31 );
+    }
+
+    /// <summary>
+    /// Returns the given R.G.B colour components as a 32-bit uint in the following format:-
+    /// <li>Bits  0 - 3  : Alpha component</li>
+    /// <li>Bits  4 - 7  : Blue component</li>
+    /// <li>Bits  8 - 11 : Green component</li>
+    /// <li>Bits 12 - 15 : Red component</li>
+    /// <li>Bits 16 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    public static uint Rgba4444( float r, float g, float b, float a )
+    {
+        return ( ( uint )( r * 15 ) << 12 )
+             | ( ( uint )( g * 15 ) << 8 )
+             | ( ( uint )( b * 15 ) << 4 )
+             | ( uint )( a * 15 );
+    }
+
+    /// <summary>
+    /// Returns the given R.G.B colour components as a 32-bit uint in the following format:-
+    /// <li>Bits  0 - 7  : Blue component</li>
+    /// <li>Bits  8 - 15 : Green component</li>
+    /// <li>Bits 16 - 23 : Red component</li>
+    /// <li>Bits 24 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    public static uint Rgb888( float r, float g, float b )
+    {
+        return ( ( uint )( r * 255 ) << 16 ) | ( ( uint )( g * 255 ) << 8 ) | ( uint )( b * 255 );
+    }
+
+    /// <summary>
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// following format:-
+    /// <li>Bits  0 - 4  : Blue component</li>
+    /// <li>Bits  5 - 10 : Green component</li>
+    /// <li>Bits 11 - 15 : Red component</li>
+    /// <li>Bits 16 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="color"> The colour. </param>
+    public static uint Rgb565( Color color )
+    {
+        return ( ( uint )( color.R * 31 ) << 11 )
+             | ( ( uint )( color.G * 63 ) << 5 )
+             | ( uint )( color.B * 31 );
+    }
+
+    /// <summary>
+    /// Returns the given <see cref="Color"/> as a 16-bit uint in the
+    /// following format:-
+    /// <li>Bits  0 - 3  : Alpha component</li>
+    /// <li>Bits  4 - 7  : Blue component</li>
+    /// <li>Bits  8 - 11 : Green component</li>
+    /// <li>Bits 12 - 15 : Red component</li>
+    /// <li>Bits 16 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="color"> The colour. </param>
+    public static uint Rgba4444( Color color )
+    {
+        return ( ( uint )( color.R * 15 ) << 12 )
+             | ( ( uint )( color.G * 15 ) << 8 )
+             | ( ( uint )( color.B * 15 ) << 4 )
+             | ( uint )( color.A * 15 );
+    }
+
+    /// <summary>
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// following format:-
+    /// <li>Bits  0 - 7  : Blue component</li>
+    /// <li>Bits  8 - 15 : Green component</li>
+    /// <li>Bits 16 - 23 : Red component</li>
+    /// <li>Bits 24 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="color"> The colour. </param>
+    public static uint Rgb888( Color color )
+    {
+        return ( ( uint )( color.R * 255 ) << 16 )
+             | ( ( uint )( color.G * 255 ) << 8 )
+             | ( uint )( color.B * 255 );
+    }
+
+    /// <summary>
+    /// Converts a 32-bit ARGB8888 integer value to a Color object.
+    /// </summary>
+    /// <param name="color"> The Color object to assign the converted values to. </param>
+    /// <param name="value"> The 32-bit ARGB8888 integer value. </param>
+    public static void Argb8888ToColor( ref Color color, uint value )
+    {
+        color.A = ( ( value & 0xff000000 ) >>> 24 ) / 255f;
+        color.R = ( ( value & 0x00ff0000 ) >>> 16 ) / 255f;
+        color.G = ( ( value & 0x0000ff00 ) >>> 8 ) / 255f;
+        color.B = ( value & 0x000000ff ) / 255f;
+    }
+
+    public static Color FromArgb( float a, float r, float g, float b ) => new( r, g, b, a );
+
+    public static Color FromRgba( float r, float g, float b, float a ) => new( r, g, b, a );
+
+    public static Color FromRgb( float r, float g, float b ) => new( r, g, b, 1.0f );
+
+    /// <summary>
+    /// Converts a 32-bit RGBA8888 integer value to a Color object.
+    /// </summary>
+    /// <param name="color"> The Color object to assign the converted values to. </param>
+    /// <param name="value"> The 32-bit RGBA8888 integer value. </param>
+    public static void Rgba8888ToColor( ref Color color, uint value )
+    {
+        color.R = ( ( value & 0xff000000 ) >>> 24 ) / 255f;
+        color.G = ( ( value & 0x00ff0000 ) >>> 16 ) / 255f;
+        color.B = ( ( value & 0x0000ff00 ) >>> 8 ) / 255f;
+        color.A = ( value & 0x000000ff ) / 255f;
+    }
+
+    /// <summary>
+    /// Converts a 16-bit RGB565 integer value to a Color object.
+    /// </summary>
+    /// <param name="color"> The Color object to assign the converted values to. </param>
+    /// <param name="value"> The 16-bit RGB565 integer value. </param>
+    public static void Rgb565ToColor( ref Color color, uint value )
+    {
+        // Ensure the value is within the valid range for 16-bit RGB565
+        if ( value > 0xFFFF )
+        {
+            throw new ArgumentOutOfRangeException( nameof( value ),
+                                                   "Value must be a 16-bit integer." );
+        }
+
+        color.R = ( ( value & 0xF800 ) >> 11 ) / 31f;
+        color.G = ( ( value & 0x07E0 ) >> 5 ) / 63f;
+        color.B = ( value & 0x001F ) / 31f;
+    }
+
+    /// <summary>
+    /// Converts a 16-bit RGBA4444 integer value to a Color object.
+    /// </summary>
+    /// <param name="color"> The Color object to assign the converted values to. </param>
+    /// <param name="value"> The 16-bit RGBA4444 integer value. </param>
+    public static void Rgba4444ToColor( ref Color color, uint value )
+    {
+        color.R = ( ( value & 0xF000 ) >> 12 ) / 15f;
+        color.G = ( ( value & 0x0F00 ) >> 8 ) / 15f;
+        color.B = ( ( value & 0x00F0 ) >> 4 ) / 15f;
+        color.A = ( value & 0x000F ) / 15f;
+    }
+
+    /// <summary>
+    /// Sets the Color components using the specified float value in the format ABGR8888.
+    /// </summary>
+    /// <param name="color">The Color object to assign the converted values to.</param>
+    /// <param name="value">The float value representing the color in ABGR8888 format.</param>
+    public static void Abgr8888ToColor( ref Color color, float value )
+    {
+        // Convert the float value to an integer representing the color
+        var c = NumberUtils.FloatToIntColor( value );
+
+        // Extract and assign color components using bitwise operations
+        color.A = ( ( c & 0xff000000 ) >>> 24 ) / 255f;
+        color.B = ( ( c & 0x00ff0000 ) >>> 16 ) / 255f;
+        color.G = ( ( c & 0x0000ff00 ) >>> 8 ) / 255f;
+        color.R = ( c & 0x000000ff ) / 255f;
+    }
+
+    #endregion Component to color methods
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region To format methods
+
+    /// <summary>
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// following format:-
+    /// <li>Bits  0 - 7  : Alpha component</li>
+    /// <li>Bits  8 - 15 : Blue component</li>
+    /// <li>Bits 16 - 23 : Green component</li>
+    /// <li>Bits 24 - 31 : Red component</li>
+    /// </summary>
+    /// <param name="color"> The colour. </param>
+    public static uint ToRgba8888( Color color )
+    {
+        return ( ( uint )( color.R * 255 ) << 24 )
+             | ( ( uint )( color.G * 255 ) << 16 )
+             | ( ( uint )( color.B * 255 ) << 8 )
+             | ( uint )( color.A * 255 );
+    }
+
+    /// <summary>
+    /// Returns the given seperate colour components as a 32-bit uint in the
+    /// following format:-
+    /// <li>Bits  0 - 7  : Alpha component</li>
+    /// <li>Bits  8 - 15 : Blue component</li>
+    /// <li>Bits 16 - 23 : Green component</li>
+    /// <li>Bits 24 - 31 : Red component</li>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    public static uint ToRgba8888( float r, float g, float b, float a )
+    {
+        return ( ( uint )( r * 255 ) << 24 )
+             | ( ( uint )( g * 255 ) << 16 )
+             | ( ( uint )( b * 255 ) << 8 )
+             | ( uint )( a * 255 );
+    }
+
+    /// <summary>
+    /// Returns the given seperate colour components as a 32-bit uint in the
+    /// following format:-
+    /// <li>Bits  0 - 7  : Alpha component</li>
+    /// <li>Bits  8 - 15 : Blue component</li>
+    /// <li>Bits 16 - 23 : Green component</li>
+    /// <li>Bits 24 - 31 : Red component</li>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    public static uint ToAbgr8888( float a, float b, float g, float r )
+    {
+        return ( ( uint )( a * 255 ) << 24 )
+             | ( ( uint )( b * 255 ) << 16 )
+             | ( ( uint )( g * 255 ) << 8 )
+             | ( uint )( r * 255 );
+    }
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR.
+    /// </summary>
+    /// <returns> the packed color as a 32-bit int. </returns> 
+    public uint ToAbgr8888()
+    {
+        return ( ( uint )( A * 255 ) << 24 )
+             | ( ( uint )( B * 255 ) << 16 )
+             | ( ( uint )( G * 255 ) << 8 )
+             | ( uint )( R * 255 );
+    }
+
+    /// <summary>
+    /// Returns the given seperate colour components as a 32-bit uint in the
+    /// following format:-
+    /// <li> Bits  0 - 7  : Blue component </li>
+    /// <li> Bits  8 - 15 : Green component </li>
+    /// <li> Bits 16 - 23 : Red component </li>
+    /// <li> Bits 24 - 31 : Alpha component </li>
+    /// </summary>
+    /// <param name="a"> Alpha component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="r"> Red component </param>
+    public static uint ToArgb8888( float a, float r, float g, float b )
+    {
+        return ( ( uint )( a * 255 ) << 24 )
+             | ( ( uint )( r * 255 ) << 16 )
+             | ( ( uint )( g * 255 ) << 8 )
+             | ( uint )( b * 255 );
+    }
+
+    /// <summary>
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// following format:-
+    /// <li>Bits  0 - 7  : Blue component</li>
+    /// <li>Bits  8 - 15 : Green component</li>
+    /// <li>Bits 16 - 23 : Red component</li>
+    /// <li>Bits 24 - 31 : Alpha component</li>
+    /// </summary>
+    /// <param name="color"> The colour. </param>
+    public static uint ToArgb8888( Color color )
+    {
+        return ( ( uint )( color.A * 255 ) << 24 )
+             | ( ( uint )( color.R * 255 ) << 16 )
+             | ( ( uint )( color.G * 255 ) << 8 )
+             | ( uint )( color.B * 255 );
+    }
+
+    /// <summary>
+    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// following format:-
+    /// <li>Bits  0 - 7  : Red component</li>
+    /// <li>Bits  8 - 15 : Green component</li>
+    /// <li>Bits 16 - 23 : Blue component</li>
+    /// <li>Bits 24 - 31 : Alpha component</li>
+    /// </summary>
+    /// <param name="color"> The colour. </param>
+    public static uint ToAbgr8888( Color color )
+    {
+        return ( ( uint )( color.A * 255f ) << 24 )
+             | ( ( uint )( color.B * 255f ) << 16 )
+             | ( ( uint )( color.G * 255f ) << 8 )
+             | ( uint )( color.R * 255f );
+    }
+
+    #endregion To format methods
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region HSV methods
+
+    /// <summary>
+    /// Sets the RGB Color components using the specified Hue-Saturation-Value.
+    /// Note that HSV components are voluntary not clamped to preserve high range
+    /// color and can range beyond typical values.
+    /// </summary>
+    /// <param name="h">The Hue in degree from 0 to 360</param>
+    /// <param name="s">The Saturation from 0 to 1</param>
+    /// <param name="v">The Value (brightness) from 0 to 1</param>
+    /// <returns>The modified Color for chaining.</returns>
+    public Color FromHsv( float h, float s, float v )
+    {
+        h %= 360; // Ensure hue is in the range [0, 360]
+
+        if ( h < 0 )
+        {
+            h += 360;
+        }
+
+        var i = ( uint )( h / 60 ) % 6;
+        var f = ( h / 60 ) - i;
+        var p = v * ( 1 - s );
+        var q = v * ( 1 - ( s * f ) );
+        var t = v * ( 1 - ( s * ( 1 - f ) ) );
+
+        ( R, G, B ) = i switch
+                      {
+                          0     => ( v, t, p ),
+                          1     => ( q, v, p ),
+                          2     => ( p, v, t ),
+                          3     => ( p, q, v ),
+                          4     => ( t, p, v ),
+                          var _ => ( v, p, q ),
+                      };
+
+        return Clamp();
+    }
+
+    /// <summary>
+    /// Sets RGB components using the specified Hue-Saturation-Value. This is a
+    /// convenient method for fromHsv(float, float, float). This is the inverse
+    /// of toHsv(float[]).
+    /// </summary>
+    /// <param name="hsv"> The Hue-Saturation-Value. </param>
+    /// <returns> The modified color for chaining. </returns>
+    public Color FromHsv( float[] hsv )
+    {
+        return FromHsv( hsv[ 0 ], hsv[ 1 ], hsv[ 2 ] );
+    }
+
+    /// <summary>
+    /// Converts the RGB color values to HSV and stores the result in the provided array.
+    /// </summary>
+    /// <param name="hsv">An array of at least 3 elements where the HSV values will be stored.</param>
+    /// <returns>The array with HSV values.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the provided array does not have at least 3 elements.
+    /// </exception>
+    public float[] ToHsv( float[] hsv )
+    {
+        if ( hsv.Length < 3 )
+        {
+            throw new ArgumentException( "The hsv array must have at least 3 elements.", nameof( hsv ) );
+        }
+
+        var max   = Math.Max( Math.Max( R, G ), B );
+        var min   = Math.Min( Math.Min( R, G ), B );
+        var range = max - min;
+
+        // Hue calculation
+        if ( Math.Abs( range ) < NumberUtils.FLOAT_TOLERANCE )
+        {
+            hsv[ 0 ] = 0; // Undefined hue, achromatic case
+        }
+        else if ( Math.Abs( max - R ) < NumberUtils.FLOAT_TOLERANCE )
+        {
+            hsv[ 0 ] = ( ( ( 60 * ( G - B ) ) / range ) + 360 ) % 360;
+        }
+        else if ( Math.Abs( max - G ) < NumberUtils.FLOAT_TOLERANCE )
+        {
+            hsv[ 0 ] = ( ( ( 60 * ( B - R ) ) / range ) + 120 ) % 360;
+        }
+        else // max == B
+        {
+            hsv[ 0 ] = ( ( ( 60 * ( R - G ) ) / range ) + 240 ) % 360;
+        }
+
+        // Saturation calculation
+        hsv[ 1 ] = max > 0 ? range / max : 0;
+
+        // Value calculation
+        hsv[ 2 ] = max;
+
+        return hsv;
+    }
+
+    #endregion HSV methods
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region various manipulation methods
 
     /// <summary>
     /// Sets this colors components using the components from the supplied color.
@@ -392,6 +996,15 @@ public class Color : ICloneable, IEquatable< Color >
         return Clamp();
     }
 
+    #endregion various manipulation methods
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region Utility methods
+
     /// <summary>
     /// Multiplies the RGB values by the alpha.
     /// </summary>
@@ -419,7 +1032,7 @@ public class Color : ICloneable, IEquatable< Color >
         RGBAPackedColor = ToRgba8888( R, G, B, A );
         ABGRPackedColor = ToAbgr8888( A, B, G, R );
 
-        RGBAFloatPack = ToFloatBitsAbgr( R, G, B, A );
+        RGBAFloatPack = ToFloatBitsRgba( R, G, B, A );
         ABGRFloatPack = ToFloatBitsAbgr( A, B, G, R );
 
         if ( showDebug )
@@ -448,8 +1061,8 @@ public class Color : ICloneable, IEquatable< Color >
 
         if ( interpolationCoefficient is < 0.0f or > 1.0f )
         {
-            throw new ArgumentOutOfRangeException
-                ( nameof( interpolationCoefficient ), "Interpolation coefficient must be between 0f and 1f." );
+            throw new ArgumentOutOfRangeException( nameof( interpolationCoefficient ),
+                                                   "Interpolation coefficient must be between 0f and 1f." );
         }
 
         R += interpolationCoefficient * ( target.R - R );
@@ -487,11 +1100,6 @@ public class Color : ICloneable, IEquatable< Color >
         return Clamp();
     }
 
-    // ========================================================================
-    // ========================================================================
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
     /// Parses a hex color string and assigns the color values to the provided Color object.
     /// </summary>
@@ -499,7 +1107,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="color">The Color object to assign the parsed values to.</param>
     /// <returns>The Color object with the parsed color values.</returns>
     /// <exception cref="ArgumentException">Thrown if the hex string is not valid.</exception>
-    public static Color ValueOf( string hex, ref Color color )
+    public static Color FromHexString( string hex, ref Color color )
     {
         if ( string.IsNullOrEmpty( hex ) )
         {
@@ -537,11 +1145,11 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="hex"></param>
     /// <returns></returns>
-    public static Color ValueOf( string hex )
+    public static Color FromHexString( string hex )
     {
         var color = new Color();
 
-        return ValueOf( hex, ref color );
+        return FromHexString( hex, ref color );
     }
 
     /// <summary>
@@ -567,18 +1175,6 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR.
-    /// </summary>
-    /// <returns> the packed color as a 32-bit int. </returns> 
-    public int ToIntBits()
-    {
-        return ( ( int )( 255 * A ) << 24 )
-             | ( ( int )( 255 * B ) << 16 )
-             | ( ( int )( 255 * G ) << 8 )
-             | ( ( int )( 255 * R ) );
-    }
-
-    /// <summary>
     /// </summary>
     /// <param name="luminance"></param>
     /// <param name="alpha"></param>
@@ -590,275 +1186,12 @@ public class Color : ICloneable, IEquatable< Color >
 
     public static Color FromHex( uint hex ) => new( hex );
 
-    // ========================================================================
-    // ========================================================================
+    #endregion Utility methods
 
     // ========================================================================
     // ========================================================================
-    // RGBA and RGB ( Methods only )
     // ========================================================================
     // ========================================================================
-
-    public static Color FromRgba( float r, float g, float b, float a ) => new( r, g, b, a );
-
-    public static Color FromRgb( float r, float g, float b ) => new( r, g, b, 1.0f );
-
-    /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then converts it
-    /// to a float. Alpha is compressed from 0-255 to use only even numbers between 0-254 to avoid
-    /// using float bits in the NaN range.
-    /// <para>
-    /// Note: Converting a color to a float and back can be lossy for alpha.
-    /// </para>
-    /// </summary>
-    /// <returns> The resulting float. </returns>
-    /// <seealso cref="NumberUtils.UIntToFloatColor"/>
-    public float ToFloatBitsRgba()
-    {
-        var r = ( uint )( 255f * R ) << 24;
-        var g = ( uint )( 255f * G ) << 16;
-        var b = ( uint )( 255f * B ) << 8;
-        var a = ( uint )( 255f * A );
-
-        var intBits = r | g | b | a;
-
-        return NumberUtils.UIntToFloatColor( intBits );
-    }
-
-    /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then converts it
-    /// to a float. Alpha is compressed from 0-255 to use only even numbers between 0-254 to avoid
-    /// using float bits in the NaN range.
-    /// <para>
-    /// Note: Converting a color to a float and back can be lossy for alpha.
-    /// </para>
-    /// </summary>
-    /// <param name="r"> Red component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="b"> Blue component </param>
-    /// <param name="a"> Alpha component </param>
-    /// <returns></returns>
-    public static float ToFloatBitsRgba( float r, float g, float b, float a )
-    {
-        var rf = ( uint )( 255f * r ) << 24;
-        var gf = ( uint )( 255f * g ) << 16;
-        var bf = ( uint )( 255f * b ) << 8;
-        var af = ( uint )( 255f * a );
-
-        var intBits = rf | gf | bf | af;
-
-        return intBits;
-    }
-
-    /// <summary>
-    /// Packs the color components into a 32-bit integer with the format RGBA.
-    /// </summary>
-    /// <returns> the packed color as a 32-bit int. </returns>
-    public uint PackedColorRgba()
-    {
-        return ( ( uint )( 255f * R ) << 24 )
-             | ( ( uint )( 255f * G ) << 16 )
-             | ( ( uint )( 255f * B ) << 8 )
-             | ( uint )( 255f * A );
-    }
-
-    /// <summary>
-    /// Converts the supplied color components to an <b>uint</b>.
-    /// </summary>
-    /// <param name="r"> Red component. </param>
-    /// <param name="g"> Green component. </param>
-    /// <param name="b"> Blue component. </param>
-    /// <param name="a"> Alpha component. </param>
-    /// <returns></returns>
-    public static uint Rgba8888ToUInt( float r, float g, float b, float a )
-    {
-        return ( ( uint )( 255f * r ) << 24 )
-             | ( ( uint )( 255f * g ) << 16 )
-             | ( ( uint )( 255f * b ) << 8 )
-             | ( uint )( 255f * a );
-    }
-
-    /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the following format:-
-    /// <li>Bits  0 - 4  : Blue component</li>
-    /// <li>Bits  5 - 10 : Green component</li>
-    /// <li>Bits 11 - 15 : Red component</li>
-    /// <li>Bits 16 - 31 : Undefined</li>
-    /// </summary>
-    /// <param name="r"> Red component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="b"> Blue component </param>
-    public static uint Rgb565( float r, float g, float b )
-    {
-        return ( ( uint )( r * 31 ) << 11 ) | ( ( uint )( g * 63 ) << 5 ) | ( uint )( b * 31 );
-    }
-
-    /// <summary>
-    /// Returns the given R.G.B colour components as a 32-bit uint in the following format:-
-    /// <li>Bits  0 - 3  : Alpha component</li>
-    /// <li>Bits  4 - 7  : Blue component</li>
-    /// <li>Bits  8 - 11 : Green component</li>
-    /// <li>Bits 12 - 15 : Red component</li>
-    /// <li>Bits 16 - 31 : Undefined</li>
-    /// </summary>
-    /// <param name="r"> Red component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="b"> Blue component </param>
-    /// <param name="a"> Alpha component </param>
-    public static uint Rgba4444( float r, float g, float b, float a )
-    {
-        return ( ( uint )( r * 15 ) << 12 )
-             | ( ( uint )( g * 15 ) << 8 )
-             | ( ( uint )( b * 15 ) << 4 )
-             | ( uint )( a * 15 );
-    }
-
-    /// <summary>
-    /// Returns the given R.G.B colour components as a 32-bit uint in the following format:-
-    /// <li>Bits  0 - 7  : Blue component</li>
-    /// <li>Bits  8 - 15 : Green component</li>
-    /// <li>Bits 16 - 23 : Red component</li>
-    /// <li>Bits 24 - 31 : Undefined</li>
-    /// </summary>
-    /// <param name="r"> Red component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="b"> Blue component </param>
-    public static uint Rgb888( float r, float g, float b )
-    {
-        return ( ( uint )( r * 255 ) << 16 ) | ( ( uint )( g * 255 ) << 8 ) | ( uint )( b * 255 );
-    }
-
-    /// <summary>
-    /// Returns the given seperate colour components as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Alpha component</li>
-    /// <li>Bits  8 - 15 : Blue component</li>
-    /// <li>Bits 16 - 23 : Green component</li>
-    /// <li>Bits 24 - 31 : Red component</li>
-    /// </summary>
-    /// <param name="r"> Red component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="b"> Blue component </param>
-    /// <param name="a"> Alpha component </param>
-    public static uint ToRgba8888( float r, float g, float b, float a )
-    {
-        return ( ( uint )( r * 255 ) << 24 )
-             | ( ( uint )( g * 255 ) << 16 )
-             | ( ( uint )( b * 255 ) << 8 )
-             | ( uint )( a * 255 );
-    }
-
-    /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 4  : Blue component</li>
-    /// <li>Bits  5 - 10 : Green component</li>
-    /// <li>Bits 11 - 15 : Red component</li>
-    /// <li>Bits 16 - 31 : Undefined</li>
-    /// </summary>
-    /// <param name="color"> The colour. </param>
-    public static uint Rgb565( Color color )
-    {
-        return ( ( uint )( color.R * 31 ) << 11 )
-             | ( ( uint )( color.G * 63 ) << 5 )
-             | ( uint )( color.B * 31 );
-    }
-
-    /// <summary>
-    /// Returns the given <see cref="Color"/> as a 16-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 3  : Alpha component</li>
-    /// <li>Bits  4 - 7  : Blue component</li>
-    /// <li>Bits  8 - 11 : Green component</li>
-    /// <li>Bits 12 - 15 : Red component</li>
-    /// <li>Bits 16 - 31 : Undefined</li>
-    /// </summary>
-    /// <param name="color"> The colour. </param>
-    public static uint Rgba4444( Color color )
-    {
-        return ( ( uint )( color.R * 15 ) << 12 )
-             | ( ( uint )( color.G * 15 ) << 8 )
-             | ( ( uint )( color.B * 15 ) << 4 )
-             | ( uint )( color.A * 15 );
-    }
-
-    /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Blue component</li>
-    /// <li>Bits  8 - 15 : Green component</li>
-    /// <li>Bits 16 - 23 : Red component</li>
-    /// <li>Bits 24 - 31 : Undefined</li>
-    /// </summary>
-    /// <param name="color"> The colour. </param>
-    public static uint Rgb888( Color color )
-    {
-        return ( ( uint )( color.R * 255 ) << 16 )
-             | ( ( uint )( color.G * 255 ) << 8 )
-             | ( uint )( color.B * 255 );
-    }
-
-    /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Alpha component</li>
-    /// <li>Bits  8 - 15 : Blue component</li>
-    /// <li>Bits 16 - 23 : Green component</li>
-    /// <li>Bits 24 - 31 : Red component</li>
-    /// </summary>
-    /// <param name="color"> The colour. </param>
-    public static uint ToRgba8888( Color color )
-    {
-        return ( ( uint )( color.R * 255 ) << 24 )
-             | ( ( uint )( color.G * 255 ) << 16 )
-             | ( ( uint )( color.B * 255 ) << 8 )
-             | ( uint )( color.A * 255 );
-    }
-
-    /// <summary>
-    /// Converts a 32-bit RGBA8888 integer value to a Color object.
-    /// </summary>
-    /// <param name="color"> The Color object to assign the converted values to. </param>
-    /// <param name="value"> The 32-bit RGBA8888 integer value. </param>
-    public static void Rgba8888ToColor( ref Color color, uint value )
-    {
-        color.R = ( ( value & 0xff000000 ) >>> 24 ) / 255f;
-        color.G = ( ( value & 0x00ff0000 ) >>> 16 ) / 255f;
-        color.B = ( ( value & 0x0000ff00 ) >>> 8 ) / 255f;
-        color.A = ( value & 0x000000ff ) / 255f;
-    }
-
-    /// <summary>
-    /// Converts a 16-bit RGB565 integer value to a Color object.
-    /// </summary>
-    /// <param name="color"> The Color object to assign the converted values to. </param>
-    /// <param name="value"> The 16-bit RGB565 integer value. </param>
-    public static void Rgb565ToColor( ref Color color, uint value )
-    {
-        // Ensure the value is within the valid range for 16-bit RGB565
-        if ( value > 0xFFFF )
-        {
-            throw new ArgumentOutOfRangeException( nameof( value ),
-                                                   "Value must be a 16-bit integer." );
-        }
-
-        color.R = ( ( value & 0xF800 ) >> 11 ) / 31f;
-        color.G = ( ( value & 0x07E0 ) >> 5 ) / 63f;
-        color.B = ( value & 0x001F ) / 31f;
-    }
-
-    /// <summary>
-    /// Converts a 16-bit RGBA4444 integer value to a Color object.
-    /// </summary>
-    /// <param name="color"> The Color object to assign the converted values to. </param>
-    /// <param name="value"> The 16-bit RGBA4444 integer value. </param>
-    public static void Rgba4444ToColor( ref Color color, uint value )
-    {
-        color.R = ( ( value & 0xF000 ) >> 12 ) / 15f;
-        color.G = ( ( value & 0x0F00 ) >> 8 ) / 15f;
-        color.B = ( ( value & 0x00F0 ) >> 4 ) / 15f;
-        color.A = ( value & 0x000F ) / 15f;
-    }
 
     /// <summary>
     /// Returns a string representation of the Color components RGBA.
@@ -868,127 +1201,6 @@ public class Color : ICloneable, IEquatable< Color >
         return $"R:{R},G:{G},B:{B},A:{A}";
     }
 
-    // ========================================================================
-    // ========================================================================
-    // ABGR ( Methods only )
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then
-    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
-    /// between 0-254 to avoid using float bits in the NaN range.
-    /// <para>
-    /// Note: Converting a color to a float and back can be lossy for alpha.
-    /// </para>
-    /// </summary>
-    /// <returns> The resulting float. </returns>
-    /// <seealso cref="NumberUtils.UIntToFloatColor(uint)"/>
-    public float ToFloatBitsAbgr()
-    {
-        var a = ( uint )( 255f * A ) << 24;
-        var b = ( uint )( 255f * B ) << 16;
-        var g = ( uint )( 255f * G ) << 8;
-        var r = ( uint )( 255f * R );
-
-        var intBits = a | b | g | r;
-
-        return NumberUtils.UIntToFloatColor( intBits );
-    }
-
-    /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then
-    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
-    /// between 0-254 to avoid using float bits in the NaN range.
-    /// <para>
-    /// Note: Converting a color to a float and back can be lossy for alpha.
-    /// </para>
-    /// </summary>
-    /// <param name="r"> Red component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="b"> Blue component </param>
-    /// <param name="a"> Alpha component </param>
-    /// <returns></returns>
-    public static float ToFloatBitsAbgr( float a, float b, float g, float r )
-    {
-        var af = ( uint )( a * 255f ) << 24;
-        var bf = ( uint )( b * 255f ) << 16;
-        var gf = ( uint )( g * 255f ) << 8;
-        var rf = ( uint )( r * 255f );
-
-        var intBits = af | bf | gf | rf;
-
-        return intBits;
-    }
-
-    public static float ToFloatBitsAbgr( byte a, byte b, byte g, byte r )
-    {
-        return BitConverter.Int32BitsToSingle( ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | r );
-    }
-
-    /// <summary>
-    /// Returns the given seperate colour components as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Alpha component</li>
-    /// <li>Bits  8 - 15 : Blue component</li>
-    /// <li>Bits 16 - 23 : Green component</li>
-    /// <li>Bits 24 - 31 : Red component</li>
-    /// </summary>
-    /// <param name="r"> Red component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="b"> Blue component </param>
-    /// <param name="a"> Alpha component </param>
-    public static uint ToAbgr8888( float a, float b, float g, float r )
-    {
-        return ( ( uint )( a * 255 ) << 24 )
-             | ( ( uint )( b * 255 ) << 16 )
-             | ( ( uint )( g * 255 ) << 8 )
-             | ( uint )( r * 255 );
-    }
-
-    /// <summary>
-    /// Sets the Color components using the specified float value in the format ABGR8888.
-    /// </summary>
-    /// <param name="color">The Color object to assign the converted values to.</param>
-    /// <param name="value">The float value representing the color in ABGR8888 format.</param>
-    public static void Abgr8888ToColor( ref Color color, float value )
-    {
-        // Convert the float value to an integer representing the color
-        var c = NumberUtils.FloatToIntColor( value );
-
-        // Extract and assign color components using bitwise operations
-        color.A = ( ( c & 0xff000000 ) >>> 24 ) / 255f;
-        color.B = ( ( c & 0x00ff0000 ) >>> 16 ) / 255f;
-        color.G = ( ( c & 0x0000ff00 ) >>> 8 ) / 255f;
-        color.R = ( c & 0x000000ff ) / 255f;
-    }
-
-    /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR.
-    /// Note that no range checking is performed for higher performance.
-    /// </summary>
-    /// <param name="r"> Red component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="b"> Blue component </param>
-    /// <param name="a"> Alpha component </param>
-    /// <returns> the packed color as a 32-bit int. </returns>
-    public static uint PackedColorAbgr( uint a, uint b, uint g, uint r )
-    {
-        return ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
-    }
-
-    /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR.
-    /// </summary>
-    /// <returns> the packed color as a 32-bit int. </returns>
-    public uint PackedColorAbgr()
-    {
-        return ( ( uint )( 255f * A ) << 24 )
-             | ( ( uint )( 255f * B ) << 16 )
-             | ( ( uint )( 255f * G ) << 8 )
-             | ( uint )( 255f * R );
-    }
-
     /// <summary>
     /// Returns a string representation of the Color components ABGR.
     /// </summary>
@@ -996,166 +1208,7 @@ public class Color : ICloneable, IEquatable< Color >
     {
         return $"A:{A},B:{B},G:{G},R:{R}";
     }
-
-    // ========================================================================
-    // ========================================================================
-    // ARGB ( Methods only )
-    // ========================================================================
-    // ========================================================================
-
-    public static Color FromArgb( float a, float r, float g, float b ) => new( r, g, b, a );
-
-    /// <summary>
-    /// Converts a 32-bit ARGB8888 integer value to a Color object.
-    /// </summary>
-    /// <param name="color"> The Color object to assign the converted values to. </param>
-    /// <param name="value"> The 32-bit ARGB8888 integer value. </param>
-    public static void Argb8888ToColor( ref Color color, uint value )
-    {
-        color.A = ( ( value & 0xff000000 ) >>> 24 ) / 255f;
-        color.R = ( ( value & 0x00ff0000 ) >>> 16 ) / 255f;
-        color.G = ( ( value & 0x0000ff00 ) >>> 8 ) / 255f;
-        color.B = ( value & 0x000000ff ) / 255f;
-    }
-
-    /// <summary>
-    /// Returns the given seperate colour components as a 32-bit uint in the
-    /// following format:-
-    /// <li> Bits  0 - 7  : Blue component </li>
-    /// <li> Bits  8 - 15 : Green component </li>
-    /// <li> Bits 16 - 23 : Red component </li>
-    /// <li> Bits 24 - 31 : Alpha component </li>
-    /// </summary>
-    /// <param name="a"> Alpha component </param>
-    /// <param name="b"> Blue component </param>
-    /// <param name="g"> Green component </param>
-    /// <param name="r"> Red component </param>
-    public static uint ToArgb8888( float a, float r, float g, float b )
-    {
-        return ( ( uint )( a * 255 ) << 24 )
-             | ( ( uint )( r * 255 ) << 16 )
-             | ( ( uint )( g * 255 ) << 8 )
-             | ( uint )( b * 255 );
-    }
-
-    /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Blue component</li>
-    /// <li>Bits  8 - 15 : Green component</li>
-    /// <li>Bits 16 - 23 : Red component</li>
-    /// <li>Bits 24 - 31 : Alpha component</li>
-    /// </summary>
-    /// <param name="color"> The colour. </param>
-    public static uint ToArgb8888( Color color )
-    {
-        return ( ( uint )( color.A * 255 ) << 24 )
-             | ( ( uint )( color.R * 255 ) << 16 )
-             | ( ( uint )( color.G * 255 ) << 8 )
-             | ( uint )( color.B * 255 );
-    }
-
-    // ========================================================================
-    // ========================================================================
-    // HSV ( Methods only )
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Sets the RGB Color components using the specified Hue-Saturation-Value.
-    /// Note that HSV components are voluntary not clamped to preserve high range
-    /// color and can range beyond typical values.
-    /// </summary>
-    /// <param name="h">The Hue in degree from 0 to 360</param>
-    /// <param name="s">The Saturation from 0 to 1</param>
-    /// <param name="v">The Value (brightness) from 0 to 1</param>
-    /// <returns>The modified Color for chaining.</returns>
-    public Color FromHsv( float h, float s, float v )
-    {
-        h %= 360; // Ensure hue is in the range [0, 360]
-
-        if ( h < 0 )
-        {
-            h += 360;
-        }
-
-        var i = ( uint )( h / 60 ) % 6;
-        var f = ( h / 60 ) - i;
-        var p = v * ( 1 - s );
-        var q = v * ( 1 - ( s * f ) );
-        var t = v * ( 1 - ( s * ( 1 - f ) ) );
-
-        ( R, G, B ) = i switch
-                      {
-                          0     => ( v, t, p ),
-                          1     => ( q, v, p ),
-                          2     => ( p, v, t ),
-                          3     => ( p, q, v ),
-                          4     => ( t, p, v ),
-                          var _ => ( v, p, q ),
-                      };
-
-        return Clamp();
-    }
-
-    /// <summary>
-    /// Sets RGB components using the specified Hue-Saturation-Value. This is a
-    /// convenient method for fromHsv(float, float, float). This is the inverse
-    /// of toHsv(float[]).
-    /// </summary>
-    /// <param name="hsv"> The Hue-Saturation-Value. </param>
-    /// <returns> The modified color for chaining. </returns>
-    public Color FromHsv( float[] hsv )
-    {
-        return FromHsv( hsv[ 0 ], hsv[ 1 ], hsv[ 2 ] );
-    }
-
-    /// <summary>
-    /// Converts the RGB color values to HSV and stores the result in the provided array.
-    /// </summary>
-    /// <param name="hsv">An array of at least 3 elements where the HSV values will be stored.</param>
-    /// <returns>The array with HSV values.</returns>
-    /// <exception cref="ArgumentException">
-    /// Thrown if the provided array does not have at least 3 elements.
-    /// </exception>
-    public float[] ToHsv( float[] hsv )
-    {
-        if ( hsv.Length < 3 )
-        {
-            throw new ArgumentException( "The hsv array must have at least 3 elements.", nameof( hsv ) );
-        }
-
-        var max   = Math.Max( Math.Max( R, G ), B );
-        var min   = Math.Min( Math.Min( R, G ), B );
-        var range = max - min;
-
-        // Hue calculation
-        if ( Math.Abs( range ) < NumberUtils.FLOAT_TOLERANCE )
-        {
-            hsv[ 0 ] = 0; // Undefined hue, achromatic case
-        }
-        else if ( Math.Abs( max - R ) < NumberUtils.FLOAT_TOLERANCE )
-        {
-            hsv[ 0 ] = ( ( ( 60 * ( G - B ) ) / range ) + 360 ) % 360;
-        }
-        else if ( Math.Abs( max - G ) < NumberUtils.FLOAT_TOLERANCE )
-        {
-            hsv[ 0 ] = ( ( ( 60 * ( B - R ) ) / range ) + 120 ) % 360;
-        }
-        else // max == B
-        {
-            hsv[ 0 ] = ( ( ( 60 * ( R - G ) ) / range ) + 240 ) % 360;
-        }
-
-        // Saturation calculation
-        hsv[ 1 ] = max > 0 ? range / max : 0;
-
-        // Value calculation
-        hsv[ 2 ] = max;
-
-        return hsv;
-    }
-
+    
     // ========================================================================
     // ========================================================================
 
@@ -1284,16 +1337,18 @@ public class Color : ICloneable, IEquatable< Color >
     /// <summary>
     /// Debugs the various methods and properties for this class.
     /// </summary>
-    public void Debug()
+    public void DebugPrint()
     {
-        Logger.Debug( $"R: {R}. G: {G}. B: {B}. A: {A}" );
-        Logger.Debug( $"PackedColorABGR: {ABGRPackedColor} :: {ABGRPackedColor:X}" );
-        Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
-        Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );
-        Logger.Debug( $"RGBAFloatPack: {RGBAFloatPack}" );
-        Logger.Debug( $"RGBA8888ToUInt(R, G, B, A): {Rgba8888ToUInt( R, G, B, A ):X}" );
-        Logger.Debug( $"ToFloatBitsABGR(): {ToFloatBitsAbgr()}" );
-        Logger.Debug( $"ToFloatBitsRGBA(): {ToFloatBitsRgba()}" );
+        Logger.Divider();
+        Logger.Debug( $"Name                    : {Name}" );
+        Logger.Debug( $"RGBA                    : {R}.{G}.{B}.{A}" );
+        Logger.Debug( $"PackedColorABGR         : {ABGRPackedColor} :: {ABGRPackedColor:X}" );
+        Logger.Debug( $"PackedColorRGBA         : {RGBAPackedColor} :: {RGBAPackedColor:X}" );
+        Logger.Debug( $"ABGRFloatPack           : {ABGRFloatPack}" );
+        Logger.Debug( $"RGBAFloatPack           : {RGBAFloatPack}" );
+        Logger.Debug( $"RGBA8888ToUInt(R,G,B,A) : {Rgba8888ToUInt( R, G, B, A ):X}" );
+        Logger.Debug( $"ToFloatBitsABGR()       : {ToFloatBitsAbgr()}" );
+        Logger.Debug( $"ToFloatBitsRGBA()       : {ToFloatBitsRgba()}" );
         Logger.Debug( $"ToFloatBitsABGR(F,F,F,F): {ToFloatBitsAbgr( A, B, G, R )}" );
         Logger.Debug( $"ToFloatBitsRGBA(F,F,F,F): {ToFloatBitsRgba( R, G, B, A )}" );
         Logger.Divider();

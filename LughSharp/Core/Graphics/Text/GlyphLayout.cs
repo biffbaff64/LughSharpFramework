@@ -22,7 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Buffers.Binary;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -991,9 +996,10 @@ public class GlyphLayout : IResetable, IPoolable
                 return -1; // Unknown color name.
             }
 
-            _colorStack.Add( color.ToIntBits() );
-            Logger.Debug( $"color.ToIntBits(): {color.ToIntBits()}" );
-
+            var colorToAdd = ( int )Color.ToAbgr8888( color );
+            
+            _colorStack.Add( colorToAdd );
+            
             return i - start;
         }
 

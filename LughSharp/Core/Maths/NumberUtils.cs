@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Maths;
 
 [PublicAPI]
@@ -103,42 +106,6 @@ public abstract class NumberUtils
     public static float IntBitsToFloat( int value )
     {
         return BitConverter.Int32BitsToSingle( value );
-    }
-
-    /// <summary>
-    /// Converts the given floating-point color value to its integer bit representation.
-    /// </summary>
-    /// <param name="value"> The floating-point color value to convert. </param>
-    /// <returns>
-    /// The integer bit representation of the floating-point color value.
-    /// </returns>
-    public static int FloatToIntColor( float value )
-    {
-        var intBits = FloatToRawIntBits( value );
-
-        intBits |= ( int )( ( intBits >>> 24 ) * ( 255f / 254f ) ) << 24;
-
-        return intBits;
-    }
-
-    /// <summary>
-    /// Converts the given integer bit representation to its floating-point color value.
-    /// </summary>
-    /// <param name="value"> The integer bit representation to convert. </param>
-    /// <returns> The floating-point color value represented by the integer bits. </returns>
-    public static float IntToFloatColor( int value )
-    {
-        return BitConverter.Int32BitsToSingle( value & 0x7fffffff );
-    }
-
-    /// <summary>
-    /// Converts the given unsigned integer bit representation to its floating-point color value.
-    /// </summary>
-    /// <param name="value"> The integer bit representation to convert. </param>
-    /// <returns> The floating-point color value represented by the integer bits. </returns>
-    public static float UIntToFloatColor( uint value )
-    {
-        return BitConverter.UInt32BitsToSingle( value & 0xfeffffff );
     }
 
     /// <summary>
@@ -290,6 +257,44 @@ public abstract class NumberUtils
                ( i >>> 24 );
     }
 
+    // ========================================================================
+
+    /// <summary>
+    /// Converts the given floating-point color value to its integer bit representation.
+    /// </summary>
+    /// <param name="value"> The floating-point color value to convert. </param>
+    /// <returns>
+    /// The integer bit representation of the floating-point color value.
+    /// </returns>
+    public static int FloatToIntColor( float value )
+    {
+        var intBits = FloatToRawIntBits( value );
+
+        intBits |= ( int )( ( intBits >>> 24 ) * ( 255f / 254f ) ) << 24;
+
+        return intBits;
+    }
+
+    /// <summary>
+    /// Converts the given integer bit representation to its floating-point color value.
+    /// </summary>
+    /// <param name="value"> The integer bit representation to convert. </param>
+    /// <returns> The floating-point color value represented by the integer bits. </returns>
+    public static float IntToFloatColor( int value )
+    {
+        return BitConverter.Int32BitsToSingle( value & 0x7fffffff );
+    }
+
+    /// <summary>
+    /// Converts the given unsigned integer bit representation to its floating-point color value.
+    /// </summary>
+    /// <param name="value"> The integer bit representation to convert. </param>
+    /// <returns> The floating-point color value represented by the integer bits. </returns>
+    public static float UIntToFloatColor( uint value )
+    {
+        return BitConverter.UInt32BitsToSingle( value & 0xfeffffff );
+    }
+    
     // ========================================================================
 
     /// <summary>

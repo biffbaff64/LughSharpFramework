@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using JetBrains.Annotations;
 using LughSharp.Core.Audio;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
@@ -130,8 +132,6 @@ public class Engine
         Logger.Initialise( enableWriteToFile: true );
         Logger.EnableDebugLogging();
         Logger.EnableErrorLogging();
-
-        Colors.Reset();
 
         Bindings = new GLBindings();
 

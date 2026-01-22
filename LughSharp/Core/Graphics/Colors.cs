@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics;
 
@@ -34,7 +37,45 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public static class Colors
 {
-    public static Dictionary< string, Color > Map { get; set; } = new();
+    public static readonly Dictionary< string, Color > Map = new()
+    {
+        //@formatter:off
+        { "CLEAR",          Color.Clear         }, // 
+        { "BLACK",          Color.Black         }, // 
+        { "WHITE",          Color.White         }, // 
+        { "LIGHT_GRAY",     Color.LightGray     }, // 
+        { "GRAY",           Color.Gray          }, // 
+        { "DARK_GRAY",      Color.DarkGray      }, // 
+        { "BLUE",           Color.Blue          }, // 
+        { "NAVY",           Color.Navy          }, // 
+        { "ROYAL",          Color.Royal         }, // 
+        { "SLATE",          Color.Slate         }, // 
+        { "SKY",            Color.Sky           }, // 
+        { "CYAN",           Color.Cyan          }, // 
+        { "TEAL",           Color.Teal          }, // 
+        { "GREEN",          Color.Green         }, // 
+        { "CHARTREUSE",     Color.Chartreuse    }, // 
+        { "LIME",           Color.Lime          }, // 
+        { "FOREST",         Color.Forest        }, // 
+        { "OLIVE",          Color.Olive         }, // 
+        { "YELLOW",         Color.Yellow        }, // 
+        { "GOLD",           Color.Gold          }, // 
+        { "GOLDENROD",      Color.Goldenrod     }, // 
+        { "ORANGE",         Color.Orange        }, // 
+        { "BROWN",          Color.Brown         }, // 
+        { "TAN",            Color.Tan           }, // 
+        { "FIREBRICK",      Color.Firebrick     }, // 
+        { "RED",            Color.Red           }, // 
+        { "SCARLET",        Color.Scarlet       }, // 
+        { "CORAL",          Color.Coral         }, // 
+        { "SALMON",         Color.Salmon        }, // 
+        { "PINK",           Color.Pink          }, // 
+        { "MAGENTA",        Color.Magenta       }, // 
+        { "PURPLE",         Color.Purple        }, // 
+        { "VIOLET",         Color.Violet        }, // 
+        { "MAROON",         Color.Maroon        }, // 
+        //@formatter:on
+    };
 
     // ========================================================================
 
@@ -50,65 +91,13 @@ public static class Colors
     {
         return Map.GetValueOrDefault( name );
     }
-
-    /// <summary>
-    /// Adds or replaces a color with the specified name.
-    /// </summary>
-    /// <param name="name">The name of the color.</param>
-    /// <param name="color">The color to add or replace.</param>
-    public static void Put( string name, Color color )
+    
+    public static void PrintAll()
     {
-        Map[ name ] = color;
-    }
-
-    /// <summary>
-    /// Resets the color map to the predefined colors.
-    /// </summary>
-    public static void Reset()
-    {
-        Map.Clear();
-        AddPredefinedColors();
-    }
-
-    /// <summary>
-    /// Adds the predefined colors to the color map.
-    /// </summary>
-    private static void AddPredefinedColors()
-    {
-        Map[ "CLEAR" ]      = Color.Clear;
-        Map[ "BLACK" ]      = Color.Black;
-        Map[ "WHITE" ]      = Color.White;
-        Map[ "LIGHT_GRAY" ] = Color.LightGray;
-        Map[ "GRAY" ]       = Color.Gray;
-        Map[ "DARK_GRAY" ]  = Color.DarkGray;
-        Map[ "BLUE" ]       = Color.Blue;
-        Map[ "NAVY" ]       = Color.Navy;
-        Map[ "ROYAL" ]      = Color.Royal;
-        Map[ "SLATE" ]      = Color.Slate;
-        Map[ "SKY" ]        = Color.Sky;
-        Map[ "CYAN" ]       = Color.Cyan;
-        Map[ "TEAL" ]       = Color.Teal;
-        Map[ "GREEN" ]      = Color.Green;
-        Map[ "CHARTREUSE" ] = Color.Chartreuse;
-        Map[ "LIME" ]       = Color.Lime;
-        Map[ "FOREST" ]     = Color.Forest;
-        Map[ "OLIVE" ]      = Color.Olive;
-        Map[ "YELLOW" ]     = Color.Yellow;
-        Map[ "GOLD" ]       = Color.Gold;
-        Map[ "GOLDENROD" ]  = Color.Goldenrod;
-        Map[ "ORANGE" ]     = Color.Orange;
-        Map[ "BROWN" ]      = Color.Brown;
-        Map[ "TAN" ]        = Color.Tan;
-        Map[ "FIREBRICK" ]  = Color.Firebrick;
-        Map[ "RED" ]        = Color.Red;
-        Map[ "SCARLET" ]    = Color.Scarlet;
-        Map[ "CORAL" ]      = Color.Coral;
-        Map[ "SALMON" ]     = Color.Salmon;
-        Map[ "PINK" ]       = Color.Pink;
-        Map[ "MAGENTA" ]    = Color.Magenta;
-        Map[ "PURPLE" ]     = Color.Purple;
-        Map[ "VIOLET" ]     = Color.Violet;
-        Map[ "MAROON" ]     = Color.Maroon;
+        foreach ( var (name, color) in Map )
+        {
+            Logger.Debug( $"{name, -12} = {color.RgbaToString()}" );
+        }
     }
 }
 
