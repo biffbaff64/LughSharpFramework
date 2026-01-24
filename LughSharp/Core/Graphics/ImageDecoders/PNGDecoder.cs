@@ -22,7 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.IO.Compression;
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -884,7 +888,7 @@ public class PNGDecoder
         {
             Logger.Error( "Invalid PNG Signature" );
 
-            if ( Api.DevMode )
+            if ( Engine.Api.DevMode )
             {
                 StringBuilder sb  = new();
                 StringBuilder sb2 = new();

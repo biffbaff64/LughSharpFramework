@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Input;
 using LughSharp.Core.Utils;
 

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Maths;
@@ -2213,7 +2214,7 @@ public class ParticleEmitter
     public bool   Continuous         { get; set; }
     public bool   Aligned            { get; set; }
     public bool   Additive           { get; set; } = true;
-    public bool   PremultipliedAlpha { get; set; } = false;
+    public bool   PremultipliedAlpha { get; set; }
     public float  X                  { get; set; }
     public float  Y                  { get; set; }
     public int    ActiveCount        { get; set; }

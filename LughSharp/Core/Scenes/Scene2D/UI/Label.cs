@@ -22,8 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using Color = LughSharp.Core.Graphics.Color;
@@ -45,10 +49,10 @@ public class Label : Widget
     private readonly        Vector2     _prefSize       = new();
 
     private string?         _ellipsis;
-    private bool            _fontScaleChanged = false;
-    private float           _fontScaleX       = 1;
-    private float           _fontScaleY       = 1;
-    private int             _intValue         = int.MinValue;
+    private bool            _fontScaleChanged;
+    private float           _fontScaleX = 1;
+    private float           _fontScaleY = 1;
+    private int             _intValue   = int.MinValue;
     private float           _lastPrefHeight;
     private bool            _prefSizeInvalid = true;
     private LabelStyle      _style           = null!;
@@ -518,7 +522,7 @@ public class Label : Widget
     {
         public LabelStyle()
         {
-            Font       = default( BitmapFont )!;
+            Font       = null!;
             FontColor  = null;
             Background = null;
         }
@@ -599,3 +603,7 @@ public class Label : Widget
 
     #endregion constructors
 }
+
+// ============================================================================
+// ============================================================================
+

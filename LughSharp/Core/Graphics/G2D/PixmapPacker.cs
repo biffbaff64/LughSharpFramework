@@ -22,9 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
@@ -266,10 +271,11 @@ public class PixmapPacker : IDisposable
 
         if ( ( name != null ) && name.EndsWith( ".9" ) )
         {
-            rect            = new PixmapPackerRectangle( 0, 0, image.Width - 2, image.Height - 2 );
-            pixmapToDispose = new Pixmap( image.Width - 2, image.Height - 2, image.GetColorFormat() );
-
-            pixmapToDispose.Blending = Pixmap.BlendTypes.None;
+            rect = new PixmapPackerRectangle( 0, 0, image.Width - 2, image.Height - 2 );
+            pixmapToDispose = new Pixmap( image.Width - 2, image.Height - 2, image.GetColorFormat() )
+            {
+                Blending = Pixmap.BlendTypes.None
+            };
 
             rect.Splits = GetSplits( image );
             rect.Pads   = GetPads( image, rect.Splits );
@@ -374,8 +380,10 @@ public class PixmapPacker : IDisposable
                 var newWidth  = right - left;
                 var newHeight = bottom - top;
 
-                pixmapToDispose          = new Pixmap( newWidth, newHeight, image.GetColorFormat() );
-                pixmapToDispose.Blending = Pixmap.BlendTypes.None;
+                pixmapToDispose = new Pixmap( newWidth, newHeight, image.GetColorFormat() )
+                {
+                    Blending = Pixmap.BlendTypes.None
+                };
                 pixmapToDispose.DrawPixmap( image, 0, 0, left, top, newWidth, newHeight );
 
                 image = pixmapToDispose;
@@ -417,15 +425,15 @@ public class PixmapPacker : IDisposable
 
 //            var pixels = image.Buffer< byte >;
 
-            GL.TexSubImage2D( page.Texture!.GLTarget,
-                              0,
-                              rectX,
-                              rectY,
-                              rectWidth,
-                              rectHeight,
-                              image.GLPixelFormat,
-                              image.GLDataType,
-                              image.PixelData );
+            Engine.GL.TexSubImage2D( page.Texture!.GLTarget,
+                                     0,
+                                     rectX,
+                                     rectY,
+                                     rectWidth,
+                                     rectHeight,
+                                     image.GLPixelFormat,
+                                     image.GLDataType,
+                                     image.PixelData );
 
 //            image.Buffer< byte > = pixels;
         }
@@ -445,7 +453,8 @@ public class PixmapPacker : IDisposable
             page.Image.DrawPixmap( image, 0, 0, 1, 1, rectX - 1, rectY - 1, 1, 1 );
             page.Image.DrawPixmap( image, imageWidth - 1, 0, 1, 1, rectX + rectWidth, rectY - 1, 1, 1 );
             page.Image.DrawPixmap( image, 0, imageHeight - 1, 1, 1, rectX - 1, rectY + rectHeight, 1, 1 );
-            page.Image.DrawPixmap( image, imageWidth - 1, imageHeight - 1, 1, 1, rectX + rectWidth, rectY + rectHeight, 1, 1 );
+            page.Image.DrawPixmap( image, imageWidth - 1, imageHeight - 1, 1, 1, rectX + rectWidth, rectY + rectHeight,
+                                   1, 1 );
 
             // Copy edge pixels into padding.
             page.Image.DrawPixmap( image, 0, 0, imageWidth, 1, rectX, rectY - 1, rectWidth, 1 );
@@ -463,7 +472,7 @@ public class PixmapPacker : IDisposable
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public Maths.Rectangle? GetRect( string name )
+    public Rectangle? GetRect( string name )
     {
         foreach ( var page in Pages )
         {
@@ -514,7 +523,8 @@ public class PixmapPacker : IDisposable
     /// so far. After calling this method, disposing the packer will no longer
     /// dispose the page pixmaps.
     /// </summary>
-    public TextureAtlas GenerateTextureAtlas( TextureFilterMode minFilter, TextureFilterMode magFilter, bool useMipMaps )
+    public TextureAtlas GenerateTextureAtlas( TextureFilterMode minFilter, TextureFilterMode magFilter,
+                                              bool useMipMaps )
     {
         var atlas = new TextureAtlas();
 
@@ -571,7 +581,8 @@ public class PixmapPacker : IDisposable
                         continue;
                     }
 
-                    var region = new AtlasRegion( page.Texture, ( int )rect.X, ( int )rect.Y, ( int )rect.Width, ( int )rect.Height );
+                    var region = new AtlasRegion( page.Texture, ( int )rect.X, ( int )rect.Y, ( int )rect.Width,
+                                                  ( int )rect.Height );
 
                     if ( rect.Splits != null )
                     {
@@ -814,10 +825,10 @@ public class PixmapPacker : IDisposable
             }
 
             if ( !startPoint
-                 && ( ( rgba[ 0 ] != 0 )
-                      || ( rgba[ 1 ] != 0 )
-                      || ( rgba[ 2 ] != 0 )
-                      || ( rgba[ 3 ] != 255 ) ) )
+              && ( ( rgba[ 0 ] != 0 )
+                || ( rgba[ 1 ] != 0 )
+                || ( rgba[ 2 ] != 0 )
+                || ( rgba[ 3 ] != 255 ) ) )
             {
                 Console.WriteLine( $"{x}  {y} {rgba}" );
             }
@@ -847,8 +858,10 @@ public class PixmapPacker : IDisposable
         /// </summary>
         public Page( PixmapPacker packer )
         {
-            Image          = new Pixmap( packer.PageWidth, packer.PageHeight, packer.PageFormat );
-            Image.Blending = Pixmap.BlendTypes.None;
+            Image = new Pixmap( packer.PageWidth, packer.PageHeight, packer.PageFormat )
+            {
+                Blending = Pixmap.BlendTypes.None
+            };
 
             Image.SetColor( packer.TransparentColor );
             Image.FillWithCurrentColor();
@@ -873,7 +886,8 @@ public class PixmapPacker : IDisposable
             }
             else
             {
-                Texture = new Texture( new PixmapTextureData( Image, Image.GetColorFormat(), useMipMaps, false, true ) );
+                Texture = new Texture( new PixmapTextureData( Image, Image.GetColorFormat(), useMipMaps, false,
+                                                              true ) );
 
                 Texture.SetFilter( minFilter, magFilter );
             }
@@ -959,7 +973,7 @@ public class PixmapPacker : IDisposable
             }
 
             if ( ( Math.Abs( node.Rect.Width - rect.Width ) < NumberUtils.FLOAT_TOLERANCE )
-                 && ( Math.Abs( node.Rect.Height - rect.Height ) < NumberUtils.FLOAT_TOLERANCE ) )
+              && ( Math.Abs( node.Rect.Height - rect.Height ) < NumberUtils.FLOAT_TOLERANCE ) )
             {
                 return node;
             }
@@ -1003,6 +1017,9 @@ public class PixmapPacker : IDisposable
             return Insert( node.LeftChild, rect );
         }
 
+        // ====================================================================
+        // ====================================================================
+        
         private class PixmapComparer : IComparer< Pixmap >
         {
             /// <inheritdoc />
@@ -1012,15 +1029,21 @@ public class PixmapPacker : IDisposable
             }
         }
 
+        // ====================================================================
+        // ====================================================================
+        
         [PublicAPI]
         public class Node
         {
-            public Node?           LeftChild  { get; set; } = null;
-            public Node?           RightChild { get; set; } = null;
+            public Node?           LeftChild  { get; set; }
+            public Node?           RightChild { get; set; }
             public Maths.Rectangle Rect       { get; set; } = new();
-            public bool            Full       { get; set; } = false;
+            public bool            Full       { get; set; }
         }
 
+        // ====================================================================
+        // ====================================================================
+        
         [PublicAPI]
         public class GuillotinePage( PixmapPacker packer ) : Page( packer )
         {
@@ -1153,6 +1176,9 @@ public class PixmapPacker : IDisposable
             return skylinePage;
         }
 
+        // ====================================================================
+        // ====================================================================
+        
         private class PixmapComparer : IComparer< Pixmap >
         {
             /// <inheritdoc />
@@ -1177,6 +1203,9 @@ public class PixmapPacker : IDisposable
             }
         }
 
+        // ====================================================================
+        // ====================================================================
+        
         internal class SkylinePage : Page
         {
             internal readonly List< RowSpec > Rows = [ ];
@@ -1188,9 +1217,9 @@ public class PixmapPacker : IDisposable
 
             internal record RowSpec
             {
-                internal int Height = 0;
-                internal int X      = 0;
-                internal int Y      = 0;
+                internal int Height;
+                internal int X;
+                internal int Y;
             }
         }
     }

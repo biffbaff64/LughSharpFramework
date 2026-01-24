@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
@@ -478,15 +480,10 @@ public class SplitPane : WidgetGroup
         if ( actor == _firstWidget )
         {
             SetFirstWidget( null );
-
-            return true;
         }
-
-        if ( actor == _secondWidget )
+        else if ( actor == _secondWidget )
         {
             SetSecondWidget( null );
-
-            return true;
         }
 
         return true;

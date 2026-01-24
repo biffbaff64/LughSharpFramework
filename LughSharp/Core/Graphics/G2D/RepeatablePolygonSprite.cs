@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -46,8 +47,8 @@ public class RepeatablePolygonSprite
     private float          _gridWidth;
     private TextureRegion? _region;
     private int            _rows;
-    public  float          X { get; set; } = 0;
-    public  float          Y { get; set; } = 0;
+    public  float          X { get; set; }
+    public  float          Y { get; set; }
 
     // ========================================================================
     // ========================================================================

@@ -22,11 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DotGLFW;
-using LughSharp.Core.Files;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils.Exceptions;
@@ -186,12 +186,12 @@ public class SpriteBatch : IBatch, IDisposable
         CreateEbo( size ); // This links _ebo to _vao
 
         // 4. Close the "Container"
-        GL.BindVertexArray( 0 );
+        Engine.GL.BindVertexArray( 0 );
 
         // Determine the vertex data type based on OpenGL version.
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
         // which are more efficient. Earlier versions use Vertex Arrays.
-        var vertexDataType = GL.GetOpenGLVersion().major >= 3
+        var vertexDataType = Engine.GL.GetOpenGLVersion().major >= 3
             ? VertexDataType.VertexBufferObjectWithVAO
             : VertexDataType.VertexArray;
 
@@ -216,7 +216,7 @@ public class SpriteBatch : IBatch, IDisposable
         // Set up an orthographic projection matrix for 2D rendering.
         // This matrix transforms 2D coordinates into normalized device coordinates (NDC).
         // The origin (0, 0) is at the bottom-left corner of the screen.
-        ProjectionMatrix.SetToOrtho2D( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
 
         // Generate the index buffer data for the mesh.
         // This buffer specifies the order in which vertices are used to form triangles.
@@ -269,43 +269,43 @@ public class SpriteBatch : IBatch, IDisposable
 
             // Capture the original color mask state
             var mask = new bool[ 4 ];
-            GL.GetBooleanv( ( int )GLParameter.ColorWritemask, ref mask );
+            Engine.GL.GetBooleanv( ( int )GLParameter.ColorWritemask, ref mask );
             _originalColorMaskR = mask[ 0 ];
             _originalColorMaskG = mask[ 1 ];
             _originalColorMaskB = mask[ 2 ];
             _originalColorMaskA = mask[ 3 ];
 
             // Set for SpriteBatch
-            GL.ColorMask( true, true, true, true );
+            Engine.GL.ColorMask( true, true, true, true );
 
-            GL.Enable( EnableCap.CullFace );
-            GL.CullFace( CullFaceMode.Back );
-            GL.FrontFace( FrontFaceDirection.Clockwise );
+            Engine.GL.Enable( EnableCap.CullFace );
+            Engine.GL.CullFace( CullFaceMode.Back );
+            Engine.GL.FrontFace( FrontFaceDirection.Clockwise );
 
-            GL.Disable( EnableCap.ScissorTest );
-            GL.Disable( EnableCap.StencilTest );
+            Engine.GL.Disable( EnableCap.ScissorTest );
+            Engine.GL.Disable( EnableCap.StencilTest );
 
             // Handle Depth state
-            _originalDepthTestEnabled = GL.IsEnabled( EnableCap.DepthTest );
-            _initialBlendingState     = GL.IsEnabled( EnableCap.Blend );
+            _originalDepthTestEnabled = Engine.GL.IsEnabled( EnableCap.DepthTest );
+            _initialBlendingState     = Engine.GL.IsEnabled( EnableCap.Blend );
 
             if ( depthMaskEnabled )
             {
-                GL.Enable( EnableCap.DepthTest );
+                Engine.GL.Enable( EnableCap.DepthTest );
             }
             else
             {
-                GL.Disable( EnableCap.DepthTest );
+                Engine.GL.Disable( EnableCap.DepthTest );
             }
 
-            GL.DepthMask( depthMaskEnabled );
+            Engine.GL.DepthMask( depthMaskEnabled );
 
             // Ensure Blending is ready
-            GL.Enable( EnableCap.Blend );
-            GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
+            Engine.GL.Enable( EnableCap.Blend );
+            Engine.GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
 
             // Use your actual window width and height
-            GL.Viewport( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
+            Engine.GL.Viewport( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
 
             // Shader and Pipeline setup
             if ( _shader != null )
@@ -343,32 +343,32 @@ public class SpriteBatch : IBatch, IDisposable
             LastTexture       = null;
 
             // Restore the original color mask state
-            GL.ColorMask( _originalColorMaskR, _originalColorMaskG, _originalColorMaskB, _originalColorMaskA );
+            Engine.GL.ColorMask( _originalColorMaskR, _originalColorMaskG, _originalColorMaskB, _originalColorMaskA );
 
             // Instead of a mysterious variable, restore to the "Standard" 
             // engine default (usually true for 3D, false for 2D).
-            GL.DepthMask( true );
+            Engine.GL.DepthMask( true );
 
             // Restore the EnableCap.DepthTest state we saved in Begin()
             if ( _originalDepthTestEnabled )
             {
-                GL.Enable( EnableCap.DepthTest );
+                Engine.GL.Enable( EnableCap.DepthTest );
             }
             else
             {
-                GL.Disable( EnableCap.DepthTest );
+                Engine.GL.Disable( EnableCap.DepthTest );
             }
 
             // Restore Blending state
             // Only modify blending if current state differs from initial state
             if ( _initialBlendingState )
             {
-                GL.Enable( EnableCap.Blend );
-                GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
+                Engine.GL.Enable( EnableCap.Blend );
+                Engine.GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
             }
             else
             {
-                GL.Disable( EnableCap.Blend );
+                Engine.GL.Disable( EnableCap.Blend );
             }
 
             // Reset index for safety
@@ -416,46 +416,46 @@ public class SpriteBatch : IBatch, IDisposable
             }
 
             // Bind Texture to specific unit and update shader uniform
-            GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
+            Engine.GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
             LastTexture?.Bind();
 
             if ( _textureLocation != -1 )
             {
-                GL.Uniform1i( _textureLocation, _currentTextureIndex );
+                Engine.GL.Uniform1i( _textureLocation, _currentTextureIndex );
             }
 
             // 3. Sync CPU Data to GPU (The Missing Link)
             // We use the raw VBO handle directly to ensure it works regardless of Mesh state
-            GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
+            Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
             unsafe
             {
                 fixed ( float* ptr = Vertices )
                 {
-                    GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ( IntPtr )ptr );
+                    Engine.GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ( IntPtr )ptr );
                 }
             }
 
             // 4. Final State Assertions (Critical for Core Profile)
             _shader?.Bind();
 
-            GL.BindVertexArray( _vao );
-            GL.BindBuffer( BufferTarget.ElementArrayBuffer, _ebo ); // Links indices to VAO
+            Engine.GL.BindVertexArray( _vao );
+            Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, _ebo ); // Links indices to VAO
 
             // 5. Blending
             if ( BlendingEnabled )
             {
-                GL.Enable( EnableCap.Blend );
-                GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendMode.OneMinusSrcAlpha );
+                Engine.GL.Enable( EnableCap.Blend );
+                Engine.GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendMode.OneMinusSrcAlpha );
             }
             else
             {
-                GL.Disable( EnableCap.Blend );
+                Engine.GL.Disable( EnableCap.Blend );
             }
 
             // 6. Draw
             // 4 = Triangles, 5125 = Unsigned Int
-            GL.DrawElements( ( int )PrimitiveType.Triangles,
+            Engine.GL.DrawElements( ( int )PrimitiveType.Triangles,
                              spritesInBatch * 6,
                              ( int )DrawElementsType.UnsignedInt,
                              IntPtr.Zero );
@@ -487,10 +487,10 @@ public class SpriteBatch : IBatch, IDisposable
             }
 
             BlendingEnabled = true;
-            GL.Enable( EnableCap.Blend );
+            Engine.GL.Enable( EnableCap.Blend );
 
             // Restore blend function state
-            GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
+            Engine.GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
         }
     }
 
@@ -514,7 +514,7 @@ public class SpriteBatch : IBatch, IDisposable
             }
 
             BlendingEnabled = false;
-            GL.Disable( EnableCap.Blend );
+            Engine.GL.Disable( EnableCap.Blend );
         }
     }
 
@@ -561,7 +561,7 @@ public class SpriteBatch : IBatch, IDisposable
         BlendDstFuncAlpha = dstFuncAlpha;
 
         // Actually set the OpenGL blend function
-        GL.BlendFuncSeparate( srcFuncColor, dstFuncColor, srcFuncAlpha, dstFuncAlpha );
+        Engine.GL.BlendFuncSeparate( srcFuncColor, dstFuncColor, srcFuncAlpha, dstFuncAlpha );
     }
 
     /// <summary>
@@ -600,8 +600,8 @@ public class SpriteBatch : IBatch, IDisposable
             }
 
             // 1. Bind the VAO and VBO so these settings "stick" to this batch
-            GL.BindVertexArray( _vao );
-            GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
+            Engine.GL.BindVertexArray( _vao );
+            Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
             // 2. Define constants in BYTES
             const int F_SIZE = sizeof( float );
@@ -662,7 +662,7 @@ public class SpriteBatch : IBatch, IDisposable
     {
         Guard.Against.Null( _shader );
 
-        _combinedMatrixLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle, "u_combinedMatrix" );
+        _combinedMatrixLocation = Engine.GL.GetUniformLocation( _shader.ShaderProgramHandle, "u_combinedMatrix" );
     }
 
     /// <summary>
@@ -673,7 +673,7 @@ public class SpriteBatch : IBatch, IDisposable
     {
         Guard.Against.Null( _shader );
 
-        _textureLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle,
+        _textureLocation = Engine.GL.GetUniformLocation( _shader.ShaderProgramHandle,
                                                   "u_texture" );
     }
 
@@ -709,7 +709,7 @@ public class SpriteBatch : IBatch, IDisposable
             Flush();
         }
 
-        GL.ActiveTexture( TextureUnit.Texture0 + TextureOffset );
+        Engine.GL.ActiveTexture( TextureUnit.Texture0 + TextureOffset );
 
         texture?.Bind();
 
@@ -720,7 +720,7 @@ public class SpriteBatch : IBatch, IDisposable
 
         if ( _textureLocation != -1 )
         {
-            GL.Uniform1i( _textureLocation, TextureOffset );
+            Engine.GL.Uniform1i( _textureLocation, TextureOffset );
         }
 
         LastTexture            = texture;
@@ -754,7 +754,7 @@ public class SpriteBatch : IBatch, IDisposable
             typeof( Scene2DImage ),
         };
 
-        if ( !textureList.Contains( texture?.GetType() ) )
+        if ( !textureList.Contains( texture.GetType() ) )
         {
             throw new RuntimeException( "Invalid image type" );
         }
@@ -770,7 +770,7 @@ public class SpriteBatch : IBatch, IDisposable
 
         fixed ( int* ptr = &maxTextureUnits[ 0 ] )
         {
-            GL.GetIntegerv( ( int )TextureLimits.MaxTextureImageUnits, ptr );
+            Engine.GL.GetIntegerv( ( int )TextureLimits.MaxTextureImageUnits, ptr );
         }
 
         if ( maxTextureUnits[ 0 ] < 32 )
@@ -865,8 +865,8 @@ public class SpriteBatch : IBatch, IDisposable
     /// </summary>
     private static void UnbindBuffers()
     {
-        GL.BindVertexArray( 0 );
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.BindVertexArray( 0 );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
     }
 
     // ========================================================================
@@ -905,8 +905,8 @@ public class SpriteBatch : IBatch, IDisposable
     /// </summary>
     private void CreateVao()
     {
-        _vao = GL.GenVertexArray();
-        GL.BindVertexArray( _vao );
+        _vao = Engine.GL.GenVertexArray();
+        Engine.GL.BindVertexArray( _vao );
     }
 
     /// <summary>
@@ -915,12 +915,12 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="size">The number of sprites that the VBO can accommodate.</param>
     private void CreateVbo( int size )
     {
-        _vbo = GL.GenBuffer();
-        GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
+        _vbo = Engine.GL.GenBuffer();
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
         Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
 
-        GL.BufferData( BufferTarget.ArrayBuffer,
+        Engine.GL.BufferData( BufferTarget.ArrayBuffer,
                        Vertices.Length * sizeof( float ),
                        0,
                        BufferUsageHint.DynamicDraw );
@@ -948,12 +948,12 @@ public class SpriteBatch : IBatch, IDisposable
             indices[ i + 5 ] = vertex + 0;
         }
 
-        _ebo = GL.GenBuffer();
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, _ebo );
+        _ebo = Engine.GL.GenBuffer();
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, _ebo );
 
         fixed ( uint* ptr = indices )
         {
-            GL.BufferData( BufferTarget.ElementArrayBuffer,
+            Engine.GL.BufferData( BufferTarget.ElementArrayBuffer,
                            indices.Length * sizeof( uint ),
                            ( IntPtr )ptr,
                            BufferUsageHint.DynamicDraw );
@@ -1775,14 +1775,9 @@ public class SpriteBatch : IBatch, IDisposable
     {
         for ( var i = 0; i < ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ); i++ )
         {
-            if ( i is 2 or 7 or 12 or 17 )
-            {
-                Logger.Debug( $"Vertices[{i}]: {( uint )Vertices[ i ]:X}" );
-            }
-            else
-            {
-                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
-            }
+            Logger.Debug( i is 2 or 7 or 12 or 17
+                              ? $"Vertices[{i}]: {( uint )Vertices[ i ]:X}"
+                              : $"Vertices[{i}]: {Vertices[ i ]}" );
         }
 
         Logger.Debug( $"Idx: {Idx}" );

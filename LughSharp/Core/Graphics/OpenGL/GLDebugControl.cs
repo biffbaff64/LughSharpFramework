@@ -22,8 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.OpenGL;
@@ -42,20 +44,20 @@ public class GLDebugControl
     {
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLDebugContext, true );
 
-        _debugCallback = GL.MessageCallback;
-        GL.Enable( EnableCap.DebugOutput );
-        GL.Enable( EnableCap.DebugOutputSynchronous );
-        GL.DebugMessageCallback( _debugCallback, null );
+        _debugCallback = Engine.GL.MessageCallback;
+        Engine.GL.Enable( EnableCap.DebugOutput );
+        Engine.GL.Enable( EnableCap.DebugOutputSynchronous );
+        Engine.GL.DebugMessageCallback( _debugCallback, null );
 
         var array = new uint[ 1 ];
 
         fixed ( uint* ptr = &array[ 0 ] )
         {
-            GL.DebugMessageControl( ( int )DebugSourceControl.DontCare,
-                                    ( int )DebugTypeControl.DontCare,
-                                    ( int )DebugSeverityControl.DontCare, 0,
-                                    ptr,
-                                    true );
+            Engine.GL.DebugMessageControl( ( int )DebugSourceControl.DontCare,
+                                           ( int )DebugTypeControl.DontCare,
+                                           ( int )DebugSeverityControl.DontCare, 0,
+                                           ptr,
+                                           true );
         }
 
         Logger.Debug( "GL Debug output enabled" );

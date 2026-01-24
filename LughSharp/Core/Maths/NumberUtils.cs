@@ -294,81 +294,10 @@ public abstract class NumberUtils
     {
         return BitConverter.UInt32BitsToSingle( value & 0xfeffffff );
     }
-    
-    // ========================================================================
 
-    /// <summary>
-    /// Returns the value of the specified number as an <tt>int</tt>
-    /// which may involve rounding or truncation.
-    /// </summary>
-    /// <returns>
-    /// the numeric value represented by this object after conversion
-    /// to type <tt>int</tt>.
-    /// </returns>
-    public abstract int IntValue();
-
-    /// <summary>
-    /// Returns the value of the specified number as a <tt>long</tt>
-    /// which may involve rounding or truncation.
-    /// </summary>
-    /// <returns>
-    /// the numeric value represented by this object after conversion
-    /// to type <tt>long</tt>.
-    /// </returns>
-    public abstract long LongValue();
-
-    /// <summary>
-    /// Returns the value of the specified number as a <tt>float</tt>
-    /// which may involve rounding.
-    /// </summary>
-    /// <returns>
-    /// the numeric value represented by this object after conversion
-    /// to type <tt>float</tt>.
-    /// </returns>
-    public abstract float FloatValue();
-
-    /// <summary>
-    /// Returns the value of the specified number as a <tt>double</tt>
-    /// which may involve rounding.
-    /// </summary>
-    /// <returns>
-    /// the numeric value represented by this object after conversion
-    /// to type <tt>double</tt>.
-    /// </returns>
-    public abstract double DoubleValue();
-
-    /// <summary>
-    /// Returns the value of the specified number as a <tt>byte</tt>
-    /// which may involve rounding or truncation.
-    /// <para>
-    /// This implementation returns the result of <see cref="IntValue" /> cast
-    /// to a <tt>byte</tt>.
-    /// </para>
-    /// </summary>
-    /// <returns>
-    /// the numeric value represented by this object after conversion
-    /// to type <tt>byte</tt>.
-    /// </returns>
-    public sbyte ByteValue()
+    public static int ToInt( int value )
     {
-        return ( sbyte )IntValue();
-    }
-
-    /// <summary>
-    /// Returns the value of the specified number as a <tt>short</tt>
-    /// which may involve rounding or truncation.
-    /// <para>
-    /// This implementation returns the result of <see cref="IntValue" />
-    /// cast to a <tt>short</tt>.
-    /// </para>
-    /// </summary>
-    /// <returns>
-    /// the numeric value represented by this object after conversion
-    /// to type <tt>short</tt>.
-    /// </returns>
-    public short ShortValue()
-    {
-        return ( short )IntValue();
+        return ( ( value + 63 ) & -64 ) >> 6;
     }
 }
 

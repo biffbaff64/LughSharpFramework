@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Graphics.OpenGL;
 
 [PublicAPI]
@@ -44,7 +46,7 @@ public class GLData
     /// <summary>
     /// As named, this is the currently bound FBO, used to keep track.
     /// </summary>
-    public static uint CurrentBoundFBO { get; set; } = 0;
+    public static uint CurrentBoundFBO { get; set; }
 }
 
 // ========================================================================

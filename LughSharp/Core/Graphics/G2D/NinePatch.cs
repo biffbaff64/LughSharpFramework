@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;

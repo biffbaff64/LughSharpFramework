@@ -26,6 +26,8 @@
 
 // ============================================================================
 
+using System.Text;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 using GLenum = int;
@@ -47,7 +49,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint GetUniformLocation( GLint program, GLchar* name )
     {
-        if ( !GL.IsProgram( program ) || ( program == -1 ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -61,7 +63,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint GetUniformLocation( GLint program, string name )
     {
-        if ( !GL.IsProgram( program ) || ( program == -1 ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -80,7 +82,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetUniformfv( GLint program, GLint location, GLfloat* parameters )
     {
-        if ( !GL.IsProgram( program ) || ( program == -1 ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -94,7 +96,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetUniformfv( GLint program, GLint location, ref GLfloat[] parameters )
     {
-        if ( !GL.IsProgram( program ) || ( program == -1 ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -113,7 +115,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetUniformiv( int program, int location, int* parameters )
     {
-        if ( !GL.IsProgram( program ) || ( program == -1 ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -127,7 +129,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetUniformiv( int program, int location, ref int[] parameters )
     {
-        if ( !GL.IsProgram( program ) || ( program == -1 ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -502,7 +504,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETNUNIFORMDVPROC >( "glGetnUniformdv", out _glGetnUniformdv );
 
-        _glGetnUniformdv( ( uint )program, location, bufSize, parameters );
+        _glGetnUniformdv( program, location, bufSize, parameters );
     }
 
     public void GetnUniformdv( GLuint program, GLint location, GLsizei bufSize, ref GLdouble[] parameters )
@@ -511,7 +513,7 @@ public unsafe partial class GLBindings
 
         fixed ( void* ptrParameters = &parameters[ 0 ] )
         {
-            _glGetnUniformdv( ( uint )program, location, bufSize, ( GLdouble* )ptrParameters );
+            _glGetnUniformdv( program, location, bufSize, ( GLdouble* )ptrParameters );
         }
     }
 
@@ -521,7 +523,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETNUNIFORMFVPROC >( "glGetnUniformfv", out _glGetnUniformfv );
 
-        _glGetnUniformfv( ( uint )program, location, bufSize, parameters );
+        _glGetnUniformfv( program, location, bufSize, parameters );
     }
 
     public void GetnUniformfv( GLuint program, GLint location, GLsizei bufSize, ref GLfloat[] parameters )
@@ -530,7 +532,7 @@ public unsafe partial class GLBindings
 
         fixed ( void* ptrParameters = &parameters[ 0 ] )
         {
-            _glGetnUniformfv( ( uint )program, location, bufSize, ( GLfloat* )ptrParameters );
+            _glGetnUniformfv( program, location, bufSize, ( GLfloat* )ptrParameters );
         }
     }
 
@@ -540,7 +542,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETNUNIFORMIVPROC >( "glGetnUniformiv", out _glGetnUniformiv );
 
-        _glGetnUniformiv( ( uint )program, location, bufSize, parameters );
+        _glGetnUniformiv( program, location, bufSize, parameters );
     }
 
     public void GetnUniformiv( GLuint program, GLint location, GLsizei bufSize, ref GLint[] parameters )
@@ -549,7 +551,7 @@ public unsafe partial class GLBindings
 
         fixed ( void* ptrParameters = &parameters[ 0 ] )
         {
-            _glGetnUniformiv( ( uint )program, location, bufSize, ( GLint* )ptrParameters );
+            _glGetnUniformiv( program, location, bufSize, ( GLint* )ptrParameters );
         }
     }
 
@@ -559,7 +561,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETNUNIFORMUIVPROC >( "glGetnUniformuiv", out _glGetnUniformuiv );
 
-        _glGetnUniformuiv( ( uint )program, location, bufSize, parameters );
+        _glGetnUniformuiv( program, location, bufSize, parameters );
     }
 
     public void GetnUniformuiv( GLuint program, GLint location, GLsizei bufSize, ref GLuint[] parameters )
@@ -568,7 +570,7 @@ public unsafe partial class GLBindings
 
         fixed ( void* ptrParameters = &parameters[ 0 ] )
         {
-            _glGetnUniformuiv( ( uint )program, location, bufSize, ( GLuint* )ptrParameters );
+            _glGetnUniformuiv( program, location, bufSize, ( GLuint* )ptrParameters );
         }
     }
 
@@ -861,7 +863,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETUNIFORMDVPROC >( "glGetUniformdv", out _glGetUniformdv );
 
-        _glGetUniformdv( ( uint )program, location, parameters );
+        _glGetUniformdv( program, location, parameters );
     }
 
     public void GetUniformdv( GLuint program, GLint location, ref GLdouble[] parameters )
@@ -870,7 +872,7 @@ public unsafe partial class GLBindings
 
         fixed ( GLdouble* p = &parameters[ 0 ] )
         {
-            _glGetUniformdv( ( uint )program, location, p );
+            _glGetUniformdv( program, location, p );
         }
     }
 
@@ -881,7 +883,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETUNIFORMINDICESPROC >( "glGetUniformIndices", out _glGetUniformIndices );
 
-        _glGetUniformIndices( ( uint )program, uniformCount, uniformNames, uniformIndices );
+        _glGetUniformIndices( program, uniformCount, uniformNames, uniformIndices );
     }
 
     /// <inheritdoc />
@@ -912,7 +914,7 @@ public unsafe partial class GLBindings
 
             fixed ( GLuint* p = &uniformIndices[ 0 ] )
             {
-                _glGetUniformIndices( ( uint )program, uniformCount, pUniformNames, p );
+                _glGetUniformIndices( program, uniformCount, pUniformNames, p );
             }
 
             return uniformIndices;
@@ -926,7 +928,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMSIVPROC >( "glGetActiveUniformsiv", out _glGetActiveUniformsiv );
 
-        _glGetActiveUniformsiv( ( uint )program, uniformCount, uniformIndices, pname, parameters );
+        _glGetActiveUniformsiv( program, uniformCount, uniformIndices, pname, parameters );
     }
 
     /// <inheritdoc />
@@ -942,7 +944,7 @@ public unsafe partial class GLBindings
             {
                 fixed ( GLint* pParameters = &parameters[ 0 ] )
                 {
-                    _glGetActiveUniformsiv( ( uint )program, uniformCount, p, pname, pParameters );
+                    _glGetActiveUniformsiv( program, uniformCount, p, pname, pParameters );
                 }
             }
         }
@@ -957,7 +959,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName", out _glGetActiveUniformName );
 
-        _glGetActiveUniformName( ( uint )program, uniformIndex, bufSize, length, uniformName );
+        _glGetActiveUniformName( program, uniformIndex, bufSize, length, uniformName );
     }
 
     /// <inheritdoc />
@@ -968,7 +970,7 @@ public unsafe partial class GLBindings
 
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName", out _glGetActiveUniformName );
 
-        _glGetActiveUniformName( ( uint )program, uniformIndex, bufSize, &length, uniformName );
+        _glGetActiveUniformName( program, uniformIndex, bufSize, &length, uniformName );
 
         return new string( ( GLbyte* )uniformName, 0, length, Encoding.UTF8 );
     }
@@ -980,7 +982,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex", out _glGetUniformBlockIndex );
 
-        return _glGetUniformBlockIndex( ( uint )program, uniformBlockName );
+        return _glGetUniformBlockIndex( program, uniformBlockName );
     }
 
     /// <inheritdoc />
@@ -993,7 +995,7 @@ public unsafe partial class GLBindings
         {
             fixed ( GLchar* p = &uniformBlockNameBytes[ 0 ] )
             {
-                return _glGetUniformBlockIndex( ( uint )program, p );
+                return _glGetUniformBlockIndex( program, p );
             }
         }
     }
@@ -1005,7 +1007,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv", out _glGetActiveUniformBlockiv );
 
-        _glGetActiveUniformBlockiv( ( uint )program, uniformBlockIndex, pname, parameters );
+        _glGetActiveUniformBlockiv( program, uniformBlockIndex, pname, parameters );
     }
 
     /// <inheritdoc />
@@ -1016,7 +1018,7 @@ public unsafe partial class GLBindings
         {
             fixed ( GLint* p = &parameters[ 0 ] )
             {
-                _glGetActiveUniformBlockiv( ( uint )program, uniformBlockIndex, pname, p );
+                _glGetActiveUniformBlockiv( program, uniformBlockIndex, pname, p );
             }
         }
     }
@@ -1029,7 +1031,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
 
-        _glGetActiveUniformBlockName( ( uint )program, uniformBlockIndex, bufSize, length, uniformBlockName );
+        _glGetActiveUniformBlockName( program, uniformBlockIndex, bufSize, length, uniformBlockName );
     }
 
     // ========================================================================
@@ -1043,7 +1045,7 @@ public unsafe partial class GLBindings
 
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
 
-        _glGetActiveUniformBlockName( ( uint )program, uniformBlockIndex, bufSize, &length, uniformBlockName );
+        _glGetActiveUniformBlockName( program, uniformBlockIndex, bufSize, &length, uniformBlockName );
 
         return new string( ( GLbyte* )uniformBlockName, 0, length, Encoding.UTF8 );
     }
@@ -1055,7 +1057,7 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLUNIFORMBLOCKBINDINGPROC >( "glUniformBlockBinding", out _glUniformBlockBinding );
 
-        _glUniformBlockBinding( ( uint )program, uniformBlockIndex, uniformBlockBinding );
+        _glUniformBlockBinding( program, uniformBlockIndex, uniformBlockBinding );
     }
 
     // ========================================================================

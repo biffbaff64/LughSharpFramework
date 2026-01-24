@@ -22,9 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 using Platform = LughSharp.Core.Main.Platform;
 
@@ -94,7 +96,7 @@ public class FloatFrameBuffer : FrameBuffer
 
         var result = new Texture( data );
 
-        if ( Api.App.AppType == Platform.ApplicationType.WindowsGL )
+        if ( Engine.Api.App.AppType == Platform.ApplicationType.WindowsGL )
         {
             result.SetFilter( TextureFilterMode.Linear, TextureFilterMode.Linear );
         }

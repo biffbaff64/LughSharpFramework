@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
+
 namespace LughSharp.Core.Graphics;
 
 [PublicAPI]
@@ -64,7 +67,7 @@ public class ManagedTextureHandle : IDisposable
             {
                 if ( disposing )
                 {
-                    GL.DeleteTextures( _handle );
+                    Engine.GL.DeleteTextures( _handle );
                 }
 
                 _isDisposed = true;

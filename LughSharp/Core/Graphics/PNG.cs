@@ -22,9 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
 using System.IO.Hashing;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.ImageDecoders;
 using LughSharp.Core.Utils.Collections;
 

@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -66,7 +68,7 @@ public class VertexBufferObject : IVertexData
     private Buffer< float >? _floatBuffer;
     private int              _bufferHandle;
     private Buffer< byte >?  _byteBuffer;
-    private bool             _isBound = false;
+    private bool             _isBound;
     private bool             _isDirty = true;
     private bool             _ownsBuffer;
 
@@ -92,7 +94,7 @@ public class VertexBufferObject : IVertexData
     /// <param name="attributes"> the <see cref="VertexAttributes"/>.  </param>
     public VertexBufferObject( bool isStatic, int numVertices, VertexAttributes attributes )
     {
-        _bufferHandle = ( int )GL.GenBuffer();
+        _bufferHandle = ( int )Engine.GL.GenBuffer();
         _byteBuffer   = new Buffer< byte >( attributes.VertexSize * numVertices );
         Attributes    = attributes;
 
@@ -115,7 +117,7 @@ public class VertexBufferObject : IVertexData
     public VertexBufferObject( BufferUsageHint usage, Buffer< byte > data, bool ownsBuffer, VertexAttributes attributes )
     {
         // Generate a new buffer handle using OpenGL and assign it to _bufferHandle.
-        _bufferHandle = ( int )GL.GenBuffer();
+        _bufferHandle = ( int )Engine.GL.GenBuffer();
         Attributes    = attributes;
 
         // Set the buffer data, ownership flag, and attributes using the provided parameters.
@@ -231,7 +233,7 @@ public class VertexBufferObject : IVertexData
     /// <param name="locations"> array containing the attribute locations.  </param>
     public void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -246,7 +248,7 @@ public class VertexBufferObject : IVertexData
 
                 fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
-                    GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
+                    Engine.GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
                 }
 
                 _isDirty = false;
@@ -319,7 +321,7 @@ public class VertexBufferObject : IVertexData
         }
 
         // Unbind the buffer from the GL_ARRAY_BUFFER target.
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
 
         // SetMark the buffer as unbound.
         _isBound = false;
@@ -330,7 +332,7 @@ public class VertexBufferObject : IVertexData
     /// </summary>
     public void Invalidate()
     {
-        _bufferHandle = ( int )GL.GenBuffer(); //TODO: ???
+        _bufferHandle = ( int )Engine.GL.GenBuffer(); //TODO: ???
         _isDirty      = true;
     }
 
@@ -340,8 +342,8 @@ public class VertexBufferObject : IVertexData
     /// </summary>
     public void Dispose()
     {
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
-        GL.DeleteBuffers( ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
 
@@ -396,10 +398,13 @@ public class VertexBufferObject : IVertexData
         {
             fixed ( void* ptr = &_byteBuffer!.BackingArray()[ 0 ] )
             {
-                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer!.Limit, ( IntPtr )ptr, Usage );
+                Engine.GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer!.Limit, ( IntPtr )ptr, Usage );
             }
 
             _isDirty = false;
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

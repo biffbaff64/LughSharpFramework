@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Text;
 using JetBrains.Annotations;
 using LughSharp.Core.Assets;
@@ -40,7 +37,6 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
-using GLenum = int;
 
 namespace LughSharp.Core.Graphics;
 
@@ -55,7 +51,7 @@ namespace LughSharp.Core.Graphics;
 /// <para>
 /// A Texture has to be bound via the <see cref="Texture.Bind()"/> method in order
 /// for it to be applied to geometry. The texture will be bound to the currently
-/// active texture unit specified via <see cref="GLBindings.ActiveTexture(GLenum)"/>,
+/// active texture unit specified via <see cref="GLBindings.ActiveTexture(int)"/>,
 /// or <see cref="GLBindings.ActiveTexture(LughSharp.Core.Graphics.OpenGL.Enums.TextureUnit)"/>.
 /// </para>
 /// <para>
@@ -170,7 +166,7 @@ public class Texture : GLTexture, IManaged
     /// Creates a new Texture using the supplied <see cref="ITextureData"/>.
     /// </summary>
     public Texture( ITextureData data )
-        : this( IGL.GL_TEXTURE_2D, GL.CreateTexture( TextureTarget.Texture2D ), data )
+        : this( IGL.GL_TEXTURE_2D, Engine.GL.CreateTexture( TextureTarget.Texture2D ), data )
     {
     }
 
@@ -192,7 +188,7 @@ public class Texture : GLTexture, IManaged
 
         if ( data.IsManaged )
         {
-            AddManagedTexture( Api.App, this );
+            AddManagedTexture( Engine.Api.App, this );
         }
     }
 
@@ -222,19 +218,19 @@ public class Texture : GLTexture, IManaged
         UnsafeSetWrap( UWrap, VWrap, true );
         UnsafeSetAnisotropicFilter( AnisotropicFilterLevel, true );
 
-        GL.BindTexture( GLTarget, 0 ); 
+        Engine.GL.BindTexture( GLTarget, 0 ); 
 
         if ( ColorFormat == LughFormat.ALPHA )
         {
             // Map Red -> Alpha, and force RGB to 1.0 (White)
-            GLenum[] swizzle = { IGL.GL_ONE, IGL.GL_ONE, IGL.GL_ONE, IGL.GL_RED };
-            GL.TexParameteriv( ( GLenum )TextureTarget.Texture2D, ( GLenum )TextureParameter.TextureSwizzleRgba, swizzle );
+            int[] swizzle = { IGL.GL_ONE, IGL.GL_ONE, IGL.GL_ONE, IGL.GL_RED };
+            Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.TextureSwizzleRgba, swizzle );
         }
         else if ( ColorFormat == LughFormat.LUMINANCE_ALPHA )
         {
             // Map Red -> RGB (Luminance), Green -> Alpha
-            GLenum[] swizzle = { IGL.GL_RED, IGL.GL_RED, IGL.GL_RED, IGL.GL_GREEN };
-            GL.TexParameteriv( ( GLenum )TextureTarget.Texture2D, ( GLenum )TextureParameter.TextureSwizzleRgba, swizzle );
+            int[] swizzle = { IGL.GL_RED, IGL.GL_RED, IGL.GL_RED, IGL.GL_GREEN };
+            Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.TextureSwizzleRgba, swizzle );
         }
     }
 
@@ -249,7 +245,7 @@ public class Texture : GLTexture, IManaged
             throw new RuntimeException( "Tried to reload unmanaged Texture" );
         }
 
-        GLTextureHandle = GL.GenTexture();
+        GLTextureHandle = Engine.GL.GenTexture();
 
         Load( TextureData );
     }
@@ -271,7 +267,7 @@ public class Texture : GLTexture, IManaged
 
         Bind();
 
-        GL.TexSubImage2D( GLTarget,
+        Engine.GL.TexSubImage2D( GLTarget,
                           0, x, y,
                           pixmap.Width,
                           pixmap.Height,
@@ -354,7 +350,7 @@ public class Texture : GLTexture, IManaged
 
                     // unload the texture, create a new gl handle then reload it.
                     _assetManager.Unload( filename );
-                    texture.GLTextureHandle = GL.GenTexture();
+                    texture.GLTextureHandle = Engine.GL.GenTexture();
                     _assetManager.Load< Texture >( filename, parameters );
                 }
             }
@@ -493,7 +489,7 @@ public class Texture : GLTexture, IManaged
 
             if ( TextureData is { IsManaged: true } )
             {
-                _managedTextures[ Api.App ].Remove( this );
+                _managedTextures[ Engine.Api.App ].Remove( this );
             }
         }
 

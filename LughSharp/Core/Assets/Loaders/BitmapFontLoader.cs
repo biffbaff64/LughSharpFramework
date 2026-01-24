@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
@@ -192,12 +193,12 @@ public class BitmapFontParameter : AssetLoaderParameters
     /// <summary>
     /// Flips the font vertically if <tt>true</tt>. Defaults to <tt>false</tt>.
     /// </summary>
-    public bool Flip { get; set; } = false;
+    public bool Flip { get; set; }
 
     /// <summary>
     /// Generates mipmaps for the font if <tt>true</tt>. Defaults to <tt>false</tt>.
     /// </summary>
-    public bool GenMipMaps { get; set; } = false;
+    public bool GenMipMaps { get; set; }
 
     /// <summary>
     /// The <see cref="TextureFilterMode"/> to use when scaling down the <see cref="BitmapFont"/>.
@@ -216,7 +217,7 @@ public class BitmapFontParameter : AssetLoaderParameters
     /// loading the <see cref="Texture"/> directly. Use this if your font is
     /// embedded in a <see cref="Skin"/>.
     /// </summary>
-    public BitmapFontData? BitmapFontData { get; set; } = null;
+    public BitmapFontData? BitmapFontData { get; set; }
 
     /// <summary>
     /// The name of the <see cref="TextureAtlas"/> to load the <see cref="BitmapFont"/>.

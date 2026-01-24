@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -57,7 +58,7 @@ public class RotateToAction : TemporalAction
 
     public float Start                { get; set; }
     public float Rotation             { get; set; }
-    public bool  UseShortestDirection { get; set; } = false;
+    public bool  UseShortestDirection { get; set; }
 
     protected override void Begin()
     {

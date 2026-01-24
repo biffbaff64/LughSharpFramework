@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Input;
 
 /// <summary>
@@ -47,12 +49,12 @@ public abstract class AbstractInput : IInput
     /// <summary>
     /// True if any key has just been pressed.
     /// </summary>
-    protected bool KeyJustPressed { get; set; } = false;
+    protected bool KeyJustPressed { get; set; }
 
     /// <summary>
     /// The number of currently pressed keys.
     /// </summary>
-    protected int PressedKeyCount { get; set; } = 0;
+    protected int PressedKeyCount { get; set; }
 
     /// <inheritdoc />
     public IInputProcessor? InputProcessor { get; set; }

@@ -22,9 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -112,7 +115,7 @@ public class TextField : Widget
 
     public TextField( string? text, TextFieldStyle style )
     {
-        _clipboard = Api.App.Clipboard!;
+        _clipboard = Engine.Api.App.Clipboard!;
         _blink     = new BlinkTaskManager( this );
         _keyRepeat = new KeyRepeatTaskManager( this );
 
@@ -915,7 +918,7 @@ public class TextField : Widget
 
             if ( textField == null )
             {
-                Api.Input.SetOnscreenKeyboardVisible( false );
+                Engine.Api.Input.SetOnscreenKeyboardVisible( false );
 
                 break;
             }
@@ -1140,7 +1143,7 @@ public class TextField : Widget
             _tf._blinkTask = new Task( () =>
                {
                    _tf._cursorOn = !_tf._cursorOn;
-                   Api.Graphics.RequestRendering();
+                   Engine.Api.Graphics.RequestRendering();
                },
                _tf._blinkCancellationToken );
             //@formatter:on
@@ -1616,7 +1619,7 @@ public class TextField : Widget
                 return false;
             }
 
-            if ( Platform.IsMac && Api.Input.IsKeyPressed( IInput.Keys.SYM ) )
+            if ( Platform.IsMac && Engine.Api.Input.IsKeyPressed( IInput.Keys.SYM ) )
             {
                 return true;
             }
@@ -1796,7 +1799,11 @@ public class TextField : Widget
     {
         public void Show( bool visible )
         {
-            Api.Input.SetOnscreenKeyboardVisible( visible );
+            Engine.Api.Input.SetOnscreenKeyboardVisible( visible );
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -22,9 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;

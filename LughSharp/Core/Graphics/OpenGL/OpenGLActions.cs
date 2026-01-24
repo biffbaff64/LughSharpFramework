@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using DotGLFW;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Graphics.OpenGL;
@@ -49,14 +51,14 @@ public class OpenGL
             var minorVersion    = 0;
             var revisionVersion = 0;
 
-            var version = GL.GetString( IGL.GL_VERSION )->ToString();
+            var version = Engine.GL.GetString( IGL.GL_VERSION )->ToString();
 
             Capabilities.IsGLES     = version.StartsWith( "OpenGL ES" );
             Capabilities.IsEmulated = false;
 
-            GL.GetIntegerv( IGL.GL_MAJOR_VERSION, &majorVersion );
+            Engine.GL.GetIntegerv( IGL.GL_MAJOR_VERSION, &majorVersion );
 
-            if ( GL.GetError() == IGL.GL_INVALID_ENUM )
+            if ( Engine.GL.GetError() == IGL.GL_INVALID_ENUM )
             {
                 if ( !TryParseOpenGLVersionFromString( version,
                                                        out majorVersion,
@@ -71,7 +73,7 @@ public class OpenGL
             }
             else
             {
-                GL.GetIntegerv( IGL.GL_MINOR_VERSION, &minorVersion );
+                Engine.GL.GetIntegerv( IGL.GL_MINOR_VERSION, &minorVersion );
 
                 Capabilities.MajorVersion    = majorVersion;
                 Capabilities.MinorVersion    = minorVersion;
@@ -83,7 +85,7 @@ public class OpenGL
             // with native GPU enabled - so try to account for that case.
             if ( Capabilities.IsGLES )
             {
-                if ( TryParseOpenGLVersionFromString( GL.GetString( IGL.GL_VERSION )->ToString(),
+                if ( TryParseOpenGLVersionFromString( Engine.GL.GetString( IGL.GL_VERSION )->ToString(),
                                                       out var glesMajorVersion,
                                                       out var glesMinorVersion,
                                                       out var glesRevisionVersion ) )
@@ -103,7 +105,7 @@ public class OpenGL
 
     /// <summary>
     /// Attempts to parse the version of the loaded OpenGL implementation from the string
-    /// returned by Api.GL.GetString( IGL.GL_VERSION ).
+    /// returned by Api.Engine.GL.GetString( IGL.GL_VERSION ).
     /// </summary>
     private static bool TryParseOpenGLVersionFromString( string str, out int major, out int minor, out int revision )
     {
@@ -159,7 +161,7 @@ public class OpenGL
         {
             get
             {
-                field = BytePointerToString.Convert( GL.GetString( ( int )StringName.Vendor ) );
+                field = BytePointerToString.Convert( Engine.GL.GetString( ( int )StringName.Vendor ) );
 
                 return field;
             }
@@ -172,7 +174,7 @@ public class OpenGL
         {
             get
             {
-                field = BytePointerToString.Convert( GL.GetString( ( int )StringName.Renderer ) );
+                field = BytePointerToString.Convert( Engine.GL.GetString( ( int )StringName.Renderer ) );
 
                 return field;
             }
@@ -185,7 +187,7 @@ public class OpenGL
         {
             get
             {
-                field = BytePointerToString.Convert( GL.GetString( ( int )StringName.Version ) );
+                field = BytePointerToString.Convert( Engine.GL.GetString( ( int )StringName.Version ) );
 
                 return field;
             }
@@ -198,7 +200,7 @@ public class OpenGL
         {
             get
             {
-                field = BytePointerToString.Convert( GL.GetString( ( int )StringName.ShadingLanguageVersion ) );
+                field = BytePointerToString.Convert( Engine.GL.GetString( ( int )StringName.ShadingLanguageVersion ) );
 
                 return field;
             }

@@ -164,7 +164,7 @@ public class MainGame : Game
 
                 _test?.Render( _spriteBatch2 );
 
-                _font?.Draw( _spriteBatch2, "[GREEN]HELLO [WHITE]WORLD", 400, 400 );
+                _font?.Draw( _spriteBatch2, "[GREEN]HELLO[] [WHITE]WORLD[]", 400, 400 );
                 
                 _spriteBatch2.End();
             }
@@ -281,7 +281,6 @@ public class MainGame : Game
         CreateStage();
         CreateFont();
 //        CreateFreeTypeFont(); // Not working yet
-
         CreateSprite();
     }
 

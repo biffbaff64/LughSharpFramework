@@ -22,10 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -146,7 +149,7 @@ public abstract class GLTexture : IDisposable
 
     // ========================================================================
 
-    private static float       _maxAnisotropicFilterLevel = 0;
+    private static float       _maxAnisotropicFilterLevel;
     private        TextureUnit _activeTextureUnit         = TextureUnit.None;
 
     // ========================================================================
@@ -155,7 +158,7 @@ public abstract class GLTexture : IDisposable
     /// Default constructor. Creates a new GLTexture object using the
     /// default GL_TEXTURE_2D target.
     /// </summary>
-    protected GLTexture() : this( IGL.GL_TEXTURE_2D, GL.GenTexture() )
+    protected GLTexture() : this( IGL.GL_TEXTURE_2D, Engine.GL.GenTexture() )
     {
     }
 
@@ -163,7 +166,7 @@ public abstract class GLTexture : IDisposable
     /// Creates a new GLTexture object using the supplied OpenGL target.
     /// </summary>
     /// <param name="glTarget"></param>
-    protected GLTexture( int glTarget ) : this( glTarget, GL.GenTexture() )
+    protected GLTexture( int glTarget ) : this( glTarget, Engine.GL.GenTexture() )
     {
     }
 
@@ -193,7 +196,7 @@ public abstract class GLTexture : IDisposable
     {
         if ( _activeTextureUnit != textureUnit )
         {
-            GL.ActiveTexture( textureUnit );
+            Engine.GL.ActiveTexture( textureUnit );
             _activeTextureUnit = textureUnit;
         }
     }
@@ -225,7 +228,7 @@ public abstract class GLTexture : IDisposable
         }
 
         ActivateTexture( ( TextureUnit )( ( int )TextureUnit.Texture0 + unit ) );
-        GL.BindTexture( GLTarget, GLTextureHandle );
+        Engine.GL.BindTexture( GLTarget, GLTextureHandle );
     }
 
     /// <summary>
@@ -241,13 +244,13 @@ public abstract class GLTexture : IDisposable
     {
         if ( force || ( UWrap != s ) )
         {
-            GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )s );
+            Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )s );
             UWrap = s;
         }
 
         if ( force || ( VWrap != t ) )
         {
-            GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )t );
+            Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )t );
             VWrap = t;
         }
     }
@@ -265,8 +268,8 @@ public abstract class GLTexture : IDisposable
 
         Bind();
 
-        GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )s );
-        GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )t );
+        Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )s );
+        Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )t );
     }
 
     /// <summary>
@@ -283,13 +286,13 @@ public abstract class GLTexture : IDisposable
     {
         if ( force || ( MinFilter != minFilter ) )
         {
-            GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MIN_FILTER, ( int )minFilter );
+            Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MIN_FILTER, ( int )minFilter );
             MinFilter = minFilter;
         }
 
         if ( force || ( MagFilter != magFilter ) )
         {
-            GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MAG_FILTER, ( int )magFilter );
+            Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MAG_FILTER, ( int )magFilter );
             MagFilter = magFilter;
         }
     }
@@ -307,8 +310,8 @@ public abstract class GLTexture : IDisposable
 
         Bind();
 
-        GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MIN_FILTER, ( int )minFilter );
-        GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MAG_FILTER, ( int )magFilter );
+        Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MIN_FILTER, ( int )minFilter );
+        Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MAG_FILTER, ( int )magFilter );
     }
 
     /// <summary>
@@ -338,7 +341,7 @@ public abstract class GLTexture : IDisposable
             return AnisotropicFilterLevel;
         }
 
-        GL.TexParameterf( GLTarget, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
+        Engine.GL.TexParameterf( GLTarget, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
 
         return AnisotropicFilterLevel = level;
     }
@@ -366,7 +369,7 @@ public abstract class GLTexture : IDisposable
 
         Bind();
 
-        GL.TexParameterf( GLTarget, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
+        Engine.GL.TexParameterf( GLTarget, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
 
         return AnisotropicFilterLevel = level;
     }
@@ -384,11 +387,11 @@ public abstract class GLTexture : IDisposable
             return _maxAnisotropicFilterLevel;
         }
 
-        if ( Api.Graphics.SupportsExtension( "GL_EXT_texture_filter_anisotropic" ) )
+        if ( Engine.Api.Graphics.SupportsExtension( "GL_EXT_texture_filter_anisotropic" ) )
         {
             var buffer = new float[ 16 ];
 
-            GL.GetFloatv( IGL.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, ref buffer );
+            Engine.GL.GetFloatv( IGL.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, ref buffer );
 
             return _maxAnisotropicFilterLevel = buffer[ 0 ];
         }
@@ -455,7 +458,7 @@ public abstract class GLTexture : IDisposable
             disposePixmap = true;
         }
 
-        GL.SetGLUnpackAlignment( pixmap, PixelFormat.GetAlignment( pixmap ) );
+        Engine.GL.SetGLUnpackAlignment( pixmap, PixelFormat.GetAlignment( pixmap ) );
         CheckGLError( "SetGLUnpackAlignment" );
 
         if ( data.UseMipMaps )
@@ -465,7 +468,7 @@ public abstract class GLTexture : IDisposable
         }
         else
         {
-            GL.TexImage2D( target, miplevel, pixmap.GLInternalPixelFormat,
+            Engine.GL.TexImage2D( target, miplevel, pixmap.GLInternalPixelFormat,
                            pixmap.Width, pixmap.Height, 0,
                            pixmap.GLPixelFormat, pixmap.GLDataType, pixmap.PixelData );
             CheckGLError( "TexImage2D" );
@@ -484,7 +487,7 @@ public abstract class GLTexture : IDisposable
     /// <exception cref="RuntimeException"></exception>
     private static void CheckGLError( string operation )
     {
-        var error = GL.GetError();
+        var error = Engine.GL.GetError();
 
         if ( error != ( int )DotGLFW.ErrorCode.NoError )
         {
@@ -501,7 +504,7 @@ public abstract class GLTexture : IDisposable
     {
         if ( GLTextureHandle != 0 )
         {
-            GL.DeleteTextures( GLTextureHandle );
+            Engine.GL.DeleteTextures( GLTextureHandle );
             GLTextureHandle = 0;
         }
     }
@@ -536,7 +539,7 @@ public abstract class GLTexture : IDisposable
     #if DEBUG
     private static void DebugUploadImageData( int target, int miplevel, Pixmap pixmap )
     {
-        if ( Api.DevMode )
+        if ( Engine.Api.DevMode )
         {
             Logger.Divider();
             Logger.Debug( $"GL Target              : {target}" );
@@ -545,7 +548,7 @@ public abstract class GLTexture : IDisposable
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
             Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap.ColorFormat}" );
-            Logger.Debug( $"Pixmap Pixel Format    : {PixelFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorFormat )}" );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixelFormat.GetFormatString( pixmap.Gdx2DPixmap.ColorFormat )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
             Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormat.GLFormatAsString( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );
@@ -576,3 +579,6 @@ public abstract class GLTexture : IDisposable
     }
     #endif
 }
+
+// ============================================================================
+// ============================================================================

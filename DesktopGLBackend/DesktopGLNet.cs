@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Network;
+
 namespace DesktopGLBackend;
 
 [PublicAPI]

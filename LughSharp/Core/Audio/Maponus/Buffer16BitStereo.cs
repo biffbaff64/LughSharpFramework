@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Audio.Maponus.Decoding;
 using LughSharp.Core.Utils.Exceptions;
 using Exception = System.Exception;
@@ -57,7 +58,7 @@ public class Buffer16BitStereo : AudioBase
         OnStart();
     }
 
-    public bool DoubleMonoToStereo { get; set; } = false;
+    public bool DoubleMonoToStereo { get; set; }
 
     /// <summary>
     /// Gets the number of bytes remaining from the current position on the buffer.

@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -107,13 +110,13 @@ public class VertexArray : IVertexData
         }
 
         fixed ( float* sourcePtr = &vertices[ offset ] )
-        fixed ( byte* destPtr = _byteBuffer.BackingArray() )
-        {
-            Unsafe.CopyBlock( destPtr + _byteBuffer.Position, sourcePtr, ( uint )( count * sizeof( float ) ) );
-            _byteBuffer.Position += count * 4;
-            _buffer.Position     =  0;
-            _buffer.Limit        =  count;
-        }
+            fixed ( byte* destPtr = _byteBuffer.BackingArray() )
+            {
+                Unsafe.CopyBlock( destPtr + _byteBuffer.Position, sourcePtr, ( uint )( count * sizeof( float ) ) );
+                _byteBuffer.Position += count * 4;
+                _buffer.Position     =  0;
+                _buffer.Limit        =  count;
+            }
     }
 
     /// <summary>
@@ -131,10 +134,11 @@ public class VertexArray : IVertexData
         }
 
         fixed ( float* sourcePtr = &vertices[ sourceOffset ] )
-        fixed ( byte* destPtr = _byteBuffer.BackingArray() )
-        {
-            Unsafe.CopyBlock( destPtr + ( targetOffset * sizeof( float ) ), sourcePtr, ( uint )( count * sizeof( float ) ) );
-        }
+            fixed ( byte* destPtr = _byteBuffer.BackingArray() )
+            {
+                Unsafe.CopyBlock( destPtr + ( targetOffset * sizeof( float ) ), sourcePtr,
+                                  ( uint )( count * sizeof( float ) ) );
+            }
     }
 
     /// <summary>
@@ -159,7 +163,7 @@ public class VertexArray : IVertexData
                 continue;
             }
 
-            GL.EnableVertexAttribArray( ( uint )location );
+            Engine.GL.EnableVertexAttribArray( ( uint )location );
 
             var byteOffset    = attribute.Offset;
             var type          = attribute.ComponentType;
@@ -167,12 +171,12 @@ public class VertexArray : IVertexData
             var normalized    = attribute.Normalized;
             var stride        = Attributes.VertexSize;
 
-            GL.VertexAttribPointer( ( uint )location,
-                                    numComponents,
-                                    type,
-                                    normalized,
-                                    stride,
-                                    ( uint )byteOffset );
+            Engine.GL.VertexAttribPointer( ( uint )location,
+                                           numComponents,
+                                           type,
+                                           normalized,
+                                           stride,
+                                           ( uint )byteOffset );
         }
     }
 
@@ -191,7 +195,7 @@ public class VertexArray : IVertexData
 
             if ( location >= 0 )
             {
-                GL.DisableVertexAttribArray( ( uint )location );
+                Engine.GL.DisableVertexAttribArray( ( uint )location );
             }
         }
     }
@@ -212,3 +216,7 @@ public class VertexArray : IVertexData
         GC.SuppressFinalize( this );
     }
 }
+
+// ============================================================================
+// ============================================================================
+

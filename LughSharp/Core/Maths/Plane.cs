@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Maths;
 
 [PublicAPI]
@@ -87,7 +89,7 @@ public class Plane
     /// <summary>
     /// </summary>
     /// <returns>The distance to the origin</returns>
-    public float DistanceToOrigin { get; private set; } = 0;
+    public float DistanceToOrigin { get; private set; }
 
     /// <summary>
     /// Sets the plane normal and distance to the origin based on the three given

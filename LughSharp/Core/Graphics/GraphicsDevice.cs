@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
@@ -33,10 +34,10 @@ public abstract class GraphicsDevice : IGraphicsDevice
 {
     public FramebufferConfig BufferConfig { get; set; } = null!;
 
-    public int   LogicalWidth          { get; set; } = 0;
-    public int   LogicalHeight         { get; set; } = 0;
-    public int   BackBufferWidth       { get; set; } = 0;
-    public int   BackBufferHeight      { get; set; } = 0;
+    public int   LogicalWidth          { get; set; }
+    public int   LogicalHeight         { get; set; }
+    public int   BackBufferWidth       { get; set; }
+    public int   BackBufferHeight      { get; set; }
     public Color WindowBackgroundColor { get; set; } = Color.Blue;
 
     // ========================================================================
@@ -47,7 +48,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public virtual bool  ContinuousRendering { get; set; } = true;
     public virtual bool  IsFullscreen        { get; }
 
-    public virtual AppVersion?                 GLVersion      { get; set; } = null!;
+    public virtual AppVersion?                 GLVersion      { get; set; }
     public virtual GraphicsBackend.BackendType GraphicsType   { get; set; }
     public virtual GraphicsCapabilities        Capabilities   { get; set; } = null!;
     public virtual GLFormatChooser             FormatChooser  { get; set; } = null!;

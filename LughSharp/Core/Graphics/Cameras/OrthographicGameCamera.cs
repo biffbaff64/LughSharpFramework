@@ -55,7 +55,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
     private float _defaultZoom;
     private Shake _shake    = new();
-    private bool  _disposed = false;
+    private bool  _disposed;
 
     // ========================================================================
 

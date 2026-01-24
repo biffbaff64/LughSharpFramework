@@ -22,10 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;

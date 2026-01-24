@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -283,7 +285,7 @@ public class Actor : IActor, IComparable< Actor >
 
         if ( Stage is { ActionsRequestRendering: true } )
         {
-            Api.Graphics.RequestRendering();
+            Engine.Api.Graphics.RequestRendering();
         }
 
         try
@@ -585,14 +587,15 @@ public class Actor : IActor, IComparable< Actor >
 
             if ( Stage is { ActionsRequestRendering: true } )
             {
-                Api.Graphics.RequestRendering();
+                Engine.Api.Graphics.RequestRendering();
             }
         }
     }
 
     /// <summary>
+    /// Represents an operation to remove a specified action from the target actor.
     /// </summary>
-    /// <param name="action"></param>
+    /// <param name="action">The action to remove from the associated actor.</param>
     public void RemoveAction( Action? action )
     {
         if ( ( action != null ) && Actions.Remove( action ) )

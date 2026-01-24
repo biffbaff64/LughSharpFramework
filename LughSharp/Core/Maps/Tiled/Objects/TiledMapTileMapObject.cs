@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Maps.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;

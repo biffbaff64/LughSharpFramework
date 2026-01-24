@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
@@ -39,8 +41,8 @@ public class DragAndDrop
     private static readonly Vector2                                _tmpVector       = new();
     private readonly        Dictionary< DragSource, DragListener > _sourceListeners = new();
     private readonly        List< DragTarget >                     _targets         = [ ];
-    private                 float                                  _dragActorX      = 0;
-    private                 float                                  _dragActorY      = 0;
+    private                 float                                  _dragActorX;
+    private                 float                                  _dragActorY;
 
     private DragListener? _dragListener;
     private long          _dragValidTime;

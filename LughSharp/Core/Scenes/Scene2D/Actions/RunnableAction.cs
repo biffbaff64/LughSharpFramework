@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -34,7 +35,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Actions;
 [PublicAPI]
 public class RunnableAction : Action
 {
-    private bool               _ran = false;
+    private bool               _ran;
     public  IRunnable.Runnable RunnableTask { get; set; } = null!;
 
     public override bool Act( float delta )

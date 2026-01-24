@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -241,7 +242,7 @@ public class TooltipManager< T > where T : Actor
     /// Once a tooltip is shown, this is used instead of <see cref="InitialTime"/>.
     /// Default is 0.
     /// </summary>
-    public float SubsequentTime { get; set; } = 0;
+    public float SubsequentTime { get; set; }
 
     /// <summary>
     /// Seconds to use <see cref="SubsequentTime"/>. Default is 1.5f.

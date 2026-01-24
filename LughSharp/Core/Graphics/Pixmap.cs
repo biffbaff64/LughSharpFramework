@@ -22,10 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+using System.Linq;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
 using Exception = System.Exception;
 using LughSharp.Core.Graphics.ImageDecoders;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -520,13 +525,13 @@ public class Pixmap : IDisposable
     /// <returns> The new Pixmap. </returns>
     public static unsafe Pixmap CreateFromFrameBuffer( int x, int y, int width, int height )
     {
-        GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
+        Engine.GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
         Pixmap pixmap = new( width, height, LughFormat.RGBA8888 );
 
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
-            GL.ReadPixels( x, y, width, height, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
+            Engine.GL.ReadPixels( x, y, width, height, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
         }
 
         return pixmap;

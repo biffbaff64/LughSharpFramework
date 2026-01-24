@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Graphics;
+using DesktopGLBackend.Window;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Main;
 

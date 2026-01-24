@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Audio;
 using LughSharp.Core.Audio.OpenAL;
 using LughSharp.Core.Maths;
@@ -34,7 +35,7 @@ namespace DesktopGLBackend.Audio;
 [PublicAPI]
 public class OpenALAudio : IAudio
 {
-    public bool                NoDevice { get; set; } = false;
+    public bool                NoDevice { get; set; }
     public List< OpenALMusic > Music    { get; set; } = new( 1 );
 
     // ========================================================================
@@ -52,7 +53,7 @@ public class OpenALAudio : IAudio
     private readonly Dictionary< int, long >?   _sourceToSoundId;
 
     private int  _mostRecentSound = -1;
-    private long _nextSoundId     = 0;
+    private long _nextSoundId;
 
     // ========================================================================
     // ========================================================================

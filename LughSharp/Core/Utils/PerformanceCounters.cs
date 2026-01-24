@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Utils;
 
 /// <summary>
@@ -32,7 +34,7 @@ public class PerformanceCounters
 {
     private const float NANO2_SECONDS = 1f / 1000000000.0f;
 
-    private long _lastTick = 0L;
+    private long _lastTick;
 
     /// <summary>
     /// The list of <see cref="PerformanceCounter" />s to track.

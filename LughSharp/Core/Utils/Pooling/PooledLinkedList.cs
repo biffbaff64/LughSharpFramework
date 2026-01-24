@@ -32,7 +32,7 @@ namespace LughSharp.Core.Utils.Pooling;
 [PublicAPI]
 public class PooledLinkedList< T >
 {
-    public int Size { get; set; } = 0;
+    public int Size { get; set; }
 
     // ========================================================================
 

@@ -22,9 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics.G3D.Models.Data;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics.G3D.Utils;
 
@@ -67,7 +69,7 @@ public interface ITextureProvider
 
         public Texture Load( string filename )
         {
-            var result = new Texture( Api.Files.Internal( filename ), _useMipMaps );
+            var result = new Texture( Engine.Api.Files.Internal( filename ), _useMipMaps );
             result.SetFilter( _minFilter, _magFilter );
             result.SetWrap( _uWrap, _vWrap );
 
@@ -100,3 +102,7 @@ public interface ITextureProvider
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

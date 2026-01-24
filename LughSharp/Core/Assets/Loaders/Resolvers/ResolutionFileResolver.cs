@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
+
 namespace LughSharp.Core.Assets.Loaders.Resolvers;
 
 /// <summary>
@@ -124,8 +127,8 @@ public class ResolutionFileResolver : IFileHandleResolver
     /// <returns>The best resolution.</returns>
     public static Resolution Choose( params Resolution[] descs )
     {
-        var w = Api.Graphics.BackBufferWidth;
-        var h = Api.Graphics.BackBufferHeight;
+        var w = Engine.Api.Graphics.BackBufferWidth;
+        var h = Engine.Api.Graphics.BackBufferHeight;
 
         // Prefer the shortest side.
         var best = descs[ 0 ];

@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Utils.Collections;
 
 [PublicAPI]
@@ -35,7 +37,7 @@ public class Collections
     /// Default is false.
     /// </para>
     /// </summary>
-    public static bool AllocateIterators { get; set; } = false;
+    public static bool AllocateIterators { get; set; }
 }
 
 // ========================================================================

@@ -23,11 +23,15 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Graphics;
+using DesktopGLBackend.Input;
+using DesktopGLBackend.Utils;
 using DotGLFW;
+using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using Image = DotGLFW.Image;
 using Platform = LughSharp.Core.Main.Platform;
@@ -104,7 +108,7 @@ public class DesktopGLWindow : IDisposable
     private List< IRunnable.Runnable > _executedRunnables = [ ];
     private List< IRunnable.Runnable > _runnables         = [ ];
 
-    private Vector2 _tmpV2            = new();
+    private Vector2 _tmpV2 = new();
     private bool    _focused;
     private bool    _iconified;
     private bool    _requestRendering;
@@ -143,8 +147,8 @@ public class DesktopGLWindow : IDisposable
         Graphics           = new DesktopGLGraphics( this );
         Graphics.GLVersion = Application.GLVersion;
 
-        Api.Input    = Input;
-        Api.Graphics = Graphics;
+        Engine.Api.Input    = Input;
+        Engine.Api.Graphics = Graphics;
 
         Glfw.SetWindowFocusCallback( window, GdxFocusCallback );
         Glfw.SetWindowIconifyCallback( window, GdxIconifyCallback );
@@ -233,8 +237,8 @@ public class DesktopGLWindow : IDisposable
     /// </summary>
     public void MakeCurrent()
     {
-        Api.Graphics = Graphics;
-        Api.Input    = Input;
+        Engine.Api.Graphics = Graphics;
+        Engine.Api.Input    = Input;
 
         Glfw.MakeContextCurrent( GlfwWindow );
 
@@ -431,7 +435,7 @@ public class DesktopGLWindow : IDisposable
 
         for ( var i = 0; i < imagePaths.Length; i++ )
         {
-            pixmaps[ i ] = new Pixmap( Api.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
+            pixmaps[ i ] = new Pixmap( Engine.Api.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
         }
 
         SetIcon( window, pixmaps );
@@ -542,9 +546,9 @@ public class DesktopGLWindow : IDisposable
     #endregion dispose pattern
 
     // ========================================================================
-    
+
     #region Window callbacks
-    
+
     /// <summary>
     /// Callback method invoked when the focus state of the associated window changes.
     /// </summary>
@@ -647,7 +651,7 @@ public class DesktopGLWindow : IDisposable
     {
         WindowListener?.RefreshRequested();
     }
-    
+
     #endregion Window callbacks
 }
 

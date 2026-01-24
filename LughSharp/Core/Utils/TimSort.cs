@@ -28,6 +28,8 @@
 
 //#define ALLOW_ASSERTS
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Utils;
 
 /// <summary>
@@ -133,7 +135,7 @@ public class TimSort< T >
     /// the info explicit simplifies the code.
     /// </para>
     /// </summary>
-    private int _stackSize = 0; // Number of pending runs on stack
+    private int _stackSize; // Number of pending runs on stack
 
     /// <summary>
     /// Temp storage for merges.

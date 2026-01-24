@@ -24,7 +24,9 @@
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using Platform = LughSharp.Core.Main.Platform;
@@ -39,11 +41,11 @@ namespace LughSharp.Core.Graphics.Utils;
 public class FloatTextureData : ITextureData
 {
     public Buffer< float > Buffer        { get; private set; } = null!;
-    public int             Width         { get; set; }         = 0;
-    public int             Height        { get; set; }         = 0;
+    public int             Width         { get; set; }
+    public int             Height        { get; set; }
     public int             BitDepth      { get; set; }
     public int             BytesPerPixel { get; set; }
-    public bool            IsPrepared    { get; set; } = false;
+    public bool            IsPrepared    { get; set; }
     public bool            UseMipMaps    { get; set; }
 
     /// <inheritdoc />
@@ -84,7 +86,7 @@ public class FloatTextureData : ITextureData
         {
             var amountOfFloats = 4;
 
-            if ( Api.Graphics.GLVersion!.BackendType.Equals( GraphicsBackend.BackendType.OpenGL ) )
+            if ( Engine.Api.Graphics.GLVersion!.BackendType.Equals( GraphicsBackend.BackendType.OpenGL ) )
             {
                 if ( _internalFormat is IGL.GL_RGBA16_F or IGL.GL_RGBA32_F )
                 {
@@ -115,45 +117,45 @@ public class FloatTextureData : ITextureData
 
     public void ConsumeCustomData( int target )
     {
-        if ( ( Api.App.AppType == Platform.ApplicationType.Android )
-             || ( Api.App.AppType == Platform.ApplicationType.IOS )
-             || ( Api.App.AppType == Platform.ApplicationType.WebGL ) )
+        if ( ( Engine.Api.App.AppType == Platform.ApplicationType.Android )
+             || ( Engine.Api.App.AppType == Platform.ApplicationType.IOS )
+             || ( Engine.Api.App.AppType == Platform.ApplicationType.WebGL ) )
         {
-            if ( !Api.Graphics.SupportsExtension( "OES_texture_float" ) )
+            if ( !Engine.Api.Graphics.SupportsExtension( "OES_texture_float" ) )
             {
                 throw new RuntimeException( "Extension OES_texture_float not supported!" );
             }
 
             // GLES and WebGL defines texture format by 3rd and 8th argument,
             // so to get a float texture one needs to supply GL_RGBA and GL_FLOAT there.
-            GL.TexImage2D( target,
-                           0,
-                           IGL.GL_RGBA,
-                           Width,
-                           Height,
-                           0,
-                           IGL.GL_RGBA,
-                           IGL.GL_FLOAT,
-                           Buffer.ToArray() );
+            Engine.GL.TexImage2D( target,
+                                  0,
+                                  IGL.GL_RGBA,
+                                  Width,
+                                  Height,
+                                  0,
+                                  IGL.GL_RGBA,
+                                  IGL.GL_FLOAT,
+                                  Buffer.ToArray() );
         }
         else
         {
-            if ( !Api.Graphics.SupportsExtension( "GL_ARB_texture_float" ) )
+            if ( !Engine.Api.Graphics.SupportsExtension( "GL_ARB_texture_float" ) )
             {
                 throw new RuntimeException( "Extension GL_ARB_texture_float not supported!" );
             }
 
             // in desktop OpenGL the texture format is defined only by the third argument,
             // hence we need to use GL_RGBA32F there (this constant is unavailable in GLES/WebGL)
-            GL.TexImage2D( target,
-                           0,
-                           _internalFormat,
-                           Width,
-                           Height,
-                           0,
-                           _format,
-                           IGL.GL_FLOAT,
-                           Buffer.ToArray() );
+            Engine.GL.TexImage2D( target,
+                                  0,
+                                  _internalFormat,
+                                  Width,
+                                  Height,
+                                  0,
+                                  _format,
+                                  IGL.GL_FLOAT,
+                                  Buffer.ToArray() );
         }
     }
 

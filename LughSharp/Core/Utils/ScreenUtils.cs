@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using Color = LughSharp.Core.Graphics.Color;
 
@@ -54,13 +56,13 @@ public static class ScreenUtils
     {
         get
         {
-            if ( Api.Graphics == null )
+            if ( Engine.Api.Graphics == null )
             {
                 throw new NullReferenceException();
             }
 
-            var w = Api.Graphics.BackBufferWidth;
-            var h = Api.Graphics.BackBufferHeight;
+            var w = Engine.Api.Graphics.BackBufferWidth;
+            var h = Engine.Api.Graphics.BackBufferHeight;
 
             return GetFrameBufferTexture( 0, 0, w, h );
         }
@@ -86,7 +88,7 @@ public static class ScreenUtils
     /// <param name="b"> Blue component. </param>
     public static void Clear( float r, float g, float b, float a, bool clearDepth = false )
     {
-        GL.ClearColor( r, g, b, a );
+        Engine.GL.ClearColor( r, g, b, a );
 
         var mask = ( uint )IGL.GL_COLOR_BUFFER_BIT;
 
@@ -95,7 +97,7 @@ public static class ScreenUtils
             mask |= IGL.GL_DEPTH_BUFFER_BIT;
         }
 
-        GL.Clear( mask );
+        Engine.GL.Clear( mask );
     }
 
     /// <summary>
@@ -154,13 +156,13 @@ public static class ScreenUtils
     /// <param name="flipY"> whether to flip pixels along Y axis</param>
     public static byte[] GetFrameBufferPixels( bool flipY )
     {
-        if ( Api.Graphics == null )
+        if ( Engine.Api.Graphics == null )
         {
             throw new NullReferenceException();
         }
 
-        var w = Api.Graphics.BackBufferWidth;
-        var h = Api.Graphics.BackBufferHeight;
+        var w = Engine.Api.Graphics.BackBufferWidth;
+        var h = Engine.Api.Graphics.BackBufferHeight;
 
         return GetFrameBufferPixels( 0, 0, w, h, flipY );
     }
@@ -186,13 +188,13 @@ public static class ScreenUtils
     {
         var numBytes = w * h * 4;
 
-        GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
+        Engine.GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
         var pixels = new Buffer< byte >( numBytes );
 
         fixed ( void* ptr = &pixels.BackingArray()[ 0 ] )
         {
-            GL.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
+            Engine.GL.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
         }
 
         var lines = new byte[ numBytes ];

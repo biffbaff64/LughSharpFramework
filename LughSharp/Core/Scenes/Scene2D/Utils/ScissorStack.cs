@@ -22,10 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Collections;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
@@ -71,7 +73,7 @@ public class ScissorStack
                 return false;
             }
 
-            GL.Enable( EnableCap.ScissorTest );
+            Engine.GL.Enable( EnableCap.ScissorTest );
         }
         else
         {
@@ -124,7 +126,7 @@ public class ScissorStack
 
         if ( _scissors.Count == 0 )
         {
-            GL.Disable( EnableCap.ScissorTest );
+            Engine.GL.Disable( EnableCap.ScissorTest );
         }
         else
         {
@@ -173,7 +175,7 @@ public class ScissorStack
                                           Rectangle area,
                                           Rectangle scissor )
     {
-        CalculateScissors( camera, 0, 0, Api.Graphics.Width, Api.Graphics.Height, batchTransform, area, scissor );
+        CalculateScissors( camera, 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height, batchTransform, area, scissor );
     }
 
     /// <summary>
@@ -225,7 +227,7 @@ public class ScissorStack
     {
         if ( _scissors.Count == 0 )
         {
-            _viewport.Set( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
+            _viewport.Set( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
 
             return _viewport;
         }

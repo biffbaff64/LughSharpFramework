@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -49,7 +51,7 @@ public class IndexBufferObjectSubData : IIndexData
     private readonly Buffer< byte >  _byteBuffer;
     private readonly BufferUsageHint _usage;
     private          int             _bufferHandle;
-    private          bool            _isBound = false;
+    private          bool            _isBound;
     private          bool            _isDirty = true;
 
     // ========================================================================
@@ -111,7 +113,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -138,7 +140,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -163,7 +165,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -186,7 +188,7 @@ public class IndexBufferObjectSubData : IIndexData
             throw new RuntimeException( "IndexBufferObject cannot be used after it has been disposed." );
         }
 
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -194,7 +196,7 @@ public class IndexBufferObjectSubData : IIndexData
 
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -206,7 +208,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <inheritdoc />
     public void Unbind()
     {
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
         _isBound = false;
     }
 
@@ -220,20 +222,23 @@ public class IndexBufferObjectSubData : IIndexData
     /// <inheritdoc />
     public void Dispose()
     {
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
-        GL.DeleteBuffers( ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
+        Engine.GL.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
     }
 
     private int CreateBufferObject()
     {
-        var result = GL.GenBuffer();
+        var result = Engine.GL.GenBuffer();
 
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, result );
-        GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Capacity, 0, _usage );
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, result );
+        Engine.GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Capacity, 0, _usage );
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
 
         return ( int )result;
     }
 }
+
+// ============================================================================
+// ============================================================================

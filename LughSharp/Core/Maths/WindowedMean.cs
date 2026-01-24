@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Maths;
 
 /// <summary>
@@ -36,10 +38,10 @@ public class WindowedMean
 {
     private readonly float[] _values;
 
-    private int   _addedValues = 0;
+    private int   _addedValues;
     private bool  _dirty       = true;
     private int   _lastValue;
-    private float _mean = 0;
+    private float _mean;
 
     /// <summary>
     /// constructor, window_size specifies the number of samples we will

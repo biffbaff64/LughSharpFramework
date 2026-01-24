@@ -22,10 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using Color = LughSharp.Core.Graphics.Color;
@@ -172,8 +174,8 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         if ( Blending )
         {
-            GL.Enable( EnableCap.Blend );
-            GL.BlendFunc( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            Engine.GL.Enable( EnableCap.Blend );
+            Engine.GL.BlendFunc( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
         }
 
         SpriteCache.Begin();
@@ -195,7 +197,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         if ( Blending )
         {
-            GL.Disable( EnableCap.Blend );
+            Engine.GL.Disable( EnableCap.Blend );
         }
     }
 
@@ -234,8 +236,8 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         if ( Blending )
         {
-            GL.Enable( EnableCap.Blend );
-            GL.BlendFunc( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            Engine.GL.Enable( EnableCap.Blend );
+            Engine.GL.BlendFunc( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
         }
 
         SpriteCache?.Begin();
@@ -255,7 +257,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         if ( Blending )
         {
-            GL.Disable( EnableCap.Blend );
+            Engine.GL.Disable( EnableCap.Blend );
         }
     }
 

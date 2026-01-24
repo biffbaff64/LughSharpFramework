@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Input;
+using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
@@ -142,9 +144,6 @@ public class ActorGestureListener : IEventListener
 
                 return true;
             }
-
-            default:
-                break;
         }
 
         return false;

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -79,8 +80,8 @@ public class Sprite : TextureRegion
 
     private bool  _flipX;
     private bool  _flipY;
-    private float _uScrollOffset = 0;
-    private float _vScrollOffset = 0;
+    private float _uScrollOffset;
+    private float _vScrollOffset;
 
     // ========================================================================
 

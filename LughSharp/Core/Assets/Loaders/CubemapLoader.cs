@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -140,18 +142,18 @@ public class CubemapLoader : AsynchronousAssetLoader
         /// <summary>
         /// The texture to put the TextureData in, optional.
         /// </summary>
-        public Cubemap? Cubemap { get; set; } = null;
+        public Cubemap? Cubemap { get; set; }
 
         /// <summary>
         /// CubemapData for textures created on the fly, optional.
         /// When set, all format and genMipMaps are ignored
         /// </summary>
-        public ICubemapData? CubemapData = null;
+        public ICubemapData? CubemapData;
 
         /// <summary>
         /// the format of the final Texture. Uses the source images format if null
         /// </summary>
-        public int Format = 0;
+        public int Format;
 
         public TextureFilterMode MagFilter = TextureFilterMode.Nearest;
         public TextureFilterMode MinFilter = TextureFilterMode.Nearest;

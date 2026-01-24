@@ -22,7 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -182,23 +186,23 @@ public class FileTextureArrayData : ITextureArrayData
                 {
                     fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
                     {
-                        GL.TexSubImage3D( IGL.GL_TEXTURE_2D_ARRAY,
-                                          0,
-                                          0,
-                                          0,
-                                          i,
-                                          pixmap.Width,
-                                          pixmap.Height,
-                                          1,
-                                          pixmap.GLInternalPixelFormat,
-                                          pixmap.GLDataType,
-                                          ( IntPtr )ptr );
+                        Engine.GL.TexSubImage3D( IGL.GL_TEXTURE_2D_ARRAY,
+                                                 0,
+                                                 0,
+                                                 0,
+                                                 i,
+                                                 pixmap.Width,
+                                                 pixmap.Height,
+                                                 1,
+                                                 pixmap.GLInternalPixelFormat,
+                                                 pixmap.GLDataType,
+                                                 ( IntPtr )ptr );
                     }
                 }
 
                 if ( _useMipMaps )
                 {
-                    GL.GenerateMipmap( IGL.GL_TEXTURE_2D_ARRAY );
+                    Engine.GL.GenerateMipmap( IGL.GL_TEXTURE_2D_ARRAY );
                 }
 
                 if ( disposePixmap )

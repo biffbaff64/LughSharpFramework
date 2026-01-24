@@ -22,8 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Input;
+using LughSharp.Core.Main;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
@@ -464,10 +467,10 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         var over = false;
 
         if ( ( node == OverNode )
-             && ( Api.App.AppType == Platform.ApplicationType.WindowsGL )
+             && ( Engine.Api.App.AppType == Platform.ApplicationType.WindowsGL )
              && ( !_selection.Multiple || ( !InputUtils.CtrlKey() && !InputUtils.ShiftKey() ) ) )
         {
-            var mouseX = ScreenToLocalCoordinates( _tmp.Set( Api.Input.GetX(), 0 ) ).X;
+            var mouseX = ScreenToLocalCoordinates( _tmp.Set( Engine.Api.Input.GetX(), 0 ) ).X;
 
             if ( ( mouseX >= 0 ) && ( mouseX < iconX ) )
             {
@@ -821,11 +824,11 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
         public ISceneDrawable  Plus       { get; set; }
         public ISceneDrawable  Minus      { get; set; }
-        public ISceneDrawable? PlusOver   { get; set; } = null;
-        public ISceneDrawable? MinusOver  { get; set; } = null;
-        public ISceneDrawable? Over       { get; set; } = null;
-        public ISceneDrawable? Selection  { get; set; } = null;
-        public ISceneDrawable? Background { get; set; } = null;
+        public ISceneDrawable? PlusOver   { get; set; }
+        public ISceneDrawable? MinusOver  { get; set; }
+        public ISceneDrawable? Over       { get; set; }
+        public ISceneDrawable? Selection  { get; set; }
+        public ISceneDrawable? Background { get; set; }
     }
 
     // ========================================================================

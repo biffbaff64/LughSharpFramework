@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;

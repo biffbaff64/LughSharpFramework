@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Maths;
+
 namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
 /// <summary>
@@ -67,9 +70,6 @@ public class InputListener : IEventListener
 
             case InputEvent.EventType.KeyTyped:
                 return KeyTyped( inputEvent, inputEvent.Character );
-
-            default:
-                break;
         }
 
         inputEvent.ToCoordinates( inputEvent.ListenerActor, _tmpCoords );
@@ -117,14 +117,11 @@ public class InputListener : IEventListener
             case InputEvent.EventType.Enter:
                 Enter( inputEvent, _tmpCoords.X, _tmpCoords.Y, inputEvent.Pointer, inputEvent.RelatedActor );
 
-                return false;
+                break;
 
             case InputEvent.EventType.Exit:
                 Exit( inputEvent, _tmpCoords.X, _tmpCoords.Y, inputEvent.Pointer, inputEvent.RelatedActor );
 
-                return false;
-
-            default:
                 break;
         }
 
@@ -241,3 +238,7 @@ public class InputListener : IEventListener
         return false;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

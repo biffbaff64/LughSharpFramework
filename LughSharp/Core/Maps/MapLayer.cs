@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maps;
@@ -34,7 +35,7 @@ public class MapLayer
 {
     private float         _offsetX;
     private float         _offsetY;
-    private MapLayer?     _parent            = null!;
+    private MapLayer?     _parent;
     private bool          _renderOffsetDirty = true;
     private float         _renderOffsetX;
     private float         _renderOffsetY;

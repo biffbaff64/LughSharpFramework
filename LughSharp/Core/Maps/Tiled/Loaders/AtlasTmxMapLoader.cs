@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Xml;
+using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
@@ -288,7 +289,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     [PublicAPI]
     public class AtlasTiledMapLoaderParameters : BaseTmxLoaderParameters
     {
-        public bool ForceTextureFilters { get; set; } = false;
+        public bool ForceTextureFilters { get; set; }
     }
 
     // ========================================================================

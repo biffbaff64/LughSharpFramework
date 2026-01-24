@@ -22,7 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Pooling;
@@ -50,7 +54,7 @@ public static class Pools
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static T Obtain< T >() where T : class, new()
+    public static T? Obtain< T >() where T : class, new()
     {
         return Get< T >( () => new T() ).Obtain();
 

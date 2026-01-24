@@ -26,6 +26,8 @@
 
 // ============================================================================
 
+using System.Text;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 using GLenum = int;
@@ -71,7 +73,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void LinkProgram( GLint program )
     {
-        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -103,7 +105,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void GetProgramiv( GLint program, GLenum pname, GLint* parameters )
     {
-        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -117,7 +119,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void GetProgramiv( GLint program, GLenum pname, ref GLint[] parameters )
     {
-        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -136,7 +138,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void GetProgramInfoLog( GLint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
     {
-        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -150,7 +152,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public string GetProgramInfoLog( GLint program, GLsizei bufSize )
     {
-        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -171,7 +173,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public bool ValidateProgram( int program )
     {
-        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -188,7 +190,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLGETPROGRAMSTAGEIVPROC >( "glGetProgramStageiv", out _glGetProgramStageiv );
 
-        _glGetProgramStageiv( ( uint )program, shadertype, pname, values );
+        _glGetProgramStageiv( program, shadertype, pname, values );
     }
 
     public void GetProgramStageiv( GLuint program, GLenum shadertype, GLenum pname, ref GLint[] values )
@@ -197,7 +199,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLint* p = &values[ 0 ] )
         {
-            _glGetProgramStageiv( ( uint )program, shadertype, pname, p );
+            _glGetProgramStageiv( program, shadertype, pname, p );
         }
     }
 
@@ -216,7 +218,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLGETPROGRAMBINARYPROC >( "glGetProgramBinary", out _glGetProgramBinary );
 
-        _glGetProgramBinary( ( uint )program, bufSize, length, binaryFormat, binary );
+        _glGetProgramBinary( program, bufSize, length, binaryFormat, binary );
     }
 
     public byte[] GetProgramBinary( GLuint program, GLsizei bufSize, out GLenum binaryFormat )
@@ -230,7 +232,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             fixed ( GLenum* pBinaryFormat = &binaryFormat )
             {
-                _glGetProgramBinary( ( uint )program, bufSize, &length, pBinaryFormat, ( IntPtr )pBinary );
+                _glGetProgramBinary( program, bufSize, &length, pBinaryFormat, ( IntPtr )pBinary );
             }
         }
 
@@ -245,7 +247,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMBINARYPROC >( "glProgramBinary", out _glProgramBinary );
 
-        _glProgramBinary( ( uint )program, binaryFormat, binary, length );
+        _glProgramBinary( program, binaryFormat, binary, length );
     }
 
     public void ProgramBinary( GLuint program, GLenum binaryFormat, byte[] binary )
@@ -254,7 +256,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( byte* pBinary = &binary[ 0 ] )
         {
-            _glProgramBinary( ( uint )program, binaryFormat, ( IntPtr )pBinary, binary.Length );
+            _glProgramBinary( program, binaryFormat, ( IntPtr )pBinary, binary.Length );
         }
     }
 
@@ -264,7 +266,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMPARAMETERIPROC >( "glProgramParameteri", out _glProgramParameteri );
 
-        _glProgramParameteri( ( uint )program, pname, value );
+        _glProgramParameteri( program, pname, value );
     }
 
     // ========================================================================
@@ -273,7 +275,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLUSEPROGRAMSTAGESPROC >( "glUseProgramStages", out _glUseProgramStages );
 
-        _glUseProgramStages( pipeline, stages, ( uint )program );
+        _glUseProgramStages( pipeline, stages, program );
     }
 
     // ========================================================================
@@ -282,7 +284,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLACTIVESHADERPROGRAMPROC >( "glActiveShaderProgram", out _glActiveShaderProgram );
 
-        _glActiveShaderProgram( pipeline, ( uint )program );
+        _glActiveShaderProgram( pipeline, program );
     }
 
     // ========================================================================
@@ -411,7 +413,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM1IPROC >( "glProgramUniform1i", out _glProgramUniform1i );
 
-        _glProgramUniform1i( ( uint )program, location, v0 );
+        _glProgramUniform1i( program, location, v0 );
     }
 
     // ========================================================================
@@ -420,7 +422,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM1IVPROC >( "glProgramUniform1iv", out _glProgramUniform1iv );
 
-        _glProgramUniform1iv( ( uint )program, location, count, value );
+        _glProgramUniform1iv( program, location, count, value );
     }
 
     public void ProgramUniform1iv( GLuint program, GLint location, GLint[] value )
@@ -429,7 +431,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLint* pValue = &value[ 0 ] )
         {
-            _glProgramUniform1iv( ( uint )program, location, value.Length, pValue );
+            _glProgramUniform1iv( program, location, value.Length, pValue );
         }
     }
 
@@ -439,7 +441,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM1FPROC >( "glProgramUniform1f", out _glProgramUniform1f );
 
-        _glProgramUniform1f( ( uint )program, location, v0 );
+        _glProgramUniform1f( program, location, v0 );
     }
 
     // ========================================================================
@@ -448,7 +450,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM1FVPROC >( "glProgramUniform1fv", out _glProgramUniform1fv );
 
-        _glProgramUniform1fv( ( uint )program, location, count, value );
+        _glProgramUniform1fv( program, location, count, value );
     }
 
     public void ProgramUniform1fv( GLuint program, GLint location, GLfloat[] value )
@@ -457,7 +459,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniform1fv( ( uint )program, location, value.Length, pValue );
+            _glProgramUniform1fv( program, location, value.Length, pValue );
         }
     }
 
@@ -467,7 +469,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM1DPROC >( "glProgramUniform1d", out _glProgramUniform1d );
 
-        _glProgramUniform1d( ( uint )program, location, v0 );
+        _glProgramUniform1d( program, location, v0 );
     }
 
     // ========================================================================
@@ -476,7 +478,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM1DVPROC >( "glProgramUniform1dv", out _glProgramUniform1dv );
 
-        _glProgramUniform1dv( ( uint )program, location, count, value );
+        _glProgramUniform1dv( program, location, count, value );
     }
 
     public void ProgramUniform1dv( GLuint program, GLint location, GLdouble[] value )
@@ -485,7 +487,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniform1dv( ( uint )program, location, value.Length, pValue );
+            _glProgramUniform1dv( program, location, value.Length, pValue );
         }
     }
 
@@ -495,7 +497,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM1UIPROC >( "glProgramUniform1ui", out _glProgramUniform1ui );
 
-        _glProgramUniform1ui( ( uint )program, location, v0 );
+        _glProgramUniform1ui( program, location, v0 );
     }
 
     // ========================================================================
@@ -504,7 +506,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM1UIVPROC >( "glProgramUniform1uiv", out _glProgramUniform1uiv );
 
-        _glProgramUniform1uiv( ( uint )program, location, count, value );
+        _glProgramUniform1uiv( program, location, count, value );
     }
 
     public void ProgramUniform1uiv( GLuint program, GLint location, GLuint[] value )
@@ -513,7 +515,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLuint* pValue = &value[ 0 ] )
         {
-            _glProgramUniform1uiv( ( uint )program, location, value.Length, pValue );
+            _glProgramUniform1uiv( program, location, value.Length, pValue );
         }
     }
 
@@ -523,7 +525,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM2IPROC >( "glProgramUniform2i", out _glProgramUniform2i );
 
-        _glProgramUniform2i( ( uint )program, location, v0, v1 );
+        _glProgramUniform2i( program, location, v0, v1 );
     }
 
     // ========================================================================
@@ -532,7 +534,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM2IVPROC >( "glProgramUniform2iv", out _glProgramUniform2iv );
 
-        _glProgramUniform2iv( ( uint )program, location, count, value );
+        _glProgramUniform2iv( program, location, count, value );
     }
 
     public void ProgramUniform2iv( GLuint program, GLint location, GLint[] value )
@@ -541,7 +543,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLint* pValue = &value[ 0 ] )
         {
-            _glProgramUniform2iv( ( uint )program, location, value.Length / 2, pValue );
+            _glProgramUniform2iv( program, location, value.Length / 2, pValue );
         }
     }
 
@@ -551,7 +553,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM2FPROC >( "glProgramUniform2f", out _glProgramUniform2f );
 
-        _glProgramUniform2f( ( uint )program, location, v0, v1 );
+        _glProgramUniform2f( program, location, v0, v1 );
     }
 
     // ========================================================================
@@ -560,7 +562,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM2FVPROC >( "glProgramUniform2fv", out _glProgramUniform2fv );
 
-        _glProgramUniform2fv( ( uint )program, location, count, value );
+        _glProgramUniform2fv( program, location, count, value );
     }
 
     public void ProgramUniform2fv( GLuint program, GLint location, GLfloat[] value )
@@ -569,7 +571,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniform2fv( ( uint )program, location, value.Length / 2, pValue );
+            _glProgramUniform2fv( program, location, value.Length / 2, pValue );
         }
     }
 
@@ -579,7 +581,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM2DPROC >( "glProgramUniform2d", out _glProgramUniform2d );
 
-        _glProgramUniform2d( ( uint )program, location, v0, v1 );
+        _glProgramUniform2d( program, location, v0, v1 );
     }
 
     // ========================================================================
@@ -588,7 +590,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM2DVPROC >( "glProgramUniform2dv", out _glProgramUniform2dv );
 
-        _glProgramUniform2dv( ( uint )program, location, count, value );
+        _glProgramUniform2dv( program, location, count, value );
     }
 
     public void ProgramUniform2dv( GLuint program, GLint location, GLdouble[] value )
@@ -597,7 +599,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniform2dv( ( uint )program, location, value.Length / 2, pValue );
+            _glProgramUniform2dv( program, location, value.Length / 2, pValue );
         }
     }
 
@@ -607,7 +609,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM2UIPROC >( "glProgramUniform2ui", out _glProgramUniform2ui );
 
-        _glProgramUniform2ui( ( uint )program, location, v0, v1 );
+        _glProgramUniform2ui( program, location, v0, v1 );
     }
 
     // ========================================================================
@@ -616,7 +618,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM2UIVPROC >( "glProgramUniform2uiv", out _glProgramUniform2uiv );
 
-        _glProgramUniform2uiv( ( uint )program, location, count, value );
+        _glProgramUniform2uiv( program, location, count, value );
     }
 
     public void ProgramUniform2uiv( GLuint program, GLint location, GLuint[] value )
@@ -625,7 +627,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLuint* pValue = &value[ 0 ] )
         {
-            _glProgramUniform2uiv( ( uint )program, location, value.Length / 2, pValue );
+            _glProgramUniform2uiv( program, location, value.Length / 2, pValue );
         }
     }
 
@@ -635,7 +637,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3IPROC >( "glProgramUniform3i", out _glProgramUniform3i );
 
-        _glProgramUniform3i( ( uint )program, location, v0, v1, v2 );
+        _glProgramUniform3i( program, location, v0, v1, v2 );
     }
 
     // ========================================================================
@@ -644,7 +646,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3IVPROC >( "glProgramUniform3iv", out _glProgramUniform3iv );
 
-        _glProgramUniform3iv( ( uint )program, location, count, value );
+        _glProgramUniform3iv( program, location, count, value );
     }
 
     public void ProgramUniform3iv( GLuint program, GLint location, GLint[] value )
@@ -653,7 +655,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLint* pValue = &value[ 0 ] )
         {
-            _glProgramUniform3iv( ( uint )program, location, value.Length / 3, pValue );
+            _glProgramUniform3iv( program, location, value.Length / 3, pValue );
         }
     }
 
@@ -663,7 +665,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3FPROC >( "glProgramUniform3f", out _glProgramUniform3f );
 
-        _glProgramUniform3f( ( uint )program, location, v0, v1, v2 );
+        _glProgramUniform3f( program, location, v0, v1, v2 );
     }
 
     // ========================================================================
@@ -672,7 +674,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3FVPROC >( "glProgramUniform3fv", out _glProgramUniform3fv );
 
-        _glProgramUniform3fv( ( uint )program, location, count, value );
+        _glProgramUniform3fv( program, location, count, value );
     }
 
     public void ProgramUniform3fv( GLuint program, GLint location, GLfloat[] value )
@@ -681,7 +683,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniform3fv( ( uint )program, location, value.Length / 3, pValue );
+            _glProgramUniform3fv( program, location, value.Length / 3, pValue );
         }
     }
 
@@ -691,7 +693,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3DPROC >( "glProgramUniform3d", out _glProgramUniform3d );
 
-        _glProgramUniform3d( ( uint )program, location, v0, v1, v2 );
+        _glProgramUniform3d( program, location, v0, v1, v2 );
     }
 
     // ========================================================================
@@ -700,7 +702,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3DVPROC >( "glProgramUniform3dv", out _glProgramUniform3dv );
 
-        _glProgramUniform3dv( ( uint )program, location, count, value );
+        _glProgramUniform3dv( program, location, count, value );
     }
 
     public void ProgramUniform3dv( GLuint program, GLint location, GLdouble[] value )
@@ -709,7 +711,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniform3dv( ( uint )program, location, value.Length / 3, pValue );
+            _glProgramUniform3dv( program, location, value.Length / 3, pValue );
         }
     }
 
@@ -719,7 +721,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3UIPROC >( "glProgramUniform3ui", out _glProgramUniform3ui );
 
-        _glProgramUniform3ui( ( uint )program, location, v0, v1, v2 );
+        _glProgramUniform3ui( program, location, v0, v1, v2 );
     }
 
     // ========================================================================
@@ -728,7 +730,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3UIVPROC >( "glProgramUniform3uiv", out _glProgramUniform3uiv );
 
-        _glProgramUniform3uiv( ( uint )program, location, count, value );
+        _glProgramUniform3uiv( program, location, count, value );
     }
 
     public void ProgramUniform3uiv( GLuint program, GLint location, GLuint[] value )
@@ -737,7 +739,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLuint* pValue = &value[ 0 ] )
         {
-            _glProgramUniform3uiv( ( uint )program, location, value.Length / 3, pValue );
+            _glProgramUniform3uiv( program, location, value.Length / 3, pValue );
         }
     }
 
@@ -747,7 +749,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM4IPROC >( "glProgramUniform4i", out _glProgramUniform4i );
 
-        _glProgramUniform4i( ( uint )program, location, v0, v1, v2, v3 );
+        _glProgramUniform4i( program, location, v0, v1, v2, v3 );
     }
 
     // ========================================================================
@@ -756,7 +758,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM4IVPROC >( "glProgramUniform4iv", out _glProgramUniform4iv );
 
-        _glProgramUniform4iv( ( uint )program, location, count, value );
+        _glProgramUniform4iv( program, location, count, value );
     }
 
     public void ProgramUniform4iv( GLuint program, GLint location, GLint[] value )
@@ -765,7 +767,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLint* pValue = &value[ 0 ] )
         {
-            _glProgramUniform4iv( ( uint )program, location, value.Length / 4, pValue );
+            _glProgramUniform4iv( program, location, value.Length / 4, pValue );
         }
     }
 
@@ -775,7 +777,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM4FPROC >( "glProgramUniform4f", out _glProgramUniform4f );
 
-        _glProgramUniform4f( ( uint )program, location, v0, v1, v2, v3 );
+        _glProgramUniform4f( program, location, v0, v1, v2, v3 );
     }
 
     // ========================================================================
@@ -784,7 +786,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM4FVPROC >( "glProgramUniform4fv", out _glProgramUniform4fv );
 
-        _glProgramUniform4fv( ( uint )program, location, count, value );
+        _glProgramUniform4fv( program, location, count, value );
     }
 
     public void ProgramUniform4fv( GLuint program, GLint location, GLfloat[] value )
@@ -793,7 +795,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniform4fv( ( uint )program, location, value.Length / 4, pValue );
+            _glProgramUniform4fv( program, location, value.Length / 4, pValue );
         }
     }
 
@@ -803,7 +805,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM4DPROC >( "glProgramUniform4d", out _glProgramUniform4d );
 
-        _glProgramUniform4d( ( uint )program, location, v0, v1, v2, v3 );
+        _glProgramUniform4d( program, location, v0, v1, v2, v3 );
     }
 
     // ========================================================================
@@ -812,7 +814,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM4DVPROC >( "glProgramUniform4dv", out _glProgramUniform4dv );
 
-        _glProgramUniform4dv( ( uint )program, location, count, value );
+        _glProgramUniform4dv( program, location, count, value );
     }
 
     public void ProgramUniform4dv( GLuint program, GLint location, GLdouble[] value )
@@ -821,7 +823,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniform4dv( ( uint )program, location, value.Length / 4, pValue );
+            _glProgramUniform4dv( program, location, value.Length / 4, pValue );
         }
     }
 
@@ -831,7 +833,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM4UIPROC >( "glProgramUniform4ui", out _glProgramUniform4ui );
 
-        _glProgramUniform4ui( ( uint )program, location, v0, v1, v2, v3 );
+        _glProgramUniform4ui( program, location, v0, v1, v2, v3 );
     }
 
     // ========================================================================
@@ -840,7 +842,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM4UIVPROC >( "glProgramUniform4uiv", out _glProgramUniform4uiv );
 
-        _glProgramUniform4uiv( ( uint )program, location, count, value );
+        _glProgramUniform4uiv( program, location, count, value );
     }
 
     public void ProgramUniform4uiv( GLuint program, GLint location, GLuint[] value )
@@ -849,7 +851,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLuint* pValue = &value[ 0 ] )
         {
-            _glProgramUniform4uiv( ( uint )program, location, value.Length / 4, pValue );
+            _glProgramUniform4uiv( program, location, value.Length / 4, pValue );
         }
     }
 
@@ -859,7 +861,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2FVPROC >( "glProgramUniformMatrix2fv", out _glProgramUniformMatrix2fv );
 
-        _glProgramUniformMatrix2fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix2fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -868,7 +870,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix2fv( ( uint )program, location, value.Length / 4, transpose, pValue );
+            _glProgramUniformMatrix2fv( program, location, value.Length / 4, transpose, pValue );
         }
     }
 
@@ -878,7 +880,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3FVPROC >( "glProgramUniformMatrix3fv", out _glProgramUniformMatrix3fv );
 
-        _glProgramUniformMatrix3fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix3fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -887,7 +889,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix3fv( ( uint )program, location, value.Length / 9, transpose, pValue );
+            _glProgramUniformMatrix3fv( program, location, value.Length / 9, transpose, pValue );
         }
     }
 
@@ -897,7 +899,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4FVPROC >( "glProgramUniformMatrix4fv", out _glProgramUniformMatrix4fv );
 
-        _glProgramUniformMatrix4fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix4fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -906,7 +908,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix4fv( ( uint )program, location, value.Length / 16, transpose, pValue );
+            _glProgramUniformMatrix4fv( program, location, value.Length / 16, transpose, pValue );
         }
     }
 
@@ -916,7 +918,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2DVPROC >( "glProgramUniformMatrix2dv", out _glProgramUniformMatrix2dv );
 
-        _glProgramUniformMatrix2dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix2dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -925,7 +927,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix2dv( ( uint )program, location, value.Length / 4, transpose, pValue );
+            _glProgramUniformMatrix2dv( program, location, value.Length / 4, transpose, pValue );
         }
     }
 
@@ -935,7 +937,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3DVPROC >( "glProgramUniformMatrix3dv", out _glProgramUniformMatrix3dv );
 
-        _glProgramUniformMatrix3dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix3dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -944,7 +946,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix3dv( ( uint )program, location, value.Length / 9, transpose, pValue );
+            _glProgramUniformMatrix3dv( program, location, value.Length / 9, transpose, pValue );
         }
     }
 
@@ -954,7 +956,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4DVPROC >( "glProgramUniformMatrix4dv", out _glProgramUniformMatrix4dv );
 
-        _glProgramUniformMatrix4dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix4dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -963,7 +965,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix4dv( ( uint )program, location, value.Length / 16, transpose, pValue );
+            _glProgramUniformMatrix4dv( program, location, value.Length / 16, transpose, pValue );
         }
     }
 
@@ -973,7 +975,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC >( "glProgramUniformMatrix2x3fv", out _glProgramUniformMatrix2x3fv );
 
-        _glProgramUniformMatrix2x3fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix2x3fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2x3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -982,7 +984,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix2x3fv( ( uint )program, location, value.Length / 6, transpose, pValue );
+            _glProgramUniformMatrix2x3fv( program, location, value.Length / 6, transpose, pValue );
         }
     }
 
@@ -992,7 +994,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC >( "glProgramUniformMatrix3x2fv", out _glProgramUniformMatrix3x2fv );
 
-        _glProgramUniformMatrix3x2fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix3x2fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3x2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -1001,7 +1003,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix3x2fv( ( uint )program, location, value.Length / 6, transpose, pValue );
+            _glProgramUniformMatrix3x2fv( program, location, value.Length / 6, transpose, pValue );
         }
     }
 
@@ -1011,7 +1013,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC >( "glProgramUniformMatrix2x4fv", out _glProgramUniformMatrix2x4fv );
 
-        _glProgramUniformMatrix2x4fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix2x4fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2x4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -1020,7 +1022,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix2x4fv( ( uint )program, location, value.Length / 8, transpose, pValue );
+            _glProgramUniformMatrix2x4fv( program, location, value.Length / 8, transpose, pValue );
         }
     }
 
@@ -1030,7 +1032,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC >( "glProgramUniformMatrix4x2fv", out _glProgramUniformMatrix4x2fv );
 
-        _glProgramUniformMatrix4x2fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix4x2fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4x2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -1039,7 +1041,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix4x2fv( ( uint )program, location, value.Length / 8, transpose, pValue );
+            _glProgramUniformMatrix4x2fv( program, location, value.Length / 8, transpose, pValue );
         }
     }
 
@@ -1049,7 +1051,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC >( "glProgramUniformMatrix3x4fv", out _glProgramUniformMatrix3x4fv );
 
-        _glProgramUniformMatrix3x4fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix3x4fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3x4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -1058,7 +1060,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix3x4fv( ( uint )program, location, value.Length / 12, transpose, pValue );
+            _glProgramUniformMatrix3x4fv( program, location, value.Length / 12, transpose, pValue );
         }
     }
 
@@ -1068,7 +1070,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC >( "glProgramUniformMatrix4x3fv", out _glProgramUniformMatrix4x3fv );
 
-        _glProgramUniformMatrix4x3fv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix4x3fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4x3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
@@ -1077,7 +1079,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix4x3fv( ( uint )program, location, value.Length / 12, transpose, pValue );
+            _glProgramUniformMatrix4x3fv( program, location, value.Length / 12, transpose, pValue );
         }
     }
 
@@ -1087,7 +1089,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC >( "glProgramUniformMatrix2x3dv", out _glProgramUniformMatrix2x3dv );
 
-        _glProgramUniformMatrix2x3dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix2x3dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2x3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -1096,7 +1098,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix2x3dv( ( uint )program, location, value.Length / 6, transpose, pValue );
+            _glProgramUniformMatrix2x3dv( program, location, value.Length / 6, transpose, pValue );
         }
     }
 
@@ -1106,7 +1108,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC >( "glProgramUniformMatrix3x2dv", out _glProgramUniformMatrix3x2dv );
 
-        _glProgramUniformMatrix3x2dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix3x2dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3x2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -1115,7 +1117,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix3x2dv( ( uint )program, location, value.Length / 6, transpose, pValue );
+            _glProgramUniformMatrix3x2dv( program, location, value.Length / 6, transpose, pValue );
         }
     }
 
@@ -1125,7 +1127,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC >( "glProgramUniformMatrix2x4dv", out _glProgramUniformMatrix2x4dv );
 
-        _glProgramUniformMatrix2x4dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix2x4dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2x4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -1134,7 +1136,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix2x4dv( ( uint )program, location, value.Length / 8, transpose, pValue );
+            _glProgramUniformMatrix2x4dv( program, location, value.Length / 8, transpose, pValue );
         }
     }
 
@@ -1144,7 +1146,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC >( "glProgramUniformMatrix4x2dv", out _glProgramUniformMatrix4x2dv );
 
-        _glProgramUniformMatrix4x2dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix4x2dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4x2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -1153,7 +1155,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix4x2dv( ( uint )program, location, value.Length / 8, transpose, pValue );
+            _glProgramUniformMatrix4x2dv( program, location, value.Length / 8, transpose, pValue );
         }
     }
 
@@ -1163,7 +1165,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC >( "glProgramUniformMatrix3x4dv", out _glProgramUniformMatrix3x4dv );
 
-        _glProgramUniformMatrix3x4dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix3x4dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3x4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -1172,7 +1174,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix3x4dv( ( uint )program, location, value.Length / 12, transpose, pValue );
+            _glProgramUniformMatrix3x4dv( program, location, value.Length / 12, transpose, pValue );
         }
     }
 
@@ -1182,7 +1184,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC >( "glProgramUniformMatrix4x3dv", out _glProgramUniformMatrix4x3dv );
 
-        _glProgramUniformMatrix4x3dv( ( uint )program, location, count, transpose, value );
+        _glProgramUniformMatrix4x3dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4x3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
@@ -1191,7 +1193,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
-            _glProgramUniformMatrix4x3dv( ( uint )program, location, value.Length / 12, transpose, pValue );
+            _glProgramUniformMatrix4x3dv( program, location, value.Length / 12, transpose, pValue );
         }
     }
 

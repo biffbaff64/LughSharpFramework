@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerI;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
@@ -34,10 +35,10 @@ public class LayerIDecoder : IFrameDecoder
 {
     protected readonly Crc16? CRC = new();
 
-    protected AudioBase?       Buffer  = null!;
-    protected SynthesisFilter? Filter1 = null!;
-    protected SynthesisFilter? Filter2 = null!;
-    protected Header?          Header  = null!;
+    protected AudioBase?       Buffer;
+    protected SynthesisFilter? Filter1;
+    protected SynthesisFilter? Filter2;
+    protected Header?          Header;
     protected int              Mode;
     protected int              NuSubbands;
     protected Bitstream        Stream   = null!;

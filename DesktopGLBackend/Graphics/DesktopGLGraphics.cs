@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using DesktopGLBackend.Utils;
+using DesktopGLBackend.Window;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
@@ -172,7 +175,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
             CoverageSampling = false,
         };
 
-        GL.Enable( EnableCap.FramebufferSrgb );
+        Engine.GL.Enable( EnableCap.FramebufferSrgb );
     }
 
     /// <summary>

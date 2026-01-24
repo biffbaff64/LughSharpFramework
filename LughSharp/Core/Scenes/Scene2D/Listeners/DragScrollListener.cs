@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -55,14 +56,14 @@ public class DragScrollListener : DragListener
     private readonly        Interpolation.ExpIn _interpolation = Interpolation.Exp5In;
     private readonly        ScrollPane          _scrollPane;
 
-    private float      _maxSpeed  = 75;
-    private float      _minSpeed  = 15;
-    private float      _padBottom = 0;
-    private float      _padTop    = 0;
-    private long       _rampTime  = 1750;
+    private float      _maxSpeed = 75;
+    private float      _minSpeed = 15;
+    private float      _padBottom;
+    private float      _padTop;
+    private long       _rampTime = 1750;
     private ScrollDown _scrollDown;
     private ScrollUp   _scrollUp;
-    private long       _startTime = 0;
+    private long       _startTime;
     private float      _tickSecs  = 0.05f;
 
     // ========================================================================

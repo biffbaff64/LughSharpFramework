@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Utils;
 
 /// <summary>
@@ -90,7 +92,7 @@ public class ComparableTimSort< T >
     // 
     // so we could cut the storage for this, but it's a minor amount, and keeping all
     // the info explicit simplifies the code.
-    private int _stackSize = 0; // Number of pending runs on stack
+    private int _stackSize; // Number of pending runs on stack
 
     // Temp storage for merges.
     private T?[] _tmp;

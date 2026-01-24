@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Exceptions;
 using Environment = System.Environment;

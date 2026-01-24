@@ -25,6 +25,7 @@
 // ============================================================================
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
 using GLenum = int;
 using GLfloat = float;
@@ -161,7 +162,7 @@ public partial class GLBindings
         {
             fixed ( byte* p = &pixmap.PixelData[ 0 ] )
             {
-                GL.PixelStorei( PixelStoreParameter.UnpackAlignment, 1 );
+                Engine.GL.PixelStorei( PixelStoreParameter.UnpackAlignment, 1 );
 
                 if ( enabled )
                 {
@@ -869,7 +870,7 @@ public partial class GLBindings
     {
         var tempArray = new int[ 1 ];
 
-        GetTexParameteriv( ( GLenum )target, ( GLenum )pname, ref tempArray );
+        GetTexParameteriv( target, pname, ref tempArray );
 
         data = tempArray[ 0 ];
     }

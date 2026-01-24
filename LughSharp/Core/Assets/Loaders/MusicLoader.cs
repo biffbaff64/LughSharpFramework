@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Audio;
+using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Assets.Loaders;
 
@@ -66,7 +68,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     /// <inheritdeoc />
     public override object LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
-        LoadedMusic = Api.Audio.NewMusic( file );
+        LoadedMusic = Engine.Api.Audio.NewMusic( file );
 
         return LoadedMusic;
     }

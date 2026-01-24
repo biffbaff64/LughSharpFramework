@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -56,10 +58,8 @@ public class ProgressBar : Widget, IDisableable
     private const    float DEFAULT_PREF_WIDTH        = 140f;
     private const    float DEFAULT_PREF_HEIGHT       = 140f;
     private readonly bool  _programmaticChangeEvents = true;
-    private readonly float _stepSize;
 
-    private readonly ProgressBarStyle? _style;
-    private          float             _animateDuration;
+    private float _animateDuration;
 
     private float _animateFromValue;
     private float _animateTime;
@@ -137,26 +137,26 @@ public class ProgressBar : Widget, IDisableable
 
     public float StepSize
     {
-        get => _stepSize;
+        get;
         init
         {
-            if ( _stepSize <= 0 )
+            if ( field <= 0 )
             {
-                throw new ArgumentException( "steps must be > 0: " + _stepSize );
+                throw new ArgumentException( "steps must be > 0: " + field );
             }
 
-            _stepSize = value;
+            field = value;
         }
     }
 
     public ProgressBarStyle Style
     {
-        get => _style!;
+        get;
         init
         {
             Guard.Against.Null( value );
 
-            _style = value;
+            field = value;
             InvalidateHierarchy();
         }
     }
@@ -173,7 +173,7 @@ public class ProgressBar : Widget, IDisableable
 
             if ( Stage is { ActionsRequestRendering: true } )
             {
-                Api.Graphics.RequestRendering();
+                Engine.Api.Graphics.RequestRendering();
             }
         }
     }

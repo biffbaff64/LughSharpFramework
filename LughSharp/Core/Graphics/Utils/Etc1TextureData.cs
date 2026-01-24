@@ -48,7 +48,7 @@ public class Etc1TextureData : ITextureData
     public int BytesPerPixel { get; set; }
 
     /// <inheritdoc />
-    public bool UseMipMaps { get; set; } = false;
+    public bool UseMipMaps { get; set; }
 
     /// <inheritdoc />
     public bool IsPrepared { get; set; }

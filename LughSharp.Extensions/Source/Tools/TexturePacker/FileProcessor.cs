@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Collections;
@@ -483,22 +485,22 @@ public class FileProcessor
         /// <summary>
         /// The input file, or directory, to be processed.
         /// </summary>
-        public FileSystemInfo? InputFile { get; set; } = null!;
+        public FileSystemInfo? InputFile { get; set; }
 
         /// <summary>
         /// The name of the final output file.
         /// </summary>
-        public string? OutputFileName { get; set; } = null!;
+        public string? OutputFileName { get; set; }
 
         /// <summary>
         /// The output directory, where the final output file will be stored.
         /// </summary>
-        public DirectoryInfo? OutputDirectory { get; set; } = null!;
+        public DirectoryInfo? OutputDirectory { get; set; }
 
         /// <summary>
         /// The nesting depth of the folder.
         /// </summary>
-        public int Depth { get; set; } = 0;
+        public int Depth { get; set; }
 
         // ====================================================================
 

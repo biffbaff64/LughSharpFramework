@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Reflection.Metadata;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
@@ -30,6 +31,7 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Input;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.UI;
@@ -124,8 +126,8 @@ public class Stage : InputAdapter, IDisposable
     /// <param name="batch"></param>
     public Stage( IBatch? batch )
         : this( new ScalingViewport( Scaling.Stretch,
-                                    Api.Graphics.Width,
-                                    Api.Graphics.Height,
+                                     Engine.Api.Graphics.Width,
+                                     Engine.Api.Graphics.Height,
                                     new OrthographicCamera() ), batch )
     {
         _ownsBatch = false;
@@ -158,7 +160,7 @@ public class Stage : InputAdapter, IDisposable
         RootGroup = new Group();
         RootGroup.SetStage( this );
 
-        Viewport.Update( Api.Graphics.Width, Api.Graphics.Height, true );
+        Viewport.Update( Engine.Api.Graphics.Width, Engine.Api.Graphics.Height, true );
     }
 
     /// <summary>
@@ -167,7 +169,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public virtual void Act()
     {
-        Act( Math.Min( Api.DeltaTime, 1 / 30f ) );
+        Act( Math.Min( Engine.Api.DeltaTime, 1 / 30f ) );
     }
 
     /// <summary>
@@ -201,7 +203,7 @@ public class Stage : InputAdapter, IDisposable
         }
 
         // Update over actor for the mouse on the desktop.
-        if ( Api.App.AppType is Platform.ApplicationType.WindowsGL or Platform.ApplicationType.WebGL )
+        if ( Engine.Api.App.AppType is Platform.ApplicationType.WindowsGL or Platform.ApplicationType.WebGL )
         {
             _mouseOverActor = FireEnterAndExit( _mouseOverActor, _mouseScreenX, _mouseScreenY, -1 );
         }
@@ -925,7 +927,7 @@ public class Stage : InputAdapter, IDisposable
     public virtual Vector2 StageToScreenCoordinates( Vector2 stageCoords )
     {
         Viewport.Project( stageCoords );
-        stageCoords.Y = Api.Graphics.Height - stageCoords.Y;
+        stageCoords.Y = Engine.Api.Graphics.Height - stageCoords.Y;
 
         return stageCoords;
     }
@@ -1178,7 +1180,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( DebugUnderMouse || DebugParentUnderMouse || ( _debugTableUnderMouse != Table.DebugType.None ) )
         {
-            ScreenToStageCoordinates( _tempCoords.Set( Api.Input.GetX(), Api.Input.GetY() ) );
+            ScreenToStageCoordinates( _tempCoords.Set( Engine.Api.Input.GetX(), Engine.Api.Input.GetY() ) );
 
             var actor = Hit( _tempCoords.X, _tempCoords.Y, true );
 
@@ -1232,7 +1234,7 @@ public class Stage : InputAdapter, IDisposable
             }
         }
 
-        GL.Enable( EnableCap.Blend );
+        Engine.GL.Enable( EnableCap.Blend );
 
         _debugShapes.ProjectionMatrix = Camera!.Combined;
         _debugShapes.Begin();
@@ -1241,7 +1243,7 @@ public class Stage : InputAdapter, IDisposable
 
         _debugShapes.End();
 
-        GL.Disable( EnableCap.Blend );
+        Engine.GL.Disable( EnableCap.Blend );
     }
 
     /// <summary>
@@ -1282,7 +1284,7 @@ public class Stage : InputAdapter, IDisposable
         var y0 = Viewport.ScreenY;
         var y1 = y0 + Viewport.ScreenHeight;
 
-        screenY = Api.Graphics.Height - 1 - screenY;
+        screenY = Engine.Api.Graphics.Height - 1 - screenY;
 
         return ( screenX >= x0 ) && ( screenX < x1 )
                                  && ( screenY >= y0 ) && ( screenY < y1 );

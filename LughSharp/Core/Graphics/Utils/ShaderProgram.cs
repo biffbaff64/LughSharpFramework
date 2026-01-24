@@ -24,8 +24,11 @@
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -130,22 +133,22 @@ public class ShaderProgram : IDisposable
     public void CompileShaders( string vertexShaderSource, string fragmentShaderSource )
     {
         // Vertex Shader
-        _vertexShaderHandle = ( int )GL.CreateShader( ( int )ShaderType.VertexShader );
-        GL.ShaderSource( _vertexShaderHandle, vertexShaderSource );
-        GL.CompileShader( _vertexShaderHandle );
+        _vertexShaderHandle = ( int )Engine.GL.CreateShader( ( int )ShaderType.VertexShader );
+        Engine.GL.ShaderSource( _vertexShaderHandle, vertexShaderSource );
+        Engine.GL.CompileShader( _vertexShaderHandle );
         CheckShaderLoadError( _vertexShaderHandle, ( int )ShaderType.VertexShader );
 
         // Fragment Shader
-        _fragmentShaderHandle = ( int )GL.CreateShader( ( int )ShaderType.FragmentShader );
-        GL.ShaderSource( _fragmentShaderHandle, fragmentShaderSource );
-        GL.CompileShader( _fragmentShaderHandle );
+        _fragmentShaderHandle = ( int )Engine.GL.CreateShader( ( int )ShaderType.FragmentShader );
+        Engine.GL.ShaderSource( _fragmentShaderHandle, fragmentShaderSource );
+        Engine.GL.CompileShader( _fragmentShaderHandle );
         CheckShaderLoadError( _fragmentShaderHandle, ( int )ShaderType.FragmentShader );
 
         // Create the shader program and link the shaders
-        ShaderProgramHandle = ( int )GL.CreateProgram();
-        GL.AttachShader( ShaderProgramHandle, _vertexShaderHandle );
-        GL.AttachShader( ShaderProgramHandle, _fragmentShaderHandle );
-        GL.LinkProgram( ShaderProgramHandle );
+        ShaderProgramHandle = ( int )Engine.GL.CreateProgram();
+        Engine.GL.AttachShader( ShaderProgramHandle, _vertexShaderHandle );
+        Engine.GL.AttachShader( ShaderProgramHandle, _fragmentShaderHandle );
+        Engine.GL.LinkProgram( ShaderProgramHandle );
 
         IsCompiled = ShaderProgramHandle != -1;
 
@@ -162,8 +165,8 @@ public class ShaderProgram : IDisposable
             FragmentShaderSrc = fragmentShaderSource,
         };
 
-        GL.DeleteShader( _vertexShaderHandle );
-        GL.DeleteShader( _fragmentShaderHandle );
+        Engine.GL.DeleteShader( _vertexShaderHandle );
+        Engine.GL.DeleteShader( _fragmentShaderHandle );
 
         CacheAttribute( "a_position" );
         CacheAttribute( ShaderConstants.A_COLOR );
@@ -182,17 +185,17 @@ public class ShaderProgram : IDisposable
     {
         var status = stackalloc int[ 1 ];
 
-        GL.GetShaderiv( shader, IGL.GL_COMPILE_STATUS, status );
+        Engine.GL.GetShaderiv( shader, IGL.GL_COMPILE_STATUS, status );
 
         if ( *status == IGL.GL_FALSE )
         {
             var length = stackalloc int[ 1 ];
 
-            GL.GetShaderiv( shader, IGL.GL_INFO_LOG_LENGTH, length );
+            Engine.GL.GetShaderiv( shader, IGL.GL_INFO_LOG_LENGTH, length );
 
-            var infoLog = GL.GetShaderInfoLog( shader, *length );
+            var infoLog = Engine.GL.GetShaderInfoLog( shader, *length );
 
-            GL.DeleteShader( shader );
+            Engine.GL.DeleteShader( shader );
 
             _shaderLog += shaderType == IGL.GL_VERTEX_SHADER ? "Vertex shader\n" : "Fragment shader:\n";
             _shaderLog += infoLog;
@@ -250,17 +253,17 @@ public class ShaderProgram : IDisposable
             switch ( matrixSize )
             {
                 case MAT44:
-                    GL.UniformMatrix4fv( name, 1, transpose, ( float* )ptr );
+                    Engine.GL.UniformMatrix4fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
                 case MAT33:
-                    GL.UniformMatrix3fv( name, 1, transpose, ( float* )ptr );
+                    Engine.GL.UniformMatrix3fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
                 case MAT22:
-                    GL.UniformMatrix2fv( name, 1, transpose, ( float* )ptr );
+                    Engine.GL.UniformMatrix2fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
@@ -277,7 +280,7 @@ public class ShaderProgram : IDisposable
     /// <returns></returns>
     public virtual int GetAttributeLocation( string name )
     {
-        var location = GL.GetAttribLocation( ShaderProgramHandle, name );
+        var location = Engine.GL.GetAttribLocation( ShaderProgramHandle, name );
 
         return location;
     }
@@ -289,7 +292,7 @@ public class ShaderProgram : IDisposable
     /// <returns></returns>
     public virtual int GetUniformLocation( string name )
     {
-        var location = GL.GetUniformLocation( ShaderProgramHandle, name );
+        var location = Engine.GL.GetUniformLocation( ShaderProgramHandle, name );
 
         return location;
     }
@@ -308,7 +311,7 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        GL.Uniform1i( location, value );
+        Engine.GL.Uniform1i( location, value );
     }
 
     /// <summary>
@@ -325,7 +328,7 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        GL.Uniform1f( location, value );
+        Engine.GL.Uniform1f( location, value );
     }
 
     /// <summary>
@@ -392,7 +395,7 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        GL.UniformMatrix4fv( location, transpose, matrix.Val );
+        Engine.GL.UniformMatrix4fv( location, transpose, matrix.Val );
     }
 
     /// <summary>
@@ -406,7 +409,7 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        GL.EnableVertexAttribArray( ( GLuint )location );
+        Engine.GL.EnableVertexAttribArray( ( GLuint )location );
     }
 
     /// <summary>
@@ -430,7 +433,7 @@ public class ShaderProgram : IDisposable
             throw new RuntimeException( "Size cannot be 0." );
         }
 
-        GL.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
+        Engine.GL.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
     }
 
     /// <summary>
@@ -462,7 +465,7 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        GL.UniformMatrix4fv( location, false, values );
+        Engine.GL.UniformMatrix4fv( location, false, values );
     }
 
     /// <summary>
@@ -476,7 +479,7 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        GL.DisableVertexAttribArray( ( GLuint )location );
+        Engine.GL.DisableVertexAttribArray( ( GLuint )location );
     }
 
     /// <summary>
@@ -492,7 +495,7 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        GL.DisableVertexAttribArray( ( GLuint )location );
+        Engine.GL.DisableVertexAttribArray( ( GLuint )location );
     }
 
     /// <summary>
@@ -500,9 +503,9 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public virtual void Bind()
     {
-        if ( GL.IsProgram( ShaderProgramHandle ) )
+        if ( Engine.GL.IsProgram( ShaderProgramHandle ) )
         {
-            GL.UseProgram( ShaderProgramHandle );
+            Engine.GL.UseProgram( ShaderProgramHandle );
         }
     }
 
@@ -511,14 +514,14 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public virtual void Unbind()
     {
-        GL.UseProgram( 0 );
+        Engine.GL.UseProgram( 0 );
     }
 
     // ========================================================================
 
     public void Use()
     {
-        GL.UseProgram( ShaderProgramHandle );
+        Engine.GL.UseProgram( ShaderProgramHandle );
     }
 
     public bool HasUniform( string name )
@@ -533,13 +536,13 @@ public class ShaderProgram : IDisposable
 
     private void CacheUniform( string name )
     {
-        var location = GL.GetUniformLocation( ShaderProgramHandle, name );
+        var location = Engine.GL.GetUniformLocation( ShaderProgramHandle, name );
         _uniformLocations[ name ] = location;
     }
 
     private void CacheAttribute( string name )
     {
-        var location = GL.GetAttribLocation( ShaderProgramHandle, name );
+        var location = Engine.GL.GetAttribLocation( ShaderProgramHandle, name );
         _attributeLocations[ name ] = location;
     }
 
@@ -621,9 +624,9 @@ public class ShaderProgram : IDisposable
             {
                 var length = stackalloc int[ 1 ];
 
-                GL.GetProgramiv( ShaderProgramHandle, IGL.GL_INFO_LOG_LENGTH, length );
+                Engine.GL.GetProgramiv( ShaderProgramHandle, IGL.GL_INFO_LOG_LENGTH, length );
 
-                _shaderLog = GL.GetProgramInfoLog( ShaderProgramHandle, *length );
+                _shaderLog = Engine.GL.GetProgramInfoLog( ShaderProgramHandle, *length );
             }
 
             return _shaderLog;
@@ -651,9 +654,9 @@ public class ShaderProgram : IDisposable
     public void Dispose()
     {
         Unbind();
-        GL.DeleteShader( _vertexShaderHandle );
-        GL.DeleteShader( _fragmentShaderHandle );
-        GL.DeleteProgram( ShaderProgramHandle );
+        Engine.GL.DeleteShader( _vertexShaderHandle );
+        Engine.GL.DeleteShader( _fragmentShaderHandle );
+        Engine.GL.DeleteProgram( ShaderProgramHandle );
 
         GC.SuppressFinalize( this );
     }

@@ -22,7 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -39,7 +42,7 @@ public static class GLUtils
     /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
     public static void GLErrorCheck( string stage )
     {
-        var error = GL.GetError();
+        var error = Engine.GL.GetError();
 
         if ( error != ( int )DotGLFW.ErrorCode.NoError )
         {
@@ -116,7 +119,7 @@ public static class GLUtils
         fixed ( int* ptr = &currentBuffer[ 0 ] )
         {
             // Fetch the currently bound buffer
-            GL.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
+            Engine.GL.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
         }
 
         if ( currentBuffer[ 0 ] != expectedBuffer )
@@ -134,9 +137,9 @@ public static class GLUtils
     /// <returns></returns>
     public static float[]? GetVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
     {
-        GL.BindBuffer( BufferTarget.ArrayBuffer, vbo );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, vbo );
 
-        var dataPtr = GL.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
+        var dataPtr = Engine.GL.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
 
         if ( dataPtr == IntPtr.Zero )
         {
@@ -148,8 +151,8 @@ public static class GLUtils
         var data = new float[ sizeInBytes / sizeof( float ) ];
         Marshal.Copy( dataPtr, data, 0, data.Length );
 
-        GL.UnmapBuffer( ( int )BufferTarget.ArrayBuffer );
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.UnmapBuffer( ( int )BufferTarget.ArrayBuffer );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
 
         return data;
     }

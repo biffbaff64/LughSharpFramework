@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maths;
@@ -33,9 +34,9 @@ namespace LughSharp.Core.Maths;
 [PublicAPI]
 public class Bezier< T > : IPath< T > where T : IVector< T >
 {
-    private T? _tmp  = default;
-    private T? _tmp2 = default;
-    private T? _tmp3 = default;
+    private T? _tmp;
+    private T? _tmp2;
+    private T? _tmp3;
 
     // ========================================================================
 

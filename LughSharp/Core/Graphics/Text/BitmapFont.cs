@@ -22,16 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.Text;
 
@@ -111,8 +106,8 @@ public class BitmapFont
     /// where 0,0 is the upper left corner.
     /// </param>
     public BitmapFont( bool flip = false )
-        : this( Api.Files.Internal( DEFAULT_FONT ),
-                Api.Files.Internal( DEFAULT_FONT_IMAGE ),
+        : this( Engine.Api.Files.Internal( DEFAULT_FONT ),
+                Engine.Api.Files.Internal( DEFAULT_FONT_IMAGE ),
                 flip )
     {
     }
@@ -231,8 +226,8 @@ public class BitmapFont
             for ( var i = 0; i < n; i++ )
             {
                 var file = data.FontFile == null
-                    ? Api.Files.Internal( data.ImagePaths[ i ] )
-                    : Api.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
+                    ? Engine.Api.Files.Internal( data.ImagePaths[ i ] )
+                    : Engine.Api.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
 
                 _regions.Add( new TextureRegion( new Texture( file, false ) ) );
             }

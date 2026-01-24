@@ -22,9 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Input;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -227,8 +229,8 @@ public class Slider : ProgressBar
 
         var oldValue = value;
 
-        if ( !Api.Input.IsKeyPressed( IInput.Keys.SHIFT_LEFT )
-             && !Api.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT ) )
+        if ( !Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_LEFT )
+             && !Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT ) )
         {
             value = GetSnapped( value );
         }

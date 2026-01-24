@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Input;
@@ -31,6 +34,7 @@ namespace LughSharp.Core.Input;
 /// a <see cref="RemoteInput"/> at the given ip/port. Instantiate
 /// this and call SendUpdate() periodically.
 /// </summary>
+[PublicAPI]
 public class RemoteSender : IInputProcessor
 {
     public const int KEY_DOWN  = 0;
@@ -45,10 +49,15 @@ public class RemoteSender : IInputProcessor
     public const int  COMPASS    = 7;
     public const int  SIZE       = 8;
     public const int  GYRO       = 9;
-    private      bool _connected = false;
+    
+    // ========================================================================
+    
+    private      bool _connected;
 
     private BinaryWriter? _out;
 
+    // ========================================================================
+    
     public RemoteSender( string ip, int port )
     {
 //        try
@@ -275,20 +284,20 @@ public class RemoteSender : IInputProcessor
         try
         {
             _out.Write( ACCEL );
-            _out.Write( Api.Input.GetAccelerometerX() );
-            _out.Write( Api.Input.GetAccelerometerY() );
-            _out.Write( Api.Input.GetAccelerometerZ() );
+            _out.Write( Engine.Api.Input.GetAccelerometerX() );
+            _out.Write( Engine.Api.Input.GetAccelerometerY() );
+            _out.Write( Engine.Api.Input.GetAccelerometerZ() );
             _out.Write( COMPASS );
-            _out.Write( Api.Input.GetAzimuth() );
-            _out.Write( Api.Input.GetPitch() );
-            _out.Write( Api.Input.GetRoll() );
+            _out.Write( Engine.Api.Input.GetAzimuth() );
+            _out.Write( Engine.Api.Input.GetPitch() );
+            _out.Write( Engine.Api.Input.GetRoll() );
             _out.Write( SIZE );
-            _out.Write( Api.Graphics.Width );
-            _out.Write( Api.Graphics.Height );
+            _out.Write( Engine.Api.Graphics.Width );
+            _out.Write( Engine.Api.Graphics.Height );
             _out.Write( GYRO );
-            _out.Write( Api.Input.GetGyroscopeX() );
-            _out.Write( Api.Input.GetGyroscopeY() );
-            _out.Write( Api.Input.GetGyroscopeZ() );
+            _out.Write( Engine.Api.Input.GetGyroscopeX() );
+            _out.Write( Engine.Api.Input.GetGyroscopeY() );
+            _out.Write( Engine.Api.Input.GetGyroscopeZ() );
         }
         catch ( Exception )
         {
@@ -297,3 +306,7 @@ public class RemoteSender : IInputProcessor
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

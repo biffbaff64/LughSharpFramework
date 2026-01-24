@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 using Exception = System.Exception;
 

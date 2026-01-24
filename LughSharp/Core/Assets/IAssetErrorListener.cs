@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Assets;
 
 /// <summary>

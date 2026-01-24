@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -271,18 +272,18 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets a value indicating whether to generate mipmaps for the texture.
         /// </summary>
-        public bool GenMipMaps { get; set; } = false;
+        public bool GenMipMaps { get; set; }
 
         /// <summary>
         /// Gets or sets the texture object to put the <see cref="TextureData"/> in (optional).
         /// </summary>
-        public Texture? Texture { get; set; } = null;
+        public Texture? Texture { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ITextureData"/> for textures created on the fly
         /// (optional). When set, all format and genMipMaps are ignored.
         /// </summary>
-        public ITextureData? TextureData { get; set; } = null;
+        public ITextureData? TextureData { get; set; }
     }
 }
 

@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.IO.Compression;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using ByteOrder = LughSharp.Core.Utils.ByteOrder;
@@ -398,7 +401,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         {
             fixed ( int* ptr = &buffer.ToArray()[ 0 ] )
             {
-                GL.GetIntegerv( IGL.GL_UNPACK_ALIGNMENT, ptr );
+                Engine.GL.GetIntegerv( IGL.GL_UNPACK_ALIGNMENT, ptr );
             }
         }
 
@@ -406,7 +409,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( previousUnpackAlignment != 4 )
         {
-            GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, 4 );
+            Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, 4 );
         }
 
         var glInternalFormat = _glInternalFormat;
@@ -458,7 +461,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                     {
                         if ( glInternalFormat == ETC1.ETC1_RGB8_OES )
                         {
-                            if ( !Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
+                            if ( !Engine.Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
                             {
                                 ETC1 etc1    = new();
                                 var  etcData = new ETC1.ETC1Data( pixelWidth, pixelHeight, data, 0, etc1 );
@@ -468,7 +471,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                                 {
                                     fixed ( void* ptr = &pixmap.ByteBuffer.BackingArray()[ 0 ] )
                                     {
-                                        GL.TexImage2D( target + face,
+                                        Engine.GL.TexImage2D( target + face,
                                                        level,
                                                        pixmap.GLInternalPixelFormat,
                                                        pixmap.Width,
@@ -488,7 +491,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                                 {
                                     fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                                     {
-                                        GL.CompressedTexImage2D( target + face,
+                                        Engine.GL.CompressedTexImage2D( target + face,
                                                                  level,
                                                                  glInternalFormat,
                                                                  pixelWidth,
@@ -507,7 +510,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             {
                                 fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                                 {
-                                    GL.CompressedTexImage2D( target + face,
+                                    Engine.GL.CompressedTexImage2D( target + face,
                                                              level,
                                                              glInternalFormat,
                                                              pixelWidth,
@@ -525,7 +528,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                         {
                             fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                             {
-                                GL.TexImage2D( target + face,
+                                Engine.GL.TexImage2D( target + face,
                                                level,
                                                glInternalFormat,
                                                pixelWidth,
@@ -557,12 +560,12 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( previousUnpackAlignment != 4 )
         {
-            GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, previousUnpackAlignment );
+            Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, previousUnpackAlignment );
         }
 
         if ( UseMipMaps )
         {
-            GL.GenerateMipmap( target );
+            Engine.GL.GenerateMipmap( target );
         }
 
         // dispose data once transfered to GPU

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using DesktopGLBackend.Window;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Exceptions;
 

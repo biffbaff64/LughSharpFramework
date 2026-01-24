@@ -22,7 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics;
 
@@ -51,8 +53,8 @@ public unsafe class GraphicsCapabilities
     /// </returns>
     public static GraphicsCapabilities Detect()
     {
-        GL.GetIntegerv( GLData.MAJOR_VERSION, out var major );
-        GL.GetIntegerv( GLData.MINOR_VERSION, out var minor );
+        Engine.GL.GetIntegerv( GLData.MAJOR_VERSION, out var major );
+        Engine.GL.GetIntegerv( GLData.MINOR_VERSION, out var minor );
 
         return new GraphicsCapabilities
         {
@@ -74,11 +76,11 @@ public unsafe class GraphicsCapabilities
 
     private static bool HasExtension( string s )
     {
-        GL.GetIntegerv( GLData.NUM_EXTENSIONS, out var n );
+        Engine.GL.GetIntegerv( GLData.NUM_EXTENSIONS, out var n );
 
         for ( uint i = 0; i < n; i++ )
         {
-            if ( string.Equals( GL.GetStringi( GLData.EXTENSIONS, i )->ToString(), s, StringComparison.Ordinal ) )
+            if ( string.Equals( Engine.GL.GetStringi( GLData.EXTENSIONS, i )->ToString(), s, StringComparison.Ordinal ) )
             {
                 return true;
             }

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
 using Keys = LughSharp.Core.Input.IInput.Keys;
 
 namespace LughSharp.Core.Input;
@@ -34,7 +36,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseLeft()
     {
-        return Api.Input.IsButtonPressed( IInput.Buttons.LEFT );
+        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.LEFT );
     }
 
     /// <summary>
@@ -50,7 +52,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseRight()
     {
-        return Api.Input.IsButtonPressed( IInput.Buttons.RIGHT );
+        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.RIGHT );
     }
 
     /// <summary>
@@ -66,7 +68,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseMiddle()
     {
-        return Api.Input.IsButtonPressed( IInput.Buttons.MIDDLE );
+        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.MIDDLE );
     }
 
     /// <summary>
@@ -82,7 +84,7 @@ public static class InputUtils
     /// </summary>
     public static bool ShiftKey()
     {
-        return Api.Input.IsKeyPressed( Keys.SHIFT_LEFT ) || Api.Input.IsKeyPressed( Keys.SHIFT_RIGHT );
+        return Engine.Api.Input.IsKeyPressed( Keys.SHIFT_LEFT ) || Engine.Api.Input.IsKeyPressed( Keys.SHIFT_RIGHT );
     }
 
     /// <summary>
@@ -101,7 +103,7 @@ public static class InputUtils
 #if MACOS
         return Api.Input.isKeyPressed( Keys.SYM );
 #else
-        return Api.Input.IsKeyPressed( Keys.CONTROL_LEFT ) || Api.Input.IsKeyPressed( Keys.CONTROL_RIGHT );
+        return Engine.Api.Input.IsKeyPressed( Keys.CONTROL_LEFT ) || Engine.Api.Input.IsKeyPressed( Keys.CONTROL_RIGHT );
 #endif
     }
 
@@ -122,7 +124,7 @@ public static class InputUtils
     /// </summary>
     public static bool AltKey()
     {
-        return Api.Input.IsKeyPressed( Keys.ALT_LEFT ) || Api.Input.IsKeyPressed( Keys.ALT_RIGHT );
+        return Engine.Api.Input.IsKeyPressed( Keys.ALT_LEFT ) || Engine.Api.Input.IsKeyPressed( Keys.ALT_RIGHT );
     }
 
     /// <summary>
@@ -133,3 +135,7 @@ public static class InputUtils
         return keycode is Keys.ALT_LEFT or Keys.ALT_RIGHT;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

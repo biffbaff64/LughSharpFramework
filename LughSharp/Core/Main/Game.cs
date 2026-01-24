@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Main;
 
 /// <summary>
@@ -33,7 +35,7 @@ namespace LughSharp.Core.Main;
 [PublicAPI]
 public abstract class Game : IApplicationListener
 {
-    private bool _isDisposed = false;
+    private bool _isDisposed;
     
     /// <summary>
     /// Sets the current screen. Screen.hide() is called on any old screen, and
@@ -50,7 +52,7 @@ public abstract class Game : IApplicationListener
             if ( field != null )
             {
                 field.Show();
-                field.Resize( Api.Graphics.Width, Api.Graphics.Height );
+                field.Resize( Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
             }
         }
     }
@@ -67,7 +69,7 @@ public abstract class Game : IApplicationListener
     /// </summary>
     public virtual void Update()
     {
-        Screen?.Update( Api.DeltaTime );
+        Screen?.Update( Engine.Api.DeltaTime );
     }
 
     /// <summary>
@@ -75,7 +77,7 @@ public abstract class Game : IApplicationListener
     /// </summary>
     public virtual void Render()
     {
-        Screen?.Render( Api.DeltaTime );
+        Screen?.Render( Engine.Api.DeltaTime );
     }
 
     /// <summary>

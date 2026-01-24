@@ -22,8 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Maths;
+
 namespace LughSharp.Core.Graphics.G3D.Models.Data;
 
+[PublicAPI]
 public class ModelTexture
 {
     public const int USAGE_UNKNOWN      = 0;
@@ -44,3 +48,7 @@ public class ModelTexture
     public Vector2? UVScaling     { get; set; }
     public int      Usage         { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

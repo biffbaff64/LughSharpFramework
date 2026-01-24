@@ -23,6 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;

@@ -22,6 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+using System.Text;
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Utils;
 
 [PublicAPI]

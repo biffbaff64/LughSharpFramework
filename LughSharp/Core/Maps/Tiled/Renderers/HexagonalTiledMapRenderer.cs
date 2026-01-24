@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Utils.Exceptions;
@@ -40,7 +41,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
     /// length/height represents a square shape and a value of 0.5 represents
     /// a regular hexagon if tile length equals tile height
     /// </summary>
-    private float _hexSideLength = 0f;
+    private float _hexSideLength;
 
     /// <summary>
     /// true for X-Axis, false for Y-Axis
@@ -50,7 +51,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
     /// <summary>
     /// true for even StaggerIndex, false for odd
     /// </summary>
-    private bool _staggerIndexEven = false;
+    private bool _staggerIndexEven;
 
     // ========================================================================
 

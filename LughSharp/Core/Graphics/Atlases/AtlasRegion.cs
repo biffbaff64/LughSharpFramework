@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Graphics.Atlases;
 
 [PublicAPI]
@@ -102,7 +104,7 @@ public class AtlasRegion : TextureRegion, IDisposable
 
     // ========================================================================
 
-    private bool _isDisposed = false;
+    private bool _isDisposed;
     
     // ========================================================================
 

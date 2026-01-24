@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
@@ -71,7 +72,7 @@ public class Timer
     {
         lock ( _threadLock )
         {
-            if ( ( _thread != null ) && ( _thread.Files == Api.Files ) )
+            if ( ( _thread != null ) && ( _thread.Files == Engine.Api.Files ) )
             {
                 return _thread;
             }
@@ -330,12 +331,12 @@ public class Timer
 
         protected Task()
         {
-            if ( Api.App == null )
+            if ( Engine.Api.App == null )
             {
                 throw new RuntimeException( "GdxApi.App not available!" );
             }
 
-            App = Api.App;
+            App = Engine.Api.App;
         }
 
         /// <summary>
@@ -419,9 +420,9 @@ public class Timer
 
         public TimerThread()
         {
-            Files = Api.Files;
+            Files = Engine.Api.Files;
 
-            Api.App.AddLifecycleListener( this );
+            Engine.Api.App.AddLifecycleListener( this );
 
             Resume();
 
@@ -469,7 +470,7 @@ public class Timer
         {
             lock ( _threadLock )
             {
-                if ( ( _thread != this ) || ( Files != Api.Files ) )
+                if ( ( _thread != this ) || ( Files != Engine.Api.Files ) )
                 {
                     Dispose();
 
@@ -495,7 +496,7 @@ public class Timer
                     }
                 }
 
-                if ( ( _thread != this ) || ( Files != Api.Files ) )
+                if ( ( _thread != this ) || ( Files != Engine.Api.Files ) )
                 {
                     Dispose();
 
@@ -534,7 +535,7 @@ public class Timer
                     Monitor.PulseAll( _threadLock );
                 }
 
-                Api.App.RemoveLifecycleListener( this );
+                Engine.Api.App.RemoveLifecycleListener( this );
             }
         }
     }

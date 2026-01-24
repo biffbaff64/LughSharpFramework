@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Input;
 using LughSharp.Core.Utils;
 
@@ -47,7 +48,7 @@ namespace LughSharp.Core.Scenes.Scene2D;
 public class Event : IResetable
 {
     // The Stage for the Actor the event was fired on.
-    public Stage? Stage { get; set; } = null!;
+    public Stage? Stage { get; set; }
 
     // The Actor this event originated from.
     public Actor? TargetActor { get; set; }

@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Files;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -1432,12 +1434,12 @@ public class Cell : IResetable
             Colspan = cell.Colspan;
         }
 
-        if ( cell.UniformX != false )
+        if ( cell.UniformX )
         {
             UniformX = cell.UniformX;
         }
 
-        if ( cell.UniformY != false )
+        if ( cell.UniformY )
         {
             UniformY = cell.UniformY;
         }
@@ -1452,9 +1454,9 @@ public class Cell : IResetable
     /// </summary>
     public Cell? GetCellDefaults()
     {
-        if ( ( _files == null ) || ( _files != Api.Files ) )
+        if ( ( _files == null ) || ( _files != Engine.Api.Files ) )
         {
-            _files = Api.Files;
+            _files = Engine.Api.Files;
 
             _defaults = new Cell
             {

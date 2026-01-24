@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -38,10 +39,10 @@ public class FileTextureData : ITextureData
     public FileInfo File { get; set; }
 
     /// <inheritdoc/>
-    public int Width { get; set; } = 0;
+    public int Width { get; set; }
 
     /// <inheritdoc/>
-    public int Height { get; set; } = 0;
+    public int Height { get; set; }
 
     /// <inheritdoc />
     public int BitDepth { get; set; }

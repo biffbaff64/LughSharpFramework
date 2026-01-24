@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
+using JetBrains.Annotations;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Utils.Collections;

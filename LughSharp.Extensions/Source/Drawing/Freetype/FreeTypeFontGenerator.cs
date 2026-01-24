@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -99,14 +100,26 @@ public class FreeTypeFontGenerator : IDisposable
     /// These are control codes, often not visible and have specific control functions.
     /// </summary>
     public static readonly string C1ControlChars =
-        "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008A\u008B\u008C\u008D\u008E\u008F\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009A\u009B\u009C\u009D\u009E\u009F";
+        "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089" +
+        "\u008A\u008B\u008C\u008D\u008E\u008F\u0090\u0091\u0092\u0093" +
+        "\u0094\u0095\u0096\u0097\u0098\u0099\u009A\u009B\u009C\u009D" +
+        "\u009E\u009F";
 
     /// <summary>
     /// Latin-1 Supplement (Unicode range U+00A0 to U+00FF).
     /// This includes extended punctuation, symbols, and accented Latin characters.
     /// </summary>
     public static readonly string Latin1SupplementChars =
-        "\u00A0\u00A1\u00A2\u00A3\u00A4\u00A5\u00A6\u00A7\u00A8\u00A9\u00AA\u00AB\u00AC\u00AD\u00AE\u00AF\u00B0\u00B1\u00B2\u00B3\u00B4\u00B5\u00B6\u00B7\u00B8\u00B9\u00BA\u00BB\u00BC\u00BD\u00BE\u00BF\u00C0\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6\u00C7\u00C8\u00C9\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF\u00D0\u00D1\u00D2\u00D3\u00D4\u00D5\u00D6\u00D7\u00D8\u00D9\u00DA\u00DB\u00DC\u00DD\u00DE\u00DF\u00E0\u00E1\u00E2\u00E3\u00E4\u00E5\u00E6\u00E7\u00E8\u00E9\u00EA\u00EB\u00EC\u00ED\u00EE\u00EF\u00F0\u00F1\u00F2\u00F3\u00F4\u00F5\u00F6\u00F7\u00F8\u00F9\u00FA\u00FB\u00FC\u00FD\u00FE\u00FF";
+        "\u00A0\u00A1\u00A2\u00A3\u00A4\u00A5\u00A6\u00A7\u00A8\u00A9" +
+        "\u00AA\u00AB\u00AC\u00AD\u00AE\u00AF\u00B0\u00B1\u00B2\u00B3" +
+        "\u00B4\u00B5\u00B6\u00B7\u00B8\u00B9\u00BA\u00BB\u00BC\u00BD" +
+        "\u00BE\u00BF\u00C0\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6\u00C7" +
+        "\u00C8\u00C9\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF\u00D0\u00D1" +
+        "\u00D2\u00D3\u00D4\u00D5\u00D6\u00D7\u00D8\u00D9\u00DA\u00DB" +
+        "\u00DC\u00DD\u00DE\u00DF\u00E0\u00E1\u00E2\u00E3\u00E4\u00E5" +
+        "\u00E6\u00E7\u00E8\u00E9\u00EA\u00EB\u00EC\u00ED\u00EE\u00EF" +
+        "\u00F0\u00F1\u00F2\u00F3\u00F4\u00F5\u00F6\u00F7\u00F8\u00F9" +
+        "\u00FA\u00FB\u00FC\u00FD\u00FE\u00FF";
 
     /// <summary>
     /// Combines all default character sets into a single string.
@@ -230,8 +243,8 @@ public class FreeTypeFontGenerator : IDisposable
         SetPixelSizes( 0, height );
 
         var fontMetrics = _face.GetSize().GetMetrics();
-        var ascent      = FreeType.ToInt( fontMetrics.GetAscender() );
-        var descent     = FreeType.ToInt( fontMetrics.GetDescender() );
+        var ascent      = NumberUtils.ToInt( fontMetrics.GetAscender() );
+        var descent     = NumberUtils.ToInt( fontMetrics.GetDescender() );
 
         return ( height * height ) / ( ascent - descent );
     }
@@ -245,9 +258,9 @@ public class FreeTypeFontGenerator : IDisposable
     public int ScaleForPixelWidth( int width, int numChars )
     {
         var fontMetrics    = _face.GetSize().GetMetrics();
-        var advance        = FreeType.ToInt( fontMetrics.GetMaxAdvance() );
-        var ascent         = FreeType.ToInt( fontMetrics.GetAscender() );
-        var descent        = FreeType.ToInt( fontMetrics.GetDescender() );
+        var advance        = NumberUtils.ToInt( fontMetrics.GetMaxAdvance() );
+        var ascent         = NumberUtils.ToInt( fontMetrics.GetAscender() );
+        var descent        = NumberUtils.ToInt( fontMetrics.GetDescender() );
         var unscaledHeight = ascent - descent;
         var height         = ( unscaledHeight * width ) / ( advance * numChars );
 
@@ -277,7 +290,7 @@ public class FreeTypeFontGenerator : IDisposable
         SetPixelSizes( 0, size );
 
         var fontMetrics = _face.GetSize().GetMetrics();
-        var baseline    = FreeType.ToInt( fontMetrics.GetAscender() );
+        var baseline    = NumberUtils.ToInt( fontMetrics.GetAscender() );
 
         // Check if character exists in this font.
         // 0 means 'undefined character code'
@@ -326,7 +339,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         glyph.Xoffset  = slot.GetBitmapLeft();
         glyph.Yoffset  = flip ? -slot.GetBitmapTop() + baseline : -( glyph.Height - slot.GetBitmapTop() ) - baseline;
-        glyph.Xadvance = FreeType.ToInt( metrics.GetHoriAdvance() );
+        glyph.Xadvance = NumberUtils.ToInt( metrics.GetHoriAdvance() );
         glyph.SrcX     = 0;
         glyph.SrcY     = 0;
         glyph.ID       = c;
@@ -380,9 +393,9 @@ public class FreeTypeFontGenerator : IDisposable
         // set general font data
         var fontMetrics = _face.GetSize().GetMetrics();
         data.Flipped    = parameter.Flip;
-        data.Ascent     = FreeType.ToInt( fontMetrics.GetAscender() );
-        data.Descent    = FreeType.ToInt( fontMetrics.GetDescender() );
-        data.LineHeight = FreeType.ToInt( fontMetrics.GetHeight() );
+        data.Ascent     = NumberUtils.ToInt( fontMetrics.GetAscender() );
+        data.Descent    = NumberUtils.ToInt( fontMetrics.GetDescender() );
+        data.LineHeight = NumberUtils.ToInt( fontMetrics.GetHeight() );
         var baseLine = data.Ascent;
 
         // if bitmapped
@@ -392,7 +405,7 @@ public class FreeTypeFontGenerator : IDisposable
             {
                 if ( LoadChar( c, flags ) )
                 {
-                    var lh = FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHeight() );
+                    var lh = NumberUtils.ToInt( _face.GetGlyph().GetMetrics().GetHeight() );
                     data.LineHeight = lh > data.LineHeight ? lh : data.LineHeight;
                 }
             }
@@ -403,7 +416,7 @@ public class FreeTypeFontGenerator : IDisposable
         // determine space width
         if ( LoadChar( ' ', flags ) || LoadChar( 'l', flags ) )
         {
-            data.SpaceXadvance = FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHoriAdvance() );
+            data.SpaceXadvance = NumberUtils.ToInt( _face.GetGlyph().GetMetrics().GetHoriAdvance() );
         }
         else
         {
@@ -418,7 +431,7 @@ public class FreeTypeFontGenerator : IDisposable
                 continue;
             }
 
-            data.XHeight = FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHeight() );
+            data.XHeight = NumberUtils.ToInt( _face.GetGlyph().GetMetrics().GetHeight() );
 
             break;
         }
@@ -436,7 +449,7 @@ public class FreeTypeFontGenerator : IDisposable
                 continue;
             }
 
-            data.CapHeight = FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHeight() ) +
+            data.CapHeight = NumberUtils.ToInt( _face.GetGlyph().GetMetrics().GetHeight() ) +
                              Math.Abs( parameter.ShadowOffsetY );
 
             break;
@@ -517,7 +530,7 @@ public class FreeTypeFontGenerator : IDisposable
         {
             var c = characters[ i ];
 
-            var height = LoadChar( c, flags ) ? FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHeight() ) : 0;
+            var height = LoadChar( c, flags ) ? NumberUtils.ToInt( _face.GetGlyph().GetMetrics().GetHeight() ) : 0;
             heights[ i ] = height;
 
             if ( c == '\0' )
@@ -624,7 +637,7 @@ public class FreeTypeFontGenerator : IDisposable
 
                     if ( kerning != 0 )
                     {
-                        first.SetKerning( secondChar, FreeType.ToInt( kerning ) );
+                        first.SetKerning( secondChar, NumberUtils.ToInt( kerning ) );
                     }
 
                     kerning = _face.GetKerning( secondIndex, firstIndex,
@@ -632,7 +645,7 @@ public class FreeTypeFontGenerator : IDisposable
 
                     if ( kerning != 0 )
                     {
-                        second.SetKerning( firstChar, FreeType.ToInt( kerning ) );
+                        second.SetKerning( firstChar, NumberUtils.ToInt( kerning ) );
                     }
                 }
             }
@@ -806,9 +819,11 @@ public class FreeTypeFontGenerator : IDisposable
             {
                 var padPixmap = new Pixmap( mainPixmap.Width + parameter.PadLeft + parameter.PadRight,
                                             mainPixmap.Height + parameter.PadTop + parameter.PadBottom,
-                                            mainPixmap.GetColorFormat() );
+                                            mainPixmap.GetColorFormat() )
+                {
+                    Blending = Pixmap.BlendTypes.None
+                };
 
-                padPixmap.Blending = Pixmap.BlendTypes.None;
                 padPixmap.DrawPixmap( mainPixmap, parameter.PadLeft, parameter.PadTop );
                 mainPixmap.Dispose();
                 mainPixmap = padPixmap;
@@ -833,7 +848,7 @@ public class FreeTypeFontGenerator : IDisposable
             glyph.Yoffset = -( glyph.Height - mainGlyph.GetTop() ) - ( int )baseLine;
         }
 
-        glyph.Xadvance = FreeType.ToInt( metrics.GetHoriAdvance() ) + ( int )parameter.BorderWidth + parameter.SpaceX;
+        glyph.Xadvance = NumberUtils.ToInt( metrics.GetHoriAdvance() ) + ( int )parameter.BorderWidth + parameter.SpaceX;
 
         if ( _bitmapped )
         {
@@ -848,8 +863,8 @@ public class FreeTypeFontGenerator : IDisposable
 
                 for ( var w = 0; w < ( glyph.Width + glyph.Xoffset ); w++ )
                 {
-                    var bit = ( buf.GetInt( idx + ( w / 8 ) ) >>> ( 7 - ( w % 8 ) ) ) & 1;
-                    mainPixmap.SetPixel( w, h, bit == 1 ? Color.White : Color.Clear );
+//TODO:                    var bit = ( buf.GetInt( idx + ( w / 8 ) ) >>> ( 7 - ( w % 8 ) ) ) & 1;
+//TODO:                    mainPixmap.SetPixel( w, h, bit == 1 ? Color.White : Color.Clear );
                 }
             }
         }
@@ -1057,14 +1072,14 @@ public class FreeTypeFontGenerator : IDisposable
 
                         if ( kerning != 0 )
                         {
-                            glyph.SetKerning( other.ID, FreeType.ToInt( kerning ) );
+                            glyph.SetKerning( other.ID, NumberUtils.ToInt( kerning ) );
                         }
 
                         kerning = face.GetKerning( otherIndex, glyphIndex, 0 );
 
                         if ( kerning != 0 )
                         {
-                            other.SetKerning( ch, FreeType.ToInt( kerning ) );
+                            other.SetKerning( ch, NumberUtils.ToInt( kerning ) );
                         }
                     }
                 }

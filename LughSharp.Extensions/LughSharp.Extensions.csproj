@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <LangVersion>preview</LangVersion>
-        <ImplicitUsings>disable</ImplicitUsings>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Extensions</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

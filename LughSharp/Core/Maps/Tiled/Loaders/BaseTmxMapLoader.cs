@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.IO.Compression;
 using System.Xml;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
@@ -33,6 +35,7 @@ using LughSharp.Core.Maps.Objects;
 using LughSharp.Core.Maps.Tiled.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Maths;
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using Color = LughSharp.Core.Graphics.Color;
 
@@ -1302,7 +1305,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     public class BaseTmxLoaderParameters : AssetLoaderParameters
     {
         // generate mipmaps?
-        public bool GenerateMipMaps { get; set; } = false;
+        public bool GenerateMipMaps { get; set; }
 
         // The TextureFilter to use for minification
         public TextureFilterMode TextureMinFilter { get; set; } = TextureFilterMode.Nearest;
@@ -1313,7 +1316,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
         /// <summary>
         /// Whether to convert the objects' pixel position and size to the equivalent in tile space.
         /// </summary>
-        public bool ConvertObjectToTileSpace { get; set; } = false;
+        public bool ConvertObjectToTileSpace { get; set; }
 
         /// <summary>
         /// Whether to flip all Y coordinates so that Y positive is up. All LibGDX renderers
@@ -1329,6 +1332,26 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
 internal class MapData
 {
+    internal string? MapVersion         { get; set; }
+    internal string? TiledVersion       { get; set; }
+    internal string? MapOrientation     { get; set; }
+    internal string? RenderOrder        { get; set; }
+    internal string? NextLayerID        { get; set; }
+    internal string? NextObjectID       { get; set; }
+    internal string? HexSideLength      { get; set; }
+    internal string? StaggerAxis        { get; set; }
+    internal string? StaggerIndex       { get; set; }
+    internal string? MapBackgroundColor { get; set; }
+
+    internal int MapWidth   { get; set; }
+    internal int MapHeight  { get; set; }
+    internal int TileWidth  { get; set; }
+    internal int TileHeight { get; set; }
+
+    internal bool IsInfinite { get; set; }
+
+    // ========================================================================
+    
     internal MapData( XmlNode? node )
     {
         if ( node == null )
@@ -1354,22 +1377,8 @@ internal class MapData
         IsInfinite         = node.Attributes?[ "infinite" ]?.Value == "1";
         //@formatter:on
     }
-
-    internal string? MapVersion         { get; set; }
-    internal string? TiledVersion       { get; set; }
-    internal string? MapOrientation     { get; set; }
-    internal string? RenderOrder        { get; set; }
-    internal string? NextLayerID        { get; set; }
-    internal string? NextObjectID       { get; set; }
-    internal string? HexSideLength      { get; set; }
-    internal string? StaggerAxis        { get; set; }
-    internal string? StaggerIndex       { get; set; }
-    internal string? MapBackgroundColor { get; set; }
-
-    internal int MapWidth   { get; set; }
-    internal int MapHeight  { get; set; }
-    internal int TileWidth  { get; set; }
-    internal int TileHeight { get; set; }
-
-    internal bool IsInfinite { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

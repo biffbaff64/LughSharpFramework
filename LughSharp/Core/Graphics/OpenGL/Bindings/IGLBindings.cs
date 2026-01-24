@@ -24,6 +24,8 @@
 
 // ============================================================================
 
+using System.Numerics;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using GLfloat = float;
 using GLdouble = double;

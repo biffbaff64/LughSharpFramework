@@ -22,7 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -46,26 +48,26 @@ public class TextureUtils
     public static void DebugTexture2D( uint textureId )
     {
         // Save state
-        GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out var activeTex );
-        GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out var prevBinding );
+        Engine.GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out var activeTex );
+        Engine.GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out var prevBinding );
 
         // Ensure we are inspecting the right object on the active unit
-        GL.BindTexture( TextureTarget.Texture2D, textureId );
+        Engine.GL.BindTexture( TextureTarget.Texture2D, textureId );
 
-        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out var w );
-        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out var h );
-        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureInternalFormat, out var internalFmt );
-        GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.TextureMaxLevel, out var maxLevel );
-        GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.MinFilter, out var minFilter );
-        GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.MagFilter, out var magFilter );
+        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out var w );
+        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out var h );
+        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureInternalFormat, out var internalFmt );
+        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.TextureMaxLevel, out var maxLevel );
+        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.MinFilter, out var minFilter );
+        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.MagFilter, out var magFilter );
 
         Logger.Debug( $"[Tex {textureId}] L0 Size: {w}x{h}, InternalFormat: 0x{internalFmt:X}" );
         Logger.Debug( $"[Tex {textureId}] MinFilter: 0x{minFilter:X}, MagFilter: 0x{magFilter:X}, MaxLevel: {maxLevel}" );
         Logger.Divider();
 
         // Restore state
-        GL.BindTexture( TextureTarget.Texture2D, ( uint )prevBinding );
-        GL.ActiveTexture( ( TextureUnit )activeTex );
+        Engine.GL.BindTexture( TextureTarget.Texture2D, ( uint )prevBinding );
+        Engine.GL.ActiveTexture( ( TextureUnit )activeTex );
     }
 
     /// <summary>
@@ -77,18 +79,18 @@ public class TextureUtils
     /// <returns></returns>
     public static uint CreateTexture2D( int width, int height, PixelInternalFormat internalFormat )
     {
-        var textureHandle = GL.GenTexture();
+        var textureHandle = Engine.GL.GenTexture();
 
-        GL.BindTexture( TextureTarget.Texture2D, textureHandle );
+        Engine.GL.BindTexture( TextureTarget.Texture2D, textureHandle );
 
         // Use immutable texture storage if supported
-        if ( GL.GetOpenGLVersion().major >= 4 )
+        if ( Engine.GL.GetOpenGLVersion().major >= 4 )
         {
-            GL.TexStorage2D( ( int )TextureTarget.Texture2D, 1, ( int )internalFormat, width, height );
+            Engine.GL.TexStorage2D( ( int )TextureTarget.Texture2D, 1, ( int )internalFormat, width, height );
         }
         else
         {
-            GL.TexImage2D( ( int )TextureTarget.Texture2D,
+            Engine.GL.TexImage2D( ( int )TextureTarget.Texture2D,
                            0,
                            ( int )internalFormat,
                            width,

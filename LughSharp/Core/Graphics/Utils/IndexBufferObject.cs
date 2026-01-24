@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -103,7 +105,7 @@ public class IndexBufferObject : IIndexData
         _byteBuffer.Flip();
 
         // Generate a new OpenGL buffer handle.
-        BufferID = ( int )GL.GenBuffer();
+        BufferID = ( int )Engine.GL.GenBuffer();
 
         // Set the usage flag for the buffer based on whether it is static or dynamic.
         _usage = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
@@ -141,7 +143,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                Engine.GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -176,7 +178,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                Engine.GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -207,7 +209,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                Engine.GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -230,7 +232,7 @@ public class IndexBufferObject : IIndexData
             throw new RuntimeException( "No buffer allocated!" );
         }
 
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )BufferID );
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )BufferID );
 
         if ( _isDirty )
         {
@@ -240,7 +242,7 @@ public class IndexBufferObject : IIndexData
             {
                 fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
-                    GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                    Engine.GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
                 }
             }
 
@@ -253,22 +255,22 @@ public class IndexBufferObject : IIndexData
     /// <inheritdoc />
     public void Unbind()
     {
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
         _isBound = false;
     }
 
     /// <inheritdoc />
     public void Invalidate()
     {
-        BufferID = ( int )GL.GenBuffer(); //TODO: ???
+        BufferID = ( int )Engine.GL.GenBuffer(); //TODO: ???
         _isDirty = true;
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
-        GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
-        GL.DeleteBuffers( ( uint )BufferID );
+        Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
+        Engine.GL.DeleteBuffers( ( uint )BufferID );
 
         BufferID = 0;
 

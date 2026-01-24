@@ -22,7 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
+using JetBrains.Annotations;
 using Environment = System.Environment;
 
 namespace LughSharp.Core.Utils.Logging;
@@ -61,9 +66,9 @@ public static class Logger
 
     #region properties
 
-    public static bool EnableWriteToFile { get; set; } = false;
+    public static bool EnableWriteToFile { get; set; }
     public static int  TraceLevel        { get; set; } = LOG_NONE;
-    public static bool IsMinimal         { get; set; } = false;
+    public static bool IsMinimal         { get; set; }
 
     #endregion properties
 

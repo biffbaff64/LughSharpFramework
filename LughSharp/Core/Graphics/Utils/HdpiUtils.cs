@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
+using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics.Utils;
 
@@ -87,17 +89,17 @@ public class HdpiUtils
     public static void GLScissor( int x, int y, int width, int height )
     {
         if ( ( _mode == HdpiMode.Logical )
-             && ( ( Api.Graphics.Width != Api.Graphics.BackBufferWidth )
-                  || ( Api.Graphics.Height != Api.Graphics.BackBufferHeight ) ) )
+             && ( ( Engine.Api.Graphics.Width != Engine.Api.Graphics.BackBufferWidth )
+                  || ( Engine.Api.Graphics.Height != Engine.Api.Graphics.BackBufferHeight ) ) )
         {
-            GL.Scissor( ToBackBufferX( x ),
+            Engine.GL.Scissor( ToBackBufferX( x ),
                         ToBackBufferY( y ),
                         ToBackBufferX( width ),
                         ToBackBufferY( height ) );
         }
         else
         {
-            GL.Scissor( x, y, width, height );
+            Engine.GL.Scissor( x, y, width, height );
         }
     }
 
@@ -109,10 +111,10 @@ public class HdpiUtils
     public static void GLViewport( int x, int y, int width, int height )
     {
         if ( ( _mode == HdpiMode.Logical )
-             && ( ( Api.Graphics.Width != Api.Graphics.BackBufferWidth )
-                  || ( Api.Graphics.Height != Api.Graphics.BackBufferHeight ) ) )
+             && ( ( Engine.Api.Graphics.Width != Engine.Api.Graphics.BackBufferWidth )
+                  || ( Engine.Api.Graphics.Height != Engine.Api.Graphics.BackBufferHeight ) ) )
         {
-            Api.Graphics.UpdateViewport( ToBackBufferX( x ),
+            Engine.Api.Graphics.UpdateViewport( ToBackBufferX( x ),
                                          ToBackBufferY( y ),
                                          ToBackBufferX( width ),
                                          ToBackBufferY( height ),
@@ -120,7 +122,7 @@ public class HdpiUtils
         }
         else
         {
-            Api.Graphics.UpdateViewport( x, y, width, height, 4 );
+            Engine.Api.Graphics.UpdateViewport( x, y, width, height, 4 );
         }
     }
 
@@ -130,7 +132,7 @@ public class HdpiUtils
     /// </summary>
     public static int ToLogicalX( int backBufferX )
     {
-        return ( int )( ( backBufferX * Api.Graphics.Width ) / ( float )Api.Graphics.BackBufferWidth );
+        return ( int )( ( backBufferX * Engine.Api.Graphics.Width ) / ( float )Engine.Api.Graphics.BackBufferWidth );
     }
 
     /// <summary>
@@ -139,7 +141,7 @@ public class HdpiUtils
     /// </summary>
     public static int ToLogicalY( int backBufferY )
     {
-        return ( int )( ( backBufferY * Api.Graphics.Height ) / ( float )Api.Graphics.BackBufferHeight );
+        return ( int )( ( backBufferY * Engine.Api.Graphics.Height ) / ( float )Engine.Api.Graphics.BackBufferHeight );
     }
 
     /// <summary>
@@ -148,7 +150,7 @@ public class HdpiUtils
     /// </summary>
     public static int ToBackBufferX( int logicalX )
     {
-        return ( int )( ( logicalX * Api.Graphics.BackBufferWidth ) / ( float )Api.Graphics.Width );
+        return ( int )( ( logicalX * Engine.Api.Graphics.BackBufferWidth ) / ( float )Engine.Api.Graphics.Width );
     }
 
     /// <summary>
@@ -157,6 +159,6 @@ public class HdpiUtils
     /// </summary>
     public static int ToBackBufferY( int logicalY )
     {
-        return ( int )( ( logicalY * Api.Graphics.BackBufferHeight ) / ( float )Api.Graphics.Height );
+        return ( int )( ( logicalY * Engine.Api.Graphics.BackBufferHeight ) / ( float )Engine.Api.Graphics.Height );
     }
 }

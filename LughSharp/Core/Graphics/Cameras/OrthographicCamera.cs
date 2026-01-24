@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.Cameras;
@@ -40,7 +42,7 @@ public class OrthographicCamera : Camera
     /// Constructs a default OrthographicCamera.
     /// All properties, such as viewport size etc, will need setting up before use.
     /// </summary>
-    public OrthographicCamera() : base()
+    public OrthographicCamera()
     {
         Near = CameraData.DEFAULT_NEAR_PLANE;
         Far  = CameraData.DEFAULT_FAR_PLANE;
@@ -58,7 +60,7 @@ public class OrthographicCamera : Camera
     /// </summary>
     /// <param name="viewportWidth"> Width of this cameras viewport. </param>
     /// <param name="viewportHeight"> Height of this cameras viewport. </param>
-    public OrthographicCamera( float viewportWidth, float viewportHeight ) : base()
+    public OrthographicCamera( float viewportWidth, float viewportHeight )
     {
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
@@ -78,7 +80,7 @@ public class OrthographicCamera : Camera
     /// <param name="yDown">whether y should be pointing down.</param>
     public void SetToOrtho( bool yDown )
     {
-        SetToOrtho( Api.Graphics.Width, Api.Graphics.Height, yDown );
+        SetToOrtho( Engine.Api.Graphics.Width, Engine.Api.Graphics.Height, yDown );
     }
 
     /// <summary>

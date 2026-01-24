@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -374,7 +376,7 @@ public class ScrollPane : WidgetGroup
 //            if ( ( Stage != null ) && Stage.ActionsRequestRendering )
             if ( Stage is { ActionsRequestRendering: true } )
             {
-                Api.Graphics.RequestRendering();
+                Engine.Api.Graphics.RequestRendering();
             }
         }
     }
@@ -897,7 +899,7 @@ public class ScrollPane : WidgetGroup
         return base.RemoveActor( actor, unfocus );
     }
 
-    public override Actor RemoveActorAt( int index, bool unfocus )
+    public override Actor? RemoveActorAt( int index, bool unfocus )
     {
         var actor = base.RemoveActorAt( index, unfocus );
 

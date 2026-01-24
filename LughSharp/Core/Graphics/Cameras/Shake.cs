@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.Cameras;
@@ -36,15 +37,15 @@ namespace LughSharp.Core.Graphics.Cameras;
 public class Shake
 {
     public bool ScreenShakeEnabled { get; set; }
-    public bool ScreenShakeAllowed { get; set; } = false;
+    public bool ScreenShakeAllowed { get; set; }
 
     // ========================================================================
 
-    private float _shakeRadius    = 0;
-    private float _randomAngle    = 0;
-    private float _elapsedTime    = 0;
-    private float _shakeDuration  = 0;
-    private float _shakeIntensity = 0;
+    private float _shakeRadius;
+    private float _randomAngle;
+    private float _elapsedTime;
+    private float _shakeDuration;
+    private float _shakeIntensity;
 
     // ========================================================================
 

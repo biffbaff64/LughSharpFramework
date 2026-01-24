@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using Exception = System.Exception;
 using Platform = LughSharp.Core.Main.Platform;
@@ -215,12 +217,12 @@ public interface INet
         /// <summary>
         /// Gets or sets the timeout for the request in milliseconds.
         /// </summary>
-        public int TimeOut { get; set; } = 0;
+        public int TimeOut { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to include credentials in the request.
         /// </summary>
-        public bool IncludeCredentials { get; set; } = false;
+        public bool IncludeCredentials { get; set; }
 
         /// <summary>
         /// Gets the content stream of the HTTP request.
@@ -246,7 +248,7 @@ public interface INet
             get => _followRedirects;
             set
             {
-                if ( value || ( Api.App.AppType != Platform.ApplicationType.WebGL ) )
+                if ( value || ( Engine.Api.App.AppType != Platform.ApplicationType.WebGL ) )
                 {
                     _followRedirects = value;
                 }

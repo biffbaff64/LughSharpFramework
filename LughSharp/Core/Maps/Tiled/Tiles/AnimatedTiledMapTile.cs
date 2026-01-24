@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Exceptions;
 using Blendmode = LughSharp.Core.Maps.Tiled.ITiledMapTile.Blendmode;
@@ -36,7 +37,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
 {
     private static readonly long _initialTimeOffset = DateTime.Now.Millisecond;
 
-    private static   long                 _lastTiledMapRenderTime = 0;
+    private static   long                 _lastTiledMapRenderTime;
     private readonly int[]                _animationIntervals;
     private readonly StaticTiledMapTile[] _frameTiles;
     private readonly int                  _loopDuration;

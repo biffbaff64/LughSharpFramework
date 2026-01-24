@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -132,7 +135,7 @@ public class Tooltip< T > : InputListener where T : Actor
 
     public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
     {
-        if ( ( pointer != -1 ) || Api.Input.IsTouched() )
+        if ( ( pointer != -1 ) || Engine.Api.Input.IsTouched() )
         {
             return;
         }

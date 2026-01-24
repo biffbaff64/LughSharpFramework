@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Graphics.OpenGL;
@@ -62,7 +64,7 @@ public class Cubemap : GLTexture, IManaged
 
         if ( data.IsManaged )
         {
-            AddManagedCubemap( Api.App, this );
+            AddManagedCubemap( Engine.Api.App, this );
         }
     }
 
@@ -141,7 +143,7 @@ public class Cubemap : GLTexture, IManaged
     /// <summary>
     /// return the number of managed cubemaps currently loaded
     /// </summary>
-    public static int NumManagedCubemaps => ManagedCubemaps[ Api.App ]?.Count ?? 0;
+    public static int NumManagedCubemaps => ManagedCubemaps[ Engine.Api.App ]?.Count ?? 0;
 
     public bool IsManaged => Data.IsManaged;
 
@@ -165,7 +167,7 @@ public class Cubemap : GLTexture, IManaged
 
         data.ConsumeCubemapData();
 
-        GL.BindTexture( GLTarget, 0 );
+        Engine.GL.BindTexture( GLTarget, 0 );
     }
 
     /// <summary>
@@ -179,7 +181,7 @@ public class Cubemap : GLTexture, IManaged
             throw new RuntimeException( "Tried to reload an unmanaged Cubemap" );
         }
 
-        GLTextureHandle = GL.GenTexture();
+        GLTextureHandle = Engine.GL.GenTexture();
 
         Load( Data );
     }
@@ -273,7 +275,7 @@ public class Cubemap : GLTexture, IManaged
                     // unload the c, create a new gl handle then reload it.
                     AssetManager.Unload( filename );
 
-                    cubemap.GLTextureHandle = GL.GenTexture();
+                    cubemap.GLTextureHandle = Engine.GL.GenTexture();
                     AssetManager.Load< Cubemap >( filename, parameter );
                 }
             }
@@ -344,9 +346,9 @@ public class Cubemap : GLTexture, IManaged
 
             if ( Data.IsManaged )
             {
-                if ( ManagedCubemaps[ Api.App ] != null )
+                if ( ManagedCubemaps[ Engine.Api.App ] != null )
                 {
-                    ManagedCubemaps[ Api.App ]?.Remove( this );
+                    ManagedCubemaps[ Engine.Api.App ]?.Remove( this );
                 }
             }
         }
@@ -400,7 +402,7 @@ public class Cubemap : GLTexture, IManaged
         // ====================================================================
 
         private static List< CubemapSide > _valueList   = new();
-        private static int                 _nextOrdinal = 0;
+        private static int                 _nextOrdinal;
         private        string              _nameValue;
 
         // ====================================================================

@@ -32,7 +32,7 @@ public class AsyncExecutor : IDisposable
     // C# mechanism to limit the number of concurrent tasks (the maxConcurrent property)
     private readonly SemaphoreSlim _semaphore;
 
-    private bool _isDisposed = false;
+    private bool _isDisposed;
 
     // ========================================================================
 

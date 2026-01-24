@@ -23,6 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Exceptions;
 

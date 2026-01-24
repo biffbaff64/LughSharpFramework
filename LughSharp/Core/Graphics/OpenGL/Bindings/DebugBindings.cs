@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
 using LughSharp.Core.Utils.Logging;
 using GLenum = int;
 using GLsizei = int;

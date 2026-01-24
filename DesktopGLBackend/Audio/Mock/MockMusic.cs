@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Audio;
 
 namespace DesktopGLBackend.Audio.Mock;
@@ -48,10 +49,10 @@ public class MockMusic : IMusic
     }
 
     /// <inheritdoc />
-    public bool IsPlaying { get; set; } = false;
+    public bool IsPlaying { get; set; }
 
     /// <inheritdoc />
-    public bool IsLooping { get; set; } = false;
+    public bool IsLooping { get; set; }
 
     /// <inheritdoc />
     public void SetVolume( float volume )

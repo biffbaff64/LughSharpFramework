@@ -22,7 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Graphics.OpenGL;
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
@@ -47,8 +48,8 @@ public class VertexBufferObjectWithVAO : IVertexData
     private readonly BufferUsageHint _usage;
 
     private int  _bufferHandle;
-    private bool _isBound = false;
-    private bool _isDirty = false;
+    private bool _isBound;
+    private bool _isDirty;
     private bool _isStatic;
     private int  _vaoHandle = -1;
 
@@ -84,7 +85,7 @@ public class VertexBufferObjectWithVAO : IVertexData
         _buffer.Flip();
         _byteBuffer.Flip();
 
-        _bufferHandle = ( int )GL.GenBuffer();
+        _bufferHandle = ( int )Engine.GL.GenBuffer();
         _usage        = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
 
         CreateVAO();
@@ -107,7 +108,7 @@ public class VertexBufferObjectWithVAO : IVertexData
         _buffer.Flip();
         _byteBuffer.Flip();
 
-        _bufferHandle = ( int )GL.GenBuffer();
+        _bufferHandle = ( int )Engine.GL.GenBuffer();
         _usage        = isStatic ? BufferUsageHint.StaticDraw : BufferUsageHint.DynamicDraw;
 
         CreateVAO();
@@ -231,7 +232,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// <param name="locations"> array containing the attribute locations. </param>
     public void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GL.BindVertexArray( ( uint )_vaoHandle );
+        Engine.GL.BindVertexArray( ( uint )_vaoHandle );
 
         BindAttributes( shader, locations );
         BindData();
@@ -246,7 +247,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// <param name="locations"> array containing the attribute locations.  </param>
     public void Unbind( ShaderProgram? shader, int[]? locations = null )
     {
-        GL.BindVertexArray( 0 );
+        Engine.GL.BindVertexArray( 0 );
         _isBound = false;
     }
 
@@ -255,7 +256,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// </summary>
     public void Invalidate()
     {
-        _bufferHandle = ( int )GL.GenBuffer(); //TODO: ???
+        _bufferHandle = ( int )Engine.GL.GenBuffer(); //TODO: ???
 
         CreateVAO();
 
@@ -265,13 +266,13 @@ public class VertexBufferObjectWithVAO : IVertexData
     private unsafe void BufferChanged()
     {
         // Bind the buffer regardless of _isBound to ensure the upload happens
-        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
         {
             // Use BufferSubData if you already allocated memory in Initialise, 
             // otherwise BufferData is fine for now.
-            GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+            Engine.GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
         }
 
         _isDirty = false;
@@ -307,7 +308,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
         if ( !stillValid )
         {
-            GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+            Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
             UnbindAttributes( shader );
 
@@ -366,13 +367,13 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         if ( _isDirty )
         {
-            GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+            Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
             _byteBuffer.Limit = _buffer.Limit * 4;
 
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                Engine.GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -381,7 +382,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     private void CreateVAO()
     {
-        _vaoHandle = ( int )GL.GenVertexArray();
+        _vaoHandle = ( int )Engine.GL.GenVertexArray();
     }
 
     private unsafe void DeleteVAO()
@@ -394,7 +395,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
             fixed ( int* intptr = &TmpHandle.ToArray()[ 0 ] )
             {
-                GL.DeleteVertexArrays( 1, ( uint* )intptr );
+                Engine.GL.DeleteVertexArrays( 1, ( uint* )intptr );
             }
 
             _vaoHandle = -1;
@@ -417,8 +418,8 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         if ( disposing )
         {
-            GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
-            GL.DeleteBuffers( ( uint )_bufferHandle );
+            Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+            Engine.GL.DeleteBuffers( ( uint )_bufferHandle );
 
             _bufferHandle = 0;
 

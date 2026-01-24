@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
+using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 using Rectangle = System.Drawing.Rectangle;
 

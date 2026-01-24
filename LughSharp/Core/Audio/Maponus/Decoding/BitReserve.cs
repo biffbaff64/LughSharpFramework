@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace LughSharp.Core.Audio.Maponus.Decoding;
 
 /// <summary>
@@ -49,9 +51,9 @@ public class BitReserve
 
     private readonly int[] _buffer = new int[ BUFSIZE ];
 
-    private int _bufByteIdx = 0;
-    private int _offset     = 0;
-    private int _totbit     = 0;
+    private int _bufByteIdx;
+    private int _offset;
+    private int _totbit;
 
     /// <summary>
     /// Return totbit Field.

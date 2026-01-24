@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maths;
@@ -37,11 +38,11 @@ namespace LughSharp.Core.Maths;
 public class Affine2
 {
     public float M00 = 1;
-    public float M01 = 0;
-    public float M02 = 0;
-    public float M10 = 0;
+    public float M01;
+    public float M02;
+    public float M10;
     public float M11 = 1;
-    public float M12 = 0;
+    public float M12;
 
     // constant: m21 = 0, m21 = 1, m22 = 1
 

@@ -22,9 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -66,17 +68,18 @@ namespace LughSharp.Core.Graphics.G2D;
 /// A PolygonSpriteBatch has to be disposed if it is no longer used.
 /// </para>
 /// </summary>
+//TODO: Update this class as with SpriteBatch()
 [PublicAPI]
 public class PolygonSpriteBatch : IPolygonBatch
 {
     // The maximum number of triangles rendered in one batch so far.
-    public int MaxTrianglesInBatch { get; set; } = 0;
+    public int MaxTrianglesInBatch { get; set; }
 
     // Number of render calls since the last call to Begin()
-    public int RenderCalls { get; set; } = 0;
+    public int RenderCalls { get; set; }
 
     // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int       TotalRenderCalls  { get; set; }         = 0;
+    public int       TotalRenderCalls  { get; set; }
     public BlendMode BlendSrcFunc      { get; private set; } = BlendMode.SrcAlpha;
     public BlendMode BlendDstFunc      { get; private set; } = BlendMode.OneMinusSrcAlpha;
     public BlendMode BlendSrcFuncAlpha { get; private set; } = BlendMode.SrcAlpha;
@@ -99,8 +102,8 @@ public class PolygonSpriteBatch : IPolygonBatch
     private bool           _blendingDisabled;
     private float          _colorPacked = Color.WhiteFloatBits;
     private ShaderProgram? _customShader;
-    private float          _invTexHeight = 0;
-    private float          _invTexWidth  = 0;
+    private float          _invTexHeight;
+    private float          _invTexWidth;
     private Texture?       _lastTexture;
     private int            _triangleIndex;
     private int            _vertexIndex;
@@ -181,7 +184,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             _shader = defaultShader;
         }
 
-        ProjectionMatrix.SetToOrtho2D( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
     }
 
     public void Begin( bool depthMaskEnabled = false )
@@ -193,8 +196,8 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         RenderCalls = 0;
 
-        _originalDepthMask = GL.IsEnabled( EnableCap.DepthTest );
-        GL.DepthMask( depthMaskEnabled );
+        _originalDepthMask = Engine.GL.IsEnabled( EnableCap.DepthTest );
+        Engine.GL.DepthMask( depthMaskEnabled );
 
         if ( _customShader != null )
         {
@@ -225,11 +228,11 @@ public class PolygonSpriteBatch : IPolygonBatch
         _lastTexture = null;
         IsDrawing    = false;
 
-        GL.DepthMask( true );
+        Engine.GL.DepthMask( true );
 
         if ( IsBlendingEnabled() )
         {
-            GL.Disable( EnableCap.Blend );
+            Engine.GL.Disable( EnableCap.Blend );
         }
     }
 
@@ -1405,13 +1408,13 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( _blendingDisabled )
         {
-            GL.Disable( EnableCap.Blend );
+            Engine.GL.Disable( EnableCap.Blend );
         }
         else
         {
-            GL.Enable( EnableCap.Blend );
+            Engine.GL.Enable( EnableCap.Blend );
 
-            GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
+            Engine.GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
         }
 
         mesh.Render( _customShader ?? _shader, IGL.GL_TRIANGLES, 0, trianglesInBatch );
@@ -1552,3 +1555,6 @@ public class PolygonSpriteBatch : IPolygonBatch
         return !_blendingDisabled;
     }
 }
+
+// ============================================================================
+// ============================================================================

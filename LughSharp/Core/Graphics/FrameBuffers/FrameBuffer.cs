@@ -22,9 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.FrameBuffers;
@@ -126,10 +128,13 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     /// </summary>
     protected override void AttachFrameBufferColorTexture( Texture texture )
     {
-        GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
-                                 IGL.GL_COLOR_ATTACHMENT0,
-                                 IGL.GL_TEXTURE_2D,
-                                 ( uint )texture.GLTextureHandle,
-                                 0 );
+        Engine.GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
+                                        IGL.GL_COLOR_ATTACHMENT0,
+                                        IGL.GL_TEXTURE_2D,
+                                        texture.GLTextureHandle,
+                                        0 );
     }
 }
+
+// ============================================================================
+// ============================================================================

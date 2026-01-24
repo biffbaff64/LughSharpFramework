@@ -92,6 +92,9 @@ public static class Colors
         return Map.GetValueOrDefault( name );
     }
     
+    /// <summary>
+    /// Prints all the colors in the <see cref="Map"/> to the log.
+    /// </summary>
     public static void PrintAll()
     {
         foreach ( var (name, color) in Map )

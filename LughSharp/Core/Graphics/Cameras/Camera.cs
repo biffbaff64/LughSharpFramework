@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.Utils.Logging;
@@ -37,9 +39,9 @@ namespace LughSharp.Core.Graphics.Cameras;
 [PublicAPI]
 public abstract class Camera
 {
-    public Vector3 Position  { get; set; } = new();                    // the position of the camera
-    public Vector3 Direction { get; set; } = new( ( float )( float )0, ( float )( float )0, ( float )( float )-1 ); // the unit length direction vector of the camera
-    public Vector3 Up        { get; set; } = new( ( float )( float )0, ( float )( float )1, ( float )( float )0 );           // the unit length up vector of the camera
+    public Vector3 Position  { get; set; } = new();           // the position of the camera
+    public Vector3 Direction { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
+    public Vector3 Up        { get; set; } = new( 0, 1, 0 );  // the unit length up vector of the camera
 
     public Matrix4 ProjectionMatrix  { get; set; }
     public Matrix4 ViewMatrix        { get; set; }
@@ -65,7 +67,7 @@ public abstract class Camera
             {
                 throw new ArgumentException( $"Near must be < Far: {field}, {Far}" );
             }
-            
+
             field = value;
         }
     } = CameraData.DEFAULT_NEAR_PLANE;
@@ -82,7 +84,7 @@ public abstract class Camera
             {
                 throw new ArgumentException( $"Far must be > Near: {field}, {Near}" );
             }
-            
+
             field = value;
         }
     } = CameraData.DEFAULT_FAR_PLANE;
@@ -287,7 +289,7 @@ public abstract class Camera
                               float viewportHeight )
     {
         var x = screenCoords.X - viewportX;
-        var y = Api.Graphics.Height - screenCoords.Y - viewportY;
+        var y = Engine.Api.Graphics.Height - screenCoords.Y - viewportY;
 
         screenCoords.X = ( ( 2 * x ) / viewportWidth ) - 1;
         screenCoords.Y = ( ( 2 * y ) / viewportHeight ) - 1;
@@ -310,7 +312,7 @@ public abstract class Camera
     /// <returns> the mutated and unprojected screenCoords <see cref="Maths.Vector3"/></returns>
     public Vector3 Unproject( Vector3 screenCoords )
     {
-        Unproject( screenCoords, 0, 0, Api.Graphics.Width, Api.Graphics.Height );
+        Unproject( screenCoords, 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
 
         return screenCoords;
     }
@@ -326,7 +328,7 @@ public abstract class Camera
     /// <returns>The mutated and projected worldCoords <see cref="Maths.Vector3"/>.</returns>
     public Vector3 Project( Vector3 worldCoords )
     {
-        Project( worldCoords, 0, 0, Api.Graphics.Width, Api.Graphics.Height );
+        Project( worldCoords, 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
 
         return worldCoords;
     }
@@ -410,7 +412,7 @@ public abstract class Camera
     /// <returns>The picking Ray.</returns>
     public Ray GetPickRay( float screenX, float screenY )
     {
-        return GetPickRay( screenX, screenY, 0, 0, Api.Graphics.Width, Api.Graphics.Height );
+        return GetPickRay( screenX, screenY, 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
     }
 
     /// <summary>
@@ -436,9 +438,9 @@ public abstract class Camera
         Logger.Debug( $"Up: X:{Up.X}, Y:{Up.Y}, Z:{Up.Z}" );
         Logger.Debug( $"Near: {Near}" );
         Logger.Debug( $"Far: {Far}" );
-        Logger.Debug( $"Projection Matrix:\n {ProjectionMatrix.ToString()}" );
-        Logger.Debug( $"View Matrix:\n {ViewMatrix.ToString()}" );
-        Logger.Debug( $"Combined Matrix:\n {Combined.ToString()}" );
+        Logger.Debug( $"Projection Matrix:\n {ProjectionMatrix}" );
+        Logger.Debug( $"View Matrix:\n {ViewMatrix}" );
+        Logger.Debug( $"Combined Matrix:\n {Combined}" );
     }
 }
 

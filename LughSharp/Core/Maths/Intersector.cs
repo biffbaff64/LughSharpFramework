@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
@@ -2233,10 +2234,10 @@ public class Intersector
         public int     Total        { get; set; }
         public float[] Front        { get; set; }
         public float[] Back         { get; set; }
-        public bool    FrontCurrent { get; set; } = false;
+        public bool    FrontCurrent { get; set; }
         public float[] EdgeSplit    { get; set; }
-        public int     FrontOffset  { get; set; } = 0;
-        public int     BackOffset   { get; set; } = 0;
+        public int     FrontOffset  { get; set; }
+        public int     BackOffset   { get; set; }
 
         public void Add( float[] vertex, int offset, int stride )
         {
@@ -2276,7 +2277,7 @@ public class Intersector
     public record MinimumTranslationVector
     {
         // Distance of the translation required for the separation
-        public float Depth { get; set; } = 0;
+        public float Depth { get; set; }
 
         // Unit length vector that indicates the direction for the separation
         public Vector2 Normal { get; set; } = new();

@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -156,8 +159,8 @@ public class FacedCubemapData : ICubemapData
                     var _                                                      => 1,
                 };
 
-                GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
-                GL.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, 0, pixmap );
+                Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
+                Engine.GL.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, 0, pixmap );
 
                 if ( disposePixmap )
                 {

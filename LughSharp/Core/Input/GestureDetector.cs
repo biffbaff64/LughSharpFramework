@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Input;
@@ -155,7 +158,6 @@ public class GestureDetector : InputAdapter
         _longPressTokenSource       ??= new CancellationTokenSource();
         _longPressCancellationToken =   _longPressTokenSource.Token;
 
-        //@formatter:off
         _longPressTask = Task.Run( () =>
         {
             if ( !_longPressFired )
@@ -168,7 +170,6 @@ public class GestureDetector : InputAdapter
                 _longPressCancellationToken.ThrowIfCancellationRequested();
             }
         }, _longPressCancellationToken );
-        //@formatter:on
 
         try
         {
@@ -211,10 +212,10 @@ public class GestureDetector : InputAdapter
         if ( pointer == 0 )
         {
             _pointer1.Set( x, y );
-            _touchDownTime = Api.Input.GetCurrentEventTime();
+            _touchDownTime = Engine.Api.Input.GetCurrentEventTime();
             _tracker.Start( x, y, _touchDownTime );
 
-            if ( Api.Input.IsTouched( 1 ) )
+            if ( Engine.Api.Input.IsTouched( 1 ) )
             {
                 // Start pinch.
                 _inTapRectangle = false;
@@ -288,11 +289,11 @@ public class GestureDetector : InputAdapter
 
             return _listener.Zoom( _initialPointer1.Distance( _initialPointer2 ),
                                    _pointer1.Distance( _pointer2 ) )
-                   || result;
+                || result;
         }
 
         // update tracker
-        _tracker.Update( x, y, Api.Input.GetCurrentEventTime() );
+        _tracker.Update( x, y, Engine.Api.Input.GetCurrentEventTime() );
 
         // check if we are still tapping.
         if ( _inTapRectangle && !IsWithinTapRectangle( x, y, _tapRectangleCenterX, _tapRectangleCenterY ) )
@@ -344,9 +345,9 @@ public class GestureDetector : InputAdapter
         {
             // handle taps
             if ( ( _lastTapButton != button )
-                 || ( _lastTapPointer != pointer )
-                 || ( ( TimeUtils.NanoTime() - _lastTapTime ) > _tapCountInterval )
-                 || !IsWithinTapRectangle( x, y, _lastTapX, _lastTapY ) )
+              || ( _lastTapPointer != pointer )
+              || ( ( TimeUtils.NanoTime() - _lastTapTime ) > _tapCountInterval )
+              || !IsWithinTapRectangle( x, y, _lastTapX, _lastTapY ) )
             {
                 _tapCount = 0;
             }
@@ -373,12 +374,12 @@ public class GestureDetector : InputAdapter
             if ( pointer == 0 )
             {
                 // first pointer has lifted off, set up panning to use the second pointer...
-                _tracker.Start( _pointer2.X, _pointer2.Y, Api.Input.GetCurrentEventTime() );
+                _tracker.Start( _pointer2.X, _pointer2.Y, Engine.Api.Input.GetCurrentEventTime() );
             }
             else
             {
                 // second pointer has lifted off, set up panning to use the first pointer...
-                _tracker.Start( _pointer1.X, _pointer1.Y, Api.Input.GetCurrentEventTime() );
+                _tracker.Start( _pointer1.X, _pointer1.Y, Engine.Api.Input.GetCurrentEventTime() );
             }
 
             return false;
@@ -393,14 +394,14 @@ public class GestureDetector : InputAdapter
         }
 
         // handle fling
-        var time = Api.Input.GetCurrentEventTime();
+        var time = Engine.Api.Input.GetCurrentEventTime();
 
         if ( ( time - _touchDownTime ) <= _maxFlingDelay )
         {
             _tracker.Update( x, y, time );
 
             handled = _listener.Fling( _tracker.GetVelocityX(), _tracker.GetVelocityY(), button )
-                      || handled;
+                   || handled;
         }
 
         _touchDownTime = 0;
@@ -458,7 +459,7 @@ public class GestureDetector : InputAdapter
     private bool IsWithinTapRectangle( float x, float y, float centerX, float centerY )
     {
         return ( Math.Abs( x - centerX ) < _tapRectangleWidth )
-               && ( Math.Abs( y - centerY ) < _tapRectangleHeight );
+            && ( Math.Abs( y - centerY ) < _tapRectangleHeight );
     }
 
     /// <summary>

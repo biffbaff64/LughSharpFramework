@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Main;
+
 namespace LughSharp.Core.Assets.Loaders.Resolvers;
 
 [PublicAPI]
@@ -30,7 +33,7 @@ public class InternalFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string filename )
     {
-        return Api.Files.Internal( filename );
+        return Engine.Api.Files.Internal( filename );
     }
 }
 

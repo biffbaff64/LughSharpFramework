@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+using JetBrains.Annotations;
+
 namespace DesktopGLBackend;
 
 /// <summary>
@@ -35,8 +38,8 @@ public class Sync
 
     private readonly Stopwatch _stopwatch = new();
 
-    private bool _initialised = false;
-    private long _nextFrame   = 0;
+    private bool _initialised;
+    private long _nextFrame;
 
     // ========================================================================
 

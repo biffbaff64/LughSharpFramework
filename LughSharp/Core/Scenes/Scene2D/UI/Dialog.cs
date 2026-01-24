@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Actions;
 using LughSharp.Core.Scenes.Scene2D.Listeners;

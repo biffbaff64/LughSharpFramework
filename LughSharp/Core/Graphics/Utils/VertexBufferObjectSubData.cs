@@ -22,8 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -188,7 +191,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// <param name="locations"> array containing the attribute locations.</param>
     public unsafe void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -196,7 +199,7 @@ public class VertexBufferObjectSubData : IVertexData
 
             fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( BufferTarget.ArrayBuffer, ByteBuffer.Limit, ( IntPtr )ptr, _usage );
+                Engine.GL.BufferData( BufferTarget.ArrayBuffer, ByteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -283,7 +286,7 @@ public class VertexBufferObjectSubData : IVertexData
             }
         }
 
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         _isBound = false;
     }
 
@@ -302,8 +305,8 @@ public class VertexBufferObjectSubData : IVertexData
     /// </summary>
     public void Dispose()
     {
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
-        GL.DeleteBuffers( ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.DeleteBuffers( ( uint )_bufferHandle );
         _bufferHandle = 0;
     }
 
@@ -312,11 +315,11 @@ public class VertexBufferObjectSubData : IVertexData
     /// </summary>
     private int CreateBufferObject()
     {
-        var result = GL.GenBuffer();
+        var result = Engine.GL.GenBuffer();
 
-        GL.BindBuffer( BufferTarget.ArrayBuffer, result );
-        GL.BufferData( BufferTarget.ArrayBuffer, ByteBuffer.Capacity, 0, _usage );
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, result );
+        Engine.GL.BufferData( BufferTarget.ArrayBuffer, ByteBuffer.Capacity, 0, _usage );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
 
         return ( int )result;
     }
@@ -327,10 +330,14 @@ public class VertexBufferObjectSubData : IVertexData
         {
             fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, ByteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, ByteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -22,6 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+using LughSharp.Core.Maths;
+
 namespace LughSharp.Core.Graphics.Utils;
 
 [PublicAPI]
@@ -32,3 +36,7 @@ public struct Vertex( Vector3 position, float color, Vector2 texCoords )
     public float   Color     = color;
     public Vector2 TexCoords = texCoords;
 }
+
+// ============================================================================
+// ============================================================================
+

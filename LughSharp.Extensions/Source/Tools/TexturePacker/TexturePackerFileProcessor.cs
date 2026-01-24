@@ -23,6 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Exceptions;
@@ -37,7 +39,7 @@ public class TexturePackerFileProcessor : FileProcessor
     public TexturePackerProgressListener? ProgressListener { get; set; }
     public List< DirectoryInfo? >                       DirsToIgnore     { get; set; }
     public string                                       PackFileName     { get; set; }
-    public bool                                         CountOnly        { get; set; } = false;
+    public bool                                         CountOnly        { get; set; }
 
     // ========================================================================
 

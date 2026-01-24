@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Audio;
+using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Assets.Loaders;
 
@@ -68,7 +70,7 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
                                           FileInfo? file,
                                           TP? parameter ) where TP : class
     {
-        LoadedSound = Api.Audio.NewSound( file );
+        LoadedSound = Engine.Api.Audio.NewSound( file );
     }
 
     /// <summary>

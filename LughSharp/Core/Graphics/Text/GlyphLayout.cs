@@ -996,9 +996,7 @@ public class GlyphLayout : IResetable, IPoolable
                 return -1; // Unknown color name.
             }
 
-            var colorToAdd = ( int )Color.ToAbgr8888( color );
-            
-            _colorStack.Add( colorToAdd );
+            _colorStack.Add( ( int )Color.ToAbgr8888( color ) );
             
             return i - start;
         }

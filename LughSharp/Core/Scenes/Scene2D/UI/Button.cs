@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Main;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
@@ -53,8 +55,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Button : Table, IDisableable
 {
-    private bool         _programmaticChangeEvents = true;
-    private ButtonStyle? _style;
+    private bool _programmaticChangeEvents = true;
 
     // ========================================================================
     // ========================================================================
@@ -130,11 +131,11 @@ public class Button : Table, IDisableable
     /// </summary>
     public virtual ButtonStyle? Style
     {
-        get => _style;
+        get;
 
         set
         {
-            _style = value ?? throw new ArgumentException( "style cannot be null." );
+            field = value ?? throw new ArgumentException( "style cannot be null." );
 
             SetBackground( GetBackgroundDrawable() );
         }
@@ -307,7 +308,7 @@ public class Button : Table, IDisableable
         {
             foreach ( var actor in Children )
             {
-                actor.MoveBy( offsetX, offsetY );
+                actor?.MoveBy( offsetX, offsetY );
             }
         }
 
@@ -317,14 +318,14 @@ public class Button : Table, IDisableable
         {
             for ( var i = 0; i < Children.Count; i++ )
             {
-                Children.GetAt( i ).MoveBy( -offsetX, -offsetY );
+                Children.GetAt( i )?.MoveBy( -offsetX, -offsetY );
             }
         }
 
         if ( Stage is { ActionsRequestRendering: true }
-             && ( IsPressed() != ClickListener?.Pressed ) )
+          && ( IsPressed() != ClickListener?.Pressed ) )
         {
-            Api.Graphics.RequestRendering();
+            Engine.Api.Graphics.RequestRendering();
         }
     }
 

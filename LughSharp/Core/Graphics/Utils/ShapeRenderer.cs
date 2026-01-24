@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -51,7 +53,7 @@ public class ShapeRenderer : IDisposable
     private readonly float   _defaultRectLineWidth = 0.75f;
     private readonly Vector2 _tmp                  = new();
 
-    private bool    _matrixDirty      = false;
+    private bool    _matrixDirty;
     private Matrix4 _projectionMatrix = new();
     private Matrix4 _transformMatrix  = new();
 
@@ -63,7 +65,7 @@ public class ShapeRenderer : IDisposable
             ? new ImmediateModeRenderer20( maxVertices, false, true, 0 )
             : new ImmediateModeRenderer20( maxVertices, false, true, 0, defaultShader );
 
-        _projectionMatrix.SetToOrtho2D( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
+        _projectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
         _matrixDirty = true;
     }
 

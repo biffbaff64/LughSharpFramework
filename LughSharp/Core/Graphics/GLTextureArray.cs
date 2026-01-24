@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -66,7 +69,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// Gets the number of managed TextureArrays currently loaded.
     /// </summary>
-    public int NumManagedTextureArrays => ManagedTextureArrays[ Api.App ].Count;
+    public int NumManagedTextureArrays => ManagedTextureArrays[ Engine.Api.App ].Count;
 
     // ========================================================================
 
@@ -123,7 +126,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="data"></param>
     /// <exception cref="RuntimeException"></exception>
     public GLTextureArray( ITextureArrayData data )
-        : base( IGL.GL_TEXTURE_2D_ARRAY, GL.GenTexture() )
+        : base( IGL.GL_TEXTURE_2D_ARRAY, Engine.GL.GenTexture() )
     {
         _data = null!;
 
@@ -131,7 +134,7 @@ public class GLTextureArray : GLTexture, IManaged
 
         if ( data.Managed )
         {
-            AddManagedTexture( Api.App, this );
+            AddManagedTexture( Engine.Api.App, this );
         }
     }
 
@@ -147,7 +150,7 @@ public class GLTextureArray : GLTexture, IManaged
 
         for ( var i = 0; i < internalPaths.Length; i++ )
         {
-            handles[ i ] = Api.Files.Internal( internalPaths[ i ] );
+            handles[ i ] = Engine.Api.Files.Internal( internalPaths[ i ] );
         }
 
         return handles;
@@ -169,16 +172,16 @@ public class GLTextureArray : GLTexture, IManaged
 
         Bind();
 
-        GL.TexImage3D( IGL.GL_TEXTURE_2D_ARRAY,
-                       0,
-                       data.InternalFormat,
-                       data.Width,
-                       data.Height,
-                       data.Depth,
-                       0,
-                       data.InternalFormat,
-                       data.GLDataType,
-                       0 );
+        Engine.GL.TexImage3D( IGL.GL_TEXTURE_2D_ARRAY,
+                              0,
+                              data.InternalFormat,
+                              data.Width,
+                              data.Height,
+                              data.Depth,
+                              0,
+                              data.InternalFormat,
+                              data.GLDataType,
+                              0 );
 
         if ( !data.Prepared )
         {
@@ -190,7 +193,7 @@ public class GLTextureArray : GLTexture, IManaged
         SetFilter( MinFilter, MagFilter );
         SetWrap( UWrap, VWrap );
 
-        GL.BindTexture( GLTarget, 0 );
+        Engine.GL.BindTexture( GLTarget, 0 );
     }
 
     /// <summary>
@@ -204,7 +207,7 @@ public class GLTextureArray : GLTexture, IManaged
             throw new RuntimeException( "Tried to reload an unmanaged TextureArray" );
         }
 
-        GLTextureHandle = GL.GenTexture();
+        GLTextureHandle = Engine.GL.GenTexture();
 
         Load( _data );
     }

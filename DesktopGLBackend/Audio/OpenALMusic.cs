@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Audio;
 using LughSharp.Core.Audio.OpenAL;
 using LughSharp.Core.Utils.Exceptions;
@@ -39,7 +40,7 @@ public abstract class OpenALMusic : IMusic
     private static readonly byte[]        _tempBytes      = new byte[ _bufferSize ];
     private static readonly byte[]        _tempBuffer     = new byte[ _bufferSize ];
     private readonly        OpenALAudio   _audio;
-    private readonly        float         _pan                  = 0;
+    private readonly        float         _pan;
     private readonly        List< float > _renderedSecondsQueue = new( _bufferCount );
     private readonly        float         _volume               = 1;
 

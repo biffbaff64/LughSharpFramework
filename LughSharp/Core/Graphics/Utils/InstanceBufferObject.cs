@@ -22,9 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -39,8 +42,8 @@ public class InstanceBufferObject : IInstanceData
     private Buffer< byte >? _byteBuffer;
 
     private int  _bufferHandle;
-    private bool _isBound = false;
-    private bool _isDirty = false;
+    private bool _isBound;
+    private bool _isDirty;
     private bool _ownsBuffer;
 
     // ========================================================================
@@ -52,7 +55,7 @@ public class InstanceBufferObject : IInstanceData
 
     public InstanceBufferObject( bool isStatic, int numVertices, VertexAttributes instanceAttributes )
     {
-        _bufferHandle = ( int )GL.GenBuffer();
+        _bufferHandle = ( int )Engine.GL.GenBuffer();
 
         var data = new Buffer< byte >( instanceAttributes.VertexSize * numVertices )
         {
@@ -170,7 +173,7 @@ public class InstanceBufferObject : IInstanceData
     {
         Debug.Assert( _byteBuffer != null, "Bind(ShaderProgram, int[]) fail: _byteBuffer is NULL" );
 
-        GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -178,7 +181,7 @@ public class InstanceBufferObject : IInstanceData
 
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
+                Engine.GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
             }
 
             _isDirty = false;
@@ -209,7 +212,7 @@ public class InstanceBufferObject : IInstanceData
                                            Attributes.VertexSize,
                                            attribute.Offset );
 
-                GL.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
+                Engine.GL.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
             }
         }
         else
@@ -234,7 +237,7 @@ public class InstanceBufferObject : IInstanceData
                                            Attributes.VertexSize,
                                            attribute.Offset );
 
-                GL.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
+                Engine.GL.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
             }
         }
 
@@ -281,7 +284,7 @@ public class InstanceBufferObject : IInstanceData
             }
         }
 
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
         _isBound = false;
     }
 
@@ -291,7 +294,7 @@ public class InstanceBufferObject : IInstanceData
     /// </summary>
     public void Invalidate()
     {
-        _bufferHandle = ( int )GL.GenBuffer(); //TODO: ???
+        _bufferHandle = ( int )Engine.GL.GenBuffer(); //TODO: ???
         _isDirty      = true;
     }
 
@@ -300,8 +303,8 @@ public class InstanceBufferObject : IInstanceData
     /// </summary>
     public void Dispose()
     {
-        GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
-        GL.DeleteBuffers( ( uint )_bufferHandle );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+        Engine.GL.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
 
@@ -359,8 +362,8 @@ public class InstanceBufferObject : IInstanceData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, 0, Usage );
-                GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
+                Engine.GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, 0, Usage );
+                Engine.GL.BufferData( BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
                 _isDirty = false;
             }
         }

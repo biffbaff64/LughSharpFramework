@@ -22,20 +22,17 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-
-
-
-// ============================================================================
+using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
+//TODO: move to GLBindings.cs
 public partial class GLBindings
 {
     /// <inheritdoc />
     public void SetGLUnpackAlignment( Pixmap pixmap, int alignment )
     {
-        GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
+        Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
     }
 }
 

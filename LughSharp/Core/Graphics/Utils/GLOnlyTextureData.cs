@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -38,13 +40,13 @@ namespace LughSharp.Core.Graphics.Utils;
 public class GLOnlyTextureData : ITextureData
 {
     public int  InternalFormat { get; set; }
-    public int  MipLevel       { get; set; } = 0;
+    public int  MipLevel       { get; set; }
     public int  Type           { get; set; }
-    public int  Width          { get; set; } = 0;
-    public int  Height         { get; set; } = 0;
+    public int  Width          { get; set; }
+    public int  Height         { get; set; }
     public int  BitDepth       { get; set; }
     public int  BytesPerPixel  { get; set; }
-    public bool IsPrepared     { get; set; } = false;
+    public bool IsPrepared     { get; set; }
     public bool UseMipMaps     { get; set; }
 
     /// <inheritdoc />
@@ -118,15 +120,15 @@ public class GLOnlyTextureData : ITextureData
     /// <param name="target"></param>
     public void ConsumeCustomData( int target )
     {
-        GL.TexImage2D( target,
-                       MipLevel,
-                       InternalFormat,
-                       Width,
-                       Height,
-                       0,
-                       _pixelFormat,
-                       Type,
-                       IntPtr.Zero );
+        Engine.GL.TexImage2D( target,
+                              MipLevel,
+                              InternalFormat,
+                              Width,
+                              Height,
+                              0,
+                              _pixelFormat,
+                              Type,
+                              IntPtr.Zero );
     }
 
     /// <inheritdoc />

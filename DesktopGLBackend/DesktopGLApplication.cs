@@ -22,6 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using DesktopGLBackend.Audio;
+using DesktopGLBackend.Input;
+using DesktopGLBackend.Utils;
+using DesktopGLBackend.Window;
+using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;

@@ -75,7 +75,7 @@ public class Mesh : IDisposable
         IndexData      = indices;
         _isVertexArray = isVertexArray;
 
-        AddManagedMesh( Api.App, this );
+        AddManagedMesh( Engine.Api.App, this );
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( Api.App, this );
+        AddManagedMesh( Engine.Api.App, this );
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( Api.App, this );
+        AddManagedMesh( Engine.Api.App, this );
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( staticIndices, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( Api.App, this );
+        AddManagedMesh( Engine.Api.App, this );
     }
 
     /// <summary>
@@ -209,7 +209,7 @@ public class Mesh : IDisposable
                 break;
         }
 
-        AddManagedMesh( Api.App, this );
+        AddManagedMesh( Engine.Api.App, this );
     }
 
     // ========================================================================
@@ -810,7 +810,7 @@ public class Mesh : IDisposable
 
                 fixed ( int* ptr = &buffer.ToArray()[ 0 ] )
                 {
-                    GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, new IntPtr( ptr + offset ) );
+                    Engine.GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, new IntPtr( ptr + offset ) );
                 }
 
                 buffer.Position = oldPosition;
@@ -818,7 +818,7 @@ public class Mesh : IDisposable
             }
             else
             {
-                GL.DrawArrays( primitiveType, offset, count );
+                Engine.GL.DrawArrays( primitiveType, offset, count );
             }
         }
         else
@@ -838,22 +838,22 @@ public class Mesh : IDisposable
 
                 if ( IsInstanced && ( numInstances > 0 ) )
                 {
-                    GL.DrawElementsInstanced( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4, numInstances );
+                    Engine.GL.DrawElementsInstanced( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4, numInstances );
                 }
                 else
                 {
-                    GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4 );
+                    Engine.GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4 );
                 }
             }
             else
             {
                 if ( IsInstanced )
                 {
-                    GL.DrawArraysInstanced( primitiveType, offset, count, numInstances );
+                    Engine.GL.DrawArraysInstanced( primitiveType, offset, count, numInstances );
                 }
                 else
                 {
-                    GL.DrawArrays( primitiveType, offset, count );
+                    Engine.GL.DrawArrays( primitiveType, offset, count );
                 }
             }
         }
@@ -1846,9 +1846,9 @@ public class Mesh : IDisposable
     {
         if ( disposing )
         {
-            if ( Meshes[ Api.App ] != null )
+            if ( Meshes[ Engine.Api.App ] != null )
             {
-                Meshes[ Api.App ]?.Remove( this );
+                Meshes[ Engine.Api.App ]?.Remove( this );
             }
 
             _vertices.Dispose();

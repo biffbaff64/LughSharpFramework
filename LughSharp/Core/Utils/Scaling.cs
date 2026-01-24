@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+using LughSharp.Core.Maths;
+
 namespace LughSharp.Core.Utils;
 
 [PublicAPI]
