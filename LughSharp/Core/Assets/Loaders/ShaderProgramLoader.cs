@@ -75,7 +75,13 @@ public class ShaderProgramLoader : AsynchronousAssetLoader
         _fragmentFileSuffix = fragmentFileSuffix;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns the assets this asset requires to be loaded first. This method may be
+    /// called on a thread other than the GL thread.
+    /// </summary>
+    /// <param name="filename">name of the asset to load</param>
+    /// <param name="file">the resolved file to load</param>
+    /// <param name="p">parameters for loading the asset</param>
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? p ) where TP : class
@@ -83,7 +89,14 @@ public class ShaderProgramLoader : AsynchronousAssetLoader
         return null!;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads the non-OpenGL part of the asset and injects any dependencies of
+    /// the asset into the <paramref name="manager"/>.
+    /// </summary>
+    /// <param name="manager">The asset manager responsible for loading the asset.</param>
+    /// <param name="filename"> The name of the asset to load. </param>
+    /// <param name="file">The file information of the asset to load.</param>
+    /// <param name="parameter">The parameters for loading the asset.</param>
     public override void LoadAsync< TP >( AssetManager manager,
                                           string filename,
                                           FileInfo? file,
@@ -91,7 +104,12 @@ public class ShaderProgramLoader : AsynchronousAssetLoader
     {
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads the OpenGL part of the asset.
+    /// </summary>
+    /// <param name="manager"></param>
+    /// <param name="file"> the resolved file to load </param>
+    /// <param name="parameter"></param>
     public override object LoadSync< TP >( AssetManager manager,
                                            FileInfo file,
                                            TP? parameter ) where TP : class

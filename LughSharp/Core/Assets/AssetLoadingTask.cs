@@ -84,7 +84,15 @@ public class AssetLoadingTask : IAssetTask
     }
 
     /// <summary>
-    /// 
+    /// Executes the asset loading task, handling dependencies and managing the
+    /// asynchronous loading process.
+    /// <para>
+    /// If the task is marked for cancellation, it exits early. If dependencies are
+    /// not yet loaded, it calculates the dependencies for the asset and initiates
+    /// dependency injection. If no dependencies are found, the asynchronous loading
+    /// of the asset begins. If dependencies have already been loaded, the asynchronous
+    /// loading process proceeds.
+    /// </para>
     /// </summary>
     public void Call()
     {

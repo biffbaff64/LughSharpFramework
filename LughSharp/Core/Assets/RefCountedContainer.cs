@@ -34,7 +34,7 @@ namespace LughSharp.Core.Assets;
 [PublicAPI]
 public interface IRefCountedContainer
 {
-    object? Asset    { get; set;  }
+    object? Asset    { get; set; }
     int     RefCount { get; set; }
 }
 

@@ -46,8 +46,8 @@ public class AssetHelper
     }
 
     /// <summary>
-    /// Load single asset, and ensures that it is loaded.
-    /// It then returns an object of the specified type.
+    /// Load single asset, and ensures that it is loaded. It then returns an object
+    /// of the specified type.
     /// </summary>
     /// <typeparam name="T"> The Type of the asset to load. </typeparam>
     /// <param name="asset"> the asset to load. </param>
@@ -78,9 +78,10 @@ public class AssetHelper
     }
 
     /// <summary>
-    /// 
+    /// Loads a texture atlas from the specified atlas name.
     /// </summary>
-    /// <param name="atlasName"> the full name of the specified atlas. </param>
+    /// <param name="atlasName"> The full name of the specified atlas </param>
+    /// <returns>A <see cref="TextureAtlas"/> object representing the loaded atlas.</returns>
     public TextureAtlas LoadAtlas( string atlasName )
     {
         // Ensure that the path contains the path to the assets folder.
@@ -90,12 +91,17 @@ public class AssetHelper
     }
 
     /// <summary>
-    /// 
+    /// Retrieves a texture region from the specified texture atlas using the provided asset name.
     /// </summary>
-    /// <param name="atlas"></param>
-    /// <param name="assetName"></param>
-    /// <returns></returns>
-    public TextureRegion? GetAtlasRegion( TextureAtlas atlas, string assetName )
+    /// <param name="atlas">
+    /// The texture atlas to search for the region. If null, no region will be found.
+    /// </param>
+    /// <param name="assetName">The name of the asset to locate within the atlas.</param>
+    /// <returns>
+    /// An instance of <see cref="TextureRegion"/> corresponding to the specified asset name
+    /// if found, or null if the asset does not exist in the atlas.
+    /// </returns>
+    public TextureRegion? GetAtlasRegion( TextureAtlas? atlas, string assetName )
     {
         return atlas?.FindRegion( assetName );
     }

@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 

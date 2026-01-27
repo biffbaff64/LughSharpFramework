@@ -402,7 +402,7 @@ public static class Logger
     }
 
     /// <summary>
-    /// Disables DEBUG Log messages without affecting other types.
+    /// Disables DEBUG Log messages without affecting other message types.
     /// </summary>
     [Conditional( "DEBUG" )]
     public static void DisableDebugLogging()
@@ -411,7 +411,7 @@ public static class Logger
     }
 
     /// <summary>
-    /// Disables Error Log messages without affecting other types.
+    /// Disables Error Log messages without affecting other message types.
     /// </summary>
     [Conditional( "DEBUG" )]
     public static void DisableErrorLogging()
@@ -420,7 +420,7 @@ public static class Logger
     }
 
     /// <summary>
-    /// Enables DEBUG Log messages without affecting other types.
+    /// Enables DEBUG Log messages without affecting other message types.
     /// </summary>
     [Conditional( "DEBUG" )]
     public static void EnableDebugLogging()
@@ -429,7 +429,7 @@ public static class Logger
     }
 
     /// <summary>
-    /// Enables ERROR Log messages without affecting other types.
+    /// Enables ERROR Log messages without affecting other message types.
     /// </summary>
     [Conditional( "DEBUG" )]
     public static void EnableErrorLogging()

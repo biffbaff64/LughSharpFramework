@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL;
@@ -194,7 +195,7 @@ public static class ScreenUtils
 
         fixed ( void* ptr = &pixels.BackingArray()[ 0 ] )
         {
-            Engine.GL.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
+            Engine.GL.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, (IntPtr)ptr );
         }
 
         var lines = new byte[ numBytes ];

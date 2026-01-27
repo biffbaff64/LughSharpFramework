@@ -24,6 +24,7 @@
 
 // ============================================================================
 
+using System;
 using System.Text;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;

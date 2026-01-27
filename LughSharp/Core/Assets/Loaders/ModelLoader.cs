@@ -164,7 +164,12 @@ public abstract class ModelLoader : AsynchronousAssetLoader
         return deps;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads the OpenGL part of the asset.
+    /// </summary>
+    /// <param name="manager"></param>
+    /// <param name="file"> the resolved file to load </param>
+    /// <param name="parameter"></param>
     public override Model LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         ModelData? data = null;

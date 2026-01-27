@@ -1004,11 +1004,14 @@ public class SpriteBatch : IBatch, IDisposable
     }
 
     /// <summary>
-    /// Draws a textured region with specified transformations such as position, scale, rotation, and flipping options.
+    /// Draws a textured region with specified transformations such as position, scale,
+    /// rotation, and flipping options.
     /// </summary>
     /// <param name="texture">The texture to be drawn.</param>
     /// <param name="region">The region where the texture will be drawn on the target.</param>
-    /// <param name="origin">The origin point of the region for transformations like rotation and scaling.</param>
+    /// <param name="origin">
+    /// The origin point of the region for transformations like rotation and scaling.
+    /// </param>
     /// <param name="scale">The scaling factor for the texture in the X and Y axes.</param>
     /// <param name="rotation">The rotation angle of the texture in radians.</param>
     /// <param name="src">The source rectangle of the texture to be drawn.</param>

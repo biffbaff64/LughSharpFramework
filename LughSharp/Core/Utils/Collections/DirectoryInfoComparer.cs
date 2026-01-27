@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Collections;
@@ -37,7 +40,10 @@ public class DirectoryInfoComparer : IEqualityComparer< DirectoryInfo >
     /// <returns> true if the specified objects are equal; otherwise false. </returns>
     public bool Equals( DirectoryInfo? x, DirectoryInfo? y )
     {
-        if ( x is null || y is null ) return x is null && y is null;
+        if ( x is null || y is null )
+        {
+            return x is null && y is null;
+        }
 
         // Compare based on the FullName string (the directory path)
         // We use StringComparer.OrdinalIgnoreCase for case-insensitive comparison, 

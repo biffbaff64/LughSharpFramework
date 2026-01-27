@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -133,3 +134,6 @@ public class QuickSelect< T >
         ( _array[ left ], _array[ right ] ) = ( _array[ right ], _array[ left ] );
     }
 }
+
+// ============================================================================
+// ============================================================================

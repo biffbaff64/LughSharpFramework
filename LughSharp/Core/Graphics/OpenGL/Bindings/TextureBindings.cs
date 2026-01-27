@@ -24,6 +24,7 @@
 
 // ============================================================================
 
+using System;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;

@@ -22,12 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
 using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
@@ -55,20 +50,6 @@ namespace LughSharp.Core.Assets;
 [PublicAPI]
 public class AssetManager : IDisposable
 {
-    //TODO: implement this
-    [PublicAPI]
-    public class AssetData
-    {
-        public string?              Name                { get; set; } // Short name (no path)
-        public string?              FullName            { get; set; } // Full name (with path)
-        public Type?                Type                { get; set; } // Asset type (e.g., Texture, Sound, etc.)
-        public AssetLoader?         Loader              { get; set; } // Loader used to load the asset
-        public RefCountedContainer? RefCountedContainer { get; set; } // Reference counted container holding the asset
-        public List< string >?      Dependencies        { get; set; } // List of dependencies
-    }
-
-    // ========================================================================
-
     protected readonly HashSet< Type > TypeList =
     [
         typeof( BitmapFont ),
@@ -94,12 +75,6 @@ public class AssetManager : IDisposable
     public IFileHandleResolver FileHandleResolver { get; set; }
 
     // ========================================================================
-
-    //TODO: implement this
-    /// <summary>
-    /// A list of all asset data currently managed by the AssetManager.
-    /// </summary>
-    public readonly List< AssetData > AssetDataList = [ ];
 
     /// <summary>
     /// A Dictionary holding the loaders for each asset type.
@@ -194,8 +169,6 @@ public class AssetManager : IDisposable
 
     // ========================================================================
     // ========================================================================
-
-    #region Non-Generic Methods
 
     /// <summary>
     /// Retrieves an asset of the specified type by its name.
@@ -436,13 +409,6 @@ public class AssetManager : IDisposable
             Thread.Yield();
         }
     }
-
-    #endregion Non-Generic Methods
-
-    // ========================================================================
-    // ========================================================================
-
-    #region Generic Methods
 
     /// <summary>
     /// Retrieves an asset of the specified type by its name.
@@ -742,13 +708,6 @@ public class AssetManager : IDisposable
         }
     }
 
-    #endregion Generic Methods
-
-    // ========================================================================
-    // ========================================================================
-
-    #region loading task methods
-
     /// <summary>
     /// Loads the next asset task from the load queue. If the asset is already loaded,
     /// increment the loaded count for use in <see cref="GetProgress"/>.
@@ -932,11 +891,6 @@ public class AssetManager : IDisposable
             throw new RuntimeException( t );
         }
     }
-
-    #endregion loading task methods
-
-    // ========================================================================
-    // ========================================================================
     
     /// <summary>
     /// Updates the asset manager, loading new assets and processing asset loading tasks.
@@ -1629,6 +1583,8 @@ public class AssetManager : IDisposable
     }
 
     // ========================================================================
+    // Debug methods
+    // ========================================================================
  
     [Conditional( "DEBUG" )]
     public void DisplayMetrics()
@@ -1649,7 +1605,7 @@ public class AssetManager : IDisposable
             }
 
             Logger.Debug( $"_assets Count       : {_assets.Count}" );
-            Logger.Debug( $"_loaders Count      : {_loaders?.Count}" );
+            Logger.Debug( $"_loaders Count      : {_loaders.Count}" );
             Logger.Debug( $"_loaded             : {_loaded}" );
             Logger.Debug( $"_toLoad             : {_toLoad}" );
             Logger.Debug( $"_loadQueue Count    : {_loadQueue.Count}" );
@@ -1721,25 +1677,6 @@ public class AssetManager : IDisposable
             }
 
             Logger.Debug( "\n--- End of Debug Dump ---" );
-        }
-    }
-
-    [Conditional( "DEBUG" )]
-    protected void DebugAssetLoaders()
-    {
-        lock ( this )
-        {
-            foreach ( var loader in _loaders! )
-            {
-                Logger.Debug( $"Type: {loader.Key.Name}" );
-
-                foreach ( var entry in loader.Value )
-                {
-                    var suffix = string.IsNullOrEmpty( entry.Key ) ? "(default)" : entry.Key;
-
-                    Logger.Debug( $"  Suffix: '{suffix}' => Loader class: {entry.Value.GetType().Name}" );
-                }
-            }
         }
     }
 

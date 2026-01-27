@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -31,6 +32,13 @@ namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial interface IGLBindings
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pixmap"></param>
+    /// <param name="alignment"></param>
+    void SetGLUnpackAlignment( Pixmap pixmap, int alignment );
+
     /// <summary>
     /// </summary>
     /// <param name="value"></param>

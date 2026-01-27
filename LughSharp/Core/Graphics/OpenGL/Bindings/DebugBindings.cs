@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Text;
 using LughSharp.Core.Utils.Logging;
 using GLenum = int;
@@ -174,30 +175,40 @@ public unsafe partial class GLBindings
         GetDelegateForFunction< PFNGLGETDEBUGMESSAGELOGPROC >( "glGetDebugMessageLog", out _glGetDebugMessageLog );
 
         fixed ( GLenum* pSources = &sources[ 0 ] )
-        fixed ( GLenum* pTypes = &types[ 0 ] )
-        fixed ( GLuint* pIds = &ids[ 0 ] )
-        fixed ( GLenum* pSeverities = &severities[ 0 ] )
-        fixed ( GLsizei* pLengths = &lengths[ 0 ] )
-        fixed ( GLchar* pMessageLogBytes = &messageLogBytes[ 0 ] )
         {
-            var pstart = pMessageLogBytes;
-            var ret    = _glGetDebugMessageLog( count, bufSize, pSources, pTypes, pIds, pSeverities, pLengths, pMessageLogBytes );
-
-            messageLog = new string[ count ];
-
-            for ( var i = 0; i < count; i++ )
+            fixed ( GLenum* pTypes = &types[ 0 ] )
             {
-                messageLog[ i ] =  new string( ( GLbyte* )pstart, 0, lengths[ i ], Encoding.UTF8 );
-                pstart          += lengths[ i ];
+                fixed ( GLuint* pIds = &ids[ 0 ] )
+                {
+                    fixed ( GLenum* pSeverities = &severities[ 0 ] )
+                    {
+                        fixed ( GLsizei* pLengths = &lengths[ 0 ] )
+                        {
+                            fixed ( GLchar* pMessageLogBytes = &messageLogBytes[ 0 ] )
+                            {
+                                var pstart = pMessageLogBytes;
+                                var ret    = _glGetDebugMessageLog( count, bufSize, pSources, pTypes, pIds, pSeverities, pLengths, pMessageLogBytes );
+
+                                messageLog = new string[ count ];
+
+                                for ( var i = 0; i < count; i++ )
+                                {
+                                    messageLog[ i ] =  new string( ( GLbyte* )pstart, 0, lengths[ i ], Encoding.UTF8 );
+                                    pstart          += lengths[ i ];
+                                }
+
+                                Array.Resize( ref sources, ( int )ret );
+                                Array.Resize( ref types, ( int )ret );
+                                Array.Resize( ref ids, ( int )ret );
+                                Array.Resize( ref severities, ( int )ret );
+                                Array.Resize( ref messageLog, ( int )ret );
+
+                                return ret;
+                            }
+                        }
+                    }
+                }
             }
-
-            Array.Resize( ref sources, ( int )ret );
-            Array.Resize( ref types, ( int )ret );
-            Array.Resize( ref ids, ( int )ret );
-            Array.Resize( ref severities, ( int )ret );
-            Array.Resize( ref messageLog, ( int )ret );
-
-            return ret;
         }
     }
 
@@ -233,3 +244,6 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================

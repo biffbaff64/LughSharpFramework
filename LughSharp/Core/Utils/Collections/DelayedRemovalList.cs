@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -515,3 +516,6 @@ public class DelayedRemovalList< T > : List< T >
         _clear     = 0;
     }
 }
+
+// ============================================================================
+// ============================================================================

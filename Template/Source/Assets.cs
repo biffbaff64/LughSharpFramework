@@ -33,9 +33,9 @@ public static class Assets
 
     // ========================================================================
     // Fonts
-    public const string ARIAL_FONT       = @"Assets\Fonts\arial-15.fnt";
-    public const string ARIAL_LATIN_FONT = @"Assets\Fonts\arial-latin.fnt";
-    public const string ARIAL_15_FONT    = @"Assets\Fonts\arial-15.fnt";
+    public const string ARIAL_FONT            = @"Assets\Fonts\arial-15.fnt";
+    public const string ARIAL_LATIN_FONT      = @"Assets\Fonts\arial-latin.fnt";
+    public const string ARIAL_15_FONT         = @"Assets\Fonts\arial-15.fnt";
     public const string AMBLE_REGULAR_26_FONT = @"Assets\Fonts\Amble-Regular-26.fnt";
 }
 

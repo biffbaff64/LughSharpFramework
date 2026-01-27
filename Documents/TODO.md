@@ -56,29 +56,29 @@ ASSETS
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - IP   - AssetDescriptor
-    - DONE - IP   - AssetLoaderParameters
-    - DONE - IP   - AssetLoadingTask
-    - DONE - IP   - AssetManager
-    - DONE - IP   - AssetManagerHelper
-    - DONE - IP   - IAssetErrorListener
-    - DONE - IP   - IAssetManager
-    - DONE - IP   - RefCountedContainer
+    - DONE - DONE - AssetDescriptor
+    - DONE - DONE - AssetHelper
+    - DONE - DONE - AssetLoaderParameters
+    - DONE - DONE - AssetLoadingTask
+    - DONE - DONE - AssetManager
+    - DONE - DONE - IAssetErrorListener
+    - DONE - DONE - IAssetTask
+    - DONE - DONE - RefCountedContainer
 
 ASSETS/LOADERS
 --------------
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - IP   - AssetLoader
-    - DONE - IP   - AsynchronousAssetLoader
-    - DONE - IP   - BitmapFontLoader
-    - DONE - IP   - CubemapLoader
-    - DONE - IP   - ModelLoader
-    - DONE - IP   - MusicLoader
-    - DONE - IP   - ParticleEffectLoader
-    - DONE - IP   - PixmapLoader
-    - DONE - IP   - ShaderProgramLoader
+    - DONE - DONE - AssetLoader
+    - DONE - DONE - AsynchronousAssetLoader
+    - DONE - DONE - BitmapFontLoader
+    - DONE - DONE - CubemapLoader
+    - DONE - DONE - ModelLoader
+    - DONE - DONE - MusicLoader
+    - DONE - DONE - ParticleEffectLoader
+    - DONE - DONE - PixmapLoader
+    - DONE - DONE - ShaderProgramLoader
     - DONE - IP   - SkinLoader
     - DONE - IP   - SoundLoader
     - DONE - IP   - SynchronousAssetLoader

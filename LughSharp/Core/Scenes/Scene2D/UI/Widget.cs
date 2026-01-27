@@ -187,7 +187,23 @@ public class Widget : Actor, ILayout
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
+    /// draw method is convenient to draw a rotated and scaled TextureRegion.
+    /// <para>
+    /// <see cref="IBatch.Begin"/> has already been called on the batch. If <see cref="IBatch.End()"/>
+    /// is called to draw without the batch then <see cref="IBatch.Begin"/> must be called before
+    /// the method returns.
+    /// </para>
+    /// <para>
+    /// <b>The default implementation does nothing. Child classes should override and implement.</b>
+    /// </para>
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="parentAlpha">
+    /// The parent alpha, to be multiplied with this actor's alpha,
+    /// allowing the parent's alpha to affect all children.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();

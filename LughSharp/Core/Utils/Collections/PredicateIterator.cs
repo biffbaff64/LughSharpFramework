@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -35,17 +37,17 @@ namespace LughSharp.Core.Utils.Collections;
 /// </summary>
 /// <typeparam name="T">The type of elements to iterate over.</typeparam>
 [PublicAPI]
-public class PredicateIterator<T> : IEnumerator<T>, IDisposable
+public class PredicateIterator< T > : IEnumerator< T >, IDisposable
 {
     /// <summary>
     /// The underlying enumerator for the collection.
     /// </summary>
-    public IEnumerator<T?> Enumerator { get; set; }
+    public IEnumerator< T? > Enumerator { get; set; }
 
     /// <summary>
     /// The predicate used to filter elements.
     /// </summary>
-    public IPredicate<T> Predicate { get; set; }
+    public IPredicate< T > Predicate { get; set; }
 
     /// <summary>
     /// Indicates whether the end of the collection has been reached.
@@ -213,3 +215,7 @@ public class PredicateIterator<T> : IEnumerator<T>, IDisposable
         GC.SuppressFinalize( this );
     }
 }
+
+// ============================================================================
+// ============================================================================
+

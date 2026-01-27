@@ -30,7 +30,7 @@ namespace LughSharp.Core.Assets.Loaders;
 /// <summary>
 /// </summary>
 [PublicAPI]
-public enum AssetLoaderType : int
+public enum AssetLoaderType
 {
     Synchronous,
     Asynchronous,

@@ -29,6 +29,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -46,6 +47,40 @@ public class Scene2DImage : Widget
     public float           ImageWidth  { get; set; }
     public float           ImageHeight { get; set; }
     public ISceneDrawable? Drawable    { get; private set; }
+
+    /// <summary>
+    /// The alignment of the image within the widget.
+    /// </summary>
+    public int Alignment
+    {
+        get;
+        set
+        {
+            field = value;
+            Invalidate();
+        }
+    }
+
+    /// <summary>
+    /// The preferred width of the image widget. This value corresponds to the
+    /// minimum width of the associated drawable if one is set, or 0 if no
+    /// drawable is assigned.
+    /// </summary>
+    public override float PrefWidth
+    {
+        get => Drawable?.MinWidth ?? 0;
+        set { }
+    }
+
+    /// <summary>
+    /// The preferred height of the widget, typically derived from the minimum
+    /// height of the drawable.
+    /// </summary>
+    public override float PrefHeight
+    {
+        get => Drawable?.MinWidth ?? 0;
+        set { }
+    }
 
     // ========================================================================
 
@@ -113,7 +148,9 @@ public class Scene2DImage : Widget
     /// <param name="drawable"></param>
     /// <param name="scaling"></param>
     /// <param name="align"></param>
-    public Scene2DImage( ISceneDrawable? drawable, Scaling scaling, int align = Core.Utils.Alignment.CENTER )
+    public Scene2DImage( ISceneDrawable? drawable,
+                         Scaling scaling,
+                         int align = Core.Utils.Alignment.CENTER )
     {
         SetDrawable( drawable );
 
@@ -121,53 +158,6 @@ public class Scene2DImage : Widget
         Alignment = align;
 
         SafeConstructorHelper();
-    }
-
-    /// <summary>
-    /// The alignment of the image within the widget.
-    /// </summary>
-    public int Alignment
-    {
-        get;
-        set
-        {
-            field = value;
-            Invalidate();
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public override float PrefWidth
-    {
-        get
-        {
-            if ( Drawable != null )
-            {
-                return Drawable.MinWidth;
-            }
-
-            return 0;
-        }
-        set { }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public override float PrefHeight
-    {
-        get
-        {
-            if ( Drawable != null )
-            {
-                return Drawable.MinWidth;
-            }
-
-            return 0;
-        }
-        set { }
     }
 
     /// <summary>
@@ -180,8 +170,8 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// Computes and caches any information needed for drawing and, if this actor
-    /// has children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
+    /// Computes and caches any information needed for drawing and, if this actor has
+    /// children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
     /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
     /// on each child. This method should almost never be called directly, instead
     /// <see cref="ILayout.Validate"/> should be used.
@@ -230,9 +220,27 @@ public class Scene2DImage : Widget
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
+    /// draw method is convenient to draw a rotated and scaled TextureRegion.
+    /// <para>
+    /// <see cref="IBatch.Begin"/> has already been called on the batch. If <see cref="IBatch.End()"/>
+    /// is called to draw without the batch then <see cref="IBatch.Begin"/> must be called before
+    /// the method returns.
+    /// </para>
+    /// <para>
+    /// <b>The default implementation does nothing. Child classes should override and implement.</b>
+    /// </para>
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="parentAlpha">
+    /// The parent alpha, to be multiplied with this actor's alpha,
+    /// allowing the parent's alpha to affect all children.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
+        Logger.Checkpoint();
+        
         Validate();
 
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );

@@ -24,6 +24,7 @@
 
 // ============================================================================
 
+using System;
 using GLenum = int;
 using GLint = int;
 using GLsizei = int;

@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using JetBrains.Annotations;
 using LughSharp.Core.Utils.Logging;
@@ -30,7 +33,7 @@ namespace LughSharp.Core.Utils;
 
 /// <summary>
 /// A helper class that allows you to load and store key/value pairs of an
-/// <see cref="Dictionary{TK,TV}" /> with the same line-oriented syntax supported
+/// <see cref="Dictionary{TKey,TValue}" /> with the same line-oriented syntax supported
 /// by <see cref="IPreferences" />
 /// </summary>
 [PublicAPI]

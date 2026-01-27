@@ -124,7 +124,6 @@ public class Engine
     /// Performs essential tasks, which MUST be performed to allow the
     /// framework to work correctly.
     /// </summary>
-    /// <param name="app"></param>
     public void Initialise( IApplication app )
     {
         App = app;
@@ -141,8 +140,9 @@ public class Engine
     }
 
     /// <summary>
-    /// Enables <see cref="DevMode"/> if the environment variable "DEV_MODE" is
-    /// available and is set to "TRUE" or "true".
+    /// Enables <see cref="DevMode"/> if the relevant environment variable is
+    /// available and is set to "TRUE" or "true". This environment variable must
+    /// be named DEVMODE or DEV_MODE.
     /// </summary>
     /// <returns> This class for chaining. </returns>
     public Engine CheckEnableDevMode()
@@ -160,8 +160,9 @@ public class Engine
     }
 
     /// <summary>
-    /// Enables <see cref="GodMode"/> if the environment variable "GOD_MODE" is
-    /// available and is set to "TRUE" or "true".
+    /// Enables <see cref="GodMode"/> if the relevant environment variable is
+    /// available and is set to "TRUE" or "true". This environment variable must
+    /// be named GODMODE or GOD_MODE.
     /// </summary>
     /// <returns> This class for chaining. </returns>
     public Engine CheckEnableGodMode()

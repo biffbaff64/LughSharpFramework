@@ -24,6 +24,8 @@
 
 // ============================================================================
 
+using System;
+
 using GLenum = int;
 using GLint = int;
 using GLsizei = int;
@@ -143,7 +145,8 @@ public unsafe partial class GLBindings
 
     public void DisableVertexArrayAttrib( GLuint vaobj, GLuint index )
     {
-        GetDelegateForFunction< PFNGLDISABLEVERTEXARRAYATTRIBPROC >( "glDisableVertexArrayAttrib", out _glDisableVertexArrayAttrib );
+        GetDelegateForFunction< PFNGLDISABLEVERTEXARRAYATTRIBPROC >( "glDisableVertexArrayAttrib",
+                                                                     out _glDisableVertexArrayAttrib );
 
         _glDisableVertexArrayAttrib( vaobj, index );
     }
@@ -152,7 +155,8 @@ public unsafe partial class GLBindings
 
     public void EnableVertexArrayAttrib( GLuint vaobj, GLuint index )
     {
-        GetDelegateForFunction< PFNGLENABLEVERTEXARRAYATTRIBPROC >( "glEnableVertexArrayAttrib", out _glEnableVertexArrayAttrib );
+        GetDelegateForFunction< PFNGLENABLEVERTEXARRAYATTRIBPROC >( "glEnableVertexArrayAttrib",
+                                                                    out _glEnableVertexArrayAttrib );
 
         _glEnableVertexArrayAttrib( vaobj, index );
     }
@@ -161,23 +165,28 @@ public unsafe partial class GLBindings
 
     public void VertexArrayElementBuffer( GLuint vaobj, GLuint buffer )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYELEMENTBUFFERPROC >( "glVertexArrayElementBuffer", out _glVertexArrayElementBuffer );
+        GetDelegateForFunction< PFNGLVERTEXARRAYELEMENTBUFFERPROC >( "glVertexArrayElementBuffer",
+                                                                     out _glVertexArrayElementBuffer );
 
         _glVertexArrayElementBuffer( vaobj, buffer );
     }
 
     // ========================================================================
 
-    public void VertexArrayVertexBuffer( GLuint vaobj, GLuint bindingindex, GLuint buffer, GLintptr offset, GLsizei stride )
+    public void VertexArrayVertexBuffer( GLuint vaobj, GLuint bindingindex, GLuint buffer, GLintptr offset,
+                                         GLsizei stride )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYVERTEXBUFFERPROC >( "glVertexArrayVertexBuffer", out _glVertexArrayVertexBuffer );
+        GetDelegateForFunction< PFNGLVERTEXARRAYVERTEXBUFFERPROC >( "glVertexArrayVertexBuffer",
+                                                                    out _glVertexArrayVertexBuffer );
 
         _glVertexArrayVertexBuffer( vaobj, bindingindex, buffer, offset, stride );
     }
 
-    public void VertexArrayVertexBuffers( GLuint vaobj, GLuint first, GLsizei count, GLuint* buffers, GLintptr* offsets, GLsizei* strides )
+    public void VertexArrayVertexBuffers( GLuint vaobj, GLuint first, GLsizei count, GLuint* buffers, GLintptr* offsets,
+                                          GLsizei* strides )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYVERTEXBUFFERPROC >( "glVertexArrayVertexBuffer", out _glVertexArrayVertexBuffer );
+        GetDelegateForFunction< PFNGLVERTEXARRAYVERTEXBUFFERPROC >( "glVertexArrayVertexBuffer",
+                                                                    out _glVertexArrayVertexBuffer );
 
         if ( _glVertexArrayVertexBuffers != null )
         {
@@ -187,15 +196,22 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void VertexArrayVertexBuffers( GLuint vaobj, GLuint first, GLuint[] buffers, GLintptr[] offsets, GLsizei[] strides )
+    public void VertexArrayVertexBuffers( GLuint vaobj, GLuint first, GLuint[] buffers, GLintptr[] offsets,
+                                          GLsizei[] strides )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYVERTEXBUFFERSPROC >( "glVertexArrayVertexBuffers", out _glVertexArrayVertexBuffers );
+        GetDelegateForFunction< PFNGLVERTEXARRAYVERTEXBUFFERSPROC >( "glVertexArrayVertexBuffers",
+                                                                     out _glVertexArrayVertexBuffers );
 
         fixed ( GLuint* ptrBuffers = &buffers[ 0 ] )
-        fixed ( GLintptr* ptrOffsets = &offsets[ 0 ] )
-        fixed ( GLsizei* ptrStrides = &strides[ 0 ] )
         {
-            _glVertexArrayVertexBuffers( vaobj, first, ( GLsizei )buffers.Length, ptrBuffers, ptrOffsets, ptrStrides );
+            fixed ( GLintptr* ptrOffsets = &offsets[ 0 ] )
+            {
+                fixed ( GLsizei* ptrStrides = &strides[ 0 ] )
+                {
+                    _glVertexArrayVertexBuffers( vaobj, first, ( GLsizei )buffers.Length, ptrBuffers, ptrOffsets,
+                                                 ptrStrides );
+                }
+            }
         }
     }
 
@@ -203,35 +219,42 @@ public unsafe partial class GLBindings
 
     public void VertexArrayAttribBinding( GLuint vaobj, GLuint attribindex, GLuint bindingindex )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBBINDINGPROC >( "glVertexArrayAttribBinding", out _glVertexArrayAttribBinding );
+        GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBBINDINGPROC >( "glVertexArrayAttribBinding",
+                                                                     out _glVertexArrayAttribBinding );
 
         _glVertexArrayAttribBinding( vaobj, attribindex, bindingindex );
     }
 
     // ========================================================================
 
-    public void VertexArrayAttribFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type, GLboolean normalized,
+    public void VertexArrayAttribFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type,
+                                         GLboolean normalized,
                                          GLuint relativeoffset )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBFORMATPROC >( "glVertexArrayAttribFormat", out _glVertexArrayAttribFormat );
+        GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBFORMATPROC >( "glVertexArrayAttribFormat",
+                                                                    out _glVertexArrayAttribFormat );
 
         _glVertexArrayAttribFormat( vaobj, attribindex, size, type, normalized, relativeoffset );
     }
 
     // ========================================================================
 
-    public void VertexArrayAttribIFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type, GLuint relativeoffset )
+    public void VertexArrayAttribIFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type,
+                                          GLuint relativeoffset )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBIFORMATPROC >( "glVertexArrayAttribIFormat", out _glVertexArrayAttribIFormat );
+        GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBIFORMATPROC >( "glVertexArrayAttribIFormat",
+                                                                     out _glVertexArrayAttribIFormat );
 
         _glVertexArrayAttribIFormat( vaobj, attribindex, size, type, relativeoffset );
     }
 
     // ========================================================================
 
-    public void VertexArrayAttribLFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type, GLuint relativeoffset )
+    public void VertexArrayAttribLFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type,
+                                          GLuint relativeoffset )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBLFORMATPROC >( "glVertexArrayAttribLFormat", out _glVertexArrayAttribLFormat );
+        GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBLFORMATPROC >( "glVertexArrayAttribLFormat",
+                                                                     out _glVertexArrayAttribLFormat );
 
         _glVertexArrayAttribLFormat( vaobj, attribindex, size, type, relativeoffset );
     }
@@ -240,7 +263,8 @@ public unsafe partial class GLBindings
 
     public void VertexArrayBindingDivisor( GLuint vaobj, GLuint bindingindex, GLuint divisor )
     {
-        GetDelegateForFunction< PFNGLVERTEXARRAYBINDINGDIVISORPROC >( "glVertexArrayBindingDivisor", out _glVertexArrayBindingDivisor );
+        GetDelegateForFunction< PFNGLVERTEXARRAYBINDINGDIVISORPROC >( "glVertexArrayBindingDivisor",
+                                                                      out _glVertexArrayBindingDivisor );
 
         _glVertexArrayBindingDivisor( vaobj, bindingindex, divisor );
     }
@@ -268,14 +292,16 @@ public unsafe partial class GLBindings
 
     public void GetVertexArrayIndexediv( GLuint vaobj, GLuint index, GLenum pname, GLint* param )
     {
-        GetDelegateForFunction< PFNGLGETVERTEXARRAYINDEXEDIVPROC >( "glGetVertexArrayIndexediv", out _glGetVertexArrayIndexediv );
+        GetDelegateForFunction< PFNGLGETVERTEXARRAYINDEXEDIVPROC >( "glGetVertexArrayIndexediv",
+                                                                    out _glGetVertexArrayIndexediv );
 
         _glGetVertexArrayIndexediv( vaobj, index, pname, param );
     }
 
     public void GetVertexArrayIndexediv( GLuint vaobj, GLuint index, GLenum pname, ref GLint[] param )
     {
-        GetDelegateForFunction< PFNGLGETVERTEXARRAYINDEXEDIVPROC >( "glGetVertexArrayIndexediv", out _glGetVertexArrayIndexediv );
+        GetDelegateForFunction< PFNGLGETVERTEXARRAYINDEXEDIVPROC >( "glGetVertexArrayIndexediv",
+                                                                    out _glGetVertexArrayIndexediv );
 
         fixed ( GLint* ptrParam = &param[ 0 ] )
         {
@@ -287,14 +313,16 @@ public unsafe partial class GLBindings
 
     public void GetVertexArrayIndexed64iv( GLuint vaobj, GLuint index, GLenum pname, GLint64* param )
     {
-        GetDelegateForFunction< PFNGLGETVERTEXARRAYINDEXED64IVPROC >( "glGetVertexArrayIndexed64iv", out _glGetVertexArrayIndexed64iv );
+        GetDelegateForFunction< PFNGLGETVERTEXARRAYINDEXED64IVPROC >( "glGetVertexArrayIndexed64iv",
+                                                                      out _glGetVertexArrayIndexed64iv );
 
         _glGetVertexArrayIndexed64iv( vaobj, index, pname, param );
     }
 
     public void GetVertexArrayIndexed64iv( GLuint vaobj, GLuint index, GLenum pname, ref GLint64[] param )
     {
-        GetDelegateForFunction< PFNGLGETVERTEXARRAYINDEXED64IVPROC >( "glGetVertexArrayIndexed64iv", out _glGetVertexArrayIndexed64iv );
+        GetDelegateForFunction< PFNGLGETVERTEXARRAYINDEXED64IVPROC >( "glGetVertexArrayIndexed64iv",
+                                                                      out _glGetVertexArrayIndexed64iv );
 
         fixed ( GLint64* ptrParam = &param[ 0 ] )
         {

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
 using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Utils.Exceptions;
@@ -103,20 +101,13 @@ public class AssetDescriptor
         AssetName  = IOUtils.NormalizePath( file.FullName );
     }
 
-    // ========================================================================
-    
-    public void DebugPrint()
-    {
-        Logger.Debug( $"AssetName: {AssetName}" );
-        Logger.Debug( $"AssetType: {AssetType}" );
-        Logger.Debug( $"Path: {File.FullName}" );
-        Logger.Debug( $"{IOUtils.StripAssetsPath( File.FullName )}" );
-    }
-
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"{AssetName}, {AssetType.FullName}";
+        return $"AssetName: {AssetName}\n" +
+               $"AssetType: {AssetType.Name}\n" +
+               $"Path: {File.FullName}\n" +
+               $"{IOUtils.StripAssetsPath( File.FullName )}";
     }
 }
 
