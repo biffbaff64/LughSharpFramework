@@ -31,6 +31,8 @@ namespace Extensions.Source.Drawing;
 public class GameSprite
 {
     public required Sprite Sprite { get; set; }
+
+    //TODO: Add more functionality here later.
 }
 
 // ============================================================================

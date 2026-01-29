@@ -33,19 +33,11 @@ namespace LughSharp.Core.Maps;
 [PublicAPI]
 public class MapLayer
 {
-    private float         _offsetX;
-    private float         _offsetY;
-    private MapLayer?     _parent;
-    private bool          _renderOffsetDirty = true;
-    private float         _renderOffsetX;
-    private float         _renderOffsetY;
-    public  MapObjects    Objects    { get; private set; } = new();
-    public  MapProperties Properties { get; private set; } = new();
+    public  MapObjects    Objects    { get; init; } = new();
+    public  MapProperties Properties { get; init; } = new();
     public  string?       Name       { get; set; }
     public  float         Opacity    { get; set; }
     public  bool          Visible    { get; set; } = true;
-
-    // ========================================================================
 
     /// <summary>
     /// The layers X offset.
@@ -122,6 +114,15 @@ public class MapLayer
         }
     }
 
+    private float     _offsetX;
+    private float     _offsetY;
+    private MapLayer? _parent;
+    private bool      _renderOffsetDirty = true;
+    private float     _renderOffsetX;
+    private float     _renderOffsetY;
+
+    // ========================================================================
+
     /// <summary>
     /// Flags that Render Offsets need to be recalculated.
     /// </summary>
@@ -130,6 +131,9 @@ public class MapLayer
         _renderOffsetDirty = true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     protected void CalculateRenderOffsets()
     {
         if ( _parent != null )
@@ -147,3 +151,7 @@ public class MapLayer
         _renderOffsetDirty = false;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

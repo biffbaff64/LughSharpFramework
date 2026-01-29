@@ -35,17 +35,45 @@ namespace LughSharp.Core.Maps.Tiled.Tiles;
 [PublicAPI]
 public class AnimatedTiledMapTile : ITiledMapTile
 {
+    public int       ID        { get; set; }
+    public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
+
+    /// <summary>
+    /// The currently displayed animation frame.
+    /// </summary>
+    public TextureRegion TextureRegion
+    {
+        get => GetCurrentFrame().TextureRegion;
+        set { }
+    }
+
+    /// <summary>
+    /// X-coordinate of the currently displayed animation frame in the tilemap.
+    /// </summary>
+    public float OffsetX
+    {
+        get => GetCurrentFrame().OffsetX;
+        set { }
+    }
+
+    /// <summary>
+    /// Y-coordinate of the currently displayed animation frame in the tilemap.
+    /// </summary>
+    public float OffsetY
+    {
+        get => GetCurrentFrame().OffsetY;
+        set { }
+    }
+
+    // ========================================================================
+    
     private static readonly long _initialTimeOffset = DateTime.Now.Millisecond;
 
     private static   long                 _lastTiledMapRenderTime;
     private readonly int[]                _animationIntervals;
     private readonly StaticTiledMapTile[] _frameTiles;
     private readonly int                  _loopDuration;
-
-    private MapObjects?    _mapObjects;
-    private MapProperties? _properties;
-
-    // ========================================================================
+    
     // ========================================================================
 
     /// <summary>
@@ -92,39 +120,25 @@ public class AnimatedTiledMapTile : ITiledMapTile
         }
     }
 
-    public int       ID        { get; set; }
-    public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
+    /// <summary>
+    /// Returns the <see cref="MapProperties"/> instance for this tile. If the
+    /// current properties instance is null, a new instance will be created first.
+    /// </summary>
+    public MapProperties? Properties
+    {
+        get => field ??= new MapProperties();
+        set;
+    } = new();
 
     /// <summary>
-    /// The currently displayed animation frame.
+    /// Returns the <see cref="MapObjects"/> instance for this tile. If the
+    /// current mapobjects instance is null, a new instance will be created first.
     /// </summary>
-    public TextureRegion TextureRegion
+    public MapObjects? MapObjects
     {
-        get => GetCurrentFrame().TextureRegion;
-        set { }
-    }
-
-    /// <summary>
-    /// X-coordinate of the currently displayed animation frame in the tilemap.
-    /// </summary>
-    public float OffsetX
-    {
-        get => GetCurrentFrame().OffsetX;
-        set { }
-    }
-
-    /// <summary>
-    /// Y-coordinate of the currently displayed animation frame in the tilemap.
-    /// </summary>
-    public float OffsetY
-    {
-        get => GetCurrentFrame().OffsetY;
-        set { }
-    }
-
-    public MapProperties Properties => _properties ??= new MapProperties();
-
-    public MapObjects MapObjects => _mapObjects ??= new MapObjects();
+        get => field ??= new MapObjects();
+        set;
+    } = new();
 
     /// <summary>
     /// Gets the index into the animation images array
@@ -145,8 +159,8 @@ public class AnimatedTiledMapTile : ITiledMapTile
             currentTime -= animationInterval;
         }
 
-        throw new RuntimeException
-            ( "Could not determine current animation frame in AnimatedTiledMapTile. This should never happen." );
+        throw new RuntimeException( "Could not determine current animation frame in " +
+                                    "AnimatedTiledMapTile. This should never happen." );
     }
 
     /// <summary>
@@ -167,3 +181,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
         return _frameTiles[ GetCurrentFrameIndex() ];
     }
 }
+
+// ============================================================================
+// ============================================================================
+

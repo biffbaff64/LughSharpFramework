@@ -33,7 +33,16 @@ namespace LughSharp.Core.Maps.Objects;
 [PublicAPI]
 public class TextureMapObject : MapObject
 {
-    // ========================================================================
+    public float          X             { get; set; }
+    public float          Y             { get; set; }
+    public float          OriginX       { get; set; }
+    public float          OriginY       { get; set; }
+    public float          ScaleX        { get; set; } = 1.0f;
+    public float          ScaleY        { get; set; } = 1.0f;
+    public float          Rotation      { get; set; }
+    public TextureRegion? TextureRegion { get; set; }
+
+    // =======================================================================
 
     /// <summary>
     /// Creates an empty texture map object
@@ -50,13 +59,7 @@ public class TextureMapObject : MapObject
     {
         TextureRegion = textureRegion;
     }
-
-    public float X        { get; set; }
-    public float Y        { get; set; }
-    public float OriginX  { get; set; }
-    public float OriginY  { get; set; }
-    public float ScaleX   { get; set; } = 1.0f;
-    public float ScaleY   { get; set; } = 1.0f;
-    public float Rotation { get; set; }
-    public TextureRegion? TextureRegion { get; set; }
 }
+
+// ============================================================================
+// ============================================================================

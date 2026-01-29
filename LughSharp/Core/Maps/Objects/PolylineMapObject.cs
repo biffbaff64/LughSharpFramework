@@ -30,11 +30,14 @@ namespace LughSharp.Core.Maps.Objects;
 [PublicAPI]
 public class PolylineMapObject : MapObject
 {
+    public Polyline Polyline { get; set; }
+    
+    // ========================================================================
+    
     /// <summary>
     /// Creates a new, empty, PolylineMapObject.
     /// </summary>
-    public PolylineMapObject()
-        : this( [ ] )
+    public PolylineMapObject() : this( [ ] )
     {
     }
 
@@ -55,6 +58,8 @@ public class PolylineMapObject : MapObject
     {
         Polyline = polyline;
     }
-
-    public Polyline Polyline { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

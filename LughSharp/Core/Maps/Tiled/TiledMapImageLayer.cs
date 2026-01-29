@@ -33,6 +33,10 @@ namespace LughSharp.Core.Maps.Tiled;
 [PublicAPI]
 public class TiledMapImageLayer : MapLayer
 {
+    public TextureRegion? Region { get; set; }
+    public float          X      { get; set; }
+    public float          Y      { get; set; }
+
     // ========================================================================
 
     /// <summary>
@@ -48,8 +52,8 @@ public class TiledMapImageLayer : MapLayer
         X      = x;
         Y      = y;
     }
-
-    public TextureRegion? Region { get; set; }
-    public float          X      { get; set; }
-    public float          Y      { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

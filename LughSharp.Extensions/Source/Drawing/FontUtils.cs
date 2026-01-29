@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
 using Extensions.Source.Drawing.Freetype;
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Text;
@@ -35,12 +36,16 @@ namespace Extensions.Source.Drawing;
 public class FontUtils
 {
     /// <summary>
-    /// 
+    /// Creates a <see cref="BitmapFont"/> from the specified font file, size, and color.
+    /// Font creation is handled via <see cref="FreeTypeFontGenerator"/>.
+    /// <para>
+    /// This method handles exceptions and logs errors if font creation fails.
+    /// </para>
     /// </summary>
-    /// <param name="fontFile"></param>
-    /// <param name="size"></param>
-    /// <param name="color"></param>
-    /// <returns></returns>
+    /// <param name="fontFile"> The fontfile path. </param>
+    /// <param name="size"> The requested font size. </param>
+    /// <param name="color"> The requested font colour. </param>
+    /// <returns> The newly created BitmapFont. </returns>
     public BitmapFont CreateFont( string fontFile, int size, Color color )
     {
         BitmapFont font;
@@ -61,11 +66,15 @@ public class FontUtils
     }
 
     /// <summary>
-    /// 
+    /// Creates a <see cref="BitmapFont"/> from the specified font file and size.
+    /// Font creation is handled via <see cref="FreeTypeFontGenerator"/>.
+    /// <para>
+    /// This method handles exceptions and logs errors if font creation fails.
+    /// </para>
     /// </summary>
-    /// <param name="fontFile"></param>
-    /// <param name="size"></param>
-    /// <returns></returns>
+    /// <param name="fontFile"> The fontfile path. </param>
+    /// <param name="size"> The requested font size. </param>
+    /// <returns> The newly created BitmapFont. </returns>
     public BitmapFont CreateFont( string fontFile, int size )
     {
         BitmapFont font;
@@ -91,3 +100,6 @@ public class FontUtils
         return font;
     }
 }
+
+// ============================================================================
+// ============================================================================

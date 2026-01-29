@@ -42,7 +42,7 @@ public class MapGroupLayer : MapLayer
     {
         base.InvalidateRenderOffset();
 
-        for ( var i = 0; i < Layers.Size(); i++ )
+        for ( var i = 0; i < Layers.LayersCount; i++ )
         {
             var child = Layers.Get( i );
 
@@ -50,3 +50,7 @@ public class MapGroupLayer : MapLayer
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

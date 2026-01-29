@@ -34,7 +34,7 @@ namespace LughSharp.Core.Maps.Tiled;
 public interface ITiledMapTile
 {
     [PublicAPI]
-    public enum Blendmode
+    enum Blendmode
     {
         None,
         Alpha,
@@ -68,10 +68,14 @@ public interface ITiledMapTile
     /// <summary>
     /// Returns this tiles properties set.
     /// </summary>
-    MapProperties Properties { get; }
+    MapProperties? Properties { get; set; }
 
     /// <summary>
     /// Returns the collection of objects contained within a tile.
     /// </summary>
-    MapObjects MapObjects { get; }
+    MapObjects? MapObjects { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

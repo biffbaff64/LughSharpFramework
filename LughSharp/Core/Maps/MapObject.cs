@@ -39,3 +39,7 @@ public class MapObject
     public Color         Color      { get; set; }         = Color.White;
     public MapProperties Properties { get; private set; } = new();
 }
+
+// ============================================================================
+// ============================================================================
+

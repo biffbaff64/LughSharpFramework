@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum LogicOp : int
+public enum LogicOp
 {
     And          = IGL.GL_AND,
     AndInverted  = IGL.GL_AND_INVERTED,

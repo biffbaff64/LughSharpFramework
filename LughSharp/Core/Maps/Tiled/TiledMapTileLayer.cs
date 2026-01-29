@@ -29,6 +29,12 @@ namespace LughSharp.Core.Maps.Tiled;
 [PublicAPI]
 public class TiledMapTileLayer : MapLayer
 {
+    public int       Width      { get; }
+    public int       Height     { get; }
+    public int       TileWidth  { get; private set; }
+    public int       TileHeight { get; private set; }
+    public Cell[ , ] Cells      { get; }
+
     // ========================================================================
 
     /// <summary>
@@ -46,12 +52,6 @@ public class TiledMapTileLayer : MapLayer
         TileHeight = tileHeight;
         Cells      = new Cell[ width, height ];
     }
-
-    public int       Width      { get; }
-    public int       Height     { get; }
-    public int       TileWidth  { get; private set; }
-    public int       TileHeight { get; private set; }
-    public Cell[ , ] Cells      { get; }
 
     /// <summary>
     /// Gets the <see cref="Cell"/> at the given X, Y coordinates.
@@ -95,6 +95,8 @@ public class TiledMapTileLayer : MapLayer
         Cells[ x, y ] = cell;
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// represents a cell in a TiledLayer: ITiledMapTile, flip and rotation properties.
     /// </summary>
@@ -192,3 +194,7 @@ public class TiledMapTileLayer : MapLayer
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

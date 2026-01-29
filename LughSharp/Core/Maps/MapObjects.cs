@@ -82,42 +82,6 @@ public class MapObjects : IEnumerable< MapObject >
         return null!;
     }
 
-    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
-    public int GetIndex( string name )
-    {
-        return GetIndex( Get( name ) );
-    }
-
-    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
-    public int GetIndex( MapObject obj )
-    {
-        return _objects.IndexOf( obj );
-    }
-
-    /// <inheritdoc cref="List{MapObject}.Count"/>
-    public int GetCount()
-    {
-        return _objects.Count;
-    }
-
-    /// <inheritdoc cref="List{MapObject}.Add"/>
-    public virtual void Add( MapObject obj )
-    {
-        _objects.Add( obj );
-    }
-
-    /// <inheritdoc cref="List{MapObject}.RemoveAt"/>
-    public void RemoveIndex( int index )
-    {
-        _objects.RemoveAt( index );
-    }
-
-    /// <inheritdoc cref="List{MapObject}.Remove"/>
-    public void Remove( MapObject obj )
-    {
-        _objects.Remove( obj );
-    }
-
     /// <summary>
     /// Returns a List of all <see cref="MapObject"/>s that match the
     /// specified type.
@@ -140,4 +104,26 @@ public class MapObjects : IEnumerable< MapObject >
 
         return fill;
     }
+
+    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
+    public int GetIndex( string name ) => GetIndex( Get( name ) );
+
+    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
+    public int GetIndex( MapObject obj ) => _objects.IndexOf( obj );
+
+    /// <inheritdoc cref="List{MapObject}.Count"/>
+    public int GetCount() => _objects.Count;
+
+    /// <inheritdoc cref="List{MapObject}.Add"/>
+    public virtual void Add( MapObject obj ) => _objects.Add( obj );
+
+    /// <inheritdoc cref="List{MapObject}.RemoveAt"/>
+    public void RemoveIndex( int index ) => _objects.RemoveAt( index );
+
+    /// <inheritdoc cref="List{MapObject}.Remove"/>
+    public void Remove( MapObject obj ) => _objects.Remove( obj );
 }
+
+// ============================================================================
+// ============================================================================
+

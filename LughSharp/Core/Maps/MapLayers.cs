@@ -121,10 +121,7 @@ public class MapLayers : IEnumerable< MapLayer >
     /// <summary>
     /// Returns the number of layers.
     /// </summary>
-    public int Size()
-    {
-        return _layers.Count;
-    }
+    public int LayersCount => _layers.Count;
 
     /// <summary>
     /// </summary>

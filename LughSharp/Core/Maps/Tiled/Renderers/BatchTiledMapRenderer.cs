@@ -35,6 +35,15 @@ namespace LughSharp.Core.Maps.Tiled.Renderers;
 [PublicAPI]
 public class BatchTileMapRenderer : ITiledMapRenderer
 {
+    public TiledMap  TiledMap    { get; set; }
+    public bool      OwnsBatch   { get; set; }
+    public Rectangle ImageBounds { get; set; } = new();
+
+    protected IBatch    Batch      { get; set; }
+    protected Rectangle ViewBounds { get; set; }
+    protected float     UnitScale  { get; set; }
+    protected float[]   Vertices   { get; set; } = new float[ NUM_VERTICES ];
+
     protected const int NUM_VERTICES = 20;
 
     // ========================================================================
@@ -76,15 +85,6 @@ public class BatchTileMapRenderer : ITiledMapRenderer
         Batch      = batch;
         OwnsBatch  = ownsBatch;
     }
-
-    public TiledMap  TiledMap    { get; set; }
-    public bool      OwnsBatch   { get; set; }
-    public Rectangle ImageBounds { get; set; } = new();
-
-    protected IBatch    Batch      { get; set; }
-    protected Rectangle ViewBounds { get; set; }
-    protected float     UnitScale  { get; set; }
-    protected float[]   Vertices   { get; set; } = new float[ NUM_VERTICES ];
 
     /// <summary>
     /// Draws all layers in the default <see cref="TiledMap"/>.
@@ -286,7 +286,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     {
         var childLayers = groupLayer.Layers;
 
-        for ( var i = 0; i < childLayers.Size(); i++ )
+        for ( var i = 0; i < childLayers.LayersCount; i++ )
         {
             var childLayer = childLayers.Get( i );
 
@@ -316,3 +316,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
         Batch.End();
     }
 }
+
+// ============================================================================
+// ============================================================================
+

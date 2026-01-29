@@ -35,6 +35,8 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
 {
     private readonly List< TiledMapTileSet > _tilesets;
 
+    // ========================================================================
+    
     /// <summary>
     /// Creates an empty collection of tilesets.
     /// </summary>
@@ -144,3 +146,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
         return null;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

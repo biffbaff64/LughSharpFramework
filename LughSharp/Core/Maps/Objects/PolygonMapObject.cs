@@ -30,11 +30,14 @@ namespace LughSharp.Core.Maps.Objects;
 [PublicAPI]
 public class PolygonMapObject : MapObject
 {
+    public Polygon Polygon { get; set; }
+
+    // ========================================================================
+    
     /// <summary>
     /// Creates empty polygon map object
     /// </summary>
-    public PolygonMapObject()
-        : this( [ ] )
+    public PolygonMapObject() : this( [ ] )
     {
     }
 
@@ -55,6 +58,8 @@ public class PolygonMapObject : MapObject
     {
         Polygon = polygon;
     }
-
-    public Polygon Polygon { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

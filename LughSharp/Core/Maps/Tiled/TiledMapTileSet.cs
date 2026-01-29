@@ -35,6 +35,17 @@ namespace LughSharp.Core.Maps.Tiled;
 public class TiledMapTileSet : IEnumerable< ITiledMapTile >
 {
     /// <summary>
+    /// The Tileset name.
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// A Property Set for this tileset.
+    /// </summary>
+    /// <inheritdoc cref="MapProperties"/>
+    public MapProperties Properties { get; private set; }
+
+    /// <summary>
     /// A Collection holding the individual tiles for this tileset.
     /// </summary>
     private readonly Dictionary< int, ITiledMapTile > _tiles;
@@ -51,17 +62,6 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
         _tiles     = new Dictionary< int, ITiledMapTile >();
         Properties = new MapProperties();
     }
-
-    /// <summary>
-    /// The Tileset name.
-    /// </summary>
-    public string? Name { get; set; }
-
-    /// <summary>
-    /// A Property Set for this tileset.
-    /// </summary>
-    /// <inheritdoc cref="MapProperties"/>
-    public MapProperties Properties { get; private set; }
 
     /// <inheritdoc />
     public IEnumerator< ITiledMapTile > GetEnumerator()
@@ -112,3 +112,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
         return _tiles.Count;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

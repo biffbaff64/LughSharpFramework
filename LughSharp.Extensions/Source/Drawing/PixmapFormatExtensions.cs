@@ -35,16 +35,16 @@ namespace Extensions.Source.Drawing;
 public static class PixmapFormatExtensions
 {
     /// <summary>
-    /// Converts a system pixel format to the corresponding PixelFormat format.
+    /// Converts a system pixel format to the corresponding <see cref="PixelFormat"/> format.
     /// </summary>
     /// <param name="format">The system pixel format to be converted.</param>
     /// <returns>
-    /// The corresponding <c>PixelFormat</c> value for the given system pixel format.
+    /// The corresponding <see cref="PixelFormat"/> value for the given system pixel format.
     /// </returns>
     /// <exception cref="RuntimeException">
     /// Thrown if the provided system pixel format is invalid or not supported.
     /// </exception>
-    public static int SystemPixelFormatToPixelFormat( System.Drawing.Imaging.PixelFormat format )
+    public static int SystemPixelFormatToPixelFormat( PixelFormat format )
     {
         return format switch
         {
@@ -61,10 +61,10 @@ public static class PixmapFormatExtensions
     }
 
     /// <summary>
-    /// Converts a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> to the corresponding System.Drawing.Imaging.PixelFormat.
+    /// Converts a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> to the corresponding <see cref="PixelFormat"/>.
     /// </summary>
-    /// <param name="format">The pixel format of type <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>.</param>
-    /// <returns>The corresponding <see cref="System.Drawing.Imaging.PixelFormat"/>.</returns>
+    /// <param name="format">The pixel format of type <see cref="LughFormat"/>.</param>
+    /// <returns>The corresponding <see cref="PixelFormat"/>.</returns>
     /// <exception cref="RuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
@@ -72,12 +72,12 @@ public static class PixmapFormatExtensions
     {
         return format switch
         {
-            LughFormat.ALPHA           => System.Drawing.Imaging.PixelFormat.Alpha,
-            LughFormat.LUMINANCE_ALPHA => System.Drawing.Imaging.PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
-            LughFormat.RGB565          => System.Drawing.Imaging.PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
-            LughFormat.RGB888          => System.Drawing.Imaging.PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
-            LughFormat.RGBA8888        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
-            LughFormat.RGBA4444        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            LughFormat.ALPHA           => PixelFormat.Alpha,
+            LughFormat.LUMINANCE_ALPHA => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
+            LughFormat.RGB565          => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
+            LughFormat.RGB888          => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
+            LughFormat.RGBA8888        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            LughFormat.RGBA4444        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
 
             // ----------------------------------
 

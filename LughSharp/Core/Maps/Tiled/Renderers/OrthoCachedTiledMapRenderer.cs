@@ -182,7 +182,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         var mapLayers = Map?.Layers;
 
-        for ( int i = 0, j = mapLayers!.Size(); i < j; i++ )
+        for ( int i = 0, j = mapLayers!.LayersCount; i < j; i++ )
         {
             var layer = mapLayers.Get( i );
 

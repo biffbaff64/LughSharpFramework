@@ -30,6 +30,10 @@ namespace LughSharp.Core.Maps.Objects;
 [PublicAPI]
 public class EllipseMapObject : MapObject
 {
+    public Ellipse Ellipse { get; set; }
+
+    // ========================================================================
+    
     /// <symmary>
     /// Creates an <see cref="Ellipse"/> object whose lower left corner
     /// is at(0, 0) with width=1 and height=1
@@ -50,6 +54,8 @@ public class EllipseMapObject : MapObject
     {
         Ellipse = new Ellipse( x, y, width, height );
     }
-
-    public Ellipse Ellipse { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -24,6 +24,7 @@
 
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maps.Tiled.Tiles;
 
@@ -33,12 +34,12 @@ namespace LughSharp.Core.Maps.Tiled.Tiles;
 [PublicAPI]
 public class StaticTiledMapTile : ITiledMapTile
 {
-    // ========================================================================
+    public int                     ID            { get; set; }
+    public float                   OffsetX       { get; set; }
+    public float                   OffsetY       { get; set; }
+    public TextureRegion           TextureRegion { get; set; }
+    public ITiledMapTile.Blendmode BlendMode     { get; set; } = ITiledMapTile.Blendmode.Alpha;
 
-    private MapObjects?    _mapObjects;
-    private MapProperties? _properties;
-
-    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -56,31 +57,34 @@ public class StaticTiledMapTile : ITiledMapTile
     /// <param name="copy"> The StaticTiledMapTile to copy. </param>
     public StaticTiledMapTile( StaticTiledMapTile copy )
     {
-        if ( copy._properties != null )
-        {
-            Properties.PutAll( copy._properties );
-        }
+        Guard.Against.Null( copy );
 
-        _mapObjects   = copy._mapObjects;
+        Properties    = copy.Properties;
+        MapObjects    = copy.MapObjects;
         TextureRegion = copy.TextureRegion;
         ID            = copy.ID;
     }
-
-    public int                     ID            { get; set; }
-    public float                   OffsetX       { get; set; }
-    public float                   OffsetY       { get; set; }
-    public TextureRegion           TextureRegion { get; set; }
-    public ITiledMapTile.Blendmode BlendMode     { get; set; } = ITiledMapTile.Blendmode.Alpha;
 
     /// <summary>
     /// Returns the <see cref="MapProperties"/> instance for this tile. If the
     /// current properties instance is null, a new instance will be created first.
     /// </summary>
-    public MapProperties Properties => _properties ??= new MapProperties();
+    public MapProperties? Properties
+    {
+        get => field ??= new MapProperties();
+        set;
+    } = new();
 
     /// <summary>
     /// Returns the <see cref="MapObjects"/> instance for this tile. If the
     /// current mapobjects instance is null, a new instance will be created first.
     /// </summary>
-    public MapObjects MapObjects => _mapObjects ??= new MapObjects();
+    public MapObjects? MapObjects
+    {
+        get => field ??= new MapObjects();
+        set;
+    } = new();
 }
+
+// ============================================================================
+// ============================================================================
