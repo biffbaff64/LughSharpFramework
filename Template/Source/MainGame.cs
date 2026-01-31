@@ -9,6 +9,9 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
+using LughSharp.Core.Maps.Tiled;
+using LughSharp.Core.Maps.Tiled.Loaders;
+using LughSharp.Core.Maps.Tiled.Renderers;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
@@ -48,6 +51,9 @@ public class MainGame : Game
     private Vector2                 _spritePosition = Vector2.Zero;
     private float                   _scale          = 1.0f;
     private int                     _direction      = -1;
+    private TmxMapLoader            _tmxMapLoader   = new();
+    private ITiledMapRenderer?      _mapRenderer;
+    private TiledMap?               _tiledMap;
 
     // ========================================================================
     // ========================================================================
@@ -62,6 +68,7 @@ public class MainGame : Game
 
         CreateCameras();
         CreateAssets();
+        CreateMap();
 
         Logger.Debug( "Done" );
     }
@@ -126,6 +133,9 @@ public class MainGame : Game
                                         ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
                 }
 
+                _mapRenderer?.SetView( _orthoGameCam.Camera );
+                _mapRenderer?.Render();
+                
                 _spriteBatch1.End();
             }
         }
@@ -165,7 +175,7 @@ public class MainGame : Game
                 _test?.Render( _spriteBatch2 );
 
                 _font?.Draw( _spriteBatch2, "[GREEN]HELLO[] [WHITE]WORLD[]", 400, 400 );
-                
+
                 _spriteBatch2.End();
             }
         }
@@ -221,7 +231,7 @@ public class MainGame : Game
                 _orthoGameCam?.Dispose();
                 _hudCam?.Dispose();
                 _font?.Dispose();
-                
+
                 // TODO:
                 // Should Sprite() implement IDisposable, or should I leave that up to
                 // any extending classes? Maybe imlplement IDisposable in Sprite() and
@@ -242,8 +252,10 @@ public class MainGame : Game
 
     private void CreateCameras()
     {
-        var zoom = 1f;
+        Logger.Checkpoint();
         
+        var zoom = 1f;
+
         _orthoGameCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
                                                     Engine.Api.Graphics.Height,
                                                     name: "MainCamera" );
@@ -275,6 +287,8 @@ public class MainGame : Game
 
     private void CreateAssets()
     {
+        Logger.Checkpoint();
+
         _image1 = new Texture( Assets.BACKGROUND_IMAGE );
         _star   = new Texture( Assets.COMPLETE_STAR );
 
@@ -286,6 +300,8 @@ public class MainGame : Game
 
     private void CreateStage()
     {
+        Logger.Checkpoint();
+
         if ( _hudCam == null )
         {
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
@@ -303,6 +319,8 @@ public class MainGame : Game
 
     private void CreateFont()
     {
+        Logger.Checkpoint();
+
         _font = new BitmapFont();
         _font.SetColor( Color.White );
         _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
@@ -311,6 +329,8 @@ public class MainGame : Game
 
     private void CreateFreeTypeFont()
     {
+        Logger.Checkpoint();
+
         var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AMBLE_REGULAR_26_FONT ) );
         var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
         {
@@ -323,6 +343,8 @@ public class MainGame : Game
 
     private void CreateSprite()
     {
+        Logger.Checkpoint();
+
         _sprite = new Sprite( new TextureRegion( new Texture( Assets.KEY_COLLECTED ) ) );
         _star2  = new Sprite( new TextureRegion( new Texture( Assets.COMPLETE_STAR ) ) );
 
@@ -331,6 +353,15 @@ public class MainGame : Game
 //        _sprite.SetBounds();
 //        _sprite.SetOriginCenter();
 //        _sprite.SetColor( Color.White );
+    }
+
+    private void CreateMap()
+    {
+        Logger.Checkpoint();
+
+        _tiledMap = _tmxMapLoader.Load( Assets.ROOM1_MAP );
+
+        _mapRenderer = new OrthogonalTiledMapRenderer( _tiledMap, _spriteBatch1! );
     }
 }
 

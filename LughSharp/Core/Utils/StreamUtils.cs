@@ -1,18 +1,18 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
-//
+// 
 // Copyright (c) 2024 Richard Ikin.
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,18 +22,31 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.IO;
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Assets.Loaders.Resolvers;
+namespace LughSharp.Core.Utils;
 
-/// <summary>
-/// An interface for classes that can map a file name to a FileInfo.
-/// Used to allow the AssetManager to load files from anywhere, or
-/// implement caching strategies.
-/// </summary>
 [PublicAPI]
-public interface IFileHandleResolver
+public class StreamUtils
 {
-    FileInfo Resolve( string filename );
+    /// <summary>
+    /// Close the provided <see cref="ICloseable"/> and ignore all errors.
+    /// </summary>
+    public static void CloseQuietly( ICloseable? closeable )
+    {
+        if ( closeable != null )
+        {
+            try
+            {
+                closeable.Close();
+            }
+            catch ( Exception )
+            {
+                // Ignored
+            }
+        }
+    }
 }
+
+// ============================================================================
+// ============================================================================

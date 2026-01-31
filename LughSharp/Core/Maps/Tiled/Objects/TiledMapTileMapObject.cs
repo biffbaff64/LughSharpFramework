@@ -38,6 +38,12 @@ namespace LughSharp.Core.Maps.Tiled.Objects;
 [PublicAPI]
 public class TiledMapTileMapObject : TextureMapObject
 {
+    public ITiledMapTile Tile             { get; set; }
+    public bool          FlipHorizontally { get; set; }
+    public bool          FlipVertically   { get; set; }
+
+    // ========================================================================
+    
     /// <summary>
     /// Creates a new <see cref="MapObject"/> with an attached <see cref="ITiledMapTile"/>.
     /// </summary>
@@ -56,8 +62,8 @@ public class TiledMapTileMapObject : TextureMapObject
 
         TextureRegion = region;
     }
-
-    public ITiledMapTile Tile             { get; set; }
-    public bool          FlipHorizontally { get; set; }
-    public bool          FlipVertically   { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

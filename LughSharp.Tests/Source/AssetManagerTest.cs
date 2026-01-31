@@ -36,11 +36,13 @@ public class AssetManagerTest
 {
     private readonly AssetManager? _assetManager;
 
+    // ========================================================================
+    
     public AssetManagerTest( AssetManager? assetManager )
     {
         _assetManager = assetManager;
-        
     }
+
     [SetUp]
     public void Setup()
     {
@@ -60,11 +62,11 @@ public class AssetManagerTest
 
         var files = new List< FileInfo >
         {
-            Engine.Api.Files.Assets( "PackedImages/input/button_a.png" ),
-            Engine.Api.Files.Assets( "PackedImages/input/button_b.png" ),
-            Engine.Api.Files.Assets( "PackedImages/input/button_x.png" ),
-            Engine.Api.Files.Assets( "PackedImages/input/button_y.png" ),
-            Engine.Api.Files.Assets( "title_background.png" ),
+            Api.Files.Assets( "PackedImages/input/button_a.png" ),
+            Api.Files.Assets( "PackedImages/input/button_b.png" ),
+            Api.Files.Assets( "PackedImages/input/button_x.png" ),
+            Api.Files.Assets( "PackedImages/input/button_y.png" ),
+            Api.Files.Assets( "title_background.png" ),
         };
 
         _assetManager.Load< Texture >( files );
@@ -74,7 +76,7 @@ public class AssetManagerTest
         
         foreach ( var file in files )
         {
-            CheckAsset< Texture >( file );
+            CheckAsset( file );
         }
 
         Logger.Debug( "Checking TextureAtlas assets...", true );
@@ -107,7 +109,7 @@ public class AssetManagerTest
         _assetManager?.Dispose();
     }
 
-    private void CheckAsset< T >( FileInfo asset )
+    private void CheckAsset( FileInfo asset )
     {
         if ( _assetManager == null )
         {

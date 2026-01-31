@@ -35,3 +35,7 @@ public interface ITiledMapRenderer : IMapRenderer
     void RenderTileLayer( TiledMapTileLayer layer );
     void RenderImageLayer( TiledMapImageLayer layer );
 }
+
+// ============================================================================
+// ============================================================================
+

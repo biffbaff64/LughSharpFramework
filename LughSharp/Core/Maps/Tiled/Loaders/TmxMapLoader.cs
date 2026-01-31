@@ -22,13 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Maps.Tiled.Loaders;
 
@@ -76,6 +81,8 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     {
         var tmxFile = Resolve( filename );
 
+        Logger.Debug( $"tmxFile: {tmxFile.FullName}" );
+        
         // ----------------------------------------
 
         XmlDocument.LoadXml( tmxFile.Name );

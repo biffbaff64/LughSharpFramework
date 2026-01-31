@@ -537,3 +537,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         MaxTileHeight = maxPixelHeight;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

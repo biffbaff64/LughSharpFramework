@@ -58,7 +58,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     /// <param name="p">parameters for loading the asset</param>
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
-                                                                   TP? parameter ) where TP : class
+                                                                   TP? p ) where TP : class
     {
         return null!;
     }

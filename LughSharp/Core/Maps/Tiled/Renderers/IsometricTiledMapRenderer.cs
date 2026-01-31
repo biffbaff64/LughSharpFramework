@@ -36,12 +36,12 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
 {
     private readonly Vector2 _bottomLeft  = new();
     private readonly Vector2 _bottomRight = new();
+    private readonly Vector3 _screenPos   = new();
+    private readonly Vector2 _topLeft     = new();
+    private readonly Vector2 _topRight    = new();
 
-    private readonly Vector3  _screenPos = new();
-    private readonly Vector2  _topLeft   = new();
-    private readonly Vector2  _topRight  = new();
-    private          Matrix4? _invIsotransform;
-    private          Matrix4? _isoTransform;
+    private Matrix4? _invIsotransform;
+    private Matrix4? _isoTransform;
 
     public IsometricTiledMapRenderer( TiledMap map )
         : base( map )
@@ -284,3 +284,7 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

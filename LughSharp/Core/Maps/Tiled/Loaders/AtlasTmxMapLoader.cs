@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using JetBrains.Annotations;
 using LughSharp.Core.Assets;
@@ -329,3 +331,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

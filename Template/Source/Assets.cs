@@ -32,6 +32,10 @@ public static class Assets
     public const string KEY_COLLECTED    = @"Assets\key_collected.png";
 
     // ========================================================================
+    // TMX Maps
+    public const string ROOM1_MAP       =  @"Assets\Maps\room1.tmx";
+    
+    // ========================================================================
     // Fonts
     public const string ARIAL_FONT            = @"Assets\Fonts\arial-15.fnt";
     public const string ARIAL_LATIN_FONT      = @"Assets\Fonts\arial-latin.fnt";

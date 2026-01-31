@@ -171,21 +171,6 @@ public class Guard
         }
 
         /// <summary>
-        /// Throws ArgumentNullException if any of the objects in the 'objects[]' array is null.
-        /// Provides a clear error message with the argumentName.
-        /// </summary>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
-        public static void Null( [System.Diagnostics.CodeAnalysis.NotNull] params object?[]? objects )
-        {
-            ArgumentNullException.ThrowIfNull( objects );
-
-            foreach ( var obj in objects )
-            {
-                ArgumentNullException.ThrowIfNull( obj, obj?.GetType().FullName );
-            }
-        }
-
-        /// <summary>
         /// Throws ArgumentNullException if argumentValue is null.
         /// Throws ArgumentException if argumentValue is string.Empty.
         /// Provides a clear error message with the argumentName.

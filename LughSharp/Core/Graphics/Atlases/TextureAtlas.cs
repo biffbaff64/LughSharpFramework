@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
 using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
