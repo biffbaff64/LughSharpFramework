@@ -33,14 +33,16 @@ namespace LughSharp.Core.Maps;
 [PublicAPI]
 public class MapLayer
 {
-    public  MapObjects    Objects    { get; init; } = new();
-    public  MapProperties Properties { get; init; } = new();
-    public  string?       Name       { get; set; }
-    public  float         Opacity    { get; set; }
-    public  bool          Visible    { get; set; } = true;
+    public MapObjects    Objects    { get; init; } = new();
+    public MapProperties Properties { get; init; } = new();
+    public string?       Name       { get; set; }  = "";
+    public float         Opacity    { get; set; }  = 1.0f;
+    public bool          Visible    { get; set; }  = true;
+    public float         ParallaxX  { get; set; } = 1.0f;
+    public float         ParallaxY  { get; set; } = 1.0f;
 
     /// <summary>
-    /// The layers X offset.
+    /// The laye s X offset.
     /// </summary>
     public float OffsetX
     {

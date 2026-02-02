@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections;
 using System.Text;
 
 using JetBrains.Annotations;
@@ -57,7 +58,7 @@ public class XmlReader
     /// </summary>
     /// <param name="xml"></param>
     /// <returns></returns>
-    public Element Parse( string xml )
+    public Element? Parse( string xml )
     {
         var data = xml.ToCharArray();
 
@@ -70,7 +71,7 @@ public class XmlReader
     /// <param name="reader"></param>
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
-    public Element Parse( TextReader reader )
+    public Element? Parse( TextReader reader )
     {
         try
         {
@@ -118,7 +119,7 @@ public class XmlReader
     /// <param name="input"></param>
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
-    public Element Parse( Stream input )
+    public Element? Parse( Stream input )
     {
         try
         {
@@ -141,7 +142,7 @@ public class XmlReader
     /// <param name="length"></param>
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
-    public Element Parse( char[] data, int offset, int length )
+    public Element? Parse( char[] data, int offset, int length )
     {
         int     cs;
         var     p             = offset;
@@ -150,8 +151,9 @@ public class XmlReader
         string? attributeName = null;
         var     hasBody       = false;
 
-        cs = xml_start;
+        cs = XML_START;
 
+        //TODO:
         int klen;
         var trans = 0;
         int acts;
@@ -182,9 +184,9 @@ public class XmlReader
                     goto case 1;
 
                 case 1:
-                    keys  = _xml_key_offsets[ cs ];
-                    trans = _xml_index_offsets[ cs ];
-                    klen  = _xml_single_lengths[ cs ];
+                    keys  = _xmlKeyOffsets[ cs ];
+                    trans = _xmlIndexOffsets[ cs ];
+                    klen  = _xmlSingleLengths[ cs ];
 
                     var matched = false;
 
@@ -202,11 +204,11 @@ public class XmlReader
 
                             var mid = lower + ( ( upper - lower ) >> 1 );
 
-                            if ( data[ p ] < _xml_trans_keys[ mid ] )
+                            if ( data[ p ] < _xmlTransKeys[ mid ] )
                             {
                                 upper = mid - 1;
                             }
-                            else if ( data[ p ] > _xml_trans_keys[ mid ] )
+                            else if ( data[ p ] > _xmlTransKeys[ mid ] )
                             {
                                 lower = mid + 1;
                             }
@@ -228,7 +230,7 @@ public class XmlReader
 
                     if ( !matched )
                     {
-                        klen = _xml_range_lengths[ cs ];
+                        klen = _xmlRangeLengths[ cs ];
 
                         if ( klen > 0 )
                         {
@@ -244,11 +246,11 @@ public class XmlReader
 
                                 var mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
 
-                                if ( data[ p ] < _xml_trans_keys[ mid ] )
+                                if ( data[ p ] < _xmlTransKeys[ mid ] )
                                 {
                                     upper = mid - 2;
                                 }
-                                else if ( data[ p ] > _xml_trans_keys[ mid + 1 ] )
+                                else if ( data[ p ] > _xmlTransKeys[ mid + 1 ] )
                                 {
                                     lower = mid + 2;
                                 }
@@ -268,17 +270,17 @@ public class XmlReader
                         }
                     }
 
-                    trans = _xml_indicies[ trans ];
-                    cs    = _xml_trans_targs[ trans ];
+                    trans = _xmlIndicies[ trans ];
+                    cs    = _xmlTransTargs[ trans ];
 
-                    if ( _xml_trans_actions[ trans ] != 0 )
+                    if ( _xmlTransActions[ trans ] != 0 )
                     {
-                        acts  = _xml_trans_actions[ trans ];
-                        nacts = _xml_actions[ acts++ ];
+                        acts  = _xmlTransActions[ trans ];
+                        nacts = _xmlActions[ acts++ ];
 
                         while ( nacts-- > 0 )
                         {
-                            switch ( _xml_actions[ acts++ ] )
+                            switch ( _xmlActions[ acts++ ] )
                             {
                                 case 0:
                                     s = p;
@@ -491,7 +493,8 @@ public class XmlReader
             throw new SerializationException( "Error parsing XML on line " + lineNumber + " near: " +
                                               new string( data, p, Math.Min( 32, pe - p ) ) );
         }
-        else if ( _elements.Count != 0 )
+        
+        if ( _elements.Count != 0 )
         {
             var element = _elements[ _elements.Count - 1 ];
             _elements.Clear();
@@ -505,18 +508,22 @@ public class XmlReader
         return finalRoot;
     }
 
+    // ========================================================================
+    
     #region Ragel Data Arrays
 
-    private static readonly byte[] _xml_actions =
+    //TODO: Add a brief description / explanation of Ragel data arrays here
+    
+    private static readonly byte[] _xmlActions =
         { 0, 1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 2, 1, 4, 2, 2, 4, 2, 6, 7, 2, 6, 8, 3, 0, 6, 7 };
 
-    private static readonly byte[] _xml_key_offsets =
+    private static readonly byte[] _xmlKeyOffsets =
     {
         0, 0, 4, 9, 14, 20, 26, 30, 35, 36, 37, 42, 46, 50, 51, 52, 56, 57, 62, 67, 73, 79, 83, 88, 89, 90, 95, 99, 103,
         104, 108, 109, 110, 111, 112, 115
     };
 
-    private static readonly char[] _xml_trans_keys =
+    private static readonly char[] _xmlTransKeys =
     {
         ( char )32, ( char )60, ( char )9, ( char )13, ( char )32, ( char )47, ( char )62, ( char )9, ( char )13,
         ( char )32, ( char )47, ( char )62, ( char )9, ( char )13, ( char )32, ( char )47, ( char )61, ( char )62,
@@ -533,19 +540,19 @@ public class XmlReader
         ( char )62, ( char )62, ( char )39, ( char )39, ( char )32, ( char )9, ( char )13, ( char )0
     };
 
-    private static readonly byte[] _xml_single_lengths =
+    private static readonly byte[] _xmlSingleLengths =
         { 0, 2, 3, 3, 4, 4, 2, 3, 1, 1, 3, 2, 2, 1, 1, 2, 1, 3, 3, 4, 4, 2, 3, 1, 1, 3, 2, 2, 1, 2, 1, 1, 1, 1, 1, 0 };
 
-    private static readonly byte[] _xml_range_lengths =
+    private static readonly byte[] _xmlRangeLengths =
         { 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0 };
 
-    private static readonly short[] _xml_index_offsets =
+    private static readonly short[] _xmlIndexOffsets =
     {
         0, 0, 4, 9, 14, 20, 26, 30, 35, 37, 39, 44, 48, 52, 54, 56, 60, 62, 67, 72, 78, 84, 88, 93, 95, 97, 102, 106,
         110, 112, 116, 118, 120, 122, 124, 127
     };
 
-    private static readonly byte[] _xml_indicies =
+    private static readonly byte[] _xmlIndicies =
     {
         0, 2, 0, 1, 2, 1, 1, 2, 3, 5, 6, 7, 5, 4, 9, 10, 1, 11, 9, 8, 13, 1, 14, 1, 13, 12, 15, 16, 15, 1, 16, 17, 18,
         16, 1, 20, 19, 22, 21, 9, 10, 11, 9, 1, 23, 24, 23, 1, 25, 11, 25, 1, 20, 26, 22, 27, 29, 30, 29, 28, 32, 31,
@@ -554,31 +561,30 @@ public class XmlReader
         60, 53, 61, 62, 62, 1, 1, 0
     };
 
-    private static readonly byte[] _xml_trans_targs =
+    private static readonly byte[] _xmlTransTargs =
     {
         1, 0, 2, 3, 3, 4, 11, 34, 5, 4, 11, 34, 5, 6, 7, 6, 7, 8, 13, 9, 10, 9, 10, 12, 34, 12, 14, 14, 16, 15, 17, 16,
         17, 18, 30, 18, 19, 26, 28, 20, 19, 26, 28, 20, 21, 22, 21, 22, 23, 32, 24, 25, 24, 25, 27, 28, 27, 29, 31, 35,
         33, 33, 34
     };
 
-    private static readonly byte[] _xml_trans_actions =
+    private static readonly byte[] _xmlTransActions =
     {
         0, 0, 0, 1, 0, 3, 3, 13, 1, 0, 0, 9, 0, 11, 11, 0, 0, 0, 0, 1, 25, 0, 19, 5, 16, 0, 1, 0, 1, 0, 0, 0, 22, 1, 0,
         0, 3, 3, 13, 1, 0, 0, 9, 0, 11, 11, 0, 0, 0, 0, 1, 25, 0, 19, 5, 16, 0, 0, 0, 7, 1, 0, 0
     };
 
-    const int xml_start = 1;
+    private const int XML_START = 1;
 
     #endregion
 
+    // ========================================================================
+    
     protected virtual void Open( string name )
     {
         var child = new Element( name, _current );
 
-        if ( _current != null )
-        {
-            _current.AddChild( child );
-        }
+        _current?.AddChild( child );
 
         _elements.Add( child );
         _current = child;
@@ -586,7 +592,7 @@ public class XmlReader
 
     protected virtual void Attribute( string? name, string? value )
     {
-        _current.SetAttribute( name, value );
+        _current?.SetAttribute( name, value );
     }
 
     protected virtual string? Entity( string name )
@@ -616,18 +622,15 @@ public class XmlReader
             return "\"";
         }
 
-        if ( name.StartsWith( "#x" ) )
-        {
-            return ( ( char )Convert.ToInt32( name.Substring( 2 ), 16 ) ).ToString();
-        }
-
-        return null;
+        return name.StartsWith( "#x" )
+            ? ( ( char )Convert.ToInt32( name.Substring( 2 ), 16 ) ).ToString()
+            : null;
     }
 
-    protected virtual void Text( string text )
+    protected virtual void Text( string? text )
     {
-        var existing = _current.Text;
-        _current.Text = ( existing != null ? existing + text : text );
+        var existing = _current?.Text;
+        _current?.Text = ( existing != null ? existing + text : text );
     }
 
     protected virtual void Close()
@@ -641,26 +644,34 @@ public class XmlReader
     // ========================================================================
 
     [PublicAPI]
-    public class Element
+    public class Element : IEnumerable
     {
         public string  Name { get; }
         public string? Text { get; set; }
 
         // ====================================================================
         
-        private Dictionary< string, string >? _attributes;
-        private List< Element >?              _children;
-        private Element                       _parent;
+        private Dictionary< string, string? >? _attributes;
+        private List< Element? >?              _children;
+        private Element                        _parent;
 
         // ====================================================================
 
-        public Element( string name, Element parent )
+        public Element( string name, Element? parent )
         {
+            Guard.Against.Null( parent );
+            
             this.Name    = name;
             this._parent = parent;
         }
 
-        public string GetAttribute( string name )
+        /// <summary>
+        /// Returns the attribute with the given name, or null if it doesn't exist. An exception is
+        /// thrown if the attribute doesn't exist.
+        /// </summary>
+        /// <param name="name"> The name of the requested attribute. </param>
+        /// <exception cref="Exception"> If the attribute doesn't exist. </exception>
+        public string? GetAttribute( string name )
         {
             if ( _attributes == null || !_attributes.TryGetValue( name, out var value ) )
             {
@@ -670,41 +681,168 @@ public class XmlReader
             return value;
         }
 
-        public string GetAttribute( string name, string defaultValue )
+        /// <summary>
+        /// Returns the attribute with the given name, or the given default value if it doesn't exist.'
+        /// </summary>
+        /// <param name="name"> The name of the requested attribute. </param>
+        /// <param name="defaultValue"> The default value to return if the attribute doesn't exist. </param>
+        /// <returns></returns>
+        public string? GetAttribute( string name, string? defaultValue )
         {
-            if ( _attributes == null || !_attributes.TryGetValue( name, out var value ) )
+            if ( _attributes == null )
             {
                 return defaultValue;
             }
 
-            return value;
+            var value = _attributes[ name ];
+            
+            return value ?? defaultValue;
         }
 
-        public void SetAttribute( string? name, string? value )
+        public bool HasAttribute( string name )
         {
-            Guard.Against.Null( name );
-            Guard.Against.Null( value );
-
-            _attributes ??= new Dictionary< string, string >();
+            return _attributes?.ContainsKey( name ) ?? false;
+        }
+        
+        public void SetAttribute( string name, string value )
+        {
+            _attributes ??= new Dictionary< string, string? >();
 
             _attributes[ name ] = value;
         }
 
-        public int GetChildCount() => _children?.Count ?? 0;
+        public int GetChildCount()
+        {
+            return _children?.Count ?? 0;
+        }
 
-        public Element GetChild( int index ) => _children?[ index ] ?? throw new Exception( "No children" );
+        public Element? GetChild( int index )
+        {
+            return _children == null
+                ? throw new Exception( "This element has no children" )
+                : _children[ index ];
+        }
 
-        public void AddChild( Element element )
+        public Element? GetChildByName( string name )
+        {
+            return _children?.FirstOrDefault( e => e.Name == name );
+        }
+
+        public Element? GetChildByNameRecursive( string name )
+        {
+            return _children?.Select( e => e.GetChildByNameRecursive( name ) )
+                            .FirstOrDefault( e => e != null )
+                ?? throw new Exception( $"This element has no child named: {name}" );
+        }
+
+        public bool HasChild( string name )
+        {
+            return _children?.Any( e => e.Name == name ) ?? false;
+        }
+
+        public bool HasChildRecursive( string name )
         {
             if ( _children == null )
             {
-                _children = new List< Element >( 8 );
+                return false;
             }
+            
+            return GetChildByNameRecursive( name ) != null;
+        }
+
+        public List< Element? > GetChildrenByName( string name )
+        {
+            return _children?.Where( e => e.Name == name )
+                            .ToList() ?? new List< Element? >( 0 );
+        }
+
+        public List< Element? > GetChildrenByNameRecursive( string name )
+        {
+            return _children?.SelectMany( e => e.GetChildrenByNameRecursive( name ) )
+                            .ToList() ?? new List< Element? >( 0 );
+        }
+        
+        public void AddChild( Element element )
+        {
+            _children ??= new List< Element? >( 8 );
 
             _children.Add( element );
         }
 
+        public void RemoveChild( int index )
+        {
+            _children?.RemoveAt( index );
+        }
+        
+        public void RemoveChild( Element element )
+        {
+            _children?.Remove( element );
+        }
+
+        public void Remove()
+        {
+            _parent?.RemoveChild( this );
+        }
+        
+        // Helper for parsing numeric attributes
+        public float GetFloatAttribute( string name, float defaultValue = 0 )
+        {
+            return float.TryParse( GetAttribute( name, "" ), out var res )
+                ? res
+                : defaultValue;
+        }
+
+        public int GetIntAttribute( string name, int defaultValue = 0 )
+        {
+            return int.TryParse( GetAttribute( name, "" ), out var res )
+                ? res
+                : defaultValue;
+        }
+
+        public string? Get( string name, string defaultValue = "" )
+        {
+            string? value;
+            
+            if ( _attributes != null )
+            {
+                value = _attributes[ name ];
+
+                if ( value != null )
+                {
+                    return value;
+                }
+            }
+            
+            var child = GetChildByName( name );
+
+            if ( child == null )
+            {
+                return defaultValue;
+            }
+            
+            value = child.Text;
+
+            if ( value == null )
+            {
+                return defaultValue;
+            }
+            
+            return value;
+        }
+
         public override string ToString() => ToString( "" );
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be
+        /// used to iterate through the collection.
+        /// </returns>
+        public IEnumerator GetEnumerator()
+        {
+            return _children?.GetEnumerator() ?? Enumerable.Empty< Element? >().GetEnumerator();
+        }
 
         public string ToString( string indent )
         {
@@ -745,21 +883,6 @@ public class XmlReader
             }
 
             return sb.ToString();
-        }
-
-        // Helper for parsing numeric attributes
-        public float GetFloatAttribute( string name, float defaultValue = 0 )
-        {
-            return float.TryParse( GetAttribute( name, "" ), out var res )
-                ? res
-                : defaultValue;
-        }
-
-        public int GetIntAttribute( string name, int defaultValue = 0 )
-        {
-            return int.TryParse( GetAttribute( name, "" ), out var res )
-                ? res
-                : defaultValue;
         }
     }
 }
