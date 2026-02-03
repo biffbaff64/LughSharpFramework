@@ -35,6 +35,8 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
+using XmlReader = LughSharp.Core.Utils.XML.XmlReader;
+
 namespace LughSharp.Core.Maps.Tiled.Loaders;
 
 /// <summary>
@@ -145,8 +147,8 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     protected override void AddStaticTiles( FileInfo tmxFile,
                                             IImageResolver imageResolver,
                                             TiledMapTileSet tileSet,
-                                            XmlNode node,
-                                            XmlNodeList? tileElements,
+                                            XmlReader.Element? node,
+                                            List< XmlReader.Element? > tileElements,
                                             string? name,
                                             int firstgid,
                                             int tilewidth,

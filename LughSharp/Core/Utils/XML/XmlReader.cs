@@ -116,6 +116,13 @@ public class XmlReader
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="file"></param>
+    /// <returns></returns>
+    public Element? Parse( FileInfo file ) => Parse( file.OpenRead() );
+    
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
@@ -752,13 +759,13 @@ public class XmlReader
 
         public List< Element? > GetChildrenByName( string name )
         {
-            return _children?.Where( e => e.Name == name )
+            return _children?.Where( e => e?.Name == name )
                             .ToList() ?? new List< Element? >( 0 );
         }
 
         public List< Element? > GetChildrenByNameRecursive( string name )
         {
-            return _children?.SelectMany( e => e.GetChildrenByNameRecursive( name ) )
+            return _children?.SelectMany( e => e?.GetChildrenByNameRecursive( name )! )
                             .ToList() ?? new List< Element? >( 0 );
         }
         
@@ -774,7 +781,7 @@ public class XmlReader
             _children?.RemoveAt( index );
         }
         
-        public void RemoveChild( Element element )
+        public void RemoveChild( Element? element )
         {
             _children?.Remove( element );
         }
@@ -799,7 +806,7 @@ public class XmlReader
                 : defaultValue;
         }
 
-        public string? Get( string name, string defaultValue = "" )
+        public string? Get( string name, string? defaultValue = "" )
         {
             string? value;
             
@@ -830,8 +837,6 @@ public class XmlReader
             return value;
         }
 
-        public override string ToString() => ToString( "" );
-
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
@@ -843,6 +848,8 @@ public class XmlReader
         {
             return _children?.GetEnumerator() ?? Enumerable.Empty< Element? >().GetEnumerator();
         }
+
+        public override string ToString() => ToString( "" );
 
         public string ToString( string indent )
         {

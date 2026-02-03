@@ -35,6 +35,8 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
+using XmlReader = LughSharp.Core.Utils.XML.XmlReader;
+
 namespace LughSharp.Core.Maps.Tiled.Loaders;
 
 [PublicAPI]
@@ -278,8 +280,8 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     protected override void AddStaticTiles( FileInfo tmxFile,
                                             IImageResolver imageResolver,
                                             TiledMapTileSet tileset,
-                                            XmlNode node,
-                                            XmlNodeList? tileElements,
+                                            XmlReader.Element? node,
+                                            List< XmlReader.Element? > tileElements,
                                             string? name,
                                             int firstgid,
                                             int tilewidth,
