@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Runtime.Versioning;
+
 using Extensions.Source.Drawing.Freetype;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
@@ -18,6 +21,7 @@ using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Template.Source;
@@ -37,8 +41,8 @@ public class MainGame : Game
     private SpriteBatch?            _spriteBatch1;
     private SpriteBatch?            _spriteBatch2;
     private AssetManager?           _assetManager;
-    private OrthographicGameCamera? _orthoGameCam;
-    private OrthographicGameCamera? _hudCam;
+    private OrthographicGameCamera? _tiledCam;
+    private OrthographicGameCamera? _gameCam;
     private Texture?                _image1;
     private Texture?                _star;
     private Stage?                  _stage;
@@ -51,7 +55,7 @@ public class MainGame : Game
     private Vector2                 _spritePosition = Vector2.Zero;
     private float                   _scale          = 1.0f;
     private int                     _direction      = -1;
-    private TmxMapLoader            _tmxMapLoader   = new();
+    private TmxMapLoader?           _tmxMapLoader;
     private ITiledMapRenderer?      _mapRenderer;
     private TiledMap?               _tiledMap;
 
@@ -120,23 +124,15 @@ public class MainGame : Game
         {
             _spriteBatch1.EnableBlending();
 
-            if ( _orthoGameCam is { IsInUse: true } )
+            if ( _tiledCam is { IsInUse: true } )
             {
-                _orthoGameCam.Viewport?.Apply( centerCamera: true );
-                _spriteBatch1.SetProjectionMatrix( _orthoGameCam.Camera.Combined );
-                _spriteBatch1.Begin();
+                _tiledCam.Viewport?.Apply( centerCamera: true );
+                _spriteBatch1.SetProjectionMatrix( _tiledCam.Camera.Combined );
 
-                if ( _image1 != null )
-                {
-                    _spriteBatch1.Draw( _image1,
-                                        ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
-                                        ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
-                }
-
-                _mapRenderer?.SetView( _orthoGameCam.Camera );
-                _mapRenderer?.Render();
+                _tiledCam.Position = Vector3.Zero;
                 
-                _spriteBatch1.End();
+                _mapRenderer?.SetView( _tiledCam.Camera );
+                _mapRenderer?.Render();
             }
         }
 
@@ -144,15 +140,22 @@ public class MainGame : Game
         {
             _spriteBatch2.EnableBlending();
 
-            if ( _hudCam is { IsInUse: true } )
+            if ( _gameCam is { IsInUse: true } )
             {
-                _hudCam.Viewport?.Apply( centerCamera: true );
-                _spriteBatch2.SetProjectionMatrix( _hudCam.Camera.Combined );
+                _gameCam.Viewport?.Apply( centerCamera: true );
+                _spriteBatch2.SetProjectionMatrix( _gameCam.Camera.Combined );
                 _spriteBatch2.Begin();
 
                 if ( _star != null )
                 {
                     _spriteBatch2.Draw( _star, 0, 0 );
+                }
+
+                if ( _image1 != null )
+                {
+                    _spriteBatch2.Draw( _image1,
+                                        ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
+                                        ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
                 }
 
                 if ( _sprite != null )
@@ -197,8 +200,8 @@ public class MainGame : Game
     /// <param name="height">The new height in pixels.</param>
     public override void Resize( int width, int height )
     {
-        _orthoGameCam?.ResizeViewport( width, height );
-        _hudCam?.ResizeViewport( width, height );
+        _tiledCam?.ResizeViewport( width, height );
+        _gameCam?.ResizeViewport( width, height );
 
         _stage?.Viewport.Update( width, height );
     }
@@ -228,8 +231,8 @@ public class MainGame : Game
                 _image1?.Dispose();
                 _star?.Dispose();
                 _assetManager?.Dispose();
-                _orthoGameCam?.Dispose();
-                _hudCam?.Dispose();
+                _tiledCam?.Dispose();
+                _gameCam?.Dispose();
                 _font?.Dispose();
 
                 // TODO:
@@ -253,36 +256,36 @@ public class MainGame : Game
     private void CreateCameras()
     {
         Logger.Checkpoint();
-        
+
         var zoom = 1f;
 
-        _orthoGameCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
+        _tiledCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
                                                     Engine.Api.Graphics.Height,
                                                     name: "MainCamera" );
 
-        _orthoGameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
-        _orthoGameCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
-        _orthoGameCam.IsInUse     = true;
-        _orthoGameCam.SetZoomDefault( zoom );
+        _tiledCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
+        _tiledCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
+        _tiledCam.IsInUse     = true;
+        _tiledCam.SetZoomDefault( zoom );
 
         // Set initial camera position
-        _orthoGameCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
-        _orthoGameCam.Update();
+        _tiledCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
+        _tiledCam.Update();
 
         // --------------------------------------
 
-        _hudCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
+        _gameCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
                                               Engine.Api.Graphics.Height,
                                               name: "HUDCamera" );
 
-        _hudCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
-        _hudCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
-        _hudCam.IsInUse     = true;
-        _hudCam.SetZoomDefault( zoom );
+        _gameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
+        _gameCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
+        _gameCam.IsInUse     = true;
+        _gameCam.SetZoomDefault( zoom );
 
         // Set initial camera position
-        _hudCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
-        _hudCam.Update();
+        _gameCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
+        _gameCam.Update();
     }
 
     private void CreateAssets()
@@ -302,12 +305,12 @@ public class MainGame : Game
     {
         Logger.Checkpoint();
 
-        if ( _hudCam == null )
+        if ( _gameCam == null )
         {
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
-        _stage = new Stage( _hudCam.Viewport, _spriteBatch2 );
+        _stage = new Stage( _gameCam.Viewport, _spriteBatch2 );
 
         _hudActor           = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
         _hudActor.IsVisible = true;
@@ -359,9 +362,9 @@ public class MainGame : Game
     {
         Logger.Checkpoint();
 
-        _tiledMap = _tmxMapLoader.Load( Assets.ROOM1_MAP );
-
-        _mapRenderer = new OrthogonalTiledMapRenderer( _tiledMap, _spriteBatch1! );
+        _tmxMapLoader = new TmxMapLoader();
+        _tiledMap     = _tmxMapLoader.Load( Assets.ROOM1_MAP );
+        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap, _spriteBatch1! );
     }
 }
 

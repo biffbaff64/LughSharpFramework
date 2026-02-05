@@ -239,8 +239,6 @@ public class Scene2DImage : Widget
     /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        Logger.Checkpoint();
-        
         Validate();
 
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );

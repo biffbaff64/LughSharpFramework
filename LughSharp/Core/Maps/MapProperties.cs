@@ -45,7 +45,7 @@ public class MapProperties
     /// <returns> The property, if found, or null. </returns>
     public virtual T? Get< T >( string key )
     {
-        return ( T? )Get( key );
+        return ( T? )_properties[ key ];
     }
 
     /// <summary>
@@ -58,28 +58,9 @@ public class MapProperties
     /// <returns> The property, if found, or the default value. </returns>
     public virtual T Get< T >( string key, T defaultValue )
     {
-        var obj = Get( key );
+        var obj = _properties[ key ];
 
         return obj == null ? defaultValue : ( T )obj;
-    }
-
-    /// <summary>
-    /// Gets the property matching the specified key.
-    /// </summary>
-    /// <param name="key"> The Key. </param>
-    /// <returns> The property, if found, or null. </returns>
-    public object? Get( string key )
-    {
-        return _properties[ key ];
-    }
-
-    /// <summary>
-    /// Returns true if the properties map contains the specified key.
-    /// </summary>
-    /// <param name="key"> The Key. </param>
-    public bool ContainsKey( string key )
-    {
-        return _properties.ContainsKey( key );
     }
 
     /// <summary>
@@ -87,11 +68,12 @@ public class MapProperties
     /// </summary>
     /// <param name="key"> The key. </param>
     /// <param name="value"> The value. </param>
-    public void Put( string key, object? value )
+    /// <typeparam name="T"> The Type of the property. </typeparam>
+    public void Put< T >( string key, T? value )
     {
         _properties[ key ] = value;
     }
-
+    
     /// <summary>
     /// </summary>
     /// <param name="properties"></param>
@@ -107,6 +89,15 @@ public class MapProperties
     public void Remove( string key )
     {
         _properties.Remove( key );
+    }
+
+    /// <summary>
+    /// Returns true if the properties map contains the specified key.
+    /// </summary>
+    /// <param name="key"> The Key. </param>
+    public bool ContainsKey( string key )
+    {
+        return _properties.ContainsKey( key );
     }
 
     /// <summary>

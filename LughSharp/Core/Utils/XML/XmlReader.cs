@@ -28,6 +28,7 @@ using System.Text;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Utils.XML;
 
@@ -118,8 +119,13 @@ public class XmlReader
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    public Element? Parse( FileInfo file ) => Parse( file.OpenRead() );
-    
+    public Element? Parse( FileInfo file )
+    {
+        var reader = file.OpenText();
+
+        return Parse( reader );
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -500,7 +506,7 @@ public class XmlReader
             throw new SerializationException( "Error parsing XML on line " + lineNumber + " near: " +
                                               new string( data, p, Math.Min( 32, pe - p ) ) );
         }
-        
+
         if ( _elements.Count != 0 )
         {
             var element = _elements[ _elements.Count - 1 ];
@@ -516,11 +522,11 @@ public class XmlReader
     }
 
     // ========================================================================
-    
+
     #region Ragel Data Arrays
 
     //TODO: Add a brief description / explanation of Ragel data arrays here
-    
+
     private static readonly byte[] _xmlActions =
         { 0, 1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 2, 1, 4, 2, 2, 4, 2, 6, 7, 2, 6, 8, 3, 0, 6, 7 };
 
@@ -586,7 +592,7 @@ public class XmlReader
     #endregion
 
     // ========================================================================
-    
+
     protected virtual void Open( string name )
     {
         var child = new Element( name, _current );
@@ -657,17 +663,15 @@ public class XmlReader
         public string? Text { get; set; }
 
         // ====================================================================
-        
+
         private Dictionary< string, string? >? _attributes;
         private List< Element? >?              _children;
         private Element                        _parent;
 
         // ====================================================================
 
-        public Element( string name, Element? parent )
+        public Element( string name, Element parent )
         {
-            Guard.Against.Null( parent );
-            
             this.Name    = name;
             this._parent = parent;
         }
@@ -701,26 +705,26 @@ public class XmlReader
                 return defaultValue;
             }
 
-            var value = _attributes[ name ];
+            var value = defaultValue;
             
-            return value ?? defaultValue;
+            if ( _attributes.TryGetValue( name, out var attribute ) )
+            {
+                value = attribute;
+            }
+
+            return value;
         }
 
-        public bool HasAttribute( string name )
-        {
-            return _attributes?.ContainsKey( name ) ?? false;
-        }
-        
+        /// <summary>
+        /// Sets the attribute with the given name to the given value.
+        /// </summary>
+        /// <param name="name"> The attribute name to set. </param>
+        /// <param name="value"> The attribute value to set. </param>
         public void SetAttribute( string name, string value )
         {
             _attributes ??= new Dictionary< string, string? >();
 
             _attributes[ name ] = value;
-        }
-
-        public int GetChildCount()
-        {
-            return _children?.Count ?? 0;
         }
 
         public Element? GetChild( int index )
@@ -732,19 +736,60 @@ public class XmlReader
 
         public Element? GetChildByName( string name )
         {
-            return _children?.FirstOrDefault( e => e.Name == name );
+            if ( _children == null )
+            {
+                return null;
+            }
+
+            foreach ( var e in _children )
+            {
+                if ( e?.Name == name )
+                {
+                    return e;
+                }
+            }
+
+            return null;
         }
 
         public Element? GetChildByNameRecursive( string name )
         {
-            return _children?.Select( e => e.GetChildByNameRecursive( name ) )
-                            .FirstOrDefault( e => e != null )
-                ?? throw new Exception( $"This element has no child named: {name}" );
+            if ( _children == null )
+            {
+                return null;
+            }
+
+            foreach ( var element in _children )
+            {
+                if ( element == null )
+                {
+                    continue;
+                }
+
+                if ( element.Name.Equals( name ) )
+                {
+                    return element;
+                }
+
+                var found = element.GetChildByNameRecursive( name );
+
+                if ( found != null )
+                {
+                    return found;
+                }
+            }
+
+            return null;
         }
 
         public bool HasChild( string name )
         {
-            return _children?.Any( e => e.Name == name ) ?? false;
+            if ( _children == null )
+            {
+                return false;
+            }
+
+            return GetChildByName( name ) != null;
         }
 
         public bool HasChildRecursive( string name )
@@ -753,22 +798,63 @@ public class XmlReader
             {
                 return false;
             }
-            
+
             return GetChildByNameRecursive( name ) != null;
         }
 
-        public List< Element? > GetChildrenByName( string name )
+        public List< Element? >? GetChildrenByName( string name )
         {
-            return _children?.Where( e => e?.Name == name )
-                            .ToList() ?? new List< Element? >( 0 );
+            var result = new List< Element? >();
+
+            if ( _children == null )
+            {
+                return result;
+            }
+
+            foreach ( var child in _children )
+            {
+                if ( child?.Name != null )
+                {
+                    if ( child.Name.Equals( name ) )
+                    {
+                        result.Add( child );
+                    }
+                }
+            }
+
+            return result;
         }
 
-        public List< Element? > GetChildrenByNameRecursive( string name )
+        public List< Element? >? GetChildrenByNameRecursive( string name )
         {
-            return _children?.SelectMany( e => e?.GetChildrenByNameRecursive( name )! )
-                            .ToList() ?? new List< Element? >( 0 );
+            var result = new List< Element? >();
+
+            GetChildrenByNameRecursive( name, result );
+
+            return result;
         }
-        
+
+        private void GetChildrenByNameRecursive( string name, List< Element? > result )
+        {
+            if ( _children == null )
+            {
+                return;
+            }
+
+            foreach ( var child in _children )
+            {
+                if ( child?.Name != null )
+                {
+                    if ( child.Name.Equals( name ) )
+                    {
+                        result.Add( child );
+                    }
+                }
+
+                child?.GetChildrenByNameRecursive( name, result );
+            }
+        }
+
         public void AddChild( Element element )
         {
             _children ??= new List< Element? >( 8 );
@@ -776,21 +862,6 @@ public class XmlReader
             _children.Add( element );
         }
 
-        public void RemoveChild( int index )
-        {
-            _children?.RemoveAt( index );
-        }
-        
-        public void RemoveChild( Element? element )
-        {
-            _children?.Remove( element );
-        }
-
-        public void Remove()
-        {
-            _parent?.RemoveChild( this );
-        }
-        
         // Helper for parsing numeric attributes
         public float GetFloatAttribute( string name, float defaultValue = 0 )
         {
@@ -809,7 +880,7 @@ public class XmlReader
         public string? Get( string name, string? defaultValue = "" )
         {
             string? value;
-            
+
             if ( _attributes != null )
             {
                 value = _attributes[ name ];
@@ -819,23 +890,35 @@ public class XmlReader
                     return value;
                 }
             }
-            
+
             var child = GetChildByName( name );
 
             if ( child == null )
             {
                 return defaultValue;
             }
-            
+
             value = child.Text;
 
-            if ( value == null )
-            {
-                return defaultValue;
-            }
-            
-            return value;
+            return value ?? defaultValue;
         }
+
+        // ====================================================================
+
+        /// <summary>
+        /// Returns true if the element has an attribute with the given name.
+        /// </summary>
+        public bool HasAttribute( string name ) => _attributes?.ContainsKey( name ) ?? false;
+
+        public void RemoveChild( int index ) => _children?.RemoveAt( index );
+
+        public void RemoveChild( Element? element ) => _children?.Remove( element );
+
+        public void Remove() => _parent?.RemoveChild( this );
+
+        public int GetChildCount() => _children?.Count ?? 0;
+        
+        // ====================================================================
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
@@ -882,7 +965,7 @@ public class XmlReader
                 {
                     foreach ( var child in _children )
                     {
-                        sb.Append( child.ToString( childIndent ) ).Append( '\n' );
+                        sb.Append( child?.ToString( childIndent ) ).Append( '\n' );
                     }
                 }
 

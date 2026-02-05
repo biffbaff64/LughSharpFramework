@@ -46,11 +46,17 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     public MapProperties Properties { get; private set; }
 
     /// <summary>
-    /// A Collection holding the individual tiles for this tileset.
+    /// Returns the size of this TiledMapTileSet, as in the number of tiles.
     /// </summary>
-    private readonly Dictionary< int, ITiledMapTile > _tiles;
+    public int Size => _tiles.Count;
 
     // ========================================================================
+
+    /// <summary>
+    /// A Collection holding the individual tiles for this tileset.
+    /// </summary>
+    private readonly Dictionary< int, ITiledMapTile? > _tiles;
+
     // ========================================================================
 
     /// <summary>
@@ -59,20 +65,8 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     public TiledMapTileSet()
     {
         Name       = string.Empty;
-        _tiles     = new Dictionary< int, ITiledMapTile >();
+        _tiles     = new Dictionary< int, ITiledMapTile? >();
         Properties = new MapProperties();
-    }
-
-    /// <inheritdoc />
-    public IEnumerator< ITiledMapTile > GetEnumerator()
-    {
-        return _tiles.Values.GetEnumerator();
-    }
-
-    /// <inheritdoc />
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 
     /// <summary>
@@ -104,12 +98,16 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
         _tiles.Remove( id );
     }
 
-    /// <summary>
-    /// Returns the size of this TiledMapTileSet, as in the number of tiles.
-    /// </summary>
-    public int Size()
+    /// <inheritdoc />
+    public IEnumerator< ITiledMapTile > GetEnumerator()
     {
-        return _tiles.Count;
+        return _tiles.Values.GetEnumerator();
+    }
+
+    /// <inheritdoc />
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
 

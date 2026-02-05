@@ -67,7 +67,8 @@ public class FileProcessor
         get =>
             ( o1, o2 ) =>
             {
-                Guard.Against.Null( o1.InputFile, o2.InputFile );
+                Guard.Against.Null( o1.InputFile );
+                Guard.Against.Null( o2.InputFile );
 
                 if ( o1.InputFile is FileInfo file1 && o2.InputFile is FileInfo file2 )
                 {
