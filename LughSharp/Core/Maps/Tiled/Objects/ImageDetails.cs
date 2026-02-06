@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.IO;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Maps.Tiled.Objects;
@@ -61,7 +63,7 @@ public record ImageDetails
         this.Image       = Image;
     }
 
-    public void Deconstruct( out string imageSource,
+    public void Deconstruct( out string? imageSource,
                              out int width,
                              out int height,
                              out FileInfo? image )

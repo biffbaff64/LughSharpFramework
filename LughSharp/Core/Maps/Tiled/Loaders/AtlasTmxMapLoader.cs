@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+using System.IO;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Assets;
@@ -187,7 +190,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
                     if ( ( tileId >= firstgid ) && ( tileId <= lastgid ) )
                     {
-                        AddStaticTiledMapTile( tileContext.Tileset, region, tileId, offsetX, offsetY );
+                        AddStaticTiledMapTile( tileContext.Tileset, region, ( uint )tileId, offsetX, offsetY );
                     }
                 }
             }
@@ -198,7 +201,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
             // Add tiles with individual image sources
             foreach ( XmlReader.Element? tileElement in tileElements )
             {
-                var tileId = ( firstgid + tileElement?.GetIntAttribute( "id" ) ) ?? 0;
+                var tileId = ( firstgid + tileElement?.GetUIntAttribute( "id" ) ) ?? 0;
                 var tile   = tileContext.Tileset.GetTile( tileId );
 
                 if ( tile == null )
@@ -238,20 +241,17 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
         var propertyList = properties.GetChildrenByName( "property" );
 
-        if ( propertyList != null )
+        foreach ( var property in propertyList )
         {
-            foreach ( XmlReader.Element? property in propertyList )
+            if ( property != null )
             {
-                if ( property != null )
+                var name = property.GetAttribute( "name" );
+
+                if ( name!.StartsWith( "atlas" ) )
                 {
-                    var name = property.GetAttribute( "name" );
+                    atlasFilePath = property.GetAttribute( "value" );
 
-                    if ( name!.StartsWith( "atlas" ) )
-                    {
-                        atlasFilePath = property.GetAttribute( "value" );
-
-                        break;
-                    }
+                    break;
                 }
             }
         }

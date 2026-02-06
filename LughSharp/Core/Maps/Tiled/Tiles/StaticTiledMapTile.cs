@@ -34,7 +34,7 @@ namespace LughSharp.Core.Maps.Tiled.Tiles;
 [PublicAPI]
 public class StaticTiledMapTile : ITiledMapTile
 {
-    public int                     ID            { get; set; }
+    public uint                     ID            { get; set; }
     public float                   OffsetX       { get; set; }
     public float                   OffsetY       { get; set; }
     public TextureRegion           TextureRegion { get; set; }

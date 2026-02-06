@@ -510,6 +510,13 @@ public class MathUtils
         return Math.Abs( value ) <= tolerance;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="tolerance"></param>
+    /// <returns></returns>
     public static bool IsNotEqual( float a, float b, float tolerance = NumberUtils.FLOAT_TOLERANCE )
     {
         return !IsEqual( a, b, tolerance );
@@ -529,16 +536,21 @@ public class MathUtils
     }
 
     /// <summary>
+    /// Calculates the logarithm of a specified value with a specified base.
     /// </summary>
-    /// <returns> the logarithm of value with base a </returns>
+    /// <param name="a">The base of the logarithm.</param>
+    /// <param name="value">The value for which the logarithm is to be calculated.</param>
+    /// <returns>The logarithm of <paramref name="value"/> with base <paramref name="a"/>.</returns>
     public static float Log( float a, float value )
     {
         return ( float )( Math.Log( value ) / Math.Log( a ) );
     }
 
     /// <summary>
+    /// Returns the base-2 logarithm of the specified value.
     /// </summary>
-    /// <returns> the logarithm of value with base 2 </returns>
+    /// <param name="value">The value for which to calculate the base-2 logarithm.</param>
+    /// <returns>The base-2 logarithm of the specified value.</returns>
     public static float Log2( float value )
     {
         return Log( 2, value );
@@ -553,7 +565,12 @@ public class MathUtils
         return b & 0xFF;
     }
 
+    // ========================================================================
+
     /// <summary>
+    /// Provides a precomputed table of sine values to enhance performance for
+    /// trigonometric calculations. The table is statically initialized and
+    /// supports operations like fast sine and cosine lookups.
     /// </summary>
     public class SinClass
     {

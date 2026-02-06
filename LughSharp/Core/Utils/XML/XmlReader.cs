@@ -22,13 +22,16 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 
 using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Utils.XML;
 
@@ -119,8 +122,13 @@ public class XmlReader
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    public Element? Parse( FileInfo file )
+    public Element? Parse( FileInfo? file )
     {
+        if ( file == null )
+        {
+            return null;
+        }
+
         var reader = file.OpenText();
 
         return Parse( reader );
@@ -605,6 +613,11 @@ public class XmlReader
 
     protected virtual void Attribute( string? name, string? value )
     {
+        if ( name == null || value == null )
+        {
+            throw new RuntimeException( $"Invalid attribute name or value: {name}, {value}" );
+        }
+        
         _current?.SetAttribute( name, value );
     }
 
@@ -666,11 +679,11 @@ public class XmlReader
 
         private Dictionary< string, string? >? _attributes;
         private List< Element? >?              _children;
-        private Element                        _parent;
+        private Element?                       _parent;
 
         // ====================================================================
 
-        public Element( string name, Element parent )
+        public Element( string name, Element? parent )
         {
             this.Name    = name;
             this._parent = parent;
@@ -802,7 +815,7 @@ public class XmlReader
             return GetChildByNameRecursive( name ) != null;
         }
 
-        public List< Element? >? GetChildrenByName( string name )
+        public List< Element? > GetChildrenByName( string name )
         {
             var result = new List< Element? >();
 
@@ -825,7 +838,7 @@ public class XmlReader
             return result;
         }
 
-        public List< Element? >? GetChildrenByNameRecursive( string name )
+        public List< Element? > GetChildrenByNameRecursive( string name )
         {
             var result = new List< Element? >();
 
@@ -873,6 +886,13 @@ public class XmlReader
         public int GetIntAttribute( string name, int defaultValue = 0 )
         {
             return int.TryParse( GetAttribute( name, "" ), out var res )
+                ? res
+                : defaultValue;
+        }
+
+        public uint GetUIntAttribute( string name, uint defaultValue = 0 )
+        {
+            return uint.TryParse( GetAttribute( name, "" ), out var res )
                 ? res
                 : defaultValue;
         }

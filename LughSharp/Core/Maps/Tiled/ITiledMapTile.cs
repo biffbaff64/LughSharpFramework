@@ -43,7 +43,7 @@ public interface ITiledMapTile
     /// <summary>
     /// The tile ID
     /// </summary>
-    int ID { get; set; }
+    uint ID { get; set; }
 
     /// <summary>
     /// The <see cref="Blendmode"/> to use when rendering a tile.

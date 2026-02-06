@@ -25,7 +25,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Maps;
 
@@ -36,18 +39,8 @@ namespace LughSharp.Core.Maps;
 public class MapLayers : IEnumerable< MapLayer >
 {
     private readonly List< MapLayer > _layers = new();
-
-    /// <inheritdoc />
-    public IEnumerator< MapLayer > GetEnumerator()
-    {
-        return _layers.GetEnumerator();
-    }
-
-    /// <inheritdoc />
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    
+    // ========================================================================
 
     /// <summary>
     /// Returns the <see cref="MapLayer"/> at the specified index.
@@ -101,6 +94,8 @@ public class MapLayers : IEnumerable< MapLayer >
     /// </summary>
     public virtual void Add( MapLayer layer )
     {
+        Logger.Debug( $"Adding layer {layer.Name}" );
+        
         _layers.Add( layer );
     }
 
@@ -147,4 +142,20 @@ public class MapLayers : IEnumerable< MapLayer >
 
         return fill;
     }
+
+    /// <inheritdoc />
+    public IEnumerator< MapLayer > GetEnumerator()
+    {
+        return _layers.GetEnumerator();
+    }
+
+    /// <inheritdoc />
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }
+
+// ============================================================================
+// ============================================================================
+

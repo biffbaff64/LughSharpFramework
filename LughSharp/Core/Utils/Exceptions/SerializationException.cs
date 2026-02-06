@@ -22,9 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Utils;
+namespace LughSharp.Core.Utils.Exceptions;
 
 [PublicAPI]
 [Serializable]

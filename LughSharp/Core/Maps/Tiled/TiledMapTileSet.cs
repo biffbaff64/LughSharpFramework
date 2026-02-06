@@ -55,7 +55,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// <summary>
     /// A Collection holding the individual tiles for this tileset.
     /// </summary>
-    private readonly Dictionary< int, ITiledMapTile? > _tiles;
+    private readonly Dictionary< uint, ITiledMapTile? > _tiles;
 
     // ========================================================================
 
@@ -65,7 +65,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     public TiledMapTileSet()
     {
         Name       = string.Empty;
-        _tiles     = new Dictionary< int, ITiledMapTile? >();
+        _tiles     = new Dictionary< uint, ITiledMapTile? >();
         Properties = new MapProperties();
     }
 
@@ -74,9 +74,9 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// </summary>
     /// <param name="id"> the id of the <see cref="ITiledMapTile"/> to retrieve. </param>
     /// <returns> tile matching ID, null if it doesn't exist  </returns>
-    public ITiledMapTile? GetTile( int id )
+    public ITiledMapTile? GetTile( uint id )
     {
-        return _tiles[ id ];
+        return id == 0 ? null : _tiles[ id ];
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// </summary>
     /// <param name="id"> the id of the <see cref="ITiledMapTile"/> to add or replace. </param>
     /// <param name="tile"> the <see cref="ITiledMapTile"/> to add or replace. </param>
-    public void PutTile( int id, ITiledMapTile tile )
+    public void PutTile( uint id, ITiledMapTile tile )
     {
         _tiles[ id ] = tile;
     }
@@ -93,7 +93,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// Removes a tile from this tileset.
     /// </summary>
     /// <param name="id"> The ID of the tile to be removed </param>
-    public void RemoveTile( int id )
+    public void RemoveTile( uint id )
     {
         _tiles.Remove( id );
     }

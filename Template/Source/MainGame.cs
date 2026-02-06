@@ -38,26 +38,27 @@ public class MainGame : Game
 
     private readonly Vector3 _cameraPos = Vector3.Zero;
 
-    private SpriteBatch?            _spriteBatch1;
-    private SpriteBatch?            _spriteBatch2;
-    private AssetManager?           _assetManager;
-    private OrthographicGameCamera? _tiledCam;
-    private OrthographicGameCamera? _gameCam;
-    private Texture?                _image1;
-    private Texture?                _star;
-    private Stage?                  _stage;
-    private Actor?                  _hudActor;
-    private BitmapFont?             _font;
-    private Sprite?                 _sprite;
-    private Sprite?                 _star2;
-    private bool                    _disposed;
-    private ILughTest?              _test;
-    private Vector2                 _spritePosition = Vector2.Zero;
-    private float                   _scale          = 1.0f;
-    private int                     _direction      = -1;
-    private TmxMapLoader?           _tmxMapLoader;
-    private ITiledMapRenderer?      _mapRenderer;
-    private TiledMap?               _tiledMap;
+    private SpriteBatch?              _spriteBatch1;
+    private SpriteBatch?              _spriteBatch2;
+    private AssetManager?             _assetManager;
+    private OrthographicGameCamera?   _tiledCam;
+    private OrthographicGameCamera?   _gameCam;
+    private Texture?                  _image1;
+    private Texture?                  _star;
+    private Stage?                    _stage;
+    private Actor?                    _hudActor;
+    private BitmapFont?               _font;
+    private Sprite?                   _sprite;
+    private Sprite?                   _star2;
+    private bool                      _disposed;
+    private ILughTest?                _test;
+    private Vector2                   _spritePosition = Vector2.Zero;
+    private float                     _scale          = 1.0f;
+    private int                       _direction      = -1;
+    private List< TiledMapTileLayer > _tileLayers     = [ ];
+    private TmxMapLoader?             _tmxMapLoader;
+    private ITiledMapRenderer?        _mapRenderer;
+    private TiledMap?                 _tiledMap;
 
     // ========================================================================
     // ========================================================================
@@ -128,11 +129,18 @@ public class MainGame : Game
             {
                 _tiledCam.Viewport?.Apply( centerCamera: true );
                 _spriteBatch1.SetProjectionMatrix( _tiledCam.Camera.Combined );
-
-                _tiledCam.Position = Vector3.Zero;
+                _spriteBatch1.Begin();
                 
+                _tiledCam.Position = Vector3.Zero;
+
                 _mapRenderer?.SetView( _tiledCam.Camera );
-                _mapRenderer?.Render();
+
+                foreach ( var layer in _tileLayers )
+                {
+                    _mapRenderer?.RenderTileLayer( layer );
+                }
+                
+                _spriteBatch1.End();
             }
         }
 
@@ -260,8 +268,8 @@ public class MainGame : Game
         var zoom = 1f;
 
         _tiledCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
-                                                    Engine.Api.Graphics.Height,
-                                                    name: "MainCamera" );
+                                                Engine.Api.Graphics.Height,
+                                                name: "MainCamera" );
 
         _tiledCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _tiledCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
@@ -275,8 +283,8 @@ public class MainGame : Game
         // --------------------------------------
 
         _gameCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
-                                              Engine.Api.Graphics.Height,
-                                              name: "HUDCamera" );
+                                               Engine.Api.Graphics.Height,
+                                               name: "HUDCamera" );
 
         _gameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _gameCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
@@ -365,6 +373,14 @@ public class MainGame : Game
         _tmxMapLoader = new TmxMapLoader();
         _tiledMap     = _tmxMapLoader.Load( Assets.ROOM1_MAP );
         _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap, _spriteBatch1! );
+        _tileLayers   = _tiledMap.Layers.OfType< TiledMapTileLayer >().ToList();
+        
+        Logger.Debug( $"Num Layers: {_tiledMap.Layers.LayersCount}" );
+        
+        foreach ( var layer in _tiledMap.Layers )
+        {
+            Logger.Debug( $"Layer: {layer.Name}" );
+        }
     }
 }
 

@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Xml;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 using JetBrains.Annotations;
 
@@ -32,7 +34,6 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Maps.Tiled.Objects;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 using XmlReader = LughSharp.Core.Utils.XML.XmlReader;
 
@@ -341,7 +342,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
                 }
 
                 var texture = tileContext.ImageResolver.GetImage( Path.GetFullPath( image?.Name! ) );
-                var tileId  = firstgid + tileElement!.GetIntAttribute( "id" );
+                var tileId  = firstgid + tileElement!.GetUIntAttribute( "id" );
 
                 AddStaticTiledMapTile( tileContext.Tileset, texture, tileId, offsetX, offsetY );
             }

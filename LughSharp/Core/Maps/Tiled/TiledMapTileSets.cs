@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Maps.Tiled;
@@ -43,24 +45,6 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     public TiledMapTileSets()
     {
         _tilesets = new List< TiledMapTileSet >();
-    }
-
-    /// <inheritdoc />
-    public virtual IEnumerator< TiledMapTileSet > GetEnumerator()
-    {
-        return _tilesets.GetEnumerator();
-    }
-
-    /// <summary>
-    /// Returns an enumerator that iterates through a collection.
-    /// </summary>
-    /// <returns>
-    /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used
-    /// to iterate through the collection.
-    /// </returns>
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 
     /// <summary>
@@ -130,7 +114,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     /// </summary>
     /// <param name="id"> id of the <see cref="ITiledMapTile"/> to get. </param>
     /// <returns> tile with matching id, null if it doesn't exist  </returns>
-    public virtual ITiledMapTile? GetTile( int id )
+    public virtual ITiledMapTile? GetTile( uint id )
     {
         for ( var i = _tilesets.Count - 1; i >= 0; i-- )
         {
@@ -144,6 +128,24 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
         }
 
         return null;
+    }
+
+    /// <inheritdoc />
+    public virtual IEnumerator< TiledMapTileSet > GetEnumerator()
+    {
+        return _tilesets.GetEnumerator();
+    }
+
+    /// <summary>
+    /// Returns an enumerator that iterates through a collection.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used
+    /// to iterate through the collection.
+    /// </returns>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
 

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maps;
@@ -38,8 +39,10 @@ public class MapLayer
     public string?       Name       { get; set; }  = "";
     public float         Opacity    { get; set; }  = 1.0f;
     public bool          Visible    { get; set; }  = true;
-    public float         ParallaxX  { get; set; } = 1.0f;
-    public float         ParallaxY  { get; set; } = 1.0f;
+    public float         ParallaxX  { get; set; }  = 1.0f;
+    public float         ParallaxY  { get; set; }  = 1.0f;
+    
+    // ========================================================================
 
     /// <summary>
     /// The laye s X offset.
@@ -116,6 +119,8 @@ public class MapLayer
         }
     }
 
+    // ========================================================================
+    
     private float     _offsetX;
     private float     _offsetY;
     private MapLayer? _parent;
@@ -156,4 +161,3 @@ public class MapLayer
 
 // ============================================================================
 // ============================================================================
-

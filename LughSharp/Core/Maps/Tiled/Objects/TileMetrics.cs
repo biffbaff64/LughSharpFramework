@@ -33,7 +33,7 @@ namespace LughSharp.Core.Maps.Tiled.Objects;
 public record TileMetrics
 {
     public required string? Name       { get; init; }
-    public required int     Firstgid   { get; init; }
+    public required uint    Firstgid   { get; init; }
     public required int     Tilewidth  { get; init; }
     public required int     Tileheight { get; init; }
     public          int     Spacing    { get; init; }
@@ -60,7 +60,7 @@ public record TileMetrics
     /// <param name="spacing"></param>
     /// <param name="margin"></param>
     public TileMetrics( string? name,
-                           int firstGid,
+                           uint firstGid,
                            int tileWidth,
                            int tileHeight,
                            int spacing = 0,
@@ -75,7 +75,7 @@ public record TileMetrics
     }
 
     public void Deconstruct( out string? name,
-                             out int firstGid,
+                             out uint firstGid,
                              out int tileWidth,
                              out int tileHeight,
                              out int spacing,

@@ -37,7 +37,7 @@ namespace LughSharp.Core.Maps.Tiled.Tiles;
 [PublicAPI]
 public class AnimatedTiledMapTile : ITiledMapTile
 {
-    public int       ID        { get; set; }
+    public uint       ID        { get; set; }
     public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
 
     /// <summary>
