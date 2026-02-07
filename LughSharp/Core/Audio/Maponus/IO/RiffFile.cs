@@ -53,6 +53,8 @@ public class RiffFile
     private          Stream?         _file;       // I/O stream to use
     private          int             _fmode;      // current file I/O mode
 
+    // ========================================================================
+    
     public RiffFile()
     {
         _file  = null;
@@ -649,6 +651,7 @@ public class RiffFile
         return ret;
     }
 
+    [PublicAPI]
     public class RiffChunkHeader
     {
         // Length of data in chunk
@@ -668,3 +671,7 @@ public class RiffFile
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

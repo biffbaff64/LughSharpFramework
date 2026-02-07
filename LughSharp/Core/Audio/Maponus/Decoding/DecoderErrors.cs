@@ -49,3 +49,7 @@ public struct DecoderErrors
     /// </summary>
     public const int UNSUPPORTED_LAYER = BitstreamErrors.DECODER_ERROR + 1;
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -93,6 +93,8 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// </summary>
     public void Render()
     {
+        Batch.EnableBlending();
+        
         BeginRender();
 
         foreach ( var layer in TiledMap.Layers )
@@ -108,6 +110,8 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// <param name="layers"></param>
     public void Render( int[] layers )
     {
+        Batch.EnableBlending();
+
         BeginRender();
 
         foreach ( var layerIdx in layers )

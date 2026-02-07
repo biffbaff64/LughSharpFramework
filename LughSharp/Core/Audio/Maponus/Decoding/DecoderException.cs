@@ -116,7 +116,10 @@ public class DecoderException : Mp3SharpException
     /// </remarks>
     public static string GetErrorString( int errorcode )
     {
-        // TODO: use resource file to map error codes to locale-sensitive strings. 
         return $"Decoder errorcode {Convert.ToString( errorcode, 16 )}";
     }
 }
+
+// ============================================================================
+// ============================================================================
+

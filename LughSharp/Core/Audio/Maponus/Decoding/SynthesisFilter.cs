@@ -274,7 +274,7 @@ public class SynthesisFilter
     /// Adds a sample to the synthesis filter for a specific subband.
     /// </summary>
     /// <param name="sample">The audio sample to process, as a floating-point value.</param>
-    /// <param name="subbandnumber">The subband index to which the sample belongs.</param
+    /// <param name="subbandnumber">The subband index to which the sample belongs.</param>
     public void AddSample( float sample, int subbandnumber )
     {
         if ( _eq != null )
@@ -663,7 +663,10 @@ public class SynthesisFilter
     /// This method performs calculations for a specific substep in the synthesis process
     /// using internal filter coefficients and scaling.
     /// </summary>
-    /// <param name="buffer">An instance of the <see cref="AudioBase"/> class that provides the audio buffer to process PCM samples.</param
+    /// <param name="buffer">
+    /// An instance of the <see cref="AudioBase"/> class that provides the audio buffer
+    /// to process PCM samples.
+    /// </param>
     private void ComputePcSamples1( AudioBase buffer )
     {
         var dvp = 0;
@@ -694,11 +697,12 @@ public class SynthesisFilter
     }
 
     /// <summary>
-    /// Processes PCM samples using the current synthesis filter state and stores the result in the specified buffer.
+    /// Processes PCM samples using the current synthesis filter state and stores the
+    /// result in the specified buffer.
     /// </summary>
     /// <param name="buffer">
     /// The audio buffer where the computed PCM samples will be stored.
-    /// </
+    /// </param>
     private void ComputePcSamples2( AudioBase buffer )
     {
         var dvp = 0;
@@ -768,7 +772,8 @@ public class SynthesisFilter
     /// The computed samples are stored in the temporary output buffer to be later processed or appended.
     /// </summary>
     /// <param name="buffer">An instance of <see cref="AudioBase"/> that represents the audio buffer
-    /// receiving the computed PCM samples.</param>
+    /// receiving the computed PCM samples.
+    /// </param>
     private void ComputePcSample4( AudioBase buffer )
     {
         var dvp = 0;
@@ -937,7 +942,7 @@ public class SynthesisFilter
     /// Computes the PCM samples for the 9th position, applying a series of weighted calculations
     /// on the internal filter state and scaling them for output.
     /// </summary>
-    /// <param name="buffer">The buffer where the computed PCM samples will be written.</param
+    /// <param name="buffer">The buffer where the computed PCM samples will be written.</param>
     private void ComputePcSample9( AudioBase buffer )
     {
         var dvp = 0;
@@ -972,7 +977,7 @@ public class SynthesisFilter
     /// The method generates and stores the computed values for further audio processing.
     /// The calculations use predefined coefficients and internal state variables.
     /// </summary>
-    /// <param name="buffer">The audio buffer that stores and processes the computed PCM samples.</param
+    /// <param name="buffer">The audio buffer that stores and processes the computed PCM samples.</param>
     private void ComputePcSample10( AudioBase buffer )
     {
         var dvp = 0;
@@ -1285,7 +1290,7 @@ public class SynthesisFilter
         // *--floatp = 0.0f;  
 
         // TODO: this may not be necessary. The Layer III decoder always
-        // outputs 32 subband samples, but I haven't checked layer I & II.
+        //  outputs 32 subband samples, but I haven't checked layer I & II.
         for ( var p = 0; p < 32; p++ )
         {
             _samples[ p ] = 0.0f;
@@ -1348,3 +1353,7 @@ public class SynthesisFilter
         return subarray;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

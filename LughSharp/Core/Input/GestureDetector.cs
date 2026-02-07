@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
@@ -37,21 +38,19 @@ namespace LughSharp.Core.Input;
 [PublicAPI]
 public class GestureDetector : InputAdapter
 {
-    private readonly Vector2 _initialPointer1 = new();
-    private readonly Vector2 _initialPointer2 = new();
-
+    private readonly Vector2          _initialPointer1 = new();
+    private readonly Vector2          _initialPointer2 = new();
     private readonly IGestureListener _listener;
     private readonly Vector2          _pointer1 = new();
     private readonly Vector2          _pointer2 = new();
     private readonly VelocityTracker  _tracker  = new();
 
-    private bool  _inTapRectangle;
-    private int   _lastTapButton;
-    private int   _lastTapPointer;
-    private long  _lastTapTime;
-    private float _lastTapX;
-    private float _lastTapY;
-
+    private bool                     _inTapRectangle;
+    private int                      _lastTapButton;
+    private int                      _lastTapPointer;
+    private long                     _lastTapTime;
+    private float                    _lastTapX;
+    private float                    _lastTapY;
     private CancellationToken        _longPressCancellationToken;
     private bool                     _longPressFired;
     private float                    _longPressSeconds;
@@ -67,6 +66,8 @@ public class GestureDetector : InputAdapter
     private float                    _tapRectangleHeight;
     private float                    _tapRectangleWidth;
     private long                     _touchDownTime;
+
+    // ========================================================================
 
     /// <summary>
     /// Creates a new GestureDetector with default values: halfTapSquareSize=20,
@@ -159,17 +160,18 @@ public class GestureDetector : InputAdapter
         _longPressCancellationToken =   _longPressTokenSource.Token;
 
         _longPressTask = Task.Run( () =>
-        {
-            if ( !_longPressFired )
-            {
-                _longPressFired = _listener.LongPress( _pointer1.X, _pointer1.Y );
-            }
+                                   {
+                                       if ( !_longPressFired )
+                                       {
+                                           _longPressFired = _listener.LongPress( _pointer1.X, _pointer1.Y );
+                                       }
 
-            if ( _longPressCancellationToken.IsCancellationRequested )
-            {
-                _longPressCancellationToken.ThrowIfCancellationRequested();
-            }
-        }, _longPressCancellationToken );
+                                       if ( _longPressCancellationToken.IsCancellationRequested )
+                                       {
+                                           _longPressCancellationToken.ThrowIfCancellationRequested();
+                                       }
+                                   },
+                                   _longPressCancellationToken );
 
         try
         {
@@ -764,3 +766,7 @@ public class GestureDetector : InputAdapter
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

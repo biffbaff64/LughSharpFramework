@@ -38,3 +38,7 @@ public interface IAudioRecorder : IDisposable
     /// <param name="numSamples">The number of samples to be read.</param>
     void Read( short[] samples, int offset, int numSamples );
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -260,3 +260,7 @@ public class WaveFileSample
     public short[]  Chan              { get; set; }
     public WaveFile EnclosingInstance { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

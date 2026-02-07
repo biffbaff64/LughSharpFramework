@@ -38,8 +38,7 @@ public class MainGame : Game
 
     private readonly Vector3 _cameraPos = Vector3.Zero;
 
-    private SpriteBatch?                _spriteBatch1;
-    private SpriteBatch?                _spriteBatch2;
+    private SpriteBatch?                _spriteBatch;
     private AssetManager?               _assetManager;
     private OrthographicGameCamera?     _tiledCam;
     private OrthographicGameCamera?     _gameCam;
@@ -59,8 +58,12 @@ public class MainGame : Game
     private float                       _scale          = 1.0f;
     private int                         _direction      = -1;
     private List< TiledMapTileLayer >   _tileLayers     = [ ];
-    private Vector2                     _mapPos         = Vector2.Zero;
-    private Vector2                     _mapDir         = Vector2.One;
+    private int                         _mapPosX        = 0;
+    private int                         _mapPosY        = 0;
+    private int                         _mapDirX        = 1;
+    private int                         _mapDirY        = 1;
+    private int                         _mapWidth       = 0;
+    private int                         _mapHeight      = 0;
 
     // ========================================================================
     // ========================================================================
@@ -69,8 +72,7 @@ public class MainGame : Game
     [SupportedOSPlatform( "windows" )]
     public override void Create()
     {
-        _spriteBatch1 = new SpriteBatch();
-        _spriteBatch2 = new SpriteBatch();
+        _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
 
         CreateCameras();
@@ -116,24 +118,32 @@ public class MainGame : Game
 //        _sprite?.Scroll( 0.001f, 0.0f );
         }
 
-//        if ( _tiledMap != null )
-//        {
-//            _mapPos.X += _mapDir.X;
-//            
-//            if ( _mapPos.X > _tiledMap.Properties.Get< int >( "width" )
-//                || _mapPos.X <= 0 )
-//            {
-//                _mapDir.X *= -1;
-//            }
-//            
-//            _mapPos.Y += _mapDir.Y;
-//            
-//            if ( _mapPos.Y >= _tiledMap.Properties.Get< int >( "height" )
-//                || _mapPos.Y <= 0 )
-//            {
-//                _mapDir.Y *= -1;
-//            }
-//        }
+        if ( _tiledCam != null && _tiledMap != null )
+        {
+            _mapPosX += _mapDirX;
+
+            if ( _mapPosX > _mapWidth && _mapDirX == 1 )
+            {
+                _mapDirX = -1;
+            }
+            else if ( _mapPosX <= 0 && _mapDirX == -1 )
+            {
+                _mapDirX = 1;
+            }
+
+            _mapPosY += _mapDirY;
+
+            if ( _mapPosY >= _mapHeight && _mapDirY == 1 )
+            {
+                _mapDirY = -1;
+            }
+            else if ( _mapPosY <= 0 && _mapDirY == -1 )
+            {
+                _mapDirY = 1;
+            }
+
+            _tiledCam.Camera.Translate( _mapDirX, _mapDirY );
+        }
     }
 
     /// <inheritdoc />
@@ -142,31 +152,27 @@ public class MainGame : Game
         // Clear and set viewport
         ScreenUtils.Clear( color: Color.Blue, clearDepth: true );
 
-        if ( _spriteBatch1 != null )
+        // --------------------------------------
+
+        if ( _tiledCam is { IsInUse: true } )
         {
-            _spriteBatch1.EnableBlending();
+            _tiledCam.Update();
 
-            if ( _tiledCam is { IsInUse: true } )
-            {
-                _tiledCam.Viewport?.Apply( centerCamera: true );
-                _tiledCam.Position.X = _mapPos.X;
-                _tiledCam.Position.Y = _mapPos.Y;
-                _tiledCam.Update();
-
-                _mapRenderer?.SetView( _tiledCam.Camera );
-                _mapRenderer?.Render();
-            }
+            _mapRenderer?.SetView( _tiledCam.Camera );
+            _mapRenderer?.Render();
         }
 
-        if ( _spriteBatch2 != null )
+        // --------------------------------------
+
+        if ( _spriteBatch != null )
         {
-            _spriteBatch2.EnableBlending();
+            _spriteBatch.EnableBlending();
 
             if ( _gameCam is { IsInUse: true } )
             {
                 _gameCam.Viewport?.Apply( centerCamera: true );
-                _spriteBatch2.SetProjectionMatrix( _gameCam.Camera.Combined );
-                _spriteBatch2.Begin();
+                _spriteBatch.SetProjectionMatrix( _gameCam.Camera.Combined );
+                _spriteBatch.Begin();
 
                 _gameCam.Position.X = 0;
                 _gameCam.Position.Y = 0;
@@ -175,38 +181,38 @@ public class MainGame : Game
 
                 if ( _star != null )
                 {
-                    _spriteBatch2.Draw( _star, 0, 0 );
+                    _spriteBatch.Draw( _star, 0, 0 );
                 }
 
                 if ( _image1 != null )
                 {
-                    _spriteBatch2.Draw( _image1,
-                                        ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
-                                        ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
+                    _spriteBatch.Draw( _image1,
+                                       ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
+                                       ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
                 }
 
                 if ( _sprite != null )
                 {
                     _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
-                    _sprite?.Draw( _spriteBatch2 );
+                    _sprite?.Draw( _spriteBatch );
                 }
 
                 if ( _star2 != null )
                 {
                     _star2.SetPosition( 320, 240 );
-                    _star2.Draw( _spriteBatch2 );
+                    _star2.Draw( _spriteBatch );
                 }
 
                 if ( _hudActor is { UserObject: Texture } )
                 {
-                    _spriteBatch2.Draw( ( Texture )_hudActor.UserObject, 0, 0 );
+                    _spriteBatch.Draw( ( Texture )_hudActor.UserObject, 0, 0 );
                 }
 
-                _test?.Render( _spriteBatch2 );
+                _test?.Render( _spriteBatch );
 
-                _font?.Draw( _spriteBatch2, "[GREEN]HELLO[] [WHITE]WORLD[]", 400, 400 );
+                _font?.Draw( _spriteBatch, "[GREEN]HELLO[] [WHITE]WORLD[]", 400, 400 );
 
-                _spriteBatch2.End();
+                _spriteBatch.End();
             }
         }
 
@@ -253,8 +259,7 @@ public class MainGame : Game
         {
             if ( disposing )
             {
-                _spriteBatch1?.Dispose();
-                _spriteBatch2?.Dispose();
+                _spriteBatch?.Dispose();
                 _image1?.Dispose();
                 _star?.Dispose();
                 _assetManager?.Dispose();
@@ -337,7 +342,7 @@ public class MainGame : Game
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
-        _stage = new Stage( _gameCam.Viewport, _spriteBatch2 );
+        _stage = new Stage( _gameCam.Viewport, _spriteBatch );
 
         _hudActor           = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
         _hudActor.IsVisible = true;
@@ -393,6 +398,14 @@ public class MainGame : Game
         _tiledMap     = _tmxMapLoader.Load( Assets.ROOM1_MAP );
         _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
         _tileLayers   = _tiledMap.Layers.OfType< TiledMapTileLayer >().ToList();
+
+        _mapWidth = _tiledMap.Properties.Get< int >( "width" );
+        _mapHeight = _tiledMap.Properties.Get< int >( "height" );
+        
+        _mapWidth *= _tiledMap.Properties.Get< int >( "tilewidth" );
+        _mapHeight *= _tiledMap.Properties.Get< int >( "tileheight" );
+        
+        Logger.Debug( $"Map width: {_mapWidth}, height: {_mapHeight}" );
     }
 }
 

@@ -945,9 +945,13 @@ public class Huffman
     /// <summary>
     /// Retrieves the collection of Huffman tables used for decoding processes.
     /// </summary>
-    /// <returns>An array of Huffman tables.</returns
+    /// <returns>An array of Huffman tables.</returns>
     public static Huffman[] GetHuffmanTable()
     {
         return _huffmanTable;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

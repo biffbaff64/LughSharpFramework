@@ -44,6 +44,18 @@ public class InputEventQueue
 
     // ========================================================================
 
+    private const int SKIP           = -1;
+    private const int KEY_DOWN       = 0;
+    private const int KEY_UP         = 1;
+    private const int KEY_TYPED      = 2;
+    private const int TOUCH_DOWN     = 3;
+    private const int TOUCH_UP       = 4;
+    private const int TOUCH_DRAGGED  = 5;
+    private const int MOUSE_MOVED    = 6;
+    private const int MOUSE_SCROLLED = 7;
+
+    // ========================================================================
+    
     /// <summary>
     /// Processes and drains the events in the queue using the specified input processor.
     /// </summary>
@@ -420,18 +432,8 @@ public class InputEventQueue
 
         return false;
     }
-
-    #region constants
-
-    private const int SKIP           = -1;
-    private const int KEY_DOWN       = 0;
-    private const int KEY_UP         = 1;
-    private const int KEY_TYPED      = 2;
-    private const int TOUCH_DOWN     = 3;
-    private const int TOUCH_UP       = 4;
-    private const int TOUCH_DRAGGED  = 5;
-    private const int MOUSE_MOVED    = 6;
-    private const int MOUSE_SCROLLED = 7;
-
-    #endregion constants
 }
+
+// ============================================================================
+// ============================================================================
+

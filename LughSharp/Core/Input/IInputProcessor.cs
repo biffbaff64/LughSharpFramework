@@ -95,3 +95,7 @@ public interface IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     bool Scrolled( float amountX, float amountY );
 }
+
+// ============================================================================
+// ============================================================================
+

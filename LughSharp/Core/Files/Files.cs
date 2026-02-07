@@ -30,8 +30,6 @@ namespace LughSharp.Core.Files;
 [PublicAPI]
 public class Files : IFiles
 {
-    // ========================================================================
-
     /// <summary>
     /// Retrieves a file handle based on the specified path and path type.
     /// </summary>

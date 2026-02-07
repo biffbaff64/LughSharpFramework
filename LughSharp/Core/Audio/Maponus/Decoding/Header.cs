@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Support;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding;
@@ -34,10 +36,9 @@ namespace LughSharp.Core.Audio.Maponus.Decoding;
 [PublicAPI]
 public class Header
 {
-    public const int MPEG2_LSF  = 0;
-    public const int MPEG25_LSF = 2;
-    public const int MPEG1      = 1;
-
+    public const int MPEG2_LSF            = 0;
+    public const int MPEG25_LSF           = 2;
+    public const int MPEG1                = 1;
     public const int STEREO               = 0;
     public const int JOINT_STEREO         = 1;
     public const int DUAL_CHANNEL         = 2;
@@ -174,6 +175,12 @@ public class Header
 
     // ========================================================================
 
+    public int   Framesize { get; set; }
+    public short Checksum  { get; set; }
+    public int   NSlots    { get; set; }
+
+    // ========================================================================
+
     private int    _bitrateIndex;
     private bool   _copyright;
     private Crc16? _crc;
@@ -189,12 +196,6 @@ public class Header
     private int    _sampleFrequency;
     private sbyte  _syncmode = Bitstream.INITIAL_SYNC;
     private int    _version;
-
-    // ========================================================================
-
-    public int   Framesize { get; set; }
-    public short Checksum  { get; set; }
-    public int   NSlots    { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -480,7 +481,8 @@ public class Header
     {
         if ( _layer == 1 )
         {
-            Framesize = ( 12 * Bitrates[ _version ][ 0 ][ _bitrateIndex ] ) / Frequencies[ _version ][ _sampleFrequency ];
+            Framesize = ( 12 * Bitrates[ _version ][ 0 ][ _bitrateIndex ] )
+                      / Frequencies[ _version ][ _sampleFrequency ];
 
             if ( _paddingBit != 0 )
             {
@@ -492,7 +494,8 @@ public class Header
         }
         else
         {
-            Framesize = ( 144 * Bitrates[ _version ][ _layer - 1 ][ _bitrateIndex ] ) / Frequencies[ _version ][ _sampleFrequency ];
+            Framesize = ( 144 * Bitrates[ _version ][ _layer - 1 ][ _bitrateIndex ] )
+                      / Frequencies[ _version ][ _sampleFrequency ];
 
             if ( _version is MPEG2_LSF or MPEG25_LSF )
             {
@@ -510,12 +513,14 @@ public class Header
             {
                 if ( _version == MPEG1 )
                 {
-                    NSlots = Framesize - ( _mode == SINGLE_CHANNEL ? 17 : 32 ) - ( _protectionBit != 0 ? 0 : 2 ) - 4; // header size
+                    NSlots = Framesize - ( _mode == SINGLE_CHANNEL ? 17 : 32 ) - ( _protectionBit != 0 ? 0 : 2 )
+                           - 4; // header size
                 }
                 else
                 {
                     // MPEG-2 LSF, SZD: MPEG-2.5 LSF
-                    NSlots = Framesize - ( _mode == SINGLE_CHANNEL ? 9 : 17 ) - ( _protectionBit != 0 ? 0 : 2 ) - 4; // header size
+                    NSlots = Framesize - ( _mode == SINGLE_CHANNEL ? 9 : 17 ) - ( _protectionBit != 0 ? 0 : 2 )
+                           - 4; // header size
                 }
             }
             else
@@ -584,12 +589,12 @@ public class Header
     public string? LayerAsString()
     {
         return _layer switch
-        {
-            1     => "I",
-            2     => "II",
-            3     => "III",
-            var _ => null,
-        };
+               {
+                   1     => "I",
+                   2     => "II",
+                   3     => "III",
+                   var _ => null,
+               };
     }
 
     /// <summary>
@@ -723,3 +728,7 @@ public class Header
         return buffer.ToString();
     }
 }
+
+// ============================================================================
+// ============================================================================
+

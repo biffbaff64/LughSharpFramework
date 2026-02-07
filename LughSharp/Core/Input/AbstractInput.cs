@@ -189,6 +189,8 @@ public abstract class AbstractInput : IInput
                                        IInput.OnscreenKeyboardType? type = IInput.OnscreenKeyboardType.Default );
 
     #endregion abstract methods
-
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================
+

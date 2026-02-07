@@ -151,3 +151,7 @@ public interface ISound : IDisposable
     /// <param name="volume"> the volume in the range [0,1].  </param>
     void SetPan( long soundId, float pan, float volume );
 }
+
+// ============================================================================
+// ============================================================================
+
