@@ -61,3 +61,7 @@ public abstract class ASubband
 
     public abstract bool PutNextSample( int channels, SynthesisFilter? filter1, SynthesisFilter? filter2 );
 }
+
+// ============================================================================
+// ============================================================================
+

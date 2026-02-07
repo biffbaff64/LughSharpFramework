@@ -29,6 +29,11 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 [PublicAPI]
 public class ScaleFactorTable
 {
+    public int[] L { get; set; }
+    public int[] S { get; set; }
+
+    public LayerIIIDecoder EnclosingInstance { get; private set; } = null!;
+
     public ScaleFactorTable( LayerIIIDecoder enclosingInstance )
     {
         InitBlock( enclosingInstance );
@@ -45,13 +50,12 @@ public class ScaleFactorTable
         S = thes;
     }
 
-    public int[] L { get; set; }
-    public int[] S { get; set; }
-
-    public LayerIIIDecoder EnclosingInstance { get; private set; } = null!;
-
     private void InitBlock( LayerIIIDecoder enclosingInstance )
     {
         EnclosingInstance = enclosingInstance;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

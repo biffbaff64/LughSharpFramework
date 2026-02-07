@@ -76,7 +76,9 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// <returns> tile matching ID, null if it doesn't exist  </returns>
     public ITiledMapTile? GetTile( uint id )
     {
-        return id == 0 ? null : _tiles[ id ];
+        var tile = _tiles.TryGetValue( id, out var tileValue ) ? tileValue : null;
+
+        return tile;
     }
 
     /// <summary>
@@ -98,6 +100,8 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
         _tiles.Remove( id );
     }
 
+    // ========================================================================
+    
     /// <inheritdoc />
     public IEnumerator< ITiledMapTile > GetEnumerator()
     {

@@ -32,7 +32,7 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerI;
 [PublicAPI]
 public class SubbandLayer1IntensityStereo : SubbandLayer1
 {
-    protected float channel2Scalefactor;
+    protected float Channel2Scalefactor;
 
     public SubbandLayer1IntensityStereo( int subbandnumber )
         : base( subbandnumber )
@@ -43,10 +43,10 @@ public class SubbandLayer1IntensityStereo : SubbandLayer1
     /// </summary>
     public override void ReadScaleFactor( Bitstream stream, Header? header )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            scalefactor         = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-            channel2Scalefactor = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+            Scalefactor         = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+            Channel2Scalefactor = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
         }
     }
 
@@ -54,33 +54,33 @@ public class SubbandLayer1IntensityStereo : SubbandLayer1
     /// </summary>
     public override bool PutNextSample( int channels, SynthesisFilter? filter1, SynthesisFilter? filter2 )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            sample = ( sample * factor ) + offset; // requantization
+            Sample = ( Sample * Factor ) + Offset; // requantization
 
             switch ( channels )
             {
                 case OutputChannels.BOTH_CHANNELS:
                 {
-                    float sample1 = sample * scalefactor, sample2 = sample * channel2Scalefactor;
-                    filter1?.AddSample( sample1, subbandnumber );
-                    filter2?.AddSample( sample2, subbandnumber );
+                    float sample1 = Sample * Scalefactor, sample2 = Sample * Channel2Scalefactor;
+                    filter1?.AddSample( sample1, Subbandnumber );
+                    filter2?.AddSample( sample2, Subbandnumber );
 
                     break;
                 }
 
                 case OutputChannels.LEFT_CHANNEL:
                 {
-                    var sample1 = sample * scalefactor;
-                    filter1?.AddSample( sample1, subbandnumber );
+                    var sample1 = Sample * Scalefactor;
+                    filter1?.AddSample( sample1, Subbandnumber );
 
                     break;
                 }
 
                 default:
                 {
-                    var sample2 = sample * channel2Scalefactor;
-                    filter1?.AddSample( sample2, subbandnumber );
+                    var sample2 = Sample * Channel2Scalefactor;
+                    filter1?.AddSample( sample2, Subbandnumber );
 
                     break;
                 }
@@ -90,3 +90,7 @@ public class SubbandLayer1IntensityStereo : SubbandLayer1
         return true;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

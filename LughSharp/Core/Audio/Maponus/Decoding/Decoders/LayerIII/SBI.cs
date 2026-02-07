@@ -29,6 +29,9 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 [PublicAPI]
 public class SBI
 {
+    public int[] L { get; }
+    public int[] S { get; }
+
     public SBI()
     {
         L = new int[ 23 ];
@@ -40,7 +43,8 @@ public class SBI
         L = thel;
         S = thes;
     }
-
-    public int[] L { get; }
-    public int[] S { get; }
 }
+
+// ============================================================================
+// ============================================================================
+

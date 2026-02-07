@@ -44,3 +44,7 @@ public struct BitstreamErrors
     public const int BITSTREAM_ERROR     = 0x100;
     public const int DECODER_ERROR       = 0x200;
 }
+
+// ============================================================================
+// ============================================================================
+

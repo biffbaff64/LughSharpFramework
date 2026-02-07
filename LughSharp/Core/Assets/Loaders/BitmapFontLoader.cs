@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
@@ -145,12 +149,9 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 
             TextureRegion? region = atlas?.FindRegion( name );
 
-            if ( region == null )
-            {
-                throw new RuntimeException( $"Could not find font region {name} in atlas {p.AtlasName}" );
-            }
-
-            return new BitmapFont( file, region );
+            return region == null
+                ? throw new RuntimeException( $"Could not find font region {name} in atlas {p.AtlasName}" )
+                : new BitmapFont( file, region );
         }
 
         var capacity = ( int )_data?.ImagePaths?.Length!;
@@ -162,7 +163,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
             regs.Add( new TextureRegion( texture! ) );
         }
 
-        return new BitmapFont( _data, regs, true );
+        return new BitmapFont( _data, regs );
     }
 
     // ========================================================================

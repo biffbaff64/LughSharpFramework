@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
@@ -127,3 +128,7 @@ public class BitstreamException : Mp3SharpException
         return $"Bitstream errorcode {Convert.ToString( errorcode, 16 )}";
     }
 }
+
+// ============================================================================
+// ============================================================================
+

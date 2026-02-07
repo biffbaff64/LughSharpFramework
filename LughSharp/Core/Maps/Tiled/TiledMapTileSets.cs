@@ -113,7 +113,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     /// </para>
     /// </summary>
     /// <param name="id"> id of the <see cref="ITiledMapTile"/> to get. </param>
-    /// <returns> tile with matching id, null if it doesn't exist  </returns>
+    /// <returns> A tile with matching id, or null if it doesn't exist  </returns>
     public virtual ITiledMapTile? GetTile( uint id )
     {
         for ( var i = _tilesets.Count - 1; i >= 0; i-- )

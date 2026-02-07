@@ -445,35 +445,35 @@ public class SubbandLayer2 : ASubband
         0.00024414063f, 0.00012207031f, 0.00006103516f,
     ];
 
-    protected readonly float[] cFactor    = [ 0 ];
-    protected readonly int[]   codelength = [ 0 ];
+    protected readonly float[] CFactor    = [ 0 ];
+    protected readonly int[]   Codelength = [ 0 ];
 
-    protected readonly float[] d = [ 0 ];
+    protected readonly float[] D = [ 0 ];
 
-    protected readonly float[] factor = [ 0.0f ];
-    protected readonly int     subbandnumber;
+    protected readonly float[] Factor = [ 0.0f ];
+    protected readonly int     Subbandnumber;
 
-    protected int allocation;
+    protected int Allocation;
 
-    protected float[]?[] groupingtable = null!;
-    protected int        groupnumber;
-    protected int        samplenumber;
-    protected float[]    samples = null!;
-    protected float      scalefactor1;
-    protected float      scalefactor2;
-    protected float      scalefactor3;
-    protected int        scfsi;
+    protected float[]?[] Groupingtable = null!;
+    protected int        Groupnumber;
+    protected int        Samplenumber;
+    protected float[]    Samples = null!;
+    protected float      Scalefactor1;
+    protected float      Scalefactor2;
+    protected float      Scalefactor3;
+    protected int        Scfsi;
 
     public SubbandLayer2( int subbandnumber )
     {
-        this.subbandnumber = subbandnumber;
-        groupnumber        = samplenumber = 0;
+        this.Subbandnumber = subbandnumber;
+        Groupnumber        = Samplenumber = 0;
     }
 
     private void InitBlock()
     {
-        samples       = new float[ 3 ];
-        groupingtable = new float[ 2 ][];
+        Samples       = new float[ 3 ];
+        Groupingtable = new float[ 2 ][];
     }
 
     /// <summary>
@@ -500,22 +500,22 @@ public class SubbandLayer2 : ASubband
             // table 3-B.2c or 3-B.2d
             if ( channelBitrate is 1 or 2 )
             {
-                return subbandnumber <= 1 ? 4 : 3;
+                return Subbandnumber <= 1 ? 4 : 3;
             }
 
             // tables 3-B.2a or 3-B.2b
-            return subbandnumber <= 10 ? 4 : subbandnumber <= 22 ? 3 : 2;
+            return Subbandnumber <= 10 ? 4 : Subbandnumber <= 22 ? 3 : 2;
         }
 
         // MPEG-2 LSF
 
         // table B.1 of ISO/IEC 13818-3
-        if ( subbandnumber <= 3 )
+        if ( Subbandnumber <= 3 )
         {
             return 4;
         }
 
-        return subbandnumber <= 10 ? 3 : 2;
+        return Subbandnumber <= 10 ? 3 : 2;
     }
 
     /// <summary>
@@ -546,50 +546,50 @@ public class SubbandLayer2 : ASubband
         if ( channelBitrate is 1 or 2 )
         {
             // table 3-B.2c or 3-B.2d
-            groupingtable[ channel ] = TableCdGroupingtables[ allocation ];
-            factor[ 0 ]              = TableCdFactor[ allocation ];
-            codelength[ 0 ]          = TableCdCodelength[ allocation ];
-            c[ 0 ]                   = TableCdC[ allocation ];
-            fd[ 0 ]                  = TableCdD[ allocation ];
+            Groupingtable[ channel ] = TableCdGroupingtables[ Allocation ];
+            Factor[ 0 ]              = TableCdFactor[ Allocation ];
+            Codelength[ 0 ]          = TableCdCodelength[ Allocation ];
+            c[ 0 ]                   = TableCdC[ Allocation ];
+            fd[ 0 ]                  = TableCdD[ Allocation ];
         }
         else
         {
             // tables 3-B.2a or 3-B.2b
-            if ( subbandnumber <= 2 )
+            if ( Subbandnumber <= 2 )
             {
-                groupingtable[ channel ] = TableAb1Groupingtables[ allocation ];
-                factor[ 0 ]              = TableAb1Factor[ allocation ];
-                codelength[ 0 ]          = TableAb1Codelength[ allocation ];
-                c[ 0 ]                   = TableAb1C[ allocation ];
-                fd[ 0 ]                  = TableAb1D[ allocation ];
+                Groupingtable[ channel ] = TableAb1Groupingtables[ Allocation ];
+                Factor[ 0 ]              = TableAb1Factor[ Allocation ];
+                Codelength[ 0 ]          = TableAb1Codelength[ Allocation ];
+                c[ 0 ]                   = TableAb1C[ Allocation ];
+                fd[ 0 ]                  = TableAb1D[ Allocation ];
             }
             else
             {
-                groupingtable[ channel ] = TableAb234Groupingtables[ allocation ];
+                Groupingtable[ channel ] = TableAb234Groupingtables[ Allocation ];
 
-                switch ( subbandnumber )
+                switch ( Subbandnumber )
                 {
                     case <= 10:
-                        factor[ 0 ]     = TableAb2Factor[ allocation ];
-                        codelength[ 0 ] = TableAb2Codelength[ allocation ];
-                        c[ 0 ]          = TableAb2C[ allocation ];
-                        fd[ 0 ]         = TableAb2D[ allocation ];
+                        Factor[ 0 ]     = TableAb2Factor[ Allocation ];
+                        Codelength[ 0 ] = TableAb2Codelength[ Allocation ];
+                        c[ 0 ]          = TableAb2C[ Allocation ];
+                        fd[ 0 ]         = TableAb2D[ Allocation ];
 
                         break;
 
                     case <= 22:
-                        factor[ 0 ]     = TableAb3Factor[ allocation ];
-                        codelength[ 0 ] = TableAb3Codelength[ allocation ];
-                        c[ 0 ]          = TableAb3C[ allocation ];
-                        fd[ 0 ]         = TableAb3D[ allocation ];
+                        Factor[ 0 ]     = TableAb3Factor[ Allocation ];
+                        Codelength[ 0 ] = TableAb3Codelength[ Allocation ];
+                        c[ 0 ]          = TableAb3C[ Allocation ];
+                        fd[ 0 ]         = TableAb3D[ Allocation ];
 
                         break;
 
                     default:
-                        factor[ 0 ]     = TableAb4Factor[ allocation ];
-                        codelength[ 0 ] = TableAb4Codelength[ allocation ];
-                        c[ 0 ]          = TableAb4C[ allocation ];
-                        fd[ 0 ]         = TableAb4D[ allocation ];
+                        Factor[ 0 ]     = TableAb4Factor[ Allocation ];
+                        Codelength[ 0 ] = TableAb4Codelength[ Allocation ];
+                        c[ 0 ]          = TableAb4C[ Allocation ];
+                        fd[ 0 ]         = TableAb4D[ Allocation ];
 
                         break;
                 }
@@ -604,18 +604,18 @@ public class SubbandLayer2 : ASubband
         Guard.Against.Null( header );
 
         var length = GetAllocationLength( header );
-        allocation = stream.GetBitsFromBuffer( length );
-        crc.AddBits( allocation, length );
+        Allocation = stream.GetBitsFromBuffer( length );
+        crc.AddBits( Allocation, length );
     }
 
     /// <summary>
     /// </summary>
     public virtual void ReadScaleFactorSelection( Bitstream stream, Crc16? crc )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            scfsi = stream.GetBitsFromBuffer( 2 );
-            crc?.AddBits( scfsi, 2 );
+            Scfsi = stream.GetBitsFromBuffer( 2 );
+            crc?.AddBits( Scfsi, 2 );
         }
     }
 
@@ -625,42 +625,42 @@ public class SubbandLayer2 : ASubband
     {
         Guard.Against.Null( header );
 
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            switch ( scfsi )
+            switch ( Scfsi )
             {
                 case 0:
-                    scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-                    scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-                    scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 1:
-                    scalefactor1 =
-                        scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Scalefactor1 =
+                        Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
-                    scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 2:
-                    scalefactor1 =
-                        scalefactor2 =
-                            scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Scalefactor1 =
+                        Scalefactor2 =
+                            Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 3:
-                    scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
-                    scalefactor2 =
-                        scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Scalefactor2 =
+                        Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
             }
 
-            PrepareForSampleRead( header, allocation, 0, factor, codelength, cFactor, d );
+            PrepareForSampleRead( header, Allocation, 0, Factor, Codelength, CFactor, D );
         }
     }
 
@@ -668,16 +668,16 @@ public class SubbandLayer2 : ASubband
     /// </summary>
     public override bool ReadSampleData( Bitstream stream )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            if ( groupingtable[ 0 ] != null )
+            if ( Groupingtable[ 0 ] != null )
             {
-                var samplecode = stream.GetBitsFromBuffer( codelength[ 0 ] );
+                var samplecode = stream.GetBitsFromBuffer( Codelength[ 0 ] );
 
                 // create requantized samples:
                 samplecode += samplecode << 1;
-                var target = samples;
-                var source = groupingtable[ 0 ];
+                var target = Samples;
+                var source = Groupingtable[ 0 ];
                 /*
                 int tmp = 0;
                 int temp = 0;
@@ -708,40 +708,44 @@ public class SubbandLayer2 : ASubband
             }
             else
             {
-                samples[ 0 ] = ( float )( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
-                samples[ 1 ] = ( float )( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
-                samples[ 2 ] = ( float )( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
+                Samples[ 0 ] = ( float )( ( stream.GetBitsFromBuffer( Codelength[ 0 ] ) * Factor[ 0 ] ) - 1.0 );
+                Samples[ 1 ] = ( float )( ( stream.GetBitsFromBuffer( Codelength[ 0 ] ) * Factor[ 0 ] ) - 1.0 );
+                Samples[ 2 ] = ( float )( ( stream.GetBitsFromBuffer( Codelength[ 0 ] ) * Factor[ 0 ] ) - 1.0 );
             }
         }
 
-        samplenumber = 0;
+        Samplenumber = 0;
 
-        return ++groupnumber == 12;
+        return ++Groupnumber == 12;
     }
 
     /// <summary>
     /// </summary>
     public override bool PutNextSample( int channels, SynthesisFilter? filter1, SynthesisFilter? filter2 )
     {
-        if ( ( allocation != 0 ) && ( channels != OutputChannels.RIGHT_CHANNEL ) )
+        if ( ( Allocation != 0 ) && ( channels != OutputChannels.RIGHT_CHANNEL ) )
         {
-            var sample = samples[ samplenumber ];
+            var sample = Samples[ Samplenumber ];
 
-            if ( groupingtable[ 0 ] == null )
+            if ( Groupingtable[ 0 ] == null )
             {
-                sample = ( sample + d[ 0 ] ) * cFactor[ 0 ];
+                sample = ( sample + D[ 0 ] ) * CFactor[ 0 ];
             }
 
-            sample *= groupnumber switch
+            sample *= Groupnumber switch
             {
-                <= 4  => scalefactor1,
-                <= 8  => scalefactor2,
-                var _ => scalefactor3,
+                <= 4  => Scalefactor1,
+                <= 8  => Scalefactor2,
+                var _ => Scalefactor3,
             };
 
-            filter1?.AddSample( sample, subbandnumber );
+            filter1?.AddSample( sample, Subbandnumber );
         }
 
-        return ++samplenumber == 3;
+        return ++Samplenumber == 3;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

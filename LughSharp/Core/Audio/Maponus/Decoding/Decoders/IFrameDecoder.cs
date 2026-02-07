@@ -30,10 +30,6 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 /// Implementations of FrameDecoder are responsible for decoding
 /// an MPEG audio frame.
 /// </summary>
-
-//TODO: the interface currently is too thin. There should be
-// methods to specify the output buffer, the synthesis filters and
-// possibly other objects used by the decoder. 
 [PublicAPI]
 public interface IFrameDecoder
 {
@@ -42,3 +38,7 @@ public interface IFrameDecoder
     /// </summary>
     void DecodeFrame();
 }
+
+// ============================================================================
+// ============================================================================
+

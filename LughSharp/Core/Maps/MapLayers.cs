@@ -94,8 +94,6 @@ public class MapLayers : IEnumerable< MapLayer >
     /// </summary>
     public virtual void Add( MapLayer layer )
     {
-        Logger.Debug( $"Adding layer {layer.Name}" );
-        
         _layers.Add( layer );
     }
 

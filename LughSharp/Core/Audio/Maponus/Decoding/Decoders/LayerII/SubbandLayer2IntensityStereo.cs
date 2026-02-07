@@ -32,10 +32,10 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerII;
 [PublicAPI]
 public class SubbandLayer2IntensityStereo : SubbandLayer2
 {
-    protected float channel2Scalefactor1;
-    protected float channel2Scalefactor2;
-    protected float channel2Scalefactor3;
-    protected int   channel2Scfsi;
+    protected float Channel2Scalefactor1;
+    protected float Channel2Scalefactor2;
+    protected float Channel2Scalefactor3;
+    protected int   Channel2Scfsi;
 
     public SubbandLayer2IntensityStereo( int subbandnumber )
         : base( subbandnumber )
@@ -46,15 +46,15 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
     /// </summary>
     public override void ReadScaleFactorSelection( Bitstream stream, Crc16? crc )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            scfsi         = stream.GetBitsFromBuffer( 2 );
-            channel2Scfsi = stream.GetBitsFromBuffer( 2 );
+            Scfsi         = stream.GetBitsFromBuffer( 2 );
+            Channel2Scfsi = stream.GetBitsFromBuffer( 2 );
 
             if ( crc != null )
             {
-                crc.AddBits( scfsi, 2 );
-                crc.AddBits( channel2Scfsi, 2 );
+                crc.AddBits( Scfsi, 2 );
+                crc.AddBits( Channel2Scfsi, 2 );
             }
         }
     }
@@ -63,51 +63,51 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
     /// </summary>
     public override void ReadScaleFactor( Bitstream stream, Header? header )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
             base.ReadScaleFactor( stream, header );
 
-            if ( channel2Scfsi is >= 0 and <= 3 )
+            if ( Channel2Scfsi is >= 0 and <= 3 )
             {
-                channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-                channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-                channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                Channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                Channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
             }
         }
 
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
             base.ReadScaleFactor( stream, header );
 
-            switch ( channel2Scfsi )
+            switch ( Channel2Scfsi )
             {
                 case 0:
-                    channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-                    channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-                    channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 1:
-                    channel2Scalefactor1 =
-                        channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor1 =
+                        Channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
-                    channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 2:
-                    channel2Scalefactor1 =
-                        channel2Scalefactor2 =
-                            channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor1 =
+                        Channel2Scalefactor2 =
+                            Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 3:
-                    channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
-                    channel2Scalefactor2 =
-                        channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor2 =
+                        Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
             }
@@ -118,13 +118,13 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
     /// </summary>
     public override bool PutNextSample( int channels, SynthesisFilter? filter1, SynthesisFilter? filter2 )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            var sample = samples[ samplenumber ];
+            var sample = Samples[ Samplenumber ];
 
-            if ( groupingtable[ 0 ] == null )
+            if ( Groupingtable[ 0 ] == null )
             {
-                sample = ( sample + d[ 0 ] ) * cFactor[ 0 ];
+                sample = ( sample + D[ 0 ] ) * CFactor[ 0 ];
             }
 
             switch ( channels )
@@ -133,59 +133,63 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
                 {
                     var sample2 = sample;
 
-                    switch ( groupnumber )
+                    switch ( Groupnumber )
                     {
                         case <= 4:
-                            sample  *= scalefactor1;
-                            sample2 *= channel2Scalefactor1;
+                            sample  *= Scalefactor1;
+                            sample2 *= Channel2Scalefactor1;
 
                             break;
 
                         case <= 8:
-                            sample  *= scalefactor2;
-                            sample2 *= channel2Scalefactor2;
+                            sample  *= Scalefactor2;
+                            sample2 *= Channel2Scalefactor2;
 
                             break;
 
                         default:
-                            sample  *= scalefactor3;
-                            sample2 *= channel2Scalefactor3;
+                            sample  *= Scalefactor3;
+                            sample2 *= Channel2Scalefactor3;
 
                             break;
                     }
 
-                    filter1?.AddSample( sample, subbandnumber );
-                    filter2?.AddSample( sample2, subbandnumber );
+                    filter1?.AddSample( sample, Subbandnumber );
+                    filter2?.AddSample( sample2, Subbandnumber );
 
                     break;
                 }
 
                 case OutputChannels.LEFT_CHANNEL:
-                    sample *= groupnumber switch
+                    sample *= Groupnumber switch
                     {
-                        <= 4  => scalefactor1,
-                        <= 8  => scalefactor2,
-                        var _ => scalefactor3,
+                        <= 4  => Scalefactor1,
+                        <= 8  => Scalefactor2,
+                        var _ => Scalefactor3,
                     };
 
-                    filter1?.AddSample( sample, subbandnumber );
+                    filter1?.AddSample( sample, Subbandnumber );
 
                     break;
 
                 default:
-                    sample *= groupnumber switch
+                    sample *= Groupnumber switch
                     {
-                        <= 4  => channel2Scalefactor1,
-                        <= 8  => channel2Scalefactor2,
-                        var _ => channel2Scalefactor3,
+                        <= 4  => Channel2Scalefactor1,
+                        <= 8  => Channel2Scalefactor2,
+                        var _ => Channel2Scalefactor3,
                     };
 
-                    filter1?.AddSample( sample, subbandnumber );
+                    filter1?.AddSample( sample, Subbandnumber );
 
                     break;
             }
         }
 
-        return ++samplenumber == 3;
+        return ++Samplenumber == 3;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

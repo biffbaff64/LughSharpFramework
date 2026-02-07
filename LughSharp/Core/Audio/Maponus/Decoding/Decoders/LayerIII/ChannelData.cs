@@ -29,14 +29,18 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 [PublicAPI]
 public class ChannelData
 {
-    public readonly GranuleInfo[] granules;
-    public readonly int[]         scaleFactorBits;
+    public readonly GranuleInfo[] Granules;
+    public readonly int[]         ScaleFactorBits;
 
     public ChannelData()
     {
-        scaleFactorBits = new int[ 4 ];
-        granules        = new GranuleInfo[ 2 ];
-        granules[ 0 ]   = new GranuleInfo();
-        granules[ 1 ]   = new GranuleInfo();
+        ScaleFactorBits = new int[ 4 ];
+        Granules        = new GranuleInfo[ 2 ];
+        Granules[ 0 ]   = new GranuleInfo();
+        Granules[ 1 ]   = new GranuleInfo();
     }
 }
+
+// ============================================================================
+// ============================================================================
+

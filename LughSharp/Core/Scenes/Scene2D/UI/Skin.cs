@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
@@ -831,3 +834,7 @@ public class Skin : IDisposable
         public Color  Color { get; set; }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

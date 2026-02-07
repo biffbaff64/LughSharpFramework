@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics.G3D.Models.Data;
@@ -50,3 +52,7 @@ public class ModelMaterial
 
     public List< ModelTexture >? Textures { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

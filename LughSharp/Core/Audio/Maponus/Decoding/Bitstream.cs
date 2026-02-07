@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Audio.Maponus.Support;
 using Exception = System.Exception;
@@ -556,3 +559,7 @@ public class Bitstream
         return totalBytesRead;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

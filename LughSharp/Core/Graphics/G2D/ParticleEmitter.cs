@@ -22,6 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -2223,3 +2228,7 @@ public class ParticleEmitter
 
     #endregion properties
 }
+
+// ============================================================================
+// ============================================================================
+

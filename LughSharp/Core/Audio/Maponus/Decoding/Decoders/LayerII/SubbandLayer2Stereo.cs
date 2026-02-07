@@ -32,21 +32,23 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerII;
 [PublicAPI]
 public class SubbandLayer2Stereo : SubbandLayer2
 {
-    protected readonly float[] channel2C          = [ 0 ];
-    protected readonly int[]   channel2Codelength = [ 0 ];
-    protected readonly float[] channel2D          = [ 0 ];
-    protected readonly float[] channel2Factor     = [ 0 ];
-    protected readonly float[] channel2Samples;
-    protected          int     channel2Allocation;
-    protected          float   channel2Scalefactor1;
-    protected          float   channel2Scalefactor2;
-    protected          float   channel2Scalefactor3;
-    protected          int     channel2Scfsi;
+    protected readonly float[] Channel2C          = [ 0 ];
+    protected readonly int[]   Channel2Codelength = [ 0 ];
+    protected readonly float[] Channel2D          = [ 0 ];
+    protected readonly float[] Channel2Factor     = [ 0 ];
+    protected readonly float[] Channel2Samples;
+    protected          int     Channel2Allocation;
+    protected          float   Channel2Scalefactor1;
+    protected          float   Channel2Scalefactor2;
+    protected          float   Channel2Scalefactor3;
+    protected          int     Channel2Scfsi;
+    
+    // ========================================================================
 
     public SubbandLayer2Stereo( int subbandnumber )
         : base( subbandnumber )
     {
-        channel2Samples = new float[ 3 ];
+        Channel2Samples = new float[ 3 ];
     }
 
     /// <summary>
@@ -54,13 +56,13 @@ public class SubbandLayer2Stereo : SubbandLayer2
     public override void ReadAllocation( Bitstream stream, Header? header, Crc16? crc )
     {
         var length = GetAllocationLength( header );
-        allocation         = stream.GetBitsFromBuffer( length );
-        channel2Allocation = stream.GetBitsFromBuffer( length );
+        Allocation         = stream.GetBitsFromBuffer( length );
+        Channel2Allocation = stream.GetBitsFromBuffer( length );
 
         if ( crc != null )
         {
-            crc.AddBits( allocation, length );
-            crc.AddBits( channel2Allocation, length );
+            crc.AddBits( Allocation, length );
+            crc.AddBits( Channel2Allocation, length );
         }
     }
 
@@ -68,16 +70,16 @@ public class SubbandLayer2Stereo : SubbandLayer2
     /// </summary>
     public override void ReadScaleFactorSelection( Bitstream stream, Crc16? crc )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            scfsi = stream.GetBitsFromBuffer( 2 );
-            crc?.AddBits( scfsi, 2 );
+            Scfsi = stream.GetBitsFromBuffer( 2 );
+            crc?.AddBits( Scfsi, 2 );
         }
 
-        if ( channel2Allocation != 0 )
+        if ( Channel2Allocation != 0 )
         {
-            channel2Scfsi = stream.GetBitsFromBuffer( 2 );
-            crc?.AddBits( channel2Scfsi, 2 );
+            Channel2Scfsi = stream.GetBitsFromBuffer( 2 );
+            crc?.AddBits( Channel2Scfsi, 2 );
         }
     }
 
@@ -87,48 +89,48 @@ public class SubbandLayer2Stereo : SubbandLayer2
     {
         base.ReadScaleFactor( stream, header );
 
-        if ( channel2Allocation != 0 )
+        if ( Channel2Allocation != 0 )
         {
-            switch ( channel2Scfsi )
+            switch ( Channel2Scfsi )
             {
                 case 0:
-                    channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-                    channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
-                    channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 1:
-                    channel2Scalefactor1 =
-                        channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor1 =
+                        Channel2Scalefactor2 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
-                    channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 2:
-                    channel2Scalefactor1 =
-                        channel2Scalefactor2 =
-                            channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor1 =
+                        Channel2Scalefactor2 =
+                            Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
 
                 case 3:
-                    channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor1 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
-                    channel2Scalefactor2 =
-                        channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+                    Channel2Scalefactor2 =
+                        Channel2Scalefactor3 = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
 
                     break;
             }
 
             PrepareForSampleRead( header,
-                                  channel2Allocation,
+                                  Channel2Allocation,
                                   1,
-                                  channel2Factor,
-                                  channel2Codelength,
-                                  channel2C,
-                                  channel2D );
+                                  Channel2Factor,
+                                  Channel2Codelength,
+                                  Channel2C,
+                                  Channel2D );
         }
     }
 
@@ -138,11 +140,11 @@ public class SubbandLayer2Stereo : SubbandLayer2
     {
         var returnvalue = base.ReadSampleData( stream );
 
-        if ( channel2Allocation != 0 )
+        if ( Channel2Allocation != 0 )
         {
-            if ( groupingtable[ 1 ] != null )
+            if ( Groupingtable[ 1 ] != null )
             {
-                var samplecode = stream.GetBitsFromBuffer( channel2Codelength[ 0 ] );
+                var samplecode = stream.GetBitsFromBuffer( Channel2Codelength[ 0 ] );
 
                 // create requantized samples:
                 samplecode += samplecode << 1;
@@ -158,8 +160,8 @@ public class SubbandLayer2Stereo : SubbandLayer2
                 target[tmp] = source[samplecode + temp];
                 // memcpy (channel2_samples, channel2_groupingtable + samplecode, 3 * sizeof (real));
                 */
-                var target = channel2Samples;
-                var source = groupingtable[ 1 ];
+                var target = Channel2Samples;
+                var source = Groupingtable[ 1 ];
                 var tmp    = 0;
                 var temp   = samplecode;
 
@@ -173,14 +175,14 @@ public class SubbandLayer2Stereo : SubbandLayer2
             }
             else
             {
-                channel2Samples[ 0 ] =
-                    ( float )( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
+                Channel2Samples[ 0 ] =
+                    ( float )( ( stream.GetBitsFromBuffer( Channel2Codelength[ 0 ] ) * Channel2Factor[ 0 ] ) - 1.0 );
 
-                channel2Samples[ 1 ] =
-                    ( float )( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
+                Channel2Samples[ 1 ] =
+                    ( float )( ( stream.GetBitsFromBuffer( Channel2Codelength[ 0 ] ) * Channel2Factor[ 0 ] ) - 1.0 );
 
-                channel2Samples[ 2 ] =
-                    ( float )( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
+                Channel2Samples[ 2 ] =
+                    ( float )( ( stream.GetBitsFromBuffer( Channel2Codelength[ 0 ] ) * Channel2Factor[ 0 ] ) - 1.0 );
             }
         }
 
@@ -193,32 +195,36 @@ public class SubbandLayer2Stereo : SubbandLayer2
     {
         var returnvalue = base.PutNextSample( channels, filter1, filter2 );
 
-        if ( ( channel2Allocation != 0 ) && ( channels != OutputChannels.LEFT_CHANNEL ) )
+        if ( ( Channel2Allocation != 0 ) && ( channels != OutputChannels.LEFT_CHANNEL ) )
         {
-            var sample = channel2Samples[ samplenumber - 1 ];
+            var sample = Channel2Samples[ Samplenumber - 1 ];
 
-            if ( groupingtable[ 1 ] == null )
+            if ( Groupingtable[ 1 ] == null )
             {
-                sample = ( sample + channel2D[ 0 ] ) * channel2C[ 0 ];
+                sample = ( sample + Channel2D[ 0 ] ) * Channel2C[ 0 ];
             }
 
-            sample *= groupnumber switch
+            sample *= Groupnumber switch
             {
-                <= 4  => channel2Scalefactor1,
-                <= 8  => channel2Scalefactor2,
-                var _ => channel2Scalefactor3,
+                <= 4  => Channel2Scalefactor1,
+                <= 8  => Channel2Scalefactor2,
+                var _ => Channel2Scalefactor3,
             };
 
             if ( channels == OutputChannels.BOTH_CHANNELS )
             {
-                filter2?.AddSample( sample, subbandnumber );
+                filter2?.AddSample( sample, Subbandnumber );
             }
             else
             {
-                filter1?.AddSample( sample, subbandnumber );
+                filter1?.AddSample( sample, Subbandnumber );
             }
         }
 
         return returnvalue;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

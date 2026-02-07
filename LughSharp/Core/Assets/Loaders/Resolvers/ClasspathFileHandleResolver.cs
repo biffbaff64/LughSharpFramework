@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.IO;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Main;
 
@@ -36,3 +38,7 @@ public class ClasspathFileHandleResolver : IFileHandleResolver
         return Engine.Api.Files.Classpath( filename );
     }
 }
+
+// ============================================================================
+// ============================================================================
+

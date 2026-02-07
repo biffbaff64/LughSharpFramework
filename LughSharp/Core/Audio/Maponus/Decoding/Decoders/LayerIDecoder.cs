@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerI;
 
@@ -33,7 +35,7 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 [PublicAPI]
 public class LayerIDecoder : IFrameDecoder
 {
-    protected readonly Crc16? CRC = new();
+    protected readonly Crc16? Crc = new();
 
     protected AudioBase?       Buffer;
     protected SynthesisFilter? Filter1;
@@ -66,7 +68,7 @@ public class LayerIDecoder : IFrameDecoder
         ReadAllocation();
         ReadScaleFactorSelection();
 
-        if ( ( CRC != null ) || Header.IsChecksumOk() )
+        if ( ( Crc != null ) || Header.IsChecksumOk() )
         {
             ReadScaleFactors();
             ReadSampleData();
@@ -128,7 +130,7 @@ public class LayerIDecoder : IFrameDecoder
     {
         for ( var i = 0; i < NuSubbands; ++i )
         {
-            Subbands[ i ].ReadAllocation( Stream, Header, CRC! );
+            Subbands[ i ].ReadAllocation( Stream, Header, Crc! );
         }
     }
 
@@ -212,3 +214,7 @@ public class LayerIDecoder : IFrameDecoder
         return writeReady;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

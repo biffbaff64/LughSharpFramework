@@ -44,3 +44,7 @@ public class GranuleInfo
     public int[] TableSelect         { get; } = new int[ 3 ];
     public int   WindowSwitchingFlag { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

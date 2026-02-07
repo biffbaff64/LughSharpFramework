@@ -50,7 +50,7 @@ public class TiledMapTileMapObject : TextureMapObject
     /// <param name="tile"> The Tile to attach. </param>
     /// <param name="flipHorizontally"> True to flip this mapobject horizontally. </param>
     /// <param name="flipVertically"> True to flip this mapobject vertically. </param>
-    public TiledMapTileMapObject( ITiledMapTile tile, bool flipHorizontally, bool flipVertically )
+    public TiledMapTileMapObject( ITiledMapTile? tile, bool flipHorizontally, bool flipVertically )
     {
         FlipHorizontally = flipHorizontally;
         FlipVertically   = flipVertically;

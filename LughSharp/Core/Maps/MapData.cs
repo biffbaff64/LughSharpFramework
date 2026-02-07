@@ -56,17 +56,17 @@ public sealed class MapData
             return;
         }
 
-        MapVersion         = element.GetAttribute( "version" );
-        TiledVersion       = element.GetAttribute( "tiledversion" );
-        MapOrientation     = element.GetAttribute( "orientation" );
-        RenderOrder        = element.GetAttribute( "renderorder" );
-        NextLayerID        = element.GetAttribute( "nextlayerid" );
-        NextObjectID       = element.GetAttribute( "nextobjectid" );
-        HexSideLength      = element.GetAttribute( "hexsidelength" );
-        StaggerAxis        = element.GetAttribute( "staggeraxis" );
-        StaggerIndex       = element.GetAttribute( "staggerindex" );
-        MapBackgroundColor = element.GetAttribute( "backgroundcolor" );
-        IsInfinite         = element.GetAttribute( "infinite" ) == "1";
+        MapVersion         = element.GetAttribute( "version", null );
+        TiledVersion       = element.GetAttribute( "tiledversion", null );
+        MapOrientation     = element.GetAttribute( "orientation", null );
+        RenderOrder        = element.GetAttribute( "renderorder", null );
+        NextLayerID        = element.GetAttribute( "nextlayerid", null );
+        NextObjectID       = element.GetAttribute( "nextobjectid", null );
+        HexSideLength      = element.GetAttribute( "hexsidelength", null );
+        StaggerAxis        = element.GetAttribute( "staggeraxis", null );
+        StaggerIndex       = element.GetAttribute( "staggerindex", null );
+        MapBackgroundColor = element.GetAttribute( "backgroundcolor", null );
+        IsInfinite         = element.GetAttribute( "infinite", null ) == "1";
         MapWidth           = element.GetIntAttribute( "width" );
         MapHeight          = element.GetIntAttribute( "height" );
         TileWidth          = element.GetIntAttribute( "tilewidth" );

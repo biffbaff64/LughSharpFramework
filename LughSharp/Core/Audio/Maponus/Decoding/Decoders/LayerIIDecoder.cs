@@ -80,7 +80,11 @@ public class LayerIIDecoder : LayerIDecoder
     {
         for ( var i = 0; i < NuSubbands; ++i )
         {
-            ( ( SubbandLayer2 )Subbands[ i ] ).ReadScaleFactorSelection( Stream, CRC );
+            ( ( SubbandLayer2 )Subbands[ i ] ).ReadScaleFactorSelection( Stream, Crc );
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

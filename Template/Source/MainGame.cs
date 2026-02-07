@@ -38,27 +38,29 @@ public class MainGame : Game
 
     private readonly Vector3 _cameraPos = Vector3.Zero;
 
-    private SpriteBatch?              _spriteBatch1;
-    private SpriteBatch?              _spriteBatch2;
-    private AssetManager?             _assetManager;
-    private OrthographicGameCamera?   _tiledCam;
-    private OrthographicGameCamera?   _gameCam;
-    private Texture?                  _image1;
-    private Texture?                  _star;
-    private Stage?                    _stage;
-    private Actor?                    _hudActor;
-    private BitmapFont?               _font;
-    private Sprite?                   _sprite;
-    private Sprite?                   _star2;
-    private bool                      _disposed;
-    private ILughTest?                _test;
-    private Vector2                   _spritePosition = Vector2.Zero;
-    private float                     _scale          = 1.0f;
-    private int                       _direction      = -1;
-    private List< TiledMapTileLayer > _tileLayers     = [ ];
-    private TmxMapLoader?             _tmxMapLoader;
-    private ITiledMapRenderer?        _mapRenderer;
-    private TiledMap?                 _tiledMap;
+    private SpriteBatch?                _spriteBatch1;
+    private SpriteBatch?                _spriteBatch2;
+    private AssetManager?               _assetManager;
+    private OrthographicGameCamera?     _tiledCam;
+    private OrthographicGameCamera?     _gameCam;
+    private Texture?                    _image1;
+    private Texture?                    _star;
+    private Stage?                      _stage;
+    private Actor?                      _hudActor;
+    private BitmapFont?                 _font;
+    private Sprite?                     _sprite;
+    private Sprite?                     _star2;
+    private bool                        _disposed;
+    private ILughTest?                  _test;
+    private TmxMapLoader?               _tmxMapLoader;
+    private OrthogonalTiledMapRenderer? _mapRenderer;
+    private TiledMap?                   _tiledMap;
+    private Vector2                     _spritePosition = Vector2.Zero;
+    private float                       _scale          = 1.0f;
+    private int                         _direction      = -1;
+    private List< TiledMapTileLayer >   _tileLayers     = [ ];
+    private Vector2                     _mapPos         = Vector2.Zero;
+    private Vector2                     _mapDir         = Vector2.One;
 
     // ========================================================================
     // ========================================================================
@@ -113,6 +115,25 @@ public class MainGame : Game
 //            _sprite?.SetScale( 0.5f );
 //        _sprite?.Scroll( 0.001f, 0.0f );
         }
+
+//        if ( _tiledMap != null )
+//        {
+//            _mapPos.X += _mapDir.X;
+//            
+//            if ( _mapPos.X > _tiledMap.Properties.Get< int >( "width" )
+//                || _mapPos.X <= 0 )
+//            {
+//                _mapDir.X *= -1;
+//            }
+//            
+//            _mapPos.Y += _mapDir.Y;
+//            
+//            if ( _mapPos.Y >= _tiledMap.Properties.Get< int >( "height" )
+//                || _mapPos.Y <= 0 )
+//            {
+//                _mapDir.Y *= -1;
+//            }
+//        }
     }
 
     /// <inheritdoc />
@@ -128,19 +149,12 @@ public class MainGame : Game
             if ( _tiledCam is { IsInUse: true } )
             {
                 _tiledCam.Viewport?.Apply( centerCamera: true );
-                _spriteBatch1.SetProjectionMatrix( _tiledCam.Camera.Combined );
-                _spriteBatch1.Begin();
-                
-                _tiledCam.Position = Vector3.Zero;
+                _tiledCam.Position.X = _mapPos.X;
+                _tiledCam.Position.Y = _mapPos.Y;
+                _tiledCam.Update();
 
                 _mapRenderer?.SetView( _tiledCam.Camera );
-
-                foreach ( var layer in _tileLayers )
-                {
-                    _mapRenderer?.RenderTileLayer( layer );
-                }
-                
-                _spriteBatch1.End();
+                _mapRenderer?.Render();
             }
         }
 
@@ -153,6 +167,11 @@ public class MainGame : Game
                 _gameCam.Viewport?.Apply( centerCamera: true );
                 _spriteBatch2.SetProjectionMatrix( _gameCam.Camera.Combined );
                 _spriteBatch2.Begin();
+
+                _gameCam.Position.X = 0;
+                _gameCam.Position.Y = 0;
+                _gameCam.Position.Z = 0;
+                _gameCam.Update();
 
                 if ( _star != null )
                 {
@@ -300,7 +319,7 @@ public class MainGame : Game
     {
         Logger.Checkpoint();
 
-        _image1 = new Texture( Assets.BACKGROUND_IMAGE );
+        _image1 = new Texture( Assets.COMPLETE_STAR );
         _star   = new Texture( Assets.COMPLETE_STAR );
 
         CreateStage();
@@ -372,15 +391,8 @@ public class MainGame : Game
 
         _tmxMapLoader = new TmxMapLoader();
         _tiledMap     = _tmxMapLoader.Load( Assets.ROOM1_MAP );
-        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap, _spriteBatch1! );
+        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
         _tileLayers   = _tiledMap.Layers.OfType< TiledMapTileLayer >().ToList();
-        
-        Logger.Debug( $"Num Layers: {_tiledMap.Layers.LayersCount}" );
-        
-        foreach ( var layer in _tiledMap.Layers )
-        {
-            Logger.Debug( $"Layer: {layer.Name}" );
-        }
     }
 }
 

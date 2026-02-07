@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+using System.IO;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
@@ -152,11 +155,13 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
         foreach ( var modelMaterial in data.Materials! )
         {
-            if ( modelMaterial.Textures != null )
+            if ( modelMaterial.Textures is not null )
             {
                 foreach ( var modelTexture in modelMaterial.Textures )
                 {
-                    deps.Add( new AssetDescriptor( modelTexture.FileName, typeof( Texture ), textureLoaderParameters ) );
+                    deps.Add( new AssetDescriptor( modelTexture.FileName,
+                                                   typeof( Texture ),
+                                                   textureLoaderParameters ) );
                 }
             }
         }

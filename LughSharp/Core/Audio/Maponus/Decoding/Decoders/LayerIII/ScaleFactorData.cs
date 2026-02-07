@@ -29,6 +29,9 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 [PublicAPI]
 public class ScaleFactorData
 {
+    public int[]   L { get; } /* [cb] */
+    public int[][] S { get; } /* [window][cb] */
+
     public ScaleFactorData()
     {
         L = new int[ 23 ];
@@ -39,7 +42,8 @@ public class ScaleFactorData
             S[ i ] = new int[ 13 ];
         }
     }
-
-    public int[]   L { get; } /* [cb] */
-    public int[][] S { get; } /* [window][cb] */
 }
+
+// ============================================================================
+// ============================================================================
+

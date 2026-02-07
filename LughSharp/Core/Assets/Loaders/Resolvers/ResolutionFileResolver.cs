@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Main;
 
@@ -177,20 +180,6 @@ public class ResolutionFileResolver : IFileHandleResolver
     public class Resolution
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="Resolution"/> class with
-        /// the specified portrait width, portrait height, and assets folder.
-        /// </summary>
-        /// <param name="portraitWidth">The width of this resolution in portrait mode.</param>
-        /// <param name="portraitHeight">The height of this resolution in portrait mode.</param>
-        /// <param name="folder">The name of the folder where the assets which fit this resolution are located.</param>
-        public Resolution( int portraitWidth, int portraitHeight, string folder )
-        {
-            PortraitWidth  = portraitWidth;
-            PortraitHeight = portraitHeight;
-            AssetsFolder   = folder;
-        }
-
-        /// <summary>
         /// Gets the width of this resolution in portrait mode.
         /// </summary>
         public int PortraitWidth { get; }
@@ -204,6 +193,22 @@ public class ResolutionFileResolver : IFileHandleResolver
         /// Gets the folder where the assets for this resolution are located.
         /// </summary>
         public string AssetsFolder { get; }
+
+        // ====================================================================
+        
+        /// <summary>
+        /// Constructs a new instance of the <see cref="Resolution"/> class with
+        /// the specified portrait width, portrait height, and assets folder.
+        /// </summary>
+        /// <param name="portraitWidth">The width of this resolution in portrait mode.</param>
+        /// <param name="portraitHeight">The height of this resolution in portrait mode.</param>
+        /// <param name="folder">The name of the folder where the assets which fit this resolution are located.</param>
+        public Resolution( int portraitWidth, int portraitHeight, string folder )
+        {
+            PortraitWidth  = portraitWidth;
+            PortraitHeight = portraitHeight;
+            AssetsFolder   = folder;
+        }
     }
 }
 

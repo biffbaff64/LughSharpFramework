@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 using Exception = System.Exception;
@@ -37,7 +39,7 @@ public class Decoder
 {
     private const float DEFAULT_SCALE_FACTOR = 32700.0f;
 
-    private static readonly Parameters DecoderDefaultParams = new();
+    private static readonly Parameters _decoderDefaultParams = new();
 
     // ========================================================================
     // ========================================================================
@@ -67,7 +69,7 @@ public class Decoder
     {
         _equalizer = new Equalizer();
 
-        parameters ??= DecoderDefaultParams;
+        parameters ??= _decoderDefaultParams;
 
         var eq = parameters.InitialEqualizerSettings;
 
@@ -168,7 +170,7 @@ public class Decoder
     /// <exception cref="InvalidCastException">
     /// Thrown if the cloning process does not return an object of type <see cref="Parameters"/>.
     /// </exception>
-    public static Parameters DefaultParams => ( Parameters )DecoderDefaultParams.Clone();
+    public static Parameters DefaultParams => ( Parameters )_decoderDefaultParams.Clone();
 
     /// <summary>
     /// Decodes one frame from an MPEG audio bitstream.

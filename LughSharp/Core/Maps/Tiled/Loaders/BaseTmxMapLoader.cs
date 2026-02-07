@@ -42,7 +42,6 @@ using LughSharp.Core.Maps.Objects;
 using LughSharp.Core.Maps.Tiled.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -52,7 +51,8 @@ using XmlReader = LughSharp.Core.Utils.XML.XmlReader;
 namespace LughSharp.Core.Maps.Tiled.Loaders;
 
 [PublicAPI]
-public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP : BaseTmxMapLoader< TP >.BaseTmxLoaderParameters
+public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
+    where TP : BaseTmxMapLoader< TP >.BaseTmxLoaderParameters
 {
     // ========================================================================
     // ========================================================================
@@ -66,11 +66,12 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
     // ========================================================================
     // ========================================================================
 
-    public int                            MapTileWidth        { get; set; }
-    public int                            MapTileHeight       { get; set; }
-    public int                            MapWidthInPixels    { get; set; }
-    public int                            MapHeightInPixels   { get; set; }
-    public TiledMap?                      Map                 { get; set; }
+    public int MapTileWidth      { get; set; }
+    public int MapTileHeight     { get; set; }
+    public int MapWidthInPixels  { get; set; }
+    public int MapHeightInPixels { get; set; }
+
+    public TiledMap                       Map                 { get; set; } = null!;
     public Dictionary< uint, MapObject >? IdToObject          { get; set; }
     public List< Action >?                RunOnEndOfLoadTiled { get; set; }
 
@@ -88,8 +89,8 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
     /// the specified <see cref="IFileHandleResolver"/>.
     /// </summary>
     /// <param name="resolver"></param>
-    protected BaseTmxMapLoader(IFileHandleResolver resolver)
-        : base(resolver)
+    protected BaseTmxMapLoader( IFileHandleResolver resolver )
+        : base( resolver )
     {
     }
 
@@ -106,7 +107,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
         {
             throw new RuntimeException( "XmlRoot must be set before loading the map!" );
         }
-        
+
         Map                 = new TiledMap();
         IdToObject          = new Dictionary< uint, MapObject >();
         RunOnEndOfLoadTiled = new List< Action >();
@@ -125,13 +126,13 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
         FetchMapAttributes();
 
         // Set map and tile dimensions
-        MapTileWidth      = XmlRoot.GetIntAttribute( "tilewidth" ) ?? 0;
-        MapTileHeight     = XmlRoot.GetIntAttribute( "tileheight" ) ?? 0;
-        MapWidthInPixels  = XmlRoot.GetIntAttribute( "width" ) * MapTileWidth ?? 0;
-        MapHeightInPixels = XmlRoot.GetIntAttribute( "height" ) * MapTileHeight ?? 0;
+        MapTileWidth      = XmlRoot.GetIntAttribute( "tilewidth" );
+        MapTileHeight     = XmlRoot.GetIntAttribute( "tileheight" );
+        MapWidthInPixels  = XmlRoot.GetIntAttribute( "width" ) * MapTileWidth;
+        MapHeightInPixels = XmlRoot.GetIntAttribute( "height" ) * MapTileHeight;
 
         // --------------------------------------
-        
+
         var mapOrientation = XmlRoot.GetAttribute( "orientation", null );
 
         if ( !string.IsNullOrEmpty( mapOrientation ) )
@@ -147,13 +148,13 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
         }
 
         // --------------------------------------
-        
+
         var properties = XmlRoot.GetChildByName( "properties" );
 
         LoadProperties( Map.Properties, properties );
 
         // --------------------------------------
-        
+
         // Load tilesets used in this map
         var tilesetList = XmlRoot.GetChildrenByName( "tileset" );
 
@@ -168,7 +169,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
         }
 
         // --------------------------------------
-        
+
         // Load all this maps component layers
         var childCount = XmlRoot?.GetChildCount() ?? 0;
 
@@ -183,7 +184,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
         }
 
         // --------------------------------------
-        
+
         // Opdate hierarchical parallax scrolling factors.
         // In Tiled the final parallax scrolling factor of a layer is the
         // multiplication of its factor with all its parents.
@@ -207,7 +208,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
         }
 
         // --------------------------------------
-        
+
         foreach ( var action in RunOnEndOfLoadTiled )
         {
             action();
@@ -341,8 +342,6 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
                                    FileInfo? tmxFile,
                                    IImageResolver imageResolver )
     {
-        Logger.Checkpoint();
-
         Guard.Against.Null( element );
 
         if ( element.Name.Equals( "group" ) )
@@ -382,8 +381,6 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
     /// <exception cref="ArgumentException"></exception>
     protected void LoadTileLayer( TiledMap map, MapLayers parentLayers, XmlReader.Element element )
     {
-        Logger.Checkpoint();
-
         if ( element.Name == null )
         {
             throw new ArgumentException( "node.Name cannot by null!" );
@@ -445,8 +442,6 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
     /// <exception cref="ArgumentException"></exception>
     protected void LoadObjectGroup( TiledMap map, MapLayers parentLayers, XmlReader.Element element )
     {
-        Logger.Checkpoint();
-
         if ( element.Name == null )
         {
             throw new ArgumentException( "element cannot by null!" );
@@ -495,11 +490,9 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
     protected void LoadImageLayer( TiledMap map,
                                    MapLayers parentLayers,
                                    XmlReader.Element element,
-                                   FileInfo tmxFile,
+                                   FileInfo? tmxFile,
                                    IImageResolver imageResolver )
     {
-        Logger.Checkpoint();
-
         if ( element.Name == null )
         {
             throw new ArgumentException( "element cannot by null!" );
@@ -598,10 +591,9 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
     /// <exception cref="ArgumentException"></exception>
     protected void LoadObject( TiledMap? map, MapObjects? objects, XmlReader.Element? element, float heightInPixels )
     {
-        if ( element?.Name == null )
-        {
-            return;
-        }
+        Guard.Against.Null( map );
+        Guard.Against.Null( objects );
+        Guard.Against.Null( element );
 
         if ( element.Name.Equals( "object" ) )
         {
@@ -665,18 +657,15 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
             {
                 string? gid;
 
-                if ( ( gid = element.GetAttribute( "gid" ) ) != null )
+                if ( ( gid = element.GetAttribute( "gid", null ) ) != null )
                 {
                     id = ( uint )long.Parse( gid );
 
-                    var flipHorizontally = ( id & FLAG_FLIP_HORIZONTALLY ) != 0;
-                    var flipVertically   = ( id & FLAG_FLIP_VERTICALLY ) != 0;
-
-                    var tile = map?.Tilesets.GetTile( id & ~MASK_CLEAR );
-
-                    var tiledMapTileMapObject = new TiledMapTileMapObject( tile!, flipHorizontally, flipVertically );
-
-                    var textureRegion = tiledMapTileMapObject.TextureRegion!;
+                    var flipHorizontally      = ( id & FLAG_FLIP_HORIZONTALLY ) != 0;
+                    var flipVertically        = ( id & FLAG_FLIP_VERTICALLY ) != 0;
+                    var tile                  = map.Tilesets.GetTile( id & ~MASK_CLEAR );
+                    var tiledMapTileMapObject = new TiledMapTileMapObject( tile, flipHorizontally, flipVertically );
+                    var textureRegion         = tiledMapTileMapObject.TextureRegion!;
 
                     tiledMapTileMapObject.Properties.Put( "gid", id );
                     tiledMapTileMapObject.X = x;
@@ -698,23 +687,22 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
             }
 
             mapObject.Name = element.GetAttribute( "name", "" ) ?? "";
-            var rotation = element.GetAttribute( "rotation" );
 
-            if ( rotation != null )
+            string? rotation;
+
+            if ( ( rotation = element.GetAttribute( "rotation", null ) ) != null )
             {
                 mapObject.Properties.Put( "rotation", float.Parse( rotation ) );
             }
 
-            var type = element.GetAttribute( "type" );
+            string? type;
 
-            if ( type != null )
+            if ( ( type = element.GetAttribute( "type", null ) ) != null )
             {
                 mapObject.Properties.Put( "type", type );
             }
 
-            id = element.GetUIntAttribute( "id" );
-
-            if ( id != 0 )
+            if ( ( id = element.GetUIntAttribute( "id" ) ) != 0 )
             {
                 mapObject.Properties.Put( "id", id );
             }
@@ -743,7 +731,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
 
             IdToObject?[ id ] = mapObject;
 
-            objects?.Add( mapObject );
+            objects.Add( mapObject );
         }
     }
 
@@ -758,42 +746,36 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
         {
             var props = element.GetChildrenByName( "property" );
 
-            if ( props != null )
+            foreach ( var property in props )
             {
-                foreach ( var property in props )
+                var name  = property?.GetAttribute( "name", null );
+                var value = property?.GetAttribute( "value", null );
+                var type  = property?.GetAttribute( "type", null );
+
+                value ??= property?.Text;
+
+                if ( type is "object" && properties != null )
                 {
-                    var name  = property?.GetAttribute( "name", null );
-                    var value = property?.GetAttribute( "value", null );
-                    var type  = property?.GetAttribute( "type", null );
-
-                    value ??= property?.Text;
-
-                    if ( type is "object" && properties != null )
+                    // Wait until the end of [LoadTiledMap] to fetch the object
+                    try
                     {
-                        // Wait until the end of [LoadTiledMap] to fetch the object
-                        try
-                        {
-                            var id          = uint.Parse( value! );
-                            var propName    = name!;
-                            var targetProps = properties;
+                        var id          = uint.Parse( value! );
+                        var propName    = name!;
+                        var targetProps = properties;
 
-                            //TODO: Refactor to remove capture of variables and 'this'
-                            RunOnEndOfLoadTiled?.Add( () =>
-                            {
-                                ExecutePropertyAssignment( id, propName, targetProps );
-                            } );
-                        }
-                        catch ( Exception )
-                        {
-                            throw new RuntimeException( $"Error parsing property {name} "
-                                                      + $"of type object with value: [{value}]" );
-                        }
+                        //TODO: Refactor to remove capture of variables and 'this'
+                        RunOnEndOfLoadTiled?.Add( () => { ExecutePropertyAssignment( id, propName, targetProps ); } );
                     }
-                    else
+                    catch ( Exception )
                     {
-                        var castValue = CastProperty( name, value, type );
-                        properties?.Put< object? >( name!, castValue );
+                        throw new RuntimeException( $"Error parsing property {name} "
+                                                  + $"of type object with value: [{value}]" );
                     }
+                }
+                else
+                {
+                    var castValue = CastProperty( name, value, type );
+                    properties?.Put< object? >( name!, castValue );
                 }
             }
         }
@@ -801,8 +783,6 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
 
     private void ExecutePropertyAssignment( uint id, string name, MapProperties? mapProps )
     {
-        Logger.Debug( $"Executing property assignment for id: {id}, name: {name}" );
-
         var obj = IdToObject?[ id ];
         mapProps?.Put( name, obj );
     }
@@ -1104,24 +1084,13 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
                 {
                     element = XmlReader.Parse( tsx );
 
-                    var imageElement = element?.GetChildByName( "image" );
+                    XmlReader.Element? imageElement;
 
-                    if ( imageElement != null )
+                    if ( ( imageElement = element?.GetChildByName( "image" ) ) != null )
                     {
-                        // Image filename
-                        imageSource = imageElement.GetAttribute( "source" );
-
-                        // Image width, in pixels
-                        imageWidth = imageElement.GetIntAttribute( "width" );
-
-                        // Image height, in pixels
-                        imageHeight = imageElement.GetIntAttribute( "height" );
-
-                        if ( imageSource is null )
-                        {
-                            throw new RuntimeException( $"Error: Image source for tileset {tmxFile.Name} is null!" );
-                        }
-
+                        imageSource     = imageElement.GetAttribute( "source" );
+                        imageWidth      = imageElement.GetIntAttribute( "width" );
+                        imageHeight     = imageElement.GetIntAttribute( "height" );
                         imageFileHandle = GetRelativeFileHandle( tsx, imageSource );
                     }
                 }
@@ -1132,19 +1101,13 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
             }
             else
             {
-                var imageElement = element.GetChildByName( "image" );
+                XmlReader.Element? imageElement;
 
-                if ( imageElement != null )
+                if ( ( imageElement = element.GetChildByName( "image" ) ) != null )
                 {
-                    // Image filename
-                    imageSource = imageElement.GetAttribute( "source" );
-
-                    // Image width, in pixels
-                    imageWidth = imageElement.GetIntAttribute( "width" );
-
-                    // Image height, in pixels
-                    imageHeight = imageElement.GetIntAttribute( "height" );
-
+                    imageSource     = imageElement.GetAttribute( "source" );
+                    imageWidth      = imageElement.GetIntAttribute( "width" );
+                    imageHeight     = imageElement.GetIntAttribute( "height" );
                     imageFileHandle = GetRelativeFileHandle( tmxFile, imageSource );
                 }
             }
@@ -1179,10 +1142,9 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
 
             tileSetProperties.Put( "firstgid", firstgid );
 
-            // Tiles
-            var tileElements = element?.GetChildrenByName( "tile" );
+            List< XmlReader.Element? >? tileElements;
 
-            if ( tileElements == null )
+            if ( ( tileElements = element?.GetChildrenByName( "tile" ) ) == null )
             {
                 throw new RuntimeException( "Error: No tile elements found!" );
             }
@@ -1225,9 +1187,8 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
 
             foreach ( var tileElement in tileElements )
             {
-                var localtid = tileElement?.GetUIntAttribute( "id" ) ?? 0;
-                var tile     = tileSet.GetTile( firstgid + localtid );
-
+                var localtid     = tileElement?.GetUIntAttribute( "id" ) ?? 0;
+                var tile         = tileSet.GetTile( firstgid + localtid );
                 var animatedTile = CreateAnimatedTile( tileSet, tile, tileElement, firstgid );
 
                 if ( animatedTile != null )
@@ -1246,13 +1207,25 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
                 tileSet.PutTile( animatedTile.ID, animatedTile );
             }
 
-            Map?.Tilesets.AddTileSet( tileSet );
+            Map.Tilesets.AddTileSet( tileSet );
         }
     }
 
+    /// <summary>
+    /// Adds static tiles to the map using the specified parameters. This implemengtation is
+    /// abstract and must be overridden by subclasses.
+    /// </summary>
+    /// <param name="element">The XML element representing the current tile or node to process.</param>
+    /// <param name="tileContext">The context associated with the tile layer being processed.</param>
+    /// <param name="tileElements">A list of XML elements representing tiles to be added.</param>
+    /// <param name="tileMetrics">Metrics that define the dimensions and properties of the tiles.</param>
+    /// <param name="source">The source path or identifier of the tileset being used.</param>
+    /// <param name="offsetX">The horizontal offset for tile placement, in pixels.</param>
+    /// <param name="offsetY">The vertical offset for tile placement, in pixels.</param>
+    /// <param name="imageDetails">Details about the image or texture associated with the tiles.</param>
     protected abstract void AddStaticTiles( XmlReader.Element? element,
                                             TileContext tileContext,
-                                            List< XmlReader.Element? > tileElements,
+                                            List< XmlReader.Element? >? tileElements,
                                             TileMetrics tileMetrics,
                                             string? source,
                                             int offsetX,
@@ -1358,7 +1331,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader where TP 
 
                 staticTiles.Add( ( StaticTiledMapTile? )tileSet.GetTile( id ) );
 
-                intervals.Add( frameElement?.GetIntAttribute( "duration" ) ?? 0 );
+                intervals.Add( frameElement.GetIntAttribute( "duration" ) );
             }
         }
 

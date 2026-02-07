@@ -32,13 +32,15 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerI;
 [PublicAPI]
 public class SubbandLayer1Stereo : SubbandLayer1
 {
-    protected int   channel2Allocation;
-    protected float channel2Factor;
-    protected float channel2Offset;
-    protected float channel2Sample;
-    protected int   channel2Samplelength;
-    protected float channel2Scalefactor;
-
+    protected int   Channel2Allocation;
+    protected float Channel2Factor;
+    protected float Channel2Offset;
+    protected float Channel2Sample;
+    protected int   Channel2Samplelength;
+    protected float Channel2Scalefactor;
+    
+    // ========================================================================
+    
     public SubbandLayer1Stereo( int subbandnumber )
         : base( subbandnumber )
     {
@@ -48,33 +50,33 @@ public class SubbandLayer1Stereo : SubbandLayer1
     /// </summary>
     public override void ReadAllocation( Bitstream stream, Header? header, Crc16? crc )
     {
-        allocation = stream.GetBitsFromBuffer( 4 );
+        Allocation = stream.GetBitsFromBuffer( 4 );
 
-        if ( allocation > 14 )
+        if ( Allocation > 14 )
         {
             return;
         }
 
-        channel2Allocation = stream.GetBitsFromBuffer( 4 );
+        Channel2Allocation = stream.GetBitsFromBuffer( 4 );
 
         if ( crc != null )
         {
-            crc.AddBits( allocation, 4 );
-            crc.AddBits( channel2Allocation, 4 );
+            crc.AddBits( Allocation, 4 );
+            crc.AddBits( Channel2Allocation, 4 );
         }
 
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            samplelength = allocation + 1;
-            factor       = TableFactor[ allocation ];
-            offset       = TableOffset[ allocation ];
+            Samplelength = Allocation + 1;
+            Factor       = TableFactor[ Allocation ];
+            Offset       = TableOffset[ Allocation ];
         }
 
-        if ( channel2Allocation != 0 )
+        if ( Channel2Allocation != 0 )
         {
-            channel2Samplelength = channel2Allocation + 1;
-            channel2Factor       = TableFactor[ channel2Allocation ];
-            channel2Offset       = TableOffset[ channel2Allocation ];
+            Channel2Samplelength = Channel2Allocation + 1;
+            Channel2Factor       = TableFactor[ Channel2Allocation ];
+            Channel2Offset       = TableOffset[ Channel2Allocation ];
         }
     }
 
@@ -82,14 +84,14 @@ public class SubbandLayer1Stereo : SubbandLayer1
     /// </summary>
     public override void ReadScaleFactor( Bitstream stream, Header? header )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            scalefactor = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+            Scalefactor = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
         }
 
-        if ( channel2Allocation != 0 )
+        if ( Channel2Allocation != 0 )
         {
-            channel2Scalefactor = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+            Channel2Scalefactor = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
         }
     }
 
@@ -99,9 +101,9 @@ public class SubbandLayer1Stereo : SubbandLayer1
     {
         var returnvalue = base.ReadSampleData( stream );
 
-        if ( channel2Allocation != 0 )
+        if ( Channel2Allocation != 0 )
         {
-            channel2Sample = stream.GetBitsFromBuffer( channel2Samplelength );
+            Channel2Sample = stream.GetBitsFromBuffer( Channel2Samplelength );
         }
 
         return returnvalue;
@@ -113,20 +115,24 @@ public class SubbandLayer1Stereo : SubbandLayer1
     {
         base.PutNextSample( channels, filter1, filter2 );
 
-        if ( ( channel2Allocation != 0 ) && ( channels != OutputChannels.LEFT_CHANNEL ) )
+        if ( ( Channel2Allocation != 0 ) && ( channels != OutputChannels.LEFT_CHANNEL ) )
         {
-            var sample2 = ( ( channel2Sample * channel2Factor ) + channel2Offset ) * channel2Scalefactor;
+            var sample2 = ( ( Channel2Sample * Channel2Factor ) + Channel2Offset ) * Channel2Scalefactor;
 
             if ( channels == OutputChannels.BOTH_CHANNELS )
             {
-                filter2?.AddSample( sample2, subbandnumber );
+                filter2?.AddSample( sample2, Subbandnumber );
             }
             else
             {
-                filter1?.AddSample( sample2, subbandnumber );
+                filter1?.AddSample( sample2, Subbandnumber );
             }
         }
 
         return true;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

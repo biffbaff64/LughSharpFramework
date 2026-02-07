@@ -84,6 +84,7 @@ public class MapLayer
 
             return _renderOffsetX;
         }
+        set => _renderOffsetX = value;
     }
 
     /// <summary>
@@ -100,6 +101,7 @@ public class MapLayer
 
             return _renderOffsetY;
         }
+        set => _renderOffsetY = value;
     }
 
     /// <summary>

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 using LughSharp.Core.Audio.Maponus.Support;
@@ -656,66 +658,66 @@ public class LayerIIIDecoder : IFrameDecoder
 
             for ( ch = 0; ch < _channels; ch++ )
             {
-                _sideInfo.Channels[ ch ].scaleFactorBits[ 0 ] = _stream.GetBitsFromBuffer( 1 );
-                _sideInfo.Channels[ ch ].scaleFactorBits[ 1 ] = _stream.GetBitsFromBuffer( 1 );
-                _sideInfo.Channels[ ch ].scaleFactorBits[ 2 ] = _stream.GetBitsFromBuffer( 1 );
-                _sideInfo.Channels[ ch ].scaleFactorBits[ 3 ] = _stream.GetBitsFromBuffer( 1 );
+                _sideInfo.Channels[ ch ].ScaleFactorBits[ 0 ] = _stream.GetBitsFromBuffer( 1 );
+                _sideInfo.Channels[ ch ].ScaleFactorBits[ 1 ] = _stream.GetBitsFromBuffer( 1 );
+                _sideInfo.Channels[ ch ].ScaleFactorBits[ 2 ] = _stream.GetBitsFromBuffer( 1 );
+                _sideInfo.Channels[ ch ].ScaleFactorBits[ 3 ] = _stream.GetBitsFromBuffer( 1 );
             }
 
             for ( var gr = 0; gr < 2; gr++ )
             {
                 for ( ch = 0; ch < _channels; ch++ )
                 {
-                    _sideInfo.Channels[ ch ].granules[ gr ].Part23Length        = _stream.GetBitsFromBuffer( 12 );
-                    _sideInfo.Channels[ ch ].granules[ gr ].BigValues           = _stream.GetBitsFromBuffer( 9 );
-                    _sideInfo.Channels[ ch ].granules[ gr ].GlobalGain          = _stream.GetBitsFromBuffer( 8 );
-                    _sideInfo.Channels[ ch ].granules[ gr ].ScaleFacCompress    = _stream.GetBitsFromBuffer( 4 );
-                    _sideInfo.Channels[ ch ].granules[ gr ].WindowSwitchingFlag = _stream.GetBitsFromBuffer( 1 );
+                    _sideInfo.Channels[ ch ].Granules[ gr ].Part23Length        = _stream.GetBitsFromBuffer( 12 );
+                    _sideInfo.Channels[ ch ].Granules[ gr ].BigValues           = _stream.GetBitsFromBuffer( 9 );
+                    _sideInfo.Channels[ ch ].Granules[ gr ].GlobalGain          = _stream.GetBitsFromBuffer( 8 );
+                    _sideInfo.Channels[ ch ].Granules[ gr ].ScaleFacCompress    = _stream.GetBitsFromBuffer( 4 );
+                    _sideInfo.Channels[ ch ].Granules[ gr ].WindowSwitchingFlag = _stream.GetBitsFromBuffer( 1 );
 
-                    if ( _sideInfo.Channels[ ch ].granules[ gr ].WindowSwitchingFlag != 0 )
+                    if ( _sideInfo.Channels[ ch ].Granules[ gr ].WindowSwitchingFlag != 0 )
                     {
-                        _sideInfo.Channels[ ch ].granules[ gr ].BlockType      = _stream.GetBitsFromBuffer( 2 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].MixedBlockFlag = _stream.GetBitsFromBuffer( 1 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].BlockType      = _stream.GetBitsFromBuffer( 2 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].MixedBlockFlag = _stream.GetBitsFromBuffer( 1 );
 
-                        _sideInfo.Channels[ ch ].granules[ gr ].TableSelect[ 0 ] = _stream.GetBitsFromBuffer( 5 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].TableSelect[ 1 ] = _stream.GetBitsFromBuffer( 5 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].TableSelect[ 0 ] = _stream.GetBitsFromBuffer( 5 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].TableSelect[ 1 ] = _stream.GetBitsFromBuffer( 5 );
 
-                        _sideInfo.Channels[ ch ].granules[ gr ].SubblockGain[ 0 ] = _stream.GetBitsFromBuffer( 3 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].SubblockGain[ 1 ] = _stream.GetBitsFromBuffer( 3 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].SubblockGain[ 2 ] = _stream.GetBitsFromBuffer( 3 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].SubblockGain[ 0 ] = _stream.GetBitsFromBuffer( 3 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].SubblockGain[ 1 ] = _stream.GetBitsFromBuffer( 3 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].SubblockGain[ 2 ] = _stream.GetBitsFromBuffer( 3 );
 
                         // Set region_count parameters since they are implicit in this case.
-                        if ( _sideInfo.Channels[ ch ].granules[ gr ].BlockType == 0 )
+                        if ( _sideInfo.Channels[ ch ].Granules[ gr ].BlockType == 0 )
                         {
                             // Side info bad: block_type == 0 in split block
                             return false;
                         }
 
-                        if ( ( _sideInfo.Channels[ ch ].granules[ gr ].BlockType == 2 ) &&
-                             ( _sideInfo.Channels[ ch ].granules[ gr ].MixedBlockFlag == 0 ) )
+                        if ( ( _sideInfo.Channels[ ch ].Granules[ gr ].BlockType == 2 ) &&
+                             ( _sideInfo.Channels[ ch ].Granules[ gr ].MixedBlockFlag == 0 ) )
                         {
-                            _sideInfo.Channels[ ch ].granules[ gr ].Region0Count = 8;
+                            _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count = 8;
                         }
                         else
                         {
-                            _sideInfo.Channels[ ch ].granules[ gr ].Region0Count = 7;
+                            _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count = 7;
                         }
 
-                        _sideInfo.Channels[ ch ].granules[ gr ].Region1Count = 20 - _sideInfo.Channels[ ch ].granules[ gr ].Region0Count;
+                        _sideInfo.Channels[ ch ].Granules[ gr ].Region1Count = 20 - _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count;
                     }
                     else
                     {
-                        _sideInfo.Channels[ ch ].granules[ gr ].TableSelect[ 0 ] = _stream.GetBitsFromBuffer( 5 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].TableSelect[ 1 ] = _stream.GetBitsFromBuffer( 5 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].TableSelect[ 2 ] = _stream.GetBitsFromBuffer( 5 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].Region0Count     = _stream.GetBitsFromBuffer( 4 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].Region1Count     = _stream.GetBitsFromBuffer( 3 );
-                        _sideInfo.Channels[ ch ].granules[ gr ].BlockType        = 0;
+                        _sideInfo.Channels[ ch ].Granules[ gr ].TableSelect[ 0 ] = _stream.GetBitsFromBuffer( 5 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].TableSelect[ 1 ] = _stream.GetBitsFromBuffer( 5 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].TableSelect[ 2 ] = _stream.GetBitsFromBuffer( 5 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count     = _stream.GetBitsFromBuffer( 4 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].Region1Count     = _stream.GetBitsFromBuffer( 3 );
+                        _sideInfo.Channels[ ch ].Granules[ gr ].BlockType        = 0;
                     }
 
-                    _sideInfo.Channels[ ch ].granules[ gr ].Preflag           = _stream.GetBitsFromBuffer( 1 );
-                    _sideInfo.Channels[ ch ].granules[ gr ].ScaleFacScale     = _stream.GetBitsFromBuffer( 1 );
-                    _sideInfo.Channels[ ch ].granules[ gr ].Count1TableSelect = _stream.GetBitsFromBuffer( 1 );
+                    _sideInfo.Channels[ ch ].Granules[ gr ].Preflag           = _stream.GetBitsFromBuffer( 1 );
+                    _sideInfo.Channels[ ch ].Granules[ gr ].ScaleFacScale     = _stream.GetBitsFromBuffer( 1 );
+                    _sideInfo.Channels[ ch ].Granules[ gr ].Count1TableSelect = _stream.GetBitsFromBuffer( 1 );
                 }
             }
         }
@@ -728,54 +730,54 @@ public class LayerIIIDecoder : IFrameDecoder
 
             for ( ch = 0; ch < _channels; ch++ )
             {
-                _sideInfo.Channels[ ch ].granules[ 0 ].Part23Length        = _stream.GetBitsFromBuffer( 12 );
-                _sideInfo.Channels[ ch ].granules[ 0 ].BigValues           = _stream.GetBitsFromBuffer( 9 );
-                _sideInfo.Channels[ ch ].granules[ 0 ].GlobalGain          = _stream.GetBitsFromBuffer( 8 );
-                _sideInfo.Channels[ ch ].granules[ 0 ].ScaleFacCompress    = _stream.GetBitsFromBuffer( 9 );
-                _sideInfo.Channels[ ch ].granules[ 0 ].WindowSwitchingFlag = _stream.GetBitsFromBuffer( 1 );
+                _sideInfo.Channels[ ch ].Granules[ 0 ].Part23Length        = _stream.GetBitsFromBuffer( 12 );
+                _sideInfo.Channels[ ch ].Granules[ 0 ].BigValues           = _stream.GetBitsFromBuffer( 9 );
+                _sideInfo.Channels[ ch ].Granules[ 0 ].GlobalGain          = _stream.GetBitsFromBuffer( 8 );
+                _sideInfo.Channels[ ch ].Granules[ 0 ].ScaleFacCompress    = _stream.GetBitsFromBuffer( 9 );
+                _sideInfo.Channels[ ch ].Granules[ 0 ].WindowSwitchingFlag = _stream.GetBitsFromBuffer( 1 );
 
-                if ( _sideInfo.Channels[ ch ].granules[ 0 ].WindowSwitchingFlag != 0 )
+                if ( _sideInfo.Channels[ ch ].Granules[ 0 ].WindowSwitchingFlag != 0 )
                 {
-                    _sideInfo.Channels[ ch ].granules[ 0 ].BlockType        = _stream.GetBitsFromBuffer( 2 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].MixedBlockFlag   = _stream.GetBitsFromBuffer( 1 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].TableSelect[ 0 ] = _stream.GetBitsFromBuffer( 5 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].TableSelect[ 1 ] = _stream.GetBitsFromBuffer( 5 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].BlockType        = _stream.GetBitsFromBuffer( 2 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].MixedBlockFlag   = _stream.GetBitsFromBuffer( 1 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].TableSelect[ 0 ] = _stream.GetBitsFromBuffer( 5 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].TableSelect[ 1 ] = _stream.GetBitsFromBuffer( 5 );
 
-                    _sideInfo.Channels[ ch ].granules[ 0 ].SubblockGain[ 0 ] = _stream.GetBitsFromBuffer( 3 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].SubblockGain[ 1 ] = _stream.GetBitsFromBuffer( 3 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].SubblockGain[ 2 ] = _stream.GetBitsFromBuffer( 3 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].SubblockGain[ 0 ] = _stream.GetBitsFromBuffer( 3 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].SubblockGain[ 1 ] = _stream.GetBitsFromBuffer( 3 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].SubblockGain[ 2 ] = _stream.GetBitsFromBuffer( 3 );
 
                     // Set region_count parameters since they are implicit in this case.
 
-                    if ( _sideInfo.Channels[ ch ].granules[ 0 ].BlockType == 0 )
+                    if ( _sideInfo.Channels[ ch ].Granules[ 0 ].BlockType == 0 )
                     {
                         // Side info bad: block_type == 0 in split block
                         return false;
                     }
 
-                    if ( ( _sideInfo.Channels[ ch ].granules[ 0 ].BlockType == 2 )
-                         && ( _sideInfo.Channels[ ch ].granules[ 0 ].MixedBlockFlag == 0 ) )
+                    if ( ( _sideInfo.Channels[ ch ].Granules[ 0 ].BlockType == 2 )
+                         && ( _sideInfo.Channels[ ch ].Granules[ 0 ].MixedBlockFlag == 0 ) )
                     {
-                        _sideInfo.Channels[ ch ].granules[ 0 ].Region0Count = 8;
+                        _sideInfo.Channels[ ch ].Granules[ 0 ].Region0Count = 8;
                     }
                     else
                     {
-                        _sideInfo.Channels[ ch ].granules[ 0 ].Region0Count = 7;
-                        _sideInfo.Channels[ ch ].granules[ 0 ].Region1Count = 20 - _sideInfo.Channels[ ch ].granules[ 0 ].Region0Count;
+                        _sideInfo.Channels[ ch ].Granules[ 0 ].Region0Count = 7;
+                        _sideInfo.Channels[ ch ].Granules[ 0 ].Region1Count = 20 - _sideInfo.Channels[ ch ].Granules[ 0 ].Region0Count;
                     }
                 }
                 else
                 {
-                    _sideInfo.Channels[ ch ].granules[ 0 ].TableSelect[ 0 ] = _stream.GetBitsFromBuffer( 5 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].TableSelect[ 1 ] = _stream.GetBitsFromBuffer( 5 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].TableSelect[ 2 ] = _stream.GetBitsFromBuffer( 5 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].Region0Count     = _stream.GetBitsFromBuffer( 4 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].Region1Count     = _stream.GetBitsFromBuffer( 3 );
-                    _sideInfo.Channels[ ch ].granules[ 0 ].BlockType        = 0;
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].TableSelect[ 0 ] = _stream.GetBitsFromBuffer( 5 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].TableSelect[ 1 ] = _stream.GetBitsFromBuffer( 5 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].TableSelect[ 2 ] = _stream.GetBitsFromBuffer( 5 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].Region0Count     = _stream.GetBitsFromBuffer( 4 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].Region1Count     = _stream.GetBitsFromBuffer( 3 );
+                    _sideInfo.Channels[ ch ].Granules[ 0 ].BlockType        = 0;
                 }
 
-                _sideInfo.Channels[ ch ].granules[ 0 ].ScaleFacScale     = _stream.GetBitsFromBuffer( 1 );
-                _sideInfo.Channels[ ch ].granules[ 0 ].Count1TableSelect = _stream.GetBitsFromBuffer( 1 );
+                _sideInfo.Channels[ ch ].Granules[ 0 ].ScaleFacScale     = _stream.GetBitsFromBuffer( 1 );
+                _sideInfo.Channels[ ch ].Granules[ 0 ].Count1TableSelect = _stream.GetBitsFromBuffer( 1 );
             }
         }
 
@@ -786,7 +788,7 @@ public class LayerIIIDecoder : IFrameDecoder
     /// </summary>
     private void ReadScaleFactors( int ch, int gr )
     {
-        var grInfo    = _sideInfo.Channels[ ch ].granules[ gr ];
+        var grInfo    = _sideInfo.Channels[ ch ].Granules[ gr ];
         var scaleComp = grInfo.ScaleFacCompress;
         var length0   = _slen[ 0 ][ scaleComp ];
         var length1   = _slen[ 1 ][ scaleComp ];
@@ -876,7 +878,7 @@ public class LayerIIIDecoder : IFrameDecoder
         {
             // LONG types 0,1,3
 
-            if ( ( _sideInfo.Channels[ ch ].scaleFactorBits[ 0 ] == 0 ) || ( gr == 0 ) )
+            if ( ( _sideInfo.Channels[ ch ].ScaleFactorBits[ 0 ] == 0 ) || ( gr == 0 ) )
             {
                 _scalefac[ ch ].L[ 0 ] = _bitReserve.ReadBits( length0 );
                 _scalefac[ ch ].L[ 1 ] = _bitReserve.ReadBits( length0 );
@@ -886,7 +888,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _scalefac[ ch ].L[ 5 ] = _bitReserve.ReadBits( length0 );
             }
 
-            if ( ( _sideInfo.Channels[ ch ].scaleFactorBits[ 1 ] == 0 ) || ( gr == 0 ) )
+            if ( ( _sideInfo.Channels[ ch ].ScaleFactorBits[ 1 ] == 0 ) || ( gr == 0 ) )
             {
                 _scalefac[ ch ].L[ 6 ]  = _bitReserve.ReadBits( length0 );
                 _scalefac[ ch ].L[ 7 ]  = _bitReserve.ReadBits( length0 );
@@ -895,7 +897,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _scalefac[ ch ].L[ 10 ] = _bitReserve.ReadBits( length0 );
             }
 
-            if ( ( _sideInfo.Channels[ ch ].scaleFactorBits[ 2 ] == 0 ) || ( gr == 0 ) )
+            if ( ( _sideInfo.Channels[ ch ].ScaleFactorBits[ 2 ] == 0 ) || ( gr == 0 ) )
             {
                 _scalefac[ ch ].L[ 11 ] = _bitReserve.ReadBits( length1 );
                 _scalefac[ ch ].L[ 12 ] = _bitReserve.ReadBits( length1 );
@@ -904,7 +906,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _scalefac[ ch ].L[ 15 ] = _bitReserve.ReadBits( length1 );
             }
 
-            if ( ( _sideInfo.Channels[ ch ].scaleFactorBits[ 3 ] == 0 ) || ( gr == 0 ) )
+            if ( ( _sideInfo.Channels[ ch ].ScaleFactorBits[ 3 ] == 0 ) || ( gr == 0 ) )
             {
                 _scalefac[ ch ].L[ 16 ] = _bitReserve.ReadBits( length1 );
                 _scalefac[ ch ].L[ 17 ] = _bitReserve.ReadBits( length1 );
@@ -924,7 +926,7 @@ public class LayerIIIDecoder : IFrameDecoder
         int blocktypenumber;
         var blocknumber = 0;
 
-        var grInfo = _sideInfo.Channels[ ch ].granules[ gr ];
+        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         var scalefacComp = grInfo.ScaleFacCompress;
 
@@ -951,7 +953,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _newSlen[ 2 ] = SupportClass.URShift( scalefacComp & 0xF, 2 );
                 _newSlen[ 3 ] = scalefacComp & 3;
 
-                _sideInfo.Channels[ ch ].granules[ gr ].Preflag = 0;
+                _sideInfo.Channels[ ch ].Granules[ gr ].Preflag = 0;
                 blocknumber                                     = 0;
             }
             else if ( scalefacComp < 500 )
@@ -961,7 +963,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _newSlen[ 2 ] = ( scalefacComp - 400 ) & 3;
                 _newSlen[ 3 ] = 0;
 
-                _sideInfo.Channels[ ch ].granules[ gr ].Preflag = 0;
+                _sideInfo.Channels[ ch ].Granules[ gr ].Preflag = 0;
                 blocknumber                                     = 1;
             }
             else if ( scalefacComp < 512 )
@@ -971,7 +973,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _newSlen[ 2 ] = 0;
                 _newSlen[ 3 ] = 0;
 
-                _sideInfo.Channels[ ch ].granules[ gr ].Preflag = 1;
+                _sideInfo.Channels[ ch ].Granules[ gr ].Preflag = 1;
                 blocknumber                                     = 2;
             }
         }
@@ -987,7 +989,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _newSlen[ 2 ] = intScalefacComp % 36 % 6;
                 _newSlen[ 3 ] = 0;
 
-                _sideInfo.Channels[ ch ].granules[ gr ].Preflag = 0;
+                _sideInfo.Channels[ ch ].Granules[ gr ].Preflag = 0;
                 blocknumber                                     = 3;
             }
             else if ( intScalefacComp < 244 )
@@ -997,7 +999,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _newSlen[ 2 ] = ( intScalefacComp - 180 ) & 3;
                 _newSlen[ 3 ] = 0;
 
-                _sideInfo.Channels[ ch ].granules[ gr ].Preflag = 0;
+                _sideInfo.Channels[ ch ].Granules[ gr ].Preflag = 0;
                 blocknumber                                     = 4;
             }
             else if ( intScalefacComp < 255 )
@@ -1007,7 +1009,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 _newSlen[ 2 ] = 0;
                 _newSlen[ 3 ] = 0;
 
-                _sideInfo.Channels[ ch ].granules[ gr ].Preflag = 0;
+                _sideInfo.Channels[ ch ].Granules[ gr ].Preflag = 0;
                 blocknumber                                     = 5;
             }
         }
@@ -1038,7 +1040,7 @@ public class LayerIIIDecoder : IFrameDecoder
     {
         var m = 0;
 
-        var grInfo = _sideInfo.Channels[ ch ].granules[ gr ];
+        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         GetLsfScaleData( ch, gr );
 
@@ -1110,7 +1112,7 @@ public class LayerIIIDecoder : IFrameDecoder
         V[ 0 ] = 0;
         W[ 0 ] = 0;
 
-        var part23End = _part2Start + _sideInfo.Channels[ ch ].granules[ gr ].Part23Length;
+        var part23End = _part2Start + _sideInfo.Channels[ ch ].Granules[ gr ].Part23Length;
 
         int region1Start;
         int region2Start;
@@ -1119,8 +1121,8 @@ public class LayerIIIDecoder : IFrameDecoder
 
         // Find region boundary for short block case
 
-        if ( ( _sideInfo.Channels[ ch ].granules[ gr ].WindowSwitchingFlag != 0 )
-             && ( _sideInfo.Channels[ ch ].granules[ gr ].BlockType == 2 ) )
+        if ( ( _sideInfo.Channels[ ch ].Granules[ gr ].WindowSwitchingFlag != 0 )
+             && ( _sideInfo.Channels[ ch ].Granules[ gr ].BlockType == 2 ) )
         {
             // Region2.
             // Extrahandling for 8KHZ
@@ -1131,8 +1133,8 @@ public class LayerIIIDecoder : IFrameDecoder
         {
             // Find region boundary for long block case
 
-            var buf  = _sideInfo.Channels[ ch ].granules[ gr ].Region0Count + 1;
-            var buf1 = buf + _sideInfo.Channels[ ch ].granules[ gr ].Region1Count + 1;
+            var buf  = _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count + 1;
+            var buf1 = buf + _sideInfo.Channels[ ch ].Granules[ gr ].Region1Count + 1;
 
             if ( buf1 > ( _sfBandIndex[ _sfreq ].L.Length - 1 ) )
             {
@@ -1146,19 +1148,19 @@ public class LayerIIIDecoder : IFrameDecoder
         var index = 0;
 
         // Read bigvalues area
-        for ( var i = 0; i < ( _sideInfo.Channels[ ch ].granules[ gr ].BigValues << 1 ); i += 2 )
+        for ( var i = 0; i < ( _sideInfo.Channels[ ch ].Granules[ gr ].BigValues << 1 ); i += 2 )
         {
             if ( i < region1Start )
             {
-                h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].granules[ gr ].TableSelect[ 0 ] ];
+                h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].Granules[ gr ].TableSelect[ 0 ] ];
             }
             else if ( i < region2Start )
             {
-                h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].granules[ gr ].TableSelect[ 1 ] ];
+                h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].Granules[ gr ].TableSelect[ 1 ] ];
             }
             else
             {
-                h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].granules[ gr ].TableSelect[ 2 ] ];
+                h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].Granules[ gr ].TableSelect[ 2 ] ];
             }
 
             Huffman.Decode( h, X, Y, V, W, _bitReserve );
@@ -1171,7 +1173,7 @@ public class LayerIIIDecoder : IFrameDecoder
         }
 
         // Read count1 area
-        h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].granules[ gr ].Count1TableSelect + 32 ];
+        h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].Granules[ gr ].Count1TableSelect + 32 ];
         var nuBits = _bitReserve.HssTell();
 
         while ( ( nuBits < part23End ) && ( index < 576 ) )
@@ -1251,7 +1253,7 @@ public class LayerIIIDecoder : IFrameDecoder
     /// </summary>
     private void DequantizeSample( float[][] xr, int ch, int gr )
     {
-        var grInfo = _sideInfo.Channels[ ch ].granules[ gr ];
+        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
         var cb     = 0;
         int nextCbBoundary;
         var cbBegin = 0;
@@ -1450,7 +1452,7 @@ public class LayerIIIDecoder : IFrameDecoder
     /// </summary>
     private void Reorder( float[][] xr, int ch, int gr )
     {
-        var grInfo = _sideInfo.Channels[ ch ].granules[ gr ];
+        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         if ( ( grInfo.WindowSwitchingFlag != 0 ) && ( grInfo.BlockType == 2 ) )
         {
@@ -1549,7 +1551,7 @@ public class LayerIIIDecoder : IFrameDecoder
         }
         else
         {
-            var grInfo  = _sideInfo.Channels[ 0 ].granules[ gr ];
+            var grInfo  = _sideInfo.Channels[ 0 ].Granules[ gr ];
             var modeExt = _header.ModeExtension();
             int i;
 
@@ -1974,7 +1976,7 @@ public class LayerIIIDecoder : IFrameDecoder
     {
         int sb18;
         int sb18Lim;
-        var grInfo = _sideInfo.Channels[ ch ].granules[ gr ];
+        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         // 31 alias-reduction operations between each pair of sub-bands
         // with 8 butterflies between each pair
@@ -2010,7 +2012,7 @@ public class LayerIIIDecoder : IFrameDecoder
     private void Hybrid( int ch, int gr )
     {
         int sb18;
-        var grInfo = _sideInfo.Channels[ ch ].granules[ gr ];
+        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         for ( sb18 = 0; sb18 < 576; sb18 += 18 )
         {
@@ -2475,3 +2477,7 @@ public class LayerIIIDecoder : IFrameDecoder
         return ix;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

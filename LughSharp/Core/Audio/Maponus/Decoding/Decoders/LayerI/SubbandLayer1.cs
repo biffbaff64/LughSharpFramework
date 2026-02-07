@@ -54,42 +54,44 @@ public class SubbandLayer1 : ASubband
         ( ( 1.0f / 8192.0f ) - 1.0f ) * ( 16384.0f / 16383.0f ), ( ( 1.0f / 16384.0f ) - 1.0f ) * ( 32768.0f / 32767.0f ),
     ];
 
-    protected readonly int subbandnumber;
+    protected readonly int Subbandnumber;
 
-    protected int   allocation;
-    protected float factor;
-    protected float offset;
-    protected float sample;
-    protected int   samplelength;
-    protected int   samplenumber;
-    protected float scalefactor;
+    protected int   Allocation;
+    protected float Factor;
+    protected float Offset;
+    protected float Sample;
+    protected int   Samplelength;
+    protected int   Samplenumber;
+    protected float Scalefactor;
+    
+    // ========================================================================
 
     /// <summary>
     /// Construtor.
     /// </summary>
     public SubbandLayer1( int subbandnumber )
     {
-        this.subbandnumber = subbandnumber;
-        samplenumber       = 0;
+        this.Subbandnumber = subbandnumber;
+        Samplenumber       = 0;
     }
 
     /// <summary>
     /// </summary>
     public override void ReadAllocation( Bitstream stream, Header? header, Crc16 crc )
     {
-        if ( ( allocation = stream.GetBitsFromBuffer( 4 ) ) == 15 )
+        if ( ( Allocation = stream.GetBitsFromBuffer( 4 ) ) == 15 )
         {
         }
 
         // cerr << "WARNING: stream contains an illegal allocation!\n";
         // MPEG-stream is corrupted!
-        crc.AddBits( allocation, 4 );
+        crc.AddBits( Allocation, 4 );
 
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            samplelength = allocation + 1;
-            factor       = TableFactor[ allocation ];
-            offset       = TableOffset[ allocation ];
+            Samplelength = Allocation + 1;
+            Factor       = TableFactor[ Allocation ];
+            Offset       = TableOffset[ Allocation ];
         }
     }
 
@@ -97,9 +99,9 @@ public class SubbandLayer1 : ASubband
     /// </summary>
     public override void ReadScaleFactor( Bitstream stream, Header? header )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            scalefactor = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
+            Scalefactor = ScaleFactors[ stream.GetBitsFromBuffer( 6 ) ];
         }
     }
 
@@ -107,14 +109,14 @@ public class SubbandLayer1 : ASubband
     /// </summary>
     public override bool ReadSampleData( Bitstream stream )
     {
-        if ( allocation != 0 )
+        if ( Allocation != 0 )
         {
-            sample = stream.GetBitsFromBuffer( samplelength );
+            Sample = stream.GetBitsFromBuffer( Samplelength );
         }
 
-        if ( ++samplenumber == 12 )
+        if ( ++Samplenumber == 12 )
         {
-            samplenumber = 0;
+            Samplenumber = 0;
 
             return true;
         }
@@ -126,12 +128,16 @@ public class SubbandLayer1 : ASubband
     /// </summary>
     public override bool PutNextSample( int channels, SynthesisFilter? filter1, SynthesisFilter? filter2 )
     {
-        if ( ( allocation != 0 ) && ( channels != OutputChannels.RIGHT_CHANNEL ) )
+        if ( ( Allocation != 0 ) && ( channels != OutputChannels.RIGHT_CHANNEL ) )
         {
-            var scaledSample = ( ( sample * factor ) + offset ) * scalefactor;
-            filter1?.AddSample( scaledSample, subbandnumber );
+            var scaledSample = ( ( Sample * Factor ) + Offset ) * Scalefactor;
+            filter1?.AddSample( scaledSample, Subbandnumber );
         }
 
         return true;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

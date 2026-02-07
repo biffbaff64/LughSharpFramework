@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+
+using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -32,6 +36,7 @@ namespace LughSharp.Core.Graphics.G3D.Models.Data;
 /// OpenGL resources like textures or vertex buffer objects are not stored. Instead, a ModelData
 /// instance needs to be converted to a Model first.
 /// </summary>
+[PublicAPI]
 public class ModelData
 {
     public string?                ID         { get; set; }
@@ -41,6 +46,8 @@ public class ModelData
     public List< ModelNode >      Nodes      { get; set; } = [ ];
     public List< ModelAnimation > Animations { get; set; } = [ ];
 
+    // ========================================================================
+    
     public virtual void AddMesh( ModelMesh mesh )
     {
         foreach ( var other in Meshes )
@@ -54,3 +61,7 @@ public class ModelData
         Meshes.Add( mesh );
     }
 }
+
+// ============================================================================
+// ============================================================================
+
