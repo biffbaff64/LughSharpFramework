@@ -32,6 +32,7 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
@@ -43,7 +44,7 @@ public class Actor : IActor, IComparable< Actor >
 {
     public Stage?    Stage      { get; set; }
     public Group?    Parent     { get; set; }
-    public string?   Name       { get; set; }
+    public string?   Name       { get; set; } = "Not Set";
     public object?   UserObject { get; set; }
     public Touchable Touchable  { get; set; } = Touchable.Enabled;
     public bool      IsVisible  { get; set; } = true;
@@ -270,6 +271,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </param>
     public virtual void Draw( IBatch batch, float parentAlpha )
     {
+        Logger.Debug( "This base method should be overridden by child classes." );
     }
 
     /// <summary>

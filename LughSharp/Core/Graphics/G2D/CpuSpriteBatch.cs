@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
@@ -235,8 +237,8 @@ public class CpuSpriteBatch : SpriteBatch
     public override void Draw( Texture? texture,
                                GRect region,
                                GRect src,
-                               bool flipX,
-                               bool flipY )
+                               bool flipX = false,
+                               bool flipY = false )
     {
         Guard.Against.Null( texture );
 

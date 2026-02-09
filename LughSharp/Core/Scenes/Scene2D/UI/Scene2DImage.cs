@@ -29,7 +29,6 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -48,6 +47,8 @@ public class Scene2DImage : Widget
     public float           ImageHeight { get; set; }
     public ISceneDrawable? Drawable    { get; private set; }
 
+    // ========================================================================
+    
     /// <summary>
     /// The alignment of the image within the widget.
     /// </summary>
@@ -92,7 +93,7 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Creates a new, unitialised, Image instance.
     /// </summary>
-    public Scene2DImage() : this( ( ISceneDrawable )null! )
+    public Scene2DImage() : this( ( ISceneDrawable? )null )
     {
     }
 
@@ -101,7 +102,7 @@ public class Scene2DImage : Widget
     /// </summary>
     /// <param name="patch"></param>
     public Scene2DImage( NinePatch patch )
-        : this( new NinePatchSceneDrawable( patch ), Scaling.Stretch )
+        : this( new NinePatchSceneDrawable( patch ), Scaling.None )
     {
     }
 
@@ -110,7 +111,7 @@ public class Scene2DImage : Widget
     /// </summary>
     /// <param name="region"></param>
     public Scene2DImage( TextureRegion region )
-        : this( new TextureRegionDrawable( region ), Scaling.Stretch )
+        : this( new TextureRegionDrawable( region ), Scaling.None )
     {
     }
 
@@ -129,7 +130,7 @@ public class Scene2DImage : Widget
     /// <param name="skin"></param>
     /// <param name="drawableName"></param>
     public Scene2DImage( Skin skin, string drawableName )
-        : this( skin.GetDrawable( drawableName ), Scaling.Stretch )
+        : this( skin.GetDrawable( drawableName ), Scaling.None )
     {
     }
 
@@ -138,7 +139,7 @@ public class Scene2DImage : Widget
     /// </summary>
     /// <param name="drawable"></param>
     public Scene2DImage( ISceneDrawable? drawable )
-        : this( drawable, Scaling.Stretch )
+        : this( drawable, Scaling.None )
     {
     }
 
@@ -156,7 +157,8 @@ public class Scene2DImage : Widget
 
         _scaling  = scaling;
         Alignment = align;
-
+        Name      = GetType().Name;
+        
         SafeConstructorHelper();
     }
 

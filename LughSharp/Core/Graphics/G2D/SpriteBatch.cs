@@ -22,7 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
@@ -41,7 +45,7 @@ namespace LughSharp.Core.Graphics.G2D;
 /// It minimizes the number of draw calls by buffering sprite data and rendering all at once.
 /// </summary>
 [PublicAPI]
-public class SpriteBatch : IBatch, IDisposable
+public class SpriteBatch : IBatch
 {
     public const int RENDERING_OPTION_FLIP_X = 1 << 0;
     public const int RENDERING_OPTION_FLIP_Y = 1 << 1;
@@ -88,8 +92,8 @@ public class SpriteBatch : IBatch, IDisposable
     private readonly object _lockObject = new();
 
     // Prevent reallocation of common vectors
-    private static readonly Vector2 DefaultOrigin = Vector2.Zero;
-    private static readonly Vector2 DefaultScale  = Vector2.One;
+    private static readonly Vector2 _defaultOrigin = Vector2.Zero;
+    private static readonly Vector2 _defaultScale  = Vector2.One;
 
     private Texture?       _lastSuccessfulTexture;
     private ShaderProgram? _shader;
@@ -211,7 +215,9 @@ public class SpriteBatch : IBatch, IDisposable
                           false,
                           size * VERTICES_PER_SPRITE,
                           size * INDICES_PER_SPRITE,
-                          va1, va2, va3 );
+                          va1,
+                          va2,
+                          va3 );
 
         // Set up an orthographic projection matrix for 2D rendering.
         // This matrix transforms 2D coordinates into normalized device coordinates (NDC).
@@ -394,6 +400,7 @@ public class SpriteBatch : IBatch, IDisposable
             if ( Idx <= 0 )
             {
                 Idx = 0;
+
                 return;
             }
 
@@ -446,7 +453,10 @@ public class SpriteBatch : IBatch, IDisposable
             if ( BlendingEnabled )
             {
                 Engine.GL.Enable( EnableCap.Blend );
-                Engine.GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendMode.OneMinusSrcAlpha );
+                Engine.GL.BlendFuncSeparate( BlendSrcFunc,
+                                             BlendDstFunc,
+                                             BlendSrcFuncAlpha,
+                                             BlendMode.OneMinusSrcAlpha );
             }
             else
             {
@@ -456,9 +466,9 @@ public class SpriteBatch : IBatch, IDisposable
             // 6. Draw
             // 4 = Triangles, 5125 = Unsigned Int
             Engine.GL.DrawElements( ( int )PrimitiveType.Triangles,
-                             spritesInBatch * 6,
-                             ( int )DrawElementsType.UnsignedInt,
-                             IntPtr.Zero );
+                                    spritesInBatch * 6,
+                                    ( int )DrawElementsType.UnsignedInt,
+                                    IntPtr.Zero );
 
             // 7. Reset
             Idx = 0;
@@ -674,7 +684,7 @@ public class SpriteBatch : IBatch, IDisposable
         Guard.Against.Null( _shader );
 
         _textureLocation = Engine.GL.GetUniformLocation( _shader.ShaderProgramHandle,
-                                                  "u_texture" );
+                                                         "u_texture" );
     }
 
     /// <summary>
@@ -921,9 +931,9 @@ public class SpriteBatch : IBatch, IDisposable
         Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
 
         Engine.GL.BufferData( BufferTarget.ArrayBuffer,
-                       Vertices.Length * sizeof( float ),
-                       0,
-                       BufferUsageHint.DynamicDraw );
+                              Vertices.Length * sizeof( float ),
+                              0,
+                              BufferUsageHint.DynamicDraw );
     }
 
     /// <summary>
@@ -954,9 +964,9 @@ public class SpriteBatch : IBatch, IDisposable
         fixed ( uint* ptr = indices )
         {
             Engine.GL.BufferData( BufferTarget.ElementArrayBuffer,
-                           indices.Length * sizeof( uint ),
-                           ( IntPtr )ptr,
-                           BufferUsageHint.DynamicDraw );
+                                  indices.Length * sizeof( uint ),
+                                  ( IntPtr )ptr,
+                                  BufferUsageHint.DynamicDraw );
         }
     }
 
@@ -973,6 +983,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="posY"> Y coordinate in pixels. </param>
     /// <param name="width"> Width of Texture in pixels. </param>
     /// <param name="height"> Height of Texture in pixerls. </param>
+    // Checked 08.02.26
     public virtual void Draw( Texture texture, float posX, float posY, float width, float height )
     {
         lock ( _lockObject )
@@ -996,10 +1007,26 @@ public class SpriteBatch : IBatch, IDisposable
             const float U2 = 1;
             const float V2 = 0;
 
-            SetVertices( posX, posY, ColorPackedRGBA, U, V,
-                         posX, fy2, ColorPackedRGBA, U, V2,
-                         fx2, fy2, ColorPackedRGBA, U2, V2,
-                         fx2, posY, ColorPackedRGBA, U2, V );
+            SetVertices( posX,
+                         posY,
+                         ColorPackedRGBA,
+                         U,
+                         V,
+                         posX,
+                         fy2,
+                         ColorPackedRGBA,
+                         U,
+                         V2,
+                         fx2,
+                         fy2,
+                         ColorPackedRGBA,
+                         U2,
+                         V2,
+                         fx2,
+                         posY,
+                         ColorPackedRGBA,
+                         U2,
+                         V );
         }
     }
 
@@ -1017,6 +1044,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="src">The source rectangle of the texture to be drawn.</param>
     /// <param name="flipX">Indicates whether the texture should be flipped horizontally.</param>
     /// <param name="flipY">Indicates whether the texture should be flipped vertically.</param>
+    // Checked 08.02.26
     public virtual void Draw( Texture texture,
                               GRect region,
                               Point2D origin,
@@ -1125,10 +1153,26 @@ public class SpriteBatch : IBatch, IDisposable
                 ( v, v2 ) = ( v2, v );
             }
 
-            SetVertices( x1, y1, ColorPackedRGBA, u, v,
-                         x2, y2, ColorPackedRGBA, u, v2,
-                         x3, y3, ColorPackedRGBA, u2, v2,
-                         x4, y4, ColorPackedRGBA, u2, v );
+            SetVertices( x1,
+                         y1,
+                         ColorPackedRGBA,
+                         u,
+                         v,
+                         x2,
+                         y2,
+                         ColorPackedRGBA,
+                         u,
+                         v2,
+                         x3,
+                         y3,
+                         ColorPackedRGBA,
+                         u2,
+                         v2,
+                         x4,
+                         y4,
+                         ColorPackedRGBA,
+                         u2,
+                         v );
         }
     }
 
@@ -1140,6 +1184,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="src">The source rectangle in the texture to be drawn.</param>
     /// <param name="flipX">Indicates whether to flip the texture horizontally.</param>
     /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
+    // Checked 08.02.26
     public virtual void Draw( Texture texture, GRect region, GRect src, bool flipX = false, bool flipY = false )
     {
         lock ( _lockObject )
@@ -1172,10 +1217,26 @@ public class SpriteBatch : IBatch, IDisposable
                 ( v, v2 ) = ( v2, v );
             }
 
-            SetVertices( region.X, region.Y, ColorPackedRGBA, u, v,
-                         region.X, fy2, ColorPackedRGBA, u, v2,
-                         fx2, fy2, ColorPackedRGBA, u2, v2,
-                         fx2, region.Y, ColorPackedRGBA, u2, v );
+            SetVertices( region.X,
+                         region.Y,
+                         ColorPackedRGBA,
+                         u,
+                         v,
+                         region.X,
+                         fy2,
+                         ColorPackedRGBA,
+                         u,
+                         v2,
+                         fx2,
+                         fy2,
+                         ColorPackedRGBA,
+                         u2,
+                         v2,
+                         fx2,
+                         region.Y,
+                         ColorPackedRGBA,
+                         u2,
+                         v );
         }
     }
 
@@ -1186,6 +1247,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="x">The x-coordinate where the texture should be drawn.</param>
     /// <param name="y">The y-coordinate where the texture should be drawn.</param>
     /// <param name="src">The source rectangle portion of the texture to be drawn.</param>
+    // Checked 08.02.26
     public virtual void Draw( Texture texture, float x, float y, GRect src )
     {
         lock ( _lockObject )
@@ -1208,10 +1270,26 @@ public class SpriteBatch : IBatch, IDisposable
             var fx2 = x + src.Width;
             var fy2 = y + src.Height;
 
-            SetVertices( x, y, ColorPackedRGBA, u, v,
-                         x, fy2, ColorPackedRGBA, u, v2,
-                         fx2, fy2, ColorPackedRGBA, u2, v2,
-                         fx2, y, ColorPackedRGBA, u2, v );
+            SetVertices( x,
+                         y,
+                         ColorPackedRGBA,
+                         u,
+                         v,
+                         x,
+                         fy2,
+                         ColorPackedRGBA,
+                         u,
+                         v2,
+                         fx2,
+                         fy2,
+                         ColorPackedRGBA,
+                         u2,
+                         v2,
+                         fx2,
+                         y,
+                         ColorPackedRGBA,
+                         u2,
+                         v );
         }
     }
 
@@ -1242,10 +1320,26 @@ public class SpriteBatch : IBatch, IDisposable
             var fx2 = region.X + region.Width;
             var fy2 = region.Y + region.Height;
 
-            SetVertices( region.X, region.Y, ColorPackedRGBA, u, v,
-                         region.X, fy2, ColorPackedRGBA, u, v2,
-                         fx2, fy2, ColorPackedRGBA, u2, v2,
-                         fx2, region.Y, ColorPackedRGBA, u2, v );
+            SetVertices( region.X,
+                         region.Y,
+                         ColorPackedRGBA,
+                         u,
+                         v,
+                         region.X,
+                         fy2,
+                         ColorPackedRGBA,
+                         u,
+                         v2,
+                         fx2,
+                         fy2,
+                         ColorPackedRGBA,
+                         u2,
+                         v2,
+                         fx2,
+                         region.Y,
+                         ColorPackedRGBA,
+                         u2,
+                         v );
         }
     }
 
@@ -1255,6 +1349,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="texture"> The texture. </param>
     /// <param name="x"> X coordinate in pixels. </param>
     /// <param name="y"> Y coordinate in pixels. </param>
+    // Checked 08.02.26
     public virtual void Draw( Texture? texture, float x, float y )
     {
         lock ( _lockObject )
@@ -1330,6 +1425,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="region">The texture region to be drawn. Can be null.</param>
     /// <param name="x">The x-coordinate of the position to draw the texture.</param>
     /// <param name="y">The y-coordinate of the position to draw the texture.</param>
+    // Checked 08.02.26
     public virtual void Draw( TextureRegion? region, float x, float y )
     {
         lock ( _lockObject )
@@ -1348,6 +1444,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="y">The Y-coordinate of the bottom-left corner where the texture will be drawn.</param>
     /// <param name="width">The width of the texture region to be drawn.</param>
     /// <param name="height">The height of the texture region to be drawn.</param>
+    // Checked 08.02.26
     public virtual void Draw( TextureRegion? region, float x, float y, float width, float height )
     {
         lock ( _lockObject )
@@ -1360,8 +1457,6 @@ public class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
-
-//            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
                 Flush();
@@ -1370,10 +1465,26 @@ public class SpriteBatch : IBatch, IDisposable
             var fx2 = x + width;
             var fy2 = y + height;
 
-            SetVertices( x, y, ColorPackedRGBA, region.U, region.V,
-                         x, fy2, ColorPackedRGBA, region.U, region.V2,
-                         fx2, fy2, ColorPackedRGBA, region.U2, region.V2,
-                         fx2, y, ColorPackedRGBA, region.U2, region.V );
+            SetVertices( x,
+                         y,
+                         ColorPackedRGBA,
+                         region.U,
+                         region.V,
+                         x,
+                         fy2,
+                         ColorPackedRGBA,
+                         region.U,
+                         region.V2,
+                         fx2,
+                         fy2,
+                         ColorPackedRGBA,
+                         region.U2,
+                         region.V2,
+                         fx2,
+                         y,
+                         ColorPackedRGBA,
+                         region.U2,
+                         region.V );
         }
     }
 
@@ -1386,6 +1497,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="origin">The origin point for transformations such as scaling and rotation.</param>
     /// <param name="scale">The scale factor to be applied to the texture region.</param>
     /// <param name="rotation">The rotation angle in radians to be applied to the texture region.</param>
+    // Checked 08.02.26
     public virtual void Draw( TextureRegion? textureRegion, GRect region, Point2D origin, Point2D scale,
                               float rotation )
     {
@@ -1477,10 +1589,26 @@ public class SpriteBatch : IBatch, IDisposable
             x4 += worldOriginX;
             y4 += worldOriginY;
 
-            SetVertices( x1, y1, ColorPackedRGBA, textureRegion.U, textureRegion.V,
-                         x2, y2, ColorPackedRGBA, textureRegion.U, textureRegion.V2,
-                         x3, y3, ColorPackedRGBA, textureRegion.U2, textureRegion.V2,
-                         x4, y4, ColorPackedRGBA, textureRegion.U2, textureRegion.V );
+            SetVertices( x1,
+                         y1,
+                         ColorPackedRGBA,
+                         textureRegion.U,
+                         textureRegion.V,
+                         x2,
+                         y2,
+                         ColorPackedRGBA,
+                         textureRegion.U,
+                         textureRegion.V2,
+                         x3,
+                         y3,
+                         ColorPackedRGBA,
+                         textureRegion.U2,
+                         textureRegion.V2,
+                         x4,
+                         y4,
+                         ColorPackedRGBA,
+                         textureRegion.U2,
+                         textureRegion.V );
         }
     }
 
@@ -1509,8 +1637,6 @@ public class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
-
-//            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
                 Flush();
@@ -1621,19 +1747,36 @@ public class SpriteBatch : IBatch, IDisposable
                 v4 = textureRegion.V2;
             }
 
-            SetVertices( x1, y1, ColorPackedRGBA, u1, v1,
-                         x2, y2, ColorPackedRGBA, u2, v2,
-                         x3, y3, ColorPackedRGBA, u3, v3,
-                         x4, y4, ColorPackedRGBA, u4, v4 );
+            SetVertices( x1,
+                         y1,
+                         ColorPackedRGBA,
+                         u1,
+                         v1,
+                         x2,
+                         y2,
+                         ColorPackedRGBA,
+                         u2,
+                         v2,
+                         x3,
+                         y3,
+                         ColorPackedRGBA,
+                         u3,
+                         v3,
+                         x4,
+                         y4,
+                         ColorPackedRGBA,
+                         u4,
+                         v4 );
         }
     }
 
     /// <summary>
+    /// Draws a texture using a specified region, dimensions, and transformation parameters.
     /// </summary>
-    /// <param name="region"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="transform"></param>
+    /// <param name="region">The specific texture region to be drawn.</param>
+    /// <param name="width">The width of the drawn texture.</param>
+    /// <param name="height">The height of the drawn texture.</param>
+    /// <param name="transform">The transformation to be applied to the texture.</param>
     public virtual void Draw( TextureRegion region, float width, float height, Affine2 transform )
     {
         lock ( _lockObject )
@@ -1666,10 +1809,26 @@ public class SpriteBatch : IBatch, IDisposable
             var u2 = region.U2;
             var v2 = region.V;
 
-            SetVertices( x1, y1, ColorPackedRGBA, u, v,
-                         x2, y2, ColorPackedRGBA, u, v2,
-                         x3, y3, ColorPackedRGBA, u2, v2,
-                         x4, y4, ColorPackedRGBA, u2, v );
+            SetVertices( x1,
+                         y1,
+                         ColorPackedRGBA,
+                         u,
+                         v,
+                         x2,
+                         y2,
+                         ColorPackedRGBA,
+                         u,
+                         v2,
+                         x3,
+                         y3,
+                         ColorPackedRGBA,
+                         u2,
+                         v2,
+                         x4,
+                         y4,
+                         ColorPackedRGBA,
+                         u2,
+                         v );
         }
     }
 

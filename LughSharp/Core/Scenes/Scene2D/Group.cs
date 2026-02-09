@@ -22,12 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Utils.Logging;
+
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D;
@@ -43,7 +49,7 @@ namespace LughSharp.Core.Scenes.Scene2D;
 [PublicAPI]
 public class Group : Actor, ICullable
 {
-    public Core.Utils.SnapshotArrayList< Actor? > Children { get; set; } = new( 4 );
+    public SnapshotArrayList< Actor? > Children { get; set; } = new( 4 );
 
     /// <summary>
     /// When true (the default), the Batch is transformed so children are drawn
@@ -72,7 +78,7 @@ public class Group : Actor, ICullable
     {
         base.Act( delta );
 
-        Actor?[] actors = Children.Begin();
+        var actors = Children.Begin();
 
         for ( int i = 0, n = Children.Count; i < n; i++ )
         {
@@ -125,7 +131,7 @@ public class Group : Actor, ICullable
     {
         parentAlpha *= Color.A;
 
-        Actor?[] actors = Children.Begin();
+        var actors = Children.Begin();
 
         if ( CullingArea != null )
         {
@@ -150,9 +156,9 @@ public class Group : Actor, ICullable
                     var cy = child.Y;
 
                     if ( ( cx <= cullRight )
-                         && ( cy <= cullTop )
-                         && ( ( cx + child.Width ) >= cullLeft )
-                         && ( ( cy + child.Height ) >= cullBottom ) )
+                      && ( cy <= cullTop )
+                      && ( ( cx + child.Width ) >= cullLeft )
+                      && ( ( cy + child.Height ) >= cullBottom ) )
                     {
                         child.Draw( batch, parentAlpha );
                     }
@@ -180,13 +186,15 @@ public class Group : Actor, ICullable
                     var cy = child.Y;
 
                     if ( ( cx <= cullRight )
-                         && ( cy <= cullTop )
-                         && ( ( cx + child.Width ) >= cullLeft )
-                         && ( ( cy + child.Height ) >= cullBottom ) )
+                      && ( cy <= cullTop )
+                      && ( ( cx + child.Width ) >= cullLeft )
+                      && ( ( cy + child.Height ) >= cullBottom ) )
                     {
                         child.X = cx + offsetX;
                         child.Y = cy + offsetY;
+
                         child.Draw( batch, parentAlpha );
+
                         child.X = cx;
                         child.Y = cy;
                     }
@@ -236,7 +244,9 @@ public class Group : Actor, ICullable
 
                     child.X = cx + offsetX;
                     child.Y = cy + offsetY;
+
                     child.Draw( batch, parentAlpha );
+
                     child.X = cx;
                     child.Y = cy;
                 }
@@ -284,7 +294,7 @@ public class Group : Actor, ICullable
     /// </summary>
     protected void DrawDebugChildren( ShapeRenderer shapes )
     {
-        Actor?[] actors = Children.Begin();
+        var actors = Children.Begin();
 
         // No culling, draw all children.
         if ( Transform )
@@ -470,7 +480,7 @@ public class Group : Actor, ICullable
             {
                 continue;
             }
-            
+
             child.ParentToLocalCoordinates( _tmp.Set( x, y ) );
 
             var hit = child.Hit( _tmp.X, _tmp.Y, touchable );
@@ -653,7 +663,7 @@ public class Group : Actor, ICullable
             actor.Parent = null;
             actor.Stage  = null;
         }
-        
+
         ChildrenChanged();
 
         return actor;
@@ -696,7 +706,7 @@ public class Group : Actor, ICullable
         for ( int i = 0, n = Children.Count; i < n; i++ )
         {
             var child = Children.GetAt( i );
-            
+
             if ( name.Equals( child?.Name ) )
             {
                 return ( T )child;
@@ -875,7 +885,7 @@ public class Group : Actor, ICullable
         buffer.Append( base.ToString() ?? string.Empty );
         buffer.Append( '\n' );
 
-        Actor?[] actors = Children.Begin();
+        var actors = Children.Begin();
 
         for ( int i = 0, n = Children.Count; i < n; i++ )
         {

@@ -55,6 +55,63 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Button : Table, IDisableable
 {
+    public ButtonClickListener?   ClickListener { get; set; }
+    public bool                   IsChecked     { get; private set; }
+    public bool                   IsDisabled    { get; set; }
+    public ButtonGroup< Button >? ButtonGroup   { get; set; }
+
+    /// <inheritdoc />
+    public override float PrefWidth
+    {
+        get
+        {
+            var width = GetPrefWidth();
+
+            if ( Style?.Up != null )
+            {
+                width = Math.Max( width, Style.Up.MinWidth );
+            }
+
+            if ( Style?.Down != null )
+            {
+                width = Math.Max( width, Style.Down.MinWidth );
+            }
+
+            if ( Style?.Checked != null )
+            {
+                width = Math.Max( width, Style.Checked.MinWidth );
+            }
+
+            return width;
+        }
+    }
+
+    /// <inheritdoc />
+    public override float PrefHeight
+    {
+        get
+        {
+            var height = GetPrefHeight();
+
+            if ( Style?.Up != null )
+            {
+                height = Math.Max( height, Style.Up.MinHeight );
+            }
+
+            if ( Style?.Down != null )
+            {
+                height = Math.Max( height, Style.Down.MinHeight );
+            }
+
+            if ( Style?.Checked != null )
+            {
+                height = Math.Max( height, Style.Checked!.MinHeight );
+            }
+
+            return height;
+        }
+    }
+
     private bool _programmaticChangeEvents = true;
 
     // ========================================================================
@@ -150,6 +207,9 @@ public class Button : Table, IDisableable
         Style = style;
         SetSize( GetPrefWidth(), GetPrefHeight() );
     }
+
+    public override float MinWidth  => PrefWidth;
+    public override float MinHeight => PrefHeight;
 
     private void Initialise()
     {
@@ -411,11 +471,6 @@ public class Button : Table, IDisableable
         public float           CheckedOffsetY   { get; set; }
     }
 
-    // ========================================================================
-    // ========================================================================
-
-    #region properties
-
     public void Toggle()
     {
         SetChecked( !IsChecked );
@@ -430,66 +485,8 @@ public class Button : Table, IDisableable
     {
         return ClickListener!.Over;
     }
-
-    public override float MinWidth  => PrefWidth;
-    public override float MinHeight => PrefHeight;
-
-    public ButtonClickListener?   ClickListener { get; set; }
-    public bool                   IsChecked     { get; private set; }
-    public bool                   IsDisabled    { get; set; }
-    public ButtonGroup< Button >? ButtonGroup   { get; set; }
-
-    /// <inheritdoc />
-    public override float PrefWidth
-    {
-        get
-        {
-            var width = GetPrefWidth();
-
-            if ( Style?.Up != null )
-            {
-                width = Math.Max( width, Style.Up.MinWidth );
-            }
-
-            if ( Style?.Down != null )
-            {
-                width = Math.Max( width, Style.Down.MinWidth );
-            }
-
-            if ( Style?.Checked != null )
-            {
-                width = Math.Max( width, Style.Checked.MinWidth );
-            }
-
-            return width;
-        }
-    }
-
-    /// <inheritdoc />
-    public override float PrefHeight
-    {
-        get
-        {
-            var height = GetPrefHeight();
-
-            if ( Style?.Up != null )
-            {
-                height = Math.Max( height, Style.Up.MinHeight );
-            }
-
-            if ( Style?.Down != null )
-            {
-                height = Math.Max( height, Style.Down.MinHeight );
-            }
-
-            if ( Style?.Checked != null )
-            {
-                height = Math.Max( height, Style.Checked!.MinHeight );
-            }
-
-            return height;
-        }
-    }
-
-    #endregion properties
 }
+
+// ============================================================================
+// ============================================================================
+

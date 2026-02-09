@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Versioning;
+﻿using System.Runtime.Versioning;
 
 using Extensions.Source.Drawing.Freetype;
 
@@ -18,6 +17,7 @@ using LughSharp.Core.Maps.Tiled.Renderers;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
+using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
@@ -25,6 +25,22 @@ using LughSharp.Tests.Source;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Template.Source;
+
+// ============================================================================
+// TODO:
+//  Freetype Font generation
+//  Sprite Scrolling
+//  GameSprite helper class
+//  UI System ( Scene2D )
+//  TiledMap Animated Tiles
+//  Audio
+//  3D Graphics
+//  Network / HTTP etc.
+//  Json handling to replace System Json
+//  Maybe add a "Content" folder to the project and copy assets there on build, then load from there instead of the "Assets" folder?
+//  2D Particle System
+//  Ninepatch support for UI
+// ============================================================================
 
 /// <summary>
 /// TEST class, used for testing the framework.
@@ -43,6 +59,7 @@ public class MainGame : Game
     private OrthographicGameCamera?     _tiledCam;
     private OrthographicGameCamera?     _gameCam;
     private Texture?                    _image1;
+    private Texture?                    _image2;
     private Texture?                    _star;
     private Stage?                      _stage;
     private Actor?                      _hudActor;
@@ -57,13 +74,12 @@ public class MainGame : Game
     private Vector2                     _spritePosition = Vector2.Zero;
     private float                       _scale          = 1.0f;
     private int                         _direction      = -1;
-    private List< TiledMapTileLayer >   _tileLayers     = [ ];
-    private int                         _mapPosX        = 0;
-    private int                         _mapPosY        = 0;
-    private int                         _mapDirX        = 1;
-    private int                         _mapDirY        = 1;
-    private int                         _mapWidth       = 0;
-    private int                         _mapHeight      = 0;
+    private int                         _mapPosX;
+    private int                         _mapPosY;
+    private int                         _mapDirX = 1;
+    private int                         _mapDirY = 1;
+    private int                         _mapWidth;
+    private int                         _mapHeight;
 
     // ========================================================================
     // ========================================================================
@@ -87,63 +103,8 @@ public class MainGame : Game
     /// <inheritdoc />
     public override void Update()
     {
-        if ( _sprite != null )
-        {
-            if ( _direction == -1 )
-            {
-                _scale -= 0.01f;
-
-                if ( _scale <= 0.25f )
-                {
-                    _direction = 1;
-                    _scale     = 0.25f;
-                }
-            }
-
-            if ( _direction == 1 )
-            {
-                _scale += 0.01f;
-
-                if ( _scale >= 1.0f )
-                {
-                    _direction = -1;
-                    _scale     = 1.0f;
-                }
-            }
-
-            _sprite?.SetScale( _scale );
-
-//            _sprite?.Rotate( -1.0f );
-//            _sprite?.SetScale( 0.5f );
-//        _sprite?.Scroll( 0.001f, 0.0f );
-        }
-
-        if ( _tiledCam != null && _tiledMap != null )
-        {
-            _mapPosX += _mapDirX;
-
-            if ( _mapPosX > _mapWidth && _mapDirX == 1 )
-            {
-                _mapDirX = -1;
-            }
-            else if ( _mapPosX <= 0 && _mapDirX == -1 )
-            {
-                _mapDirX = 1;
-            }
-
-            _mapPosY += _mapDirY;
-
-            if ( _mapPosY >= _mapHeight && _mapDirY == 1 )
-            {
-                _mapDirY = -1;
-            }
-            else if ( _mapPosY <= 0 && _mapDirY == -1 )
-            {
-                _mapDirY = 1;
-            }
-
-            _tiledCam.Camera.Translate( _mapDirX, _mapDirY );
-        }
+        ScaleSprite();
+        ScrollMap();
     }
 
     /// <inheritdoc />
@@ -179,16 +140,23 @@ public class MainGame : Game
                 _gameCam.Position.Z = 0;
                 _gameCam.Update();
 
+//                if ( _image2 != null )
+//                {
+//                    _spriteBatch.Draw( _image2, 0, 0 );
+//                }
+
                 if ( _star != null )
                 {
-                    _spriteBatch.Draw( _star, 0, 0 );
+                    _spriteBatch.Draw( _star, 10, 20 );
                 }
 
                 if ( _image1 != null )
                 {
                     _spriteBatch.Draw( _image1,
                                        ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
-                                       ( Engine.Api.Graphics.Height - _image1.Height ) / 2f );
+                                       ( Engine.Api.Graphics.Height - _image1.Height ) / 2f,
+                                       _image1.Width,
+                                       _image1.Height );
                 }
 
                 if ( _sprite != null )
@@ -289,7 +257,7 @@ public class MainGame : Game
     {
         Logger.Checkpoint();
 
-        var zoom = 1f;
+        const float ZOOM = 1f;
 
         _tiledCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
                                                 Engine.Api.Graphics.Height,
@@ -298,7 +266,7 @@ public class MainGame : Game
         _tiledCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _tiledCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _tiledCam.IsInUse     = true;
-        _tiledCam.SetZoomDefault( zoom );
+        _tiledCam.SetZoomDefault( ZOOM );
 
         // Set initial camera position
         _tiledCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
@@ -313,7 +281,7 @@ public class MainGame : Game
         _gameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _gameCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _gameCam.IsInUse     = true;
-        _gameCam.SetZoomDefault( zoom );
+        _gameCam.SetZoomDefault( ZOOM );
 
         // Set initial camera position
         _gameCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
@@ -325,6 +293,7 @@ public class MainGame : Game
         Logger.Checkpoint();
 
         _image1 = new Texture( Assets.COMPLETE_STAR );
+        _image2 = new Texture( Assets.HUD_PANEL );
         _star   = new Texture( Assets.COMPLETE_STAR );
 
         CreateStage();
@@ -342,11 +311,10 @@ public class MainGame : Game
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
-        _stage = new Stage( _gameCam.Viewport, _spriteBatch );
-
+        _stage              = new Stage( _gameCam.Viewport );
         _hudActor           = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
         _hudActor.IsVisible = true;
-        _hudActor.SetPosition( 100, 100 );
+        _hudActor.SetPosition( 0, 0 );
 
         _stage?.AddActor( _hudActor );
         _stage?.DebugAll = true;
@@ -397,15 +365,76 @@ public class MainGame : Game
         _tmxMapLoader = new TmxMapLoader();
         _tiledMap     = _tmxMapLoader.Load( Assets.ROOM1_MAP );
         _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
-        _tileLayers   = _tiledMap.Layers.OfType< TiledMapTileLayer >().ToList();
 
-        _mapWidth = _tiledMap.Properties.Get< int >( "width" );
+        _mapWidth  = _tiledMap.Properties.Get< int >( "width" );
         _mapHeight = _tiledMap.Properties.Get< int >( "height" );
-        
-        _mapWidth *= _tiledMap.Properties.Get< int >( "tilewidth" );
+
+        _mapWidth  *= _tiledMap.Properties.Get< int >( "tilewidth" );
         _mapHeight *= _tiledMap.Properties.Get< int >( "tileheight" );
-        
+
         Logger.Debug( $"Map width: {_mapWidth}, height: {_mapHeight}" );
+    }
+
+    private void ScaleSprite()
+    {
+        if ( _sprite != null )
+        {
+            if ( _direction == -1 )
+            {
+                _scale -= 0.01f;
+
+                if ( _scale <= 0.25f )
+                {
+                    _direction = 1;
+                    _scale     = 0.25f;
+                }
+            }
+
+            if ( _direction == 1 )
+            {
+                _scale += 0.01f;
+
+                if ( _scale >= 1.0f )
+                {
+                    _direction = -1;
+                    _scale     = 1.0f;
+                }
+            }
+
+            _sprite?.SetScale( _scale );
+            _sprite?.Rotate( -1.0f );
+            _sprite?.Scroll( 0.001f, 0.0f );
+        }
+    }
+
+    private void ScrollMap()
+    {
+        if ( _tiledCam != null && _tiledMap != null )
+        {
+            _mapPosX += _mapDirX;
+
+            if ( _mapPosX > _mapWidth && _mapDirX == 1 )
+            {
+                _mapDirX = -1;
+            }
+            else if ( _mapPosX <= 0 && _mapDirX == -1 )
+            {
+                _mapDirX = 1;
+            }
+
+            _mapPosY += _mapDirY;
+
+            if ( _mapPosY >= _mapHeight && _mapDirY == 1 )
+            {
+                _mapDirY = -1;
+            }
+            else if ( _mapPosY <= 0 && _mapDirY == -1 )
+            {
+                _mapDirY = 1;
+            }
+
+            _tiledCam.Camera.Translate( _mapDirX, _mapDirY );
+        }
     }
 }
 

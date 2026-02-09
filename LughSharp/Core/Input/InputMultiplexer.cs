@@ -24,11 +24,15 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Utils.Collections;
+
 namespace LughSharp.Core.Input;
 
 [PublicAPI]
 public class InputMultiplexer : IInputProcessor
 {
+    public SnapshotArrayList< IInputProcessor > Processors { get; set; } = new( 4 );
+
     // ========================================================================
 
     /// <summary>
@@ -52,8 +56,6 @@ public class InputMultiplexer : IInputProcessor
             Processors.Add( inputProcessor );
         }
     }
-
-    public Utils.SnapshotArrayList< IInputProcessor > Processors { get; set; } = new( 4 );
 
     /// <inheritdoc />
     public bool KeyDown( int keycode )
@@ -305,7 +307,7 @@ public class InputMultiplexer : IInputProcessor
     /// Adds the given list of <see cref="IInputProcessor"/>s, which can be a
     /// single processor or multiple processors, to the multiplexer.
     /// </summary>
-    public void AddProcessors( params IInputProcessor[] processorList )
+    public void SetProcessors( IInputProcessor[] processorList )
     {
         Processors.Clear();
         Processors.AddAll( processorList );
@@ -315,7 +317,7 @@ public class InputMultiplexer : IInputProcessor
     /// Adds the given list of <see cref="IInputProcessor"/>s, which can be a
     /// single processor or multiple processors, to the multiplexer.
     /// </summary>
-    public void AddProcessors( List< IInputProcessor > processorList )
+    public void SetProcessors( List< IInputProcessor > processorList )
     {
         Processors.Clear();
         Processors.AddAll( processorList );

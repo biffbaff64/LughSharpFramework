@@ -27,7 +27,9 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -263,12 +265,16 @@ public class GlyphLayout : IResetable, IPoolable
             _colorStack.Add( currentColor );
         }
 
-        var       isLastRun = false;
-        var       y         = 0f;
-        var       down      = fontData.Down;
-        GlyphRun? lineRun   = null; // Collects glyphs for the current line.
-        Glyph?    lastGlyph = null; // Last glyph of the previous run on the same line, used for kerning between runs.
-        var       runStart  = start;
+        var isLastRun = false;
+        var y         = 0f;
+        var down      = fontData.Down;
+        var runStart  = start;
+
+        // Collects glyphs for the current line.
+        GlyphRun? lineRun = null;
+
+        // Last glyph of the previous run on the same line, used for kerning between runs.
+        Glyph? lastGlyph = null;
 
         while ( true )
         {
@@ -281,7 +287,8 @@ public class GlyphLayout : IResetable, IPoolable
                 // End of text.
                 if ( runStart == end )
                 {
-                    break; // No run to process, we're done.
+                    // No run to process, we're done.
+                    break;
                 }
 
                 runEnd    = end; // Process the final run.
@@ -414,10 +421,7 @@ public class GlyphLayout : IResetable, IPoolable
 
                             lineRun = Wrap( fontData, lineRun, wrapIndex );
 
-                            if ( lineRun == null )
-                            {
-                            }
-                            else
+                            if ( lineRun != null )
                             {
                                 Runs.Add( lineRun );
 
@@ -505,33 +509,30 @@ public class GlyphLayout : IResetable, IPoolable
             return false;
         }
 
-        if ( character == '[' ) // Possible color tag.
+        if ( ( character == '[' ) && markupEnabled ) // Possible color tag.
         {
-            if ( markupEnabled )
+            var length = ParseColorMarkup( str, start, end );
+
+            if ( length >= 0 )
             {
-                var length = ParseColorMarkup( str, start, end );
+                runEnd =  start - 1;
+                start  += length + 1;
 
-                if ( length >= 0 )
+                if ( start == end )
                 {
-                    runEnd =  start - 1;
-                    start  += length + 1;
-
-                    if ( start == end )
-                    {
-                        isLastRun = true; // Color tag is the last element in the string.
-                    }
-                    else
-                    {
-                        nextColor = _colorStack.Peek();
-                    }
-
-                    return false;
+                    isLastRun = true; // Color tag is the last element in the string.
+                }
+                else
+                {
+                    nextColor = _colorStack.Peek();
                 }
 
-                if ( length == -2 )
-                {
-                    start++; // Skip first of "[[" escape sequence.
-                }
+                return false;
+            }
+
+            if ( length == -2 )
+            {
+                start++; // Skip first of "[[" escape sequence.
             }
         }
 
@@ -923,11 +924,11 @@ public class GlyphLayout : IResetable, IPoolable
                 // Parse hex color RRGGBBAA to an ABGR int, where AA
                 // is optional and defaults to FF if omitted.
                 var color = 0;
-                
+
                 for ( var i = start + 1; i < end; i++ )
                 {
                     var ch = str[ i ];
-                    
+
                     if ( ch == ']' )
                     {
                         if ( i < start + 2 || i > start + 9 )
@@ -941,12 +942,12 @@ public class GlyphLayout : IResetable, IPoolable
                         }
 
                         _colorStack.Add( NumberUtils.ReverseBytes( color ) );
-                        
+
                         return i - start;
                     }
 
                     color = ( color << 4 ) + ch;
-                    
+
                     if ( ch is >= '0' and <= '9' )
                     {
                         color -= '0';
@@ -966,10 +967,10 @@ public class GlyphLayout : IResetable, IPoolable
                 }
 
                 return -1;
-            
+
             case '[': // "[[" is an escaped left square bracket.
                 return -2;
-            
+
             case ']': // "[]" is a "pop" color tag.
                 if ( _colorStack.Count > 1 )
                 {
@@ -977,33 +978,36 @@ public class GlyphLayout : IResetable, IPoolable
                 }
 
                 return 0;
+
+            default:
+                break;
         }
 
         // Parse named color.
         for ( var i = start + 1; i < end; i++ )
         {
             var ch = str[ i ];
-            
+
             if ( ch != ']' )
             {
                 continue;
             }
 
             var color = Graphics.Colors.Get( str.Substring( start, i - start ) );
-            
+
             if ( color == null )
             {
                 return -1; // Unknown color name.
             }
 
             _colorStack.Add( ( int )Color.ToAbgr8888( color ) );
-            
+
             return i - start;
         }
 
         return -1; // Unclosed color tag.
     }
-    
+
     /// <summary>
     /// Resets the object for reuse. Object references should be nulled and fields
     /// may be set to default values.

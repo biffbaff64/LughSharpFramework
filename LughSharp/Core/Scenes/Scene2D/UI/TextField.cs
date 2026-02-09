@@ -22,7 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
@@ -32,6 +38,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
@@ -935,12 +942,17 @@ public class TextField : Widget
         }
     }
 
-    private TextField? FindNextTextField( Core.Utils.SnapshotArrayList< Actor > actors,
+    private TextField? FindNextTextField( SnapshotArrayList< Actor? >? actors,
                                           TextField? best,
                                           Vector2 bestCoords,
                                           Vector2 currentCoords,
                                           bool up )
     {
+        if ( actors == null )
+        {
+            return best;
+        }
+        
         for ( int i = 0, n = actors.Count; i < n; i++ )
         {
             var actor = actors.GetAt( i );

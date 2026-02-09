@@ -24,16 +24,19 @@
 
 // ============================================================================
 
+using System;
 using System.Numerics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL.Enums;
+
 using GLfloat = float;
 using GLdouble = double;
 using GLuint = uint;
 using GLboolean = bool;
 
 // ============================================================================
-
 using static LughSharp.Core.Graphics.OpenGL.IGL;
 
 namespace LughSharp.Core.Graphics.OpenGL.Bindings;
@@ -348,7 +351,8 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
-    void TexImage1D( int target, int level, int internalFormat, int width, int border, int format, int type, IntPtr pixels );
+    void TexImage1D( int target, int level, int internalFormat, int width, int border, int format, int type,
+                     IntPtr pixels );
 
     /// <summary>
     /// Specify a one-dimensional texture image
@@ -392,7 +396,8 @@ public partial interface IGLBindings
     /// Specifies the pixel data as an array of values. Make sure to match the generic type with the
     /// <paramref name="type"/> parameter.
     /// </param>
-    void TexImage1D< T >( int target, int level, int internalFormat, int width, int border, int format, int type, T[] pixels )
+    void TexImage1D< T >( int target, int level, int internalFormat, int width, int border, int format, int type,
+                          T[] pixels )
         where T : unmanaged;
 
     /// <summary>
@@ -835,7 +840,8 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array of <typeparamref name="T"/>s where the pixel data will be
     /// returned. Make sure to match the type of the data with the type in <paramref name="type"/>.
     /// </param>
-    void ReadPixels< T >( int x, int y, int width, int height, int format, int type, ref T[] pixels ) where T : unmanaged;
+    void ReadPixels< T >( int x, int y, int width, int height, int format, int type, ref T[] pixels )
+        where T : unmanaged;
 
     /// <summary>
     /// Return the boolean value or values of a selected parameter.
@@ -2139,7 +2145,8 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="border">This value must be 0.</param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    void CompressedTexImage2D( int target, int level, int internalFormat, int width, int height, int border, byte[] data );
+    void CompressedTexImage2D( int target, int level, int internalFormat, int width, int height, int border,
+                               byte[] data );
 
     /// <summary>
     /// Specify a one-dimensional texture image in a compressed format
@@ -2167,7 +2174,8 @@ public partial interface IGLBindings
     /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
-    void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, int imageSize, IntPtr data );
+    void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, int imageSize,
+                               IntPtr data );
 
     /// <summary>
     /// Specify a one-dimensional texture image in a compressed format
@@ -2390,7 +2398,8 @@ public partial interface IGLBindings
     /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
-    void CompressedTexSubImage1D( int target, int level, int xoffset, int width, int format, int imageSize, IntPtr data );
+    void CompressedTexSubImage1D( int target, int level, int xoffset, int width, int format, int imageSize,
+                                  IntPtr data );
 
     /// <summary>
     /// Specify a one-dimensional texture subimage in a compressed format
@@ -2471,7 +2480,8 @@ public partial interface IGLBindings
     /// Specifies how the alpha destination blending factor is computed. The initial value is
     /// <see cref="GL_ZERO"/>.
     /// </param>
-    void BlendFuncSeparate( BlendMode sfactorRGB, BlendMode dfactorRGB, BlendMode sfactorAlpha, BlendMode dfactorAlpha );
+    void BlendFuncSeparate( BlendMode sfactorRGB, BlendMode dfactorRGB, BlendMode sfactorAlpha,
+                            BlendMode dfactorAlpha );
 
     /// <summary>
     /// Render multiple sets of primitives from array data.
@@ -2537,7 +2547,8 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a two-dimensional array of indices of the vertices that are to be rendered.</param>
-    void MultiDrawElements< T >( int mode, int[] count, int type, T[][] indices ) where T : unmanaged, IUnsignedNumber< T >;
+    void MultiDrawElements< T >( int mode, int[] count, int type, T[][] indices )
+        where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
     /// Specify point parameters.
@@ -2837,7 +2848,7 @@ public partial interface IGLBindings
     /// <param name="data"></param>
     /// <param name="usage"></param>
     void BufferData( BufferTarget target, int size, IntPtr data, BufferUsageHint usage );
-    
+
     /// <summary>
     /// Create and initialize a buffer object's data store.
     /// </summary>
@@ -2870,7 +2881,7 @@ public partial interface IGLBindings
     /// <param name="usage"></param>
     /// <typeparam name="T"></typeparam>
     void BufferData< T >( BufferTarget target, T[] data, BufferUsageHint usage ) where T : unmanaged;
-    
+
     /// <summary>
     /// Create and initialize a buffer object's data store.
     /// </summary>
@@ -6454,7 +6465,8 @@ public partial interface IGLBindings
     /// Returns the name of the uniform block at the specified index in the program object
     /// specified by <paramref name="program"/>.
     /// </param>
-    unsafe void GetActiveUniformBlockName( uint program, uint uniformBlockIndex, int bufSize, int* length, byte* uniformBlockName );
+    unsafe void GetActiveUniformBlockName( uint program, uint uniformBlockIndex, int bufSize, int* length,
+                                           byte* uniformBlockName );
 
     /// <summary>
     /// Returns the name of an active uniform block at the specified index within a program object
@@ -6551,7 +6563,8 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    void DrawRangeElementsBaseVertex( int mode, uint start, uint end, int count, int type, IntPtr indices, int basevertex );
+    void DrawRangeElementsBaseVertex( int mode, uint start, uint end, int count, int type, IntPtr indices,
+                                      int basevertex );
 
     /// <summary>
     /// Render primitives from array data with a per-element offset.
@@ -6578,7 +6591,8 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    void DrawRangeElementsBaseVertex< T >( int mode, uint start, uint end, int count, int type, T[] indices, int basevertex )
+    void DrawRangeElementsBaseVertex< T >( int mode, uint start, uint end, int count, int type, T[] indices,
+                                           int basevertex )
         where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
@@ -6602,7 +6616,8 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    void DrawElementsInstancedBaseVertex( int mode, int count, int type, IntPtr indices, int instancecount, int basevertex );
+    void DrawElementsInstancedBaseVertex( int mode, int count, int type, IntPtr indices, int instancecount,
+                                          int basevertex );
 
     /// <summary>
     /// Render multiple instances of a set of primitives from array data with a per-element offset.
@@ -6628,7 +6643,8 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    void DrawElementsInstancedBaseVertex< T >( int mode, int count, int type, T[] indices, int instancecount, int basevertex )
+    void DrawElementsInstancedBaseVertex< T >( int mode, int count, int type, T[] indices, int instancecount,
+                                               int basevertex )
         where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
@@ -6652,7 +6668,8 @@ public partial interface IGLBindings
     /// Specifies an array of the constants that should be added to each element of
     /// <paramref name="indices"/> when choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void MultiDrawElementsBaseVertex( int mode, int* count, int type, IntPtr* indices, int drawcount, int* basevertex );
+    unsafe void MultiDrawElementsBaseVertex( int mode, int* count, int type, IntPtr* indices, int drawcount,
+                                             int* basevertex );
 
     /// <summary>
     /// Render multiple sets of primitives from array data with a per-element offset.
@@ -6676,7 +6693,8 @@ public partial interface IGLBindings
     /// Specifies an array of the constants that should be added to each element of
     /// <paramref name="indices"/> when choosing elements from the enabled vertex arrays.
     /// </param>
-    void MultiDrawElementsBaseVertex< T >( int mode, int type, T[][] indices, int[] basevertex ) where T : unmanaged, IUnsignedNumber< T >;
+    void MultiDrawElementsBaseVertex< T >( int mode, int type, T[][] indices, int[] basevertex )
+        where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
     /// Specify the vertex to be used as the source of data for flat shaded varyings.

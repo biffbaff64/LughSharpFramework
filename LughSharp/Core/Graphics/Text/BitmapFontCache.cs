@@ -858,7 +858,7 @@ public class BitmapFontCache
                                 bool wrap,
                                 string? truncate = null )
     {
-        var layout = Pools.Obtain< GlyphLayout >();
+        var layout = Pools.Obtain< GlyphLayout >() ?? new GlyphLayout();
         
         _pooledLayouts.Add( layout );
 

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
@@ -61,7 +63,7 @@ namespace LughSharp.Core.Graphics.G2D;
 /// </para>
 /// </summary>
 [PublicAPI]
-public interface IBatch
+public interface IBatch : IDisposable
 {
     const int X1 = 0;
     const int Y1 = 1;

@@ -27,6 +27,8 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Logging;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
@@ -76,7 +78,7 @@ public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
     /// <summary>
     /// The <see cref="TextureRegion"/> component of this <see cref="ISceneDrawable"/>
     /// </summary>
-    protected TextureRegion? Region
+    public TextureRegion? Region
     {
         get;
         private init

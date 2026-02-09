@@ -24,12 +24,15 @@
 
 using System.Diagnostics;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -44,24 +47,78 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Label : Widget
 {
+    public BitmapFontCache FontCache   { get; set; } = null!;
+    public StringBuilder   Text        { get; }      = new();
+    public int             LabelAlign  { get; set; } = Alignment.LEFT;
+    public int             LineAlign   { get; set; } = Alignment.LEFT;
+    public GlyphLayout     GlyphLayout { get; set; } = new();
+
+    // ========================================================================
+    
     private static readonly Color       _tempColor      = new();
     private static readonly GlyphLayout _prefSizeLayout = new();
     private readonly        Vector2     _prefSize       = new();
 
-    private string?         _ellipsis;
-    private bool            _fontScaleChanged;
-    private float           _fontScaleX = 1;
-    private float           _fontScaleY = 1;
-    private int             _intValue   = int.MinValue;
-    private float           _lastPrefHeight;
-    private bool            _prefSizeInvalid = true;
-    private LabelStyle      _style           = null!;
-    private bool            _wrap;
-    public  BitmapFontCache FontCache   { get; set; } = null!;
-    public  StringBuilder   Text        { get; }      = new();
-    public  int             LabelAlign  { get; set; } = Alignment.LEFT;
-    public  int             LineAlign   { get; set; } = Alignment.LEFT;
-    public  GlyphLayout     GlyphLayout { get; set; } = new();
+    private string?    _ellipsis;
+    private bool       _fontScaleChanged;
+    private float      _fontScaleX = 1;
+    private float      _fontScaleY = 1;
+    private int        _intValue   = int.MinValue;
+    private float      _lastPrefHeight;
+    private bool       _prefSizeInvalid = true;
+    private LabelStyle _style           = null!;
+    private bool       _wrap;
+
+    // ========================================================================
+
+    public Label( string text, Skin skin )
+        : this( text, skin.Get< LabelStyle >() )
+    {
+    }
+
+    public Label( string text, Skin skin, string styleName )
+        : this( text, skin.Get< LabelStyle >( styleName ) )
+    {
+    }
+
+    /// <summary>
+    /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont with
+    /// the specified name from the skin and the specified color.
+    /// </summary>
+    public Label( string text, Skin skin, string fontName, Color color )
+        : this( text, new LabelStyle( skin.GetFont( fontName ), color ) )
+    {
+    }
+
+    /// <summary>
+    /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont
+    /// with the specified name and the specified color from the
+    /// skin.
+    /// </summary>
+    public Label( string text, Skin skin, string fontName, string colorName )
+        : this( text, new LabelStyle( skin.GetFont( fontName ), skin.GetColor( colorName ) ) )
+    {
+    }
+
+    /// <summary>
+    /// Creates a label with the specified text and style.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="style"></param>
+    public Label( string? text, LabelStyle style )
+    {
+        if ( text != null )
+        {
+            Text.Append( text );
+        }
+
+        Style = style;
+
+        if ( text is { Length: > 0 } )
+        {
+            SetSize( GetPrefWidth(), GetPrefHeight() );
+        }
+    }
 
     public LabelStyle Style
     {
@@ -232,8 +289,8 @@ public class Label : Widget
             if ( _style.Background != null )
             {
                 width = Math.Max( width, _style.Background.MinWidth )
-                        - _style.Background.LeftWidth
-                        - _style.Background.RightWidth;
+                      - _style.Background.LeftWidth
+                      - _style.Background.RightWidth;
             }
 
             _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color.White, width, Alignment.LEFT, true );
@@ -411,7 +468,8 @@ public class Label : Widget
 
         if ( Style.Background != null )
         {
-            height = Math.Max( height + Style.Background.TopHeight + Style.Background.BottomHeight, Style.Background.MinHeight );
+            height = Math.Max( height + Style.Background.TopHeight + Style.Background.BottomHeight,
+                               Style.Background.MinHeight );
         }
 
         return height;
@@ -551,59 +609,7 @@ public class Label : Widget
     }
 
     #endregion labelstyle
-
-    // ========================================================================
-    // ========================================================================
-
-    #region constructors
-
-    public Label( string text, Skin skin )
-        : this( text, skin.Get< LabelStyle >() )
-    {
-    }
-
-    public Label( string text, Skin skin, string styleName )
-        : this( text, skin.Get< LabelStyle >( styleName ) )
-    {
-    }
-
-    /// <summary>
-    /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont with
-    /// the specified name from the skin and the specified color.
-    /// </summary>
-    public Label( string text, Skin skin, string fontName, Color color )
-        : this( text, new LabelStyle( skin.GetFont( fontName ), color ) )
-    {
-    }
-
-    /// <summary>
-    /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont
-    /// with the specified name and the specified color from the
-    /// skin.
-    /// </summary>
-    public Label( string text, Skin skin, string fontName, string colorName )
-        : this( text, new LabelStyle( skin.GetFont( fontName ), skin.GetColor( colorName ) ) )
-    {
-    }
-
-    public Label( string? text, LabelStyle style )
-    {
-        if ( text != null )
-        {
-            Text.Append( text );
-        }
-
-        Style = style;
-
-        if ( text is { Length: > 0 } )
-        {
-            SetSize( GetPrefWidth(), GetPrefHeight() );
-        }
-    }
-
-    #endregion constructors
 }
 
 // ============================================================================
 // ============================================================================
-
