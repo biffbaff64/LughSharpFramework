@@ -1511,8 +1511,6 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-
-//            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
                 Flush();
