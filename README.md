@@ -1,7 +1,7 @@
 ﻿- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-![alt text](http://github.com/biffbaff64/LughSharpFramework/LughSharp/Assets/Circa64_Main_Logo.png)
+![alt text](http://github.com/biffbaff64/LughSharpFramework/blob/master/LughSharp/Assets/Circa64_Main_Logo.png)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-![alt text](http://github.com/biffbaff64/LughSharpFramework/LughSharp/Assets/lughlogo.png)
+![alt text](http://github.com/biffbaff64/LughSharpFramework/blob/master/LughSharp/Assets/lughlogo.png)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 C# 2D Game Framework project heavily inspired by the Java LibGDX Game Framework.
@@ -22,12 +22,15 @@ PROGRESS:
  - Audio needs testing and/or finishing
  - 2D Particle System needs testing and/or finishing
  - Ninepatch support for UI needs testing and/or finishing
+ - ImagePacker class needs testing and/or finishing
 
 
 TODO:
- -  Sprite Scrolling
- -  GameSprite helper class
- -  Network / HTTP etc.
- -  Json handling to replace System Json
- -  Maybe add a "Content" folder to the project and copy assets there on build, then load from there instead of the "Assets" folder?
+ - Sprite Scrolling
+ - GameSprite helper class
+ - Network / HTTP etc.
+ - Json handling to replace System Json
+ - Maybe add a "Content" folder to the project and copy assets there on build, then load from there instead of the "Assets" folder?
+ - TiledMapPacker support
+ - Box2D Physics support
  - 

@@ -22,19 +22,17 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Runtime.InteropServices;
-using ICSharpCode.SharpZipLib.Core;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace Extensions.Source.Drawing.Freetype;
+namespace Extensions.Source.Freetype;
 
 [PublicAPI]
 public class FreeType

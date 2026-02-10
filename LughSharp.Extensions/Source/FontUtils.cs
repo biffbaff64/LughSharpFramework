@@ -22,15 +22,17 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using Extensions.Source.Drawing.Freetype;
+using Extensions.Source.Freetype;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
+
 using Color = LughSharp.Core.Graphics.Color;
 
-namespace Extensions.Source.Drawing;
+namespace Extensions.Source;
 
 [PublicAPI]
 public class FontUtils

@@ -22,6 +22,10 @@
         <ProjectReference Include="..\LughSharp\LughSharp.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Source\Box2D\Joints\" />
+    </ItemGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU'">
         <OutputPath>$(SolutionDir)bin\$(Configuration)\$(TargetFramework)\</OutputPath>
     </PropertyGroup>

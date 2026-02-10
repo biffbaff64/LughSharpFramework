@@ -24,7 +24,9 @@
 
 using System;
 using System.Reflection.Metadata;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
@@ -41,6 +43,7 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
+
 using Color = LughSharp.Core.Graphics.Color;
 using Platform = LughSharp.Core.Main.Platform;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
@@ -130,11 +133,11 @@ public class Stage : InputAdapter, IDisposable
         : this( new ScalingViewport( Scaling.Stretch,
                                      Engine.Api.Graphics.Width,
                                      Engine.Api.Graphics.Height,
-                                    new OrthographicCamera() ), batch )
+                                     new OrthographicCamera() ), batch )
     {
         _ownsBatch = false;
     }
-    
+
     /// <summary>
     /// Creates a stage with the specified viewport. The stage will use its own
     /// <see cref="IBatch"/> which will be disposed when the stage is disposed.
@@ -223,7 +226,7 @@ public class Stage : InputAdapter, IDisposable
         {
             return;
         }
-        
+
         Camera = Viewport.Camera;
         Camera.Update();
 
@@ -238,7 +241,7 @@ public class Stage : InputAdapter, IDisposable
         Batch.Begin();
 
         RootGroup.Draw( Batch, 1 );
-        
+
         Batch.End();
 
         if ( Debug )
@@ -265,7 +268,6 @@ public class Stage : InputAdapter, IDisposable
         RootGroup.AddAction( action );
     }
 
-
     /// <summary>
     /// </summary>
     /// <param name="overLast"></param>
@@ -290,6 +292,11 @@ public class Stage : InputAdapter, IDisposable
         {
             var inputEvent = Pools.Obtain< InputEvent >();
 
+            if ( inputEvent == null )
+            {
+                throw new RuntimeException( "Null InputEvent for FireEnterAndExit [Exit Overlast]!" );
+            }
+            
             inputEvent.Type         = InputEvent.EventType.Exit;
             inputEvent.Stage        = this;
             inputEvent.StageX       = _tempCoords.Y;
@@ -306,6 +313,11 @@ public class Stage : InputAdapter, IDisposable
         {
             var inputEvent = Pools.Obtain< InputEvent >();
 
+            if ( inputEvent == null )
+            {
+                throw new RuntimeException( "Null InputEvent for FireEnterAndExit [Exit Over]!" );
+            }
+            
             inputEvent.Stage        = this;
             inputEvent.StageX       = _tempCoords.X;
             inputEvent.StageY       = _tempCoords.Y;
@@ -325,6 +337,11 @@ public class Stage : InputAdapter, IDisposable
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
         var inputEvent = Pools.Obtain< InputEvent >();
+
+        if ( inputEvent == null )
+        {
+            throw new RuntimeException( "Null InputEvent for FireExit!" );
+        }
 
         inputEvent.Type         = InputEvent.EventType.Exit;
         inputEvent.Stage        = this;
@@ -477,6 +494,11 @@ public class Stage : InputAdapter, IDisposable
 
         var inputEvent = Pools.Obtain< InputEvent >();
 
+        if ( inputEvent == null )
+        {
+            throw new RuntimeException( "Null InputEvent for TouchUp!" );
+        }
+
         inputEvent.Type    = InputEvent.EventType.TouchUp;
         inputEvent.Stage   = this;
         inputEvent.StageX  = _tempCoords.X;
@@ -539,6 +561,11 @@ public class Stage : InputAdapter, IDisposable
 
         var inputEvent = Pools.Obtain< InputEvent >();
 
+        if ( inputEvent == null )
+        {
+            throw new RuntimeException( "Null InputEvent for MouseMoved!" );
+        }
+
         inputEvent.Stage  = this;
         inputEvent.Type   = InputEvent.EventType.MouseMoved;
         inputEvent.StageX = _tempCoords.X;
@@ -572,6 +599,11 @@ public class Stage : InputAdapter, IDisposable
 
         var inputEvent = Pools.Obtain< InputEvent >();
 
+        if ( inputEvent == null )
+        {
+            throw new RuntimeException( "Null InputEvent for Scrolled!" );
+        }
+
         inputEvent.Stage         = this;
         inputEvent.Type          = InputEvent.EventType.Scrolled;
         inputEvent.ScrollAmountX = amountX;
@@ -596,6 +628,11 @@ public class Stage : InputAdapter, IDisposable
         var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
 
+        if ( inputEvent == null )
+        {
+            throw new RuntimeException( "Null InputEvent for KeyDown!" );
+        }
+
         inputEvent.Stage   = this;
         inputEvent.Type    = InputEvent.EventType.KeyDown;
         inputEvent.KeyCode = keyCode;
@@ -616,6 +653,11 @@ public class Stage : InputAdapter, IDisposable
         var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
 
+        if ( inputEvent == null )
+        {
+            throw new RuntimeException( "Null InputEvent for KeyUp!" );
+        }
+
         inputEvent.Stage   = this;
         inputEvent.Type    = InputEvent.EventType.KeyUp;
         inputEvent.KeyCode = keyCode;
@@ -635,6 +677,11 @@ public class Stage : InputAdapter, IDisposable
     {
         var target     = KeyboardFocus ?? RootGroup;
         var inputEvent = Pools.Obtain< InputEvent >();
+
+        if ( inputEvent == null )
+        {
+            throw new RuntimeException( "Null InputEvent for KeyTyped!" );
+        }
 
         inputEvent.Stage     = this;
         inputEvent.Type      = InputEvent.EventType.KeyTyped;
@@ -661,6 +708,11 @@ public class Stage : InputAdapter, IDisposable
                                int button )
     {
         var focus = Pools.Obtain< TouchFocus >();
+
+        if ( focus == null )
+        {
+            throw new RuntimeException( "Null TouchFocus for AddTouchFocus!" );
+        }
 
         focus.ListenerActor = listenerActor;
         focus.Target        = target;
@@ -727,6 +779,8 @@ public class Stage : InputAdapter, IDisposable
             {
                 inputEvent = Pools.Obtain< InputEvent >();
 
+                //TODO: throw exception here if inputEvent is STILL null, or create a new one?
+                
                 inputEvent.Stage  = this;
                 inputEvent.Type   = InputEvent.EventType.TouchUp;
                 inputEvent.StageX = int.MinValue;
@@ -1291,7 +1345,6 @@ public class Stage : InputAdapter, IDisposable
         return ( screenX >= x0 ) && ( screenX < x1 )
                                  && ( screenY >= y0 ) && ( screenY < y1 );
     }
-
 
     /// <summary>
     /// If true, debug lines are shown for all actors.

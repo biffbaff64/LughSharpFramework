@@ -22,17 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Exceptions;
 
-namespace Extensions.Source.Drawing.Freetype;
+namespace Extensions.Source.Freetype;
 
 /// <summary>
 /// Creates <see cref="BitmapFont"/> instances from FreeType font files.

@@ -23,16 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
-using LughSharp.Core.Graphics.G2D;
 
-namespace Extensions.Source.Drawing;
+namespace Extensions.Source.Box2D;
 
 [PublicAPI]
-public class GameSprite
+public class ChainShape
 {
-    public required Sprite Sprite { get; set; }
-
-    //TODO: Add more functionality here later.
+    
 }
 
 // ============================================================================

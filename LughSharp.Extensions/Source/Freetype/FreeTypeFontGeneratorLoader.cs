@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+//  Copyright (c) 2024 Richard Ikin
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,64 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
-using JetBrains.Annotations;
+namespace Extensions.Source.Freetype;
 
-namespace Extensions.Source.Drawing;
-
-[PublicAPI]
-public class BufferedImage : IWriteableRenderedImage, ITransparency
+public class FreeTypeFontGeneratorLoader
 {
-    /// <inheritdoc />
-    public void AddTileObserver( TileObserver to )
-    {
-    }
-
-    /// <inheritdoc />
-    public void RemoveTileObserver( TileObserver to )
-    {
-    }
-
-    /// <inheritdoc />
-    public WritableRaster? GetWritableTile( int tileX, int tileY )
-    {
-        return null;
-    }
-
-    /// <inheritdoc />
-    public void ReleaseWritableTile( int tileX, int tileY )
-    {
-    }
-
-    /// <inheritdoc />
-    public bool IsTileWritable( int tileX, int tileY )
-    {
-        return false;
-    }
-
-    /// <inheritdoc />
-    public Point[] GetWritableTileIndices()
-    {
-        return [ ];
-    }
-
-    /// <inheritdoc />
-    public bool HasTileWriters()
-    {
-        return false;
-    }
-
-    /// <inheritdoc />
-    public void SetData( Raster raster )
-    {
-    }
-
-    /// <inheritdoc />
-    public int GetTransparency()
-    {
-        return 0;
-    }
 }
-
-// ========================================================================
-// ========================================================================

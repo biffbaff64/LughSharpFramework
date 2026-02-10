@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
@@ -162,7 +165,7 @@ public class Actor : IActor, IComparable< Actor >
                 OnScaleChanged();
             }
         }
-    }
+    } = 1.0f;
 
     /// <summary>
     /// The Y Scaling factor
@@ -178,7 +181,7 @@ public class Actor : IActor, IComparable< Actor >
                 OnScaleChanged();
             }
         }
-    }
+    } = 1.0f;
 
     /// <summary>
     /// This actors rotation.

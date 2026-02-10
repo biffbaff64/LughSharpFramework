@@ -29,6 +29,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -355,3 +356,7 @@ public class Scene2DImage : Widget
         return ( className.IndexOf( '$' ) != -1 ? "Image " : "" ) + className + ": " + Drawable;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

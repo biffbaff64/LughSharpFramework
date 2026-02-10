@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Versioning;
 
-using Extensions.Source.Drawing.Freetype;
+using Extensions.Source.Freetype;
 
 using JetBrains.Annotations;
 

@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using Extensions.Source.Drawing;
 using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
@@ -37,6 +36,9 @@ using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source;
 
+/// <summary>
+/// A collection of convenience methods for creating UI elements in a Scene2D context.
+/// </summary>
 [PublicAPI]
 public class Scene2DUtils
 {
