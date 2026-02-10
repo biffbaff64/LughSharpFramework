@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Box2D;
@@ -30,7 +29,49 @@ namespace Extensions.Source.Box2D;
 [PublicAPI]
 public interface IContactListener
 {
-    
+    /// <summary>
+    /// Called when two fixtures begin to touch.
+    /// </summary>
+    void BeginContact( Contact contact );
+
+    /// <summary>
+    /// Called when two fixtures cease to touch.
+    /// </summary>
+    void EndContact( Contact contact );
+
+    /// <summary>
+    /// This is called after a contact is updated. This allows you to inspect a contact before
+    /// it goes to the solver. If you are careful, you can modify the contact manifold (e.g.
+    /// disable contact). A copy of the old manifold is provided so that you can detect changes.
+    /// <br></br>
+    /// <para>
+    /// Note: this is called only for awake bodies.
+    /// </para>
+    /// <para>
+    /// Note: this is called even when the number of contact points is zero.
+    /// </para>
+    /// <para>
+    /// Note: this is not called for sensors. Note: if you set the number of contact points to
+    /// zero, you will not get an EndContact callback. However, you may get a BeginContact
+    /// callback the next step.
+    /// </para>
+    /// </summary>
+    void PreSolve( Contact contact, Manifold oldManifold );
+
+    /// <summary>
+    /// This lets you inspect a contact after the solver is finished. This is useful for
+    /// inspecting impulses.
+    /// <br></br>
+    /// <para>
+    /// Note: the contact manifold does not include time of impact impulses, which can be
+    /// arbitrarily large if the sub-step is small. Hence the impulse is provided explicitly
+    /// in a separate data structure.
+    /// </para>
+    /// <para>
+    /// Note: this is only called for contacts that are touching, solid, and awake.
+    /// </para>
+    /// </summary>
+    void PostSolve( Contact contact, ContactImpulse impulse );
 }
 
 // ============================================================================

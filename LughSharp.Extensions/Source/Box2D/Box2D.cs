@@ -29,8 +29,21 @@ namespace Extensions.Source.Box2D;
 [PublicAPI]
 public class Box2D
 {
+    private Box2D()
+    {
+    }
+
+    /// <summary>
+    /// Initialise the Box2D native library. This must be called before any of the box2d
+    /// classes/methods can be used, with the exception of the <see cref="World"/> class,
+    /// which will also cause the Box2D natives to be loaded.
+    /// </summary>
+    public static void Init()
+    {
+        //TODO:
+//        new SharedLibraryLoader().load( "gdx-box2d" );
+    }
 }
 
 // ============================================================================
 // ============================================================================
-

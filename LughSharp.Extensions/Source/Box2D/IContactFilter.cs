@@ -26,10 +26,14 @@ using JetBrains.Annotations;
 
 namespace Extensions.Source.Box2D;
 
+/// <summary>
+/// Provides collision filtering. In other words, you can implement this class if you
+/// want finer control over contact creation.
+/// </summary>
 [PublicAPI]
 public interface IContactFilter
 {
-    
+    bool ShouldCollide( Fixture fixtureA, Fixture fixtureB );
 }
 
 // ============================================================================

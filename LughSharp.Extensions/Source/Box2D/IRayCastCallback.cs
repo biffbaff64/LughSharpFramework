@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Numerics;
 
 using JetBrains.Annotations;
 
@@ -30,7 +31,22 @@ namespace Extensions.Source.Box2D;
 [PublicAPI]
 public interface IRayCastCallback
 {
-    
+    /// <summary>
+    /// Called for each fixture found in the query. You control how the ray cast proceeds
+    /// by returning a float:
+    /// <li>return -1: ignore this fixture and continue.</li>
+    /// <li>return 0: terminate the ray cast.</li>
+    /// <li>return fraction: clip the ray to this point.</li>
+    /// <li>return 1: don't clip the ray and continue.</li>
+    /// <br></br>
+    /// The <see cref="Vector2"/> instances passed to the callback will be reused for future
+    /// calls so make a copy of them!
+    /// </summary>
+    /// <param name="fixture"> the fixture hit by the ray </param>
+    /// <param name="point"> the point of initial intersection </param>
+    /// <param name="normal"> the normal vector at the point of intersection </param>
+    /// <param name="fraction"></param>
+    float ReportRayFixture( Fixture fixture, Vector2 point, Vector2 normal, float fraction );
 }
 
 // ============================================================================

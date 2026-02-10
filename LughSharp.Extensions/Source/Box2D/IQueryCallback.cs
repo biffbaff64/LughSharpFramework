@@ -22,15 +22,21 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Box2D;
 
+/// <summary>
+/// Callback class for AABB queries.
+/// </summary>
 [PublicAPI]
 public interface IQueryCallback
 {
-    
+    /// <summary>
+    /// Called for each fixture found in the query AABB.
+    /// </summary>
+    /// <returns> false to terminate the query. </returns>
+    bool ReportFixture( Fixture fixture );
 }
 
 // ============================================================================

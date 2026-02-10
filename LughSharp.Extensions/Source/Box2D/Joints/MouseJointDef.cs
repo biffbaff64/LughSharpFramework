@@ -25,11 +25,12 @@
 
 using JetBrains.Annotations;
 
-namespace Extensions.Source.Box2D;
+namespace Extensions.Source.Box2D.Joints;
 
 [PublicAPI]
-public interface IDestructionListener
+public class MouseJointDef
 {
+    
 }
 
 // ============================================================================
