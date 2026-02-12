@@ -76,7 +76,7 @@ public class ImageTextButton : Button
     private void SetStyleAndSize( ImageTextButtonStyle style )
     {
         SetStyle( style );
-        SetSize( PrefWidth, PrefHeight );
+        SetSize( GetPrefWidth(), GetPrefHeight() );
     }
 
     public void SetStyle( ButtonStyle style )

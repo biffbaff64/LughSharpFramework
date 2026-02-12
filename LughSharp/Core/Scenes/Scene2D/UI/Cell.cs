@@ -22,11 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -34,7 +38,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// A Cell for use with <see cref="Table"/>s.
 /// </summary>
 [PublicAPI]
-public class Cell : IResetable
+public class Cell : IPoolable, IResetable
 {
     public Value? MinWidth    { get; set; }
     public Value? MinHeight   { get; set; }
@@ -92,11 +96,6 @@ public class Cell : IResetable
     private const int   RIGHTI  = Core.Utils.Alignment.RIGHT;
 
     // ========================================================================
-
-    private Cell?   _defaults;
-    private IFiles? _files;
-
-    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -107,19 +106,13 @@ public class Cell : IResetable
     {
         CellAboveIndex = -1;
 
-        var defaults = GetCellDefaults();
-
-        if ( defaults != null )
-        {
-            Set( defaults );
-        }
+        ResetToDefaults();
     }
 
     // ========================================================================
 
     /// <summary>
-    /// Reset state so the cell can be reused, setting all constraints to
-    /// their <see cref="GetCellDefaults()"/> values.
+    /// Reset state so the cell can be reused, setting all constraints to their default values.
     /// </summary>
     public void Reset()
     {
@@ -128,9 +121,38 @@ public class Cell : IResetable
         EndRow         = false;
         CellAboveIndex = -1;
 
-        Set( GetCellDefaults() );
+        ResetToDefaults();
     }
 
+    /// <summary>
+    /// Reset all constraints to their default values.
+    /// </summary>
+    private void ResetToDefaults()
+    {
+        this.MinWidth    = Value.MinWidth;
+        this.MinHeight   = Value.MinHeight;
+        this.PrefWidth   = Value.PrefWidth;
+        this.PrefHeight  = Value.PrefHeight;
+        this.MaxWidth    = Value.MaxWidth;
+        this.MaxHeight   = Value.MaxHeight;
+        this.SpaceTop    = Value.Zero;
+        this.SpaceLeft   = Value.Zero;
+        this.SpaceBottom = Value.Zero;
+        this.SpaceRight  = Value.Zero;
+        this.PadTop      = Value.Zero;
+        this.PadLeft     = Value.Zero;
+        this.PadBottom   = Value.Zero;
+        this.PadRight    = Value.Zero;
+        this.FillX       = ZEROF;
+        this.FillY       = ZEROF;
+        this.Alignment   = CENTERI;
+        this.ExpandX     = ZEROI;
+        this.ExpandY     = ZEROI;
+        this.Colspan     = ONEI;
+        this.UniformX    = false;
+        this.UniformY    = false;
+    }
+    
     /// <summary>
     /// Sets the actor in this cell and adds the actor to the cell's table.
     /// If null, removes any current actor.
@@ -184,8 +206,6 @@ public class Cell : IResetable
     /// <exception cref="ArgumentNullException">If parameter <tt>size</tt> is null.</exception>
     public Cell Size( Value size )
     {
-        Guard.Against.Null( size );
-
         MinWidth   = size;
         MinHeight  = size;
         PrefWidth  = size;
@@ -203,9 +223,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Size( Value width, Value height )
     {
-        Guard.Against.Null( width );
-        Guard.Against.Null( height );
-
         MinWidth   = width;
         MinHeight  = height;
         PrefWidth  = width;
@@ -247,8 +264,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Width( Value width )
     {
-        Guard.Against.Null( width );
-
         MinWidth  = width;
         PrefWidth = width;
         MaxWidth  = width;
@@ -275,8 +290,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Height( Value height )
     {
-        Guard.Against.Null( height );
-
         MinHeight  = height;
         PrefHeight = height;
         MaxHeight  = height;
@@ -301,8 +314,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell MinSize( Value size )
     {
-        Guard.Against.Null( size );
-
         MinWidth  = size;
         MinHeight = size;
 
@@ -326,9 +337,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell MinSize( Value width, Value height )
     {
-        Guard.Against.Null( width );
-        Guard.Against.Null( height );
-
         MinWidth  = width;
         MinHeight = height;
 
@@ -356,8 +364,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinWidth( Value minWidth )
     {
-        Guard.Against.Null( minWidth );
-
         MinWidth = minWidth;
 
         return this;
@@ -373,8 +379,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinHeight( Value minHeight )
     {
-        Guard.Against.Null( minHeight );
-
         MinHeight = minHeight;
 
         return this;
@@ -421,8 +425,6 @@ public class Cell : IResetable
     /// </remarks>
     public Cell SetPrefSize( Value size )
     {
-        Guard.Against.Null( size );
-
         PrefWidth  = size;
         PrefHeight = size;
 
@@ -440,9 +442,6 @@ public class Cell : IResetable
     /// </remarks>
     public Cell SetPrefSize( Value width, Value height )
     {
-        Guard.Against.Null( width );
-        Guard.Against.Null( height );
-
         PrefWidth  = width;
         PrefHeight = height;
 
@@ -459,8 +458,6 @@ public class Cell : IResetable
     /// </remarks>
     public Cell SetPrefWidth( Value prefWidth )
     {
-        Guard.Against.Null( prefWidth );
-
         PrefWidth = prefWidth;
 
         return this;
@@ -476,8 +473,6 @@ public class Cell : IResetable
     /// </remarks>
     public Cell SetPrefHeight( Value prefHeight )
     {
-        Guard.Against.Null( prefHeight );
-
         PrefHeight = prefHeight;
 
         return this;
@@ -551,8 +546,6 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell SetMaxSize( Value size )
     {
-        Guard.Against.Null( size );
-
         MaxWidth  = size;
         MaxHeight = size;
 
@@ -569,9 +562,6 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell SetMaxSize( Value width, Value height )
     {
-        Guard.Against.Null( width );
-        Guard.Against.Null( height );
-
         MaxWidth  = width;
         MaxHeight = height;
 
@@ -586,8 +576,6 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell SetMaxWidth( Value maxWidth )
     {
-        Guard.Against.Null( maxWidth );
-
         MaxWidth = maxWidth;
 
         return this;
@@ -601,8 +589,6 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell SetMaxHeight( Value maxHeight )
     {
-        Guard.Against.Null( maxHeight );
-
         MaxHeight = maxHeight;
 
         return this;
@@ -667,8 +653,6 @@ public class Cell : IResetable
     /// <exception cref="ArgumentException"></exception>
     public Cell Space( Value space )
     {
-        Guard.Against.Null( space );
-
         SpaceTop    = space;
         SpaceLeft   = space;
         SpaceBottom = space;
@@ -686,11 +670,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Space( Value top, Value left, Value bottom, Value right )
     {
-        Guard.Against.Null( top );
-        Guard.Against.Null( left );
-        Guard.Against.Null( bottom );
-        Guard.Against.Null( right );
-
         SpaceTop    = top;
         SpaceLeft   = left;
         SpaceBottom = bottom;
@@ -705,8 +684,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetSpaceTop( Value spaceTop )
     {
-        Guard.Against.Null( spaceTop );
-
         SpaceTop = spaceTop;
 
         return this;
@@ -718,8 +695,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetSpaceLeft( Value spaceLeft )
     {
-        Guard.Against.Null( spaceLeft );
-
         SpaceLeft = spaceLeft;
 
         return this;
@@ -727,8 +702,6 @@ public class Cell : IResetable
 
     public Cell SetSpaceBottom( Value spaceBottom )
     {
-        Guard.Against.Null( spaceBottom );
-
         SpaceBottom = spaceBottom;
 
         return this;
@@ -736,8 +709,6 @@ public class Cell : IResetable
 
     public Cell SetSpaceRight( Value spaceRight )
     {
-        Guard.Against.Null( spaceRight );
-
         SpaceRight = spaceRight;
 
         return this;
@@ -839,8 +810,6 @@ public class Cell : IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Pad( Value pad )
     {
-        Guard.Against.Null( pad );
-
         PadTop    = pad;
         PadLeft   = pad;
         PadBottom = pad;
@@ -851,11 +820,6 @@ public class Cell : IResetable
 
     public Cell Pad( Value top, Value left, Value bottom, Value right )
     {
-        Guard.Against.Null( top );
-        Guard.Against.Null( left );
-        Guard.Against.Null( bottom );
-        Guard.Against.Null( right );
-
         PadTop    = top;
         PadLeft   = left;
         PadBottom = bottom;
@@ -1212,7 +1176,6 @@ public class Cell : IResetable
 
     // ========================================================================
 
-    //@formatter:off
     public float GetMinWidth()
     {
         return MinWidth!.Get( Actor );
@@ -1282,8 +1245,6 @@ public class Cell : IResetable
     {
         return PadRight!.Get( Actor );
     }
-
-    //@formatter:on
 
     // ========================================================================
 
@@ -1446,46 +1407,6 @@ public class Cell : IResetable
 
         FillX = cell.FillX;
         FillY = cell.FillY;
-    }
-
-    /// <summary>
-    /// Returns the defaults to use for all cells. This can be used to avoid
-    /// needing to set the same defaults for every table (eg, for spacing).
-    /// </summary>
-    public Cell? GetCellDefaults()
-    {
-        if ( ( _files == null ) || ( _files != Engine.Api.Files ) )
-        {
-            _files = Engine.Api.Files;
-
-            _defaults = new Cell
-            {
-                MinWidth    = Value.MinWidth,
-                MinHeight   = Value.MinHeight,
-                PrefWidth   = Value.PrefWidth,
-                PrefHeight  = Value.PrefHeight,
-                MaxWidth    = Value.MaxWidth,
-                MaxHeight   = Value.MaxHeight,
-                SpaceTop    = Value.Zero,
-                SpaceLeft   = Value.Zero,
-                SpaceBottom = Value.Zero,
-                SpaceRight  = Value.Zero,
-                PadTop      = Value.Zero,
-                PadLeft     = Value.Zero,
-                PadBottom   = Value.Zero,
-                PadRight    = Value.Zero,
-                FillX       = ZEROF,
-                FillY       = ZEROF,
-                Alignment   = CENTERI,
-                ExpandX     = ZEROI,
-                ExpandY     = ZEROI,
-                Colspan     = ONEI,
-                UniformX    = false,
-                UniformY    = false,
-            };
-        }
-
-        return _defaults;
     }
 
     /// <inheritdoc />

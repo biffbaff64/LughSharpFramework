@@ -63,27 +63,6 @@ public class Scene2DImage : Widget
         }
     }
 
-    /// <summary>
-    /// The preferred width of the image widget. This value corresponds to the
-    /// minimum width of the associated drawable if one is set, or 0 if no
-    /// drawable is assigned.
-    /// </summary>
-    public override float PrefWidth
-    {
-        get => Drawable?.MinWidth ?? 0;
-        set { }
-    }
-
-    /// <summary>
-    /// The preferred height of the widget, typically derived from the minimum
-    /// height of the drawable.
-    /// </summary>
-    public override float PrefHeight
-    {
-        get => Drawable?.MinWidth ?? 0;
-        set { }
-    }
-
     // ========================================================================
 
     private Scaling _scaling;
@@ -160,17 +139,21 @@ public class Scene2DImage : Widget
         Alignment = align;
         Name      = GetType().Name;
         
-        SafeConstructorHelper();
+        SetSize( GetPrefWidth(), GetPrefHeight() );
     }
 
     /// <summary>
-    /// Helper method for constructors, allowing access to virtual members which are
-    /// unsafe to be referenced from constructors.
+    /// The preferred width of the image widget. This value corresponds to the
+    /// minimum width of the associated drawable if one is set, or 0 if no
+    /// drawable is assigned.
     /// </summary>
-    private void SafeConstructorHelper()
-    {
-        SetSize( PrefWidth, PrefHeight );
-    }
+    public float GetPrefWidth() => Drawable?.MinWidth ?? 0;
+
+    /// <summary>
+    /// The preferred height of the widget, typically derived from the minimum
+    /// height of the drawable.
+    /// </summary>
+    public float GetPrefHeight() => Drawable?.MinWidth ?? 0;
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor has
@@ -311,7 +294,7 @@ public class Scene2DImage : Widget
 
         if ( drawable != null )
         {
-            if ( !PrefWidth.Equals( drawable.MinWidth ) || !PrefHeight.Equals( drawable.MinHeight ) )
+            if ( !GetPrefWidth().Equals( drawable.MinWidth ) || !GetPrefHeight().Equals( drawable.MinHeight ) )
             {
                 InvalidateHierarchy();
             }

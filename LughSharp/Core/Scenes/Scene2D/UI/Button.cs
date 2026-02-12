@@ -60,58 +60,6 @@ public class Button : Table, IDisableable
     public bool                   IsDisabled    { get; set; }
     public ButtonGroup< Button >? ButtonGroup   { get; set; }
 
-    /// <inheritdoc />
-    public override float PrefWidth
-    {
-        get
-        {
-            var width = GetPrefWidth();
-
-            if ( Style?.Up != null )
-            {
-                width = Math.Max( width, Style.Up.MinWidth );
-            }
-
-            if ( Style?.Down != null )
-            {
-                width = Math.Max( width, Style.Down.MinWidth );
-            }
-
-            if ( Style?.Checked != null )
-            {
-                width = Math.Max( width, Style.Checked.MinWidth );
-            }
-
-            return width;
-        }
-    }
-
-    /// <inheritdoc />
-    public override float PrefHeight
-    {
-        get
-        {
-            var height = GetPrefHeight();
-
-            if ( Style?.Up != null )
-            {
-                height = Math.Max( height, Style.Up.MinHeight );
-            }
-
-            if ( Style?.Down != null )
-            {
-                height = Math.Max( height, Style.Down.MinHeight );
-            }
-
-            if ( Style?.Checked != null )
-            {
-                height = Math.Max( height, Style.Checked!.MinHeight );
-            }
-
-            return height;
-        }
-    }
-
     private bool _programmaticChangeEvents = true;
 
     // ========================================================================
@@ -208,8 +156,8 @@ public class Button : Table, IDisableable
         SetSize( GetPrefWidth(), GetPrefHeight() );
     }
 
-    public override float MinWidth  => PrefWidth;
-    public override float MinHeight => PrefHeight;
+    public float MinWidth  => GetPrefWidth();
+    public float MinHeight => GetPrefHeight();
 
     private void Initialise()
     {
@@ -253,6 +201,50 @@ public class Button : Table, IDisableable
                 Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
             }
         }
+    }
+
+    public override float GetPrefWidth()
+    {
+        var width = base.GetPrefWidth();
+
+        if ( Style?.Up != null )
+        {
+            width = Math.Max( width, Style.Up.MinWidth );
+        }
+
+        if ( Style?.Down != null )
+        {
+            width = Math.Max( width, Style.Down.MinWidth );
+        }
+
+        if ( Style?.Checked != null )
+        {
+            width = Math.Max( width, Style.Checked.MinWidth );
+        }
+
+        return width;
+    }
+
+    public override float GetPrefHeight()
+    {
+        var height = base.GetPrefHeight();
+
+        if ( Style?.Up != null )
+        {
+            height = Math.Max( height, Style.Up.MinHeight );
+        }
+
+        if ( Style?.Down != null )
+        {
+            height = Math.Max( height, Style.Down.MinHeight );
+        }
+
+        if ( Style?.Checked != null )
+        {
+            height = Math.Max( height, Style.Checked!.MinHeight );
+        }
+
+        return height;
     }
 
     /// <summary>

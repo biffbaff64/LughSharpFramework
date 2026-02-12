@@ -311,8 +311,16 @@ public class MainGame : Game
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
-        _stage              = new Stage( _gameCam.Viewport );
+        _stage = new Stage( _gameCam.Viewport );
         _hudActor           = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
+
+        var style = new ImageButton.ImageButtonStyle
+        {
+            ImageUp   = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_UP ) ),
+            ImageDown = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_DOWN ) )
+        };
+//        _hudActor = new ImageButton( style );
+
         _hudActor.IsVisible = true;
         _hudActor.SetPosition( 0, 0 );
 

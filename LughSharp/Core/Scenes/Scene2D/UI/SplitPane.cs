@@ -23,11 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
+
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -35,20 +37,22 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class SplitPane : WidgetGroup
 {
-    private readonly Rectangle _firstWidgetBounds  = new();
-    private readonly Rectangle _handleBounds       = new();
+    protected bool      CursorOverHandle { get; private set; }
+    protected Rectangle HandleBounds     { get; } = new();
+    protected Vector2   LastPoint        { get; } = new();
     private readonly Vector2   _handlePosition     = new();
-    private readonly Vector2   _lastPoint          = new();
+
+    // ========================================================================
+
+    private readonly Rectangle _firstWidgetBounds  = new();
     private readonly Rectangle _secondWidgetBounds = new();
     private readonly Rectangle _tempScissors       = new();
 
-    private bool           _cursorOverHandle;
     private Actor?         _firstWidget;
+    private Actor?         _secondWidget;
     private float          _maxAmount = 1;
     private float          _minAmount;
-    private Actor?         _secondWidget;
     private float          _splitAmount = 0.5f;
-    private SplitPaneStyle _style       = null!;
     private bool           _vertical;
 
     // ========================================================================
@@ -78,110 +82,105 @@ public class SplitPane : WidgetGroup
         SetFirstWidget( firstWidget );
         SetSecondWidget( secondWidget );
 
-        Initialise();
+        SetSize( PrefWidth, PrefHeight );
+
+        AddListener( new SplitPaneInputListener( this ) );
     }
 
-    public override float PrefWidth
+    public float PrefWidth
     {
         get
         {
             var first = _firstWidget switch
-            {
-                null           => 0,
-                ILayout widget => widget.PrefWidth,
-                var _          => _firstWidget.Width,
-            };
+                        {
+                            null           => 0,
+                            ILayout widget => widget.GetPrefWidth(),
+                            var _          => _firstWidget.Width,
+                        };
 
             var second = _secondWidget switch
-            {
-                null           => 0,
-                ILayout layout => layout.PrefWidth,
-                var _          => _secondWidget.Width,
-            };
+                         {
+                             null           => 0,
+                             ILayout layout => layout.GetPrefWidth(),
+                             var _          => _secondWidget.Width,
+                         };
 
             if ( _vertical )
             {
                 return Math.Max( first, second );
             }
 
-            return first + _style.Handle.MinWidth + second;
+            return first + Style.Handle.MinWidth + second;
         }
     }
 
-    public override float PrefHeight
+    public float PrefHeight
     {
         get
         {
             var first = _firstWidget switch
-            {
-                null           => 0,
-                ILayout widget => widget.PrefHeight,
-                var _          => _firstWidget.Height,
-            };
+                        {
+                            null           => 0,
+                            ILayout widget => widget.GetPrefHeight(),
+                            var _          => _firstWidget.Height,
+                        };
 
             var second = _secondWidget switch
-            {
-                null           => 0,
-                ILayout layout => layout.PrefHeight,
-                var _          => _secondWidget.Height,
-            };
+                         {
+                             null           => 0,
+                             ILayout layout => layout.GetPrefHeight(),
+                             var _          => _secondWidget.Height,
+                         };
 
             if ( !_vertical )
             {
                 return Math.Max( first, second );
             }
 
-            return first + _style.Handle.MinHeight + second;
+            return first + Style.Handle.MinHeight + second;
         }
     }
 
-    public override float MinWidth
+    public float MinWidth
     {
         get
         {
-            var first  = _firstWidget is ILayout layout ? layout.MinWidth : 0;
-            var second = _secondWidget is ILayout widget ? widget.MinWidth : 0;
+            var first  = _firstWidget is ILayout layout ? layout.GetMinWidth() : 0;
+            var second = _secondWidget is ILayout widget ? widget.GetMinWidth() : 0;
 
             if ( _vertical )
             {
                 return Math.Max( first, second );
             }
 
-            return first + _style.Handle.MinWidth + second;
+            return first + Style.Handle.MinWidth + second;
         }
     }
 
-    public override float MinHeight
+    public float MinHeight
     {
         get
         {
-            var first  = _firstWidget is ILayout layout ? layout.MinHeight : 0;
-            var second = _secondWidget is ILayout widget ? widget.MinHeight : 0;
+            var first  = _firstWidget is ILayout layout ? layout.GetMinHeight() : 0;
+            var second = _secondWidget is ILayout widget ? widget.GetMinHeight() : 0;
 
             if ( !_vertical )
             {
                 return Math.Max( first, second );
             }
 
-            return first + _style.Handle.MinHeight + second;
+            return first + Style.Handle.MinHeight + second;
         }
     }
 
     public SplitPaneStyle Style
     {
-        get => _style;
+        get;
         set
         {
-            _style = value;
+            field = value;
             InvalidateHierarchy();
         }
-    }
-
-    private void Initialise()
-    {
-        SetSize( PrefWidth, PrefHeight );
-
-        AddListener( new SplitPaneInputListener( this ) );
     }
 
     public void Layout()
@@ -256,7 +255,7 @@ public class SplitPane : WidgetGroup
 
     private void CalculateHorizBoundsAndPositions()
     {
-        var handle = _style.Handle;
+        var handle = Style.Handle;
 
         var height         = Height;
         var availWidth     = Width - handle.MinWidth;
@@ -266,12 +265,12 @@ public class SplitPane : WidgetGroup
 
         _firstWidgetBounds.Set( 0, 0, leftAreaWidth, height );
         _secondWidgetBounds.Set( leftAreaWidth + handleWidth, 0, rightAreaWidth, height );
-        _handleBounds.Set( leftAreaWidth, 0, handleWidth, height );
+        HandleBounds.Set( leftAreaWidth, 0, handleWidth, height );
     }
 
     private void CalculateVertBoundsAndPositions()
     {
-        var handle = _style.Handle;
+        var handle = Style.Handle;
 
         var width  = Width;
         var height = Height;
@@ -283,7 +282,7 @@ public class SplitPane : WidgetGroup
 
         _firstWidgetBounds.Set( 0, height - topAreaHeight, width, topAreaHeight );
         _secondWidgetBounds.Set( 0, 0, width, bottomAreaHeight );
-        _handleBounds.Set( 0, bottomAreaHeight, width, handleHeight );
+        HandleBounds.Set( 0, bottomAreaHeight, width, handleHeight );
     }
 
     public override void Draw( IBatch batch, float parentAlpha )
@@ -331,7 +330,7 @@ public class SplitPane : WidgetGroup
         }
 
         batch.SetColor( color.R, color.G, color.B, alpha );
-        _style.Handle.Draw( batch, _handleBounds.X, _handleBounds.Y, _handleBounds.Width, _handleBounds.Height );
+        Style.Handle.Draw( batch, HandleBounds.X, HandleBounds.Y, HandleBounds.Width, HandleBounds.Height );
 
         ResetTransform( batch );
     }
@@ -365,32 +364,34 @@ public class SplitPane : WidgetGroup
 
         if ( _vertical )
         {
-            var availableHeight = Height - _style.Handle.MinHeight;
+            var availableHeight = Height - Style.Handle.MinHeight;
 
             if ( _firstWidget is ILayout layout )
             {
                 effectiveMinAmount = Math.Max( effectiveMinAmount,
-                                               Math.Min( layout.MinHeight / availableHeight, 1 ) );
+                                               Math.Min( layout.GetMinHeight() / availableHeight, 1 ) );
             }
 
             if ( _secondWidget is ILayout layout2 )
             {
                 effectiveMaxAmount = Math.Min( effectiveMaxAmount,
-                                               1 - Math.Min( layout2.MinHeight / availableHeight, 1 ) );
+                                               1 - Math.Min( layout2.GetMinHeight() / availableHeight, 1 ) );
             }
         }
         else
         {
-            var availableWidth = Width - _style.Handle.MinWidth;
+            var availableWidth = Width - Style.Handle.MinWidth;
 
             if ( _firstWidget is ILayout layout )
             {
-                effectiveMinAmount = Math.Max( effectiveMinAmount, Math.Min( layout.MinWidth / availableWidth, 1 ) );
+                effectiveMinAmount =
+                    Math.Max( effectiveMinAmount, Math.Min( layout.GetMinWidth() / availableWidth, 1 ) );
             }
 
             if ( _secondWidget is ILayout layout2 )
             {
-                effectiveMaxAmount = Math.Min( effectiveMaxAmount, 1 - Math.Min( layout2.MinWidth / availableWidth, 1 ) );
+                effectiveMaxAmount = Math.Min( effectiveMaxAmount,
+                                               1 - Math.Min( layout2.GetMinWidth() / availableWidth, 1 ) );
             }
         }
 
@@ -445,7 +446,7 @@ public class SplitPane : WidgetGroup
 
         if ( widget != null )
         {
-            base.AddActor( widget );
+            AddActor( widget );
         }
 
         Invalidate();
@@ -462,13 +463,11 @@ public class SplitPane : WidgetGroup
 
         if ( widget != null )
         {
-            base.AddActor( widget );
+            AddActor( widget );
         }
 
         Invalidate();
     }
-
-    // ========================================================================
 
     public bool RemoveActor( Actor actor )
     {
@@ -517,21 +516,24 @@ public class SplitPane : WidgetGroup
         return false;
     }
 
-    public override Actor RemoveActorAt( int index, bool unfocus )
+    public override Actor? RemoveActorAt( int index, bool unfocus )
     {
         var actor = base.RemoveActorAt( index, unfocus );
 
-        if ( actor == _firstWidget )
+        if ( actor != null )
         {
-            base.RemoveActor( actor, unfocus );
-            _firstWidget = null;
-            Invalidate();
-        }
-        else if ( actor == _secondWidget )
-        {
-            base.RemoveActor( actor, unfocus );
-            _secondWidget = null;
-            Invalidate();
+            if ( actor == _firstWidget )
+            {
+                base.RemoveActor( actor, unfocus );
+                _firstWidget = null;
+                Invalidate();
+            }
+            else if ( actor == _secondWidget )
+            {
+                base.RemoveActor( actor, unfocus );
+                _secondWidget = null;
+                Invalidate();
+            }
         }
 
         return actor;
@@ -539,7 +541,7 @@ public class SplitPane : WidgetGroup
 
     public bool IsCursorOverHandle()
     {
-        return _cursorOverHandle;
+        return CursorOverHandle;
     }
 
     // ========================================================================
@@ -568,12 +570,12 @@ public class SplitPane : WidgetGroup
                 return false;
             }
 
-            if ( _parent._handleBounds.Contains( x, y ) )
+            if ( _parent.HandleBounds.Contains( x, y ) )
             {
                 _draggingPointer = pointer;
 
-                _parent._lastPoint.Set( x, y );
-                _parent._handlePosition.Set( _parent._handleBounds.X, _parent._handleBounds.Y );
+                _parent.LastPoint.Set( x, y );
+                _parent._handlePosition.Set( _parent.HandleBounds.X, _parent.HandleBounds.Y );
 
                 return true;
             }
@@ -596,11 +598,11 @@ public class SplitPane : WidgetGroup
                 return;
             }
 
-            var handle = _parent._style.Handle;
+            var handle = _parent.Style.Handle;
 
             if ( !_parent._vertical )
             {
-                var delta      = x - _parent._lastPoint.X;
+                var delta      = x - _parent.LastPoint.X;
                 var availWidth = _parent.Width - handle.MinWidth;
                 var dragX      = _parent._handlePosition.X + delta;
 
@@ -613,7 +615,7 @@ public class SplitPane : WidgetGroup
             }
             else
             {
-                var delta       = y - _parent._lastPoint.Y;
+                var delta       = y - _parent.LastPoint.Y;
                 var availHeight = _parent.Height - handle.MinHeight;
                 var dragY       = _parent._handlePosition.Y + delta;
 
@@ -625,14 +627,14 @@ public class SplitPane : WidgetGroup
                 _parent._splitAmount = 1 - ( dragY / availHeight );
             }
 
-            _parent._lastPoint.Set( x, y );
+            _parent.LastPoint.Set( x, y );
 
             _parent.Invalidate();
         }
 
         public override bool MouseMoved( InputEvent? ev, float x, float y )
         {
-            _parent._cursorOverHandle = _parent._handleBounds.Contains( x, y );
+            _parent.CursorOverHandle = _parent.HandleBounds.Contains( x, y );
 
             return false;
         }
@@ -644,6 +646,8 @@ public class SplitPane : WidgetGroup
     [PublicAPI]
     public class SplitPaneStyle
     {
+        public ISceneDrawable Handle { get; }
+
         public SplitPaneStyle()
         {
             Handle = null!;
@@ -658,7 +662,9 @@ public class SplitPane : WidgetGroup
         {
             Handle = style.Handle;
         }
-
-        public ISceneDrawable Handle { get; }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

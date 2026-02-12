@@ -48,7 +48,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ListBox< T > : Widget
+public class ListBox< T > : Widget where T : notnull
 {
     public Rectangle?          CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
@@ -98,27 +98,23 @@ public class ListBox< T > : Widget
         Create( style );
     }
 
-    public override float PrefWidth
+    public override float GetPrefWidth()
     {
-        get
-        {
-            Validate();
+        Validate();
 
-            return _prefWidth;
-        }
-        set => _prefWidth = value;
+        return _prefWidth;
     }
 
-    public override float PrefHeight
-    {
-        get
-        {
-            Validate();
+    public void SetPrefWidth( float value ) => _prefWidth = value;
 
-            return _prefHeight;
-        }
-        set => _prefHeight = value;
+    public override float GetPrefHeight()
+    {
+        Validate();
+
+        return _prefHeight;
     }
+
+    public void SetPrefHeight( float value ) => _prefHeight = value;
 
     /// <summary>
     /// Returns the list's style. Modifying the returned style may not have an
@@ -135,7 +131,7 @@ public class ListBox< T > : Widget
         };
 
         SetStyle( style );
-        SetSize( PrefWidth, PrefHeight );
+        SetSize( GetPrefWidth(), GetPrefHeight() );
 
         KeyListener = new ListKeyListener( this );
 
@@ -175,11 +171,11 @@ public class ListBox< T > : Widget
 
         foreach ( var item in Items )
         {
-            layout?.SetText( font, ToString( item ) );
-            _prefWidth = Math.Max( layout!.Width, _prefWidth );
+            layout.SetText( font, ToString( item ) );
+            _prefWidth = Math.Max( layout.Width, _prefWidth );
         }
 
-        layoutPool.Free( layout! );
+        layoutPool.Free( layout );
         _prefWidth  += selectedDrawable.LeftWidth + selectedDrawable.RightWidth;
         _prefHeight =  Items.Count * ItemHeight;
 
@@ -285,7 +281,7 @@ public class ListBox< T > : Widget
         }
     }
 
-    protected GlyphLayout? DrawItem( IBatch batch, BitmapFont font, int index, T item, float x, float y, float width )
+    protected GlyphLayout DrawItem( IBatch batch, BitmapFont font, int index, T item, float x, float y, float width )
     {
         var str = ToString( item );
 
@@ -397,8 +393,8 @@ public class ListBox< T > : Widget
     {
         Guard.Against.Null( newItems );
 
-        var oldPrefWidth  = PrefWidth;
-        var oldPrefHeight = PrefHeight;
+        var oldPrefWidth  = GetPrefWidth();
+        var oldPrefHeight = GetPrefHeight();
 
         Items.Clear();
         Items.AddAll( newItems );
@@ -410,7 +406,7 @@ public class ListBox< T > : Widget
 
         Invalidate();
 
-        if ( !oldPrefWidth.Equals( PrefWidth ) || !oldPrefHeight.Equals( PrefHeight ) )
+        if ( !oldPrefWidth.Equals( GetPrefWidth() ) || !oldPrefHeight.Equals( GetPrefHeight() ) )
         {
             InvalidateHierarchy();
         }
@@ -425,8 +421,8 @@ public class ListBox< T > : Widget
     {
         Guard.Against.Null( newItems );
 
-        var oldPrefWidth  = PrefWidth;
-        var oldPrefHeight = PrefHeight;
+        var oldPrefWidth  = GetPrefWidth();
+        var oldPrefHeight = GetPrefHeight();
 
         if ( !newItems.Equals( Items ) )
         {
@@ -440,7 +436,7 @@ public class ListBox< T > : Widget
 
         Invalidate();
 
-        if ( !oldPrefWidth.Equals( PrefWidth ) || !oldPrefHeight.Equals( PrefHeight ) )
+        if ( !oldPrefWidth.Equals( GetPrefWidth() ) || !oldPrefHeight.Equals( GetPrefHeight() ) )
         {
             InvalidateHierarchy();
         }

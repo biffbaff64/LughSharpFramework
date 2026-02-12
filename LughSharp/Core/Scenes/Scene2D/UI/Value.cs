@@ -1,18 +1,18 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
-//
+// 
 // Copyright (c) 2024 Richard Ikin.
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,80 +23,99 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Globalization;
+
 using JetBrains.Annotations;
+
+using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
-/// <summary>
-/// Value placeholder, allowing the value to be computed on request.
-/// Values can be provided to an actor for context to reduce the number of value
-/// instances that need to be created and reduce verbosity in code that specifies
-/// values.
-/// </summary>
 [PublicAPI]
 public abstract class Value
 {
-    public static readonly Fixed Zero = new( 0 );
-    public static          Value MinWidth   { get; set; } = new ValueMinWidthInnerClass();
-    public static          Value MinHeight  { get; set; } = new ValueMinHeightInnerClass();
-    public static          Value MaxWidth   { get; set; } = new ValueMaxWidthInnerClass();
-    public static          Value MaxHeight  { get; set; } = new ValueMaxHeightInnerClass();
-    public static          Value PrefWidth  { get; set; } = new ValuePrefWidthInnerClass();
-    public static          Value PrefHeight { get; set; } = new ValuePrefHeightInnerClass();
-
-    // ========================================================================
-
     public abstract float Get( Actor? context = null );
 
-    // ========================================================================
+    public static readonly Fixed Zero = new Fixed( 0 );
+
+    private class LambdaValue : Value
+    {
+        private readonly Func< Actor?, float > _getter;
+
+        public LambdaValue( Func< Actor?, float > getter )
+        {
+            _getter = getter;
+        }
+
+        public override float Get( Actor? context = null )
+        {
+            return _getter( context );
+        }
+    }
+
+    public static readonly Value MinWidth = new LambdaValue( ctx => ctx is ILayout layout
+                                                                 ? layout.GetMinWidth()
+                                                                 : ( ctx?.Width ?? 0 ) );
+
+    public static readonly Value MinHeight = new LambdaValue( ctx => ctx is ILayout layout
+                                                                  ? layout.GetMinHeight()
+                                                                  : ( ctx?.Height ?? 0 ) );
+
+    public static readonly Value PrefWidth = new LambdaValue( ctx => ctx is ILayout layout
+                                                                  ? layout.GetPrefWidth()
+                                                                  : ( ctx?.Width ?? 0 ) );
+
+    public static readonly Value PrefHeight = new LambdaValue( ctx => ctx is ILayout layout
+                                                                   ? layout.GetPrefHeight()
+                                                                   : ( ctx?.Height ?? 0 ) );
+
+    public static readonly Value MaxWidth = new LambdaValue( ctx => ctx is ILayout layout
+                                                                 ? layout.GetMaxWidth()
+                                                                 : ( ctx?.Width ?? 0 ) );
+
+    public static readonly Value MaxHeight = new LambdaValue( ctx => ctx is ILayout layout
+                                                                  ? layout.GetMaxHeight()
+                                                                  : ( ctx?.Height ?? 0 ) );
 
     public static Value PercentWidth( float percent )
     {
-        return new ValuePercentWidth( percent );
+        return new LambdaValue( ctx => ( ctx?.Width ?? 0 ) * percent );
     }
 
     public static Value PercentHeight( float percent )
     {
-        return new ValuePercentHeight( percent );
+        return new LambdaValue( ctx => ( ctx?.Height ?? 0 ) * percent );
     }
 
-    public static Value PercentWidth( float percent, Actor? actor )
+    public static Value PercentWidth( float percent, Actor actor )
     {
-        return new ValuePercentWidth( percent, actor );
+        if ( actor == null )
+        {
+            throw new ArgumentNullException( nameof( actor ) );
+        }
+
+        return new LambdaValue( _ => actor.Width * percent );
     }
 
-    public static Value PercentHeight( float percent, Actor? actor )
-    {
-        return new ValuePercentHeight( percent, actor );
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// A fixed value that is not computed each time it is used.
-    /// </summary>
     [PublicAPI]
     public class Fixed : Value
     {
         private static readonly Fixed?[] _cache = new Fixed[ 111 ];
+        private readonly        float    _value;
 
         public Fixed( float value )
         {
-            Value = value;
+            _value = value;
         }
-
-        public float Value { get; }
 
         public override float Get( Actor? context = null )
         {
-            return Value;
+            return _value;
         }
 
         public override string ToString()
         {
-            return Value.ToString( CultureInfo.InvariantCulture );
+            return _value.ToString( CultureInfo.InvariantCulture );
         }
 
         public static Fixed ValueOf( float value )
@@ -106,171 +125,24 @@ public abstract class Value
                 return Zero;
             }
 
-            if ( value is >= -10 and <= 100 && value.Equals( ( int )value ) )
+            if ( value is >= -10 and <= 100
+              && Math.Abs( value - ( int )value ) < NumberUtils.FLOAT_TOLERANCE )
             {
-                var f = _cache[ ( int )value + 10 ];
+                var index = ( int )value + 10;
 
-                if ( f == null )
-                {
-                    _cache[ ( int )value + 10 ] = f = new Fixed( value );
-                }
-
-                return f;
+                return _cache[ index ] ??= new Fixed( value );
             }
 
             return new Fixed( value );
         }
-    }
 
-    // ========================================================================
-
-    /// <summary>
-    /// Returns a value that is a percentage of the actor's width.
-    /// </summary>
-    private class ValuePercentWidth : Value
-    {
-        private readonly Actor? _actor;
-        private readonly float  _percent;
-
-        public ValuePercentWidth( float percent, Actor? actor = null )
+        /// Allow code like "cell.Width(10)" instead of "cell.Width(Value.Fixed.ValueOf(10))"
+        public static implicit operator Fixed( float v )
         {
-            _percent = percent;
-            _actor   = actor;
-        }
-
-        public override float Get( Actor? actor = null )
-        {
-            return ( _actor?.Width * _percent ) ?? 0;
-        }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Returns a value that is a percentage of the actor's height.
-    /// </summary>
-    private class ValuePercentHeight : Value
-    {
-        private readonly Actor? _actor;
-        private readonly float  _percent;
-
-        public ValuePercentHeight( float percent, Actor? actor = null )
-        {
-            _percent = percent;
-            _actor   = actor;
-        }
-
-        public override float Get( Actor? actor = null )
-        {
-            return ( _actor?.Height * _percent ) ?? 0;
-        }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Value that is the minWidth of the actor in the cell.
-    /// </summary>
-    private class ValueMinWidthInnerClass : Value
-    {
-        public override float Get( Actor? context = null )
-        {
-            if ( context is ILayout layout )
-            {
-                return layout.MinWidth;
-            }
-
-            return context?.Width ?? 0;
-        }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Value that is the minHeight of the actor in the cell.
-    /// </summary>
-    private class ValueMinHeightInnerClass : Value
-    {
-        public override float Get( Actor? context = null )
-        {
-            if ( context is ILayout layout )
-            {
-                return layout.MinHeight;
-            }
-
-            return context?.Height ?? 0;
-        }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Value that is the prefWidth of the actor in the cell.
-    /// </summary>
-    private class ValuePrefWidthInnerClass : Value
-    {
-        public override float Get( Actor? context = null )
-        {
-            if ( context is ILayout layout )
-            {
-                return layout.PrefWidth;
-            }
-
-            return context?.Width ?? 0;
-        }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Value that is the prefHeight of the actor in the cell.
-    /// </summary>
-    private class ValuePrefHeightInnerClass : Value
-    {
-        public override float Get( Actor? context = null )
-        {
-            if ( context is ILayout layout )
-            {
-                return layout.PrefHeight;
-            }
-
-            return context?.Height ?? 0;
-        }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Value that is the maxWidth of the actor in the cell.
-    /// </summary>
-    private class ValueMaxWidthInnerClass : Value
-    {
-        public override float Get( Actor? context = null )
-        {
-            if ( context is ILayout layout )
-            {
-                return layout.MaxWidth;
-            }
-
-            return context?.Width ?? 0;
-        }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Value that is the maxWidth of the actor in the cell.
-    /// </summary>
-    private class ValueMaxHeightInnerClass : Value
-    {
-        public override float Get( Actor? context = null )
-        {
-            if ( context is ILayout layout )
-            {
-                return layout.MaxHeight;
-            }
-
-            return context?.Height ?? 0;
+            return ValueOf( v );
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

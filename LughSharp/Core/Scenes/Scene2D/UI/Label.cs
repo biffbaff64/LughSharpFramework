@@ -67,7 +67,6 @@ public class Label : Widget
     private float      _lastPrefHeight;
     private bool       _prefSizeInvalid = true;
     private LabelStyle _style           = null!;
-    private bool       _wrap;
 
     // ========================================================================
 
@@ -165,10 +164,10 @@ public class Label : Widget
     /// </summary>
     public bool Wrap
     {
-        get => _wrap;
+        get;
         set
         {
-            _wrap = value;
+            field = value;
 
             InvalidateHierarchy();
         }

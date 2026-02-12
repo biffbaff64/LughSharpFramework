@@ -24,9 +24,12 @@
 
 using System;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Exceptions;
+
 using Blendmode = LughSharp.Core.Maps.Tiled.ITiledMapTile.Blendmode;
 
 namespace LughSharp.Core.Maps.Tiled.Tiles;
@@ -37,8 +40,10 @@ namespace LughSharp.Core.Maps.Tiled.Tiles;
 [PublicAPI]
 public class AnimatedTiledMapTile : ITiledMapTile
 {
-    public uint       ID        { get; set; }
+    public uint      ID        { get; set; }
     public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
+
+    // ========================================================================
 
     /// <summary>
     /// The currently displayed animation frame.
@@ -67,15 +72,35 @@ public class AnimatedTiledMapTile : ITiledMapTile
         set { }
     }
 
+    /// <summary>
+    /// Returns the <see cref="MapProperties"/> instance for this tile. If the
+    /// current properties instance is null, a new instance will be created first.
+    /// </summary>
+    public MapProperties? Properties
+    {
+        get => field ??= new MapProperties();
+        set;
+    } = new();
+
+    /// <summary>
+    /// Returns the <see cref="MapObjects"/> instance for this tile. If the
+    /// current mapobjects instance is null, a new instance will be created first.
+    /// </summary>
+    public MapObjects? MapObjects
+    {
+        get => field ??= new MapObjects();
+        set;
+    } = new();
+
     // ========================================================================
-    
+
     private static readonly long _initialTimeOffset = DateTime.Now.Millisecond;
 
     private static   long                 _lastTiledMapRenderTime;
     private readonly int[]                _animationIntervals;
     private readonly StaticTiledMapTile[] _frameTiles;
     private readonly int                  _loopDuration;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -123,26 +148,6 @@ public class AnimatedTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    /// Returns the <see cref="MapProperties"/> instance for this tile. If the
-    /// current properties instance is null, a new instance will be created first.
-    /// </summary>
-    public MapProperties? Properties
-    {
-        get => field ??= new MapProperties();
-        set;
-    } = new();
-
-    /// <summary>
-    /// Returns the <see cref="MapObjects"/> instance for this tile. If the
-    /// current mapobjects instance is null, a new instance will be created first.
-    /// </summary>
-    public MapObjects? MapObjects
-    {
-        get => field ??= new MapObjects();
-        set;
-    } = new();
-
-    /// <summary>
     /// Gets the index into the animation images array
     /// </summary>
     public int GetCurrentFrameIndex()
@@ -186,4 +191,3 @@ public class AnimatedTiledMapTile : ITiledMapTile
 
 // ============================================================================
 // ============================================================================
-

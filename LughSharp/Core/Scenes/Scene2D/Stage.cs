@@ -254,7 +254,7 @@ public class Stage : InputAdapter, IDisposable
     /// Adds an actor to the root of the stage.
     /// </summary>
     /// <see cref="Group.AddActor "/>
-    public virtual void AddActor( Actor actor )
+    public void AddActor( Actor actor )
     {
         RootGroup.AddActor( actor );
     }
@@ -263,7 +263,7 @@ public class Stage : InputAdapter, IDisposable
     /// Adds an action to the root of the stage.
     /// </summary>
     /// <see cref="Group.AddAction(Action) "/>
-    public virtual void AddAction( Action action )
+    public void AddAction( Action action )
     {
         RootGroup.AddAction( action );
     }

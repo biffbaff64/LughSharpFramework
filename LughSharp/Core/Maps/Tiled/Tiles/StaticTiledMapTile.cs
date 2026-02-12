@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -34,7 +35,7 @@ namespace LughSharp.Core.Maps.Tiled.Tiles;
 [PublicAPI]
 public class StaticTiledMapTile : ITiledMapTile
 {
-    public uint                     ID            { get; set; }
+    public uint                    ID            { get; set; }
     public float                   OffsetX       { get; set; }
     public float                   OffsetY       { get; set; }
     public TextureRegion           TextureRegion { get; set; }

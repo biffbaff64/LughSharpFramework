@@ -47,37 +47,6 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Window : Table
 {
-    // ========================================================================
-
-    private const int DEFAULT_WIDTH  = 150;
-    private const int DEFAULT_HEIGHT = 150;
-    private const int MOVE           = 1 << 5;
-
-    private static readonly Vector2 _tmpPosition = new();
-    private static readonly Vector2 _tmpSize     = new();
-
-    private WindowStyle? _style;
-    private Table?       _titleTable;
-
-    // ========================================================================
-
-    public Window( string title, Skin skin )
-        : this( title, skin.Get< WindowStyle >() )
-    {
-        Skin = skin;
-    }
-
-    public Window( string title, Skin skin, string styleName )
-        : this( title, skin.Get< WindowStyle >( styleName ) )
-    {
-        Skin = skin;
-    }
-
-    public Window( string title, WindowStyle style )
-    {
-        Setup( title, style );
-    }
-
     public bool   DrawTitleTable  { get; set; }
     public Label? TitleLabel      { get; set; }
     public bool   IsMovable       { get; set; } = true;
@@ -86,10 +55,6 @@ public class Window : Table
     public bool   Dragging        { get; set; }
     public int    ResizeBorder    { get; set; } = 8;
     public bool   KeepWithinStage { get; set; } = true;
-
-    // ========================================================================
-
-    protected int Edge { get; set; }
 
     /// <summary>
     /// This windows <see cref="WindowStyle"/> property.
@@ -107,14 +72,38 @@ public class Window : Table
         }
     }
 
-    /// <summary>
-    /// Private Setup method, code moved from constructor to allow
-    /// calling of virtual methods as they should not be called from
-    /// constructors.
-    /// </summary>
-    /// <param name="title"> Window title. </param>
-    /// <param name="style"> Window Style </param>
-    private void Setup( string title, WindowStyle style )
+    // ========================================================================
+
+    protected int Edge { get; set; }
+
+    // ========================================================================
+    
+    private const int DEFAULT_WIDTH  = 150;
+    private const int DEFAULT_HEIGHT = 150;
+    private const int MOVE           = 1 << 5;
+
+    private static readonly Vector2 _tmpPosition = new();
+    private static readonly Vector2 _tmpSize     = new();
+
+    private WindowStyle? _style;
+    private Table?       _titleTable;
+
+    // ========================================================================
+    // ========================================================================
+
+    public Window( string title, Skin skin )
+        : this( title, skin.Get< WindowStyle >() )
+    {
+        Skin = skin;
+    }
+
+    public Window( string title, Skin skin, string styleName )
+        : this( title, skin.Get< WindowStyle >( styleName ) )
+    {
+        Skin = skin;
+    }
+
+    public Window( string title, WindowStyle style )
     {
         Touchable = Touchable.Enabled;
         Clip      = true;
@@ -302,11 +291,11 @@ public class Window : Table
         return hit;
     }
 
-    protected override float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         return _titleTable == null
             ? base.GetPrefWidth()
-            : Math.Max( base.GetPrefWidth(), _titleTable.PrefWidth + GetPadLeft() + GetPadRight() );
+            : Math.Max( base.GetPrefWidth(), _titleTable.GetPrefWidth() + GetPadLeft() + GetPadRight() );
     }
 
     // ========================================================================
@@ -351,6 +340,9 @@ public class Window : Table
             return false;
         }
     }
+    
+    // ========================================================================
+    // ========================================================================
 
     [PublicAPI]
     public class WindowInputListener : InputListener
@@ -599,6 +591,13 @@ public class Window : Table
     [PublicAPI]
     public class WindowStyle
     {
+        public ISceneDrawable? Background      { get; set; }
+        public BitmapFont?     TitleFont       { get; set; }
+        public Color?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
+        public ISceneDrawable? StageBackground { get; set; }
+
+        // ====================================================================
+        
         public WindowStyle()
         {
         }
@@ -623,11 +622,6 @@ public class Window : Table
 
             Background = style.Background;
         }
-
-        public ISceneDrawable? Background      { get; set; }
-        public BitmapFont?     TitleFont       { get; set; }
-        public Color?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
-        public ISceneDrawable? StageBackground { get; set; }
     }
 }
 

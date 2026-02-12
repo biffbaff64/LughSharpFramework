@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -37,6 +38,7 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
+
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
@@ -45,37 +47,24 @@ namespace LughSharp.Core.Scenes.Scene2D;
 [PublicAPI]
 public class Actor : IActor, IComparable< Actor >
 {
-    public Stage?    Stage      { get; set; }
-    public Group?    Parent     { get; set; }
-    public string?   Name       { get; set; } = "Not Set";
-    public object?   UserObject { get; set; }
-    public Touchable Touchable  { get; set; } = Touchable.Enabled;
-    public bool      IsVisible  { get; set; } = true;
-
-    public virtual float MinWidth   { get; set; }
-    public virtual float MinHeight  { get; set; }
-    public virtual float MaxWidth   { get; set; }
-    public virtual float MaxHeight  { get; set; }
-    public virtual float PrefWidth  { get; set; }
-    public virtual float PrefHeight { get; set; }
+    public Stage? Stage  { get; set; }
+    public Group? Parent { get; set; }
 
     public DelayedRemovalList< IEventListener > Listeners        { get; }      = [ ];
     public DelayedRemovalList< IEventListener > CaptureListeners { get; }      = [ ];
     public List< Action >                       Actions          { get; set; } = [ ];
 
+    public string?   Name       { get; set; } = "Not Set";
+    public Touchable Touchable  { get; set; } = Touchable.Enabled;
+    public bool      IsVisible  { get; set; } = true;
+    public object?   UserObject { get; set; }
+    
     // ========================================================================
 
     protected float OriginX { get; set; }
     protected float OriginY { get; set; }
 
     // ========================================================================
-
-    /// <summary>
-    /// Default Constructor.
-    /// </summary>
-    protected Actor()
-    {
-    }
 
     /// <summary>
     /// The X coordinate of the actor's left edge.
@@ -228,6 +217,15 @@ public class Actor : IActor, IComparable< Actor >
         }
     } = false;
 
+    // ========================================================================
+    
+    /// <summary>
+    /// Default Constructor.
+    /// </summary>
+    protected Actor()
+    {
+    }
+
     /// <summary>
     /// Compares the current instance with another object of the same type and returns
     /// an integer that indicates whether the current instance precedes, follows, or
@@ -356,6 +354,12 @@ public class Actor : IActor, IComparable< Actor >
         var ascendants = Pools.Obtain< List< Group > >();
         var parent     = Parent;
 
+        if ( ascendants == null || ascendants.Count == 0 )
+        {
+            // No point in carrying on if there are no ascendants.
+            return ev.IsCancelled;
+        }
+        
         while ( parent != null )
         {
             ascendants.Add( parent );
@@ -1266,7 +1270,7 @@ public class Actor : IActor, IComparable< Actor >
         tableBounds.Width  = width;
         tableBounds.Height = height;
 
-        var scissorBounds = Pools.Obtain< Rectangle >();
+        var scissorBounds = Pools.Obtain< Rectangle >() ?? new Rectangle();
 
         Stage.CalculateScissors( tableBounds, scissorBounds );
 

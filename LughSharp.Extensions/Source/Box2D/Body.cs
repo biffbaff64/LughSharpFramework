@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices.JavaScript;
+
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Box2D;
@@ -32,32 +34,37 @@ namespace Extensions.Source.Box2D;
 [PublicAPI]
 public class Body
 {
-//	/** the address of the body **/
-//	protected long addr;
-//
-//	/** temporary float array **/
-//	private final float[] tmp = new float[4];
-//
-//	/** World **/
-//	private final World world;
-//
-//	/** Fixtures of this body **/
-//	private Array<Fixture> fixtures = new Array<Fixture>(2);
-//
-//	/** Joints of this body **/
-//	protected Array<JointEdge> joints = new Array<JointEdge>(2);
-//
-//	/** user data **/
-//	private Object userData;
-//
-//	/** Constructs a new body with the given address
-//	 * @param world the world
-//	 * @param addr the address */
-//	protected Body (World world, long addr) {
-//		this.world = world;
-//		this.addr = addr;
-//	}
-//
+    /** the address of the body **/
+    protected long addr;
+
+    /** temporary float array **/
+    private readonly float[] tmp = new float[ 4 ];
+
+    /** World **/
+    private readonly World world;
+
+    /** Fixtures of this body **/
+    private List< Fixture > fixtures = new( 2 );
+
+    /** Joints of this body **/
+    protected List< JointEdge > joints = new( 2 );
+
+    /** user data **/
+    private object? userData;
+
+    // ========================================================================
+
+    /// <summary>
+    /// Constructs a new body with the given address
+    /// </summary>
+    /// <param name="world"> the Box2D World this body will exist in. </param>
+    /// <param name="addr"></param>
+    protected Body( World world, long addr )
+    {
+        this.world = world;
+        this.addr  = addr;
+    }
+
 //	/** Resets this body after fetching it from the {@link World#freeBodies} Pool. */
 //	protected void reset (long addr) {
 //		this.addr = addr;
@@ -824,4 +831,3 @@ public class Body
 
 // ============================================================================
 // ============================================================================
-

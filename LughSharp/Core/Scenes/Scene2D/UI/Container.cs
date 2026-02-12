@@ -248,7 +248,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
         if ( actor != null )
         {
-            base.AddActor( actor );
+            AddActor( actor );
         }
     }
 
@@ -870,7 +870,7 @@ public class Container< T > : WidgetGroup where T : Actor
             v = Math.Max( v, _background.MinHeight );
         }
 
-        return Math.Max( MinHeight, v + _padTop.Get( this ) + _padBottom.Get( this ) );
+        return Math.Max( GetMinHeight(), v + _padTop.Get( this ) + _padBottom.Get( this ) );
     }
 
     #endregion preferred sizing

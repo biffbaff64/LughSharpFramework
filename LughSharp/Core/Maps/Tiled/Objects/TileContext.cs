@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.IO;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Maps.Tiled.Objects;

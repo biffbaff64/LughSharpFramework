@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
@@ -39,6 +41,8 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     public bool      OwnsBatch   { get; set; }
     public Rectangle ImageBounds { get; set; } = new();
 
+    // ========================================================================
+    
     protected IBatch    Batch      { get; set; }
     protected Rectangle ViewBounds { get; set; }
     protected float     UnitScale  { get; set; }

@@ -234,13 +234,13 @@ public class ImageButton : Button
     [PublicAPI]
     public class ImageButtonStyle : ButtonStyle
     {
-        public readonly ISceneDrawable? ImageChecked;
-        public readonly ISceneDrawable? ImageCheckedDown;
-        public readonly ISceneDrawable? ImageCheckedOver;
-        public readonly ISceneDrawable? ImageDisabled;
-        public readonly ISceneDrawable? ImageDown;
-        public readonly ISceneDrawable? ImageOver;
-        public readonly ISceneDrawable? ImageUp;
+        public ISceneDrawable? ImageChecked;
+        public ISceneDrawable? ImageCheckedDown;
+        public ISceneDrawable? ImageCheckedOver;
+        public ISceneDrawable? ImageDisabled;
+        public ISceneDrawable? ImageDown;
+        public ISceneDrawable? ImageOver;
+        public ISceneDrawable? ImageUp;
 
         /// <summary>
         /// Creates a new, unitialised, ImageButtonStyle instance.
@@ -292,3 +292,7 @@ public class ImageButton : Button
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

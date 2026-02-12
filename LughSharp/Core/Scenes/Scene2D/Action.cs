@@ -31,8 +31,6 @@ namespace LughSharp.Core.Scenes.Scene2D;
 [PublicAPI]
 public abstract class Action : IAction, IResetable
 {
-    private Actor? _actor;
-
     /// <inheritdoc />
     public Pool< Action >? Pool { get; set; }
 
@@ -45,7 +43,7 @@ public abstract class Action : IAction, IResetable
     public virtual Actor? Actor
     {
         // Returns null if the action is not attached to an actor.
-        get => _actor;
+        get;
 
         // Sets the actor this action is attached to. This also sets the target actor if it
         // is null. This method is called automatically when an action is added to an actor.
@@ -58,7 +56,7 @@ public abstract class Action : IAction, IResetable
         // Act(float). For a TemporalAction, use TemporalAction#begin().
         set
         {
-            _actor = value;
+            field = value;
 
             Target ??= value;
 
@@ -115,3 +113,7 @@ public abstract class Action : IAction, IResetable
         return name;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

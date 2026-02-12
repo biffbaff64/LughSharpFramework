@@ -33,12 +33,12 @@ namespace LughSharp.Core.Scenes.Scene2D.Utils;
 [PublicAPI]
 public interface ILayout
 {
-    float MinWidth   { get; }
-    float MinHeight  { get; }
-    float MaxWidth   { get; }
-    float MaxHeight  { get; }
-    float PrefWidth  { get; }
-    float PrefHeight { get; }
+    float GetMinWidth();
+    float GetMinHeight();
+    float GetMaxWidth();
+    float GetMaxHeight();
+    float GetPrefWidth();
+    float GetPrefHeight();
 
     // ========================================================================
 
@@ -106,3 +106,6 @@ public interface ILayout
     /// </summary>
     void Pack();
 }
+
+// ============================================================================
+// ============================================================================

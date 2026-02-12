@@ -54,16 +54,12 @@ namespace LughSharp.Core.Maps.Tiled.Loaders;
 public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     where TP : BaseTmxMapLoader< TP >.BaseTmxLoaderParameters
 {
-    // ========================================================================
-    // ========================================================================
-
     protected const uint FLAG_FLIP_HORIZONTALLY     = 0x80000000;
     protected const uint FLAG_FLIP_VERTICALLY       = 0x40000000;
     protected const uint FLAG_FLIP_DIAGONALLY       = 0x20000000;
     protected const uint ROTATED_HEXAGONAL_120_FLAG = 0x10000000;
     protected const uint MASK_CLEAR                 = 0xF0000000;
 
-    // ========================================================================
     // ========================================================================
 
     public int MapTileWidth      { get; set; }
@@ -75,6 +71,8 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     public Dictionary< uint, MapObject >? IdToObject          { get; set; }
     public List< Action >?                RunOnEndOfLoadTiled { get; set; }
 
+    // ========================================================================
+    
     protected bool               ConvertObjectToTileSpace;
     protected bool               FlipY       = true;
     protected XmlDocument        XmlDocument = new();

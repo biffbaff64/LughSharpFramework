@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics.G2D;
@@ -159,7 +162,8 @@ public class Table : WidgetGroup
     public Cell ObtainCell()
     {
         var cell = CellPool.Obtain();
-        cell!.Table = this;
+        
+        cell.Table = this;
 
         return cell;
     }
@@ -371,11 +375,6 @@ public class Table : WidgetGroup
             // Set the index of the cell above.
             if ( cell.Row > 0 )
             {
-                // TODO: This label is direct from the Java libgdx.
-                //       I don't like using them so this will be refactored at some point.
-                //       I'm not even sure it's in the right place...should it be AFTER the loop?
-            outer:
-
                 for ( var i = cellCount - 1; i >= 0; i-- )
                 {
                     var other = _cells[ i ];
@@ -390,6 +389,8 @@ public class Table : WidgetGroup
                         }
                     }
                 }
+                
+            outer: ;
             }
         }
         else
@@ -417,7 +418,7 @@ public class Table : WidgetGroup
         return cell;
     }
 
-    public Table Add( params Actor[] actors )
+    public Table Add( Actor[] actors )
     {
         for ( int i = 0, n = actors.Length; i < n; i++ )
         {
@@ -519,7 +520,7 @@ public class Table : WidgetGroup
         return true;
     }
 
-    public override Actor RemoveActorAt( int index, bool unfocus )
+    public override Actor? RemoveActorAt( int index, bool unfocus )
     {
         var actor = base.RemoveActorAt( index, unfocus );
 
@@ -682,7 +683,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Returns the cell for the specified actor in this table, or null.
     /// </summary>
-    public Cell? GetCell< T >( T actor ) where T : Actor
+    public Cell? GetCell< T >( T? actor ) where T : Actor
     {
         if ( actor == null )
         {
@@ -712,7 +713,7 @@ public class Table : WidgetGroup
         return _cells;
     }
 
-    protected virtual float GetPrefWidth()
+    public virtual float GetPrefWidth()
     {
         if ( _sizeInvalid )
         {
@@ -724,7 +725,7 @@ public class Table : WidgetGroup
         return _background != null ? Math.Max( width, _background.MinWidth ) : width;
     }
 
-    protected virtual float GetPrefHeight()
+    public virtual float GetPrefHeight()
     {
         if ( _sizeInvalid )
         {
@@ -1852,7 +1853,9 @@ public class Table : WidgetGroup
         {
             if ( Children.GetAt( i ) is ILayout )
             {
-                ( ( ILayout )Children.GetAt( i ) ).Validate();
+                var child = Children.GetAt( i ) as ILayout;
+                
+                child?.Validate();
             }
         }
 

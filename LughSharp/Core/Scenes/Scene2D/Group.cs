@@ -505,7 +505,7 @@ public class Group : Actor, ICullable
     /// Adds an actor as a child of this group, removing it from its previous
     /// parent. If the actor is already a child of this group, no changes are made.
     /// </summary>
-    public virtual void AddActor( Actor actor )
+    public void AddActor( Actor actor )
     {
         if ( actor.Parent != null )
         {

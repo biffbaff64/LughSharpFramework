@@ -31,6 +31,9 @@ public static class Assets
     public const string COMPLETE_STAR    = @"Assets\complete_star.png";
     public const string KEY_COLLECTED    = @"Assets\key_collected.png";
 
+    public const string BUTTON_B_UP      = @"Assets\packedimages\input\button_b.png";
+    public const string BUTTON_B_DOWN    = @"Assets\packedimages\input\button_b_pressed.png";
+    
     // ========================================================================
     // TMX Maps
     public const string ROOM1_MAP       =  @"Assets\Maps\room1.tmx";

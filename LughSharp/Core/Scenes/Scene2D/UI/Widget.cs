@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -44,11 +45,16 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Widget : Actor, ILayout
 {
-    private bool _layoutEnabled = true;
-
     /// <summary>
     /// </summary>
     public bool NeedsLayout { get; set; } = true;
+
+    /// <summary>
+    /// If true, this actor will be sized to the parent in <see cref="ILayout.Validate"/>. If the
+    /// parent is the stage, the actor will be sized to the stage. This method is for convenience
+    /// only when the widget's parent does not set the size of its children (such as the stage).
+    /// </summary>
+    public bool FillParent { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -157,16 +163,9 @@ public class Widget : Actor, ILayout
     /// </summary>
     public virtual void Pack()
     {
-        SetSize( PrefWidth, PrefHeight );
+        SetSize( GetPrefWidth(), GetPrefHeight() );
         Validate();
     }
-
-    /// <summary>
-    /// If true, this actor will be sized to the parent in <see cref="ILayout.Validate"/>. If the
-    /// parent is the stage, the actor will be sized to the stage. This method is for convenience
-    /// only when the widget's parent does not set the size of its children (such as the stage).
-    /// </summary>
-    public bool FillParent { get; set; }
 
     /// <summary>
     /// Enables or disables the layout for this actor and all child actors, recursively.
@@ -175,17 +174,17 @@ public class Widget : Actor, ILayout
     /// </summary>
     public bool EnableLayout
     {
-        get => _layoutEnabled;
+        get;
         set
         {
-            _layoutEnabled = value;
+            field = value;
 
-            if ( _layoutEnabled )
+            if ( field )
             {
                 InvalidateHierarchy();
             }
         }
-    }
+    } = true;
 
     /// <summary>
     /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
@@ -214,4 +213,19 @@ public class Widget : Actor, ILayout
     {
         Invalidate();
     }
+
+    public float GetMinWidth() => GetPrefWidth();
+
+    public float GetMinHeight() => GetPrefHeight();
+
+    public virtual float GetPrefWidth() => 0;
+
+    public virtual float GetPrefHeight() => 0;
+
+    public float GetMaxWidth() => 0;
+
+    public float GetMaxHeight() => 0;
 }
+
+// ============================================================================
+// ============================================================================

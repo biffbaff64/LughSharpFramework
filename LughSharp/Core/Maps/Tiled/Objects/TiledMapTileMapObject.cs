@@ -22,10 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Maps.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maps.Tiled.Objects;
 
@@ -54,7 +57,7 @@ public class TiledMapTileMapObject : TextureMapObject
     {
         FlipHorizontally = flipHorizontally;
         FlipVertically   = flipVertically;
-        Tile             = tile;
+        Tile             = tile ?? throw new ArgumentNullException( nameof( tile ), "Tile cannot be null." );
 
         var region = new TextureRegion( tile.TextureRegion );
 

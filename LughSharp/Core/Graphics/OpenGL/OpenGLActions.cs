@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using DotGLFW;
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
