@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+using System.Linq;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Input;
 using LughSharp.Core.Utils.Exceptions;
@@ -162,3 +165,7 @@ public class ArraySelection< T > : Selection< T >
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

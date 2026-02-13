@@ -84,7 +84,7 @@ public class TextTooltip : Tooltip< Label >
 
         Container.GetActor()!.Style = style.Label;
         Container.SetBackground( style.Background );
-        Container.MaxWidth = style.WrapWidth;
+        Container.SetMaxWidth( style.WrapWidth );
     }
 
     // ========================================================================
@@ -92,6 +92,10 @@ public class TextTooltip : Tooltip< Label >
     [PublicAPI]
     public class TextTooltipStyle
     {
+        public Label.LabelStyle Label      { get; set; } = null!;
+        public ISceneDrawable   Background { get; set; } = null!;
+        public float            WrapWidth  { get; set; }
+
         public TextTooltipStyle()
         {
         }
@@ -108,9 +112,9 @@ public class TextTooltip : Tooltip< Label >
             Background = style.Background;
             WrapWidth  = style.WrapWidth;
         }
-
-        public Label.LabelStyle Label      { get; set; } = null!;
-        public ISceneDrawable   Background { get; set; } = null!;
-        public float            WrapWidth  { get; set; }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Input;
 using LughSharp.Core.Scenes.Scene2D.Listeners;

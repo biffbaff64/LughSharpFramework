@@ -30,6 +30,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
@@ -41,6 +42,7 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
+
 using Color = LughSharp.Core.Graphics.Color;
 using Platform = LughSharp.Core.Main.Platform;
 
@@ -67,6 +69,31 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class TextField : Widget
 {
+    public TextFieldStyle?     Style                    { get; set; }
+    public string?             Text                     { get; set; }
+    public string?             MessageText              { get; set; }
+    public int                 Cursor                   { get; set; }
+    public int                 SelectionStart           { get; set; }
+    public bool                HasSelection             { get; set; }
+    public bool                WriteEnters              { get; set; }
+    public GlyphLayout         Layout                   { get; set; } = new();
+    public List< float >       GlyphPositions           { get; set; } = [ ];
+    public string?             DisplayText              { get; set; }
+    public float               FontOffset               { get; set; }
+    public float               TextHeight               { get; set; }
+    public float               TextOffset               { get; set; }
+    public bool                FocusTraversal           { get; set; } = true;
+    public bool                ProgrammaticChangeEvents { get; set; }
+    public bool                Disabled                 { get; set; }
+    public ITextFieldFilter?   Filter                   { get; set; }
+    public ITextFieldListener? Listener                 { get; set; }
+    public int                 MaxLength                { get; set; }
+
+    public float KeyRepeatInitialTime = 0.4f;
+    public float KeyRepeatTime        = 0.1f;
+
+    // ========================================================================
+
     protected const char CARRIAGE_RETURN = '\r';
     protected const char NEWLINE         = '\n';
     protected const char TAB             = '\t';
@@ -74,22 +101,20 @@ public class TextField : Widget
     protected const char DELETE          = '\u007f';
     protected const char BULLET          = '\u0095';
 
-    public static float KeyRepeatInitialTime = 0.4f;
-    public static float KeyRepeatTime        = 0.1f;
+    // ========================================================================
 
-    private readonly BlinkTaskManager     _blink;
-    private readonly IClipboard           _clipboard;
-    private readonly KeyRepeatTaskManager _keyRepeat;
     private readonly bool                 _onlyFontChars = true;
     private readonly int                  _textAlign     = Alignment.LEFT;
     private readonly Vector2              _tmp1          = new();
     private readonly Vector2              _tmp2          = new();
     private readonly Vector2              _tmp3          = new();
+    private readonly BlinkTaskManager     _blink;
+    private readonly IClipboard           _clipboard;
+    private readonly KeyRepeatTaskManager _keyRepeat;
 
     private CancellationToken        _blinkCancellationToken;
     private Task?                    _blinkTask;
     private CancellationTokenSource? _blinkTokenSource;
-
     private bool                     _cursorOn;
     private bool                     _focused;
     private InputListener?           _inputListener;
@@ -126,63 +151,18 @@ public class TextField : Widget
         _blink     = new BlinkTaskManager( this );
         _keyRepeat = new KeyRepeatTaskManager( this );
 
-        NonVirtualInitialise( text, style );
+        SetStyle( style );
+        Initialise();
+        SetText( text );
+        SetSize( GetPrefWidth(), GetPrefHeight() );
     }
 
-    // ========================================================================
-
-    public TextFieldStyle?     Style                    { get; set; }
-    public string?             Text                     { get; set; }
-    public string?             MessageText              { get; set; }
-    public int                 Cursor                   { get; set; }
-    public int                 SelectionStart           { get; set; }
-    public bool                HasSelection             { get; set; }
-    public bool                WriteEnters              { get; set; }
-    public GlyphLayout         Layout                   { get; set; } = new();
-    public List< float >       GlyphPositions           { get; set; } = [ ];
-    public string?             DisplayText              { get; set; }
-    public float               FontOffset               { get; set; }
-    public float               TextHeight               { get; set; }
-    public float               TextOffset               { get; set; }
-    public bool                FocusTraversal           { get; set; } = true;
-    public bool                ProgrammaticChangeEvents { get; set; }
-    public bool                Disabled                 { get; set; }
-    public ITextFieldFilter?   Filter                   { get; set; }
-    public ITextFieldListener? Listener                 { get; set; }
-    public int                 MaxLength                { get; set; }
-
-    // ========================================================================
-
-    public override float PrefHeight
+    public void Initialise()
     {
-        get
-        {
-            float topAndBottom = 0, minHeight = 0;
+        _inputListener = CreateInputListener();
 
-            if ( Style?.Background != null )
-            {
-                topAndBottom = Math.Max( topAndBottom, Style.Background.BottomHeight + Style.Background.TopHeight );
-                minHeight    = Math.Max( minHeight, Style.Background.MinHeight );
-            }
-
-            if ( Style?.FocusedBackground != null )
-            {
-                topAndBottom = Math.Max( topAndBottom,
-                                         Style.FocusedBackground.BottomHeight + Style.FocusedBackground.TopHeight );
-
-                minHeight = Math.Max( minHeight, Style.FocusedBackground.MinHeight );
-            }
-
-            if ( Style?.DisabledBackground != null )
-            {
-                topAndBottom = Math.Max( topAndBottom,
-                                         Style.DisabledBackground.BottomHeight + Style.DisabledBackground.TopHeight );
-
-                minHeight = Math.Max( minHeight, Style.DisabledBackground.MinHeight );
-            }
-
-            return Math.Max( topAndBottom + TextHeight, minHeight );
-        }
+        _blink.Create();
+        _keyRepeat.Create();
     }
 
     /// <summary>
@@ -213,35 +193,38 @@ public class TextField : Widget
         }
     }
 
-    public virtual float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         return 150;
     }
 
-    public virtual float GetPrefHeight()
+    public override float GetPrefHeight()
     {
-        return PrefHeight;
-    }
+        float topAndBottom = 0, minHeight = 0;
 
-    // ========================================================================
+        if ( Style?.Background != null )
+        {
+            topAndBottom = Math.Max( topAndBottom, Style.Background.BottomHeight + Style.Background.TopHeight );
+            minHeight    = Math.Max( minHeight, Style.Background.MinHeight );
+        }
 
-    /// <summary>
-    /// Not a good idea to call virtual methods from a constructor, so...
-    /// </summary>
-    private void NonVirtualInitialise( string? text, TextFieldStyle style )
-    {
-        SetStyle( style );
-        Initialise();
-        SetText( text );
-        SetSize( GetPrefWidth(), GetPrefHeight() );
-    }
+        if ( Style?.FocusedBackground != null )
+        {
+            topAndBottom = Math.Max( topAndBottom,
+                                     Style.FocusedBackground.BottomHeight + Style.FocusedBackground.TopHeight );
 
-    public virtual void Initialise()
-    {
-        _inputListener = CreateInputListener();
+            minHeight = Math.Max( minHeight, Style.FocusedBackground.MinHeight );
+        }
 
-        _blink.Create();
-        _keyRepeat.Create();
+        if ( Style?.DisabledBackground != null )
+        {
+            topAndBottom = Math.Max( topAndBottom,
+                                     Style.DisabledBackground.BottomHeight + Style.DisabledBackground.TopHeight );
+
+            minHeight = Math.Max( minHeight, Style.DisabledBackground.MinHeight );
+        }
+
+        return Math.Max( topAndBottom + TextHeight, minHeight );
     }
 
     protected virtual InputListener CreateInputListener()
@@ -251,7 +234,6 @@ public class TextField : Widget
 
     public virtual void SetStyle( TextFieldStyle style )
     {
-        Guard.Against.Null( style );
         Guard.Against.Null( style.Font );
 
         Style = style;
@@ -371,7 +353,8 @@ public class TextField : Widget
             var minIndex = Math.Min( Cursor, SelectionStart );
             var maxIndex = Math.Max( Cursor, SelectionStart );
             var minX     = Math.Max( glyphPositions[ minIndex ] - glyphPositions[ _visibleTextStart ], -TextOffset );
-            var maxX     = Math.Min( glyphPositions[ maxIndex ] - glyphPositions[ _visibleTextStart ], visibleWidth - TextOffset );
+            var maxX = Math.Min( glyphPositions[ maxIndex ] - glyphPositions[ _visibleTextStart ],
+                                 visibleWidth - TextOffset );
 
             _selectionX     = minX;
             _selectionWidth = maxX - minX - Style!.Font!.FontData.CursorX;
@@ -572,7 +555,11 @@ public class TextField : Widget
                     messageFont.SetColor( 0.7f, 0.7f, 0.7f, Color.A * parentAlpha );
                 }
 
-                DrawMessageText( batch, messageFont, x + bgLeftWidth, y + textY + yOffset, width - bgLeftWidth - bgRightWidth );
+                DrawMessageText( batch,
+                                 messageFont,
+                                 x + bgLeftWidth,
+                                 y + textY + yOffset,
+                                 width - bgLeftWidth - bgRightWidth );
             }
         }
         else
@@ -624,7 +611,15 @@ public class TextField : Widget
     {
         if ( DisplayText != null )
         {
-            font.Draw( batch, DisplayText, x + TextOffset, y, _visibleTextStart, _visibleTextEnd, 0, Alignment.LEFT, false );
+            font.Draw( batch,
+                       DisplayText,
+                       x + TextOffset,
+                       y,
+                       _visibleTextStart,
+                       _visibleTextEnd,
+                       0,
+                       Alignment.LEFT,
+                       false );
         }
     }
 
@@ -640,9 +635,9 @@ public class TextField : Widget
     {
         cursorPatch.Draw( batch,
                           ( ( x + TextOffset + GlyphPositions[ Cursor ] )
-                            - GlyphPositions[ _visibleTextStart ] )
-                          + FontOffset
-                          + font.FontData.CursorX,
+                          - GlyphPositions[ _visibleTextStart ] )
+                        + FontOffset
+                        + font.FontData.CursorX,
                           y - TextHeight - font.GetDescent(),
                           cursorPatch.MinWidth,
                           TextHeight );
@@ -721,7 +716,7 @@ public class TextField : Widget
         }
     }
 
-    public virtual void SetText( string? str )
+    public void SetText( string? str )
     {
         str ??= string.Empty;
 
@@ -869,7 +864,7 @@ public class TextField : Widget
         var maxIndex = Math.Max( from, to );
 
         var newText = ( minIndex > 0 ? Text.Substring( 0, minIndex ) : "" )
-                      + ( maxIndex < Text.Length ? Text.Substring( maxIndex, Text.Length ) : "" );
+                    + ( maxIndex < Text.Length ? Text.Substring( maxIndex, Text.Length ) : "" );
 
         if ( fireChangeEvent )
         {
@@ -952,7 +947,7 @@ public class TextField : Widget
         {
             return best;
         }
-        
+
         for ( int i = 0, n = actors.Count; i < n; i++ )
         {
             var actor = actors.GetAt( i );
@@ -985,7 +980,7 @@ public class TextField : Widget
                 }
 
                 var better = ( best == null )
-                             || ( !actorCoords.Y.Equals( bestCoords.Y ) && ( ( actorCoords.Y > bestCoords.Y ) ^ up ) );
+                          || ( !actorCoords.Y.Equals( bestCoords.Y ) && ( ( actorCoords.Y > bestCoords.Y ) ^ up ) );
 
                 if ( !better )
                 {
@@ -1596,8 +1591,8 @@ public class TextField : Widget
         protected virtual bool CheckFocusTraversal( char character )
         {
             return _tf.FocusTraversal
-                   && ( ( character == TAB )
-                        || ( character is CARRIAGE_RETURN or NEWLINE && ( Platform.IsAndroid || Platform.IsIos ) ) );
+                && ( ( character == TAB )
+                  || ( character is CARRIAGE_RETURN or NEWLINE && ( Platform.IsAndroid || Platform.IsIos ) ) );
         }
 
         public override bool KeyTyped( InputEvent? ev, char character )
@@ -1668,7 +1663,7 @@ public class TextField : Widget
                             if ( backspace && ( _tf.Cursor > 0 ) )
                             {
                                 _tf.Text = _tf.Text?.Substring( 0, _tf.Cursor - 1 )
-                                           + _tf.Text?.Substring( _tf.Cursor-- );
+                                         + _tf.Text?.Substring( _tf.Cursor-- );
 
                                 _tf._renderOffset = 0;
                             }
@@ -1689,7 +1684,7 @@ public class TextField : Widget
                         }
 
                         if ( !_tf.WithinMaxLength( _tf.Text!.Length
-                                                   - ( _tf.HasSelection
+                                                 - ( _tf.HasSelection
                                                        ? Math.Abs( _tf.Cursor - _tf.SelectionStart )
                                                        : 0 ) ) )
                         {
@@ -1818,4 +1813,3 @@ public class TextField : Widget
 
 // ============================================================================
 // ============================================================================
-

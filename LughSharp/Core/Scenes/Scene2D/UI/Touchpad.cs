@@ -46,6 +46,15 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Touchpad : Widget
 {
+    public bool IsTouched { get; set; }
+
+    /// <summary>
+    /// Whether to reset the knob to the center on touch up.
+    /// </summary>
+    public bool ResetOnTouchUp { get; set; } = true;
+
+    // ========================================================================
+    
     private readonly Circle  _deadzoneBounds = new( 0, 0, 0 );
     private readonly Circle  _knobBounds     = new( 0, 0, 0 );
     private readonly Vector2 _knobPercent    = new();
@@ -92,10 +101,38 @@ public class Touchpad : Widget
     /// <param name="style"></param>
     public Touchpad( float deadzoneRadius, TouchpadStyle style )
     {
-        ConstructorHelper( deadzoneRadius, style );
+        if ( deadzoneRadius <= 0 )
+        {
+            throw new ArgumentException( "deadzoneRadius must be > 0" );
+        }
+
+        _deadzoneRadius = deadzoneRadius;
+
+        _knobPosition.Set( Width / 2f, Height / 2f );
+
+        Style = style;
+
+        SetSize( Style.Background?.MinWidth ?? 0, Style.Background?.MinHeight ?? 0 );
+
+        AddListener( new TouchpadInputListener( this ) );
     }
 
     // ========================================================================
+
+    public float PrefWidth => _style.Background?.MinWidth ?? 0;
+
+    public float PrefHeight => _style.Background?.MinHeight ?? 0;
+
+    public TouchpadStyle Style
+    {
+        get => _style;
+        set
+        {
+            _style = value;
+
+            InvalidateHierarchy();
+        }
+    }
 
     /// <summary>
     /// Returns the x-position of the knob relative to the center of the widget.
@@ -120,26 +157,6 @@ public class Touchpad : Widget
     /// to the edge of the circular movement area. The positive direction is up.
     /// </summary>
     public float KnobPercentY => _knobPercent.Y;
-
-    // ========================================================================
-
-    private void ConstructorHelper( float deadzoneRadius, TouchpadStyle style )
-    {
-        if ( deadzoneRadius <= 0 )
-        {
-            throw new ArgumentException( "deadzoneRadius must be > 0" );
-        }
-
-        _deadzoneRadius = deadzoneRadius;
-
-        _knobPosition.Set( Width / 2f, Height / 2f );
-
-        Style = style;
-
-        SetSize( Style.Background?.MinWidth ?? 0, Style.Background?.MinHeight ?? 0 );
-
-        AddListener( new TouchpadInputListener( this ) );
-    }
 
     // ========================================================================
 
@@ -339,34 +356,8 @@ public class Touchpad : Widget
 
         public ISceneDrawable? Knob { get; set; }
     }
-
-    // ========================================================================
-
-    #region properties
-
-    public TouchpadStyle Style
-    {
-        get => _style;
-        set
-        {
-            Guard.Against.Null( value );
-
-            _style = value;
-
-            InvalidateHierarchy();
-        }
-    }
-
-    public bool IsTouched { get; set; }
-
-    public override float PrefWidth => _style.Background?.MinWidth ?? 0;
-
-    public override float PrefHeight => _style.Background?.MinHeight ?? 0;
-
-    /// <summary>
-    /// Whether to reset the knob to the center on touch up.
-    /// </summary>
-    public bool ResetOnTouchUp { get; set; } = true;
-
-    #endregion properties
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -34,17 +34,17 @@ public class Stack : WidgetGroup
 
     // ========================================================================
 
+    public Stack( Actor[] actors ) : this()
+    {
+        LoadActors( actors );
+    }
+
     public Stack()
     {
         Transform = false;
         Width     = 150;
         Height    = 150;
         Touchable = Touchable.ChildrenOnly;
-    }
-
-    public Stack( params Actor[] actors ) : this()
-    {
-        LoadActors( actors );
     }
 
     public float PrefWidth
@@ -190,11 +190,6 @@ public class Stack : WidgetGroup
                 MaxHeight = MaxHeight == 0 ? childMaxHeight : Math.Min( MaxHeight, childMaxHeight );
             }
         }
-    }
-
-    public void Add( Actor actor )
-    {
-        AddActor( actor );
     }
 
     public void Layout()
