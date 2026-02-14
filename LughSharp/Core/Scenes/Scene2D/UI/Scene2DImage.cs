@@ -78,7 +78,7 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// 
+    /// Creates a new Image instance with the specified <see cref="NinePatch"/>.
     /// </summary>
     /// <param name="patch"></param>
     public Scene2DImage( NinePatch patch )
@@ -87,7 +87,7 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// 
+    /// Creates a new Image instance with the specified <see cref="TextureRegion"/>.
     /// </summary>
     /// <param name="region"></param>
     public Scene2DImage( TextureRegion region )
@@ -96,7 +96,7 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// 
+    /// Creates a new Image instance with the specified <see cref="Texture"/>.
     /// </summary>
     /// <param name="texture"></param>
     public Scene2DImage( Texture texture )
@@ -105,7 +105,8 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// 
+    /// Creates a new Image instance with the specified <see cref="Skin"/>,
+    /// and using the drawable with the specified name.
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="drawableName"></param>
@@ -131,7 +132,7 @@ public class Scene2DImage : Widget
     /// <param name="align"></param>
     public Scene2DImage( ISceneDrawable? drawable,
                          Scaling scaling,
-                         int align = Core.Utils.Alignment.CENTER )
+                         int align = Core.Utils.Align.CENTER )
     {
         SetDrawable( drawable );
 
@@ -147,13 +148,13 @@ public class Scene2DImage : Widget
     /// minimum width of the associated drawable if one is set, or 0 if no
     /// drawable is assigned.
     /// </summary>
-    public float GetPrefWidth() => Drawable?.MinWidth ?? 0;
+    public override float GetPrefWidth() => Drawable?.MinWidth ?? 0;
 
     /// <summary>
     /// The preferred height of the widget, typically derived from the minimum
     /// height of the drawable.
     /// </summary>
-    public float GetPrefHeight() => Drawable?.MinWidth ?? 0;
+    public override float GetPrefHeight() => Drawable?.MinWidth ?? 0;
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor has
@@ -179,11 +180,11 @@ public class Scene2DImage : Widget
         ImageWidth  = size.X;
         ImageHeight = size.Y;
 
-        if ( ( Alignment & Core.Utils.Alignment.LEFT ) != 0 )
+        if ( ( Alignment & Core.Utils.Align.LEFT ) != 0 )
         {
             ImageX = 0;
         }
-        else if ( ( Alignment & Core.Utils.Alignment.RIGHT ) != 0 )
+        else if ( ( Alignment & Core.Utils.Align.RIGHT ) != 0 )
         {
             ImageX = ( int )( width - ImageWidth );
         }
@@ -192,11 +193,11 @@ public class Scene2DImage : Widget
             ImageX = ( int )( ( width / 2 ) - ( ImageWidth / 2 ) );
         }
 
-        if ( ( Alignment & Core.Utils.Alignment.TOP ) != 0 )
+        if ( ( Alignment & Core.Utils.Align.TOP ) != 0 )
         {
             ImageY = ( int )( height - ImageHeight );
         }
-        else if ( ( Alignment & Core.Utils.Alignment.BOTTOM ) != 0 )
+        else if ( ( Alignment & Core.Utils.Align.BOTTOM ) != 0 )
         {
             ImageY = 0;
         }

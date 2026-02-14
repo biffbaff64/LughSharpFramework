@@ -104,7 +104,7 @@ public class TextField : Widget
     // ========================================================================
 
     private readonly bool                 _onlyFontChars = true;
-    private readonly int                  _textAlign     = Alignment.LEFT;
+    private readonly int                  _textAlign     = Align.LEFT;
     private readonly Vector2              _tmp1          = new();
     private readonly Vector2              _tmp2          = new();
     private readonly Vector2              _tmp3          = new();
@@ -151,10 +151,10 @@ public class TextField : Widget
         _blink     = new BlinkTaskManager( this );
         _keyRepeat = new KeyRepeatTaskManager( this );
 
-        SetStyle( style );
+        SetStyleSafe( style );
         Initialise();
         SetText( text );
-        SetSize( GetPrefWidth(), GetPrefHeight() );
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
     public void Initialise()
@@ -195,10 +195,20 @@ public class TextField : Widget
 
     public override float GetPrefWidth()
     {
+        return GetPrefWidthSafe();
+    }
+
+    protected static float GetPrefWidthSafe()
+    {
         return 150;
     }
 
     public override float GetPrefHeight()
+    {
+        return GetPrefHeightSafe();
+    }
+    
+    protected float GetPrefHeightSafe()
     {
         float topAndBottom = 0, minHeight = 0;
 
@@ -233,6 +243,11 @@ public class TextField : Widget
     }
 
     public virtual void SetStyle( TextFieldStyle style )
+    {
+        SetStyleSafe( style );
+    }
+
+    protected void SetStyleSafe( TextFieldStyle style )
     {
         Guard.Against.Null( style.Font );
 
@@ -333,11 +348,11 @@ public class TextField : Widget
 
         _visibleTextEnd = Math.Max( 0, end - 1 );
 
-        if ( ( _textAlign & Alignment.LEFT ) == 0 )
+        if ( ( _textAlign & Align.LEFT ) == 0 )
         {
             TextOffset = ( visibleWidth - glyphPositions[ _visibleTextEnd ] - FontOffset ) + startX;
 
-            if ( ( _textAlign & Alignment.CENTER ) != 0 )
+            if ( ( _textAlign & Align.CENTER ) != 0 )
             {
                 TextOffset = ( float )Math.Round( TextOffset * 0.5f );
             }
@@ -618,7 +633,7 @@ public class TextField : Widget
                        _visibleTextStart,
                        _visibleTextEnd,
                        0,
-                       Alignment.LEFT,
+                       Align.LEFT,
                        false );
         }
     }

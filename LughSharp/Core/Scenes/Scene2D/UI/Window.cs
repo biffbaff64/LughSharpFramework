@@ -138,35 +138,35 @@ public class Window : Table
             var parentWidth  = Stage.Width;
             var parentHeight = Stage.Height;
 
-            if ( ( GetX( Alignment.RIGHT ) - Stage.Camera.Position.X )
+            if ( ( GetX( Align.RIGHT ) - Stage.Camera.Position.X )
                  > ( parentWidth / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( Stage.Camera.Position.X + ( parentWidth / 2 / orthographicCamera.Zoom ),
-                             GetY( Alignment.RIGHT ),
-                             Alignment.RIGHT );
+                             GetY( Align.RIGHT ),
+                             Align.RIGHT );
             }
 
-            if ( ( GetX( Alignment.LEFT ) - Stage.Camera.Position.X )
+            if ( ( GetX( Align.LEFT ) - Stage.Camera.Position.X )
                  < ( -parentWidth / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( Stage.Camera.Position.X - ( parentWidth / 2 / orthographicCamera.Zoom ),
-                             GetY( Alignment.LEFT ),
-                             Alignment.LEFT );
+                             GetY( Align.LEFT ),
+                             Align.LEFT );
             }
 
-            if ( ( GetY( Alignment.TOP ) - Stage.Camera.Position.Y ) > ( parentHeight / 2 / orthographicCamera.Zoom ) )
+            if ( ( GetY( Align.TOP ) - Stage.Camera.Position.Y ) > ( parentHeight / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( GetX( Alignment.TOP ),
+                SetPosition( GetX( Align.TOP ),
                              Stage.Camera.Position.Y + ( parentHeight / 2 / orthographicCamera.Zoom ),
-                             Alignment.TOP );
+                             Align.TOP );
             }
 
-            if ( ( GetY( Alignment.BOTTOM ) - Stage.Camera.Position.Y )
+            if ( ( GetY( Align.BOTTOM ) - Stage.Camera.Position.Y )
                  < ( -parentHeight / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( GetX( Alignment.BOTTOM ),
+                SetPosition( GetX( Align.BOTTOM ),
                              Stage.Camera.Position.Y - ( parentHeight / 2 / orthographicCamera.Zoom ),
-                             Alignment.BOTTOM );
+                             Align.BOTTOM );
             }
         }
         else if ( Parent == Stage.RootGroup )
@@ -379,17 +379,17 @@ public class Window : Table
             {
                 if ( x < ( padLeft + border ) )
                 {
-                    _window.Edge |= Alignment.LEFT;
+                    _window.Edge |= Align.LEFT;
                 }
 
                 if ( x > ( right - border ) )
                 {
-                    _window.Edge |= Alignment.RIGHT;
+                    _window.Edge |= Align.RIGHT;
                 }
 
                 if ( y < ( padBottom + border ) )
                 {
-                    _window.Edge |= Alignment.BOTTOM;
+                    _window.Edge |= Align.BOTTOM;
                 }
 
                 if ( _window.Edge != 0 )
@@ -399,17 +399,17 @@ public class Window : Table
 
                 if ( x < ( padLeft + border ) )
                 {
-                    _window.Edge |= Alignment.LEFT;
+                    _window.Edge |= Align.LEFT;
                 }
 
                 if ( x > ( right - border ) )
                 {
-                    _window.Edge |= Alignment.RIGHT;
+                    _window.Edge |= Align.RIGHT;
                 }
 
                 if ( y < ( padBottom + border ) )
                 {
-                    _window.Edge |= Alignment.BOTTOM;
+                    _window.Edge |= Align.BOTTOM;
                 }
             }
 
@@ -478,7 +478,7 @@ public class Window : Table
                 windowY += amountY;
             }
 
-            if ( ( _window.Edge & Alignment.LEFT ) != 0 )
+            if ( ( _window.Edge & Align.LEFT ) != 0 )
             {
                 var amountX = x - _startX;
 
@@ -496,7 +496,7 @@ public class Window : Table
                 windowX += amountX;
             }
 
-            if ( ( _window.Edge & Alignment.BOTTOM ) != 0 )
+            if ( ( _window.Edge & Align.BOTTOM ) != 0 )
             {
                 var amountY = y - _startY;
 
@@ -514,7 +514,7 @@ public class Window : Table
                 windowY += amountY;
             }
 
-            if ( ( _window.Edge & Alignment.RIGHT ) != 0 )
+            if ( ( _window.Edge & Align.RIGHT ) != 0 )
             {
                 var amountX = x - _lastX - width;
 
@@ -531,7 +531,7 @@ public class Window : Table
                 width += amountX;
             }
 
-            if ( ( _window.Edge & Alignment.TOP ) != 0 )
+            if ( ( _window.Edge & Align.TOP ) != 0 )
             {
                 var amountY = y - _lastY - height;
 

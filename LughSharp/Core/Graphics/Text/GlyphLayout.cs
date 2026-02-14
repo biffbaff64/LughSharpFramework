@@ -182,7 +182,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="str"> A string holding the text. </param>
     public void SetText( BitmapFont font, string str )
     {
-        SetText( font, str, 0, str.Length, font.GetColor(), 0, Alignment.LEFT, false, null );
+        SetText( font, str, 0, str.Length, font.GetColor(), 0, Align.LEFT, false, null );
     }
 
     /// <summary>
@@ -216,7 +216,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="halign">
-    /// Horizontal alignment of the text, see also <see cref="Alignment"/>.
+    /// Horizontal alignment of the text, see also <see cref="Align"/>.
     /// </param>
     /// <param name="targetWidth">
     /// The width used for alignment, line wrapping, and truncation. May be zero if
@@ -605,10 +605,10 @@ public class GlyphLayout : IResetable, IPoolable
     /// </summary>
     private void AlignRuns( float targetWidth, int halign )
     {
-        if ( ( halign & Alignment.LEFT ) == 0 )
+        if ( ( halign & Align.LEFT ) == 0 )
         {
             // Not left aligned, so must be center or right aligned.
-            var center    = ( halign & Alignment.CENTER ) != 0;
+            var center    = ( halign & Align.CENTER ) != 0;
             var runsItems = Runs.ToArray();
 
             for ( int i = 0, n = Runs.Count; i < n; i++ )

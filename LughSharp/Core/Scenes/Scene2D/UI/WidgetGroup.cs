@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -46,6 +47,15 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class WidgetGroup : Group, ILayout
 {
+    // <summary>
+    /// Returns true if the widget's layout has been invalidated.
+    // </summary>
+    public bool NeedsLayout { get; private set; } = true;
+
+    public bool EnableLayout { get; set; } = true;
+
+    public bool FillParent { get; set; }
+
     // ========================================================================
 
     protected WidgetGroup()
@@ -60,23 +70,16 @@ public class WidgetGroup : Group, ILayout
         LoadActors( actors );
     }
 
-    // Returns true if the widget's layout has been invalidated.
-    public bool NeedsLayout { get; private set; } = true;
-
-    public bool EnableLayout { get; set; } = true;
-
-    public bool FillParent { get; set; }
-
     public virtual void Pack()
     {
-        SetSize( PrefWidth, PrefHeight );
+        SetSize( GetPrefWidth(), GetPrefHeight() );
 
         Validate();
 
         // Validating the layout may change the pref size. Eg, a wrapped label doesn't
         // know its pref height until it knows its width, so it calls invalidateHierarchy()
         // in layout() if its pref height has changed.
-        SetSize( PrefWidth, PrefHeight );
+        SetSize( GetPrefWidth(), GetPrefHeight() );
 
         Validate();
     }
@@ -199,6 +202,36 @@ public class WidgetGroup : Group, ILayout
         }
     }
 
+    public float GetMinWidth()
+    {
+        return GetPrefWidth();
+    }
+
+    public float GetMinHeight()
+    {
+        return GetPrefHeight();
+    }
+
+    public float GetPrefWidth()
+    {
+        return 0;
+    }
+
+    public float GetPrefHeight()
+    {
+        return 0;
+    }
+
+    public float GetMaxWidth()
+    {
+        return 0;
+    }
+
+    public float GetMaxHeight()
+    {
+        return 0;
+    }
+
     /// <inheritdoc />
     protected override void ChildrenChanged()
     {
@@ -218,3 +251,6 @@ public class WidgetGroup : Group, ILayout
         base.Draw( batch, parentAlpha );
     }
 }
+
+// ============================================================================
+// ============================================================================

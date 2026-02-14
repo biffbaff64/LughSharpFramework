@@ -768,7 +768,7 @@ public class BitmapFontCache
     {
         Clear();
 
-        return AddText( str, x, y, 0, str.Length, 0, Alignment.LEFT, false );
+        return AddText( str, x, y, 0, str.Length, 0, Align.LEFT, false );
     }
 
     /// <summary>
@@ -816,7 +816,7 @@ public class BitmapFontCache
     /// </summary>
     public GlyphLayout AddText( string str, float x, float y )
     {
-        return AddText( str, x, y, 0, str.Length, 0, Alignment.LEFT, false );
+        return AddText( str, x, y, 0, str.Length, 0, Align.LEFT, false );
     }
 
     /// <summary>
@@ -839,7 +839,7 @@ public class BitmapFontCache
     /// <param name="start"> The first character of the string to draw. </param>
     /// <param name="end"> The last character of the string to draw (exclusive). </param>
     /// <param name="targetWidth"> The width of the area the text will be drawn, for wrapping or truncation. </param>
-    /// <param name="halign"> Horizontal alignment of the text, see <see cref="Alignment"/>. </param>
+    /// <param name="halign"> Horizontal alignment of the text, see <see cref="Align"/>. </param>
     /// <param name="wrap"> If true, the text will be wrapped within targetWidth. </param>
     /// <param name="truncate">
     /// If not null, the text will be truncated within targetWidth with this string appended.

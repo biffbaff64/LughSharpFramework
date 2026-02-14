@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Input;
@@ -44,6 +47,14 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TValue >.Node
 {
+    public TNode?         RangeStart    { get; set; }
+    public ClickListener? ClickListener { get; set; }
+    public TreeStyle?     Style         { get; set; }
+    public List< TNode >  RootNodes     { get; set; } = [ ];
+    public float          YSpacing      { get; set; } = 4;
+    public float          IndentSpacing { get; set; }
+    public TNode?         OverNode      { get; set; }
+
     // ========================================================================
 
     private readonly TreeSelection _selection;
@@ -68,12 +79,30 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
+    /// A hierarchical widget for displaying and managing a tree-like structure of nodes.
+    /// The tree can have one or more root nodes, and each node can include child nodes.
+    /// The appearance and behavior of the tree are customizable through its style and other settings.
     /// </summary>
+    /// <typeparam name="TNode">
+    /// The type of the node used within the tree. This must inherit from <see cref="Tree{TNode, TValue}.Node"/>.
+    /// </typeparam>
+    /// <typeparam name="TValue">
+    /// The type of the value that each node in the tree represents.
+    /// </typeparam>
     public Tree( Skin skin, string styleName )
         : this( skin.Get< TreeStyle >( styleName ) )
     {
     }
 
+    /// <summary>
+    /// Represents a hierarchical UI component for displaying and managing nodes organized in a tree structure.
+    /// </summary>
+    /// <typeparam name="TNode">
+    /// The type of the tree nodes, inheriting from <see cref="Tree{TNode, TValue}.Node"/>.
+    /// </typeparam>
+    /// <typeparam name="TValue">
+    /// The type of the value stored in each tree node.
+    /// </typeparam>
     public Tree( TreeStyle style )
     {
         _selection = new TreeSelection( this )
@@ -83,24 +112,16 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         };
 
         SetStyle( style );
-        Initialise();
-    }
 
-    public TNode?         RangeStart    { get; set; }
-    public ClickListener? ClickListener { get; set; }
-    public TreeStyle?     Style         { get; set; }
-    public List< TNode >  RootNodes     { get; set; } = [ ];
-    public float          YSpacing      { get; set; } = 4;
-    public float          IndentSpacing { get; set; }
-    public TNode?         OverNode      { get; set; }
-
-    private void Initialise()
-    {
         ClickListener = new TreeClickListener();
 
         AddListener( ClickListener );
     }
 
+    /// <summary>
+    /// Sets the style to use for this tree.
+    /// </summary>
+    /// <param name="style"></param>
     public void SetStyle( TreeStyle style )
     {
         Style = style;
@@ -112,11 +133,20 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
     }
 
-    public void Add( TNode node )
+    /// <summary>
+    /// Adds a node to the tree.
+    /// </summary>
+    /// <param name="node"></param>
+    public void AddNode( TNode node )
     {
         Insert( RootNodes.Count, node );
     }
 
+    /// <summary>
+    /// Inserts a node at the specified index.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="node"></param>
     public void Insert( int index, TNode node )
     {
         int actorIndex;
@@ -155,8 +185,6 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
         RootNodes.Insert( index, node );
 
-        //TODO: Remove the need for the following two null suppressions
-
         if ( index == 0 )
         {
             actorIndex = 0;
@@ -175,6 +203,10 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         node.AddToTree( this, actorIndex );
     }
 
+    /// <summary>
+    /// Removes the specified node from the tree.
+    /// </summary>
+    /// <param name="node"></param>
     public void Remove( TNode node )
     {
         if ( node.Parent != null )
@@ -197,6 +229,9 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
     }
 
+    /// <summary>
+    /// Removes all nodes from the tree.
+    /// </summary>
     public override void ClearChildren()
     {
         base.ClearChildren();
@@ -206,6 +241,9 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         _selection.Clear();
     }
 
+    /// <summary>
+    /// Invalidates the tree's layout.
+    /// </summary>
     public override void Invalidate()
     {
         base.Invalidate();
@@ -261,8 +299,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
             {
                 if ( actor is ILayout layout )
                 {
-                    rowWidth    += layout.PrefWidth;
-                    node.Height =  layout.PrefHeight;
+                    rowWidth    += layout.GetPrefWidth();
+                    node.Height =  layout.GetPrefHeight();
                 }
                 else
                 {
@@ -281,6 +319,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
                 if ( node.IsExpanded )
                 {
+                    //TODO: Refactor to remove recursiveness
                     ComputeSize( node.NodeChildren!, indent + IndentSpacing, plusMinusWidth );
                 }
             }
@@ -330,6 +369,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
             if ( node.IsExpanded )
             {
+                //TODO: Refactor to remove recursiveness
                 y = Layout( node.NodeChildren!, indent + IndentSpacing, y, plusMinusWidth );
             }
         }
@@ -782,19 +822,19 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <inheritdoc />
-        protected override void Changed()
+        protected override void OnChanged()
         {
             _parent.RangeStart = Size() switch
             {
-                0     => default( TNode ),
+                0     => null,
                 1     => First(),
                 var _ => _parent.RangeStart,
             };
         }
     }
 
-// ========================================================================
-// ========================================================================
+    // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// The style for a <see cref="Tree{TN,TV}"/>.
@@ -802,6 +842,16 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     [PublicAPI]
     public class TreeStyle
     {
+        public ISceneDrawable  Plus       { get; set; }
+        public ISceneDrawable  Minus      { get; set; }
+        public ISceneDrawable? PlusOver   { get; set; }
+        public ISceneDrawable? MinusOver  { get; set; }
+        public ISceneDrawable? Over       { get; set; }
+        public ISceneDrawable? Selection  { get; set; }
+        public ISceneDrawable? Background { get; set; }
+
+        // ====================================================================
+        
         public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
         {
             Plus      = plus;
@@ -821,14 +871,6 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
             Selection  = style.Selection;
             Background = style.Background;
         }
-
-        public ISceneDrawable  Plus       { get; set; }
-        public ISceneDrawable  Minus      { get; set; }
-        public ISceneDrawable? PlusOver   { get; set; }
-        public ISceneDrawable? MinusOver  { get; set; }
-        public ISceneDrawable? Over       { get; set; }
-        public ISceneDrawable? Selection  { get; set; }
-        public ISceneDrawable? Background { get; set; }
     }
 
     // ========================================================================
@@ -844,23 +886,6 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     [PublicAPI]
     public class Node
     {
-        private Actor? _actor;
-
-        /// <summary>
-        /// Creates a node without an actor. An actor must be
-        /// set before this node can be used.
-        /// </summary>
-        public Node()
-        {
-        }
-
-        public Node( Actor actor )
-        {
-            Guard.Against.Null( actor );
-
-            _actor = actor;
-        }
-
         public TValue?         Value      { get; set; }
         public TNode?          Parent     { get; set; }
         public ISceneDrawable? Icon       { get; set; }
@@ -875,6 +900,23 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         /// because then the child node's actors are not in the tree.
         /// </summary>
         public List< TNode >? NodeChildren { get; set; } = [ ];
+
+        // ====================================================================
+        
+        private Actor? _actor;
+
+        /// <summary>
+        /// Creates a node without an actor. An actor must be
+        /// set before this node can be used.
+        /// </summary>
+        public Node()
+        {
+        }
+
+        public Node( Actor actor )
+        {
+            _actor = actor;
+        }
 
         public Actor? Actor
         {
@@ -1159,7 +1201,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
         /// <summary>
         /// Updates the order of the actors in the tree for this node and all child nodes.
-        /// This is useful after changing the order. of <see cref="NodeChildren"/>.
+        /// This is useful after changing the order of <see cref="NodeChildren"/>.
         /// </summary>
         public void UpdateChildren()
         {
@@ -1342,34 +1384,35 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     // ========================================================================
     // ========================================================================
 
+    [PublicAPI]
     public class TreeClickListener : ClickListener
     {
-        public readonly Tree< TNode, TValue > Tree = null!;
+        private readonly Tree< TNode, TValue > _tree = null!;
 
         public override void OnClicked( InputEvent ev, float x, float y )
         {
-            var node = Tree.GetNodeAt( y );
+            var node = _tree.GetNodeAt( y );
 
             if ( node == null )
             {
                 return;
             }
 
-            if ( node != Tree.GetNodeAt( TouchDownY ) )
+            if ( node != _tree.GetNodeAt( TouchDownY ) )
             {
                 return;
             }
 
-            if ( Tree._selection.Multiple && Tree._selection.NotEmpty() && InputUtils.ShiftKey() )
+            if ( _tree._selection.Multiple && _tree._selection.NotEmpty() && InputUtils.ShiftKey() )
             {
                 // Select range (shift).
-                Tree.RangeStart ??= node;
+                _tree.RangeStart ??= node;
 
-                var rangeStart = Tree.RangeStart;
+                var rangeStart = _tree.RangeStart;
 
                 if ( !InputUtils.CtrlKey() )
                 {
-                    Tree._selection.Clear();
+                    _tree._selection.Clear();
                 }
 
                 if ( ( rangeStart.Actor == null ) || ( node.Actor == null ) )
@@ -1382,28 +1425,28 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
                 if ( start > end )
                 {
-                    Tree.SelectNodes( Tree.RootNodes, end, start );
+                    _tree.SelectNodes( _tree.RootNodes, end, start );
                 }
                 else
                 {
-                    Tree.SelectNodes( Tree.RootNodes, start, end );
-                    Tree._selection.Items().Reverse();
+                    _tree.SelectNodes( _tree.RootNodes, start, end );
+                    _tree._selection.Items().Reverse();
                 }
 
-                Tree._selection.FireChangeEvent();
-                Tree.RangeStart = rangeStart;
+                _tree._selection.FireChangeEvent();
+                _tree.RangeStart = rangeStart;
 
                 return;
             }
 
-            if ( ( node.NodeChildren?.Count > 0 ) && ( !Tree._selection.Multiple || !InputUtils.CtrlKey() ) )
+            if ( ( node.NodeChildren?.Count > 0 ) && ( !_tree._selection.Multiple || !InputUtils.CtrlKey() ) )
             {
                 // Toggle expanded if left of icon.
                 var rowX = node.Actor?.X;
 
                 if ( node.Icon != null )
                 {
-                    rowX -= Tree._iconSpacingRight + node.Icon.MinWidth;
+                    rowX -= _tree._iconSpacingRight + node.Icon.MinWidth;
                 }
 
                 if ( x < rowX )
@@ -1419,17 +1462,17 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 return;
             }
 
-            Tree._selection.Choose( node );
+            _tree._selection.Choose( node );
 
-            if ( !Tree._selection.IsEmpty )
+            if ( !_tree._selection.IsEmpty )
             {
-                Tree.RangeStart = node;
+                _tree.RangeStart = node;
             }
         }
 
         public override bool MouseMoved( InputEvent? ev, float x, float y )
         {
-            Tree.OverNode = Tree.GetNodeAt( y );
+            _tree.OverNode = _tree.GetNodeAt( y );
 
             return false;
         }
@@ -1437,17 +1480,21 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
         {
             base.Enter( ev, x, y, pointer, fromActor );
-            Tree.OverNode = Tree.GetNodeAt( y );
+            _tree.OverNode = _tree.GetNodeAt( y );
         }
 
         public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
         {
             base.Exit( ev, x, y, pointer, toActor );
 
-            if ( ( toActor == null ) || !toActor.IsDescendantOf( Tree ) )
+            if ( ( toActor == null ) || !toActor.IsDescendantOf( _tree ) )
             {
-                Tree.OverNode = null;
+                _tree.OverNode = null;
             }
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -71,7 +71,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     private readonly ArraySelection< T >  _selection;
     private readonly Vector2              _temp = new();
 
-    private int  _alignment = Alignment.LEFT;
+    private int  _alignment = Align.LEFT;
     private bool _selectedPrefWidth;
 
     // ========================================================================
@@ -397,7 +397,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// and <see cref="SetAlignment(int)"/> to set the alignment in the list shown when the
     /// select box is open.
     /// </summary>
-    /// <param name="alignment"> See <see cref="Alignment"/>. </param>
+    /// <param name="alignment"> See <see cref="Align"/>. </param>
     public void SetAlignment( int alignment )
     {
         //TODO: Property?

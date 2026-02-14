@@ -59,7 +59,7 @@ public class ListBox< T > : Widget where T : notnull
     public ArraySelection< T > Selection    { get; set; } = null!;
     public List< T >           Items        { get; set; } = [ ];
     public float               ItemHeight   { get; set; }
-    public int                 Alignment    { get; set; } = Core.Utils.Alignment.LEFT;
+    public int                 Alignment    { get; set; } = Core.Utils.Align.LEFT;
     public bool                TypeToSelect { get; set; }
 
     // ========================================================================

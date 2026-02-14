@@ -106,7 +106,7 @@ public class ArraySelection< T > : Selection< T >
                 }
                 else
                 {
-                    Changed();
+                    OnChanged();
                 }
 
                 _rangeStart = oldRangeStart;
@@ -125,7 +125,7 @@ public class ArraySelection< T > : Selection< T >
     /// <summary>
     /// Called after the selection changes, clears the range start item.
     /// </summary>
-    protected override void Changed()
+    protected override void OnChanged()
     {
         _rangeStart = default( T? );
     }
@@ -161,7 +161,7 @@ public class ArraySelection< T > : Selection< T >
         }
         else if ( changed )
         {
-            Changed();
+            OnChanged();
         }
     }
 }

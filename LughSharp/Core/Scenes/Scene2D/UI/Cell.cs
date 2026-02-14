@@ -54,7 +54,7 @@ public class Cell : IPoolable, IResetable
     public Value? PadLeft     { get; set; }
     public Value? PadBottom   { get; set; }
     public Value? PadRight    { get; set; }
-    public int    Alignment   { get; set; } = Core.Utils.Alignment.NONE;
+    public int    Alignment   { get; set; } = Core.Utils.Align.NONE;
     public int    ExpandX     { get; set; }
     public int    ExpandY     { get; set; }
     public int    Colspan     { get; set; }
@@ -90,10 +90,10 @@ public class Cell : IPoolable, IResetable
     private const int   ZEROI   = 0;
     private const int   ONEI    = 1;
     private const int   CENTERI = ONEI;
-    private const int   TOPI    = Core.Utils.Alignment.TOP;
-    private const int   BOTTOMI = Core.Utils.Alignment.BOTTOM;
-    private const int   LEFTI   = Core.Utils.Alignment.LEFT;
-    private const int   RIGHTI  = Core.Utils.Alignment.RIGHT;
+    private const int   TOPI    = Core.Utils.Align.TOP;
+    private const int   BOTTOMI = Core.Utils.Align.BOTTOM;
+    private const int   LEFTI   = Core.Utils.Align.LEFT;
+    private const int   RIGHTI  = Core.Utils.Align.RIGHT;
 
     // ========================================================================
     // ========================================================================
@@ -945,10 +945,10 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the cell. Set to <see cref="Core.Utils.Alignment.CENTER"/>,
-    /// <see cref="Core.Utils.Alignment.TOP"/>, <see cref="Core.Utils.Alignment.BOTTOM"/>,
-    /// <see cref="Core.Utils.Alignment.LEFT"/>,
-    /// <see cref="Core.Utils.Alignment.RIGHT"/>, or any combination of those.
+    /// Sets the alignment of the actor within the cell. Set to <see cref="Align.CENTER"/>,
+    /// <see cref="Align.TOP"/>, <see cref="Align.BOTTOM"/>,
+    /// <see cref="Align.LEFT"/>,
+    /// <see cref="Align.RIGHT"/>, or any combination of those.
     /// </summary>
     public Cell SetAlignment( int align )
     {
@@ -958,7 +958,7 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the cell to <see cref="Core.Utils.Alignment.CENTER"/>.
+    /// Sets the alignment of the actor within the cell to <see cref="Align.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public Cell Center()
@@ -969,72 +969,72 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.TOP"/> and clears <see cref="Core.Utils.Alignment.BOTTOM"/> for
+    /// Adds <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Top()
     {
-        if ( Alignment == Core.Utils.Alignment.NONE )
+        if ( Alignment == Core.Utils.Align.NONE )
         {
             Alignment = TOPI;
         }
         else
         {
-            Alignment = ( Alignment | Core.Utils.Alignment.TOP ) & ~Core.Utils.Alignment.BOTTOM;
+            Alignment = ( Alignment | Core.Utils.Align.TOP ) & ~Core.Utils.Align.BOTTOM;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.LEFT"/> and clears <see cref="Core.Utils.Alignment.RIGHT"/> for
+    /// Adds <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Left()
     {
-        if ( Alignment == Core.Utils.Alignment.NONE )
+        if ( Alignment == Core.Utils.Align.NONE )
         {
             Alignment = LEFTI;
         }
         else
         {
-            Alignment = ( Alignment | Core.Utils.Alignment.LEFT ) & ~Core.Utils.Alignment.RIGHT;
+            Alignment = ( Alignment | Core.Utils.Align.LEFT ) & ~Core.Utils.Align.RIGHT;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.BOTTOM"/> and clears <see cref="Core.Utils.Alignment.TOP"/> for
+    /// Adds <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Bottom()
     {
-        if ( Alignment == Core.Utils.Alignment.NONE )
+        if ( Alignment == Core.Utils.Align.NONE )
         {
             Alignment = BOTTOMI;
         }
         else
         {
-            Alignment = ( Alignment | Core.Utils.Alignment.BOTTOM ) & ~Core.Utils.Alignment.TOP;
+            Alignment = ( Alignment | Core.Utils.Align.BOTTOM ) & ~Core.Utils.Align.TOP;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.RIGHT"/> and clears <see cref="Core.Utils.Alignment.LEFT"/> for
+    /// Adds <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Right()
     {
-        if ( Alignment == Core.Utils.Alignment.NONE )
+        if ( Alignment == Core.Utils.Align.NONE )
         {
             Alignment = RIGHTI;
         }
         else
         {
-            Alignment = ( Alignment | Core.Utils.Alignment.RIGHT ) & ~Core.Utils.Alignment.LEFT;
+            Alignment = ( Alignment | Core.Utils.Align.RIGHT ) & ~Core.Utils.Align.LEFT;
         }
 
         return this;
@@ -1305,7 +1305,7 @@ public class Cell : IPoolable, IResetable
         PadRight    = null;
         FillX       = 0f;
         FillY       = 0f;
-        Alignment   = Core.Utils.Alignment.NONE;
+        Alignment   = Core.Utils.Align.NONE;
         ExpandX     = 0;
         ExpandY     = 0;
         Colspan     = 0;

@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -51,6 +54,57 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class VerticalGroup : WidgetGroup
 {
+    /// <summary>
+    /// Sets the vertical space between children.
+    /// </summary>
+    public float Space { get; set; }
+
+    /// <summary>
+    /// Sets the horizontal space between columns when wrap is enabled.
+    /// </summary>
+    public float WrapSpace { get; set; }
+
+    public float PadTop { get; set; }
+
+    public float PadBottom { get; set; }
+
+    public float PadLeft { get; set; }
+
+    public float PadRight { get; set; }
+
+    /// <summary>
+    /// Sets the alignment of all widgets within the vertical group. Set to
+    /// <see cref="Align.CENTER"/>, <see cref="Align.TOP"/>,
+    /// <see cref="Align.BOTTOM"/>,
+    /// <see cref="Align.LEFT"/>, <see cref="Align.RIGHT"/>, or any combination of those.
+    /// </summary>
+    public int Alignment { get; set; } = Align.TOP;
+
+    public float Fill { get; set; } = 1f;
+
+    public bool Expand { get; set; }
+
+    /// <summary>
+    /// If false, the widgets are arranged in a single column and the preferred height
+    /// is the widget heights plus spacing.
+    /// <para>
+    /// If true, the widgets will wrap using the height of the vertical group. The preferred
+    /// height of the group will be 0 as it is expected that something external will set the
+    /// height of the group. Widgets are sized to their preferred height unless it is larger
+    /// than the group's height, in which case they are sized to the group's height but not
+    /// less than their minimum height.
+    /// </para>
+    /// <para>
+    /// Default is false.
+    /// </para>
+    /// <para>
+    /// When wrap is enabled, the group's preferred width depends on the height of the group.
+    /// In some cases the parent of the group will need to layout twice: once to set the
+    /// height of the group and a second time to adjust to the group's new preferred width.
+    /// </para>
+    /// </summary>
+    public bool Wrapping { get; set; }
+
     // ========================================================================
 
     private int            _columnAlign;
@@ -122,17 +176,22 @@ public class VerticalGroup : WidgetGroup
             {
                 var child = children.GetAt( i );
 
+                if ( child == null )
+                {
+                    continue;
+                }
+                
                 float width;
                 float height;
 
                 if ( child is ILayout layoutChild )
                 {
-                    width  = layoutChild.PrefWidth;
-                    height = layoutChild.PrefHeight;
+                    width  = layoutChild.GetPrefWidth();
+                    height = layoutChild.GetPrefHeight();
 
                     if ( height > groupHeight )
                     {
-                        height = Math.Max( groupHeight, layoutChild.MinHeight );
+                        height = Math.Max( groupHeight, layoutChild.GetMinHeight() );
                     }
                 }
                 else
@@ -185,10 +244,15 @@ public class VerticalGroup : WidgetGroup
             {
                 var child = children.GetAt( i );
 
+                if ( child == null )
+                {
+                    continue;
+                }
+                
                 if ( child is ILayout layoutChild )
                 {
-                    _prefWidth  =  Math.Max( _prefWidth, layoutChild.PrefWidth );
-                    _prefHeight += layoutChild.PrefHeight;
+                    _prefWidth  =  Math.Max( _prefWidth, layoutChild.GetPrefWidth() );
+                    _prefHeight += layoutChild.GetPrefHeight();
                 }
                 else
                 {
@@ -229,22 +293,22 @@ public class VerticalGroup : WidgetGroup
         var columnWidth = ( Expand ? Width : _prefWidth ) - padLeft - PadRight;
         var y           = ( _prefHeight - PadTop ) + space;
 
-        if ( ( align & Core.Utils.Alignment.TOP ) != 0 )
+        if ( ( align & Align.TOP ) != 0 )
         {
             y += Height - _prefHeight;
         }
-        else if ( ( align & Core.Utils.Alignment.BOTTOM ) == 0 ) // center
+        else if ( ( align & Align.BOTTOM ) == 0 ) // center
         {
             y += ( Height - _prefHeight ) / 2;
         }
 
         float startX;
 
-        if ( ( align & Core.Utils.Alignment.LEFT ) != 0 )
+        if ( ( align & Align.LEFT ) != 0 )
         {
             startX = padLeft;
         }
-        else if ( ( align & Core.Utils.Alignment.RIGHT ) != 0 )
+        else if ( ( align & Align.RIGHT ) != 0 )
         {
             startX = Width - PadRight - columnWidth;
         }
@@ -279,8 +343,8 @@ public class VerticalGroup : WidgetGroup
             if ( child is ILayout layoutchild )
             {
                 layout = layoutchild;
-                width  = layout.PrefWidth;
-                height = layout.PrefHeight;
+                width  = layout.GetPrefWidth();
+                height = layout.GetPrefHeight();
             }
             else
             {
@@ -295,9 +359,9 @@ public class VerticalGroup : WidgetGroup
 
             if ( layout != null )
             {
-                width = Math.Max( width, layout.MinWidth );
+                width = Math.Max( width, layout.GetMinWidth() );
 
-                var maxWidth = layout.MaxWidth;
+                var maxWidth = layout.GetMaxWidth();
 
                 if ( ( maxWidth > 0 ) && ( width > maxWidth ) )
                 {
@@ -307,11 +371,11 @@ public class VerticalGroup : WidgetGroup
 
             var x = startX;
 
-            if ( ( align & Core.Utils.Alignment.RIGHT ) != 0 )
+            if ( ( align & Align.RIGHT ) != 0 )
             {
                 x += columnWidth - width;
             }
-            else if ( ( align & Core.Utils.Alignment.LEFT ) == 0 ) // center
+            else if ( ( align & Align.LEFT ) == 0 ) // center
             {
                 x += ( columnWidth - width ) / 2;
             }
@@ -338,7 +402,7 @@ public class VerticalGroup : WidgetGroup
 
     private void LayoutWrapped()
     {
-        var prefWidth = PrefWidth;
+        var prefWidth = GetPrefWidth();
 
         if ( !prefWidth.Equals( _lastPrefWidth ) )
         {
@@ -359,20 +423,20 @@ public class VerticalGroup : WidgetGroup
         var y           = 0f;
         var columnWidth = 0f;
 
-        if ( ( align & Core.Utils.Alignment.RIGHT ) != 0 )
+        if ( ( align & Align.RIGHT ) != 0 )
         {
             columnX += Width - prefWidth;
         }
-        else if ( ( align & Core.Utils.Alignment.LEFT ) == 0 ) // center
+        else if ( ( align & Align.LEFT ) == 0 ) // center
         {
             columnX += ( Width - prefWidth ) / 2;
         }
 
-        if ( ( align & Core.Utils.Alignment.TOP ) != 0 )
+        if ( ( align & Align.TOP ) != 0 )
         {
             yStart += groupHeight - _prefHeight;
         }
-        else if ( ( align & Core.Utils.Alignment.BOTTOM ) == 0 ) // center
+        else if ( ( align & Align.BOTTOM ) == 0 ) // center
         {
             yStart += ( groupHeight - _prefHeight ) / 2;
         }
@@ -398,6 +462,11 @@ public class VerticalGroup : WidgetGroup
         {
             var child = children.GetAt( i );
 
+            if ( child == null )
+            {
+                continue;
+            }
+            
             float    width;
             float    height;
             ILayout? layout = null;
@@ -405,12 +474,12 @@ public class VerticalGroup : WidgetGroup
             if ( child is ILayout layoutchild )
             {
                 layout = layoutchild;
-                width  = layout.PrefWidth;
-                height = layout.PrefHeight;
+                width  = layout.GetPrefWidth();
+                height = layout.GetPrefHeight();
 
                 if ( height > groupHeight )
                 {
-                    height = Math.Max( groupHeight, layout.MinHeight );
+                    height = Math.Max( groupHeight, layout.GetMinHeight() );
                 }
             }
             else
@@ -426,11 +495,11 @@ public class VerticalGroup : WidgetGroup
 
                 y = yStart;
 
-                if ( ( align & Core.Utils.Alignment.BOTTOM ) != 0 )
+                if ( ( align & Align.BOTTOM ) != 0 )
                 {
                     y -= maxHeight - columnSizes[ r ];
                 }
-                else if ( ( align & Core.Utils.Alignment.TOP ) == 0 ) // center
+                else if ( ( align & Align.TOP ) == 0 ) // center
                 {
                     y -= ( maxHeight - columnSizes[ r ] ) / 2;
                 }
@@ -452,9 +521,9 @@ public class VerticalGroup : WidgetGroup
 
             if ( layout != null )
             {
-                width = Math.Max( width, layout.MinWidth );
+                width = Math.Max( width, layout.GetMinWidth() );
 
-                var maxWidth = layout.MaxWidth;
+                var maxWidth = layout.GetMaxWidth();
 
                 if ( ( maxWidth > 0 ) && ( width > maxWidth ) )
                 {
@@ -464,11 +533,11 @@ public class VerticalGroup : WidgetGroup
 
             var x = columnX;
 
-            if ( ( align & Core.Utils.Alignment.RIGHT ) != 0 )
+            if ( ( align & Align.RIGHT ) != 0 )
             {
                 x += columnWidth - width;
             }
-            else if ( ( align & Core.Utils.Alignment.LEFT ) == 0 ) // center
+            else if ( ( align & Align.LEFT ) == 0 ) // center
             {
                 x += ( columnWidth - width ) / 2;
             }
@@ -569,59 +638,59 @@ public class VerticalGroup : WidgetGroup
 
     /// <summary>
     /// Sets the alignment of all widgets within the vertical group to
-    /// <see cref="Core.Utils.Alignment.CENTER"/>. This clears any other alignment.
+    /// <see cref="Align.CENTER"/>. This clears any other alignment.
     /// </summary>
     public VerticalGroup AlignCenter()
     {
-        Alignment = Core.Utils.Alignment.CENTER;
+        Alignment = Align.CENTER;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Core.Utils.Alignment.TOP"/> and clears <see cref="Core.Utils.Alignment.BOTTOM"/> for the
+    /// Sets <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for the
     /// alignment of all widgets within the vertical group.
     /// </summary>
     public VerticalGroup AlignTop()
     {
-        Alignment |= Core.Utils.Alignment.TOP;
-        Alignment &= ~Core.Utils.Alignment.BOTTOM;
+        Alignment |= Align.TOP;
+        Alignment &= ~Align.BOTTOM;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.LEFT"/> and clears <see cref="Core.Utils.Alignment.RIGHT"/> for the
+    /// Adds <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for the
     /// alignment of all widgets within the vertical group.
     /// </summary>
     public VerticalGroup AlignLeft()
     {
-        Alignment |= Core.Utils.Alignment.LEFT;
-        Alignment &= ~Core.Utils.Alignment.RIGHT;
+        Alignment |= Align.LEFT;
+        Alignment &= ~Align.RIGHT;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Core.Utils.Alignment.BOTTOM"/> and clears <see cref="Core.Utils.Alignment.TOP"/> for the
+    /// Sets <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for the
     /// alignment of all widgets within the vertical group.
     /// </summary>
     public VerticalGroup AlignBottom()
     {
-        Alignment |= Core.Utils.Alignment.BOTTOM;
-        Alignment &= ~Core.Utils.Alignment.TOP;
+        Alignment |= Align.BOTTOM;
+        Alignment &= ~Align.TOP;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.RIGHT"/> and clears <see cref="Core.Utils.Alignment.LEFT"/> for the
+    /// Adds <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/> for the
     /// alignment of all widgets within the vertical group.
     /// </summary>
     public VerticalGroup AlignRight()
     {
-        Alignment |= Core.Utils.Alignment.RIGHT;
-        Alignment &= ~Core.Utils.Alignment.LEFT;
+        Alignment |= Align.RIGHT;
+        Alignment &= ~Align.LEFT;
 
         return this;
     }
@@ -640,9 +709,9 @@ public class VerticalGroup : WidgetGroup
     /// <summary>
     /// Sets the vertical alignment of each column of widgets when <see cref="Wrapping"/>
     /// is enabled and sets the horizontal alignment of widgets within each column. Set
-    /// to <see cref="Core.Utils.Alignment.CENTER"/>, <see cref="Core.Utils.Alignment.TOP"/>,
-    /// <see cref="Core.Utils.Alignment.BOTTOM"/>,
-    /// <see cref="Core.Utils.Alignment.LEFT"/>, <see cref="Core.Utils.Alignment.RIGHT"/>, or any combination of those.
+    /// to <see cref="Align.CENTER"/>, <see cref="Align.TOP"/>,
+    /// <see cref="Align.BOTTOM"/>,
+    /// <see cref="Align.LEFT"/>, <see cref="Align.RIGHT"/>, or any combination of those.
     /// </summary>
     public VerticalGroup ColumnAlign( int columnAlign )
     {
@@ -652,61 +721,61 @@ public class VerticalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the alignment of widgets within each column to <see cref="Core.Utils.Alignment.CENTER"/>.
+    /// Sets the alignment of widgets within each column to <see cref="Align.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public virtual VerticalGroup ColumnCenter()
     {
-        _columnAlign = Core.Utils.Alignment.CENTER;
+        _columnAlign = Align.CENTER;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.TOP"/> and clears <see cref="Core.Utils.Alignment.BOTTOM"/> for the
+    /// Adds <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for the
     /// alignment of each column of widgets when <see cref="Wrapping"/> is enabled.
     /// </summary>
     public virtual VerticalGroup ColumnTop()
     {
-        _columnAlign |= Core.Utils.Alignment.TOP;
-        _columnAlign &= ~Core.Utils.Alignment.BOTTOM;
+        _columnAlign |= Align.TOP;
+        _columnAlign &= ~Align.BOTTOM;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.LEFT"/> and clears <see cref="Core.Utils.Alignment.RIGHT"/> for the
+    /// Adds <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for the
     /// alignment of widgets within each column.
     /// </summary>
     public virtual VerticalGroup ColumnLeft()
     {
-        _columnAlign |= Core.Utils.Alignment.LEFT;
-        _columnAlign &= ~Core.Utils.Alignment.RIGHT;
+        _columnAlign |= Align.LEFT;
+        _columnAlign &= ~Align.RIGHT;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.BOTTOM"/> and clears <see cref="Core.Utils.Alignment.TOP"/> for the
+    /// Adds <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for the
     /// alignment of each column of widgets when <see cref="Wrapping"/>
     /// wrapping} is enabled.
     /// </summary>
     public virtual VerticalGroup ColumnBottom()
     {
-        _columnAlign |= Core.Utils.Alignment.BOTTOM;
-        _columnAlign &= ~Core.Utils.Alignment.TOP;
+        _columnAlign |= Align.BOTTOM;
+        _columnAlign &= ~Align.TOP;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Core.Utils.Alignment.RIGHT"/> and clears <see cref="Core.Utils.Alignment.LEFT"/>
+    /// Adds <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/>
     /// for the alignment of widgets within each column.
     /// </summary>
     public virtual VerticalGroup ColumnRight()
     {
-        _columnAlign |= Core.Utils.Alignment.RIGHT;
-        _columnAlign &= ~Core.Utils.Alignment.LEFT;
+        _columnAlign |= Align.RIGHT;
+        _columnAlign &= ~Align.LEFT;
 
         return this;
     }
@@ -738,59 +807,4 @@ public class VerticalGroup : WidgetGroup
                      ScaleY,
                      Rotation );
     }
-
-    #region properties
-
-    /// <summary>
-    /// Sets the vertical space between children.
-    /// </summary>
-    public float Space { get; set; }
-
-    /// <summary>
-    /// Sets the horizontal space between columns when wrap is enabled.
-    /// </summary>
-    public float WrapSpace { get; set; }
-
-    public float PadTop { get; set; }
-
-    public float PadBottom { get; set; }
-
-    public float PadLeft { get; set; }
-
-    public float PadRight { get; set; }
-
-    /// <summary>
-    /// Sets the alignment of all widgets within the vertical group. Set to
-    /// <see cref="Core.Utils.Alignment.CENTER"/>, <see cref="Core.Utils.Alignment.TOP"/>,
-    /// <see cref="Core.Utils.Alignment.BOTTOM"/>,
-    /// <see cref="Core.Utils.Alignment.LEFT"/>, <see cref="Core.Utils.Alignment.RIGHT"/>, or any combination of those.
-    /// </summary>
-    public int Alignment { get; set; } = Core.Utils.Alignment.TOP;
-
-    public float Fill { get; set; } = 1f;
-
-    public bool Expand { get; set; }
-
-    /// <summary>
-    /// If false, the widgets are arranged in a single column and the preferred height
-    /// is the widget heights plus spacing.
-    /// <para>
-    /// If true, the widgets will wrap using the height of the vertical group. The preferred
-    /// height of the group will be 0 as it is expected that something external will set the
-    /// height of the group. Widgets are sized to their preferred height unless it is larger
-    /// than the group's height, in which case they are sized to the group's height but not
-    /// less than their minimum height.
-    /// </para>
-    /// <para>
-    /// Default is false.
-    /// </para>
-    /// <para>
-    /// When wrap is enabled, the group's preferred width depends on the height of the group.
-    /// In some cases the parent of the group will need to layout twice: once to set the
-    /// height of the group and a second time to adjust to the group's new preferred width.
-    /// </para>
-    /// </summary>
-    public bool Wrapping { get; set; }
-
-    #endregion properties
 }

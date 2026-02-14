@@ -80,7 +80,7 @@ public class CheckBox : TextButton
 
         Add( label );
 
-        label?.SetAlignment( Alignment.LEFT );
+        label?.SetAlignment( Align.LEFT );
 
         SetSize( GetPrefWidth(), GetPrefHeight() );
     }

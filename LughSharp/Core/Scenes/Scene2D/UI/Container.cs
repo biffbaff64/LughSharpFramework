@@ -181,22 +181,22 @@ public class Container< T > : WidgetGroup where T : Actor
 
         var x = padLeft;
 
-        if ( ( _align & Alignment.RIGHT ) != 0 )
+        if ( ( _align & Align.RIGHT ) != 0 )
         {
             x += containerWidth - width;
         }
-        else if ( ( _align & Alignment.LEFT ) == 0 )
+        else if ( ( _align & Align.LEFT ) == 0 )
         {
             x += ( containerWidth - width ) / 2;
         }
 
         var y = padBottom;
 
-        if ( ( _align & Alignment.TOP ) != 0 )
+        if ( ( _align & Align.TOP ) != 0 )
         {
             y += containerHeight - height;
         }
-        else if ( ( _align & Alignment.BOTTOM ) == 0 )
+        else if ( ( _align & Align.BOTTOM ) == 0 )
         {
             y += ( containerHeight - height ) / 2;
         }
@@ -1061,9 +1061,9 @@ public class Container< T > : WidgetGroup where T : Actor
 
     /// <summary>
     /// Sets the alignment of the actor within the container.
-    /// Set to <see cref="Alignment.CENTER"/>, <see cref="Alignment.TOP"/>,
-    /// <see cref="Alignment.BOTTOM"/>, <see cref="Alignment.LEFT"/>,
-    /// <see cref="Alignment.RIGHT"/>, or any combination of those.
+    /// Set to <see cref="Align.CENTER"/>, <see cref="Align.TOP"/>,
+    /// <see cref="Align.BOTTOM"/>, <see cref="Align.LEFT"/>,
+    /// <see cref="Align.RIGHT"/>, or any combination of those.
     /// </summary>
     public Container< T > SetAlignment( int align )
     {
@@ -1073,60 +1073,60 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the container to <see cref="Alignment.CENTER"/>.
+    /// Sets the alignment of the actor within the container to <see cref="Align.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public Container< T > AlignCenter()
     {
-        _align = Alignment.CENTER;
+        _align = Align.CENTER;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Alignment.TOP"/> and clears <see cref="Alignment.BOTTOM"/> for
+    /// Sets <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignTop()
     {
-        _align |= Alignment.TOP;
-        _align &= ~Alignment.BOTTOM;
+        _align |= Align.TOP;
+        _align &= ~Align.BOTTOM;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Alignment.LEFT"/> and clears <see cref="Alignment.RIGHT"/> for
+    /// Sets <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignLeft()
     {
-        _align |= Alignment.LEFT;
-        _align &= ~Alignment.RIGHT;
+        _align |= Align.LEFT;
+        _align &= ~Align.RIGHT;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Alignment.BOTTOM"/> and clears <see cref="Alignment.TOP"/> for
+    /// Sets <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignBottom()
     {
-        _align |= Alignment.BOTTOM;
-        _align &= ~Alignment.TOP;
+        _align |= Align.BOTTOM;
+        _align &= ~Align.TOP;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Alignment.RIGHT"/> and clears <see cref="Alignment.LEFT"/> for the
+    /// Sets <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/> for the
     /// alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignRight()
     {
-        _align |= Alignment.RIGHT;
-        _align &= ~Alignment.LEFT;
+        _align |= Align.RIGHT;
+        _align &= ~Align.LEFT;
 
         return this;
     }

@@ -127,7 +127,7 @@ public class Selection< T > : IDisableable, IDisposable
             }
             else
             {
-                Changed();
+                OnChanged();
             }
         }
         finally
@@ -215,7 +215,7 @@ public class Selection< T > : IDisableable, IDisposable
         else
         {
             LastSelected = item;
-            Changed();
+            OnChanged();
         }
 
         Cleanup();
@@ -255,7 +255,7 @@ public class Selection< T > : IDisableable, IDisposable
             else if ( items.Count > 0 )
             {
                 LastSelected = items.Peek();
-                Changed();
+                OnChanged();
             }
         }
 
@@ -281,7 +281,7 @@ public class Selection< T > : IDisableable, IDisposable
         else
         {
             LastSelected = item;
-            Changed();
+            OnChanged();
         }
     }
 
@@ -318,7 +318,7 @@ public class Selection< T > : IDisableable, IDisposable
             else
             {
                 LastSelected = items.Peek();
-                Changed();
+                OnChanged();
             }
         }
 
@@ -341,7 +341,7 @@ public class Selection< T > : IDisableable, IDisposable
         else
         {
             LastSelected = default( T? );
-            Changed();
+            OnChanged();
         }
     }
 
@@ -375,7 +375,7 @@ public class Selection< T > : IDisableable, IDisposable
             else
             {
                 LastSelected = default( T? );
-                Changed();
+                OnChanged();
             }
         }
 
@@ -400,7 +400,7 @@ public class Selection< T > : IDisableable, IDisposable
         else
         {
             LastSelected = default( T? );
-            Changed();
+            OnChanged();
         }
 
         Cleanup();
@@ -409,7 +409,7 @@ public class Selection< T > : IDisableable, IDisposable
     /// <summary>
     /// Called after the selection changes. The default implementation does nothing.
     /// </summary>
-    protected virtual void Changed()
+    protected virtual void OnChanged()
     {
     }
 

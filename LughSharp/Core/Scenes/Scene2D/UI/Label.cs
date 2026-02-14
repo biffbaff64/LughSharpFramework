@@ -49,8 +49,8 @@ public class Label : Widget
 {
     public BitmapFontCache FontCache   { get; set; } = null!;
     public StringBuilder   Text        { get; }      = new();
-    public int             LabelAlign  { get; set; } = Alignment.LEFT;
-    public int             LineAlign   { get; set; } = Alignment.LEFT;
+    public int             LabelAlign  { get; set; } = Align.LEFT;
+    public int             LineAlign   { get; set; } = Align.LEFT;
     public GlyphLayout     GlyphLayout { get; set; } = new();
 
     // ========================================================================
@@ -292,7 +292,7 @@ public class Label : Widget
                       - _style.Background.RightWidth;
             }
 
-            _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color.White, width, Alignment.LEFT, true );
+            _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color.White, width, Align.LEFT, true );
         }
         else
         {
@@ -352,9 +352,9 @@ public class Label : Widget
             textWidth  = layout.Width;
             textHeight = layout.Height;
 
-            if ( ( LabelAlign & Alignment.LEFT ) == 0 )
+            if ( ( LabelAlign & Align.LEFT ) == 0 )
             {
-                if ( ( LabelAlign & Alignment.RIGHT ) != 0 )
+                if ( ( LabelAlign & Align.RIGHT ) != 0 )
                 {
                     x += width - textWidth;
                 }
@@ -372,12 +372,12 @@ public class Label : Widget
 
         Debug.Assert( Style.Font != null, "Style.Font != null" );
 
-        if ( ( LabelAlign & Alignment.TOP ) != 0 )
+        if ( ( LabelAlign & Align.TOP ) != 0 )
         {
             y += FontCache.Font.Flipped ? 0 : height - textHeight;
             y += Style.Font.GetDescent();
         }
-        else if ( ( LabelAlign & Alignment.BOTTOM ) != 0 )
+        else if ( ( LabelAlign & Align.BOTTOM ) != 0 )
         {
             y += FontCache.Font.Flipped ? height - textHeight : 0;
             y -= Style.Font.GetDescent();
@@ -480,7 +480,7 @@ public class Label : Widget
     /// Aligns all the text within the label (default left center) and each line
     /// of text horizontally (default is left).
     /// </param>
-    /// <see cref="Alignment"/>
+    /// <see cref="Align"/>
     public void SetAlignment( int alignment )
     {
         SetAlignment( alignment, alignment );
@@ -489,23 +489,23 @@ public class Label : Widget
     /// <summary>
     /// <param name="labelAlign"> Aligns all the text within the label (default left center). </param>
     /// <param name="lineAlign"> Aligns each line of text horizontally (default left). </param>
-    /// See also <see cref="Alignment "/>
+    /// See also <see cref="Align "/>
     /// </summary>
     public void SetAlignment( int labelAlign, int lineAlign )
     {
         LabelAlign = labelAlign;
 
-        if ( ( lineAlign & Alignment.LEFT ) != 0 )
+        if ( ( lineAlign & Align.LEFT ) != 0 )
         {
-            LineAlign = Alignment.LEFT;
+            LineAlign = Align.LEFT;
         }
-        else if ( ( lineAlign & Alignment.RIGHT ) != 0 )
+        else if ( ( lineAlign & Align.RIGHT ) != 0 )
         {
-            LineAlign = Alignment.RIGHT;
+            LineAlign = Align.RIGHT;
         }
         else
         {
-            LineAlign = Alignment.CENTER;
+            LineAlign = Align.CENTER;
         }
 
         Invalidate();

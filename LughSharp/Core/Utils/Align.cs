@@ -28,31 +28,32 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
 
+///// <summary>
+///// Provides bit flag constants for alignment.
+///// </summary>
+//[PublicAPI]
+//[Flags]
+//public enum Align
+//{
+//    None   = 0,
+//    Center = 1 << 0,
+//    Top    = 1 << 1,
+//    Bottom = 1 << 2,
+//    Left   = 1 << 3,
+//    Right  = 1 << 4,
+//
+//    TopLeft     = Top | Left,
+//    TopRight    = Top | Right,
+//    BottomLeft  = Bottom | Left,
+//    BottomRight = Bottom | Right,
+//}
+
 /// <summary>
-/// Provides bit flag constants for alignment.
+/// Provides utility methods and constants for handling alignment
+/// using bit flags.
 /// </summary>
 [PublicAPI]
-[Flags]
-public enum Align
-{
-    None   = 0,
-    Center = 1 << 0,
-    Top    = 1 << 1,
-    Bottom = 1 << 2,
-    Left   = 1 << 3,
-    Right  = 1 << 4,
-
-    TopLeft     = Top | Left,
-    TopRight    = Top | Right,
-    BottomLeft  = Bottom | Left,
-    BottomRight = Bottom | Right,
-}
-
-/// <summary>
-/// Provides utility methods and constants for handling alignment using bit flags.
-/// </summary>
-[PublicAPI]
-public sealed class Alignment
+public sealed class Align
 {
     public const int NONE   = 0;
     public const int CENTER = 1 << 0;

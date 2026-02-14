@@ -452,7 +452,7 @@ public class TextArea : TextField
                        LinesBreak[ i ],
                        LinesBreak[ i + 1 ],
                        0,
-                       Alignment.LEFT,
+                       Align.LEFT,
                        false );
             offsetY -= font.GetLineHeight();
         }
