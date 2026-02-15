@@ -58,7 +58,7 @@ public class HorizontalGroup : WidgetGroup
     public bool  Wrap      { get; set; }
     public float Fill      { get; set; }
     public bool  Expand    { get; set; }
-    public int   Alignment { get; set; } = Core.Utils.Align.LEFT;
+    public int   Alignment { get; set; } = Align.LEFT;
     public float PadTop    { get; set; }
     public float PadLeft   { get; set; }
     public float PadBottom { get; set; }
@@ -276,22 +276,22 @@ public class HorizontalGroup : WidgetGroup
         var rowHeight = ( Expand ? Height : _prefHeight ) - PadTop - padBottom;
         var x         = PadLeft;
 
-        if ( ( align & Core.Utils.Align.RIGHT ) != 0 )
+        if ( ( align & Align.RIGHT ) != 0 )
         {
             x += Width - _prefWidth;
         }
-        else if ( ( align & Core.Utils.Align.LEFT ) == 0 ) // center
+        else if ( ( align & Align.LEFT ) == 0 ) // center
         {
             x += ( Width - _prefWidth ) / 2;
         }
 
         float startY;
 
-        if ( ( align & Core.Utils.Align.BOTTOM ) != 0 )
+        if ( ( align & Align.BOTTOM ) != 0 )
         {
             startY = padBottom;
         }
-        else if ( ( align & Core.Utils.Align.TOP ) != 0 )
+        else if ( ( align & Align.TOP ) != 0 )
         {
             startY = Height - PadTop - rowHeight;
         }
@@ -360,11 +360,11 @@ public class HorizontalGroup : WidgetGroup
 
             var y = startY;
 
-            if ( ( align & Core.Utils.Align.TOP ) != 0 )
+            if ( ( align & Align.TOP ) != 0 )
             {
                 y += rowHeight - height;
             }
-            else if ( ( align & Core.Utils.Align.BOTTOM ) == 0 ) // center
+            else if ( ( align & Align.BOTTOM ) == 0 ) // center
             {
                 y += ( rowHeight - height ) / 2;
             }
@@ -418,11 +418,11 @@ public class HorizontalGroup : WidgetGroup
             throw new RuntimeException( "_rowSizes cannot be null!" );
         }
 
-        if ( ( align & Core.Utils.Align.TOP ) != 0 )
+        if ( ( align & Align.TOP ) != 0 )
         {
             rowY += Height - prefHeight;
         }
-        else if ( ( align & Core.Utils.Align.BOTTOM ) == 0 ) // center
+        else if ( ( align & Align.BOTTOM ) == 0 ) // center
         {
             rowY += ( Height - prefHeight ) / 2;
         }
@@ -433,11 +433,11 @@ public class HorizontalGroup : WidgetGroup
             rowDir =  1;
         }
 
-        if ( ( align & Core.Utils.Align.RIGHT ) != 0 )
+        if ( ( align & Align.RIGHT ) != 0 )
         {
             xStart += groupWidth - _prefWidth;
         }
-        else if ( ( align & Core.Utils.Align.LEFT ) == 0 ) // center
+        else if ( ( align & Align.LEFT ) == 0 ) // center
         {
             xStart += ( groupWidth - _prefWidth ) / 2;
         }
@@ -496,11 +496,11 @@ public class HorizontalGroup : WidgetGroup
                               rowSizes.Count - 2 ); // In case an actor changed size without invalidating this layout.
                 x = xStart;
 
-                if ( ( align & Core.Utils.Align.RIGHT ) != 0 )
+                if ( ( align & Align.RIGHT ) != 0 )
                 {
                     x += maxWidth - rowSizes[ r ];
                 }
-                else if ( ( align & Core.Utils.Align.LEFT ) == 0 ) // center
+                else if ( ( align & Align.LEFT ) == 0 ) // center
                 {
                     x += ( maxWidth - rowSizes[ r ] ) / 2;
                 }
@@ -535,11 +535,11 @@ public class HorizontalGroup : WidgetGroup
 
             var y = rowY;
 
-            if ( ( align & Core.Utils.Align.TOP ) != 0 )
+            if ( ( align & Align.TOP ) != 0 )
             {
                 y += rowHeight - height;
             }
-            else if ( ( align & Core.Utils.Align.BOTTOM ) == 0 ) // center
+            else if ( ( align & Align.BOTTOM ) == 0 ) // center
             {
                 y += ( rowHeight - height ) / 2;
             }
@@ -565,7 +565,7 @@ public class HorizontalGroup : WidgetGroup
         }
     }
 
-    public float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         if ( Wrap )
         {
@@ -580,7 +580,7 @@ public class HorizontalGroup : WidgetGroup
         return PrefWidth;
     }
 
-    public float GetPrefHeight()
+    public override float GetPrefHeight()
     {
         if ( _sizeInvalid )
         {
@@ -789,7 +789,7 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup AlignCenter()
     {
-        Alignment = Core.Utils.Align.CENTER;
+        Alignment = Align.CENTER;
 
         return this;
     }
@@ -800,8 +800,8 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup AlignTop()
     {
-        Alignment |= Core.Utils.Align.TOP;
-        Alignment &= ~Core.Utils.Align.BOTTOM;
+        Alignment |= Align.TOP;
+        Alignment &= ~Align.BOTTOM;
 
         return this;
     }
@@ -812,8 +812,8 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup AlignBottom()
     {
-        Alignment |= Core.Utils.Align.BOTTOM;
-        Alignment &= ~Core.Utils.Align.TOP;
+        Alignment |= Align.BOTTOM;
+        Alignment &= ~Align.TOP;
 
         return this;
     }
@@ -824,8 +824,8 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup AlignLeft()
     {
-        Alignment |= Core.Utils.Align.LEFT;
-        Alignment &= ~Core.Utils.Align.RIGHT;
+        Alignment |= Align.LEFT;
+        Alignment &= ~Align.RIGHT;
 
         return this;
     }
@@ -836,8 +836,8 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup AlignRight()
     {
-        Alignment |= Core.Utils.Align.RIGHT;
-        Alignment &= ~Core.Utils.Align.LEFT;
+        Alignment |= Align.RIGHT;
+        Alignment &= ~Align.LEFT;
 
         return this;
     }
@@ -865,7 +865,7 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup RowCenter()
     {
-        _rowAlign = Core.Utils.Align.CENTER;
+        _rowAlign = Align.CENTER;
 
         return this;
     }
@@ -876,8 +876,8 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup RowTop()
     {
-        _rowAlign |= Core.Utils.Align.TOP;
-        _rowAlign &= ~Core.Utils.Align.BOTTOM;
+        _rowAlign |= Align.TOP;
+        _rowAlign &= ~Align.BOTTOM;
 
         return this;
     }
@@ -888,8 +888,8 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup RowLeft()
     {
-        _rowAlign |= Core.Utils.Align.LEFT;
-        _rowAlign &= ~Core.Utils.Align.RIGHT;
+        _rowAlign |= Align.LEFT;
+        _rowAlign &= ~Align.RIGHT;
 
         return this;
     }
@@ -900,8 +900,8 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup RowBottom()
     {
-        _rowAlign |= Core.Utils.Align.BOTTOM;
-        _rowAlign &= ~Core.Utils.Align.TOP;
+        _rowAlign |= Align.BOTTOM;
+        _rowAlign &= ~Align.TOP;
 
         return this;
     }
@@ -912,8 +912,8 @@ public class HorizontalGroup : WidgetGroup
     /// </summary>
     public HorizontalGroup RowRight()
     {
-        _rowAlign |= Core.Utils.Align.RIGHT;
-        _rowAlign &= ~Core.Utils.Align.LEFT;
+        _rowAlign |= Align.RIGHT;
+        _rowAlign &= ~Align.LEFT;
 
         return this;
     }

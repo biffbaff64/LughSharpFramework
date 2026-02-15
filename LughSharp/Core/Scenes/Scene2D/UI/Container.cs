@@ -512,7 +512,7 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
-    public float GetMinWidth()
+    public override float GetMinWidth()
     {
         return _minWidth.Get( _actor ) + _padLeft.Get( this ) + _padRight.Get( this );
     }
@@ -522,7 +522,7 @@ public class Container< T > : WidgetGroup where T : Actor
         return _minWidth;
     }
 
-    public float GetMaxWidth()
+    public override float GetMaxWidth()
     {
         var v = _maxWidth.Get( _actor );
 
@@ -586,7 +586,7 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
-    public float GetMinHeight()
+    public override float GetMinHeight()
     {
         return _minHeight.Get( _actor ) + _padTop.Get( this ) + _padBottom.Get( this );
     }
@@ -596,7 +596,7 @@ public class Container< T > : WidgetGroup where T : Actor
         return _minHeight;
     }
 
-    public float GetMaxHeight()
+    public override float GetMaxHeight()
     {
         var v = _maxHeight.Get( _actor );
 
@@ -839,12 +839,7 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
-    public Value GetPrefWidthValue()
-    {
-        return _prefWidth;
-    }
-
-    public float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         var v = _prefWidth.Get( _actor );
 
@@ -856,12 +851,7 @@ public class Container< T > : WidgetGroup where T : Actor
         return Math.Max( GetMinWidth(), v + _padLeft.Get( this ) + _padRight.Get( this ) );
     }
 
-    public Value GetPrefHeightValue()
-    {
-        return _prefHeight;
-    }
-
-    public float GetPrefHeight()
+    public override float GetPrefHeight()
     {
         var v = _prefHeight.Get( _actor );
 

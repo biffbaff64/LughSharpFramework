@@ -96,11 +96,11 @@ public class ImageTextButton : Button
 
         if ( _label != null )
         {
-            var labelStyle = _label.Style;
+            var labelStyle = _label.GetStyle();
 
             labelStyle.Font      = textButtonStyle.Font!;
             labelStyle.FontColor = GetFontColor();
-            _label.Style         = labelStyle;
+            _label.SetStyle( labelStyle );
         }
     }
 
@@ -247,7 +247,7 @@ public class ImageTextButton : Button
 
         if ( _label != null )
         {
-            _label.Style.FontColor = GetFontColor();
+            _label.GetStyle().FontColor = GetFontColor();
         }
 
         base.Draw( batch, parentAlpha );

@@ -111,36 +111,11 @@ public class Label : Widget
             Text.Append( text );
         }
 
-        Style = style;
+        SetStyle( style );
 
         if ( text is { Length: > 0 } )
         {
-            SetSize( GetPrefWidth(), GetPrefHeight() );
-        }
-    }
-
-    public LabelStyle Style
-    {
-        // Returns the label's style. Modifying the returned style may not have an
-        // effect until <see cref="SetStyle(LabelStyle)"/> is called.
-        get => _style;
-        set
-        {
-            if ( value == null )
-            {
-                throw new ArgumentException( "style cannot be null." );
-            }
-
-            if ( value.Font == null )
-            {
-                throw new ArgumentException( "Missing LabelStyle font." );
-            }
-
-            _style = value;
-
-            FontCache = _style.Font.NewFontCache();
-
-            InvalidateHierarchy();
+            SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
         }
     }
 
@@ -183,6 +158,17 @@ public class Label : Widget
     {
         get => _fontScaleY;
         set => SetFontScale( FontScaleX, value );
+    }
+
+    public LabelStyle GetStyle() => _style;
+
+    public void SetStyle( LabelStyle value )
+    {
+        _style = value;
+
+        FontCache = _style.Font.NewFontCache();
+
+        InvalidateHierarchy();
     }
 
     /// <summary>
@@ -370,17 +356,17 @@ public class Label : Widget
             textHeight = font.FontData.CapHeight;
         }
 
-        Debug.Assert( Style.Font != null, "Style.Font != null" );
+        Debug.Assert( GetStyle().Font != null, "Style.Font != null" );
 
         if ( ( LabelAlign & Align.TOP ) != 0 )
         {
             y += FontCache.Font.Flipped ? 0 : height - textHeight;
-            y += Style.Font.GetDescent();
+            y += GetStyle().Font.GetDescent();
         }
         else if ( ( LabelAlign & Align.BOTTOM ) != 0 )
         {
             y += FontCache.Font.Flipped ? height - textHeight : 0;
-            y -= Style.Font.GetDescent();
+            y -= GetStyle().Font.GetDescent();
         }
         else
         {
@@ -408,15 +394,15 @@ public class Label : Widget
         var color = _tempColor.Set( Color );
         color.A *= parentAlpha;
 
-        if ( Style.Background != null )
+        if ( GetStyle().Background != null )
         {
             batch.SetColor( color.R, color.G, color.B, color.A );
-            Style.Background.Draw( batch, X, Y, Width, Height );
+            GetStyle().Background?.Draw( batch, X, Y, Width, Height );
         }
 
-        if ( Style.FontColor != null )
+        if ( GetStyle().FontColor != null )
         {
-            color.Mul( Style.FontColor );
+            color.Mul( GetStyle().FontColor! );
         }
 
         FontCache.Tint( color );
@@ -424,7 +410,9 @@ public class Label : Widget
         FontCache.Draw( batch );
     }
 
-    public float GetPrefWidth()
+    public override float GetPrefWidth() => GetPrefWidthSafe();
+    
+    public float GetPrefWidthSafe()
     {
         if ( Wrap )
         {
@@ -438,18 +426,18 @@ public class Label : Widget
 
         var width = _prefSize.X;
 
-        if ( Style.Background != null )
+        if ( GetStyle().Background != null )
         {
-            width = Math.Max(
-                             width + Style.Background.LeftWidth + Style.Background.RightWidth,
-                             Style.Background.MinWidth
-                            );
+            width = Math.Max( width + GetStyle().Background!.LeftWidth + GetStyle().Background!.RightWidth,
+                              GetStyle().Background!.MinWidth );
         }
 
         return width;
     }
 
-    public float GetPrefHeight()
+    public override float GetPrefHeight() => GetPrefHeightSafe();
+    
+    public float GetPrefHeightSafe()
     {
         if ( _prefSizeInvalid )
         {
@@ -460,15 +448,15 @@ public class Label : Widget
 
         if ( _fontScaleChanged )
         {
-            descentScaleCorrection = _fontScaleY / Style.Font.GetScaleY();
+            descentScaleCorrection = _fontScaleY / GetStyle().Font.GetScaleY();
         }
 
-        var height = _prefSize.Y - ( Style.Font.GetDescent() * descentScaleCorrection * 2 );
+        var height = _prefSize.Y - ( GetStyle().Font.GetDescent() * descentScaleCorrection * 2 );
 
-        if ( Style.Background != null )
+        if ( GetStyle().Background != null )
         {
-            height = Math.Max( height + Style.Background.TopHeight + Style.Background.BottomHeight,
-                               Style.Background.MinHeight );
+            height = Math.Max( height + GetStyle().Background!.TopHeight + GetStyle().Background!.BottomHeight,
+                               GetStyle().Background!.MinHeight );
         }
 
         return height;

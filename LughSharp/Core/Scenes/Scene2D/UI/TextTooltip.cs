@@ -82,7 +82,7 @@ public class TextTooltip : Tooltip< Label >
             throw new NullReferenceException( "Container cannot be null" );
         }
 
-        Container.GetActor()!.Style = style.Label;
+        Container.GetActor()!.SetStyle( style.Label );
         Container.SetBackground( style.Background );
         Container.SetMaxWidth( style.WrapWidth );
     }

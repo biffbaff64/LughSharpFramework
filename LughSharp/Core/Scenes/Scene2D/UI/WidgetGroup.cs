@@ -202,32 +202,32 @@ public class WidgetGroup : Group, ILayout
         }
     }
 
-    public float GetMinWidth()
+    public virtual float GetMinWidth()
     {
         return GetPrefWidth();
     }
 
-    public float GetMinHeight()
+    public virtual float GetMinHeight()
     {
         return GetPrefHeight();
     }
 
-    public float GetPrefWidth()
+    public virtual float GetPrefWidth()
     {
         return 0;
     }
 
-    public float GetPrefHeight()
+    public virtual float GetPrefHeight()
     {
         return 0;
     }
 
-    public float GetMaxWidth()
+    public virtual float GetMaxWidth()
     {
         return 0;
     }
 
-    public float GetMaxHeight()
+    public virtual float GetMaxHeight()
     {
         return 0;
     }

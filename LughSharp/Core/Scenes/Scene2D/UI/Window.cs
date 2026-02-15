@@ -67,7 +67,7 @@ public class Window : Table
             _style = value;
 
             SetBackground( _style?.Background );
-            TitleLabel!.Style = new Label.LabelStyle( _style?.TitleFont!, _style?.TitleFontColor! );
+            TitleLabel!.SetStyle( new Label.LabelStyle( _style?.TitleFont!, _style?.TitleFontColor! ) );
             InvalidateHierarchy();
         }
     }

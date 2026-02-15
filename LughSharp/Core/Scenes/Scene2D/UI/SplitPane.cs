@@ -227,12 +227,12 @@ public class SplitPane : WidgetGroup
         }
     }
 
-    private float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         return PrefWidth;
     }
 
-    private float GetPrefHeight()
+    public override float GetPrefHeight()
     {
         return PrefHeight;
     }

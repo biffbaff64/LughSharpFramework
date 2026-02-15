@@ -156,7 +156,7 @@ public class Widget : Actor, ILayout
     /// Generally this method should not be called in an actor's constructor because it calls
     /// <see cref="ILayout.SetLayout"/>, which means a subclass would have Layout() called before the
     /// subclass' constructor. Instead, in constructors simply set the actor's size
-    /// to <see cref="ILayout.PrefWidth"/> and <see cref="ILayout.PrefHeight"/>. This allows
+    /// to <see cref="ILayout.GetPrefWidth"/> and <see cref="ILayout.GetPrefHeight"/>. This allows
     /// the actor to have a size at construction time for more convenient use with groups that do
     /// not layout their children.
     /// </para>

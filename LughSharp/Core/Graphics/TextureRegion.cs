@@ -182,12 +182,15 @@ public class TextureRegion
     }
 
     /// <summary>
+    /// Sets the texture region using pixel coordinates. Note that the V coordinates
+    /// are inverted to match OpenGL's texture coordinate system where V=0 is at the
+    /// bottom and V=1 is at the top. This ensures textures are not rendered upside down.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <param name="x">The x-coordinate in pixels from the left edge of the texture.</param>
+    /// <param name="y">The y-coordinate in pixels from the top edge of the texture.</param>
+    /// <param name="width">The width of the region in pixels.</param>
+    /// <param name="height">The height of the region in pixels.</param>
+    /// <exception cref="RuntimeException">Thrown when Texture is null.</exception>
     public void SetRegion( int x, int y, int width, int height )
     {
         if ( Texture == null )
@@ -198,7 +201,10 @@ public class TextureRegion
         var invTexWidth  = 1f / Texture.Width;
         var invTexHeight = 1f / Texture.Height;
 
-        SetRegion( x * invTexWidth, y * invTexHeight, ( x + width ) * invTexWidth, ( y + height ) * invTexHeight );
+        // V coordinates are inverted: V starts at (y + height) and V2 ends at y
+        // This is because OpenGL texture coordinates have V=0 at bottom, V=1 at top,
+        // but image coordinates have Y=0 at top. This prevents upside-down rendering.
+        SetRegion( x * invTexWidth, ( y + height ) * invTexHeight, ( x + width ) * invTexWidth, y * invTexHeight );
 
         SetRegionWidth( Math.Abs( width ), IsFlipX() );
         SetRegionHeight( Math.Abs( height ), IsFlipY() );
@@ -442,8 +448,6 @@ public class TextureRegion
 
             return ( int )Math.Round( Math.Abs( U2 - U ) * Texture.Width );
         }
-
-        // No setter for RegionHeight as it is derived.
     }
 
     /// <summary>
@@ -461,8 +465,6 @@ public class TextureRegion
 
             return ( int )Math.Round( Math.Abs( V2 - V ) * Texture.Height );
         }
-
-        // No setter for RegionHeight as it is derived.
     }
 
     // ========================================================================

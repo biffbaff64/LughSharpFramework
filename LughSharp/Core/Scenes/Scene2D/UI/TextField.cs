@@ -198,7 +198,7 @@ public class TextField : Widget
         return GetPrefWidthSafe();
     }
 
-    protected static float GetPrefWidthSafe()
+    protected float GetPrefWidthSafe()
     {
         return 150;
     }

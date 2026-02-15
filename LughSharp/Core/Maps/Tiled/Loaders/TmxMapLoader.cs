@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Assets;
@@ -110,30 +106,43 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     }
 
     /// <summary>
+    /// Loads the non-OpenGL part of the asset and injects any dependencies of
+    /// the asset into the <paramref name="manager"/>.
     /// </summary>
-    /// <param name="manager"></param>
-    /// <param name="filename"></param>
-    /// <param name="tmxFile"></param>
-    /// <param name="parameter"></param>
+    /// <param name="manager">The asset manager responsible for loading the asset.</param>
+    /// <param name="filename"> The name of the asset to load. </param>
+    /// <param name="file">The file information of the asset to load.</param>
+    /// <param name="parameter">The parameters for loading the asset.</param>
     public override void LoadAsync< TP >( AssetManager manager,
                                           string filename,
-                                          FileInfo? tmxFile,
+                                          FileInfo? file,
                                           TP? parameter ) where TP : class
     {
-        Map = LoadTiledMap( tmxFile,
+        Map = LoadTiledMap( file,
                             parameter as LoaderParameters,
                             new IImageResolver.AssetManagerImageResolver( manager ) );
     }
 
-    /// <inheritdoc />
-    public override TiledMap? LoadSync< TP >( AssetManager manager,
+    /// <summary>
+    /// Loads the OpenGL part of the asset.
+    /// </summary>
+    /// <param name="manager"></param>
+    /// <param name="tmxFile"> the resolved file to load </param>
+    /// <param name="parameter"></param>
+    public override TiledMap LoadSync< TP >( AssetManager manager,
                                               FileInfo tmxFile,
                                               TP? parameter ) where TP : class
     {
         return Map;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns the assets this asset requires to be loaded first. This method may be
+    /// called on a thread other than the GL thread.
+    /// </summary>
+    /// <param name="filename">name of the asset to load</param>
+    /// <param name="file">the resolved file to load</param>
+    /// <param name="p">parameters for loading the asset</param>
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? p ) where TP : class
@@ -162,10 +171,20 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     }
 
     /// <summary>
+    /// Retrieves a list of file handles for the external dependencies of a TiledMap.
+    /// These include tileset files and images referenced within the map or tilesets.
     /// </summary>
-    /// <param name="tmxFile"></param>
-    /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
+    /// <param name="tmxFile">
+    /// The TiledMap (.tmx) file for which the dependency file handles are to be extracted.
+    /// </param>
+    /// <returns>
+    /// A list of file handles corresponding to dependency files, such as tileset sources
+    /// and associated images.
+    /// </returns>
+    /// <exception cref="RuntimeException">
+    /// Thrown if the TiledMap file does not contain any tileset nodes, which are required
+    /// to determine dependencies.
+    /// </exception>
     protected List< FileInfo > GetDependencyFileHandles( FileInfo tmxFile )
     {
         var fileHandles = new List< FileInfo >();
@@ -217,7 +236,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
                 if ( imageElement != null )
                 {
-                    var imageSource = imageElement?.GetAttribute( "source" );
+                    var imageSource = imageElement.GetAttribute( "source" );
                     var image       = GetRelativeFileHandle( tmxFile, imageSource );
 
                     fileHandles.Add( image! );
@@ -262,10 +281,21 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
         return fileHandles;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Adds static tiles to the map using the specified parameters. This implemengtation is
+    /// abstract and must be overridden by subclasses.
+    /// </summary>
+    /// <param name="element">The XML element representing the current tile or node to process.</param>
+    /// <param name="tileContext">The context associated with the tile layer being processed.</param>
+    /// <param name="tileElements">A list of XML elements representing tiles to be added.</param>
+    /// <param name="tileMetrics">Metrics that define the dimensions and properties of the tiles.</param>
+    /// <param name="source">The source path or identifier of the tileset being used.</param>
+    /// <param name="offsetX">The horizontal offset for tile placement, in pixels.</param>
+    /// <param name="offsetY">The vertical offset for tile placement, in pixels.</param>
+    /// <param name="imageDetails">Details about the image or texture associated with the tiles.</param>
     protected override void AddStaticTiles( XmlReader.Element? element,
                                             TileContext tileContext,
-                                            List< XmlReader.Element? > tileElements,
+                                            List< XmlReader.Element? >? tileElements,
                                             TileMetrics tileMetrics,
                                             string? source,
                                             int offsetX,

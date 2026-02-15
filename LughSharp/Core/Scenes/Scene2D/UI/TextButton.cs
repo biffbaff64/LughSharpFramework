@@ -102,11 +102,11 @@ public class TextButton : Button
 
             if ( Label != null )
             {
-                var labelStyle = Label.Style;
+                var labelStyle = Label.GetStyle();
 
                 labelStyle.Font      = value.Font!;
                 labelStyle.FontColor = value.FontColor;
-                Label.Style          = labelStyle;
+                Label.SetStyle( labelStyle );
             }
         }
     }
@@ -203,7 +203,7 @@ public class TextButton : Button
     {
         if ( Label != null )
         {
-            Label.Style.FontColor = GetFontColor();
+            Label.GetStyle().FontColor = GetFontColor();
             base.Draw( batch, parentAlpha );
         }
     }

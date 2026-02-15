@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
@@ -53,6 +54,17 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ProgressBar : Widget, IDisableable
 {
+    public float KnobPosition { get; set; }
+    public float MinValue     { get; set; }
+    public float MaxValue     { get; set; }
+    public float Value        { get; set; }
+    public bool  IsVertical   { get; set; }
+    public bool  IsRound      { get; set; } = true;
+    public bool  IsDisabled   { get; set; }
+
+    public Interpolator AnimateInterpolation { get; set; } = Interpolation.Linear;
+    public Interpolator VisualInterpolation  { get; set; } = Interpolation.Linear;
+
     // ========================================================================
 
     private const    float DEFAULT_PREF_WIDTH        = 140f;
@@ -118,18 +130,8 @@ public class ProgressBar : Widget, IDisableable
         IsVertical = vertical;
         Value      = min;
 
-        SetSize( GetPrefWidth(), GetPrefHeight() );
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
-
-    public float KnobPosition { get; set; }
-    public float MinValue     { get; set; }
-    public float MaxValue     { get; set; }
-    public float Value        { get; set; }
-    public bool  IsVertical   { get; set; }
-    public bool  IsRound      { get; set; } = true;
-
-    public Interpolator AnimateInterpolation { get; set; } = Interpolation.Linear;
-    public Interpolator VisualInterpolation  { get; set; } = Interpolation.Linear;
 
     // ========================================================================
 
@@ -160,8 +162,6 @@ public class ProgressBar : Widget, IDisableable
             InvalidateHierarchy();
         }
     }
-
-    public bool IsDisabled { get; set; }
 
     public override void Act( float delta )
     {
@@ -493,7 +493,12 @@ public class ProgressBar : Widget, IDisableable
         }
     }
 
-    public float GetPrefWidth()
+    public override float GetPrefWidth()
+    {
+        return GetPrefWidthSafe();
+    }
+    
+    protected float GetPrefWidthSafe()
     {
         if ( IsVertical )
         {
@@ -506,7 +511,12 @@ public class ProgressBar : Widget, IDisableable
         return DEFAULT_PREF_WIDTH;
     }
 
-    public float GetPrefHeight()
+    public override float GetPrefHeight()
+    {
+        return GetPrefHeightSafe();
+    }
+    
+    protected float GetPrefHeightSafe()
     {
         if ( IsVertical )
         {
@@ -621,6 +631,18 @@ public class ProgressBar : Widget, IDisableable
     [PublicAPI]
     public class ProgressBarStyle
     {
+        // The progress bar background, stretched only in one direction.
+        public ISceneDrawable? Background         { get; set; }
+        public ISceneDrawable? DisabledBackground { get; set; }
+        public ISceneDrawable? Knob               { get; set; }
+        public ISceneDrawable? DisabledKnob       { get; set; }
+        public ISceneDrawable? KnobBefore         { get; set; }
+        public ISceneDrawable? DisabledKnobBefore { get; set; }
+        public ISceneDrawable? KnobAfter          { get; set; }
+        public ISceneDrawable? DisabledKnobAfter  { get; set; }
+
+        // ====================================================================
+        
         public ProgressBarStyle()
         {
         }
@@ -642,15 +664,5 @@ public class ProgressBar : Widget, IDisableable
             KnobAfter          = style.KnobAfter;
             DisabledKnobAfter  = style.DisabledKnobAfter;
         }
-
-        // The progress bar background, stretched only in one direction.
-        public ISceneDrawable? Background         { get; set; }
-        public ISceneDrawable? DisabledBackground { get; set; }
-        public ISceneDrawable? Knob               { get; set; }
-        public ISceneDrawable? DisabledKnob       { get; set; }
-        public ISceneDrawable? KnobBefore         { get; set; }
-        public ISceneDrawable? DisabledKnobBefore { get; set; }
-        public ISceneDrawable? KnobAfter          { get; set; }
-        public ISceneDrawable? DisabledKnobAfter  { get; set; }
     }
 }

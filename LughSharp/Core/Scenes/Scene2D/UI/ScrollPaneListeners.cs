@@ -38,18 +38,18 @@ public class ScrollPaneScrollListener( ScrollPane parent ) : InputListener
 
         _parent!.SetScrollbarsVisible( true );
 
-        if ( _parent!.ScrollY || _parent!.ScrollX )
+        if ( _parent!.IsScrollY || _parent!.IsScrollX )
         {
-            if ( _parent!.ScrollY )
+            if ( _parent!.IsScrollY )
             {
-                if ( !_parent!.ScrollX && ( scrollAmountY == 0 ) )
+                if ( !_parent!.IsScrollX && ( scrollAmountY == 0 ) )
                 {
                     scrollAmountY = scrollAmountX;
                 }
             }
             else
             {
-                if ( _parent!.ScrollX && ( scrollAmountX == 0 ) )
+                if ( _parent!.IsScrollX && ( scrollAmountX == 0 ) )
                 {
                     scrollAmountX = scrollAmountY;
                 }
@@ -103,7 +103,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
         }
 
         if ( _parent!.ScrollBarTouch
-          && _parent!.ScrollX
+          && _parent!.IsScrollX
           && _parent!.HScrollBounds.Contains( x, y ) )
         {
             inputEvent?.Stop();
@@ -125,7 +125,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
         }
 
         if ( _parent!.ScrollBarTouch
-          && _parent!.ScrollY
+          && _parent!.IsScrollY
           && _parent!.VScrollBounds.Contains( x, y ) )
         {
             inputEvent?.Stop();
@@ -254,7 +254,7 @@ public class ScrollPaneGestureListener : ActorGestureListener
         _parent!.ClampPane();
 
         if ( _parent!.CancelTouchFocus &&
-             ( ( _parent!.ScrollX && ( deltaX != 0 ) ) || ( _parent!.ScrollY && ( deltaY != 0 ) ) ) )
+             ( ( _parent!.IsScrollX && ( deltaX != 0 ) ) || ( _parent!.IsScrollY && ( deltaY != 0 ) ) ) )
         {
             _parent!.TouchFocusCancel();
         }
@@ -265,7 +265,7 @@ public class ScrollPaneGestureListener : ActorGestureListener
     {
         Guard.Against.Null( _parent );
 
-        if ( ( Math.Abs( x ) > 150 ) && _parent!.ScrollX )
+        if ( ( Math.Abs( x ) > 150 ) && _parent!.IsScrollX )
         {
             _parent!.FlingTimer = _parent!.FlingTime;
             _parent!.VelocityX   = x;
@@ -276,7 +276,7 @@ public class ScrollPaneGestureListener : ActorGestureListener
             }
         }
 
-        if ( ( Math.Abs( y ) > 150 ) && _parent!.ScrollY )
+        if ( ( Math.Abs( y ) > 150 ) && _parent!.IsScrollY )
         {
             _parent!.FlingTimer = _parent!.FlingTime;
             _parent!.VelocityY   = -y;

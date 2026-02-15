@@ -22,12 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
-using LughSharp.Core.Files;
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
@@ -54,7 +50,7 @@ public class Cell : IPoolable, IResetable
     public Value? PadLeft     { get; set; }
     public Value? PadBottom   { get; set; }
     public Value? PadRight    { get; set; }
-    public int    Alignment   { get; set; } = Core.Utils.Align.NONE;
+    public int    Alignment   { get; set; } = Align.NONE;
     public int    ExpandX     { get; set; }
     public int    ExpandY     { get; set; }
     public int    Colspan     { get; set; }
@@ -90,10 +86,10 @@ public class Cell : IPoolable, IResetable
     private const int   ZEROI   = 0;
     private const int   ONEI    = 1;
     private const int   CENTERI = ONEI;
-    private const int   TOPI    = Core.Utils.Align.TOP;
-    private const int   BOTTOMI = Core.Utils.Align.BOTTOM;
-    private const int   LEFTI   = Core.Utils.Align.LEFT;
-    private const int   RIGHTI  = Core.Utils.Align.RIGHT;
+    private const int   TOPI    = Align.TOP;
+    private const int   BOTTOMI = Align.BOTTOM;
+    private const int   LEFTI   = Align.LEFT;
+    private const int   RIGHTI  = Align.RIGHT;
 
     // ========================================================================
     // ========================================================================
@@ -974,13 +970,13 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public Cell Top()
     {
-        if ( Alignment == Core.Utils.Align.NONE )
+        if ( Alignment == Align.NONE )
         {
             Alignment = TOPI;
         }
         else
         {
-            Alignment = ( Alignment | Core.Utils.Align.TOP ) & ~Core.Utils.Align.BOTTOM;
+            Alignment = ( Alignment | Align.TOP ) & ~Align.BOTTOM;
         }
 
         return this;
@@ -992,13 +988,13 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public Cell Left()
     {
-        if ( Alignment == Core.Utils.Align.NONE )
+        if ( Alignment == Align.NONE )
         {
             Alignment = LEFTI;
         }
         else
         {
-            Alignment = ( Alignment | Core.Utils.Align.LEFT ) & ~Core.Utils.Align.RIGHT;
+            Alignment = ( Alignment | Align.LEFT ) & ~Align.RIGHT;
         }
 
         return this;
@@ -1010,13 +1006,13 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public Cell Bottom()
     {
-        if ( Alignment == Core.Utils.Align.NONE )
+        if ( Alignment == Align.NONE )
         {
             Alignment = BOTTOMI;
         }
         else
         {
-            Alignment = ( Alignment | Core.Utils.Align.BOTTOM ) & ~Core.Utils.Align.TOP;
+            Alignment = ( Alignment | Align.BOTTOM ) & ~Align.TOP;
         }
 
         return this;
@@ -1028,13 +1024,13 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public Cell Right()
     {
-        if ( Alignment == Core.Utils.Align.NONE )
+        if ( Alignment == Align.NONE )
         {
             Alignment = RIGHTI;
         }
         else
         {
-            Alignment = ( Alignment | Core.Utils.Align.RIGHT ) & ~Core.Utils.Align.LEFT;
+            Alignment = ( Alignment | Align.RIGHT ) & ~Align.LEFT;
         }
 
         return this;
@@ -1186,12 +1182,12 @@ public class Cell : IPoolable, IResetable
         return MinHeight!.Get( Actor );
     }
 
-    public float GetPrefWidth()
+    public virtual float GetPrefWidth()
     {
         return PrefWidth!.Get( Actor );
     }
 
-    public float GetPrefHeight()
+    public virtual float GetPrefHeight()
     {
         return PrefHeight!.Get( Actor );
     }
@@ -1305,7 +1301,7 @@ public class Cell : IPoolable, IResetable
         PadRight    = null;
         FillX       = 0f;
         FillY       = 0f;
-        Alignment   = Core.Utils.Align.NONE;
+        Alignment   = Align.NONE;
         ExpandX     = 0;
         ExpandY     = 0;
         Colspan     = 0;

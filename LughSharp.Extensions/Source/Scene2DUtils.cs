@@ -131,9 +131,9 @@ public class Scene2DUtils
 
         var label = new Label( labelText, label1Style )
         {
-            Style      = label1Style,
             LabelAlign = Align.CENTER
         };
+        label.SetStyle( label1Style );
         label.SetPosition( pos.X, pos.Y );
 
         return label;
@@ -229,11 +229,11 @@ public class Scene2DUtils
     public Label MakeLabel( string str, int x, int y, Color color, Skin skin )
     {
         var label = new Label( str, skin );
-        var style = label.Style;
+        var style = label.GetStyle();
 
         style.FontColor = color;
 
-        label.Style = style;
+        label.SetStyle( style );
         label.SetAlignment( Align.CENTER );
         label.SetPosition( x, y );
 

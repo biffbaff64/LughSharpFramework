@@ -562,7 +562,7 @@ public class VerticalGroup : WidgetGroup
         }
     }
 
-    public float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         if ( _sizeInvalid )
         {
@@ -572,7 +572,7 @@ public class VerticalGroup : WidgetGroup
         return _prefWidth;
     }
 
-    public float GetPrefHeight()
+    public override float GetPrefHeight()
     {
         if ( Wrapping )
         {

@@ -713,7 +713,7 @@ public class Table : WidgetGroup
         return _cells;
     }
 
-    public virtual float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         if ( _sizeInvalid )
         {
@@ -725,7 +725,7 @@ public class Table : WidgetGroup
         return _background != null ? Math.Max( width, _background.MinWidth ) : width;
     }
 
-    public virtual float GetPrefHeight()
+    public override float GetPrefHeight()
     {
         if ( _sizeInvalid )
         {
@@ -737,7 +737,7 @@ public class Table : WidgetGroup
         return _background != null ? Math.Max( height, _background.MinHeight ) : height;
     }
 
-    public float GetMinWidth()
+    public override float GetMinWidth()
     {
         if ( _sizeInvalid )
         {
@@ -747,7 +747,7 @@ public class Table : WidgetGroup
         return _tableMinWidth;
     }
 
-    public float GetMinHeight()
+    public override float GetMinHeight()
     {
         if ( _sizeInvalid )
         {

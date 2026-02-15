@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
@@ -49,7 +50,7 @@ public class Scene2DImage : Widget
     public ISceneDrawable? Drawable    { get; private set; }
 
     // ========================================================================
-    
+
     /// <summary>
     /// The alignment of the image within the widget.
     /// </summary>
@@ -73,8 +74,10 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Creates a new, unitialised, Image instance.
     /// </summary>
-    public Scene2DImage() : this( ( ISceneDrawable? )null )
+    public Scene2DImage()
     {
+        Drawable = null;
+        _scaling = Scaling.None;
     }
 
     /// <summary>
@@ -116,31 +119,40 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// 
+    /// Creates a new Image instance with the specified <see cref="ISceneDrawable"/>.
     /// </summary>
     /// <param name="drawable"></param>
-    public Scene2DImage( ISceneDrawable? drawable )
+    public Scene2DImage( ISceneDrawable drawable )
         : this( drawable, Scaling.None )
     {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new Image instance with the specified <see cref="ISceneDrawable"/>,
+    /// <see cref="Scaling"/>Mode, and alignment. Alignment defaults to <see cref="Align.CENTER"/>.
     /// </summary>
     /// <param name="drawable"></param>
     /// <param name="scaling"></param>
     /// <param name="align"></param>
-    public Scene2DImage( ISceneDrawable? drawable,
+    public Scene2DImage( ISceneDrawable drawable,
                          Scaling scaling,
-                         int align = Core.Utils.Align.CENTER )
+                         int align = Align.CENTER )
     {
         SetDrawable( drawable );
 
         _scaling  = scaling;
         Alignment = align;
         Name      = GetType().Name;
-        
-        SetSize( GetPrefWidth(), GetPrefHeight() );
+
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+
+        Logger.Debug( $"Name: {Name}" );
+        Logger.Debug( $"Alignment: {Alignment}" );
+        Logger.Debug( $"Scaling: {_scaling}" );
+        Logger.Debug( $"Size: {Width}, {Height}" );
+        Logger.Debug( $"Drawable: TopHeight: {Drawable!.TopHeight}, BottomHeight: {Drawable.BottomHeight}" );
+        Logger.Debug( $"Drawable: LeftWidth: {Drawable.LeftWidth}, RightWidth: {Drawable.RightWidth}" );
+        Logger.Debug( $"Drawable: MinWidth: {Drawable.MinWidth}, MinHeight: {Drawable.MinHeight}" );
     }
 
     /// <summary>
@@ -148,13 +160,17 @@ public class Scene2DImage : Widget
     /// minimum width of the associated drawable if one is set, or 0 if no
     /// drawable is assigned.
     /// </summary>
-    public override float GetPrefWidth() => Drawable?.MinWidth ?? 0;
+    public override float GetPrefWidth() => GetPrefWidthSafe();
+
+    protected float GetPrefWidthSafe() => Drawable?.MinWidth ?? 0;
 
     /// <summary>
     /// The preferred height of the widget, typically derived from the minimum
     /// height of the drawable.
     /// </summary>
-    public override float GetPrefHeight() => Drawable?.MinWidth ?? 0;
+    public override float GetPrefHeight() => GetPrefHeightSafe();
+
+    protected float GetPrefHeightSafe() => Drawable?.MinHeight ?? 0;
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor has
@@ -165,11 +181,11 @@ public class Scene2DImage : Widget
     /// </summary>
     public override void SetLayout()
     {
-        if ( Drawable == null )
+        if ( Drawable is null )
         {
-            return;
+            throw new InvalidOperationException( "Drawable cannot be null" );
         }
-
+        
         var regionWidth  = Drawable.MinWidth;
         var regionHeight = Drawable.MinHeight;
         var width        = Width;
@@ -180,11 +196,11 @@ public class Scene2DImage : Widget
         ImageWidth  = size.X;
         ImageHeight = size.Y;
 
-        if ( ( Alignment & Core.Utils.Align.LEFT ) != 0 )
+        if ( ( Alignment & Align.LEFT ) != 0 )
         {
             ImageX = 0;
         }
-        else if ( ( Alignment & Core.Utils.Align.RIGHT ) != 0 )
+        else if ( ( Alignment & Align.RIGHT ) != 0 )
         {
             ImageX = ( int )( width - ImageWidth );
         }
@@ -193,11 +209,11 @@ public class Scene2DImage : Widget
             ImageX = ( int )( ( width / 2 ) - ( ImageWidth / 2 ) );
         }
 
-        if ( ( Alignment & Core.Utils.Align.TOP ) != 0 )
+        if ( ( Alignment & Align.TOP ) != 0 )
         {
             ImageY = ( int )( height - ImageHeight );
         }
-        else if ( ( Alignment & Core.Utils.Align.BOTTOM ) != 0 )
+        else if ( ( Alignment & Align.BOTTOM ) != 0 )
         {
             ImageY = 0;
         }
@@ -271,7 +287,7 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// Sets the <see cref="ISceneDrawable"/> for this Image.
+    /// Sets the drawable for the image using the specified skin and drawable name.
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="drawableName"></param>
@@ -286,21 +302,14 @@ public class Scene2DImage : Widget
     /// can be used to size the image to its pref size.
     /// </summary>
     /// <param name="drawable"> May be null. </param>
-    public void SetDrawable( ISceneDrawable? drawable )
+    public void SetDrawable( ISceneDrawable drawable )
     {
         if ( Drawable == drawable )
         {
             return;
         }
 
-        if ( drawable != null )
-        {
-            if ( !GetPrefWidth().Equals( drawable.MinWidth ) || !GetPrefHeight().Equals( drawable.MinHeight ) )
-            {
-                InvalidateHierarchy();
-            }
-        }
-        else
+        if ( !GetPrefWidth().Equals( drawable.MinWidth ) || !GetPrefHeight().Equals( drawable.MinHeight ) )
         {
             InvalidateHierarchy();
         }
@@ -343,4 +352,3 @@ public class Scene2DImage : Widget
 
 // ============================================================================
 // ============================================================================
-

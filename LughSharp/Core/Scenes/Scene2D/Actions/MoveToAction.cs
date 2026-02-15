@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Utils;
+
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>
@@ -33,7 +35,7 @@ public class MoveToAction : TemporalAction
     public float StartY    { get; set; }
     public float EndX      { get; set; }
     public float EndY      { get; set; }
-    public int   Alignment { get; set; } = Core.Utils.Align.BOTTOM_LEFT;
+    public int   Alignment { get; set; } = Align.BOTTOM_LEFT;
 
     protected override void Begin()
     {
@@ -72,7 +74,7 @@ public class MoveToAction : TemporalAction
     public override void Reset()
     {
         base.Reset();
-        Alignment = Core.Utils.Align.BOTTOM_LEFT;
+        Alignment = Align.BOTTOM_LEFT;
     }
 
     public void SetStartPosition( float x, float y )

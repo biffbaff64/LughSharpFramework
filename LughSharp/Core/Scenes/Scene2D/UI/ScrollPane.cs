@@ -80,22 +80,22 @@ public class ScrollPane : WidgetGroup
     /// <summary>
     /// Returns the maximum scroll value in the x direction.
     /// </summary>
-    public float MaxX { get; set; }
+    public float MaxScrollX { get; set; }
 
     /// <summary>
     /// Returns the maximum scroll value in the y direction.
     /// </summary>
-    public float MaxY { get; set; }
+    public float MaxScrollY { get; set; }
 
     /// <summary>
-    /// The x scroll position in pixels, where 0 is the left of the scroll pane.
+    /// Indicates whether horizontal scrolling is enabled within the scroll pane.
     /// </summary>
-    public bool ScrollX { get; set; }
+    public bool IsScrollX { get; set; }
 
     /// <summary>
-    /// The y scroll position in pixels, where 0 is the top of the scroll pane.
+    /// Indicates whether vertical scrolling is enabled within the scroll pane.
     /// </summary>
-    public bool ScrollY { get; set; }
+    public bool IsScrollY { get; set; }
 
     /// <summary>
     /// Flick scroll X velocity.
@@ -138,9 +138,9 @@ public class ScrollPane : WidgetGroup
     }
     
     /// If true, the scroll knobs are sized based on
-    /// <see cref="MaxX()"/>
+    /// <see cref="MaxScrollX"/>
     /// " or
-    /// <see cref="MaxY()"/>
+    /// <see cref="MaxScrollY"/>
     /// . If false, the scroll knobs are sized based on
     /// <see cref="ISceneDrawable.MinWidth"/>
     /// or
@@ -264,12 +264,12 @@ public class ScrollPane : WidgetGroup
         }
 
         AmountX = OverscrollX
-            ? MathUtils.Clamp( AmountX, -OverscrollDistance, MaxX + OverscrollDistance )
-            : MathUtils.Clamp( AmountX, 0, MaxX );
+            ? MathUtils.Clamp( AmountX, -OverscrollDistance, MaxScrollX + OverscrollDistance )
+            : MathUtils.Clamp( AmountX, 0, MaxScrollX );
 
         AmountY = OverscrollY
-            ? MathUtils.Clamp( AmountY, -OverscrollDistance, MaxY + OverscrollDistance )
-            : MathUtils.Clamp( AmountY, 0, MaxY );
+            ? MathUtils.Clamp( AmountY, -OverscrollDistance, MaxScrollY + OverscrollDistance )
+            : MathUtils.Clamp( AmountY, 0, MaxScrollY );
     }
 
     public override void Act( float delta )
@@ -308,7 +308,7 @@ public class ScrollPane : WidgetGroup
                 VelocityX = 0;
             }
 
-            if ( AmountX >= ( MaxX + OverscrollDistance ) )
+            if ( AmountX >= ( MaxScrollX + OverscrollDistance ) )
             {
                 VelocityX = 0;
             }
@@ -318,7 +318,7 @@ public class ScrollPane : WidgetGroup
                 VelocityY = 0;
             }
 
-            if ( AmountY >= ( MaxY + OverscrollDistance ) )
+            if ( AmountY >= ( MaxScrollY + OverscrollDistance ) )
             {
                 VelocityY = 0;
             }
@@ -341,11 +341,11 @@ public class ScrollPane : WidgetGroup
           && ( FlingTimer <= 0 )
           && !panning
           && ( !TouchScrollH ||
-               ( ScrollX && ( ( MaxX / ( HScrollBounds.Width - HKnobBounds.Width ) ) >
+               ( IsScrollX && ( ( MaxScrollX / ( HScrollBounds.Width - HKnobBounds.Width ) ) >
                               ( WidgetArea.Width * 0.1f ) ) ) )
           && ( !TouchScrollV ||
-               ( ScrollY &&
-                 ( ( MaxY / ( VScrollBounds.Height - VKnobBounds.Height ) ) > ( WidgetArea.Height * 0.1f ) ) ) ) )
+               ( IsScrollY &&
+                 ( ( MaxScrollY / ( VScrollBounds.Height - VKnobBounds.Height ) ) > ( WidgetArea.Height * 0.1f ) ) ) ) )
         {
             if ( !VisualAmountX.Equals( AmountX ) )
             {
@@ -388,7 +388,7 @@ public class ScrollPane : WidgetGroup
 
         if ( !panning )
         {
-            if ( OverscrollX && ScrollX )
+            if ( OverscrollX && IsScrollX )
             {
                 if ( AmountX < 0 )
                 {
@@ -407,26 +407,26 @@ public class ScrollPane : WidgetGroup
 
                     animating = true;
                 }
-                else if ( AmountX > MaxX )
+                else if ( AmountX > MaxScrollX )
                 {
                     SetScrollbarsVisible( true );
 
                     AmountX -= ( OverscrollSpeedMin
                                + ( ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                   * -( MaxX - AmountX ) )
+                                   * -( MaxScrollX - AmountX ) )
                                  / OverscrollDistance ) )
                              * delta;
 
-                    if ( AmountX < MaxX )
+                    if ( AmountX < MaxScrollX )
                     {
-                        AmountX = MaxX;
+                        AmountX = MaxScrollX;
                     }
 
                     animating = true;
                 }
             }
 
-            if ( OverscrollY && ScrollY )
+            if ( OverscrollY && IsScrollY )
             {
                 if ( AmountY < 0 )
                 {
@@ -445,19 +445,19 @@ public class ScrollPane : WidgetGroup
 
                     animating = true;
                 }
-                else if ( AmountY > MaxY )
+                else if ( AmountY > MaxScrollY )
                 {
                     SetScrollbarsVisible( true );
 
                     AmountY -= ( OverscrollSpeedMin
                                + ( ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                   * -( MaxY - AmountY ) )
+                                   * -( MaxScrollY - AmountY ) )
                                  / OverscrollDistance ) )
                              * delta;
 
-                    if ( AmountY < MaxY )
+                    if ( AmountY < MaxScrollY )
                     {
-                        AmountY = MaxY;
+                        AmountY = MaxScrollY;
                     }
 
                     animating = true;
@@ -534,13 +534,13 @@ public class ScrollPane : WidgetGroup
         }
 
         // Determine if horizontal/vertical scrollbars are needed.
-        ScrollX = ForceScrollX || ( ( widgetWidth > WidgetArea.Width ) && !DisableXScroll );
-        ScrollY = ForceScrollY || ( ( widgetHeight > WidgetArea.Height ) && !DisableYScroll );
+        IsScrollX = ForceScrollX || ( ( widgetWidth > WidgetArea.Width ) && !DisableXScroll );
+        IsScrollY = ForceScrollY || ( ( widgetHeight > WidgetArea.Height ) && !DisableYScroll );
 
         // Adjust widget area for scrollbar sizes and check if it causes the other scrollbar to show.
         if ( !ScrollbarsOnTop )
         {
-            if ( ScrollY )
+            if ( IsScrollY )
             {
                 WidgetArea.Width -= scrollbarWidth;
 
@@ -550,13 +550,13 @@ public class ScrollPane : WidgetGroup
                 }
 
                 // Horizontal scrollbar may cause vertical scrollbar to show.
-                if ( !ScrollX && ( widgetWidth > WidgetArea.Width ) && !DisableXScroll )
+                if ( !IsScrollX && ( widgetWidth > WidgetArea.Width ) && !DisableXScroll )
                 {
-                    ScrollX = true;
+                    IsScrollX = true;
                 }
             }
 
-            if ( ScrollX )
+            if ( IsScrollX )
             {
                 WidgetArea.Height -= scrollbarHeight;
 
@@ -566,9 +566,9 @@ public class ScrollPane : WidgetGroup
                 }
 
                 // Vertical scrollbar may cause horizontal scrollbar to show.
-                if ( !ScrollY && ( widgetHeight > WidgetArea.Height ) && !DisableYScroll )
+                if ( !IsScrollY && ( widgetHeight > WidgetArea.Height ) && !DisableYScroll )
                 {
-                    ScrollY          =  true;
+                    IsScrollY          =  true;
                     WidgetArea.Width -= scrollbarWidth;
 
                     if ( !VScrollOnRight )
@@ -583,14 +583,14 @@ public class ScrollPane : WidgetGroup
         widgetWidth  = DisableXScroll ? WidgetArea.Width : Math.Max( WidgetArea.Width, widgetWidth );
         widgetHeight = DisableYScroll ? WidgetArea.Height : Math.Max( WidgetArea.Height, widgetHeight );
 
-        MaxX = widgetWidth - WidgetArea.Width;
-        MaxY = widgetHeight - WidgetArea.Height;
+        MaxScrollX = widgetWidth - WidgetArea.Width;
+        MaxScrollY = widgetHeight - WidgetArea.Height;
 
-        AmountX = MathUtils.Clamp( AmountX, 0, MaxX );
-        AmountY = MathUtils.Clamp( AmountY, 0, MaxY );
+        AmountX = MathUtils.Clamp( AmountX, 0, MaxScrollX );
+        AmountY = MathUtils.Clamp( AmountY, 0, MaxScrollY );
 
         // Set the scrollbar and knob bounds.
-        if ( ScrollX )
+        if ( IsScrollX )
         {
             if ( hScrollKnob != null )
             {
@@ -599,7 +599,7 @@ public class ScrollPane : WidgetGroup
 
                 HScrollBounds.Set( x, y, WidgetArea.Width, scrollbarHeight );
 
-                if ( ScrollY && ScrollbarsOnTop )
+                if ( IsScrollY && ScrollbarsOnTop )
                 {
                     HScrollBounds.Width -= scrollbarWidth;
 
@@ -637,7 +637,7 @@ public class ScrollPane : WidgetGroup
             }
         }
 
-        if ( ScrollY )
+        if ( IsScrollY )
         {
             if ( vScrollKnob != null )
             {
@@ -646,7 +646,7 @@ public class ScrollPane : WidgetGroup
 
                 VScrollBounds.Set( x, y, scrollbarWidth, WidgetArea.Height );
 
-                if ( ScrollX && ScrollbarsOnTop )
+                if ( IsScrollX && ScrollbarsOnTop )
                 {
                     VScrollBounds.Height -= scrollbarHeight;
 
@@ -698,8 +698,8 @@ public class ScrollPane : WidgetGroup
     private void UpdateWidgetPosition()
     {
         // Calculate the widget's position depending on the scroll state and available widget area.
-        var x = WidgetArea.X - ( ScrollX ? ( int )VisualAmountX : 0 );
-        var y = WidgetArea.Y - ( int )( ScrollY ? MaxY - VisualAmountY : MaxY );
+        var x = WidgetArea.X - ( IsScrollX ? ( int )VisualAmountX : 0 );
+        var y = WidgetArea.Y - ( int )( IsScrollY ? MaxScrollY - VisualAmountY : MaxScrollY );
 
         Widget?.SetPosition( x, y );
 
@@ -725,14 +725,14 @@ public class ScrollPane : WidgetGroup
         // Setup transform for this group.
         ApplyTransform( batch, ComputeTransform() );
 
-        if ( ScrollX )
+        if ( IsScrollX )
         {
             HKnobBounds.X = HScrollBounds.X
                           + ( int )( ( HScrollBounds.Width - HKnobBounds.Width )
                                    * GetVisualScrollPercentX() );
         }
 
-        if ( ScrollY )
+        if ( IsScrollY )
         {
             VKnobBounds.Y = VScrollBounds.Y
                           + ( int )( ( VScrollBounds.Height - VKnobBounds.Height )
@@ -786,8 +786,8 @@ public class ScrollPane : WidgetGroup
 
         batch.SetColor( r, g, b, a );
 
-        var x = ScrollX && ( HKnobBounds.Width > 0 );
-        var y = ScrollY && ( VKnobBounds.Height > 0 );
+        var x = IsScrollX && ( HKnobBounds.Width > 0 );
+        var y = IsScrollY && ( VKnobBounds.Height > 0 );
 
         if ( x && y )
         {
@@ -857,7 +857,7 @@ public class ScrollPane : WidgetGroup
         VelocityY  = velocityY;
     }
 
-    public float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         float width = 0;
 
@@ -877,7 +877,7 @@ public class ScrollPane : WidgetGroup
             width = Math.Max( width + background.LeftWidth + background.RightWidth, background.MinWidth );
         }
 
-        if ( ScrollY )
+        if ( IsScrollY )
         {
             float scrollbarWidth = 0;
 
@@ -897,7 +897,7 @@ public class ScrollPane : WidgetGroup
         return width;
     }
 
-    public float GetPrefHeight()
+    public override float GetPrefHeight()
     {
         float height = 0;
 
@@ -917,7 +917,7 @@ public class ScrollPane : WidgetGroup
             height = Math.Max( height + background.TopHeight + background.BottomHeight, background.MinHeight );
         }
 
-        if ( ScrollX )
+        if ( IsScrollX )
         {
             float scrollbarHeight = 0;
 
@@ -1019,8 +1019,8 @@ public class ScrollPane : WidgetGroup
 
         if ( touchable && ( Touchable == Touchable.Enabled ) && IsVisible )
         {
-            if ( ( ScrollX && TouchScrollH && HScrollBounds.Contains( x, y ) )
-              || ( ScrollY && TouchScrollV && VScrollBounds.Contains( x, y ) ) )
+            if ( ( IsScrollX && TouchScrollH && HScrollBounds.Contains( x, y ) )
+              || ( IsScrollY && TouchScrollV && VScrollBounds.Contains( x, y ) ) )
             {
                 return this;
             }
@@ -1034,7 +1034,7 @@ public class ScrollPane : WidgetGroup
     /// </summary>
     public float GetMouseWheelX()
     {
-        return Math.Min( WidgetArea.Width, Math.Max( WidgetArea.Width * 0.9f, MaxX * 0.1f ) / 4 );
+        return Math.Min( WidgetArea.Width, Math.Max( WidgetArea.Width * 0.9f, MaxScrollX * 0.1f ) / 4 );
     }
 
     /// <summary>
@@ -1042,7 +1042,7 @@ public class ScrollPane : WidgetGroup
     /// </summary>
     public float GetMouseWheelY()
     {
-        return Math.Min( WidgetArea.Height, Math.Max( WidgetArea.Height * 0.9f, MaxY * 0.1f ) / 4 );
+        return Math.Min( WidgetArea.Height, Math.Max( WidgetArea.Height * 0.9f, MaxScrollY * 0.1f ) / 4 );
     }
 
     /// <summary>
@@ -1057,52 +1057,52 @@ public class ScrollPane : WidgetGroup
 
     public float GetVisualScrollPercentX()
     {
-        if ( MaxX == 0 )
+        if ( MaxScrollX == 0 )
         {
             return 0;
         }
 
-        return MathUtils.Clamp( VisualAmountX / MaxX, 0, 1 );
+        return MathUtils.Clamp( VisualAmountX / MaxScrollX, 0, 1 );
     }
 
     public float GetVisualScrollPercentY()
     {
-        if ( MaxY == 0 )
+        if ( MaxScrollY == 0 )
         {
             return 0;
         }
 
-        return MathUtils.Clamp( VisualAmountY / MaxY, 0, 1 );
+        return MathUtils.Clamp( VisualAmountY / MaxScrollY, 0, 1 );
     }
 
     public float GetScrollPercentX()
     {
-        if ( MaxX == 0 )
+        if ( MaxScrollX == 0 )
         {
             return 0;
         }
 
-        return MathUtils.Clamp( AmountX / MaxX, 0, 1 );
+        return MathUtils.Clamp( AmountX / MaxScrollX, 0, 1 );
     }
 
     public void SetScrollPercentX( float percentX )
     {
-        AmountX = MaxX * MathUtils.Clamp( percentX, 0, 1 );
+        AmountX = MaxScrollX * MathUtils.Clamp( percentX, 0, 1 );
     }
 
     public float GetScrollPercentY()
     {
-        if ( MaxY == 0 )
+        if ( MaxScrollY == 0 )
         {
             return 0;
         }
 
-        return MathUtils.Clamp( AmountY / MaxY, 0, 1 );
+        return MathUtils.Clamp( AmountY / MaxScrollY, 0, 1 );
     }
 
     public void SetScrollPercentY( float percentY )
     {
-        AmountY = MaxY * MathUtils.Clamp( percentY, 0, 1 );
+        AmountY = MaxScrollY * MathUtils.Clamp( percentY, 0, 1 );
     }
 
     public void SetFlickScroll( bool flickScroll )
@@ -1169,33 +1169,33 @@ public class ScrollPane : WidgetGroup
             }
         }
 
-        AmountX = MathUtils.Clamp( amountX, 0, MaxX );
+        AmountX = MathUtils.Clamp( amountX, 0, MaxScrollX );
 
         var amountY = AmountY;
 
         if ( centerVertical )
         {
-            amountY = ( ( MaxY - y ) + ( WidgetArea.Height / 2 ) ) - ( height / 2 );
+            amountY = ( ( MaxScrollY - y ) + ( WidgetArea.Height / 2 ) ) - ( height / 2 );
         }
         else
         {
-            if ( amountY > ( ( MaxY - y - height ) + WidgetArea.Height ) )
+            if ( amountY > ( ( MaxScrollY - y - height ) + WidgetArea.Height ) )
             {
-                amountY = ( MaxY - y - height ) + WidgetArea.Height;
+                amountY = ( MaxScrollY - y - height ) + WidgetArea.Height;
             }
 
-            if ( amountY < ( MaxY - y ) )
+            if ( amountY < ( MaxScrollY - y ) )
             {
-                amountY = MaxY - y;
+                amountY = MaxScrollY - y;
             }
         }
 
-        AmountY = MathUtils.Clamp( amountY, 0f, MaxY );
+        AmountY = MathUtils.Clamp( amountY, 0f, MaxScrollY );
     }
 
     public float GetScrollBarHeight()
     {
-        if ( !ScrollX )
+        if ( !IsScrollX )
         {
             return 0;
         }
@@ -1217,7 +1217,7 @@ public class ScrollPane : WidgetGroup
 
     public float GetScrollBarWidth()
     {
-        if ( !ScrollY )
+        if ( !IsScrollY )
         {
             return 0;
         }
@@ -1406,8 +1406,6 @@ public class ScrollPane : WidgetGroup
     // ========================================================================
     // ========================================================================
 
-    #region expression bodies
-
     /// <summary>
     /// Called whenever the visual x scroll amount is changed.
     /// </summary>
@@ -1448,26 +1446,6 @@ public class ScrollPane : WidgetGroup
         return WidgetArea.Height;
     }
 
-    /// <summary>
-    /// Returns true if the widget is larger than the scroll pane horizontally.
-    /// </summary>
-    public bool IsScrollX()
-    {
-        return ScrollX;
-
-        //TODO:
-    }
-
-    /// <summary>
-    /// Returns true if the widget is larger than the scroll pane vertically.
-    /// </summary>
-    public bool IsScrollY()
-    {
-        return ScrollY;
-
-        //TODO:
-    }
-
     public bool IsScrollingDisabledX()
     {
         return DisableXScroll;
@@ -1480,22 +1458,22 @@ public class ScrollPane : WidgetGroup
 
     public bool IsLeftEdge()
     {
-        return !ScrollX || ( AmountX <= 0 );
+        return !IsScrollX || ( AmountX <= 0 );
     }
 
     public bool IsRightEdge()
     {
-        return !ScrollX || ( AmountX >= MaxX );
+        return !IsScrollX || ( AmountX >= MaxScrollX );
     }
 
     public bool IsTopEdge()
     {
-        return !ScrollY || ( AmountY <= 0 );
+        return !IsScrollY || ( AmountY <= 0 );
     }
 
     public bool IsBottomEdge()
     {
-        return !ScrollY || ( AmountY >= MaxY );
+        return !IsScrollY || ( AmountY >= MaxScrollY );
     }
 
     public bool IsDragging()
@@ -1505,22 +1483,22 @@ public class ScrollPane : WidgetGroup
 
     public float GetVisualScrollX()
     {
-        return !ScrollX ? 0 : VisualAmountX;
+        return !IsScrollX ? 0 : VisualAmountX;
     }
 
     public float GetVisualScrollY()
     {
-        return !ScrollY ? 0 : VisualAmountY;
+        return !IsScrollY ? 0 : VisualAmountY;
     }
 
     public void SetScrollX( float pixels )
     {
-        AmountX = MathUtils.Clamp( pixels, 0, MaxX );
+        AmountX = MathUtils.Clamp( pixels, 0, MaxScrollX );
     }
 
     public void SetScrollY( float pixels )
     {
-        AmountY = MathUtils.Clamp( pixels, 0, MaxY );
+        AmountY = MathUtils.Clamp( pixels, 0, MaxScrollY );
     }
 
     public bool IsFlinging()
@@ -1528,15 +1506,18 @@ public class ScrollPane : WidgetGroup
         return FlingTimer > 0;
     }
 
-    public float GetMinWidth()
+    public override float GetMinWidth()
     {
         return 0;
     }
 
-    public float GetMinHeight()
+    public override float GetMinHeight()
     {
         return 0;
     }
-
-    #endregion expression bodies
 }
+
+// ============================================================================
+// ============================================================================
+
+

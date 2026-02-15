@@ -60,7 +60,7 @@ public class MainGame : Game
     private OrthographicGameCamera?     _gameCam;
     private Texture?                    _image1;
     private Texture?                    _image2;
-    private Texture?                    _star;
+    private TextureRegion                    _star;
     private Stage?                      _stage;
     private Actor?                      _hudActor;
     private BitmapFont?                 _font;
@@ -147,7 +147,7 @@ public class MainGame : Game
 
                 if ( _star != null )
                 {
-                    _spriteBatch.Draw( _star, 10, 20 );
+                    _spriteBatch.Draw( _star, 10, 80 );
                 }
 
                 if ( _image1 != null )
@@ -229,7 +229,7 @@ public class MainGame : Game
             {
                 _spriteBatch?.Dispose();
                 _image1?.Dispose();
-                _star?.Dispose();
+//                _star?.Dispose();
                 _assetManager?.Dispose();
                 _tiledCam?.Dispose();
                 _gameCam?.Dispose();
@@ -294,7 +294,7 @@ public class MainGame : Game
 
         _image1 = new Texture( Assets.COMPLETE_STAR );
         _image2 = new Texture( Assets.HUD_PANEL );
-        _star   = new Texture( Assets.COMPLETE_STAR );
+        _star   = new TextureRegion( new Texture( Assets.COMPLETE_STAR ) );
 
         CreateStage();
         CreateFont();
@@ -311,14 +311,14 @@ public class MainGame : Game
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
-        _stage = new Stage( _gameCam.Viewport );
-        _hudActor           = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
+        _stage    = new Stage( _gameCam.Viewport );
+        _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
 
-        var style = new ImageButton.ImageButtonStyle
-        {
-            ImageUp   = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_UP ) ),
-            ImageDown = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_DOWN ) )
-        };
+//        var style = new ImageButton.ImageButtonStyle
+//        {
+//            ImageUp   = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_UP ) ),
+//            ImageDown = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_DOWN ) )
+//        };
 //        _hudActor = new ImageButton( style );
 
         _hudActor.IsVisible = true;

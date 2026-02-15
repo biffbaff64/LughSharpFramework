@@ -784,7 +784,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     /// <summary>
     /// Gets the preferred width of this tree.
     /// </summary>
-    public float GetPrefWidth()
+    public override float GetPrefWidth()
     {
         if ( _sizeInvalid )
         {
@@ -797,7 +797,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     /// <summary>
     /// Gets the preferred height of this tree.
     /// </summary>
-    public float GetPrefHeight()
+    public override float GetPrefHeight()
     {
         if ( _sizeInvalid )
         {
