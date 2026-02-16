@@ -119,7 +119,7 @@ public static class GLUtils
         fixed ( int* ptr = &currentBuffer[ 0 ] )
         {
             // Fetch the currently bound buffer
-            Engine.GL.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
+            Engine.GL.GetIntegerv( ( int )BufferBinding.ArrayBufferBinding, ptr );
         }
 
         if ( currentBuffer[ 0 ] != expectedBuffer )

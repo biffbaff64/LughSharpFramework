@@ -78,7 +78,7 @@ public class NewColor
     {
     }
 
-    private NewColor( ValidColors color )
+    private NewColor( ValidColor color )
     {
     }
 
@@ -120,7 +120,7 @@ public class NewColor
     // ========================================================================
 
     [PublicAPI]
-    public enum ValidColors
+    public enum ValidColor
     {
         Red,
         Green,

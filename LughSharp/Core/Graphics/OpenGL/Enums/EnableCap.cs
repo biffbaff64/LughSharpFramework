@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum EnableCap : int
+public enum EnableCap
 {
     // --------------------------------
     ColorArray    = IGL.GL_COLOR_ARRAY,

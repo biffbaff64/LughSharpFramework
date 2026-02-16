@@ -38,7 +38,7 @@ public class GraphicsBackend
     /// The supported underlying graphics backends.
     /// </summary>
     [PublicAPI]
-    public enum BackendType : int
+    public enum BackendType
     {
         /// <summary>
         /// OpenGL graphics backend.
@@ -82,7 +82,7 @@ public class GraphicsBackend
     /// Sub-categories for OpenGL
     /// </summary>
     [PublicAPI]
-    public enum OpenGLSubCategories
+    public enum OpenGLSubCategory
     {
         GL10,
         GL20,
@@ -105,7 +105,7 @@ public class GraphicsBackend
     public struct BackendInfo
     {
         public BackendType         Type        { get; set; }
-        public OpenGLSubCategories SubCategory { get; set; }
+        public OpenGLSubCategory SubCategory { get; set; }
     }
 }
 

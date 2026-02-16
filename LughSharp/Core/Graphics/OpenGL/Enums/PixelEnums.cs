@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum PixelType : int
+public enum PixelType
 {
     UnsignedShort4444 = IGL.GL_UNSIGNED_SHORT_4_4_4_4,
     UnsignedShort5551 = IGL.GL_UNSIGNED_SHORT_5_5_5_1,
@@ -36,7 +36,7 @@ public enum PixelType : int
 }
 
 [PublicAPI]
-public enum GLPixelFormat : int
+public enum GLPixelFormat
 {
     Alpha          = IGL.GL_ALPHA,
     Luminance      = IGL.GL_LUMINANCE,
@@ -51,7 +51,7 @@ public enum GLPixelFormat : int
 }
 
 [PublicAPI]
-public enum PixelInternalFormat : int
+public enum PixelInternalFormat
 {
     Alpha          = IGL.GL_ALPHA,
     Rgb            = IGL.GL_RGB,
@@ -62,7 +62,7 @@ public enum PixelInternalFormat : int
 }
 
 [PublicAPI]
-public enum PixelStoreParameter : int
+public enum PixelStoreParameter
 {
     UnpackAlignment  = IGL.GL_UNPACK_ALIGNMENT,
     PackAlignment    = IGL.GL_PACK_ALIGNMENT,

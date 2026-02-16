@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum TextureUnit : int
+public enum TextureUnit
 {
     None          = 0,
     ActiveTexture = IGL.GL_ACTIVE_TEXTURE,

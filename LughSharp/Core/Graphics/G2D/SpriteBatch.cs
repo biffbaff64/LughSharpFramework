@@ -780,7 +780,7 @@ public class SpriteBatch : IBatch
 
         fixed ( int* ptr = &maxTextureUnits[ 0 ] )
         {
-            Engine.GL.GetIntegerv( ( int )TextureLimits.MaxTextureImageUnits, ptr );
+            Engine.GL.GetIntegerv( ( int )TextureLimit.MaxTextureImageUnits, ptr );
         }
 
         if ( maxTextureUnits[ 0 ] < 32 )

@@ -42,7 +42,7 @@ public class Files : IFiles
     /// A <see cref="FileInfo"/> object that represents the file handle for the
     /// specified path and path type.
     /// </returns>
-    public virtual FileInfo GetFileHandle( string path, PathTypes type )
+    public virtual FileInfo GetFileHandle( string path, PathType type )
     {
         if ( string.IsNullOrEmpty( path ) )
         {
@@ -53,13 +53,13 @@ public class Files : IFiles
 
         return type switch
         {
-            PathTypes.Classpath => Classpath( path ),
-            PathTypes.Internal  => Internal( path ),
-            PathTypes.Absolute  => Absolute( path ),
-            PathTypes.Assembly  => Assembly( path ),
-            PathTypes.External  => External( path ),
-            PathTypes.Local     => Local( path ),
-            PathTypes.Assets    => Assets( path ),
+            PathType.Classpath => Classpath( path ),
+            PathType.Internal  => Internal( path ),
+            PathType.Absolute  => Absolute( path ),
+            PathType.Assembly  => Assembly( path ),
+            PathType.External  => External( path ),
+            PathType.Local     => Local( path ),
+            PathType.Assets    => Assets( path ),
 
             // ----------------------------------
 
@@ -74,7 +74,7 @@ public class Files : IFiles
     // Class path
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Classpath"/> file handle.
+    /// Convenience method that returns a <see cref="PathType.Classpath"/> file handle.
     /// </summary>
     public virtual FileInfo Classpath( string path )
     {
@@ -143,7 +143,7 @@ public class Files : IFiles
     // Internal storage
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Internal"/> file handle.
+    /// Convenience method that returns a <see cref="PathType.Internal"/> file handle.
     /// </summary>
     public virtual FileInfo Internal( string path )
     {
@@ -214,7 +214,7 @@ public class Files : IFiles
     // Absolute path
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Absolute"/> file handle.
+    /// Convenience method that returns a <see cref="PathType.Absolute"/> file handle.
     /// </summary>
     public virtual FileInfo Absolute( string path )
     {
@@ -244,7 +244,7 @@ public class Files : IFiles
     // External storage
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.External"/> file handle.
+    /// Convenience method that returns a <see cref="PathType.External"/> file handle.
     /// </summary>
     public virtual FileInfo External( string path )
     {
@@ -317,7 +317,7 @@ public class Files : IFiles
     // Default Assets path
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Assets"/> file handle.
+    /// Convenience method that returns a <see cref="PathType.Assets"/> file handle.
     /// </summary>
     public virtual FileInfo Assets( string path )
     {
@@ -360,7 +360,7 @@ public class Files : IFiles
     // Assembly path
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Assembly"/> file handle.
+    /// Convenience method that returns a <see cref="PathType.Assembly"/> file handle.
     /// </summary>
     public virtual FileInfo Assembly( string path )
     {
@@ -423,7 +423,7 @@ public class Files : IFiles
     // Local storage
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Local"/> file handle.
+    /// Convenience method that returns a <see cref="PathType.Local"/> file handle.
     /// </summary>
     public virtual FileInfo Local( string path )
     {

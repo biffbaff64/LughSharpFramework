@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Utils.Pooling;
 
@@ -124,8 +125,8 @@ public static class Pools
 
         if ( !TypePools.TryGetValue( typeof( T ), out var poolObject ) )
         {
-            throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. " +
-                                                 $"Cannot free object." );
+            // Ignore freeing an object that was never retained.
+            return;
         }
 
         var pool = ( Pool< T > )poolObject;

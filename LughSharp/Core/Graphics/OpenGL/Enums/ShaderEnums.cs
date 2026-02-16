@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ShaderType : int
+public enum ShaderType
 {
     VertexShader         = IGL.GL_VERTEX_SHADER,
     FragmentShader       = IGL.GL_FRAGMENT_SHADER,
@@ -38,7 +38,7 @@ public enum ShaderType : int
 }
 
 [PublicAPI]
-public enum ShaderParameterName : int
+public enum ShaderParameterName
 {
     CompileStatus = IGL.GL_COMPILE_STATUS,
     InfoLogLength = IGL.GL_INFO_LOG_LENGTH,

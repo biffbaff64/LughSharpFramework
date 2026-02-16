@@ -96,7 +96,7 @@ public class BitmapFont
 
     // ========================================================================
 
-    private readonly PathTypes             _pathType;
+    private readonly PathType             _pathType;
     private readonly List< TextureRegion > _regions;
 
     // ========================================================================
@@ -213,7 +213,7 @@ public class BitmapFont
         UseIntegerPositions = integer;
         Flipped             = data.Flipped;
         FontData            = data;
-        _pathType           = PathTypes.Local;
+        _pathType           = PathType.Local;
 
         if ( ( pageRegions == null ) || ( pageRegions.Count == 0 ) )
         {

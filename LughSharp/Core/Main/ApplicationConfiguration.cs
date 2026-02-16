@@ -43,7 +43,7 @@ public class ApplicationConfiguration
     public HdpiMode        HdpiMode                       { get; set; } = HdpiMode.Logical;
     public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
     public string          PreferencesDirectory           { get; set; } = ".prefs/";
-    public PathTypes       PreferencesFileType            { get; set; } = PathTypes.External;
+    public PathType       PreferencesFileType            { get; set; } = PathType.External;
     public bool            DisableAudio                   { get; set; }
     public int             AudioDeviceSimultaneousSources { get; set; } = 16;
     public int             AudioDeviceBufferSize          { get; set; } = 512;
@@ -95,7 +95,7 @@ public class ApplicationConfiguration
     public int       WindowMinHeight    { get; set; } = DEFAULT_WINDOW_MIN_HEIGHT;
     public int       WindowMaxWidth     { get; set; } = DEFAULT_WINDOW_MAX_WIDTH;
     public int       WindowMaxHeight    { get; set; } = DEFAULT_WINDOW_MAX_HEIGHT;
-    public PathTypes WindowIconFileType { get; set; }
+    public PathType WindowIconFileType { get; set; }
     public string[]? WindowIconPaths    { get; set; }
 
     /// <summary>
@@ -290,9 +290,9 @@ public class ApplicationConfiguration
     /// <summary>
     /// Sets the directory where <see cref="IPreferences"/> will be stored, as well as
     /// the file type to be used to store them. Defaults to "$USER_HOME/.prefs/"
-    /// and <see cref="PathTypes"/>.
+    /// and <see cref="PathType"/>.
     /// </summary>
-    public void SetPreferencesConfig( string preferencesDirectory, PathTypes preferencesFileType )
+    public void SetPreferencesConfig( string preferencesDirectory, PathType preferencesFileType )
     {
         PreferencesDirectory = preferencesDirectory;
         PreferencesFileType  = preferencesFileType;
@@ -420,7 +420,7 @@ public class ApplicationConfiguration
     /// </param>
     public void SetWindowIcon( params string[] filePaths )
     {
-        SetWindowIcon( PathTypes.Internal, filePaths );
+        SetWindowIcon( PathType.Internal, filePaths );
     }
 
     /// <summary>
@@ -429,11 +429,11 @@ public class ApplicationConfiguration
     /// </summary>
     /// <param name="fileType"> The type of file handle the paths are relative to. </param>
     /// <param name="filePaths">
-    /// One or more image paths, relative to the given <see cref="PathTypes"/>. Must be JPEG,
+    /// One or more image paths, relative to the given <see cref="PathType"/>. Must be JPEG,
     /// PNG, or BMP format. The one closest to the system's desired size will be scaled.
     /// Good sizes include 16x16, 32x32 and 48x48.
     /// </param>
-    public void SetWindowIcon( PathTypes fileType, params string[] filePaths )
+    public void SetWindowIcon( PathType fileType, params string[] filePaths )
     {
         WindowIconFileType = fileType;
         WindowIconPaths    = filePaths;

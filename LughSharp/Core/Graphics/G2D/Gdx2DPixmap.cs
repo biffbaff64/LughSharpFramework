@@ -178,7 +178,7 @@ public class Gdx2DPixmap : IDisposable
         Width       = width;
         Height      = height;
         ColorFormat = format;
-        Blend       = ( uint )Pixmap.BlendTypes.Default;
+        Blend       = ( uint )Pixmap.BlendType.Default;
         Scale       = ( uint )Pixmap.ScaleType.Default;
 
         var length = width * height * PixelFormat.BytesPerPixel( format );

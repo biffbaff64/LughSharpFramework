@@ -446,7 +446,7 @@ public abstract class GLTexture : IDisposable
         {
             var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.GetPixelFormat() );
 
-            tmp.Blending = Pixmap.BlendTypes.None;
+            tmp.Blending = Pixmap.BlendType.None;
             tmp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );
 
             if ( data.ShouldDisposePixmap() )

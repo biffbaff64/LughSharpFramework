@@ -1485,7 +1485,7 @@ public class Actor : IActor, IComparable< Actor >
             return;
         }
 
-        shapes.Set( ShapeRenderer.ShapeTypes.Lines );
+        shapes.Set( ShapeRenderer.ShapeRenderType.Lines );
 
         if ( Stage != null )
         {

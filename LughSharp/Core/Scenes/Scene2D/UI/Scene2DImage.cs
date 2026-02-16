@@ -30,7 +30,6 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -145,14 +144,6 @@ public class Scene2DImage : Widget
         Name      = GetType().Name;
 
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
-
-        Logger.Debug( $"Name: {Name}" );
-        Logger.Debug( $"Alignment: {Alignment}" );
-        Logger.Debug( $"Scaling: {_scaling}" );
-        Logger.Debug( $"Size: {Width}, {Height}" );
-        Logger.Debug( $"Drawable: TopHeight: {Drawable!.TopHeight}, BottomHeight: {Drawable.BottomHeight}" );
-        Logger.Debug( $"Drawable: LeftWidth: {Drawable.LeftWidth}, RightWidth: {Drawable.RightWidth}" );
-        Logger.Debug( $"Drawable: MinWidth: {Drawable.MinWidth}, MinHeight: {Drawable.MinHeight}" );
     }
 
     /// <summary>

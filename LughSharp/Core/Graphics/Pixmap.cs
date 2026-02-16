@@ -48,7 +48,7 @@ namespace LughSharp.Core.Graphics;
 /// </para>
 /// <para>
 /// By default all methods use blending. You can disable blending by setting it
-/// to <see cref="BlendTypes.None"/>, which may reduce blitting time by ~30%.
+/// to <see cref="BlendType.None"/>, which may reduce blitting time by ~30%.
 /// </para>
 /// <para>
 /// The <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)"/> method
@@ -75,8 +75,6 @@ public class Pixmap : IDisposable
     /// <param name="format">The <see cref="PixelFormat"/> </param>
     public Pixmap( int width, int height, int format )
     {
-        Logger.Checkpoint();
-
         try
         {
             Gdx2DPixmap = new Gdx2DPixmap( width, height, format );
@@ -179,10 +177,10 @@ public class Pixmap : IDisposable
     public int Height => Gdx2DPixmap.Height;
 
     /// <summary>
-    /// Sets the type of <see cref="BlendTypes"/> to be used for all operations.
-    /// Default is <see cref="BlendTypes.SourceOver"/>.
+    /// Sets the type of <see cref="BlendType"/> to be used for all operations.
+    /// Default is <see cref="BlendType.SourceOver"/>.
     /// </summary>
-    public BlendTypes Blending { get; set; } = BlendTypes.SourceOver;
+    public BlendType Blending { get; set; } = BlendType.SourceOver;
 
     /// <summary>
     /// Returns the OpenGL pixel format of this Pixmap.
@@ -256,7 +254,7 @@ public class Pixmap : IDisposable
     public byte[] PixelData => Gdx2DPixmap.PixmapBuffer.BackingArray();
 
     /// <summary>
-    /// Sets the type of interpolation <see cref="BlendTypes"/> to be used in
+    /// Sets the type of interpolation <see cref="BlendType"/> to be used in
     /// conjunction with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)"/>.
     /// </summary>
     public Filter FilterValue
@@ -675,7 +673,7 @@ public class Pixmap : IDisposable
     /// Blending functions to be set with <see cref="Pixmap.Blending"/>.
     /// </summary>
     [PublicAPI]
-    public enum BlendTypes
+    public enum BlendType
     {
         None       = 0,
         SourceOver = 1,

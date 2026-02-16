@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
@@ -30,6 +33,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -56,28 +60,12 @@ public class Window : Table
     public int    ResizeBorder    { get; set; } = 8;
     public bool   KeepWithinStage { get; set; } = true;
 
-    /// <summary>
-    /// This windows <see cref="WindowStyle"/> property.
-    /// </summary>
-    public WindowStyle? Style
-    {
-        get => _style;
-        set
-        {
-            _style = value;
-
-            SetBackground( _style?.Background );
-            TitleLabel!.SetStyle( new Label.LabelStyle( _style?.TitleFont!, _style?.TitleFontColor! ) );
-            InvalidateHierarchy();
-        }
-    }
-
     // ========================================================================
 
     protected int Edge { get; set; }
 
     // ========================================================================
-    
+
     private const int DEFAULT_WIDTH  = 150;
     private const int DEFAULT_HEIGHT = 150;
     private const int MOVE           = 1 << 5;
@@ -85,24 +73,46 @@ public class Window : Table
     private static readonly Vector2 _tmpPosition = new();
     private static readonly Vector2 _tmpSize     = new();
 
-    private WindowStyle? _style;
     private Table?       _titleTable;
+    private WindowStyle? _style;
 
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Creates a window with the specified title, and using the default
+    /// <see cref="WindowStyle"/> from the specified <see cref="Skin"/>
+    /// </summary>
+    /// <param name="title"> A string holding the title. </param>
+    /// <param name="skin"> The Skin. </param>
     public Window( string title, Skin skin )
         : this( title, skin.Get< WindowStyle >() )
     {
         Skin = skin;
     }
 
+    /// <summary>
+    /// Creates a window with the specified title, and using the named
+    /// <see cref="WindowStyle"/> from the specified <see cref="Skin"/>
+    /// </summary>
+    /// <param name="title"> A string holding the title. </param>
+    /// <param name="skin"> The Skin. </param>
+    /// <param name="styleName"> The name of the WindowStyle to use. </param>
     public Window( string title, Skin skin, string styleName )
         : this( title, skin.Get< WindowStyle >( styleName ) )
     {
         Skin = skin;
     }
 
+    /// <summary>
+    /// Creates a window with the specified title, and using the specified
+    /// <see cref="WindowStyle"/>. The window size will be set to the default sizes
+    /// of <see cref="DEFAULT_WIDTH"/> and <see cref="DEFAULT_HEIGHT"/>. A new
+    /// <see cref="WindowCaptureListener"/> and <see cref="WindowInputListener"/>
+    /// will be added to the window, and the window will be added to the stage.
+    /// </summary>
+    /// <param name="title"> The title. </param>
+    /// <param name="style"> The WindowStyle to use. </param>
     public Window( string title, WindowStyle style )
     {
         Touchable = Touchable.Enabled;
@@ -111,13 +121,12 @@ public class Window : Table
         TitleLabel = new Label( title, new Label.LabelStyle( style.TitleFont!, style.TitleFontColor! ) );
         TitleLabel.SetEllipsis( true );
 
-        _titleTable = new TitleTableClass( this );
-
+        _titleTable = new TitleTable( this );
         _titleTable.Add( TitleLabel ).SetExpandX().SetFillX().SetMinWidth( 0 );
 
         AddActor( _titleTable );
 
-        Style = _style = style;
+        SetStyle( style );
         SetSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 
         AddCaptureListener( new WindowCaptureListener( this ) );
@@ -125,6 +134,10 @@ public class Window : Table
     }
 
     /// <summary>
+    /// Ensures that the window remains within the bounds of the stage by adjusting
+    /// its position if necessary. The check accounts for the stage dimensions, camera
+    /// position, and zoom level, as well as whether the window is a direct child of
+    /// the stage's root group.
     /// </summary>
     public void EnsureWithinStage()
     {
@@ -139,7 +152,7 @@ public class Window : Table
             var parentHeight = Stage.Height;
 
             if ( ( GetX( Align.RIGHT ) - Stage.Camera.Position.X )
-                 > ( parentWidth / 2 / orthographicCamera.Zoom ) )
+               > ( parentWidth / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( Stage.Camera.Position.X + ( parentWidth / 2 / orthographicCamera.Zoom ),
                              GetY( Align.RIGHT ),
@@ -147,7 +160,7 @@ public class Window : Table
             }
 
             if ( ( GetX( Align.LEFT ) - Stage.Camera.Position.X )
-                 < ( -parentWidth / 2 / orthographicCamera.Zoom ) )
+               < ( -parentWidth / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( Stage.Camera.Position.X - ( parentWidth / 2 / orthographicCamera.Zoom ),
                              GetY( Align.LEFT ),
@@ -162,7 +175,7 @@ public class Window : Table
             }
 
             if ( ( GetY( Align.BOTTOM ) - Stage.Camera.Position.Y )
-                 < ( -parentHeight / 2 / orthographicCamera.Zoom ) )
+               < ( -parentHeight / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( GetX( Align.BOTTOM ),
                              Stage.Camera.Position.Y - ( parentHeight / 2 / orthographicCamera.Zoom ),
@@ -196,6 +209,11 @@ public class Window : Table
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="batch"></param>
+    /// <param name="parentAlpha"></param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         if ( Stage != null )
@@ -204,7 +222,7 @@ public class Window : Table
 
             EnsureWithinStage();
 
-            if ( Style?.StageBackground != null )
+            if ( GetStyle()?.StageBackground != null )
             {
                 StageToLocalCoordinates( _tmpPosition.Set( 0, 0 ) );
                 StageToLocalCoordinates( _tmpSize.Set( Stage.Width, Stage.Height ) );
@@ -225,7 +243,7 @@ public class Window : Table
     {
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
-        Style?.StageBackground?.Draw( batch, x, y, width, height );
+        GetStyle()?.StageBackground?.Draw( batch, x, y, width, height );
     }
 
     protected override void DrawBackground( IBatch batch, float parentAlpha, float x, float y )
@@ -298,15 +316,37 @@ public class Window : Table
             : Math.Max( base.GetPrefWidth(), _titleTable.GetPrefWidth() + GetPadLeft() + GetPadRight() );
     }
 
+    /// <summary>
+    /// Gets this windows <see cref="WindowStyle"/> property.
+    /// </summary>
+    public WindowStyle? GetStyle() => _style;
+
+    /// <summary>
+    /// Sets this windows <see cref="WindowStyle"/> property.
+    /// </summary>
+    public void SetStyle( WindowStyle? value )
+    {
+        _style = value;
+
+        if ( _style == null )
+        {
+            return;
+        }
+        
+        SetBackground( _style?.Background );
+        TitleLabel?.SetStyle( new Label.LabelStyle( _style?.TitleFont, _style?.TitleFontColor ) );
+        InvalidateHierarchy();
+    }
+
     // ========================================================================
     // ========================================================================
 
     [PublicAPI]
-    public class TitleTableClass : Table
+    public class TitleTable : Table
     {
         private readonly Window _window;
 
-        public TitleTableClass( Window window )
+        public TitleTable( Window window )
         {
             _window = window;
         }
@@ -340,7 +380,7 @@ public class Window : Table
             return false;
         }
     }
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -348,80 +388,21 @@ public class Window : Table
     public class WindowInputListener : InputListener
     {
         private readonly Window _window;
-        private          float  _lastX;
-        private          float  _lastY;
-        private          float  _startX;
-        private          float  _startY;
 
+        private float _lastX;
+        private float _lastY;
+        private float _startX;
+        private float _startY;
+
+        // ====================================================================
+
+        /// <summary>
+        /// Creates a new WindowInputListener for the specified window.
+        /// </summary>
+        /// <param name="window"> The Window. </param>
         public WindowInputListener( Window window )
         {
             _window = window;
-        }
-
-        private void UpdateEdge( float x, float y )
-        {
-            var border = _window.ResizeBorder / 2f;
-            var width  = _window.Width;
-            var height = _window.Height;
-
-            var padTop    = _window.GetPadTop();
-            var padLeft   = _window.GetPadLeft();
-            var padBottom = _window.GetPadBottom();
-            var padRight  = _window.GetPadRight();
-            var right     = width - padRight;
-
-            _window.Edge = 0;
-
-            if ( _window.IsResizable
-                 && ( x >= ( padLeft - border ) )
-                 && ( x <= ( right + border ) )
-                 && ( y >= ( padBottom - border ) ) )
-            {
-                if ( x < ( padLeft + border ) )
-                {
-                    _window.Edge |= Align.LEFT;
-                }
-
-                if ( x > ( right - border ) )
-                {
-                    _window.Edge |= Align.RIGHT;
-                }
-
-                if ( y < ( padBottom + border ) )
-                {
-                    _window.Edge |= Align.BOTTOM;
-                }
-
-                if ( _window.Edge != 0 )
-                {
-                    border += 25;
-                }
-
-                if ( x < ( padLeft + border ) )
-                {
-                    _window.Edge |= Align.LEFT;
-                }
-
-                if ( x > ( right - border ) )
-                {
-                    _window.Edge |= Align.RIGHT;
-                }
-
-                if ( y < ( padBottom + border ) )
-                {
-                    _window.Edge |= Align.BOTTOM;
-                }
-            }
-
-            if ( _window is { IsMovable: true, Edge: 0 }
-                 && ( y <= height )
-                 && ( y >= ( height - padTop ) )
-                 && ( x >= padLeft )
-                 && ( x <= right )
-               )
-            {
-                _window.Edge = MOVE;
-            }
         }
 
         public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
@@ -452,22 +433,17 @@ public class Window : Table
                 return;
             }
 
-            var width   = _window.Width;
-            var height  = _window.Height;
-            var windowX = _window.X;
-            var windowY = _window.Y;
-
+            var width     = _window.Width;
+            var height    = _window.Height;
+            var windowX   = _window.X;
+            var windowY   = _window.Y;
             var minWidth  = _window.GetMinWidth();
             var minHeight = _window.GetMinHeight();
-
-//            var maxWidth  = _window.GetMaxWidth();
-//            var maxHeight = _window.GetMaxHeight();
-
-            var stage = _window.Stage;
+            var stage     = _window.Stage;
 
             var clampPosition = _window.KeepWithinStage
-                                && ( stage != null )
-                                && ( _window.Parent == stage.RootGroup );
+                             && ( stage != null )
+                             && ( _window.Parent == stage.RootGroup );
 
             if ( ( _window.Edge & MOVE ) != 0 )
             {
@@ -576,9 +552,81 @@ public class Window : Table
             return _window.IsModal;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ev"></param>
+        /// <param name="character"></param>
+        /// <returns></returns>
         public override bool KeyTyped( InputEvent? ev, char character )
         {
             return _window.IsModal;
+        }
+
+        private void UpdateEdge( float x, float y )
+        {
+            var border = _window.ResizeBorder / 2f;
+            var width  = _window.Width;
+            var height = _window.Height;
+
+            var padTop    = _window.GetPadTop();
+            var padLeft   = _window.GetPadLeft();
+            var padBottom = _window.GetPadBottom();
+            var padRight  = _window.GetPadRight();
+            var right     = width - padRight;
+
+            _window.Edge = 0;
+
+            if ( _window.IsResizable
+              && ( x >= ( padLeft - border ) )
+              && ( x <= ( right + border ) )
+              && ( y >= ( padBottom - border ) ) )
+            {
+                if ( x < ( padLeft + border ) )
+                {
+                    _window.Edge |= Align.LEFT;
+                }
+
+                if ( x > ( right - border ) )
+                {
+                    _window.Edge |= Align.RIGHT;
+                }
+
+                if ( y < ( padBottom + border ) )
+                {
+                    _window.Edge |= Align.BOTTOM;
+                }
+
+                if ( _window.Edge != 0 )
+                {
+                    border += 25;
+                }
+
+                if ( x < ( padLeft + border ) )
+                {
+                    _window.Edge |= Align.LEFT;
+                }
+
+                if ( x > ( right - border ) )
+                {
+                    _window.Edge |= Align.RIGHT;
+                }
+
+                if ( y < ( padBottom + border ) )
+                {
+                    _window.Edge |= Align.BOTTOM;
+                }
+            }
+
+            if ( _window is { IsMovable: true, Edge: 0 }
+              && ( y <= height )
+              && ( y >= ( height - padTop ) )
+              && ( x >= padLeft )
+              && ( x <= right )
+               )
+            {
+                _window.Edge = MOVE;
+            }
         }
     }
 
@@ -597,11 +645,23 @@ public class Window : Table
         public ISceneDrawable? StageBackground { get; set; }
 
         // ====================================================================
-        
+
+        /// <summary>
+        /// Creates a new empty WindowStyle instance. Before using this style it will be
+        /// necessary to set the <see cref="Background"/>, <see cref="TitleFont"/> properties.
+        /// The <see cref="TitleFontColor"/>defaults to white, but can be changed to any color.
+        /// </summary>
         public WindowStyle()
         {
         }
 
+        /// <summary>
+        /// Creates a new WindowStyle instance with the specified parameters for
+        /// <see cref="TitleFont"/>, <see cref="TitleFontColor"/>, and <see cref="Background"/>.
+        /// </summary>
+        /// <param name="titleFont"></param>
+        /// <param name="titleFontColor"></param>
+        /// <param name="background"></param>
         public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable? background )
         {
             TitleFont  = titleFont;
@@ -610,6 +670,10 @@ public class Window : Table
             TitleFontColor?.Set( titleFontColor );
         }
 
+        /// <summary>
+        /// Copies the specified style into this style.
+        /// </summary>
+        /// <param name="style"> The style to copy from. </param>
         public WindowStyle( WindowStyle style )
         {
             Background = style.Background;

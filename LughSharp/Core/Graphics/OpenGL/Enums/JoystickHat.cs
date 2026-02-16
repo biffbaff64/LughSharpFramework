@@ -30,7 +30,7 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 /// Status of a joystick hat.
 /// </summary>
 [PublicAPI]
-public enum JoystickHats : byte
+public enum JoystickHat : byte
 {
     /// <summary>
     /// Hat is centered.

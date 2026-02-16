@@ -96,7 +96,7 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="internalPath">
     /// The internal path to the file. For an explanation of internal paths see
-    /// <see cref="PathTypes.Internal"/>.
+    /// <see cref="PathType.Internal"/>.
     /// </param>
     public Texture( string internalPath )
         : this( Engine.Api.Files.Internal( internalPath ), false )

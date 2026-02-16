@@ -43,7 +43,7 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 /// </para>
 /// </summary>
 [PublicAPI]
-public enum TextureFilterMode : int
+public enum TextureFilterMode
 {
     /// <summary>
     /// Fetch the nearest texel that best maps to the pixel on screen.

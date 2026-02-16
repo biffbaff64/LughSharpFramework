@@ -26,18 +26,19 @@ namespace Template.Source;
 
 public static class Assets
 {
-    public const string BACKGROUND_IMAGE = @"Assets\title_background.png";
-    public const string HUD_PANEL        = @"Assets\hud_panel.png";
-    public const string COMPLETE_STAR    = @"Assets\complete_star.png";
-    public const string KEY_COLLECTED    = @"Assets\key_collected.png";
+    public const string BACKGROUND_IMAGE  = @"Assets\title_background.png";
+    public const string HUD_PANEL         = @"Assets\hud_panel.png";
+    public const string COMPLETE_STAR     = @"Assets\complete_star.png";
+    public const string KEY_COLLECTED     = @"Assets\key_collected.png";
+    public const string WINDOW_BACKGROUND = @"Assets\title_background.png";
+    public const string PAUSE_EXIT_BUTTON = @"Assets\pause_exit_button.png";
+    public const string BUTTON_B_UP       = @"Assets\packedimages\input\button_b.png";
+    public const string BUTTON_B_DOWN     = @"Assets\packedimages\input\button_b_pressed.png";
 
-    public const string BUTTON_B_UP      = @"Assets\packedimages\input\button_b.png";
-    public const string BUTTON_B_DOWN    = @"Assets\packedimages\input\button_b_pressed.png";
-    
     // ========================================================================
     // TMX Maps
-    public const string ROOM1_MAP       =  @"Assets\Maps\room1.tmx";
-    
+    public const string ROOM1_MAP = @"Assets\Maps\room1.tmx";
+
     // ========================================================================
     // Fonts
     public const string ARIAL_FONT            = @"Assets\Fonts\arial-15.fnt";

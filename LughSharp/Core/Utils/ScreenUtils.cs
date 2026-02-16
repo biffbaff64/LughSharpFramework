@@ -129,7 +129,7 @@ public static class ScreenUtils
         var pixmap    = Pixmap.CreateFromFrameBuffer( x, y, w, h );
         var potPixmap = new Pixmap( potW, potH, LughFormat.RGBA8888 );
 
-        potPixmap.Blending = Pixmap.BlendTypes.None;
+        potPixmap.Blending = Pixmap.BlendType.None;
         potPixmap.DrawPixmap( pixmap, 0, 0 );
 
         var texture       = new Texture( potPixmap );

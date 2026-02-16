@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum TextureParameter : int
+public enum TextureParameter
 {
     MinFilter             = IGL.GL_TEXTURE_MIN_FILTER,
     MagFilter             = IGL.GL_TEXTURE_MAG_FILTER,

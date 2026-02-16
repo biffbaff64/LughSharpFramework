@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Files;
 
 [PublicAPI]
-public enum PathTypes
+public enum PathType
 {
     /// <summary>
     /// Path relative to the root of the classpath. Classpath files are always readonly.

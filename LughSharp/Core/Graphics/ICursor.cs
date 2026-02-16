@@ -39,7 +39,7 @@ public interface ICursor
     /// Available system mouse cursor types.
     /// </summary>
     [PublicAPI]
-    public enum SystemCursor : int
+    public enum SystemCursor
     {
         Arrow,
         Ibeam,

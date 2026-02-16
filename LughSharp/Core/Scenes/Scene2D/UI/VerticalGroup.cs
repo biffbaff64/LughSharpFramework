@@ -790,7 +790,7 @@ public class VerticalGroup : WidgetGroup
             return;
         }
 
-        shapes.Set( ShapeRenderer.ShapeTypes.Lines );
+        shapes.Set( ShapeRenderer.ShapeRenderType.Lines );
 
         if ( Stage != null )
         {

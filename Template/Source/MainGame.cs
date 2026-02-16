@@ -60,12 +60,14 @@ public class MainGame : Game
     private OrthographicGameCamera?     _gameCam;
     private Texture?                    _image1;
     private Texture?                    _image2;
-    private TextureRegion                    _star;
+    private TextureRegion?              _star;
     private Stage?                      _stage;
-    private Actor?                      _hudActor;
+    private Scene2DImage?               _hudActor;
+    private Window?                     _windowActor;
+    private ImageButton?                _imageButton;
     private BitmapFont?                 _font;
     private Sprite?                     _sprite;
-    private Sprite?                     _star2;
+    private Sprite?                     _sprite2;
     private bool                        _disposed;
     private ILughTest?                  _test;
     private TmxMapLoader?               _tmxMapLoader;
@@ -103,7 +105,7 @@ public class MainGame : Game
     /// <inheritdoc />
     public override void Update()
     {
-        ScaleSprite();
+//        ScaleSprite();
         ScrollMap();
     }
 
@@ -140,10 +142,10 @@ public class MainGame : Game
                 _gameCam.Position.Z = 0;
                 _gameCam.Update();
 
-//                if ( _image2 != null )
-//                {
-//                    _spriteBatch.Draw( _image2, 0, 0 );
-//                }
+                if ( _image2 != null )
+                {
+                    _spriteBatch.Draw( _image2, 0, 0 );
+                }
 
                 if ( _star != null )
                 {
@@ -161,19 +163,14 @@ public class MainGame : Game
 
                 if ( _sprite != null )
                 {
-                    _sprite?.SetPosition( _spritePosition.X, _spritePosition.Y );
+                    _sprite?.SetPosition( 40, 120 );
                     _sprite?.Draw( _spriteBatch );
                 }
 
-                if ( _star2 != null )
+                if ( _sprite2 != null )
                 {
-                    _star2.SetPosition( 320, 240 );
-                    _star2.Draw( _spriteBatch );
-                }
-
-                if ( _hudActor is { UserObject: Texture } )
-                {
-                    _spriteBatch.Draw( ( Texture )_hudActor.UserObject, 0, 0 );
+                    _sprite2.SetPosition( 320, 240 );
+                    _sprite2.Draw( _spriteBatch );
                 }
 
                 _test?.Render( _spriteBatch );
@@ -240,7 +237,7 @@ public class MainGame : Game
                 // any extending classes? Maybe imlplement IDisposable in Sprite() and
                 // allow ( and encouraging ) extending classes to override it?
                 _sprite = null;
-                _star2  = null;
+                _sprite2  = null;
             }
 
             _disposed = true;
@@ -255,20 +252,16 @@ public class MainGame : Game
 
     private void CreateCameras()
     {
-        Logger.Checkpoint();
-
         const float ZOOM = 1f;
 
         _tiledCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
                                                 Engine.Api.Graphics.Height,
-                                                name: "MainCamera" );
+                                                name: "TILEDCamera" );
 
         _tiledCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
         _tiledCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
         _tiledCam.IsInUse     = true;
         _tiledCam.SetZoomDefault( ZOOM );
-
-        // Set initial camera position
         _tiledCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
         _tiledCam.Update();
 
@@ -290,48 +283,61 @@ public class MainGame : Game
 
     private void CreateAssets()
     {
-        Logger.Checkpoint();
-
         _image1 = new Texture( Assets.COMPLETE_STAR );
-        _image2 = new Texture( Assets.HUD_PANEL );
+        _image2 = new Texture( Assets.COMPLETE_STAR );
         _star   = new TextureRegion( new Texture( Assets.COMPLETE_STAR ) );
 
         CreateStage();
         CreateFont();
 //        CreateFreeTypeFont(); // Not working yet
-        CreateSprite();
+        CreateSprites();
     }
 
     private void CreateStage()
     {
-        Logger.Checkpoint();
-
         if ( _gameCam == null )
         {
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
-        _stage    = new Stage( _gameCam.Viewport );
-        _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) );
+        _stage = new Stage( _gameCam.Viewport );
+        _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) )
+        {
+            IsVisible = true
+        };
+        _hudActor.SetPosition( 0, 0 );
 
 //        var style = new ImageButton.ImageButtonStyle
 //        {
 //            ImageUp   = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_UP ) ),
 //            ImageDown = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_DOWN ) )
 //        };
-//        _hudActor = new ImageButton( style );
+//        _imageButton = new ImageButton( style )
+//        {
+//            IsVisible = true
+//        };
+//        _imageButton.SetPosition( 0, 0 );
 
-        _hudActor.IsVisible = true;
-        _hudActor.SetPosition( 0, 0 );
-
+//        var windowStyle = new Window.WindowStyle
+//        {
+//            TitleFont = _font,
+//            TitleFontColor = Color.White,
+//            Background = new TextureRegionDrawable( new Texture( Assets.WINDOW_BACKGROUND ) ),
+//        };
+//        _windowActor = new Window( "Window Title", windowStyle )
+//        {
+//            IsVisible = true,
+//        };
+//        _windowActor.SetPosition( 200, 180 );
+        
         _stage?.AddActor( _hudActor );
+//        _stage?.AddActor( _imageButton );
+//        _stage?.AddActor( _windowActor );
         _stage?.DebugAll = true;
     }
 
     private void CreateFont()
     {
-        Logger.Checkpoint();
-
         _font = new BitmapFont();
         _font.SetColor( Color.White );
         _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
@@ -340,8 +346,6 @@ public class MainGame : Game
 
     private void CreateFreeTypeFont()
     {
-        Logger.Checkpoint();
-
         var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AMBLE_REGULAR_26_FONT ) );
         var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
         {
@@ -352,24 +356,21 @@ public class MainGame : Game
         _font.SetColor( Color.White );
     }
 
-    private void CreateSprite()
+    private void CreateSprites()
     {
-        Logger.Checkpoint();
-
         _sprite = new Sprite( new TextureRegion( new Texture( Assets.KEY_COLLECTED ) ) );
-        _star2  = new Sprite( new TextureRegion( new Texture( Assets.COMPLETE_STAR ) ) );
-
-        _spritePosition.Set( 40, 120 );
-//        _sprite.SetPosition( _spritePosition.X, _spritePosition.Y );
-//        _sprite.SetBounds();
-//        _sprite.SetOriginCenter();
-//        _sprite.SetColor( Color.White );
+        _sprite.SetBounds();
+        _sprite.SetOriginCenter();
+        _sprite.SetColor( Color.White );
+        
+        _sprite2  = new Sprite( new TextureRegion( new Texture( Assets.PAUSE_EXIT_BUTTON ) ) );
+        _sprite2.SetBounds();
+        _sprite2.SetOriginCenter();
+        _sprite2.SetColor( Color.White );
     }
 
     private void CreateMap()
     {
-        Logger.Checkpoint();
-
         _tmxMapLoader = new TmxMapLoader();
         _tiledMap     = _tmxMapLoader.Load( Assets.ROOM1_MAP );
         _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );

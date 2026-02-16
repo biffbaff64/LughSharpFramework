@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum TextureTarget : int
+public enum TextureTarget
 {
     Texture1D               = IGL.GL_TEXTURE_1D,
     Texture2D               = IGL.GL_TEXTURE_2D,

@@ -424,7 +424,7 @@ public class DesktopGLWindow : IDisposable
     /// Sets the icon that will be used in the window's title bar. Has no effect in macOS,
     /// which doesn't use window icons.
     /// </summary>
-    public static void SetIcon( DotGLFW.Window window, string[] imagePaths, PathTypes imagePathType )
+    public static void SetIcon( DotGLFW.Window window, string[] imagePaths, PathType imagePathType )
     {
         if ( Platform.IsMac )
         {
@@ -474,7 +474,7 @@ public class DesktopGLWindow : IDisposable
             {
                 var rgba = new Pixmap( images[ i ].Width, images[ i ].Height, LughFormat.RGBA8888 );
 
-                rgba.Blending = Pixmap.BlendTypes.None;
+                rgba.Blending = Pixmap.BlendType.None;
                 rgba.DrawPixmap( images[ i ], 0, 0 );
 
                 tmpPixmaps[ i ] = rgba;

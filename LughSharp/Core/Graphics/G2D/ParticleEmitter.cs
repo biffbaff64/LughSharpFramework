@@ -63,7 +63,7 @@ public class ParticleEmitter
 
     // ========================================================================
 
-    public enum SpriteModes
+    public enum ParticleSpriteMode
     {
         Single,
         Random,
@@ -574,7 +574,7 @@ public class ParticleEmitter
             _updateFlags |= _updateTint;
         }
 
-        if ( SpriteMode == SpriteModes.Animated )
+        if ( SpriteMode == ParticleSpriteMode.Animated )
         {
             _updateFlags |= _updateSprite;
         }
@@ -584,9 +584,9 @@ public class ParticleEmitter
     {
         var sprite = SpriteMode switch
         {
-            SpriteModes.Single   => Sprites.First(),
-            SpriteModes.Animated => Sprites.First(),
-            SpriteModes.Random   => Sprites.Random(),
+            ParticleSpriteMode.Single   => Sprites.First(),
+            ParticleSpriteMode.Animated => Sprites.First(),
+            ParticleSpriteMode.Random   => Sprites.Random(),
             var _                => null!,
         };
 
@@ -1062,17 +1062,17 @@ public class ParticleEmitter
 
             switch ( SpriteMode )
             {
-                case SpriteModes.Single:
+                case ParticleSpriteMode.Single:
                     sprite = sprites.First();
 
                     break;
 
-                case SpriteModes.Random:
+                case ParticleSpriteMode.Random:
                     sprite = sprites.Random();
 
                     break;
 
-                case SpriteModes.Animated:
+                case ParticleSpriteMode.Animated:
                     if ( _particles[ i ] != null )
                     {
                         var percent = 1 - ( _particles[ i ]!.CurrentLife / ( float )_particles[ i ]!.Life );
@@ -1483,7 +1483,7 @@ public class ParticleEmitter
 
             if ( line!.StartsWith( "spriteMode" ) )
             {
-                SpriteMode = Enum.Parse< SpriteModes >( ReadString( line ) );
+                SpriteMode = Enum.Parse< ParticleSpriteMode >( ReadString( line ) );
 
 //                line = reader.ReadLine();
             }
@@ -2188,7 +2188,7 @@ public class ParticleEmitter
     public bool CleansUpBlendFunction { get; set; } = true;
 
     public List< Sprite >                Sprites           { get; set; } = [ ];
-    public SpriteModes                   SpriteMode        { get; set; } = SpriteModes.Single;
+    public ParticleSpriteMode                   SpriteMode        { get; set; } = ParticleSpriteMode.Single;
     public List< string >                ImagePaths        { get; set; } = [ ];
     public ScaledNumericValue            XScaleValue       { get; set; } = new();
     public ScaledNumericValue            YScaleValue       { get; set; } = new();

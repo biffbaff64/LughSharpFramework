@@ -121,7 +121,7 @@ public static class Platform
     /// Application type family groups
     /// </summary>
     [PublicAPI]
-    public enum Family : int
+    public enum PlatformFamily
     {
         Unknown,
         Mobile,  // Android, IOS
@@ -181,10 +181,10 @@ public static class Platform
 
     /// <summary>
     /// The target family group (mobile, console, desktop etc).
-    /// Must be one of the enum <see cref="Family"/>.
+    /// Must be one of the enum <see cref="PlatformFamily"/>.
     /// </summary>
     /// <exception cref="RuntimeException"></exception>
-    public static Family FamilyGroup
+    public static PlatformFamily PlatformFamilyGroup
     {
         get;
         set
@@ -192,9 +192,9 @@ public static class Platform
                        {
                            // ----------------------------------------
 
-                           Family.Console
-                               or Family.Desktop
-                               or Family.Mobile => value,
+                           PlatformFamily.Console
+                               or PlatformFamily.Desktop
+                               or PlatformFamily.Mobile => value,
 
                            // ----------------------------------------
 

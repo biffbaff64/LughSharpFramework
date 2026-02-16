@@ -39,17 +39,17 @@ public interface IFiles
     /// <exception cref="RuntimeException">
     /// if the type is classpath or internal and the file does not exist.
     /// </exception>
-    FileInfo GetFileHandle( string path, PathTypes type );
+    FileInfo GetFileHandle( string path, PathType type );
 
-    /// <inheritdoc cref="PathTypes.Classpath"/>
+    /// <inheritdoc cref="PathType.Classpath"/>
     FileInfo Classpath( string path );
 
-    /// <inheritdoc cref="PathTypes.Absolute"/>
+    /// <inheritdoc cref="PathType.Absolute"/>
     FileInfo Absolute( string path );
 
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.Assembly"/>
+    /// <inheritdoc cref="PathType.Assembly"/>
     FileInfo Assembly( string path );
 
     /// <summary>
@@ -67,7 +67,7 @@ public interface IFiles
 
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.Internal"/>
+    /// <inheritdoc cref="PathType.Internal"/>
     FileInfo Internal( string path );
 
     /// <summary>
@@ -85,7 +85,7 @@ public interface IFiles
 
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.External"/>
+    /// <inheritdoc cref="PathType.External"/>
     FileInfo External( string path );
 
     /// <summary>
@@ -102,7 +102,7 @@ public interface IFiles
 
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.Assets"/>
+    /// <inheritdoc cref="PathType.Assets"/>
     FileInfo Assets( string path );
     
     /// <summary>
@@ -113,7 +113,7 @@ public interface IFiles
     
     // ========================================================================
 
-    /// <inheritdoc cref="PathTypes.Local"/>
+    /// <inheritdoc cref="PathType.Local"/>
     FileInfo Local( string path );
 
     /// <summary>

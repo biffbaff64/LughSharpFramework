@@ -915,9 +915,9 @@ public class FreeType
             if ( format != pixmap.GLPixelFormat )
             {
                 converted          = new Pixmap( pixmap.Width, pixmap.Height, format );
-                converted.Blending = Pixmap.BlendTypes.None;       // Assuming SetBlending method
+                converted.Blending = Pixmap.BlendType.None;       // Assuming SetBlending method
                 converted.DrawPixmap( pixmap, 0, 0 );              // Assuming DrawPixmap method
-                converted.Blending = Pixmap.BlendTypes.SourceOver; // Assuming SetBlending method
+                converted.Blending = Pixmap.BlendType.SourceOver; // Assuming SetBlending method
 
                 pixmap.Dispose();
             }

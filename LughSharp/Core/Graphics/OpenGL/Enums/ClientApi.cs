@@ -30,7 +30,7 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 /// The context client APIs.
 /// </summary>
 [PublicAPI]
-public enum ClientApi : int
+public enum ClientApi
 {
     /// <summary>
     /// No context API is created.

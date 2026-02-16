@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ProgramParameter : int
+public enum ProgramParameter
 {
     DeleteStatus     = IGL.GL_DELETE_STATUS,
     LinkStatus       = IGL.GL_LINK_STATUS,
@@ -37,3 +37,7 @@ public enum ProgramParameter : int
     ActiveAttributes = IGL.GL_ACTIVE_ATTRIBUTES,
     ActiveUniforms   = IGL.GL_ACTIVE_UNIFORMS,
 }
+
+// ========================================================================
+// ========================================================================
+

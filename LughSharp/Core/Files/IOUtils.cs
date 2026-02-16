@@ -34,13 +34,13 @@ namespace LughSharp.Core.Files;
 [PublicAPI]
 public class IOUtils
 {
-    /// <inheritdoc cref="PathTypes.External"/>
+    /// <inheritdoc cref="PathType.External"/>
     public static string ExternalPath => NormalizePath( $"{System.Environment.GetFolderPath( System.Environment.SpecialFolder.UserProfile )}\\" );
 
-    /// <inheritdoc cref="PathTypes.Internal"/>
+    /// <inheritdoc cref="PathType.Internal"/>
     public static string InternalPath => NormalizePath( $"{Directory.GetCurrentDirectory()}\\" );
 
-    /// <inheritdoc cref="PathTypes.Local"/>
+    /// <inheritdoc cref="PathType.Local"/>
     public static string LocalPath => NormalizePath( Path.DirectorySeparatorChar.ToString() );
 
     // ========================================================================
@@ -188,7 +188,7 @@ public class IOUtils
     /// </summary>
     /// <param name="path">The path to evaluate.</param>
     /// <returns>
-    /// A value from the <see cref="PathTypes"/> enumeration indicating the type of the path:
+    /// A value from the <see cref="PathType"/> enumeration indicating the type of the path:
     /// <list type="bullet">
     /// <item><term>PathTypes.Directory</term> - The path is a directory.</item>
     /// <item><term>PathTypes.File</term> - The path is a file.</item>
@@ -197,21 +197,21 @@ public class IOUtils
     /// <item><term>PathTypes.Unknown</term> - The path is null or empty.</item>
     /// </list>
     /// </returns>
-    public static PathTypes GetPathType( string path )
+    public static PathType GetPathType( string path )
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            return PathTypes.Unknown;
+            return PathType.Unknown;
         }
 
         try
         {
             if ( Directory.Exists( path ) )
             {
-                return PathTypes.Directory;
+                return PathType.Directory;
             }
 
-            return File.Exists( path ) ? PathTypes.File : PathTypes.DoesNotExist;
+            return File.Exists( path ) ? PathType.File : PathType.DoesNotExist;
         }
 
         // Handle potential exceptions like PathTooLongException, SecurityException, etc.
@@ -219,7 +219,7 @@ public class IOUtils
         {
             Logger.Error( $"Exception ignored: {e.Message}" );
 
-            return PathTypes.Invalid;
+            return PathType.Invalid;
         }
     }
 

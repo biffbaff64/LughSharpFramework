@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum TextureLimits
+public enum TextureLimit
 {
     // The above would return a value such as 16 or 32 or above. That is the number of image samplers that your GPU supports in the fragment shader.
     MaxTextureImageUnits = IGL.GL_MAX_TEXTURE_IMAGE_UNITS,

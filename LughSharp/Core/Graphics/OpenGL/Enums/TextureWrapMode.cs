@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum TextureWrapMode : int
+public enum TextureWrapMode
 {
     ClampToBorder = IGL.GL_CLAMP_TO_BORDER,
 

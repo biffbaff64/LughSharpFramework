@@ -30,7 +30,7 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 /// The context API used to create the window context.
 /// </summary>
 [PublicAPI]
-public enum ContextApi : int
+public enum ContextApi
 {
     /// <summary>
     /// Uses the native context API to create the window context.

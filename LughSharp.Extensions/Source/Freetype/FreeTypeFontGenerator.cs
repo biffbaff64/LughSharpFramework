@@ -823,7 +823,7 @@ public class FreeTypeFontGenerator : IDisposable
                                             mainPixmap.Height + parameter.PadTop + parameter.PadBottom,
                                             mainPixmap.GetColorFormat() )
                 {
-                    Blending = Pixmap.BlendTypes.None
+                    Blending = Pixmap.BlendType.None
                 };
 
                 padPixmap.DrawPixmap( mainPixmap, parameter.PadLeft, parameter.PadTop );

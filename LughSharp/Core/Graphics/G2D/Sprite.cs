@@ -723,19 +723,19 @@ public class Sprite : TextureRegion
         }
 
         // Assign UVs to the vertex array in GetVertices()
-        // Match the Bottom-Up geometry (V1=BL, V2=TL, V3=TR, V4=BR) 
+        // Match the Bottom-Up geometry (V1=BL, V2=TL, V3=TR, V4=BR)
         // to the coordinate system of the texture
         Vertices[ IBatch.U1 ] = u;
-        Vertices[ IBatch.V1 ] = v2;
+        Vertices[ IBatch.V1 ] = v;
 
         Vertices[ IBatch.U2 ] = u;
-        Vertices[ IBatch.V2 ] = v;
+        Vertices[ IBatch.V2 ] = v2;
 
         Vertices[ IBatch.U3 ] = u2;
-        Vertices[ IBatch.V3 ] = v;
+        Vertices[ IBatch.V3 ] = v2;
 
         Vertices[ IBatch.U4 ] = u2;
-        Vertices[ IBatch.V4 ] = v2;
+        Vertices[ IBatch.V4 ] = v;
         
         return Vertices;
     }
@@ -770,16 +770,16 @@ public class Sprite : TextureRegion
         base.SetRegion( u, v, u2, v2 );
 
         Vertices[ IBatch.U1 ] = u;
-        Vertices[ IBatch.V1 ] = v2;
+        Vertices[ IBatch.V1 ] = v;
 
         Vertices[ IBatch.U2 ] = u;
-        Vertices[ IBatch.V2 ] = v;
+        Vertices[ IBatch.V2 ] = v2;
 
         Vertices[ IBatch.U3 ] = u2;
-        Vertices[ IBatch.V3 ] = v;
+        Vertices[ IBatch.V3 ] = v2;
 
         Vertices[ IBatch.U4 ] = u2;
-        Vertices[ IBatch.V4 ] = v2;
+        Vertices[ IBatch.V4 ] = v;
     }
 
     /// <summary>

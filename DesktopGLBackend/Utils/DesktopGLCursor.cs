@@ -80,7 +80,7 @@ public class DesktopGLCursor : ICursor, IDisposable
         }
 
         PixmapCopy          = new Pixmap( pixmap.Width, pixmap.Height, LughFormat.RGBA8888 );
-        PixmapCopy.Blending = Pixmap.BlendTypes.None;
+        PixmapCopy.Blending = Pixmap.BlendType.None;
         PixmapCopy.DrawPixmap( pixmap, 0, 0 );
 
         GlfwImage = new DotGLFW.Image

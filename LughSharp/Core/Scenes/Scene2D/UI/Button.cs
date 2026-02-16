@@ -78,7 +78,8 @@ public class Button : Table, IDisableable
     {
         Initialise();
 
-        ConstructorHelper( skin.Get< ButtonStyle >() );
+        Style = skin.Get< ButtonStyle >();
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
     public Button( Skin skin, string styleName )
@@ -86,7 +87,8 @@ public class Button : Table, IDisableable
     {
         Initialise();
 
-        ConstructorHelper( skin.Get< ButtonStyle >( styleName ) );
+        Style = skin.Get< ButtonStyle >( styleName );
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
     public Button( Actor child, Skin skin, string styleName )
@@ -100,14 +102,16 @@ public class Button : Table, IDisableable
         Initialise();
         Add( child );
 
-        ConstructorHelper( style );
+        Style = style;
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
     public Button( ButtonStyle style )
     {
         Initialise();
 
-        ConstructorHelper( style );
+        Style = style;
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
     public Button( ISceneDrawable? up )
@@ -134,7 +138,7 @@ public class Button : Table, IDisableable
     /// Returns the button's style. Modifying the returned style may not have an
     /// effect until <see cref="Style"/> set() is called.
     /// </summary>
-    public virtual ButtonStyle? Style
+    public ButtonStyle? Style
     {
         get;
 
@@ -144,16 +148,6 @@ public class Button : Table, IDisableable
 
             SetBackground( GetBackgroundDrawable() );
         }
-    }
-
-    /// <summary>
-    /// Somewhere to call virtual methods that used to be called
-    /// from constructors.
-    /// </summary>
-    private void ConstructorHelper( ButtonStyle style )
-    {
-        Style = style;
-        SetSize( GetPrefWidth(), GetPrefHeight() );
     }
 
     public float MinWidth  => GetPrefWidth();
@@ -203,7 +197,9 @@ public class Button : Table, IDisableable
         }
     }
 
-    public override float GetPrefWidth()
+    public override float GetPrefWidth() => GetPrefWidthSafe();
+    
+    protected float GetPrefWidthSafe()
     {
         var width = base.GetPrefWidth();
 
@@ -225,7 +221,9 @@ public class Button : Table, IDisableable
         return width;
     }
 
-    public override float GetPrefHeight()
+    public override float GetPrefHeight() => GetPrefHeightSafe();
+    
+    public float GetPrefHeightSafe()
     {
         var height = base.GetPrefHeight();
 
@@ -248,7 +246,7 @@ public class Button : Table, IDisableable
     }
 
     /// <summary>
-    /// If false, <see cref="SetChecked(bool)"/> and <see cref="Toggle()"/> will not
+    /// If false, <see cref="SetChecked(bool)"/> and <see cref="ToggleChecked"/> will not
     /// fire <see cref="ChangeListener.ChangeEvent()"/>.
     /// The event will only be fired when the user clicks the button
     /// </summary>
@@ -381,6 +379,21 @@ public class Button : Table, IDisableable
         }
     }
 
+    public void ToggleChecked()
+    {
+        SetChecked( !IsChecked );
+    }
+
+    public bool IsPressed()
+    {
+        return ClickListener!.VisualPressed;
+    }
+
+    public bool IsOver()
+    {
+        return ClickListener!.Over;
+    }
+
     // ========================================================================
     // ========================================================================
 
@@ -414,6 +427,22 @@ public class Button : Table, IDisableable
     [PublicAPI]
     public class ButtonStyle
     {
+        public ISceneDrawable? Up               { get; set; }
+        public ISceneDrawable? Down             { get; set; }
+        public ISceneDrawable? Over             { get; set; }
+        public ISceneDrawable? Focused          { get; set; }
+        public ISceneDrawable? Disabled         { get; set; }
+        public ISceneDrawable? Checked          { get; set; }
+        public ISceneDrawable? CheckedOver      { get; set; }
+        public ISceneDrawable? CheckedDown      { get; set; }
+        public ISceneDrawable? CheckedFocused   { get; set; }
+        public float           PressedOffsetX   { get; set; }
+        public float           PressedOffsetY   { get; set; }
+        public float           UnpressedOffsetX { get; set; }
+        public float           UnpressedOffsetY { get; set; }
+        public float           CheckedOffsetX   { get; set; }
+        public float           CheckedOffsetY   { get; set; }
+
         // ====================================================================
 
         public ButtonStyle()
@@ -445,37 +474,6 @@ public class Button : Table, IDisableable
             CheckedOffsetX   = style.CheckedOffsetX;
             CheckedOffsetY   = style.CheckedOffsetY;
         }
-
-        public ISceneDrawable? Up               { get; set; }
-        public ISceneDrawable? Down             { get; set; }
-        public ISceneDrawable? Over             { get; set; }
-        public ISceneDrawable? Focused          { get; set; }
-        public ISceneDrawable? Disabled         { get; set; }
-        public ISceneDrawable? Checked          { get; set; }
-        public ISceneDrawable? CheckedOver      { get; set; }
-        public ISceneDrawable? CheckedDown      { get; set; }
-        public ISceneDrawable? CheckedFocused   { get; set; }
-        public float           PressedOffsetX   { get; set; }
-        public float           PressedOffsetY   { get; set; }
-        public float           UnpressedOffsetX { get; set; }
-        public float           UnpressedOffsetY { get; set; }
-        public float           CheckedOffsetX   { get; set; }
-        public float           CheckedOffsetY   { get; set; }
-    }
-
-    public void Toggle()
-    {
-        SetChecked( !IsChecked );
-    }
-
-    public bool IsPressed()
-    {
-        return ClickListener!.VisualPressed;
-    }
-
-    public bool IsOver()
-    {
-        return ClickListener!.Over;
     }
 }
 

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Diagnostics;
 using System.Text;
 
@@ -32,6 +33,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 
 using Color = LughSharp.Core.Graphics.Color;
 
@@ -47,14 +49,14 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Label : Widget
 {
-    public BitmapFontCache FontCache   { get; set; } = null!;
-    public StringBuilder   Text        { get; }      = new();
-    public int             LabelAlign  { get; set; } = Align.LEFT;
-    public int             LineAlign   { get; set; } = Align.LEFT;
-    public GlyphLayout     GlyphLayout { get; set; } = new();
+    public BitmapFontCache? FontCache   { get; set; }
+    public StringBuilder    Text        { get; }      = new();
+    public int              LabelAlign  { get; set; } = Align.LEFT;
+    public int              LineAlign   { get; set; } = Align.LEFT;
+    public GlyphLayout      GlyphLayout { get; set; } = new();
 
     // ========================================================================
-    
+
     private static readonly Color       _tempColor      = new();
     private static readonly GlyphLayout _prefSizeLayout = new();
     private readonly        Vector2     _prefSize       = new();
@@ -243,8 +245,13 @@ public class Label : Widget
         _prefSizeInvalid = true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void ScaleAndComputePrefSize()
     {
+        Guard.Against.Null( FontCache );
+
         var font = FontCache.Font;
 
         var oldScaleX = font.GetScaleX();
@@ -265,6 +272,8 @@ public class Label : Widget
 
     private void ComputePrefSize()
     {
+        Guard.Against.Null( FontCache );
+
         _prefSizeInvalid = false;
 
         if ( Wrap && ( _ellipsis == null ) )
@@ -290,8 +299,9 @@ public class Label : Widget
 
     public void Layout()
     {
-        var font = FontCache.Font;
-
+        Guard.Against.Null( FontCache );
+        
+        var font      = FontCache.Font;
         var oldScaleX = font.GetScaleX();
         var oldScaleY = font.GetScaleY();
 
@@ -405,13 +415,18 @@ public class Label : Widget
             color.Mul( GetStyle().FontColor! );
         }
 
-        FontCache.Tint( color );
-        FontCache.SetPosition( X, Y );
-        FontCache.Draw( batch );
+        if ( FontCache != null )
+        {
+            FontCache.Tint( color );
+            FontCache.SetPosition( X, Y );
+            FontCache.Draw( batch );
+        }
     }
 
+    // ========================================================================
+
     public override float GetPrefWidth() => GetPrefWidthSafe();
-    
+
     public float GetPrefWidthSafe()
     {
         if ( Wrap )
@@ -435,8 +450,10 @@ public class Label : Widget
         return width;
     }
 
+    // ========================================================================
+
     public override float GetPrefHeight() => GetPrefHeightSafe();
-    
+
     public float GetPrefHeightSafe()
     {
         if ( _prefSizeInvalid )
@@ -461,6 +478,8 @@ public class Label : Widget
 
         return height;
     }
+
+    // ========================================================================
 
     /// <summary>
     /// </summary>
@@ -556,8 +575,7 @@ public class Label : Widget
     }
 
     // ========================================================================
-
-    #region labelstyle
+    // ========================================================================
 
     /// <summary>
     /// The style for a label, see <see cref="Label"/>.
@@ -565,6 +583,12 @@ public class Label : Widget
     [PublicAPI]
     public class LabelStyle
     {
+        public BitmapFont?     Font       { get; set; }
+        public Color?          FontColor  { get; set; }
+        public ISceneDrawable? Background { get; set; }
+
+        // ====================================================================
+
         public LabelStyle()
         {
             Font       = null!;
@@ -572,10 +596,10 @@ public class Label : Widget
             Background = null;
         }
 
-        public LabelStyle( BitmapFont font, Color fontColor )
+        public LabelStyle( BitmapFont? font, Color? fontColor )
         {
-            Font      = font;
-            FontColor = fontColor;
+            Font      = font ?? new BitmapFont();
+            FontColor = fontColor ?? Color.White;
         }
 
         public LabelStyle( LabelStyle style )
@@ -589,13 +613,7 @@ public class Label : Widget
 
             Background = style.Background;
         }
-
-        public BitmapFont      Font       { get; set; }
-        public Color?          FontColor  { get; set; }
-        public ISceneDrawable? Background { get; set; }
     }
-
-    #endregion labelstyle
 }
 
 // ============================================================================

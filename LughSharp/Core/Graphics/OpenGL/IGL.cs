@@ -33,7 +33,7 @@ namespace LughSharp.Core.Graphics.OpenGL;
 public partial interface IGL
 {
     [PublicAPI]
-    enum Format : int
+    enum Format
     {
         Alpha          = GL_ALPHA,
         RGB            = GL_RGB,

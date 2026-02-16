@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -39,11 +40,13 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ButtonGroup< T > where T : Button
 {
-    private readonly List< T > _buttons        = new();
-    private readonly List< T > _checkedButtons = new( 1 );
-    private          T         _lastChecked    = null!;
-    private          int       _maxCheckCount  = 1;
+    public List< T > Buttons        { get; set; } = new();
+    public List< T > CheckedButtons { get; set; } = new( 1 );
 
+    // ========================================================================
+
+    private T    _lastChecked   = null!;
+    private int  _maxCheckCount = 1;
     private int  _minCheckCount;
     private bool _uncheckLast = true;
 
@@ -65,27 +68,20 @@ public class ButtonGroup< T > where T : Button
 
     public void Add( T button )
     {
-        Guard.Against.Null( button );
-
         button.ButtonGroup = null!;
 
-        var shouldCheck = button.IsChecked || ( _buttons.Count < _minCheckCount );
+        var shouldCheck = button.IsChecked || ( Buttons.Count < _minCheckCount );
 
         button.SetChecked( false );
         button.ButtonGroup = ( this as ButtonGroup< Button > )!;
 
-        _buttons.Add( button );
+        Buttons.Add( button );
 
         button.SetChecked( shouldCheck );
     }
 
-    public void Add( params T[] buttons )
+    public void Add( T[] buttons )
     {
-        if ( buttons == null )
-        {
-            throw new ArgumentException( "buttons cannot be null." );
-        }
-
         for ( int i = 0, n = buttons.Length; i < n; i++ )
         {
             Add( buttons[ i ] );
@@ -94,24 +90,14 @@ public class ButtonGroup< T > where T : Button
 
     public void Remove( T button )
     {
-        if ( button == null )
-        {
-            throw new ArgumentException( "button cannot be null." );
-        }
-
         button.ButtonGroup = null!;
 
-        _buttons.Remove( button );
-        _checkedButtons.Remove( button );
+        Buttons.Remove( button );
+        CheckedButtons.Remove( button );
     }
 
     public void Remove( params T[] buttons )
     {
-        if ( buttons == null )
-        {
-            throw new ArgumentException( "buttons cannot be null." );
-        }
-
         for ( int i = 0, n = buttons.Length; i < n; i++ )
         {
             Remove( buttons[ i ] );
@@ -120,8 +106,8 @@ public class ButtonGroup< T > where T : Button
 
     public void Clear()
     {
-        _buttons.Clear();
-        _checkedButtons.Clear();
+        Buttons.Clear();
+        CheckedButtons.Clear();
     }
 
     /// <summary>
@@ -129,17 +115,12 @@ public class ButtonGroup< T > where T : Button
     /// </summary>
     public void SetChecked( string text )
     {
-        if ( text == null )
+        for ( int i = 0, n = Buttons.Count; i < n; i++ )
         {
-            throw new ArgumentException( "text cannot be null." );
-        }
-
-        for ( int i = 0, n = _buttons.Count; i < n; i++ )
-        {
-            Button button = _buttons[ i ];
+            Button button = Buttons[ i ];
 
             if ( ( button.GetType() == typeof( TextButton ) )
-                 && text.Equals( ( ( TextButton )button ).GetText() ) )
+              && text.Equals( ( ( TextButton )button ).GetText() ) )
             {
                 button.SetChecked( true );
 
@@ -163,17 +144,17 @@ public class ButtonGroup< T > where T : Button
         if ( !newState )
         {
             // Keep button checked to enforce minCheckCount.
-            if ( _checkedButtons.Count <= _minCheckCount )
+            if ( CheckedButtons.Count <= _minCheckCount )
             {
                 return false;
             }
 
-            _checkedButtons.Remove( button );
+            CheckedButtons.Remove( button );
         }
         else
         {
             // Keep button unchecked to enforce maxCheckCount.
-            if ( ( _maxCheckCount != -1 ) && ( _checkedButtons.Count >= _maxCheckCount ) )
+            if ( ( _maxCheckCount != -1 ) && ( CheckedButtons.Count >= _maxCheckCount ) )
             {
                 if ( _uncheckLast )
                 {
@@ -189,7 +170,7 @@ public class ButtonGroup< T > where T : Button
                 }
             }
 
-            _checkedButtons.Add( button );
+            CheckedButtons.Add( button );
             _lastChecked = button;
         }
 
@@ -206,9 +187,9 @@ public class ButtonGroup< T > where T : Button
 
         _minCheckCount = 0;
 
-        for ( int i = 0, n = _buttons.Count; i < n; i++ )
+        for ( int i = 0, n = Buttons.Count; i < n; i++ )
         {
-            var button = _buttons[ i ];
+            var button = Buttons[ i ];
             button.SetChecked( false );
         }
 
@@ -218,32 +199,22 @@ public class ButtonGroup< T > where T : Button
     /// <summary>
     /// Returns the first checked button, or null.
     /// </summary>
-    public T? GetChecked()
+    public T? GetFirstChecked()
     {
-        return _checkedButtons.Count > 0 ? _checkedButtons[ 0 ] : null;
+        return CheckedButtons.Count > 0 ? CheckedButtons[ 0 ] : null;
     }
 
     /// <summary>
     /// Returns the first checked button index, or -1.
     /// </summary>
-    public int GetCheckedIndex()
+    public int GetFirstCheckedIndex()
     {
-        if ( _checkedButtons.Count > 0 )
+        if ( CheckedButtons.Count > 0 )
         {
-            return _buttons.IndexOf( _checkedButtons[ 0 ] );
+            return Buttons.IndexOf( CheckedButtons[ 0 ] );
         }
 
         return -1;
-    }
-
-    public List< T > GetAllChecked()
-    {
-        return _checkedButtons;
-    }
-
-    public List< T > GetButtons()
-    {
-        return _buttons;
     }
 
     /// <summary>
@@ -280,3 +251,7 @@ public class ButtonGroup< T > where T : Button
         _uncheckLast = uncheckLast;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

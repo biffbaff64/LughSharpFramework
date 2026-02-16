@@ -4233,7 +4233,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         _glBindFramebuffer( target, framebuffer );
 
-        Engine.GL.GetIntegerv( ( int )BufferBindings.FramebufferBinding, out var binding );
+        Engine.GL.GetIntegerv( ( int )BufferBinding.FramebufferBinding, out var binding );
         GLData.CurrentBoundFBO = ( uint )binding;
     }
 

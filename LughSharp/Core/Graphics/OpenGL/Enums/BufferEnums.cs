@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum BufferTarget : int
+public enum BufferTarget
 {
     ArrayBuffer             = IGL.GL_ARRAY_BUFFER,
     ElementArrayBuffer      = IGL.GL_ELEMENT_ARRAY_BUFFER,
@@ -41,7 +41,7 @@ public enum BufferTarget : int
 }
 
 [PublicAPI]
-public enum BufferAccess : int
+public enum BufferAccess
 {
     ReadOnly  = IGL.GL_READ_ONLY,
     ReadWrite = IGL.GL_READ_WRITE,
@@ -49,7 +49,7 @@ public enum BufferAccess : int
 }
 
 [PublicAPI]
-public enum BufferUsageHint : int
+public enum BufferUsageHint
 {
     StaticDraw  = IGL.GL_STATIC_DRAW,
     StaticCopy  = IGL.GL_STATIC_COPY,
@@ -63,7 +63,7 @@ public enum BufferUsageHint : int
 }
 
 [PublicAPI]
-public enum BufferBindings : int
+public enum BufferBinding
 {
     ArrayBuffer                    = IGL.GL_ARRAY_BUFFER,
     ArrayBufferBinding             = IGL.GL_ARRAY_BUFFER_BINDING,

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
@@ -33,7 +34,7 @@ namespace LughSharp.Core.Graphics.Utils;
 [PublicAPI]
 public class ShapeRenderer : IDisposable
 {
-    public enum ShapeTypes
+    public enum ShapeRenderType
     {
         Points = IGL.GL_POINTS,
         Lines  = IGL.GL_LINES,
@@ -43,7 +44,7 @@ public class ShapeRenderer : IDisposable
     // ========================================================================
 
     public IImmediateModeRenderer Renderer      { get; set; }
-    public ShapeTypes?            ShapeType     { get; set; }
+    public ShapeRenderType?       ShapeType     { get; set; }
     public bool                   AutoShapeType { get; set; }
 
     // ========================================================================
@@ -147,10 +148,10 @@ public class ShapeRenderer : IDisposable
             throw new InvalidOperationException( "autoShapeType must be true to use this method." );
         }
 
-        Begin( ShapeTypes.Lines );
+        Begin( ShapeRenderType.Lines );
     }
 
-    public void Begin( ShapeTypes? type )
+    public void Begin( ShapeRenderType? type )
     {
         if ( ShapeType != null )
         {
@@ -185,7 +186,7 @@ public class ShapeRenderer : IDisposable
         Flush( ShapeType );
     }
 
-    public void Flush( ShapeTypes? shapeType )
+    public void Flush( ShapeRenderType? shapeType )
     {
         if ( shapeType == null )
         {
@@ -196,7 +197,7 @@ public class ShapeRenderer : IDisposable
         Begin( shapeType );
     }
 
-    public void Set( ShapeTypes type )
+    public void Set( ShapeRenderType type )
     {
         if ( ShapeType == type )
         {
@@ -218,7 +219,7 @@ public class ShapeRenderer : IDisposable
 
     public void Point( float x, float y, float z )
     {
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             var size = _defaultRectLineWidth * 0.5f;
             Line( x - size, y - size, z, x + size, y + size, z );
@@ -226,7 +227,7 @@ public class ShapeRenderer : IDisposable
             return;
         }
 
-        if ( ShapeType == ShapeTypes.Filled )
+        if ( ShapeType == ShapeRenderType.Filled )
         {
             var size = _defaultRectLineWidth * 0.5f;
             Box( x - size, y - size, z - size, _defaultRectLineWidth, _defaultRectLineWidth, _defaultRectLineWidth );
@@ -234,7 +235,7 @@ public class ShapeRenderer : IDisposable
             return;
         }
 
-        Check( ShapeTypes.Points, null, 1 );
+        Check( ShapeRenderType.Points, null, 1 );
         Renderer.SetColor( _color );
         Renderer.Vertex( x, y, z );
     }
@@ -266,14 +267,14 @@ public class ShapeRenderer : IDisposable
 
     public void Line( float x, float y, float z, float x2, float y2, float z2, Color c1, Color c2 )
     {
-        if ( ShapeType == ShapeTypes.Filled )
+        if ( ShapeType == ShapeRenderType.Filled )
         {
             RectLine( x, y, x2, y2, _defaultRectLineWidth, c1, c2 );
 
             return;
         }
 
-        Check( ShapeTypes.Lines, null, 2 );
+        Check( ShapeRenderType.Lines, null, 2 );
 
         Renderer.SetColor( c1.R, c1.G, c1.B, c1.A );
         Renderer.Vertex( x, y, z );
@@ -281,9 +282,10 @@ public class ShapeRenderer : IDisposable
         Renderer.Vertex( x2, y2, z2 );
     }
 
-    public void Curve( float x1, float y1, float cx1, float cy1, float cx2, float cy2, float x2, float y2, int segments )
+    public void Curve( float x1, float y1, float cx1, float cy1, float cx2, float cy2, float x2, float y2,
+                       int segments )
     {
-        Check( ShapeTypes.Lines, null, ( segments * 2 ) + 2 );
+        Check( ShapeRenderType.Lines, null, ( segments * 2 ) + 2 );
 
         var colorBits   = _color.ToFloatBitsAbgr();
         var subdivStep  = 1f / segments;
@@ -330,11 +332,11 @@ public class ShapeRenderer : IDisposable
 
     public void Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
     {
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, 6 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 6 );
 
         var colorBits = _color.ToFloatBitsAbgr();
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             Renderer.SetColor( colorBits );
             Renderer.Vertex( x1, y1, 0 );
@@ -360,11 +362,12 @@ public class ShapeRenderer : IDisposable
         }
     }
 
-    public void Triangle( float x1, float y1, float x2, float y2, float x3, float y3, Color col1, Color col2, Color col3 )
+    public void Triangle( float x1, float y1, float x2, float y2, float x3, float y3, Color col1, Color col2,
+                          Color col3 )
     {
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, 6 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 6 );
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             Renderer.SetColor( col1.R, col1.G, col1.B, col1.A );
             Renderer.Vertex( x1, y1, 0 );
@@ -392,10 +395,10 @@ public class ShapeRenderer : IDisposable
 
     public void Rect( float x, float y, float width, float height )
     {
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, 8 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
         var colorBits = _color.ToFloatBitsAbgr();
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             Renderer.SetColor( colorBits );
             Renderer.Vertex( x, y, 0 );
@@ -430,9 +433,9 @@ public class ShapeRenderer : IDisposable
 
     public void Rect( float x, float y, float width, float height, Color col1, Color col2, Color col3, Color col4 )
     {
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, 8 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             Renderer.SetColor( col1.R, col1.G, col1.B, col1.A );
             Renderer.Vertex( x, y, 0 );
@@ -465,7 +468,8 @@ public class ShapeRenderer : IDisposable
         Renderer.Vertex( x, y, 0 );
     }
 
-    public void Rect( float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float degrees )
+    public void Rect( float x, float y, float originX, float originY, float width, float height, float scaleX,
+                      float scaleY, float degrees )
     {
         Rect( x, y, originX, originY, width, height, scaleX, scaleY, degrees, _color, _color, _color, _color );
     }
@@ -474,7 +478,7 @@ public class ShapeRenderer : IDisposable
                       float width, float height, float scaleX, float scaleY, float degrees,
                       Color col1, Color col2, Color col3, Color col4 )
     {
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, 8 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
         var cos = MathUtils.CosDeg( degrees );
         var sin = MathUtils.SinDeg( degrees );
@@ -502,7 +506,7 @@ public class ShapeRenderer : IDisposable
         var x4           = x1 + ( x3 - x2 );
         var y4           = y3 - ( y2 - y1 );
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             Renderer.SetColor( col1.R, col1.G, col1.B, col1.A );
             Renderer.Vertex( x1, y1, 0 );
@@ -537,7 +541,7 @@ public class ShapeRenderer : IDisposable
 
     public void RectLine( float x1, float y1, float x2, float y2, float width )
     {
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, 8 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
         var colorBits = _color.ToFloatBitsAbgr();
         var t         = _tmp.Set( y2 - y1, x1 - x2 ).Nor();
@@ -547,7 +551,7 @@ public class ShapeRenderer : IDisposable
         var tx = t.X * width;
         var ty = t.Y * width;
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             Renderer.SetColor( colorBits );
             Renderer.Vertex( x1 + tx, y1 + ty, 0 );
@@ -584,7 +588,7 @@ public class ShapeRenderer : IDisposable
 
     public void RectLine( float x1, float y1, float x2, float y2, float width, Color c1, Color c2 )
     {
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, 8 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
         var col1Bits = c1.ToFloatBitsAbgr();
         var col2Bits = c2.ToFloatBitsAbgr();
@@ -595,7 +599,7 @@ public class ShapeRenderer : IDisposable
         var tx = t.X * width;
         var ty = t.Y * width;
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             Renderer.SetColor( col1Bits );
             Renderer.Vertex( x1 + tx, y1 + ty, 0 );
@@ -640,9 +644,9 @@ public class ShapeRenderer : IDisposable
         depth = -depth;
         var colorBits = _color.ToFloatBitsAbgr();
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
-            Check( ShapeTypes.Lines, ShapeTypes.Filled, 24 );
+            Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 24 );
             Renderer.SetColor( colorBits );
             Renderer.Vertex( x, y, z );
             Renderer.SetColor( colorBits );
@@ -694,7 +698,7 @@ public class ShapeRenderer : IDisposable
         }
         else
         {
-            Check( ShapeTypes.Lines, ShapeTypes.Filled, 36 );
+            Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 36 );
 
             // Front
             Renderer.SetColor( colorBits );
@@ -795,7 +799,12 @@ public class ShapeRenderer : IDisposable
 
     public void Arc( float x, float y, float radius, float start, float degrees )
     {
-        Arc( x, y, radius, start, degrees, Math.Max( 1, ( int )( 6 * ( float )Math.Cbrt( radius ) * ( degrees / 360.0f ) ) ) );
+        Arc( x,
+             y,
+             radius,
+             start,
+             degrees,
+             Math.Max( 1, ( int )( 6 * ( float )Math.Cbrt( radius ) * ( degrees / 360.0f ) ) ) );
     }
 
     public void Arc( float x, float y, float radius, float start, float degrees, int segments )
@@ -814,9 +823,9 @@ public class ShapeRenderer : IDisposable
 
         float temp;
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
-            Check( ShapeTypes.Lines, ShapeTypes.Filled, ( segments * 2 ) + 2 );
+            Check( ShapeRenderType.Lines, ShapeRenderType.Filled, ( segments * 2 ) + 2 );
 
             Renderer.SetColor( colorBits );
             Renderer.Vertex( x, y, 0 );
@@ -838,7 +847,7 @@ public class ShapeRenderer : IDisposable
         }
         else
         {
-            Check( ShapeTypes.Lines, ShapeTypes.Filled, ( segments * 3 ) + 3 );
+            Check( ShapeRenderType.Lines, ShapeRenderType.Filled, ( segments * 3 ) + 3 );
 
             for ( var i = 0; i < segments; i++ )
             {
@@ -889,9 +898,9 @@ public class ShapeRenderer : IDisposable
         var   cy        = 0f;
         float temp;
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
-            Check( ShapeTypes.Lines, ShapeTypes.Filled, ( segments * 2 ) + 2 );
+            Check( ShapeRenderType.Lines, ShapeRenderType.Filled, ( segments * 2 ) + 2 );
 
             for ( var i = 0; i < segments; i++ )
             {
@@ -909,7 +918,7 @@ public class ShapeRenderer : IDisposable
         }
         else
         {
-            Check( ShapeTypes.Lines, ShapeTypes.Filled, ( segments * 3 ) + 3 );
+            Check( ShapeRenderType.Lines, ShapeRenderType.Filled, ( segments * 3 ) + 3 );
             segments--;
 
             for ( var i = 0; i < segments; i++ )
@@ -943,7 +952,11 @@ public class ShapeRenderer : IDisposable
 
     public void Ellipse( float x, float y, float width, float height )
     {
-        Ellipse( x, y, width, height, Math.Max( 1, ( int )( 12 * ( float )Math.Cbrt( Math.Max( width * 0.5f, height * 0.5f ) ) ) ) );
+        Ellipse( x,
+                 y,
+                 width,
+                 height,
+                 Math.Max( 1, ( int )( 12 * ( float )Math.Cbrt( Math.Max( width * 0.5f, height * 0.5f ) ) ) ) );
     }
 
     public void Ellipse( float x, float y, float width, float height, int segments )
@@ -953,14 +966,14 @@ public class ShapeRenderer : IDisposable
             throw new ArgumentException( "segments must be > 0." );
         }
 
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, segments * 3 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, segments * 3 );
 
         var colorBits = _color.ToFloatBitsAbgr();
         var angle     = ( 2 * MathUtils.PI ) / segments;
 
         float cx = x + ( width / 2 ), cy = y + ( height / 2 );
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             for ( var i = 0; i < segments; i++ )
             {
@@ -994,8 +1007,14 @@ public class ShapeRenderer : IDisposable
 
     public void Ellipse( float x, float y, float width, float height, float rotation )
     {
-        Ellipse( x, y, width, height, rotation, Math.Max( 1, ( int )( 12 * ( float )Math.Cbrt(
-                                                               Math.Max( width * 0.5f, height * 0.5f ) ) ) ) );
+        Ellipse( x,
+                 y,
+                 width,
+                 height,
+                 rotation,
+                 Math.Max( 1,
+                           ( int )( 12 * ( float )Math.Cbrt(
+                                                            Math.Max( width * 0.5f, height * 0.5f ) ) ) ) );
     }
 
     public void Ellipse( float x, float y, float width, float height, float rotation, int segments )
@@ -1005,7 +1024,7 @@ public class ShapeRenderer : IDisposable
             throw new ArgumentException( "segments must be > 0." );
         }
 
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, segments * 3 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, segments * 3 );
 
         var colorBits = _color.ToFloatBitsAbgr();
         var angle     = ( 2 * MathUtils.PI ) / segments;
@@ -1019,7 +1038,7 @@ public class ShapeRenderer : IDisposable
         var   x1 = width * 0.5f;
         float y1 = 0;
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             for ( var i = 0; i < segments; i++ )
             {
@@ -1063,7 +1082,7 @@ public class ShapeRenderer : IDisposable
             throw new ArgumentException( "segments must be > 0." );
         }
 
-        Check( ShapeTypes.Lines, ShapeTypes.Filled, ( segments * 4 ) + 2 );
+        Check( ShapeRenderType.Lines, ShapeRenderType.Filled, ( segments * 4 ) + 2 );
 
         var   colorBits = _color.ToFloatBitsAbgr();
         var   angle     = ( 2 * MathUtils.PI ) / segments;
@@ -1073,7 +1092,7 @@ public class ShapeRenderer : IDisposable
         float temp;
         float temp2;
 
-        if ( ShapeType == ShapeTypes.Lines )
+        if ( ShapeType == ShapeRenderType.Lines )
         {
             for ( var i = 0; i < segments; i++ )
             {
@@ -1134,7 +1153,7 @@ public class ShapeRenderer : IDisposable
         Renderer.SetColor( colorBits );
         Renderer.Vertex( x + cx, y + cy, z );
 
-        if ( ShapeType != ShapeTypes.Lines )
+        if ( ShapeType != ShapeRenderType.Lines )
         {
             Renderer.SetColor( colorBits );
             Renderer.Vertex( x + temp, y + temp2, z );
@@ -1157,7 +1176,7 @@ public class ShapeRenderer : IDisposable
             throw new ArgumentException( "Polygons must have an even number of vertices." );
         }
 
-        Check( ShapeTypes.Lines, null, count );
+        Check( ShapeRenderType.Lines, null, count );
 
         var colorBits = _color.ToFloatBitsAbgr();
         var firstX    = vertices[ 0 ];
@@ -1200,7 +1219,7 @@ public class ShapeRenderer : IDisposable
             throw new ArgumentException( "Polylines must have an even number of vertices." );
         }
 
-        Check( ShapeTypes.Lines, null, count );
+        Check( ShapeRenderType.Lines, null, count );
 
         var colorBits = _color.ToFloatBitsAbgr();
 
@@ -1228,7 +1247,7 @@ public class ShapeRenderer : IDisposable
         Polyline( vertices, 0, vertices.Length );
     }
 
-    private void Check( ShapeTypes preferred, ShapeTypes? other, int newVertices )
+    private void Check( ShapeRenderType preferred, ShapeRenderType? other, int newVertices )
     {
         if ( ShapeType == null )
         {

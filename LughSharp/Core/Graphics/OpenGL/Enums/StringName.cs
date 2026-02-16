@@ -27,7 +27,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum StringName : int
+public enum StringName
 {
     Extensions             = IGL.GL_EXTENSIONS,
     Renderer               = IGL.GL_RENDERER,
