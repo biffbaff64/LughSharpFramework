@@ -26,6 +26,11 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Files;
 
+/// <summary>
+/// Represents the type of a file system path used to define the nature or origin of the path,
+/// such as whether it is an absolute path, a local directory, or a path within the assembly.
+/// Useful for distinguishing between various file handling mechanisms and scopes.
+/// </summary>
 [PublicAPI]
 public enum PathType
 {

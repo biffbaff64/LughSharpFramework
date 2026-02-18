@@ -23,50 +23,20 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
-using LughSharp.Core.Main;
-using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Maths;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
+/// <summary>
+/// A drawable that supports scale and rotation.
+/// </summary>
 [PublicAPI]
-public class DialogInputListener : InputListener
+public interface ITransformDrawable : IDrawable
 {
-    private readonly Dialog  _dialog;
-    private readonly object? _object;
-    private readonly int     _thisKey;
-
-    public DialogInputListener( Dialog d, int thisKey, object? o )
-    {
-        _dialog  = d;
-        _thisKey = thisKey;
-        _object  = o;
-    }
-
-    /// <inheritdoc />
-    public override bool KeyDown( InputEvent? inputEvent, int keycode )
-    {
-        if ( keycode == _thisKey )
-        {
-            // Delay a frame to eat the keyTyped event.
-            Engine.Api.App.PostRunnable( () =>
-            {
-                _dialog.Result( _object );
-
-                if ( !_dialog.CancelHide )
-                {
-                    _dialog.Hide();
-                }
-
-                _dialog.CancelHide = false;
-            } );
-        }
-
-        return false;
-    }
+    void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation );
 }
 
 // ============================================================================
 // ============================================================================
-
-
-

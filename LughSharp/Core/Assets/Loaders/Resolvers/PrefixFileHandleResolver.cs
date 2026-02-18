@@ -43,7 +43,7 @@ public class PrefixFileHandleResolver : IFileHandleResolver
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Creates a new PrefixFileHandleResolver using the specified base resolver and prefix.
     /// </summary>
     /// <param name="baseResolver"></param>
     /// <param name="prefix"></param>

@@ -227,13 +227,17 @@ public class Texture : GLTexture, IManaged
         {
             // Map Red -> Alpha, and force RGB to 1.0 (White)
             int[] swizzle = { IGL.GL_ONE, IGL.GL_ONE, IGL.GL_ONE, IGL.GL_RED };
-            Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.TextureSwizzleRgba, swizzle );
+            Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D,
+                                      ( int )TextureParameter.TextureSwizzleRgba,
+                                      swizzle );
         }
         else if ( ColorFormat == LughFormat.LUMINANCE_ALPHA )
         {
             // Map Red -> RGB (Luminance), Green -> Alpha
             int[] swizzle = { IGL.GL_RED, IGL.GL_RED, IGL.GL_RED, IGL.GL_GREEN };
-            Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.TextureSwizzleRgba, swizzle );
+            Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D,
+                                      ( int )TextureParameter.TextureSwizzleRgba, 
+                                      swizzle );
         }
     }
 
@@ -419,8 +423,6 @@ public class Texture : GLTexture, IManaged
     /// The Texture name, usually the filename but can be something else.
     /// Name will be set to 'Name Not Set' if null or empty.
     /// </summary>
-    [field: AllowNull]
-    [field: MaybeNull]
     public string Name
     {
         get

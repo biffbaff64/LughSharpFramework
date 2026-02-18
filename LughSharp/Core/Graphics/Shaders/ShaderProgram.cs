@@ -24,17 +24,24 @@
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using GLuint = uint;
 
-namespace LughSharp.Core.Graphics.Utils;
+namespace LughSharp.Core.Graphics.Shaders;
 
 [PublicAPI]
 public struct ShaderData

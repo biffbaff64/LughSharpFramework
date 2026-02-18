@@ -29,6 +29,9 @@ using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Assets.Loaders.Resolvers;
 
+/// <summary>
+/// This <see cref="IFileHandleResolver"/> uses the local file system to resolve file handles.
+/// </summary>
 [PublicAPI]
 public class LocalFileHandleResolver : IFileHandleResolver
 {

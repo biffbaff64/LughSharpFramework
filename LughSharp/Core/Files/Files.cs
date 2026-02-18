@@ -22,11 +22,18 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+using System.Linq;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Files;
 
+/// <summary>
+/// Implementation of <see cref="IFiles"/> providing convenience methods for resolving file paths.
+/// </summary>
 [PublicAPI]
 public class Files : IFiles
 {
@@ -285,12 +292,9 @@ public class Files : IFiles
     {
         var path = IOUtils.ExternalPath;
 
-        if ( string.IsNullOrEmpty( path ) )
-        {
-            throw new RuntimeException( "Could not determine external storage path" );
-        }
-
-        return path;
+        return string.IsNullOrEmpty( path )
+            ? throw new RuntimeException( "Could not determine external storage path" )
+            : path;
     }
 
     /// <summary>

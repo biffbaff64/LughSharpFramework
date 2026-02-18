@@ -680,11 +680,11 @@ public class BitmapFontData
 
             x2 -= offsetX;
 
-            if ( x2 > region.RegionWidth )
+            if ( x2 > region.GetRegionWidth() )
             {
-                glyph.Width -= x2 - region.RegionWidth;
+                glyph.Width -= x2 - region.GetRegionWidth();
 
-                x2 = region.RegionWidth;
+                x2 = region.GetRegionWidth();
             }
         }
 
@@ -706,14 +706,14 @@ public class BitmapFontData
 
             y2 -= offsetY;
 
-            if ( y2 > region.RegionHeight )
+            if ( y2 > region.GetRegionHeight() )
             {
-                var amount = y2 - region.RegionHeight;
+                var amount = y2 - region.GetRegionHeight();
 
                 glyph.Height  -= amount;
                 glyph.Yoffset += amount;
 
-                y2 = region.RegionHeight;
+                y2 = region.GetRegionHeight();
             }
         }
 

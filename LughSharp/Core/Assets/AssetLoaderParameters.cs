@@ -33,6 +33,9 @@ namespace LughSharp.Core.Assets;
 [PublicAPI]
 public interface ILoaderParameters
 {
+    /// <summary>
+    /// Callback that will be invoked when the asset has been loaded.
+    /// </summary>
     ILoadedCallback? LoadedCallback { get; set; }
 }
 
@@ -71,6 +74,7 @@ public class AssetLoaderParameters : ILoaderParameters
 [PublicAPI]
 public class DefaultLoadedCallback( int refCount ) : ILoadedCallback
 {
+    
     public void FinishedLoading( AssetManager assetManager, string filename, Type? type )
     {
         assetManager.SetReferenceCount( filename, refCount );

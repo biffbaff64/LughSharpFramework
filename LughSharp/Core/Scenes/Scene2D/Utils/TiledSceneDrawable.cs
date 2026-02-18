@@ -69,8 +69,8 @@ public class TiledSceneDrawable : TextureRegionDrawable
 
             batch.Color = Color.Mul( batch.Color );
 
-            var regionWidth  = region.RegionWidth * Scale;
-            var regionHeight = region.RegionHeight * Scale;
+            var regionWidth  = region.GetRegionWidth() * Scale;
+            var regionHeight = region.GetRegionHeight() * Scale;
             var fullX        = ( int )( width / regionWidth );
             var fullY        = ( int )( height / regionHeight );
             var remainingX   = width - ( regionWidth * fullX );

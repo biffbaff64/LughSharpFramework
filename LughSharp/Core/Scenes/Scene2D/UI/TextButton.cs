@@ -30,6 +30,7 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -277,7 +278,7 @@ public class TextButton : Button
         {
         }
 
-        public TextButtonStyle( ISceneDrawable upImage, ISceneDrawable downImage, ISceneDrawable checkedImage,
+        public TextButtonStyle( IDrawable upImage, IDrawable downImage, IDrawable checkedImage,
                                 BitmapFont font )
             : base( upImage, downImage, checkedImage )
         {

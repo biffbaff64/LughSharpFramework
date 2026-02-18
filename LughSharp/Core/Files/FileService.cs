@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Files;
@@ -32,7 +35,16 @@ namespace LughSharp.Core.Files;
 [PublicAPI]
 public class FileService : IFileService
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Resolves a relative path against a base file's parent directory and ensures 
+    /// the result remains within an authorized root directory.
+    /// </summary>
+    /// <param name="baseFile">The <see cref="FileInfo"/> representing the starting point.</param>
+    /// <param name="relativePath">The path string to resolve (supports navigation like ".." or "subfolder/file.txt").</param>
+    /// <param name="rootLimit">Optional. An absolute path that acts as a security boundary. 
+    /// Access outside this path will throw an exception.</param>
+    /// <returns>A <see cref="FileInfo"/> object for the resolved path, or <c>null</c> if inputs are invalid.</returns>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the resolved path is outside the <paramref name="rootLimit"/>.</exception>
     public FileInfo? GetRelativeFileHandle( FileInfo? baseFile, string? relativePath, string? rootLimit = null )
     {
         // Guard against null or empty inputs
@@ -72,7 +84,7 @@ public class FileService : IFileService
     /// <param name="fullPath">The fully resolved absolute path to check.</param>
     /// <param name="rootPath">The absolute path of the allowed root directory.</param>
     /// <returns><c>true</c> if the path is within the root; otherwise, <c>false</c>.</returns>
-    private bool IsPathSafe( string fullPath, string rootPath )
+    public bool IsPathSafe( string fullPath, string rootPath )
     {
         // Normalize the root path to ensure it is absolute
         var normalizedRoot = Path.GetFullPath( rootPath );

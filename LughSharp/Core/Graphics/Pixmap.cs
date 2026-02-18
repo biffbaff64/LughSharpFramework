@@ -65,6 +65,12 @@ public class Pixmap : IDisposable
     public Gdx2DPixmap Gdx2DPixmap { get; set; }                // 
     public int         Stride      { get; set; }
 
+    /// <summary>
+    /// Sets the type of <see cref="BlendType"/> to be used for all operations.
+    /// Default is <see cref="BlendType.SourceOver"/>.
+    /// </summary>
+    public BlendType Blending { get; set; } = BlendType.SourceOver;
+
     // ========================================================================
 
     /// <summary>
@@ -177,12 +183,6 @@ public class Pixmap : IDisposable
     public int Height => Gdx2DPixmap.Height;
 
     /// <summary>
-    /// Sets the type of <see cref="BlendType"/> to be used for all operations.
-    /// Default is <see cref="BlendType.SourceOver"/>.
-    /// </summary>
-    public BlendType Blending { get; set; } = BlendType.SourceOver;
-
-    /// <summary>
     /// Returns the OpenGL pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
@@ -270,6 +270,8 @@ public class Pixmap : IDisposable
                 : Gdx2DPixmap.GDX_2D_SCALE_LINEAR;
         }
     } = Filter.BiLinear;
+    
+    // ========================================================================
 
     /// <summary>
     /// Sets the color for drawing operations.

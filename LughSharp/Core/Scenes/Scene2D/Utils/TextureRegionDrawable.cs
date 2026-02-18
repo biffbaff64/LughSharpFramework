@@ -39,7 +39,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Utils;
 /// Drawable for a <see cref="TextureRegion"/>.
 /// </summary>
 [PublicAPI]
-public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
+public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
 {
     /// <summary>
     /// Creates an uninitialized TextureRegionDrawable.
@@ -78,7 +78,7 @@ public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
     }
 
     /// <summary>
-    /// The <see cref="TextureRegion"/> component of this <see cref="ISceneDrawable"/>
+    /// The <see cref="TextureRegion"/> component of this <see cref="IDrawable"/>
     /// </summary>
     public TextureRegion? Region
     {
@@ -89,8 +89,8 @@ public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
 
             if ( field != null )
             {
-                MinWidth  = field.RegionWidth;
-                MinHeight = field.RegionHeight;
+                MinWidth  = field.GetRegionWidth();
+                MinHeight = field.GetRegionHeight();
             }
         }
     }
@@ -111,11 +111,7 @@ public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
     /// <summary>
     /// Draws this drawable at the specified bounds.
     /// </summary>
-    public virtual void Draw( IBatch batch,
-                              GRect region,
-                              Point2D origin,
-                              Point2D scale,
-                              float rotation )
+    public virtual void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation )
     {
         if ( Region != null )
         {
@@ -125,9 +121,9 @@ public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
 
     /// <summary>
     /// Creates a new drawable that renders the same as this drawable
-    /// tinted the specified color.
+    /// but tinted with the specified color.
     /// </summary>
-    public virtual ISceneDrawable Tint( Color tint )
+    public virtual IDrawable Tint( Color tint )
     {
         if ( Region == null )
         {
@@ -141,7 +137,7 @@ public class TextureRegionDrawable : BaseSceneDrawable, ITransformSceneDrawable
         sprite.SetColor( tint );
         sprite.SetSize( MinWidth, MinHeight );
 
-        var drawable = new SpriteSceneDrawable( sprite )
+        var drawable = new SpriteDrawable( sprite )
         {
             LeftWidth    = LeftWidth,
             RightWidth   = RightWidth,

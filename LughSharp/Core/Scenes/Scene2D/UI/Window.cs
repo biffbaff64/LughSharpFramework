@@ -35,6 +35,7 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -639,10 +640,10 @@ public class Window : Table
     [PublicAPI]
     public class WindowStyle
     {
-        public ISceneDrawable? Background      { get; set; }
+        public IDrawable? Background      { get; set; }
         public BitmapFont?     TitleFont       { get; set; }
         public Color?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
-        public ISceneDrawable? StageBackground { get; set; }
+        public IDrawable? StageBackground { get; set; }
 
         // ====================================================================
 
@@ -662,7 +663,7 @@ public class Window : Table
         /// <param name="titleFont"></param>
         /// <param name="titleFontColor"></param>
         /// <param name="background"></param>
-        public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable? background )
+        public WindowStyle( BitmapFont titleFont, Color titleFontColor, IDrawable? background )
         {
             TitleFont  = titleFont;
             Background = background;

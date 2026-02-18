@@ -32,6 +32,9 @@ namespace LughSharp.Core.Assets;
 [PublicAPI]
 public interface IAssetTask
 {
+    /// <summary>
+    /// 
+    /// </summary>
     void Call();
 }
 

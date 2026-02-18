@@ -45,18 +45,6 @@ public class MapObjects : IEnumerable< MapObject >
         _objects = new List< MapObject >();
     }
 
-    /// <inheritdoc />
-    public IEnumerator< MapObject > GetEnumerator()
-    {
-        return _objects.GetEnumerator();
-    }
-
-    /// <inheritdoc />
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
     /// <summary>
     /// Gets the <see cref="MapObject"/> at the specified index.
     /// </summary>
@@ -107,7 +95,11 @@ public class MapObjects : IEnumerable< MapObject >
         return fill;
     }
 
-    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
+    /// <summary>
+    /// Searches for the specified object and returns the zero-based index of the
+    /// first occurrence within this MapObject collection.
+    /// </summary>
+    /// <param name="name"> The name of the object to locate. </param>
     public int GetIndex( string name ) => GetIndex( Get( name ) );
 
     /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
@@ -124,6 +116,20 @@ public class MapObjects : IEnumerable< MapObject >
 
     /// <inheritdoc cref="List{MapObject}.Remove"/>
     public void Remove( MapObject obj ) => _objects.Remove( obj );
+
+    // ========================================================================
+    
+    /// <inheritdoc />
+    public IEnumerator< MapObject > GetEnumerator()
+    {
+        return _objects.GetEnumerator();
+    }
+
+    /// <inheritdoc />
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }
 
 // ============================================================================

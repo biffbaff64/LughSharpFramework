@@ -527,7 +527,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     throw new RuntimeException( "Image Texture cannot be null!" );
                 }
 
-                y -= texture.RegionHeight;
+                y -= texture.GetRegionHeight();
             }
 
             var imageLayer = new TiledMapImageLayer( texture, x, y );
@@ -577,7 +577,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     /// <param name="node"></param>
     protected void LoadObject( TiledMap? map, ITiledMapTile tile, XmlReader.Element? node )
     {
-        LoadObject( map, tile.MapObjects, node, tile.TextureRegion.RegionHeight );
+        LoadObject( map, tile.MapObjects, node, tile.TextureRegion.GetRegionHeight() );
     }
 
     /// <summary>
@@ -669,11 +669,11 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     tiledMapTileMapObject.X = x;
                     tiledMapTileMapObject.Y = FlipY ? y : y - height;
 
-                    var objectWidth  = element.GetFloatAttribute( "width", textureRegion.RegionWidth );
-                    var objectHeight = element.GetFloatAttribute( "height", textureRegion.RegionHeight );
+                    var objectWidth  = element.GetFloatAttribute( "width", textureRegion.GetRegionWidth() );
+                    var objectHeight = element.GetFloatAttribute( "height", textureRegion.GetRegionHeight() );
 
-                    tiledMapTileMapObject.ScaleX   = scaleX * ( objectWidth / textureRegion.RegionWidth );
-                    tiledMapTileMapObject.ScaleY   = scaleY * ( objectHeight / textureRegion.RegionHeight );
+                    tiledMapTileMapObject.ScaleX   = scaleX * ( objectWidth / textureRegion.GetRegionWidth() );
+                    tiledMapTileMapObject.ScaleY   = scaleY * ( objectHeight / textureRegion.GetRegionHeight() );
                     tiledMapTileMapObject.Rotation = element.GetFloatAttribute( "rotation" );
 
                     mapObject = tiledMapTileMapObject;

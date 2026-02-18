@@ -36,6 +36,7 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -585,7 +586,7 @@ public class Label : Widget
     {
         public BitmapFont?     Font       { get; set; }
         public Color?          FontColor  { get; set; }
-        public ISceneDrawable? Background { get; set; }
+        public IDrawable? Background { get; set; }
 
         // ====================================================================
 

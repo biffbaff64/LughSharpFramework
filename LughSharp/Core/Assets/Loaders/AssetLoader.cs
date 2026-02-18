@@ -30,6 +30,8 @@ using LughSharp.Core.Assets.Loaders.Resolvers;
 namespace LughSharp.Core.Assets.Loaders;
 
 /// <summary>
+/// Specifies the type of asset loading strategy used by an asset loader,
+/// either Synchronous or Asynchronous.
 /// </summary>
 [PublicAPI]
 public enum AssetLoaderType

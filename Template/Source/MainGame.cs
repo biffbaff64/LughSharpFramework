@@ -142,38 +142,20 @@ public class MainGame : Game
                 _gameCam.Position.Z = 0;
                 _gameCam.Update();
 
-                if ( _image2 != null )
-                {
-                    _spriteBatch.Draw( _image2, 0, 0 );
-                }
-
                 if ( _star != null )
                 {
-                    _spriteBatch.Draw( _star, 10, 80 );
-                }
-
-                if ( _image1 != null )
-                {
-                    _spriteBatch.Draw( _image1,
-                                       ( Engine.Api.Graphics.Width - _image1.Width ) / 2f,
-                                       ( Engine.Api.Graphics.Height - _image1.Height ) / 2f,
-                                       _image1.Width,
-                                       _image1.Height );
-                }
-
-                if ( _sprite != null )
-                {
-                    _sprite?.SetPosition( 40, 120 );
-                    _sprite?.Draw( _spriteBatch );
+                    _spriteBatch.Draw( _star,
+                                       ( Engine.Api.Graphics.Width - _star.GetRegionWidth() ) / 2f,
+                                       ( Engine.Api.Graphics.Height - _star.GetRegionHeight() ) / 2f,
+                                       _star.GetRegionWidth(),
+                                       _star.GetRegionHeight() );
                 }
 
                 if ( _sprite2 != null )
                 {
-                    _sprite2.SetPosition( 320, 240 );
+                    _sprite2.SetPosition( _tiledCam?.Position.X ?? 20, _tiledCam?.Position.Y ?? 20 );
                     _sprite2.Draw( _spriteBatch );
                 }
-
-                _test?.Render( _spriteBatch );
 
                 _font?.Draw( _spriteBatch, "[GREEN]HELLO[] [WHITE]WORLD[]", 400, 400 );
 
@@ -225,17 +207,18 @@ public class MainGame : Game
             if ( disposing )
             {
                 _spriteBatch?.Dispose();
-                _image1?.Dispose();
-//                _star?.Dispose();
                 _assetManager?.Dispose();
                 _tiledCam?.Dispose();
                 _gameCam?.Dispose();
+                _image1?.Dispose();
+                _image2?.Dispose();
+                _stage?.Dispose();
                 _font?.Dispose();
 
                 // TODO:
                 // Should Sprite() implement IDisposable, or should I leave that up to
                 // any extending classes? Maybe imlplement IDisposable in Sprite() and
-                // allow ( and encouraging ) extending classes to override it?
+                // allow ( and encourage ) extending classes to override it?
                 _sprite = null;
                 _sprite2  = null;
             }
@@ -300,8 +283,10 @@ public class MainGame : Game
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
+        var texture = new Texture( Assets.HUD_PANEL );
+        
         _stage = new Stage( _gameCam.Viewport );
-        _hudActor = new Scene2DImage( new Texture( Assets.HUD_PANEL ) )
+        _hudActor = new Scene2DImage( texture )
         {
             IsVisible = true
         };

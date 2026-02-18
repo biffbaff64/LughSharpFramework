@@ -582,7 +582,7 @@ public class ProgressBar : Widget, IDisableable
         return VisualInterpolation.Apply( ( GetVisualValue() - MinValue ) / ( MaxValue - MinValue ) );
     }
 
-    private ISceneDrawable? GetBackgroundDrawable()
+    private IDrawable? GetBackgroundDrawable()
     {
         if ( IsDisabled && ( Style.DisabledBackground != null ) )
         {
@@ -592,7 +592,7 @@ public class ProgressBar : Widget, IDisableable
         return Style.Background;
     }
 
-    private ISceneDrawable? GetKnobDrawable()
+    private IDrawable? GetKnobDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnob != null ) )
         {
@@ -602,7 +602,7 @@ public class ProgressBar : Widget, IDisableable
         return Style.Knob;
     }
 
-    private ISceneDrawable? GetKnobBeforeDrawable()
+    private IDrawable? GetKnobBeforeDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnobBefore != null ) )
         {
@@ -612,7 +612,7 @@ public class ProgressBar : Widget, IDisableable
         return Style.KnobBefore;
     }
 
-    private ISceneDrawable? GetKnobAfterDrawable()
+    private IDrawable? GetKnobAfterDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnobAfter != null ) )
         {
@@ -632,14 +632,14 @@ public class ProgressBar : Widget, IDisableable
     public class ProgressBarStyle
     {
         // The progress bar background, stretched only in one direction.
-        public ISceneDrawable? Background         { get; set; }
-        public ISceneDrawable? DisabledBackground { get; set; }
-        public ISceneDrawable? Knob               { get; set; }
-        public ISceneDrawable? DisabledKnob       { get; set; }
-        public ISceneDrawable? KnobBefore         { get; set; }
-        public ISceneDrawable? DisabledKnobBefore { get; set; }
-        public ISceneDrawable? KnobAfter          { get; set; }
-        public ISceneDrawable? DisabledKnobAfter  { get; set; }
+        public IDrawable? Background         { get; set; }
+        public IDrawable? DisabledBackground { get; set; }
+        public IDrawable? Knob               { get; set; }
+        public IDrawable? DisabledKnob       { get; set; }
+        public IDrawable? KnobBefore         { get; set; }
+        public IDrawable? DisabledKnobBefore { get; set; }
+        public IDrawable? KnobAfter          { get; set; }
+        public IDrawable? DisabledKnobAfter  { get; set; }
 
         // ====================================================================
         
@@ -647,7 +647,7 @@ public class ProgressBar : Widget, IDisableable
         {
         }
 
-        public ProgressBarStyle( ISceneDrawable background, ISceneDrawable knob )
+        public ProgressBarStyle( IDrawable background, IDrawable knob )
         {
             Background = background;
             Knob       = knob;

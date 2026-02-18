@@ -355,7 +355,7 @@ public class TextureAtlas : IDisposable
             {
                 var sprite = new Sprite( region );
 
-                sprite.SetBounds( 0, 0, region.RegionHeight, region.RegionWidth );
+                sprite.SetBounds( 0, 0, region.GetRegionHeight(), region.GetRegionWidth() );
                 sprite.Rotate90( true );
 
                 return sprite;

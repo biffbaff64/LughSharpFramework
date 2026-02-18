@@ -35,29 +35,29 @@ namespace LughSharp.Core.Scenes.Scene2D.Utils;
 /// Drawable for a <see cref="Sprite"/>.
 /// </summary>
 [PublicAPI]
-public class SpriteSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
+public class SpriteDrawable : BaseDrawable, ITransformDrawable
 {
     private Sprite? _sprite;
 
     /// <summary>
     /// Creates an uninitialized SpriteDrawable. The sprite must be set before use.
     /// </summary>
-    public SpriteSceneDrawable()
+    public SpriteDrawable()
     {
     }
 
-    public SpriteSceneDrawable( Sprite sprite )
+    public SpriteDrawable( Sprite sprite )
     {
         Sprite = sprite;
     }
 
-    public SpriteSceneDrawable( SpriteSceneDrawable? drawable ) : base( drawable )
+    public SpriteDrawable( SpriteDrawable? drawable ) : base( drawable )
     {
         Sprite = drawable?.Sprite;
     }
 
     /// <summary>
-    /// The <see cref="Sprite"/> component of this <see cref="ISceneDrawable"/>.
+    /// The <see cref="Sprite"/> component of this <see cref="IDrawable"/>.
     /// </summary>
     public Sprite? Sprite
     {
@@ -123,7 +123,7 @@ public class SpriteSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
     /// Creates a new drawable that renders the same as this drawable,
     /// tinted with the specified color.
     /// </summary>
-    public SpriteSceneDrawable Tint( Color tint )
+    public SpriteDrawable Tint( Color tint )
     {
         Sprite newSprite;
 
@@ -139,7 +139,7 @@ public class SpriteSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
         newSprite.SetColor( tint );
         newSprite.SetSize( MinWidth, MinHeight );
 
-        var drawable = new SpriteSceneDrawable( newSprite )
+        var drawable = new SpriteDrawable( newSprite )
         {
             LeftWidth    = LeftWidth,
             RightWidth   = RightWidth,

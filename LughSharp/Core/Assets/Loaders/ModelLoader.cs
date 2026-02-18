@@ -77,7 +77,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
     /// <summary>
     /// Directly load the model on the calling thread.
-    /// The model with not be managed by an <see cref="AssetManager"/>.
+    /// The model will not be managed by an <see cref="AssetManager"/>.
     /// </summary>
     public Model? LoadModel< T >( in FileInfo fileHandle, ITextureProvider textureProvider, T? parameters )
         where T : ModelLoaderParameters
@@ -89,7 +89,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
     /// <summary>
     /// Directly load the model on the calling thread.
-    /// The model with not be managed by an <see cref="AssetManager"/>.
+    /// The model will not be managed by an <see cref="AssetManager"/>.
     /// </summary>
     public Model? LoadModel< T >( in FileInfo fileHandle, T parameters ) where T : ModelLoaderParameters
     {
@@ -98,7 +98,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
     /// <summary>
     /// Directly load the model on the calling thread.
-    /// The model with not be managed by an <see cref="AssetManager"/>.
+    /// The model will not be managed by an <see cref="AssetManager"/>.
     /// </summary>
     public Model? LoadModel( in FileInfo fileHandle, ITextureProvider textureProvider )
     {
@@ -107,7 +107,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
     /// <summary>
     /// Directly load the model on the calling thread.
-    /// The model with not be managed by an <see cref="AssetManager"/>.
+    /// The model will not be managed by an <see cref="AssetManager"/>.
     /// </summary>
     public Model? LoadModel( in FileInfo fileHandle )
     {

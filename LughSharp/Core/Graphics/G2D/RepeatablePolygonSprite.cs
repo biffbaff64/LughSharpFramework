@@ -75,10 +75,10 @@ public class RepeatablePolygonSprite
 
         if ( density is -1 )
         {
-            density = boundRect.Width / region.RegionWidth;
+            density = boundRect.Width / region.GetRegionWidth();
         }
 
-        var regionAspectRatio = region.RegionHeight / region.RegionWidth;
+        var regionAspectRatio = region.GetRegionHeight() / region.GetRegionWidth();
 
         _cols       = ( int )Math.Ceiling( density );
         _gridWidth  = boundRect.Width / density;

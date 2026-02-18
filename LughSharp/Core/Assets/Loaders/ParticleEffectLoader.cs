@@ -134,6 +134,9 @@ public class ParticleEffectLoader : SynchronousAssetLoader< ParticleEffect >
     }
 }
 
+// ============================================================================
+// ============================================================================
+
 /// <summary>
 /// Parameter to be passed to <see cref="AssetManager.Load(string, Type, AssetLoaderParameters)"/>
 /// if additional configuration is necessary for the <see cref="ParticleEffect"/>.

@@ -28,6 +28,11 @@ using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Files;
 
+/// <summary>
+/// Provides an interface for file operations, path resolution, and storage management.
+/// It includes methods to handle different types of file paths and check the availability
+/// of storage locations.
+/// </summary>
 [PublicAPI]
 public interface IFiles
 {

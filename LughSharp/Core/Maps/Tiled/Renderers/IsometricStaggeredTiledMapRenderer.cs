@@ -104,8 +104,8 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
 
                     var x1 = ( ( x * layerTileWidth ) - offsetX ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
                     var y1 = ( y * layerTileHeight50 ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
-                    var x2 = x1 + ( region.RegionWidth * UnitScale );
-                    var y2 = y1 + ( region.RegionHeight * UnitScale );
+                    var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+                    var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
                     var u1 = region.U;
                     var v1 = region.V2;

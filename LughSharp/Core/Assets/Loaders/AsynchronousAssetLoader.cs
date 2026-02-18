@@ -29,9 +29,7 @@ using LughSharp.Core.Assets.Loaders.Resolvers;
 namespace LughSharp.Core.Assets.Loaders;
 
 /// <summary>
-/// Base class for asynchronous AssetLoader instances. Such loaders try to load parts
-/// of an OpenGL resource, like the Pixmap, on a separate thread to then load the actual
-/// resource on the thread the OpenGL context is active on.
+/// Base class for asynchronous AssetLoader instances.
 /// </summary>
 [PublicAPI]
 public abstract class AsynchronousAssetLoader : AssetLoader
@@ -47,13 +45,26 @@ public abstract class AsynchronousAssetLoader : AssetLoader
     }
 
     /// <summary>
-    /// Loads the non-OpenGL part of the asset and injects any dependencies of
-    /// the asset into the <paramref name="manager"/>.
+    /// Synchronously loads an asset from the specified file using the provided asset
+    /// manager and parameters.
     /// </summary>
-    /// <param name="manager">The asset manager responsible for loading the asset.</param>
-    /// <param name="filename"> The name of the asset to load. </param>
-    /// <param name="file">The file information of the asset to load.</param>
-    /// <param name="parameter">The parameters for loading the asset.</param>
+    /// <param name="manager">The asset manager responsible for managing the asset loading process.</param>
+    /// <param name="file">The file information of the asset to be loaded.</param>
+    /// <param name="parameter">The optional parameters used for customizing the asset loading process.</param>
+    /// <typeparam name="TP">The type of the asset loader parameters.</typeparam>
+    /// <return>Returns the loaded asset object or null if the loading process fails.</return>
+    public abstract object? LoadSync< TP >( AssetManager manager,
+                                            FileInfo file,
+                                            TP? parameter ) where TP : AssetLoaderParameters;
+
+    /// <summary>
+    /// Asynchronously loads an asset using the specified parameters.
+    /// </summary>
+    /// <typeparam name="TP">The type of the parameters for loading the asset.</typeparam>
+    /// <param name="manager">The asset manager responsible for managing the asset loading process.</param>
+    /// <param name="filename">The name of the asset to be loaded.</param>
+    /// <param name="file">The file information of the asset, if available.</param>
+    /// <param name="parameter">An optional set of parameters used for loading the asset.</param>
     public abstract void LoadAsync< TP >( AssetManager manager,
                                           string filename,
                                           FileInfo? file,
@@ -69,26 +80,16 @@ public abstract class AsynchronousAssetLoader : AssetLoader
     /// method. Note that <see cref="LoadAsync{TP}"/> may still be executing when this method is called
     /// and must release any resources it allocated.
     /// </summary>
-    /// <param name="manager"></param>
+    /// <param name="manager">The asset manager responsible for loading the asset.</param>
     /// <param name="filename"> The name of the asset to load. </param>
-    /// <param name="file"></param>
-    /// <param name="parameter"></param>
+    /// <param name="file">The file information of the asset to load.</param>
+    /// <param name="parameter">The parameters for loading the asset.</param>
     public virtual void UnloadAsync< TP >( AssetManager manager,
                                            string filename,
                                            FileInfo file,
                                            TP? parameter ) where TP : AssetLoaderParameters
     {
     }
-
-    /// <summary>
-    /// Loads the OpenGL part of the asset.
-    /// </summary>
-    /// <param name="manager"></param>
-    /// <param name="file"> the resolved file to load </param>
-    /// <param name="parameter"></param>
-    public abstract object? LoadSync< TP >( AssetManager manager,
-                                            FileInfo file,
-                                            TP? parameter ) where TP : AssetLoaderParameters;
 }
 
 // ============================================================================

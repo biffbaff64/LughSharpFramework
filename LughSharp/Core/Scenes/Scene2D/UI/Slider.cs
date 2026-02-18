@@ -106,7 +106,7 @@ public class Slider : ProgressBar
         return ( SliderStyle )Style;
     }
 
-    protected ISceneDrawable? GetBackgroundDrawable()
+    protected IDrawable? GetBackgroundDrawable()
     {
         var style = ( SliderStyle )Style;
 
@@ -128,7 +128,7 @@ public class Slider : ProgressBar
         return style.Background;
     }
 
-    protected ISceneDrawable? GetKnobDrawable()
+    protected IDrawable? GetKnobDrawable()
     {
         var style = ( SliderStyle )Style;
 
@@ -150,7 +150,7 @@ public class Slider : ProgressBar
         return style.Knob;
     }
 
-    protected ISceneDrawable? GetKnobBeforeDrawable()
+    protected IDrawable? GetKnobBeforeDrawable()
     {
         var style = ( SliderStyle )Style;
 
@@ -172,7 +172,7 @@ public class Slider : ProgressBar
         return style.KnobBefore;
     }
 
-    protected ISceneDrawable? GetKnobAfterDrawable()
+    protected IDrawable? GetKnobAfterDrawable()
     {
         var style = ( SliderStyle )Style;
 
@@ -305,14 +305,14 @@ public class Slider : ProgressBar
     [PublicAPI]
     public class SliderStyle : ProgressBarStyle
     {
-        public ISceneDrawable? BackgroundOver { get; set; }
-        public ISceneDrawable? BackgroundDown { get; set; }
-        public ISceneDrawable? KnobBeforeOver { get; set; }
-        public ISceneDrawable? KnobOver       { get; set; }
-        public ISceneDrawable? KnobAfterOver  { get; set; }
-        public ISceneDrawable? KnobBeforeDown { get; set; }
-        public ISceneDrawable? KnobDown       { get; set; }
-        public ISceneDrawable? KnobAfterDown  { get; set; }
+        public IDrawable? BackgroundOver { get; set; }
+        public IDrawable? BackgroundDown { get; set; }
+        public IDrawable? KnobBeforeOver { get; set; }
+        public IDrawable? KnobOver       { get; set; }
+        public IDrawable? KnobAfterOver  { get; set; }
+        public IDrawable? KnobBeforeDown { get; set; }
+        public IDrawable? KnobDown       { get; set; }
+        public IDrawable? KnobAfterDown  { get; set; }
 
         // ====================================================================
         
@@ -320,7 +320,7 @@ public class Slider : ProgressBar
         {
         }
 
-        public SliderStyle( ISceneDrawable background, ISceneDrawable knob )
+        public SliderStyle( IDrawable background, IDrawable knob )
             : base( background, knob )
         {
         }

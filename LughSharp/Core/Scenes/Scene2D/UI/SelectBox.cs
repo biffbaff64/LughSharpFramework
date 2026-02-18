@@ -40,6 +40,7 @@ using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -306,7 +307,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// Returns appropriate background Drawable from the style
     /// based on the current select box state.
     /// </summary>
-    protected ISceneDrawable? GetBackgroundIDrawable()
+    protected IDrawable? GetBackgroundIDrawable()
     {
         if ( IsDisabled && ( Style.BackgroundDisabled != null ) )
         {
@@ -1066,10 +1067,10 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
         public Color                      FontColor          { get; } = new( 1, 1, 1, 1 );
         public Color?                     OverFontColor      { get; }
         public Color?                     DisabledFontColor  { get; }
-        public ISceneDrawable?            Background         { get; }
-        public ISceneDrawable?            BackgroundOver     { get; }
-        public ISceneDrawable?            BackgroundOpen     { get; }
-        public ISceneDrawable?            BackgroundDisabled { get; }
+        public IDrawable?            Background         { get; }
+        public IDrawable?            BackgroundOver     { get; }
+        public IDrawable?            BackgroundOpen     { get; }
+        public IDrawable?            BackgroundDisabled { get; }
 
         // ====================================================================
 
@@ -1079,7 +1080,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         public SelectBoxStyle( BitmapFont font,
                                Color fontColor,
-                               ISceneDrawable background,
+                               IDrawable background,
                                ScrollPane.ScrollPaneStyle scrollStyle,
                                ListBox< T >.ListStyle listStyle )
         {

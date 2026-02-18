@@ -124,7 +124,8 @@ public class ResolutionFileResolver : IFileHandleResolver
     }
 
     /// <summary>
-    /// Chooses the best resolution from the provided resolutions based on the device's back buffer size.
+    /// Chooses the best resolution from the provided resolutions based on the
+    /// device's back buffer size.
     /// </summary>
     /// <param name="descs">The array of resolutions to choose from.</param>
     /// <returns>The best resolution.</returns>

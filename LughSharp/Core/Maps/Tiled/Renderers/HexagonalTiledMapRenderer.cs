@@ -245,8 +245,8 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
 
             var x1 = x + ( tile.OffsetX * UnitScale );
             var y1 = y + ( tile.OffsetY * UnitScale );
-            var x2 = x1 + ( region.RegionWidth * UnitScale );
-            var y2 = y1 + ( region.RegionHeight * UnitScale );
+            var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+            var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
             var u1 = region.U;
             var v1 = region.V2;

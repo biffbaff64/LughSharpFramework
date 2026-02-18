@@ -27,6 +27,7 @@ using System;
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
@@ -355,8 +356,8 @@ public class PolygonSpriteBatch : IPolygonBatch
             _triangles[ _triangleIndex++ ] = ( short )( region.Triangles[ i ] + startVertex );
         }
 
-        var sX = width / region.Region.RegionWidth;
-        var sY = height / region.Region.RegionHeight;
+        var sX = width / region.Region.GetRegionWidth();
+        var sY = height / region.Region.GetRegionHeight();
 
         for ( var i = 0; i < region.Vertices?.Length; i += 2 )
         {
@@ -410,8 +411,8 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         var worldOriginX = x + originX;
         var worldOriginY = y + originY;
-        var sX           = width / region.Region.RegionWidth;
-        var sY           = height / region.Region.RegionHeight;
+        var sX           = width / region.Region.GetRegionWidth();
+        var sY           = height / region.Region.GetRegionHeight();
         var cos          = MathUtils.CosDeg( rotation );
         var sin          = MathUtils.SinDeg( rotation );
 
@@ -932,7 +933,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
     public void Draw( TextureRegion region, float x, float y )
     {
-        Draw( region, x, y, region.RegionWidth, region.RegionHeight );
+        Draw( region, x, y, region.GetRegionWidth(), region.GetRegionHeight() );
     }
 
     public void Draw( TextureRegion region, float x, float y, float width, float height )

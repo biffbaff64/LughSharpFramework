@@ -38,20 +38,6 @@ public class AtlasSprite : Sprite
     public float       OriginalOffsetX { get; set; }
     public float       OriginalOffsetY { get; set; }
 
-    /// <inheritdoc />
-    public override float X
-    {
-        get => base.X - Region.OffsetX;
-        set => base.X = value + Region.OffsetX;
-    }
-
-    /// <inheritdoc />
-    public override float Y
-    {
-        get => base.Y - Region.OffsetY;
-        set => base.Y = value + Region.OffsetY;
-    }
-
     // ========================================================================
 
     /// <summary>
@@ -90,8 +76,8 @@ public class AtlasSprite : Sprite
 
         SetOrigin( region.OriginalWidth / 2f, region.OriginalHeight / 2f );
 
-        var width  = region.RegionWidth;
-        var height = region.RegionHeight;
+        var width  = region.GetRegionWidth();
+        var height = region.GetRegionHeight();
 
         if ( region.Rotate )
         {
@@ -106,6 +92,33 @@ public class AtlasSprite : Sprite
         SetColor( 1, 1, 1, 1 );
     }
 
+    public override void SetPosition( float x, float y )
+    {
+        base.SetPosition( x + Region.OffsetX, y + Region.OffsetY );
+    }
+
+    /// <summary>
+    /// Sets the x position where the sprite will be drawn. If origin, rotation,
+    /// or scale are changed, it is slightly more efficient to set the position
+    /// after those operations. If both position and size are to be changed, it
+    /// is better to use <see cref="Sprite.SetBounds(float,float,float,float)"/>.
+    /// </summary>
+    public override void SetX( float x )
+    {
+        base.SetX( x + Region.OffsetX );
+    }
+
+    /// <summary>
+    /// Sets the y position where the sprite will be drawn. If origin, rotation,
+    /// or scale are changed, it is slightly more efficient to set the position
+    /// after those operations. If both position and size are to be changed, it
+    /// is better to use <see cref="Sprite.SetBounds(float,float,float,float)"/>.
+    /// </summary>
+    public override void SetY( float y )
+    {
+        base.SetY( y + Region.OffsetY );
+    }
+    
     /// <inheritdoc />
     public override void SetBounds( float x, float y, float width, float height )
     {
@@ -127,7 +140,7 @@ public class AtlasSprite : Sprite
     /// <inheritdoc />
     public override void SetSize( float width, float height )
     {
-        SetBounds( X, Y, width, height );
+        SetBounds( GetX(), GetY(), width, height );
     }
 
     /// <inheritdoc />
@@ -214,15 +227,13 @@ public class AtlasSprite : Sprite
         SetOrigin( oldOriginX, oldOriginY );
     }
 
-    public float GetOriginX()
-    {
-        return OriginX + Region.OffsetX;
-    }
+    public override float GetX() => base.GetX() - Region.OffsetX;
 
-    public float GetOriginY()
-    {
-        return OriginY + Region.OffsetY;
-    }
+    public override float GetY() => base.GetY() - Region.OffsetY;
+
+    public float GetOriginX() => OriginX + Region.OffsetX;
+
+    public float GetOriginY() => OriginY + Region.OffsetY;
 
     public float GetWidth()
     {

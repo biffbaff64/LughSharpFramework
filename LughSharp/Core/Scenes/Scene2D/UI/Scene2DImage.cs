@@ -31,10 +31,12 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
+
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
-/// Displays a <see cref="ISceneDrawable"/>, scaled various way within the widgets
+/// Displays a <see cref="Utils.IDrawable"/>, scaled various way within the widgets
 /// bounds. The preferred size is the min size of the drawable. Only when using
 /// a <see cref="TextureRegionDrawable"/> will the actor's scale, rotation, and
 /// origin be used when drawing.
@@ -46,7 +48,7 @@ public class Scene2DImage : Widget
     public float           ImageY      { get; set; }
     public float           ImageWidth  { get; set; }
     public float           ImageHeight { get; set; }
-    public ISceneDrawable? Drawable    { get; private set; }
+    public IDrawable? Drawable    { get; private set; }
 
     // ========================================================================
 
@@ -84,7 +86,7 @@ public class Scene2DImage : Widget
     /// </summary>
     /// <param name="patch"></param>
     public Scene2DImage( NinePatch patch )
-        : this( new NinePatchSceneDrawable( patch ), Scaling.None )
+        : this( new NinePatchDrawable( patch ), Scaling.None )
     {
     }
 
@@ -118,24 +120,22 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// Creates a new Image instance with the specified <see cref="ISceneDrawable"/>.
+    /// Creates a new Image instance with the specified <see cref="IDrawable"/>.
     /// </summary>
     /// <param name="drawable"></param>
-    public Scene2DImage( ISceneDrawable drawable )
+    public Scene2DImage( IDrawable drawable )
         : this( drawable, Scaling.None )
     {
     }
 
     /// <summary>
-    /// Creates a new Image instance with the specified <see cref="ISceneDrawable"/>,
+    /// Creates a new Image instance with the specified <see cref="IDrawable"/>,
     /// <see cref="Scaling"/>Mode, and alignment. Alignment defaults to <see cref="Align.CENTER"/>.
     /// </summary>
     /// <param name="drawable"></param>
     /// <param name="scaling"></param>
     /// <param name="align"></param>
-    public Scene2DImage( ISceneDrawable drawable,
-                         Scaling scaling,
-                         int align = Align.CENTER )
+    public Scene2DImage( IDrawable drawable, Scaling scaling, int align = Align.CENTER )
     {
         SetDrawable( drawable );
 
@@ -242,7 +242,7 @@ public class Scene2DImage : Widget
         var scaleX = ScaleX;
         var scaleY = ScaleY;
 
-        if ( Drawable is ITransformSceneDrawable drawable )
+        if ( Drawable is ITransformDrawable drawable )
         {
             var rotation = Rotation;
 
@@ -293,7 +293,7 @@ public class Scene2DImage : Widget
     /// can be used to size the image to its pref size.
     /// </summary>
     /// <param name="drawable"> May be null. </param>
-    public void SetDrawable( ISceneDrawable drawable )
+    public void SetDrawable( IDrawable drawable )
     {
         if ( Drawable == drawable )
         {

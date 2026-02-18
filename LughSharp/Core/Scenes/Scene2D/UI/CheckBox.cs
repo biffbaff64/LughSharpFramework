@@ -28,6 +28,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -87,7 +88,7 @@ public class CheckBox : TextButton
 
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        ISceneDrawable? checkbox = null;
+        IDrawable? checkbox = null;
 
         if ( IsDisabled )
         {
@@ -135,18 +136,18 @@ public class CheckBox : TextButton
     [PublicAPI]
     public class CheckBoxStyle : TextButtonStyle
     {
-        public ISceneDrawable? CheckboxOn          { get; set; }
-        public ISceneDrawable? CheckboxOff         { get; set; }
-        public ISceneDrawable? CheckboxOnOver      { get; set; }
-        public ISceneDrawable? CheckboxOver        { get; set; }
-        public ISceneDrawable? CheckboxOnDisabled  { get; set; }
-        public ISceneDrawable? CheckboxOffDisabled { get; set; }
+        public IDrawable? CheckboxOn          { get; set; }
+        public IDrawable? CheckboxOff         { get; set; }
+        public IDrawable? CheckboxOnOver      { get; set; }
+        public IDrawable? CheckboxOver        { get; set; }
+        public IDrawable? CheckboxOnDisabled  { get; set; }
+        public IDrawable? CheckboxOffDisabled { get; set; }
 
         public CheckBoxStyle()
         {
         }
 
-        public CheckBoxStyle( ISceneDrawable checkboxOff, ISceneDrawable checkboxOn, BitmapFont font, Color fontColor )
+        public CheckBoxStyle( IDrawable checkboxOff, IDrawable checkboxOn, BitmapFont font, Color fontColor )
         {
             CheckboxOff = checkboxOff;
             CheckboxOn  = checkboxOn;

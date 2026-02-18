@@ -37,6 +37,7 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -235,7 +236,7 @@ public class ListBox< T > : Widget where T : notnull
             {
                 var             item     = Items[ i ];
                 var             selected = Selection.Contains( item );
-                ISceneDrawable? drawable = null;
+                IDrawable? drawable = null;
 
                 if ( ( _pressedIndex == i ) && ( Style?.Down != null ) )
                 {
@@ -679,7 +680,7 @@ public class ListBox< T > : Widget where T : notnull
             Font = new BitmapFont();
         }
 
-        public ListStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected, ISceneDrawable selection )
+        public ListStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected, IDrawable selection )
         {
             Font = font;
             FontColorSelected.Set( fontColorSelected );
@@ -702,9 +703,9 @@ public class ListBox< T > : Widget where T : notnull
         public BitmapFont      Font                { get; set; }
         public Color           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
         public Color           FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
-        public ISceneDrawable? Selection           { get; set; }
-        public ISceneDrawable? Down                { get; set; }
-        public ISceneDrawable? Over                { get; set; }
-        public ISceneDrawable? Background          { get; set; }
+        public IDrawable? Selection           { get; set; }
+        public IDrawable? Down                { get; set; }
+        public IDrawable? Over                { get; set; }
+        public IDrawable? Background          { get; set; }
     }
 }

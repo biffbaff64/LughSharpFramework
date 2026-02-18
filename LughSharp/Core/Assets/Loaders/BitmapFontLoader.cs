@@ -188,6 +188,9 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 // ============================================================================
 // ============================================================================
 
+/// <summary>
+/// Parameters for loading a <see cref="BitmapFont"/>.
+/// </summary>
 [PublicAPI]
 public class BitmapFontParameter : AssetLoaderParameters
 {

@@ -25,10 +25,12 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Maths;
+
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
@@ -42,13 +44,14 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     public Rectangle ImageBounds { get; set; } = new();
 
     // ========================================================================
-    
+
     protected IBatch    Batch      { get; set; }
     protected Rectangle ViewBounds { get; set; }
     protected float     UnitScale  { get; set; }
     protected float[]   Vertices   { get; set; } = new float[ NUM_VERTICES ];
 
-    protected const int NUM_VERTICES = 20;
+    protected const int   NUM_VERTICES       = 20;
+    protected const float DEFAULT_UNIT_SCALE = 1.0f;
 
     // ========================================================================
 
@@ -62,7 +65,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// and <see cref="IBatch"/>
     /// </summary>
     protected BatchTileMapRenderer( TiledMap map, IBatch batch )
-        : this( map, 1.0f, batch )
+        : this( map, DEFAULT_UNIT_SCALE, batch )
     {
     }
 
@@ -70,17 +73,16 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// </summary>
     /// <param name="map"></param>
     /// <param name="unitScale"></param>
-    protected BatchTileMapRenderer( TiledMap map, float unitScale = 1.0f )
+    protected BatchTileMapRenderer( TiledMap map, float unitScale = DEFAULT_UNIT_SCALE )
         : this( map, unitScale, new SpriteBatch(), true )
     {
     }
 
     /// <summary>
+    /// Provides functionality for rendering a <see cref="TiledMap"/> using a batched
+    /// approach. This class serves as a base for map renderers with different tile
+    /// layouts, such as orthogonal, isometric, and hexagonal.
     /// </summary>
-    /// <param name="map"></param>
-    /// <param name="unitScale"></param>
-    /// <param name="batch"></param>
-    /// <param name="ownsBatch"></param>
     protected BatchTileMapRenderer( TiledMap map, float unitScale, IBatch batch, bool ownsBatch = false )
     {
         TiledMap   = map;
@@ -91,14 +93,13 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
-    /// Draws all layers in the default <see cref="TiledMap"/>.
-    /// This is the map supplied on creation, or supplied by any
-    /// extending classes.
+    /// Draws all layers in the default <see cref="TiledMap"/>. This is the map
+    /// supplied on creation, or supplied by any extending classes.
     /// </summary>
     public void Render()
     {
         Batch.EnableBlending();
-        
+
         BeginRender();
 
         foreach ( var layer in TiledMap.Layers )
@@ -110,26 +111,30 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
+    /// Renders the specified layers.
     /// </summary>
-    /// <param name="layers"></param>
+    /// <param name="layers"> The array of layers to draw. </param>
     public void Render( int[] layers )
     {
         Batch.EnableBlending();
 
         BeginRender();
 
-        foreach ( var layerIdx in layers )
+        foreach ( var layer in layers )
         {
-            var layer = TiledMap.Layers.Get( layerIdx );
-            RenderMapLayer( layer );
+            RenderMapLayer( TiledMap.Layers.Get( layer ) );
         }
 
         EndRender();
     }
 
     /// <summary>
+    /// Updates the batch's projection matrix using the provided <see cref="OrthographicCamera"/>
+    /// and recalculates the view bounds for rendering the tiled map.
     /// </summary>
-    /// <param name="camera"></param>
+    /// <param name="camera">
+    /// The orthographic camera used to determine the projection matrix and view bounds for rendering.
+    /// </param>
     public void SetView( OrthographicCamera camera )
     {
         Batch.SetProjectionMatrix( camera.Combined );
@@ -144,16 +149,59 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
+    /// Sets the view for the renderer using the specified projection matrix and viewport dimensions.
     /// </summary>
-    /// <param name="projection"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="projection">The projection matrix to be used for rendering.</param>
+    /// <param name="x">The x-coordinate of the viewport's bottom-left corner in world units.</param>
+    /// <param name="y">The y-coordinate of the viewport's bottom-left corner in world units.</param>
+    /// <param name="width">The width of the viewport in world units.</param>
+    /// <param name="height">The height of the viewport in world units.</param>
     public void SetView( Matrix4 projection, float x, float y, float width, float height )
     {
         Batch.SetProjectionMatrix( projection );
         ViewBounds.Set( x, y, width, height );
+    }
+
+    /// <summary>
+    /// Renders the specified <see cref="MapLayer"/>.
+    /// </summary>
+    protected void RenderMapLayer( MapLayer layer )
+    {
+        if ( !layer.Visible )
+        {
+            return;
+        }
+
+        switch ( layer )
+        {
+            case MapGroupLayer groupLayer:
+            {
+                RenderGroupLayerChildren( groupLayer );
+
+                break;
+            }
+
+            case TiledMapTileLayer tileLayer:
+            {
+                RenderTileLayer( tileLayer );
+
+                break;
+            }
+
+            case TiledMapImageLayer imageLayer:
+            {
+                RenderImageLayer( imageLayer );
+
+                break;
+            }
+
+            default:
+            {
+                RenderObjects( layer );
+
+                break;
+            }
+        }
     }
 
     /// <summary>
@@ -202,8 +250,8 @@ public class BatchTileMapRenderer : ITiledMapRenderer
         var y  = layer.Y;
         var x1 = x * UnitScale;
         var y1 = y * UnitScale;
-        var x2 = x1 + ( region.RegionWidth * UnitScale );
-        var y2 = y1 + ( region.RegionHeight * UnitScale );
+        var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+        var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
         ImageBounds.Set( x1, y1, x2 - x1, y2 - y1 );
 
@@ -241,48 +289,6 @@ public class BatchTileMapRenderer : ITiledMapRenderer
             if ( region.Texture != null )
             {
                 Batch.Draw( region.Texture, Vertices, 0, NUM_VERTICES );
-            }
-        }
-    }
-
-    /// <summary>
-    /// Renders the specified <see cref="MapLayer"/>.
-    /// </summary>
-    protected void RenderMapLayer( MapLayer layer )
-    {
-        if ( !layer.Visible )
-        {
-            return;
-        }
-
-        switch ( layer )
-        {
-            case MapGroupLayer groupLayer:
-            {
-                RenderGroupLayerChildren( groupLayer );
-
-                break;
-            }
-
-            case TiledMapTileLayer tileLayer:
-            {
-                RenderTileLayer( tileLayer );
-
-                break;
-            }
-
-            case TiledMapImageLayer imageLayer:
-            {
-                RenderImageLayer( imageLayer );
-
-                break;
-            }
-
-            default:
-            {
-                RenderObjects( layer );
-
-                break;
             }
         }
     }
@@ -327,4 +333,3 @@ public class BatchTileMapRenderer : ITiledMapRenderer
 
 // ============================================================================
 // ============================================================================
-

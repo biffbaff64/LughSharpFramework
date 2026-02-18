@@ -28,6 +28,7 @@ using System.IO;
 
 using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
+using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;

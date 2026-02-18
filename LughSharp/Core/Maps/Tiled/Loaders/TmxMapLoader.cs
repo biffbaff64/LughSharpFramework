@@ -333,8 +333,8 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
             props.Put( "margin", margin );
             props.Put( "spacing", spacing );
 
-            var stopWidth  = texture.RegionWidth - tilewidth;
-            var stopHeight = texture.RegionHeight - tileheight;
+            var stopWidth  = texture.GetRegionWidth() - tilewidth;
+            var stopHeight = texture.GetRegionHeight() - tileheight;
 
             var id = firstgid;
 

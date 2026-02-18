@@ -153,8 +153,8 @@ public class AtlasRegion : TextureRegion, IDisposable
     {
         SetRegion( region );
 
-        PackedWidth    = region.RegionWidth;
-        PackedHeight   = region.RegionHeight;
+        PackedWidth    = region.GetRegionWidth();
+        PackedHeight   = region.GetRegionHeight();
         OriginalWidth  = PackedWidth;
         OriginalHeight = PackedHeight;
     }

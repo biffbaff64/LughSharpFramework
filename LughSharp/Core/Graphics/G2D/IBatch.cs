@@ -26,6 +26,7 @@ using System;
 
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
 

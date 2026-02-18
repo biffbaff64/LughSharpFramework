@@ -29,6 +29,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
@@ -1012,16 +1013,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          U,
                          V,
+                         // -----------
                          posX,
                          fy2,
                          ColorPackedRGBA,
                          U,
                          V2,
+                         // -----------
                          fx2,
                          fy2,
                          ColorPackedRGBA,
                          U2,
                          V2,
+                         // -----------
                          fx2,
                          posY,
                          ColorPackedRGBA,
@@ -1158,16 +1162,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          u,
                          v,
+                         // -----------
                          x2,
                          y2,
                          ColorPackedRGBA,
                          u,
                          v2,
+                         // -----------
                          x3,
                          y3,
                          ColorPackedRGBA,
                          u2,
                          v2,
+                         // -----------
                          x4,
                          y4,
                          ColorPackedRGBA,
@@ -1222,16 +1229,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          u,
                          v,
+                         // -----------
                          region.X,
                          fy2,
                          ColorPackedRGBA,
                          u,
                          v2,
+                         // -----------
                          fx2,
                          fy2,
                          ColorPackedRGBA,
                          u2,
                          v2,
+                         // -----------
                          fx2,
                          region.Y,
                          ColorPackedRGBA,
@@ -1275,16 +1285,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          u,
                          v,
+                         // -----------
                          x,
                          fy2,
                          ColorPackedRGBA,
                          u,
                          v2,
+                         // -----------
                          fx2,
                          fy2,
                          ColorPackedRGBA,
                          u2,
                          v2,
+                         // -----------
                          fx2,
                          y,
                          ColorPackedRGBA,
@@ -1325,16 +1338,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          u,
                          v,
+                         // -----------
                          region.X,
                          fy2,
                          ColorPackedRGBA,
                          u,
                          v2,
+                         // -----------
                          fx2,
                          fy2,
                          ColorPackedRGBA,
                          u2,
                          v2,
+                         // -----------
                          fx2,
                          region.Y,
                          ColorPackedRGBA,
@@ -1432,7 +1448,7 @@ public class SpriteBatch : IBatch
         {
             Validate( region );
 
-            Draw( region, x, y, region!.RegionWidth, region.RegionHeight );
+            Draw( region, x, y, region!.GetRegionWidth(), region.GetRegionHeight() );
         }
     }
 
@@ -1470,16 +1486,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          region.U,
                          region.V,
+                         // -----------
                          x,
                          fy2,
                          ColorPackedRGBA,
                          region.U,
                          region.V2,
+                         // -----------
                          fx2,
                          fy2,
                          ColorPackedRGBA,
                          region.U2,
                          region.V2,
+                         // -----------
                          fx2,
                          y,
                          ColorPackedRGBA,
@@ -1592,16 +1611,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          textureRegion.U,
                          textureRegion.V,
+                         // -----------
                          x2,
                          y2,
                          ColorPackedRGBA,
                          textureRegion.U,
                          textureRegion.V2,
+                         // -----------
                          x3,
                          y3,
                          ColorPackedRGBA,
                          textureRegion.U2,
                          textureRegion.V2,
+                         // -----------
                          x4,
                          y4,
                          ColorPackedRGBA,
@@ -1750,16 +1772,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          u1,
                          v1,
+                         // -----------
                          x2,
                          y2,
                          ColorPackedRGBA,
                          u2,
                          v2,
+                         // -----------
                          x3,
                          y3,
                          ColorPackedRGBA,
                          u3,
                          v3,
+                         // -----------
                          x4,
                          y4,
                          ColorPackedRGBA,
@@ -1785,8 +1810,6 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( region.Texture );
             }
-
-//            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
                 Flush();
@@ -1812,16 +1835,19 @@ public class SpriteBatch : IBatch
                          ColorPackedRGBA,
                          u,
                          v,
+                         // -----------
                          x2,
                          y2,
                          ColorPackedRGBA,
                          u,
                          v2,
+                         // -----------
                          x3,
                          y3,
                          ColorPackedRGBA,
                          u2,
                          v2,
+                         // -----------
                          x4,
                          y4,
                          ColorPackedRGBA,
@@ -1860,24 +1886,28 @@ public class SpriteBatch : IBatch
                               float x3, float y3, float c3, float u3, float v3,
                               float x4, float y4, float c4, float u4, float v4 )
     {
+        // Bottom Left
         Vertices[ Idx + IBatch.X1 ] = x1; // X
         Vertices[ Idx + IBatch.Y1 ] = y1; // Y
         Vertices[ Idx + IBatch.C1 ] = c1; // Color
         Vertices[ Idx + IBatch.U1 ] = u1; // Texture U
         Vertices[ Idx + IBatch.V1 ] = v1; // Texture V
 
+        // Top Left
         Vertices[ Idx + IBatch.X2 ] = x2; // X
         Vertices[ Idx + IBatch.Y2 ] = y2; // Y
         Vertices[ Idx + IBatch.C2 ] = c2; // Color
         Vertices[ Idx + IBatch.U2 ] = u2; // Texture U
         Vertices[ Idx + IBatch.V2 ] = v2; // Texture V
 
+        // Top Right
         Vertices[ Idx + IBatch.X3 ] = x3; // X
         Vertices[ Idx + IBatch.Y3 ] = y3; // Y
         Vertices[ Idx + IBatch.C3 ] = c3; // Color
         Vertices[ Idx + IBatch.U3 ] = u3; // Texture U
         Vertices[ Idx + IBatch.V3 ] = v3; // Texture V
 
+        // Bottom Right
         Vertices[ Idx + IBatch.X4 ] = x4; // X
         Vertices[ Idx + IBatch.Y4 ] = y4; // Y
         Vertices[ Idx + IBatch.C4 ] = c4; // Color

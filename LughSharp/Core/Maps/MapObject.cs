@@ -28,7 +28,8 @@ using Color = LughSharp.Core.Graphics.Color;
 namespace LughSharp.Core.Maps;
 
 /// <summary>
-/// Generic Map entity with basic attributes like name, opacity, color
+/// Generic Map entity with basic attributes like name, opacity, color,
+/// visibility and <see cref="MapProperties"/>.
 /// </summary>
 [PublicAPI]
 public class MapObject

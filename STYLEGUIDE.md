@@ -5,7 +5,7 @@ Style Guide for contributors
 ----------------------------
 
 This style guide is for C# code developed for the LughSharp Framework, and must be adhered to by contributors.
-It is heavily bases on the Google C# Style Guide.
+It is heavily based on the Google C# Style Guide.
 
 Formatting guidelines
 =====================
@@ -41,6 +41,11 @@ Files
 - Filenames and directory names are PascalCase, e.g. MyFile.cs.
 - Where possible the file name should be the same as the name of the main class in the file, e.g. MyClass.cs.
 - In general, prefer one core class per file.
+  - All source files must have a copyright header, and have a footer comprised of 2 lines of '=' characters/
+    - eg:
+        // ============================================================================
+        // ============================================================================
+
 
 Organization
 ------------

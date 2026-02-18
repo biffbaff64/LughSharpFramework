@@ -33,6 +33,11 @@ namespace LughSharp.Core.Assets;
 [PublicAPI]
 public interface IAssetErrorListener
 {
+    /// <summary>
+    /// Called when an error occurs while loading an asset.
+    /// </summary>
+    /// <param name="asset"> The <see cref="AssetDescriptor"/> describing the asset. </param>
+    /// <param name="throwable"> The exception that occurred during asset loading. </param>
     void Error( AssetDescriptor asset, Exception throwable );
 }
 

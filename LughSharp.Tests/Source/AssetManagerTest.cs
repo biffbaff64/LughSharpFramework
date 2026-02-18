@@ -98,7 +98,7 @@ public class AssetManagerTest
             Logger.Error( "Unable to find requested region in objects.atlas" );
         }
         
-        Logger.Debug( $"region size: {region?.RegionWidth}, {region?.RegionHeight}" );
+        Logger.Debug( $"region size: {region?.GetRegionWidth()}, {region?.GetRegionHeight()}" );
         
         Logger.Debug( "Finished!", true );
     }

@@ -30,29 +30,59 @@ using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;
 
+/// <summary>
+/// Renders orthogonal tiles by drawing them directly to the screen.
+/// </summary>
 [PublicAPI]
 public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
 {
+    /// <summary>
+    /// Creates a new Renderer using the supplied <see cref="TiledMap"/>. This
+    /// renderer will use its own <see cref="IBatch"/> instance.
+    /// </summary>
+    /// <param name="map"> The TiledMap to render. </param>
     public OrthogonalTiledMapRenderer( TiledMap map )
         : base( map )
     {
     }
 
+    /// <summary>
+    /// Creates a new Renderer using the supplied <see cref="TiledMap"/> and <see cref="IBatch"/>.
+    /// </summary>
+    /// <param name="map"> The TiledMap to render. </param>
+    /// <param name="batch"> The IBatch instance to use for rendering. </param>
     public OrthogonalTiledMapRenderer( TiledMap map, IBatch batch )
         : base( map, batch )
     {
     }
 
+    /// <summary>
+    /// Creates a new Renderer using the supplied <see cref="TiledMap"/> and unit scale.
+    /// The renderer will use its own <see cref="IBatch"/> instance.
+    /// </summary>
+    /// <param name="map"> The TiledMap to render. </param>
+    /// <param name="unitScale"> The unit scale for rendering object layers. </param>
     public OrthogonalTiledMapRenderer( TiledMap map, float unitScale )
         : base( map, unitScale )
     {
     }
 
+    /// <summary>
+    /// Creates a new Renderer using the supplied <see cref="TiledMap"/>, unit scale,
+    /// and <see cref="IBatch"/>.
+    /// </summary>
+    /// <param name="map"></param>
+    /// <param name="unitScale"></param>
+    /// <param name="batch"></param>
     public OrthogonalTiledMapRenderer( TiledMap map, float unitScale, IBatch batch )
         : base( map, unitScale, batch )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="layer"></param>
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
         var batchColor = Batch.Color;
@@ -108,33 +138,33 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
 
                     var x1 = x + ( tile.OffsetX * UnitScale );
                     var y1 = y + ( tile.OffsetY * UnitScale );
-                    var x2 = x1 + ( region.RegionWidth * UnitScale );
-                    var y2 = y1 + ( region.RegionHeight * UnitScale );
+                    var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+                    var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
                     var u1 = region.U;
                     var v1 = region.V2;
                     var u2 = region.U2;
                     var v2 = region.V;
 
-                    Vertices[ IBatch.X1 ] = x1;
+                    Vertices[ IBatch.X1 ] = x1;     // Bottom left
                     Vertices[ IBatch.Y1 ] = y1;
                     Vertices[ IBatch.C1 ] = color;
                     Vertices[ IBatch.U1 ] = u1;
                     Vertices[ IBatch.V1 ] = v1;
 
-                    Vertices[ IBatch.X2 ] = x1;
+                    Vertices[ IBatch.X2 ] = x1;     // Top left
                     Vertices[ IBatch.Y2 ] = y2;
                     Vertices[ IBatch.C2 ] = color;
                     Vertices[ IBatch.U2 ] = u1;
                     Vertices[ IBatch.V2 ] = v2;
 
-                    Vertices[ IBatch.X3 ] = x2;
+                    Vertices[ IBatch.X3 ] = x2;     // Top right
                     Vertices[ IBatch.Y3 ] = y2;
                     Vertices[ IBatch.C3 ] = color;
                     Vertices[ IBatch.U3 ] = u2;
                     Vertices[ IBatch.V3 ] = v2;
 
-                    Vertices[ IBatch.X4 ] = x2;
+                    Vertices[ IBatch.X4 ] = x2;     // Bottom right
                     Vertices[ IBatch.Y4 ] = y1;
                     Vertices[ IBatch.C4 ] = color;
                     Vertices[ IBatch.U4 ] = u2;

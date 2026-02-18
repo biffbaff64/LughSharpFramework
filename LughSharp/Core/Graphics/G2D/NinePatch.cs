@@ -149,8 +149,8 @@ public class NinePatch
     {
         Guard.Against.Null( region );
 
-        var middleWidth  = region.RegionWidth - left - right;
-        var middleHeight = region.RegionHeight - top - bottom;
+        var middleWidth  = region.GetRegionWidth() - left - right;
+        var middleHeight = region.GetRegionHeight() - top - bottom;
         var patches      = new TextureRegion?[ 9 ];
 
         if ( top > 0 )
@@ -279,7 +279,7 @@ public class NinePatch
     /// specified via the public members <see cref="TopLeft"/>, <see cref="TopCenter"/>,
     /// etc.
     /// </summary>
-    public NinePatch( params TextureRegion[] patches )
+    public NinePatch( params TextureRegion?[] patches )
     {
         if ( patches is not { Length: 9 } )
         {
@@ -289,41 +289,41 @@ public class NinePatch
         Load( patches );
 
         if ( ( ( patches[ TOP_LEFT ] != null )
-               && ( Math.Abs( patches[ TOP_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) )
+               && ( Math.Abs( patches[ TOP_LEFT ]!.GetRegionWidth() - LeftWidth ) > TOLERANCE ) )
              || ( ( patches[ MIDDLE_LEFT ] != null )
-                  && ( Math.Abs( patches[ MIDDLE_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) )
+                  && ( Math.Abs( patches[ MIDDLE_LEFT ]!.GetRegionWidth() - LeftWidth ) > TOLERANCE ) )
              || ( ( patches[ BOTTOM_LEFT ] != null )
-                  && ( Math.Abs( patches[ BOTTOM_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) ) )
+                  && ( Math.Abs( patches[ BOTTOM_LEFT ]!.GetRegionWidth() - LeftWidth ) > TOLERANCE ) ) )
         {
             throw new RuntimeException( "Left side patches must have the same width" );
         }
 
         if ( ( ( patches[ TOP_RIGHT ] != null )
-               && ( Math.Abs( patches[ TOP_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) )
+               && ( Math.Abs( patches[ TOP_RIGHT ]!.GetRegionWidth() - RightWidth ) > TOLERANCE ) )
              || ( ( patches[ MIDDLE_RIGHT ] != null )
-                  && ( Math.Abs( patches[ MIDDLE_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) )
+                  && ( Math.Abs( patches[ MIDDLE_RIGHT ]!.GetRegionWidth() - RightWidth ) > TOLERANCE ) )
              || ( ( patches[ BOTTOM_RIGHT ] != null )
-                  && ( Math.Abs( patches[ BOTTOM_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) ) )
+                  && ( Math.Abs( patches[ BOTTOM_RIGHT ]!.GetRegionWidth() - RightWidth ) > TOLERANCE ) ) )
         {
             throw new RuntimeException( "Right side patches must have the same width" );
         }
 
         if ( ( ( patches[ BOTTOM_LEFT ] != null )
-               && ( Math.Abs( patches[ BOTTOM_LEFT ].RegionHeight - BottomHeight ) > TOLERANCE ) )
+               && ( Math.Abs( patches[ BOTTOM_LEFT ]!.GetRegionHeight() - BottomHeight ) > TOLERANCE ) )
              || ( ( patches[ BOTTOM_CENTER ] != null )
-                  && ( Math.Abs( patches[ BOTTOM_CENTER ].RegionHeight - BottomHeight ) > TOLERANCE ) )
+                  && ( Math.Abs( patches[ BOTTOM_CENTER ]!.GetRegionHeight() - BottomHeight ) > TOLERANCE ) )
              || ( ( patches[ BOTTOM_RIGHT ] != null )
-                  && ( Math.Abs( patches[ BOTTOM_RIGHT ].RegionHeight - BottomHeight ) > TOLERANCE ) ) )
+                  && ( Math.Abs( patches[ BOTTOM_RIGHT ]!.GetRegionHeight() - BottomHeight ) > TOLERANCE ) ) )
         {
             throw new RuntimeException( "Bottom side patches must have the same height" );
         }
 
         if ( ( ( patches[ TOP_LEFT ] != null )
-               && ( Math.Abs( patches[ TOP_LEFT ].RegionHeight - TopHeight ) > TOLERANCE ) )
+               && ( Math.Abs( patches[ TOP_LEFT ]!.GetRegionHeight() - TopHeight ) > TOLERANCE ) )
              || ( ( patches[ TOP_CENTER ] != null )
-                  && ( Math.Abs( patches[ TOP_CENTER ].RegionHeight - TopHeight ) > TOLERANCE ) )
+                  && ( Math.Abs( patches[ TOP_CENTER ]!.GetRegionHeight() - TopHeight ) > TOLERANCE ) )
              || ( ( patches[ TOP_RIGHT ] != null )
-                  && ( Math.Abs( patches[ TOP_RIGHT ].RegionHeight - TopHeight ) > TOLERANCE ) ) )
+                  && ( Math.Abs( patches[ TOP_RIGHT ]!.GetRegionHeight() - TopHeight ) > TOLERANCE ) ) )
         {
             throw new RuntimeException( "Top side patches must have the same height" );
         }
@@ -390,8 +390,8 @@ public class NinePatch
         if ( patches[ BOTTOM_LEFT ] != null )
         {
             BottomLeft   = Add( patches[ BOTTOM_LEFT ], false, false );
-            LeftWidth    = patches[ BOTTOM_LEFT ]!.RegionWidth;
-            BottomHeight = patches[ BOTTOM_LEFT ]!.RegionHeight;
+            LeftWidth    = patches[ BOTTOM_LEFT ]!.GetRegionWidth();
+            BottomHeight = patches[ BOTTOM_LEFT ]!.GetRegionHeight();
         }
         else
         {
@@ -404,8 +404,8 @@ public class NinePatch
                                 ( patches[ BOTTOM_LEFT ] != null ) || ( patches[ BOTTOM_RIGHT ] != null ),
                                 false );
 
-            MiddleWidth  = Math.Max( MiddleWidth, patches[ BOTTOM_CENTER ]!.RegionWidth );
-            BottomHeight = Math.Max( BottomHeight, patches[ BOTTOM_CENTER ]!.RegionHeight );
+            MiddleWidth  = Math.Max( MiddleWidth, patches[ BOTTOM_CENTER ]!.GetRegionWidth() );
+            BottomHeight = Math.Max( BottomHeight, patches[ BOTTOM_CENTER ]!.GetRegionHeight() );
         }
         else
         {
@@ -415,8 +415,8 @@ public class NinePatch
         if ( patches[ BOTTOM_RIGHT ] != null )
         {
             BottomRight  = Add( patches[ BOTTOM_RIGHT ], false, false );
-            RightWidth   = Math.Max( RightWidth, patches[ BOTTOM_RIGHT ]!.RegionWidth );
-            BottomHeight = Math.Max( BottomHeight, patches[ BOTTOM_RIGHT ]!.RegionHeight );
+            RightWidth   = Math.Max( RightWidth, patches[ BOTTOM_RIGHT ]!.GetRegionWidth() );
+            BottomHeight = Math.Max( BottomHeight, patches[ BOTTOM_RIGHT ]!.GetRegionHeight() );
         }
         else
         {
@@ -429,8 +429,8 @@ public class NinePatch
                               false,
                               ( patches[ TOP_LEFT ] != null ) || ( patches[ BOTTOM_LEFT ] != null ) );
 
-            LeftWidth    = Math.Max( LeftWidth, patches[ MIDDLE_LEFT ]!.RegionWidth );
-            MiddleHeight = Math.Max( MiddleHeight, patches[ MIDDLE_LEFT ]!.RegionHeight );
+            LeftWidth    = Math.Max( LeftWidth, patches[ MIDDLE_LEFT ]!.GetRegionWidth() );
+            MiddleHeight = Math.Max( MiddleHeight, patches[ MIDDLE_LEFT ]!.GetRegionHeight() );
         }
         else
         {
@@ -443,8 +443,8 @@ public class NinePatch
                                 ( patches[ MIDDLE_LEFT ] != null ) || ( patches[ MIDDLE_RIGHT ] != null ),
                                 ( patches[ TOP_CENTER ] != null ) || ( patches[ BOTTOM_CENTER ] != null ) );
 
-            MiddleWidth  = Math.Max( MiddleWidth, patches[ MIDDLE_CENTER ]!.RegionWidth );
-            MiddleHeight = Math.Max( MiddleHeight, patches[ MIDDLE_CENTER ]!.RegionHeight );
+            MiddleWidth  = Math.Max( MiddleWidth, patches[ MIDDLE_CENTER ]!.GetRegionWidth() );
+            MiddleHeight = Math.Max( MiddleHeight, patches[ MIDDLE_CENTER ]!.GetRegionHeight() );
         }
         else
         {
@@ -457,8 +457,8 @@ public class NinePatch
                                false,
                                ( patches[ TOP_RIGHT ] != null ) || ( patches[ BOTTOM_RIGHT ] != null ) );
 
-            RightWidth   = Math.Max( RightWidth, patches[ MIDDLE_RIGHT ]!.RegionWidth );
-            MiddleHeight = Math.Max( MiddleHeight, patches[ MIDDLE_RIGHT ]!.RegionHeight );
+            RightWidth   = Math.Max( RightWidth, patches[ MIDDLE_RIGHT ]!.GetRegionWidth() );
+            MiddleHeight = Math.Max( MiddleHeight, patches[ MIDDLE_RIGHT ]!.GetRegionHeight() );
         }
         else
         {
@@ -468,8 +468,8 @@ public class NinePatch
         if ( patches[ TOP_LEFT ] != null )
         {
             TopLeft   = Add( patches[ TOP_LEFT ], false, false );
-            LeftWidth = Math.Max( LeftWidth, patches[ TOP_LEFT ]!.RegionWidth );
-            TopHeight = Math.Max( TopHeight, patches[ TOP_LEFT ]!.RegionHeight );
+            LeftWidth = Math.Max( LeftWidth, patches[ TOP_LEFT ]!.GetRegionWidth() );
+            TopHeight = Math.Max( TopHeight, patches[ TOP_LEFT ]!.GetRegionHeight() );
         }
         else
         {
@@ -483,8 +483,8 @@ public class NinePatch
                              || ( patches[ TOP_RIGHT ] != null ),
                              false );
 
-            MiddleWidth = Math.Max( MiddleWidth, patches[ TOP_CENTER ]!.RegionWidth );
-            TopHeight   = Math.Max( TopHeight, patches[ TOP_CENTER ]!.RegionHeight );
+            MiddleWidth = Math.Max( MiddleWidth, patches[ TOP_CENTER ]!.GetRegionWidth() );
+            TopHeight   = Math.Max( TopHeight, patches[ TOP_CENTER ]!.GetRegionHeight() );
         }
         else
         {
@@ -494,8 +494,8 @@ public class NinePatch
         if ( patches[ TOP_RIGHT ] != null )
         {
             TopRight   = Add( patches[ TOP_RIGHT ], false, false );
-            RightWidth = Math.Max( RightWidth, patches[ TOP_RIGHT ]!.RegionWidth );
-            TopHeight  = Math.Max( TopHeight, patches[ TOP_RIGHT ]!.RegionHeight );
+            RightWidth = Math.Max( RightWidth, patches[ TOP_RIGHT ]!.GetRegionWidth() );
+            TopHeight  = Math.Max( TopHeight, patches[ TOP_RIGHT ]!.GetRegionHeight() );
         }
         else
         {

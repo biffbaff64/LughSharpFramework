@@ -22,9 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.UI;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
 public class DialogFocusListener : FocusListener
 {

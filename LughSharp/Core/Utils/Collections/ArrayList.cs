@@ -25,12 +25,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
-namespace LughSharp.Core.Utils;
+namespace LughSharp.Core.Utils.Collections;
 
 /// <summary>
 /// A resizable, ordered or unordered array of objects. If unordered, this class

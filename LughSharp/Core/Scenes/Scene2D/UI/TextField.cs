@@ -44,6 +44,7 @@ using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -467,7 +468,7 @@ public class TextField : Widget
         return ( MaxLength <= 0 ) || ( size < MaxLength );
     }
 
-    protected virtual ISceneDrawable? GetBackgroundDrawable()
+    protected virtual IDrawable? GetBackgroundDrawable()
     {
         if ( Disabled && ( Style?.DisabledBackground != null ) )
         {
@@ -589,7 +590,7 @@ public class TextField : Widget
         }
     }
 
-    protected virtual float GetTextY( BitmapFont font, ISceneDrawable? background )
+    protected virtual float GetTextY( BitmapFont font, IDrawable? background )
     {
         var height = Height;
         var textY  = ( TextHeight / 2 ) + font.GetDescent();
@@ -613,7 +614,7 @@ public class TextField : Widget
         return textY;
     }
 
-    protected virtual void DrawSelection( ISceneDrawable selection, IBatch batch, BitmapFont font, float x, float y )
+    protected virtual void DrawSelection( IDrawable selection, IBatch batch, BitmapFont font, float x, float y )
     {
         selection.Draw( batch,
                         x + TextOffset + _selectionX + FontOffset,
@@ -646,7 +647,7 @@ public class TextField : Widget
         }
     }
 
-    protected virtual void DrawCursor( ISceneDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
+    protected virtual void DrawCursor( IDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
     {
         cursorPatch.Draw( batch,
                           ( ( x + TextOffset + GlyphPositions[ Cursor ] )
@@ -1258,9 +1259,9 @@ public class TextField : Widget
 
         public TextFieldStyle( BitmapFont font,
                                Color fontColor,
-                               ISceneDrawable? cursor,
-                               ISceneDrawable? selection,
-                               ISceneDrawable? background )
+                               IDrawable? cursor,
+                               IDrawable? selection,
+                               IDrawable? background )
         {
             Font       = font;
             FontColor  = fontColor;
@@ -1306,11 +1307,11 @@ public class TextField : Widget
         public Color?          FontColor          { get; set; }
         public Color?          FocusedFontColor   { get; set; }
         public Color?          DisabledFontColor  { get; set; }
-        public ISceneDrawable? Background         { get; set; }
-        public ISceneDrawable? FocusedBackground  { get; set; }
-        public ISceneDrawable? DisabledBackground { get; set; }
-        public ISceneDrawable? Cursor             { get; set; }
-        public ISceneDrawable? Selection          { get; set; }
+        public IDrawable? Background         { get; set; }
+        public IDrawable? FocusedBackground  { get; set; }
+        public IDrawable? DisabledBackground { get; set; }
+        public IDrawable? Cursor             { get; set; }
+        public IDrawable? Selection          { get; set; }
         public BitmapFont?     MessageFont        { get; set; }
         public Color?          MessageFontColor   { get; set; }
     }

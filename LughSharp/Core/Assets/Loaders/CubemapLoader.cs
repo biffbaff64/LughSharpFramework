@@ -138,6 +138,9 @@ public class CubemapLoader : AsynchronousAssetLoader
 
     // ========================================================================
 
+    /// <summary>
+    /// Parameters for loading cubemaps.
+    /// </summary>
     [PublicAPI]
     public class CubemapParameter : AssetLoaderParameters
     {

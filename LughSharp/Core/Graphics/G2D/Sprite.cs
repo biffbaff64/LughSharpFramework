@@ -22,10 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Graphics.G2D;
@@ -76,12 +80,14 @@ public class Sprite : TextureRegion
 
     private readonly Color _color = new( 1, 1, 1, 1 );
 
-    private bool _isDirty = true;
-
-    private bool  _flipX;
-    private bool  _flipY;
-    private float _uScrollOffset;
-    private float _vScrollOffset;
+    private bool       _isDirty = true;
+    private bool       _flipX;
+    private bool       _flipY;
+    private float      _uScrollOffset;
+    private float      _vScrollOffset;
+    private Rectangle? _bounds;
+    private float      _x;
+    private float      _y;
 
     // ========================================================================
 
@@ -158,7 +164,7 @@ public class Sprite : TextureRegion
         SetRegion( region );
         SetColor( 1, 1, 1, 1 );
 
-        SetSizeAndOrigin( region.RegionWidth, region.RegionHeight );
+        SetSizeAndOrigin( region.GetRegionWidth(), region.GetRegionHeight() );
     }
 
     /// <summary>
@@ -232,8 +238,8 @@ public class Sprite : TextureRegion
         V        = sprite.V;
         U2       = sprite.U2;
         V2       = sprite.V2;
-        X        = sprite.X;
-        Y        = sprite.Y;
+        _x       = sprite.GetX();
+        _y       = sprite.GetY();
         Width    = sprite.Width;
         Height   = sprite.Height;
         OriginX  = sprite.OriginX;
@@ -246,8 +252,8 @@ public class Sprite : TextureRegion
         // Copy color
         _color.Set( sprite._color );
 
-        SetRegionWidth( sprite.RegionWidth, IsFlipX() );
-        SetRegionHeight( sprite.RegionHeight, IsFlipY() );
+        SetRegionWidth( sprite.GetRegionWidth() );
+        SetRegionHeight( sprite.GetRegionHeight() );
     }
 
     /// <summary>
@@ -259,9 +265,9 @@ public class Sprite : TextureRegion
     /// </summary>
     public virtual void SetBounds()
     {
-        SetBounds( X, Y, Width, Height );
+        SetBounds( _x, _y, Width, Height );
     }
-    
+
     /// <summary>
     /// Sets the position and size of the sprite when drawn, before scaling
     /// and rotation are applied. If origin, rotation, or scale are changed,
@@ -269,8 +275,8 @@ public class Sprite : TextureRegion
     /// </summary>
     public virtual void SetBounds( float x, float y, float width, float height )
     {
-        X      = x;
-        Y      = y;
+        _x     = x;
+        _y     = y;
         Width  = width;
         Height = height;
 
@@ -328,20 +334,20 @@ public class Sprite : TextureRegion
             return;
         }
 
-        var x2 = X + width;
-        var y2 = Y + height;
+        var x2 = _x + width;
+        var y2 = _y + height;
 
-        Vertices[ IBatch.X1 ] = X;
-        Vertices[ IBatch.Y1 ] = Y;
+        Vertices[ IBatch.X1 ] = _x;     // Bottom left
+        Vertices[ IBatch.Y1 ] = _y;
 
-        Vertices[ IBatch.X2 ] = X;
+        Vertices[ IBatch.X2 ] = _x;     // Top left
         Vertices[ IBatch.Y2 ] = y2;
 
-        Vertices[ IBatch.X3 ] = x2;
+        Vertices[ IBatch.X3 ] = x2;     // Top right
         Vertices[ IBatch.Y3 ] = y2;
 
-        Vertices[ IBatch.X4 ] = x2;
-        Vertices[ IBatch.Y4 ] = Y;
+        Vertices[ IBatch.X4 ] = x2;     // Bottom right
+        Vertices[ IBatch.Y4 ] = _y;
     }
 
     /// <summary>
@@ -350,10 +356,10 @@ public class Sprite : TextureRegion
     /// to set the position after those operations. If both position and size are to be changed, it is better to use
     /// <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
-    public void SetPosition( float x, float y )
+    public virtual void SetPosition( float x, float y )
     {
-        X = x;
-        Y = y;
+        _x = x;
+        _y = y;
 
         if ( _isDirty )
         {
@@ -370,16 +376,16 @@ public class Sprite : TextureRegion
         var x2 = x + Width;
         var y2 = y + Height;
 
-        Vertices[ IBatch.X1 ] = x;
+        Vertices[ IBatch.X1 ] = x;      // Bottom left
         Vertices[ IBatch.Y1 ] = y;
 
-        Vertices[ IBatch.X2 ] = x;
+        Vertices[ IBatch.X2 ] = x;      // Top left
         Vertices[ IBatch.Y2 ] = y2;
 
-        Vertices[ IBatch.X3 ] = x2;
+        Vertices[ IBatch.X3 ] = x2;     // Top right
         Vertices[ IBatch.Y3 ] = y2;
 
-        Vertices[ IBatch.X4 ] = x2;
+        Vertices[ IBatch.X4 ] = x2;     // Bottom right
         Vertices[ IBatch.Y4 ] = y;
     }
 
@@ -404,7 +410,7 @@ public class Sprite : TextureRegion
     /// </summary>
     public void SetCenterX( float value )
     {
-        X = value - ( Width / 2 );
+        _x = value - ( Width / 2 );
     }
 
     /// <summary>
@@ -412,7 +418,7 @@ public class Sprite : TextureRegion
     /// </summary>
     public void SetCenterY( float value )
     {
-        Y = value - ( Height / 2 );
+        _y = value - ( Height / 2 );
     }
 
     /// <summary>
@@ -422,7 +428,7 @@ public class Sprite : TextureRegion
     /// </summary>
     public void TranslateX( float xAmount )
     {
-        X += xAmount;
+        _x += xAmount;
 
         if ( _isDirty )
         {
@@ -449,7 +455,7 @@ public class Sprite : TextureRegion
     /// </summary>
     public void TranslateY( float yAmount )
     {
-        Y += yAmount;
+        _y += yAmount;
 
         if ( _isDirty )
         {
@@ -476,8 +482,8 @@ public class Sprite : TextureRegion
     /// </summary>
     public void Translate( float xAmount, float yAmount )
     {
-        X += xAmount;
-        Y += yAmount;
+        _x += xAmount;
+        _y += yAmount;
 
         if ( _isDirty )
         {
@@ -491,16 +497,16 @@ public class Sprite : TextureRegion
             return;
         }
 
-        Vertices[ IBatch.X1 ] += xAmount;
+        Vertices[ IBatch.X1 ] += xAmount;   // Bottom left
         Vertices[ IBatch.Y1 ] += yAmount;
 
-        Vertices[ IBatch.X2 ] += xAmount;
+        Vertices[ IBatch.X2 ] += xAmount;   // Top left
         Vertices[ IBatch.Y2 ] += yAmount;
 
-        Vertices[ IBatch.X3 ] += xAmount;
+        Vertices[ IBatch.X3 ] += xAmount;   // Top right
         Vertices[ IBatch.Y3 ] += yAmount;
 
-        Vertices[ IBatch.X4 ] += xAmount;
+        Vertices[ IBatch.X4 ] += xAmount;   // Bottom right
         Vertices[ IBatch.Y4 ] += yAmount;
     }
 
@@ -663,81 +669,117 @@ public class Sprite : TextureRegion
 
         _isDirty = false;
 
-        // --- 1. GEOMETRY CALCULATIONS ---
         var originX = Width / 2f;
         var originY = Height / 2f;
 
         // Local corners relative to center
-        var localX1 = -originX * ScaleX;
-        var localY1 = -originY * ScaleY;
-        var localX2 = ( Width - originX ) * ScaleX;
-        var localY2 = ( Height - originY ) * ScaleY;
+        var localX1      = -originX;
+        var localY1      = -originY;
+        var localX2      = localX1 + Width;
+        var localY2      = localY1 + Height;
+        var worldOriginX = _x - localX1;
+        var worldOriginY = _y - localY1;
 
-        var worldCenterX = X + originX;
-        var worldCenterY = Y + originY;
+        if ( ScaleX is not 1 || ScaleY is not 1 )
+        {
+            localX1 *= ScaleX;
+            localY1 *= ScaleY;
+            localX2 *= ScaleX;
+            localY2 *= ScaleY;
+        }
 
         if ( Rotation != 0 )
         {
             var cos = MathUtils.CosDeg( Rotation );
             var sin = MathUtils.SinDeg( Rotation );
 
-            Vertices[ IBatch.X1 ] = localX1 * cos - localY1 * sin + worldCenterX;
-            Vertices[ IBatch.Y1 ] = localX1 * sin + localY1 * cos + worldCenterY;
+            var localXCos  = localX1 * cos;
+            var localXSin  = localX1 * sin;
+            var localYCos  = localY1 * cos;
+            var localYSin  = localY1 * sin;
+            var localX2Cos = localX2 * cos;
+            var localX2Sin = localX2 * sin;
+            var localY2Cos = localY2 * cos;
+            var localY2Sin = localY2 * sin;
 
-            Vertices[ IBatch.X2 ] = localX1 * cos - localY2 * sin + worldCenterX;
-            Vertices[ IBatch.Y2 ] = localX1 * sin + localY2 * cos + worldCenterY;
+            var x1 = localXCos - localYSin + worldOriginX;
+            var y1 = localYCos + localXSin + worldOriginY;
+            Vertices[ IBatch.X1 ] = x1;
+            Vertices[ IBatch.Y1 ] = y1;
 
-            Vertices[ IBatch.X3 ] = localX2 * cos - localY2 * sin + worldCenterX;
-            Vertices[ IBatch.Y3 ] = localX2 * sin + localY2 * cos + worldCenterY;
+            var x2 = localXCos - localY2Sin + worldOriginX;
+            var y2 = localY2Cos + localXSin + worldOriginY;
+            Vertices[ IBatch.X2 ] = x2;
+            Vertices[ IBatch.Y2 ] = y2;
 
-            Vertices[ IBatch.X4 ] = localX2 * cos - localY1 * sin + worldCenterX;
-            Vertices[ IBatch.Y4 ] = localX2 * sin + localY1 * cos + worldCenterY;
+            var x3 = localX2Cos - localY2Sin + worldOriginX;
+            var y3 = localY2Cos + localX2Sin + worldOriginY;
+            Vertices[ IBatch.X3 ] = x3;
+            Vertices[ IBatch.Y3 ] = y3;
+
+            Vertices[ IBatch.X4 ] = x1 + ( x3 - x2 );
+            Vertices[ IBatch.Y4 ] = y3 - ( y2 - y1 );
         }
         else
         {
-            Vertices[ IBatch.X1 ] = localX1 + worldCenterX;
-            Vertices[ IBatch.Y1 ] = localY1 + worldCenterY;
-            Vertices[ IBatch.X2 ] = localX1 + worldCenterX;
-            Vertices[ IBatch.Y2 ] = localY2 + worldCenterY;
-            Vertices[ IBatch.X3 ] = localX2 + worldCenterX;
-            Vertices[ IBatch.Y3 ] = localY2 + worldCenterY;
-            Vertices[ IBatch.X4 ] = localX2 + worldCenterX;
-            Vertices[ IBatch.Y4 ] = localY1 + worldCenterY;
+            var x1 = localX1 + worldOriginX;
+            var y1 = localY1 + worldOriginY;
+            var x2 = localX2 + worldOriginX;
+            var y2 = localY2 + worldOriginY;
+
+            Vertices[ IBatch.X1 ] = x1;
+            Vertices[ IBatch.Y1 ] = y1;
+            Vertices[ IBatch.X2 ] = x1;
+            Vertices[ IBatch.Y2 ] = y2;
+            Vertices[ IBatch.X3 ] = x2;
+            Vertices[ IBatch.Y3 ] = y2;
+            Vertices[ IBatch.X4 ] = x2;
+            Vertices[ IBatch.Y4 ] = y1;
         }
 
-        // --- 2. UV (TEXTURE) CALCULATIONS ---
-        // Start with the base region coordinates + our scroll offsets
-        var u  = U + _uScrollOffset;
-        var v  = V + _vScrollOffset;
-        var u2 = U2 + _uScrollOffset;
-        var v2 = V2 + _vScrollOffset;
-
-        if ( _flipX )
-        {
-            ( u, u2 ) = ( u2, u );
-        }
-
-        if ( _flipY )
-        {
-            ( v, v2 ) = ( v2, v );
-        }
-
-        // Assign UVs to the vertex array in GetVertices()
-        // Match the Bottom-Up geometry (V1=BL, V2=TL, V3=TR, V4=BR)
-        // to the coordinate system of the texture
-        Vertices[ IBatch.U1 ] = u;
-        Vertices[ IBatch.V1 ] = v;
-
-        Vertices[ IBatch.U2 ] = u;
-        Vertices[ IBatch.V2 ] = v2;
-
-        Vertices[ IBatch.U3 ] = u2;
-        Vertices[ IBatch.V3 ] = v2;
-
-        Vertices[ IBatch.U4 ] = u2;
-        Vertices[ IBatch.V4 ] = v;
-        
         return Vertices;
+    }
+
+    /// <summary>
+    /// Returns the bounding axis aligned <see cref="Rectangle"/> that bounds this
+    /// sprite. The rectangles x and y coordinates describe its bottom left corner.
+    /// If you change the position or size of the sprite, you have to fetch the
+    /// triangle again for it to be recomputed.
+    /// </summary>
+    /// <returns> the bounding Rectangle </returns>
+    public Rectangle GetBoundingRectangle()
+    {
+        var vertices = GetVertices();
+
+        var minx = vertices[ IBatch.X1 ];
+        var miny = vertices[ IBatch.Y1 ];
+        var maxx = vertices[ IBatch.X1 ];
+        var maxy = vertices[ IBatch.Y1 ];
+
+        minx = minx > vertices[ IBatch.X2 ] ? vertices[ IBatch.X2 ] : minx;
+        minx = minx > vertices[ IBatch.X3 ] ? vertices[ IBatch.X3 ] : minx;
+        minx = minx > vertices[ IBatch.X4 ] ? vertices[ IBatch.X4 ] : minx;
+
+        maxx = maxx < vertices[ IBatch.X2 ] ? vertices[ IBatch.X2 ] : maxx;
+        maxx = maxx < vertices[ IBatch.X3 ] ? vertices[ IBatch.X3 ] : maxx;
+        maxx = maxx < vertices[ IBatch.X4 ] ? vertices[ IBatch.X4 ] : maxx;
+
+        miny = miny > vertices[ IBatch.Y2 ] ? vertices[ IBatch.Y2 ] : miny;
+        miny = miny > vertices[ IBatch.Y3 ] ? vertices[ IBatch.Y3 ] : miny;
+        miny = miny > vertices[ IBatch.Y4 ] ? vertices[ IBatch.Y4 ] : miny;
+
+        maxy = maxy < vertices[ IBatch.Y2 ] ? vertices[ IBatch.Y2 ] : maxy;
+        maxy = maxy < vertices[ IBatch.Y3 ] ? vertices[ IBatch.Y3 ] : maxy;
+        maxy = maxy < vertices[ IBatch.Y4 ] ? vertices[ IBatch.Y4 ] : maxy;
+
+        _bounds ??= new Rectangle();
+
+        _bounds.X      = minx;
+        _bounds.Y      = miny;
+        _bounds.Width  = maxx - minx;
+        _bounds.Height = maxy - miny;
+
+        return _bounds;
     }
 
     public void Draw( IBatch batch )
@@ -770,16 +812,16 @@ public class Sprite : TextureRegion
         base.SetRegion( u, v, u2, v2 );
 
         Vertices[ IBatch.U1 ] = u;
-        Vertices[ IBatch.V1 ] = v;
+        Vertices[ IBatch.V1 ] = v2;
 
         Vertices[ IBatch.U2 ] = u;
-        Vertices[ IBatch.V2 ] = v2;
+        Vertices[ IBatch.V2 ] = v;
 
         Vertices[ IBatch.U3 ] = u2;
-        Vertices[ IBatch.V3 ] = v2;
+        Vertices[ IBatch.V3 ] = v;
 
         Vertices[ IBatch.U4 ] = u2;
-        Vertices[ IBatch.V4 ] = v;
+        Vertices[ IBatch.V4 ] = v2;
     }
 
     /// <summary>
@@ -828,30 +870,30 @@ public class Sprite : TextureRegion
     /// </summary>
     /// <param name="xAmount"></param>
     /// <param name="yAmount"></param>
-    public override void Scroll(float xAmount, float yAmount)
+    public override void Scroll( float xAmount, float yAmount )
     {
-        if (xAmount == 0 && yAmount == 0)
+        if ( xAmount == 0 && yAmount == 0 )
         {
             return;
         }
 
-        _uScrollOffset = (_uScrollOffset + xAmount) % 1.0f;
-        _vScrollOffset = (_vScrollOffset + yAmount) % 1.0f;
+        _uScrollOffset = ( _uScrollOffset + xAmount ) % 1.0f;
+        _vScrollOffset = ( _vScrollOffset + yAmount ) % 1.0f;
 
         // Handle negative scrolling (ensure offset is always positive)
-        if (_uScrollOffset < 0)
+        if ( _uScrollOffset < 0 )
         {
             _uScrollOffset += 1.0f;
         }
 
-        if (_vScrollOffset < 0)
+        if ( _vScrollOffset < 0 )
         {
             _vScrollOffset += 1.0f;
         }
 
         _isDirty = true;
     }
-    
+
     // ========================================================================
 
     public void DebugVertices()
@@ -873,52 +915,36 @@ public class Sprite : TextureRegion
 
     // ========================================================================
 
-    public override float U
+    public override void SetU( float u )
     {
-        get => base.U;
-        set
-        {
-            base.U = value;
+        base.SetU( u );
 
-            Vertices[ IBatch.U1 ] = value;
-            Vertices[ IBatch.U2 ] = value;
-        }
+        Vertices[ IBatch.U1 ] = u;
+        Vertices[ IBatch.U2 ] = u;
     }
 
-    public override float V
+    public override void SetV( float v )
     {
-        get => base.V;
-        set
-        {
-            base.V = value;
+        base.SetV( v );
 
-            Vertices[ IBatch.V2 ] = value;
-            Vertices[ IBatch.V3 ] = value;
-        }
+        Vertices[ IBatch.V2 ] = v;
+        Vertices[ IBatch.V3 ] = v;
     }
 
-    public override float U2
+    public override void SetU2( float u2 )
     {
-        get => base.U2;
-        set
-        {
-            base.U2 = value;
+        base.SetU2( u2 );
 
-            Vertices[ IBatch.U3 ] = value;
-            Vertices[ IBatch.U4 ] = value;
-        }
+        Vertices[ IBatch.U3 ] = u2;
+        Vertices[ IBatch.U4 ] = u2;
     }
 
-    public override float V2
+    public override void SetV2( float v2 )
     {
-        get => base.V2;
-        set
-        {
-            base.V2 = value;
+        base.SetV2( v2 );
 
-            Vertices[ IBatch.V1 ] = value;
-            Vertices[ IBatch.V4 ] = value;
-        }
+        Vertices[ IBatch.V1 ] = v2;
+        Vertices[ IBatch.V4 ] = v2;
     }
 
     /// <summary>
@@ -1036,36 +1062,36 @@ public class Sprite : TextureRegion
         }
     }
 
+    public virtual float GetX() => _x;
+
+    public virtual float GetY() => _y;
+
     /// <summary>
     /// Sets the x position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
     /// after those operations. If both position and size are to be changed, it
     /// is better to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
-    public virtual float X
+    public virtual void SetX( float x )
     {
-        get;
-        set
+        _x = x;
+
+        if ( _isDirty )
         {
-            field = value;
-
-            if ( _isDirty )
-            {
-                return;
-            }
-
-            if ( ( Rotation != 0 ) || ScaleX is not 1 || ScaleY is not 1 )
-            {
-                _isDirty = true;
-
-                return;
-            }
-
-            Vertices[ IBatch.X1 ] = value;
-            Vertices[ IBatch.X2 ] = value;
-            Vertices[ IBatch.X3 ] = value + Width;
-            Vertices[ IBatch.X4 ] = value + Width;
+            return;
         }
+
+        if ( ( Rotation != 0 ) || ScaleX is not 1 || ScaleY is not 1 )
+        {
+            _isDirty = true;
+
+            return;
+        }
+
+        Vertices[ IBatch.X1 ] = x;
+        Vertices[ IBatch.X2 ] = x;
+        Vertices[ IBatch.X3 ] = x + Width;
+        Vertices[ IBatch.X4 ] = x + Width;
     }
 
     /// <summary>
@@ -1074,30 +1100,26 @@ public class Sprite : TextureRegion
     /// after those operations. If both position and size are to be changed, it
     /// is better to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
-    public virtual float Y
+    public virtual void SetY( float y )
     {
-        get;
-        set
+        _y = y;
+
+        if ( _isDirty )
         {
-            field = value;
-
-            if ( _isDirty )
-            {
-                return;
-            }
-
-            if ( ( Rotation != 0 ) || ScaleX is not 1 || ScaleY is not 1 )
-            {
-                _isDirty = true;
-
-                return;
-            }
-
-            Vertices[ IBatch.Y1 ] = value;
-            Vertices[ IBatch.Y2 ] = value + Height;
-            Vertices[ IBatch.Y3 ] = value + Height;
-            Vertices[ IBatch.Y4 ] = value;
+            return;
         }
+
+        if ( ( Rotation != 0 ) || ScaleX is not 1 || ScaleY is not 1 )
+        {
+            _isDirty = true;
+
+            return;
+        }
+
+        Vertices[ IBatch.Y1 ] = y;
+        Vertices[ IBatch.Y2 ] = y + Height;
+        Vertices[ IBatch.Y3 ] = y + Height;
+        Vertices[ IBatch.Y4 ] = y;
     }
 }
 

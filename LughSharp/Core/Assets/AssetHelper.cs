@@ -31,6 +31,9 @@ using LughSharp.Core.Graphics.Atlases;
 
 namespace LughSharp.Core.Assets;
 
+/// <summary>
+/// Helper class for loading assets.
+/// </summary>
 [PublicAPI]
 public class AssetHelper
 {

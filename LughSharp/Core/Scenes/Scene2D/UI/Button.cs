@@ -114,17 +114,17 @@ public class Button : Table, IDisableable
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
-    public Button( ISceneDrawable? up )
+    public Button( IDrawable? up )
         : this( new ButtonStyle( up, null, null ) )
     {
     }
 
-    public Button( ISceneDrawable? up, ISceneDrawable? down )
+    public Button( IDrawable? up, IDrawable? down )
         : this( new ButtonStyle( up, down, null ) )
     {
     }
 
-    public Button( ISceneDrawable? upImage, ISceneDrawable? downImage, ISceneDrawable? checkedImage )
+    public Button( IDrawable? upImage, IDrawable? downImage, IDrawable? checkedImage )
         : this( new ButtonStyle( upImage, downImage, checkedImage ) )
     {
     }
@@ -258,7 +258,7 @@ public class Button : Table, IDisableable
     /// <summary>
     /// Returns appropriate background drawable from the style based on the current button state.
     /// </summary>
-    public virtual ISceneDrawable? GetBackgroundDrawable()
+    public virtual IDrawable? GetBackgroundDrawable()
     {
         if ( IsDisabled && ( Style?.Disabled != null ) )
         {
@@ -427,15 +427,15 @@ public class Button : Table, IDisableable
     [PublicAPI]
     public class ButtonStyle
     {
-        public ISceneDrawable? Up               { get; set; }
-        public ISceneDrawable? Down             { get; set; }
-        public ISceneDrawable? Over             { get; set; }
-        public ISceneDrawable? Focused          { get; set; }
-        public ISceneDrawable? Disabled         { get; set; }
-        public ISceneDrawable? Checked          { get; set; }
-        public ISceneDrawable? CheckedOver      { get; set; }
-        public ISceneDrawable? CheckedDown      { get; set; }
-        public ISceneDrawable? CheckedFocused   { get; set; }
+        public IDrawable? Up               { get; set; }
+        public IDrawable? Down             { get; set; }
+        public IDrawable? Over             { get; set; }
+        public IDrawable? Focused          { get; set; }
+        public IDrawable? Disabled         { get; set; }
+        public IDrawable? Checked          { get; set; }
+        public IDrawable? CheckedOver      { get; set; }
+        public IDrawable? CheckedDown      { get; set; }
+        public IDrawable? CheckedFocused   { get; set; }
         public float           PressedOffsetX   { get; set; }
         public float           PressedOffsetY   { get; set; }
         public float           UnpressedOffsetX { get; set; }
@@ -449,7 +449,7 @@ public class Button : Table, IDisableable
         {
         }
 
-        public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? ischecked )
+        public ButtonStyle( IDrawable? up, IDrawable? down, IDrawable? ischecked )
         {
             Up      = up;
             Down    = down;

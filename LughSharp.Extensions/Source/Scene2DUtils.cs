@@ -33,6 +33,7 @@ using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace Extensions.Source;
 
@@ -81,12 +82,12 @@ public class Scene2DUtils
     }
 
     /// <summary>
-    /// Convenience method for creating a <see cref="IDrawable"/>.
+    /// Convenience method for creating a <see cref="LughSharp.Core.Utils.IDrawable"/>.
     /// </summary>
     /// <param name="imageName"> The name of the image to use. </param>
     /// <param name="atlasLoader"> The <see cref="TextureAtlas"/> loader to use. </param>
     /// <returns> The ISceneDrawable. </returns>
-    public ISceneDrawable CreateDrawable( string imageName, TextureAtlas atlasLoader )
+    public IDrawable CreateDrawable( string imageName, TextureAtlas atlasLoader )
     {
         var region = atlasLoader.FindRegion( imageName );
 
@@ -276,7 +277,7 @@ public class Scene2DUtils
         style?.CheckboxOn  = new TextureRegionDrawable( imageOn );
         style?.CheckboxOff = new TextureRegionDrawable( imageOff );
 
-        checkBox.SetSize( imageOn.RegionWidth, imageOn.RegionHeight );
+        checkBox.SetSize( imageOn.GetRegionWidth(), imageOn.GetRegionHeight() );
         checkBox.Style = style;
         checkBox.SetPosition( x, y );
 

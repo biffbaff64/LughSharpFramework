@@ -24,6 +24,8 @@
 
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 

@@ -336,8 +336,8 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
                 var x1 = ( col * layerTileWidth ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
                 var y1 = ( row * layerTileHeight ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
-                var x2 = x1 + ( region.RegionWidth * UnitScale );
-                var y2 = y1 + ( region.RegionHeight * UnitScale );
+                var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+                var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
                 var adjustX = 0.5f / texture.Width;
                 var adjustY = 0.5f / texture.Height;
@@ -469,8 +469,8 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         var y  = layer.Y;
         var x1 = x * UnitScale;
         var y1 = y * UnitScale;
-        var x2 = x1 + ( region.RegionWidth * UnitScale );
-        var y2 = y1 + ( region.RegionHeight * UnitScale );
+        var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+        var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
         var u1 = region.U;
         var v1 = region.V2;

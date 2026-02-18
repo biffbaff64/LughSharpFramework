@@ -560,8 +560,6 @@ public class Gdx2DPixmap : IDisposable
 
                 return r | g | b | a;
 
-//            case PixelFormat.INTENSITY:
-            //TODO:
             case LughFormat.INDEXED_COLOR:
             case LughFormat.RGBA8888:
                 return color;

@@ -37,6 +37,7 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.UI;

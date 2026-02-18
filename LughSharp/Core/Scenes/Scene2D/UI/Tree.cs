@@ -476,22 +476,22 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
     }
 
-    protected void DrawSelection( TNode node, ISceneDrawable selection, IBatch batch, float x, float y, float width, float height )
+    protected void DrawSelection( TNode node, IDrawable selection, IBatch batch, float x, float y, float width, float height )
     {
         selection.Draw( batch, x, y, width, height );
     }
 
-    protected void DrawOver( TNode node, ISceneDrawable over, IBatch batch, float x, float y, float width, float height )
+    protected void DrawOver( TNode node, IDrawable over, IBatch batch, float x, float y, float width, float height )
     {
         over.Draw( batch, x, y, width, height );
     }
 
-    protected void DrawExpandIcon( TNode node, ISceneDrawable expandIcon, IBatch batch, float x, float y )
+    protected void DrawExpandIcon( TNode node, IDrawable expandIcon, IBatch batch, float x, float y )
     {
         expandIcon.Draw( batch, x, y, expandIcon.MinWidth, expandIcon.MinHeight );
     }
 
-    protected void DrawIcon( TNode node, ISceneDrawable icon, IBatch batch, float x, float y )
+    protected void DrawIcon( TNode node, IDrawable icon, IBatch batch, float x, float y )
     {
         icon.Draw( batch, x, y, icon.MinWidth, icon.MinHeight );
     }
@@ -502,7 +502,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     /// on the desktop if the node is the over node, the mouse is left of iconX, and
     /// clicking would expand the node.
     /// </summary>
-    protected ISceneDrawable GetExpandIcon( TNode node, float iconX )
+    protected IDrawable GetExpandIcon( TNode node, float iconX )
     {
         var over = false;
 
@@ -842,17 +842,17 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     [PublicAPI]
     public class TreeStyle
     {
-        public ISceneDrawable  Plus       { get; set; }
-        public ISceneDrawable  Minus      { get; set; }
-        public ISceneDrawable? PlusOver   { get; set; }
-        public ISceneDrawable? MinusOver  { get; set; }
-        public ISceneDrawable? Over       { get; set; }
-        public ISceneDrawable? Selection  { get; set; }
-        public ISceneDrawable? Background { get; set; }
+        public IDrawable  Plus       { get; set; }
+        public IDrawable  Minus      { get; set; }
+        public IDrawable? PlusOver   { get; set; }
+        public IDrawable? MinusOver  { get; set; }
+        public IDrawable? Over       { get; set; }
+        public IDrawable? Selection  { get; set; }
+        public IDrawable? Background { get; set; }
 
         // ====================================================================
         
-        public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
+        public TreeStyle( IDrawable plus, IDrawable minus, IDrawable? selection )
         {
             Plus      = plus;
             Minus     = minus;
@@ -888,7 +888,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     {
         public TValue?         Value      { get; set; }
         public TNode?          Parent     { get; set; }
-        public ISceneDrawable? Icon       { get; set; }
+        public IDrawable? Icon       { get; set; }
         public bool            Selectable { get; set; } = true;
         public float           Height     { get; set; }
         public bool            IsExpanded { get; private set; }

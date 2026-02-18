@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Graphics.Utils;

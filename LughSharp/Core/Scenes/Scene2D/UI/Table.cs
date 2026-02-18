@@ -35,6 +35,7 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -108,7 +109,7 @@ public class Table : WidgetGroup
 
     private int _alignment = Align.CENTER;
 
-    private ISceneDrawable?    _background;
+    private IDrawable?    _background;
     private bool               _clip;
     private float[]            _columnMinWidth;
     private float[]            _columnPrefWidth;
@@ -242,7 +243,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// <param name="background"> May be null to clear the background. </param>
     /// </summary>
-    protected void SetBackground( ISceneDrawable? background )
+    protected void SetBackground( IDrawable? background )
     {
         if ( _background == background )
         {
@@ -280,7 +281,7 @@ public class Table : WidgetGroup
     /// </summary>
     /// <param name="background"></param>
     /// <returns></returns>
-    public Table Background( ISceneDrawable? background )
+    public Table Background( IDrawable? background )
     {
         SetBackground( background );
 
@@ -294,7 +295,7 @@ public class Table : WidgetGroup
         return this;
     }
 
-    public ISceneDrawable? GetBackground()
+    public IDrawable? GetBackground()
     {
         return _background;
     }

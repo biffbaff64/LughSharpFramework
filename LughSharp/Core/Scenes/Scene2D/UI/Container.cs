@@ -28,6 +28,8 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -42,7 +44,7 @@ public class Container< T > : WidgetGroup where T : Actor
 {
     private T?              _actor;
     private int             _align;
-    private ISceneDrawable? _background;
+    private IDrawable? _background;
     private bool            _clip;
     private float           _fillX;
     private float           _fillY;
@@ -78,12 +80,12 @@ public class Container< T > : WidgetGroup where T : Actor
 
     /// <summary>
     /// Sets the background drawable and, if adjustPadding is true, sets the container's
-    /// padding to <see cref="ISceneDrawable.BottomHeight"/> , <see cref="ISceneDrawable.TopHeight"/>,
-    /// <see cref="ISceneDrawable.LeftWidth"/>, and <see cref="ISceneDrawable.RightWidth"/>.
+    /// padding to <see cref="IDrawable.BottomHeight"/> , <see cref="IDrawable.TopHeight"/>,
+    /// <see cref="IDrawable.LeftWidth"/>, and <see cref="IDrawable.RightWidth"/>.
     /// </summary>
     /// <param name="background"> If null, the background will be cleared and padding removed. </param>
     /// <param name="adjustPadding"></param>
-    public void SetBackground( ISceneDrawable? background, bool adjustPadding = true )
+    public void SetBackground( IDrawable? background, bool adjustPadding = true )
     {
         if ( _background == background )
         {
@@ -107,14 +109,14 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
-    public Container< T > Background( ISceneDrawable background )
+    public Container< T > Background( IDrawable background )
     {
         SetBackground( background );
 
         return this;
     }
 
-    public ISceneDrawable? GetBackground()
+    public IDrawable? GetBackground()
     {
         return _background;
     }

@@ -22,12 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Scenes.Scene2D.Listeners;
+using System;
+
+using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Utils.Exceptions;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 
-public class ScrollPaneScrollListener( ScrollPane parent ) : InputListener
+public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListener
 {
     private readonly ScrollPane? _parent = parent;
 
@@ -67,7 +69,7 @@ public class ScrollPaneScrollListener( ScrollPane parent ) : InputListener
     }
 }
 
-public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
+public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
 {
     private readonly ScrollPane? _parent = parent;
     private          float       _handlePosition;
@@ -232,7 +234,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
 
 // ============================================================================
 
-public class ScrollPaneGestureListener : ActorGestureListener
+public sealed class ScrollPaneGestureListener : ActorGestureListener
 {
     private readonly ScrollPane? _parent;
 

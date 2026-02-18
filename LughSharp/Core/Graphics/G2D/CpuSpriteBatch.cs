@@ -25,6 +25,8 @@
 using System;
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
@@ -373,7 +375,7 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( region, x, y, 0, 0, region.RegionWidth, region.RegionHeight, 1, 1, 0 );
+            DrawAdjusted( region, x, y, 0, 0, region.GetRegionWidth(), region.GetRegionHeight(), 1, 1, 0 );
         }
     }
 

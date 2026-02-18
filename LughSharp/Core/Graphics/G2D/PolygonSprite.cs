@@ -32,9 +32,17 @@ namespace LughSharp.Core.Graphics.G2D;
 [PublicAPI]
 public class PolygonSprite
 {
-    // ========================================================================
-    // ========================================================================
+    public PolygonRegion? Region   { get; private set; }
+    public float          Width    { get; set; }
+    public float          Height   { get; set; }
+    public float          OriginX  { get; set; }
+    public float          OriginY  { get; set; }
+    public float          ScaleX   { get; set; } = 1f;
+    public float          ScaleY   { get; set; } = 1f;
+    public float          Rotation { get; set; }
 
+    // ========================================================================
+    
     private readonly Rectangle _bounds = new();
 
     private bool     _dirty;
@@ -43,12 +51,11 @@ public class PolygonSprite
     private float    _y;
 
     // ========================================================================
-    // ========================================================================
 
     public PolygonSprite( PolygonRegion region )
     {
         SetRegion( region );
-        SetSize( region.Region.RegionWidth, region.Region.RegionHeight );
+        SetSize( region.Region.GetRegionWidth(), region.Region.GetRegionHeight() );
         SetOrigin( Width / 2, Height / 2 );
     }
 
@@ -59,15 +66,6 @@ public class PolygonSprite
     {
         Set( sprite );
     }
-
-    public PolygonRegion? Region   { get; private set; }
-    public float          Width    { get; set; }
-    public float          Height   { get; set; }
-    public float          OriginX  { get; set; }
-    public float          OriginY  { get; set; }
-    public float          ScaleX   { get; set; } = 1f;
-    public float          ScaleY   { get; set; } = 1f;
-    public float          Rotation { get; set; }
 
     /// <summary>
     /// Sets the x position where the sprite will be drawn. If origin, rotation,
@@ -318,8 +316,8 @@ public class PolygonSprite
 
         var worldOriginX = _x + originX;
         var worldOriginY = _y + originY;
-        var sX           = Width / region.Region.RegionWidth;
-        var sY           = Height / region.Region.RegionHeight;
+        var sX           = Width / region.Region.GetRegionWidth();
+        var sY           = Height / region.Region.GetRegionHeight();
         var cos          = MathUtils.CosDeg( Rotation );
         var sin          = MathUtils.SinDeg( Rotation );
 
@@ -452,3 +450,7 @@ public class PolygonSprite
         _dirty = true;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

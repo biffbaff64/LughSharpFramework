@@ -22,14 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
 using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Assets;
 
+/// <summary>
+/// Describes an asset to be loaded.
+/// </summary>
 [PublicAPI]
 public class AssetDescriptor
 {

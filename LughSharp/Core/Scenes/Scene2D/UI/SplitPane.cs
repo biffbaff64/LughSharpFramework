@@ -646,14 +646,14 @@ public class SplitPane : WidgetGroup
     [PublicAPI]
     public class SplitPaneStyle
     {
-        public ISceneDrawable Handle { get; }
+        public IDrawable Handle { get; }
 
         public SplitPaneStyle()
         {
             Handle = null!;
         }
 
-        public SplitPaneStyle( ISceneDrawable handle )
+        public SplitPaneStyle( IDrawable handle )
         {
             Handle = handle;
         }

@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -41,32 +44,15 @@ public class TextureRegion
     /// </summary>
     public Texture? Texture { get; set; }
 
-    /// <summary>
-    /// Represents the horizontal texture coordinate of the region's
-    /// starting point in the texture.
-    /// </summary>
-    public virtual float U { get; set; }
+    // ========================================================================
 
-    /// <summary>
-    /// Represents the texture coordinate on the horizontal axis of the
-    /// bottom-right corner of the texture region.
-    /// </summary>
-    public virtual float U2 { get; set; }
+    private int   _regionWidth;
+    private int   _regionHeight;
+    private float _u;
+    private float _v;
+    private float _u2;
+    private float _v2;
 
-    /// <summary>
-    /// Represents the vertical coordinate of a texture region in normalized
-    /// texture space.
-    /// </summary>
-    public virtual float V { get; set; }
-
-    /// <summary>
-    /// Represents the V2 coordinate of a texture region.
-    /// This property typically corresponds to the vertical texture coordinate
-    /// used for rendering operations in graphical systems.
-    /// The specific usage of this coordinate may vary depending on the rendering context.
-    /// </summary>
-    public virtual float V2 { get; set; }
-    
     // ========================================================================
 
     /// <summary>
@@ -164,15 +150,6 @@ public class TextureRegion
     // ========================================================================
 
     /// <summary>
-    /// Non-Virtual version of <see cref="SetRegion( float, float, float, float )"/>,
-    /// enabling this to be called from constructors.
-    /// </summary>
-    private void SafeSetRegion( float u, float v, float u2, float v2 )
-    {
-        SetRegion( u, v, u2, v2 );
-    }
-
-    /// <summary>
     /// </summary>
     /// <param name="texture"></param>
     public void SetRegion( Texture texture )
@@ -201,13 +178,22 @@ public class TextureRegion
         var invTexWidth  = 1f / Texture.Width;
         var invTexHeight = 1f / Texture.Height;
 
-        // V coordinates are inverted: V starts at (y + height) and V2 ends at y
-        // This is because OpenGL texture coordinates have V=0 at bottom, V=1 at top,
-        // but image coordinates have Y=0 at top. This prevents upside-down rendering.
-        SetRegion( x * invTexWidth, ( y + height ) * invTexHeight, ( x + width ) * invTexWidth, y * invTexHeight );
+        SetRegion( x * invTexWidth,
+                   y * invTexHeight,
+                   ( x + width ) * invTexWidth,
+                   ( y + height ) * invTexHeight );
 
-        SetRegionWidth( Math.Abs( width ), IsFlipX() );
-        SetRegionHeight( Math.Abs( height ), IsFlipY() );
+        _regionWidth  = Math.Abs( width );
+        _regionHeight = Math.Abs( height );
+    }
+
+    /// <summary>
+    /// Non-Virtual version of <see cref="SetRegion( float, float, float, float )"/>,
+    /// enabling this to be called from constructors.
+    /// </summary>
+    public virtual void SetRegion( float u, float v, float u2, float v2 )
+    {
+        SafeSetRegion( u, v, u2, v2 );
     }
 
     /// <summary>
@@ -217,7 +203,7 @@ public class TextureRegion
     /// <param name="u2"></param>
     /// <param name="v2"></param>
     /// <exception cref="RuntimeException"></exception>
-    public virtual void SetRegion( float u, float v, float u2, float v2 )
+    protected void SafeSetRegion( float u, float v, float u2, float v2 )
     {
         if ( Texture == null )
         {
@@ -227,12 +213,12 @@ public class TextureRegion
         var texWidth  = Texture.Width;
         var texHeight = Texture.Height;
 
-        SetRegionWidth( ( int )Math.Round( Math.Abs( u2 - u ) * texWidth ), IsFlipX() );
-        SetRegionHeight( ( int )Math.Round( Math.Abs( v2 - v ) * texHeight ), IsFlipY() );
+        _regionWidth  = ( int )Math.Round( Math.Abs( u2 - u ) * texWidth );
+        _regionHeight = ( int )Math.Round( Math.Abs( v2 - v ) * texHeight );
 
         // For a 1x1 region, adjust UVs toward pixel center to avoid filtering
         // artifacts on AMD GPUs when drawing very stretched.
-        if ( ( RegionWidth == 1 ) && ( RegionHeight == 1 ) )
+        if ( ( _regionWidth == 1 ) && ( _regionHeight == 1 ) )
         {
             var xAdjustment = 0.25f / texWidth;
 
@@ -353,8 +339,8 @@ public class TextureRegion
     {
         var x      = RegionX;
         var y      = RegionY;
-        var width  = RegionWidth;
-        var height = RegionHeight;
+        var width  = _regionWidth;
+        var height = _regionHeight;
 
         var rows = height / tileHeight;
         var cols = width / tileWidth;
@@ -396,6 +382,88 @@ public class TextureRegion
     // ========================================================================
 
     /// <summary>
+    /// Represents the horizontal texture coordinate of the region's
+    /// starting point in the texture.
+    /// </summary>
+    public virtual float U
+    {
+        get => _u;
+        set => _u = value;
+    }
+
+    public virtual void SetU( float u )
+    {
+        _u = u;
+
+        if ( Texture != null )
+        {
+            _regionWidth = ( int )Math.Round( Math.Abs( U2 - u ) * Texture.Width );
+        }
+    }
+    
+    /// <summary>
+    /// Represents the texture coordinate on the horizontal axis of the
+    /// bottom-right corner of the texture region.
+    /// </summary>
+    public virtual float U2
+    {
+        get => _u2;
+        set => _u2 = value;
+    }
+
+    public virtual void SetU2( float u2 )
+    {
+        _u2 = u2;
+
+        if ( Texture != null )
+        {
+            _regionHeight = ( int )Math.Round( Math.Abs( u2 - U ) * Texture.Height );
+        }
+    }
+
+    /// <summary>
+    /// Represents the vertical coordinate of a texture region in normalized
+    /// texture space.
+    /// </summary>
+    public virtual float V
+    {
+        get => _v;
+        set => _v = value;
+    }
+
+    public virtual void SetV( float v )
+    {
+        _v = v;
+
+        if ( Texture != null )
+        {
+            _regionHeight = ( int )Math.Round( Math.Abs( V2 - v ) * Texture.Height );
+        }
+    }
+
+    /// <summary>
+    /// Represents the V2 coordinate of a texture region.
+    /// This property typically corresponds to the vertical texture coordinate
+    /// used for rendering operations in graphical systems.
+    /// The specific usage of this coordinate may vary depending on the rendering context.
+    /// </summary>
+    public virtual float V2
+    {
+        get => _v2;
+        set => _v2 = value;
+    }
+    
+    public virtual void SetV2( float v2 )
+    {
+        _v2 = v2;
+
+        if ( Texture != null )
+        {
+            _regionWidth = ( int )Math.Round( Math.Abs( v2 - V ) * Texture.Height );
+        }
+    }
+
+    /// <summary>
     /// </summary>
     public int RegionX
     {
@@ -431,44 +499,21 @@ public class TextureRegion
         }
     }
 
+    // ========================================================================
+    // ========================================================================
+
     /// <summary>
     /// This TextureRegions Width property.
     /// </summary>
-    public int RegionWidth
+    public int GetRegionWidth()
     {
-        get
-        {
-            if ( ( Texture == null ) || ( Texture.Width == 0 ) )
-            {
-                // Handle cases where Texture or its Width is not valid yet
-                Logger.Debug( "Texture, or its Width, is not valid yet" );
-
-                return 0;
-            }
-
-            return ( int )Math.Round( Math.Abs( U2 - U ) * Texture.Width );
-        }
+        return _regionWidth;
     }
 
-    /// <summary>
-    /// This TextureRegions Height property.
-    /// </summary>
-    public int RegionHeight
+    public void SetRegionWidth( int width )
     {
-        get
-        {
-            if ( ( Texture == null ) || ( Texture.Height == 0 ) )
-            {
-                // Handle cases where Texture or its Height is not valid yet
-                return 0;
-            }
-
-            return ( int )Math.Round( Math.Abs( V2 - V ) * Texture.Height );
-        }
+        _regionWidth = width;
     }
-
-    // ========================================================================
-    // ========================================================================
 
     /// <summary>
     /// 
@@ -499,6 +544,22 @@ public class TextureRegion
 
         // The property setters for U/U2 will then implicitly update RegionWidth
         // when its getter is called.
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// This TextureRegions Height property.
+    /// </summary>
+    public int GetRegionHeight()
+    {
+        return _regionHeight;
+    }
+    
+    public void SetRegionHeight( int height )
+    {
+        _regionHeight = height;
     }
 
     /// <summary>

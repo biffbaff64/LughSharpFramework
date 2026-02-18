@@ -96,6 +96,7 @@ public class TiledMapTileLayer : MapLayer
     }
 
     // ========================================================================
+    // ========================================================================
     
     /// <summary>
     /// represents a cell in a TiledLayer: ITiledMapTile, flip and rotation properties.

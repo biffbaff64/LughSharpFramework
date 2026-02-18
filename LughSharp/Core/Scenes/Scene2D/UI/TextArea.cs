@@ -38,6 +38,8 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
+using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
+
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
@@ -348,7 +350,7 @@ public class TextArea : TextField
         LinesShowing = ( int )Math.Floor( availableHeight / font!.GetLineHeight() );
     }
 
-    protected override float GetTextY( BitmapFont font, ISceneDrawable? background )
+    protected override float GetTextY( BitmapFont font, IDrawable? background )
     {
         var textY = Height;
 
@@ -365,7 +367,7 @@ public class TextArea : TextField
         return textY;
     }
 
-    protected override void DrawSelection( ISceneDrawable selection, IBatch batch, BitmapFont font, float x, float y )
+    protected override void DrawSelection( IDrawable selection, IBatch batch, BitmapFont font, float x, float y )
     {
         var i          = FirstLineShowing * 2;
         var offsetY    = 0f;
@@ -458,7 +460,7 @@ public class TextArea : TextField
         }
     }
 
-    protected override void DrawCursor( ISceneDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
+    protected override void DrawCursor( IDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
     {
         cursorPatch.Draw( batch, x + GetCursorX(), y + GetCursorY(), cursorPatch.MinWidth, font.GetLineHeight() );
     }
