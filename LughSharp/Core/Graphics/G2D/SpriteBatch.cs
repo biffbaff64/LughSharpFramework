@@ -984,7 +984,6 @@ public class SpriteBatch : IBatch
     /// <param name="posY"> Y coordinate in pixels. </param>
     /// <param name="width"> Width of Texture in pixels. </param>
     /// <param name="height"> Height of Texture in pixerls. </param>
-    // Checked 08.02.26
     public virtual void Draw( Texture texture, float posX, float posY, float width, float height )
     {
         lock ( _lockObject )
@@ -1039,7 +1038,7 @@ public class SpriteBatch : IBatch
     /// rotation, and flipping options.
     /// </summary>
     /// <param name="texture">The texture to be drawn.</param>
-    /// <param name="region">The region where the texture will be drawn on the target.</param>
+    /// <param name="destination">The region where the texture will be drawn on the target.</param>
     /// <param name="origin">
     /// The origin point of the region for transformations like rotation and scaling.
     /// </param>
@@ -1048,9 +1047,8 @@ public class SpriteBatch : IBatch
     /// <param name="src">The source rectangle of the texture to be drawn.</param>
     /// <param name="flipX">Indicates whether the texture should be flipped horizontally.</param>
     /// <param name="flipY">Indicates whether the texture should be flipped vertically.</param>
-    // Checked 08.02.26
     public virtual void Draw( Texture texture,
-                              GRect region,
+                              GRect destination,
                               Point2D origin,
                               Point2D scale,
                               float rotation,
@@ -1072,12 +1070,12 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            var worldOriginX = region.X + origin.X;
-            var worldOriginY = region.Y + origin.Y;
+            var worldOriginX = destination.X + origin.X;
+            var worldOriginY = destination.Y + origin.Y;
             var fx           = -origin.X;
             var fy           = -origin.Y;
-            var fx2          = region.Width - origin.X;
-            var fy2          = region.Height - origin.Y;
+            var fx2          = destination.Width - origin.X;
+            var fy2          = destination.Height - origin.Y;
 
             // scale
             if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
@@ -1187,12 +1185,11 @@ public class SpriteBatch : IBatch
     /// Draws a specified texture within a defined region, with optional flipping along both axes.
     /// </summary>
     /// <param name="texture">The texture to be drawn.</param>
-    /// <param name="region">The destination rectangle on the target surface.</param>
+    /// <param name="destination">The destination rectangle on the target surface.</param>
     /// <param name="src">The source rectangle in the texture to be drawn.</param>
     /// <param name="flipX">Indicates whether to flip the texture horizontally.</param>
     /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
-    // Checked 08.02.26
-    public virtual void Draw( Texture texture, GRect region, GRect src, bool flipX = false, bool flipY = false )
+    public virtual void Draw( Texture texture, GRect destination, GRect src, bool flipX = false, bool flipY = false )
     {
         lock ( _lockObject )
         {
@@ -1211,8 +1208,8 @@ public class SpriteBatch : IBatch
             var v   = ( src.Y + src.Height ) * InvTexHeight;
             var u2  = ( src.X + src.Width ) * InvTexWidth;
             var v2  = src.Y * InvTexHeight;
-            var fx2 = region.X + region.Width;
-            var fy2 = region.Y + region.Height;
+            var fx2 = destination.X + destination.Width;
+            var fy2 = destination.Y + destination.Height;
 
             if ( flipX )
             {
@@ -1224,13 +1221,13 @@ public class SpriteBatch : IBatch
                 ( v, v2 ) = ( v2, v );
             }
 
-            SetVertices( region.X,
-                         region.Y,
+            SetVertices( destination.X,
+                         destination.Y,
                          ColorPackedRGBA,
                          u,
                          v,
                          // -----------
-                         region.X,
+                         destination.X,
                          fy2,
                          ColorPackedRGBA,
                          u,
@@ -1243,7 +1240,7 @@ public class SpriteBatch : IBatch
                          v2,
                          // -----------
                          fx2,
-                         region.Y,
+                         destination.Y,
                          ColorPackedRGBA,
                          u2,
                          v );
@@ -1257,7 +1254,6 @@ public class SpriteBatch : IBatch
     /// <param name="x">The x-coordinate where the texture should be drawn.</param>
     /// <param name="y">The y-coordinate where the texture should be drawn.</param>
     /// <param name="src">The source rectangle portion of the texture to be drawn.</param>
-    // Checked 08.02.26
     public virtual void Draw( Texture texture, float x, float y, GRect src )
     {
         lock ( _lockObject )
@@ -1310,12 +1306,12 @@ public class SpriteBatch : IBatch
     /// Draws a textured rectangle on the screen using specified texture coordinates.
     /// </summary>
     /// <param name="texture">The texture to use for rendering.</param>
-    /// <param name="region">The rectangular region where the texture will be drawn.</param>
+    /// <param name="destination">The rectangular region where the texture will be drawn.</param>
     /// <param name="u">The U coordinate of the texture's top-left corner.</param>
     /// <param name="v">The V coordinate of the texture's top-left corner.</param>
     /// <param name="u2">The U coordinate of the texture's bottom-right corner.</param>
     /// <param name="v2">The V coordinate of the texture's bottom-right corner.</param>
-    public virtual void Draw( Texture texture, GRect region, float u, float v, float u2, float v2 )
+    public virtual void Draw( Texture texture, GRect destination, float u, float v, float u2, float v2 )
     {
         lock ( _lockObject )
         {
@@ -1330,16 +1326,16 @@ public class SpriteBatch : IBatch
                 Flush();
             }
 
-            var fx2 = region.X + region.Width;
-            var fy2 = region.Y + region.Height;
+            var fx2 = destination.X + destination.Width;
+            var fy2 = destination.Y + destination.Height;
 
-            SetVertices( region.X,
-                         region.Y,
+            SetVertices( destination.X,
+                         destination.Y,
                          ColorPackedRGBA,
                          u,
                          v,
                          // -----------
-                         region.X,
+                         destination.X,
                          fy2,
                          ColorPackedRGBA,
                          u,
@@ -1352,7 +1348,7 @@ public class SpriteBatch : IBatch
                          v2,
                          // -----------
                          fx2,
-                         region.Y,
+                         destination.Y,
                          ColorPackedRGBA,
                          u2,
                          v );
@@ -1365,20 +1361,9 @@ public class SpriteBatch : IBatch
     /// <param name="texture"> The texture. </param>
     /// <param name="x"> X coordinate in pixels. </param>
     /// <param name="y"> Y coordinate in pixels. </param>
-    // Checked 08.02.26
-    public virtual void Draw( Texture? texture, float x, float y )
+    public virtual void Draw( Texture texture, float x, float y )
     {
-        lock ( _lockObject )
-        {
-            if ( texture is null )
-            {
-                Logger.Debug( "Draw called with null texture" );
-
-                return;
-            }
-
-            Draw( texture, x, y, texture.Width, texture.Height );
-        }
+        Draw( texture, x, y, texture.Width, texture.Height );
     }
 
     /// <summary>
@@ -1388,7 +1373,7 @@ public class SpriteBatch : IBatch
     /// <param name="spriteVertices">An array of vertex data describing the sprites to be rendered.</param>
     /// <param name="offset">The starting index in the vertex array from which to begin processing.</param>
     /// <param name="count">The number of vertices to process starting from the specified offset.</param>
-    public virtual void Draw( Texture? texture, float[] spriteVertices, int offset, int count )
+    public virtual void Draw( Texture texture, float[] spriteVertices, int offset, int count )
     {
         lock ( _lockObject )
         {
@@ -1435,20 +1420,21 @@ public class SpriteBatch : IBatch
         }
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Draws the specified texture region at the given position.
     /// </summary>
     /// <param name="region">The texture region to be drawn. Can be null.</param>
     /// <param name="x">The x-coordinate of the position to draw the texture.</param>
     /// <param name="y">The y-coordinate of the position to draw the texture.</param>
-    // Checked 08.02.26
-    public virtual void Draw( TextureRegion? region, float x, float y )
+    public virtual void Draw( TextureRegion region, float x, float y )
     {
         lock ( _lockObject )
         {
             Validate( region );
 
-            Draw( region, x, y, region!.GetRegionWidth(), region.GetRegionHeight() );
+            Draw( region, x, y, region.GetRegionWidth(), region.GetRegionHeight() );
         }
     }
 
@@ -1460,14 +1446,13 @@ public class SpriteBatch : IBatch
     /// <param name="y">The Y-coordinate of the bottom-left corner where the texture will be drawn.</param>
     /// <param name="width">The width of the texture region to be drawn.</param>
     /// <param name="height">The height of the texture region to be drawn.</param>
-    // Checked 08.02.26
-    public virtual void Draw( TextureRegion? region, float x, float y, float width, float height )
+    public virtual void Draw( TextureRegion region, float x, float y, float width, float height )
     {
         lock ( _lockObject )
         {
             Validate( region );
 
-            var texture = region!.Texture;
+            var texture = region.Texture;
 
             if ( texture != LastTexture )
             {
@@ -1480,30 +1465,34 @@ public class SpriteBatch : IBatch
 
             var fx2 = x + width;
             var fy2 = y + height;
+            var u   = region.U;
+            var v   = region.V2;
+            var u2  = region.U2;
+            var v2  = region.V;
 
             SetVertices( x,
                          y,
                          ColorPackedRGBA,
-                         region.U,
-                         region.V,
+                         u,
+                         v,
                          // -----------
                          x,
                          fy2,
                          ColorPackedRGBA,
-                         region.U,
-                         region.V2,
+                         u,
+                         v2,
                          // -----------
                          fx2,
                          fy2,
                          ColorPackedRGBA,
-                         region.U2,
-                         region.V2,
+                         u2,
+                         v2,
                          // -----------
                          fx2,
                          y,
                          ColorPackedRGBA,
-                         region.U2,
-                         region.V );
+                         u2,
+                         v );
         }
     }
 
@@ -1512,19 +1501,18 @@ public class SpriteBatch : IBatch
     /// scaling, and rotation.
     /// </summary>
     /// <param name="textureRegion">The texture region to be drawn.</param>
-    /// <param name="region">The rectangular region where the texture will be drawn.</param>
+    /// <param name="destination">The rectangular region where the texture will be drawn.</param>
     /// <param name="origin">The origin point for transformations such as scaling and rotation.</param>
     /// <param name="scale">The scale factor to be applied to the texture region.</param>
     /// <param name="rotation">The rotation angle in radians to be applied to the texture region.</param>
-    // Checked 08.02.26
-    public virtual void Draw( TextureRegion? textureRegion, GRect region, Point2D origin, Point2D scale,
+    public virtual void Draw( TextureRegion textureRegion, GRect destination, Point2D origin, Point2D scale,
                               float rotation )
     {
         lock ( _lockObject )
         {
             Validate( textureRegion );
 
-            var texture = textureRegion!.Texture;
+            var texture = textureRegion.Texture;
 
             if ( texture != LastTexture )
             {
@@ -1536,15 +1524,15 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            var worldOriginX = region.X + origin.X;
-            var worldOriginY = region.Y + origin.Y;
+            var worldOriginX = destination.X + origin.X;
+            var worldOriginY = destination.Y + origin.Y;
             var fx           = -origin.X;
             var fy           = -origin.Y;
-            var fx2          = region.Width - origin.X;
-            var fy2          = region.Height - origin.Y;
+            var fx2          = destination.Width - origin.X;
+            var fy2          = destination.Height - origin.Y;
 
             // scale
-            if ( ( Math.Abs( scale.X - 1 ) > 0 ) || ( Math.Abs( scale.Y - 1 ) > 0 ) )
+            if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
             {
                 fx  *= scale.X;
                 fy  *= scale.Y;
@@ -1606,42 +1594,47 @@ public class SpriteBatch : IBatch
             x4 += worldOriginX;
             y4 += worldOriginY;
 
+            var u  = textureRegion.U;
+            var v  = textureRegion.V2;
+            var u2 = textureRegion.U2;
+            var v2 = textureRegion.V;
+
             SetVertices( x1,
                          y1,
                          ColorPackedRGBA,
-                         textureRegion.U,
-                         textureRegion.V,
+                         u,
+                         v,
                          // -----------
                          x2,
                          y2,
                          ColorPackedRGBA,
-                         textureRegion.U,
-                         textureRegion.V2,
+                         u,
+                         v2,
                          // -----------
                          x3,
                          y3,
                          ColorPackedRGBA,
-                         textureRegion.U2,
-                         textureRegion.V2,
+                         u2,
+                         v2,
                          // -----------
                          x4,
                          y4,
                          ColorPackedRGBA,
-                         textureRegion.U2,
-                         textureRegion.V );
+                         u2,
+                         v );
         }
     }
 
     /// <summary>
     /// </summary>
     /// <param name="textureRegion"></param>
-    /// <param name="region"></param>
+    /// <param name="destination"></param>
     /// <param name="origin"></param>
     /// <param name="scale"></param>
     /// <param name="rotation"></param>
     /// <param name="clockwise"></param>
     public virtual void Draw( TextureRegion textureRegion,
-                              GRect region,
+                              GRect destination,
                               Point2D origin,
                               Point2D scale,
                               float rotation,
@@ -1663,15 +1656,15 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            var worldOriginX = region.X + origin.X;
-            var worldOriginY = region.Y + origin.Y;
+            var worldOriginX = destination.X + origin.X;
+            var worldOriginY = destination.Y + origin.Y;
             var fx           = -origin.X;
             var fy           = -origin.Y;
-            var fx2          = region.Width - origin.X;
-            var fy2          = region.Height - origin.Y;
+            var fx2          = destination.Width - origin.X;
+            var fy2          = destination.Height - origin.Y;
 
             // scale
-            if ( ( Math.Abs( scale.X - 1 ) > 0 ) || ( Math.Abs( scale.Y - 1 ) > 0 ) )
+            if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
             {
                 fx  *= scale.X;
                 fy  *= scale.Y;
@@ -1758,12 +1751,12 @@ public class SpriteBatch : IBatch
             else // TODO: Check the orders of V and V2 here
             {
                 u1 = textureRegion.U;
-                v1 = textureRegion.V;
-                u2 = textureRegion.U2;
+                v1 = textureRegion.V2;
+                u2 = textureRegion.U;
                 v2 = textureRegion.V;
                 u3 = textureRegion.U2;
-                v3 = textureRegion.V2;
-                u4 = textureRegion.U;
+                v3 = textureRegion.V;
+                u4 = textureRegion.U2;
                 v4 = textureRegion.V2;
             }
 

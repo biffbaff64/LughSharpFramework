@@ -88,8 +88,9 @@ public class TextureRegion
     /// The height of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
     public TextureRegion( Texture? texture, int width, int height )
-        : this( texture, 0, 0, width, height )
     {
+        Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
+        SetRegion( 0, 0, width, height );
     }
 
     /// <summary>
@@ -124,10 +125,11 @@ public class TextureRegion
     public TextureRegion( Texture? texture, float u, float v, float u2, float v2 )
     {
         Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
-        SafeSetRegion( u, v, u2, v2 );
+        SetRegionSafe( u, v, u2, v2 );
     }
 
     /// <summary>
+    /// Creates a new TextureRegion with the same texture and coordinates as the given region.
     /// Represents a rectangular region within a texture, with properties and methods
     /// for manipulation such as flipping, scrolling, and splitting.
     /// </summary>
@@ -148,6 +150,8 @@ public class TextureRegion
 
     // ========================================================================
     // ========================================================================
+
+    #region SetRegion methods
 
     /// <summary>
     /// </summary>
@@ -175,13 +179,18 @@ public class TextureRegion
             throw new RuntimeException( "Texture cannot be null" );
         }
 
+        if ( height < 0 )
+        {
+            Logger.Debug( $"Negative height: {height}, this region will be Y flipped" );
+        }
+
         var invTexWidth  = 1f / Texture.Width;
         var invTexHeight = 1f / Texture.Height;
 
-        SetRegion( x * invTexWidth,
-                   y * invTexHeight,
-                   ( x + width ) * invTexWidth,
-                   ( y + height ) * invTexHeight );
+        SetRegionSafe( u: x * invTexWidth,
+                       v: y * invTexHeight,
+                       u2: ( x + width ) * invTexWidth,
+                       v2: ( y + height ) * invTexHeight );
 
         _regionWidth  = Math.Abs( width );
         _regionHeight = Math.Abs( height );
@@ -193,17 +202,20 @@ public class TextureRegion
     /// </summary>
     public virtual void SetRegion( float u, float v, float u2, float v2 )
     {
-        SafeSetRegion( u, v, u2, v2 );
+        SetRegionSafe( u, v, u2, v2 );
     }
 
     /// <summary>
+    /// Sets texture region coordinates and calculates region dimensions,
+    /// ensuring the texture is not null and applying modifications to UVs
+    /// to avoid filtering artifacts for 1x1 regions.
     /// </summary>
-    /// <param name="u"></param>
-    /// <param name="v"></param>
-    /// <param name="u2"></param>
-    /// <param name="v2"></param>
-    /// <exception cref="RuntimeException"></exception>
-    protected void SafeSetRegion( float u, float v, float u2, float v2 )
+    /// <param name="u">The u-coordinate of the region's bottom-left corner in texture space.</param>
+    /// <param name="v">The v-coordinate of the region's bottom-left corner in texture space.</param>
+    /// <param name="u2">The u-coordinate of the region's top-right corner in texture space.</param>
+    /// <param name="v2">The v-coordinate of the region's top-right corner in texture space.</param>
+    /// <exception cref="RuntimeException">Thrown if the texture is null.</exception>
+    protected void SetRegionSafe( float u, float v, float u2, float v2 )
     {
         if ( Texture == null )
         {
@@ -235,6 +247,11 @@ public class TextureRegion
         V  = v;
         U2 = u2;
         V2 = v2;
+
+        if ( V > V2 )
+        {
+            Logger.Debug( $"V: {V} > V2: {V2}, this region will be Y flipped" );
+        }
     }
 
     /// <summary>
@@ -243,7 +260,7 @@ public class TextureRegion
     public void SetRegion( TextureRegion region )
     {
         Texture = region.Texture;
-        SetRegion( region.U, region.V, region.U2, region.V2 );
+        SetRegionSafe( region.U, region.V, region.U2, region.V2 );
     }
 
     /// <summary>
@@ -258,6 +275,8 @@ public class TextureRegion
         Texture = region.Texture;
         SetRegion( region.RegionX + x, region.RegionY + y, width, height );
     }
+
+    #endregion SetRegion methods
 
     /// <summary>
     /// Flips this TextureRegion horizontally, vertically, or both.
@@ -400,7 +419,7 @@ public class TextureRegion
             _regionWidth = ( int )Math.Round( Math.Abs( U2 - u ) * Texture.Width );
         }
     }
-    
+
     /// <summary>
     /// Represents the texture coordinate on the horizontal axis of the
     /// bottom-right corner of the texture region.
@@ -452,7 +471,7 @@ public class TextureRegion
         get => _v2;
         set => _v2 = value;
     }
-    
+
     public virtual void SetV2( float v2 )
     {
         _v2 = v2;
@@ -479,6 +498,13 @@ public class TextureRegion
 
             return ( int )Math.Round( U * Texture.Width );
         }
+        set
+        {
+            if ( Texture != null )
+            {
+                SetU( value / ( float )Texture.Width );
+            }
+        }
     }
 
     /// <summary>
@@ -496,6 +522,13 @@ public class TextureRegion
             }
 
             return ( int )Math.Round( V * Texture.Height );
+        }
+        set
+        {
+            if ( Texture != null )
+            {
+                SetV( value / ( float )Texture.Height );
+            }
         }
     }
 
@@ -516,10 +549,11 @@ public class TextureRegion
     }
 
     /// <summary>
-    /// 
+    /// Adjusts the width of the texture region to match the specified desired width.
+    /// Updates the U and U2 coordinates of the region based on the desired width and flipping mode.
     /// </summary>
-    /// <param name="desiredRegionWidth"></param>
-    /// <param name="isFlipX"></param>
+    /// <param name="desiredRegionWidth">The desired width of the texture region, in pixels.</param>
+    /// <param name="isFlipX">Specifies whether the region should be flipped horizontally.</param>
     public void SetRegionWidth( int desiredRegionWidth, bool isFlipX )
     {
         if ( ( Texture == null ) || ( Texture.Width == 0 ) )
@@ -556,17 +590,17 @@ public class TextureRegion
     {
         return _regionHeight;
     }
-    
+
     public void SetRegionHeight( int height )
     {
         _regionHeight = height;
     }
 
     /// <summary>
-    /// 
+    /// Sets the height of the texture region and optionally flips the vertical coordinate.
     /// </summary>
-    /// <param name="desiredRegionHeight"></param>
-    /// <param name="isFlipY"></param>
+    /// <param name="desiredRegionHeight">The desired height of the texture region in pixels.</param>
+    /// <param name="isFlipY">Indicates whether the vertical coordinate (V) should be flipped.</param>
     public void SetRegionHeight( int desiredRegionHeight, bool isFlipY )
     {
         if ( ( Texture == null ) || ( Texture.Height == 0 ) )

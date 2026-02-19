@@ -66,7 +66,7 @@ public class Affine2
     /// Sets this matrix to the identity matrix.
     /// </summary>
     /// <returns>This matrix for the purpose of chaining operations.</returns>
-    public Affine2 ToIdentityMatrix()
+    public Affine2 Idt()
     {
         M00 = 1;
         M01 = 0;
