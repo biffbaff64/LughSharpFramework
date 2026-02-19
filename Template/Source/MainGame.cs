@@ -142,13 +142,63 @@ public class MainGame : Game
                 _gameCam.Position.Z = 0;
                 _gameCam.Update();
 
+                if ( _image1 != null )
+                {
+                    var width = _image1.Width;
+                    var height = _image1.Height;
+                    var spriteVertices = new float[]
+                    {
+                        100f, 100f, -1f, 0f, 1f, // Bottom-Left
+                        100f, 150f, -1f, 0f, 0f, // Top-Left
+                        150f, 150f, -1f, 1f, 0f, // Top-Right
+                        150f, 100f, -1f, 1f, 1f  // Bottom-Right
+                    };
+                    
+                    _spriteBatch.Draw( _image1, 700, 20, 100, 100 );
+                    _spriteBatch.Draw( _image1,
+                                       new GRect( 600, 20, width, height ),
+                                       new Point2D( 600 + ( width / 2 ), 20 + ( height / 2 ) ),
+                                       new Point2D( 1, 1 ),
+                                       0,
+                                       new GRect( 0, 0, width, height ),
+                                       false,
+                                       false );
+                    _spriteBatch.Draw( _image1,
+                                       new GRect( 20, 600, width, height ),
+                                       new GRect( 0, 0, width, height ),
+                                       false,
+                                       false );
+                    _spriteBatch.Draw( _image1, 30, 400, new GRect( 0, 0, width, height ) );
+                    _spriteBatch.Draw( _image1, new GRect( 120, 600, width, height ), 0, 1, 1, 0 );
+                    _spriteBatch.Draw( _image1, 800, 300 );
+                    _spriteBatch.Draw( _image1, spriteVertices, 0, spriteVertices.Length );
+                }
+
                 if ( _star != null )
                 {
                     _spriteBatch.Draw( _star,
-                                       ( Engine.Api.Graphics.Width - _star.GetRegionWidth() ) / 2f,
-                                       ( Engine.Api.Graphics.Height - _star.GetRegionHeight() ) / 2f,
-                                       _star.GetRegionWidth(),
-                                       _star.GetRegionHeight() );
+                                       Engine.Api.Graphics.Width - _star.GetRegionWidth(),
+                                       Engine.Api.Graphics.Height - _star.GetRegionHeight() );
+                    _spriteBatch.Draw( _star,
+                                       Engine.Api.Graphics.Width - ( _star.GetRegionWidth() * 2 ),
+                                       Engine.Api.Graphics.Height - ( _star.GetRegionHeight() * 2 ),
+                                      _star.GetRegionWidth(),
+                                      _star.GetRegionHeight() );
+                    _spriteBatch.Draw( _star,
+                                       new GRect( 0, 0, _star.GetRegionWidth(), _star.GetRegionHeight()),
+                                       new Point2D( 0 + ( _star.GetRegionWidth() / 2 ), 0 + ( _star.GetRegionHeight() / 2 ) ),
+                                       new Point2D( 1, 1 ),
+                                       0 );
+                    _spriteBatch.Draw( _star,
+                                       new GRect( 100, 100, _star.GetRegionWidth(), _star.GetRegionHeight()),
+                                       new Point2D( 100 + ( _star.GetRegionWidth() / 2 ), 100 + ( _star.GetRegionHeight() / 2 ) ),
+                                       new Point2D( 1, 1 ),
+                                       0,
+                                       false );
+//                    _spriteBatch.Draw( _star,
+//                                       _star.GetRegionWidth(),
+//                                       _star.GetRegionHeight(),
+//                                       new Affine2() );
                 }
 
                 if ( _sprite2 != null )
@@ -206,8 +256,8 @@ public class MainGame : Game
         {
             if ( disposing )
             {
-                _spriteBatch?.Dispose();
                 _assetManager?.Dispose();
+                _spriteBatch?.Dispose();
                 _tiledCam?.Dispose();
                 _gameCam?.Dispose();
                 _image1?.Dispose();
@@ -219,8 +269,8 @@ public class MainGame : Game
                 // Should Sprite() implement IDisposable, or should I leave that up to
                 // any extending classes? Maybe imlplement IDisposable in Sprite() and
                 // allow ( and encourage ) extending classes to override it?
-                _sprite = null;
-                _sprite2  = null;
+                _sprite  = null;
+                _sprite2 = null;
             }
 
             _disposed = true;
@@ -284,7 +334,7 @@ public class MainGame : Game
         }
 
         var texture = new Texture( Assets.HUD_PANEL );
-        
+
         _stage = new Stage( _gameCam.Viewport );
         _hudActor = new Scene2DImage( texture )
         {
@@ -314,7 +364,7 @@ public class MainGame : Game
 //            IsVisible = true,
 //        };
 //        _windowActor.SetPosition( 200, 180 );
-        
+
         _stage?.AddActor( _hudActor );
 //        _stage?.AddActor( _imageButton );
 //        _stage?.AddActor( _windowActor );
@@ -347,8 +397,8 @@ public class MainGame : Game
         _sprite.SetBounds();
         _sprite.SetOriginCenter();
         _sprite.SetColor( Color.White );
-        
-        _sprite2  = new Sprite( new TextureRegion( new Texture( Assets.PAUSE_EXIT_BUTTON ) ) );
+
+        _sprite2 = new Sprite( new TextureRegion( new Texture( Assets.PAUSE_EXIT_BUTTON ) ) );
         _sprite2.SetBounds();
         _sprite2.SetOriginCenter();
         _sprite2.SetColor( Color.White );
