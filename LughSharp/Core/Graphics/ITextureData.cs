@@ -107,7 +107,7 @@ public interface ITextureData : IManaged
     //      Use PixelFormat.BytesPerPixel( _pixmap.GetColorFormat() ).
     
     /// <summary>
-    /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
+    /// Returns the Pixel Format of the pixel data.
     /// </summary>
     int GetPixelFormat();
 
@@ -151,3 +151,7 @@ public interface ITextureData : IManaged
     /// </summary>
     void DebugPrint();
 }
+
+// ============================================================================
+// ============================================================================
+

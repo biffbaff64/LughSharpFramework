@@ -131,8 +131,8 @@ public class Stage : InputAdapter, IDisposable
     /// <param name="batch"></param>
     public Stage( IBatch? batch )
         : this( new ScalingViewport( Scaling.Stretch,
-                                     Engine.Api.Graphics.Width,
-                                     Engine.Api.Graphics.Height,
+                                     Engine.Api.Graphics.WindowWidth,
+                                     Engine.Api.Graphics.WindowHeight,
                                      new OrthographicCamera() ), batch )
     {
         _ownsBatch = false;
@@ -165,7 +165,7 @@ public class Stage : InputAdapter, IDisposable
         RootGroup = new Group();
         RootGroup.SetStage( this );
 
-        Viewport.Update( Engine.Api.Graphics.Width, Engine.Api.Graphics.Height, true );
+        Viewport.Update( Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight, true );
     }
 
     /// <summary>
@@ -418,7 +418,7 @@ public class Stage : InputAdapter, IDisposable
         _mouseScreenX              = screenX;
         _mouseScreenY              = screenY;
 
-        if ( TouchFocuses.Count == 0 )
+        if ( TouchFocuses.Size == 0 )
         {
             return false;
         }
@@ -440,7 +440,7 @@ public class Stage : InputAdapter, IDisposable
 
         TouchFocus?[] focuses = TouchFocuses.Begin();
 
-        for ( int i = 0, n = TouchFocuses.Count; i < n; i++ )
+        for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
         {
             var focus = focuses[ i ];
 
@@ -485,7 +485,7 @@ public class Stage : InputAdapter, IDisposable
         _pointerScreenX[ pointer ] = screenX;
         _pointerScreenY[ pointer ] = screenY;
 
-        if ( TouchFocuses.Count == 0 )
+        if ( TouchFocuses.Size == 0 )
         {
             return false;
         }
@@ -508,7 +508,7 @@ public class Stage : InputAdapter, IDisposable
 
         TouchFocus?[] focuses = TouchFocuses.Begin();
 
-        for ( int i = 0, n = TouchFocuses.Count; i < n; i++ )
+        for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
         {
             var focus = focuses[ i ];
 
@@ -734,7 +734,7 @@ public class Stage : InputAdapter, IDisposable
                                   int pointer,
                                   int button )
     {
-        for ( var i = TouchFocuses.Count - 1; i >= 0; i-- )
+        for ( var i = TouchFocuses.Size - 1; i >= 0; i-- )
         {
             var focus = TouchFocuses.GetAt( i );
 
@@ -761,7 +761,7 @@ public class Stage : InputAdapter, IDisposable
         InputEvent?   inputEvent = null;
         TouchFocus?[] items      = TouchFocuses.Begin();
 
-        for ( int i = 0, n = TouchFocuses.Count; i < n; i++ )
+        for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
         {
             var focus = items[ i ];
 
@@ -834,7 +834,7 @@ public class Stage : InputAdapter, IDisposable
         // allowing for concurrent modification, and never cancel the same focus twice.
         TouchFocus?[] items = TouchFocuses.Begin();
 
-        for ( int i = 0, n = TouchFocuses.Count; i < n; i++ )
+        for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
         {
             var focus = items[ i ];
 
@@ -983,7 +983,7 @@ public class Stage : InputAdapter, IDisposable
     public virtual Vector2 StageToScreenCoordinates( Vector2 stageCoords )
     {
         Viewport.Project( stageCoords );
-        stageCoords.Y = Engine.Api.Graphics.Height - stageCoords.Y;
+        stageCoords.Y = Engine.Api.Graphics.WindowHeight - stageCoords.Y;
 
         return stageCoords;
     }
@@ -1320,7 +1320,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( actor is Group group )
         {
-            for ( int i = 0, n = group.Children.Count; i < n; i++ )
+            for ( int i = 0, n = group.Children.Size; i < n; i++ )
             {
                 if ( group.Children.GetAt( i ) != except )
                 {
@@ -1340,7 +1340,7 @@ public class Stage : InputAdapter, IDisposable
         var y0 = Viewport.ScreenY;
         var y1 = y0 + Viewport.ScreenHeight;
 
-        screenY = Engine.Api.Graphics.Height - 1 - screenY;
+        screenY = Engine.Api.Graphics.WindowHeight - 1 - screenY;
 
         return ( screenX >= x0 ) && ( screenX < x1 )
                                  && ( screenY >= y0 ) && ( screenY < y1 );
@@ -1434,7 +1434,7 @@ public class Stage : InputAdapter, IDisposable
         Logger.Debug( "Camera:" );
         Viewport.Camera?.Debug();
         Logger.Debug( $"Width: {Width}, Height: {Height}" );
-        Logger.Debug( $"Num Actors: {Actors.Count}" );
+        Logger.Debug( $"Num Actors: {Actors.Size}" );
         Logger.EndBlock();
     }
 

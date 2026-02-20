@@ -55,6 +55,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Button : Table, IDisableable
 {
+    public override string? Name => "Button";
+    
     public ButtonClickListener?   ClickListener { get; set; }
     public bool                   IsChecked     { get; private set; }
     public bool                   IsDisabled    { get; set; }
@@ -366,7 +368,7 @@ public class Button : Table, IDisableable
 
         if ( offset )
         {
-            for ( var i = 0; i < Children.Count; i++ )
+            for ( var i = 0; i < Children.Size; i++ )
             {
                 Children.GetAt( i )?.MoveBy( -offsetX, -offsetY );
             }

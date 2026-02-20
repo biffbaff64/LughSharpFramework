@@ -59,6 +59,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class SelectBox< T > : Widget, IDisableable where T : notnull
 {
+    public override string? Name => "SelectBox";
+
     public ClickListener  ClickListener { get; set; }
     public SelectBoxStyle Style         { get; set; } = null!;
     public List< T >      Items         { get; }      = [ ];
@@ -607,6 +609,8 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     [PublicAPI]
     public class SelectBoxScrollPane : ScrollPane
     {
+        public override string? Name => "SelectBoxScrollPane";
+
         public int            MaxListCount { get; set; }
         public ListBox< T >   ListBox      { get; set; }
         public SelectBox< T > SelectBox    { get; set; }
@@ -719,7 +723,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
             }
 
             X = x;
-            
+
             Validate();
 
             ScrollTo( 0,
@@ -794,7 +798,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
         public override void Act( float delta )
         {
             base.Act( delta );
-            ToFront();
+            BringToFront();
         }
 
         public override void SetStage( Stage? stage )
@@ -1067,10 +1071,10 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
         public Color                      FontColor          { get; } = new( 1, 1, 1, 1 );
         public Color?                     OverFontColor      { get; }
         public Color?                     DisabledFontColor  { get; }
-        public IDrawable?            Background         { get; }
-        public IDrawable?            BackgroundOver     { get; }
-        public IDrawable?            BackgroundOpen     { get; }
-        public IDrawable?            BackgroundDisabled { get; }
+        public IDrawable?                 Background         { get; }
+        public IDrawable?                 BackgroundOver     { get; }
+        public IDrawable?                 BackgroundOpen     { get; }
+        public IDrawable?                 BackgroundDisabled { get; }
 
         // ====================================================================
 

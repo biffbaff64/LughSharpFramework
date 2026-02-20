@@ -44,6 +44,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Scene2DImage : Widget
 {
+    public override string? Name => "Scene2DImage";
     public float           ImageX      { get; set; }
     public float           ImageY      { get; set; }
     public float           ImageWidth  { get; set; }
@@ -141,7 +142,6 @@ public class Scene2DImage : Widget
 
         _scaling  = scaling;
         Alignment = align;
-        Name      = GetType().Name;
 
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }

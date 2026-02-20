@@ -85,7 +85,7 @@ public class AssetDescriptor
 
         AssetType  = assetType;
         Parameters = parameters;
-        AssetName  = IOUtils.NormalizePath( filepath );
+        AssetName  = filepath;
         File       = new FileInfo( AssetName );
     }
 
@@ -100,7 +100,7 @@ public class AssetDescriptor
         Parameters = parameters;
         AssetType  = assetType ?? throw new ArgumentNullException( nameof( assetType ) );
         File       = file ?? throw new ArgumentNullException( nameof( file ) );
-        AssetName  = IOUtils.NormalizePath( file.FullName );
+        AssetName  = file.FullName;
     }
 
     /// <inheritdoc />

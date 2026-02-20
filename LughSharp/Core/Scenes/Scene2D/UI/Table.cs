@@ -1850,7 +1850,7 @@ public class Table : WidgetGroup
         }
 
         // Validate all children (some may not be in cells).
-        for ( int i = 0, n = Children.Count; i < n; i++ )
+        for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             if ( Children.GetAt( i ) is ILayout )
             {

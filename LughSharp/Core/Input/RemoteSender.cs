@@ -292,8 +292,8 @@ public class RemoteSender : IInputProcessor
             _out.Write( Engine.Api.Input.GetPitch() );
             _out.Write( Engine.Api.Input.GetRoll() );
             _out.Write( SIZE );
-            _out.Write( Engine.Api.Graphics.Width );
-            _out.Write( Engine.Api.Graphics.Height );
+            _out.Write( Engine.Api.Graphics.WindowWidth );
+            _out.Write( Engine.Api.Graphics.WindowHeight );
             _out.Write( GYRO );
             _out.Write( Engine.Api.Input.GetGyroscopeX() );
             _out.Write( Engine.Api.Input.GetGyroscopeY() );

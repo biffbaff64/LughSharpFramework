@@ -26,6 +26,9 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics;
 
+/// <summary>
+/// Specifies the type of vertex data to be used.
+/// </summary>
 [PublicAPI]
 public enum VertexDataType
 {
@@ -33,33 +36,6 @@ public enum VertexDataType
     VertexBufferObject,
     VertexBufferObjectSubData,
     VertexBufferObjectWithVAO,
-}
-
-/// <summary>
-/// Represents various OpenGL capabilities that can be enabled or disabled.
-/// </summary>
-[PublicAPI]
-public enum GraphicsCapability
-{
-    Blend,
-    DepthTest,
-    ScissorTest,
-    CullFace,
-
-    // Add more as needed
-}
-
-/// <summary>
-/// Represents common texture internal formats.
-/// </summary>
-[PublicAPI]
-public enum TextureFormat
-{
-    Rgb,
-    Rgba,
-    Alpha,
-
-    // Add more as needed (e.g., grayscale, compressed formats)
 }
 
 // ============================================================================

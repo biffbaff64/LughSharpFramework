@@ -65,8 +65,8 @@ public class ImageProcessor
 
     // ========================================================================
 
-    private static readonly Bitmap EmptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
-    private static readonly Regex  IndexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
+    private static readonly Bitmap _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
+    private static readonly Regex  _indexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
 
     private readonly Dictionary< string, TexturePackerRect? > _crcs = [ ];
 
@@ -102,7 +102,7 @@ public class ImageProcessor
             throw new RuntimeException( $"Error reading image: {file}", ex );
         }
 
-        var name = IOUtils.NormalizePath( file.FullName );
+        var name = file.FullName;
 
         // Strip extension.
         name = Path.GetFileNameWithoutExtension( name );
@@ -260,7 +260,7 @@ public class ImageProcessor
 
         if ( Settings.UseIndexes )
         {
-            var match = IndexPattern.Match( name );
+            var match = _indexPattern.Match( name );
 
             if ( match.Success )
             {
@@ -466,7 +466,7 @@ public class ImageProcessor
                 {
                     return Settings.IgnoreBlankImages
                         ? null
-                        : new TexturePackerRect( EmptyImage, 0, 0, 1, 1, false );
+                        : new TexturePackerRect( _emptyImage, 0, 0, 1, 1, false );
                 }
 
                 // Create a new Bitmap representing the stripped area

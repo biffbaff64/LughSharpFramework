@@ -35,6 +35,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class CheckBox : TextButton
 {
+    public override string? Name => "CheckBox";
+    
     public Scene2DImage? Image     { get; set; }
     public Cell?         ImageCell { get; set; }
 

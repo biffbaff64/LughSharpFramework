@@ -76,7 +76,7 @@ public class TexturePackerTest
 
         // Make sure we have a settings file to use. Comment out if not needed,
         // or to test with default settings.
-        var settingsFilePath = IOUtils.NormalizePath( Path.Combine( inputFolder, "pack.json" ) );
+        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
         settings.WriteToJsonFile( settingsFilePath );
 
         // Calls to TexturePacker.Process() do not modify the paths with any IOUtils

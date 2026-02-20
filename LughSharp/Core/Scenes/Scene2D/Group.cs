@@ -64,6 +64,8 @@ public class Group : Actor, ICullable
 
     public Rectangle? CullingArea { get; set; }
 
+    public override string? Name => "Group";
+    
     // ========================================================================
 
     private readonly Matrix4 _computedTransform = new();
@@ -80,7 +82,7 @@ public class Group : Actor, ICullable
 
         var actors = Children.Begin();
 
-        for ( int i = 0, n = Children.Count; i < n; i++ )
+        for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             actors[ i ]?.Act( delta );
         }
@@ -143,7 +145,7 @@ public class Group : Actor, ICullable
 
             if ( Transform )
             {
-                for ( int i = 0, n = Children.Count; i < n; i++ )
+                for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
                     var child = actors[ i ];
 
@@ -173,7 +175,7 @@ public class Group : Actor, ICullable
                 X = 0;
                 Y = 0;
 
-                for ( int i = 0, n = Children.Count; i < n; i++ )
+                for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
                     var child = actors[ i ];
 
@@ -209,7 +211,7 @@ public class Group : Actor, ICullable
             // No culling, draw all children.
             if ( Transform )
             {
-                for ( int i = 0, n = Children.Count; i < n; i++ )
+                for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
                     var child = actors[ i ];
 
@@ -230,7 +232,7 @@ public class Group : Actor, ICullable
                 X = 0;
                 Y = 0;
 
-                for ( int i = 0, n = Children.Count; i < n; i++ )
+                for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
                     var child = actors[ i ];
 
@@ -299,7 +301,7 @@ public class Group : Actor, ICullable
         // No culling, draw all children.
         if ( Transform )
         {
-            for ( int i = 0, n = Children.Count; i < n; i++ )
+            for ( int i = 0, n = Children.Size; i < n; i++ )
             {
                 var child = actors[ i ];
 
@@ -332,7 +334,7 @@ public class Group : Actor, ICullable
             X = 0;
             Y = 0;
 
-            for ( int i = 0, n = Children.Count; i < n; i++ )
+            for ( int i = 0, n = Children.Size; i < n; i++ )
             {
                 var child = actors[ i ];
 
@@ -472,7 +474,7 @@ public class Group : Actor, ICullable
             return null;
         }
 
-        for ( var i = Children.Count - 1; i >= 0; i-- )
+        for ( var i = Children.Size - 1; i >= 0; i-- )
         {
             var child = Children.GetAt( i );
 
@@ -516,9 +518,11 @@ public class Group : Actor, ICullable
 
             actor.Parent.RemoveActor( actor, false );
         }
-
+        
         Children.Add( actor );
 
+        Logger.Debug( $"Actor {actor.Name} added to group, Children.Count = {Children.Size}" );
+        
         actor.Parent = this;
         actor.Stage  = Stage;
 
@@ -544,7 +548,7 @@ public class Group : Actor, ICullable
             actor.Parent.RemoveActor( actor, false );
         }
 
-        if ( index >= Children.Count )
+        if ( index >= Children.Size )
         {
             Children.Add( actor );
         }
@@ -606,7 +610,7 @@ public class Group : Actor, ICullable
 
         var index = Children.IndexOf( actorAfter );
 
-        if ( ( index == Children.Count ) || ( index == -1 ) )
+        if ( ( index == Children.Size ) || ( index == -1 ) )
         {
             Children.Add( actor );
         }
@@ -676,7 +680,7 @@ public class Group : Actor, ICullable
     {
         var actors = Children.Begin();
 
-        for ( int i = 0, n = Children.Count; i < n; i++ )
+        for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             actors[ i ]!.Stage  = null;
             actors[ i ]!.Parent = null;
@@ -703,7 +707,7 @@ public class Group : Actor, ICullable
     /// </summary>
     public T? FindActor< T >( string name ) where T : Actor
     {
-        for ( int i = 0, n = Children.Count; i < n; i++ )
+        for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             var child = Children.GetAt( i );
 
@@ -713,7 +717,7 @@ public class Group : Actor, ICullable
             }
         }
 
-        for ( int i = 0, n = Children.Count; i < n; i++ )
+        for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             var child = Children.GetAt( i );
 
@@ -738,7 +742,7 @@ public class Group : Actor, ICullable
     {
         Stage = stage;
 
-        for ( int i = 0, n = Children.Count; i < n; i++ )
+        for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             Children.GetAt( i )?.Stage = stage;
         }
@@ -750,7 +754,7 @@ public class Group : Actor, ICullable
     /// </summary>
     public bool SwapActor( int first, int second )
     {
-        var maxIndex = Children.Count;
+        var maxIndex = Children.Size;
 
         if ( ( first < 0 ) || ( first >= maxIndex ) )
         {
@@ -799,7 +803,7 @@ public class Group : Actor, ICullable
     /// </summary>
     public bool HasChildren()
     {
-        return Children.Count > 0;
+        return Children.Size > 0;
     }
 
     /// <summary>
@@ -887,7 +891,7 @@ public class Group : Actor, ICullable
 
         var actors = Children.Begin();
 
-        for ( int i = 0, n = Children.Count; i < n; i++ )
+        for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             for ( var ii = 0; ii < indent; ii++ )
             {

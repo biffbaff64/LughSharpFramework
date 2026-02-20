@@ -31,6 +31,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -54,6 +55,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ProgressBar : Widget, IDisableable
 {
+    public override string? Name => "ProgressBar";
     public float KnobPosition { get; set; }
     public float MinValue     { get; set; }
     public float MaxValue     { get; set; }
@@ -72,7 +74,6 @@ public class ProgressBar : Widget, IDisableable
     private readonly bool  _programmaticChangeEvents = true;
 
     private float _animateDuration;
-
     private float _animateFromValue;
     private float _animateTime;
 
@@ -84,7 +85,7 @@ public class ProgressBar : Widget, IDisableable
                 max,
                 stepSize,
                 vertical,
-                skin.Get< ProgressBarStyle >( "default-" + ( vertical ? "vertical" : "horizontal" ) ) )
+                skin.Get< ProgressBarStyle >( $"default-{( vertical ? "vertical" : "horizontal" )}" ) )
     {
     }
 
@@ -114,12 +115,7 @@ public class ProgressBar : Widget, IDisableable
     {
         if ( min > max )
         {
-            throw new ArgumentException( "max must be > min. min,max: " + min + ", " + max );
-        }
-
-        if ( stepSize <= 0 )
-        {
-            throw new ArgumentException( "stepSize must be > 0: " + stepSize );
+            throw new ArgumentException( $"max must be > min. min,max: {min}, {max}" );
         }
 
         Style = style;
@@ -135,22 +131,32 @@ public class ProgressBar : Widget, IDisableable
 
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     public bool IsAnimating => _animateTime > 0;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="ArgumentException"></exception>
     public float StepSize
     {
         get;
         init
         {
-            if ( field <= 0 )
+            if ( value <= 0 )
             {
-                throw new ArgumentException( "steps must be > 0: " + field );
+                throw new ArgumentException( $"steps must be > 0: {field}" );
             }
 
             field = value;
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public ProgressBarStyle Style
     {
         get;
@@ -163,6 +169,7 @@ public class ProgressBar : Widget, IDisableable
         }
     }
 
+    /// <inheritdoc />
     public override void Act( float delta )
     {
         base.Act( delta );
@@ -178,6 +185,7 @@ public class ProgressBar : Widget, IDisableable
         }
     }
 
+    /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         var knob        = Style.Knob;
@@ -477,7 +485,7 @@ public class ProgressBar : Widget, IDisableable
     {
         if ( min > max )
         {
-            throw new ArgumentException( "min must be <= max: " + min + " <= " + max );
+            throw new ArgumentException( $"min must be <= max: {min} <= {max}" );
         }
 
         MinValue = min;
@@ -493,11 +501,16 @@ public class ProgressBar : Widget, IDisableable
         }
     }
 
+    /// <inheritdoc />
     public override float GetPrefWidth()
     {
         return GetPrefWidthSafe();
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     protected float GetPrefWidthSafe()
     {
         if ( IsVertical )
@@ -511,11 +524,16 @@ public class ProgressBar : Widget, IDisableable
         return DEFAULT_PREF_WIDTH;
     }
 
+    /// <inheritdoc />
     public override float GetPrefHeight()
     {
         return GetPrefHeightSafe();
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     protected float GetPrefHeightSafe()
     {
         if ( IsVertical )
@@ -562,6 +580,10 @@ public class ProgressBar : Widget, IDisableable
         _animateTime = 0;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public float GetPercent()
     {
         if ( MinValue.Equals( MaxValue ) )
@@ -572,6 +594,10 @@ public class ProgressBar : Widget, IDisableable
         return ( Value - MinValue ) / ( MaxValue - MinValue );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public float GetVisualPercent()
     {
         if ( MinValue.Equals( MaxValue ) )
@@ -582,6 +608,10 @@ public class ProgressBar : Widget, IDisableable
         return VisualInterpolation.Apply( ( GetVisualValue() - MinValue ) / ( MaxValue - MinValue ) );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private IDrawable? GetBackgroundDrawable()
     {
         if ( IsDisabled && ( Style.DisabledBackground != null ) )
@@ -592,6 +622,10 @@ public class ProgressBar : Widget, IDisableable
         return Style.Background;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private IDrawable? GetKnobDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnob != null ) )
@@ -602,6 +636,10 @@ public class ProgressBar : Widget, IDisableable
         return Style.Knob;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private IDrawable? GetKnobBeforeDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnobBefore != null ) )
@@ -612,6 +650,10 @@ public class ProgressBar : Widget, IDisableable
         return Style.KnobBefore;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private IDrawable? GetKnobAfterDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnobAfter != null ) )
@@ -666,3 +708,7 @@ public class ProgressBar : Widget, IDisableable
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

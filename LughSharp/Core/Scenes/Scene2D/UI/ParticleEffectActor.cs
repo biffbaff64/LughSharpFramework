@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
 
@@ -32,15 +34,23 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The particle effect is positioned at 0, 0 in the ParticleEffectActor. Its
 /// bounding box is not limited to the size of this actor.
 /// </summary>
+[PublicAPI]
 public class ParticleEffectActor : Actor, IDisposable
 {
-    protected readonly bool ownsEffect;
-
-    private bool _resetOnStart;
-
-    protected float lastDelta;
+    public override string? Name => "ParticleEffectActor";
+    public bool           IsRunning      { get; set; }
+    public bool           AutoRemove     { get; set; }
+    public ParticleEffect ParticleEffect { get; }
 
     // ========================================================================
+    
+    protected readonly bool OwnsEffect;
+    protected float LastDelta;
+
+    // ========================================================================
+
+    private bool _resetOnStart;
+    
     // ========================================================================
 
     public ParticleEffectActor( ParticleEffect particleEffect, bool resetOnStart )
@@ -53,28 +63,23 @@ public class ParticleEffectActor : Actor, IDisposable
     {
         ParticleEffect = new ParticleEffect();
         ParticleEffect.Load( particleFile, atlas );
-        ownsEffect = true;
+        OwnsEffect = true;
     }
 
     public ParticleEffectActor( FileInfo particleFile, DirectoryInfo imagesDir )
     {
         ParticleEffect = new ParticleEffect();
         ParticleEffect.Load( particleFile, imagesDir );
-        ownsEffect = true;
+        OwnsEffect = true;
     }
-
-    public bool           IsRunning      { get; set; }
-    public bool           AutoRemove     { get; set; }
-    public ParticleEffect ParticleEffect { get; }
-
     public override void Draw( IBatch batch, float parentAlpha )
     {
         ParticleEffect.SetPosition( X, Y );
 
-        if ( lastDelta > 0 )
+        if ( LastDelta > 0 )
         {
-            ParticleEffect.Update( lastDelta );
-            lastDelta = 0;
+            ParticleEffect.Update( LastDelta );
+            LastDelta = 0;
         }
 
         if ( IsRunning )
@@ -91,7 +96,7 @@ public class ParticleEffectActor : Actor, IDisposable
         // don't do particleEffect.update() here - the correct position
         // is set just while we are in draw() method. We save the delta
         // here to update in draw()
-        lastDelta += delta;
+        LastDelta += delta;
 
         if ( AutoRemove && ParticleEffect.IsComplete() )
         {
@@ -160,7 +165,7 @@ public class ParticleEffectActor : Actor, IDisposable
     {
         if ( disposing )
         {
-            if ( ownsEffect )
+            if ( OwnsEffect )
             {
                 ParticleEffect.Dispose();
             }
@@ -169,3 +174,7 @@ public class ParticleEffectActor : Actor, IDisposable
 
     #endregion dispose pattern
 }
+
+// ============================================================================
+// ============================================================================
+

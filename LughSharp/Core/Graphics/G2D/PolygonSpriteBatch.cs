@@ -187,7 +187,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             _shader = defaultShader;
         }
 
-        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
     }
 
     public void Begin( bool depthMaskEnabled = false )

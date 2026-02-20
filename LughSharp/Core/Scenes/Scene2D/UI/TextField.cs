@@ -964,7 +964,7 @@ public class TextField : Widget
             return best;
         }
 
-        for ( int i = 0, n = actors.Count; i < n; i++ )
+        for ( int i = 0, n = actors.Size; i < n; i++ )
         {
             var actor = actors.GetAt( i );
 

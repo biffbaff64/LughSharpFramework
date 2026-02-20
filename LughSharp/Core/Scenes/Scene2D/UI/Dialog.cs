@@ -40,6 +40,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Dialog : Window
 {
+    public override string? Name => "Dialog";
     private readonly IgnoreTouchDown _ignoreTouchDown = null!;
 
     private ChangeListener _dialogChangeListener = null!;

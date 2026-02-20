@@ -149,7 +149,7 @@ public class Stack : WidgetGroup
 
         var children = Children;
 
-        for ( int i = 0, n = children.Count; i < n; i++ )
+        for ( int i = 0, n = children.Size; i < n; i++ )
         {
             var   child = children.GetAt( i );
             float childMaxWidth, childMaxHeight;
@@ -204,7 +204,7 @@ public class Stack : WidgetGroup
 
         var children = Children;
 
-        for ( int i = 0, n = children.Count; i < n; i++ )
+        for ( int i = 0, n = children.Size; i < n; i++ )
         {
             var child = children.GetAt( i );
             child?.SetBounds( 0, 0, width, height );

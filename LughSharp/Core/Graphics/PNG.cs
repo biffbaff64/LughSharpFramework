@@ -25,32 +25,30 @@
 using System;
 using System.IO;
 using System.IO.Hashing;
+
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.ImageDecoders;
 using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Graphics;
 
 /// <summary>
-/// The Paeth filter computes a simple linear function of the three neighboring pixels
-/// (left, above, upper left), then chooses as predictor the neighboring pixel closest
-/// to the computed value. This technique is due to Alan W. Paeth [PAETH].
-/// To compute the Paeth filter, apply the following formula to each byte of the scanline:
-/// <code>
-///    Paeth(x) = Raw(x) - PaethPredictor(Raw(x-bpp), Prior(x), Prior(x-bpp))
-/// </code>
-/// where x ranges from zero to the number of bytes representing the scanline minus one,
-/// Raw(x) refers to the raw data byte at that byte position in the scanline, Prior(x)
-/// refers to the unfiltered bytes of the prior scanline, and bpp is defined as for the
-/// Sub filter. Note this is done for each byte, regardless of bit depth. Unsigned arithmetic
-/// modulo 256 is used, so that both the inputs and outputs fit into bytes. The sequence of
-/// Paeth values is transmitted as the filtered scanline.
+/// 
 /// </summary>
 [PublicAPI]
 public class PNG : IDisposable
 {
+    /// <summary>
+    /// If true, the resulting PNG is flipped vertically. Default is true.
+    /// </summary>
+    public bool FlipY { get; set; }
+
+    // ========================================================================
+
     private const int  IHDR                = 0x49484452;
     private const int  IDAT                = 0x49444154;
     private const int  IEND                = 0x49454E44;
@@ -58,7 +56,23 @@ public class PNG : IDisposable
     private const byte COMPRESSION_DEFLATE = 0;
     private const byte FILTER_NONE         = 0;
     private const byte INTERLACE_NONE      = 0;
-    private const byte PAETH_FILTER        = 4;
+
+    /// <summary>
+    /// The Paeth filter computes a simple linear function of the three neighboring pixels
+    /// (left, above, upper left), then chooses as predictor the neighboring pixel closest
+    /// to the computed value. This technique is due to Alan W. Paeth [PAETH].
+    /// To compute the Paeth filter, apply the following formula to each byte of the scanline:
+    /// <code>
+    ///    Paeth(x) = Raw(x) - PaethPredictor(Raw(x-bpp), Prior(x), Prior(x-bpp))
+    /// </code>
+    /// where x ranges from zero to the number of bytes representing the scanline minus one,
+    /// Raw(x) refers to the raw data byte at that byte position in the scanline, Prior(x)
+    /// refers to the unfiltered bytes of the prior scanline, and bpp is defined as for the
+    /// Sub filter. Note this is done for each byte, regardless of bit depth. Unsigned arithmetic
+    /// modulo 256 is used, so that both the inputs and outputs fit into bytes. The sequence of
+    /// Paeth values is transmitted as the filtered scanline.
+    /// </summary>
+    private const byte PAETH_FILTER = 4;
 
     private readonly ChunkBuffer _buffer;
     private readonly Deflater    _deflater;
@@ -79,11 +93,6 @@ public class PNG : IDisposable
         _buffer   = new ChunkBuffer( initialBufferSize );
         _deflater = new Deflater();
     }
-
-    /// <summary>
-    /// If true, the resulting PNG is flipped vertically. Default is true.
-    /// </summary>
-    public bool FlipY { get; set; }
 
     /// <summary>
     /// Sets the deflate compression level.
@@ -294,3 +303,6 @@ public class PNG : IDisposable
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

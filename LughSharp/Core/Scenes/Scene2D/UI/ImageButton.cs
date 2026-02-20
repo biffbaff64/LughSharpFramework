@@ -42,6 +42,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ImageButton : Button
 {
+    public override string? Name => "ImageButton";
+    
     // ========================================================================
     // ========================================================================
 

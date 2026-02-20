@@ -65,6 +65,7 @@ public class MainGame : Game
     private Scene2DImage?               _hudActor;
     private Window?                     _windowActor;
     private ImageButton?                _imageButton;
+    private ProgressBar?                _progressBar;
     private BitmapFont?                 _font;
     private Sprite?                     _sprite;
     private Sprite?                     _sprite2;
@@ -141,77 +142,7 @@ public class MainGame : Game
                 _gameCam.Position.Y = 0;
                 _gameCam.Position.Z = 0;
                 _gameCam.Update();
-
-//                if ( _image1 != null )
-//                {
-//                    var width  = _image1.Width;
-//                    var height = _image1.Height;
-//                    var spriteVertices = new[]
-//                    {
-//                        100f, 100f, -1f, 0f, 1f, // Bottom-Left
-//                        100f, 150f, -1f, 0f, 0f, // Top-Left
-//                        150f, 150f, -1f, 1f, 0f, // Top-Right
-//                        150f, 100f, -1f, 1f, 1f  // Bottom-Right
-//                    };
-//
-//                    _spriteBatch.Draw( _image1, 700, 20, 100, 100 );
-//                    _spriteBatch.Draw( _image1,
-//                                       new GRect( 600, 20, width, height ),
-//                                       new Point2D( 600 + ( width / 2 ), 20 + ( height / 2 ) ),
-//                                       new Point2D( 1, 1 ),
-//                                       0,
-//                                       new GRect( 0, 0, width, height ),
-//                                       false,
-//                                       false );
-//                    _spriteBatch.Draw( _image1,
-//                                       new GRect( 20, 600, width, height ),
-//                                       new GRect( 0, 0, width, height ),
-//                                       false,
-//                                       false );
-//                    _spriteBatch.Draw( _image1, 30, 400, new GRect( 0, 0, width, height ) );
-//                    _spriteBatch.Draw( _image1, new GRect( 120, 600, width, height ), 0, 1, 1, 0 );
-//                    _spriteBatch.Draw( _image1, 800, 300 );
-//                    _spriteBatch.Draw( _image1, spriteVertices, 0, spriteVertices.Length );
-//                }
-
-                if ( _star != null )
-                {
-//                    _spriteBatch.Draw( _star,
-//                                       Engine.Api.Graphics.Width - _star.GetRegionWidth(),
-//                                       Engine.Api.Graphics.Height - _star.GetRegionHeight() );
-//                    _spriteBatch.Draw( _star,
-//                                       Engine.Api.Graphics.Width - ( _star.GetRegionWidth() * 2 ),
-//                                       Engine.Api.Graphics.Height - ( _star.GetRegionHeight() * 2 ),
-//                                       _star.GetRegionWidth(),
-//                                       _star.GetRegionHeight() );
-//                    _spriteBatch.Draw( _star,
-//                                       new GRect( 0, 0, _star.GetRegionWidth(), _star.GetRegionHeight() ),
-//                                       new Point2D( 0 + ( _star.GetRegionWidth() / 2 ),
-//                                                    0 + ( _star.GetRegionHeight() / 2 ) ),
-//                                       new Point2D( 1, 1 ),
-//                                       0 );
-//                    _spriteBatch.Draw( _star,
-//                                       new GRect( 100, 100, _star.GetRegionWidth(), _star.GetRegionHeight() ),
-//                                       new Point2D( 100 + ( _star.GetRegionWidth() / 2 ),
-//                                                    100 + ( _star.GetRegionHeight() / 2 ) ),
-//                                       new Point2D( 1, 1 ),
-//                                       0,
-//                                       false );
-                    var transform = new Affine2();
-                    transform.Idt(); // Identity transform
-                    transform.SetToTranslation( 100, 100 );
-
-                    _spriteBatch.Draw( _star, _star.GetRegionWidth(), _star.GetRegionHeight(), transform );
-                }
-
-                if ( _sprite2 != null )
-                {
-                    _sprite2.SetPosition( _tiledCam?.Position.X ?? 20, _tiledCam?.Position.Y ?? 20 );
-                    _sprite2.Draw( _spriteBatch );
-                }
-
-                _font?.Draw( _spriteBatch, "[GREEN]HELLO[] [WHITE]WORLD[]", 400, 400 );
-
+                
                 _spriteBatch.End();
             }
         }
@@ -290,8 +221,8 @@ public class MainGame : Game
     {
         const float ZOOM = 1f;
 
-        _tiledCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
-                                                Engine.Api.Graphics.Height,
+        _tiledCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
+                                                Engine.Api.Graphics.WindowHeight,
                                                 name: "TILEDCamera" );
 
         _tiledCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
@@ -303,8 +234,8 @@ public class MainGame : Game
 
         // --------------------------------------
 
-        _gameCam = new OrthographicGameCamera( Engine.Api.Graphics.Width,
-                                               Engine.Api.Graphics.Height,
+        _gameCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
+                                               Engine.Api.Graphics.WindowHeight,
                                                name: "HUDCamera" );
 
         _gameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
@@ -345,32 +276,37 @@ public class MainGame : Game
         };
         _hudActor.SetPosition( 0, 0 );
 
-//        var style = new ImageButton.ImageButtonStyle
-//        {
-//            ImageUp   = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_UP ) ),
-//            ImageDown = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_DOWN ) )
-//        };
-//        _imageButton = new ImageButton( style )
-//        {
-//            IsVisible = true
-//        };
-//        _imageButton.SetPosition( 0, 0 );
+        var style = new ImageButton.ImageButtonStyle
+        {
+            ImageUp   = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_UP ) ),
+            ImageDown = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_DOWN ) )
+        };
+        _imageButton = new ImageButton( style )
+        {
+            IsVisible = true
+        };
+        _imageButton.SetPosition( 0, 0 );
 
-//        var windowStyle = new Window.WindowStyle
-//        {
-//            TitleFont = _font,
-//            TitleFontColor = Color.White,
-//            Background = new TextureRegionDrawable( new Texture( Assets.WINDOW_BACKGROUND ) ),
-//        };
-//        _windowActor = new Window( "Window Title", windowStyle )
-//        {
-//            IsVisible = true,
-//        };
-//        _windowActor.SetPosition( 200, 180 );
+        var windowStyle = new Window.WindowStyle
+        {
+            TitleFont = _font,
+            TitleFontColor = Color.White,
+            Background = new TextureRegionDrawable( new Texture( Assets.WINDOW_BACKGROUND ) ),
+        };
+        _windowActor = new Window( "Window Title", windowStyle )
+        {
+            IsVisible = true,
+        };
+        _windowActor.SetPosition( 200, 180 );
+
+        var barStyle = new ProgressBar.ProgressBarStyle();
+        _progressBar = new ProgressBar( 0f, 10f, 1f, false, barStyle );
+        _progressBar.SetPosition( 20, 550 );
 
         _stage?.AddActor( _hudActor );
-//        _stage?.AddActor( _imageButton );
-//        _stage?.AddActor( _windowActor );
+        _stage?.AddActor( _imageButton );
+        _stage?.AddActor( _windowActor );
+        _stage?.AddActor( _progressBar );
         _stage?.DebugAll = true;
     }
 

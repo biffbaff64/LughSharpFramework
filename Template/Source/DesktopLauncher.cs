@@ -82,7 +82,7 @@ public static class DesktopLauncher
 
         // Make sure we have a settings file to use. Comment out if not needed,
         // or to test with default settings.
-        var settingsFilePath = IOUtils.NormalizePath( Path.Combine( inputFolder, "pack.json" ) );
+        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
         settings.WriteToJsonFile( settingsFilePath );
 
         TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\animations" ), outputFolder, "animations",

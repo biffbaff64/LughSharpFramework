@@ -25,10 +25,14 @@
 using System;
 using System.IO;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
+
 using Exception = System.Exception;
+
 using LughSharp.Core.Graphics.ImageDecoders;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -38,13 +42,11 @@ using LughSharp.Core.Utils.Logging;
 namespace LughSharp.Core.Graphics;
 
 /// <summary>
-/// A Pixmap represents an image in memory. It has a width and height expressed
-/// in pixels as well as a <c>PixelFormat</c> specifying the number and order
-/// of color components per pixel.
+/// A Pixmap represents an image in memory. It has a width and height expressed in pixels
+/// as well as a <c>PixelFormat</c> specifying the number and order of color components per pixel.
 /// <para>
-/// Coordinates of pixels are specified with respect to the top left corner of
-/// the image, with the x-axis pointing to the right and the y-axis pointing
-/// downwards.
+/// Coordinates of pixels are specified with respect to the top left corner of the image, with
+/// the x-axis pointing to the right and the y-axis pointing downwards.
 /// </para>
 /// <para>
 /// By default all methods use blending. You can disable blending by setting it
@@ -91,14 +93,15 @@ public class Pixmap : IDisposable
         catch ( Exception e )
         {
             throw new RuntimeException( $"Couldn't create pixmap with width: {width}, " +
-                                           $"height: {height}, format: {format}", e );
+                                        $"height: {height}, format: {format}",
+                                        e );
         }
     }
 
     /// <summary>
-    /// Creates a new Pixmap instance from the given encoded image data. The image can
-    /// be encoded as JPEG, PNG or BMP. The size of data used is <b>length</b>, starting
-    /// from <b>offset</b>.
+    /// Creates a new Pixmap instance from the given <c>encodedData</c>. The image can
+    /// be encoded as JPEG, PNG or BMP. The size of data used is <c>length</c>, starting
+    /// from <c>offset</c>.
     /// </summary>
     public Pixmap( byte[] encodedData, int offset, int length )
     {
@@ -121,9 +124,7 @@ public class Pixmap : IDisposable
     /// Jpeg or Bitmap. Paletted formats are not supported.
     /// </summary>
     /// <param name="file"> The file. </param>
-    /// <exception cref="RuntimeException">
-    /// Thrown if there were errors loading or reading the file.
-    /// </exception>
+    /// <exception cref="RuntimeException"> Thrown if there were errors loading or reading the file. </exception>
     public Pixmap( FileInfo file )
     {
         try
@@ -220,6 +221,7 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Returns the byte[] array holding the pixel data. For the format Alpha each
     /// value is encoded as a byte.
+    /// <br/>
     /// <para>
     /// For the format LuminanceAlpha the luminance is the first byte and the alpha is
     /// the second byte of the pixel.
@@ -260,7 +262,6 @@ public class Pixmap : IDisposable
     public Filter FilterValue
     {
         get;
-
         set
         {
             field = value;
@@ -270,7 +271,7 @@ public class Pixmap : IDisposable
                 : Gdx2DPixmap.GDX_2D_SCALE_LINEAR;
         }
     } = Filter.BiLinear;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -410,10 +411,14 @@ public class Pixmap : IDisposable
         try
         {
             Gdx2DPixmap.DrawPixmapNative( pixmap.Gdx2DPixmap,
-                                          srcx, srcy,
-                                          srcWidth, srcHeight,
-                                          dstx, dsty,
-                                          dstWidth, dstHeight );
+                                          srcx,
+                                          srcy,
+                                          srcWidth,
+                                          srcHeight,
+                                          dstx,
+                                          dsty,
+                                          dstWidth,
+                                          dstHeight );
         }
         catch ( Exception ex )
         {

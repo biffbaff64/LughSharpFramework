@@ -99,16 +99,21 @@ public interface ITextureArrayData
     void ConsumeTextureArrayData();
 }
 
+// ============================================================================
+// ============================================================================
+
 /// <summary>
 /// Provides static method to instantiate the right implementation.
 /// </summary>
 [PublicAPI]
 public class TextureArrayDataFactory
 {
-    public static ITextureArrayData LoadFromFiles( int format,
-                                                   bool useMipMaps,
-                                                   params FileInfo[] files )
+    public static ITextureArrayData LoadFromFiles( int format, bool useMipMaps, FileInfo[] files )
     {
         return new FileTextureArrayData( format, useMipMaps, files );
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -103,10 +103,7 @@ public class Scene2DUtils
     /// <returns> The ScrollPane. </returns>
     public ScrollPane CreateScrollPane( Table table, Skin skin, string name )
     {
-        var scrollPane = new ScrollPane( table, skin )
-        {
-            Name = name
-        };
+        var scrollPane = new ScrollPane( table, skin );
 
         return scrollPane;
     }

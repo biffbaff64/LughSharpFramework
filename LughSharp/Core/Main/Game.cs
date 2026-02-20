@@ -52,7 +52,7 @@ public abstract class Game : IApplicationListener
             if ( field != null )
             {
                 field.Show();
-                field.Resize( Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
+                field.Resize( Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
             }
         }
     }

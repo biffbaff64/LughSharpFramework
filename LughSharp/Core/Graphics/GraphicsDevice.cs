@@ -42,8 +42,8 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
     // ========================================================================
 
-    public virtual int   Width               { get; }
-    public virtual int   Height              { get; }
+    public virtual int   WindowWidth               { get; }
+    public virtual int   WindowHeight              { get; }
     public virtual float DeltaTime           { get; set; }
     public virtual bool  ContinuousRendering { get; set; } = true;
     public virtual bool  IsFullscreen        { get; }
@@ -90,7 +90,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// </summary>
     float IGraphicsDevice.GetBackBufferScale()
     {
-        return BackBufferWidth / ( float )Width;
+        return BackBufferWidth / ( float )WindowWidth;
     }
 
     // ========================================================================

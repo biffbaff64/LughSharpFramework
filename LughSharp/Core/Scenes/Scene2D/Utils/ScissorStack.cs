@@ -175,7 +175,7 @@ public class ScissorStack
                                           Rectangle area,
                                           Rectangle scissor )
     {
-        CalculateScissors( camera, 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height, batchTransform, area, scissor );
+        CalculateScissors( camera, 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight, batchTransform, area, scissor );
     }
 
     /// <summary>
@@ -227,7 +227,7 @@ public class ScissorStack
     {
         if ( _scissors.Count == 0 )
         {
-            _viewport.Set( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
+            _viewport.Set( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
 
             return _viewport;
         }

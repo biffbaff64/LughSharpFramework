@@ -336,9 +336,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
                 if ( inputPath.StartsWith( rootPath ) )
                 {
-                    rootPath  = IOUtils.NormalizePath( rootPath );
                     inputPath = inputPath.Substring( rootPath.Length );
-                    inputPath = IOUtils.NormalizePath( inputPath );
 
                     if ( inputPath.StartsWith( '/' ) )
                     {

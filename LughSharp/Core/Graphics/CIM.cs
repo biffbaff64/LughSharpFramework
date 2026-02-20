@@ -36,16 +36,19 @@ public static class CIM
 {
     private const int BUFFER_SIZE = 32000;
 
-    private static readonly byte[] WriteBuffer = new byte[ BUFFER_SIZE ];
-    private static readonly byte[] ReadBuffer  = new byte[ BUFFER_SIZE ];
+    private static readonly byte[] _writeBuffer = new byte[ BUFFER_SIZE ];
+    private static readonly byte[] _readBuffer  = new byte[ BUFFER_SIZE ];
 
     // ========================================================================
-    
+
     /// <summary>
+    /// Writes a Pixmap to a file in CIM format.
     /// </summary>
-    /// <param name="file"></param>
-    /// <param name="pixmap"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <param name="file">The file to which the Pixmap will be written.</param>
+    /// <param name="pixmap">The Pixmap instance containing image data to write.</param>
+    /// <exception cref="RuntimeException">
+    /// Thrown if the Pixmap cannot be written to the specified file.
+    /// </exception>
     public static void Write( FileInfo file, Pixmap pixmap )
     {
         try
@@ -55,7 +58,7 @@ public static class CIM
 
             output.Write( pixmap.Width );
             output.Write( pixmap.Height );
-            output.Write( ( int )pixmap.GetColorFormat() );
+            output.Write( pixmap.GetColorFormat() );
 
             var pixelBuf = pixmap.ByteBuffer;
 
@@ -65,16 +68,16 @@ public static class CIM
             var remainingBytes = pixelBuf.Capacity % BUFFER_SIZE;
             var iterations     = pixelBuf.Capacity / BUFFER_SIZE;
 
-            lock ( WriteBuffer )
+            lock ( _writeBuffer )
             {
                 for ( var i = 0; i < iterations; i++ )
                 {
-                    pixelBuf.GetBytes( WriteBuffer );
-                    output.Write( WriteBuffer );
+                    pixelBuf.GetBytes( _writeBuffer );
+                    output.Write( _writeBuffer );
                 }
 
-                pixelBuf.GetBytes( WriteBuffer, 0, remainingBytes );
-                output.Write( WriteBuffer, 0, remainingBytes );
+                pixelBuf.GetBytes( _writeBuffer, 0, remainingBytes );
+                output.Write( _writeBuffer, 0, remainingBytes );
             }
 
             pixelBuf.Position = 0;
@@ -87,10 +90,11 @@ public static class CIM
     }
 
     /// <summary>
+    /// Reads a Pixmap from a file in CIM format.
     /// </summary>
-    /// <param name="file"></param>
-    /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
+    /// <param name="file"> The file to read from. </param>
+    /// <returns> The Pixmap instance read from the file. </returns>
+    /// <exception cref="RuntimeException">Thrown if the Pixmap cannot be read from the specified file.</exception>
     public static Pixmap Read( FileInfo file )
     {
         try
@@ -105,13 +109,13 @@ public static class CIM
             pixelBuf.Position = 0;
             pixelBuf.Limit    = pixelBuf.Capacity;
 
-            lock ( ReadBuffer )
+            lock ( _readBuffer )
             {
                 int readBytes;
 
-                while ( ( readBytes = input.Read( ReadBuffer ) ) > 0 )
+                while ( ( readBytes = input.Read( _readBuffer ) ) > 0 )
                 {
-                    pixelBuf.PutBytes( ReadBuffer, 0, 0, readBytes );
+                    pixelBuf.PutBytes( _readBuffer, 0, 0, readBytes );
                 }
             }
 

@@ -22,26 +22,53 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Files;
 
+/// <summary>
+/// Utility methods for various Input/Output (I/O) operations, including file and
+/// directory management, and path handling.
+/// </summary>
 [PublicAPI]
 public class IOUtils
 {
-    /// <inheritdoc cref="PathType.External"/>
-    public static string ExternalPath => NormalizePath( $"{System.Environment.GetFolderPath( System.Environment.SpecialFolder.UserProfile )}\\" );
+    /// <summary>
+    /// Path relative to the root of the app external storage on Android and
+    /// to the home directory of the current user on the desktop.
+    /// <para>
+    /// An example External path would be:-
+    /// <code>
+    /// C:\Users\joe_blogs\
+    /// </code>
+    /// </para>
+    /// </summary>
+    public static string ExternalPath => $"{System.Environment.GetFolderPath( System.Environment.SpecialFolder.UserProfile )}\\";
 
-    /// <inheritdoc cref="PathType.Internal"/>
-    public static string InternalPath => NormalizePath( $"{Directory.GetCurrentDirectory()}\\" );
+    /// <summary>
+    /// Path relative to the asset directory on Android and to the application's root
+    /// directory on the desktop. On the desktop, if the file is not found, then the
+    /// classpath is checked.
+    /// <para>
+    /// This is not the root folder of this framework, it is the root folder of the
+    /// application that is using this framework. An example Internal path would be:-
+    /// <code>
+    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\
+    /// </code>
+    /// </para>
+    /// <para>
+    /// <b>Internal files are always readonly.</b>
+    /// </para>
+    /// </summary>
+    public static string InternalPath => $"{Directory.GetCurrentDirectory()}\\";
 
-    /// <inheritdoc cref="PathType.Local"/>
-    public static string LocalPath => NormalizePath( Path.DirectorySeparatorChar.ToString() );
+    /// <summary>
+    /// Path relative to the private files directory on Android and to the
+    /// application's root directory on the desktop.
+    /// </summary>
+    public static string LocalPath => Path.DirectorySeparatorChar.ToString();
 
     // ========================================================================
 
@@ -50,14 +77,14 @@ public class IOUtils
     /// from the location of the assembly file on disk, provided as a normalized path
     /// with consistent separators.
     /// </summary>
-    public static string AssemblyPath => NormalizePath( Assembly.GetExecutingAssembly().Location );
+    public static string AssemblyPath => Assembly.GetExecutingAssembly().Location;
 
     /// <summary>
     /// Gets the directory path of the executing assembly, normalized to include a
     /// trailing directory separator. This value is derived from the location of the
     /// assembly currently executing.
     /// </summary>
-    public static string AssemblyDirectory => NormalizePath( Path.GetDirectoryName( AssemblyPath ) + "\\" );
+    public static string AssemblyDirectory => Path.GetDirectoryName( AssemblyPath ) + "\\";
 
     // ========================================================================
 
@@ -68,61 +95,32 @@ public class IOUtils
     /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\Assets\
     /// </code>
     /// </summary>
-    public static string AssetsRoot => NormalizePath( $"{AssemblyDirectory}Assets\\" );
+    public static string AssetsRoot => $"{AssemblyDirectory}Assets\\";
 
     // ========================================================================
-
-    /// <summary>
-    /// Uses the Replace() method to replace all occurrences of both backslashes (\) and
-    /// forward slashes (/) with the platform-specific <see cref="Path.DirectorySeparatorChar"/>.
-    /// </summary>
-    /// <param name="path"> The path to normalize. </param>
-    /// <returns> The normalized path with consistent separators. </returns>
-    public static string NormalizePath( string path )
-    {
-//        // If the path is null or empty, return a single forward slash.
-//        if ( string.IsNullOrEmpty( path ) )
-//        {
-//            return "/";
-//        }
-//
-//        // 1. Replace the platform-specific separator (e.g., '\' on Windows) with '/'.
-//        // 2. Also ensure any explicitly written backslashes are converted.
-//        var normalizedPath = path.Replace( Path.DirectorySeparatorChar, '/' )
-//                                 .Replace( '\\', '/' );
-//
-//        // 3. Optional cleanup: replace any accidental double slashes with a single one.
-//        // This is a safety measure, though subsequent code should use Path.Combine/joining methods correctly.
-//        while ( normalizedPath.Contains( "//" ) )
-//        {
-//            normalizedPath = normalizedPath.Replace( "//", "/" );
-//        }
-//
-//        return normalizedPath;
-        return path;
-    }
     
     /// <summary>
     /// Validates the provided asset path by ensuring it is relative to the assets
     /// directory and normalizing it to use consistent directory separators.
     /// </summary>
     /// <param name="path">The asset path to validate and normalize.</param>
-    /// <returns>The validated and normalized asset path.</returns>
+    /// <returns>The validated asset path.</returns>
     public static string AssetPath( string path )
     {
         if ( !path.Contains( AssemblyDirectory ) )
         {
-            path = AssemblyDirectory + path;
+            return AssemblyDirectory + path;
         }
 
-        return NormalizePath( path );
+        return path;
     }
 
     /// <summary>
-    /// 
+    /// Creates a new file at the specified path and ensures that all necessary directories
+    /// in the path are created beforehand.
     /// </summary>
-    /// <param name="filePath"></param>
-    /// <returns></returns>
+    /// <param name="filePath">The full path, including file name, where the file should be created.</param>
+    /// <returns>A <see cref="FileStream"/> object for the created file.</returns>
     public static FileStream CreateFileWithDirectories( string filePath )
     {
         var directoryPath = Path.GetDirectoryName( filePath );
@@ -263,32 +261,6 @@ public class IOUtils
         var position = path.IndexOf( "Assets", StringComparison.Ordinal );
 
         return path.Substring( position, path.Length - position );
-    }
-
-    public static void MonitorFileDeletion( string file )
-    {
-        var fileInfo      = new FileInfo( file );
-        var directoryPath = fileInfo.Directory?.FullName ?? string.Empty;
-        var filename      = fileInfo.Name;
-
-        using ( var watcher = new FileSystemWatcher( directoryPath ) )
-        {
-            watcher.Filter              =  filename;
-            watcher.NotifyFilter        =  NotifyFilters.FileName | NotifyFilters.LastWrite;
-            watcher.Deleted             += OnDeleted;
-            watcher.EnableRaisingEvents =  true;
-
-            Logger.Debug( $"Monitoring for deletion of {filename}..." );
-        }
-    }
-
-    private static void OnDeleted( object sender, FileSystemEventArgs e )
-    {
-        // A breakpoint here will stop execution when the file is deleted.
-        Logger.Error( $"File deleted at: {e.FullPath}" );
-
-        // You can also add more logging or an exception to break execution.
-        throw new Exception( "File was deleted!" );
     }
 
     // ========================================================================

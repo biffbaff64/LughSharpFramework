@@ -248,7 +248,7 @@ public abstract class Viewport
 
         Camera.Project( _tmp, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
 
-        _tmp.Y = Engine.Api.Graphics.Height - _tmp.Y;
+        _tmp.Y = Engine.Api.Graphics.WindowHeight - _tmp.Y;
 
         worldCoords.X = _tmp.X;
         worldCoords.Y = _tmp.Y;
@@ -309,7 +309,7 @@ public abstract class Viewport
     /// <summary>
     /// Returns the right gutter (black bar) width in screen coordinates.
     /// </summary>
-    public virtual int RightGutterWidth => Engine.Api.Graphics.Width - ( ScreenX + ScreenWidth );
+    public virtual int RightGutterWidth => Engine.Api.Graphics.WindowWidth - ( ScreenX + ScreenWidth );
 
     /// <summary>
     /// Returns the right gutter (black bar) x in screen coordinates.
@@ -329,7 +329,7 @@ public abstract class Viewport
     /// <summary>
     /// Returns the top gutter (black bar) height in screen coordinates.
     /// </summary>
-    public virtual int TopGutterHeight => Engine.Api.Graphics.Height - ( ScreenY + ScreenHeight );
+    public virtual int TopGutterHeight => Engine.Api.Graphics.WindowHeight - ( ScreenY + ScreenHeight );
 
     // ========================================================================
 

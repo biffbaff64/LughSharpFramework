@@ -48,6 +48,7 @@ public class ScrollPane : WidgetGroup
 
     // ========================================================================
 
+    public override string? Name => "ScrollPane";
     public int    DraggingPointer    { get; set; } = -1;
     public float  FadeAlpha          { get; set; }
     public float  FadeAlphaSeconds   { get; set; } = 1;

@@ -69,12 +69,12 @@ public interface IGraphicsDevice
     /// <summary>
     /// Gets the current width of the application window in pixels.
     /// </summary>
-    int Width { get; }
+    int WindowWidth { get; }
 
     /// <summary>
     /// Gets the current height of the application window in pixels.
     /// </summary>
-    int Height { get; }
+    int WindowHeight { get; }
 
     /// <summary>
     /// Gets or sets the width of the back buffer in pixels.
@@ -388,24 +388,9 @@ public interface IGraphicsDevice
     /// <param name="systemCursor"> The system cursor to use. </param>
     void SetSystemCursor( ICursor.SystemCursor systemCursor );
     
-    /// <summary>
-    /// Describes a monitor.
-    /// </summary>
-    [PublicAPI]
-    public class Monitor
-    {
-        public readonly string Name;
-        public readonly int    VirtualX;
-        public readonly int    VirtualY;
+    // ========================================================================
+    // ========================================================================
 
-        protected Monitor( int virtualX, int virtualY, string name )
-        {
-            VirtualX = virtualX;
-            VirtualY = virtualY;
-            Name     = name;
-        }
-    }
-    
     /// <summary>
     /// Describes a fullscreen display mode, having the properties <see cref="Width"/>,
     /// <see cref="Height"/>, <see cref="RefreshRate"/>, and <see cref="BitsPerPixel"/>.
@@ -469,3 +454,4 @@ public interface IGraphicsDevice
 
 // ============================================================================
 // ============================================================================
+

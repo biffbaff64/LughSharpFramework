@@ -35,6 +35,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ImageTextButton : Button
 {
+    public override string? Name => "ImageTextButton";
     private readonly Scene2DImage?                _image;
     private          Label?                _label;
     private          ImageTextButtonStyle? _style;

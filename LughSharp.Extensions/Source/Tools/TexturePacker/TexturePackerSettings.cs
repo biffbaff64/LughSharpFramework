@@ -479,7 +479,7 @@ public class TexturePackerSettings
 
             if ( !string.IsNullOrEmpty( name ) )
             {
-                var directoryPath = IOUtils.NormalizePath( name );
+                var directoryPath = name;
 
                 if ( !string.IsNullOrEmpty( directoryPath ) )
                 {

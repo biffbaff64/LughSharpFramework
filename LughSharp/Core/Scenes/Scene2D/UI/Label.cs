@@ -50,6 +50,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Label : Widget
 {
+    public override string? Name => "Label";
     public BitmapFontCache? FontCache   { get; set; }
     public StringBuilder    Text        { get; }      = new();
     public int              LabelAlign  { get; set; } = Align.LEFT;

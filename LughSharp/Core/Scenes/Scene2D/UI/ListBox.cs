@@ -55,6 +55,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ListBox< T > : Widget where T : notnull
 {
+    public override string? Name => "ListBox";
     public Rectangle?          CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
     public ArraySelection< T > Selection    { get; set; } = null!;

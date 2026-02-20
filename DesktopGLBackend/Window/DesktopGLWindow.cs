@@ -204,7 +204,7 @@ public class DesktopGLWindow : IDisposable
         if ( shouldRender )
         {
             Graphics.Update();
-            Graphics.RenderWindow( GlfwWindow, Graphics.Width, Graphics.Height );
+            Graphics.RenderWindow( GlfwWindow, Graphics.WindowWidth, Graphics.WindowHeight );
 
 //            ApplicationListener?.Update();
 //            ApplicationListener?.Render();
@@ -506,7 +506,7 @@ public class DesktopGLWindow : IDisposable
         if ( !ListenerInitialised )
         {
             ApplicationListener?.Create();
-            ApplicationListener?.Resize( Graphics.Width, Graphics.Height );
+            ApplicationListener?.Resize( Graphics.WindowWidth, Graphics.WindowHeight );
             ListenerInitialised = true;
         }
     }

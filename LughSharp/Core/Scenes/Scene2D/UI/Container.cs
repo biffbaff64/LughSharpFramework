@@ -42,6 +42,9 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Container< T > : WidgetGroup where T : Actor
 {
+    public override string? Name => "Container";
+    public bool Rounding { get; set; } = true;
+
     private T?              _actor;
     private int             _align;
     private IDrawable? _background;
@@ -75,8 +78,6 @@ public class Container< T > : WidgetGroup where T : Actor
     {
         SetActor( actor );
     }
-
-    public bool Rounding { get; set; } = true;
 
     /// <summary>
     /// Sets the background drawable and, if adjustPadding is true, sets the container's

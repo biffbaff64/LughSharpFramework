@@ -92,8 +92,6 @@ public class Files : IFiles
                                              "Example: 'Resources/Textures/sprite.png'" );
         }
 
-        path = IOUtils.NormalizePath( path );
-
         // Prevent path traversal attacks
         if ( path.Contains( ".." ) )
         {
@@ -169,8 +167,6 @@ public class Files : IFiles
                                            "and storage is mounted." );
         }
 
-        path = IOUtils.NormalizePath( path );
-
         if ( path.Contains( ".." ) )
         {
             throw new RuntimeException( $"Path traversal is not allowed in internal storage: {path}\n" +
@@ -233,8 +229,6 @@ public class Files : IFiles
                                              "Example Unix: '/usr/local/share/game/config.json'" );
         }
 
-        path = IOUtils.NormalizePath( path );
-
         if ( !Path.IsPathRooted( path ) )
         {
             throw new RuntimeException( $"Invalid absolute path: {path}\n" +
@@ -268,8 +262,6 @@ public class Files : IFiles
                                            "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
                                            "Note: Check if external storage is mounted and accessible." );
         }
-
-        path = IOUtils.NormalizePath( path );
 
         if ( path.Contains( ".." ) )
         {
@@ -332,8 +324,6 @@ public class Files : IFiles
                                              "Example: 'Textures/sprite.png'" );
         }
 
-        path = IOUtils.NormalizePath( path );
-
         if ( path.Contains( ".." ) )
         {
             throw new RuntimeException( $"Path traversal is not allowed in assets storage: {path}\n" +
@@ -374,8 +364,6 @@ public class Files : IFiles
                                              "Assembly path cannot be null or empty.\n" +
                                              "Example: 'Resources/Shaders/default.glsl'" );
         }
-
-        path = IOUtils.NormalizePath( path );
 
         if ( path.Contains( ".." ) )
         {
@@ -444,8 +432,6 @@ public class Files : IFiles
                                            "Example valid path: 'UserData/preferences.xml'\n" +
                                            "Note: Check if local storage directory exists and is accessible." );
         }
-
-        path = IOUtils.NormalizePath( path );
 
         if ( path.Contains( ".." ) )
         {

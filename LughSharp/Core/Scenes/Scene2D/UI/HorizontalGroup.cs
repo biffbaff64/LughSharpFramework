@@ -55,6 +55,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class HorizontalGroup : WidgetGroup
 {
+    public override string? Name => "HorizontalGroup";
     public bool  Wrap      { get; set; }
     public float Fill      { get; set; }
     public bool  Expand    { get; set; }
@@ -117,7 +118,7 @@ public class HorizontalGroup : WidgetGroup
         _sizeInvalid = false;
         var children = Children;
 
-        var n = children.Count;
+        var n = children.Size;
 
         _prefHeight = 0;
 
@@ -305,7 +306,7 @@ public class HorizontalGroup : WidgetGroup
         var children = Children;
 
         var i    = 0;
-        var n    = children.Count;
+        var n    = children.Size;
         var incr = 1;
 
         if ( Reverse )
@@ -448,7 +449,7 @@ public class HorizontalGroup : WidgetGroup
         var rowSizes = _rowSizes;
         var children = Children;
         var i        = 0;
-        var n        = children.Count;
+        var n        = children.Size;
         var incr     = 1;
 
         if ( Reverse )

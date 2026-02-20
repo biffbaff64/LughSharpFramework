@@ -23,12 +23,17 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics;
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public class PixelFormat
 {
@@ -54,7 +59,7 @@ public class PixelFormat
                    LughFormat.RGBA4444 => IGL.GL_RGBA4,
 
                    // ---------------------------
-                   
+
                    var _ => throw new RuntimeException( $"Unsupported internal format: {format}" )
                };
     }
@@ -74,7 +79,7 @@ public class PixelFormat
                    LughFormat.RGBA4444        => IGL.GL_RGBA,
 
                    // ---------------------------
-                   
+
                    var _ => throw new RuntimeException( $"Unsupported data format: {format}" )
                };
     }
@@ -120,9 +125,9 @@ public class PixelFormat
     public static int GetAlignment( Pixmap pixmap )
     {
         //TODO:
-        return GetAlignment( pixmap.Width * BytesPerPixel( pixmap.GetColorFormat()) );
+        return GetAlignment( pixmap.Width * BytesPerPixel( pixmap.GetColorFormat() ) );
     }
-    
+
     /// <summary>
     /// Computes the GL_UNPACK_ALIGNMENT. 
     /// Very important for textures with 3 bytes per pixel (RGB888).
@@ -139,14 +144,8 @@ public class PixelFormat
             return 4;
         }
 
-        if ( ( rowStrideBytes % 2 ) == 0 )
-        {
-            return 2;
-        }
-
-        return 1;
+        return ( rowStrideBytes % 2 ) == 0 ? 2 : 1;
     }
-    
 
     /// <summary>
     /// Retrieves the OpenGL data type name corresponding to the given format.
@@ -199,7 +198,7 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Retrieves the name of the PixelFormat format based on the provided format identifier.
+    /// Retrieves the name of the PixelFormat format based on the provided LughFormat identifier.
     /// </summary>
     public static string GetFormatString( int format )
     {
@@ -291,7 +290,7 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a PNG Color Type value to a PixelFormat value.
+    /// Converts a PNG Color Type value to a LughFormat value.
     /// </summary>
     public static int PNGColorToLughFormat( int colorType )
     {
@@ -311,9 +310,10 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> to the corresponding System.Drawing.Imaging.PixelFormat.
+    /// Converts a <see cref="LughFormat"/> value to the corresponding
+    /// <see cref="System.Drawing.Imaging.PixelFormat"/>.
     /// </summary>
-    /// <param name="format">The pixel format of type <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>.</param>
+    /// <param name="format">The pixel format of type <c>LughFormat</c>.</param>
     /// <returns>The corresponding <see cref="System.Drawing.Imaging.PixelFormat"/>.</returns>
     /// <exception cref="RuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
@@ -337,7 +337,9 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// Converts a PNG color type and bit depth to a PixelFormat value.
+    /// Converts a PNG color type and bit depth to a PixelFormat value. If invalid
+    /// color type or bit depth is provided, the function returns <see cref="LughFormat.INVALID"/>,
+    /// and this must be handled by the caller.
     /// </summary>
     public static int FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
     {

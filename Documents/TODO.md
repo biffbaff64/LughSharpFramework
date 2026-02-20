@@ -236,7 +236,7 @@ FILES
     - DONE - DONE - DONE - IFilenameFilter
     - DONE - DONE - DONE - IFiles
     - DONE - DONE - DONE - IFileService
-    - DONE - IP   - DONE - IOUtils
+    - DONE - DONE - DONE - IOUtils
     - DONE - DONE - DONE - PathType
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -248,7 +248,7 @@ GRAPHICS
 
     CODE   DOCU   FOOTER
     ----   ----   ------
-    -      -      -      - CIM
+    - DONE - DONE - DONE - CIM
     -      -      -      - Color
     -      -      -      - Colors
     -      -      -      - Cubemap
@@ -257,27 +257,26 @@ GRAPHICS
     -      -      -      - GraphicsBackend
     -      -      -      - GraphicsCapabilities
     -      -      -      - GraphicsDevice
-    -      -      -      - GraphicsEnums
-    -      -      -      - GStructs
-    -      -      -      - ICubemapData
-    -      -      -      - ICursor
-    -      -      -      - IGraphicsDevice
-    -      -      -      - ITextureArrayData
-    -      -      -      - ITextureData
-    -      -      -      - LughFormat               ( Needs a better name )
-    -      -      -      - ManagedTextureHandle
+    - DONE - IP   - DONE - GStructs
+    - DONE - DONE - DONE - ICubemapData
+    - DONE - DONE - DONE - ICursor
+    - DONE - DONE - DONE - IGraphicsDevice
+    - DONE - DONE - DONE - ITextureArrayData
+    - DONE - IP   - DONE - ITextureData
+    - DONE - IP   - DONE - LughFormat               ( Needs a better name )
     -      -      -      - Mesh
-    -      -      -      - PixelFormat
-    -      -      -      - Pixmap                   y=down, x=right
+    - DONE - IP   - DONE - PixelFormat
+    - DONE - IP   - DONE - Pixmap                   y=down, x=right
     -      -      -      - PixmapData
     -      -      -      - PixmapDownloader
     -      -      -      - PixmapIO
-    -      -      -      - PNG
+    - DONE - IP   - DONE - PNG
     -      -      -      - Texture                  y=down, x=right
     -      -      -      - TextureDataFactory
     -      -      -      - TextureRegion            y=down, x=right
     -      -      -      - VertexAttribute
     -      -      -      - VertexAttributes
+    - DONE - IP   - DONE - VertexDataType
 
 GRAPHICS/ATLASES
 ----------------
@@ -973,7 +972,7 @@ UTILS/COLLECTIONS
     -      -      -      - OrderedMap
     -      -      -      - PredicateIterable
     -      -      -      - PredicateIterator
-    -      -      -      - SnapshotArrayList
+    - DONE - DONE - DONE - SnapshotArrayList
 
 UTILS/EXCEPTIONS
 ----------------

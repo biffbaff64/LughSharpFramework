@@ -37,6 +37,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class SplitPane : WidgetGroup
 {
+    public override string? Name => "SplitPane";
+    
     protected bool      CursorOverHandle { get; private set; }
     protected Rectangle HandleBounds     { get; } = new();
     protected Vector2   LastPoint        { get; } = new();

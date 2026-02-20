@@ -116,7 +116,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="useMipMaps"></param>
     /// <param name="format"></param>
     /// <param name="files"></param>
-    public GLTextureArray( bool useMipMaps, int format, params FileInfo[] files )
+    public GLTextureArray( bool useMipMaps, int format, FileInfo[] files )
         : this( TextureArrayDataFactory.LoadFromFiles( format, useMipMaps, files ) )
     {
     }

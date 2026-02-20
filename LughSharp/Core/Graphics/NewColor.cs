@@ -82,8 +82,8 @@ public class NewColor
     {
     }
 
-    public uint ARGB8888 => ( uint )( A << 24 | R << 16 | G << 8 | B );
-    public uint RGBA8888 => ( uint )( R << 24 | G << 16 | B << 8 | A );
+    public uint ARGB8888 => ( uint )( ( A << 24 ) | ( R << 16 ) | ( G << 8 ) | B );
+    public uint RGBA8888 => ( uint )( ( R << 24 ) | ( G << 16 ) | ( B << 8 ) | A );
 
     /// <summary>
     /// Clamps this Colors RGBA components to a valid range [0 - 1]
@@ -104,14 +104,32 @@ public class NewColor
         return this;
     }
 
+    /// <summary>
+    /// Converts the specified RGBA color components into a packed uint representation
+    /// in RGBA8888 format.
+    /// </summary>
+    /// <param name="r">The red component of the color.</param>
+    /// <param name="g">The green component of the color.</param>
+    /// <param name="b">The blue component of the color.</param>
+    /// <param name="a">The alpha (transparency) component of the color.</param>
+    /// <returns>A uint value representing the color in RGBA8888 format.</returns>
     public uint ToRgba8888( byte r, byte g, byte b, byte a )
     {
-        return ( uint )( r << RGBA_RED_SHIFT | g << RGBA_GREEN_SHIFT | b << RGBA_BLUE_SHIFT | a );
+        return ( uint )( ( r << RGBA_RED_SHIFT ) | ( g << RGBA_GREEN_SHIFT ) | ( b << RGBA_BLUE_SHIFT ) | a );
     }
 
+    /// <summary>
+    /// Converts the specified ABGR color components into a packed uint representation
+    /// in ABGR8888 format.
+    /// </summary>
+    /// <param name="r">The red component of the color.</param>
+    /// <param name="g">The green component of the color.</param>
+    /// <param name="b">The blue component of the color.</param>
+    /// <param name="a">The alpha (transparency) component of the color.</param>
+    /// <returns>A uint value representing the color in ABGR8888 format.</returns>
     public uint ToAbgr8888( byte a, byte b, byte g, byte r )
     {
-        return ( uint )( a << ARGB_ALPHA_SHIFT | b << ARGB_BLUE_SHIFT | g << ARGB_GREEN_SHIFT | r );
+        return ( uint )( ( a << ARGB_ALPHA_SHIFT ) | ( b << ARGB_BLUE_SHIFT ) | ( g << ARGB_GREEN_SHIFT ) | r );
     }
 
     // ========================================================================
@@ -160,7 +178,7 @@ public class NewColor
 
     // ========================================================================
 
-    private static readonly uint[] ValidColorTable =
+    private static readonly uint[] _validColorTable =
     {
         //RRGGBBAA
         0xFF0000FF, // Red

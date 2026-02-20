@@ -187,7 +187,7 @@ public class WidgetGroup : Group, ILayout
     {
         var children = parent.Children;
 
-        for ( int i = 0, n = children.Count; i < n; i++ )
+        for ( int i = 0, n = children.Size; i < n; i++ )
         {
             var actor = children.GetAt( i );
 

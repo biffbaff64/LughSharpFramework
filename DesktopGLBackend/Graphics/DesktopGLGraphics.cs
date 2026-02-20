@@ -87,14 +87,14 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <summary>
     /// Gets the current width of the application window in pixels.
     /// </summary>
-    public override int Width => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
+    public override int WindowWidth => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
         ? BackBufferWidth
         : LogicalWidth;
 
     /// <summary>
     /// Gets the current height of the application window in pixels.
     /// </summary>
-    public override int Height => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
+    public override int WindowHeight => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
         ? BackBufferHeight
         : LogicalHeight;
 
@@ -519,7 +519,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
 
         UpdateViewport( 0, 0, BackBufferWidth, BackBufferHeight, 1 );
 
-        GLWindow.ApplicationListener?.Resize( Width, Height );
+        GLWindow.ApplicationListener?.Resize( WindowWidth, WindowHeight );
         GLWindow.ApplicationListener?.Update();
         GLWindow.ApplicationListener?.Render();
 

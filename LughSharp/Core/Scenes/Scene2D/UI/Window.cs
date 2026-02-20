@@ -376,7 +376,7 @@ public class Window : Table
 
         public new bool TouchDown( InputEvent ev, float x, float y, int pointer, int button )
         {
-            _window.ToFront();
+            _window.BringToFront();
 
             return false;
         }

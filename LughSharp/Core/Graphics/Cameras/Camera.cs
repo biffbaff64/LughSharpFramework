@@ -289,7 +289,7 @@ public abstract class Camera
                               float viewportHeight )
     {
         var x = screenCoords.X - viewportX;
-        var y = Engine.Api.Graphics.Height - screenCoords.Y - viewportY;
+        var y = Engine.Api.Graphics.WindowHeight - screenCoords.Y - viewportY;
 
         screenCoords.X = ( ( 2 * x ) / viewportWidth ) - 1;
         screenCoords.Y = ( ( 2 * y ) / viewportHeight ) - 1;
@@ -302,7 +302,7 @@ public abstract class Camera
     /// <summary>
     /// Function to translate a point given in screen coordinates to world space. It's the same
     /// as GLU gluUnProject but does not rely on OpenGL. The viewport is assumed to span the whole
-    /// screen and is fetched from <see cref="IGraphicsDevice.Width"/> and <see cref="IGraphicsDevice.Height"/>.
+    /// screen and is fetched from <see cref="IGraphicsDevice.WindowWidth"/> and <see cref="IGraphicsDevice.WindowHeight"/>.
     /// The x- and y-coordinate of vec are assumed to be in screen coordinates (origin is the top
     /// left corner, y pointing down, x pointing to the right) as reported by the touch methods in
     /// <see cref="Input"/>. A z-coordinate of 0 will return a point on the near plane, a z-coordinate
@@ -312,7 +312,7 @@ public abstract class Camera
     /// <returns> the mutated and unprojected screenCoords <see cref="Maths.Vector3"/></returns>
     public Vector3 Unproject( Vector3 screenCoords )
     {
-        Unproject( screenCoords, 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
+        Unproject( screenCoords, 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
 
         return screenCoords;
     }
@@ -328,7 +328,7 @@ public abstract class Camera
     /// <returns>The mutated and projected worldCoords <see cref="Maths.Vector3"/>.</returns>
     public Vector3 Project( Vector3 worldCoords )
     {
-        Project( worldCoords, 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
+        Project( worldCoords, 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
 
         return worldCoords;
     }
@@ -412,7 +412,7 @@ public abstract class Camera
     /// <returns>The picking Ray.</returns>
     public Ray GetPickRay( float screenX, float screenY )
     {
-        return GetPickRay( screenX, screenY, 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
+        return GetPickRay( screenX, screenY, 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
     }
 
     /// <summary>

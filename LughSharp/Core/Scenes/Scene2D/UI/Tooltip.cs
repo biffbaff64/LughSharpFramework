@@ -66,7 +66,7 @@ public class Tooltip< T > : InputListener where T : Actor
     {
         if ( Instant )
         {
-            Container.ToFront();
+            Container.BringToFront();
 
             return false;
         }

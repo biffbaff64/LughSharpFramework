@@ -320,8 +320,6 @@ public class AssetManager : IDisposable
     /// <exception cref="RuntimeException">Thrown if the asset is not loaded or cannot be found.</exception>
     public void Unload( string filename )
     {
-        filename = IOUtils.NormalizePath( filename );
-
         // Check if it's currently processed (and the first element in the queue,
         // thus not a dependency) and cancel if necessary
         if ( TryCancelCurrentTask( filename ) )
@@ -490,8 +488,6 @@ public class AssetManager : IDisposable
 
         lock ( this )
         {
-            name = IOUtils.NormalizePath( name );
-
             _assets.TryGetValue( type, out var assetsByType );
             assetsByType!.TryGetValue( name, out var assetContainer );
 
@@ -555,8 +551,6 @@ public class AssetManager : IDisposable
 
         lock ( this )
         {
-            filename = IOUtils.NormalizePath( filename );
-
             if ( _tasks.Count > 0 )
             {
                 if ( _tasks.First().AssetDesc is { } assetDesc
@@ -1262,8 +1256,6 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            name = IOUtils.NormalizePath( name );
-
             _assetDependencies.TryGetValue( name, out var dependencies );
 
             return dependencies ?? [ ];
@@ -1279,8 +1271,6 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            name = IOUtils.NormalizePath( name );
-
             var result = _assetTypes.TryGetValue( name, out var assetType );
 
             if ( !result || ( assetType == null ) )

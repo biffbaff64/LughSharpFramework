@@ -223,7 +223,7 @@ public class SpriteBatch : IBatch
         // Set up an orthographic projection matrix for 2D rendering.
         // This matrix transforms 2D coordinates into normalized device coordinates (NDC).
         // The origin (0, 0) is at the bottom-left corner of the screen.
-        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
 
         // Generate the index buffer data for the mesh.
         // This buffer specifies the order in which vertices are used to form triangles.
@@ -312,7 +312,7 @@ public class SpriteBatch : IBatch
             Engine.GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
 
             // Use your actual window width and height
-            Engine.GL.Viewport( 0, 0, Engine.Api.Graphics.Width, Engine.Api.Graphics.Height );
+            Engine.GL.Viewport( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
 
             // Shader and Pipeline setup
             if ( _shader != null )

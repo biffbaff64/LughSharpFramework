@@ -54,11 +54,12 @@ public class Actor : IActor, IComparable< Actor >
     public DelayedRemovalList< IEventListener > CaptureListeners { get; }      = [ ];
     public List< Action >                       Actions          { get; set; } = [ ];
 
-    public string?   Name       { get; set; } = "Not Set";
     public Touchable Touchable  { get; set; } = Touchable.Enabled;
     public bool      IsVisible  { get; set; } = true;
     public object?   UserObject { get; set; }
-    
+
+    public virtual string? Name => "Actor";
+
     // ========================================================================
 
     protected float OriginX { get; set; }
@@ -218,7 +219,7 @@ public class Actor : IActor, IComparable< Actor >
     } = false;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Default Constructor.
     /// </summary>
@@ -249,7 +250,6 @@ public class Actor : IActor, IComparable< Actor >
     /// </returns>
     public int CompareTo( Actor? other )
     {
-        //TODO:
         return other == null ? 1 : 0;
     }
 
@@ -359,7 +359,7 @@ public class Actor : IActor, IComparable< Actor >
             // No point in carrying on if there are no ascendants.
             return ev.IsCancelled;
         }
-        
+
         while ( parent != null )
         {
             ascendants.Add( parent );
@@ -786,7 +786,7 @@ public class Actor : IActor, IComparable< Actor >
             return false;
         }
 
-        for ( int i = 0, n = Stage.TouchFocuses.Count; i < n; i++ )
+        for ( int i = 0, n = Stage.TouchFocuses.Size; i < n; i++ )
         {
             if ( Stage.TouchFocuses.GetAt( i ).Target == this )
             {
@@ -808,7 +808,7 @@ public class Actor : IActor, IComparable< Actor >
             return false;
         }
 
-        for ( int i = 0, n = Stage.TouchFocuses.Count; i < n; i++ )
+        for ( int i = 0, n = Stage.TouchFocuses.Size; i < n; i++ )
         {
             if ( Stage.TouchFocuses.GetAt( i ).ListenerActor == this )
             {
@@ -1171,7 +1171,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// Changes the z-order for this actor so it is in front of all siblings.
     /// </summary>
-    public void ToFront()
+    public void BringToFront()
     {
         SetZIndex( int.MaxValue );
     }
@@ -1179,7 +1179,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// Changes the z-order for this actor so it is in back of all siblings.
     /// </summary>
-    public void ToBack()
+    public void MoveToBack()
     {
         SetZIndex( 0 );
     }
@@ -1198,12 +1198,12 @@ public class Actor : IActor, IComparable< Actor >
             throw new ArgumentException( "ZIndex cannot be < 0." );
         }
 
-        if ( ( Parent == null ) || ( Parent.Children.Count <= 1 ) )
+        if ( ( Parent == null ) || ( Parent.Children.Size <= 1 ) )
         {
             return false;
         }
 
-        index = Math.Min( index, Parent.Children.Count - 1 );
+        index = Math.Min( index, Parent.Children.Size - 1 );
 
         if ( Parent.Children.GetAt( index ) == this )
         {

@@ -67,7 +67,7 @@ public class TooltipManager< T > where T : Actor
 
             stage.AddActor( _showTooltip.Container );
 
-            _showTooltip.Container.ToFront();
+            _showTooltip.Container.BringToFront();
             _activeTooltips.Add( _showTooltip );
             _showTooltip.Container.ClearActions();
 

@@ -135,7 +135,7 @@ public class VerticalGroup : WidgetGroup
 
         var children = Children;
 
-        var n = children.Count;
+        var n = children.Size;
 
         _prefWidth = 0;
 
@@ -322,7 +322,7 @@ public class VerticalGroup : WidgetGroup
         var children = Children;
 
         var i    = 0;
-        var n    = children.Count;
+        var n    = children.Size;
         var incr = 1;
 
         if ( _reverse )
@@ -448,7 +448,7 @@ public class VerticalGroup : WidgetGroup
         var children    = Children;
 
         var i    = 0;
-        var n    = children.Count;
+        var n    = children.Size;
         var incr = 1;
 
         if ( _reverse )
