@@ -27,7 +27,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
@@ -35,6 +37,11 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 using Color = LughSharp.Core.Graphics.Color;
 using Exception = System.Exception;
 
@@ -58,6 +65,27 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Skin : IDisposable
 {
+    public static Dictionary< Type, Dictionary< string, object >? > Resources     { get; set; }
+    public static Dictionary< string, Type >                        JsonClassTags { get; set; }
+
+    /// <summary>
+    /// Returns the <see cref="TextureAtlas"/> passed to this skin constructor, or null.
+    /// </summary>
+    public TextureAtlas? Atlas { get; set; }
+
+    /// <summary>
+    /// The scale used to size drawables created by this skin.
+    /// <para>
+    /// This can be useful when scaling an entire UI (eg with a stage's viewport)
+    /// then using an atlas with images whose resolution matches the UI scale.
+    /// The skin can then be scaled the opposite amount so that the larger or smaller
+    /// images are drawn at the original size. For example, if the UI is scaled 2x,
+    /// the atlas would have images that are twice the size, then the skin's scale
+    /// would be set to 0.5.
+    /// </para>
+    /// </summary>
+    public float Scale { get; set; }
+
     // ========================================================================
 
     private static readonly Type[] _defaultTagClasses =
@@ -156,57 +184,32 @@ public class Skin : IDisposable
         AddRegions( atlas );
     }
 
-    public static Dictionary< Type, Dictionary< string, object >? > Resources     { get; set; }
-    public static Dictionary< string, Type >                        JsonClassTags { get; set; }
-
-    /// <summary>
-    /// Returns the <see cref="TextureAtlas"/> passed to this skin constructor, or null.
-    /// </summary>
-    public TextureAtlas? Atlas { get; set; }
-
-    /// <summary>
-    /// The scale used to size drawables created by this skin.
-    /// <para>
-    /// This can be useful when scaling an entire UI (eg with a stage's viewport)
-    /// then using an atlas with images whose resolution matches the UI scale.
-    /// The skin can then be scaled the opposite amount so that the larger or smaller
-    /// images are drawn at the original size. For example, if the UI is scaled 2x,
-    /// the atlas would have images that are twice the size, then the skin's scale
-    /// would be set to 0.5.
-    /// </para>
-    /// </summary>
-    public float Scale { get; set; }
-
-    //TODO:
-//    public Json GetJsonLoader( in FileInfo skinFile )
-//    {
-//        var skin = this;
-//    }
-
     /// <summary>
     /// Adds all resources in the specified skin JSON file.
     /// </summary>
     public void Load( FileInfo skinFile )
     {
-//        using var fileStream = File.OpenRead( skinFile.Name );
+        try
+        {
+            var jsonText = File.ReadAllText( skinFile.FullName );
 
-//        JsonDocument document = JsonSerializer.Deserialize<>( fileStream );
+            var settings = new JsonSerializerSettings();
+            settings.Converters.Add( new SkinConverter( this, skinFile ) );
+            settings.Converters.Add( new ColorConverter( this ) );
 
-//        try
-//        {
-//            GetJsonLoader( skinFile ).FromJson( typeof( Skin ), skinFile );
-//        }
-//        catch ( SerializationException ex )
-//        {
-//            throw new SerializationException( "Error reading file: " + skinFile, ex );
-//        }
+            JsonConvert.DeserializeObject< Skin >( jsonText, settings );
+        }
+        catch ( JsonException ex )
+        {
+            throw new Exception( "Error reading file: " + skinFile, ex );
+        }
     }
 
     /// <summary>
     /// Adds all named texture regions from the atlas. The atlas will not be
     /// automatically disposed when the skin is disposed.
     /// </summary>
-    public static void AddRegions( TextureAtlas atlas )
+    public void AddRegions( TextureAtlas atlas )
     {
         for ( int i = 0, n = atlas.Regions.Count; i < n; i++ )
         {
@@ -226,7 +229,7 @@ public class Skin : IDisposable
         Add( name, resource, resource.GetType() );
     }
 
-    public static void Add( string? name, object? resource, Type type )
+    public void Add( string? name, object? resource, Type type )
     {
         Guard.Against.Null( name );
         Guard.Against.Null( resource );
@@ -237,8 +240,8 @@ public class Skin : IDisposable
         {
             typeResources = new Dictionary< string, object >
                 ( ( type == typeof( TextureRegion ) )
-                  || ( type == typeof( IDrawable ) )
-                  || ( type == typeof( Sprite ) )
+               || ( type == typeof( IDrawable ) )
+               || ( type == typeof( Sprite ) )
                       ? 256
                       : 64 );
 
@@ -336,7 +339,14 @@ public class Skin : IDisposable
 
     public bool Has( string name, Type type )
     {
-        return Resources[ type ]!.ContainsKey( name );
+        if ( !Resources.TryGetValue( type, out var resource ) )
+        {
+            Logger.Error( $"Resources Dictionary does not contain key: {type.Name}" );
+
+            return false;
+        }
+
+        return resource!.ContainsKey( name );
     }
 
     /// <summary>
@@ -353,7 +363,11 @@ public class Skin : IDisposable
         return Get< Color >( name );
     }
 
-    public BitmapFont GetFont( string name )
+    /// <summary>
+    /// Returns the named <see cref="BitmapFont"/> from the skin, or null if not found.
+    /// </summary>
+    /// <param name="name"> The name of the font.</param>
+    public BitmapFont? GetFont( string name )
     {
         return Get< BitmapFont >( name );
     }
@@ -517,8 +531,8 @@ public class Skin : IDisposable
             if ( textureRegion is AtlasRegion region )
             {
                 if ( region.Rotate
-                     || ( region.PackedWidth != region.OriginalWidth )
-                     || ( region.PackedHeight != region.OriginalHeight ) )
+                  || ( region.PackedWidth != region.OriginalWidth )
+                  || ( region.PackedHeight != region.OriginalHeight ) )
                 {
                     sprite = new AtlasSprite( region );
                 }
@@ -568,8 +582,8 @@ public class Skin : IDisposable
                     drawable = new NinePatchDrawable( GetPatch( name ) );
                 }
                 else if ( region.Rotate
-                          || ( region.PackedWidth != region.OriginalWidth )
-                          || ( region.PackedHeight != region.OriginalHeight ) )
+                       || ( region.PackedWidth != region.OriginalWidth )
+                       || ( region.PackedHeight != region.OriginalHeight ) )
                 {
                     drawable = new SpriteDrawable( GetSprite( name ) );
                 }
@@ -610,7 +624,7 @@ public class Skin : IDisposable
                 else
                 {
                     throw new RuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion, " +
-                                                   $"Texture, or Sprite registered with name: {name}" );
+                                                $"Texture, or Sprite registered with name: {name}" );
                 }
             }
         }
@@ -672,14 +686,15 @@ public class Skin : IDisposable
     public static IDrawable NewDrawable( IDrawable drawable )
     {
         return drawable switch
-        {
-            TiledSceneDrawable tiledDrawable          => new TiledSceneDrawable( tiledDrawable ),
-            TextureRegionDrawable regionDrawable => new TextureRegionDrawable( regionDrawable ),
-            NinePatchDrawable patchDrawable      => new NinePatchDrawable( patchDrawable ),
-            SpriteDrawable spriteDrawable        => new SpriteDrawable( spriteDrawable ),
+               {
+                   TiledSceneDrawable tiledDrawable     => new TiledSceneDrawable( tiledDrawable ),
+                   TextureRegionDrawable regionDrawable => new TextureRegionDrawable( regionDrawable ),
+                   NinePatchDrawable patchDrawable      => new NinePatchDrawable( patchDrawable ),
+                   SpriteDrawable spriteDrawable        => new SpriteDrawable( spriteDrawable ),
 
-            var _ => throw new RuntimeException( "Unable to copy, unknown drawable type: " + drawable.GetType() ),
-        };
+                   var _ => throw new RuntimeException( "Unable to copy, unknown drawable type: "
+                                                      + drawable.GetType() ),
+               };
     }
 
     /// <summary>
@@ -696,13 +711,14 @@ public class Skin : IDisposable
     public IDrawable NewDrawable( IDrawable drawable, Color tint )
     {
         var newDrawable = drawable switch
-        {
-            TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
-            NinePatchDrawable patchDrawable      => patchDrawable.Tint( tint ),
-            SpriteDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
+                          {
+                              TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
+                              NinePatchDrawable patchDrawable      => patchDrawable.Tint( tint ),
+                              SpriteDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
 
-            var _ => throw new RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" ),
-        };
+                              var _ => throw new
+                                  RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" ),
+                          };
 
         if ( newDrawable is BaseDrawable named )
         {
@@ -824,6 +840,179 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    public class ColorConverter : JsonConverter< Color >
+    {
+        private readonly Skin _skin;
+        public ColorConverter( Skin skin ) => _skin = skin;
+
+        /// <summary>
+        /// Reads the JSON representation of the object.
+        /// </summary>
+        /// <param name="reader">The <see cref="T:Newtonsoft.Json.JsonReader" /> to read from.</param>
+        /// <param name="objectType">Type of the object.</param>
+        /// <param name="existingValue">
+        /// The existing value of object being read. If there is no existing value then <c>null</c> will be used.
+        /// </param>
+        /// <param name="hasExistingValue">The existing value has a value.</param>
+        /// <param name="serializer">The calling serializer.</param>
+        /// <returns>The object value.</returns>
+        public override Color ReadJson( JsonReader reader,
+                                        Type objectType,
+                                        Color? existingValue,
+                                        bool hasExistingValue,
+                                        JsonSerializer serializer )
+        {
+            var token = JToken.Load( reader );
+
+            // Equivalent to: if (jsonData.isString()) return get(jsonData.asString(), Color.class);
+            if ( token.Type == JTokenType.String )
+            {
+                return _skin.Get< Color >( token.ToString() );
+            }
+
+            // Handle hex: { "hex": "ff00ff" }
+            if ( token[ "hex" ] != null )
+            {
+                return Color.FromHexString( token[ "hex" ]!.ToString() );
+            }
+
+            // Handle RGBA: { "r": 1, "g": 0, "b": 0, "a": 1 }
+            var r = token[ "r" ]?.Value< float >() ?? 0;
+            var g = token[ "g" ]?.Value< float >() ?? 0;
+            var b = token[ "b" ]?.Value< float >() ?? 0;
+            var a = token[ "a" ]?.Value< float >() ?? 1;
+
+            return new Color( r, g, b, a );
+        }
+
+        /// <summary>
+        /// Writes the JSON representation of the object.
+        /// </summary>
+        /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter" /> to write to.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="serializer">The calling serializer.</param>
+        public override void WriteJson( JsonWriter writer, Color? value, JsonSerializer serializer )
+        {
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    public class SkinConverter : JsonConverter< Skin >
+    {
+        private const string PARENT_FIELD_NAME = "parent";
+
+        private readonly Skin _skin;
+
+        public SkinConverter( Skin skin, FileInfo file )
+        {
+            _skin = skin;
+        }
+
+        /// <summary>
+        /// Reads the JSON representation of the object.
+        /// </summary>
+        /// <param name="reader">The <see cref="T:Newtonsoft.Json.JsonReader" /> to read from.</param>
+        /// <param name="objectType">Type of the object.</param>
+        /// <param name="existingValue">
+        /// The existing value of object being read. If there is no existing value then <c>null</c> will be used.
+        /// </param>
+        /// <param name="hasExistingValue">The existing value has a value.</param>
+        /// <param name="serializer">The calling serializer.</param>
+        /// <returns>The object value.</returns>
+        public override Skin ReadJson( JsonReader reader,
+                                       Type objectType,
+                                       Skin? existingValue,
+                                       bool hasExistingValue,
+                                       JsonSerializer serializer )
+        {
+            var root = JObject.Load( reader );
+
+            foreach ( var typeProperty in root.Properties() )
+            {
+                var className = typeProperty.Name;
+                // Get the actual C# Type from the JSON key (e.g., "Color")
+                var targetType = ResolveType( className );
+
+                if ( typeProperty.Value is JObject resources )
+                {
+                    foreach ( var resourceProperty in resources.Properties() )
+                    {
+                        var resourceName  = resourceProperty.Name;
+                        var resourceToken = resourceProperty.Value;
+
+                        if ( resourceToken is JObject resourceObj && resourceObj[ PARENT_FIELD_NAME ] != null )
+                        {
+                            var parentName = resourceObj[ PARENT_FIELD_NAME ]?.ToString();
+
+                            if ( string.IsNullOrWhiteSpace( parentName ) )
+                            {
+                                throw new JsonSerializationException( $"Resource '{resourceName}' "
+                                                                    + $"has an empty parent field." );
+                            }
+
+                            // Try to find the parent instance
+                            object parentInstance = _skin.Get( parentName, targetType );
+
+                            if ( parentInstance == null )
+                            {
+                                throw new JsonSerializationException( $"Unable to find parent resource "
+                                                                    + $"named '{parentName}' for '{resourceName}'" );
+                            }
+
+                            // Convert parent back to a JObject so we can merge
+                            var parentJson = JObject.FromObject( parentInstance, serializer );
+
+                            // Merge: Current properties overwrite parent properties
+                            parentJson.Merge( resourceObj,
+                                              new JsonMergeSettings
+                                              {
+                                                  MergeArrayHandling = MergeArrayHandling.Union
+                                              } );
+
+                            resourceToken = parentJson;
+                        }
+
+                        // Deserialize the (potentially merged) object and add to skin
+                        var finalObject = resourceToken.ToObject( targetType, serializer );
+                        _skin.Add( resourceName, finalObject, targetType );
+                    }
+                }
+            }
+
+            return _skin;
+        }
+
+        private Type ResolveType( string name )
+        {
+            if ( name.Contains( "Color" ) )
+            {
+                return typeof( Color );
+            }
+
+            if ( name.Contains( "BitmapFont" ) )
+            {
+                return typeof( BitmapFont );
+            }
+
+            return typeof( object );
+        }
+
+        /// <summary>
+        /// Writes the JSON representation of the object.
+        /// </summary>
+        /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter" /> to write to.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="serializer">The calling serializer.</param>
+        public override void WriteJson( JsonWriter writer, Skin? value, JsonSerializer serializer )
+        {
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
     /// <summary>
     /// </summary>
     [PublicAPI]
@@ -837,4 +1026,3 @@ public class Skin : IDisposable
 
 // ============================================================================
 // ============================================================================
-

@@ -103,6 +103,18 @@ public class BitmapFont
 
     /// <summary>
     /// Creates a BitmapFont using the default 15pt Arial font included in the Library.
+    /// This constructor is provided for convenience, and is primarily intended for use
+    /// by the Scene2D Skin Loader.
+    /// </summary>
+    internal BitmapFont()
+        : this( Engine.Api.Files.Internal( DEFAULT_FONT ),
+                Engine.Api.Files.Internal( DEFAULT_FONT_IMAGE ),
+                false )
+    {
+    }
+    
+    /// <summary>
+    /// Creates a BitmapFont using the default 15pt Arial font included in the Library.
     /// This is convenient to easily display text without bothering without generating
     /// a bitmap font yourself.
     /// </summary>

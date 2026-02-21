@@ -28,7 +28,7 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
-public class UISkin
+public class UISkinElements
 {
     // ========================================================================
 
@@ -90,6 +90,8 @@ public class UISkin
         public TextTooltipStyle? TextTooltipStyle { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class BitmapFont
     {
@@ -97,6 +99,8 @@ public class UISkin
         public UISkinFile? DefaultFont { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class UISkinFile
     {
@@ -104,6 +108,8 @@ public class UISkin
         public string? File { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class UIColor
     {
@@ -123,6 +129,8 @@ public class UISkin
         public UISkinColor? Gray { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class TintedDrawable
     {
@@ -130,6 +138,8 @@ public class UISkin
         public DialogDim? DialogDim { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class DialogDim
     {
@@ -140,6 +150,8 @@ public class UISkin
         public UISkinColor? Color { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class UISkinColor
     {
@@ -168,6 +180,8 @@ public class UISkin
         public Toggle? Toggle { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class ButtonStyleDefault
     {
@@ -181,6 +195,8 @@ public class UISkin
         public string? Disabled { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Toggle
     {
@@ -203,6 +219,8 @@ public class UISkin
         public Toggle1? Toggle1 { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class TextButtonStyleDefault
     {
@@ -219,6 +237,8 @@ public class UISkin
         public string? DisabledFontColor { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Toggle1
     {
@@ -241,6 +261,8 @@ public class UISkin
         public Default2? Default2 { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Default2
     {
@@ -269,6 +291,8 @@ public class UISkin
         public Default3? Default3 { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Default3
     {
@@ -288,6 +312,8 @@ public class UISkin
         public ListStyle1? ListStyle1 { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class ListStyle1
     {
@@ -310,6 +336,8 @@ public class UISkin
         public DefaultHorizontal? Default_Horizontal { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class DefaultVertical
     {
@@ -317,6 +345,8 @@ public class UISkin
         public string? Handle { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class DefaultHorizontal
     {
@@ -336,6 +366,8 @@ public class UISkin
         public Dialog? Dialog { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Default4
     {
@@ -349,6 +381,8 @@ public class UISkin
         public string? TitleFontColor { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Dialog
     {
@@ -371,6 +405,8 @@ public class UISkin
         public DefaultVertical1? Default_Vertical { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class DefaultHorizontal1
     {
@@ -381,6 +417,8 @@ public class UISkin
         public string? Knob { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class DefaultVertical1
     {
@@ -403,6 +441,8 @@ public class UISkin
         public DefaultVertical2? Default_Vertical { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class DefaultHorizontal2
     {
@@ -410,6 +450,8 @@ public class UISkin
         public string? Parent { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class DefaultVertical2
     {
@@ -426,6 +468,8 @@ public class UISkin
         public Default5? Default5 { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Default5
     {
@@ -445,6 +489,8 @@ public class UISkin
         public Default6? Default6 { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Default6
     {
@@ -473,6 +519,8 @@ public class UISkin
         public Default7? Default7 { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Default7
     {
@@ -498,6 +546,8 @@ public class UISkin
         public ListStyleDefault? Default { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class ListStyleDefault
     {
@@ -523,6 +573,8 @@ public class UISkin
         public TouchpadStyleDefault? Default { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class TouchpadStyleDefault
     {
@@ -542,6 +594,8 @@ public class UISkin
         public TreeStyleDefault? Default { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class TreeStyleDefault
     {
@@ -564,6 +618,8 @@ public class UISkin
         public TtsDefault? Default { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class TtsDefault
     {
@@ -577,6 +633,8 @@ public class UISkin
         public int WrapWidth { get; set; }
     }
 
+    // ========================================================================
+    
     [PublicAPI]
     public class Label
     {
@@ -587,3 +645,8 @@ public class UISkin
         public string? FontColor { get; set; }
     }
 }
+
+// ============================================================================
+// ============================================================================
+
+

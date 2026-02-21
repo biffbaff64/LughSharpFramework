@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
@@ -55,7 +57,6 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ProgressBar : Widget, IDisableable
 {
-    public override string? Name => "ProgressBar";
     public float KnobPosition { get; set; }
     public float MinValue     { get; set; }
     public float MaxValue     { get; set; }
@@ -69,9 +70,14 @@ public class ProgressBar : Widget, IDisableable
 
     // ========================================================================
 
-    private const    float DEFAULT_PREF_WIDTH        = 140f;
-    private const    float DEFAULT_PREF_HEIGHT       = 140f;
-    private readonly bool  _programmaticChangeEvents = true;
+    public override string? Name => "ProgressBar";
+
+    // ========================================================================
+
+    private const float DEFAULT_PREF_WIDTH  = 140f;
+    private const float DEFAULT_PREF_HEIGHT = 140f;
+
+    private readonly bool _programmaticChangeEvents = true;
 
     private float _animateDuration;
     private float _animateFromValue;
@@ -289,7 +295,9 @@ public class ProgressBar : Widget, IDisableable
 
             if ( currentKnob != null )
             {
-                float w = currentKnob.MinWidth, h = currentKnob.MinHeight;
+                var w = currentKnob.MinWidth;
+                var h = currentKnob.MinHeight;
+
                 x += ( width - w ) * 0.5f;
                 y += ( ( knobHeight - h ) * 0.5f ) + KnobPosition;
 
@@ -307,8 +315,8 @@ public class ProgressBar : Widget, IDisableable
         else
         {
             var positionWidth = width;
-
-            float bgLeftWidth = 0, bgRightWidth = 0;
+            var bgLeftWidth   = 0f;
+            var bgRightWidth  = 0f;
 
             if ( bg != null )
             {
@@ -506,7 +514,7 @@ public class ProgressBar : Widget, IDisableable
     {
         return GetPrefWidthSafe();
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -529,7 +537,7 @@ public class ProgressBar : Widget, IDisableable
     {
         return GetPrefHeightSafe();
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -684,7 +692,7 @@ public class ProgressBar : Widget, IDisableable
         public IDrawable? DisabledKnobAfter  { get; set; }
 
         // ====================================================================
-        
+
         public ProgressBarStyle()
         {
         }
@@ -711,4 +719,3 @@ public class ProgressBar : Widget, IDisableable
 
 // ============================================================================
 // ============================================================================
-

@@ -135,6 +135,10 @@ public class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
+    public Color() : this( 0, 0, 0, 0 )
+    {
+    }
+    
     /// <summary>
     /// Constructor, sets all the components to 0.
     /// </summary>
@@ -194,8 +198,6 @@ public class Color : ICloneable, IEquatable< Color >
         G = g / 255.0f;
         B = b / 255.0f;
         A = a / 255.0f;
-
-        System.Drawing.Color.FromArgb( r, g, b, a );
 
         Clamp();
 

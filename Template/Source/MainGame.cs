@@ -142,7 +142,7 @@ public class MainGame : Game
                 _gameCam.Position.Y = 0;
                 _gameCam.Position.Z = 0;
                 _gameCam.Update();
-                
+
                 _spriteBatch.End();
             }
         }
@@ -276,6 +276,8 @@ public class MainGame : Game
         };
         _hudActor.SetPosition( 0, 0 );
 
+        // --------------------------------------
+
         var style = new ImageButton.ImageButtonStyle
         {
             ImageUp   = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_UP ) ),
@@ -287,11 +289,13 @@ public class MainGame : Game
         };
         _imageButton.SetPosition( 0, 0 );
 
+        // --------------------------------------
+
         var windowStyle = new Window.WindowStyle
         {
-            TitleFont = _font,
+            TitleFont      = _font,
             TitleFontColor = Color.White,
-            Background = new TextureRegionDrawable( new Texture( Assets.WINDOW_BACKGROUND ) ),
+            Background     = new TextureRegionDrawable( new Texture( Assets.WINDOW_BACKGROUND ) ),
         };
         _windowActor = new Window( "Window Title", windowStyle )
         {
@@ -299,14 +303,23 @@ public class MainGame : Game
         };
         _windowActor.SetPosition( 200, 180 );
 
-        var barStyle = new ProgressBar.ProgressBarStyle();
-        _progressBar = new ProgressBar( 0f, 10f, 1f, false, barStyle );
-        _progressBar.SetPosition( 20, 550 );
+        // --------------------------------------
+
+        var skin = new Skin( new FileInfo( Assets.PROGRESS_BAR_SKIN ) );
+//        _progressBar = new ProgressBar( 0f, 10f, 1f, false, skin );
+//        _progressBar.SetPosition( 20, 550 );
+
+        if ( skin.Has( "ProgressBarStyle", typeof( ProgressBar.ProgressBarStyle ) ) )
+        {
+            Logger.Debug( "Skin contains ProgressBar.ProgressBarStyle" );
+        }
+
+        // --------------------------------------
 
         _stage?.AddActor( _hudActor );
         _stage?.AddActor( _imageButton );
         _stage?.AddActor( _windowActor );
-        _stage?.AddActor( _progressBar );
+//        _stage?.AddActor( _progressBar );
         _stage?.DebugAll = true;
     }
 

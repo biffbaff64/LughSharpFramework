@@ -34,6 +34,7 @@ public static class Assets
     public const string PAUSE_EXIT_BUTTON = @"Assets\pause_exit_button.png";
     public const string BUTTON_B_UP       = @"Assets\packedimages\input\button_b.png";
     public const string BUTTON_B_DOWN     = @"Assets\packedimages\input\button_b_pressed.png";
+    public const string PROGRESS_BAR_SKIN = @"Assets\Skins\uiskin.json";
 
     // ========================================================================
     // TMX Maps
