@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
-
-using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -86,7 +86,7 @@ public class ImageButton : Button
     /// <summary>
     /// </summary>
     /// <param name="imageUp"></param>
-    public ImageButton( IDrawable? imageUp )
+    public ImageButton( ISceneDrawable? imageUp )
         : this( new ImageButtonStyle( null, null, null, imageUp, null, null ) )
     {
     }
@@ -95,7 +95,7 @@ public class ImageButton : Button
     /// </summary>
     /// <param name="imageUp"></param>
     /// <param name="imageDown"></param>
-    public ImageButton( IDrawable? imageUp, IDrawable? imageDown )
+    public ImageButton( ISceneDrawable? imageUp, ISceneDrawable? imageDown )
         : this( new ImageButtonStyle( null, null, null, imageUp, imageDown, null ) )
     {
     }
@@ -105,7 +105,7 @@ public class ImageButton : Button
     /// <param name="imageUp"></param>
     /// <param name="imageDown"></param>
     /// <param name="imageChecked"></param>
-    public ImageButton( IDrawable? imageUp, IDrawable? imageDown, IDrawable? imageChecked )
+    public ImageButton( ISceneDrawable? imageUp, ISceneDrawable? imageDown, ISceneDrawable? imageChecked )
         : this( new ImageButtonStyle( null, null, null, imageUp, imageDown, imageChecked ) )
     {
     }
@@ -133,7 +133,7 @@ public class ImageButton : Button
     /// <summary>
     /// Returns the appropriate image drawable from the style based on the current button state.
     /// </summary>
-    protected IDrawable? GetImageDrawable()
+    protected ISceneDrawable? GetImageDrawable()
     {
         if ( IsDisabled && ( Style.ImageDisabled != null ) )
         {
@@ -193,13 +193,18 @@ public class ImageButton : Button
     /// </summary>
     protected void UpdateImage()
     {
-        Scene2DImage.SetDrawable( GetImageDrawable() );
+        var drawable = GetImageDrawable();
+
+        if ( drawable != null )
+        {
+            Scene2DImage.SetDrawable( drawable );
+        }
     }
 
     /// <summary>
     /// Draws the group and its children. The default implementation calls
-    /// <see cref="Group.ApplyTransform(LughSharp.Core.Graphics.G2D.IBatch,Matrix4)"/> if needed, then
-    /// <see cref="Button.DrawChildren(IBatch, float)"/>, followed by
+    /// <see cref="Group.ApplyTransform(LughSharp.Core.Graphics.G2D.IBatch,Matrix4)"/> if
+    ///  needed, then <see cref="Button.DrawChildren(IBatch, float)"/>, followed by
     /// <see cref="Button.ResetTransform(IBatch)"/> if needed.
     /// </summary>
     /// <param name="batch"> The <see cref="IBatch"/> </param>
@@ -238,13 +243,13 @@ public class ImageButton : Button
     [PublicAPI]
     public class ImageButtonStyle : ButtonStyle
     {
-        public IDrawable? ImageChecked;
-        public IDrawable? ImageCheckedDown;
-        public IDrawable? ImageCheckedOver;
-        public IDrawable? ImageDisabled;
-        public IDrawable? ImageDown;
-        public IDrawable? ImageOver;
-        public IDrawable? ImageUp;
+        public ISceneDrawable? ImageChecked;
+        public ISceneDrawable? ImageCheckedDown;
+        public ISceneDrawable? ImageCheckedOver;
+        public ISceneDrawable? ImageDisabled;
+        public ISceneDrawable? ImageDown;
+        public ISceneDrawable? ImageOver;
+        public ISceneDrawable? ImageUp;
 
         /// <summary>
         /// Creates a new, unitialised, ImageButtonStyle instance.
@@ -254,15 +259,15 @@ public class ImageButton : Button
         }
 
         /// <summary>
-        /// Creates a new ImageButtonStyle instance, using the supplied <see cref="IDrawable"/>
+        /// Creates a new ImageButtonStyle instance, using the supplied <see cref="ISceneDrawable"/>
         /// images for <see cref="ImageUp"/>, <see cref="ImageDown"/> and <see cref="ImageChecked"/>.
         /// </summary>
-        public ImageButtonStyle( IDrawable? up,
-                                 IDrawable? down,
-                                 IDrawable? chcked,
-                                 IDrawable? imageUp,
-                                 IDrawable? imageDown,
-                                 IDrawable? imageChecked )
+        public ImageButtonStyle( ISceneDrawable? up,
+                                 ISceneDrawable? down,
+                                 ISceneDrawable? chcked,
+                                 ISceneDrawable? imageUp,
+                                 ISceneDrawable? imageDown,
+                                 ISceneDrawable? imageChecked )
             : base( up, down, chcked )
         {
             ImageUp      = imageUp;

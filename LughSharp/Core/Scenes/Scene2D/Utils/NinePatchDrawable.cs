@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Utils;
 /// Drawable for a <see cref="NinePatch"/>.
 /// <para>
 /// The drawable sizes are set when the ninepatch is set, but they are separate
-/// values. Eg, <see cref="IDrawable.LeftWidth"/> could be set to more than
+/// values. Eg, <see cref="ISceneDrawable.LeftWidth"/> could be set to more than
 /// <see cref="NinePatch.LeftWidth"/> in order to provide more space on the left
 /// than actually exists in the ninepatch.
 /// </para>

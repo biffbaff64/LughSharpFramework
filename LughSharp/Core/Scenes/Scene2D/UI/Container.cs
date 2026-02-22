@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,6 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
-using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -47,7 +46,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     private T?              _actor;
     private int             _align;
-    private IDrawable? _background;
+    private ISceneDrawable? _background;
     private bool            _clip;
     private float           _fillX;
     private float           _fillY;
@@ -81,12 +80,12 @@ public class Container< T > : WidgetGroup where T : Actor
 
     /// <summary>
     /// Sets the background drawable and, if adjustPadding is true, sets the container's
-    /// padding to <see cref="IDrawable.BottomHeight"/> , <see cref="IDrawable.TopHeight"/>,
-    /// <see cref="IDrawable.LeftWidth"/>, and <see cref="IDrawable.RightWidth"/>.
+    /// padding to <see cref="ISceneDrawable.BottomHeight"/> , <see cref="ISceneDrawable.TopHeight"/>,
+    /// <see cref="ISceneDrawable.LeftWidth"/>, and <see cref="ISceneDrawable.RightWidth"/>.
     /// </summary>
     /// <param name="background"> If null, the background will be cleared and padding removed. </param>
     /// <param name="adjustPadding"></param>
-    public void SetBackground( IDrawable? background, bool adjustPadding = true )
+    public void SetBackground( ISceneDrawable? background, bool adjustPadding = true )
     {
         if ( _background == background )
         {
@@ -110,14 +109,14 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
-    public Container< T > Background( IDrawable background )
+    public Container< T > Background( ISceneDrawable background )
     {
         SetBackground( background );
 
         return this;
     }
 
-    public IDrawable? GetBackground()
+    public ISceneDrawable? GetBackground()
     {
         return _background;
     }

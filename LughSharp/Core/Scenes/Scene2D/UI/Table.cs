@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
-using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -109,7 +108,7 @@ public class Table : WidgetGroup
 
     private int _alignment = Align.CENTER;
 
-    private IDrawable?    _background;
+    private ISceneDrawable?    _background;
     private bool               _clip;
     private float[]            _columnMinWidth;
     private float[]            _columnPrefWidth;
@@ -243,7 +242,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// <param name="background"> May be null to clear the background. </param>
     /// </summary>
-    protected void SetBackground( IDrawable? background )
+    protected void SetBackground( ISceneDrawable? background )
     {
         if ( _background == background )
         {
@@ -281,7 +280,7 @@ public class Table : WidgetGroup
     /// </summary>
     /// <param name="background"></param>
     /// <returns></returns>
-    public Table Background( IDrawable? background )
+    public Table Background( ISceneDrawable? background )
     {
         SetBackground( background );
 
@@ -295,7 +294,7 @@ public class Table : WidgetGroup
         return this;
     }
 
-    public IDrawable? GetBackground()
+    public ISceneDrawable? GetBackground()
     {
         return _background;
     }

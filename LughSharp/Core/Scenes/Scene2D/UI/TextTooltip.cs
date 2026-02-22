@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -93,14 +93,14 @@ public class TextTooltip : Tooltip< Label >
     public class TextTooltipStyle
     {
         public Label.LabelStyle Label      { get; set; } = null!;
-        public IDrawable   Background { get; set; } = null!;
+        public ISceneDrawable   Background { get; set; } = null!;
         public float            WrapWidth  { get; set; }
 
         public TextTooltipStyle()
         {
         }
 
-        public TextTooltipStyle( Label.LabelStyle label, IDrawable background )
+        public TextTooltipStyle( Label.LabelStyle label, ISceneDrawable background )
         {
             Label      = label;
             Background = background;

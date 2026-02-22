@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -143,9 +143,9 @@ public class ScrollPane : WidgetGroup
     /// " or
     /// <see cref="MaxScrollY"/>
     /// . If false, the scroll knobs are sized based on
-    /// <see cref="IDrawable.MinWidth"/>
+    /// <see cref="ISceneDrawable.MinWidth"/>
     /// or
-    /// <see cref="IDrawable.MinHeight"/>
+    /// <see cref="ISceneDrawable.MinHeight"/>
     /// ".
     /// Default is true.
     public bool VariableSizeKnobs { get; set; } = true;
@@ -1371,11 +1371,11 @@ public class ScrollPane : WidgetGroup
         {
         }
 
-        public ScrollPaneStyle( IDrawable background,
-                                IDrawable hScroll,
-                                IDrawable hScrollKnob,
-                                IDrawable vScroll,
-                                IDrawable vScrollKnob )
+        public ScrollPaneStyle( ISceneDrawable background,
+                                ISceneDrawable hScroll,
+                                ISceneDrawable hScrollKnob,
+                                ISceneDrawable vScroll,
+                                ISceneDrawable vScrollKnob )
         {
             Background  = background;
             HScroll     = hScroll;
@@ -1396,12 +1396,12 @@ public class ScrollPane : WidgetGroup
             VScrollKnob = style.VScrollKnob;
         }
 
-        public IDrawable? Background  { get; set; }
-        public IDrawable? Corner      { get; set; }
-        public IDrawable? HScroll     { get; set; }
-        public IDrawable? HScrollKnob { get; set; }
-        public IDrawable? VScroll     { get; set; }
-        public IDrawable? VScrollKnob { get; set; }
+        public ISceneDrawable? Background  { get; set; }
+        public ISceneDrawable? Corner      { get; set; }
+        public ISceneDrawable? HScroll     { get; set; }
+        public ISceneDrawable? HScrollKnob { get; set; }
+        public ISceneDrawable? VScroll     { get; set; }
+        public ISceneDrawable? VScrollKnob { get; set; }
     }
 
     // ========================================================================

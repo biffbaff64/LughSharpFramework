@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.Styles;
 
 /// <summary>
 /// This interface marks an Actor as Styleable

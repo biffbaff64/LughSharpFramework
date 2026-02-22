@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,6 @@ using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
 using Color = LughSharp.Core.Graphics.Color;
-using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -154,7 +153,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
         if ( _scrollPane != null )
         {
             _scrollPane.Style         = style.ScrollStyle;
-            _scrollPane.ListBox.Style = style.ListStyle;
+            _scrollPane.ListBox.Style = style.ListBoxStyle;
         }
 
         InvalidateHierarchy();
@@ -281,7 +280,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
                 PrefWidth = Math.Max( PrefWidth + bg.LeftWidth + bg.RightWidth, bg.MinWidth );
             }
 
-            var listStyle   = Style.ListStyle;
+            var listStyle   = Style.ListBoxStyle;
             var scrollStyle = Style.ScrollStyle;
 
             var listWidth = maxItemWidth + listStyle.Selection?.LeftWidth + listStyle.Selection?.RightWidth;
@@ -309,7 +308,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// Returns appropriate background Drawable from the style
     /// based on the current select box state.
     /// </summary>
-    protected IDrawable? GetBackgroundIDrawable()
+    protected ISceneDrawable? GetBackgroundIDrawable()
     {
         if ( IsDisabled && ( Style.BackgroundDisabled != null ) )
         {
@@ -632,7 +631,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
             SetFadeScrollBars( false );
             SetScrollingDisabled( true, false );
 
-            ListBox = new ListBox< T >( SelectBox.Style.ListStyle )
+            ListBox = new ListBox< T >( SelectBox.Style.ListBoxStyle )
             {
                 Touchable    = Touchable.Disabled,
                 TypeToSelect = true,
@@ -1067,14 +1066,14 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     {
         public BitmapFont                 Font               { get; } = null!;
         public ScrollPane.ScrollPaneStyle ScrollStyle        { get; } = null!;
-        public ListBox< T >.ListStyle     ListStyle          { get; } = null!;
+        public ListBox< T >.ListBoxStyle     ListBoxStyle          { get; } = null!;
         public Color                      FontColor          { get; } = new( 1, 1, 1, 1 );
         public Color?                     OverFontColor      { get; }
         public Color?                     DisabledFontColor  { get; }
-        public IDrawable?                 Background         { get; }
-        public IDrawable?                 BackgroundOver     { get; }
-        public IDrawable?                 BackgroundOpen     { get; }
-        public IDrawable?                 BackgroundDisabled { get; }
+        public ISceneDrawable?                 Background         { get; }
+        public ISceneDrawable?                 BackgroundOver     { get; }
+        public ISceneDrawable?                 BackgroundOpen     { get; }
+        public ISceneDrawable?                 BackgroundDisabled { get; }
 
         // ====================================================================
 
@@ -1084,14 +1083,14 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         public SelectBoxStyle( BitmapFont font,
                                Color fontColor,
-                               IDrawable background,
+                               ISceneDrawable background,
                                ScrollPane.ScrollPaneStyle scrollStyle,
-                               ListBox< T >.ListStyle listStyle )
+                               ListBox< T >.ListBoxStyle listBoxStyle )
         {
             Font        = font;
             Background  = background;
             ScrollStyle = scrollStyle;
-            ListStyle   = listStyle;
+            ListBoxStyle   = listBoxStyle;
 
             FontColor.Set( fontColor );
         }
@@ -1115,7 +1114,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
             Background  = style.Background;
             ScrollStyle = new ScrollPane.ScrollPaneStyle( style.ScrollStyle );
-            ListStyle   = new ListBox< T >.ListStyle( style.ListStyle );
+            ListBoxStyle   = new ListBox< T >.ListBoxStyle( style.ListBoxStyle );
 
             BackgroundOver     = style.BackgroundOver;
             BackgroundOpen     = style.BackgroundOpen;

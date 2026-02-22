@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Utils;
 /// A drawable that supports scale and rotation.
 /// </summary>
 [PublicAPI]
-public interface ITransformDrawable : IDrawable
+public interface ITransformDrawable : ISceneDrawable
 {
     void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation );
 }

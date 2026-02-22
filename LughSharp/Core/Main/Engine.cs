@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ namespace LughSharp.Core.Main;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Engine
+public sealed class Engine
 {
     public IApplication    App      { get; set; } = null!;
     public IAudio          Audio    { get; set; } = null!;

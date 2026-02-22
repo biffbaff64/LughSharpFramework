@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Utils;
 /// Drawable that stores the size information but doesn't draw anything.
 /// </summary>
 [PublicAPI]
-public class BaseDrawable : IDrawable
+public class BaseDrawable : ISceneDrawable
 {
     public string? Name         { get; set; }
     public float   LeftWidth    { get; set; }
@@ -54,7 +54,7 @@ public class BaseDrawable : IDrawable
     /// <summary>
     /// Creates a new empty drawable with the same sizing information as the specified drawable.
     /// </summary>
-    protected BaseDrawable( IDrawable? drawable )
+    protected BaseDrawable( ISceneDrawable? drawable )
     {
         Guard.Against.Null( drawable );
 

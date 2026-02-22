@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Json;
 using LughSharp.Core.Utils.Logging;
 
 using Newtonsoft.Json;
@@ -44,6 +45,7 @@ using Newtonsoft.Json.Linq;
 
 using Color = LughSharp.Core.Graphics.Color;
 using Exception = System.Exception;
+using JsonWriter = Newtonsoft.Json.JsonWriter;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -65,8 +67,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Skin : IDisposable
 {
-    public static Dictionary< Type, Dictionary< string, object >? > Resources     { get; set; }
-    public static Dictionary< string, Type >                        JsonClassTags { get; set; }
+    public Dictionary< Type, Dictionary< string, object >? > Resources     { get; set; } = [ ];
+    public Dictionary< string, Type >                        JsonClassTags { get; set; } = [ ];
 
     /// <summary>
     /// Returns the <see cref="TextureAtlas"/> passed to this skin constructor, or null.
@@ -84,51 +86,51 @@ public class Skin : IDisposable
     /// would be set to 0.5.
     /// </para>
     /// </summary>
-    public float Scale { get; set; }
+    public float Scale { get; set; } = 1.0f;
 
     // ========================================================================
 
-    private static readonly Type[] _defaultTagClasses =
-    [
-        typeof( BitmapFont ),
-        typeof( Color ),
-        typeof( TintedDrawable ),
-        typeof( NinePatchDrawable ),
-        typeof( SpriteDrawable ),
-        typeof( TextureRegionDrawable ),
-        typeof( TiledSceneDrawable ),
-        typeof( Button.ButtonStyle ),
-        typeof( TextButton.TextButtonStyle ),
-        typeof( CheckBox.CheckBoxStyle ),
-        typeof( Label.LabelStyle ),
-        typeof( ProgressBar.ProgressBarStyle ),
-        typeof( TextField.TextFieldStyle ),
-        typeof( ImageButton.ImageButtonStyle ),
-        typeof( ImageTextButton.ImageTextButtonStyle ),
-        typeof( ListBox<>.ListStyle ),
-        typeof( ScrollPane.ScrollPaneStyle ),
-        typeof( SelectBox<>.SelectBoxStyle ),
-        typeof( Slider.SliderStyle ),
-        typeof( SplitPane.SplitPaneStyle ),
-        typeof( TextTooltip.TextTooltipStyle ),
-        typeof( Touchpad.TouchpadStyle ),
-        typeof( Tree< , >.TreeStyle ),
-        typeof( Window.WindowStyle ),
-    ];
-
-    // ========================================================================
-
-    static Skin()
+    protected struct Tag
     {
-        Resources     = new Dictionary< Type, Dictionary< string, object >? >();
-        JsonClassTags = new Dictionary< string, Type >( _defaultTagClasses.Length );
+        public readonly string Name;
+        public readonly Type   Type;
 
-        foreach ( var c in _defaultTagClasses )
+        public Tag( string name, Type type )
         {
-            JsonClassTags.Add( c.Name, c );
+            Name = name;
+            Type = type;
         }
     }
 
+    protected static readonly Tag[] DefaultTagClasses =
+    [
+        new( "BitmapFont", typeof( BitmapFont ) ),
+        new( "Color", typeof( Color ) ),
+        new( "TintedDrawable", typeof( Skin.TintedDrawable ) ),
+        new( "NinePatchDrawable", typeof( NinePatchDrawable ) ),
+        new( "SpriteDrawable", typeof( SpriteDrawable ) ),
+        new( "TextureRegionDrawable", typeof( TextureRegionDrawable ) ),
+        new( "TiledSceneDrawable", typeof( TiledSceneDrawable ) ),
+        new( "ButtonStyle", typeof( Button.ButtonStyle ) ),
+        new( "TextButtonStyle", typeof( TextButton.TextButtonStyle ) ),
+        new( "CheckBoxStyle", typeof( CheckBox.CheckBoxStyle ) ),
+        new( "LabelStyle", typeof( Label.LabelStyle ) ),
+        new( "ProgressBarStyle", typeof( ProgressBar.ProgressBarStyle ) ),
+        new( "TextFieldStyle", typeof( TextField.TextFieldStyle ) ),
+        new( "ImageButtonStyle", typeof( ImageButton.ImageButtonStyle ) ),
+        new( "ImageTextButtonStyle", typeof( ImageTextButton.ImageTextButtonStyle ) ),
+        new( "ListBoxStyle", typeof( ListBox<>.ListBoxStyle ) ),
+        new( "ScrollPaneStyle", typeof( ScrollPane.ScrollPaneStyle ) ),
+        new( "SelectBoxStyle", typeof( SelectBox<>.SelectBoxStyle ) ),
+        new( "SliderStyle", typeof( Slider.SliderStyle ) ),
+        new( "SplitPaneStyle", typeof( SplitPane.SplitPaneStyle ) ),
+        new( "TextTooltipStyle", typeof( TextTooltip.TextTooltipStyle ) ),
+        new( "TouchpadStyle", typeof( Touchpad.TouchpadStyle ) ),
+        new( "TreeStyle", typeof( Tree< , >.TreeStyle ) ),
+        new( "WindowStyle", typeof( Window.WindowStyle ) ),
+    ];
+
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -136,6 +138,7 @@ public class Skin : IDisposable
     /// </summary>
     public Skin()
     {
+        Setup();
     }
 
     /// <summary>
@@ -147,6 +150,8 @@ public class Skin : IDisposable
     /// </summary>
     public Skin( FileInfo skinFile )
     {
+        Setup();
+
         var name      = Path.GetFileNameWithoutExtension( skinFile.Name );
         var atlasFile = new FileInfo( name + ".atlas" );
 
@@ -168,9 +173,10 @@ public class Skin : IDisposable
     /// </summary>
     public Skin( FileInfo skinFile, TextureAtlas atlas )
     {
+        Setup();
+
         Atlas = atlas;
         AddRegions( atlas );
-
         Load( skinFile );
     }
 
@@ -180,8 +186,20 @@ public class Skin : IDisposable
     /// </summary>
     public Skin( TextureAtlas atlas )
     {
+        Setup();
+
         Atlas = atlas;
         AddRegions( atlas );
+    }
+
+    private void Setup()
+    {
+        foreach ( var c in DefaultTagClasses )
+        {
+            Logger.Debug( $"Adding {c.Type.Name}::{c.Type} to JsonClassTags" );
+
+            JsonClassTags.Add( c.Type.Name, c.Type );
+        }
     }
 
     /// <summary>
@@ -194,6 +212,7 @@ public class Skin : IDisposable
             var jsonText = File.ReadAllText( skinFile.FullName );
 
             var settings = new JsonSerializerSettings();
+
             settings.Converters.Add( new SkinConverter( this, skinFile ) );
             settings.Converters.Add( new ColorConverter( this ) );
 
@@ -213,14 +232,15 @@ public class Skin : IDisposable
     {
         for ( int i = 0, n = atlas.Regions.Count; i < n; i++ )
         {
-            var name = atlas.Regions[ i ]?.Name;
+            var region = atlas.Regions[ i ];
+            var name   = region?.Name;
 
-            if ( atlas.Regions[ i ]?.Index != -1 )
+            if ( region?.Index != -1 )
             {
-                name += "_" + atlas.Regions[ i ]?.Index;
+                name += "_" + region?.Index;
             }
 
-            Add( name, atlas.Regions[ i ], typeof( TextureRegion ) );
+            Add( name, region, typeof( TextureRegion ) );
         }
     }
 
@@ -240,7 +260,7 @@ public class Skin : IDisposable
         {
             typeResources = new Dictionary< string, object >
                 ( ( type == typeof( TextureRegion ) )
-               || ( type == typeof( IDrawable ) )
+               || ( type == typeof( ISceneDrawable ) )
                || ( type == typeof( Sprite ) )
                       ? 256
                       : 64 );
@@ -251,7 +271,7 @@ public class Skin : IDisposable
         typeResources.Put( name, resource );
     }
 
-    public static void Remove( string name, Type type )
+    public void Remove( string name, Type type )
     {
         Guard.Against.Null( name );
 
@@ -264,7 +284,7 @@ public class Skin : IDisposable
     /// <exception cref="RuntimeException">if the resource was not found.</exception>
     public T Get< T >()
     {
-        return Get< T >( "default" );
+        return ( T )Get( "default", typeof( T ) );
     }
 
     /// <summary>
@@ -283,8 +303,9 @@ public class Skin : IDisposable
     public object Get( string name, Type type )
     {
         Guard.Against.Null( name );
+        Guard.Against.Null( type );
 
-        if ( type == typeof( IDrawable ) )
+        if ( type == typeof( ISceneDrawable ) )
         {
             return GetDrawable( name );
         }
@@ -325,7 +346,7 @@ public class Skin : IDisposable
     /// Returns a named resource of the specified type.
     /// </summary>
     /// <returns> null if not found. </returns>
-    public static T? Optional< T >( string name )
+    public T? Optional< T >( string name )
     {
         Guard.Against.Null( name );
 
@@ -353,7 +374,7 @@ public class Skin : IDisposable
     /// Returns the name to resource mapping for the specified type, or
     /// null if no resources of that type exist.
     /// </summary>
-    public static Dictionary< string, object >? GetAll( Type type )
+    public Dictionary< string, object >? GetAll( Type type )
     {
         return Resources[ type ];
     }
@@ -367,7 +388,7 @@ public class Skin : IDisposable
     /// Returns the named <see cref="BitmapFont"/> from the skin, or null if not found.
     /// </summary>
     /// <param name="name"> The name of the font.</param>
-    public BitmapFont? GetFont( string name )
+    public BitmapFont GetFont( string name )
     {
         return Get< BitmapFont >( name );
     }
@@ -560,9 +581,9 @@ public class Skin : IDisposable
     /// or sprite exists with the name, then the appropriate drawable is created and
     /// stored in the skin.
     /// </summary>
-    public IDrawable GetDrawable( string name )
+    public ISceneDrawable GetDrawable( string name )
     {
-        var drawable = Optional< IDrawable >( name );
+        var drawable = Optional< ISceneDrawable >( name );
 
         if ( drawable != null )
         {
@@ -634,7 +655,7 @@ public class Skin : IDisposable
             baseDrawable.Name = name;
         }
 
-        Add( name, drawable, typeof( IDrawable ) );
+        Add( name, drawable, typeof( ISceneDrawable ) );
 
         return drawable;
     }
@@ -659,7 +680,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
-    public IDrawable NewDrawable( string name )
+    public ISceneDrawable NewDrawable( string name )
     {
         return NewDrawable( GetDrawable( name ) );
     }
@@ -667,7 +688,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
-    public IDrawable NewDrawable( string name, float r, float g, float b, float a )
+    public ISceneDrawable NewDrawable( string name, float r, float g, float b, float a )
     {
         return NewDrawable( GetDrawable( name ), new Color( r, g, b, a ) );
     }
@@ -675,7 +696,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
-    public IDrawable NewDrawable( string name, Color tint )
+    public ISceneDrawable NewDrawable( string name, Color tint )
     {
         return NewDrawable( GetDrawable( name ), tint );
     }
@@ -683,7 +704,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a copy of the specified drawable.
     /// </summary>
-    public static IDrawable NewDrawable( IDrawable drawable )
+    public static ISceneDrawable NewDrawable( ISceneDrawable drawable )
     {
         return drawable switch
                {
@@ -691,6 +712,8 @@ public class Skin : IDisposable
                    TextureRegionDrawable regionDrawable => new TextureRegionDrawable( regionDrawable ),
                    NinePatchDrawable patchDrawable      => new NinePatchDrawable( patchDrawable ),
                    SpriteDrawable spriteDrawable        => new SpriteDrawable( spriteDrawable ),
+
+                   // ---------------------------
 
                    var _ => throw new RuntimeException( "Unable to copy, unknown drawable type: "
                                                       + drawable.GetType() ),
@@ -700,7 +723,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
-    public IDrawable NewDrawable( IDrawable drawable, float r, float g, float b, float a )
+    public ISceneDrawable NewDrawable( ISceneDrawable drawable, float r, float g, float b, float a )
     {
         return NewDrawable( drawable, new Color( r, g, b, a ) );
     }
@@ -708,13 +731,15 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)"/>.
     /// </summary>
-    public IDrawable NewDrawable( IDrawable drawable, Color tint )
+    public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color tint )
     {
         var newDrawable = drawable switch
                           {
                               TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
                               NinePatchDrawable patchDrawable      => patchDrawable.Tint( tint ),
                               SpriteDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
+
+                              // ----------------
 
                               var _ => throw new
                                   RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" ),
@@ -737,14 +762,14 @@ public class Skin : IDisposable
 
     /// <summary>
     /// Scales the drawable's :-
-    /// <see cref="IDrawable.LeftWidth"/>,
-    /// <see cref="IDrawable.RightWidth"/>,
-    /// <see cref="IDrawable.BottomHeight"/>,
-    /// <see cref="IDrawable.TopHeight"/>,
-    /// <see cref="IDrawable.MinWidth"/>,
-    /// <see cref="IDrawable.MinHeight"/>.
+    /// <see cref="ISceneDrawable.LeftWidth"/>,
+    /// <see cref="ISceneDrawable.RightWidth"/>,
+    /// <see cref="ISceneDrawable.BottomHeight"/>,
+    /// <see cref="ISceneDrawable.TopHeight"/>,
+    /// <see cref="ISceneDrawable.MinWidth"/>,
+    /// <see cref="ISceneDrawable.MinHeight"/>.
     /// </summary>
-    public IDrawable ScaleDrawable( IDrawable drawable )
+    public ISceneDrawable ScaleDrawable( ISceneDrawable drawable )
     {
         drawable.LeftWidth    *= Scale;
         drawable.RightWidth   *= Scale;
@@ -834,6 +859,35 @@ public class Skin : IDisposable
                     disposable.Dispose();
                 }
             }
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    protected Json GetJsonLoader( FileInfo skinFile, Skin skin )
+    {
+        Json json = new JsonExt();
+        
+        return json;
+    }
+
+    private class JsonExt : Json
+    {
+        private readonly string _parentFileName = "parent";
+
+        public T ReadValue< T >( Type type, Type elementType, JsonValue jsonData )
+        {
+            throw new NotImplementedException();
+        }
+
+        protected bool IgnoreUnknownField( Type type, string fieldName )
+        {
+            return fieldName.Equals( _parentFileName );
+        }
+
+        public void ReadFields( object obj, JsonValue jsonMap )
+        {
         }
     }
 
@@ -942,7 +996,8 @@ public class Skin : IDisposable
                         var resourceName  = resourceProperty.Name;
                         var resourceToken = resourceProperty.Value;
 
-                        if ( resourceToken is JObject resourceObj && resourceObj[ PARENT_FIELD_NAME ] != null )
+                        if ( resourceToken is JObject resourceObj
+                          && resourceObj[ PARENT_FIELD_NAME ] != null )
                         {
                             var parentName = resourceObj[ PARENT_FIELD_NAME ]?.ToString();
 
@@ -953,7 +1008,7 @@ public class Skin : IDisposable
                             }
 
                             // Try to find the parent instance
-                            object parentInstance = _skin.Get( parentName, targetType );
+                            var parentInstance = _skin.Get( parentName, targetType );
 
                             if ( parentInstance == null )
                             {
@@ -986,14 +1041,12 @@ public class Skin : IDisposable
 
         private Type ResolveType( string name )
         {
-            if ( name.Contains( "Color" ) )
+            foreach ( var tag in DefaultTagClasses )
             {
-                return typeof( Color );
-            }
-
-            if ( name.Contains( "BitmapFont" ) )
-            {
-                return typeof( BitmapFont );
+                if ( name.Contains( tag.Name ) )
+                {
+                    return tag.Type;
+                }
             }
 
             return typeof( object );
@@ -1017,10 +1070,10 @@ public class Skin : IDisposable
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
-    public struct TintedDrawable
+    public class TintedDrawable
     {
-        public string Name  { get; set; }
-        public Color  Color { get; set; }
+        public string Name  { get; set; } = "white";
+        public Color  Color { get; set; } = Color.White;
     }
 }
 

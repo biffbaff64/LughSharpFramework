@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,6 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 using Color = LughSharp.Core.Graphics.Color;
-using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -55,7 +54,6 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ListBox< T > : Widget where T : notnull
 {
-    public override string? Name => "ListBox";
     public Rectangle?          CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
     public ArraySelection< T > Selection    { get; set; } = null!;
@@ -66,6 +64,10 @@ public class ListBox< T > : Widget where T : notnull
 
     // ========================================================================
 
+    public override string? Name => "ListBox";
+    
+    // ========================================================================
+    
     private int   _overIndex = -1;
     private float _prefHeight;
     private float _prefWidth;
@@ -75,33 +77,33 @@ public class ListBox< T > : Widget where T : notnull
 
     /// <summary>
     /// Creates a new ListBox, using the supplied <see cref="Skin"/>.
-    /// The <see cref="ListStyle"/> embedded in the Skin will be used.
+    /// The <see cref="ListBoxStyle"/> embedded in the Skin will be used.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
     public ListBox( Skin skin )
-        : this( skin.Get< ListStyle >() )
+        : this( skin.Get< ListBoxStyle >() )
     {
     }
 
     /// <summary>
     /// Creates a new ListBox, using the supplied <see cref="Skin"/>. The
-    /// <see cref="ListStyle"/> to use will be extracted from the supplied
+    /// <see cref="ListBoxStyle"/> to use will be extracted from the supplied
     /// skin using the name provided.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
     /// <param name="styleName"> The name of the ListStyle to extract from the Skin. </param>
     public ListBox( Skin skin, string styleName )
-        : this( skin.Get< ListStyle >( styleName ) )
+        : this( skin.Get< ListBoxStyle >( styleName ) )
     {
     }
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="ListStyle"/>
+    /// Creates a new ListBox, using the supplied <see cref="ListBoxStyle"/>
     /// </summary>
-    /// <param name="style"> The ListStyle to use. </param>
-    public ListBox( ListStyle style )
+    /// <param name="boxStyle"> The ListStyle to use. </param>
+    public ListBox( ListBoxStyle boxStyle )
     {
-        Create( style );
+        Create( boxStyle );
     }
 
     public override float GetPrefWidth()
@@ -124,11 +126,11 @@ public class ListBox< T > : Widget where T : notnull
 
     /// <summary>
     /// Returns the list's style. Modifying the returned style may not have an
-    /// effect until <see cref="SetStyle(ListStyle)"/> is called.
+    /// effect until <see cref="SetStyle(ListBoxStyle)"/> is called.
     /// </summary>
-    public ListStyle? Style { get; set; }
+    public ListBoxStyle? Style { get; set; }
 
-    private void Create( ListStyle style )
+    private void Create( ListBoxStyle boxStyle )
     {
         Selection = new ArraySelection< T >( Items )
         {
@@ -136,7 +138,7 @@ public class ListBox< T > : Widget where T : notnull
             Required = true,
         };
 
-        SetStyle( style );
+        SetStyle( boxStyle );
         SetSize( GetPrefWidth(), GetPrefHeight() );
 
         KeyListener = new ListKeyListener( this );
@@ -145,9 +147,9 @@ public class ListBox< T > : Widget where T : notnull
         AddListener( new ListInputListener( this ) );
     }
 
-    public void SetStyle( ListStyle style )
+    public void SetStyle( ListBoxStyle boxStyle )
     {
-        Style = style ?? throw new ArgumentException( "style cannot be null." );
+        Style = boxStyle ?? throw new ArgumentException( "style cannot be null." );
 
         InvalidateHierarchy();
     }
@@ -237,7 +239,7 @@ public class ListBox< T > : Widget where T : notnull
             {
                 var             item     = Items[ i ];
                 var             selected = Selection.Contains( item );
-                IDrawable? drawable = null;
+                ISceneDrawable? drawable = null;
 
                 if ( ( _pressedIndex == i ) && ( Style?.Down != null ) )
                 {
@@ -674,14 +676,14 @@ public class ListBox< T > : Widget where T : notnull
     /// The style for a list, see <see cref="ListBox{T}"/>.
     /// </summary>
     [PublicAPI]
-    public class ListStyle
+    public class ListBoxStyle
     {
-        public ListStyle()
+        public ListBoxStyle()
         {
             Font = new BitmapFont();
         }
 
-        public ListStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected, IDrawable selection )
+        public ListBoxStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected, ISceneDrawable selection )
         {
             Font = font;
             FontColorSelected.Set( fontColorSelected );
@@ -689,24 +691,24 @@ public class ListBox< T > : Widget where T : notnull
             Selection = selection;
         }
 
-        public ListStyle( ListStyle style )
+        public ListBoxStyle( ListBoxStyle boxStyle )
         {
-            Font = style.Font;
-            FontColorSelected.Set( style.FontColorSelected );
-            FontColorUnselected.Set( style.FontColorUnselected );
-            Selection = style.Selection;
+            Font = boxStyle.Font;
+            FontColorSelected.Set( boxStyle.FontColorSelected );
+            FontColorUnselected.Set( boxStyle.FontColorUnselected );
+            Selection = boxStyle.Selection;
 
-            Down       = style.Down;
-            Over       = style.Over;
-            Background = style.Background;
+            Down       = boxStyle.Down;
+            Over       = boxStyle.Over;
+            Background = boxStyle.Background;
         }
 
         public BitmapFont      Font                { get; set; }
         public Color           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
         public Color           FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
-        public IDrawable? Selection           { get; set; }
-        public IDrawable? Down                { get; set; }
-        public IDrawable? Over                { get; set; }
-        public IDrawable? Background          { get; set; }
+        public ISceneDrawable? Selection           { get; set; }
+        public ISceneDrawable? Down                { get; set; }
+        public ISceneDrawable? Over                { get; set; }
+        public ISceneDrawable? Background          { get; set; }
     }
 }

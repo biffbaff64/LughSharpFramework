@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,25 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Diagnostics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+
 using Color = LughSharp.Core.Graphics.Color;
-using IDrawable = LughSharp.Core.Scenes.Scene2D.Utils.IDrawable;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public class TextButton : Button
 {
-    private Label?           _label;
-    private TextButtonStyle? _style;
+    private Label? _label;
 
     // ========================================================================
 
@@ -88,7 +90,7 @@ public class TextButton : Button
     /// </exception>
     public new TextButtonStyle? Style
     {
-        get => _style;
+        get;
         set
         {
             Guard.Against.Null( value );
@@ -98,7 +100,7 @@ public class TextButton : Button
                 throw new ArgumentException( "style must be a TextButtonStyle." );
             }
 
-            _style     = value;
+            field      = value;
             base.Style = value;
 
             if ( Label != null )
@@ -278,7 +280,7 @@ public class TextButton : Button
         {
         }
 
-        public TextButtonStyle( IDrawable upImage, IDrawable downImage, IDrawable checkedImage,
+        public TextButtonStyle( ISceneDrawable upImage, ISceneDrawable downImage, ISceneDrawable checkedImage,
                                 BitmapFont font )
             : base( upImage, downImage, checkedImage )
         {

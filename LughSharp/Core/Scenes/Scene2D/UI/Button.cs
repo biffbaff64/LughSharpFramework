@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
@@ -53,10 +57,10 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Button : Table, IDisableable
+public class Button : Table, IDisableable, IStyleable< Button.ButtonStyle >
 {
     public override string? Name => "Button";
-    
+
     public ButtonClickListener?   ClickListener { get; set; }
     public bool                   IsChecked     { get; private set; }
     public bool                   IsDisabled    { get; set; }
@@ -74,6 +78,8 @@ public class Button : Table, IDisableable
     public Button()
     {
         Initialise();
+
+        Style = null!;
     }
 
     public Button( Skin skin ) : base( skin )
@@ -116,17 +122,17 @@ public class Button : Table, IDisableable
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
-    public Button( IDrawable? up )
+    public Button( ISceneDrawable? up )
         : this( new ButtonStyle( up, null, null ) )
     {
     }
 
-    public Button( IDrawable? up, IDrawable? down )
+    public Button( ISceneDrawable? up, ISceneDrawable? down )
         : this( new ButtonStyle( up, down, null ) )
     {
     }
 
-    public Button( IDrawable? upImage, IDrawable? downImage, IDrawable? checkedImage )
+    public Button( ISceneDrawable? upImage, ISceneDrawable? downImage, ISceneDrawable? checkedImage )
         : this( new ButtonStyle( upImage, downImage, checkedImage ) )
     {
     }
@@ -140,10 +146,9 @@ public class Button : Table, IDisableable
     /// Returns the button's style. Modifying the returned style may not have an
     /// effect until <see cref="Style"/> set() is called.
     /// </summary>
-    public ButtonStyle? Style
+    public ButtonStyle Style
     {
         get;
-
         set
         {
             field = value ?? throw new ArgumentException( "style cannot be null." );
@@ -200,7 +205,7 @@ public class Button : Table, IDisableable
     }
 
     public override float GetPrefWidth() => GetPrefWidthSafe();
-    
+
     protected float GetPrefWidthSafe()
     {
         var width = base.GetPrefWidth();
@@ -224,7 +229,7 @@ public class Button : Table, IDisableable
     }
 
     public override float GetPrefHeight() => GetPrefHeightSafe();
-    
+
     public float GetPrefHeightSafe()
     {
         var height = base.GetPrefHeight();
@@ -260,7 +265,7 @@ public class Button : Table, IDisableable
     /// <summary>
     /// Returns appropriate background drawable from the style based on the current button state.
     /// </summary>
-    public virtual IDrawable? GetBackgroundDrawable()
+    public virtual ISceneDrawable? GetBackgroundDrawable()
     {
         if ( IsDisabled && ( Style?.Disabled != null ) )
         {
@@ -429,21 +434,22 @@ public class Button : Table, IDisableable
     [PublicAPI]
     public class ButtonStyle
     {
-        public IDrawable? Up               { get; set; }
-        public IDrawable? Down             { get; set; }
-        public IDrawable? Over             { get; set; }
-        public IDrawable? Focused          { get; set; }
-        public IDrawable? Disabled         { get; set; }
-        public IDrawable? Checked          { get; set; }
-        public IDrawable? CheckedOver      { get; set; }
-        public IDrawable? CheckedDown      { get; set; }
-        public IDrawable? CheckedFocused   { get; set; }
-        public float           PressedOffsetX   { get; set; }
-        public float           PressedOffsetY   { get; set; }
-        public float           UnpressedOffsetX { get; set; }
-        public float           UnpressedOffsetY { get; set; }
-        public float           CheckedOffsetX   { get; set; }
-        public float           CheckedOffsetY   { get; set; }
+        public ISceneDrawable? Up             { get; set; }
+        public ISceneDrawable? Down           { get; set; }
+        public ISceneDrawable? Over           { get; set; }
+        public ISceneDrawable? Focused        { get; set; }
+        public ISceneDrawable? Disabled       { get; set; }
+        public ISceneDrawable? Checked        { get; set; }
+        public ISceneDrawable? CheckedOver    { get; set; }
+        public ISceneDrawable? CheckedDown    { get; set; }
+        public ISceneDrawable? CheckedFocused { get; set; }
+
+        public float PressedOffsetX   { get; set; }
+        public float PressedOffsetY   { get; set; }
+        public float UnpressedOffsetX { get; set; }
+        public float UnpressedOffsetY { get; set; }
+        public float CheckedOffsetX   { get; set; }
+        public float CheckedOffsetY   { get; set; }
 
         // ====================================================================
 
@@ -451,7 +457,7 @@ public class Button : Table, IDisableable
         {
         }
 
-        public ButtonStyle( IDrawable? up, IDrawable? down, IDrawable? ischecked )
+        public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? ischecked )
         {
             Up      = up;
             Down    = down;
@@ -481,4 +487,3 @@ public class Button : Table, IDisableable
 
 // ============================================================================
 // ============================================================================
-

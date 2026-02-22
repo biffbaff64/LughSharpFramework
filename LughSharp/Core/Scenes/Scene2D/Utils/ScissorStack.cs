@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -35,10 +39,13 @@ using Rectangle = LughSharp.Core.Maths.Rectangle;
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// A stack of {@link Rectangle} objects to be used for clipping via
-/// <see cref="LughSharp.Core.Graphics.OpenGL.Bindings.GLBindings.glScissor(int, int, int, int)"/>. When a new Rectangle is
-/// pushed onto the stack, it will be merged with the current top of stack. The
-/// minimum area of overlap is then set as the real top of the stack.
+/// A stack of <see cref="Rectangle"/> objects to be used for clipping via
+/// <see cref="GLBindings.Scissor(int, int, int, int)"/>.
+/// <para>
+/// When a new Rectangle is pushed onto the stack, it will be merged with the
+/// current top of stack. The minimum area of overlap is then set as the real
+/// top of the stack.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class ScissorStack
@@ -48,12 +55,12 @@ public class ScissorStack
     private static readonly Rectangle         _viewport = new();
 
     /// <summary>
-    /// Pushes a new scissor <see cref="System.Drawing.Rectangle"/> onto the stack, merging it with
-    /// the current top of the stack. The minimal area of overlap between the top of
-    /// stack rectangle and the provided rectangle is pushed onto the stack. This will
-    /// invoke <see cref="LughSharp.Core.Graphics.OpenGL.Bindings.GLBindings.glScissor(int, int, int, int)"/> with the final top of
-    /// stack rectangle. In case no scissor is yet on the stack this will also enable
-    /// <see cref="IGL.GL_SCISSOR_TEST"/> automatically.
+    /// Pushes a new scissor <see cref="System.Drawing.Rectangle"/> onto the stack,
+    /// merging it with the current top of the stack. The minimal area of overlap
+    /// between the top of stack rectangle and the provided rectangle is pushed onto
+    /// the stack. This will invoke <see cref="GLBindings.Scissor(int, int, int, int)"/>
+    /// with the final top of stack rectangle. In case no scissor is yet on the stack
+    /// this will also enable <see cref="IGL.GL_SCISSOR_TEST"/> automatically.
     /// <para>
     /// Any drawing should be flushed before pushing scissors.
     /// </para>

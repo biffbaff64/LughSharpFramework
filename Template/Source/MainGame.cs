@@ -22,6 +22,8 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
 
+using Newtonsoft.Json.Linq;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Template.Source;
@@ -308,6 +310,37 @@ public class MainGame : Game
         var skin = new Skin( new FileInfo( Assets.PROGRESS_BAR_SKIN ) );
 //        _progressBar = new ProgressBar( 0f, 10f, 1f, false, skin );
 //        _progressBar.SetPosition( 20, 550 );
+
+//        foreach ( var resource in skin.Resources )
+//        {
+//            if ( resource.Value != null )
+//            {
+//                Console.WriteLine( $"{resource.Key.Name}" );
+//                
+//                foreach ( var value in resource.Value )
+//                {
+//                    Console.WriteLine( $"  {value.Key}: {value.Value.GetType().Name}" );
+//                }
+//            }
+//        }
+
+        foreach ( var resource in skin.Resources )
+        {
+            // The Key.Name is likely "Skin$TintedDrawable"
+            Console.WriteLine( $"Type Key: {resource.Key.Name}" );
+
+            foreach ( var value in resource.Value )
+            {
+                var actualType = value.Value.GetType();
+                Console.WriteLine( $"  Entry Name: {value.Key}" );
+                Console.WriteLine( $"  Actual C# Type: {actualType.FullName}" );
+
+                if ( value.Value is JObject jobj )
+                {
+                    Console.WriteLine( "  WARNING: This is still raw JSON (JObject), not a class!" );
+                }
+            }
+        }
 
         if ( skin.Has( "ProgressBarStyle", typeof( ProgressBar.ProgressBarStyle ) ) )
         {

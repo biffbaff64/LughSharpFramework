@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// The <see cref="TextureRegion"/> component of this <see cref="IDrawable"/>
+    /// The <see cref="TextureRegion"/> component of this <see cref="ISceneDrawable"/>
     /// </summary>
     public TextureRegion? Region
     {
@@ -123,7 +123,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new drawable that renders the same as this drawable
     /// but tinted with the specified color.
     /// </summary>
-    public virtual IDrawable Tint( Color tint )
+    public virtual ISceneDrawable Tint( Color tint )
     {
         if ( Region == null )
         {
