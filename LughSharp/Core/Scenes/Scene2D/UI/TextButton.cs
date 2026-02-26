@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Diagnostics;
 
 using JetBrains.Annotations;
@@ -93,6 +92,7 @@ public class TextButton : Button
         get;
         set
         {
+            //TODO: Too much is going on in this setter. Refactor it.
             Guard.Against.Null( value );
 
             if ( value.GetType() != typeof( TextButtonStyle ) )
@@ -105,11 +105,11 @@ public class TextButton : Button
 
             if ( Label != null )
             {
-                var labelStyle = Label.GetStyle();
+                var labelStyle = Label.Style;
 
-                labelStyle.Font      = value.Font!;
-                labelStyle.FontColor = value.FontColor;
-                Label.SetStyle( labelStyle );
+                labelStyle.Font      = value.Font ?? new BitmapFont();
+                labelStyle.FontColor = value.FontColor ?? Color.White;
+                Label.Style = labelStyle;
             }
         }
     }
@@ -206,7 +206,7 @@ public class TextButton : Button
     {
         if ( Label != null )
         {
-            Label.GetStyle().FontColor = GetFontColor();
+            Label.Style.FontColor = GetFontColor() ?? Color.White;
             base.Draw( batch, parentAlpha );
         }
     }

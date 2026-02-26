@@ -29,6 +29,7 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -37,7 +38,7 @@ using Rectangle = LughSharp.Core.Maths.Rectangle;
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
-public class ScrollPane : WidgetGroup
+public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
 {
     public readonly Rectangle HKnobBounds   = new();
     public readonly Rectangle HScrollBounds = new();
@@ -48,35 +49,35 @@ public class ScrollPane : WidgetGroup
 
     // ========================================================================
 
-    public override string? Name => "ScrollPane";
-    public int    DraggingPointer    { get; set; } = -1;
-    public float  FadeAlpha          { get; set; }
-    public float  FadeAlphaSeconds   { get; set; } = 1;
-    public float  FadeDelay          { get; set; }
-    public float  FadeDelaySeconds   { get; set; } = 1;
-    public bool   FlickScroll        { get; set; } = true;
-    public float  FlingTimer         { get; set; }
-    public bool   HScrollOnBottom    { get; set; } = true;
-    public float  OverscrollSpeedMax { get; set; } = 200;
-    public float  OverscrollSpeedMin { get; set; } = 30;
-    public bool   OverscrollX        { get; set; } = true;
-    public bool   OverscrollY        { get; set; } = true;
-    public bool   ScrollbarsOnTop    { get; set; }
-    public bool   TouchScrollH       { get; set; }
-    public bool   TouchScrollV       { get; set; }
-    public float  VisualAmountX      { get; set; }
-    public float  VisualAmountY      { get; set; }
-    public bool   VScrollOnRight     { get; set; } = true;
-    public Actor? Widget             { get; set; }
-    public float  AmountX            { get; set; }
-    public float  AmountY            { get; set; }
-    public bool   ForceScrollX       { get; set; }
-    public bool   ForceScrollY       { get; set; }
-    public bool   DisableXScroll     { get; set; }
-    public bool   DisableYScroll     { get; set; }
-    public float  OverscrollDistance { get; set; } = 50;
-    public bool   FadeScrollBars     { get; set; } = true;
-    public bool   SmoothScrolling    { get; set; } = true;
+    public override string? Name               => "ScrollPane";
+    public          int     DraggingPointer    { get; set; } = -1;
+    public          float   FadeAlpha          { get; set; }
+    public          float   FadeAlphaSeconds   { get; set; } = 1;
+    public          float   FadeDelay          { get; set; }
+    public          float   FadeDelaySeconds   { get; set; } = 1;
+    public          bool    FlickScroll        { get; set; } = true;
+    public          float   FlingTimer         { get; set; }
+    public          bool    HScrollOnBottom    { get; set; } = true;
+    public          float   OverscrollSpeedMax { get; set; } = 200;
+    public          float   OverscrollSpeedMin { get; set; } = 30;
+    public          bool    OverscrollX        { get; set; } = true;
+    public          bool    OverscrollY        { get; set; } = true;
+    public          bool    ScrollbarsOnTop    { get; set; }
+    public          bool    TouchScrollH       { get; set; }
+    public          bool    TouchScrollV       { get; set; }
+    public          float   VisualAmountX      { get; set; }
+    public          float   VisualAmountY      { get; set; }
+    public          bool    VScrollOnRight     { get; set; } = true;
+    public          Actor?  Widget             { get; set; }
+    public          float   AmountX            { get; set; }
+    public          float   AmountY            { get; set; }
+    public          bool    ForceScrollX       { get; set; }
+    public          bool    ForceScrollY       { get; set; }
+    public          bool    DisableXScroll     { get; set; }
+    public          bool    DisableYScroll     { get; set; }
+    public          float   OverscrollDistance { get; set; } = 50;
+    public          bool    FadeScrollBars     { get; set; } = true;
+    public          bool    SmoothScrolling    { get; set; } = true;
 
     /// <summary>
     /// Returns the maximum scroll value in the x direction.
@@ -137,7 +138,7 @@ public class ScrollPane : WidgetGroup
             InvalidateHierarchy();
         }
     }
-    
+
     /// If true, the scroll knobs are sized based on
     /// <see cref="MaxScrollX"/>
     /// " or
@@ -343,7 +344,7 @@ public class ScrollPane : WidgetGroup
           && !panning
           && ( !TouchScrollH ||
                ( IsScrollX && ( ( MaxScrollX / ( HScrollBounds.Width - HKnobBounds.Width ) ) >
-                              ( WidgetArea.Width * 0.1f ) ) ) )
+                                ( WidgetArea.Width * 0.1f ) ) ) )
           && ( !TouchScrollV ||
                ( IsScrollY &&
                  ( ( MaxScrollY / ( VScrollBounds.Height - VKnobBounds.Height ) ) > ( WidgetArea.Height * 0.1f ) ) ) ) )
@@ -569,7 +570,7 @@ public class ScrollPane : WidgetGroup
                 // Vertical scrollbar may cause horizontal scrollbar to show.
                 if ( !IsScrollY && ( widgetHeight > WidgetArea.Height ) && !DisableYScroll )
                 {
-                    IsScrollY          =  true;
+                    IsScrollY        =  true;
                     WidgetArea.Width -= scrollbarWidth;
 
                     if ( !VScrollOnRight )
@@ -1337,11 +1338,6 @@ public class ScrollPane : WidgetGroup
         Invalidate();
     }
 
-    // ========================================================================
-    // ========================================================================
-
-    #region debug
-
     public override void DrawDebug( ShapeRenderer shapes )
     {
         DrawDebugBounds( shapes );
@@ -1355,53 +1351,6 @@ public class ScrollPane : WidgetGroup
         }
 
         ResetTransform( shapes );
-    }
-
-    #endregion debug
-
-    // ========================================================================
-    // ========================================================================
-
-    [PublicAPI]
-    public class ScrollPaneStyle
-    {
-        // ====================================================================
-
-        public ScrollPaneStyle()
-        {
-        }
-
-        public ScrollPaneStyle( ISceneDrawable background,
-                                ISceneDrawable hScroll,
-                                ISceneDrawable hScrollKnob,
-                                ISceneDrawable vScroll,
-                                ISceneDrawable vScrollKnob )
-        {
-            Background  = background;
-            HScroll     = hScroll;
-            HScrollKnob = hScrollKnob;
-            VScroll     = vScroll;
-            VScrollKnob = vScrollKnob;
-        }
-
-        public ScrollPaneStyle( ScrollPaneStyle style )
-        {
-            Background = style.Background;
-            Corner     = style.Corner;
-
-            HScroll     = style.HScroll;
-            HScrollKnob = style.HScrollKnob;
-
-            VScroll     = style.VScroll;
-            VScrollKnob = style.VScrollKnob;
-        }
-
-        public ISceneDrawable? Background  { get; set; }
-        public ISceneDrawable? Corner      { get; set; }
-        public ISceneDrawable? HScroll     { get; set; }
-        public ISceneDrawable? HScrollKnob { get; set; }
-        public ISceneDrawable? VScroll     { get; set; }
-        public ISceneDrawable? VScrollKnob { get; set; }
     }
 
     // ========================================================================
@@ -1516,9 +1465,52 @@ public class ScrollPane : WidgetGroup
     {
         return 0;
     }
+
+    // ========================================================================
+    // ========================================================================
+
+    [PublicAPI]
+    public class ScrollPaneStyle
+    {
+        public ISceneDrawable? Background  { get; set; }
+        public ISceneDrawable? Corner      { get; set; }
+        public ISceneDrawable? HScroll     { get; set; }
+        public ISceneDrawable? HScrollKnob { get; set; }
+        public ISceneDrawable? VScroll     { get; set; }
+        public ISceneDrawable? VScrollKnob { get; set; }
+
+        // ====================================================================
+
+        public ScrollPaneStyle()
+        {
+        }
+
+        public ScrollPaneStyle( ISceneDrawable background,
+                                ISceneDrawable hScroll,
+                                ISceneDrawable hScrollKnob,
+                                ISceneDrawable vScroll,
+                                ISceneDrawable vScrollKnob )
+        {
+            Background  = background;
+            HScroll     = hScroll;
+            HScrollKnob = hScrollKnob;
+            VScroll     = vScroll;
+            VScrollKnob = vScrollKnob;
+        }
+
+        public ScrollPaneStyle( ScrollPaneStyle style )
+        {
+            Background = style.Background;
+            Corner     = style.Corner;
+
+            HScroll     = style.HScroll;
+            HScrollKnob = style.HScrollKnob;
+
+            VScroll     = style.VScroll;
+            VScrollKnob = style.VScrollKnob;
+        }
+    }
 }
 
 // ============================================================================
 // ============================================================================
-
-

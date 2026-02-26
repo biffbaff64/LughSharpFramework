@@ -27,6 +27,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -35,14 +36,14 @@ using Rectangle = LughSharp.Core.Maths.Rectangle;
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
-public class SplitPane : WidgetGroup
+public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
 {
     public override string? Name => "SplitPane";
-    
-    protected bool      CursorOverHandle { get; private set; }
-    protected Rectangle HandleBounds     { get; } = new();
-    protected Vector2   LastPoint        { get; } = new();
-    private readonly Vector2   _handlePosition     = new();
+
+    protected        bool      CursorOverHandle { get; private set; }
+    protected        Rectangle HandleBounds     { get; } = new();
+    protected        Vector2   LastPoint        { get; } = new();
+    private readonly Vector2   _handlePosition = new();
 
     // ========================================================================
 
@@ -50,12 +51,12 @@ public class SplitPane : WidgetGroup
     private readonly Rectangle _secondWidgetBounds = new();
     private readonly Rectangle _tempScissors       = new();
 
-    private Actor?         _firstWidget;
-    private Actor?         _secondWidget;
-    private float          _maxAmount = 1;
-    private float          _minAmount;
-    private float          _splitAmount = 0.5f;
-    private bool           _vertical;
+    private Actor? _firstWidget;
+    private Actor? _secondWidget;
+    private float  _maxAmount = 1;
+    private float  _minAmount;
+    private float  _splitAmount = 0.5f;
+    private bool   _vertical;
 
     // ========================================================================
 
@@ -648,7 +649,7 @@ public class SplitPane : WidgetGroup
     [PublicAPI]
     public class SplitPaneStyle
     {
-        public ISceneDrawable Handle { get; }
+        public ISceneDrawable Handle { get; set; }
 
         public SplitPaneStyle()
         {
@@ -669,4 +670,3 @@ public class SplitPane : WidgetGroup
 
 // ============================================================================
 // ============================================================================
-

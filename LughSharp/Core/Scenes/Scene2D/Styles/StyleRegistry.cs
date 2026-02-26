@@ -22,12 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.UI;
@@ -114,6 +111,10 @@ public class StyleRegistry
         throw new Exception( $"Missing {typeof( T ).Name}: {name}" );
     }
 
+    /// <summary>
+    /// Populate the registry with default styles.
+    /// </summary>
+    /// <param name="atlas"> The <see cref="TextureAtlas"/> containing default UI elements.</param>
     public void CreateStyleDefaults( TextureAtlas atlas )
     {
         var btnUp       = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) );
@@ -139,47 +140,111 @@ public class StyleRegistry
         this.Add( "default", tbStyle );
 
         // ----- ScrollPaneStyle -----
-        var spStyle = new ScrollPane.ScrollPaneStyle();
-        
+        var spStyle = new ScrollPane.ScrollPaneStyle()
+        {
+            Background  = new TextureRegionDrawable( atlas.FindRegion( "default-rect" ) ),
+            Corner      = new TextureRegionDrawable( atlas.FindRegion( "default-rect-corner" ) ),
+            VScroll     = new TextureRegionDrawable( atlas.FindRegion( "default-scroll" ) ),
+            HScroll     = new TextureRegionDrawable( atlas.FindRegion( "default-scroll" ) ),
+            VScrollKnob = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) ),
+            HScrollKnob = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) )
+        };
+
+        this.Add( "default", spStyle );
+
         // ----- SplitPaneStyle -----
-        var splitPStyle = new SplitPane.SplitPaneStyle();
-        
+        var horizHandle = new TextureRegionDrawable( atlas.FindRegion( "default-splitpane" ) );
+        var vertHandle  = new TextureRegionDrawable( atlas.FindRegion( "default-splitpane-vertical" ) );
+
+        this.Add( "default-vertical", new SplitPane.SplitPaneStyle { Handle   = vertHandle } )
+            .Add( "default-horizontal", new SplitPane.SplitPaneStyle { Handle = horizHandle } );
+
         // ----- WindowStyle -----
-        var winStyle = new Window.WindowStyle();
-        
+        var winStyle = new Window.WindowStyle()
+        {
+            Background      = new TextureRegionDrawable( atlas.FindRegion( "default-window" ) ),
+            TitleFont       = defaultFont,
+            TitleFontColor  = Color.White,
+            StageBackground = new TextureRegionDrawable( atlas.FindRegion( "dialogDim" ) )
+        };
+
+        this.Add( "default", winStyle ).Add( "dialog", winStyle );
+
         // ----- ProgressBarStyle -----
-        var pbStyle = new ProgressBar.ProgressBarStyle();
-        
+        this.Add( "default-horizontal",
+                  new ProgressBar.ProgressBarStyle()
+                  {
+                      Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
+                      Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-slider-knob" ) )
+                  } )
+            .Add( "default-vertical",
+                  new ProgressBar.ProgressBarStyle()
+                  {
+                      Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
+                      Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) )
+                  } );
+
         // ----- SliderStyle -----
         var sliderStyle = new Slider.SliderStyle();
+
+        this.Add( "default-horizontal", sliderStyle ).Add( "default-vertical", sliderStyle );
         
         // ----- LabelStyle -----
-        var labelStyle = new Label.LabelStyle();
+        var labelStyle = new Label.LabelStyle()
+        {
+            Font      = defaultFont,
+            FontColor = Color.White
+        };
+
+        this.Add( "default", labelStyle );
         
         // ----- TextFieldStyle -----
-        var tfStyle = new TextField.TextFieldStyle();
+        var tfStyle = new TextField.TextFieldStyle()
+        {
+            Selection = new TextureRegionDrawable( atlas.FindRegion( "selection" ) ),
+            Background = new TextureRegionDrawable( atlas.FindRegion( "textfield" ) ),
+            Font       = defaultFont,
+            FontColor  = Color.White,
+            Cursor = new TextureRegionDrawable( atlas.FindRegion( "cursor" ) )
+        };
         
+        this.Add( "default", tfStyle );
+
         // ----- CheckBoxStyle -----
-        var cbStyle = new CheckBox.CheckBoxStyle();
+        var cbStyle = new CheckBox.CheckBoxStyle()
+        {
+            CheckboxOn = new TextureRegionDrawable( atlas.FindRegion( "check-on" ) ),
+            CheckboxOff = new TextureRegionDrawable( atlas.FindRegion( "check-off" ) ),
+            Font = defaultFont,
+            FontColor = Color.White
+        };
+
+        this.Add( "default", cbStyle );
         
         // ----- ListStyle -----
 //        var listStyle = new ListBox<>.ListBoxStyle();
-        
+
         // ----- TouchpadStyle -----
-        var tpStyle = new Touchpad.TouchpadStyle();
+        var tpStyle = new Touchpad.TouchpadStyle()
+        {
+            Background = new TextureRegionDrawable( atlas.FindRegion( "default-pane" ) ),
+            Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) )
+        };
         
+        this.Add( "default", tpStyle );
+
         // ----- TreeStyle -----
 //        var treeStyle = new Tree< , >.TreeStyle();
-        
+
         // ----- TextTooltipStyle -----
         var ttStyle = new TextTooltip.TextTooltipStyle();
-        
+
         // ----- ImageTextButtonStyle -----
         var itbStyle = new ImageTextButton.ImageTextButtonStyle();
-        
+
         // ----- ImageButtonStyle -----
         var ibStyle = new ImageButton.ImageButtonStyle();
-        
+
         // ----- SelectBoxStyle -----
 //        var sbStyle = new SelectBox<>.SelectBoxStyle();
     }

@@ -33,6 +33,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -56,7 +57,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class SelectBox< T > : Widget, IDisableable where T : notnull
+public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle >, IDisableable
+    where T : notnull
 {
     public override string? Name => "SelectBox";
 

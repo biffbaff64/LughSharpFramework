@@ -37,6 +37,7 @@ using LughSharp.Core.Input;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -67,7 +68,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// Android <see cref="IOnScreenKeyboard"/> implementation will bring up the default IME.
 /// </para>
 [PublicAPI]
-public class TextField : Widget
+public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 {
     public TextFieldStyle?     Style                    { get; set; }
     public string?             Text                     { get; set; }
@@ -1252,6 +1253,20 @@ public class TextField : Widget
     [PublicAPI]
     public class TextFieldStyle
     {
+        public BitmapFont?     Font               { get; set; }
+        public Color?          FontColor          { get; set; }
+        public Color?          FocusedFontColor   { get; set; }
+        public Color?          DisabledFontColor  { get; set; }
+        public ISceneDrawable? Background         { get; set; }
+        public ISceneDrawable? FocusedBackground  { get; set; }
+        public ISceneDrawable? DisabledBackground { get; set; }
+        public ISceneDrawable? Cursor             { get; set; }
+        public ISceneDrawable? Selection          { get; set; }
+        public BitmapFont?     MessageFont        { get; set; }
+        public Color?          MessageFontColor   { get; set; }
+        
+        // ====================================================================
+        
         public TextFieldStyle()
         {
         }
@@ -1301,18 +1316,6 @@ public class TextField : Widget
                 MessageFontColor = new Color( style.MessageFontColor );
             }
         }
-
-        public BitmapFont?     Font               { get; set; }
-        public Color?          FontColor          { get; set; }
-        public Color?          FocusedFontColor   { get; set; }
-        public Color?          DisabledFontColor  { get; set; }
-        public ISceneDrawable? Background         { get; set; }
-        public ISceneDrawable? FocusedBackground  { get; set; }
-        public ISceneDrawable? DisabledBackground { get; set; }
-        public ISceneDrawable? Cursor             { get; set; }
-        public ISceneDrawable? Selection          { get; set; }
-        public BitmapFont?     MessageFont        { get; set; }
-        public Color?          MessageFontColor   { get; set; }
     }
 
     // ========================================================================

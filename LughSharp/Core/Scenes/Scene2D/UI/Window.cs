@@ -31,6 +31,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 
@@ -49,7 +50,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Window : Table
+public class Window : Table, IStyleable< Window.WindowStyle >
 {
     public bool   DrawTitleTable  { get; set; }
     public Label? TitleLabel      { get; set; }
@@ -73,8 +74,7 @@ public class Window : Table
     private static readonly Vector2 _tmpPosition = new();
     private static readonly Vector2 _tmpSize     = new();
 
-    private Table?       _titleTable;
-    private WindowStyle? _style;
+    private Table? _titleTable;
 
     // ========================================================================
     // ========================================================================
@@ -126,7 +126,7 @@ public class Window : Table
 
         AddActor( _titleTable );
 
-        SetStyle( style );
+        Style = style;
         SetSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 
         AddCaptureListener( new WindowCaptureListener( this ) );
@@ -222,7 +222,7 @@ public class Window : Table
 
             EnsureWithinStage();
 
-            if ( GetStyle()?.StageBackground != null )
+            if ( Style.StageBackground != null )
             {
                 StageToLocalCoordinates( _tmpPosition.Set( 0, 0 ) );
                 StageToLocalCoordinates( _tmpSize.Set( Stage.Width, Stage.Height ) );
@@ -243,7 +243,7 @@ public class Window : Table
     {
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
-        GetStyle()?.StageBackground?.Draw( batch, x, y, width, height );
+        Style.StageBackground?.Draw( batch, x, y, width, height );
     }
 
     protected override void DrawBackground( IBatch batch, float parentAlpha, float x, float y )
@@ -319,23 +319,25 @@ public class Window : Table
     /// <summary>
     /// Gets this windows <see cref="WindowStyle"/> property.
     /// </summary>
-    public WindowStyle? GetStyle() => _style;
-
-    /// <summary>
-    /// Sets this windows <see cref="WindowStyle"/> property.
-    /// </summary>
-    public void SetStyle( WindowStyle? value )
+    public WindowStyle Style
     {
-        _style = value;
-
-        if ( _style == null )
+        get;
+        set
         {
-            return;
-        }
+            field = value;
+
+            SetBackground( Style.Background );
+
+            if ( TitleLabel != null )
+            {
+                if ( field.TitleFont != null && field.TitleFontColor != null )
+                {
+                    TitleLabel.Style = new Label.LabelStyle( field.TitleFont, field.TitleFontColor );
+                }
+            }
         
-        SetBackground( _style?.Background );
-        TitleLabel?.SetStyle( new Label.LabelStyle( _style?.TitleFont, _style?.TitleFontColor ) );
-        InvalidateHierarchy();
+            InvalidateHierarchy();
+        }
     }
 
     // ========================================================================

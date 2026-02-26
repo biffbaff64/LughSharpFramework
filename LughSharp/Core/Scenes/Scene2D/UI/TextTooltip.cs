@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -32,7 +34,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// A tooltip that shows a label.
 /// </summary>
 [PublicAPI]
-public class TextTooltip : Tooltip< Label >
+public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltip.TextTooltipStyle >
 {
     public TextTooltip( string text, Skin skin )
         : this( text, new TooltipManager< Label >(), skin.Get< TextTooltipStyle >() )
@@ -70,21 +72,25 @@ public class TextTooltip : Tooltip< Label >
         Container.SetActor( label );
         Container.SetWidths( Math.Min( manager.MaxWidth, label.GlyphLayout.Width ) );
 
-        SetStyle( style );
+        Style = style;
     }
 
-    public void SetStyle( TextTooltipStyle style )
+    public TextTooltipStyle Style
     {
-        Guard.Against.Null( style );
-
-        if ( Container == null )
+        get;
+        set
         {
-            throw new NullReferenceException( "Container cannot be null" );
-        }
+            field = value;
+            
+            if ( Container == null )
+            {
+                throw new NullReferenceException( "Container cannot be null" );
+            }
 
-        Container.GetActor()!.SetStyle( style.Label );
-        Container.SetBackground( style.Background );
-        Container.SetMaxWidth( style.WrapWidth );
+            Container.GetActor()!.Style = value.Label;
+            Container.SetBackground( value.Background );
+            Container.SetMaxWidth( value.WrapWidth );
+        }
     }
 
     // ========================================================================

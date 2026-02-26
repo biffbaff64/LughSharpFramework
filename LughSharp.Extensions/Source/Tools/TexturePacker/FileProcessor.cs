@@ -46,8 +46,6 @@ public class FileProcessor
     // Delegate to process a directory
     public Action< Entry, List< Entry > >? ProcessDirDelegate { get; set; }
 
-//    public delegate void ProcessEntryDelegate( Entry entry );
-
     // ========================================================================
 
     public IFilenameFilter? InputFilter     { get; set; }

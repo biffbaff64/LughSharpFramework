@@ -97,11 +97,11 @@ public class ImageTextButton : Button
 
         if ( _label != null )
         {
-            var labelStyle = _label.GetStyle();
+            var labelStyle = _label.Style;
 
             labelStyle.Font      = textButtonStyle.Font!;
             labelStyle.FontColor = GetFontColor();
-            _label.SetStyle( labelStyle );
+            _label.Style = labelStyle;
         }
     }
 
@@ -175,7 +175,7 @@ public class ImageTextButton : Button
     /// <summary>
     /// Returns the appropriate label font color from the style based on the current button state.
     /// </summary>
-    protected Color? GetFontColor()
+    protected Color GetFontColor()
     {
         if ( IsDisabled && ( _style?.DisabledFontColor != null ) )
         {
@@ -248,7 +248,7 @@ public class ImageTextButton : Button
 
         if ( _label != null )
         {
-            _label.GetStyle().FontColor = GetFontColor();
+            _label.Style.FontColor = GetFontColor();
         }
 
         base.Draw( batch, parentAlpha );

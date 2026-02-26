@@ -31,6 +31,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -55,7 +56,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ProgressBar : Widget, IDisableable
+public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.ProgressBarStyle >
 {
     public float KnobPosition { get; set; }
     public float MinValue     { get; set; }
@@ -166,7 +167,7 @@ public class ProgressBar : Widget, IDisableable
     public ProgressBarStyle Style
     {
         get;
-        init
+        set
         {
             Guard.Against.Null( value );
 

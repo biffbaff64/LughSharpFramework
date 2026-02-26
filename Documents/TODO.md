@@ -889,8 +889,8 @@ SCENES/SCENE2D/UTILS
     -      -      -      - DragAndDrop
     -      -      -      - ICullable
     -      -      -      - IDisableable
-    -      -      -      - IDrawable
     -      -      -      - ILayout
+    -      -      -      - ISceneDrawable
     -      -      -      - ITransformDrawable
     -      -      -      - NinePatchDrawable
     -      -      -      - ScissorStack
@@ -985,6 +985,19 @@ UTILS/EXCEPTIONS
     -      -      -      - ReadOnlyBufferException
     -      -      -      - RuntimeException
     -      -      -      - SerializationException
+
+UTILS/JSON
+----------
+
+    CODE   DOCU   FOOTER
+    ----   ----   ------
+    -      -      -      - Json
+    -      -      -      - JsonMatcher
+    -      -      -      - JsonReader
+    -      -      -      - JsonSkimmer
+    -      -      -      - JsonString
+    -      -      -      - JsonValue
+    -      -      -      - JsonWriter
 
 UTILS/LOGGING
 -------------

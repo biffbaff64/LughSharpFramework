@@ -31,6 +31,7 @@ using LughSharp.Core.Input;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using Platform = LughSharp.Core.Main.Platform;
@@ -45,7 +46,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// <typeparam name="TNode"> The type of nodes in the tree. </typeparam>
 /// <typeparam name="TValue"> The type of values for each node. </typeparam>
 [PublicAPI]
-public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TValue >.Node
+public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue>.TreeStyle >
+    where TNode : Tree< TNode, TValue >.Node
 {
     public TNode?         RangeStart    { get; set; }
     public ClickListener? ClickListener { get; set; }

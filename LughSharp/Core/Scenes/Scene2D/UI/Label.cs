@@ -31,6 +31,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
@@ -47,14 +48,14 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Label : Widget
+public class Label : Widget, IStyleable< Label.LabelStyle >
 {
-    public override string? Name => "Label";
-    public BitmapFontCache? FontCache   { get; set; }
-    public StringBuilder    Text        { get; }      = new();
-    public int              LabelAlign  { get; set; } = Align.LEFT;
-    public int              LineAlign   { get; set; } = Align.LEFT;
-    public GlyphLayout      GlyphLayout { get; set; } = new();
+    public override string?          Name        => "Label";
+    public          BitmapFontCache? FontCache   { get; set; }
+    public          StringBuilder    Text        { get; }      = new();
+    public          int              LabelAlign  { get; set; } = Align.LEFT;
+    public          int              LineAlign   { get; set; } = Align.LEFT;
+    public          GlyphLayout      GlyphLayout { get; set; } = new();
 
     // ========================================================================
 
@@ -62,14 +63,13 @@ public class Label : Widget
     private static readonly GlyphLayout _prefSizeLayout = new();
     private readonly        Vector2     _prefSize       = new();
 
-    private string?    _ellipsis;
-    private bool       _fontScaleChanged;
-    private float      _fontScaleX = 1;
-    private float      _fontScaleY = 1;
-    private int        _intValue   = int.MinValue;
-    private float      _lastPrefHeight;
-    private bool       _prefSizeInvalid = true;
-    private LabelStyle _style           = null!;
+    private string? _ellipsis;
+    private bool    _fontScaleChanged;
+    private float   _fontScaleX = 1;
+    private float   _fontScaleY = 1;
+    private int     _intValue   = int.MinValue;
+    private float   _lastPrefHeight;
+    private bool    _prefSizeInvalid = true;
 
     // ========================================================================
 
@@ -114,7 +114,7 @@ public class Label : Widget
             Text.Append( text );
         }
 
-        SetStyle( style );
+        Style = style;
 
         if ( text is { Length: > 0 } )
         {
@@ -163,15 +163,16 @@ public class Label : Widget
         set => SetFontScale( FontScaleX, value );
     }
 
-    public LabelStyle GetStyle() => _style;
-
-    public void SetStyle( LabelStyle value )
+    public LabelStyle Style
     {
-        _style = value;
+        get;
+        set
+        {
+            field     = value;
+            FontCache = value.Font.NewFontCache();
 
-        FontCache = _style.Font.NewFontCache();
-
-        InvalidateHierarchy();
+            InvalidateHierarchy();
+        }
     }
 
     /// <summary>
@@ -281,11 +282,11 @@ public class Label : Widget
         {
             var width = Width;
 
-            if ( _style.Background != null )
+            if ( Style.Background != null )
             {
-                width = Math.Max( width, _style.Background.MinWidth )
-                      - _style.Background.LeftWidth
-                      - _style.Background.RightWidth;
+                width = Math.Max( width, Style.Background.MinWidth )
+                      - Style.Background.LeftWidth
+                      - Style.Background.RightWidth;
             }
 
             _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color.White, width, Align.LEFT, true );
@@ -301,7 +302,7 @@ public class Label : Widget
     public void Layout()
     {
         Guard.Against.Null( FontCache );
-        
+
         var font      = FontCache.Font;
         var oldScaleX = font.GetScaleX();
         var oldScaleY = font.GetScaleY();
@@ -329,12 +330,12 @@ public class Label : Widget
         float x      = 0;
         float y      = 0;
 
-        if ( _style.Background != null )
+        if ( Style.Background != null )
         {
-            x      =  _style.Background.LeftWidth;
-            y      =  _style.Background.BottomHeight;
-            width  -= _style.Background.LeftWidth + _style.Background.RightWidth;
-            height -= _style.Background.BottomHeight + _style.Background.TopHeight;
+            x      =  Style.Background.LeftWidth;
+            y      =  Style.Background.BottomHeight;
+            width  -= Style.Background.LeftWidth + Style.Background.RightWidth;
+            height -= Style.Background.BottomHeight + Style.Background.TopHeight;
         }
 
         var   layout = GlyphLayout;
@@ -367,17 +368,17 @@ public class Label : Widget
             textHeight = font.FontData.CapHeight;
         }
 
-        Debug.Assert( GetStyle().Font != null, "Style.Font != null" );
+        Debug.Assert( Style.Font != null, "Style.Font != null" );
 
         if ( ( LabelAlign & Align.TOP ) != 0 )
         {
             y += FontCache.Font.Flipped ? 0 : height - textHeight;
-            y += GetStyle().Font.GetDescent();
+            y += Style.Font.GetDescent();
         }
         else if ( ( LabelAlign & Align.BOTTOM ) != 0 )
         {
             y += FontCache.Font.Flipped ? height - textHeight : 0;
-            y -= GetStyle().Font.GetDescent();
+            y -= Style.Font.GetDescent();
         }
         else
         {
@@ -405,16 +406,13 @@ public class Label : Widget
         var color = _tempColor.Set( Color );
         color.A *= parentAlpha;
 
-        if ( GetStyle().Background != null )
+        if ( Style.Background != null )
         {
             batch.SetColor( color.R, color.G, color.B, color.A );
-            GetStyle().Background?.Draw( batch, X, Y, Width, Height );
+            Style.Background?.Draw( batch, X, Y, Width, Height );
         }
 
-        if ( GetStyle().FontColor != null )
-        {
-            color.Mul( GetStyle().FontColor! );
-        }
+        color.Mul( Style.FontColor );
 
         if ( FontCache != null )
         {
@@ -442,10 +440,10 @@ public class Label : Widget
 
         var width = _prefSize.X;
 
-        if ( GetStyle().Background != null )
+        if ( Style.Background != null )
         {
-            width = Math.Max( width + GetStyle().Background!.LeftWidth + GetStyle().Background!.RightWidth,
-                              GetStyle().Background!.MinWidth );
+            width = Math.Max( width + Style.Background!.LeftWidth + Style.Background!.RightWidth,
+                              Style.Background!.MinWidth );
         }
 
         return width;
@@ -466,15 +464,15 @@ public class Label : Widget
 
         if ( _fontScaleChanged )
         {
-            descentScaleCorrection = _fontScaleY / GetStyle().Font.GetScaleY();
+            descentScaleCorrection = _fontScaleY / Style.Font.GetScaleY();
         }
 
-        var height = _prefSize.Y - ( GetStyle().Font.GetDescent() * descentScaleCorrection * 2 );
+        var height = _prefSize.Y - ( Style.Font.GetDescent() * descentScaleCorrection * 2 );
 
-        if ( GetStyle().Background != null )
+        if ( Style.Background != null )
         {
-            height = Math.Max( height + GetStyle().Background!.TopHeight + GetStyle().Background!.BottomHeight,
-                               GetStyle().Background!.MinHeight );
+            height = Math.Max( height + Style.Background!.TopHeight + Style.Background!.BottomHeight,
+                               Style.Background!.MinHeight );
         }
 
         return height;
@@ -584,33 +582,29 @@ public class Label : Widget
     [PublicAPI]
     public class LabelStyle
     {
-        public BitmapFont?     Font       { get; set; }
-        public Color?          FontColor  { get; set; }
+        public BitmapFont      Font       { get; set; }
+        public Color           FontColor  { get; set; }
         public ISceneDrawable? Background { get; set; }
 
         // ====================================================================
 
         public LabelStyle()
         {
-            Font       = null!;
-            FontColor  = null;
+            Font       = new BitmapFont();
+            FontColor  = Color.White;
             Background = null;
         }
 
-        public LabelStyle( BitmapFont? font, Color? fontColor )
+        public LabelStyle( BitmapFont font, Color fontColor )
         {
-            Font      = font ?? new BitmapFont();
-            FontColor = fontColor ?? Color.White;
+            Font      = font;
+            FontColor = fontColor;
         }
 
         public LabelStyle( LabelStyle style )
         {
-            Font = style.Font;
-
-            if ( style.FontColor != null )
-            {
-                FontColor = new Color( style.FontColor );
-            }
+            Font      = style.Font;
+            FontColor = new Color( style.FontColor );
 
             Background = style.Background;
         }

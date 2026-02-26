@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
+// Copyright (c) 2024 Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Json;
 
 [PublicAPI]
-public class JsonWriter
+public class JsonReader
 {
+    
 }
 
 // ============================================================================

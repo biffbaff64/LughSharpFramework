@@ -31,6 +31,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -52,7 +53,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ListBox< T > : Widget where T : notnull
+public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > where T : notnull
 {
     public Rectangle?          CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
