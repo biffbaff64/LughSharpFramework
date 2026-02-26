@@ -23,18 +23,22 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Json;
 
 namespace LughSharp.Core.Utils.Json;
 
 [PublicAPI]
-public class JsonValue
+public class JsonValue : IEnumerator< JsonValue >
 {
     public string?    Name        { get; set; } = string.Empty;
     public JsonValue? Child       { get; set; }
@@ -60,6 +64,10 @@ public class JsonValue
 
     // ========================================================================
 
+    private bool _disposed = false;
+
+    // ========================================================================
+
     public JsonValue( ValueType type )
     {
         this.Type = type;
@@ -67,35 +75,38 @@ public class JsonValue
 
     public JsonValue( string? value )
     {
-        set( value );
+        Set( value );
     }
 
     public JsonValue( double value )
     {
-        set( value, null );
+        Set( value, null );
     }
 
     public JsonValue( long value )
     {
-        set( value, null );
+        Set( value, null );
     }
 
     public JsonValue( double value, string stringValue )
     {
-        set( value, stringValue );
+        Set( value, stringValue );
     }
 
     public JsonValue( long value, string stringValue )
     {
-        set( value, stringValue );
+        Set( value, stringValue );
     }
 
     public JsonValue( bool value )
     {
-        set( value );
+        Set( value );
     }
 
-    /** Creates a deep copy of the specific value, except {@link #parent()}, {@link #next()}, and {@link #prev()} are null. */
+    /// <summary>
+    /// Creates a deep copy of the specific value, except <see cref="Parent"/>,
+    /// <see cref="Next"/>, and <see cref="Prev"/> are null.
+    /// </summary>
     public JsonValue( JsonValue value )
         : this( value, null, null )
     {
@@ -589,7 +600,7 @@ public class JsonValue
                 return ( byte )LongValue;
 
             case ValueType.BooleanValue:
-                return ( byte )(LongValue != 0 ? 1 : 0);
+                return ( byte )( LongValue != 0 ? 1 : 0 );
         }
 
         throw new RuntimeException( $"Value cannot be converted to byte: {Type}" );
@@ -620,7 +631,7 @@ public class JsonValue
         switch ( Type )
         {
             case ValueType.StringValue:
-                return ( char )(StringValue is { Length: > 0 } ? StringValue[ 0 ] : 0 );
+                return ( char )( StringValue is { Length: > 0 } ? StringValue[ 0 ] : 0 );
 
             case ValueType.DoubleValue:
                 return ( char )DoubleValue;
@@ -647,7 +658,7 @@ public class JsonValue
         }
 
         string?[] array = new string[ Size ];
-        int      i     = 0;
+        int       i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -672,6 +683,7 @@ public class JsonValue
 
                 case ValueType.BooleanValue:
                     v = value.LongValue != 0 ? "true" : "false";
+
                     break;
 
                 case ValueType.NullValue:
@@ -1030,7 +1042,7 @@ public class JsonValue
             switch ( value.Type )
             {
                 case ValueType.StringValue:
-                    v = ( char )(value.StringValue is { Length: > 0 } ? value.StringValue[ 0 ] : 0 );
+                    v = ( char )( value.StringValue is { Length: > 0 } ? value.StringValue[ 0 ] : 0 );
 
                     break;
 
@@ -1059,8 +1071,1165 @@ public class JsonValue
         return array;
     }
 
-// ========================================================================
-// ========================================================================
+    /// <summary>
+    /// Returns true if a child with the specified name exists and has a child.
+    /// </summary>
+    public bool HasChild( string name )
+    {
+        return GetChild( name ) != null;
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns its first child.
+    /// </summary>
+    /// <returns> May be null. </returns>
+    public JsonValue? GetChild( string name )
+    {
+        JsonValue? child = Get( name );
+
+        return child?.Child;
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a string.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="defaultValue"> May be null. </param>
+    public string? GetString( string name, string? defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsString();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a float.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public float GetFloat( string name, float defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsFloat();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a double.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public double GetDouble( string name, double defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsDouble();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a long.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public long GetLong( string name, long defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsLong();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as an int.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public int GetInt( string name, int defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsInt();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a bool.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public bool GetBoolean( string name, bool defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsBoolean();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a byte.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public byte GetByte( string name, byte defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsByte();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a short.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public short GetShort( string name, short defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsShort();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a char.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public char GetChar( string name, char defaultValue )
+    {
+        JsonValue? child = Get( name );
+
+        return ( child == null || !child.IsValue() || child.IsNull() )
+            ? defaultValue
+            : child.AsChar();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a string.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public string? GetString( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsString();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a float.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public float GetFloat( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsFloat();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a double.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public double GetDouble( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsDouble();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a long.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public long GetLong( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsLong();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a int.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public int GetInt( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsInt();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a bool.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public bool GetBoolean( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsBoolean();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a byte.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public byte GetByte( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsByte();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a short.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public short GetShort( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsShort();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a char.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public char GetChar( string name )
+    {
+        JsonValue? child = Get( name );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Named value not found: {name}" );
+        }
+
+        return child.AsChar();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a string.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public string? GetString( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsString();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a float.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public float GetFloat( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsFloat();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a double.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public double GetDouble( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsDouble();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a long.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public long GetLong( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsLong();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a int.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public int GetInt( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsInt();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a by bool.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public bool GetBoolean( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsBoolean();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a byte.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public byte GetByte( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsByte();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a short.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public short GetShort( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsShort();
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a char.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public char GetChar( int index )
+    {
+        JsonValue? child = Get( index );
+
+        if ( child == null )
+        {
+            throw new RuntimeException( $"Indexed value not found: {Name}" );
+        }
+
+        return child.AsChar();
+    }
+
+    /// <summary>
+    /// Sets the name of the specified value and replaces an existing child with
+    /// the same name, else adds it after the last child.
+    /// </summary>
+    public void SetChild( string name, JsonValue value )
+    {
+        if ( name == null )
+        {
+            throw new ArgumentException( "name cannot be null." );
+        }
+
+        value.Name = name;
+        SetChild( value );
+    }
+
+    /// <summary>
+    /// Replaces an existing child with the same name as the specified
+    /// value. If an existing child does not exist, it adds it after
+    /// the last child.
+    /// </summary>
+    public void SetChild( JsonValue value )
+    {
+        string? name = value.Name;
+
+        if ( name == null )
+        {
+            throw new RuntimeException( $"An object child requires a name: {value}" );
+        }
+
+        JsonValue? current = Child;
+
+        while ( current != null )
+        {
+            if ( current.Name != null && current.Name.Equals( name ) )
+            {
+                current.Replace( value );
+
+                return;
+            }
+
+            current = current.Next;
+        }
+
+        AddChild( value );
+    }
+
+    /// <summary>
+    /// Replaces this value in its parent with the specified value.
+    /// </summary>
+    public void Replace( JsonValue value )
+    {
+        if ( Parent?.Last == this )
+        {
+            Parent.Last = value;
+        }
+
+        if ( Prev != null )
+        {
+            Prev.Next = value;
+        }
+        else
+        {
+            Parent?.Child = value;
+        }
+
+        value.Prev = Prev;
+        value.Next = Next;
+
+        if ( Next != null )
+        {
+            Next.Prev = value;
+        }
+
+        value.Parent = Parent;
+        Prev         = null;
+        Next         = null;
+        Parent       = null;
+    }
+
+    /// <summary>
+    /// Sets the name of the specified value and adds it after the last child.
+    /// </summary>
+    public void AddChild( string name, JsonValue value )
+    {
+        if ( name == null )
+        {
+            throw new ArgumentException( "name cannot be null." );
+        }
+
+        value.Name = name;
+        AddChild( value );
+    }
+
+    /// <summary>
+    /// Adds the specified value after the last child.
+    /// </summary>
+    /// <exception cref="RuntimeException">
+    /// if this is an object and the specified child's name is null.
+    /// </exception>
+    public void AddChild( JsonValue value )
+    {
+        if ( Type == ValueType.ObjectType && value.Name == null )
+        {
+            throw new RuntimeException( $"An object child requires a name: {value}" );
+        }
+
+        value.Parent = this;
+        value.Next   = null;
+
+        if ( Child == null )
+        {
+            value.Prev = null;
+            Child      = value;
+        }
+        else
+        {
+            Last?.Next = value;
+            value.Prev = Last;
+        }
+
+        Last = value;
+        Size++;
+    }
+
+    /// <summary>
+    /// Adds the specified value as the first child.
+    /// </summary>
+    /// <exception cref="RuntimeException">
+    /// if this is an object and the specified child's name is null.
+    /// </exception>
+    public void AddChildFirst( JsonValue value )
+    {
+        if ( Type == ValueType.ObjectType && value.Name == null )
+        {
+            throw new RuntimeException( $"An object child requires a name: {value}" );
+        }
+
+        value.Parent = this;
+        value.Next   = Child;
+        value.Prev   = null;
+
+        if ( Child == null )
+        {
+            Child = value;
+            Last  = value;
+        }
+        else
+        {
+            Child.Prev = value;
+            Child      = value;
+        }
+
+        Size++;
+    }
+
+    /// <summary>
+    /// Sets the type and value to the specified JsonValue.
+    /// </summary>
+    public void Set( JsonValue value )
+    {
+        Type        = value.Type;
+        StringValue = value.StringValue;
+        DoubleValue = value.DoubleValue;
+        LongValue   = value.LongValue;
+    }
+
+    public void Set( string? value )
+    {
+        StringValue = value;
+        Type        = value == null ? ValueType.NullValue : ValueType.StringValue;
+    }
+
+    public void SetNull()
+    {
+        StringValue = null;
+        Type        = ValueType.NullValue;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="stringValue">
+    /// May be null if the string representation is the string value of the double (eg, no leading zeros).
+    /// </param>
+    public void Set( double value, string? stringValue )
+    {
+        DoubleValue = value;
+        LongValue   = ( long )value;
+        StringValue = stringValue;
+        Type        = ValueType.DoubleValue;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="stringValue">
+    /// May be null if the string representation is the string value of the long (eg, no leading zeros).
+    /// </param>
+    public void Set( long value, string? stringValue )
+    {
+        LongValue   = value;
+        DoubleValue = value;
+        StringValue = stringValue;
+        Type        = ValueType.LongValue;
+    }
+
+    public void Set( bool value )
+    {
+        LongValue = value ? 1 : 0;
+        Type      = ValueType.BooleanValue;
+    }
+
+    public bool EqualsString( string value )
+    {
+        return string.Equals( AsString(), value, StringComparison.OrdinalIgnoreCase );
+    }
+
+    public bool NameEquals( string value )
+    {
+        return string.Equals( Name, value, StringComparison.OrdinalIgnoreCase );
+    }
+
+    public string? ToJson( JsonOutputType outputType )
+    {
+        if ( IsValue() )
+        {
+            return AsString();
+        }
+
+        StringWriter writer = new StringWriter( new StringBuilder( 512 ) );
+
+        try
+        {
+            ToJson( outputType, writer );
+        }
+        catch ( IOException ex )
+        {
+            throw new RuntimeException( ex );
+        }
+
+        return writer.ToString();
+    }
+
+    public void ToJson( JsonOutputType outputType, StringWriter writer )
+    {
+        if ( IsObject() )
+        {
+            writer.Write( '{' );
+
+            for ( JsonValue? child = this.Child; child != null; child = child.Next )
+            {
+                writer.Write( JsonOutput.QuoteName( child.Name, outputType ) );
+                writer.Write( ':' );
+                child.ToJson( outputType, writer );
+
+                if ( child.Next != null )
+                {
+                    writer.Write( ',' );
+                }
+            }
+
+            writer.Write( '}' );
+        }
+        else if ( IsArray() )
+        {
+            writer.Write( '[' );
+
+            for ( JsonValue? child = this.Child; child != null; child = child.Next )
+            {
+                child.ToJson( outputType, writer );
+
+                if ( child.Next != null )
+                {
+                    writer.Write( ',' );
+                }
+            }
+
+            writer.Write( ']' );
+        }
+        else if ( IsString() )
+        {
+            writer.Write( JsonOutput.QuoteValue( AsString(), outputType ) );
+        }
+        else if ( IsDouble() )
+        {
+            double doubleValue = AsDouble();
+            long   longValue   = AsLong();
+
+            writer.Write( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
+                              ? LongValue.ToString()
+                              : DoubleValue.ToString( CultureInfo.InvariantCulture ) );
+        }
+        else if ( IsLong() )
+        {
+            writer.Write( AsLong().ToString() );
+        }
+        else if ( IsBoolean() )
+        {
+            writer.Write( AsBoolean() ? "true" : "false" );
+        }
+        else if ( IsNull() )
+        {
+            writer.Write( "null" );
+        }
+        else
+        {
+            throw new SerializationException( $"Unknown object type: {this}" );
+        }
+    }
+
+    public override string ToString()
+    {
+        if ( IsValue() )
+        {
+            string? str = Name == null ? AsString() : $"{Name}: {AsString()}";
+
+            return str ?? "null";
+        }
+
+        return ( Name == null ? "" : $"{Name}: " ) + PrettyPrint( JsonOutputType.Minimal, 0 );
+    }
+
+    /// <summary>
+    /// Returns a human readable string representing the path from
+    /// the root of the JSON object graph to this value.
+    /// </summary>
+    public string Trace()
+    {
+        if ( Parent == null )
+        {
+            if ( Type == ValueType.ArrayType )
+            {
+                return "[]";
+            }
+
+            if ( Type == ValueType.ObjectType )
+            {
+                return "{}";
+            }
+
+            return "";
+        }
+
+        string trace;
+
+        if ( Parent.Type == ValueType.ArrayType )
+        {
+            trace = "[]";
+
+            int i = 0;
+
+            for ( JsonValue? child = Parent.Child; child != null; child = child.Next, i++ )
+            {
+                if ( child == this )
+                {
+                    trace = $"[{i}]";
+
+                    break;
+                }
+            }
+        }
+        else if ( Name?.IndexOf( '.' ) != -1 )
+        {
+            trace = $".\"{Name?.Replace( "\"", "\\\"" )}\"";
+        }
+        else
+        {
+            trace = '.' + Name;
+        }
+
+        return Parent.Trace() + trace;
+    }
+
+    public string PrettyPrint( JsonOutputType outputType, int singleLineColumns )
+    {
+        PrettyPrintSettings settings = new PrettyPrintSettings
+        {
+            OutputType        = outputType,
+            SingleLineColumns = singleLineColumns
+        };
+
+        return PrettyPrint( settings );
+    }
+
+    public string PrettyPrint( PrettyPrintSettings settings )
+    {
+        StringBuilder buffer = new StringBuilder( 512 );
+        PrettyPrint( this, buffer, 0, settings );
+
+        return buffer.ToString();
+    }
+
+    private void PrettyPrint( JsonValue obj, StringBuilder buffer, int indent, PrettyPrintSettings settings )
+    {
+        JsonOutputType outputType = settings.OutputType;
+
+        if ( obj.IsObject() )
+        {
+            if ( obj.Child == null )
+            {
+                buffer.Append( "{}" );
+            }
+            else
+            {
+                bool newLines = !IsFlat( obj );
+                int  start    = buffer.Length;
+
+                while ( true )
+                {
+                    buffer.Append( newLines ? "{\n" : "{ " );
+
+                    for ( JsonValue? child = obj.Child; child != null; child = child.Next )
+                    {
+                        if ( newLines )
+                        {
+                            Indent( indent, buffer );
+                        }
+
+                        buffer.Append( JsonOutput.QuoteName( child.Name, outputType ) );
+                        buffer.Append( ": " );
+                        PrettyPrint( child, buffer, indent + 1, settings );
+
+                        if ( ( !newLines || outputType != JsonOutputType.Minimal ) && child.Next != null )
+                        {
+                            buffer.Append( ',' );
+                        }
+
+                        buffer.Append( newLines ? '\n' : ' ' );
+
+                        if ( !newLines && buffer.Length - start > settings.SingleLineColumns )
+                        {
+                            buffer.Length = start;
+                            newLines      = true;
+
+                            goto outer;
+                        }
+                    }
+
+                    break;
+                }
+
+            outer:
+
+                if ( newLines )
+                {
+                    Indent( indent - 1, buffer );
+                }
+
+                buffer.Append( '}' );
+            }
+        }
+        else if ( obj.IsArray() )
+        {
+            if ( obj.Child == null )
+            {
+                buffer.Append( "[]" );
+            }
+            else
+            {
+                bool newLines = !IsFlat( obj );
+                bool wrap     = settings.WrapNumericArrays || !IsNumeric( obj );
+                int  start    = buffer.Length;
+
+                while ( true )
+                {
+                    buffer.Append( newLines ? "[\n" : "[ " );
+
+                    for ( JsonValue? child = obj.Child; child != null; child = child.Next )
+                    {
+                        if ( newLines )
+                        {
+                            Indent( indent, buffer );
+                        }
+
+                        PrettyPrint( child, buffer, indent + 1, settings );
+
+                        if ( ( !newLines || outputType != JsonOutputType.Minimal ) && child.Next != null )
+                        {
+                            buffer.Append( ',' );
+                        }
+
+                        buffer.Append( newLines ? '\n' : ' ' );
+
+                        if ( wrap && !newLines && buffer.Length - start > settings.SingleLineColumns )
+                        {
+                            buffer.Length = start;
+                            newLines      = true;
+
+                            goto outer;
+                        }
+                    }
+
+                    break;
+                }
+
+            outer:
+
+                if ( newLines )
+                {
+                    Indent( indent - 1, buffer );
+                }
+
+                buffer.Append( ']' );
+            }
+        }
+        else if ( obj.IsString() )
+        {
+            buffer.Append( JsonOutput.QuoteValue( obj.AsString(), outputType ) );
+        }
+        else if ( obj.IsDouble() )
+        {
+            double doubleValue = obj.AsDouble();
+            long   longValue   = obj.AsLong();
+            buffer.Append( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
+                               ? longValue
+                               : doubleValue );
+        }
+        else if ( obj.IsLong() )
+        {
+            buffer.Append( obj.AsLong() );
+        }
+        else if ( obj.IsBoolean() )
+        {
+            buffer.Append( obj.AsBoolean() );
+        }
+        else if ( obj.IsNull() )
+        {
+            buffer.Append( "null" );
+        }
+        else
+        {
+            throw new SerializationException( $"Unknown object type: {obj}" );
+        }
+    }
+
+    /// <summary>
+    /// More efficient than <see cref="PrettyPrint(PrettyPrintSettings)"/> but
+    /// <see cref="PrettyPrintSettings.SingleLineColumns"/> and
+    /// <see cref="PrettyPrintSettings.WrapNumericArrays"/> are not supported.
+    /// </summary>
+    public void PrettyPrint( JsonOutputType outputType, TextWriter writer )
+    {
+        var settings = new PrettyPrintSettings()
+        {
+            OutputType = outputType,
+        };
+
+        PrettyPrint( this, writer, 0, settings );
+    }
+
+    private void PrettyPrint( JsonValue obj, TextWriter writer, int indent, PrettyPrintSettings settings )
+    {
+        JsonOutputType outputType = settings.OutputType;
+
+        if ( obj.IsObject() )
+        {
+            if ( obj.Child == null )
+            {
+                writer.Write( "{}" );
+            }
+            else
+            {
+                bool newLines = !IsFlat( obj ) || obj.Size > 6;
+
+                writer.Write( newLines ? "{\n" : "{ " );
+
+                for ( JsonValue? child = obj.Child; child != null; child = child.Next )
+                {
+                    if ( newLines )
+                    {
+                        Indent( indent, writer );
+                    }
+
+                    writer.Write( JsonOutput.QuoteName( child.Name, outputType ) );
+                    writer.Write( ": " );
+
+                    PrettyPrint( child, writer, indent + 1, settings );
+
+                    if ( ( !newLines || outputType != JsonOutputType.Minimal ) && child.Next != null )
+                    {
+                        writer.Write( ',' );
+                    }
+
+                    writer.Write( newLines ? '\n' : ' ' );
+                }
+
+                if ( newLines )
+                {
+                    Indent( indent - 1, writer );
+                }
+
+                writer.Write( '}' );
+            }
+        }
+        else if ( obj.IsArray() )
+        {
+            if ( obj.Child == null )
+            {
+                writer.Write( "[]" );
+            }
+            else
+            {
+                bool newLines = !IsFlat( obj );
+
+                writer.Write( newLines ? "[\n" : "[ " );
+
+                int i = 0;
+
+                for ( JsonValue? child = obj.Child; child != null; child = child.Next )
+                {
+                    if ( newLines )
+                    {
+                        Indent( indent, writer );
+                    }
+
+                    PrettyPrint( child, writer, indent + 1, settings );
+
+                    if ( ( !newLines || outputType != JsonOutputType.Minimal ) && child.Next != null )
+                    {
+                        writer.Write( ',' );
+                    }
+
+                    writer.Write( newLines ? '\n' : ' ' );
+                }
+
+                if ( newLines )
+                {
+                    Indent( indent - 1, writer );
+                }
+
+                writer.Write( ']' );
+            }
+        }
+        else if ( obj.IsString() )
+        {
+            writer.Write( JsonOutput.QuoteValue( obj.AsString(), outputType ) );
+        }
+        else if ( obj.IsDouble() )
+        {
+            double doubleValue = obj.AsDouble();
+            long   longValue   = obj.AsLong();
+            
+            writer.Write( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
+                              ? longValue.ToString()
+                              : doubleValue.ToString( CultureInfo.InvariantCulture ) );
+        }
+        else if ( object.isLong() )
+        {
+            writer.write( Long.toString( object.AsLong() ) );
+        }
+        else if ( obj.IsBoolean() )
+        {
+            writer.Write( obj.AsBoolean().ToString() );
+        }
+        else if ( obj.IsNull() )
+        {
+            writer.Write( "null" );
+        }
+        else
+        {
+            throw new SerializationException( $"Unknown object type: {obj}" );
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Advances the enumerator to the next element of the collection.
+    /// </summary>
+    /// <exception cref="T:System.InvalidOperationException">
+    /// The collection was modified after the enumerator was created.
+    /// </exception>
+    /// <returns>
+    /// <c>true</c> if the enumerator was successfully advanced to the next element,
+    /// <c>false</c> if the enumerator has passed the end of the collection.
+    /// </returns>
+    public bool MoveNext()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Sets the enumerator to its initial position, which is before the first
+    /// element in the collection.
+    /// </summary>
+    /// <exception cref="T:System.InvalidOperationException">
+    /// The collection was modified after the enumerator was created.
+    /// </exception>
+    /// <exception cref="T:System.NotSupportedException">
+    /// The enumerator does not support being reset.
+    /// </exception>
+    public void Reset()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Gets the element in the collection at the current position of the enumerator.
+    /// </summary>
+    /// <returns>The element in the collection at the current position of the enumerator.</returns>
+    public JsonValue Current { get; set; }
+
+    /// <summary>
+    /// Gets the element in the collection at the current position of the enumerator.
+    /// </summary>
+    /// <returns>The element in the collection at the current position of the enumerator.</returns>
+    object? IEnumerator.Current { get; }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing,
+    /// or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected void Dispose( bool disposing )
+    {
+        if ( !_disposed )
+        {
+            if ( disposing )
+            {
+            }
+
+            _disposed = true;
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
 
     public enum ValueType
     {
@@ -1073,8 +2242,8 @@ public class JsonValue
         NullValue
     }
 
-// ========================================================================
-// ========================================================================
+    // ========================================================================
+    // ========================================================================
 
     [PublicAPI]
     public class PrettyPrintSettings

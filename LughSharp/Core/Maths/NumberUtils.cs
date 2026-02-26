@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Maths;
@@ -298,6 +299,21 @@ public abstract class NumberUtils
     public static int ToInt( int value )
     {
         return ( ( value + 63 ) & -64 ) >> 6;
+    }
+
+    public static bool IsNumeric( object value )
+    {
+        return ( value is sbyte
+            or byte
+            or short
+            or ushort
+            or int
+            or uint
+            or long
+            or ulong
+            or float
+            or double
+            or decimal );
     }
 }
 

@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Text.RegularExpressions;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics.Text;
@@ -34,7 +35,7 @@ public partial class RegexUtils
     public const string WORD_BOUNDARY_PATTERN              = @"\b\w+\b";
     public const string MINIMAL_NAME_PATTERN               = "^[^\":,}/ ][^:]*$";
     public const string FILENAME_WITHOUT_EXTENSION_PATTERN = "(.*)\\..*";
-    public const string NUMMBER_SUFFIX_PATTERN             = "(.*?)(\\d+)$";
+    public const string NUMBER_SUFFIX_PATTERN              = "(.*?)(\\d+)$";
     public const string VERSION_NUMBER_PATTERN             = "\\d+";
     public const string IDENTIFIER_PATTERN                 = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
     public const string UNQUOTED_VALUE_PATTERN             = "^[^\":,{\\[\\]/ ][^}\\],]*$";
@@ -48,7 +49,7 @@ public partial class RegexUtils
     [GeneratedRegex( FILENAME_WITHOUT_EXTENSION_PATTERN, RegexOptions.Compiled )]
     public static partial Regex FileNameWithoutExtensionRegex();
 
-    [GeneratedRegex( NUMMBER_SUFFIX_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( NUMBER_SUFFIX_PATTERN, RegexOptions.Compiled )]
     public static partial Regex NumberSuffixRegex();
 
     [GeneratedRegex( WORD_BOUNDARY_PATTERN, RegexOptions.Compiled )]
