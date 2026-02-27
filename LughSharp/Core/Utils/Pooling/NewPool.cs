@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections.Concurrent;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Utils.Pooling;
@@ -90,7 +92,7 @@ public class NewPool< T > where T : notnull
     {
         // Try to get from free objects first
         // Use TryTake for ConcurrentBag
-        if ( !_freeObjects.TryTake( out var obj ) )
+        if ( !_freeObjects.TryTake( out T? obj ) )
         {
             // Pool is empty, create a new object
             if ( GetTotalPooledAndActiveCount() >= Max )
@@ -129,7 +131,7 @@ public class NewPool< T > where T : notnull
             // This should ideally not happen if pool is correctly managed, but indicates an issue.
             // Means an object is being obtained but already marked as active.
             Logger.Error( $"Obtained object {obj.GetType().Name} was already marked as " +
-                            $"active. Potential pool misuse." );
+                          $"active. Potential pool misuse." );
 
             //TODO: We might want to re-add to free and try again, or throw. For now, proceeding.
         }
@@ -159,7 +161,7 @@ public class NewPool< T > where T : notnull
 
             try
             {
-                var obj = _newObjectFactory();
+                T? obj = _newObjectFactory();
 
                 if ( obj == null )
                 {
@@ -174,7 +176,7 @@ public class NewPool< T > where T : notnull
             catch ( Exception ex )
             {
                 Logger.Error( $"Failed to create object during Fill for " +
-                                $"type {typeof( T ).Name}: {ex.Message}" );
+                              $"type {typeof( T ).Name}: {ex.Message}" );
 
                 break; // Stop filling if creation fails
             }
@@ -198,7 +200,7 @@ public class NewPool< T > where T : notnull
         ArgumentNullException.ThrowIfNull( obj );
 
         // Check if the object was actually obtained from this pool and is not being double-freed.
-        if ( !_activeObjects.TryRemove( obj, out var _ ) )
+        if ( !_activeObjects.TryRemove( obj, out bool _ ) )
         {
             throw new InvalidOperationException( $"Attempted to free object {obj.GetType().Name} that was " +
                                                  $"not obtained from this pool or was already freed." );
@@ -224,7 +226,7 @@ public class NewPool< T > where T : notnull
     {
         ArgumentNullException.ThrowIfNull( objects );
 
-        foreach ( var obj in objects )
+        foreach ( T? obj in objects )
         {
             if ( obj == null )
             {
@@ -240,7 +242,7 @@ public class NewPool< T > where T : notnull
     /// </summary>
     public virtual void Clear()
     {
-        while ( _freeObjects.TryTake( out var obj ) ) // For ConcurrentBag
+        while ( _freeObjects.TryTake( out T? obj ) ) // For ConcurrentBag
         {
             DiscardObject( obj );
         }

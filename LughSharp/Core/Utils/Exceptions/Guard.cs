@@ -24,6 +24,7 @@
 
 using System.Collections;
 using System.Runtime.CompilerServices;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Exceptions;
@@ -80,7 +81,7 @@ public class Guard
             throw new ArgumentNullException( argumentName );
         }
 
-        var enumerable1 = enumerable as T[] ?? enumerable.ToArray();
+        T[] enumerable1 = enumerable as T[] ?? enumerable.ToArray();
 
         if ( enumerable1.Length == 0 )
         {
@@ -102,7 +103,8 @@ public class Guard
     /// does not exist.
     /// </summary>
     public static void ThrowIfFileNullOrNotExist(
-        [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
+        [System.Diagnostics.CodeAnalysis.NotNull]
+        FileSystemInfo? argumentValue,
         [CallerArgumentExpression( nameof( argumentValue ) )]
         string argumentName = "" )
     {
@@ -127,7 +129,8 @@ public class Guard
     /// does not exist.
     /// </summary>
     public static void ThrowIfNotFileOrDirectory(
-        [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
+        [System.Diagnostics.CodeAnalysis.NotNull]
+        FileSystemInfo? argumentValue,
         [CallerArgumentExpression( nameof( argumentValue ) )]
         string argumentName = "" )
     {

@@ -45,7 +45,7 @@ public enum ClientApi
     /// <summary>
     /// OpenGL ES context is created.
     /// </summary>
-    OpenGlEsApi = 0x00030002,
+    OpenGlEsApi = 0x00030002
 }
 
 // ========================================================================

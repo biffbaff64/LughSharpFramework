@@ -156,7 +156,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
 
         for ( var i = 0; i < _animationIntervals.Length; ++i )
         {
-            var animationInterval = _animationIntervals[ i ];
+            int animationInterval = _animationIntervals[ i ];
 
             if ( currentTime <= animationInterval )
             {

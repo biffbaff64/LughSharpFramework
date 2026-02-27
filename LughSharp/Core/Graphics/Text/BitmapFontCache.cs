@@ -24,7 +24,9 @@
 
 using System;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
@@ -128,7 +130,7 @@ public class BitmapFontCache
         Font                = font;
         UseIntegerPositions = integer;
 
-        var pageCount = font.GetRegions().Count;
+        int pageCount = font.GetRegions().Count;
 
         if ( pageCount == 0 )
         {
@@ -160,7 +162,7 @@ public class BitmapFontCache
     /// <param name="y"> The y coordinate </param>
     public void SetPosition( float x, float y )
     {
-        Translate( x - this.X, y - this.Y );
+        Translate( x - X, y - Y );
     }
 
     /// <summary>
@@ -184,12 +186,12 @@ public class BitmapFontCache
         X += xAmount;
         Y += yAmount;
 
-        var pageVertices = _pageVertices;
-        
+        float[]?[] pageVertices = _pageVertices;
+
         for ( int i = 0, n = pageVertices.Length; i < n; i++ )
         {
-            var vertices = pageVertices[ i ];
-            
+            float[]? vertices = pageVertices[ i ];
+
             for ( int ii = 0, nn = _idx[ i ]; ii < nn; ii += 5 )
             {
                 vertices?[ ii ]     += xAmount;
@@ -203,7 +205,7 @@ public class BitmapFontCache
     /// </summary>
     public void Tint( Color tint )
     {
-        var newTint = tint.ToFloatBitsAbgr();
+        float newTint = tint.ToFloatBitsAbgr();
 
         if ( _currentTint.Equals( newTint ) )
         {
@@ -212,7 +214,7 @@ public class BitmapFontCache
 
         _currentTint = newTint;
 
-        var tempGlyphCount = _tempGlyphCount;
+        int[] tempGlyphCount = _tempGlyphCount;
 
         for ( int i = 0, n = tempGlyphCount.Length; i < n; i++ )
         {
@@ -221,19 +223,19 @@ public class BitmapFontCache
 
         for ( int i = 0, n = Layouts.Count; i < n; i++ )
         {
-            var layout = Layouts[ i ];
+            GlyphLayout layout = Layouts[ i ];
 
             for ( int ii = 0, nn = layout.Runs.Count; ii < nn; ii++ )
             {
-                var run        = layout.Runs[ ii ];
-                var glyphs     = run.Glyphs;
-                var colorFloat = _tempColor.Set( run.Color ).Mul( tint ).ToFloatBitsAbgr();
+                GlyphLayout.GlyphRun run        = layout.Runs[ ii ];
+                List< Glyph >        glyphs     = run.Glyphs;
+                float                colorFloat = _tempColor.Set( run.Color ).Mul( tint ).ToFloatBitsAbgr();
 
                 for ( int iii = 0, nnn = glyphs.Count; iii < nnn; iii++ )
                 {
-                    var glyph  = glyphs[ iii ];
-                    var page   = glyph.Page;
-                    var offset = ( tempGlyphCount[ page ] * 20 ) + 2;
+                    Glyph glyph  = glyphs[ iii ];
+                    int   page   = glyph.Page;
+                    int   offset = ( tempGlyphCount[ page ] * 20 ) + 2;
 
                     tempGlyphCount[ page ]++;
 
@@ -252,7 +254,7 @@ public class BitmapFontCache
     /// </summary>
     public void SetAlphas( float alpha )
     {
-        var    alphaBits = ( int )( 254 * alpha ) << 24;
+        int    alphaBits = ( int )( 254 * alpha ) << 24;
         float? prev      = 0;
         float  newColor  = 0;
 
@@ -260,13 +262,13 @@ public class BitmapFontCache
         {
             for ( int i = 2, n = _idx[ j ]; i < n; i += 5 )
             {
-                var c = _pageVertices[ j ]![ i ];
+                float c = _pageVertices[ j ]![ i ];
 
                 if ( !c.Equals( prev ) || ( ( float )i ).Equals( 2f ) )
                 {
                     prev = c;
 
-                    var rgba = NumberUtils.FloatToIntColor( c );
+                    int rgba = NumberUtils.FloatToIntColor( c );
 
                     rgba     = ( rgba & 0x00FFFFFF ) | alphaBits;
                     newColor = NumberUtils.IntToFloatColor( rgba );
@@ -311,7 +313,7 @@ public class BitmapFontCache
     /// <param name="a"></param>
     public void SetColors( float r, float g, float b, float a )
     {
-        var intBits = ( ( int )( 255 * a ) << 24 )
+        int intBits = ( ( int )( 255 * a ) << 24 )
                     | ( ( int )( 255 * b ) << 16 )
                     | ( ( int )( 255 * g ) << 8 )
                     | ( int )( 255 * r );
@@ -347,16 +349,16 @@ public class BitmapFontCache
             return;
         }
 
-        var pageCount = _pageVertices.Length;
+        int pageCount = _pageVertices.Length;
 
         for ( var i = 0; i < pageCount; i++ )
         {
-            var glyphIndices = _pageGlyphIndices![ i ];
+            List< int > glyphIndices = _pageGlyphIndices![ i ];
 
             // Loop through the indices and determine whether the glyph is inside begin/end.
             for ( int j = 0, n = glyphIndices.Count; j < n; j++ )
             {
-                var glyphIndex = glyphIndices[ j ];
+                int glyphIndex = glyphIndices[ j ];
 
                 // Break early if the glyph is out of bounds.
                 if ( glyphIndex >= end )
@@ -382,13 +384,19 @@ public class BitmapFontCache
     /// affects text subsequently added to the cache, but does not affect existing
     /// text currently in the cache.
     /// </summary>
-    public Color GetColor() => _color;
+    public Color GetColor()
+    {
+        return _color;
+    }
 
     /// <summary>
     /// A convenience method for setting the cache color. The color can also
     /// be set by modifying <see cref="GetColor()"/>.
     /// </summary>
-    public void SetColor( Color col ) => _color.Set( col );
+    public void SetColor( Color col )
+    {
+        _color.Set( col );
+    }
 
     /// <summary>
     /// A convenience method for setting the cache color. The color can
@@ -405,7 +413,7 @@ public class BitmapFontCache
     /// <param name="spriteBatch">The sprite batch used to draw the cached text.</param>
     public virtual void Draw( IBatch spriteBatch )
     {
-        var regions = Font.GetRegions();
+        List< TextureRegion > regions = Font.GetRegions();
 
         for ( int j = 0, n = _pageVertices.Length; j < n; j++ )
         {
@@ -445,18 +453,18 @@ public class BitmapFontCache
 
         // Determine vertex offset and count to render for each page.
         // Some pages might not need to be rendered at all.
-        var regions = Font.GetRegions();
+        List< TextureRegion > regions = Font.GetRegions();
 
         for ( int i = 0, pageCount = _pageVertices.Length; i < pageCount; i++ )
         {
             int offset = -1, count = 0;
 
             // For each set of glyph indices, determine where to begin within the start/end bounds.
-            var glyphIndices = _pageGlyphIndices![ i ];
+            List< int > glyphIndices = _pageGlyphIndices![ i ];
 
             for ( int ii = 0, n = glyphIndices.Count; ii < n; ii++ )
             {
-                var glyphIndex = glyphIndices[ ii ];
+                int glyphIndex = glyphIndices[ ii ];
 
                 // Break early if the glyph is out of bounds.
                 if ( glyphIndex >= end )
@@ -501,8 +509,8 @@ public class BitmapFontCache
             return;
         }
 
-        var color    = GetColor();
-        var oldAlpha = color.A;
+        Color color    = GetColor();
+        float oldAlpha = color.A;
 
         color.A *= alphaModulation;
         SetColors( color );
@@ -550,7 +558,7 @@ public class BitmapFontCache
         }
         else
         {
-            var tempGlyphCount = _tempGlyphCount;
+            int[] tempGlyphCount = _tempGlyphCount;
 
             for ( int i = 0, n = tempGlyphCount.Length; i < n; i++ )
             {
@@ -560,7 +568,7 @@ public class BitmapFontCache
             // Determine # of glyphs in each page.
             for ( int i = 0, n = layout.Runs.Count; i < n; i++ )
             {
-                var glyphs = layout.Runs[ i ].Glyphs;
+                List< Glyph > glyphs = layout.Runs[ i ].Glyphs;
 
                 for ( int ii = 0, nn = glyphs.Count; ii < nn; ii++ )
                 {
@@ -590,7 +598,7 @@ public class BitmapFontCache
             }
         }
 
-        var vertexCount = _idx[ page ] + ( glyphCount * 20 );
+        int vertexCount = _idx[ page ] + ( glyphCount * 20 );
 
         if ( _pageVertices[ page ] == null )
         {
@@ -629,7 +637,7 @@ public class BitmapFontCache
         }
 
         // Initialize only the NEW slots in the array
-        for ( var i = pageGlyphIndicesLength; i < pageCount; i++ )
+        for ( int i = pageGlyphIndicesLength; i < pageCount; i++ )
         {
             newPageGlyphIndices[ i ] = new List< int >();
         }
@@ -648,7 +656,7 @@ public class BitmapFontCache
     /// <param name="y">The y coordinate where the glyphs should be positioned.</param>
     private void AddToCache( GlyphLayout layout, float x, float y )
     {
-        var runCount = layout.Runs.Count;
+        int runCount = layout.Runs.Count;
 
         if ( runCount == 0 )
         {
@@ -664,19 +672,19 @@ public class BitmapFontCache
         Layouts.Add( layout );
         RequireGlyphs( layout );
 
-        var colors              = layout.Colors;
-        var colorsIndex         = 0;
-        var nextColorGlyphIndex = 0;
-        var glyphIndex          = 0;
-        var lastColorFloatBits  = 0f;
+        List< GlyphLayout.GlyphColor > colors              = layout.Colors;
+        var                            colorsIndex         = 0;
+        var                            nextColorGlyphIndex = 0;
+        var                            glyphIndex          = 0;
+        var                            lastColorFloatBits  = 0f;
 
         for ( var i = 0; i < runCount; i++ )
         {
-            var run       = layout.Runs[ i ];
-            var glyphs    = run.Glyphs;
-            var xAdvances = run.XAdvances;
-            var gx        = x + run.X;
-            var gy        = y + run.Y;
+            GlyphLayout.GlyphRun run       = layout.Runs[ i ];
+            List< Glyph >        glyphs    = run.Glyphs;
+            List< float >        xAdvances = run.XAdvances;
+            float                gx        = x + run.X;
+            float                gy        = y + run.Y;
 
             for ( int ii = 0, nn = run.Glyphs.Count; ii < nn; ii++ )
             {
@@ -708,18 +716,18 @@ public class BitmapFontCache
     /// <param name="color"></param>
     private void AddGlyph( Glyph glyph, float x, float y, float color )
     {
-        var scaleX = Font.FontData.ScaleX;
-        var scaleY = Font.FontData.ScaleY;
+        float scaleX = Font.FontData.ScaleX;
+        float scaleY = Font.FontData.ScaleY;
 
         x += glyph.Xoffset * scaleX;
         y += glyph.Yoffset * scaleY;
 
-        var width  = glyph.Width * scaleX;
-        var height = glyph.Height * scaleY;
-        var u      = glyph.U;
-        var u2     = glyph.U2;
-        var v      = glyph.V;
-        var v2     = glyph.V2;
+        float width  = glyph.Width * scaleX;
+        float height = glyph.Height * scaleY;
+        float u      = glyph.U;
+        float u2     = glyph.U2;
+        float v      = glyph.V;
+        float v2     = glyph.V2;
 
         if ( UseIntegerPositions )
         {
@@ -729,9 +737,9 @@ public class BitmapFontCache
             height = ( float )Math.Round( height );
         }
 
-        var x2   = x + width;
-        var y2   = y + height;
-        var page = glyph.Page;
+        float x2   = x + width;
+        float y2   = y + height;
+        int   page = glyph.Page;
 
         _pageGlyphIndices?[ page ].Add( _glyphCount++ );
 
@@ -858,8 +866,8 @@ public class BitmapFontCache
                                 bool wrap,
                                 string? truncate = null )
     {
-        var layout = Pools.Obtain< GlyphLayout >() ?? new GlyphLayout();
-        
+        GlyphLayout layout = Pools.Obtain< GlyphLayout >() ?? new GlyphLayout();
+
         _pooledLayouts.Add( layout );
 
         layout.SetText( Font, str, start, end, _color, targetWidth, halign, wrap, truncate );

@@ -44,9 +44,8 @@ public enum LogicOp
     OrInverted   = IGL.GL_OR_INVERTED,
     OrReversed   = IGL.GL_OR_REVERSE,
     Set          = IGL.GL_SET,
-    Xor          = IGL.GL_XOR,
+    Xor          = IGL.GL_XOR
 }
 
 // ========================================================================
 // ========================================================================
-

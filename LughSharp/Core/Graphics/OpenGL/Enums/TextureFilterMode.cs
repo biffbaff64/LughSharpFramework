@@ -86,5 +86,5 @@ public enum TextureFilterMode
     /// the four nearest texels from each of the two images, combining them to
     /// the final output pixel.
     /// </summary>
-    MipMapLinearLinear = MipMap,
+    MipMapLinearLinear = MipMap
 }

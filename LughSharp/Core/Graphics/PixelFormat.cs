@@ -165,7 +165,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => $"Invalid format: {format}",
+                   var _ => $"Invalid format: {format}"
                };
     }
 
@@ -193,7 +193,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => $"UNKNOWN TARGET: {target}",
+                   var _ => $"UNKNOWN TARGET: {target}"
                };
     }
 
@@ -219,7 +219,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Unknown Format: {format}" ),
+                   var _ => throw new RuntimeException( $"Unknown Format: {format}" )
                };
     }
 
@@ -285,7 +285,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => $"Invalid format: {format}",
+                   var _ => $"Invalid format: {format}"
                };
     }
 
@@ -305,7 +305,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Unknown PNG Color Type: {colorType}" ),
+                   var _ => throw new RuntimeException( $"Unknown PNG Color Type: {colorType}" )
                };
     }
 
@@ -332,7 +332,7 @@ public class PixelFormat
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Invalid format: {format}" ),
+                   var _ => throw new RuntimeException( $"Invalid format: {format}" )
                };
     }
 
@@ -344,7 +344,7 @@ public class PixelFormat
     public static int FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
     {
         // Map PNG color type and bit depth to the format
-        var format = ( colorType, bitDepth ) switch
+        int format = ( colorType, bitDepth ) switch
                      {
                          (6, 8) => LughFormat.RGBA8888,        // Truecolor with alpha, 8 bits
                          (6, 4) => LughFormat.RGBA4444,        // Truecolor with alpha, 4 bits
@@ -356,7 +356,7 @@ public class PixelFormat
 
                          // ----------------------------------
 
-                         var _ => LughFormat.INVALID, // Invalid format, handled by caller
+                         var _ => LughFormat.INVALID // Invalid format, handled by caller
                      };
 
         return format;

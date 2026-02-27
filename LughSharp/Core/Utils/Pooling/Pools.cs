@@ -26,7 +26,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -123,7 +125,7 @@ public static class Pools
     {
         ArgumentNullException.ThrowIfNull( obj );
 
-        if ( !TypePools.TryGetValue( typeof( T ), out var poolObject ) )
+        if ( !TypePools.TryGetValue( typeof( T ), out object? poolObject ) )
         {
             // Ignore freeing an object that was never retained.
             return;
@@ -149,11 +151,11 @@ public static class Pools
 
         Pool< T >? pool = null;
 
-        var enumerable = objects as T?[] ?? objects.ToArray();
-        
+        T?[] enumerable = objects as T?[] ?? objects.ToArray();
+
         for ( int i = 0, n = enumerable.Length; i < n; i++ )
         {
-            var obj = enumerable.ElementAt( i );
+            T? obj = enumerable.ElementAt( i );
 
             if ( obj == null )
             {
@@ -169,7 +171,7 @@ public static class Pools
                     continue;
                 }
             }
-            
+
             pool.Free( obj );
 
             if ( !samePool )
@@ -185,7 +187,7 @@ public static class Pools
     /// <typeparam name="T">The type of objects in the pool to clear.</typeparam>
     public static void Clear< T >() where T : class
     {
-        if ( TypePools.TryGetValue( typeof( T ), out var poolObject ) )
+        if ( TypePools.TryGetValue( typeof( T ), out object? poolObject ) )
         {
             ( ( Pool< T > )poolObject ).Clear();
         }
@@ -196,7 +198,7 @@ public static class Pools
     /// </summary>
     public static void ClearAllPools()
     {
-        foreach ( var entry in TypePools.Values )
+        foreach ( object entry in TypePools.Values )
         {
             if ( entry is IClearablePool clearablePool )
             {

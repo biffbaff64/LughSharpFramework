@@ -26,7 +26,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Collections;
@@ -106,7 +108,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
             throw new ArgumentException( "An element with the same key already exists in the LinkedHashMap." );
         }
 
-        var node = _items.AddLast( key );
+        LinkedListNode< TK > node = _items.AddLast( key );
         _valueByKey.Add( key, new ValueNodePair( value, node ) );
     }
 
@@ -129,12 +131,12 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     {
         Guard.Against.Null( key );
 
-        if ( !_valueByKey.TryGetValue( key, out var tempValue ) )
+        if ( !_valueByKey.TryGetValue( key, out ValueNodePair? tempValue ) )
         {
             return false;
         }
 
-        var node = tempValue.Node;
+        LinkedListNode< TK > node = tempValue.Node;
         _valueByKey.Remove( key );
         _items.Remove( node );
 
@@ -152,7 +154,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// <returns>True if the key is found; otherwise, false.</returns>
     public bool TryGetValue( TK key, out TV value )
     {
-        if ( !_valueByKey.TryGetValue( key, out var tempValue ) )
+        if ( !_valueByKey.TryGetValue( key, out ValueNodePair? tempValue ) )
         {
             value = default!;
 
@@ -171,8 +173,8 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// <returns>True if the key-value pair is found in the collection; otherwise, false.</returns>
     public bool Contains( KeyValuePair< TK, TV > item )
     {
-        return _valueByKey.TryGetValue( item.Key, out var value )
-               && EqualityComparer< TV >.Default.Equals( value.Value, item.Value );
+        return _valueByKey.TryGetValue( item.Key, out ValueNodePair? value )
+            && EqualityComparer< TV >.Default.Equals( value.Value, item.Value );
     }
 
     /// <summary>
@@ -205,7 +207,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
             throw new ArgumentException( "The number of elements is greater than the available space." );
         }
 
-        foreach ( var item in this )
+        foreach ( KeyValuePair< TK, TV > item in this )
         {
             array[ arrayIndex++ ] = item;
         }
@@ -220,7 +222,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
         get => _valueByKey[ key ].Value;
         set
         {
-            if ( !_valueByKey.TryGetValue( key, out var value1 ) )
+            if ( !_valueByKey.TryGetValue( key, out ValueNodePair? value1 ) )
             {
                 Add( key, value );
             }
@@ -238,7 +240,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// <returns>An enumerator that can be used to iterate through the collection.</returns>
     public IEnumerator< KeyValuePair< TK, TV > > GetEnumerator()
     {
-        var node = _items.First;
+        LinkedListNode< TK >? node = _items.First;
 
         while ( node != null )
         {
@@ -267,12 +269,12 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// <param name="key">The key to be updated in the internal order.</param>
     public void UpdateKey( TK key )
     {
-        if ( !_valueByKey.TryGetValue( key, out var value ) )
+        if ( !_valueByKey.TryGetValue( key, out ValueNodePair? value ) )
         {
             return;
         }
 
-        var node = value.Node;
+        LinkedListNode< TK > node = value.Node;
 
         if ( node.Next == null )
         {
@@ -301,7 +303,9 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     {
         get
         {
-            return new List< TV >( this.Select( kvp => kvp.Value ) ); // Creates a list/collection from the ordered enumerator
+            return
+                new List< TV >( this.Select( kvp => kvp
+                                                 .Value ) ); // Creates a list/collection from the ordered enumerator
         }
     }
 

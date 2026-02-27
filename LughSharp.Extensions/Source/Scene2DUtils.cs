@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
@@ -32,6 +33,7 @@ using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source;
@@ -74,8 +76,8 @@ public class Scene2DUtils
     /// <returns> The Image. </returns>
     public Scene2DImage CreateScene2DImage( string imageName, TextureAtlas atlasLoader )
     {
-        var region   = atlasLoader.FindRegion( imageName );
-        var drawable = new TextureRegionDrawable( region );
+        AtlasRegion? region   = atlasLoader.FindRegion( imageName );
+        var          drawable = new TextureRegionDrawable( region );
 
         return new Scene2DImage( drawable );
     }
@@ -88,7 +90,7 @@ public class Scene2DUtils
     /// <returns> The ISceneDrawable. </returns>
     public ISceneDrawable CreateDrawable( string imageName, TextureAtlas atlasLoader )
     {
-        var region = atlasLoader.FindRegion( imageName );
+        AtlasRegion? region = atlasLoader.FindRegion( imageName );
 
         return new TextureRegionDrawable( region );
     }
@@ -129,7 +131,7 @@ public class Scene2DUtils
         var label = new Label( labelText, label1Style )
         {
             LabelAlign = Align.CENTER,
-            Style      = label1Style,
+            Style      = label1Style
         };
         label.SetPosition( pos.X, pos.Y );
 
@@ -207,7 +209,7 @@ public class Scene2DUtils
     /// <returns> The Checkbox. </returns>
     public CheckBox AddCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
     {
-        var checkBox = MakeCheckBox( imageOn, imageOff, x, y, color, skin );
+        CheckBox checkBox = MakeCheckBox( imageOn, imageOff, x, y, color, skin );
 
         Stage.AddActor( checkBox );
 
@@ -225,12 +227,12 @@ public class Scene2DUtils
     /// <returns> The label. </returns>
     public Label MakeLabel( string str, int x, int y, Color color, Skin skin )
     {
-        var label = new Label( str, skin );
-        var style = label.Style;
+        var              label = new Label( str, skin );
+        Label.LabelStyle style = label.Style;
 
         style.FontColor = color;
 
-        label.Style = style ;
+        label.Style = style;
         label.SetAlignment( Align.CENTER );
         label.SetPosition( x, y );
 
@@ -266,8 +268,8 @@ public class Scene2DUtils
     /// <returns> The Checkbox. </returns>
     public CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
     {
-        var checkBox = new CheckBox( "", skin );
-        var style    = checkBox.Style;
+        var                     checkBox = new CheckBox( "", skin );
+        CheckBox.CheckBoxStyle? style    = checkBox.Style;
 
         style?.FontColor   = color;
         style?.CheckboxOn  = new TextureRegionDrawable( imageOn );

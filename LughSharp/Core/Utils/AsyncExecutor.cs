@@ -25,6 +25,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -62,34 +63,37 @@ public class AsyncExecutor : IDisposable
 
         // 1. Wait for a concurrency slot. Use WaitAsync() to avoid blocking the calling thread.
         // We use ConfigureAwait(false) for library code to avoid context switching issues.
-        var submissionTask = _semaphore.WaitAsync().ContinueWith( waitTask =>
-                                       {
-                                           // If the wait was successful, execute the task.
-                                           if ( waitTask.IsCompletedSuccessfully )
-                                           {
-                                               // 2. Task.Run executes the work on the standard .NET ThreadPool.
-                                               return Task.Run( () =>
-                                               {
-                                                   try
-                                                   {
-                                                       task.Call();
-                                                   }
-                                                   catch ( Exception e )
-                                                   {
-                                                       // Wrap and rethrow as RuntimeException if needed, or just let it bubble up
-                                                       throw new RuntimeException( "Asynchronous task failed.", e );
-                                                   }
-                                                   finally
-                                                   {
-                                                       // 3. Release the semaphore slot when the work is finished (SUCCESS or FAILURE)
-                                                       _semaphore.Release();
-                                                   }
-                                               } );
-                                           }
+        Task submissionTask = _semaphore.WaitAsync().ContinueWith( waitTask =>
+                                                                   {
+                                                                       // If the wait was successful, execute the task.
+                                                                       if ( waitTask.IsCompletedSuccessfully )
+                                                                       {
+                                                                           // 2. Task.Run executes the work on the standard .NET ThreadPool.
+                                                                           return Task.Run( () =>
+                                                                           {
+                                                                               try
+                                                                               {
+                                                                                   task.Call();
+                                                                               }
+                                                                               catch ( Exception e )
+                                                                               {
+                                                                                   // Wrap and rethrow as RuntimeException if needed, or just let it bubble up
+                                                                                   throw new
+                                                                                       RuntimeException( "Asynchronous task failed.",
+                                                                                           e );
+                                                                               }
+                                                                               finally
+                                                                               {
+                                                                                   // 3. Release the semaphore slot when the work is finished (SUCCESS or FAILURE)
+                                                                                   _semaphore.Release();
+                                                                               }
+                                                                           } );
+                                                                       }
 
-                                           return Task.CompletedTask;
-                                       }, TaskContinuationOptions.ExecuteSynchronously )
-                                       .Unwrap(); // Unwrap the Task<Task> to return just the inner Task
+                                                                       return Task.CompletedTask;
+                                                                   },
+                                                                   TaskContinuationOptions.ExecuteSynchronously )
+                                        .Unwrap(); // Unwrap the Task<Task> to return just the inner Task
 
         return submissionTask;
     }
@@ -97,7 +101,10 @@ public class AsyncExecutor : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if ( _isDisposed ) return;
+        if ( _isDisposed )
+        {
+            return;
+        }
 
         Dispose( true );
         GC.SuppressFinalize( this );

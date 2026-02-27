@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Utils;
@@ -62,9 +63,9 @@ internal class FitScaling : Scaling
 {
     public override Vector2 Apply( float sourceWidth, float sourceHeight, float targetWidth, float targetHeight )
     {
-        var targetRatio = targetHeight / targetWidth;
-        var sourceRatio = sourceHeight / sourceWidth;
-        var scale       = targetRatio > sourceRatio ? targetWidth / sourceWidth : targetHeight / sourceHeight;
+        float targetRatio = targetHeight / targetWidth;
+        float sourceRatio = sourceHeight / sourceWidth;
+        float scale       = targetRatio > sourceRatio ? targetWidth / sourceWidth : targetHeight / sourceHeight;
 
         Temp.X = sourceWidth * scale;
         Temp.Y = sourceHeight * scale;
@@ -84,9 +85,9 @@ internal class FillScaling : Scaling
 {
     public override Vector2 Apply( float sourceWidth, float sourceHeight, float targetWidth, float targetHeight )
     {
-        var targetRatio = targetHeight / targetWidth;
-        var sourceRatio = sourceHeight / sourceWidth;
-        var scale       = targetRatio < sourceRatio ? targetWidth / sourceWidth : targetHeight / sourceHeight;
+        float targetRatio = targetHeight / targetWidth;
+        float sourceRatio = sourceHeight / sourceWidth;
+        float scale       = targetRatio < sourceRatio ? targetWidth / sourceWidth : targetHeight / sourceHeight;
 
         Temp.X = sourceWidth * scale;
         Temp.Y = sourceHeight * scale;
@@ -106,7 +107,7 @@ internal class FillXScaling : Scaling
 {
     public override Vector2 Apply( float sourceWidth, float sourceHeight, float targetWidth, float targetHeight )
     {
-        var scale = targetWidth / sourceWidth;
+        float scale = targetWidth / sourceWidth;
 
         Temp.X = sourceWidth * scale;
         Temp.Y = sourceHeight * scale;
@@ -127,7 +128,7 @@ internal class FillYScaling : Scaling
 {
     public override Vector2 Apply( float sourceWidth, float sourceHeight, float targetWidth, float targetHeight )
     {
-        var scale = targetHeight / sourceHeight;
+        float scale = targetHeight / sourceHeight;
 
         Temp.X = sourceWidth * scale;
         Temp.Y = sourceHeight * scale;

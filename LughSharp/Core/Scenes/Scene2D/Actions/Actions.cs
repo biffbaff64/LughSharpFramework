@@ -23,9 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Utils;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
@@ -374,7 +376,8 @@ public class Actions
         return action;
     }
 
-    public static SequenceAction Sequence( Action action1, Action action2, Action action3, Action action4, Action action5 )
+    public static SequenceAction Sequence( Action action1, Action action2, Action action3, Action action4,
+                                           Action action5 )
     {
         var action = ( SequenceAction )Action( typeof( SequenceAction ) );
         action.AddAction( action1 );
@@ -441,7 +444,8 @@ public class Actions
         return action;
     }
 
-    public static ParallelAction Parallel( Action action1, Action action2, Action action3, Action action4, Action action5 )
+    public static ParallelAction Parallel( Action action1, Action action2, Action action3, Action action4,
+                                           Action action5 )
     {
         var action = ( ParallelAction )Action( typeof( ParallelAction ) );
         action.AddAction( action1 );

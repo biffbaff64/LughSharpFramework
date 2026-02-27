@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Maths;
 

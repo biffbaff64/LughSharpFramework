@@ -35,7 +35,7 @@ public enum VertexDataType
     VertexArray,
     VertexBufferObject,
     VertexBufferObjectSubData,
-    VertexBufferObjectWithVAO,
+    VertexBufferObjectWithVAO
 }
 
 // ============================================================================

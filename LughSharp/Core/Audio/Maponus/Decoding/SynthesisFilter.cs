@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding;
@@ -39,35 +40,35 @@ public class SynthesisFilter
 
     // Note: These values are not in the same order as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
     private static readonly float _cos164  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 64.0 ) ) );
-    private static readonly float _cos364  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 64.0 ) ) );
-    private static readonly float _cos564  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 64.0 ) ) );
-    private static readonly float _cos764  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 64.0 ) ) );
-    private static readonly float _cos964  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 9.0 ) / 64.0 ) ) );
-    private static readonly float _cos1164 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 11.0 ) / 64.0 ) ) );
-    private static readonly float _cos1364 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 13.0 ) / 64.0 ) ) );
-    private static readonly float _cos1564 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 15.0 ) / 64.0 ) ) );
-    private static readonly float _cos1764 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 17.0 ) / 64.0 ) ) );
-    private static readonly float _cos1964 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 19.0 ) / 64.0 ) ) );
-    private static readonly float _cos2164 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 21.0 ) / 64.0 ) ) );
-    private static readonly float _cos2364 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 23.0 ) / 64.0 ) ) );
-    private static readonly float _cos2564 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 25.0 ) / 64.0 ) ) );
-    private static readonly float _cos2764 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 27.0 ) / 64.0 ) ) );
-    private static readonly float _cos2964 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 29.0 ) / 64.0 ) ) );
-    private static readonly float _cos3164 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 31.0 ) / 64.0 ) ) );
+    private static readonly float _cos364  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 3.0 / 64.0 ) ) );
+    private static readonly float _cos564  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 5.0 / 64.0 ) ) );
+    private static readonly float _cos764  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 7.0 / 64.0 ) ) );
+    private static readonly float _cos964  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 9.0 / 64.0 ) ) );
+    private static readonly float _cos1164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 11.0 / 64.0 ) ) );
+    private static readonly float _cos1364 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 13.0 / 64.0 ) ) );
+    private static readonly float _cos1564 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 15.0 / 64.0 ) ) );
+    private static readonly float _cos1764 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 17.0 / 64.0 ) ) );
+    private static readonly float _cos1964 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 19.0 / 64.0 ) ) );
+    private static readonly float _cos2164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 21.0 / 64.0 ) ) );
+    private static readonly float _cos2364 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 23.0 / 64.0 ) ) );
+    private static readonly float _cos2564 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 25.0 / 64.0 ) ) );
+    private static readonly float _cos2764 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 27.0 / 64.0 ) ) );
+    private static readonly float _cos2964 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 29.0 / 64.0 ) ) );
+    private static readonly float _cos3164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 31.0 / 64.0 ) ) );
     private static readonly float _cos132  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 32.0 ) ) );
-    private static readonly float _cos332  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 32.0 ) ) );
-    private static readonly float _cos532  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 32.0 ) ) );
-    private static readonly float _cos732  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 32.0 ) ) );
-    private static readonly float _cos932  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 9.0 ) / 32.0 ) ) );
-    private static readonly float _cos1132 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 11.0 ) / 32.0 ) ) );
-    private static readonly float _cos1332 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 13.0 ) / 32.0 ) ) );
-    private static readonly float _cos1532 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 15.0 ) / 32.0 ) ) );
+    private static readonly float _cos332  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 3.0 / 32.0 ) ) );
+    private static readonly float _cos532  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 5.0 / 32.0 ) ) );
+    private static readonly float _cos732  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 7.0 / 32.0 ) ) );
+    private static readonly float _cos932  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 9.0 / 32.0 ) ) );
+    private static readonly float _cos1132 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 11.0 / 32.0 ) ) );
+    private static readonly float _cos1332 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 13.0 / 32.0 ) ) );
+    private static readonly float _cos1532 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 15.0 / 32.0 ) ) );
     private static readonly float _cos116  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 16.0 ) ) );
-    private static readonly float _cos316  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 16.0 ) ) );
-    private static readonly float _cos516  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 16.0 ) ) );
-    private static readonly float _cos716  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 16.0 ) ) );
+    private static readonly float _cos316  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 3.0 / 16.0 ) ) );
+    private static readonly float _cos516  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 5.0 / 16.0 ) ) );
+    private static readonly float _cos716  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 7.0 / 16.0 ) ) );
     private static readonly float _cos18   = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 8.0 ) ) );
-    private static readonly float _cos38   = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 8.0 ) ) );
+    private static readonly float _cos38   = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 3.0 / 8.0 ) ) );
     private static readonly float _cos14   = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 4.0 ) ) );
 
     private static float[]? _d;
@@ -169,7 +170,7 @@ public class SynthesisFilter
         0.008865356f, -0.003387451f, 0.000534058f, 0.000015259f, -0.000396729f, -0.003173828f,
         -0.006118774f, -0.031478882f, -0.073059082f, -0.108856201f, -0.543823242f, -1.144287109f,
         0.600219727f, -0.090927124f, 0.084182739f, -0.030517578f, 0.007919312f, -0.003326416f,
-        0.000473022f, 0.000015259f,
+        0.000473022f, 0.000015259f
     ];
 
     private readonly int     _channel;
@@ -306,74 +307,74 @@ public class SynthesisFilter
         float newV1,  newV2,  newV3,  newV4,  newV8,  newV9;
         float newV10, newV11, newV12, newV13, newV14, newV15;
 
-        var s = _samples;
+        float[] s = _samples;
 
-        var s0  = s[ 0 ];
-        var s1  = s[ 1 ];
-        var s2  = s[ 2 ];
-        var s3  = s[ 3 ];
-        var s4  = s[ 4 ];
-        var s5  = s[ 5 ];
-        var s6  = s[ 6 ];
-        var s7  = s[ 7 ];
-        var s8  = s[ 8 ];
-        var s9  = s[ 9 ];
-        var s10 = s[ 10 ];
-        var s11 = s[ 11 ];
-        var s12 = s[ 12 ];
-        var s13 = s[ 13 ];
-        var s14 = s[ 14 ];
-        var s15 = s[ 15 ];
-        var s16 = s[ 16 ];
-        var s17 = s[ 17 ];
-        var s18 = s[ 18 ];
-        var s19 = s[ 19 ];
-        var s20 = s[ 20 ];
-        var s21 = s[ 21 ];
-        var s22 = s[ 22 ];
-        var s23 = s[ 23 ];
-        var s24 = s[ 24 ];
-        var s25 = s[ 25 ];
-        var s26 = s[ 26 ];
-        var s27 = s[ 27 ];
-        var s28 = s[ 28 ];
-        var s29 = s[ 29 ];
-        var s30 = s[ 30 ];
-        var s31 = s[ 31 ];
+        float s0  = s[ 0 ];
+        float s1  = s[ 1 ];
+        float s2  = s[ 2 ];
+        float s3  = s[ 3 ];
+        float s4  = s[ 4 ];
+        float s5  = s[ 5 ];
+        float s6  = s[ 6 ];
+        float s7  = s[ 7 ];
+        float s8  = s[ 8 ];
+        float s9  = s[ 9 ];
+        float s10 = s[ 10 ];
+        float s11 = s[ 11 ];
+        float s12 = s[ 12 ];
+        float s13 = s[ 13 ];
+        float s14 = s[ 14 ];
+        float s15 = s[ 15 ];
+        float s16 = s[ 16 ];
+        float s17 = s[ 17 ];
+        float s18 = s[ 18 ];
+        float s19 = s[ 19 ];
+        float s20 = s[ 20 ];
+        float s21 = s[ 21 ];
+        float s22 = s[ 22 ];
+        float s23 = s[ 23 ];
+        float s24 = s[ 24 ];
+        float s25 = s[ 25 ];
+        float s26 = s[ 26 ];
+        float s27 = s[ 27 ];
+        float s28 = s[ 28 ];
+        float s29 = s[ 29 ];
+        float s30 = s[ 30 ];
+        float s31 = s[ 31 ];
 
-        var p0  = s0 + s31;
-        var p1  = s1 + s30;
-        var p2  = s2 + s29;
-        var p3  = s3 + s28;
-        var p4  = s4 + s27;
-        var p5  = s5 + s26;
-        var p6  = s6 + s25;
-        var p7  = s7 + s24;
-        var p8  = s8 + s23;
-        var p9  = s9 + s22;
-        var p10 = s10 + s21;
-        var p11 = s11 + s20;
-        var p12 = s12 + s19;
-        var p13 = s13 + s18;
-        var p14 = s14 + s17;
-        var p15 = s15 + s16;
+        float p0  = s0 + s31;
+        float p1  = s1 + s30;
+        float p2  = s2 + s29;
+        float p3  = s3 + s28;
+        float p4  = s4 + s27;
+        float p5  = s5 + s26;
+        float p6  = s6 + s25;
+        float p7  = s7 + s24;
+        float p8  = s8 + s23;
+        float p9  = s9 + s22;
+        float p10 = s10 + s21;
+        float p11 = s11 + s20;
+        float p12 = s12 + s19;
+        float p13 = s13 + s18;
+        float p14 = s14 + s17;
+        float p15 = s15 + s16;
 
-        var pp0  = p0 + p15;
-        var pp1  = p1 + p14;
-        var pp2  = p2 + p13;
-        var pp3  = p3 + p12;
-        var pp4  = p4 + p11;
-        var pp5  = p5 + p10;
-        var pp6  = p6 + p9;
-        var pp7  = p7 + p8;
-        var pp8  = ( p0 - p15 ) * _cos132;
-        var pp9  = ( p1 - p14 ) * _cos332;
-        var pp10 = ( p2 - p13 ) * _cos532;
-        var pp11 = ( p3 - p12 ) * _cos732;
-        var pp12 = ( p4 - p11 ) * _cos932;
-        var pp13 = ( p5 - p10 ) * _cos1132;
-        var pp14 = ( p6 - p9 ) * _cos1332;
-        var pp15 = ( p7 - p8 ) * _cos1532;
+        float pp0  = p0 + p15;
+        float pp1  = p1 + p14;
+        float pp2  = p2 + p13;
+        float pp3  = p3 + p12;
+        float pp4  = p4 + p11;
+        float pp5  = p5 + p10;
+        float pp6  = p6 + p9;
+        float pp7  = p7 + p8;
+        float pp8  = ( p0 - p15 ) * _cos132;
+        float pp9  = ( p1 - p14 ) * _cos332;
+        float pp10 = ( p2 - p13 ) * _cos532;
+        float pp11 = ( p3 - p12 ) * _cos732;
+        float pp12 = ( p4 - p11 ) * _cos932;
+        float pp13 = ( p5 - p10 ) * _cos1132;
+        float pp14 = ( p6 - p9 ) * _cos1332;
+        float pp15 = ( p7 - p8 ) * _cos1532;
 
         p0  = pp0 + pp7;
         p1  = pp1 + pp6;
@@ -429,18 +430,18 @@ public class SynthesisFilter
         // this is pretty insane coding
         float tmp1;
 
-        var newV19 = -( newV4 = ( newV12 = p7 ) + p5 ) - p6;
-        var newV27 = -p6 - p7 - p4;
-        var newV6  = ( newV10 = ( newV14 = p15 ) + p11 ) + p13;
-        var newV17 = -( newV2 = p15 + p13 + p9 ) - p14;
-        var newV21 = ( tmp1 = -p14 - p15 - p10 - p11 ) - p13;
-        var newV29 = -p14 - p15 - p12 - p8;
-        var newV25 = tmp1 - p12;
-        var newV31 = -p0;
+        float newV19 = -( newV4 = ( newV12 = p7 ) + p5 ) - p6;
+        float newV27 = -p6 - p7 - p4;
+        float newV6  = ( newV10 = ( newV14 = p15 ) + p11 ) + p13;
+        float newV17 = -( newV2 = p15 + p13 + p9 ) - p14;
+        float newV21 = ( tmp1 = -p14 - p15 - p10 - p11 ) - p13;
+        float newV29 = -p14 - p15 - p12 - p8;
+        float newV25 = tmp1 - p12;
+        float newV31 = -p0;
 
-        var newV0 = p1;
+        float newV0 = p1;
 
-        var newV23 = -( newV8 = p3 ) - p2;
+        float newV23 = -( newV8 = p3 ) - p2;
 
         p0  = ( s0 - s31 ) * _cos164;
         p1  = ( s1 - s30 ) * _cos364;
@@ -530,23 +531,23 @@ public class SynthesisFilter
         // manually doing something that a compiler should handle sucks
         // coding like this is hard to read
         float tmp2;
-        var   newV5  = ( newV11 = ( newV13 = ( newV15 = p15 ) + p7 ) + p11 ) + p5 + p13;
-        var   newV7  = ( newV9 = p15 + p11 + p3 ) + p13;
-        var   newV16 = -( newV1 = ( tmp1 = p13 + p15 + p9 ) + p1 ) - p14;
-        var   newV18 = -( newV3 = tmp1 + p5 + p7 ) - p6 - p14;
+        float newV5  = ( newV11 = ( newV13 = ( newV15 = p15 ) + p7 ) + p11 ) + p5 + p13;
+        float newV7  = ( newV9 = p15 + p11 + p3 ) + p13;
+        float newV16 = -( newV1 = ( tmp1 = p13 + p15 + p9 ) + p1 ) - p14;
+        float newV18 = -( newV3 = tmp1 + p5 + p7 ) - p6 - p14;
 
-        var newV22 = ( tmp1 = -p10 - p11 - p14 - p15 ) - p13 - p2 - p3;
-        var newV20 = tmp1 - p13 - p5 - p6 - p7;
-        var newV24 = tmp1 - p12 - p2 - p3;
-        var newV26 = tmp1 - p12 - ( tmp2 = p4 + p6 + p7 );
-        var newV30 = ( tmp1 = -p8 - p12 - p14 - p15 ) - p0;
-        var newV28 = tmp1 - tmp2;
+        float newV22 = ( tmp1 = -p10 - p11 - p14 - p15 ) - p13 - p2 - p3;
+        float newV20 = tmp1 - p13 - p5 - p6 - p7;
+        float newV24 = tmp1 - p12 - p2 - p3;
+        float newV26 = tmp1 - p12 - ( tmp2 = p4 + p6 + p7 );
+        float newV30 = ( tmp1 = -p8 - p12 - p14 - p15 ) - p0;
+        float newV28 = tmp1 - tmp2;
 
         // insert V[0-15] (== new_v[0-15]) into actual v:
         // float[] x2 = actual_v + actual_write_pos;
-        var dest = _actualV;
+        float[] dest = _actualV;
 
-        var pos = _actualWritePos;
+        int pos = _actualWritePos;
 
         dest[ 0 + pos ]   = newV0;
         dest[ 16 + pos ]  = newV1;
@@ -635,7 +636,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 0 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 0 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 15 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 14 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 13 + dvp ] * _d16[ i ][ 3 ] )
@@ -673,7 +674,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 1 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 1 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 0 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 15 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 14 + dvp ] * _d16[ i ][ 3 ] )
@@ -709,7 +710,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 2 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 2 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 1 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 0 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 15 + dvp ] * _d16[ i ][ 3 ] )
@@ -744,7 +745,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 3 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 3 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 2 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 1 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 0 + dvp ] * _d16[ i ][ 3 ] )
@@ -780,7 +781,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 4 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 4 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 3 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 2 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 1 + dvp ] * _d16[ i ][ 3 ] )
@@ -815,7 +816,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 5 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 5 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 4 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 3 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 2 + dvp ] * _d16[ i ][ 3 ] )
@@ -849,7 +850,7 @@ public class SynthesisFilter
         // fat chance of having this loop unroll
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 6 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 6 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 5 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 4 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 3 + dvp ] * _d16[ i ][ 3 ] )
@@ -882,7 +883,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 7 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 7 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 6 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 5 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 4 + dvp ] * _d16[ i ][ 3 ] )
@@ -915,7 +916,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 8 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 8 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 7 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 6 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 5 + dvp ] * _d16[ i ][ 3 ] )
@@ -949,7 +950,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 9 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 9 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 8 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 7 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 6 + dvp ] * _d16[ i ][ 3 ] )
@@ -984,7 +985,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 10 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 10 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 9 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 8 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 7 + dvp ] * _d16[ i ][ 3 ] )
@@ -1019,7 +1020,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 11 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 11 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 10 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 9 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 8 + dvp ] * _d16[ i ][ 3 ] )
@@ -1052,7 +1053,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 12 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 12 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 11 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 10 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 9 + dvp ] * _d16[ i ][ 3 ] )
@@ -1087,7 +1088,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 13 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 13 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 12 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 11 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 10 + dvp ] * _d16[ i ][ 3 ] )
@@ -1122,7 +1123,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 14 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 14 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 13 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 12 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 11 + dvp ] * _d16[ i ][ 3 ] )
@@ -1156,7 +1157,7 @@ public class SynthesisFilter
 
         for ( var i = 0; i < 32; i++ )
         {
-            var pcSample = ( ( _actualV[ 15 + dvp ] * _d16![ i ][ 0 ] )
+            float pcSample = ( ( _actualV[ 15 + dvp ] * _d16![ i ][ 0 ] )
                              + ( _actualV[ 14 + dvp ] * _d16[ i ][ 1 ] )
                              + ( _actualV[ 13 + dvp ] * _d16[ i ][ 2 ] )
                              + ( _actualV[ 12 + dvp ] * _d16[ i ][ 3 ] )
@@ -1312,7 +1313,7 @@ public class SynthesisFilter
     /// </returns>
     private static float[][] SplitArray( float[] array, int blockSize )
     {
-        var size  = array.Length / blockSize;
+        int size  = array.Length / blockSize;
         var split = new float[ size ][];
 
         for ( var i = 0; i < size; i++ )
@@ -1356,4 +1357,3 @@ public class SynthesisFilter
 
 // ============================================================================
 // ============================================================================
-

@@ -60,7 +60,7 @@ public enum EnableCap
 
     // --------------------------------
     FramebufferSrgb = IGL.GL_FRAMEBUFFER_SRGB,
-    
+
     // --------------------------------
     NormalArray = IGL.GL_NORMAL_ARRAY,
     Normalize   = IGL.GL_NORMALIZE,
@@ -71,5 +71,5 @@ public enum EnableCap
     // --------------------------------
     SampleAlphaToCoverage = IGL.GL_SAMPLE_ALPHA_TO_COVERAGE,
     SampleAlphaToOne      = IGL.GL_SAMPLE_ALPHA_TO_ONE,
-    SampleCoverage        = IGL.GL_SAMPLE_COVERAGE,
+    SampleCoverage        = IGL.GL_SAMPLE_COVERAGE
 }

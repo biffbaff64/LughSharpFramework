@@ -51,7 +51,7 @@ public enum TextureParameter
     TextureInternalFormat = IGL.GL_TEXTURE_INTERNAL_FORMAT,
     TextureRedSize        = IGL.GL_TEXTURE_RED_SIZE,
     TextureGreenSize      = IGL.GL_TEXTURE_GREEN_SIZE,
-    TextureMaxLevel       = IGL.GL_TEXTURE_MAX_LEVEL,
+    TextureMaxLevel       = IGL.GL_TEXTURE_MAX_LEVEL
 }
 
 // ========================================================================

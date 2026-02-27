@@ -34,8 +34,8 @@ public class Quaternion
 {
     // ========================================================================
 
-    private static readonly Quaternion _tmp1 = new(0, 0, 0, 0);
-    private static readonly Quaternion _tmp2 = new(0, 0, 0, 0);
+    private static readonly Quaternion _tmp1 = new( 0, 0, 0, 0 );
+    private static readonly Quaternion _tmp2 = new( 0, 0, 0, 0 );
 
     // ========================================================================
 
@@ -46,9 +46,9 @@ public class Quaternion
     /// <param name="y"> The y-component </param>
     /// <param name="z"> The z-component </param>
     /// <param name="w"> The w-component </param>
-    public Quaternion(float x, float y, float z, float w)
+    public Quaternion( float x, float y, float z, float w )
     {
-        Set(x, y, z, w);
+        Set( x, y, z, w );
     }
 
     public Quaternion()
@@ -60,9 +60,9 @@ public class Quaternion
     /// Constructor, sets the quaternion components from the given quaternion.
     /// </summary>
     /// <param name="quaternion"> The quaternion to copy. </param>
-    public Quaternion(Quaternion quaternion)
+    public Quaternion( Quaternion quaternion )
     {
-        Set(quaternion);
+        Set( quaternion );
     }
 
     /// <summary>
@@ -71,9 +71,9 @@ public class Quaternion
     /// </summary>
     /// <param name="axis"> The axis </param>
     /// <param name="angle"> The angle in degrees. </param>
-    public Quaternion(Vector3 axis, float angle)
+    public Quaternion( Vector3 axis, float angle )
     {
-        SetFromAxis(axis, angle);
+        SetFromAxis( axis, angle );
     }
 
     public float X { get; set; }
@@ -89,7 +89,7 @@ public class Quaternion
     /// <param name="z"> The z-component </param>
     /// <param name="w"> The w-component </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion Set(float x, float y, float z, float w)
+    public Quaternion Set( float x, float y, float z, float w )
     {
         X = x;
         Y = y;
@@ -104,9 +104,9 @@ public class Quaternion
     /// </summary>
     /// <param name="quaternion"> The quaternion. </param>
     /// <returns> This quaternion for chaining. </returns>
-    public Quaternion Set(Quaternion quaternion)
+    public Quaternion Set( Quaternion quaternion )
     {
-        return Set(quaternion.X, quaternion.Y, quaternion.Z, quaternion.W);
+        return Set( quaternion.X, quaternion.Y, quaternion.Z, quaternion.W );
     }
 
     /// <summary>
@@ -115,10 +115,10 @@ public class Quaternion
     /// <param name="axis"> The axis </param>
     /// <param name="angle"> The angle in degrees </param>
     /// <returns> This quaternion for chaining. </returns>
-    [Obsolete("Use SetFromAxis(Vector3, float) instead")]
-    public Quaternion Set(Vector3 axis, float angle)
+    [Obsolete( "Use SetFromAxis(Vector3, float) instead" )]
+    public Quaternion Set( Vector3 axis, float angle )
     {
-        return SetFromAxis(axis.X, axis.Y, axis.Z, angle);
+        return SetFromAxis( axis.X, axis.Y, axis.Z, angle );
     }
 
     /// <summary>
@@ -126,15 +126,15 @@ public class Quaternion
     /// <returns> a copy of this quaternion </returns>
     public Quaternion Cpy()
     {
-        return new Quaternion(this);
+        return new Quaternion( this );
     }
 
     /// <summary>
     /// </summary>
     /// <returns> the euclidean length of the specified quaternion </returns>
-    public static float Len(float x, float y, float z, float w)
+    public static float Len( float x, float y, float z, float w )
     {
-        return (float)Math.Sqrt((x * x) + (y * y) + (z * z) + (w * w));
+        return ( float )Math.Sqrt( ( x * x ) + ( y * y ) + ( z * z ) + ( w * w ) );
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public class Quaternion
     /// <returns> the euclidean length of this quaternion </returns>
     public float Len()
     {
-        return (float)Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W));
+        return ( float )Math.Sqrt( ( X * X ) + ( Y * Y ) + ( Z * Z ) + ( W * W ) );
     }
 
     /// <inheritdoc />
@@ -157,7 +157,7 @@ public class Quaternion
     /// <param name="pitch"> the rotation around the x axis in degrees </param>
     /// <param name="roll"> the rotation around the z axis degrees </param>
     /// <returns> this quaternion </returns>
-    public Quaternion SetEulerAngles(float yaw, float pitch, float roll)
+    public Quaternion SetEulerAngles( float yaw, float pitch, float roll )
     {
         return SetEulerAnglesRad(
                                  yaw * MathUtils.DEGREES_TO_RADIANS,
@@ -173,33 +173,33 @@ public class Quaternion
     /// <param name="pitch"> the rotation around the x axis in radians </param>
     /// <param name="roll"> the rotation around the z axis in radians </param>
     /// <returns> this quaternion </returns>
-    public Quaternion SetEulerAnglesRad(float yaw, float pitch, float roll)
+    public Quaternion SetEulerAnglesRad( float yaw, float pitch, float roll )
     {
-        var hr = roll * 0.5f;
-        var shr = (float)Math.Sin(hr);
-        var chr = (float)Math.Cos(hr);
-        var hp = pitch * 0.5f;
-        var shp = (float)Math.Sin(hp);
-        var chp = (float)Math.Cos(hp);
-        var hy = yaw * 0.5f;
-        var shy = (float)Math.Sin(hy);
-        var chy = (float)Math.Cos(hy);
-        var chyShp = chy * shp;
-        var shyChp = shy * chp;
-        var chyChp = chy * chp;
-        var shyShp = shy * shp;
+        float hr     = roll * 0.5f;
+        var   shr    = ( float )Math.Sin( hr );
+        var   chr    = ( float )Math.Cos( hr );
+        float hp     = pitch * 0.5f;
+        var   shp    = ( float )Math.Sin( hp );
+        var   chp    = ( float )Math.Cos( hp );
+        float hy     = yaw * 0.5f;
+        var   shy    = ( float )Math.Sin( hy );
+        var   chy    = ( float )Math.Cos( hy );
+        float chyShp = chy * shp;
+        float shyChp = shy * chp;
+        float chyChp = chy * chp;
+        float shyShp = shy * shp;
 
         // cos(yaw/2) * Sin(pitch/2) * cos(roll/2) + Sin(yaw/2) * cos(pitch/2) * Sin(roll/2)
-        X = (chyShp * chr) + (shyChp * shr);
+        X = ( chyShp * chr ) + ( shyChp * shr );
 
         // Sin(yaw/2) * cos(pitch/2) * cos(roll/2) - cos(yaw/2) * Sin(pitch/2) * Sin(roll/2)
-        Y = (shyChp * chr) - (chyShp * shr);
+        Y = ( shyChp * chr ) - ( chyShp * shr );
 
         // cos(yaw/2) * cos(pitch/2) * Sin(roll/2) - Sin(yaw/2) * Sin(pitch/2) * cos(roll/2)
-        Z = (chyChp * shr) - (shyShp * chr);
+        Z = ( chyChp * shr ) - ( shyShp * chr );
 
         // cos(yaw/2) * cos(pitch/2) * cos(roll/2) + Sin(yaw/2) * Sin(pitch/2) * Sin(roll/2)
-        W = (chyChp * chr) + (shyShp * shr);
+        W = ( chyChp * chr ) + ( shyShp * shr );
 
         return this;
     }
@@ -212,7 +212,7 @@ public class Quaternion
     /// </returns>
     public int GetGimbalPole()
     {
-        var t = (Y * X) + (Z * W);
+        float t = ( Y * X ) + ( Z * W );
 
         return t > 0.499f ? 1 : t < -0.499f ? -1 : 0;
     }
@@ -226,11 +226,11 @@ public class Quaternion
     /// </returns>
     public float GetRollRad()
     {
-        var pole = GetGimbalPole();
+        int pole = GetGimbalPole();
 
         return pole == 0
-            ? MathUtils.Atan2(2f * ((W * Z) + (Y * X)), 1f - (2f * ((X * X) + (Z * Z))))
-            : pole * 2f * MathUtils.Atan2(Y, W);
+            ? MathUtils.Atan2( 2f * ( ( W * Z ) + ( Y * X ) ), 1f - ( 2f * ( ( X * X ) + ( Z * Z ) ) ) )
+            : pole * 2f * MathUtils.Atan2( Y, W );
     }
 
     /// <summary>
@@ -254,10 +254,10 @@ public class Quaternion
     /// </returns>
     public float GetPitchRad()
     {
-        var pole = GetGimbalPole();
+        int pole = GetGimbalPole();
 
         return pole == 0
-            ? (float)Math.Asin(MathUtils.Clamp(2f * ((W * X) - (Z * Y)), -1f, 1f))
+            ? ( float )Math.Asin( MathUtils.Clamp( 2f * ( ( W * X ) - ( Z * Y ) ), -1f, 1f ) )
             : pole * MathUtils.PI * 0.5f;
     }
 
@@ -281,7 +281,7 @@ public class Quaternion
     public float GetYawRad()
     {
         return GetGimbalPole() == 0
-            ? MathUtils.Atan2(2f * ((Y * W) + (X * Z)), 1f - (2f * ((Y * Y) + (X * X))))
+            ? MathUtils.Atan2( 2f * ( ( Y * W ) + ( X * Z ) ), 1f - ( 2f * ( ( Y * Y ) + ( X * X ) ) ) )
             : 0f;
     }
 
@@ -295,9 +295,9 @@ public class Quaternion
         return GetYawRad() * MathUtils.RADIANS_TO_DEGREES;
     }
 
-    public static float Len2(float x, float y, float z, float w)
+    public static float Len2( float x, float y, float z, float w )
     {
-        return (x * x) + (y * y) + (z * z) + (w * w);
+        return ( x * x ) + ( y * y ) + ( z * z ) + ( w * w );
     }
 
     /// <summary>
@@ -305,7 +305,7 @@ public class Quaternion
     /// </summary>
     public float Len2()
     {
-        return (X * X) + (Y * Y) + (Z * Z) + (W * W);
+        return ( X * X ) + ( Y * Y ) + ( Z * Z ) + ( W * W );
     }
 
     /// <summary>
@@ -314,11 +314,11 @@ public class Quaternion
     /// <returns> the quaternion for chaining </returns>
     public Quaternion Nor()
     {
-        var len = Len2();
+        float len = Len2();
 
-        if ((len != 0.0f) && !MathUtils.IsEqual(len, 1f))
+        if ( ( len != 0.0f ) && !MathUtils.IsEqual( len, 1f ) )
         {
-            len = (float)Math.Sqrt(len);
+            len = ( float )Math.Sqrt( len );
 
             W /= len;
             X /= len;
@@ -346,11 +346,11 @@ public class Quaternion
     /// Transforms the given vector using this quaternion
     /// </summary>
     /// <param name="v"> Vector to transform </param>
-    public Vector3 Transform(Vector3 v)
+    public Vector3 Transform( Vector3 v )
     {
-        _tmp2.Set(this);
+        _tmp2.Set( this );
         _tmp2.Conjugate();
-        _tmp2.MulLeft(_tmp1.Set(v.X, v.Y, v.Z, 0)).MulLeft(this);
+        _tmp2.MulLeft( _tmp1.Set( v.X, v.Y, v.Z, 0 ) ).MulLeft( this );
 
         v.X = _tmp2.X;
         v.Y = _tmp2.Y;
@@ -364,12 +364,12 @@ public class Quaternion
     /// </summary>
     /// <param name="other"> Quaternion to multiply with </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion Mul(Quaternion other)
+    public Quaternion Mul( Quaternion other )
     {
-        var newX = ((W * other.X) + (X * other.W) + (Y * other.Z)) - (Z * other.Y);
-        var newY = ((W * other.Y) + (Y * other.W) + (Z * other.X)) - (X * other.Z);
-        var newZ = ((W * other.Z) + (Z * other.W) + (X * other.Y)) - (Y * other.X);
-        var newW = (W * other.W) - (X * other.X) - (Y * other.Y) - (Z * other.Z);
+        float newX = ( W * other.X ) + ( X * other.W ) + ( Y * other.Z ) - ( Z * other.Y );
+        float newY = ( W * other.Y ) + ( Y * other.W ) + ( Z * other.X ) - ( X * other.Z );
+        float newZ = ( W * other.Z ) + ( Z * other.W ) + ( X * other.Y ) - ( Y * other.X );
+        float newW = ( W * other.W ) - ( X * other.X ) - ( Y * other.Y ) - ( Z * other.Z );
 
         X = newX;
         Y = newY;
@@ -387,12 +387,12 @@ public class Quaternion
     /// <param name="z"> the z component of the other quaternion to multiply with </param>
     /// <param name="w"> the w component of the other quaternion to multiply with </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion Mul(float x, float y, float z, float w)
+    public Quaternion Mul( float x, float y, float z, float w )
     {
-        var newX = ((W * x) + (X * w) + (Y * z)) - (Z * y);
-        var newY = ((W * y) + (Y * w) + (Z * x)) - (X * z);
-        var newZ = ((W * z) + (Z * w) + (X * y)) - (Y * x);
-        var newW = (W * w) - (X * x) - (Y * y) - (Z * z);
+        float newX = ( W * x ) + ( X * w ) + ( Y * z ) - ( Z * y );
+        float newY = ( W * y ) + ( Y * w ) + ( Z * x ) - ( X * z );
+        float newZ = ( W * z ) + ( Z * w ) + ( X * y ) - ( Y * x );
+        float newW = ( W * w ) - ( X * x ) - ( Y * y ) - ( Z * z );
 
         X = newX;
         Y = newY;
@@ -407,12 +407,12 @@ public class Quaternion
     /// </summary>
     /// <param name="other"> Quaternion to multiply with </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion MulLeft(Quaternion other)
+    public Quaternion MulLeft( Quaternion other )
     {
-        var newX = ((other.W * X) + (other.X * W) + (other.Y * Z)) - (other.Z * Y);
-        var newY = ((other.W * Y) + (other.Y * W) + (other.Z * X)) - (other.X * Z);
-        var newZ = ((other.W * Z) + (other.Z * W) + (other.X * Y)) - (other.Y * X);
-        var newW = (other.W * W) - (other.X * X) - (other.Y * Y) - (other.Z * Z);
+        float newX = ( other.W * X ) + ( other.X * W ) + ( other.Y * Z ) - ( other.Z * Y );
+        float newY = ( other.W * Y ) + ( other.Y * W ) + ( other.Z * X ) - ( other.X * Z );
+        float newZ = ( other.W * Z ) + ( other.Z * W ) + ( other.X * Y ) - ( other.Y * X );
+        float newW = ( other.W * W ) - ( other.X * X ) - ( other.Y * Y ) - ( other.Z * Z );
 
         X = newX;
         Y = newY;
@@ -430,12 +430,12 @@ public class Quaternion
     /// <param name="z"> the z component of the other quaternion to multiply with </param>
     /// <param name="w"> the w component of the other quaternion to multiply with </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion MulLeft(float x, float y, float z, float w)
+    public Quaternion MulLeft( float x, float y, float z, float w )
     {
-        var newX = ((w * X) + (x * W) + (y * Z)) - (z * Y);
-        var newY = ((w * Y) + (y * W) + (z * X)) - (x * Z);
-        var newZ = ((w * Z) + (z * W) + (x * Y)) - (y * X);
-        var newW = (w * W) - (x * X) - (y * Y) - (z * Z);
+        float newX = ( w * X ) + ( x * W ) + ( y * Z ) - ( z * Y );
+        float newY = ( w * Y ) + ( y * W ) + ( z * X ) - ( x * Z );
+        float newZ = ( w * Z ) + ( z * W ) + ( x * Y ) - ( y * X );
+        float newW = ( w * W ) - ( x * X ) - ( y * Y ) - ( z * Z );
 
         X = newX;
         Y = newY;
@@ -449,7 +449,7 @@ public class Quaternion
     /// Add the x,y,z,w components of the passed in quaternion to the
     /// ones of this quaternion
     /// </summary>
-    public Quaternion Add(Quaternion quaternion)
+    public Quaternion Add( Quaternion quaternion )
     {
         X += quaternion.X;
         Y += quaternion.Y;
@@ -463,7 +463,7 @@ public class Quaternion
     /// Add the x,y,z,w components of the passed in quaternion to the
     /// ones of this quaternion
     /// </summary>
-    public Quaternion Add(float qx, float qy, float qz, float qw)
+    public Quaternion Add( float qx, float qy, float qz, float qw )
     {
         X += qx;
         Y += qy;
@@ -479,35 +479,35 @@ public class Quaternion
     /// Fills a 4x4 matrix with the rotation matrix represented by this quaternion.
     /// </summary>
     /// <param name="matrix"> Matrix to fill </param>
-    public void ToMatrix(float[] matrix)
+    public void ToMatrix( float[] matrix )
     {
-        var xx = X * X;
-        var xy = X * Y;
-        var xz = X * Z;
-        var xw = X * W;
-        var yy = Y * Y;
-        var yz = Y * Z;
-        var yw = Y * W;
-        var zz = Z * Z;
-        var zw = Z * W;
+        float xx = X * X;
+        float xy = X * Y;
+        float xz = X * Z;
+        float xw = X * W;
+        float yy = Y * Y;
+        float yz = Y * Z;
+        float yw = Y * W;
+        float zz = Z * Z;
+        float zw = Z * W;
 
         // Set matrix from quaternion
-        matrix[Matrix4.M00_0] = 1 - (2 * (yy + zz));
-        matrix[Matrix4.M01_4] = 2 * (xy - zw);
-        matrix[Matrix4.M02_8] = 2 * (xz + yw);
-        matrix[Matrix4.M03_12] = 0;
-        matrix[Matrix4.M10_1] = 2 * (xy + zw);
-        matrix[Matrix4.M11_5] = 1 - (2 * (xx + zz));
-        matrix[Matrix4.M12_9] = 2 * (yz - xw);
-        matrix[Matrix4.M13_13] = 0;
-        matrix[Matrix4.M20_2] = 2 * (xz - yw);
-        matrix[Matrix4.M21_6] = 2 * (yz + xw);
-        matrix[Matrix4.M22_10] = 1 - (2 * (xx + yy));
-        matrix[Matrix4.M23_14] = 0;
-        matrix[Matrix4.M30_3] = 0;
-        matrix[Matrix4.M31_7] = 0;
-        matrix[Matrix4.M32_11] = 0;
-        matrix[Matrix4.M33_15] = 1;
+        matrix[ Matrix4.M00_0 ]  = 1 - ( 2 * ( yy + zz ) );
+        matrix[ Matrix4.M01_4 ]  = 2 * ( xy - zw );
+        matrix[ Matrix4.M02_8 ]  = 2 * ( xz + yw );
+        matrix[ Matrix4.M03_12 ] = 0;
+        matrix[ Matrix4.M10_1 ]  = 2 * ( xy + zw );
+        matrix[ Matrix4.M11_5 ]  = 1 - ( 2 * ( xx + zz ) );
+        matrix[ Matrix4.M12_9 ]  = 2 * ( yz - xw );
+        matrix[ Matrix4.M13_13 ] = 0;
+        matrix[ Matrix4.M20_2 ]  = 2 * ( xz - yw );
+        matrix[ Matrix4.M21_6 ]  = 2 * ( yz + xw );
+        matrix[ Matrix4.M22_10 ] = 1 - ( 2 * ( xx + yy ) );
+        matrix[ Matrix4.M23_14 ] = 0;
+        matrix[ Matrix4.M30_3 ]  = 0;
+        matrix[ Matrix4.M31_7 ]  = 0;
+        matrix[ Matrix4.M32_11 ] = 0;
+        matrix[ Matrix4.M33_15 ] = 1;
     }
 
     /// <summary>
@@ -516,7 +516,7 @@ public class Quaternion
     /// <returns> this quaternion for chaining </returns>
     public Quaternion Idt()
     {
-        return Set(0, 0, 0, 1);
+        return Set( 0, 0, 0, 1 );
     }
 
     /// <summary>
@@ -524,21 +524,21 @@ public class Quaternion
     /// <returns> If this quaternion is an identity Quaternion </returns>
     public bool IsIdentity()
     {
-        return MathUtils.IsZero(X)
-               && MathUtils.IsZero(Y)
-               && MathUtils.IsZero(Z)
-               && MathUtils.IsEqual(W, 1f);
+        return MathUtils.IsZero( X )
+            && MathUtils.IsZero( Y )
+            && MathUtils.IsZero( Z )
+            && MathUtils.IsEqual( W, 1f );
     }
 
     /// <summary>
     /// </summary>
     /// <returns> If this quaternion is an identity Quaternion </returns>
-    public bool IsIdentity(float tolerance)
+    public bool IsIdentity( float tolerance )
     {
-        return MathUtils.IsZero(X, tolerance)
-               && MathUtils.IsZero(Y, tolerance)
-               && MathUtils.IsZero(Z, tolerance)
-               && MathUtils.IsEqual(W, 1f, tolerance);
+        return MathUtils.IsZero( X, tolerance )
+            && MathUtils.IsZero( Y, tolerance )
+            && MathUtils.IsZero( Z, tolerance )
+            && MathUtils.IsEqual( W, 1f, tolerance );
     }
 
     // todo : the setFromAxis(v3,float) method should replace the set(v3,float) method
@@ -548,9 +548,9 @@ public class Quaternion
     /// <param name="axis"> The axis </param>
     /// <param name="degrees"> The angle in degrees </param>
     /// <returns> This quaternion for chaining. </returns>
-    public Quaternion SetFromAxis(Vector3 axis, float degrees)
+    public Quaternion SetFromAxis( Vector3 axis, float degrees )
     {
-        return SetFromAxis(axis.X, axis.Y, axis.Z, degrees);
+        return SetFromAxis( axis.X, axis.Y, axis.Z, degrees );
     }
 
     /// <summary>
@@ -559,9 +559,9 @@ public class Quaternion
     /// <param name="axis"> The axis </param>
     /// <param name="radians"> The angle in radians </param>
     /// <returns> This quaternion for chaining. </returns>
-    public Quaternion SetFromAxisRad(Vector3 axis, float radians)
+    public Quaternion SetFromAxisRad( Vector3 axis, float radians )
     {
-        return SetFromAxisRad(axis.X, axis.Y, axis.Z, radians);
+        return SetFromAxisRad( axis.X, axis.Y, axis.Z, radians );
     }
 
     /// <summary>
@@ -572,9 +572,9 @@ public class Quaternion
     /// <param name="z"> Z direction of the axis </param>
     /// <param name="degrees"> The angle in degrees </param>
     /// <returns> This quaternion for chaining. </returns>
-    public Quaternion SetFromAxis(float x, float y, float z, float degrees)
+    public Quaternion SetFromAxis( float x, float y, float z, float degrees )
     {
-        return SetFromAxisRad(x, y, z, degrees * MathUtils.DEGREES_TO_RADIANS);
+        return SetFromAxisRad( x, y, z, degrees * MathUtils.DEGREES_TO_RADIANS );
     }
 
     /// <summary>
@@ -585,74 +585,74 @@ public class Quaternion
     /// <param name="z"> Z direction of the axis </param>
     /// <param name="radians"> The angle in radians </param>
     /// <returns> This quaternion for chaining. </returns>
-    public Quaternion SetFromAxisRad(float x, float y, float z, float radians)
+    public Quaternion SetFromAxisRad( float x, float y, float z, float radians )
     {
-        var d = Vector3.Len(x, y, z);
+        float d = Vector3.Len( x, y, z );
 
-        if (d == 0f)
+        if ( d == 0f )
         {
             return Idt();
         }
 
         d = 1f / d;
 
-        var lAng = radians < 0 ? MathUtils.PI2 - (-radians % MathUtils.PI2) : radians % MathUtils.PI2;
-        var lSin = (float)Math.Sin(lAng / 2);
-        var lCos = (float)Math.Cos(lAng / 2);
+        float lAng = radians < 0 ? MathUtils.PI2 - ( -radians % MathUtils.PI2 ) : radians % MathUtils.PI2;
+        var   lSin = ( float )Math.Sin( lAng / 2 );
+        var   lCos = ( float )Math.Cos( lAng / 2 );
 
-        return Set(d * x * lSin, d * y * lSin, d * z * lSin, lCos).Nor();
+        return Set( d * x * lSin, d * y * lSin, d * z * lSin, lCos ).Nor();
     }
 
     /// <summary>
     /// Sets the Quaternion from the given matrix, optionally removing any scaling.
     /// </summary>
-    public Quaternion SetFromMatrix(bool normalizeAxes, Matrix4 matrix)
+    public Quaternion SetFromMatrix( bool normalizeAxes, Matrix4 matrix )
     {
         return SetFromAxes(
                            normalizeAxes,
-                           matrix.Val[Matrix4.M00_0],
-                           matrix.Val[Matrix4.M01_4],
-                           matrix.Val[Matrix4.M02_8],
-                           matrix.Val[Matrix4.M10_1],
-                           matrix.Val[Matrix4.M11_5],
-                           matrix.Val[Matrix4.M12_9],
-                           matrix.Val[Matrix4.M20_2],
-                           matrix.Val[Matrix4.M21_6],
-                           matrix.Val[Matrix4.M22_10]
+                           matrix.Val[ Matrix4.M00_0 ],
+                           matrix.Val[ Matrix4.M01_4 ],
+                           matrix.Val[ Matrix4.M02_8 ],
+                           matrix.Val[ Matrix4.M10_1 ],
+                           matrix.Val[ Matrix4.M11_5 ],
+                           matrix.Val[ Matrix4.M12_9 ],
+                           matrix.Val[ Matrix4.M20_2 ],
+                           matrix.Val[ Matrix4.M21_6 ],
+                           matrix.Val[ Matrix4.M22_10 ]
                           );
     }
 
     /// <summary>
     /// Sets the Quaternion from the given rotation matrix, which must not contain scaling.
     /// </summary>
-    public Quaternion SetFromMatrix(Matrix4 matrix)
+    public Quaternion SetFromMatrix( Matrix4 matrix )
     {
-        return SetFromMatrix(false, matrix);
+        return SetFromMatrix( false, matrix );
     }
 
     /// <summary>
     /// Sets the Quaternion from the given matrix, optionally removing any scaling.
     /// </summary>
-    public Quaternion SetFromMatrix(bool normalizeAxes, Matrix3 matrix)
+    public Quaternion SetFromMatrix( bool normalizeAxes, Matrix3 matrix )
     {
-        return SetFromAxes(normalizeAxes,
-                            matrix.Val[Matrix3.M00],
-                            matrix.Val[Matrix3.M01],
-                            matrix.Val[Matrix3.M02],
-                            matrix.Val[Matrix3.M10],
-                            matrix.Val[Matrix3.M11],
-                            matrix.Val[Matrix3.M12],
-                            matrix.Val[Matrix3.M20],
-                            matrix.Val[Matrix3.M21],
-                            matrix.Val[Matrix3.M22]);
+        return SetFromAxes( normalizeAxes,
+                            matrix.Val[ Matrix3.M00 ],
+                            matrix.Val[ Matrix3.M01 ],
+                            matrix.Val[ Matrix3.M02 ],
+                            matrix.Val[ Matrix3.M10 ],
+                            matrix.Val[ Matrix3.M11 ],
+                            matrix.Val[ Matrix3.M12 ],
+                            matrix.Val[ Matrix3.M20 ],
+                            matrix.Val[ Matrix3.M21 ],
+                            matrix.Val[ Matrix3.M22 ] );
     }
 
     /// <summary>
     /// Sets the Quaternion from the given rotation matrix, which must not contain scaling.
     /// </summary>
-    public Quaternion SetFromMatrix(Matrix3 matrix)
+    public Quaternion SetFromMatrix( Matrix3 matrix )
     {
-        return SetFromMatrix(false, matrix);
+        return SetFromMatrix( false, matrix );
     }
 
     /// <summary>
@@ -672,7 +672,7 @@ public class Quaternion
     /// <param name="zx"> z-axis x-coordinate </param>
     /// <param name="zy"> z-axis y-coordinate </param>
     /// <param name="zz"> z-axis z-coordinate </param>
-    public Quaternion SetFromAxes(float xx,
+    public Quaternion SetFromAxes( float xx,
                                    float xy,
                                    float xz,
                                    float yx,
@@ -680,9 +680,9 @@ public class Quaternion
                                    float yz,
                                    float zx,
                                    float zy,
-                                   float zz)
+                                   float zz )
     {
-        return SetFromAxes(false, xx, xy, xz, yx, yy, yz, zx, zy, zz);
+        return SetFromAxes( false, xx, xy, xz, yx, yy, yz, zx, zy, zz );
     }
 
     /// <summary>
@@ -705,7 +705,7 @@ public class Quaternion
     /// <param name="zx"> z-axis x-coordinate </param>
     /// <param name="zy"> z-axis y-coordinate </param>
     /// <param name="zz"> z-axis z-coordinate </param>
-    public Quaternion SetFromAxes(bool normalizeAxes,
+    public Quaternion SetFromAxes( bool normalizeAxes,
                                    float xx,
                                    float xy,
                                    float xz,
@@ -714,13 +714,13 @@ public class Quaternion
                                    float yz,
                                    float zx,
                                    float zy,
-                                   float zz)
+                                   float zz )
     {
-        if (normalizeAxes)
+        if ( normalizeAxes )
         {
-            var lx = 1f / Vector3.Len(xx, xy, xz);
-            var ly = 1f / Vector3.Len(yx, yy, yz);
-            var lz = 1f / Vector3.Len(zx, zy, zz);
+            float lx = 1f / Vector3.Len( xx, xy, xz );
+            float ly = 1f / Vector3.Len( yx, yy, yz );
+            float lz = 1f / Vector3.Len( zx, zy, zz );
 
             xx *= lx;
             xy *= lx;
@@ -735,49 +735,49 @@ public class Quaternion
 
         // the trace is the sum of the diagonal elements; see
         // http://mathworld.wolfram.com/MatrixTrace.html
-        var t = xx + yy + zz;
+        float t = xx + yy + zz;
 
         // we protect the division by s by ensuring that s>=1
-        if (t >= 0)
+        if ( t >= 0 )
         {
             // |w| >= .5
-            var s = (float)Math.Sqrt(t + 1); // |s|>=1 ...
+            var s = ( float )Math.Sqrt( t + 1 ); // |s|>=1 ...
 
             W = 0.5f * s;
             s = 0.5f / s; // so this division isn't bad
-            X = (zy - yz) * s;
-            Y = (xz - zx) * s;
-            Z = (yx - xy) * s;
+            X = ( zy - yz ) * s;
+            Y = ( xz - zx ) * s;
+            Z = ( yx - xy ) * s;
         }
-        else if ((xx > yy) && (xx > zz))
+        else if ( ( xx > yy ) && ( xx > zz ) )
         {
-            var s = (float)Math.Sqrt((1.0f + xx) - yy - zz); // |s|>=1
+            var s = ( float )Math.Sqrt( 1.0f + xx - yy - zz ); // |s|>=1
 
             X = s * 0.5f; // |x| >= .5
             s = 0.5f / s;
-            Y = (yx + xy) * s;
-            Z = (xz + zx) * s;
-            W = (zy - yz) * s;
+            Y = ( yx + xy ) * s;
+            Z = ( xz + zx ) * s;
+            W = ( zy - yz ) * s;
         }
-        else if (yy > zz)
+        else if ( yy > zz )
         {
-            var s = (float)Math.Sqrt((1.0f + yy) - xx - zz); // |s|>=1
+            var s = ( float )Math.Sqrt( 1.0f + yy - xx - zz ); // |s|>=1
 
             Y = s * 0.5f; // |y| >= .5
             s = 0.5f / s;
-            X = (yx + xy) * s;
-            Z = (zy + yz) * s;
-            W = (xz - zx) * s;
+            X = ( yx + xy ) * s;
+            Z = ( zy + yz ) * s;
+            W = ( xz - zx ) * s;
         }
         else
         {
-            var s = (float)Math.Sqrt((1.0 + zz) - xx - yy); // |s|>=1
+            var s = ( float )Math.Sqrt( 1.0 + zz - xx - yy ); // |s|>=1
 
             Z = s * 0.5f; // |z| >= .5
             s = 0.5f / s;
-            X = (xz + zx) * s;
-            Y = (zy + yz) * s;
-            W = (yx - xy) * s;
+            X = ( xz + zx ) * s;
+            Y = ( zy + yz ) * s;
+            W = ( yx - xy ) * s;
         }
 
         return this;
@@ -789,15 +789,15 @@ public class Quaternion
     /// <param name="v1"> The base vector, which should be normalized. </param>
     /// <param name="v2"> The target vector, which should be normalized. </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion SetFromCross(Vector3 v1, Vector3 v2)
+    public Quaternion SetFromCross( Vector3 v1, Vector3 v2 )
     {
-        var dot = MathUtils.Clamp(v1.Dot(v2), -1f, 1f);
-        var angle = (float)Math.Acos(dot);
+        float dot   = MathUtils.Clamp( v1.Dot( v2 ), -1f, 1f );
+        var   angle = ( float )Math.Acos( dot );
 
         return SetFromAxisRad(
-                              (v1.Y * v2.Z) - (v1.Z * v2.Y),
-                              (v1.Z * v2.X) - (v1.X * v2.Z),
-                              (v1.X * v2.Y) - (v1.Y * v2.X),
+                              ( v1.Y * v2.Z ) - ( v1.Z * v2.Y ),
+                              ( v1.Z * v2.X ) - ( v1.X * v2.Z ),
+                              ( v1.X * v2.Y ) - ( v1.Y * v2.X ),
                               angle
                              );
     }
@@ -812,12 +812,12 @@ public class Quaternion
     /// <param name="y2"> The target vector y value, which should be normalized. </param>
     /// <param name="z2"> The target vector z value, which should be normalized. </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion SetFromCross(float x1, float y1, float z1, float x2, float y2, float z2)
+    public Quaternion SetFromCross( float x1, float y1, float z1, float x2, float y2, float z2 )
     {
-        var dot = MathUtils.Clamp(Vector3.Dot(x1, y1, z1, x2, y2, z2), -1f, 1f);
-        var angle = (float)Math.Acos(dot);
+        float dot   = MathUtils.Clamp( Vector3.Dot( x1, y1, z1, x2, y2, z2 ), -1f, 1f );
+        var   angle = ( float )Math.Acos( dot );
 
-        return SetFromAxisRad((y1 * z2) - (z1 * y2), (z1 * x2) - (x1 * z2), (x1 * y2) - (y1 * x2), angle);
+        return SetFromAxisRad( ( y1 * z2 ) - ( z1 * y2 ), ( z1 * x2 ) - ( x1 * z2 ), ( x1 * y2 ) - ( y1 * x2 ), angle );
     }
 
     /// <summary>
@@ -830,41 +830,41 @@ public class Quaternion
     /// <param name="end"> the end quaternion </param>
     /// <param name="alpha"> alpha in the range [0,1] </param>
     /// <returns> this quaternion for chaining </returns>
-    public Quaternion Slerp(Quaternion end, float alpha)
+    public Quaternion Slerp( Quaternion end, float alpha )
     {
-        var d = (X * end.X) + (Y * end.Y) + (Z * end.Z) + (W * end.W);
-        var absDot = d < 0.0f ? -d : d;
+        float d      = ( X * end.X ) + ( Y * end.Y ) + ( Z * end.Z ) + ( W * end.W );
+        float absDot = d < 0.0f ? -d : d;
 
         // Set the first and second scale for the interpolation
-        var scale0 = 1f - alpha;
-        var scale1 = alpha;
+        float scale0 = 1f - alpha;
+        float scale1 = alpha;
 
         // Check if the angle between the 2 quaternions was big enough to
         // warrant such calculations
-        if ((1 - absDot) > 0.1)
+        if ( ( 1 - absDot ) > 0.1 )
         {
             // Get the angle between the 2 quaternions,
             // and then store the Sin() of that angle
-            var angle = (float)Math.Acos(absDot);
-            var invSinTheta = 1f / (float)Math.Sin(angle);
+            var   angle       = ( float )Math.Acos( absDot );
+            float invSinTheta = 1f / ( float )Math.Sin( angle );
 
             // Calculate the scale for q1 and q2, according to the angle and
             // it's sine value
-            scale0 = (float)Math.Sin((1f - alpha) * angle) * invSinTheta;
-            scale1 = (float)Math.Sin(alpha * angle) * invSinTheta;
+            scale0 = ( float )Math.Sin( ( 1f - alpha ) * angle ) * invSinTheta;
+            scale1 = ( float )Math.Sin( alpha * angle ) * invSinTheta;
         }
 
-        if (d < 0.0f)
+        if ( d < 0.0f )
         {
             scale1 = -scale1;
         }
 
         // Calculate the x, y, z and w values for the quaternion by using a
         // special form of linear interpolation for quaternions.
-        X = (scale0 * X) + (scale1 * end.X);
-        Y = (scale0 * Y) + (scale1 * end.Y);
-        Z = (scale0 * Z) + (scale1 * end.Z);
-        W = (scale0 * W) + (scale1 * end.W);
+        X = ( scale0 * X ) + ( scale1 * end.X );
+        Y = ( scale0 * Y ) + ( scale1 * end.Y );
+        Z = ( scale0 * Z ) + ( scale1 * end.Z );
+        W = ( scale0 * W ) + ( scale1 * end.W );
 
         // Return the interpolated quaternion
         return this;
@@ -880,16 +880,16 @@ public class Quaternion
     /// </summary>
     /// <param name="q"> List of quaternions </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion Slerp(Quaternion[] q)
+    public Quaternion Slerp( Quaternion[] q )
     {
         // Calculate exponents and multiply everything from left to right
-        var w = 1.0f / q.Length;
+        float w = 1.0f / q.Length;
 
-        Set(q[0]).Exp(w);
+        Set( q[ 0 ] ).Exp( w );
 
-        for (var i = 1; i < q.Length; i++)
+        for ( var i = 1; i < q.Length; i++ )
         {
-            Mul(_tmp1.Set(q[i]).Exp(w));
+            Mul( _tmp1.Set( q[ i ] ).Exp( w ) );
         }
 
         Nor();
@@ -909,14 +909,14 @@ public class Quaternion
     /// <param name="q"> List of quaternions </param>
     /// <param name="w"> List of weights </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion Slerp(Quaternion[] q, float[] w)
+    public Quaternion Slerp( Quaternion[] q, float[] w )
     {
         // Calculate exponents and multiply everything from left to right
-        Set(q[0]).Exp(w[0]);
+        Set( q[ 0 ] ).Exp( w[ 0 ] );
 
-        for (var i = 1; i < q.Length; i++)
+        for ( var i = 1; i < q.Length; i++ )
         {
-            Mul(_tmp1.Set(q[i]).Exp(w[i]));
+            Mul( _tmp1.Set( q[ i ] ).Exp( w[ i ] ) );
         }
 
         Nor();
@@ -933,30 +933,30 @@ public class Quaternion
     /// </summary>
     /// <param name="alpha"> Exponent </param>
     /// <returns> This quaternion for chaining </returns>
-    public Quaternion Exp(float alpha)
+    public Quaternion Exp( float alpha )
     {
         // Calculate |q|^alpha
-        var norm = Len();
-        var normExp = (float)Math.Pow(norm, alpha);
+        float norm    = Len();
+        var   normExp = ( float )Math.Pow( norm, alpha );
 
         // Calculate theta
-        var theta = (float)Math.Acos(W / norm);
+        var theta = ( float )Math.Acos( W / norm );
 
         // Calculate coefficient of basis elements
         float coeff;
 
         // If theta is small enough, use the limit of Sin(alpha*theta) / Sin(theta) instead of actual value
-        if (Math.Abs(theta) < 0.001)
+        if ( Math.Abs( theta ) < 0.001 )
         {
-            coeff = (normExp * alpha) / norm;
+            coeff = normExp * alpha / norm;
         }
         else
         {
-            coeff = (float)((normExp * Math.Sin(alpha * theta)) / (norm * Math.Sin(theta)));
+            coeff = ( float )( normExp * Math.Sin( alpha * theta ) / ( norm * Math.Sin( theta ) ) );
         }
 
         // Write results
-        W = (float)(normExp * Math.Cos(alpha * theta));
+        W =  ( float )( normExp * Math.Cos( alpha * theta ) );
         X *= coeff;
         Y *= coeff;
         Z *= coeff;
@@ -979,16 +979,16 @@ public class Quaternion
     /// <param name="z2"> the z component of the second quaternion </param>
     /// <param name="w2"> the w component of the second quaternion </param>
     /// <returns> the dot product between the first and second quaternion. </returns>
-    public static float Dot(float x1,
+    public static float Dot( float x1,
                              float y1,
                              float z1,
                              float w1,
                              float x2,
                              float y2,
                              float z2,
-                             float w2)
+                             float w2 )
     {
-        return (x1 * x2) + (y1 * y2) + (z1 * z2) + (w1 * w2);
+        return ( x1 * x2 ) + ( y1 * y2 ) + ( z1 * z2 ) + ( w1 * w2 );
     }
 
     /// <summary>
@@ -996,9 +996,9 @@ public class Quaternion
     /// </summary>
     /// <param name="other"> the other quaternion. </param>
     /// <returns> the dot product of this and the other quaternion. </returns>
-    public float Dot(Quaternion other)
+    public float Dot( Quaternion other )
     {
-        return (X * other.X) + (Y * other.Y) + (Z * other.Z) + (W * other.W);
+        return ( X * other.X ) + ( Y * other.Y ) + ( Z * other.Z ) + ( W * other.W );
     }
 
     /// <summary>
@@ -1009,9 +1009,9 @@ public class Quaternion
     /// <param name="z"> the z component of the other quaternion </param>
     /// <param name="w"> the w component of the other quaternion </param>
     /// <returns> the dot product of this and the other quaternion. </returns>
-    public float Dot(float x, float y, float z, float w)
+    public float Dot( float x, float y, float z, float w )
     {
-        return (X * x) + (Y * y) + (Z * z) + (W * w);
+        return ( X * x ) + ( Y * y ) + ( Z * z ) + ( W * w );
     }
 
     /// <summary>
@@ -1019,7 +1019,7 @@ public class Quaternion
     /// </summary>
     /// <param name="scalar"> the scalar. </param>
     /// <returns> this quaternion for chaining. </returns>
-    public Quaternion Mul(float scalar)
+    public Quaternion Mul( float scalar )
     {
         X *= scalar;
         Y *= scalar;
@@ -1042,9 +1042,9 @@ public class Quaternion
     /// </summary>
     /// <param name="axis"> vector which will receive the axis </param>
     /// <returns> the angle in degrees </returns>
-    public float GetAxisAngle(Vector3 axis)
+    public float GetAxisAngle( Vector3 axis )
     {
-        return GetAxisAngleRad(axis) * MathUtils.RADIANS_TO_DEGREES;
+        return GetAxisAngleRad( axis ) * MathUtils.RADIANS_TO_DEGREES;
     }
 
     /// <summary>
@@ -1060,20 +1060,20 @@ public class Quaternion
     /// </summary>
     /// <param name="axis"> vector which will receive the axis </param>
     /// <returns> the angle in radians </returns>
-    public float GetAxisAngleRad(Vector3 axis)
+    public float GetAxisAngleRad( Vector3 axis )
     {
         // if w>1 Acos and Sqrt will produce errors, this cant happen if quaternion is normalised
-        if (W > 1)
+        if ( W > 1 )
         {
             Nor();
         }
 
-        var angle = (float)(2.0 * Math.Acos(W));
+        var angle = ( float )( 2.0 * Math.Acos( W ) );
 
         // assuming quaternion normalised then w is less than 1, so term always positive.
-        var s = Math.Sqrt(1 - (W * W));
+        double s = Math.Sqrt( 1 - ( W * W ) );
 
-        if (s < NumberUtils.FLOAT_TOLERANCE)
+        if ( s < NumberUtils.FLOAT_TOLERANCE )
         {
             // test to avoid divide by zero, s is always positive due to Sqrt
             // if s close to zero then direction of axis not important
@@ -1084,9 +1084,9 @@ public class Quaternion
         }
         else
         {
-            axis.X = (float)(X / s); // normalise axis
-            axis.Y = (float)(Y / s);
-            axis.Z = (float)(Z / s);
+            axis.X = ( float )( X / s ); // normalise axis
+            axis.Y = ( float )( Y / s );
+            axis.Z = ( float )( Z / s );
         }
 
         return angle;
@@ -1107,7 +1107,7 @@ public class Quaternion
     /// <returns> the angle in radians of the rotation </returns>
     public float GetAngleRad()
     {
-        return (float)(2.0 * Math.Acos(W > 1 ? W / Len() : W));
+        return ( float )( 2.0 * Math.Acos( W > 1 ? W / Len() : W ) );
     }
 
     /// <summary>
@@ -1150,18 +1150,18 @@ public class Quaternion
     /// <param name="twist">
     /// will receive the twist rotation: the rotation around the specified axis
     /// </param>
-    public void GetSwingTwist(float axisX, float axisY, float axisZ, Quaternion swing, Quaternion twist)
+    public void GetSwingTwist( float axisX, float axisY, float axisZ, Quaternion swing, Quaternion twist )
     {
-        var d = Vector3.Dot(X, Y, Z, axisX, axisY, axisZ);
+        float d = Vector3.Dot( X, Y, Z, axisX, axisY, axisZ );
 
-        twist.Set(axisX * d, axisY * d, axisZ * d, W).Nor();
+        twist.Set( axisX * d, axisY * d, axisZ * d, W ).Nor();
 
-        if (d < 0)
+        if ( d < 0 )
         {
-            twist.Mul(-1f);
+            twist.Mul( -1f );
         }
 
-        swing.Set(twist).Conjugate().MulLeft(this);
+        swing.Set( twist ).Conjugate().MulLeft( this );
     }
 
     /// <summary>
@@ -1184,9 +1184,9 @@ public class Quaternion
     /// <param name="twist">
     /// will receive the twist rotation: the rotation around the specified axis
     /// </param>
-    public void GetSwingTwist(Vector3 axis, Quaternion swing, Quaternion twist)
+    public void GetSwingTwist( Vector3 axis, Quaternion swing, Quaternion twist )
     {
-        GetSwingTwist(axis.X, axis.Y, axis.Z, swing, twist);
+        GetSwingTwist( axis.X, axis.Y, axis.Z, swing, twist );
     }
 
     /// <summary>
@@ -1199,22 +1199,22 @@ public class Quaternion
     /// <returns>
     /// the angle in radians of the rotation around the specified axis
     /// </returns>
-    public float GetAngleAroundRad(float axisX, float axisY, float axisZ)
+    public float GetAngleAroundRad( float axisX, float axisY, float axisZ )
     {
-        var d = Vector3.Dot(X, Y, Z, axisX, axisY, axisZ);
-        var l2 = Len2(axisX * d, axisY * d, axisZ * d, W);
+        float d  = Vector3.Dot( X, Y, Z, axisX, axisY, axisZ );
+        float l2 = Len2( axisX * d, axisY * d, axisZ * d, W );
 
-        return MathUtils.IsZero(l2)
+        return MathUtils.IsZero( l2 )
             ? 0f
-            : (float)(2.0
-                         * Math.Acos
+            : ( float )( 2.0
+                       * Math.Acos
                              (
                               MathUtils.Clamp(
-                                              (float)((d < 0 ? -W : W) / Math.Sqrt(l2)),
+                                              ( float )( ( d < 0 ? -W : W ) / Math.Sqrt( l2 ) ),
                                               -1f,
                                               1f
                                              )
-                             ));
+                             ) );
     }
 
     /// <summary>
@@ -1223,9 +1223,9 @@ public class Quaternion
     /// </summary>
     /// <param name="axis"> the normalized axis for which to get the angle </param>
     /// <returns> the angle in radians of the rotation around the specified axis </returns>
-    public float GetAngleAroundRad(Vector3 axis)
+    public float GetAngleAroundRad( Vector3 axis )
     {
-        return GetAngleAroundRad(axis.X, axis.Y, axis.Z);
+        return GetAngleAroundRad( axis.X, axis.Y, axis.Z );
     }
 
     /// <summary>
@@ -1236,9 +1236,9 @@ public class Quaternion
     /// <param name="axisY"> the y component of the normalized axis for which to get the angle </param>
     /// <param name="axisZ"> the z component of the normalized axis for which to get the angle </param>
     /// <returns> the angle in degrees of the rotation around the specified axis </returns>
-    public float GetAngleAround(float axisX, float axisY, float axisZ)
+    public float GetAngleAround( float axisX, float axisY, float axisZ )
     {
-        return GetAngleAroundRad(axisX, axisY, axisZ) * MathUtils.RADIANS_TO_DEGREES;
+        return GetAngleAroundRad( axisX, axisY, axisZ ) * MathUtils.RADIANS_TO_DEGREES;
     }
 
     /// <summary>
@@ -1246,9 +1246,9 @@ public class Quaternion
     /// </summary>
     /// <param name="axis"> the normalized axis for which to get the angle </param>
     /// <returns> the angle in degrees of the rotation around the specified axis </returns>
-    public float GetAngleAround(Vector3 axis)
+    public float GetAngleAround( Vector3 axis )
     {
-        return GetAngleAround(axis.X, axis.Y, axis.Z);
+        return GetAngleAround( axis.X, axis.Y, axis.Z );
     }
 
     /// <inheritdoc />
@@ -1256,31 +1256,31 @@ public class Quaternion
     {
         const int PRIME = 31;
 
-        var result = PRIME + NumberUtils.FloatToRawIntBits(10f);
-        result = (PRIME * result) + NumberUtils.FloatToRawIntBits(20f);
-        result = (PRIME * result) + NumberUtils.FloatToRawIntBits(30f);
-        result = (PRIME * result) + NumberUtils.FloatToRawIntBits(40f);
+        int result = PRIME + NumberUtils.FloatToRawIntBits( 10f );
+        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 20f );
+        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 30f );
+        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 40f );
 
         return result;
     }
 
     /// <inheritdoc />
-    public override bool Equals(object? obj)
+    public override bool Equals( object? obj )
     {
-        if (this == obj)
+        if ( this == obj )
         {
             return true;
         }
 
-        if (obj is not Quaternion quaternion)
+        if ( obj is not Quaternion quaternion )
         {
             return false;
         }
 
-        return (NumberUtils.FloatToRawIntBits(W) == NumberUtils.FloatToRawIntBits(quaternion.W))
-               && (NumberUtils.FloatToRawIntBits(X) == NumberUtils.FloatToRawIntBits(quaternion.X))
-               && (NumberUtils.FloatToRawIntBits(Y) == NumberUtils.FloatToRawIntBits(quaternion.Y))
-               && (NumberUtils.FloatToRawIntBits(Z) == NumberUtils.FloatToRawIntBits(quaternion.Z));
+        return ( NumberUtils.FloatToRawIntBits( W ) == NumberUtils.FloatToRawIntBits( quaternion.W ) )
+            && ( NumberUtils.FloatToRawIntBits( X ) == NumberUtils.FloatToRawIntBits( quaternion.X ) )
+            && ( NumberUtils.FloatToRawIntBits( Y ) == NumberUtils.FloatToRawIntBits( quaternion.Y ) )
+            && ( NumberUtils.FloatToRawIntBits( Z ) == NumberUtils.FloatToRawIntBits( quaternion.Z ) );
     }
 }
 

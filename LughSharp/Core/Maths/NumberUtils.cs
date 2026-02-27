@@ -54,7 +54,7 @@ public abstract class NumberUtils
     /// <returns> The integer bit representation of the floating-point value. </returns>
     public static int FloatToIntBits( float value )
     {
-        var result = FloatToRawIntBits( value );
+        int result = FloatToRawIntBits( value );
 
         // Check for NaN based on values of bit fields, maximum
         // exponent and nonzero significand.
@@ -92,7 +92,7 @@ public abstract class NumberUtils
     {
         unsafe
         {
-            var intBits = *( int* )&value;
+            int intBits = *( int* )&value;
             var result  = intBits.ToString( "X8" );
 
             return result;
@@ -138,7 +138,7 @@ public abstract class NumberUtils
     /// </returns>
     public static int? ParseInt( string? str )
     {
-        if ( int.TryParse( str, out var parsedValue ) )
+        if ( int.TryParse( str, out int parsedValue ) )
         {
             return parsedValue;
         }
@@ -156,7 +156,7 @@ public abstract class NumberUtils
     /// </returns>
     public static float? ParseFloat( string? str )
     {
-        if ( float.TryParse( str, out var parsedValue ) )
+        if ( float.TryParse( str, out float parsedValue ) )
         {
             return parsedValue;
         }
@@ -269,7 +269,7 @@ public abstract class NumberUtils
     /// </returns>
     public static int FloatToIntColor( float value )
     {
-        var intBits = FloatToRawIntBits( value );
+        int intBits = FloatToRawIntBits( value );
 
         intBits |= ( int )( ( intBits >>> 24 ) * ( 255f / 254f ) ) << 24;
 
@@ -303,7 +303,7 @@ public abstract class NumberUtils
 
     public static bool IsNumeric( object value )
     {
-        return ( value is sbyte
+        return value is sbyte
             or byte
             or short
             or ushort
@@ -313,7 +313,7 @@ public abstract class NumberUtils
             or ulong
             or float
             or double
-            or decimal );
+            or decimal;
     }
 }
 

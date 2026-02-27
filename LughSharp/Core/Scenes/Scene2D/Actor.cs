@@ -297,8 +297,8 @@ public class Actor : IActor, IComparable< Actor >
             {
                 if ( Actions[ i ].Act( delta ) && ( i < Actions.Count ) )
                 {
-                    var current     = Actions[ i ];
-                    var actionIndex = current == Actions[ i ] ? i : Actions.IndexOf( Actions[ i ] );
+                    Action current     = Actions[ i ];
+                    int    actionIndex = current == Actions[ i ] ? i : Actions.IndexOf( Actions[ i ] );
 
                     if ( actionIndex != -1 )
                     {
@@ -312,7 +312,7 @@ public class Actor : IActor, IComparable< Actor >
         }
         catch ( SystemException ex )
         {
-            var context = ToString();
+            string? context = ToString();
 
             if ( context != null )
             {
@@ -351,8 +351,8 @@ public class Actor : IActor, IComparable< Actor >
 
         // Collect ascendants so event propagation is unaffected by
         // hierarchy changes.
-        var ascendants = Pools.Obtain< List< Group > >();
-        var parent     = Parent;
+        var    ascendants = Pools.Obtain< List< Group > >();
+        Group? parent     = Parent;
 
         if ( ascendants == null || ascendants.Count == 0 )
         {
@@ -370,11 +370,11 @@ public class Actor : IActor, IComparable< Actor >
         {
             // Notify ascendants' capture listeners, starting at the root.
             // Ascendants may stop an event before children receive it.
-            var ascendantsArray = ascendants.ToArray();
+            Group[] ascendantsArray = ascendants.ToArray();
 
-            for ( var i = ascendants.Count - 1; i >= 0; i-- )
+            for ( int i = ascendants.Count - 1; i >= 0; i-- )
             {
-                var currentTarget = ascendantsArray[ i ];
+                Group currentTarget = ascendantsArray[ i ];
 
                 currentTarget.Notify( ev, true );
 
@@ -452,7 +452,7 @@ public class Actor : IActor, IComparable< Actor >
             throw new ArgumentException( "The event target cannot be null." );
         }
 
-        var listeners = capture ? CaptureListeners : Listeners;
+        DelayedRemovalList< IEventListener > listeners = capture ? CaptureListeners : Listeners;
 
         if ( listeners.Count == 0 )
         {
@@ -480,7 +480,7 @@ public class Actor : IActor, IComparable< Actor >
         }
         catch ( SystemException ex )
         {
-            var context = ToString();
+            string? context = ToString();
 
             if ( context != null )
             {
@@ -626,7 +626,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public void ClearActions()
     {
-        for ( var i = Actions.Count - 1; i >= 0; i-- )
+        for ( int i = Actions.Count - 1; i >= 0; i-- )
         {
             Actions[ i ].Actor = null;
         }
@@ -663,7 +663,7 @@ public class Actor : IActor, IComparable< Actor >
     {
         Guard.Against.Null( actor );
 
-        var parent = this;
+        Actor? parent = this;
 
         do
         {
@@ -706,7 +706,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public T? FirstAscendant< T >( T type ) where T : Actor
     {
-        var actor = this;
+        Actor? actor = this;
 
         do
         {
@@ -743,7 +743,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public bool AscendantsVisible()
     {
-        var actor = this;
+        Actor? actor = this;
 
         do
         {
@@ -824,7 +824,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float GetX( int alignment )
     {
-        var x = X;
+        float x = X;
 
         if ( ( alignment & Align.RIGHT ) != 0 )
         {
@@ -888,7 +888,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public float GetY( int alignment )
     {
-        var y = Y;
+        float y = Y;
 
         if ( ( alignment & Align.TOP ) != 0 )
         {
@@ -1263,14 +1263,14 @@ public class Actor : IActor, IComparable< Actor >
             return false;
         }
 
-        var tableBounds = Rectangle.Tmp;
+        Rectangle tableBounds = Rectangle.Tmp;
 
         tableBounds.X      = x;
         tableBounds.Y      = y;
         tableBounds.Width  = width;
         tableBounds.Height = height;
 
-        var scissorBounds = Pools.Obtain< Rectangle >() ?? new Rectangle();
+        Rectangle scissorBounds = Pools.Obtain< Rectangle >() ?? new Rectangle();
 
         Stage.CalculateScissors( tableBounds, scissorBounds );
 
@@ -1323,11 +1323,11 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public virtual Vector2 ParentToLocalCoordinates( Vector2 parentCoords )
     {
-        var rotation = Rotation;
-        var scaleX   = ScaleX;
-        var scaleY   = ScaleY;
-        var childX   = X;
-        var childY   = Y;
+        float rotation = Rotation;
+        float scaleX   = ScaleX;
+        float scaleY   = ScaleY;
+        float childX   = X;
+        float childY   = Y;
 
         if ( rotation == 0 )
         {
@@ -1339,8 +1339,8 @@ public class Actor : IActor, IComparable< Actor >
             }
             else
             {
-                var originX = OriginX;
-                var originY = OriginY;
+                float originX = OriginX;
+                float originY = OriginY;
 
                 parentCoords.X = ( ( parentCoords.X - childX - originX ) / scaleX ) + originX;
                 parentCoords.Y = ( ( parentCoords.Y - childY - originY ) / scaleY ) + originY;
@@ -1351,10 +1351,10 @@ public class Actor : IActor, IComparable< Actor >
             var cos = ( float )Math.Cos( rotation * MathUtils.DEGREES_TO_RADIANS );
             var sin = ( float )Math.Sin( rotation * MathUtils.DEGREES_TO_RADIANS );
 
-            var originX = OriginX;
-            var originY = OriginY;
-            var tox     = parentCoords.X - childX - originX;
-            var toy     = parentCoords.Y - childY - originY;
+            float originX = OriginX;
+            float originY = OriginY;
+            float tox     = parentCoords.X - childX - originX;
+            float toy     = parentCoords.Y - childY - originY;
 
             parentCoords.X = ( ( ( tox * cos ) + ( toy * sin ) ) / scaleX ) + originX;
             parentCoords.Y = ( ( ( tox * -sin ) + ( toy * cos ) ) / scaleY ) + originY;
@@ -1389,11 +1389,11 @@ public class Actor : IActor, IComparable< Actor >
     /// </system>
     public virtual Vector2 LocalToParentCoordinates( Vector2 localCoords )
     {
-        var rotation = -Rotation;
-        var scaleX   = ScaleX;
-        var scaleY   = ScaleY;
-        var x        = X;
-        var y        = Y;
+        float rotation = -Rotation;
+        float scaleX   = ScaleX;
+        float scaleY   = ScaleY;
+        float x        = X;
+        float y        = Y;
 
         if ( rotation == 0 )
         {
@@ -1405,8 +1405,8 @@ public class Actor : IActor, IComparable< Actor >
             }
             else
             {
-                var originX = OriginX;
-                var originY = OriginY;
+                float originX = OriginX;
+                float originY = OriginY;
 
                 localCoords.X = ( ( localCoords.X - originX ) * scaleX ) + originX + x;
                 localCoords.Y = ( ( localCoords.Y - originY ) * scaleY ) + originY + y;
@@ -1417,10 +1417,10 @@ public class Actor : IActor, IComparable< Actor >
             var cos = ( float )Math.Cos( rotation * MathUtils.DEGREES_TO_RADIANS );
             var sin = ( float )Math.Sin( rotation * MathUtils.DEGREES_TO_RADIANS );
 
-            var originX = OriginX;
-            var originY = OriginY;
-            var tox     = ( localCoords.X - originX ) * scaleX;
-            var toy     = ( localCoords.Y - originY ) * scaleY;
+            float originX = OriginX;
+            float originY = OriginY;
+            float tox     = ( localCoords.X - originX ) * scaleX;
+            float toy     = ( localCoords.Y - originY ) * scaleY;
 
             localCoords.X = ( tox * cos ) + ( toy * sin ) + originX + x;
             localCoords.Y = ( tox * -sin ) + ( toy * cos ) + originY + y;
@@ -1438,7 +1438,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <returns></returns>
     public virtual Vector2 LocalToAscendantCoordinates( Actor? ascendant, Vector2 localCoords )
     {
-        var actor = this;
+        Actor? actor = this;
 
         do
         {

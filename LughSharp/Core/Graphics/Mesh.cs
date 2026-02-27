@@ -25,7 +25,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
@@ -263,7 +265,7 @@ public class Mesh : IDisposable
         {
             var builder = new StringBuilder( "Managed meshes/app: { " );
 
-            foreach ( var app in Meshes.Keys )
+            foreach ( IApplication app in Meshes.Keys )
             {
                 builder.Append( Meshes[ app ]?.Count );
                 builder.Append( ' ' );
@@ -294,7 +296,7 @@ public class Mesh : IDisposable
         else
         {
             throw new RuntimeException( "Trying to enable InstancedRendering on same Mesh instance twice."
-                                         + " Use disableInstancedRendering to clean up old InstanceData first" );
+                                      + " Use disableInstancedRendering to clean up old InstanceData first" );
         }
 
         return this;
@@ -519,7 +521,7 @@ public class Mesh : IDisposable
     /// <param name="destOffset"> the offset (in floats) in the vertices array to start copying  </param>
     public float[] GetVertices( int srcOffset, int count, float[] vertices, int destOffset = 0 )
     {
-        var max = NumVertices * VertexSize;
+        int max = NumVertices * VertexSize;
 
         if ( count == NumberUtils.NOT_SET )
         {
@@ -541,8 +543,8 @@ public class Mesh : IDisposable
                                          $"has {vertices.Length} floats, needs {count}" );
         }
 
-        var verticesBuffer = GetVerticesBuffer();
-        var pos            = verticesBuffer.Position;
+        Buffer< float > verticesBuffer = GetVerticesBuffer();
+        int             pos            = verticesBuffer.Position;
 
         verticesBuffer.Position = srcOffset;
         verticesBuffer.Get( vertices, destOffset, count );
@@ -610,7 +612,7 @@ public class Mesh : IDisposable
     /// <param name="destOffset"> the offset in the indices array to start copying  </param>
     public void GetIndices( int srcOffset, int count, int[] indices, int destOffset )
     {
-        var max = NumIndices;
+        int max = NumIndices;
 
         if ( count < 0 )
         {
@@ -628,7 +630,7 @@ public class Mesh : IDisposable
                 ArgumentException( $"not enough room in indices array, has {indices.Length} shorts, needs {count}" );
         }
 
-        var pos = IndicesBuffer.Position;
+        int pos = IndicesBuffer.Position;
 
         IndicesBuffer.Position = srcOffset;
         IndicesBuffer.Get( indices, destOffset, count );
@@ -802,9 +804,9 @@ public class Mesh : IDisposable
                                                         $"max: {IndexData.NumMaxIndices})" );
                 }
 
-                var buffer      = IndexData.GetBuffer( false );
-                var oldPosition = buffer.Position;
-                var oldLimit    = buffer.Limit;
+                Buffer< int > buffer      = IndexData.GetBuffer( false );
+                int           oldPosition = buffer.Position;
+                int           oldLimit    = buffer.Limit;
 
                 buffer.Position = offset;
                 buffer.Limit    = offset + count;
@@ -824,7 +826,7 @@ public class Mesh : IDisposable
         }
         else
         {
-            var numInstances = _instances?.NumInstances ?? 0;
+            int numInstances = _instances?.NumInstances ?? 0;
 
             if ( IndexData.NumIndices > 0 )
             {
@@ -833,13 +835,17 @@ public class Mesh : IDisposable
                 if ( ( count + offset ) > IndexData.NumMaxIndices )
                 {
                     throw new RuntimeException( $"Mesh attempting to access memory outside " +
-                                                   $"of the index buffer (count: {count}, offset: " +
-                                                   $"{offset}, max: {IndexData.NumMaxIndices})" );
+                                                $"of the index buffer (count: {count}, offset: " +
+                                                $"{offset}, max: {IndexData.NumMaxIndices})" );
                 }
 
                 if ( IsInstanced && ( numInstances > 0 ) )
                 {
-                    Engine.GL.DrawElementsInstanced( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4, numInstances );
+                    Engine.GL.DrawElementsInstanced( primitiveType,
+                                                     count,
+                                                     IGL.GL_UNSIGNED_INT,
+                                                     offset * 4,
+                                                     numInstances );
                 }
                 else
                 {
@@ -876,8 +882,8 @@ public class Mesh : IDisposable
     /// <returns> the VertexAttribute or null if no attribute with that usage was found.  </returns>
     public VertexAttribute? GetVertexAttribute( int usage )
     {
-        var attributes = _vertices.Attributes;
-        var len        = attributes.Size;
+        VertexAttributes attributes = _vertices.Attributes;
+        int              len        = attributes.Size;
 
         for ( var i = 0; i < len; i++ )
         {
@@ -922,21 +928,21 @@ public class Mesh : IDisposable
     /// <param name="bbox"> the bounding box to store the result in.  </param>
     public void CalculateBoundingBox( BoundingBox bbox )
     {
-        var numVertices = NumVertices;
+        int numVertices = NumVertices;
 
         if ( numVertices == 0 )
         {
             throw new RuntimeException( "No vertices defined" );
         }
 
-        var verts = _vertices.GetBuffer( false );
+        Buffer< float > verts = _vertices.GetBuffer( false );
 
         bbox.ToInfinity();
 
-        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
-        var offset     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes.VertexSize / 4;
-        var idx        = offset;
+        VertexAttribute? posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
+        int              offset     = posAttrib!.Offset / 4;
+        int              vertexSize = _vertices.Attributes.VertexSize / 4;
+        int              idx        = offset;
 
         switch ( posAttrib.NumComponents )
         {
@@ -1022,30 +1028,30 @@ public class Mesh : IDisposable
     /// <returns> the value specified by out.  </returns>
     public BoundingBox ExtendBoundingBox( in BoundingBox box, int offset, int count, in Matrix4? transform )
     {
-        var numIndices  = NumIndices;
-        var numVertices = NumVertices;
-        var max         = numIndices == 0 ? numVertices : numIndices;
+        int numIndices  = NumIndices;
+        int numVertices = NumVertices;
+        int max         = numIndices == 0 ? numVertices : numIndices;
 
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > max ) )
         {
             throw new RuntimeException( $"Invalid part specified ( offset={offset}, count={count}, max={max} )" );
         }
 
-        var verts      = _vertices.GetBuffer( false );
-        var index      = IndexData.GetBuffer( false );
-        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
-        var posoff     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes.VertexSize / 4;
-        var end        = offset + count;
+        Buffer< float >  verts      = _vertices.GetBuffer( false );
+        Buffer< int >    index      = IndexData.GetBuffer( false );
+        VertexAttribute? posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
+        int              posoff     = posAttrib!.Offset / 4;
+        int              vertexSize = _vertices.Attributes.VertexSize / 4;
+        int              end        = offset + count;
 
         switch ( posAttrib.NumComponents )
         {
             case 1:
                 if ( numIndices > 0 )
                 {
-                    for ( var i = offset; i < end; i++ )
+                    for ( int i = offset; i < end; i++ )
                     {
-                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        int idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), 0, 0 );
 
@@ -1059,9 +1065,9 @@ public class Mesh : IDisposable
                 }
                 else
                 {
-                    for ( var i = offset; i < end; i++ )
+                    for ( int i = offset; i < end; i++ )
                     {
-                        var idx = ( i * vertexSize )! + posoff;
+                        int idx = ( i * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), 0, 0 );
 
@@ -1079,9 +1085,9 @@ public class Mesh : IDisposable
             case 2:
                 if ( numIndices > 0 )
                 {
-                    for ( var i = offset; i < end; i++ )
+                    for ( int i = offset; i < end; i++ )
                     {
-                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        int idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
 
@@ -1095,9 +1101,9 @@ public class Mesh : IDisposable
                 }
                 else
                 {
-                    for ( var i = offset; i < end; i++ )
+                    for ( int i = offset; i < end; i++ )
                     {
-                        var idx = ( i * vertexSize )! + posoff;
+                        int idx = ( i * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
 
@@ -1115,9 +1121,9 @@ public class Mesh : IDisposable
             case 3:
                 if ( numIndices > 0 )
                 {
-                    for ( var i = offset; i < end; i++ )
+                    for ( int i = offset; i < end; i++ )
                     {
-                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        int idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
 
@@ -1131,9 +1137,9 @@ public class Mesh : IDisposable
                 }
                 else
                 {
-                    for ( var i = offset; i < end; i++ )
+                    for ( int i = offset; i < end; i++ )
                     {
-                        var idx = ( i * vertexSize )! + posoff;
+                        int idx = ( i * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
 
@@ -1172,27 +1178,27 @@ public class Mesh : IDisposable
                                          int count,
                                          in Matrix4? transform )
     {
-        var numIndices = NumIndices;
+        int numIndices = NumIndices;
 
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > numIndices ) )
         {
             throw new RuntimeException( "Not enough indices" );
         }
 
-        var verts      = _vertices.GetBuffer( false );
-        var index      = IndexData.GetBuffer( false );
-        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
-        var posoff     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes.VertexSize / 4;
-        var end        = offset + count;
-        var result     = 0f;
+        Buffer< float >  verts      = _vertices.GetBuffer( false );
+        Buffer< int >    index      = IndexData.GetBuffer( false );
+        VertexAttribute? posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
+        int              posoff     = posAttrib!.Offset / 4;
+        int              vertexSize = _vertices.Attributes.VertexSize / 4;
+        int              end        = offset + count;
+        var              result     = 0f;
 
         switch ( posAttrib.NumComponents )
         {
             case 1:
-                for ( var i = offset; i < end; i++ )
+                for ( int i = offset; i < end; i++ )
                 {
-                    var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                    int idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
 
                     _tmpV.Set( verts.Get( idx ), 0, 0 );
 
@@ -1201,7 +1207,7 @@ public class Mesh : IDisposable
                         _tmpV.Mul( transform );
                     }
 
-                    var r = _tmpV.Sub( centerX, centerY, centerZ ).Len2();
+                    float r = _tmpV.Sub( centerX, centerY, centerZ ).Len2();
 
                     if ( r > result )
                     {
@@ -1212,9 +1218,9 @@ public class Mesh : IDisposable
                 break;
 
             case 2:
-                for ( var i = offset; i < end; i++ )
+                for ( int i = offset; i < end; i++ )
                 {
-                    var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                    int idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
 
                     _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
 
@@ -1223,7 +1229,7 @@ public class Mesh : IDisposable
                         _tmpV.Mul( transform );
                     }
 
-                    var r = _tmpV.Sub( centerX, centerY, centerZ ).Len2();
+                    float r = _tmpV.Sub( centerX, centerY, centerZ ).Len2();
 
                     if ( r > result )
                     {
@@ -1234,9 +1240,9 @@ public class Mesh : IDisposable
                 break;
 
             case 3:
-                for ( var i = offset; i < end; i++ )
+                for ( int i = offset; i < end; i++ )
                 {
-                    var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                    int idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
 
                     _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
 
@@ -1245,7 +1251,7 @@ public class Mesh : IDisposable
                         _tmpV.Mul( transform );
                     }
 
-                    var r = _tmpV.Sub( centerX, centerY, centerZ ).Len2();
+                    float r = _tmpV.Sub( centerX, centerY, centerZ ).Len2();
 
                     if ( r > result )
                     {
@@ -1352,7 +1358,7 @@ public class Mesh : IDisposable
     {
         List< Mesh >? managedResources;
 
-        if ( !Meshes.TryGetValue( app, out var value) || (value == null ) )
+        if ( !Meshes.TryGetValue( app, out List< Mesh >? value ) || ( value == null ) )
         {
             managedResources = [ ];
         }
@@ -1397,16 +1403,16 @@ public class Mesh : IDisposable
     /// <param name="scaleZ"> scale on z  </param>
     public void Scale( float scaleX, float scaleY, float scaleZ )
     {
-        var posAttr       = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
-        var offset        = posAttr!.Offset / 4;
-        var numComponents = posAttr.NumComponents;
-        var numVertices   = NumVertices;
-        var vertexSize    = VertexSize / 4;
-        var vertices      = new float[ numVertices * vertexSize ];
+        VertexAttribute? posAttr       = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
+        int              offset        = posAttr!.Offset / 4;
+        int              numComponents = posAttr.NumComponents;
+        int              numVertices   = NumVertices;
+        int              vertexSize    = VertexSize / 4;
+        var              vertices      = new float[ numVertices * vertexSize ];
 
         GetVertices( vertices );
 
-        var idx = offset;
+        int idx = offset;
 
         switch ( numComponents )
         {
@@ -1463,11 +1469,11 @@ public class Mesh : IDisposable
     /// <param name="count">The number of vertices to be transformed.</param>
     protected void Transform( in Matrix4 matrix, in int start, in int count )
     {
-        var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
+        VertexAttribute? posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
 
-        var posOffset     = posAttr!.Offset / 4;
-        var stride        = VertexSize / 4;
-        var numComponents = posAttr.NumComponents;
+        int posOffset     = posAttr!.Offset / 4;
+        int stride        = VertexSize / 4;
+        int numComponents = posAttr.NumComponents;
         var vertices      = new float[ count * stride ];
 
         GetVertices( start * stride, count * stride, vertices );
@@ -1511,8 +1517,8 @@ public class Mesh : IDisposable
                                                 $"length = {vertices.Length}" );
         }
 
-        var tmp      = new Vector3();
-        var idxFloat = offset + ( start * vertexSize );
+        var   tmp      = new Vector3();
+        float idxFloat = offset + ( start * vertexSize );
 
         switch ( dimensions )
         {
@@ -1579,17 +1585,17 @@ public class Mesh : IDisposable
     /// <param name="count">The number of vertices to transform.</param>
     protected void TransformUV( in Matrix3 matrix, int start, int count )
     {
-        var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates );
+        VertexAttribute? posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates );
 
         if ( posAttr == null )
         {
             return;
         }
 
-        var offset      = posAttr.Offset / 4;
-        var vertexSize  = VertexSize / 4;
-        var numVertices = NumVertices;
-        var verts       = _vertices.GetBuffer( false );
+        int             offset      = posAttr.Offset / 4;
+        int             vertexSize  = VertexSize / 4;
+        int             numVertices = NumVertices;
+        Buffer< float > verts       = _vertices.GetBuffer( false );
 
         if ( ( start < 0 ) || ( count < 0 ) || ( ( start + count ) > numVertices ) )
         {
@@ -1598,7 +1604,7 @@ public class Mesh : IDisposable
 
         for ( var i = 0; i < count; i++ )
         {
-            var index = offset + ( ( start + i ) * vertexSize );
+            int index = offset + ( ( start + i ) * vertexSize );
             var uv    = new Vector2( verts.Get( index ), verts.Get( index + 1 ) );
             uv = matrix.Transform( uv );
 
@@ -1633,7 +1639,7 @@ public class Mesh : IDisposable
         }
 
         var tmp = new Vector2();
-        var idx = offset + ( start * vertexSize );
+        int idx = offset + ( start * vertexSize );
 
         for ( var i = 0; i < count; i++ )
         {
@@ -1672,8 +1678,8 @@ public class Mesh : IDisposable
     /// <returns> the copy of this mesh  </returns>
     public Mesh Copy( bool isStatic, bool removeDuplicates, in int[]? usage )
     {
-        var vertexSizeFloats = VertexSize / 4; // Vertex size in floats
-        var numVertices      = NumVertices;
+        int vertexSizeFloats = VertexSize / 4; // Vertex size in floats
+        int numVertices      = NumVertices;
         var vertices         = new float[ numVertices * vertexSizeFloats ];
 
         GetVertices( 0, vertices.Length, vertices );
@@ -1687,9 +1693,9 @@ public class Mesh : IDisposable
             var sizeFloats = 0;
             var asCount    = 0;
 
-            foreach ( var t in usage )
+            foreach ( int t in usage )
             {
-                var a = GetVertexAttribute( t );
+                VertexAttribute? a = GetVertexAttribute( t );
 
                 if ( a != null )
                 {
@@ -1703,12 +1709,12 @@ public class Mesh : IDisposable
                 attrs  = new VertexAttribute[ asCount ];
                 checks = new int[ sizeFloats ]; // Store float offsets
 
-                var idx = -1;
-                var ai  = -1;
+                int idx = -1;
+                int ai  = -1;
 
-                foreach ( var t in usage )
+                foreach ( int t in usage )
                 {
-                    var a = GetVertexAttribute( t );
+                    VertexAttribute? a = GetVertexAttribute( t );
 
                     if ( a == null )
                     {
@@ -1738,7 +1744,7 @@ public class Mesh : IDisposable
             newVertexSizeFloats = vertexSizeFloats;
         }
 
-        var    numIndices = NumIndices;
+        int    numIndices = NumIndices;
         int[]? indices    = null;
 
         if ( numIndices > 0 )
@@ -1753,14 +1759,14 @@ public class Mesh : IDisposable
 
                 for ( var i = 0; i < numIndices; i++ )
                 {
-                    var   idx1     = indices[ i ] * vertexSizeFloats; // Use float vertex size
+                    int   idx1     = indices[ i ] * vertexSizeFloats; // Use float vertex size
                     short newIndex = -1;
 
                     if ( removeDuplicates )
                     {
                         for ( var j = 0; ( j < size ) && ( newIndex < 0 ); j++ )
                         {
-                            var idx2  = j * newVertexSizeFloats; // Use float vertex size
+                            int idx2  = j * newVertexSizeFloats; // Use float vertex size
                             var found = true;
 
                             for ( var k = 0; ( k < checks.Length ) && found; k++ )
@@ -1784,7 +1790,7 @@ public class Mesh : IDisposable
                     }
                     else
                     {
-                        var idx = size * newVertexSizeFloats; // Use float vertex size
+                        int idx = size * newVertexSizeFloats; // Use float vertex size
 
                         for ( var j = 0; j < checks.Length; j++ )
                         {
@@ -1801,7 +1807,7 @@ public class Mesh : IDisposable
             }
         }
 
-        var result = attrs == null
+        Mesh result = attrs == null
             ? new Mesh( isStatic, numVertices, indices?.Length ?? 0, VertexAttributes )
             : new Mesh( isStatic, numVertices, indices?.Length ?? 0, attrs );
 

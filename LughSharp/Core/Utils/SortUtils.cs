@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -137,13 +138,13 @@ public static class SortUtils
         }
 
         // Convert the List to an array for TimSort
-        var arrayToSort = list.ToArray();
+        T[] arrayToSort = list.ToArray();
 
         // Create a TimSort instance
         var timSort = new TimSort< T >();
 
         // Create an IComparer<T> from the Comparison<T> delegate
-        var comparer = Comparer< T >.Create( comparison );
+        Comparer< T > comparer = Comparer< T >.Create( comparison );
 
         // Perform the sort on the array
         timSort.DoSort( arrayToSort, comparer, 0, arrayToSort.Length );

@@ -69,8 +69,8 @@ public class EarClippingTriangulator
     {
         _vertices = vertices;
 
-        var vertexCount  = _vertexCount = count / 2;
-        var vertexOffset = offset / 2;
+        int vertexCount  = _vertexCount = count / 2;
+        int vertexOffset = offset / 2;
 
         _indicesArray.Clear();
         _indicesArray.EnsureCapacity( vertexCount );
@@ -86,7 +86,7 @@ public class EarClippingTriangulator
         {
             for ( int i = 0, n = vertexCount - 1; i < vertexCount; i++ )
             {
-                _indicesArray[ i ] = ( short )( ( vertexOffset + n ) - i ); // Reversed.
+                _indicesArray[ i ] = ( short )( vertexOffset + n - i ); // Reversed.
             }
         }
 
@@ -115,12 +115,12 @@ public class EarClippingTriangulator
 
         while ( _vertexCount > 3 )
         {
-            var earTipIndex = FindEarTip();
+            int earTipIndex = FindEarTip();
             CutEarTip( earTipIndex );
 
             // The type of the two vertices adjacent to the clipped vertex may have changed.
-            var previousIndex = PreviousIndex( earTipIndex );
-            var nextIndex     = earTipIndex == _vertexCount ? 0 : earTipIndex;
+            int previousIndex = PreviousIndex( earTipIndex );
+            int nextIndex     = earTipIndex == _vertexCount ? 0 : earTipIndex;
 
             _vertexTypes[ previousIndex ] = ClassifyVertex( previousIndex );
             _vertexTypes[ nextIndex ]     = ClassifyVertex( nextIndex );
@@ -139,9 +139,9 @@ public class EarClippingTriangulator
     /// </summary>
     private int ClassifyVertex( int index )
     {
-        var previous = _indices![ PreviousIndex( index ) ] * 2;
-        var current  = _indices[ index ] * 2;
-        var next     = _indices[ NextIndex( index ) ] * 2;
+        int previous = _indices![ PreviousIndex( index ) ] * 2;
+        int current  = _indices[ index ] * 2;
+        int next     = _indices[ NextIndex( index ) ] * 2;
 
         return ComputeSpannedAreaSign( _vertices![ previous ],
                                        _vertices[ previous + 1 ],
@@ -189,30 +189,30 @@ public class EarClippingTriangulator
             return false;
         }
 
-        var previousIndex = PreviousIndex( earTipIndex );
-        var nextIndex     = NextIndex( earTipIndex );
-        var p1            = _indices![ previousIndex ] * 2;
-        var p2            = _indices[ earTipIndex ] * 2;
-        var p3            = _indices[ nextIndex ] * 2;
-        var p1X           = _vertices![ p1 ];
-        var p1Y           = _vertices[ p1 + 1 ];
-        var p2X           = _vertices[ p2 ];
-        var p2Y           = _vertices[ p2 + 1 ];
-        var p3X           = _vertices[ p3 ];
-        var p3Y           = _vertices[ p3 + 1 ];
+        int   previousIndex = PreviousIndex( earTipIndex );
+        int   nextIndex     = NextIndex( earTipIndex );
+        int   p1            = _indices![ previousIndex ] * 2;
+        int   p2            = _indices[ earTipIndex ] * 2;
+        int   p3            = _indices[ nextIndex ] * 2;
+        float p1X           = _vertices![ p1 ];
+        float p1Y           = _vertices[ p1 + 1 ];
+        float p2X           = _vertices[ p2 ];
+        float p2Y           = _vertices[ p2 + 1 ];
+        float p3X           = _vertices[ p3 ];
+        float p3Y           = _vertices[ p3 + 1 ];
 
         // Check if any point is inside the triangle formed by previous,
         // current and next vertices. Only consider vertices that are not
         // part of this triangle, or else we'll always find one inside.
-        for ( var i = NextIndex( nextIndex ); i != previousIndex; i = NextIndex( i ) )
+        for ( int i = NextIndex( nextIndex ); i != previousIndex; i = NextIndex( i ) )
         {
             // Concave vertices can obviously be inside the candidate ear, but so can
             // tangential vertices if they coincide with one of the triangle's vertices.
             if ( _vertexTypes[ i ] != CONVEX )
             {
-                var v  = _indices[ i ] * 2;
-                var vx = _vertices[ v ];
-                var vy = _vertices[ v + 1 ];
+                int   v  = _indices[ i ] * 2;
+                float vx = _vertices[ v ];
+                float vy = _vertices[ v + 1 ];
 
                 // Because the polygon has clockwise winding order, the area sign will
                 // be positive if the point is strictly inside. It will be 0 on the edge,
@@ -263,7 +263,7 @@ public class EarClippingTriangulator
                                                float p3X,
                                                float p3Y )
     {
-        var area = p1X * ( p3Y - p2Y );
+        float area = p1X * ( p3Y - p2Y );
 
         area += p2X * ( p1Y - p3Y );
         area += p3X * ( p2Y - p1Y );

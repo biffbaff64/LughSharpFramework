@@ -58,7 +58,7 @@ public class MapProperties
     /// <returns> The property, if found, or the default value. </returns>
     public virtual T Get< T >( string key, T defaultValue )
     {
-        var obj = _properties[ key ];
+        object? obj = _properties[ key ];
 
         return obj == null ? defaultValue : ( T )obj;
     }
@@ -73,7 +73,7 @@ public class MapProperties
     {
         _properties[ key ] = value;
     }
-    
+
     /// <summary>
     /// </summary>
     /// <param name="properties"></param>
@@ -111,4 +111,3 @@ public class MapProperties
 
 // ============================================================================
 // ============================================================================
-

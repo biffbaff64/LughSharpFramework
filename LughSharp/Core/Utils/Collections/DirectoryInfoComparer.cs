@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Collections;
@@ -50,7 +51,7 @@ public class DirectoryInfoComparer : IEqualityComparer< DirectoryInfo >
         // which is appropriate for most file systems (like Windows).
         return StringComparer.OrdinalIgnoreCase.Equals( x.FullName, y.FullName );
     }
-    
+
     /// <summary>
     /// Returns a hash code for the specified object.
     /// The GetHashCode method must return the same hash code for objects 

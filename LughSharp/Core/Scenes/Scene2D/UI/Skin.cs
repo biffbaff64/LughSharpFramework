@@ -22,12 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 using JetBrains.Annotations;
 
@@ -112,7 +108,7 @@ public class Skin : IDisposable
     [
         new( "BitmapFont",              typeof( BitmapFont ) ),
         new( "Color",                   typeof( Color ) ),
-        new( "TintedDrawable",          typeof( Skin.TintedDrawable ) ),
+        new( "TintedDrawable",          typeof( TintedDrawable ) ),
         new( "NinePatchDrawable",       typeof( NinePatchDrawable ) ),
         new( "SpriteDrawable",          typeof( SpriteDrawable ) ),
         new( "TextureRegionDrawable",   typeof( TextureRegionDrawable ) ),
@@ -133,7 +129,7 @@ public class Skin : IDisposable
         new( "TextTooltipStyle",        typeof( TextTooltip.TextTooltipStyle ) ),
         new( "TouchpadStyle",           typeof( Touchpad.TouchpadStyle ) ),
         new( "TreeStyle",               typeof( Tree< , >.TreeStyle ) ),
-        new( "WindowStyle",             typeof( Window.WindowStyle ) ),
+        new( "WindowStyle",             typeof( Window.WindowStyle ) )
     ];
     //@formatter:on
 
@@ -159,8 +155,8 @@ public class Skin : IDisposable
     {
         Setup();
 
-        var name      = Path.GetFileNameWithoutExtension( skinFile.Name );
-        var atlasFile = new FileInfo( name + ".atlas" );
+        string name      = Path.GetFileNameWithoutExtension( skinFile.Name );
+        var    atlasFile = new FileInfo( $"{name}.atlas" );
 
         if ( atlasFile.Exists )
         {
@@ -199,9 +195,12 @@ public class Skin : IDisposable
         AddRegions( atlas );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void Setup()
     {
-        foreach ( var c in DefaultTagClasses )
+        foreach ( Tag c in DefaultTagClasses )
         {
             JsonClassTags.Add( c.Type.Name, c.Type );
         }
@@ -214,7 +213,7 @@ public class Skin : IDisposable
     {
         try
         {
-            var jsonText = File.ReadAllText( skinFile.FullName );
+            string jsonText = File.ReadAllText( skinFile.FullName );
 
             var settings = new JsonSerializerSettings();
 
@@ -225,7 +224,7 @@ public class Skin : IDisposable
         }
         catch ( JsonException ex )
         {
-            throw new Exception( "Error reading file: " + skinFile, ex );
+            throw new Exception( $"Error reading file: {skinFile}", ex );
         }
     }
 
@@ -237,29 +236,40 @@ public class Skin : IDisposable
     {
         for ( int i = 0, n = atlas.Regions.Count; i < n; i++ )
         {
-            var region = atlas.Regions[ i ];
-            var name   = region?.Name;
+            AtlasRegion? region = atlas.Regions[ i ];
+            string?      name   = region?.Name;
 
             if ( region?.Index != -1 )
             {
-                name += "_" + region?.Index;
+                name += $"_{region?.Index}";
             }
 
             Add( name, region, typeof( TextureRegion ) );
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="resource"></param>
     public void Add( string name, object resource )
     {
         Add( name, resource, resource.GetType() );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="resource"></param>
+    /// <param name="type"></param>
     public void Add( string? name, object? resource, Type type )
     {
         Guard.Against.Null( name );
         Guard.Against.Null( resource );
 
-        var typeResources = Resources.Get( type );
+        Dictionary< string, object >? typeResources = Resources.Get( type );
 
         if ( typeResources == null )
         {
@@ -276,6 +286,11 @@ public class Skin : IDisposable
         typeResources.Put( name, resource );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
     public void Remove( string name, Type type )
     {
         Guard.Against.Null( name );
@@ -296,7 +311,7 @@ public class Skin : IDisposable
     /// Returns a named resource of the specified type.
     /// </summary>
     /// <exception cref="RuntimeException">if the resource was not found.</exception>
-    public T Get< T >( string name )
+    public T Get< T >( string? name )
     {
         return ( T )Get( name, typeof( T ) );
     }
@@ -305,7 +320,7 @@ public class Skin : IDisposable
     /// Returns a named resource of the specified type.
     /// </summary>
     /// <exception cref="RuntimeException">if the resource was not found.</exception>
-    public object Get( string name, Type type )
+    public object Get( string? name, Type? type )
     {
         Guard.Against.Null( name );
         Guard.Against.Null( type );
@@ -330,21 +345,16 @@ public class Skin : IDisposable
             return GetSprite( name );
         }
 
-        var typeResources = Resources[ type ];
+        Dictionary< string, object >? typeResources = Resources[ type ];
 
         if ( typeResources == null )
         {
             throw new RuntimeException( $"No {type.FullName} registered with name: {name}" );
         }
 
-        var resource = typeResources[ name ];
+        object? resource = typeResources[ name ];
 
-        if ( resource == null )
-        {
-            throw new RuntimeException( $"No {type.FullName} registered with name: {name}" );
-        }
-
-        return resource;
+        return resource ?? throw new RuntimeException( $"No {type.FullName} registered with name: {name}" );
     }
 
     /// <summary>
@@ -363,9 +373,15 @@ public class Skin : IDisposable
         return ( T? )Resources[ typeof( T ) ]?.Get( name );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public bool Has( string name, Type type )
     {
-        if ( !Resources.TryGetValue( type, out var resource ) )
+        if ( !Resources.TryGetValue( type, out Dictionary< string, object >? resource ) )
         {
             Logger.Error( $"Resources Dictionary does not contain key: {type.Name}" );
 
@@ -384,6 +400,11 @@ public class Skin : IDisposable
         return Resources[ type ];
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public Color GetColor( string name )
     {
         return Get< Color >( name );
@@ -416,7 +437,7 @@ public class Skin : IDisposable
 
         if ( texture == null )
         {
-            throw new RuntimeException( "No TextureRegion or Texture registered with name: " + name );
+            throw new RuntimeException( $"No TextureRegion or Texture registered with name: {name}" );
         }
 
         region = new TextureRegion( texture );
@@ -435,7 +456,7 @@ public class Skin : IDisposable
         var i = 0;
 
         List< TextureRegion >? regions = null;
-        var                    region  = Optional< TextureRegion? >( regionName + "_" + i++ );
+        var                    region  = Optional< TextureRegion? >( $"{regionName}_{i++}" );
 
         if ( region != null )
         {
@@ -444,7 +465,7 @@ public class Skin : IDisposable
             while ( region != null )
             {
                 regions.Add( region );
-                region = Optional< TextureRegion? >( regionName + "_" + i++ );
+                region = Optional< TextureRegion? >( $"{regionName}_{i++}" );
             }
         }
 
@@ -467,7 +488,7 @@ public class Skin : IDisposable
 
         tiled = new TiledSceneDrawable( GetRegion( name ) )
         {
-            Name = name,
+            Name = name
         };
 
         if ( Scale is not 1.0f )
@@ -499,17 +520,17 @@ public class Skin : IDisposable
 
         try
         {
-            var region = GetRegion( name );
+            TextureRegion region = GetRegion( name );
 
             if ( region is AtlasRegion atlasRegion )
             {
-                var splits = atlasRegion.FindValue( "split" );
+                int[]? splits = atlasRegion.FindValue( "split" );
 
                 if ( splits != null )
                 {
                     patch = new NinePatch( atlasRegion, splits[ 0 ], splits[ 1 ], splits[ 2 ], splits[ 3 ] );
 
-                    var pads = atlasRegion.FindValue( "pad" );
+                    int[]? pads = atlasRegion.FindValue( "pad" );
 
                     if ( pads != null )
                     {
@@ -531,7 +552,7 @@ public class Skin : IDisposable
         }
         catch ( RuntimeException )
         {
-            throw new RuntimeException( "No NinePatch, TextureRegion, or Texture registered with name: " + name );
+            throw new RuntimeException( $"No NinePatch, TextureRegion, or Texture registered with name: {name}" );
         }
     }
 
@@ -552,7 +573,7 @@ public class Skin : IDisposable
 
         try
         {
-            var textureRegion = GetRegion( name );
+            TextureRegion textureRegion = GetRegion( name );
 
             if ( textureRegion is AtlasRegion region )
             {
@@ -577,7 +598,7 @@ public class Skin : IDisposable
         }
         catch ( RuntimeException )
         {
-            throw new RuntimeException( "No NinePatch, TextureRegion, or Texture registered with name: " + name );
+            throw new RuntimeException( $"No NinePatch, TextureRegion, or Texture registered with name: {name}" );
         }
     }
 
@@ -599,7 +620,7 @@ public class Skin : IDisposable
         // If it has rotation or whitespace stripping, use sprite.
         try
         {
-            var textureRegion = GetRegion( name );
+            TextureRegion textureRegion = GetRegion( name );
 
             if ( textureRegion is AtlasRegion region )
             {
@@ -649,8 +670,8 @@ public class Skin : IDisposable
                 }
                 else
                 {
-                    throw new RuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion, " +
-                                                $"Texture, or Sprite registered with name: {name}" );
+                    throw new
+                        RuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion, Texture, or Sprite registered with name: {name}" );
                 }
             }
         }
@@ -677,7 +698,7 @@ public class Skin : IDisposable
             throw new ArgumentException( "style cannot be null." );
         }
 
-        var typeResources = Resources[ resource.GetType() ];
+        Dictionary< string, object >? typeResources = Resources[ resource.GetType() ];
 
         return typeResources?.FindKey( resource );
     }
@@ -701,8 +722,13 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(string)"/>.
     /// </summary>
-    public ISceneDrawable NewDrawable( string name, Color tint )
+    public ISceneDrawable NewDrawable( string? name, Color tint )
     {
+        if ( string.IsNullOrEmpty( name ) )
+        {
+            throw new ArgumentException( "name cannot be null or empty." );
+        }
+
         return NewDrawable( GetDrawable( name ), tint );
     }
 
@@ -720,8 +746,8 @@ public class Skin : IDisposable
 
                    // ---------------------------
 
-                   var _ => throw new RuntimeException( "Unable to copy, unknown drawable type: "
-                                                      + drawable.GetType() ),
+                   var _ =>
+                       throw new RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" )
                };
     }
 
@@ -738,27 +764,27 @@ public class Skin : IDisposable
     /// </summary>
     public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color tint )
     {
-        var newDrawable = drawable switch
-                          {
-                              TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
-                              NinePatchDrawable patchDrawable      => patchDrawable.Tint( tint ),
-                              SpriteDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
+        ISceneDrawable newDrawable = drawable switch
+                                     {
+                                         TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
+                                         NinePatchDrawable patchDrawable      => patchDrawable.Tint( tint ),
+                                         SpriteDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
 
-                              // ----------------
+                                         // ----------------
 
-                              var _ => throw new
-                                  RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" ),
-                          };
+                                         var _ => throw new
+                                             RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" )
+                                     };
 
         if ( newDrawable is BaseDrawable named )
         {
             if ( drawable is BaseDrawable baseDrawable )
             {
-                named.Name = baseDrawable.Name + " (" + tint + ")";
+                named.Name = $"{baseDrawable.Name} ({tint})";
             }
             else
             {
-                named.Name = " (" + tint + ")";
+                named.Name = $" ({tint})";
             }
         }
 
@@ -797,7 +823,7 @@ public class Skin : IDisposable
     public void SetEnabled( Actor actor, bool enabled )
     {
         // Get current style.
-        var method = actor.GetType().GetMethod( "GetStyle" );
+        MethodInfo? method = actor.GetType().GetMethod( "GetStyle" );
 
         if ( method == null )
         {
@@ -816,7 +842,7 @@ public class Skin : IDisposable
         }
 
         // Determine new style.
-        var name = Find( style );
+        string? name = Find( style );
 
         if ( name == null )
         {
@@ -842,9 +868,28 @@ public class Skin : IDisposable
         }
     }
 
-    private static MethodInfo? FindMethod( Type? type, string name )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    private static MethodInfo? FindMethod( Type? type, string? name )
     {
-        return type?.GetMethod( name );
+        MethodInfo[] methods = type?.GetMethods( BindingFlags.Public
+                                               | BindingFlags.NonPublic
+                                               | BindingFlags.Instance
+                                               | BindingFlags.Static ) ?? Array.Empty< MethodInfo >();
+
+        foreach ( MethodInfo method in methods )
+        {
+            if ( method.Name == name )
+            {
+                return method;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -855,9 +900,9 @@ public class Skin : IDisposable
     {
         Atlas?.Dispose();
 
-        foreach ( var entry in Resources.Values )
+        foreach ( Dictionary< string, object >? entry in Resources.Values )
         {
-            foreach ( var resource in entry!.Values )
+            foreach ( object resource in entry!.Values )
             {
                 if ( resource is IDisposable disposable )
                 {
@@ -870,6 +915,11 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="skinFile"></param>
+    /// <returns></returns>
     protected Json GetJsonLoader( FileInfo skinFile )
     {
         var json = new SkinJson( this )
@@ -878,12 +928,12 @@ public class Skin : IDisposable
             UsePrototypes = false
         };
 
-        // Registering the custom serializers
+        // Register the custom serializers
         json.SetSerializer< Color >( new ColorSerializer( this ) );
         json.SetSerializer< BitmapFont >( new BitmapFontSerializer( this, skinFile ) );
         json.SetSerializer< TintedDrawable >( new TintedDrawableSerializer( this ) );
 
-        foreach ( var entry in JsonClassTags )
+        foreach ( KeyValuePair< string, Type > entry in JsonClassTags )
         {
             json.AddClassTag( entry.Key, entry.Value );
         }
@@ -894,59 +944,80 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     protected class SkinJson : Json
     {
         private const    string PARENT_FIELD_NAME = "parent";
         private readonly Skin   _skin;
 
+        // ====================================================================
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="skin"></param>
         public SkinJson( Skin skin )
         {
             _skin = skin;
         }
 
-        protected override T ReadValue< T >( Type elementType, JsonValue? jsonData )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="elementType"></param>
+        /// <param name="jsonValue"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public override T ReadValue< T >( Type? type, Type? elementType, JsonValue? jsonValue )
         {
-            if ( jsonData != null
-              && jsonData.IsString()
+            if ( jsonValue != null
+              && jsonValue.IsString()
               && !typeof( IEnumerable ).IsAssignableFrom( typeof( T ) ) )
             {
-                return _skin.Get< T >( jsonData.AsString() );
+                return _skin.Get< T >( jsonValue.AsString() );
             }
 
-            return base.ReadValue< T >( elementType, jsonData );
+            return base.ReadValue< T >( type, elementType, jsonValue )
+                ?? throw new RuntimeException( $"Unable to read value: {jsonValue}" );
         }
 
-        public override bool IgnoreUnknownField( Type type, string fieldName )
-        {
-            return fieldName == PARENT_FIELD_NAME;
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="jsonMap"></param>
+        /// <exception cref="SerializationException"></exception>
         public override void ReadFields( object obj, JsonValue jsonMap )
         {
             if ( jsonMap.Has( PARENT_FIELD_NAME ) )
             {
-                string parentName = ReadValue< string >( PARENT_FIELD_NAME, jsonMap );
-                var    parentType = obj.GetType();
+                var   parentName = ReadValue< string >( PARENT_FIELD_NAME, typeof( string ), jsonMap );
+                Type? parentType = obj.GetType();
 
-                // ... Logic for copyFields from parent (same loop as your Java code)
                 while ( true )
                 {
                     try
                     {
-                        CopyFields( Get( parentName, parentType ), obj );
+                        CopyFields( _skin.Get( parentName, parentType ), obj );
 
                         break;
                     }
-                    catch ( RuntimeException ex )
+                    catch ( RuntimeException )
                     {
                         // Parent resource doesn't exist.
-                        parentType = parentType.BaseType; // Try resource for base class.
+                        parentType = parentType?.BaseType; // Try resource for base class.
 
-                        if ( parentType == Object.class)
+                        if ( parentType == typeof( object ) )
                         {
-                            SerializationException se = new SerializationException(
-                                 "Unable to find parent resource with name: " + parentName );
-                            se.AddTrace( jsonMap.child.trace() );
+                            var se = new SerializationException( $"Unable to find parent resource: {parentName}" );
+
+                            if ( jsonMap.Child != null )
+                            {
+                                se.AddTrace( jsonMap.Child.Trace() );
+                            }
 
                             throw se;
                         }
@@ -956,16 +1027,43 @@ public class Skin : IDisposable
 
             base.ReadFields( obj, jsonMap );
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public override bool IgnoreUnknownField( Type type, string fieldName )
+        {
+            return fieldName == PARENT_FIELD_NAME;
+        }
     }
 
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ColorSerializer : Json.ReadOnlySerializer< Color >
     {
         private readonly Skin _skin;
-        public ColorSerializer( Skin skin ) => _skin = skin;
 
+        public ColorSerializer( Skin skin )
+        {
+            _skin = skin;
+        }
+
+        // ====================================================================
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="jsonData"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public override Color Read( Json json, JsonValue jsonData, Type type )
         {
             if ( jsonData.IsString() )
@@ -973,17 +1071,17 @@ public class Skin : IDisposable
                 return _skin.Get< Color >( jsonData.AsString() );
             }
 
-            string hex = json.ReadValue< string >( "hex", null, jsonData );
+            var hex = json.ReadValue< string >( "hex", null, jsonData );
 
             if ( hex != null )
             {
                 return Color.FromHexString( hex );
             }
 
-            float r = json.ReadValue< float >( "r", 0f, jsonData );
-            float g = json.ReadValue< float >( "g", 0f, jsonData );
-            float b = json.ReadValue< float >( "b", 0f, jsonData );
-            float a = json.ReadValue< float >( "a", 1f, jsonData );
+            var r = json.ReadValue< float >( "r", typeof( float ), 0f, jsonData );
+            var g = json.ReadValue< float >( "g", typeof( float ), 0f, jsonData );
+            var b = json.ReadValue< float >( "b", typeof( float ), 0f, jsonData );
+            var a = json.ReadValue< float >( "a", typeof( float ), 1f, jsonData );
 
             return new Color( r, g, b, a );
         }
@@ -992,27 +1090,45 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class BitmapFontSerializer : Json.ReadOnlySerializer< BitmapFont >
     {
         private readonly Skin     _skin;
         private readonly FileInfo _skinFile;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="skin"></param>
+        /// <param name="skinFile"></param>
         public BitmapFontSerializer( Skin skin, FileInfo skinFile )
         {
             _skin     = skin;
             _skinFile = skinFile;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="jsonData"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="SerializationException"></exception>
         public override BitmapFont Read( Json json, JsonValue jsonData, Type type )
         {
-            string path                = json.ReadValue< string >( "file", jsonData );
-            float  scaledSize          = json.ReadValue< float >( "scaledSize", -1f, jsonData );
-            bool   flip                = json.ReadValue< bool >( "flip", false, jsonData );
-            bool   markupEnabled       = json.ReadValue< bool >( "markupEnabled", false, jsonData );
-            bool   useIntegerPositions = json.ReadValue< bool >( "useIntegerPositions", true, jsonData );
+            var path                = json.ReadValue< string >( "file", typeof( string ), jsonData );
+            var scaledSize          = json.ReadValue< float >( "scaledSize", typeof( float ), -1f, jsonData );
+            var flip                = json.ReadValue< bool >( "flip", typeof( bool ), false, jsonData );
+            var markupEnabled       = json.ReadValue< bool >( "markupEnabled", typeof( bool ), false, jsonData );
+            var useIntegerPositions = json.ReadValue< bool >( "useIntegerPositions", typeof( bool ), true, jsonData );
 
-            var parentPath = _skinFile.DirectoryName ?? "\\.";
-            var fontFile   = new FileInfo( Path.Combine( parentPath, path ) );
+            Guard.Against.Null( path );
+
+            string parentPath = _skinFile.DirectoryName ?? "\\.";
+            var    fontFile   = new FileInfo( Path.Combine( parentPath, path ) );
 
             if ( !File.Exists( fontFile.FullName ) )
             {
@@ -1021,20 +1137,19 @@ public class Skin : IDisposable
 
             if ( !File.Exists( fontFile.FullName ) )
             {
-                throw new SerializationException( "Font file not found: " + fontFile );
+                throw new SerializationException( $"Font file not found: {fontFile}" );
             }
 
             string regionName = Path.GetFileNameWithoutExtension( fontFile.Name );
 
             try
             {
-                BitmapFont font;
-                // GetRegions usually returns an Array<TextureRegion> in LibGDX ports
-                var regions = _skin.GetRegions( regionName );
+                BitmapFont             font;
+                List< TextureRegion >? regions = _skin.GetRegions( regionName );
 
                 if ( regions is { Count: > 0 } )
                 {
-                    font = new BitmapFont( new BitmapFontData( fontFile, flip ), regions, true );
+                    font = new BitmapFont( new BitmapFontData( fontFile, flip ), regions );
                 }
                 else
                 {
@@ -1046,24 +1161,19 @@ public class Skin : IDisposable
                     }
                     else
                     {
-                        var      fontFileParent = fontFile.DirectoryName ?? "\\.";
-                        FileInfo imageFile      = new FileInfo( Path.Combine( fontFileParent, regionName + ".png" ) );
+                        string fontFileParent = fontFile.DirectoryName ?? "\\.";
+                        var    imageFile      = new FileInfo( Path.Combine( fontFileParent, $"{regionName}.png" ) );
 
-                        if ( File.Exists( imageFile.FullName ) )
-                        {
-                            font = new BitmapFont( fontFile, imageFile, flip );
-                        }
-                        else
-                        {
-                            font = new BitmapFont( fontFile, flip );
-                        }
+                        font = File.Exists( imageFile.FullName )
+                            ? new BitmapFont( fontFile, imageFile, flip )
+                            : new BitmapFont( fontFile, flip );
                     }
                 }
 
                 font.FontData.MarkupEnabled = markupEnabled;
                 font.UseIntegerPositions    = useIntegerPositions;
 
-                if ( Math.Abs( scaledSize - ( -1 ) ) > NumberUtils.FLOAT_TOLERANCE )
+                if ( Math.Abs( scaledSize - -1 ) > NumberUtils.FLOAT_TOLERANCE )
                 {
                     font.FontData.SetScale( scaledSize / font.GetCapHeight() );
                 }
@@ -1072,7 +1182,7 @@ public class Skin : IDisposable
             }
             catch ( Exception ex )
             {
-                throw new SerializationException( "Error loading bitmap font: " + fontFile, ex );
+                throw new SerializationException( $"Error loading bitmap font: {fontFile}", ex );
             }
         }
     }
@@ -1080,31 +1190,45 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class TintedDrawableSerializer : Json.ReadOnlySerializer< TintedDrawable >
+
     {
         private readonly Skin _skin;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="skin"></param>
         public TintedDrawableSerializer( Skin skin )
         {
             _skin = skin;
         }
 
-        public override TintedDrawable Read( Json json, JsonValue jsonData, Type type )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="jsonData"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="SerializationException"></exception>
+        public override object Read( Json json, JsonValue jsonData, Type type )
         {
-            string name  = json.ReadValue< string >( "name", jsonData );
-            Color  color = json.ReadValue< Color >( "color", jsonData );
+            var name  = json.ReadValue< string >( "name", typeof( string ), jsonData );
+            var color = json.ReadValue< Color >( "color", typeof( Color ), jsonData );
 
             if ( color == null )
             {
-                throw new SerializationException( "TintedDrawable missing color: " + jsonData );
+                throw new SerializationException( $"TintedDrawable missing color: {jsonData}" );
             }
 
-            // Assuming NewDrawable is a method on your Skin class
             ISceneDrawable drawable = _skin.NewDrawable( name, color );
 
             if ( drawable is BaseDrawable baseDrawable )
             {
-                // C# "is" pattern matching makes the cast and null-check cleaner
                 baseDrawable.Name = $"{jsonData.Name} ({name}, {color})";
             }
 
@@ -1115,34 +1239,48 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class SkinSerializer : Json.ReadOnlySerializer< Skin >
     {
         private readonly Skin _skin;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="skin"></param>
         public SkinSerializer( Skin skin )
         {
             _skin = skin;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="typeToValueMap"></param>
+        /// <param name="ignored"></param>
+        /// <returns></returns>
+        /// <exception cref="SerializationException"></exception>
         public override Skin Read( Json json, JsonValue typeToValueMap, Type ignored )
         {
-            // Iterate through each type block in the JSON (e.g., "com.badlogic.gdx.graphics.Color")
-            for ( JsonValue valueMap = typeToValueMap.Child; valueMap != null; valueMap = valueMap.Next )
+            for ( JsonValue? valueMap = typeToValueMap.Child; valueMap != null; valueMap = valueMap.Next )
             {
                 try
                 {
-                    // 1. Try to get type from Json's internal tag map
-                    Type? type = json.GetTagType( valueMap.Name );
-
-                    // 2. If not found, try to resolve the type string directly
-                    if ( type == null )
+                    if ( string.IsNullOrEmpty( valueMap.Name ) )
                     {
-                        type = Type.GetType( valueMap.Name );
+                        throw new SerializationException( "Skin missing name." );
                     }
 
+                    // 1. Try to get type from Json's internal tag map
+                    // 2. If not found, try to resolve the type string directly
+                    Type? type = json.GetTagType( valueMap.Name ) ?? Type.GetType( valueMap.Name );
+
                     if ( type == null )
                     {
-                        throw new SerializationException( "Unknown type: " + valueMap.Name );
+                        throw new SerializationException( $"Unknown type: {valueMap.Name}" );
                     }
 
                     ReadNamedObjects( json, type, valueMap );
@@ -1156,14 +1294,20 @@ public class Skin : IDisposable
             return _skin;
         }
 
-        private void ReadNamedObjects< T >( Json json, JsonValue valueMap )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="type"></param>
+        /// <param name="valueMap"></param>
+        /// <exception cref="SerializationException"></exception>
+        private void ReadNamedObjects( Json json, Type type, JsonValue valueMap )
         {
-            Type type    = typeof( T );
             Type addType = ( type == typeof( TintedDrawable ) ) ? typeof( IDrawable ) : type;
 
-            for ( JsonValue valueEntry = valueMap.Child; valueEntry != null; valueEntry = valueEntry.Next )
+            for ( JsonValue? valueEntry = valueMap.Child; valueEntry != null; valueEntry = valueEntry.Next )
             {
-                object? obj = json.ReadValue< T >( type, valueEntry );
+                object? obj = json.ReadValue( type, valueEntry );
 
                 if ( obj == null )
                 {
@@ -1188,254 +1332,6 @@ public class Skin : IDisposable
             }
         }
     }
-
-    /*
-    protected Json GetJsonLoader( FileInfo skinFile, Skin skin )
-    {
-            Json json = new Json()
-            {
-                private static readonly string parentFieldName = "parent";
-
-                public T readValue<T>( Type type, Type elementType, JsonValue jsonData )
-                {
-                    // If the JSON is a string but the type is not, look up the actual value by name.
-                    if ( jsonData != null
-                      && jsonData.isString()
-                      && !ClassReflection.isAssignableFrom( CharSequence.class, type) )
-                    {
-                        return get( jsonData.asString(), type );
-                    }
-
-                    return super.readValue( type, elementType, jsonData );
-                }
-
-                protected bool ignoreUnknownField( Type type, string fieldName )
-                {
-                    return fieldName.equals( parentFieldName );
-                }
-
-                public void readFields( object obj, JsonValue jsonMap)
-                {
-                    if ( jsonMap.has( parentFieldName ) )
-                    {
-                        string parentName = readValue( parentFieldName, string.class, jsonMap);
-                        Type  parentType = obj.getClass();
-
-                        while ( true )
-                        {
-                            try
-                            {
-                                copyFields( get( parentName, parentType ), obj );
-
-                                break;
-                            }
-                            catch ( RuntimeException ex )
-                            {
-                                // Parent resource doesn't exist.
-                                parentType = parentType.getSuperclass(); // Try resource for super class.
-
-                                if ( parentType == obj.class)
-                                {
-                                    SerializationException se =
-                                    new SerializationException($"Unable to find parent resource with name: {parentName} );
-                                    se.addTrace( jsonMap.child.trace() );
-
-                                    throw se;
-                                }
-                            }
-                        }
-                    }
-
-                    super.readFields( obj, jsonMap );
-                }
-            };
-
-            json.setTypeName( null );
-            json.setUsePrototypes( false );
-
-            json.setSerializer( typeof( Skin ), new ReadOnlySerializer< Skin >()
-            {
-                public Skin read(Json json, JsonValue typeToValueMap, Type ignored)
-                {
-                    for (JsonValue valueMap = typeToValueMap.child; valueMap != null; valueMap = valueMap.next)
-                    {
-                        try
-                        {
-                            Type type = json.getClass(valueMap.name());
-
-                            if (type == null)
-                            {
-                                type = ClassReflection.forName(valueMap.name());
-                            }
-
-                            readNamedObjects(json, type, valueMap);
-                        }
-                        catch ( ReflectionException ex)
-                        {
-                            throw new SerializationException( ex );
-                        }
-                    }
-
-                    return skin;
-                }
-
-                private void readNamedObjects( Json json, Type type, JsonValue valueMap )
-                {
-                    Type addType = ( type == TintedDrawable.class )
-                                    ? Drawable.class
-                                    : type;
-
-                    for ( JsonValue valueEntry = valueMap.child; valueEntry != null; valueEntry = valueEntry.next )
-                    {
-                        object object = json.readValue( type, valueEntry );
-
-                        if ( object == null ) continue;
-
-                        try
-                        {
-                            add( valueEntry.name, object, addType );
-                            if ( addType != Drawable.class
-                                && ClassReflection.isAssignableFrom( Drawable.class, addType) )
-                            {
-                                add( valueEntry.name, object, Drawable.class);
-                            }
-                        }
-                        catch ( Exception ex )
-                        {
-                            throw new SerializationException($"Error reading {ClassReflection.getSimpleName( type )} : {valueEntry.name}",ex );
-                        }
-                    }
-                }
-            });
-
-            json.setSerializer(BitmapFont.class, new ReadOnlySerializer< BitmapFont >()
-            {
-                public BitmapFont read(Json json, JsonValue jsonData, Type type)
-                {
-                    string path = json.readValue("file", string.class, jsonData);
-                    float scaledSize = json.readValue("scaledSize", float.class, -1f, jsonData);
-                    bool flip = json.readValue("flip", bool.class, false, jsonData);
-                    bool markupEnabled = json.readValue("markupEnabled", bool.class, false, jsonData);
-                    bool useIntegerPositions = json.readValue("useIntegerPositions", bool.class, true, jsonData);
-                    FileHandle fontFile = skinFile.parent().child(path);
-
-                    if (!fontFile.exists())
-                    {
-                        fontFile = Gdx.files.internal(path);
-                    }
-
-                    if (!fontFile.exists())
-                    {
-                        throw new SerializationException( $"Font file not found: {fontFile"} );
-                    }
-
-                    // Use a region with the same name as the font, else use a PNG
-                    // file in the same directory as the FNT file.
-                    string regionName = fontFile.nameWithoutExtension();
-                    try
-                    {
-                        BitmapFont font;
-                        Array<TextureRegion> regions = skin.getRegions(regionName);
-                        if (regions != null)
-                        {
-                            font = new BitmapFont(new BitmapFontData(fontFile, flip), regions, true);
-                        }
-                        else
-                        {
-                            TextureRegion region = skin.optional(regionName, TextureRegion.class);
-                            if (region != null)
-                            {
-                                font = new BitmapFont(fontFile, region, flip);
-                            }
-                            else
-                            {
-                                FileHandle imageFile = fontFile.parent().child(regionName + ".png");
-                                if (imageFile.exists())
-                                {
-                                    font = new BitmapFont(fontFile, imageFile, flip);
-                                }
-                                else
-                                {
-                                    font = new BitmapFont(fontFile, flip);
-                                }
-                            }
-                        }
-
-                        font.getData().markupEnabled = markupEnabled;
-                        font.setUseIntegerPositions(useIntegerPositions);
-
-                        // Scaled size is the desired cap height to scale the font to.
-                        if (scaledSize != -1)
-                        {
-                            font.getData().setScale(scaledSize / font.getCapHeight());
-                        }
-
-                        return font;
-                    }
-                    catch (RuntimeException ex)
-                    {
-                        throw new SerializationException( "Error loading bitmap font: " + fontFile, ex );
-                    }
-                }
-            });
-
-            json.setSerializer(Color.class, new ReadOnlySerializer< Color >()
-            {
-                public Color read(Json json, JsonValue jsonData, Type type)
-                {
-                    if (jsonData.isString())
-                    {
-                        return get(jsonData.asString(), Color.class);
-                    }
-
-                    string hex = json.readValue("hex", string.class, ( string )null, jsonData);
-
-                    if (hex != null)
-                    {
-                        return Color.valueOf(hex);
-                    }
-
-                    float r = json.readValue("r", float.class, 0f, jsonData);
-                    float g = json.readValue("g", float.class, 0f, jsonData);
-                    float b = json.readValue("b", float.class, 0f, jsonData);
-                    float a = json.readValue("a", float.class, 1f, jsonData);
-
-                    return new Color(r, g, b, a);
-                }
-            });
-
-            json.setSerializer(TintedDrawable.class, new ReadOnlySerializer()
-            {
-                public object read( Json json, JsonValue jsonData, Type type )
-                {
-                    string name = json.readValue( "name", string.class, jsonData );
-                    Color color = json.readValue( "color", Color.class, jsonData );
-
-                    if ( color == null )
-                    {
-                        throw new SerializationException( $"TintedDrawable missing color: {jsonData}" );
-                    }
-
-                    IDrawable drawable = newDrawable( name, color );
-
-                    if ( drawable is BaseDrawable )
-                    {
-                        BaseDrawable named = ( BaseDrawable )drawable;
-                        named.setName( $"{jsonData.name} ({name}, {color})" );
-                    }
-
-                    return drawable;
-                }
-            });
-
-            foreach ( ObjectMap.Entry<string, Type> entry in jsonClassTags )
-            {
-                json.addClassTag( entry.key, entry.value );
-            }
-
-            return json;
-    }
-    */
 
     // ========================================================================
     // ========================================================================
@@ -1473,7 +1369,7 @@ public class Skin : IDisposable
                                         bool hasExistingValue,
                                         JsonSerializer serializer )
         {
-            var token = JToken.Load( reader );
+            JToken token = JToken.Load( reader );
 
             // Equivalent to: if (jsonData.isString()) return get(jsonData.asString(), Color.class);
             if ( token.Type == JTokenType.String )
@@ -1488,10 +1384,10 @@ public class Skin : IDisposable
             }
 
             // Handle RGBA: { "r": 1, "g": 0, "b": 0, "a": 1 }
-            var r = token[ "r" ]?.Value< float >() ?? 0;
-            var g = token[ "g" ]?.Value< float >() ?? 0;
-            var b = token[ "b" ]?.Value< float >() ?? 0;
-            var a = token[ "a" ]?.Value< float >() ?? 1;
+            float r = token[ "r" ]?.Value< float >() ?? 0;
+            float g = token[ "g" ]?.Value< float >() ?? 0;
+            float b = token[ "b" ]?.Value< float >() ?? 0;
+            float a = token[ "a" ]?.Value< float >() ?? 1;
 
             return new Color( r, g, b, a );
         }
@@ -1513,10 +1409,14 @@ public class Skin : IDisposable
     [PublicAPI]
     public class SkinConverter : JsonConverter< Skin >
     {
-        private const string PARENT_FIELD_NAME = "parent";
+        private const    string PARENT_FIELD_NAME = "parent";
+        private readonly Skin   _skin;
 
-        private readonly Skin _skin;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="skin"></param>
+        /// <param name="file"></param>
         public SkinConverter( Skin skin, FileInfo file )
         {
             _skin = skin;
@@ -1542,20 +1442,20 @@ public class Skin : IDisposable
                                        bool hasExistingValue,
                                        JsonSerializer serializer )
         {
-            var root = JObject.Load( reader );
+            JObject root = JObject.Load( reader );
 
-            foreach ( var typeProperty in root.Properties() )
+            foreach ( JProperty typeProperty in root.Properties() )
             {
-                var className = typeProperty.Name;
+                string className = typeProperty.Name;
                 // Get the actual C# Type from the JSON key (e.g., "Color")
-                var targetType = ResolveType( className );
+                Type targetType = ResolveType( className );
 
                 if ( typeProperty.Value is JObject resources )
                 {
-                    foreach ( var resourceProperty in resources.Properties() )
+                    foreach ( JProperty resourceProperty in resources.Properties() )
                     {
-                        var resourceName  = resourceProperty.Name;
-                        var resourceToken = resourceProperty.Value;
+                        string resourceName  = resourceProperty.Name;
+                        JToken resourceToken = resourceProperty.Value;
 
                         if ( resourceToken is JObject resourceObj
                           && resourceObj[ PARENT_FIELD_NAME ] != null )
@@ -1564,21 +1464,21 @@ public class Skin : IDisposable
 
                             if ( string.IsNullOrWhiteSpace( parentName ) )
                             {
-                                throw new JsonSerializationException( $"Resource '{resourceName}' "
-                                                                    + $"has an empty parent field." );
+                                throw new JsonSerializationException
+                                    ( $"Resource '{resourceName}' has an empty parent field." );
                             }
 
                             // Try to find the parent instance
-                            var parentInstance = _skin.Get( parentName, targetType );
+                            object? parentInstance = _skin.Get( parentName, targetType );
 
                             if ( parentInstance == null )
                             {
-                                throw new JsonSerializationException( $"Unable to find parent resource "
-                                                                    + $"named '{parentName}' for '{resourceName}'" );
+                                throw new JsonSerializationException
+                                    ( $"Unable to find parent resource named '{parentName}' for '{resourceName}'" );
                             }
 
                             // Convert parent back to a JObject so we can merge
-                            var parentJson = JObject.FromObject( parentInstance, serializer );
+                            JObject parentJson = JObject.FromObject( parentInstance, serializer );
 
                             // Merge: Current properties overwrite parent properties
                             parentJson.Merge( resourceObj,
@@ -1600,9 +1500,14 @@ public class Skin : IDisposable
             return _skin;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         private Type ResolveType( string name )
         {
-            foreach ( var tag in DefaultTagClasses )
+            foreach ( Tag tag in DefaultTagClasses )
             {
                 if ( name.Contains( tag.Name ) )
                 {
@@ -1624,13 +1529,13 @@ public class Skin : IDisposable
         }
     }
 
-// ========================================================================
-// ========================================================================
+    // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// </summary>
     [PublicAPI]
-    public class TintedDrawable
+    public record TintedDrawable
     {
         public string Name  { get; set; } = "white";
         public Color  Color { get; set; } = Color.White;

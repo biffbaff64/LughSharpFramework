@@ -25,7 +25,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Utils;
@@ -141,7 +143,7 @@ public class QuadTreeFloat : IResetable
 
     public void Add( float value, float valueX, float valueY )
     {
-        var count = Count;
+        int count = Count;
 
         if ( count == -1 )
         {
@@ -187,8 +189,8 @@ public class QuadTreeFloat : IResetable
     private void AddToChild( float value, float valueX, float valueY )
     {
         QuadTreeFloat? child;
-        var            halfWidth  = Width / 2;
-        var            halfHeight = Height / 2;
+        float          halfWidth  = Width / 2;
+        float          halfHeight = Height / 2;
 
         if ( valueX < ( X + halfWidth ) )
         {
@@ -218,7 +220,7 @@ public class QuadTreeFloat : IResetable
 
     private QuadTreeFloat? ObtainChild( float x, float y, float width, float height, int depth )
     {
-        var child = _pool.Obtain();
+        QuadTreeFloat? child = _pool.Obtain();
 
         if ( child != null )
         {
@@ -264,26 +266,26 @@ public class QuadTreeFloat : IResetable
                         List< float > results )
     {
         if ( !( ( X < ( rectX + rectSize ) )
-                && ( ( X + Width ) > rectX )
-                && ( Y < ( rectY + rectSize ) )
-                && ( ( Y + Height ) > rectY ) ) )
+             && ( ( X + Width ) > rectX )
+             && ( Y < ( rectY + rectSize ) )
+             && ( ( Y + Height ) > rectY ) ) )
         {
             return;
         }
 
-        var count = Count;
+        int count = Count;
 
         if ( count != -1 )
         {
-            var values = Values;
+            List< float > values = Values;
 
             for ( var i = 1; i < count; i += 3 )
             {
-                var px = values[ i ];
-                var py = values[ i + 1 ];
-                var dx = px - centerX;
-                var dy = py - centerY;
-                var d  = ( dx * dx ) + ( dy * dy );
+                float px = values[ i ];
+                float py = values[ i + 1 ];
+                float dx = px - centerX;
+                float dy = py - centerY;
+                float d  = ( dx * dx ) + ( dy * dy );
 
                 if ( d <= radiusSqr )
                 {
@@ -327,12 +329,12 @@ public class QuadTreeFloat : IResetable
 
         FindNearestInternal( x, y, result );
 
-        var nearValue = result.First();
-        var nearX     = result[ 1 ];
-        var nearY     = result[ 2 ];
-        var nearDist  = result[ 3 ];
+        float nearValue = result.First();
+        float nearX     = result[ 1 ];
+        float nearY     = result[ 2 ];
+        float nearDist  = result[ 3 ];
 
-        var found = !float.IsPositiveInfinity( nearDist );
+        bool found = !float.IsPositiveInfinity( nearDist );
 
         if ( !found )
         {
@@ -346,7 +348,7 @@ public class QuadTreeFloat : IResetable
 
         for ( int i = 3, n = result.Count; i < n; i += 4 )
         {
-            var dist = result[ i ];
+            float dist = result[ i ];
 
             if ( dist < nearDist )
             {
@@ -374,29 +376,29 @@ public class QuadTreeFloat : IResetable
     private void FindNearestInternal( float x, float y, List< float > result )
     {
         if ( !( ( X < x )
-                && ( ( X + Width ) > x )
-                && ( Y < y )
-                && ( ( Y + Height ) > y ) ) )
+             && ( ( X + Width ) > x )
+             && ( Y < y )
+             && ( ( Y + Height ) > y ) ) )
         {
             return;
         }
 
-        var count = Count;
+        int count = Count;
 
         if ( count != -1 )
         {
-            var nearValue = result.First();
-            var nearX     = result[ 1 ];
-            var nearY     = result[ 2 ];
-            var nearDist  = result[ 3 ];
+            float nearValue = result.First();
+            float nearX     = result[ 1 ];
+            float nearY     = result[ 2 ];
+            float nearDist  = result[ 3 ];
 
-            var values = Values;
+            List< float > values = Values;
 
             for ( var i = 1; i < count; i += 3 )
             {
                 float px   = values[ i ], py = values[ i + 1 ];
                 float dx   = px - x,      dy = py - y;
-                var   dist = ( dx * dx ) + ( dy * dy );
+                float dist = ( dx * dx ) + ( dy * dy );
 
                 if ( dist < nearDist )
                 {

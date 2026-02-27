@@ -25,14 +25,18 @@
 using DesktopGLBackend.Graphics;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
+
 using DotGLFW;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
+
 using Image = DotGLFW.Image;
 using Platform = LughSharp.Core.Main.Platform;
 
@@ -173,7 +177,7 @@ public class DesktopGLWindow : IDisposable
 
         lock ( _runnables )
         {
-            foreach ( var runnable in _runnables )
+            foreach ( IRunnable.Runnable runnable in _runnables )
             {
                 _executedRunnables.Add( runnable );
             }
@@ -181,12 +185,12 @@ public class DesktopGLWindow : IDisposable
             _runnables.Clear();
         }
 
-        foreach ( var runnable in _executedRunnables )
+        foreach ( IRunnable.Runnable runnable in _executedRunnables )
         {
             runnable();
         }
 
-        var shouldRender = ( _executedRunnables.Count > 0 ) || Graphics.ContinuousRendering;
+        bool shouldRender = ( _executedRunnables.Count > 0 ) || Graphics.ContinuousRendering;
 
         _executedRunnables.Clear();
 
@@ -294,7 +298,7 @@ public class DesktopGLWindow : IDisposable
     /// <returns>A Vector2 holding the window X and Y.</returns>
     public Vector2 GetPosition()
     {
-        Glfw.GetWindowPos( GlfwWindow, out var xPos, out var yPos );
+        Glfw.GetWindowPos( GlfwWindow, out int xPos, out int yPos );
 
         return _tmpV2.Set( xPos, yPos );
     }
@@ -440,7 +444,7 @@ public class DesktopGLWindow : IDisposable
 
         SetIcon( window, pixmaps );
 
-        foreach ( var pixmap in pixmaps )
+        foreach ( Pixmap pixmap in pixmaps )
         {
             pixmap.Dispose();
         }
@@ -484,7 +488,7 @@ public class DesktopGLWindow : IDisposable
             {
                 Width  = images[ i ].Width,
                 Height = images[ i ].Height,
-                Pixels = images[ i ].PixelData,
+                Pixels = images[ i ].PixelData
             };
 
             buffer.Add( icon );
@@ -492,7 +496,7 @@ public class DesktopGLWindow : IDisposable
 
         Glfw.SetWindowIcon( window, buffer.ToArray() );
 
-        foreach ( var pixmap in tmpPixmaps )
+        foreach ( Pixmap? pixmap in tmpPixmaps )
         {
             pixmap?.Dispose();
         }

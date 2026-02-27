@@ -45,7 +45,7 @@ public interface IFileService
     /// Access outside this path will throw an exception.</param>
     /// <returns>A <see cref="FileInfo"/> object for the resolved path, or <c>null</c> if inputs are invalid.</returns>
     /// <exception cref="UnauthorizedAccessException">Thrown if the resolved path is outside the <paramref name="rootLimit"/>.</exception>
-    FileInfo? GetRelativeFileHandle(FileInfo? baseFile, string? relativePath, string? rootLimit = null);
+    FileInfo? GetRelativeFileHandle( FileInfo? baseFile, string? relativePath, string? rootLimit = null );
 }
 
 // ============================================================================

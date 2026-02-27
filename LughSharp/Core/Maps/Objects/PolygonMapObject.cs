@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Maps.Objects;
@@ -33,7 +34,7 @@ public class PolygonMapObject : MapObject
     public Polygon Polygon { get; set; }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Creates empty polygon map object
     /// </summary>
@@ -62,4 +63,3 @@ public class PolygonMapObject : MapObject
 
 // ============================================================================
 // ============================================================================
-

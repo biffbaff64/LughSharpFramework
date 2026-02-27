@@ -26,10 +26,13 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -71,7 +74,7 @@ public class TextureUnpacker
             }
         }
 
-        foreach ( var page in atlas.Pages )
+        foreach ( TextureAtlasData.Page page in atlas.Pages )
         {
             // load the image file belonging to this page as a Bitmap
             var fileInfo = new FileInfo( page.TextureFile!.FullName );
@@ -92,7 +95,7 @@ public class TextureUnpacker
                 PrintExceptionAndExit( e );
             }
 
-            foreach ( var region in atlas.Regions )
+            foreach ( TextureAtlasData.Region region in atlas.Regions )
             {
                 if ( !Quiet )
                 {
@@ -117,7 +120,7 @@ public class TextureUnpacker
                             var originalImg =
                                 new Bitmap( region.OriginalWidth, region.OriginalHeight, img.PixelFormat );
 
-                            using ( var g = Graphics.FromImage( originalImg ) )
+                            using ( Graphics g = Graphics.FromImage( originalImg ) )
                             {
                                 g.InterpolationMode = InterpolationMode.Bilinear;
                                 g.DrawImage( splitImage,
@@ -137,11 +140,11 @@ public class TextureUnpacker
                     }
 
                     // check if the parent directories of this image file exist and create them if not
-                    var imgOutputFilePath = Path.Combine( outputDirInfo.FullName,
-                                                          $"{region.Index switch
-                                                             { -1 => region.Name,
-                                                                 var _ => $"{region.Name}_{region.Index}" }}.{extension}" );
-                    var imgDirInfo = new FileInfo( imgOutputFilePath ).Directory;
+                    string imgOutputFilePath = Path.Combine( outputDirInfo.FullName,
+                                                             $"{region.Index switch
+                                                                { -1 => region.Name,
+                                                                    var _ => $"{region.Name}_{region.Index}" }}.{extension}" );
+                    DirectoryInfo? imgDirInfo = new FileInfo( imgOutputFilePath ).Directory;
 
                     if ( imgDirInfo is { Exists: false } )
                     {
@@ -214,14 +217,14 @@ public class TextureUnpacker
             return;
         }
 
-        var atlasFileHandle = new FileInfo( atlasFile ).FullName;
+        string atlasFileHandle = new FileInfo( atlasFile ).FullName;
 
         if ( !File.Exists( atlasFileHandle ) )
         {
             throw new RuntimeException( $"Atlas file not found: {atlasFileHandle}" );
         }
 
-        var atlasParentPath = Path.GetPathRoot( atlasFileHandle );
+        string? atlasParentPath = Path.GetPathRoot( atlasFileHandle );
 
         if ( atlasParentPath == null )
         {
@@ -254,12 +257,12 @@ public class TextureUnpacker
         // get the needed part of the page and rotate if needed
         if ( region.Rotate )
         {
-            var srcRect  = new Rectangle( region.Left, region.Top, region.Height, region.Width );
-            var srcImage = page.Clone( srcRect, page.PixelFormat );
+            var    srcRect  = new Rectangle( region.Left, region.Top, region.Height, region.Width );
+            Bitmap srcImage = page.Clone( srcRect, page.PixelFormat );
 
             splitImage = new Bitmap( region.Width, region.Height, page.PixelFormat );
 
-            using var g = Graphics.FromImage( splitImage );
+            using Graphics g = Graphics.FromImage( splitImage );
 
             g.InterpolationMode = InterpolationMode.Bilinear;
             g.TranslateTransform( 0, -region.Width );
@@ -280,7 +283,7 @@ public class TextureUnpacker
                                           splitImage.Height + ( padding * 2 ),
                                           page.PixelFormat );
 
-            using var g = Graphics.FromImage( paddedImage );
+            using Graphics g = Graphics.FromImage( paddedImage );
             g.DrawImage( splitImage, padding, padding );
 
             return paddedImage;
@@ -297,20 +300,20 @@ public class TextureUnpacker
     /// <param name="outputDir"></param>
     public static Bitmap ExtractNinePatch( Bitmap page, TextureAtlasData.Region region, DirectoryInfo outputDir )
     {
-        var splitImage = ExtractImage( page, region, outputDir, NINEPATCH_PADDING );
+        Bitmap splitImage = ExtractImage( page, region, outputDir, NINEPATCH_PADDING );
 
-        using var g        = Graphics.FromImage( splitImage );
-        using var blackPen = new Pen( Color.Black );
+        using Graphics g        = Graphics.FromImage( splitImage );
+        using var      blackPen = new Pen( Color.Black );
 
         // Draw the four lines to save the ninepatch's padding and splits
-        var splits = region.FindValue( "split" );
+        int[]? splits = region.FindValue( "split" );
 
         if ( splits is { Length: 4 } )
         {
-            var startX = splits[ 0 ] + NINEPATCH_PADDING;
-            var endX   = ( ( region.Width - splits[ 1 ] ) + NINEPATCH_PADDING ) - 1;
-            var startY = splits[ 2 ] + NINEPATCH_PADDING;
-            var endY   = ( ( region.Height - splits[ 3 ] ) + NINEPATCH_PADDING ) - 1;
+            int startX = splits[ 0 ] + NINEPATCH_PADDING;
+            int endX   = region.Width - splits[ 1 ] + NINEPATCH_PADDING - 1;
+            int startY = splits[ 2 ] + NINEPATCH_PADDING;
+            int endY   = region.Height - splits[ 3 ] + NINEPATCH_PADDING - 1;
 
             if ( endX >= startX )
             {
@@ -323,14 +326,14 @@ public class TextureUnpacker
             }
         }
 
-        var pads = region.FindValue( "pad" );
+        int[]? pads = region.FindValue( "pad" );
 
         if ( pads is { Length: 4 } )
         {
-            var padStartX = pads[ 0 ] + NINEPATCH_PADDING;
-            var padEndX   = ( ( region.Width - pads[ 1 ] ) + NINEPATCH_PADDING ) - 1;
-            var padStartY = pads[ 2 ] + NINEPATCH_PADDING;
-            var padEndY   = ( ( region.Height - pads[ 3 ] ) + NINEPATCH_PADDING ) - 1;
+            int padStartX = pads[ 0 ] + NINEPATCH_PADDING;
+            int padEndX   = region.Width - pads[ 1 ] + NINEPATCH_PADDING - 1;
+            int padStartY = pads[ 2 ] + NINEPATCH_PADDING;
+            int padEndY   = region.Height - pads[ 3 ] + NINEPATCH_PADDING - 1;
 
             g.DrawLine( blackPen, padStartX, splitImage.Height - 1, padEndX, splitImage.Height - 1 );
             g.DrawLine( blackPen, splitImage.Width - 1, padStartY, splitImage.Width - 1, padEndY );
@@ -345,7 +348,7 @@ public class TextureUnpacker
     /// <returns> 0 If arguments are invalid, Number of arguments otherwise. </returns>
     private int ParseArguments( string[] args )
     {
-        var numArgs = args.Length;
+        int numArgs = args.Length;
 
         // check if number of args is right
         if ( numArgs < 1 )
@@ -354,8 +357,8 @@ public class TextureUnpacker
         }
 
         // check if the input file's extension is right
-        var extension = args[ 0 ].Substring( args[ 0 ].Length - ATLAS_FILE_EXTENSION.Length )
-                                 .Equals( ATLAS_FILE_EXTENSION );
+        bool extension = args[ 0 ].Substring( args[ 0 ].Length - ATLAS_FILE_EXTENSION.Length )
+                                  .Equals( ATLAS_FILE_EXTENSION );
 
         // check if the directory names are valid
         var directory = true;
@@ -415,7 +418,7 @@ public class TextureUnpacker
                    "bmp"           => ImageFormat.Bmp,
                    "gif"           => ImageFormat.Gif,
                    "tiff"          => ImageFormat.Tiff,
-                   _               => ImageFormat.Png
+                   var _           => ImageFormat.Png
                };
     }
 

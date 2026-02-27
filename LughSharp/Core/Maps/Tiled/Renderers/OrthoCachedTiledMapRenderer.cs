@@ -25,6 +25,8 @@
 using System;
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
@@ -32,6 +34,7 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
+
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
@@ -103,15 +106,17 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         SpriteCache.ProjectionMatrix = camera.Combined;
 
-        var width  = ( camera.ViewportWidth * camera.Zoom ) + ( MaxTileWidth * 2 * UnitScale );
-        var height = ( camera.ViewportHeight * camera.Zoom ) + ( MaxTileHeight * 2 * UnitScale );
+        float width  = ( camera.ViewportWidth * camera.Zoom ) + ( MaxTileWidth * 2 * UnitScale );
+        float height = ( camera.ViewportHeight * camera.Zoom ) + ( MaxTileHeight * 2 * UnitScale );
 
         ViewBounds.Set( camera.Position.X - ( width / 2 ), camera.Position.Y - ( height / 2 ), width, height );
 
         if ( ( CanCacheMoreW && ( ViewBounds.X < ( CacheBounds.X - _tolerance ) ) )
-             || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
-             || ( CanCacheMoreE && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
-             || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height ) > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
+          || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
+          || ( CanCacheMoreE
+            && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
+          || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height )
+                                > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
         {
             Cached = false;
         }
@@ -131,9 +136,11 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         ViewBounds.Set( x, y, width, height );
 
         if ( ( CanCacheMoreW && ( ViewBounds.X < ( CacheBounds.X - _tolerance ) ) )
-             || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
-             || ( CanCacheMoreE && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
-             || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height ) > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
+          || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
+          || ( CanCacheMoreE
+            && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
+          || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height )
+                                > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
         {
             Cached = false;
         }
@@ -149,15 +156,15 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
             Count  = 0;
             SpriteCache.Clear();
 
-            var extraWidth  = ViewBounds.Width * OverCache;
-            var extraHeight = ViewBounds.Height * OverCache;
+            float extraWidth  = ViewBounds.Width * OverCache;
+            float extraHeight = ViewBounds.Height * OverCache;
 
             CacheBounds.X      = ViewBounds.X - extraWidth;
             CacheBounds.Y      = ViewBounds.Y - extraHeight;
             CacheBounds.Width  = ViewBounds.Width + ( extraWidth * 2 );
             CacheBounds.Height = ViewBounds.Height + ( extraHeight * 2 );
 
-            foreach ( var layer in Map!.Layers )
+            foreach ( MapLayer layer in Map!.Layers )
             {
                 SpriteCache.BeginCache();
 
@@ -182,11 +189,11 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         SpriteCache.Begin();
 
-        var mapLayers = Map?.Layers;
+        MapLayers? mapLayers = Map?.Layers;
 
         for ( int i = 0, j = mapLayers!.LayersCount; i < j; i++ )
         {
-            var layer = mapLayers.Get( i );
+            MapLayer layer = mapLayers.Get( i );
 
             if ( layer.Visible )
             {
@@ -211,15 +218,15 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
             Count  = 0;
             SpriteCache?.Clear();
 
-            var extraWidth  = ViewBounds.Width * OverCache;
-            var extraHeight = ViewBounds.Height * OverCache;
+            float extraWidth  = ViewBounds.Width * OverCache;
+            float extraHeight = ViewBounds.Height * OverCache;
 
             CacheBounds.X      = ViewBounds.X - extraWidth;
             CacheBounds.Y      = ViewBounds.Y - extraHeight;
             CacheBounds.Width  = ViewBounds.Width + ( extraWidth * 2 );
             CacheBounds.Height = ViewBounds.Height + ( extraHeight * 2 );
 
-            foreach ( var layer in Map!.Layers )
+            foreach ( MapLayer layer in Map!.Layers )
             {
                 SpriteCache?.BeginCache();
 
@@ -244,9 +251,9 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         SpriteCache?.Begin();
 
-        foreach ( var i in layers )
+        foreach ( int i in layers )
         {
-            var layer = Map?.Layers.Get( i );
+            MapLayer? layer = Map?.Layers.Get( i );
 
             if ( layer!.Visible )
             {
@@ -265,7 +272,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
     public void RenderObjects( MapLayer layer )
     {
-        foreach ( var mapObject in layer.Objects )
+        foreach ( MapObject mapObject in layer.Objects )
         {
             RenderObject( mapObject );
         }
@@ -277,43 +284,45 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
     public void RenderTileLayer( TiledMapTileLayer layer )
     {
-        var color = Color.ToFloatBitsAbgr( 1, 1, 1, layer.Opacity );
+        float color = Color.ToFloatBitsAbgr( 1, 1, 1, layer.Opacity );
 
-        var layerWidth  = layer.Width;
-        var layerHeight = layer.Height;
+        int layerWidth  = layer.Width;
+        int layerHeight = layer.Height;
 
-        var layerTileWidth  = layer.TileWidth * UnitScale;
-        var layerTileHeight = layer.TileHeight * UnitScale;
-        var layerOffsetX    = layer.RenderOffsetX * UnitScale;
+        float layerTileWidth  = layer.TileWidth * UnitScale;
+        float layerTileHeight = layer.TileHeight * UnitScale;
+        float layerOffsetX    = layer.RenderOffsetX * UnitScale;
 
         // offset in tiled is y down, so we flip it
-        var layerOffsetY = -layer.RenderOffsetY * UnitScale;
+        float layerOffsetY = -layer.RenderOffsetY * UnitScale;
 
-        var col1 = Math.Max( 0, ( int )( ( CacheBounds.X - layerOffsetX ) / layerTileWidth ) );
-        var col2 = Math.Min( layerWidth,
-                             ( int )( ( ( CacheBounds.X + CacheBounds.Width + layerTileWidth ) - layerOffsetX ) / layerTileWidth ) );
+        int col1 = Math.Max( 0, ( int )( ( CacheBounds.X - layerOffsetX ) / layerTileWidth ) );
+        int col2 = Math.Min( layerWidth,
+                             ( int )( ( CacheBounds.X + CacheBounds.Width + layerTileWidth - layerOffsetX )
+                                    / layerTileWidth ) );
 
-        var row1 = Math.Max( 0, ( int )( ( CacheBounds.Y - layerOffsetY ) / layerTileHeight ) );
-        var row2 = Math.Min( layerHeight,
-                             ( int )( ( ( CacheBounds.Y + CacheBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight ) );
+        int row1 = Math.Max( 0, ( int )( ( CacheBounds.Y - layerOffsetY ) / layerTileHeight ) );
+        int row2 = Math.Min( layerHeight,
+                             ( int )( ( CacheBounds.Y + CacheBounds.Height + layerTileHeight - layerOffsetY )
+                                    / layerTileHeight ) );
 
         CanCacheMoreN = row2 < layerHeight;
         CanCacheMoreE = col2 < layerWidth;
         CanCacheMoreW = col1 > 0;
         CanCacheMoreS = row1 > 0;
 
-        for ( var row = row2; row >= row1; row-- )
+        for ( int row = row2; row >= row1; row-- )
         {
-            for ( var col = col1; col < col2; col++ )
+            for ( int col = col1; col < col2; col++ )
             {
-                var cell = layer.GetCell( col, row );
+                TiledMapTileLayer.Cell? cell = layer.GetCell( col, row );
 
                 if ( cell == null )
                 {
                     continue;
                 }
 
-                var tile = cell.GetTile();
+                ITiledMapTile? tile = cell.GetTile();
 
                 if ( tile == null )
                 {
@@ -322,29 +331,29 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
                 Count++;
 
-                var flipX     = cell.GetFlipHorizontally();
-                var flipY     = cell.GetFlipVertically();
-                var rotations = cell.GetRotation();
+                bool flipX     = cell.GetFlipHorizontally();
+                bool flipY     = cell.GetFlipVertically();
+                int  rotations = cell.GetRotation();
 
-                var region  = tile.TextureRegion;
-                var texture = region.Texture;
+                TextureRegion region  = tile.TextureRegion;
+                Texture?      texture = region.Texture;
 
                 if ( texture == null )
                 {
                     return;
                 }
 
-                var x1 = ( col * layerTileWidth ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
-                var y1 = ( row * layerTileHeight ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
-                var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
-                var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
+                float x1 = ( col * layerTileWidth ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
+                float y1 = ( row * layerTileHeight ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
+                float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+                float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
-                var adjustX = 0.5f / texture.Width;
-                var adjustY = 0.5f / texture.Height;
-                var u1      = region.U + adjustX;
-                var v1      = region.V2 - adjustY;
-                var u2      = region.U2 - adjustX;
-                var v2      = region.V + adjustY;
+                float adjustX = 0.5f / texture.Width;
+                float adjustY = 0.5f / texture.Height;
+                float u1      = region.U + adjustX;
+                float v1      = region.V2 - adjustY;
+                float u2      = region.U2 - adjustX;
+                float v2      = region.V + adjustY;
 
                 Vertices[ IBatch.X1 ] = x1;
                 Vertices[ IBatch.Y1 ] = y1;
@@ -372,7 +381,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
                 if ( flipX )
                 {
-                    var temp = Vertices[ IBatch.U1 ];
+                    float temp = Vertices[ IBatch.U1 ];
                     Vertices[ IBatch.U1 ] = Vertices[ IBatch.U3 ];
                     Vertices[ IBatch.U3 ] = temp;
                     temp                  = Vertices[ IBatch.U2 ];
@@ -382,7 +391,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
                 if ( flipY )
                 {
-                    var temp = Vertices[ IBatch.V1 ];
+                    float temp = Vertices[ IBatch.V1 ];
                     Vertices[ IBatch.V1 ] = Vertices[ IBatch.V3 ];
                     Vertices[ IBatch.V3 ] = temp;
                     temp                  = Vertices[ IBatch.V2 ];
@@ -396,13 +405,13 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
                     {
                         case TiledMapTileLayer.Cell.ROTATE90:
                         {
-                            var tempV = Vertices[ IBatch.V1 ];
+                            float tempV = Vertices[ IBatch.V1 ];
                             Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
                             Vertices[ IBatch.V2 ] = Vertices[ IBatch.V3 ];
                             Vertices[ IBatch.V3 ] = Vertices[ IBatch.V4 ];
                             Vertices[ IBatch.V4 ] = tempV;
 
-                            var tempU = Vertices[ IBatch.U1 ];
+                            float tempU = Vertices[ IBatch.U1 ];
                             Vertices[ IBatch.U1 ] = Vertices[ IBatch.U2 ];
                             Vertices[ IBatch.U2 ] = Vertices[ IBatch.U3 ];
                             Vertices[ IBatch.U3 ] = Vertices[ IBatch.U4 ];
@@ -413,14 +422,14 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
                         case TiledMapTileLayer.Cell.ROTATE180:
                         {
-                            var tempU = Vertices[ IBatch.U1 ];
+                            float tempU = Vertices[ IBatch.U1 ];
                             Vertices[ IBatch.U1 ] = Vertices[ IBatch.U3 ];
                             Vertices[ IBatch.U3 ] = tempU;
                             tempU                 = Vertices[ IBatch.U2 ];
                             Vertices[ IBatch.U2 ] = Vertices[ IBatch.U4 ];
                             Vertices[ IBatch.U4 ] = tempU;
 
-                            var tempV = Vertices[ IBatch.V1 ];
+                            float tempV = Vertices[ IBatch.V1 ];
                             Vertices[ IBatch.V1 ] = Vertices[ IBatch.V3 ];
                             Vertices[ IBatch.V3 ] = tempV;
                             tempV                 = Vertices[ IBatch.V2 ];
@@ -432,13 +441,13 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
                         case TiledMapTileLayer.Cell.ROTATE270:
                         {
-                            var tempV = Vertices[ IBatch.V1 ];
+                            float tempV = Vertices[ IBatch.V1 ];
                             Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];
                             Vertices[ IBatch.V4 ] = Vertices[ IBatch.V3 ];
                             Vertices[ IBatch.V3 ] = Vertices[ IBatch.V2 ];
                             Vertices[ IBatch.V2 ] = tempV;
 
-                            var tempU = Vertices[ IBatch.U1 ];
+                            float tempU = Vertices[ IBatch.U1 ];
                             Vertices[ IBatch.U1 ] = Vertices[ IBatch.U4 ];
                             Vertices[ IBatch.U4 ] = Vertices[ IBatch.U3 ];
                             Vertices[ IBatch.U3 ] = Vertices[ IBatch.U2 ];
@@ -456,26 +465,26 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
     public void RenderImageLayer( TiledMapImageLayer layer )
     {
-        var color = Color.ToFloatBitsAbgr( 1.0f, 1.0f, 1.0f, layer.Opacity );
+        float color = Color.ToFloatBitsAbgr( 1.0f, 1.0f, 1.0f, layer.Opacity );
 
-        var region = layer.Region;
+        TextureRegion? region = layer.Region;
 
         if ( region?.Texture == null )
         {
             return;
         }
 
-        var x  = layer.X;
-        var y  = layer.Y;
-        var x1 = x * UnitScale;
-        var y1 = y * UnitScale;
-        var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
-        var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
+        float x  = layer.X;
+        float y  = layer.Y;
+        float x1 = x * UnitScale;
+        float y1 = y * UnitScale;
+        float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+        float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
-        var u1 = region.U;
-        var v1 = region.V2;
-        var u2 = region.U2;
-        var v2 = region.V;
+        float u1 = region.U;
+        float v1 = region.V2;
+        float u2 = region.U2;
+        float v2 = region.V;
 
         Vertices[ IBatch.X1 ] = x1;
         Vertices[ IBatch.Y1 ] = y1;
@@ -542,4 +551,3 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
 // ============================================================================
 // ============================================================================
-

@@ -25,6 +25,7 @@
 using System;
 
 using JetBrains.Annotations;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding;
@@ -80,11 +81,11 @@ public class CircularByteBuffer
         {
             var newDataArray = new byte[ value ];
 
-            var minLength = _length > value ? value : _length;
+            int minLength = _length > value ? value : _length;
 
             for ( var i = 0; i < minLength; i++ )
             {
-                newDataArray[ i ] = InternalGet( ( i - _length ) + 1 );
+                newDataArray[ i ] = InternalGet( i - _length + 1 );
             }
 
             _buffer = newDataArray;
@@ -113,7 +114,7 @@ public class CircularByteBuffer
             if ( value > _numValid )
             {
                 throw new Exception( $"Can't set NumValid to {value} which is greater "
-                                     + $"than the current numValid value of {_numValid}" );
+                                   + $"than the current numValid value of {_numValid}" );
             }
 
             _numValid = value;
@@ -141,7 +142,7 @@ public class CircularByteBuffer
     {
         lock ( this )
         {
-            var ret = InternalGet( _length );
+            byte ret = InternalGet( _length );
 
             _buffer[ _index ] = newValue;
             _numValid++;
@@ -191,7 +192,7 @@ public class CircularByteBuffer
 
     private byte InternalGet( int offset )
     {
-        var ind = _index + offset;
+        int ind = _index + offset;
 
         // Do thin modulo (should just drop through)
         for ( ; ind >= _length; ind -= _length )
@@ -210,7 +211,7 @@ public class CircularByteBuffer
 
     private void InternalSet( int offset, byte valueToSet )
     {
-        var ind = _index + offset;
+        int ind = _index + offset;
 
         // Do thin modulo (should just drop through)
         for ( ; ind > _length; ind -= _length )
@@ -234,7 +235,7 @@ public class CircularByteBuffer
     /// </summary>
     public byte[] GetRange( int str, int stp )
     {
-        var outByte = new byte[ ( str - stp ) + 1 ];
+        var outByte = new byte[ str - stp + 1 ];
 
         for ( int i = str, j = 0; i >= stp; i--, j++ )
         {
@@ -249,7 +250,7 @@ public class CircularByteBuffer
     {
         var ret = "";
 
-        foreach ( var t in _buffer )
+        foreach ( byte t in _buffer )
         {
             ret += t + " ";
         }
@@ -262,4 +263,3 @@ public class CircularByteBuffer
 
 // ============================================================================
 // ============================================================================
-

@@ -34,7 +34,7 @@ public enum ShaderType
     GeometryShader       = IGL.GL_GEOMETRY_SHADER,
     TessControlShader    = IGL.GL_TESS_CONTROL_SHADER,
     TessEvaluationShader = IGL.GL_TESS_EVALUATION_SHADER,
-    ComputeShader        = IGL.GL_COMPUTE_SHADER,
+    ComputeShader        = IGL.GL_COMPUTE_SHADER
 }
 
 [PublicAPI]
@@ -43,5 +43,5 @@ public enum ShaderParameterName
     CompileStatus = IGL.GL_COMPILE_STATUS,
     InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
     ShaderType    = IGL.GL_SHADER_TYPE,
-    DeleteStatus  = IGL.GL_DELETE_STATUS,
+    DeleteStatus  = IGL.GL_DELETE_STATUS
 }

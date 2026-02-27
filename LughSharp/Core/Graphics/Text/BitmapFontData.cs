@@ -26,7 +26,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils.Exceptions;
@@ -51,12 +53,12 @@ public class BitmapFontData
     public readonly char[] CapChars =
     [
         'M', 'N', 'B', 'D', 'C', 'E', 'F', 'K', 'A', 'G', 'H', 'I', 'J',
-        'L', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        'L', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     ];
 
     public readonly char[] XChars =
     [
-        'x', 'e', 'a', 'o', 'n', 's', 'r', 'c', 'u', 'm', 'v', 'w', 'z',
+        'x', 'e', 'a', 'o', 'n', 's', 'r', 'c', 'u', 'm', 'v', 'w', 'z'
     ];
 
     // ====================================================================
@@ -181,7 +183,7 @@ public class BitmapFontData
 
         try
         {
-            var line = reader.ReadLine(); // info
+            string? line = reader.ReadLine(); // info
 
             if ( line == null )
             {
@@ -190,7 +192,7 @@ public class BitmapFontData
 
             line = line.Substring( line.IndexOf( "padding=", StringComparison.Ordinal ) + 8 );
 
-            var padding = line.Substring( 0, line.IndexOf( ' ' ) ).Split( ",", 4 );
+            string[] padding = line.Substring( 0, line.IndexOf( ' ' ) ).Split( ",", 4 );
 
             if ( padding.Length != 4 )
             {
@@ -202,7 +204,7 @@ public class BitmapFontData
             PadBottom = int.Parse( padding[ 2 ] );
             PadLeft   = int.Parse( padding[ 3 ] );
 
-            var padY = PadTop + PadBottom;
+            float padY = PadTop + PadBottom;
 
             line = reader.ReadLine();
 
@@ -211,7 +213,7 @@ public class BitmapFontData
                 throw new RuntimeException( "Missing common header." );
             }
 
-            var common = line.Split( " ", 9 ); // At most we want the 6th element; i.e. "page=N"
+            string[] common = line.Split( " ", 9 ); // At most we want the 6th element; i.e. "page=N"
 
             // At least lineHeight and base are required.
             if ( common.Length < 3 )
@@ -261,17 +263,17 @@ public class BitmapFontData
                 }
 
                 // Expect ID to mean "index".
-                var rx      = new Regex( ".*id=(\\d+)" );
-                var matches = rx.Matches( line );
+                var             rx      = new Regex( ".*id=(\\d+)" );
+                MatchCollection matches = rx.Matches( line );
 
                 if ( matches.Count > 0 )
                 {
                     rx = new Regex( "\\d+" );
-                    var id = rx.Matches( matches[ 0 ].Value )[ 0 ];
+                    Match id = rx.Matches( matches[ 0 ].Value )[ 0 ];
 
                     try
                     {
-                        var pageID = int.Parse( id.Value );
+                        int pageID = int.Parse( id.Value );
 
                         if ( pageID != p )
                         {
@@ -293,9 +295,9 @@ public class BitmapFontData
                     throw new RuntimeException( "Missing: file" );
                 }
 
-                var fileName = matches[ 0 ].Groups[ 1 ].Value;
+                string fileName = matches[ 0 ].Groups[ 1 ].Value;
 
-                ImagePaths[ p ] = string.Join( separator: "\\", FontFile.DirectoryName, fileName );
+                ImagePaths[ p ] = string.Join( "\\", FontFile.DirectoryName, fileName );
             }
 
             Descent = 0;
@@ -329,7 +331,7 @@ public class BitmapFontData
                 // Split the line by spaces and '=' characters.
                 // StringSplitOptions.RemoveEmptyEntries will skip any empty strings
                 // that result from multiple delimiters next to each other (e.g., "id==").
-                var parts = line.Split( [ ' ', '=' ], StringSplitOptions.RemoveEmptyEntries );
+                string[] parts = line.Split( [ ' ', '=' ], StringSplitOptions.RemoveEmptyEntries );
 
                 // Based on the 'char id=N' format, the parts array should look like:
                 // ["char", "id", "N", "x", "X_VAL", "y", "Y_VAL", ...]
@@ -342,7 +344,7 @@ public class BitmapFontData
                     continue;
                 }
 
-                if ( !int.TryParse( parts[ 2 ], out var ch ) )
+                if ( !int.TryParse( parts[ 2 ], out int ch ) )
                 {
                     Logger.Error( $"Skipping malformed 'char' line (invalid ID): {line}" );
 
@@ -377,7 +379,7 @@ public class BitmapFontData
                 glyph.Height  = GetNextInt(); // Gets the value after "height="
                 glyph.Xoffset = GetNextInt(); // Gets the value after "xoffset="
 
-                var yoffsetValue = GetNextInt(); // Get the raw yoffset value
+                int yoffsetValue = GetNextInt(); // Get the raw yoffset value
 
                 if ( flip )
                 {
@@ -402,7 +404,7 @@ public class BitmapFontData
                         {
                             try
                             {
-                                if ( !int.TryParse( parts[ currentPartIndex ], out var parsedPage ) )
+                                if ( !int.TryParse( parts[ currentPartIndex ], out int parsedPage ) )
                                 {
                                     Logger.Error( $"IGNORED NumberFormatException: Invalid page ID: " +
                                                   $"{parts[ currentPartIndex ]} on line: {line}" );
@@ -447,7 +449,7 @@ public class BitmapFontData
                     // Skip the key (e.g., "x", "y")
                     currentPartIndex++;
 
-                    if ( !int.TryParse( parts[ currentPartIndex ], out var val ) )
+                    if ( !int.TryParse( parts[ currentPartIndex ], out int val ) )
                     {
                         throw new RuntimeException( $"Invalid number format on char " +
                                                     $"line for {parts[ currentPartIndex - 1 ]}: " +
@@ -476,9 +478,9 @@ public class BitmapFontData
                     break;
                 }
 
-                var parts  = line.Split( [ ' ', '=' ], StringSplitOptions.RemoveEmptyEntries );
-                var first  = int.Parse( parts[ 2 ] );
-                var second = int.Parse( parts[ 4 ] );
+                string[] parts  = line.Split( [ ' ', '=' ], StringSplitOptions.RemoveEmptyEntries );
+                int      first  = int.Parse( parts[ 2 ] );
+                int      second = int.Parse( parts[ 4 ] );
 
                 if ( ( first < 0 )
                   || ( first > CharacterUtils.MAX_VALUE )
@@ -488,8 +490,8 @@ public class BitmapFontData
                     continue;
                 }
 
-                var glyph  = GetGlyph( ( char )first );
-                var amount = int.Parse( parts[ 6 ] );
+                Glyph? glyph  = GetGlyph( ( char )first );
+                int    amount = int.Parse( parts[ 6 ] );
 
                 // Kernings may exist for glyph pairs not contained in the font.
                 glyph?.SetKerning( second, amount );
@@ -509,7 +511,7 @@ public class BitmapFontData
             {
                 hasMetricsOverride = true;
 
-                var parts = line.Split( [ ' ', '=' ], StringSplitOptions.RemoveEmptyEntries );
+                string[] parts = line.Split( [ ' ', '=' ], StringSplitOptions.RemoveEmptyEntries );
 
                 overrideAscent        = float.Parse( parts[ 2 ] );
                 overrideDescent       = float.Parse( parts[ 4 ] );
@@ -520,13 +522,13 @@ public class BitmapFontData
                 overrideXHeight       = float.Parse( parts[ 14 ] );
             }
 
-            var spaceGlyph = GetGlyph( ' ' );
+            Glyph? spaceGlyph = GetGlyph( ' ' );
 
             if ( spaceGlyph == null )
             {
                 spaceGlyph = new Glyph { ID = ' ' };
 
-                var xadvanceGlyph = GetGlyph( 'l' ) ?? GetFirstGlyph();
+                Glyph xadvanceGlyph = GetGlyph( 'l' ) ?? GetFirstGlyph();
 
                 spaceGlyph.Xadvance = xadvanceGlyph.Xadvance;
 
@@ -543,7 +545,7 @@ public class BitmapFontData
 
             Glyph? xGlyph = null;
 
-            foreach ( var xChar in XChars )
+            foreach ( char xChar in XChars )
             {
                 xGlyph = GetGlyph( xChar );
 
@@ -559,7 +561,7 @@ public class BitmapFontData
 
             Glyph? capGlyph = null;
 
-            foreach ( var capChar in CapChars )
+            foreach ( char capChar in CapChars )
             {
                 capGlyph = GetGlyph( capChar );
 
@@ -571,14 +573,14 @@ public class BitmapFontData
 
             if ( capGlyph == null )
             {
-                foreach ( var page in Glyphs )
+                foreach ( Glyph?[]? page in Glyphs )
                 {
                     if ( page == null )
                     {
                         continue;
                     }
 
-                    foreach ( var glyph in page )
+                    foreach ( Glyph? glyph in page )
                     {
                         if ( ( glyph == null )
                           || ( glyph.Height == 0 )
@@ -641,12 +643,12 @@ public class BitmapFontData
             throw new RuntimeException( "Texture is null." );
         }
 
-        var invTexWidth  = 1.0f / region.Texture.Width;
-        var invTexHeight = 1.0f / region.Texture.Height;
-        var u            = region.U;
-        var v            = region.V;
-        var offsetX      = 0;
-        var offsetY      = 0;
+        float invTexWidth  = 1.0f / region.Texture.Width;
+        float invTexHeight = 1.0f / region.Texture.Height;
+        float u            = region.U;
+        float v            = region.V;
+        var   offsetX      = 0;
+        var   offsetY      = 0;
 
         if ( region is AtlasRegion atlasRegion )
         {
@@ -658,10 +660,10 @@ public class BitmapFontData
                              - atlasRegion.OffsetY );
         }
 
-        var x  = glyph.SrcX;
-        var x2 = glyph.SrcX + glyph.Width;
-        var y  = glyph.SrcY;
-        var y2 = glyph.SrcY + glyph.Height;
+        int x  = glyph.SrcX;
+        int x2 = glyph.SrcX + glyph.Width;
+        int y  = glyph.SrcY;
+        int y2 = glyph.SrcY + glyph.Height;
 
         // Shift glyph for left and top edge stripped whitespace.
         // Clip glyph for right and bottom edge stripped whitespace.
@@ -708,7 +710,7 @@ public class BitmapFontData
 
             if ( y2 > region.GetRegionHeight() )
             {
-                var amount = y2 - region.GetRegionHeight();
+                int amount = y2 - region.GetRegionHeight();
 
                 glyph.Height  -= amount;
                 glyph.Yoffset += amount;
@@ -749,7 +751,7 @@ public class BitmapFontData
     /// <param name="glyph"></param>
     public void SetGlyph( int ch, Glyph glyph )
     {
-        var page = Glyphs[ ch / BitmapFont.PAGE_SIZE ];
+        Glyph?[]? page = Glyphs[ ch / BitmapFont.PAGE_SIZE ];
 
         if ( page == null )
         {
@@ -767,11 +769,11 @@ public class BitmapFontData
     /// <exception cref="RuntimeException"></exception>
     public Glyph GetFirstGlyph()
     {
-        foreach ( var page in Glyphs )
+        foreach ( Glyph?[]? page in Glyphs )
         {
             if ( page != null )
             {
-                foreach ( var glyph in page )
+                foreach ( Glyph? glyph in page )
                 {
                     if ( ( glyph == null ) || ( glyph.Height == 0 ) || ( glyph.Width == 0 ) )
                     {
@@ -830,18 +832,18 @@ public class BitmapFontData
     {
         Guard.Against.Null( glyphRun );
 
-        var max = end - start;
+        int max = end - start;
 
         if ( max == 0 )
         {
             return;
         }
 
-        var markupEnabled = MarkupEnabled;
-        var scaleX        = ScaleX;
+        bool  markupEnabled = MarkupEnabled;
+        float scaleX        = ScaleX;
 
-        var glyphs    = glyphRun.Glyphs;
-        var xAdvances = glyphRun.XAdvances;
+        List< Glyph > glyphs    = glyphRun.Glyphs;
+        List< float > xAdvances = glyphRun.XAdvances;
 
         // Guess at number of glyphs needed.
         glyphs.EnsureCapacity( max );
@@ -849,14 +851,14 @@ public class BitmapFontData
 
         do
         {
-            var ch = str[ start++ ];
+            char ch = str[ start++ ];
 
             if ( ch == '\r' )
             {
                 continue; // Ignore.
             }
 
-            var glyph = GetGlyph( ch );
+            Glyph? glyph = GetGlyph( ch );
 
             if ( glyph == null )
             {
@@ -888,7 +890,7 @@ public class BitmapFontData
 
         if ( lastGlyph != null )
         {
-            var lastGlyphWidth = lastGlyph.FixedWidth
+            float lastGlyphWidth = lastGlyph.FixedWidth
                 ? lastGlyph.Xadvance * scaleX
                 : ( ( lastGlyph.Width + lastGlyph.Xoffset ) * scaleX ) - PadRight;
 
@@ -903,7 +905,7 @@ public class BitmapFontData
     /// </summary>
     public int GetWrapIndex( List< Glyph > glyphList, int start )
     {
-        var i  = start - 1;
+        int i  = start - 1;
         var ch = ( char )glyphList[ i ].ID;
 
         if ( IsWhitespace( ch ) )
@@ -931,13 +933,13 @@ public class BitmapFontData
 
     private Dictionary< string, string > ParseKeyValueLine( string line )
     {
-        var dict  = new Dictionary< string, string >( StringComparer.OrdinalIgnoreCase );
-        var parts = line.Split( ' ', StringSplitOptions.RemoveEmptyEntries ); // Split by space
+        var      dict  = new Dictionary< string, string >( StringComparer.OrdinalIgnoreCase );
+        string[] parts = line.Split( ' ', StringSplitOptions.RemoveEmptyEntries ); // Split by space
 
         // Skip the first token (e.g., "info", "common")
         for ( var i = 1; i < parts.Length; i++ )
         {
-            var keyValue = parts[ i ].Split( '=', 2 ); // Split each part by the first '='
+            string[] keyValue = parts[ i ].Split( '=', 2 ); // Split each part by the first '='
 
             if ( keyValue.Length == 2 )
             {
@@ -959,7 +961,7 @@ public class BitmapFontData
             return false;
         }
 
-        foreach ( var br in BreakChars )
+        foreach ( char br in BreakChars )
         {
             if ( c == br )
             {
@@ -1011,8 +1013,8 @@ public class BitmapFontData
             throw new ArgumentException( "scaleY cannot be 0." );
         }
 
-        var x = scalex / ScaleX;
-        var y = scaley / ScaleY;
+        float x = scalex / ScaleX;
+        float y = scaley / ScaleY;
 
         ScaleX = scalex;
         ScaleY = scaley;
@@ -1061,7 +1063,7 @@ public class BitmapFontData
 
         if ( ImagePaths?.Length > 0 )
         {
-            foreach ( var path in ImagePaths )
+            foreach ( string path in ImagePaths )
             {
                 pageRegions.Add( new TextureRegion( new Texture( path ) ) );
             }

@@ -27,7 +27,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -148,7 +150,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         LoadFactor = loadFactor;
 
-        var tableSize = TableSize( initialCapacity, loadFactor );
+        int tableSize = TableSize( initialCapacity, loadFactor );
 
         Threshold  = ( int )( tableSize * loadFactor );
         Mask       = tableSize - 1;
@@ -174,7 +176,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     {
         LoadFactor = map.LoadFactor;
 
-        var tableSize = TableSize( ( int )( map.KeyTable.Length * map.LoadFactor ),
+        int tableSize = TableSize( ( int )( map.KeyTable.Length * map.LoadFactor ),
                                    LoadFactor );
 
         Threshold = ( int )( tableSize * LoadFactor );
@@ -202,11 +204,11 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         ArgumentNullException.ThrowIfNull( item );
 
         // Get the 32-bit hash code
-        var hashCode = item.GetHashCode();
+        int hashCode = item.GetHashCode();
 
         // Convert to ulong and multiply by the 64-bit golden ratio constant
         // This is where Fibonacci hashing happens, spreading out the bits.
-        var fibonacciHashed = ( ulong )hashCode * HashHelpers.GOLDEN_RATIO_MULTIPLIER_64_BIT;
+        ulong fibonacciHashed = ( ulong )hashCode * HashHelpers.GOLDEN_RATIO_MULTIPLIER_64_BIT;
 
         // Shift the uppermost bits into the low-order positions to get the final index.
         // The Shift value determines how many of the *most significant* bits of the 64-bit hash
@@ -234,11 +236,11 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     {
         ArgumentNullException.ThrowIfNull( key );
 
-        var keyTable = KeyTable;
+        TK?[] keyTable = KeyTable;
 
-        for ( var i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
+        for ( int i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
         {
-            var other = keyTable[ i ];
+            TK? other = keyTable[ i ];
 
             if ( other == null )
             {
@@ -261,7 +263,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     public TV? LocateValue( TK key )
     {
         // 1. Use the existing helper to find the index of the key.
-        var index = LocateKey( key );
+        int index = LocateKey( key );
 
         // 2. If the key is found (index is not -1), return the value from the parallel array.
         return index >= 0
@@ -289,7 +291,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             // Key already exists, return false to indicate failure.
             return false;
         }
-        
+
         AddPair( key, value );
 
         return true;
@@ -311,7 +313,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         Put( key, value );
     }
-    
+
     /// <summary>
     /// Replaces the value associated with the specified key, and returns the old value.
     /// If the key is not found, the value is added at the end of the map and null is returned.
@@ -321,12 +323,12 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <returns></returns>
     public virtual TV? Put( TK key, TV? value )
     {
-        var i = LocateKey( key );
+        int i = LocateKey( key );
 
         if ( i >= 0 )
         {
             // Existing key was found.
-            var oldValue = ValueTable[ i ];
+            TV? oldValue = ValueTable[ i ];
             ValueTable[ i ] = value;
 
             return oldValue;
@@ -367,7 +369,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         for ( int i = 0, n = KeyTable.Length; i < n; i++ )
         {
-            var key = KeyTable[ i ];
+            TK? key = KeyTable[ i ];
 
             if ( key != null )
             {
@@ -420,7 +422,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <typeparam name="TV">The type of the values in the collection.</typeparam>
     public TV? Get( TK key, TV defaultValue )
     {
-        var i = LocateKey( key );
+        int i = LocateKey( key );
 
         return i < 0 ? defaultValue : ValueTable[ i ];
     }
@@ -433,7 +435,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <returns></returns>
     public bool TryGetValue( TK key, [MaybeNullWhen( false )] out TV value )
     {
-        var index = LocateKey( key );
+        int index = LocateKey( key );
 
         if ( index >= 0 )
         {
@@ -468,7 +470,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         get
         {
             // 1. Search for the key's index
-            var index = LocateKey( key );
+            int index = LocateKey( key );
 
             // 2. If the key is found, return the corresponding value
             return index >= 0
@@ -484,7 +486,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         set
         {
             // 1. Search for the key's index
-            var index = LocateKey( key );
+            int index = LocateKey( key );
 
             if ( index >= 0 )
             {
@@ -505,18 +507,24 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <see cref="IDictionary{TKey,TValue}" />.
     /// </summary>
     public virtual int Count => Size;
-    
+
     /// <summary>
     /// Helper method.
     /// Returns TRUE if Size is greater than zero.
     /// </summary>
-    public virtual bool NotEmpty() => Size > 0;
+    public virtual bool NotEmpty()
+    {
+        return Size > 0;
+    }
 
     /// <summary>
     /// Helper method.
     /// Returns TRUE if Size is zero.
     /// </summary>
-    public virtual bool IsEmpty() => Size == 0;
+    public virtual bool IsEmpty()
+    {
+        return Size == 0;
+    }
 
     /// <summary>
     /// Shrinks the map to the specified maximum capacity.
@@ -529,7 +537,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             throw new ArgumentException( "maximumCapacity must be >= 0: " + maximumCapacity );
         }
 
-        var tableSize = TableSize( maximumCapacity, LoadFactor );
+        int tableSize = TableSize( maximumCapacity, LoadFactor );
 
         if ( KeyTable.Length > tableSize )
         {
@@ -544,7 +552,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <param name="maximumCapacity"></param>
     public virtual void Clear( int maximumCapacity )
     {
-        var tableSize = TableSize( maximumCapacity, LoadFactor );
+        int tableSize = TableSize( maximumCapacity, LoadFactor );
 
         if ( KeyTable.Length <= tableSize )
         {
@@ -588,7 +596,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     {
         if ( value == null )
         {
-            for ( var i = ValueTable.Length - 1; i >= 0; i-- )
+            for ( int i = ValueTable.Length - 1; i >= 0; i-- )
             {
                 if ( ( KeyTable[ i ] != null ) && ( ValueTable[ i ] == null ) )
                 {
@@ -598,7 +606,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         }
         else
         {
-            for ( var i = ValueTable.Length - 1; i >= 0; i-- )
+            for ( int i = ValueTable.Length - 1; i >= 0; i-- )
             {
                 if ( value.Equals( ValueTable[ i ] ) )
                 {
@@ -628,7 +636,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     {
         if ( value == null )
         {
-            for ( var i = ValueTable.Length - 1; i >= 0; i-- )
+            for ( int i = ValueTable.Length - 1; i >= 0; i-- )
             {
                 if ( ( KeyTable[ i ] != null ) && ( ValueTable[ i ] == null ) )
                 {
@@ -638,7 +646,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         }
         else
         {
-            for ( var i = ValueTable.Length - 1; i >= 0; i-- )
+            for ( int i = ValueTable.Length - 1; i >= 0; i-- )
             {
                 if ( value.Equals( ValueTable[ i ] ) )
                 {
@@ -657,7 +665,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// </summary>
     public void EnsureCapacity( int additionalCapacity )
     {
-        var tableSize = TableSize( Size + additionalCapacity, LoadFactor );
+        int tableSize = TableSize( Size + additionalCapacity, LoadFactor );
 
         if ( KeyTable.Length < tableSize )
         {
@@ -670,7 +678,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     {
         const int PRIME = 28;
 
-        var result = PRIME + 34;
+        int result = PRIME + 34;
         result = ( PRIME * result ) + 43;
 
         return result;
@@ -695,7 +703,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             throw new ArgumentException( "capacity must be >= 0: " + capacity );
         }
 
-        var tableSize = MathUtils.NextPowerOfTwo( Math.Max( 2, ( int )Math.Ceiling( capacity / lf ) ) );
+        int tableSize = MathUtils.NextPowerOfTwo( Math.Max( 2, ( int )Math.Ceiling( capacity / lf ) ) );
 
         if ( tableSize > ( 1 << 30 ) )
         {
@@ -725,11 +733,11 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         for ( int i = 0, n = KeyTable.Length; i < n; i++ )
         {
-            var key = KeyTable[ i ];
+            TK? key = KeyTable[ i ];
 
             if ( key != null )
             {
-                var value = ValueTable[ i ];
+                TV? value = ValueTable[ i ];
 
                 if ( value == null )
                 {
@@ -757,7 +765,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <param name="newSize">The new size for the internal storage arrays.</param>
     public void Resize( int newSize )
     {
-        var oldCapacity = KeyTable.Length;
+        int oldCapacity = KeyTable.Length;
 
         // Update the threshold, mask, and shift based on the new size
         Threshold = ( int )( newSize * LoadFactor );
@@ -765,8 +773,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         Shift     = int.LeadingZeroCount( Mask );
 
         // Store the old tables
-        var oldKeyTable   = KeyTable;
-        var oldValueTable = ValueTable;
+        TK?[] oldKeyTable   = KeyTable;
+        TV?[] oldValueTable = ValueTable;
 
         // Initialize the new tables with the new size
         KeyTable   = new TK[ newSize ];
@@ -777,7 +785,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         {
             for ( var i = 0; i < oldCapacity; i++ )
             {
-                var key = oldKeyTable[ i ];
+                TK? key = oldKeyTable[ i ];
 
                 if ( key != null )
                 {
@@ -794,7 +802,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <param name="value">The value to be associated with the key.</param>
     private void PutResize( TK key, TV? value )
     {
-        for ( var i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
+        for ( int i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
         {
             if ( KeyTable[ i ] == null )
             {
@@ -826,19 +834,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             throw new NullReferenceException( "Remove(): _valueTable is null" );
         }
 
-        var i = LocateKey( key );
+        int i = LocateKey( key );
 
         if ( i < 0 )
         {
             return default( TV );
         }
 
-        var oldValue = ValueTable[ i ];
-        var next     = ( i + 1 ) & Mask;
+        TV? oldValue = ValueTable[ i ];
+        int next     = ( i + 1 ) & Mask;
 
         while ( KeyTable[ next ] is { } nextKey )
         {
-            var placement = GetHashIndex( nextKey );
+            int placement = GetHashIndex( nextKey );
 
             if ( ( ( next - placement ) & Mask ) > ( ( i - placement ) & Mask ) )
             {
@@ -1023,11 +1031,11 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             buffer.Append( '{' );
         }
 
-        var i = KeyTable.Length;
+        int i = KeyTable.Length;
 
         while ( i-- > 0 )
         {
-            var key = KeyTable[ i ];
+            TK? key = KeyTable[ i ];
 
             if ( key == null )
             {
@@ -1037,7 +1045,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             buffer.Append( key );
             buffer.Append( '=' );
 
-            var value = ValueTable[ i ];
+            TV? value = ValueTable[ i ];
 
             buffer.Append( value );
 
@@ -1046,7 +1054,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         while ( i-- > 0 )
         {
-            var key = KeyTable[ i ];
+            TK? key = KeyTable[ i ];
 
             if ( key == null )
             {
@@ -1057,7 +1065,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
             buffer.Append( key );
             buffer.Append( '=' );
 
-            var value = ValueTable[ i ];
+            TV? value = ValueTable[ i ];
 
             if ( Equals( value, this ) )
             {
@@ -1128,7 +1136,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         private void FindNextIndex()
         {
-            for ( var n = _map.KeyTable.Length; ++_nextIndex < n; )
+            for ( int n = _map.KeyTable.Length; ++_nextIndex < n; )
             {
                 if ( _map.KeyTable[ _nextIndex ] != null )
                 {
@@ -1230,7 +1238,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         /// </summary>
         protected virtual void FindNextIndex()
         {
-            for ( var n = Map.KeyTable.Length; ++NextIndex < n; )
+            for ( int n = Map.KeyTable.Length; ++NextIndex < n; )
             {
                 if ( Map.KeyTable[ NextIndex ] != null )
                 {
@@ -1248,19 +1256,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         /// </summary>
         public virtual void Remove()
         {
-            var i = CurrentIndex;
+            int i = CurrentIndex;
 
             if ( i < 0 )
             {
                 throw new RuntimeException( "CurrentIndex must not be < 0!" );
             }
 
-            var mask = Map.Mask;
-            var next = ( i + 1 ) & mask;
+            int mask = Map.Mask;
+            int next = ( i + 1 ) & mask;
 
             while ( Map.KeyTable[ next ] is { } key )
             {
-                var placement = Map.GetHashIndex( key );
+                int placement = Map.GetHashIndex( key );
 
                 if ( ( ( next - placement ) & mask ) > ( ( i - placement ) & mask ) )
                 {
@@ -1379,7 +1387,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
                 throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
-            var value = Map.ValueTable[ NextIndex ];
+            TV? value = Map.ValueTable[ NextIndex ];
 
             CurrentIndex = NextIndex;
 
@@ -1455,7 +1463,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
                 throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
-            var key = Map.KeyTable[ NextIndex ]!;
+            TK key = Map.KeyTable[ NextIndex ]!;
 
             CurrentIndex = NextIndex;
 
@@ -1499,4 +1507,3 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
 // ============================================================================
 // ============================================================================
-

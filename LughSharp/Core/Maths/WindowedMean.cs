@@ -39,7 +39,7 @@ public class WindowedMean
     private readonly float[] _values;
 
     private int   _addedValues;
-    private bool  _dirty       = true;
+    private bool  _dirty = true;
     private int   _lastValue;
     private float _mean;
 
@@ -71,7 +71,7 @@ public class WindowedMean
                 {
                     float mean = 0;
 
-                    foreach ( var t in _values )
+                    foreach ( float t in _values )
                     {
                         mean += t;
                     }
@@ -105,7 +105,7 @@ public class WindowedMean
         {
             var lowest = float.MaxValue;
 
-            foreach ( var t in _values )
+            foreach ( float t in _values )
             {
                 lowest = Math.Min( lowest, t );
             }
@@ -122,7 +122,7 @@ public class WindowedMean
         {
             var lowest = float.MinValue;
 
-            foreach ( var t in _values )
+            foreach ( float t in _values )
             {
                 lowest = Math.Max( lowest, t );
             }
@@ -225,10 +225,10 @@ public class WindowedMean
             return 0;
         }
 
-        var   mean = Mean;
+        float mean = Mean;
         float sum  = 0;
 
-        foreach ( var t in _values )
+        foreach ( float t in _values )
         {
             sum += ( t - mean ) * ( t - mean );
         }

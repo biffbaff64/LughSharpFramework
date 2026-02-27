@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio;
 using LughSharp.Core.Audio.OpenAL;
 using LughSharp.Core.Utils.Exceptions;
@@ -91,7 +92,7 @@ public abstract class OpenALMusic : IMusic
 
                 AL.GenBuffers( 1, out _buffers );
 
-                var err = AL.GetError();
+                int err = AL.GetError();
 
                 if ( err != AL.NO_ERROR )
                 {
@@ -315,7 +316,7 @@ public abstract class OpenALMusic : IMusic
             return 0;
         }
 
-        AL.GetSourcef( ( uint )SourceId, AL.SEC_OFFSET, out var value );
+        AL.GetSourcef( ( uint )SourceId, AL.SEC_OFFSET, out float value );
 
         return _renderedSeconds + value;
     }

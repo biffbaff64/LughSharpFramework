@@ -87,7 +87,7 @@ public class FocusListener : IEventListener
         public enum FeType
         {
             Keyboard,
-            Scroll,
+            Scroll
         }
 
         public bool    Focused { get; set; }

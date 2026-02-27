@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -72,4 +73,3 @@ public class TexturePackerAlias : IComparable< TexturePackerAlias >
 
 // ============================================================================
 // ============================================================================
-

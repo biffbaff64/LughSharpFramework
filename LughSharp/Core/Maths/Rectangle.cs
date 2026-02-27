@@ -23,8 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -206,9 +208,9 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     public bool Contains( Circle circle )
     {
         return ( ( circle.X - circle.Radius ) >= X )
-               && ( ( circle.X + circle.Radius ) <= ( X + Width ) )
-               && ( ( circle.Y - circle.Radius ) >= Y )
-               && ( ( circle.Y + circle.Radius ) <= ( Y + Height ) );
+            && ( ( circle.X + circle.Radius ) <= ( X + Width ) )
+            && ( ( circle.Y - circle.Radius ) >= Y )
+            && ( ( circle.Y + circle.Radius ) <= ( Y + Height ) );
     }
 
     /// <summary>
@@ -217,20 +219,20 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <returns> whether the other rectangle is contained in this rectangle.</returns>
     public bool Contains( Rectangle rectangle )
     {
-        var xmin = rectangle.X;
-        var xmax = xmin + rectangle.Width;
+        float xmin = rectangle.X;
+        float xmax = xmin + rectangle.Width;
 
-        var ymin = rectangle.Y;
-        var ymax = ymin + rectangle.Height;
+        float ymin = rectangle.Y;
+        float ymax = ymin + rectangle.Height;
 
         return ( xmin > X )
-               && ( xmin < ( X + Width ) )
-               && ( xmax > X )
-               && ( xmax < ( X + Width ) )
-               && ( ymin > Y )
-               && ( ymin < ( Y + Height ) )
-               && ( ymax > Y )
-               && ( ymax < ( Y + Height ) );
+            && ( xmin < ( X + Width ) )
+            && ( xmax > X )
+            && ( xmax < ( X + Width ) )
+            && ( ymin > Y )
+            && ( ymin < ( Y + Height ) )
+            && ( ymax > Y )
+            && ( ymax < ( Y + Height ) );
     }
 
     /// <summary>
@@ -295,7 +297,8 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <returns> whether this rectangle overlaps the other rectangle.  </returns>
     public bool Overlaps( Rectangle r )
     {
-        return ( X < ( r.X + r.Width ) ) && ( ( X + Width ) > r.X ) && ( Y < ( r.Y + r.Height ) ) && ( ( Y + Height ) > r.Y );
+        return ( X < ( r.X + r.Width ) ) && ( ( X + Width ) > r.X ) && ( Y < ( r.Y + r.Height ) )
+            && ( ( Y + Height ) > r.Y );
     }
 
     // ========================================================================
@@ -305,7 +308,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// </summary>
     public void Intersect( Rectangle rect )
     {
-        var result = Intersect( rect, this );
+        Rectangle result = Intersect( rect, this );
 
         X      = result.X;
         Y      = result.Y;
@@ -319,10 +322,10 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// </summary>
     public static Rectangle Intersect( Rectangle a, Rectangle b )
     {
-        var x1 = Math.Max( a.X, b.X );
-        var x2 = Math.Min( a.X + a.Width, b.X + b.Width );
-        var y1 = Math.Max( a.Y, b.Y );
-        var y2 = Math.Min( a.Y + a.Height, b.Y + b.Height );
+        float x1 = Math.Max( a.X, b.X );
+        float x2 = Math.Min( a.X + a.Width, b.X + b.Width );
+        float y1 = Math.Max( a.Y, b.Y );
+        float y2 = Math.Min( a.Y + a.Height, b.Y + b.Height );
 
         if ( ( x2 >= x1 ) && ( y2 >= y1 ) )
         {
@@ -338,9 +341,9 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     public bool IntersectsWith( Rectangle rect )
     {
         return ( rect.X < ( X + Width ) )
-               && ( X < ( rect.X + rect.Width ) )
-               && ( rect.Y < ( Y + Height ) )
-               && ( Y < ( rect.Y + rect.Height ) );
+            && ( X < ( rect.X + rect.Width ) )
+            && ( rect.Y < ( Y + Height ) )
+            && ( Y < ( rect.Y + rect.Height ) );
     }
 
     // ========================================================================
@@ -350,10 +353,10 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// </summary>
     public static Rectangle Union( Rectangle a, Rectangle b )
     {
-        var x1 = Math.Min( a.X, b.X );
-        var x2 = Math.Max( a.X + a.Width, b.X + b.Width );
-        var y1 = Math.Min( a.Y, b.Y );
-        var y2 = Math.Max( a.Y + a.Height, b.Y + b.Height );
+        float x1 = Math.Min( a.X, b.X );
+        float x2 = Math.Max( a.X + a.Width, b.X + b.Width );
+        float y1 = Math.Min( a.Y, b.Y );
+        float y2 = Math.Max( a.Y + a.Height, b.Y + b.Height );
 
         return new Rectangle( x1, y1, x2 - x1, y2 - y1 );
     }
@@ -404,14 +407,14 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <returns> this rectangle for chaining  </returns>
     public Rectangle Merge( Rectangle rect )
     {
-        var minX = Math.Min( X, rect.X );
-        var maxX = Math.Max( X + Width, rect.X + rect.Width );
+        float minX = Math.Min( X, rect.X );
+        float maxX = Math.Max( X + Width, rect.X + rect.Width );
 
         X     = minX;
         Width = maxX - minX;
 
-        var minY = Math.Min( Y, rect.Y );
-        var maxY = Math.Max( Y + Height, rect.Y + rect.Height );
+        float minY = Math.Min( Y, rect.Y );
+        float maxY = Math.Max( Y + Height, rect.Y + rect.Height );
 
         Y      = minY;
         Height = maxY - minY;
@@ -428,14 +431,14 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <returns> this rectangle for chaining  </returns>
     public Rectangle Merge( float x, float y )
     {
-        var minX = Math.Min( X, x );
-        var maxX = Math.Max( X + Width, x );
+        float minX = Math.Min( X, x );
+        float maxX = Math.Max( X + Width, x );
 
         X     = minX;
         Width = maxX - minX;
 
-        var minY = Math.Min( Y, y );
-        var maxY = Math.Max( Y + Height, y );
+        float minY = Math.Min( Y, y );
+        float maxY = Math.Max( Y + Height, y );
 
         Y      = minY;
         Height = maxY - minY;
@@ -462,12 +465,12 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <returns> this rectangle for chaining  </returns>
     public Rectangle Merge( IEnumerable< Vector2 > vecs )
     {
-        var minX = X;
-        var maxX = X + Width;
-        var minY = Y;
-        var maxY = Y + Height;
+        float minX = X;
+        float maxX = X + Width;
+        float minY = Y;
+        float maxY = Y + Height;
 
-        foreach ( var v in vecs )
+        foreach ( Vector2 v in vecs )
         {
             minX = Math.Min( minX, v.X );
             maxX = Math.Max( maxX, v.X );
@@ -549,7 +552,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <see cref="Scaling "/>
     public Rectangle FitOutside( Rectangle rect )
     {
-        var ratio = GetAspectRatio();
+        float ratio = GetAspectRatio();
 
         if ( ratio > rect.GetAspectRatio() )
         {
@@ -562,7 +565,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
             SetSize( rect.Width, rect.Width / ratio );
         }
 
-        SetPosition( ( rect.X + ( rect.Width / 2 ) ) - ( Width / 2 ), ( rect.Y + ( rect.Height / 2 ) ) - ( Height / 2 ) );
+        SetPosition( rect.X + ( rect.Width / 2 ) - ( Width / 2 ), rect.Y + ( rect.Height / 2 ) - ( Height / 2 ) );
 
         return this;
     }
@@ -577,7 +580,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <see cref="Scaling "/>
     public Rectangle FitInside( Rectangle rect )
     {
-        var ratio = GetAspectRatio();
+        float ratio = GetAspectRatio();
 
         if ( ratio < rect.GetAspectRatio() )
         {
@@ -590,7 +593,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
             SetSize( rect.Width, rect.Width / ratio );
         }
 
-        SetPosition( ( rect.X + ( rect.Width / 2 ) ) - ( Width / 2 ), ( rect.Y + ( rect.Height / 2 ) ) - ( Height / 2 ) );
+        SetPosition( rect.X + ( rect.Width / 2 ) - ( Width / 2 ), rect.Y + ( rect.Height / 2 ) - ( Height / 2 ) );
 
         return this;
     }
@@ -615,9 +618,9 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <returns> this rectangle for chaining  </returns>
     public Rectangle FromString( string v )
     {
-        var s0 = v.IndexOf( ',', 1 );
-        var s1 = v.IndexOf( ',', s0 + 1 );
-        var s2 = v.IndexOf( ',', s1 + 1 );
+        int s0 = v.IndexOf( ',', 1 );
+        int s1 = v.IndexOf( ',', s0 + 1 );
+        int s2 = v.IndexOf( ',', s1 + 1 );
 
         // Note: v[ ^1 ] is equivalent to v[ v.Length - 1 ]
 
@@ -625,10 +628,10 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
         {
             try
             {
-                var x      = float.Parse( v.Substring( 1, s0 - 1 ) );
-                var y      = float.Parse( v.Substring( s0 + 1, s1 - ( s0 + 1 ) ) );
-                var width  = float.Parse( v.Substring( s1 + 1, s2 - ( s1 + 1 ) ) );
-                var height = float.Parse( v.Substring( s2 + 1, v.Length - 1 - ( s2 + 1 ) ) );
+                float x      = float.Parse( v.Substring( 1, s0 - 1 ) );
+                float y      = float.Parse( v.Substring( s0 + 1, s1 - ( s0 + 1 ) ) );
+                float width  = float.Parse( v.Substring( s1 + 1, s2 - ( s1 + 1 ) ) );
+                float height = float.Parse( v.Substring( s2 + 1, v.Length - 1 - ( s2 + 1 ) ) );
 
                 return Set( x, y, width, height );
             }
@@ -665,7 +668,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
         const int PRIME = 31;
 
         //TODO: Do this properly without referencing Tmp.
-        var result = PRIME + NumberUtils.FloatToRawIntBits( Tmp.X );
+        int result = PRIME + NumberUtils.FloatToRawIntBits( Tmp.X );
         result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( Tmp.Y );
         result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( Tmp.Width );
         result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( Tmp.Height );

@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
@@ -94,9 +95,9 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
         {
             for ( var i = 0; i < _data.ImagePaths?.Length; i++ )
             {
-                var path          = _data.ImagePaths[ i ];
-                var resolved      = Resolve( path );
-                var textureParams = new TextureLoader.TextureLoaderParameters();
+                string   path          = _data.ImagePaths[ i ];
+                FileInfo resolved      = Resolve( path );
+                var      textureParams = new TextureLoader.TextureLoaderParameters();
 
                 if ( parameter != null )
                 {
@@ -144,8 +145,8 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.AtlasName != null )
         {
-            var atlas = manager.Get< TextureAtlas >( p.AtlasName! );
-            var name  = Path.GetFileNameWithoutExtension( _data?.ImagePaths?[ 0 ] );
+            var     atlas = manager.Get< TextureAtlas >( p.AtlasName! );
+            string? name  = Path.GetFileNameWithoutExtension( _data?.ImagePaths?[ 0 ] );
 
             TextureRegion? region = atlas?.FindRegion( name );
 

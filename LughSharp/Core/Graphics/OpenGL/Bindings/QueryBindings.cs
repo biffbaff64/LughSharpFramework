@@ -226,7 +226,8 @@ public unsafe partial class GLBindings
 
     public void GetQueryBufferObjecti64v( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
     {
-        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTI64VPROC >( "glGetQueryBufferObjecti64v", out _glGetQueryBufferObjecti64v );
+        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTI64VPROC >( "glGetQueryBufferObjecti64v",
+                                                                     out _glGetQueryBufferObjecti64v );
 
         _glGetQueryBufferObjecti64v( id, buffer, pname, offset );
     }
@@ -235,7 +236,8 @@ public unsafe partial class GLBindings
 
     public void GetQueryBufferObjectiv( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
     {
-        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTIVPROC >( "glGetQueryBufferObjectiv", out _glGetQueryBufferObjectiv );
+        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTIVPROC >( "glGetQueryBufferObjectiv",
+                                                                   out _glGetQueryBufferObjectiv );
 
         _glGetQueryBufferObjectiv( id, buffer, pname, offset );
     }
@@ -244,7 +246,8 @@ public unsafe partial class GLBindings
 
     public void GetQueryBufferObjectui64v( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
     {
-        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTUI64VPROC >( "glGetQueryBufferObjectui64v", out _glGetQueryBufferObjectui64v );
+        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTUI64VPROC >( "glGetQueryBufferObjectui64v",
+                                                                      out _glGetQueryBufferObjectui64v );
 
         _glGetQueryBufferObjectui64v( id, buffer, pname, offset );
     }
@@ -253,7 +256,8 @@ public unsafe partial class GLBindings
 
     public void GetQueryBufferObjectuiv( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
     {
-        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTUIVPROC >( "glGetQueryBufferObjectuiv", out _glGetQueryBufferObjectuiv );
+        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTUIVPROC >( "glGetQueryBufferObjectuiv",
+                                                                    out _glGetQueryBufferObjectuiv );
 
         _glGetQueryBufferObjectuiv( id, buffer, pname, offset );
     }

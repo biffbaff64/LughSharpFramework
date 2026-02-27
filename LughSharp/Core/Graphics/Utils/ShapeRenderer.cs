@@ -39,7 +39,7 @@ public class ShapeRenderer : IDisposable
     {
         Points = IGL.GL_POINTS,
         Lines  = IGL.GL_LINES,
-        Filled = IGL.GL_TRIANGLES,
+        Filled = IGL.GL_TRIANGLES
     }
 
     // ========================================================================
@@ -222,7 +222,7 @@ public class ShapeRenderer : IDisposable
     {
         if ( ShapeType == ShapeRenderType.Lines )
         {
-            var size = _defaultRectLineWidth * 0.5f;
+            float size = _defaultRectLineWidth * 0.5f;
             Line( x - size, y - size, z, x + size, y + size, z );
 
             return;
@@ -230,7 +230,7 @@ public class ShapeRenderer : IDisposable
 
         if ( ShapeType == ShapeRenderType.Filled )
         {
-            var size = _defaultRectLineWidth * 0.5f;
+            float size = _defaultRectLineWidth * 0.5f;
             Box( x - size, y - size, z - size, _defaultRectLineWidth, _defaultRectLineWidth, _defaultRectLineWidth );
 
             return;
@@ -288,26 +288,26 @@ public class ShapeRenderer : IDisposable
     {
         Check( ShapeRenderType.Lines, null, ( segments * 2 ) + 2 );
 
-        var colorBits   = _color.ToFloatBitsAbgr();
-        var subdivStep  = 1f / segments;
-        var subdivStep2 = subdivStep * subdivStep;
-        var subdivStep3 = subdivStep * subdivStep * subdivStep;
-        var pre1        = 3 * subdivStep;
-        var pre2        = 3 * subdivStep2;
-        var pre4        = 6 * subdivStep2;
-        var pre5        = 6 * subdivStep3;
-        var tmp1X       = ( x1 - ( cx1 * 2 ) ) + cx2;
-        var tmp1Y       = ( y1 - ( cy1 * 2 ) ) + cy2;
-        var tmp2X       = ( ( ( cx1 - cx2 ) * 3 ) - x1 ) + x2;
-        var tmp2Y       = ( ( ( cy1 - cy2 ) * 3 ) - y1 ) + y2;
-        var fx          = x1;
-        var fy          = y1;
-        var dfx         = ( ( cx1 - x1 ) * pre1 ) + ( tmp1X * pre2 ) + ( tmp2X * subdivStep3 );
-        var dfy         = ( ( cy1 - y1 ) * pre1 ) + ( tmp1Y * pre2 ) + ( tmp2Y * subdivStep3 );
-        var ddfx        = ( tmp1X * pre4 ) + ( tmp2X * pre5 );
-        var ddfy        = ( tmp1Y * pre4 ) + ( tmp2Y * pre5 );
-        var dddfx       = tmp2X * pre5;
-        var dddfy       = tmp2Y * pre5;
+        float colorBits   = _color.ToFloatBitsAbgr();
+        float subdivStep  = 1f / segments;
+        float subdivStep2 = subdivStep * subdivStep;
+        float subdivStep3 = subdivStep * subdivStep * subdivStep;
+        float pre1        = 3 * subdivStep;
+        float pre2        = 3 * subdivStep2;
+        float pre4        = 6 * subdivStep2;
+        float pre5        = 6 * subdivStep3;
+        float tmp1X       = x1 - ( cx1 * 2 ) + cx2;
+        float tmp1Y       = y1 - ( cy1 * 2 ) + cy2;
+        float tmp2X       = ( ( cx1 - cx2 ) * 3 ) - x1 + x2;
+        float tmp2Y       = ( ( cy1 - cy2 ) * 3 ) - y1 + y2;
+        float fx          = x1;
+        float fy          = y1;
+        float dfx         = ( ( cx1 - x1 ) * pre1 ) + ( tmp1X * pre2 ) + ( tmp2X * subdivStep3 );
+        float dfy         = ( ( cy1 - y1 ) * pre1 ) + ( tmp1Y * pre2 ) + ( tmp2Y * subdivStep3 );
+        float ddfx        = ( tmp1X * pre4 ) + ( tmp2X * pre5 );
+        float ddfy        = ( tmp1Y * pre4 ) + ( tmp2Y * pre5 );
+        float dddfx       = tmp2X * pre5;
+        float dddfy       = tmp2Y * pre5;
 
         while ( segments-- > 0 )
         {
@@ -335,7 +335,7 @@ public class ShapeRenderer : IDisposable
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 6 );
 
-        var colorBits = _color.ToFloatBitsAbgr();
+        float colorBits = _color.ToFloatBitsAbgr();
 
         if ( ShapeType == ShapeRenderType.Lines )
         {
@@ -397,7 +397,7 @@ public class ShapeRenderer : IDisposable
     public void Rect( float x, float y, float width, float height )
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
-        var colorBits = _color.ToFloatBitsAbgr();
+        float colorBits = _color.ToFloatBitsAbgr();
 
         if ( ShapeType == ShapeRenderType.Lines )
         {
@@ -481,12 +481,12 @@ public class ShapeRenderer : IDisposable
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
-        var cos = MathUtils.CosDeg( degrees );
-        var sin = MathUtils.SinDeg( degrees );
-        var fx  = -originX;
-        var fy  = -originY;
-        var fx2 = width - originX;
-        var fy2 = height - originY;
+        float cos = MathUtils.CosDeg( degrees );
+        float sin = MathUtils.SinDeg( degrees );
+        float fx  = -originX;
+        float fy  = -originY;
+        float fx2 = width - originX;
+        float fy2 = height - originY;
 
         if ( !scaleX.Equals( 1 ) || !scaleY.Equals( 1 ) )
         {
@@ -496,16 +496,16 @@ public class ShapeRenderer : IDisposable
             fy2 *= scaleY;
         }
 
-        var worldOriginX = x + originX;
-        var worldOriginY = y + originY;
-        var x1           = ( ( cos * fx ) - ( sin * fy ) ) + worldOriginX;
-        var y1           = ( sin * fx ) + ( cos * fy ) + worldOriginY;
-        var x2           = ( ( cos * fx2 ) - ( sin * fy ) ) + worldOriginX;
-        var y2           = ( sin * fx2 ) + ( cos * fy ) + worldOriginY;
-        var x3           = ( ( cos * fx2 ) - ( sin * fy2 ) ) + worldOriginX;
-        var y3           = ( sin * fx2 ) + ( cos * fy2 ) + worldOriginY;
-        var x4           = x1 + ( x3 - x2 );
-        var y4           = y3 - ( y2 - y1 );
+        float worldOriginX = x + originX;
+        float worldOriginY = y + originY;
+        float x1           = ( cos * fx ) - ( sin * fy ) + worldOriginX;
+        float y1           = ( sin * fx ) + ( cos * fy ) + worldOriginY;
+        float x2           = ( cos * fx2 ) - ( sin * fy ) + worldOriginX;
+        float y2           = ( sin * fx2 ) + ( cos * fy ) + worldOriginY;
+        float x3           = ( cos * fx2 ) - ( sin * fy2 ) + worldOriginX;
+        float y3           = ( sin * fx2 ) + ( cos * fy2 ) + worldOriginY;
+        float x4           = x1 + ( x3 - x2 );
+        float y4           = y3 - ( y2 - y1 );
 
         if ( ShapeType == ShapeRenderType.Lines )
         {
@@ -544,13 +544,13 @@ public class ShapeRenderer : IDisposable
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
-        var colorBits = _color.ToFloatBitsAbgr();
-        var t         = _tmp.Set( y2 - y1, x1 - x2 ).Nor();
+        float   colorBits = _color.ToFloatBitsAbgr();
+        Vector2 t         = _tmp.Set( y2 - y1, x1 - x2 ).Nor();
 
         width *= 0.5f;
 
-        var tx = t.X * width;
-        var ty = t.Y * width;
+        float tx = t.X * width;
+        float ty = t.Y * width;
 
         if ( ShapeType == ShapeRenderType.Lines )
         {
@@ -591,14 +591,14 @@ public class ShapeRenderer : IDisposable
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
-        var col1Bits = c1.ToFloatBitsAbgr();
-        var col2Bits = c2.ToFloatBitsAbgr();
-        var t        = _tmp.Set( y2 - y1, x1 - x2 ).Nor();
+        float   col1Bits = c1.ToFloatBitsAbgr();
+        float   col2Bits = c2.ToFloatBitsAbgr();
+        Vector2 t        = _tmp.Set( y2 - y1, x1 - x2 ).Nor();
 
         width *= 0.5f;
 
-        var tx = t.X * width;
-        var ty = t.Y * width;
+        float tx = t.X * width;
+        float ty = t.Y * width;
 
         if ( ShapeType == ShapeRenderType.Lines )
         {
@@ -643,7 +643,7 @@ public class ShapeRenderer : IDisposable
     public void Box( float x, float y, float z, float width, float height, float depth )
     {
         depth = -depth;
-        var colorBits = _color.ToFloatBitsAbgr();
+        float colorBits = _color.ToFloatBitsAbgr();
 
         if ( ShapeType == ShapeRenderType.Lines )
         {
@@ -815,12 +815,12 @@ public class ShapeRenderer : IDisposable
             throw new ArgumentException( "segments must be > 0." );
         }
 
-        var colorBits = _color.ToFloatBitsAbgr();
-        var theta     = ( 2 * MathUtils.PI * ( degrees / 360.0f ) ) / segments;
-        var cos       = MathUtils.Cos( theta );
-        var sin       = MathUtils.Sin( theta );
-        var cx        = radius * MathUtils.Cos( start * MathUtils.DEGREES_TO_RADIANS );
-        var cy        = radius * MathUtils.Sin( start * MathUtils.DEGREES_TO_RADIANS );
+        float colorBits = _color.ToFloatBitsAbgr();
+        float theta     = 2 * MathUtils.PI * ( degrees / 360.0f ) / segments;
+        float cos       = MathUtils.Cos( theta );
+        float sin       = MathUtils.Sin( theta );
+        float cx        = radius * MathUtils.Cos( start * MathUtils.DEGREES_TO_RADIANS );
+        float cy        = radius * MathUtils.Sin( start * MathUtils.DEGREES_TO_RADIANS );
 
         float temp;
 
@@ -891,11 +891,11 @@ public class ShapeRenderer : IDisposable
             throw new ArgumentException( "segments must be > 0." );
         }
 
-        var   colorBits = _color.ToFloatBitsAbgr();
-        var   angle     = ( 2 * MathUtils.PI ) / segments;
-        var   cos       = MathUtils.Cos( angle );
-        var   sin       = MathUtils.Sin( angle );
-        var   cx        = radius;
+        float colorBits = _color.ToFloatBitsAbgr();
+        float angle     = 2 * MathUtils.PI / segments;
+        float cos       = MathUtils.Cos( angle );
+        float sin       = MathUtils.Sin( angle );
+        float cx        = radius;
         var   cy        = 0f;
         float temp;
 
@@ -969,8 +969,8 @@ public class ShapeRenderer : IDisposable
 
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, segments * 3 );
 
-        var colorBits = _color.ToFloatBitsAbgr();
-        var angle     = ( 2 * MathUtils.PI ) / segments;
+        float colorBits = _color.ToFloatBitsAbgr();
+        float angle     = 2 * MathUtils.PI / segments;
 
         float cx = x + ( width / 2 ), cy = y + ( height / 2 );
 
@@ -1027,16 +1027,16 @@ public class ShapeRenderer : IDisposable
 
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, segments * 3 );
 
-        var colorBits = _color.ToFloatBitsAbgr();
-        var angle     = ( 2 * MathUtils.PI ) / segments;
+        float colorBits = _color.ToFloatBitsAbgr();
+        float angle     = 2 * MathUtils.PI / segments;
 
-        rotation = ( MathUtils.PI * rotation ) / 180f;
+        rotation = MathUtils.PI * rotation / 180f;
 
-        var sin = MathUtils.Sin( rotation );
-        var cos = MathUtils.Cos( rotation );
+        float sin = MathUtils.Sin( rotation );
+        float cos = MathUtils.Cos( rotation );
 
         float cx = x + ( width / 2 ), cy = y + ( height / 2 );
-        var   x1 = width * 0.5f;
+        float x1 = width * 0.5f;
         float y1 = 0;
 
         if ( ShapeType == ShapeRenderType.Lines )
@@ -1044,13 +1044,13 @@ public class ShapeRenderer : IDisposable
             for ( var i = 0; i < segments; i++ )
             {
                 Renderer.SetColor( colorBits );
-                Renderer.Vertex( ( cx + ( cos * x1 ) ) - ( sin * y1 ), cy + ( sin * x1 ) + ( cos * y1 ), 0 );
+                Renderer.Vertex( cx + ( cos * x1 ) - ( sin * y1 ), cy + ( sin * x1 ) + ( cos * y1 ), 0 );
 
                 x1 = width * 0.5f * MathUtils.Cos( ( i + 1 ) * angle );
                 y1 = height * 0.5f * MathUtils.Sin( ( i + 1 ) * angle );
 
                 Renderer.SetColor( colorBits );
-                Renderer.Vertex( ( cx + ( cos * x1 ) ) - ( sin * y1 ), cy + ( sin * x1 ) + ( cos * y1 ), 0 );
+                Renderer.Vertex( cx + ( cos * x1 ) - ( sin * y1 ), cy + ( sin * x1 ) + ( cos * y1 ), 0 );
             }
         }
         else
@@ -1058,7 +1058,7 @@ public class ShapeRenderer : IDisposable
             for ( var i = 0; i < segments; i++ )
             {
                 Renderer.SetColor( colorBits );
-                Renderer.Vertex( ( cx + ( cos * x1 ) ) - ( sin * y1 ), cy + ( sin * x1 ) + ( cos * y1 ), 0 );
+                Renderer.Vertex( cx + ( cos * x1 ) - ( sin * y1 ), cy + ( sin * x1 ) + ( cos * y1 ), 0 );
                 Renderer.SetColor( colorBits );
                 Renderer.Vertex( cx, cy, 0 );
 
@@ -1066,7 +1066,7 @@ public class ShapeRenderer : IDisposable
                 y1 = height * 0.5f * MathUtils.Sin( ( i + 1 ) * angle );
 
                 Renderer.SetColor( colorBits );
-                Renderer.Vertex( ( cx + ( cos * x1 ) ) - ( sin * y1 ), cy + ( sin * x1 ) + ( cos * y1 ), 0 );
+                Renderer.Vertex( cx + ( cos * x1 ) - ( sin * y1 ), cy + ( sin * x1 ) + ( cos * y1 ), 0 );
             }
         }
     }
@@ -1085,10 +1085,10 @@ public class ShapeRenderer : IDisposable
 
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, ( segments * 4 ) + 2 );
 
-        var   colorBits = _color.ToFloatBitsAbgr();
-        var   angle     = ( 2 * MathUtils.PI ) / segments;
-        var   cos       = MathUtils.Cos( angle );
-        var   sin       = MathUtils.Sin( angle );
+        float colorBits = _color.ToFloatBitsAbgr();
+        float angle     = 2 * MathUtils.PI / segments;
+        float cos       = MathUtils.Cos( angle );
+        float sin       = MathUtils.Sin( angle );
         float cx        = radius, cy = 0;
         float temp;
         float temp2;
@@ -1179,14 +1179,14 @@ public class ShapeRenderer : IDisposable
 
         Check( ShapeRenderType.Lines, null, count );
 
-        var colorBits = _color.ToFloatBitsAbgr();
-        var firstX    = vertices[ 0 ];
-        var firstY    = vertices[ 1 ];
+        float colorBits = _color.ToFloatBitsAbgr();
+        float firstX    = vertices[ 0 ];
+        float firstY    = vertices[ 1 ];
 
         for ( int i = offset, n = offset + count; i < n; i += 2 )
         {
-            var   x1 = vertices[ i ];
-            var   y1 = vertices[ i + 1 ];
+            float x1 = vertices[ i ];
+            float y1 = vertices[ i + 1 ];
             float x2;
             float y2;
 
@@ -1222,14 +1222,14 @@ public class ShapeRenderer : IDisposable
 
         Check( ShapeRenderType.Lines, null, count );
 
-        var colorBits = _color.ToFloatBitsAbgr();
+        float colorBits = _color.ToFloatBitsAbgr();
 
-        for ( int i = offset, n = ( offset + count ) - 2; i < n; i += 2 )
+        for ( int i = offset, n = offset + count - 2; i < n; i += 2 )
         {
-            var x1 = vertices[ i ];
-            var y1 = vertices[ i + 1 ];
-            var x2 = vertices[ i + 2 ];
-            var y2 = vertices[ i + 3 ];
+            float x1 = vertices[ i ];
+            float y1 = vertices[ i + 1 ];
+            float x2 = vertices[ i + 2 ];
+            float y2 = vertices[ i + 3 ];
 
             Renderer.SetColor( colorBits );
             Renderer.Vertex( x1, y1, 0 );

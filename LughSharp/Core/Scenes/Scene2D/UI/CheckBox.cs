@@ -23,10 +23,12 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -35,12 +37,12 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class CheckBox : TextButton
 {
     public override string? Name => "CheckBox";
-    
+
     public Scene2DImage? Image     { get; set; }
     public Cell?         ImageCell { get; set; }
 
     // ========================================================================
-    
+
     public CheckBox( string text, Skin skin )
         : this( text, skin.Get< CheckBoxStyle >() )
     {
@@ -74,7 +76,7 @@ public class CheckBox : TextButton
     {
         ClearChildren();
 
-        var label = Label;
+        Label? label = Label;
 
         Image = new Scene2DImage( style.CheckboxOff, Scaling.None );
 
@@ -105,7 +107,7 @@ public class CheckBox : TextButton
 
         if ( checkbox == null )
         {
-            var over = IsOver() && !IsDisabled;
+            bool over = IsOver() && !IsDisabled;
 
             if ( IsChecked && ( Style?.CheckboxOn != null ) )
             {

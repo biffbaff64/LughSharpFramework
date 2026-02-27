@@ -102,11 +102,11 @@ public class SampleBuffer : AudioBase
     /// <param name="samples">The array of floating-point samples.</param>
     public override void AppendSamples( int channel, float[] samples )
     {
-        var pos = _bufferp[ channel ];
+        int pos = _bufferp[ channel ];
 
         for ( var i = 0; i < 32; )
         {
-            var fs = samples[ i++ ];
+            float fs = samples[ i++ ];
 
             fs = fs > 32767.0f ? 32767.0f : fs < -32767.0f ? -32767.0f : fs;
 
@@ -158,4 +158,3 @@ public class SampleBuffer : AudioBase
 
 // ============================================================================
 // ============================================================================
-

@@ -42,7 +42,7 @@ public class OutputChannels
         BothChannels    = 0,
         LeftChannel     = 1,
         RightChannel    = 2,
-        DownmixChannels = 3,
+        DownmixChannels = 3
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public class OutputChannels
     {
         get
         {
-            var count = _outputChannels == BOTH_CHANNELS ? 2 : 1;
+            int count = _outputChannels == BOTH_CHANNELS ? 2 : 1;
 
             return count;
         }
@@ -116,13 +116,13 @@ public class OutputChannels
     public static OutputChannels FromInt( int code )
     {
         return code switch
-        {
-            ( int )OutputChannelsEnum.LeftChannel     => Left,
-            ( int )OutputChannelsEnum.RightChannel    => Right,
-            ( int )OutputChannelsEnum.BothChannels    => Both,
-            ( int )OutputChannelsEnum.DownmixChannels => DownMix,
-            var _                                     => throw new ArgumentException( "Invalid channel code: " + code ),
-        };
+               {
+                   ( int )OutputChannelsEnum.LeftChannel => Left,
+                   ( int )OutputChannelsEnum.RightChannel => Right,
+                   ( int )OutputChannelsEnum.BothChannels => Both,
+                   ( int )OutputChannelsEnum.DownmixChannels => DownMix,
+                   var _ => throw new ArgumentException( "Invalid channel code: " + code )
+               };
     }
 
     /// <inheritdoc />
@@ -147,4 +147,3 @@ public class OutputChannels
 
 // ============================================================================
 // ============================================================================
-

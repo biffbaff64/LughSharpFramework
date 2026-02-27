@@ -29,7 +29,6 @@ namespace LughSharp.Core.Maps.Tiled.Tiles;
 [PublicAPI]
 public class AnimatedTileBuilder
 {
-    
 }
 
 // ============================================================================

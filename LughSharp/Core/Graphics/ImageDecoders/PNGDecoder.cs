@@ -24,7 +24,9 @@
 
 using System.IO.Compression;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -54,7 +56,7 @@ public class PNGDecoder
     public static readonly byte[] StandardPNGSignature =
     [
         // DO NOT CHANGE THESE VALUES!
-        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
+        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A
     ];
 
     public static readonly byte[] IHDRSequence = "IHDR"u8.ToArray();
@@ -131,7 +133,7 @@ public class PNGDecoder
             throw new RuntimeException( "Unable to perform analysis, texture is null" );
         }
 
-        var data = CreatePNGFromTexture( texture );
+        byte[]? data = CreatePNGFromTexture( texture );
 
         if ( data == null )
         {
@@ -233,8 +235,8 @@ public class PNGDecoder
         // ANALYSIS
         // --------------------------------------
 
-        var colorType = IHDRchunk.ColorType;
-        var bitDepth  = IHDRchunk.BitDepth;
+        byte colorType = IHDRchunk.ColorType;
+        byte bitDepth  = IHDRchunk.BitDepth;
 
         BytesPerPixel  = GetBytesPerPixel( colorType, bitDepth );
         PNGPixelFormat = PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
@@ -267,8 +269,8 @@ public class PNGDecoder
 
         while ( ( idatIndex = FindChunk( pngData, "IDAT", idatIndex + 1 ) ) != -1 )
         {
-            var chunkSize     = ReadIntFromBytes( pngData, idatIndex );
-            var fullChunkSize = chunkSize + 12; // Add 12 bytes for type and CRC
+            int chunkSize     = ReadIntFromBytes( pngData, idatIndex );
+            int fullChunkSize = chunkSize + 12; // Add 12 bytes for type and CRC
 
             if ( ( idatIndex + fullChunkSize ) > pngData.Length )
             {
@@ -310,9 +312,9 @@ public class PNGDecoder
 
         if ( verbose )
         {
-            var bitDepth    = data[ BITDEPTH_OFFSET ];
-            var colorType   = data[ COLORTYPE_OFFSET ];
-            var colorFormat = DetermineColorFormat( ColorType, bitDepth );
+            byte   bitDepth    = data[ BITDEPTH_OFFSET ];
+            byte   colorType   = data[ COLORTYPE_OFFSET ];
+            string colorFormat = DetermineColorFormat( ColorType, bitDepth );
 
             Logger.Debug( "IHDR Data Breakdown:" );
             Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
@@ -340,14 +342,14 @@ public class PNGDecoder
     /// </returns>
     public static int FindChunk( byte[] bytes, string chunkType, int startIndex = 0 )
     {
-        var chunkTypeBytes = Encoding.ASCII.GetBytes( chunkType );
+        byte[] chunkTypeBytes = Encoding.ASCII.GetBytes( chunkType );
 
         if ( ( startIndex < 0 ) || ( startIndex > ( bytes.Length - 8 ) ) ) // Corrected end condition
         {
             return -1;
         }
 
-        for ( var i = startIndex; i <= ( bytes.Length - 8 ); i++ )
+        for ( int i = startIndex; i <= ( bytes.Length - 8 ); i++ )
         {
             if ( ( bytes[ i + 5 ] == chunkTypeBytes[ 1 ] )
               && ( bytes[ i + 4 ] == chunkTypeBytes[ 0 ] )
@@ -370,7 +372,7 @@ public class PNGDecoder
     private static int FindFirstIDATDataOffset( byte[] data )
     {
         // 1. Initial Position: Skip the PNG Signature (8 bytes)
-        var currentOffset = IHDR_START;
+        int currentOffset = IHDR_START;
 
         // 2. Parse the mandatory IHDR Chunk (25 bytes)
         //    We don't need the data, just skip the chunk.
@@ -382,7 +384,7 @@ public class PNGDecoder
             // --- Read the current chunk's metadata ---
 
             // A. Read 4 bytes at 'current_offset' to get the Data Length (L)
-            var lengthBytes = ReadIntFromBytes( data, currentOffset );
+            int lengthBytes = ReadIntFromBytes( data, currentOffset );
 
             // B. Read 4 bytes at 'current_offset + 4' and convert to a string
             // to get the Chunk Type
@@ -519,7 +521,7 @@ public class PNGDecoder
     /// </exception>
     private static uint ReadBigEndianUInt32( BinaryReader reader )
     {
-        var bytes = reader.ReadBytes( 4 );
+        byte[] bytes = reader.ReadBytes( 4 );
 
         if ( BitConverter.IsLittleEndian )
         {
@@ -577,7 +579,7 @@ public class PNGDecoder
                         {
                             8     => 1,
                             16    => 2,
-                            var _ => -1,
+                            var _ => -1
                         },
 
                    // RGB
@@ -585,7 +587,7 @@ public class PNGDecoder
                         {
                             8     => 3,
                             16    => 6,
-                            var _ => -1,
+                            var _ => -1
                         },
 
                    // Indexed-color ( Indexed color uses a palette )
@@ -596,7 +598,7 @@ public class PNGDecoder
                         {
                             8     => 2,
                             16    => 4,
-                            var _ => -1,
+                            var _ => -1
                         },
 
                    // RGBA
@@ -604,12 +606,12 @@ public class PNGDecoder
                         {
                             8     => 4,
                             16    => 8,
-                            var _ => -1,
+                            var _ => -1
                         },
 
                    // ----------------------------------
 
-                   var _ => -1,
+                   var _ => -1
                };
     }
 
@@ -633,7 +635,7 @@ public class PNGDecoder
                         {
                             8     => "RGB888",
                             16    => "RGB161616",
-                            var _ => $"Truecolor {bitDepth}-bit",
+                            var _ => $"Truecolor {bitDepth}-bit"
                         },
 
                    // --------------------------------------------
@@ -644,7 +646,7 @@ public class PNGDecoder
                         {
                             8     => "Grayscale with Alpha 88",
                             16    => "Grayscale with Alpha 1616",
-                            var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}",
+                            var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}"
                         },
 
                    // --------------------------------------------
@@ -652,11 +654,11 @@ public class PNGDecoder
                         {
                             8     => "RGBA8888",
                             16    => "RGBA16161616",
-                            var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}",
+                            var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}"
                         },
 
                    // --------------------------------------------
-                   var _ => "Unknown Color Format",
+                   var _ => "Unknown Color Format"
                };
     }
 
@@ -677,7 +679,7 @@ public class PNGDecoder
 
                    // ----------------------------------
 
-                   var _ => $"Unknown colortype: {colortype}",
+                   var _ => $"Unknown colortype: {colortype}"
                };
     }
 
@@ -746,7 +748,7 @@ public class PNGDecoder
             throw new RuntimeException( "Cannot perform PNG conversion as Input data is null." );
         }
 
-        var bytesPerPixel = PixelFormat.BytesPerPixel( format );
+        int bytesPerPixel = PixelFormat.BytesPerPixel( format );
 
         if ( rawRgba.Length != ( width * height * bytesPerPixel ) )
         {
@@ -781,7 +783,7 @@ public class PNGDecoder
         }
 
         // Prepare image data with filter bytes
-        var scanlineLen = ( width * 4 ) + 1;
+        int scanlineLen = ( width * 4 ) + 1;
         var imageData   = new byte[ scanlineLen * height ];
 
         for ( var y = 0; y < height; y++ )
@@ -823,7 +825,7 @@ public class PNGDecoder
         static void WriteChunk( Stream s, string type, byte[] data )
         {
             WriteBigEndian( s, data.Length );
-            var typeBytes = Encoding.ASCII.GetBytes( type );
+            byte[] typeBytes = Encoding.ASCII.GetBytes( type );
             s.Write( typeBytes, 0, 4 );
             s.Write( data, 0, data.Length );
 
@@ -881,7 +883,7 @@ public class PNGDecoder
 
         var signatureStruct = new PNGFormatStructs.PNGSignature
         {
-            Signature = signature,
+            Signature = signature
         };
 
         if ( !IsPNG( pngData ) )
@@ -951,7 +953,7 @@ public class PNGDecoder
             Compression = pngData[ IHDR_DATA_OFFSET + COMPRESSION_OFFSET ],
             Filter      = pngData[ IHDR_DATA_OFFSET + FILTER_OFFSET ],
             Interlace   = pngData[ IHDR_DATA_OFFSET + INTERLACE_OFFSET ],
-            Crc         = crc,
+            Crc         = crc
         };
     }
 
@@ -970,12 +972,12 @@ public class PNGDecoder
 
         Array.Copy( pngData, _idatStartPosition, tmp, 0, CHUNK_LENGTH_FIELD_SIZE );
 
-        var tmpChunkSize = ReadBigEndianUInt32( tmp, CHUNK_LENGTH_FIELD_SIZE );
+        uint tmpChunkSize = ReadBigEndianUInt32( tmp, CHUNK_LENGTH_FIELD_SIZE );
 
         return new PNGFormatStructs.IDATChunk
         {
             ChunkSize = tmpChunkSize,
-            ChunkType = tmp,
+            ChunkType = tmp
         };
     }
 
@@ -1034,27 +1036,27 @@ public class PNGDecoder
 
     private static void DebugDumpPngData( byte[] pngData )
     {
-        var offset = 0;
-        var length = pngData.Length;
-        var remaining = pngData.Length;
-        var end    = pngData.Length; // 20 * 8;
-        var sb     = new StringBuilder();
-        var index  = 0;
+        var offset    = 0;
+        int length    = pngData.Length;
+        int remaining = pngData.Length;
+        int end       = pngData.Length; // 20 * 8;
+        var sb        = new StringBuilder();
+        var index     = 0;
 
         while ( index < end )
         {
             sb.Clear();
 
-            var count = Math.Min( remaining, 8 );
-            
+            int count = Math.Min( remaining, 8 );
+
             for ( var i = 0; i < count; i++ )
             {
                 sb.Append( $"[{pngData[ offset + index + i ]:X2}]" );
             }
-            
+
             Logger.Debug( sb.ToString() );
-            
-            index += Math.Min( 8, remaining );
+
+            index     += Math.Min( 8, remaining );
             remaining -= count;
         }
     }
@@ -1062,4 +1064,3 @@ public class PNGDecoder
 
 // ============================================================================
 // ============================================================================
-

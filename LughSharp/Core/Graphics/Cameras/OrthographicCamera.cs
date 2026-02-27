@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 
@@ -97,7 +98,7 @@ public class OrthographicCamera : Camera
 
         Up.Set( 0f, 1f, 0f );
         Direction.Set( 0f, 0f, -1f );
-        Position.Set( ( Zoom * viewportWidth ) / 2.0f, ( Zoom * viewportHeight ) / 2.0f, CameraData.DEFAULT_Z );
+        Position.Set( Zoom * viewportWidth / 2.0f, Zoom * viewportHeight / 2.0f, CameraData.DEFAULT_Z );
 
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
@@ -117,10 +118,10 @@ public class OrthographicCamera : Camera
     /// </param>
     public override void Update( bool updateFrustrum = true )
     {
-        var left   = ( Zoom * -ViewportWidth ) / 2f;
-        var right  = Zoom * ( ViewportWidth / 2f );
-        var bottom = Zoom * -( ViewportHeight / 2f );
-        var top    = ( Zoom * ViewportHeight ) / 2f;
+        float left   = Zoom * -ViewportWidth / 2f;
+        float right  = Zoom * ( ViewportWidth / 2f );
+        float bottom = Zoom * -( ViewportHeight / 2f );
+        float top    = Zoom * ViewportHeight / 2f;
 
         ProjectionMatrix.SetToOrtho( left, right, bottom, top, Near, Far );
         ViewMatrix.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );

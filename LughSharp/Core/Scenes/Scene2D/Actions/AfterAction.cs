@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
@@ -51,16 +52,16 @@ public class AfterAction : DelegateAction
 
     protected override bool Delegate( float delta )
     {
-        var currentActions = Target?.Actions;
+        List< Action >? currentActions = Target?.Actions;
 
         if ( currentActions?.Count == 1 )
         {
             _waitForActions.Clear();
         }
 
-        for ( var i = _waitForActions.Count - 1; i >= 0; i-- )
+        for ( int i = _waitForActions.Count - 1; i >= 0; i-- )
         {
-            var action = _waitForActions[ i ];
+            Action action = _waitForActions[ i ];
 
             if ( currentActions?.IndexOf( action ) == -1 )
             {

@@ -24,7 +24,9 @@
 
 using System.Globalization;
 using System.Xml.Linq;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -59,7 +61,7 @@ public class DesktopGLPreferences : IPreferences
             Directory.CreateDirectory( _filePath );
         }
 
-        var fullPath = _filePath + _propertiesFile;
+        string fullPath = _filePath + _propertiesFile;
 
         if ( !File.Exists( fullPath ) )
         {
@@ -75,10 +77,10 @@ public class DesktopGLPreferences : IPreferences
 
             if ( _xDocument.Root?.Name == "properties" )
             {
-                foreach ( var entryElement in _xDocument.Root.Elements( "entry" ) )
+                foreach ( XElement entryElement in _xDocument.Root.Elements( "entry" ) )
                 {
-                    var key   = entryElement.Attribute( "key" )?.Value;
-                    var value = entryElement.Value;
+                    string? key   = entryElement.Attribute( "key" )?.Value;
+                    string  value = entryElement.Value;
 
                     if ( key != null )
                     {
@@ -138,7 +140,7 @@ public class DesktopGLPreferences : IPreferences
     /// <returns> The current <see cref="IPreferences"/> instance. </returns>
     public IPreferences PutAll( Dictionary< string, object > vals )
     {
-        foreach ( var entry in vals )
+        foreach ( KeyValuePair< string, object > entry in vals )
         {
             switch ( entry.Value )
             {
@@ -220,8 +222,8 @@ public class DesktopGLPreferences : IPreferences
     /// <returns> The boolean value. </returns>
     public bool GetBool( string key, bool defValue )
     {
-        if ( !_properties.TryGetValue( key, out var value )
-             || ( ( value.ToString() != "true" ) && ( value.ToString() != "false" ) ) )
+        if ( !_properties.TryGetValue( key, out object? value )
+          || ( ( value.ToString() != "true" ) && ( value.ToString() != "false" ) ) )
         {
             return defValue;
         }
@@ -237,7 +239,7 @@ public class DesktopGLPreferences : IPreferences
     /// <returns> The integer value. </returns>
     public int GetInteger( string key, int defValue )
     {
-        if ( !_properties.TryGetValue( key, out var value ) )
+        if ( !_properties.TryGetValue( key, out object? value ) )
         {
             return defValue;
         }
@@ -253,7 +255,7 @@ public class DesktopGLPreferences : IPreferences
     /// <returns> The long value. </returns>
     public long GetLong( string key, long defValue )
     {
-        if ( !_properties.TryGetValue( key, out var value ) )
+        if ( !_properties.TryGetValue( key, out object? value ) )
         {
             return defValue;
         }
@@ -269,7 +271,7 @@ public class DesktopGLPreferences : IPreferences
     /// <returns> The float value. </returns>
     public float GetFloat( string key, float defValue )
     {
-        if ( !_properties.TryGetValue( key, out var value ) )
+        if ( !_properties.TryGetValue( key, out object? value ) )
         {
             return defValue;
         }
@@ -287,7 +289,7 @@ public class DesktopGLPreferences : IPreferences
     /// <returns> The string value. </returns>
     public string GetString( string key, string defValue = "" )
     {
-        if ( !_properties.TryGetValue( key, out var value ) )
+        if ( !_properties.TryGetValue( key, out object? value ) )
         {
             return defValue;
         }
@@ -319,7 +321,7 @@ public class DesktopGLPreferences : IPreferences
     /// </summary>
     public void Clear()
     {
-        foreach ( var property in _properties )
+        foreach ( KeyValuePair< string, object > property in _properties )
         {
             _put( property.Key, "" );
         }
@@ -353,7 +355,7 @@ public class DesktopGLPreferences : IPreferences
 
         try
         {
-            foreach ( var entry in _properties )
+            foreach ( KeyValuePair< string, object > entry in _properties )
             {
                 _xDocument.Root?.Add( new XElement( "entry", new XAttribute( "key", entry.Key ), entry.Value ) );
             }

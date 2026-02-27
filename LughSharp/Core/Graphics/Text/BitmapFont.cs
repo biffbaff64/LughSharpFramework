@@ -28,6 +28,7 @@ using System.IO;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
@@ -96,7 +97,7 @@ public class BitmapFont
 
     // ========================================================================
 
-    private readonly PathType             _pathType;
+    private readonly PathType              _pathType;
     private readonly List< TextureRegion > _regions;
 
     // ========================================================================
@@ -112,7 +113,7 @@ public class BitmapFont
                 false )
     {
     }
-    
+
     /// <summary>
     /// Creates a BitmapFont using the default 15pt Arial font included in the Library.
     /// This is convenient to easily display text without bothering without generating
@@ -203,7 +204,7 @@ public class BitmapFont
     /// If true, rendering positions will be at integer values to avoid filtering artifacts.
     /// </param>
     public BitmapFont( BitmapFontData data, TextureRegion? region, bool integer )
-        : this( data, region != null ? new List< TextureRegion >() { region } : null, integer )
+        : this( data, region != null ? new List< TextureRegion > { region } : null, integer )
     {
     }
 
@@ -236,13 +237,13 @@ public class BitmapFont
             }
 
             // Load each path.
-            var n = data.ImagePaths.Length;
+            int n = data.ImagePaths.Length;
 
             _regions = new List< TextureRegion >( n );
 
             for ( var i = 0; i < n; i++ )
             {
-                var file = data.FontFile == null
+                FileInfo file = data.FontFile == null
                     ? Engine.Api.Files.Internal( data.ImagePaths[ i ] )
                     : Engine.Api.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
 
@@ -282,7 +283,7 @@ public class BitmapFont
     protected virtual void Load( BitmapFontData data )
     {
         // Iterate through each page of glyphs in the font data.
-        foreach ( var page in data.Glyphs )
+        foreach ( Glyph?[]? page in data.Glyphs )
         {
             // Skip null pages.
             if ( page == null )
@@ -291,7 +292,7 @@ public class BitmapFont
             }
 
             // Iterate through each glyph in the page.
-            foreach ( var glyph in page )
+            foreach ( Glyph? glyph in page )
             {
                 // Set the glyph region if the glyph is not null.
                 if ( glyph != null )
@@ -313,12 +314,18 @@ public class BitmapFont
     /// <summary>
     /// Returns the color of text drawn with this font.
     /// </summary>
-    public Color GetColor() => Cache?.GetColor() ?? Color.White;
+    public Color GetColor()
+    {
+        return Cache?.GetColor() ?? Color.White;
+    }
 
     /// <summary>
     /// A convenience method for setting the font color.
     /// </summary>
-    public void SetColor( Color color ) => Cache?.GetColor().Set( color );
+    public void SetColor( Color color )
+    {
+        Cache?.GetColor().Set( color );
+    }
 
     /// <summary>
     /// A convenience method for setting the font color.
@@ -331,12 +338,18 @@ public class BitmapFont
     /// <summary>
     /// Returns the alpha of text drawn with this font.
     /// </summary>
-    public float GetAlpha() => Cache?.GetColor().A ?? 1f;
+    public float GetAlpha()
+    {
+        return Cache?.GetColor().A ?? 1f;
+    }
 
     /// <summary>
     /// A covenience method for setting the font alpha.
     /// </summary>
-    public void SetAlpha( float a ) => Cache?.GetColor().A = a;
+    public void SetAlpha( float a )
+    {
+        Cache?.GetColor().A = a;
+    }
 
     /// <summary>
     /// Returns the first texture region. This is included for backwards compatibility,
@@ -346,63 +359,96 @@ public class BitmapFont
     /// </para>
     /// </summary>
     /// <returns>the first texture region</returns>
-    public TextureRegion GetRegion() => _regions.First();
+    public TextureRegion GetRegion()
+    {
+        return _regions.First();
+    }
 
     /// <summary>
     /// Returns the array of TextureRegions that represents each texture page of glyphs.
     /// </summary>
     /// <returns> The array of texture regions; modifying it may produce undesirable results </returns>
-    public List< TextureRegion > GetRegions() => _regions;
+    public List< TextureRegion > GetRegions()
+    {
+        return _regions;
+    }
 
     /// <summary>
     /// Returns the texture page at the given index.
     /// </summary>
-    public TextureRegion GetRegion( int index ) => _regions[ index ];
+    public TextureRegion GetRegion( int index )
+    {
+        return _regions[ index ];
+    }
 
     /// <summary>
     /// Returns the line height, which is the distance from one line of text to the next.
     /// </summary>
-    public float GetLineHeight() => FontData.LineHeight;
+    public float GetLineHeight()
+    {
+        return FontData.LineHeight;
+    }
 
     /// <summary>
     /// Returns the x-advance of the space character.
     /// </summary>
-    public virtual float GetSpaceXadvance() => FontData.SpaceXadvance;
+    public virtual float GetSpaceXadvance()
+    {
+        return FontData.SpaceXadvance;
+    }
 
     /// <summary>
     /// Returns the x-height, which is the distance from the top of most lowercase
     /// characters to the baseline.
     /// </summary>
-    public float GetXHeight() => FontData.XHeight;
+    public float GetXHeight()
+    {
+        return FontData.XHeight;
+    }
 
     /// <summary>
     /// Returns the cap height, which is the distance from the top of most uppercase
     /// characters to the baseline. Since the drawing position is the cap height of
     /// the first line, the cap height can be used to get the location of the baseline.
     /// </summary>
-    public float GetCapHeight() => FontData.CapHeight;
+    public float GetCapHeight()
+    {
+        return FontData.CapHeight;
+    }
 
     /// <summary>
     /// Returns the ascent, which is the distance from the cap height to the top of
     /// the tallest glyph.
     /// </summary>
-    public float GetAscent() => FontData.Ascent;
+    public float GetAscent()
+    {
+        return FontData.Ascent;
+    }
 
     /// <summary>
     /// Returns the descent, which is the distance from the bottom of the glyph that
     /// extends the lowest to the baseline. This number is negative.
     /// </summary>
-    public float GetDescent() => FontData.Descent;
+    public float GetDescent()
+    {
+        return FontData.Descent;
+    }
 
     /// <summary>
     /// Returns the <see cref="BitmapFontData.ScaleX"/> value.
     /// </summary>
-    public float GetScaleX() => FontData.ScaleX;
+    public float GetScaleX()
+    {
+        return FontData.ScaleX;
+    }
 
     /// <summary>
     /// Returns the <see cref="BitmapFontData.ScaleY"/> value.
     /// </summary>
-    public float GetScaleY() => FontData.ScaleY;
+    public float GetScaleY()
+    {
+        return FontData.ScaleY;
+    }
 
     /// <summary>
     /// Makes the specified glyphs fixed width. This can be useful to make the numbers
@@ -411,12 +457,12 @@ public class BitmapFont
     /// </summary>
     public void SetFixedWidthGlyphs( string glyphs )
     {
-        var data       = FontData;
-        var maxAdvance = 0;
+        BitmapFontData data       = FontData;
+        var            maxAdvance = 0;
 
         for ( int index = 0, end = glyphs.Length; index < end; index++ )
         {
-            var g = data.GetGlyph( glyphs[ index ] );
+            Glyph? g = data.GetGlyph( glyphs[ index ] );
 
             if ( ( g != null ) && ( g.Xadvance > maxAdvance ) )
             {
@@ -426,7 +472,7 @@ public class BitmapFont
 
         for ( int index = 0, end = glyphs.Length; index < end; index++ )
         {
-            var g = data.GetGlyph( glyphs[ index ] );
+            Glyph? g = data.GetGlyph( glyphs[ index ] );
 
             if ( g == null )
             {
@@ -459,7 +505,7 @@ public class BitmapFont
     /// </summary>
     private static int IndexOf( string text, char ch, int start )
     {
-        var n = text.Length;
+        int n = text.Length;
 
         for ( ; start < n; start++ )
         {
@@ -482,10 +528,10 @@ public class BitmapFont
     public GlyphLayout Draw( IBatch batch, string str, float x, float y )
     {
         Guard.Against.Null( Cache );
-        
+
         Cache.Clear();
 
-        var layout = Cache.AddText( str, x, y );
+        GlyphLayout layout = Cache.AddText( str, x, y );
 
         Cache.Draw( batch );
 
@@ -501,7 +547,7 @@ public class BitmapFont
 
         Cache.Clear();
 
-        var layout = Cache.AddText( str, x, y, targetWidth, halign, wrap );
+        GlyphLayout layout = Cache.AddText( str, x, y, targetWidth, halign, wrap );
 
         Cache.Draw( batch );
 
@@ -522,10 +568,10 @@ public class BitmapFont
                              bool wrap )
     {
         Guard.Against.Null( Cache );
-        
+
         Cache.Clear();
 
-        var layout = Cache.AddText( str, x, y, start, end, targetWidth, halign, wrap );
+        GlyphLayout layout = Cache.AddText( str, x, y, start, end, targetWidth, halign, wrap );
 
         Cache.Draw( batch );
 
@@ -550,7 +596,7 @@ public class BitmapFont
 
         Cache.Clear();
 
-        var layout = Cache.AddText( str, x, y, start, end, targetWidth, halign, wrap, truncate );
+        GlyphLayout layout = Cache.AddText( str, x, y, start, end, targetWidth, halign, wrap, truncate );
 
         Cache.Draw( batch );
 
@@ -577,7 +623,7 @@ public class BitmapFont
     {
         if ( OwnsTexture )
         {
-            foreach ( var t in _regions )
+            foreach ( TextureRegion t in _regions )
             {
                 t.Texture?.Dispose();
             }

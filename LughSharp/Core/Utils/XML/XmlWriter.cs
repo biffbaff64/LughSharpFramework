@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -59,14 +60,14 @@ public class XmlWriter : StringWriter
 
     public XmlWriter( StringWriter writer )
     {
-        this._writer = writer;
-        this._stack  = new List< string >();
+        _writer = writer;
+        _stack  = new List< string >();
     }
 
     private void Indent()
     {
-        var count = _indent;
-        
+        int count = _indent;
+
         if ( _currentElement != null )
         {
             count++;
@@ -86,12 +87,12 @@ public class XmlWriter : StringWriter
         }
 
         Indent();
-        
+
         _writer?.Write( '<' );
         _writer?.Write( name );
-        
+
         _currentElement = name;
-        
+
         return this;
     }
 
@@ -108,12 +109,12 @@ public class XmlWriter : StringWriter
         }
 
         _indent++;
-        
+
         _stack.Add( _currentElement );
         _currentElement = null;
 
         _writer?.Write( ">" );
-        
+
         return true;
     }
 
@@ -126,18 +127,18 @@ public class XmlWriter : StringWriter
         _writer?.Write( "=\"" );
         _writer?.Write( value == null ? "null" : value.ToString() );
         _writer?.Write( '"' );
-        
+
         return this;
     }
 
     public XmlWriter Text( object? text )
     {
         StartElementContent();
-        
-        var str = text == null ? "null" : text.ToString();
+
+        string? str = text == null ? "null" : text.ToString();
 
         _indentNextClose = str?.Length > 64;
-        
+
         if ( _indentNextClose )
         {
             _writer?.Write( '\n' );
@@ -145,7 +146,7 @@ public class XmlWriter : StringWriter
         }
 
         _writer?.Write( str );
-        
+
         if ( _indentNextClose )
         {
             _writer?.Write( '\n' );
@@ -164,7 +165,7 @@ public class XmlWriter : StringWriter
         else
         {
             _indent = Math.Max( _indent - 1, 0 );
-            
+
             if ( _indentNextClose )
             {
                 Indent();
@@ -176,7 +177,7 @@ public class XmlWriter : StringWriter
         }
 
         _indentNextClose = true;
-        
+
         return this;
     }
 

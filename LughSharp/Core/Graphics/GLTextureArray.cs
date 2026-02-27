@@ -24,7 +24,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -54,7 +56,7 @@ public class GLTextureArray : GLTexture, IManaged
         {
             var builder = new StringBuilder( "Managed TextureArrays/app: { " );
 
-            foreach ( var app in ManagedTextureArrays.Keys )
+            foreach ( IApplication app in ManagedTextureArrays.Keys )
             {
                 builder.Append( ManagedTextureArrays[ app ].Count );
                 builder.Append( ' ' );
@@ -73,8 +75,8 @@ public class GLTextureArray : GLTexture, IManaged
 
     // ========================================================================
 
-    public int Width  => _data.Width;
-    public int Height => _data.Height;
+    public          int Width  => _data.Width;
+    public          int Height => _data.Height;
     public override int Depth  => _data.Depth;
 
     [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
@@ -89,7 +91,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// </summary>
     /// <param name="internalPaths"></param>
-    public GLTextureArray( params string[] internalPaths ) 
+    public GLTextureArray( params string[] internalPaths )
         : this( GetInternalHandles( internalPaths ) )
     {
     }
@@ -218,7 +220,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="texture"></param>
     private static void AddManagedTexture( IApplication app, GLTextureArray texture )
     {
-        var managedTextureArray = ManagedTextureArrays[ app ];
+        List< GLTextureArray > managedTextureArray = ManagedTextureArrays[ app ];
 
         ManagedTextureArrays[ app ].Add( texture );
         ManagedTextureArrays[ app ] = managedTextureArray;
@@ -239,7 +241,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// </summary>
     internal static void InvalidateAllTextureArrays( IApplication app )
     {
-        foreach ( var textureArray in ManagedTextureArrays[ app ] )
+        foreach ( GLTextureArray textureArray in ManagedTextureArrays[ app ] )
         {
             textureArray.Reload();
         }

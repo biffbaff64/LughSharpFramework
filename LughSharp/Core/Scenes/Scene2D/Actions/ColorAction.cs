@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
@@ -73,10 +75,10 @@ public class ColorAction : TemporalAction
         }
         else
         {
-            var r = _startR + ( ( _endColor.R - _startR ) * percent );
-            var g = _startG + ( ( _endColor.G - _startG ) * percent );
-            var b = _startB + ( ( _endColor.B - _startB ) * percent );
-            var a = _startA + ( ( _endColor.A - _startA ) * percent );
+            float r = _startR + ( ( _endColor.R - _startR ) * percent );
+            float g = _startG + ( ( _endColor.G - _startG ) * percent );
+            float b = _startB + ( ( _endColor.B - _startB ) * percent );
+            float a = _startA + ( ( _endColor.A - _startA ) * percent );
 
             Target?.Color.Set( r, g, b, a );
         }

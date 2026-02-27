@@ -42,7 +42,7 @@ public partial interface IGL
         RGB565         = GL_RGB565,
         Luminance      = GL_LUMINANCE,
         LuminanceAlpha = GL_LUMINANCE_ALPHA,
-        ColorIndex     = GL_COLOR_INDEX,
+        ColorIndex     = GL_COLOR_INDEX
     }
 
     // ========================================================================

@@ -36,7 +36,7 @@ public class TiledMap : Map, IDisposable
     public List< object >?  OwnedResources { get; set; }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Performs application-defined tasks associated with freeing,
     /// releasing, or resetting unmanaged resources.
@@ -77,4 +77,3 @@ public class TiledMap : Map, IDisposable
 
 // ============================================================================
 // ============================================================================
-

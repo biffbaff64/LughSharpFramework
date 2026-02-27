@@ -32,7 +32,7 @@ public enum MatrixMode
     Modelview  = IGL.GL_MODELVIEW,
     Projection = IGL.GL_PROJECTION,
     Texture    = IGL.GL_TEXTURE,
-    Color      = IGL.GL_COLOR,
+    Color      = IGL.GL_COLOR
 }
 
 // ========================================================================

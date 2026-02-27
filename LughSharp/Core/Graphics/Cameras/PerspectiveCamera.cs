@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.Cameras;
@@ -68,7 +69,7 @@ public class PerspectiveCamera : Camera
     /// </summary>
     public override void Update( bool updateFrustrum = true )
     {
-        var aspect = ViewportWidth / ViewportHeight;
+        float aspect = ViewportWidth / ViewportHeight;
 
         ProjectionMatrix.SetToProjection( Math.Abs( Near ), Math.Abs( Far ), FieldOfView, aspect );
 

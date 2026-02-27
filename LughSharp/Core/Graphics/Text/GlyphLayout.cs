@@ -235,7 +235,7 @@ public class GlyphLayout : IResetable, IPoolable
     {
         Reset();
 
-        var fontData = font.FontData;
+        BitmapFontData fontData = font.FontData;
 
         if ( start == end )
         {
@@ -252,23 +252,23 @@ public class GlyphLayout : IResetable, IPoolable
             targetWidth = Math.Max( targetWidth, fontData.SpaceXadvance * 3 );
         }
 
-        var wrapOrTruncate = wrap || ( truncate != null );
-        var currentColor   = ( int )color.PackedColorRgba();
-        var nextColor      = currentColor;
+        bool wrapOrTruncate = wrap || ( truncate != null );
+        var  currentColor   = ( int )color.PackedColorRgba();
+        int  nextColor      = currentColor;
 
         Colors.Add( new GlyphColor( 0, currentColor ) );
 
-        var markupEnabled = fontData.MarkupEnabled;
+        bool markupEnabled = fontData.MarkupEnabled;
 
         if ( markupEnabled )
         {
             _colorStack.Add( currentColor );
         }
 
-        var isLastRun = false;
-        var y         = 0f;
-        var down      = fontData.Down;
-        var runStart  = start;
+        var   isLastRun = false;
+        var   y         = 0f;
+        float down      = fontData.Down;
+        int   runStart  = start;
 
         // Collects glyphs for the current line.
         GlyphRun? lineRun = null;
@@ -315,7 +315,7 @@ public class GlyphLayout : IResetable, IPoolable
             // Handle run end
             {
                 // Store the run that has ended.
-                var run = _glyphRunPool.Obtain();
+                GlyphRun run = _glyphRunPool.Obtain();
                 run.X = 0;
                 run.Y = y;
 
@@ -385,12 +385,12 @@ public class GlyphLayout : IResetable, IPoolable
                         // to the drawing position.
 
                         // At least the first glyph will fit.
-                        var runWidth = lineRun.XAdvances.First() + lineRun.XAdvances[ 1 ];
+                        float runWidth = lineRun.XAdvances.First() + lineRun.XAdvances[ 1 ];
 
                         for ( var i = 2; i < lineRun?.XAdvances.Count; i++ )
                         {
-                            var glyph      = lineRun.Glyphs[ i - 1 ];
-                            var glyphWidth = GetGlyphWidth( glyph, fontData );
+                            Glyph glyph      = lineRun.Glyphs[ i - 1 ];
+                            float glyphWidth = GetGlyphWidth( glyph, fontData );
 
                             if ( runWidth + glyphWidth - EPSILON <= targetWidth )
                             {
@@ -409,7 +409,7 @@ public class GlyphLayout : IResetable, IPoolable
                             }
 
                             // Wrap.
-                            var wrapIndex = fontData.GetWrapIndex( lineRun.Glyphs, i );
+                            int wrapIndex = fontData.GetWrapIndex( lineRun.Glyphs, i );
 
                             // Require at least one glyph per line.
                             if ( ( wrapIndex == 0 && lineRun.X == 0 )
@@ -498,7 +498,7 @@ public class GlyphLayout : IResetable, IPoolable
                                   ref int nextColor,
                                   ref bool markupEnabled )
     {
-        var character = str[ start++ ];
+        char character = str[ start++ ];
 
         // Each run is delimited by newline or left square bracket.
         if ( character == '\n' ) // End of line.
@@ -511,7 +511,7 @@ public class GlyphLayout : IResetable, IPoolable
 
         if ( ( character == '[' ) && markupEnabled ) // Possible color tag.
         {
-            var length = ParseColorMarkup( str, start, end );
+            int length = ParseColorMarkup( str, start, end );
 
             if ( length >= 0 )
             {
@@ -565,24 +565,24 @@ public class GlyphLayout : IResetable, IPoolable
     /// </summary>
     private void CalculateRunWidths( BitmapFontData fontData )
     {
-        var width     = 0f;
-        var runsItems = Runs.ToArray();
+        var        width     = 0f;
+        GlyphRun[] runsItems = Runs.ToArray();
 
         for ( int i = 0, n = Runs.Count; i < n; i++ )
         {
-            var run       = runsItems[ i ];
-            var xAdvances = run.XAdvances.ToArray();
+            GlyphRun run       = runsItems[ i ];
+            float[]  xAdvances = run.XAdvances.ToArray();
 
             // run.x is needed to ensure floats are rounded same as above.
-            var runWidth = run.X + xAdvances[ 0 ];
+            float runWidth = run.X + xAdvances[ 0 ];
 
-            var max    = 0f;
-            var glyphs = run.Glyphs.ToArray();
+            var     max    = 0f;
+            Glyph[] glyphs = run.Glyphs.ToArray();
 
             for ( int ii = 0, nn = glyphs.Length; ii < nn; )
             {
-                var glyph      = glyphs[ ii ];
-                var glyphWidth = GetGlyphWidth( glyph, fontData );
+                Glyph glyph      = glyphs[ ii ];
+                float glyphWidth = GetGlyphWidth( glyph, fontData );
 
                 // A glyph can extend past the right edge of subsequent glyphs.
                 max = Math.Max( max, runWidth + glyphWidth );
@@ -608,12 +608,12 @@ public class GlyphLayout : IResetable, IPoolable
         if ( ( halign & Align.LEFT ) == 0 )
         {
             // Not left aligned, so must be center or right aligned.
-            var center    = ( halign & Align.CENTER ) != 0;
-            var runsItems = Runs.ToArray();
+            bool       center    = ( halign & Align.CENTER ) != 0;
+            GlyphRun[] runsItems = Runs.ToArray();
 
             for ( int i = 0, n = Runs.Count; i < n; i++ )
             {
-                var run = runsItems[ i ];
+                GlyphRun run = runsItems[ i ];
 
                 run.X += center
                     ? 0.5f * ( targetWidth - run.Width )
@@ -635,10 +635,10 @@ public class GlyphLayout : IResetable, IPoolable
                            float targetWidth,
                            string truncate )
     {
-        var glyphCount = run.Glyphs.Count;
+        int glyphCount = run.Glyphs.Count;
 
         // Obtain a GlyphRun for the truncate string.
-        var truncateRun = _glyphRunPool.Obtain();
+        GlyphRun? truncateRun = _glyphRunPool.Obtain();
 
         if ( truncateRun == null )
         {
@@ -655,7 +655,7 @@ public class GlyphLayout : IResetable, IPoolable
         {
             SetLastGlyphXAdvance( fontData, truncateRun );
 
-            var xAdvances = truncateRun.XAdvances.ToArray();
+            float[] xAdvances = truncateRun.XAdvances.ToArray();
 
             // Sum the advances to get the total width, skipping the
             // first advance for tighter bounds.
@@ -670,13 +670,13 @@ public class GlyphLayout : IResetable, IPoolable
 
         // Determine how many glyphs from the original run fit within
         // the remaining target width.
-        var count        = 0;
-        var width        = run.X;
-        var runXAdvances = run.XAdvances.ToArray();
+        var     count        = 0;
+        float   width        = run.X;
+        float[] runXAdvances = run.XAdvances.ToArray();
 
         while ( count < run.XAdvances.Count )
         {
-            var xAdvance = runXAdvances[ count ];
+            float xAdvance = runXAdvances[ count ];
             width += xAdvance;
 
             // Stop if adding the next glyph would exceed the target width.
@@ -710,7 +710,7 @@ public class GlyphLayout : IResetable, IPoolable
             run.XAdvances.AddAll( truncateRun.XAdvances );
         }
 
-        var droppedGlyphCount = glyphCount - run.Glyphs.Count;
+        int droppedGlyphCount = glyphCount - run.Glyphs.Count;
 
         if ( droppedGlyphCount > 0 )
         {
@@ -747,12 +747,12 @@ public class GlyphLayout : IResetable, IPoolable
         Guard.Against.Null( fontData );
         Guard.Against.Null( first );
 
-        var glyphs2    = first.Glyphs; // Starts with all the glyphs.
-        var glyphCount = first.Glyphs.Count;
-        var xAdvances2 = first.XAdvances; // Starts with all the xAdvances.
+        List< Glyph > glyphs2    = first.Glyphs; // Starts with all the glyphs.
+        int           glyphCount = first.Glyphs.Count;
+        List< float > xAdvances2 = first.XAdvances; // Starts with all the xAdvances.
 
         // Skip whitespace before the wrap index.
-        var firstEnd = wrapIndex;
+        int firstEnd = wrapIndex;
 
         for ( ; firstEnd > 0; firstEnd-- )
         {
@@ -763,7 +763,7 @@ public class GlyphLayout : IResetable, IPoolable
         }
 
         // Skip whitespace after the wrap index.
-        var secondStart = wrapIndex;
+        int secondStart = wrapIndex;
 
         for ( ; secondStart < glyphCount; secondStart++ )
         {
@@ -781,7 +781,7 @@ public class GlyphLayout : IResetable, IPoolable
         {
             second = _glyphRunPool.Obtain();
 
-            var glyphs1 = second.Glyphs; // Starts empty.
+            List< Glyph > glyphs1 = second.Glyphs; // Starts empty.
 
             glyphs1.AddAll( glyphs2, 0, firstEnd );
             glyphs2.RemoveRange( 0, secondStart - 1 );
@@ -789,7 +789,7 @@ public class GlyphLayout : IResetable, IPoolable
             first.Glyphs  = glyphs1;
             second.Glyphs = glyphs2;
 
-            var xAdvances1 = second.XAdvances; // Starts empty.
+            List< float > xAdvances1 = second.XAdvances; // Starts empty.
 
             xAdvances1.AddAll( xAdvances2, 0, firstEnd + 1 );
             xAdvances2.RemoveRange( 1, secondStart ); // Leave first entry to be overwritten by next line.
@@ -797,26 +797,26 @@ public class GlyphLayout : IResetable, IPoolable
             first.XAdvances  = xAdvances1;
             second.XAdvances = xAdvances2;
 
-            var firstGlyphCount   = first.Glyphs.Count; // After wrapping it.
-            var secondGlyphCount  = second.Glyphs.Count;
-            var droppedGlyphCount = glyphCount - firstGlyphCount - secondGlyphCount;
+            int firstGlyphCount   = first.Glyphs.Count; // After wrapping it.
+            int secondGlyphCount  = second.Glyphs.Count;
+            int droppedGlyphCount = glyphCount - firstGlyphCount - secondGlyphCount;
 
             GlyphCount -= droppedGlyphCount;
 
             if ( fontData.MarkupEnabled && droppedGlyphCount > 0 )
             {
-                var reductionThreshold = GlyphCount - secondGlyphCount;
+                int reductionThreshold = GlyphCount - secondGlyphCount;
 
-                for ( var i = Colors.Count - 1; i >= 1; i-- )
+                for ( int i = Colors.Count - 1; i >= 1; i-- )
                 {
-                    var colorChangeIndex = Colors[ i ].GlyphIndex;
+                    int colorChangeIndex = Colors[ i ].GlyphIndex;
 
                     if ( colorChangeIndex <= reductionThreshold )
                     {
                         break;
                     }
 
-                    Colors[ i ] = new GlyphColor( ( colorChangeIndex - droppedGlyphCount ),
+                    Colors[ i ] = new GlyphColor( colorChangeIndex - droppedGlyphCount,
                                                   Colors[ i ].Argb8888 );
                 }
             }
@@ -827,7 +827,7 @@ public class GlyphLayout : IResetable, IPoolable
             glyphs2.Truncate( firstEnd );
             xAdvances2.Truncate( firstEnd + 1 );
 
-            var droppedGlyphCount = secondStart - firstEnd;
+            int droppedGlyphCount = secondStart - firstEnd;
 
             if ( droppedGlyphCount > 0 )
             {
@@ -836,7 +836,7 @@ public class GlyphLayout : IResetable, IPoolable
                 if ( fontData.MarkupEnabled && Colors[ Colors.Count - 1 ].GlyphIndex > GlyphCount )
                 {
                     // Many color changes can be hidden in the dropped whitespace, so keep only the very last color entry.
-                    var lastColor = Colors.Peek().Argb8888;
+                    int lastColor = Colors.Peek().Argb8888;
 
                     while ( Colors[ Colors.Count - 1 ].GlyphIndex > GlyphCount )
                     {
@@ -868,7 +868,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// </summary>
     private void SetLastGlyphXAdvance( BitmapFontData fontData, GlyphRun run )
     {
-        var last = run.Glyphs.Peek();
+        Glyph last = run.Glyphs.Peek();
 
         if ( !last.FixedWidth )
         {
@@ -881,9 +881,9 @@ public class GlyphLayout : IResetable, IPoolable
     /// </summary>
     private float GetGlyphWidth( Glyph glyph, BitmapFontData fontData )
     {
-        return ( glyph.FixedWidth
+        return ( ( glyph.FixedWidth
             ? glyph.Xadvance
-            : glyph.Width + glyph.Xoffset ) * fontData.ScaleX - fontData.PadRight;
+            : glyph.Width + glyph.Xoffset ) * fontData.ScaleX ) - fontData.PadRight;
     }
 
     /// <summary>
@@ -891,7 +891,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// </summary>
     private float GetLineOffset( List< Glyph > glyphs, BitmapFontData fontData )
     {
-        var first = glyphs.First();
+        Glyph first = glyphs.First();
 
         return ( first.FixedWidth
             ? 0
@@ -925,9 +925,9 @@ public class GlyphLayout : IResetable, IPoolable
                 // is optional and defaults to FF if omitted.
                 var color = 0;
 
-                for ( var i = start + 1; i < end; i++ )
+                for ( int i = start + 1; i < end; i++ )
                 {
-                    var ch = str[ i ];
+                    char ch = str[ i ];
 
                     if ( ch == ']' )
                     {
@@ -938,7 +938,7 @@ public class GlyphLayout : IResetable, IPoolable
 
                         if ( i - start < 8 )
                         {
-                            color = color << ( 9 - ( i - start ) << 2 ) | 0xff; // RRGGBB or fewer chars.
+                            color = ( color << ( ( 9 - ( i - start ) ) << 2 ) ) | 0xff; // RRGGBB or fewer chars.
                         }
 
                         _colorStack.Add( NumberUtils.ReverseBytes( color ) );
@@ -984,16 +984,16 @@ public class GlyphLayout : IResetable, IPoolable
         }
 
         // Parse named color.
-        for ( var i = start + 1; i < end; i++ )
+        for ( int i = start + 1; i < end; i++ )
         {
-            var ch = str[ i ];
+            char ch = str[ i ];
 
             if ( ch != ']' )
             {
                 continue;
             }
 
-            var color = Graphics.Colors.Get( str.Substring( start, i - start ) );
+            Color? color = Graphics.Colors.Get( str.Substring( start, i - start ) );
 
             if ( color == null )
             {
@@ -1082,7 +1082,7 @@ public class GlyphLayout : IResetable, IPoolable
 
             for ( int i = 0, n = Glyphs.Count; i < n; i++ )
             {
-                var g = Glyphs[ i ];
+                Glyph g = Glyphs[ i ];
                 buffer.Append( ( char )g.ID );
             }
 

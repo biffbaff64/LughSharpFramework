@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maths;
@@ -91,7 +92,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <returns>The vector at the specified parameter t.</returns>
     public T ValueAt( in T o, in float t )
     {
-        var n = Points.Count;
+        int n = Points.Count;
 
         if ( n == 2 )
         {
@@ -117,7 +118,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <returns>The derivative at the specified parameter t.</returns>
     public T DerivativeAt( in T o, in float t )
     {
-        var n = Points.Count;
+        int n = Points.Count;
 
         if ( n == 2 )
         {
@@ -143,16 +144,16 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     public float Approximate( in T v )
     {
         // TODO: make a real approximate method
-        var p1 = Points[ 0 ];
-        var p2 = Points[ Points.Count - 1 ];
-        var p3 = v;
+        T p1 = Points[ 0 ];
+        T p2 = Points[ Points.Count - 1 ];
+        T p3 = v;
 
-        var l1Sqr = p1.Distance2( p2 );
-        var l2Sqr = p3.Distance2( p2 );
-        var l3Sqr = p3.Distance2( p1 );
+        float l1Sqr = p1.Distance2( p2 );
+        float l2Sqr = p3.Distance2( p2 );
+        float l3Sqr = p3.Distance2( p1 );
 
-        var l1 = ( float )Math.Sqrt( l1Sqr );
-        var s  = ( ( l2Sqr + l1Sqr ) - l3Sqr ) / ( 2 * l1 );
+        var   l1 = ( float )Math.Sqrt( l1Sqr );
+        float s  = ( l2Sqr + l1Sqr - l3Sqr ) / ( 2 * l1 );
 
         return MathUtils.Clamp( ( l1 - s ) / l1, 0f, 1f );
     }
@@ -306,7 +307,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     public static T Quadratic( in T list, in float t, in T p0, in T p1, in T p2, in T? tmp )
     {
         // B2(t) = (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2
-        var dt = 1f - t;
+        float dt = 1f - t;
 
         return list.Set( p0 ).Scale( dt * dt )
                    .Add( tmp!.Set( p1 ).Scale( 2 * dt * t ) )
@@ -344,9 +345,9 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     public static T Cubic( in T alist, in float t, in T p0, in T p1, in T p2, in T p3, in T? tmp )
     {
         // B3(t) = (1-t) * (1-t) * (1-t) * p0 + 3 * (1-t) * (1-t) * t * p1 + 3 * (1-t) * t * t * p2 + t * t * t * p3
-        var dt  = 1f - t;
-        var dt2 = dt * dt;
-        var t2  = t * t;
+        float dt  = 1f - t;
+        float dt2 = dt * dt;
+        float t2  = t * t;
 
         return alist.Set( p0 ).Scale( dt * dt2 )
                     .Add( tmp!.Set( p1 ).Scale( 3 * dt2 * t ) )
@@ -368,9 +369,9 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     public static T CubicDerivative( in T alist, in float t, in T p0, in T p1, in T p2, in T p3, in T? tmp )
     {
         // B3'(t) = 3 * (1-t) * (1-t) * (p1 - p0) + 6 * (1 - t) * t * (p2 - p1) + 3 * t * t * (p3 - p2)
-        var dt  = 1f - t;
-        var dt2 = dt * dt;
-        var t2  = t * t;
+        float dt  = 1f - t;
+        float dt2 = dt * dt;
+        float t2  = t * t;
 
         return alist.Set( p1 ).Sub( p0 ).Scale( dt2 * 3 )
                     .Add( tmp!.Set( p2 ).Sub( p1 ).Scale( dt * t * 6 ) )

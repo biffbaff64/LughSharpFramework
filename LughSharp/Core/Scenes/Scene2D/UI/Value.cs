@@ -36,7 +36,7 @@ public abstract class Value
 {
     public abstract float Get( Actor? context = null );
 
-    public static readonly Fixed Zero = new Fixed( 0 );
+    public static readonly Fixed Zero = new( 0 );
 
     private class LambdaValue : Value
     {
@@ -128,7 +128,7 @@ public abstract class Value
             if ( value is >= -10 and <= 100
               && Math.Abs( value - ( int )value ) < NumberUtils.FLOAT_TOLERANCE )
             {
-                var index = ( int )value + 10;
+                int index = ( int )value + 10;
 
                 return _cache[ index ] ??= new Fixed( value );
             }

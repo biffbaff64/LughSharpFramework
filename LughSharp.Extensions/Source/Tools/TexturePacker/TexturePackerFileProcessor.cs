@@ -24,7 +24,9 @@
 
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Exceptions;
@@ -37,9 +39,9 @@ namespace Extensions.Source.Tools.TexturePacker;
 public class TexturePackerFileProcessor : FileProcessor
 {
     public TexturePackerProgressListener? ProgressListener { get; set; }
-    public List< DirectoryInfo? >                       DirsToIgnore     { get; set; }
-    public string                                       PackFileName     { get; set; }
-    public bool                                         CountOnly        { get; set; }
+    public List< DirectoryInfo? >         DirsToIgnore     { get; set; }
+    public string                         PackFileName     { get; set; }
+    public bool                           CountOnly        { get; set; }
 
     // ========================================================================
 
@@ -134,10 +136,10 @@ public class TexturePackerFileProcessor : FileProcessor
         CountOnly = true;
         _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
-        
+
         // Do actual processing, returning a List<> of Entry objects.
         ProgressListener?.Start( 1.0f );
-        var result = base.Process( inputRoot, outputRoot );
+        List< Entry > result = base.Process( inputRoot, outputRoot );
         ProgressListener?.End();
 
         return result;
@@ -224,9 +226,9 @@ public class TexturePackerFileProcessor : FileProcessor
             // Collect all files under subdirectories except for those directories with a
             // pack.json file. A directory with its own settings can't be combined since
             // combined directories must use the settings of the parent directory.
-            
+
             var combiningProcessor = new CombiningProcessor( this );
-            
+
             entryList = combiningProcessor.Process( inputDir.InputFile, null ).ToList();
         }
 
@@ -245,15 +247,15 @@ public class TexturePackerFileProcessor : FileProcessor
         // Sort by name using numeric suffix, then alpha.
         entryList.Sort( ( entry1, entry2 ) =>
         {
-            var full1    = entry1.InputFile?.Name;
-            var dotIndex = full1?.LastIndexOf( '.' );
-            
+            string? full1    = entry1.InputFile?.Name;
+            int?    dotIndex = full1?.LastIndexOf( '.' );
+
             if ( dotIndex != -1 )
             {
                 full1 = full1?.Substring( 0, ( int )dotIndex! );
             }
 
-            var full2 = entry2.InputFile?.Name;
+            string? full2 = entry2.InputFile?.Name;
             dotIndex = full2?.LastIndexOf( '.' );
 
             if ( dotIndex != -1 )
@@ -261,12 +263,12 @@ public class TexturePackerFileProcessor : FileProcessor
                 full2 = full2?.Substring( 0, ( int )dotIndex! );
             }
 
-            var name1 = full1;
-            var name2 = full2;
-            var num1  = 0;
-            var num2  = 0;
+            string? name1 = full1;
+            string? name2 = full2;
+            var     num1  = 0;
+            var     num2  = 0;
 
-            var matcher = RegexUtils.NumberSuffixRegex().Match( full1! );
+            Match matcher = RegexUtils.NumberSuffixRegex().Match( full1! );
 
             if ( matcher.Success )
             {
@@ -296,7 +298,7 @@ public class TexturePackerFileProcessor : FileProcessor
                 }
             }
 
-            var compare = string.Compare( name1, name2, StringComparison.Ordinal );
+            int compare = string.Compare( name1, name2, StringComparison.Ordinal );
 
             if ( ( compare != 0 ) || ( num1 == num2 ) )
             {
@@ -306,7 +308,7 @@ public class TexturePackerFileProcessor : FileProcessor
             return num1 - num2;
         } );
 
-        var sourceString = inputDir.InputFile?.FullName.Substring( IOUtils.AssetsRoot.Length );
+        string? sourceString = inputDir.InputFile?.FullName.Substring( IOUtils.AssetsRoot.Length );
 
         // ---------- Pack ----------
 
@@ -331,7 +333,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
             try
             {
-                var rootPath = _rootDirectory.FullName;
+                string rootPath = _rootDirectory.FullName;
                 inputPath = inputDir.InputFile!.FullName;
 
                 if ( inputPath.StartsWith( rootPath ) )
@@ -359,10 +361,10 @@ public class TexturePackerFileProcessor : FileProcessor
 
         // ---------- Pack Images ----------
 
-        var packer = NewTexturePacker( _rootDirectory, settings );
+        TexturePacker packer = NewTexturePacker( _rootDirectory, settings );
 
         // Add all the gathered images to the packer.
-        foreach ( var file in entryList )
+        foreach ( Entry file in entryList )
         {
             if ( file.InputFile != null )
             {
@@ -404,18 +406,18 @@ public class TexturePackerFileProcessor : FileProcessor
     public int CollectSettingsFiles( DirectoryInfo inputRoot, DirectoryInfo? outputRoot )
     {
         //@formatter:off
-        var settingsFiles = Directory.EnumerateFiles
-        (
-            inputRoot.FullName,
-            "*.*",                      // Search pattern for all files
-            SearchOption.AllDirectories // Search all subdirectories
-        )
-        // First, filter the paths based on the regex pattern
-        .Where( filePath => Regex.IsMatch( Path.GetFileName( filePath ), @"pack\.json" ) )
-        // Second, project/map each resulting file path string to a new FileInfo object
-        .Select( filePath => new FileInfo( filePath ) )
-        // Finally, convert the resulting sequence into a List<FileInfo>
-        .ToList();
+        List< FileInfo > settingsFiles = Directory.EnumerateFiles
+                                                      (
+                                                       inputRoot.FullName,
+                                                       "*.*",                      // Search pattern for all files
+                                                       SearchOption.AllDirectories // Search all subdirectories
+                                                      )
+                                                  // First, filter the paths based on the regex pattern
+                                                  .Where( filePath => Regex.IsMatch( Path.GetFileName( filePath ), @"pack\.json" ) )
+                                                  // Second, project/map each resulting file path string to a new FileInfo object
+                                                  .Select( filePath => new FileInfo( filePath ) )
+                                                  // Finally, convert the resulting sequence into a List<FileInfo>
+                                                  .ToList();
         //@formatter:on
 
         ProgressListener ??= new TexturePackerProgressListener();
@@ -430,11 +432,11 @@ public class TexturePackerFileProcessor : FileProcessor
             settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
 
             // Establish the settings to use for processing
-            foreach ( var settingsFile in settingsFiles )
+            foreach ( FileInfo settingsFile in settingsFiles )
             {
                 // Find first parent with settings, or use defaults.
-                var settings = default( TexturePackerSettings );
-                var parent   = settingsFile.Directory;
+                var            settings = default( TexturePackerSettings );
+                DirectoryInfo? parent   = settingsFile.Directory;
 
                 while ( ( parent != null ) && !parent.Equals( _rootDirectory ) )
                 {
@@ -472,7 +474,7 @@ public class TexturePackerFileProcessor : FileProcessor
     {
         try
         {
-            var data = settings.ReadFromJsonFile( settingsFile );
+            TexturePackerSettings? data = settings.ReadFromJsonFile( settingsFile );
 
             settings.Merge( data );
 
@@ -499,7 +501,7 @@ public class TexturePackerFileProcessor : FileProcessor
     {
         // Load root settings to get scale.
         var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, DEFAULT_PACKFILE_NAME ) );
-        var rootSettings = _defaultSettings;
+        TexturePackerSettings rootSettings = _defaultSettings;
 
         if ( settingsFile.Exists )
         {
@@ -507,15 +509,15 @@ public class TexturePackerFileProcessor : FileProcessor
             MergeSettings( rootSettings, settingsFile );
         }
 
-        var quotedAtlasExtension = Regex.Escape( rootSettings.AtlasExtension );
-        
+        string quotedAtlasExtension = Regex.Escape( rootSettings.AtlasExtension );
+
         for ( int i = 0, n = rootSettings.Scale.Length; i < n; i++ )
         {
             var inputRegexes = new List< Regex >();
-            var packFile = new FileInfo( rootSettings.GetScaledPackFileName( PackFileName, i ) );
+            var packFile     = new FileInfo( rootSettings.GetScaledPackFileName( PackFileName, i ) );
 
-            var prefix   = packFile.Name;
-            var dotIndex = prefix.LastIndexOf( '.' );
+            string prefix   = packFile.Name;
+            int    dotIndex = prefix.LastIndexOf( '.' );
 
             if ( dotIndex != -1 )
             {
@@ -525,7 +527,7 @@ public class TexturePackerFileProcessor : FileProcessor
             inputRegexes.Add( new Regex( "(?i)" + prefix + @"-?\d*\.(png|jpg|jpeg)" ) );
             inputRegexes.Add( new Regex( "(?i)" + prefix + quotedAtlasExtension ) );
 
-            var dir = packFile.DirectoryName;
+            string? dir = packFile.DirectoryName;
 
             if ( dir == null )
             {
@@ -537,34 +539,34 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
     }
-    
+
     public static void ClearOutputFolder( DirectoryInfo outputRoot, List< Regex > inputRegexes )
     {
         // Define the folder path where you want to start deleting files
-        var targetDirectoryPath = outputRoot.FullName;
+        string targetDirectoryPath = outputRoot.FullName;
 
         try
         {
             //@formatter:off
             // Directory.EnumerateFiles gets all file paths in the directory and all subdirectories
-            var filesToDelete = Directory.EnumerateFiles(
-                targetDirectoryPath, 
-                "*.*", 
-                SearchOption.AllDirectories
-            )
-            // Filter the file paths
-            .Where( filePath => 
-            {
-                // Get just the file name to match against the regexes
-                var fileName = Path.GetFileName( filePath );
+            IEnumerable< string > filesToDelete = Directory.EnumerateFiles(
+                                                                           targetDirectoryPath, 
+                                                                           "*.*", 
+                                                                           SearchOption.AllDirectories
+                                                                          )
+                                                           // Filter the file paths
+                                                           .Where( filePath => 
+                                                           {
+                                                               // Get just the file name to match against the regexes
+                                                               string fileName = Path.GetFileName( filePath );
                 
-                // Check if ANY of the Regex objects in the list match the file name
-                return inputRegexes.Any( regex => regex.IsMatch( fileName ) );
-            } );
+                                                               // Check if ANY of the Regex objects in the list match the file name
+                                                               return inputRegexes.Any( regex => regex.IsMatch( fileName ) );
+                                                           } );
             //@formatter:on
 
             // Iterate through the filtered paths and delete each file
-            foreach ( var filePath in filesToDelete )
+            foreach ( string filePath in filesToDelete )
             {
                 File.Delete( filePath );
             }
@@ -594,7 +596,7 @@ public class TexturePackerFileProcessor : FileProcessor
     {
         var packer = new TexturePacker( root, settings )
         {
-            ProgressListener = ProgressListener,
+            ProgressListener = ProgressListener
         };
 
         return packer;
@@ -608,7 +610,7 @@ public class TexturePackerFileProcessor : FileProcessor
     {
         return new TexturePackerSettings( settings );
     }
-    
+
     // ========================================================================
     // ========================================================================
 

@@ -25,7 +25,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -131,8 +133,8 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
             throw new RuntimeException( $"Unable to read image: {_file.FullName}" );
         }
 
-        var name = _isPatch ? $"{Name}.9" : Name;
-        var rect = imageProcessor.ProcessImage( bitmap, name );
+        string?            name = _isPatch ? $"{Name}.9" : Name;
+        TexturePackerRect? rect = imageProcessor.ProcessImage( bitmap, name );
 
         return rect == null
             ? throw new RuntimeException( "ProcessImage returned null" )
@@ -247,4 +249,3 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
 
 // ============================================================================
 // ============================================================================
-

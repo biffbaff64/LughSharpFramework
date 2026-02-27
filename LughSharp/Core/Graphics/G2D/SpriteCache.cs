@@ -23,11 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -157,12 +159,12 @@ public class SpriteCache
                                                VertexConstants.TEXCOORD_COMPONENTS,
                                                "a_texCoord0" ) )
         {
-            AutoBind = false,
+            AutoBind = false
         };
 
         if ( useIndices )
         {
-            var   length  = size * 6;
+            int   length  = size * 6;
             var   indices = new int[ length ];
             short j       = 0;
 
@@ -190,7 +192,7 @@ public class SpriteCache
         get;
         set
         {
-            var color = Color;
+            Color color = Color;
             Color.Abgr8888ToColor( ref color, value );
 
             field = value;
@@ -260,7 +262,7 @@ public class SpriteCache
 
         if ( cacheID == ( _caches.Count - 1 ) )
         {
-            var oldCache = _caches.RemoveIndex( cacheID );
+            Cache oldCache = _caches.RemoveIndex( cacheID );
             _mesh.GetVerticesBuffer().Limit = oldCache.Offset;
             BeginCache();
 
@@ -282,8 +284,8 @@ public class SpriteCache
             throw new RuntimeException( "beginCache must be called before endCache." );
         }
 
-        var cache      = _currentCache;
-        var cacheCount = _mesh.GetVerticesBuffer().Position - cache.Offset;
+        Cache? cache      = _currentCache;
+        int    cacheCount = _mesh.GetVerticesBuffer().Position - cache.Offset;
 
         if ( cache.Textures == null )
         {
@@ -306,8 +308,8 @@ public class SpriteCache
             if ( cacheCount > cache.MaxCount )
             {
                 throw new RuntimeException( $"If a cache is not the last created, it cannot be redefined"
-                                               + $"with more entries than when it was first created: "
-                                               + $"{cacheCount} ({cache.MaxCount} max)" );
+                                          + $"with more entries than when it was first created: "
+                                          + $"{cacheCount} ({cache.MaxCount} max)" );
             }
 
             cache.TextureCount = _textures.Count;
@@ -335,9 +337,9 @@ public class SpriteCache
                 }
             }
 
-            var vertices = _mesh.GetVerticesBuffer();
+            Buffer< float > vertices = _mesh.GetVerticesBuffer();
             vertices.Position = 0;
-            var lastCache = _caches[ _caches.Count - 1 ];
+            Cache lastCache = _caches[ _caches.Count - 1 ];
             vertices.Limit = lastCache.Offset + lastCache.MaxCount;
         }
 
@@ -371,9 +373,9 @@ public class SpriteCache
             throw new RuntimeException( "beginCache must be called before add." );
         }
 
-        var verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
-        var count            = ( length / ( verticesPerImage * Sprite.VERTEX_SIZE ) ) * 6;
-        var lastIndex        = _textures.Count - 1;
+        int verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
+        int count            = length / ( verticesPerImage * Sprite.VERTEX_SIZE ) * 6;
+        int lastIndex        = _textures.Count - 1;
 
         if ( ( lastIndex < 0 ) || ( _textures[ lastIndex ] != texture ) )
         {
@@ -396,8 +398,8 @@ public class SpriteCache
     /// </summary>
     public void Add( Texture texture, float x, float y )
     {
-        var fx2 = x + texture.Width;
-        var fy2 = y + texture.Height;
+        float fx2 = x + texture.Width;
+        float fy2 = y + texture.Height;
 
         _tempVertices[ 0 ] = x;
         _tempVertices[ 1 ] = y;
@@ -465,8 +467,8 @@ public class SpriteCache
                      float v2,
                      float color )
     {
-        var fx2 = x + srcWidth;
-        var fy2 = y + srcHeight;
+        float fx2 = x + srcWidth;
+        float fy2 = y + srcHeight;
 
         _tempVertices[ 0 ] = x;
         _tempVertices[ 1 ] = y;
@@ -525,15 +527,15 @@ public class SpriteCache
     /// </summary>
     public void Add( Texture texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight )
     {
-        var invTexWidth  = 1.0f / texture.Width;
-        var invTexHeight = 1.0f / texture.Height;
+        float invTexWidth  = 1.0f / texture.Width;
+        float invTexHeight = 1.0f / texture.Height;
 
-        var u   = srcX * invTexWidth;
-        var v   = ( srcY + srcHeight ) * invTexHeight;
-        var u2  = ( srcX + srcWidth ) * invTexWidth;
-        var v2  = srcY * invTexHeight;
-        var fx2 = x + srcWidth;
-        var fy2 = y + srcHeight;
+        float u   = srcX * invTexWidth;
+        float v   = ( srcY + srcHeight ) * invTexHeight;
+        float u2  = ( srcX + srcWidth ) * invTexWidth;
+        float v2  = srcY * invTexHeight;
+        float fx2 = x + srcWidth;
+        float fy2 = y + srcHeight;
 
         _tempVertices[ 0 ] = x;
         _tempVertices[ 1 ] = y;
@@ -602,15 +604,15 @@ public class SpriteCache
                      bool flipX,
                      bool flipY )
     {
-        var invTexWidth  = 1.0f / texture.Width;
-        var invTexHeight = 1.0f / texture.Height;
-        var u            = srcX * invTexWidth;
-        var v            = ( srcY + srcHeight ) * invTexHeight;
-        var u2           = ( srcX + srcWidth ) * invTexWidth;
-        var v2           = srcY * invTexHeight;
+        float invTexWidth  = 1.0f / texture.Width;
+        float invTexHeight = 1.0f / texture.Height;
+        float u            = srcX * invTexWidth;
+        float v            = ( srcY + srcHeight ) * invTexHeight;
+        float u2           = ( srcX + srcWidth ) * invTexWidth;
+        float v2           = srcY * invTexHeight;
 
-        var fx2 = x + width;
-        var fy2 = y + height;
+        float fx2 = x + width;
+        float fy2 = y + height;
 
         if ( flipX )
         {
@@ -695,13 +697,13 @@ public class SpriteCache
                      bool flipY )
     {
         // bottom left and top right corner points relative to origin
-        var worldOriginX = x + originX;
-        var worldOriginY = y + originY;
+        float worldOriginX = x + originX;
+        float worldOriginY = y + originY;
 
-        var fx  = -originX;
-        var fy  = -originY;
-        var fx2 = width - originX;
-        var fy2 = height - originY;
+        float fx  = -originX;
+        float fy  = -originY;
+        float fx2 = width - originX;
+        float fy2 = height - originY;
 
         // scale
         if ( scaleX is not 1 || scaleY is not 1 )
@@ -713,14 +715,14 @@ public class SpriteCache
         }
 
         // construct corner points, start from top left and go counter clockwise
-        var p1X = fx;
-        var p1Y = fy;
-        var p2X = fx;
-        var p2Y = fy2;
-        var p3X = fx2;
-        var p3Y = fy2;
-        var p4X = fx2;
-        var p4Y = fy;
+        float p1X = fx;
+        float p1Y = fy;
+        float p2X = fx;
+        float p2Y = fy2;
+        float p3X = fx2;
+        float p3Y = fy2;
+        float p4X = fx2;
+        float p4Y = fy;
 
         float x1;
         float y1;
@@ -734,8 +736,8 @@ public class SpriteCache
         // rotate
         if ( rotation != 0 )
         {
-            var cos = MathUtils.CosDeg( rotation );
-            var sin = MathUtils.SinDeg( rotation );
+            float cos = MathUtils.CosDeg( rotation );
+            float sin = MathUtils.SinDeg( rotation );
 
             x1 = ( cos * p1X ) - ( sin * p1Y );
             y1 = ( sin * p1X ) + ( cos * p1Y );
@@ -773,13 +775,13 @@ public class SpriteCache
         x4 += worldOriginX;
         y4 += worldOriginY;
 
-        var invTexWidth  = 1.0f / texture.Width;
-        var invTexHeight = 1.0f / texture.Height;
+        float invTexWidth  = 1.0f / texture.Width;
+        float invTexHeight = 1.0f / texture.Height;
 
-        var u  = srcX * invTexWidth;
-        var v  = ( srcY + srcHeight ) * invTexHeight;
-        var u2 = ( srcX + srcWidth ) * invTexWidth;
-        var v2 = srcY * invTexHeight;
+        float u  = srcX * invTexWidth;
+        float v  = ( srcY + srcHeight ) * invTexHeight;
+        float u2 = ( srcX + srcWidth ) * invTexWidth;
+        float v2 = srcY * invTexHeight;
 
         if ( flipX )
         {
@@ -861,12 +863,12 @@ public class SpriteCache
             return;
         }
 
-        var fx2 = x + width;
-        var fy2 = y + height;
-        var u   = region.U;
-        var v   = region.V2;
-        var u2  = region.U2;
-        var v2  = region.V;
+        float fx2 = x + width;
+        float fy2 = y + height;
+        float u   = region.U;
+        float v   = region.V2;
+        float u2  = region.U2;
+        float v2  = region.V;
 
         _tempVertices[ 0 ] = x;
         _tempVertices[ 1 ] = y;
@@ -940,12 +942,12 @@ public class SpriteCache
         }
 
         // bottom left and top right corner points relative to origin
-        var worldOriginX = x + originX;
-        var worldOriginY = y + originY;
-        var fx           = -originX;
-        var fy           = -originY;
-        var fx2          = width - originX;
-        var fy2          = height - originY;
+        float worldOriginX = x + originX;
+        float worldOriginY = y + originY;
+        float fx           = -originX;
+        float fy           = -originY;
+        float fx2          = width - originX;
+        float fy2          = height - originY;
 
         // scale
         if ( scaleX is not 1 || scaleY is not 1 )
@@ -957,14 +959,14 @@ public class SpriteCache
         }
 
         // construct corner points, start from top left and go counter clockwise
-        var p1X = fx;
-        var p1Y = fy;
-        var p2X = fx;
-        var p2Y = fy2;
-        var p3X = fx2;
-        var p3Y = fy2;
-        var p4X = fx2;
-        var p4Y = fy;
+        float p1X = fx;
+        float p1Y = fy;
+        float p2X = fx;
+        float p2Y = fy2;
+        float p3X = fx2;
+        float p3Y = fy2;
+        float p4X = fx2;
+        float p4Y = fy;
 
         float x1;
         float y1;
@@ -978,8 +980,8 @@ public class SpriteCache
         // rotate
         if ( rotation != 0 )
         {
-            var cos = MathUtils.CosDeg( rotation );
-            var sin = MathUtils.SinDeg( rotation );
+            float cos = MathUtils.CosDeg( rotation );
+            float sin = MathUtils.SinDeg( rotation );
 
             x1 = ( cos * p1X ) - ( sin * p1Y );
             y1 = ( sin * p1X ) + ( cos * p1Y );
@@ -1017,10 +1019,10 @@ public class SpriteCache
         x4 += worldOriginX;
         y4 += worldOriginY;
 
-        var u  = region.U;
-        var v  = region.V2;
-        var u2 = region.U2;
-        var v2 = region.V;
+        float u  = region.U;
+        float v  = region.V2;
+        float u2 = region.U2;
+        float v2 = region.V;
 
         _tempVertices[ 0 ] = x1;
         _tempVertices[ 1 ] = y1;
@@ -1181,14 +1183,14 @@ public class SpriteCache
             throw new RuntimeException( "SpriteCache.begin must be called before draw." );
         }
 
-        var cache = _caches[ cacheID ];
+        Cache cache = _caches[ cacheID ];
 
-        var verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
-        var offset           = ( cache.Offset / ( verticesPerImage * Sprite.VERTEX_SIZE ) ) * 6;
-        var counts           = cache.Counts;
-        var textureCount     = cache.TextureCount;
+        int    verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
+        int    offset           = cache.Offset / ( verticesPerImage * Sprite.VERTEX_SIZE ) * 6;
+        int[]? counts           = cache.Counts;
+        int    textureCount     = cache.TextureCount;
 
-        var textures = cache.Textures;
+        Texture[]? textures = cache.Textures;
 
         for ( var i = 0; i < textureCount; i++ )
         {
@@ -1216,22 +1218,22 @@ public class SpriteCache
             throw new RuntimeException( "SpriteCache.begin must be called before draw." );
         }
 
-        var cache = _caches[ cacheID ];
+        Cache cache = _caches[ cacheID ];
 
-        var verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
+        int verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
 
-        offset =  ( ( cache.Offset / ( verticesPerImage * Sprite.VERTEX_SIZE ) ) * 6 ) + ( offset * 6 );
+        offset =  ( cache.Offset / ( verticesPerImage * Sprite.VERTEX_SIZE ) * 6 ) + ( offset * 6 );
         length *= 6;
 
-        var textures = cache.Textures;
+        Texture[]? textures = cache.Textures;
 
-        var counts       = cache.Counts;
-        var textureCount = cache.TextureCount;
+        int[]? counts       = cache.Counts;
+        int    textureCount = cache.TextureCount;
 
         for ( var i = 0; i < textureCount; i++ )
         {
             textures?[ i ].Bind();
-            var count = counts![ i ];
+            int count = counts![ i ];
 
             if ( count > length )
             {
@@ -1307,41 +1309,41 @@ public class SpriteCache
     private static ShaderProgram CreateDefaultShader()
     {
         const string VERTEX_SHADER = "in vec4 "
-                                     + "a_position"
-                                     + ";\n" //
-                                     + "in vec4 "
-                                     + "a_color"
-                                     + ";\n" //
-                                     + "in vec2 "
-                                     + "u_texCoord" + "0;\n"                    //
-                                     + "uniform mat4 u_projectionViewMatrix;\n" //
-                                     + "out vec4 v_color;\n"                    //
-                                     + "out vec2 v_texCoords;\n"                //
-                                     + "\n"                                     //
-                                     + "void main()\n"                          //
-                                     + "{\n"                                    //
-                                     + "   v_color = "
-                                     + "a_color"
-                                     + ";\n"                                         //
-                                     + "   v_color.a = v_color.a * (255.0/254.0);\n" //
-                                     + "   v_texCoords = "
-                                     + "u_texCoord" + "0;\n" //
-                                     + "   gl_Position =  u_projectionViewMatrix * "
-                                     + "a_position"
-                                     + ";\n" //
-                                     + "}\n";
+                                   + "a_position"
+                                   + ";\n" //
+                                   + "in vec4 "
+                                   + "a_color"
+                                   + ";\n" //
+                                   + "in vec2 "
+                                   + "u_texCoord" + "0;\n"                    //
+                                   + "uniform mat4 u_projectionViewMatrix;\n" //
+                                   + "out vec4 v_color;\n"                    //
+                                   + "out vec2 v_texCoords;\n"                //
+                                   + "\n"                                     //
+                                   + "void main()\n"                          //
+                                   + "{\n"                                    //
+                                   + "   v_color = "
+                                   + "a_color"
+                                   + ";\n"                                         //
+                                   + "   v_color.a = v_color.a * (255.0/254.0);\n" //
+                                   + "   v_texCoords = "
+                                   + "u_texCoord" + "0;\n" //
+                                   + "   gl_Position =  u_projectionViewMatrix * "
+                                   + "a_position"
+                                   + ";\n" //
+                                   + "}\n";
 
         const string FRAGMENT_SHADER = "#ifdef GL_ES\n"
-                                       + "#define LOWP lowp\n"
-                                       + "precision mediump float;\n"
-                                       + "#endif\n"
-                                       + "in vec4 v_color;\n"
-                                       + "in vec2 v_texCoords;\n"
-                                       + "uniform sampler2D u_texture;\n"
-                                       + "void main()\n"
-                                       + "{\n"                                                             //
-                                       + "  vec4 fragColor = v_color * texture(u_texture, v_texCoords);\n" //
-                                       + "}";
+                                     + "#define LOWP lowp\n"
+                                     + "precision mediump float;\n"
+                                     + "#endif\n"
+                                     + "in vec4 v_color;\n"
+                                     + "in vec2 v_texCoords;\n"
+                                     + "uniform sampler2D u_texture;\n"
+                                     + "void main()\n"
+                                     + "{\n"                                                             //
+                                     + "  vec4 fragColor = v_color * texture(u_texture, v_texCoords);\n" //
+                                     + "}";
 
         var shader = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
 

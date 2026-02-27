@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -74,7 +75,7 @@ public class HashHelpers
         // Calculate shift based on table size
         // This calculates log2(tableSize)
         var bitsForTableSize = 0;
-        var tempTableSize    = tableSize;
+        int tempTableSize    = tableSize;
 
         while ( tempTableSize > 1 )
         {
@@ -107,7 +108,7 @@ public class HashHelpers
         // Then Shift = 64 - tableSizePower.
 
         // A safer way to get the power of 2 from a mask (if mask is (1 << n) - 1):
-        var tableSize      = mask + 1;
+        int tableSize      = mask + 1;
         var tableSizePower = 0;
 
         while ( ( 1 << tableSizePower ) < tableSize )

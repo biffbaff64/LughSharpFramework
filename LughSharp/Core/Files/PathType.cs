@@ -135,9 +135,8 @@ public enum PathType
     /// a fallback or error state, indicating that the provided path cannot be
     /// resolved within the context of the available path types.
     /// </summary>
-    Invalid,
+    Invalid
 }
 
 // ============================================================================
 // ============================================================================
-

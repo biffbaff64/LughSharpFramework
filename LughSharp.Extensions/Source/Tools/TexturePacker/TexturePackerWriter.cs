@@ -28,11 +28,14 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
+
 using Bitmap = System.Drawing.Bitmap;
 using Encoder = System.Drawing.Imaging.Encoder;
 using Pen = System.Drawing.Pen;
@@ -48,14 +51,14 @@ public class TexturePackerWriter
     private readonly ImageProcessor                 _imageProcessor;
 
     // ========================================================================
-    
+
     public TexturePackerWriter( TexturePackerSettings settings,
                                 TexturePackerProgressListener? progressListener,
                                 ImageProcessor imageProcessor )
     {
-        this._settings         = settings;
-        this._progressListener = progressListener;
-        this._imageProcessor   = imageProcessor;
+        _settings         = settings;
+        _progressListener = progressListener;
+        _imageProcessor   = imageProcessor;
     }
 
     /// <summary>
@@ -69,9 +72,9 @@ public class TexturePackerWriter
     /// <exception cref="Exception"></exception>
     public void WriteImages( string outputDir, string scaledPackFileName, List< TexturePackerPage > pages )
     {
-        var packFileNoExt = new FileInfo( Path.Combine( outputDir, scaledPackFileName ) );
-        var packDir       = packFileNoExt.Directory;
-        var imageName     = Path.GetFileName( packFileNoExt.FullName );
+        var            packFileNoExt = new FileInfo( Path.Combine( outputDir, scaledPackFileName ) );
+        DirectoryInfo? packDir       = packFileNoExt.Directory;
+        string         imageName     = Path.GetFileName( packFileNoExt.FullName );
 
         if ( packDir == null )
         {
@@ -83,16 +86,16 @@ public class TexturePackerWriter
         // Iterate over each page to write its image
         for ( var p = 0; p < pages.Count; p++ )
         {
-            var page = pages[ p ] ?? throw new NullReferenceException( "Page is null" );
+            TexturePackerPage page = pages[ p ] ?? throw new NullReferenceException( "Page is null" );
 
-            var width  = page.Width;
-            var height = page.Height;
+            int width  = page.Width;
+            int height = page.Height;
 
             // Apply edge padding if enabled
             if ( _settings.EdgePadding )
             {
-                var edgePadX = _settings.PaddingX;
-                var edgePadY = _settings.PaddingY;
+                int edgePadX = _settings.PaddingX;
+                int edgePadY = _settings.PaddingY;
 
                 if ( _settings.DuplicatePadding )
                 {
@@ -116,8 +119,8 @@ public class TexturePackerWriter
             // Adjust to multiple of four if required
             if ( _settings.MultipleOfFour )
             {
-                width  = ( width % 4 ) == 0 ? width : ( width + 4 ) - ( width % 4 );
-                height = ( height % 4 ) == 0 ? height : ( height + 4 ) - ( height % 4 );
+                width  = ( width % 4 ) == 0 ? width : width + 4 - ( width % 4 );
+                height = ( height % 4 ) == 0 ? height : height + 4 - ( height % 4 );
             }
 
             // Enforce minimum dimensions
@@ -131,11 +134,11 @@ public class TexturePackerWriter
             // Find a unique output file name
             while ( true )
             {
-                var name = imageName;
+                string name = imageName;
 
                 if ( fileIndex > 1 )
                 {
-                    var last = name[ name.Length - 1 ];
+                    char last = name[ name.Length - 1 ];
 
                     if ( char.IsDigit( last )
                       || ( ( name.Length > 3 )
@@ -165,9 +168,10 @@ public class TexturePackerWriter
             page.ImageName = Path.GetFileName( outputFile );
 
             // Create a bitmap canvas for the page
-            var canvas = new Bitmap( width, height,
+            var canvas = new Bitmap( width,
+                                     height,
                                      LughSharp.Core.Graphics.PixelFormat.ToSystemPixelFormat( _settings.Format ) );
-            var g = Graphics.FromImage( canvas );
+            Graphics g = Graphics.FromImage( canvas );
 
             if ( page.OutputRects == null )
             {
@@ -179,20 +183,20 @@ public class TexturePackerWriter
             // Draw each rect (image region) onto the canvas
             for ( var r = 0; r < page.OutputRects.Count; r++ )
             {
-                var rect = page.OutputRects[ r ];
+                TexturePackerRect rect = page.OutputRects[ r ];
 
-                using ( var image = rect.GetImage( _imageProcessor ) )
+                using ( Bitmap image = rect.GetImage( _imageProcessor ) )
                 {
-                    var iw    = image.Width;
-                    var ih    = image.Height;
-                    var rectX = page.X + rect.X;
-                    var rectY = ( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY );
+                    int iw    = image.Width;
+                    int ih    = image.Height;
+                    int rectX = page.X + rect.X;
+                    int rectY = page.Y + page.Height - rect.Y - ( rect.Height - _settings.PaddingY );
 
                     // Apply duplicate padding if enabled
                     if ( _settings.DuplicatePadding )
                     {
-                        var amountX = _settings.PaddingX / 2;
-                        var amountY = _settings.PaddingY / 2;
+                        int amountX = _settings.PaddingX / 2;
+                        int amountY = _settings.PaddingY / 2;
 
                         if ( rect.Rotated )
                         {
@@ -201,11 +205,15 @@ public class TexturePackerWriter
                             {
                                 for ( var j = 1; j <= amountY; j++ )
                                 {
-                                    Plot( canvas, rectX - j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, 0 ) );
-                                    Plot( canvas, ( ( rectX + ih ) - 1 ) + j, ( ( rectY + iw ) - 1 ) + i,
+                                    Plot( canvas, rectX - j, rectY + iw - 1 + i, image.GetPixel( 0, 0 ) );
+                                    Plot( canvas,
+                                          rectX + ih - 1 + j,
+                                          rectY + iw - 1 + i,
                                           image.GetPixel( 0, ih - 1 ) );
                                     Plot( canvas, rectX - j, rectY - i, image.GetPixel( iw - 1, 0 ) );
-                                    Plot( canvas, ( ( rectX + ih ) - 1 ) + j, rectY - i,
+                                    Plot( canvas,
+                                          rectX + ih - 1 + j,
+                                          rectY - i,
                                           image.GetPixel( iw - 1, ih - 1 ) );
                                 }
                             }
@@ -215,8 +223,10 @@ public class TexturePackerWriter
                             {
                                 for ( var j = 0; j < iw; j++ )
                                 {
-                                    Plot( canvas, rectX - i, ( rectY + iw ) - 1 - j, image.GetPixel( j, 0 ) );
-                                    Plot( canvas, ( ( rectX + ih ) - 1 ) + i, ( rectY + iw ) - 1 - j,
+                                    Plot( canvas, rectX - i, rectY + iw - 1 - j, image.GetPixel( j, 0 ) );
+                                    Plot( canvas,
+                                          rectX + ih - 1 + i,
+                                          rectY + iw - 1 - j,
                                           image.GetPixel( j, ih - 1 ) );
                                 }
                             }
@@ -226,7 +236,7 @@ public class TexturePackerWriter
                                 for ( var j = 0; j < ih; j++ )
                                 {
                                     Plot( canvas, rectX + j, rectY - i, image.GetPixel( iw - 1, j ) );
-                                    Plot( canvas, rectX + j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, j ) );
+                                    Plot( canvas, rectX + j, rectY + iw - 1 + i, image.GetPixel( 0, j ) );
                                 }
                             }
                         }
@@ -238,9 +248,11 @@ public class TexturePackerWriter
                                 for ( var j = 1; j <= amountY; j++ )
                                 {
                                     Plot( canvas, rectX - i, rectY - j, image.GetPixel( 0, 0 ) );
-                                    Plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( 0, ih - 1 ) );
-                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
-                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j,
+                                    Plot( canvas, rectX - i, rectY + ih - 1 + j, image.GetPixel( 0, ih - 1 ) );
+                                    Plot( canvas, rectX + iw - 1 + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
+                                    Plot( canvas,
+                                          rectX + iw - 1 + i,
+                                          rectY + ih - 1 + j,
                                           image.GetPixel( iw - 1, ih - 1 ) );
                                 }
                             }
@@ -249,14 +261,28 @@ public class TexturePackerWriter
                             for ( var i = 1; i <= amountY; i++ )
                             {
                                 Copy( image, 0, 0, iw, 1, canvas, rectX, rectY - i, rect.Rotated );
-                                Copy( image, 0, ih - 1, iw, 1, canvas, rectX, ( ( rectY + ih ) - 1 ) + i,
+                                Copy( image,
+                                      0,
+                                      ih - 1,
+                                      iw,
+                                      1,
+                                      canvas,
+                                      rectX,
+                                      rectY + ih - 1 + i,
                                       rect.Rotated );
                             }
 
                             for ( var i = 1; i <= amountX; i++ )
                             {
                                 Copy( image, 0, 0, 1, ih, canvas, rectX - i, rectY, rect.Rotated );
-                                Copy( image, iw - 1, 0, 1, ih, canvas, ( ( rectX + iw ) - 1 ) + i, rectY,
+                                Copy( image,
+                                      iw - 1,
+                                      0,
+                                      1,
+                                      ih,
+                                      canvas,
+                                      rectX + iw - 1 + i,
+                                      rectY,
                                       rect.Rotated );
                             }
                         }
@@ -270,7 +296,9 @@ public class TexturePackerWriter
                     {
                         using ( var pen = new Pen( Color.Magenta ) )
                         {
-                            g.DrawRectangle( pen, rectX, rectY,
+                            g.DrawRectangle( pen,
+                                             rectX,
+                                             rectY,
                                              rect.Width - _settings.PaddingX - 1,
                                              rect.Height - _settings.PaddingY - 1 );
                         }
@@ -311,15 +339,15 @@ public class TexturePackerWriter
                      _settings.OutputFormat.Equals( "jpeg", StringComparison.OrdinalIgnoreCase ) )
                 {
                     using ( var newImage = new Bitmap( canvas.Width, canvas.Height, PixelFormat.Format24bppRgb ) )
-                    using ( var newGraphics = Graphics.FromImage( newImage ) )
+                    using ( Graphics newGraphics = Graphics.FromImage( newImage ) )
                     {
                         // Clear the background with the configured color before drawing.
-                        newGraphics.Clear( System.Drawing.Color.White );
+                        newGraphics.Clear( Color.White );
                         newGraphics.DrawImage( canvas, 0, 0 );
 
-                        var jpgEncoder          = GetEncoder( ImageFormat.Jpeg );
-                        var myEncoder           = Encoder.Quality;
-                        var myEncoderParameters = new EncoderParameters( 1 );
+                        ImageCodecInfo jpgEncoder          = GetEncoder( ImageFormat.Jpeg );
+                        Encoder        myEncoder           = Encoder.Quality;
+                        var            myEncoderParameters = new EncoderParameters( 1 );
                         var myEncoderParameter =
                             new EncoderParameter( myEncoder, ( long )( _settings.JpegQuality * 100 ) );
 
@@ -333,27 +361,27 @@ public class TexturePackerWriter
                     if ( _settings.PremultiplyAlpha )
                     {
                         // Use LockBits for massive performance improvement
-                        var bitmapData = canvas.LockBits( new System.Drawing.Rectangle( 0, 0, width, height ),
-                                                          ImageLockMode.ReadWrite,
-                                                          PixelFormat.Format32bppArgb );
+                        BitmapData bitmapData = canvas.LockBits( new System.Drawing.Rectangle( 0, 0, width, height ),
+                                                                 ImageLockMode.ReadWrite,
+                                                                 PixelFormat.Format32bppArgb );
 
                         try
                         {
                             unsafe
                             {
                                 var ptr    = ( byte* )bitmapData.Scan0;
-                                var stride = bitmapData.Stride;
+                                int stride = bitmapData.Stride;
 
                                 for ( var y = 0; y < height; y++ )
                                 {
-                                    var rowPtr = ptr + ( y * stride );
+                                    byte* rowPtr = ptr + ( y * stride );
 
                                     for ( var x = 0; x < width; x++ )
                                     {
                                         // Pixels are stored in BGRA order (Blue, Green, Red, Alpha)
-                                        var index = x * 4;
+                                        int index = x * 4;
 
-                                        var alpha = rowPtr[ index + 3 ]; // Alpha (index 3)
+                                        byte alpha = rowPtr[ index + 3 ]; // Alpha (index 3)
 
                                         if ( alpha == 0 )
                                         {
@@ -362,7 +390,7 @@ public class TexturePackerWriter
                                         }
 
                                         // Alpha factor (0.0 to 1.0)
-                                        var alphaFactor = alpha / 255f;
+                                        float alphaFactor = alpha / 255f;
 
                                         // Apply premultiplication: R = R * A, G = G * A, B = B * A
                                         // Note: Alpha (index 3) remains unchanged
@@ -428,7 +456,7 @@ public class TexturePackerWriter
             {
                 if ( rotated )
                 {
-                    Plot( dst, dx + j, ( dy + w ) - i - 1, src.GetPixel( x + i, y + j ) );
+                    Plot( dst, dx + j, dy + w - i - 1, src.GetPixel( x + i, y + j ) );
                 }
                 else
                 {
@@ -445,7 +473,7 @@ public class TexturePackerWriter
     {
         var packFile =
             new FileInfo( Path.Combine( outputDir.FullName, scaledPackFileName + _settings.AtlasExtension ) );
-        var packDir = packFile.Directory;
+        DirectoryInfo? packDir = packFile.Directory;
 
         packDir?.Create();
 
@@ -454,36 +482,36 @@ public class TexturePackerWriter
         {
             var textureAtlasData = new TextureAtlasData( packFile, packDir!, _settings.FlattenPaths );
 
-            foreach ( var page in pages )
+            foreach ( TexturePackerPage page in pages )
             {
                 Guard.Against.Null( page );
 
-                foreach ( var rect in page.OutputRects )
+                foreach ( TexturePackerRect rect in page.OutputRects )
                 {
-                    var rectName = TexturePackerRect.GetAtlasName( rect.Name, _settings.FlattenPaths );
+                    string rectName = TexturePackerRect.GetAtlasName( rect.Name, _settings.FlattenPaths );
 
-                    foreach ( var region in textureAtlasData.Regions )
+                    foreach ( TextureAtlasData.Region region in textureAtlasData.Regions )
                     {
                         Guard.Against.Null( region.Name );
 
                         if ( region.Name.Equals( rectName ) )
                         {
                             throw new RuntimeException( $"A region with the name \"{rectName}\" " +
-                                                           $"has already been packed: {rect.Name}" );
+                                                        $"has already been packed: {rect.Name}" );
                         }
                     }
                 }
             }
         }
 
-        var appending = packFile.Exists;
+        bool appending = packFile.Exists;
 
         // Write metadata for each page and its rects
         using ( var writer = new StreamWriter( packFile.FullName, appending, System.Text.Encoding.UTF8 ) )
         {
             for ( var i = 0; i < pages.Count; i++ )
             {
-                var page = pages[ i ];
+                TexturePackerPage page = pages[ i ];
 
                 Guard.Against.Null( page );
                 Guard.Against.Null( page.OutputRects );
@@ -508,7 +536,7 @@ public class TexturePackerWriter
 
                 page.OutputRects.Sort();
 
-                foreach ( var rect in page.OutputRects )
+                foreach ( TexturePackerRect rect in page.OutputRects )
                 {
                     if ( ( rect.Name == null ) || ( rect.Name.Length == 0 ) )
                     {
@@ -529,7 +557,7 @@ public class TexturePackerWriter
 
                     aliases.Sort();
 
-                    foreach ( var alias in aliases )
+                    foreach ( TexturePackerAlias alias in aliases )
                     {
                         if ( ( alias.Name == null ) || ( alias.Name.Length == 0 ) )
                         {
@@ -585,7 +613,7 @@ public class TexturePackerWriter
             writer.WriteLine( $"{tab}filter{colon}{_settings.FilterMin}{comma}{_settings.FilterMag}" );
         }
 
-        var repeatValue = GetRepeatValue(); // Pass settings to GetRepeatValue
+        string? repeatValue = GetRepeatValue(); // Pass settings to GetRepeatValue
 
         if ( repeatValue != null )
         {
@@ -621,10 +649,10 @@ public class TexturePackerWriter
             writer.WriteLine( $"{tab}index{colon}{rect.Index}" );
         }
 
-        var atlasY = page.ImageHeight - rect.Y - rect.RegionHeight;
+        int atlasY = page.ImageHeight - rect.Y - rect.RegionHeight;
         writer.WriteLine( $"{tab}bounds{colon}{page.X + rect.X}{comma}{atlasY}{comma}{rect.RegionWidth}{comma}{rect.RegionHeight}" );
 
-        var offsetY = rect.OriginalHeight - rect.RegionHeight - rect.OffsetY;
+        int offsetY = rect.OriginalHeight - rect.RegionHeight - rect.OffsetY;
 
         if ( ( rect.OffsetX != 0 ) || ( offsetY != 0 ) || ( rect.OriginalWidth != rect.RegionWidth ) ||
              ( rect.OriginalHeight != rect.RegionHeight ) )
@@ -664,7 +692,7 @@ public class TexturePackerWriter
         writer.WriteLine( $"format: {_settings.Format}" );
         writer.WriteLine( $"filter: {_settings.FilterMin}, {_settings.FilterMag}" );
 
-        var repeatValue = GetRepeatValue();
+        string? repeatValue = GetRepeatValue();
         writer.WriteLine( $"repeat: {repeatValue ?? "none"}" );
     }
 
@@ -676,7 +704,7 @@ public class TexturePackerWriter
         writer.WriteLine( TexturePackerRect.GetAtlasName( name, _settings.FlattenPaths ) );
         writer.WriteLine( $"  rotate: {rect.Rotated}" );
 
-        var atlasY = page.ImageHeight - rect.Y - rect.RegionHeight;
+        int atlasY = page.ImageHeight - rect.Y - rect.RegionHeight;
         writer.WriteLine( $"  xy: {page.X + rect.X}, {atlasY}" );
 
         writer.WriteLine( $"  size: {rect.RegionWidth}, {rect.RegionHeight}" );
@@ -706,9 +734,9 @@ public class TexturePackerWriter
     /// </summary>
     private static ImageCodecInfo GetEncoder( ImageFormat format )
     {
-        var codecs = ImageCodecInfo.GetImageEncoders();
+        ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
 
-        foreach ( var codec in codecs )
+        foreach ( ImageCodecInfo codec in codecs )
         {
             if ( codec.FormatID == format.Guid )
             {
@@ -730,7 +758,7 @@ public class TexturePackerWriter
                    { WrapX: TextureWrapMode.Repeat, WrapY     : TextureWrapMode.ClampToEdge } => "x",
                    { WrapX: TextureWrapMode.ClampToEdge, WrapY: TextureWrapMode.Repeat }      => "y",
 
-                   var _ => null,
+                   var _ => null
                };
     }
 }

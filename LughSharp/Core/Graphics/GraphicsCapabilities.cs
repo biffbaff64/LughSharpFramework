@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 
@@ -53,8 +54,8 @@ public unsafe class GraphicsCapabilities
     /// </returns>
     public static GraphicsCapabilities Detect()
     {
-        Engine.GL.GetIntegerv( GLData.MAJOR_VERSION, out var major );
-        Engine.GL.GetIntegerv( GLData.MINOR_VERSION, out var minor );
+        Engine.GL.GetIntegerv( GLData.MAJOR_VERSION, out int major );
+        Engine.GL.GetIntegerv( GLData.MINOR_VERSION, out int minor );
 
         return new GraphicsCapabilities
         {
@@ -70,17 +71,19 @@ public unsafe class GraphicsCapabilities
                    || HasExtension( "GL_ARB_ES3_compatibility" ),
 
             HasInternalFormatQuery = VersionAtLeast( 4, 2, major, minor )
-                                  || HasExtension( "GL_ARB_internalformat_query2" ),
+                                  || HasExtension( "GL_ARB_internalformat_query2" )
         };
     }
 
     private static bool HasExtension( string s )
     {
-        Engine.GL.GetIntegerv( GLData.NUM_EXTENSIONS, out var n );
+        Engine.GL.GetIntegerv( GLData.NUM_EXTENSIONS, out int n );
 
         for ( uint i = 0; i < n; i++ )
         {
-            if ( string.Equals( Engine.GL.GetStringi( GLData.EXTENSIONS, i )->ToString(), s, StringComparison.Ordinal ) )
+            if ( string.Equals( Engine.GL.GetStringi( GLData.EXTENSIONS, i )->ToString(),
+                                s,
+                                StringComparison.Ordinal ) )
             {
                 return true;
             }

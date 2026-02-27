@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
@@ -124,11 +125,11 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// <inheritdoc />
     protected override void AttachFrameBufferColorTexture( Cubemap texture )
     {
-        var glHandle = texture.GLTextureHandle;
+        uint glHandle = texture.GLTextureHandle;
 
-        var sides = Cubemap.CubemapSide.Values();
+        Cubemap.CubemapSide[] sides = Cubemap.CubemapSide.Values();
 
-        foreach ( var side in sides )
+        foreach ( Cubemap.CubemapSide side in sides )
         {
             Engine.GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
                                             IGL.GL_COLOR_ATTACHMENT0,
@@ -205,4 +206,3 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 
 // ============================================================================
 // ============================================================================
-

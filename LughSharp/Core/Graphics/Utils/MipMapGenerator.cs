@@ -23,9 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
+
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -69,8 +71,8 @@ public class MipMapGenerator
         }
 
         if ( ( Engine.Api.App.AppType == Platform.ApplicationType.Android )
-             || ( Engine.Api.App.AppType == Platform.ApplicationType.WebGL )
-             || ( Engine.Api.App.AppType == Platform.ApplicationType.IOS ) )
+          || ( Engine.Api.App.AppType == Platform.ApplicationType.WebGL )
+          || ( Engine.Api.App.AppType == Platform.ApplicationType.IOS ) )
         {
             GenerateMipMapGLES20( target, pixmap );
         }
@@ -87,14 +89,14 @@ public class MipMapGenerator
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
                 Engine.GL.TexImage2D( target,
-                               0,
-                               pixmap.GLInternalPixelFormat,
-                               pixmap.Width,
-                               pixmap.Height,
-                               0,
-                               pixmap.GLPixelFormat,
-                               pixmap.GLDataType,
-                               ( IntPtr )ptr );
+                                      0,
+                                      pixmap.GLInternalPixelFormat,
+                                      pixmap.Width,
+                                      pixmap.Height,
+                                      0,
+                                      pixmap.GLPixelFormat,
+                                      pixmap.GLDataType,
+                                      ( IntPtr )ptr );
             }
         }
 
@@ -104,19 +106,19 @@ public class MipMapGenerator
     private static unsafe void GenerateMipMapDesktop( int target, Pixmap pixmap, int textureWidth, int textureHeight )
     {
         if ( Engine.Api.Graphics.SupportsExtension( "GL_ARB_framebuffer_object" )
-             || Engine.Api.Graphics.SupportsExtension( "GL_EXT_framebuffer_object" ) )
+          || Engine.Api.Graphics.SupportsExtension( "GL_EXT_framebuffer_object" ) )
         {
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
                 Engine.GL.TexImage2D( target,
-                               0,
-                               pixmap.GLInternalPixelFormat,
-                               pixmap.Width,
-                               pixmap.Height,
-                               0,
-                               pixmap.GLPixelFormat,
-                               pixmap.GLDataType,
-                               ( IntPtr )ptr );
+                                      0,
+                                      pixmap.GLInternalPixelFormat,
+                                      pixmap.Width,
+                                      pixmap.Height,
+                                      0,
+                                      pixmap.GLPixelFormat,
+                                      pixmap.GLDataType,
+                                      ( IntPtr )ptr );
             }
 
             Engine.GL.GenerateMipmap( target );
@@ -132,14 +134,14 @@ public class MipMapGenerator
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
             Engine.GL.TexImage2D( target,
-                           0,
-                           pixmap.GLInternalPixelFormat,
-                           pixmap.Width,
-                           pixmap.Height,
-                           0,
-                           pixmap.GLPixelFormat,
-                           pixmap.GLDataType,
-                           ( IntPtr )ptr );
+                                  0,
+                                  pixmap.GLInternalPixelFormat,
+                                  pixmap.Width,
+                                  pixmap.Height,
+                                  0,
+                                  pixmap.GLPixelFormat,
+                                  pixmap.GLDataType,
+                                  ( IntPtr )ptr );
         }
 
         if ( textureWidth != textureHeight )
@@ -147,8 +149,8 @@ public class MipMapGenerator
             throw new RuntimeException( "texture width and height must be square when using mipmapping." );
         }
 
-        var width  = pixmap.Width / 2;
-        var height = pixmap.Height / 2;
+        int width  = pixmap.Width / 2;
+        int height = pixmap.Height / 2;
         var level  = 1;
 
         while ( ( width > 0 ) && ( height > 0 ) )
@@ -168,14 +170,14 @@ public class MipMapGenerator
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
                 Engine.GL.TexImage2D( target,
-                               level,
-                               pixmap.GLInternalPixelFormat,
-                               pixmap.Width,
-                               pixmap.Height,
-                               0,
-                               pixmap.GLPixelFormat,
-                               pixmap.GLDataType,
-                               ( IntPtr )ptr );
+                                      level,
+                                      pixmap.GLInternalPixelFormat,
+                                      pixmap.Width,
+                                      pixmap.Height,
+                                      0,
+                                      pixmap.GLPixelFormat,
+                                      pixmap.GLDataType,
+                                      ( IntPtr )ptr );
             }
 
             width  = pixmap.Width / 2;

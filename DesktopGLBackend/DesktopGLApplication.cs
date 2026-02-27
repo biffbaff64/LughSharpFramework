@@ -26,7 +26,9 @@ using DesktopGLBackend.Audio;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
@@ -35,6 +37,8 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
+using Monitor = DotGLFW.Monitor;
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace DesktopGLBackend;
@@ -185,7 +189,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         while ( _running && ( Windows.Count > 0 ) )
         {
             var haveWindowsRendered = false;
-            var targetFramerate     = UNINITIALISED_FRAMERATE;
+            int targetFramerate     = UNINITIALISED_FRAMERATE;
 
             closedWindows.Clear();
 
@@ -193,7 +197,7 @@ public class DesktopGLApplication : IApplication, IDisposable
             {
                 // Update active windows.
                 // SwapBuffers is called in window.Update().
-                foreach ( var window in Windows )
+                foreach ( DesktopGLWindow window in Windows )
                 {
                     window.MakeCurrent();
 
@@ -228,7 +232,7 @@ public class DesktopGLApplication : IApplication, IDisposable
             }
 
             // Handle all Runnables.
-            foreach ( var runnable in ExecutedRunnables )
+            foreach ( Action runnable in ExecutedRunnables )
             {
                 runnable.Invoke();
             }
@@ -237,7 +241,7 @@ public class DesktopGLApplication : IApplication, IDisposable
             {
                 // This section MUST follow Runnables execution so changes made by
                 // Runnables are reflected in the following render.
-                foreach ( var window in Windows )
+                foreach ( DesktopGLWindow window in Windows )
                 {
                     if ( !window.Graphics.ContinuousRendering )
                     {
@@ -247,7 +251,7 @@ public class DesktopGLApplication : IApplication, IDisposable
             }
 
             // Tidy up any closed windows
-            foreach ( var window in closedWindows )
+            foreach ( DesktopGLWindow window in closedWindows )
             {
                 if ( Windows.Count == 1 )
                 {
@@ -255,9 +259,9 @@ public class DesktopGLApplication : IApplication, IDisposable
                     // methods. The application will be disposed when ALL windows have been
                     // disposed, which is the case, when there is only 1 window left, which is
                     // in the process of being disposed.
-                    for ( var i = LifecycleListeners.Count - 1; i >= 0; i-- )
+                    for ( int i = LifecycleListeners.Count - 1; i >= 0; i-- )
                     {
-                        var l = LifecycleListeners[ i ];
+                        ILifecycleListener l = LifecycleListeners[ i ];
 
                         l.Pause();
                         l.Dispose();
@@ -325,7 +329,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
                 if ( !DotGLFW.Glfw.Init() )
                 {
-                    DotGLFW.Glfw.GetError( out var error );
+                    DotGLFW.Glfw.GetError( out string? error );
 
                     Logger.Error( $"Failed to initialise Glfw: {error}" );
 
@@ -485,14 +489,14 @@ public class DesktopGLApplication : IApplication, IDisposable
     {
         lock ( LifecycleListeners )
         {
-            foreach ( var lifecycleListener in LifecycleListeners )
+            foreach ( ILifecycleListener lifecycleListener in LifecycleListeners )
             {
                 lifecycleListener.Pause();
                 lifecycleListener.Dispose();
             }
         }
 
-        foreach ( var window in Windows )
+        foreach ( DesktopGLWindow window in Windows )
         {
             window.Dispose();
         }
@@ -630,7 +634,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     {
         Guard.Against.Null( dglWindow );
 
-        var windowHandle = CreateGlfwWindow( config, sharedContext );
+        DotGLFW.Window windowHandle = CreateGlfwWindow( config, sharedContext );
 
         dglWindow.Create( windowHandle );
         dglWindow.SetVisible( config.InitialVisibility );
@@ -674,19 +678,19 @@ public class DesktopGLApplication : IApplication, IDisposable
             DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.RefreshRate, config.FullscreenMode.RefreshRate );
 
             windowHandle = DotGLFW.Glfw.CreateWindow( config.FullscreenMode.Width,
-                                              config.FullscreenMode.Height,
-                                              config.Title ?? "",
-                                              config.FullscreenMode.MonitorHandle,
-                                              DotGLFW.Window.NULL );
+                                                      config.FullscreenMode.Height,
+                                                      config.Title ?? "",
+                                                      config.FullscreenMode.MonitorHandle,
+                                                      DotGLFW.Window.NULL );
         }
         else
         {
             // Create a 'windowed' window
             windowHandle = DotGLFW.Glfw.CreateWindow( config.WindowWidth,
-                                              config.WindowHeight,
-                                              config.Title ?? "",
-                                              DotGLFW.Monitor.NULL,
-                                              DotGLFW.Window.NULL );
+                                                      config.WindowHeight,
+                                                      config.Title ?? "",
+                                                      Monitor.NULL,
+                                                      DotGLFW.Window.NULL );
         }
 
         if ( windowHandle.Equals( null ) )
@@ -704,8 +708,8 @@ public class DesktopGLApplication : IApplication, IDisposable
         {
             if ( config is { WindowX: -1, WindowY: -1 } )
             {
-                var windowWidth  = Math.Max( config.WindowWidth, config.WindowMinWidth );
-                var windowHeight = Math.Max( config.WindowHeight, config.WindowMinHeight );
+                int windowWidth  = Math.Max( config.WindowWidth, config.WindowMinWidth );
+                int windowHeight = Math.Max( config.WindowHeight, config.WindowMinHeight );
 
                 if ( config.WindowMaxWidth > -1 )
                 {
@@ -717,18 +721,22 @@ public class DesktopGLApplication : IApplication, IDisposable
                     windowHeight = Math.Min( windowHeight, config.WindowMaxHeight );
                 }
 
-                var monitorHandle = DotGLFW.Glfw.GetPrimaryMonitor();
+                Monitor? monitorHandle = DotGLFW.Glfw.GetPrimaryMonitor();
 
                 if ( config is { WindowMaximized: true, MaximizedMonitor: not null } )
                 {
                     monitorHandle = config.MaximizedMonitor.MonitorHandle;
                 }
 
-                DotGLFW.Glfw.GetMonitorWorkarea( monitorHandle, out var areaX, out var areaY, out var areaW, out var areaH );
+                DotGLFW.Glfw.GetMonitorWorkarea( monitorHandle,
+                                                 out int areaX,
+                                                 out int areaY,
+                                                 out int areaW,
+                                                 out int areaH );
 
                 DotGLFW.Glfw.SetWindowPos( windowHandle,
-                                   ( areaX + ( areaW / 2 ) ) - ( windowWidth / 2 ),
-                                   ( areaY + ( areaH / 2 ) ) - ( windowHeight / 2 ) );
+                                           areaX + ( areaW / 2 ) - ( windowWidth / 2 ),
+                                           areaY + ( areaH / 2 ) - ( windowHeight / 2 ) );
             }
             else
             {

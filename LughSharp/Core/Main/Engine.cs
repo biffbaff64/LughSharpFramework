@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
@@ -32,6 +34,7 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Input;
 using LughSharp.Core.Network;
 using LughSharp.Core.Utils.Logging;
+
 using GLBindings = LughSharp.Core.Graphics.OpenGL.Bindings.GLBindings;
 
 namespace LughSharp.Core.Main;
@@ -196,9 +199,9 @@ public sealed class Engine
     /// <returns> True if a match is found. </returns>
     private static bool CheckEnvironmentVar( string envVar, string value )
     {
-        return System.Environment.GetEnvironmentVariables().Contains( envVar )
-               && System.Environment.GetEnvironmentVariable( envVar )!
-                        .Equals( value, StringComparison.CurrentCultureIgnoreCase );
+        return Environment.GetEnvironmentVariables().Contains( envVar )
+            && Environment.GetEnvironmentVariable( envVar )!
+                          .Equals( value, StringComparison.CurrentCultureIgnoreCase );
     }
 
     // ========================================================================
@@ -240,11 +243,11 @@ public sealed class Engine
 
     private const string A_PRAYER_TO_THE_GODDESS =
         "Oh Blessed Goddess, enlighten what is dark in me. "
-        + "Strengthen what is weak in me. "
-        + "Mend what is broken in me. "
-        + "Bind what is bruised in me. "
-        + "Heal what is sick in me. "
-        + "Revive whatever peace & love has died in me.";
+      + "Strengthen what is weak in me. "
+      + "Mend what is broken in me. "
+      + "Bind what is bruised in me. "
+      + "Heal what is sick in me. "
+      + "Revive whatever peace & love has died in me.";
 }
 
 // ============================================================================

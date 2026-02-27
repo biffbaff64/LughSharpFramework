@@ -23,11 +23,14 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Utils;
@@ -62,8 +65,8 @@ public static class ScreenUtils
                 throw new NullReferenceException();
             }
 
-            var w = Engine.Api.Graphics.BackBufferWidth;
-            var h = Engine.Api.Graphics.BackBufferHeight;
+            int w = Engine.Api.Graphics.BackBufferWidth;
+            int h = Engine.Api.Graphics.BackBufferHeight;
 
             return GetFrameBufferTexture( 0, 0, w, h );
         }
@@ -124,8 +127,8 @@ public static class ScreenUtils
     /// <param name="h"> the height of the framebuffer contents to capture  </param>
     public static TextureRegion GetFrameBufferTexture( int x, int y, int w, int h )
     {
-        var potW      = MathUtils.NextPowerOfTwo( w );
-        var potH      = MathUtils.NextPowerOfTwo( h );
+        int potW      = MathUtils.NextPowerOfTwo( w );
+        int potH      = MathUtils.NextPowerOfTwo( h );
         var pixmap    = Pixmap.CreateFromFrameBuffer( x, y, w, h );
         var potPixmap = new Pixmap( potW, potH, LughFormat.RGBA8888 );
 
@@ -162,8 +165,8 @@ public static class ScreenUtils
             throw new NullReferenceException();
         }
 
-        var w = Engine.Api.Graphics.BackBufferWidth;
-        var h = Engine.Api.Graphics.BackBufferHeight;
+        int w = Engine.Api.Graphics.BackBufferWidth;
+        int h = Engine.Api.Graphics.BackBufferHeight;
 
         return GetFrameBufferPixels( 0, 0, w, h, flipY );
     }
@@ -187,7 +190,7 @@ public static class ScreenUtils
     /// <param name="flipY"> whether to flip pixels along Y axis  </param>
     public static unsafe byte[] GetFrameBufferPixels( int x, int y, int w, int h, bool flipY )
     {
-        var numBytes = w * h * 4;
+        int numBytes = w * h * 4;
 
         Engine.GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
@@ -195,14 +198,14 @@ public static class ScreenUtils
 
         fixed ( void* ptr = &pixels.BackingArray()[ 0 ] )
         {
-            Engine.GL.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, (IntPtr)ptr );
+            Engine.GL.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
         }
 
         var lines = new byte[ numBytes ];
 
         if ( flipY )
         {
-            var numBytesPerLine = w * 4;
+            int numBytesPerLine = w * 4;
 
             for ( var i = 0; i < h; i++ )
             {

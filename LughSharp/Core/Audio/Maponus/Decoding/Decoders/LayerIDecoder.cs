@@ -25,6 +25,7 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerI;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
@@ -104,7 +105,7 @@ public class LayerIDecoder : IFrameDecoder
     /// </summary>
     protected virtual void CreateSubbands()
     {
-        var intensityStereoBound = Header?.IntensityStereoBound() ?? 0;
+        int intensityStereoBound = Header?.IntensityStereoBound() ?? 0;
 
         for ( var i = 0; i < NuSubbands; ++i )
         {
@@ -159,7 +160,7 @@ public class LayerIDecoder : IFrameDecoder
     protected virtual void ReadSampleData()
     {
         bool readReady;
-        var  hdrMode = Header?.Mode() ?? 0;
+        int  hdrMode = Header?.Mode() ?? 0;
 
         do
         {
@@ -217,4 +218,3 @@ public class LayerIDecoder : IFrameDecoder
 
 // ============================================================================
 // ============================================================================
-

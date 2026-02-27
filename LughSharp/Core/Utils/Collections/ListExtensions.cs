@@ -24,7 +24,9 @@
 
 using System;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -59,7 +61,7 @@ public static class ListExtensions
 
     /// <param name="target"></param>
     /// <typeparam name="T"></typeparam>
-    extension<T>( List<T> target )
+    extension< T >( List< T > target )
     {
         /// <summary>
         /// Adds <paramref name="count" /> elements in the source Array, starting at position
@@ -67,9 +69,9 @@ public static class ListExtensions
         /// </summary>
         public void AddAll( T[] source, int start, int count )
         {
-            for (var i = start; i < count; i++)
+            for ( int i = start; i < count; i++ )
             {
-                target.Add(source[ i ]);
+                target.Add( source[ i ] );
             }
         }
 
@@ -77,11 +79,11 @@ public static class ListExtensions
         /// Adds <paramref name="count" /> elements in the source List, starting at position
         /// <paramref name="start" /> to the target List.
         /// </summary>
-        public void AddAll( List<T> source, int start, int count )
+        public void AddAll( List< T > source, int start, int count )
         {
-            for (var i = start; i < count; i++)
+            for ( int i = start; i < count; i++ )
             {
-                target.Add(source[ i ]);
+                target.Add( source[ i ] );
             }
         }
 
@@ -91,22 +93,22 @@ public static class ListExtensions
         /// <param name="source">
         /// The collection of elements to add to the target list. Cannot be null.
         /// </param>
-        public void AddAll( IEnumerable<T> source )
+        public void AddAll( IEnumerable< T > source )
         {
-            foreach (var item in source)
+            foreach ( T item in source )
             {
-                target.Add(item);
+                target.Add( item );
             }
         }
 
         /// <summary>
         /// Adds all elements in the source List to the target List.
         /// </summary>
-        public void AddAll( List<T> source )
+        public void AddAll( List< T > source )
         {
-            foreach (var tex in source)
+            foreach ( T tex in source )
             {
-                target.Add(tex);
+                target.Add( tex );
             }
         }
     }
@@ -117,29 +119,29 @@ public static class ListExtensions
     /// </summary>
     public static void AddAll< T >( this List< T > target, params T[] items ) where T : notnull
     {
-        foreach (var item in items)
+        foreach ( T item in items )
         {
-            target.Add(item);
+            target.Add( item );
         }
     }
 
     /// <param name="target"></param>
     /// <typeparam name="T"></typeparam>
-    extension<T>( List<T> target )
+    extension< T >( List< T > target )
     {
         /// <summary>
         /// Shuffles the element order of the specified list.
         /// </summary>
         public void Shuffle()
         {
-            var count = target.Count;
-            var last  = count - 1;
+            int count = target.Count;
+            int last  = count - 1;
 
             var random = new Random();
 
             for ( var i = 0; i < last; ++i )
             {
-                var r = random.Next( i, count );
+                int r = random.Next( i, count );
 
                 ( target[ i ], target[ r ] ) = ( target[ r ], target[ i ] );
             }
@@ -169,7 +171,7 @@ public static class ListExtensions
                 throw new RuntimeException( "List is empty." );
             }
 
-            var item = target[ ^1 ];
+            T item = target[ ^1 ];
 
             target.RemoveAt( target.Count - 1 );
 
@@ -197,7 +199,7 @@ public static class ListExtensions
                 throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {target.Count}" );
             }
 
-            var value = target[ index ];
+            T value = target[ index ];
 
             target.RemoveAt( index );
 
@@ -212,10 +214,12 @@ public static class ListExtensions
             Logger.Debug( $"{target.Count} items in list {nameof( target )}" );
 
             Logger.IsMinimal = true;
-            foreach( var entry in target )
+
+            foreach ( T entry in target )
             {
                 Logger.Debug( $"{entry}" );
             }
+
             Logger.IsMinimal = false;
         }
     }

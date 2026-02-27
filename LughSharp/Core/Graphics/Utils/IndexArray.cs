@@ -25,6 +25,7 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -97,7 +98,7 @@ public class IndexArray : IIndexData
     /// <param name="indices"></param>
     public void SetIndices( Buffer< int > indices )
     {
-        var pos = indices.Position;
+        int pos = indices.Position;
 
         _buffer.Clear();
         _buffer.Limit = indices.Remaining();
@@ -118,7 +119,7 @@ public class IndexArray : IIndexData
     /// <param name="count"></param>
     public void UpdateIndices( int targetOffset, int[] indices, int offset, int count )
     {
-        var pos = _byteBuffer.Position;
+        int pos = _byteBuffer.Position;
 
         _byteBuffer.Position = targetOffset * 2;
 

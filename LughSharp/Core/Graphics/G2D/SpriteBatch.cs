@@ -196,7 +196,7 @@ public class SpriteBatch : IBatch
         // Determine the vertex data type based on OpenGL version.
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
         // which are more efficient. Earlier versions use Vertex Arrays.
-        var vertexDataType = Engine.GL.GetOpenGLVersion().major >= 3
+        VertexDataType vertexDataType = Engine.GL.GetOpenGLVersion().major >= 3
             ? VertexDataType.VertexBufferObjectWithVAO
             : VertexDataType.VertexArray;
 
@@ -206,9 +206,9 @@ public class SpriteBatch : IBatch
         // Usage.COLOR_PACKED: 1 floats for packed RGBA color component.
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
 
-        var va1 = VertexAttribute.Position( VertexConstants.POSITION_COMPONENTS );
-        var va2 = VertexAttribute.ColorPacked( VertexConstants.COLOR_COMPONENTS, IGL.GL_FLOAT, false );
-        var va3 = VertexAttribute.TexCoords( 0, VertexConstants.TEXCOORD_COMPONENTS );
+        VertexAttribute va1 = VertexAttribute.Position( VertexConstants.POSITION_COMPONENTS );
+        VertexAttribute va2 = VertexAttribute.ColorPacked( VertexConstants.COLOR_COMPONENTS, IGL.GL_FLOAT, false );
+        VertexAttribute va3 = VertexAttribute.TexCoords( 0, VertexConstants.TEXCOORD_COMPONENTS );
 
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
@@ -227,7 +227,7 @@ public class SpriteBatch : IBatch
 
         // Generate the index buffer data for the mesh.
         // This buffer specifies the order in which vertices are used to form triangles.
-        PopulateIndexBuffer( size, out var indicesData );
+        PopulateIndexBuffer( size, out int[] indicesData );
 
         // Set the indices on the mesh.
         _mesh.SetIndices( indicesData );
@@ -619,7 +619,7 @@ public class SpriteBatch : IBatch
             const int STRIDE = VertexConstants.VERTEX_SIZE * F_SIZE; // 5 * 4 = 20 bytes
 
             // 3. Position: Location 0 (a_position vec2)
-            var posLoc = program.GetAttributeLocation( "a_position" );
+            int posLoc = program.GetAttributeLocation( "a_position" );
 
             if ( posLoc >= 0 )
             {
@@ -633,7 +633,7 @@ public class SpriteBatch : IBatch
             }
 
             // 4. Color: Location 1 (a_color float)
-            var colLoc = program.GetAttributeLocation( "a_color" );
+            int colLoc = program.GetAttributeLocation( "a_color" );
 
             if ( colLoc >= 0 )
             {
@@ -648,7 +648,7 @@ public class SpriteBatch : IBatch
             }
 
             // 5. UVs: Location 2 (a_texCoord0 vec2)
-            var texLoc = program.GetAttributeLocation( "a_texCoord0" );
+            int texLoc = program.GetAttributeLocation( "a_texCoord0" );
 
             if ( texLoc >= 0 )
             {
@@ -697,8 +697,8 @@ public class SpriteBatch : IBatch
 //        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/GdxDefault.glsl.vert" );
 //        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/GdxDefault.glsl.frag" );
 
-        var vertexShader = Shaders.Shaders.DEFAULT_VERTEX_SHADER;
-        var fragShader   = Shaders.Shaders.DEFAULT_FRAGMENT_SHADER;
+        string vertexShader = Shaders.Shaders.DEFAULT_VERTEX_SHADER;
+        string fragShader   = Shaders.Shaders.DEFAULT_FRAGMENT_SHADER;
 
         return new ShaderProgram( vertexShader, fragShader );
     }
@@ -758,11 +758,11 @@ public class SpriteBatch : IBatch
             throw new InvalidOperationException( "Begin() must be called before Draw()." );
         }
 
-        var textureList = new List< object? >()
+        var textureList = new List< object? >
         {
             typeof( Texture ),
             typeof( TextureRegion ),
-            typeof( Scene2DImage ),
+            typeof( Scene2DImage )
         };
 
         if ( !textureList.Contains( texture.GetType() ) )
@@ -857,7 +857,7 @@ public class SpriteBatch : IBatch
     /// </param>
     private static void PopulateIndexBuffer( int size, out int[] indices )
     {
-        var len = size * INDICES_PER_SPRITE;
+        int len = size * INDICES_PER_SPRITE;
         indices = new int[ len ];
 
         for ( short i = 0, j = 0; i < len; i += INDICES_PER_SPRITE, j += 4 )
@@ -999,8 +999,8 @@ public class SpriteBatch : IBatch
                 Flush();
             }
 
-            var fx2 = posX + width;
-            var fy2 = posY + height;
+            float fx2 = posX + width;
+            float fy2 = posY + height;
 
             const float U  = 0;
             const float V  = 1;
@@ -1070,12 +1070,12 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            var worldOriginX = destination.X + origin.X;
-            var worldOriginY = destination.Y + origin.Y;
-            var fx           = -origin.X;
-            var fy           = -origin.Y;
-            var fx2          = destination.Width - origin.X;
-            var fy2          = destination.Height - origin.Y;
+            int worldOriginX = destination.X + origin.X;
+            int worldOriginY = destination.Y + origin.Y;
+            int fx           = -origin.X;
+            int fy           = -origin.Y;
+            int fx2          = destination.Width - origin.X;
+            int fy2          = destination.Height - origin.Y;
 
             // scale
             if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
@@ -1087,22 +1087,22 @@ public class SpriteBatch : IBatch
             }
 
             // construct corner points, start from top left and go counter clockwise
-            var p1X = fx;
-            var p1Y = fy;
-            var p2X = fx;
-            var p2Y = fy2;
-            var p3X = fx2;
-            var p3Y = fy2;
-            var p4X = fx2;
-            var p4Y = fy;
+            int p1X = fx;
+            int p1Y = fy;
+            int p2X = fx;
+            int p2Y = fy2;
+            int p3X = fx2;
+            int p3Y = fy2;
+            int p4X = fx2;
+            int p4Y = fy;
 
             float x1, y1, x2, y2, x3, y3, x4, y4;
 
             // rotate
             if ( rotation != 0 )
             {
-                var cos = MathUtils.CosDeg( rotation );
-                var sin = MathUtils.SinDeg( rotation );
+                float cos = MathUtils.CosDeg( rotation );
+                float sin = MathUtils.SinDeg( rotation );
 
                 x1 = ( cos * p1X ) - ( sin * p1Y );
                 y1 = ( sin * p1X ) + ( cos * p1Y );
@@ -1140,10 +1140,10 @@ public class SpriteBatch : IBatch
             x4 += worldOriginX;
             y4 += worldOriginY;
 
-            var u  = src.X * InvTexWidth;
-            var v  = ( src.Y + src.Height ) * InvTexHeight;
-            var u2 = ( src.X + src.Width ) * InvTexWidth;
-            var v2 = src.Y * InvTexHeight;
+            float u  = src.X * InvTexWidth;
+            float v  = ( src.Y + src.Height ) * InvTexHeight;
+            float u2 = ( src.X + src.Width ) * InvTexWidth;
+            float v2 = src.Y * InvTexHeight;
 
             if ( flipX )
             {
@@ -1204,12 +1204,12 @@ public class SpriteBatch : IBatch
                 Flush();
             }
 
-            var u   = src.X * InvTexWidth;
-            var v   = ( src.Y + src.Height ) * InvTexHeight;
-            var u2  = ( src.X + src.Width ) * InvTexWidth;
-            var v2  = src.Y * InvTexHeight;
-            var fx2 = destination.X + destination.Width;
-            var fy2 = destination.Y + destination.Height;
+            float u   = src.X * InvTexWidth;
+            float v   = ( src.Y + src.Height ) * InvTexHeight;
+            float u2  = ( src.X + src.Width ) * InvTexWidth;
+            float v2  = src.Y * InvTexHeight;
+            int   fx2 = destination.X + destination.Width;
+            int   fy2 = destination.Y + destination.Height;
 
             if ( flipX )
             {
@@ -1269,12 +1269,12 @@ public class SpriteBatch : IBatch
                 Flush();
             }
 
-            var u   = src.X * InvTexWidth;
-            var v   = ( src.Y + src.Height ) * InvTexHeight;
-            var u2  = ( src.X + src.Width ) * InvTexWidth;
-            var v2  = src.Y * InvTexHeight;
-            var fx2 = x + src.Width;
-            var fy2 = y + src.Height;
+            float u   = src.X * InvTexWidth;
+            float v   = ( src.Y + src.Height ) * InvTexHeight;
+            float u2  = ( src.X + src.Width ) * InvTexWidth;
+            float v2  = src.Y * InvTexHeight;
+            float fx2 = x + src.Width;
+            float fy2 = y + src.Height;
 
             SetVertices( x,
                          y,
@@ -1326,8 +1326,8 @@ public class SpriteBatch : IBatch
                 Flush();
             }
 
-            var fx2 = destination.X + destination.Width;
-            var fy2 = destination.Y + destination.Height;
+            int fx2 = destination.X + destination.Width;
+            int fy2 = destination.Y + destination.Height;
 
             SetVertices( destination.X,
                          destination.Y,
@@ -1379,8 +1379,8 @@ public class SpriteBatch : IBatch
         {
             Validate( texture );
 
-            var verticesLength    = Vertices.Length;
-            var remainingVertices = verticesLength;
+            int verticesLength    = Vertices.Length;
+            int remainingVertices = verticesLength;
 
             if ( texture != LastTexture )
             {
@@ -1397,7 +1397,7 @@ public class SpriteBatch : IBatch
                 }
             }
 
-            var copyCount = Math.Min( remainingVertices, count );
+            int copyCount = Math.Min( remainingVertices, count );
 
             Array.Copy( spriteVertices, offset, Vertices, Idx, copyCount );
 
@@ -1452,7 +1452,7 @@ public class SpriteBatch : IBatch
         {
             Validate( region );
 
-            var texture = region.Texture;
+            Texture? texture = region.Texture;
 
             if ( texture != LastTexture )
             {
@@ -1463,12 +1463,12 @@ public class SpriteBatch : IBatch
                 Flush();
             }
 
-            var fx2 = x + width;
-            var fy2 = y + height;
-            var u   = region.U;
-            var v   = region.V2;
-            var u2  = region.U2;
-            var v2  = region.V;
+            float fx2 = x + width;
+            float fy2 = y + height;
+            float u   = region.U;
+            float v   = region.V2;
+            float u2  = region.U2;
+            float v2  = region.V;
 
             SetVertices( x,
                          y,
@@ -1512,7 +1512,7 @@ public class SpriteBatch : IBatch
         {
             Validate( textureRegion );
 
-            var texture = textureRegion.Texture;
+            Texture? texture = textureRegion.Texture;
 
             if ( texture != LastTexture )
             {
@@ -1524,12 +1524,12 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            var worldOriginX = destination.X + origin.X;
-            var worldOriginY = destination.Y + origin.Y;
-            var fx           = -origin.X;
-            var fy           = -origin.Y;
-            var fx2          = destination.Width - origin.X;
-            var fy2          = destination.Height - origin.Y;
+            int worldOriginX = destination.X + origin.X;
+            int worldOriginY = destination.Y + origin.Y;
+            int fx           = -origin.X;
+            int fy           = -origin.Y;
+            int fx2          = destination.Width - origin.X;
+            int fy2          = destination.Height - origin.Y;
 
             // scale
             if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
@@ -1541,22 +1541,22 @@ public class SpriteBatch : IBatch
             }
 
             // construct corner points, start from top left and go counter clockwise
-            var p1X = fx;
-            var p1Y = fy;
-            var p2X = fx;
-            var p2Y = fy2;
-            var p3X = fx2;
-            var p3Y = fy2;
-            var p4X = fx2;
-            var p4Y = fy;
+            int p1X = fx;
+            int p1Y = fy;
+            int p2X = fx;
+            int p2Y = fy2;
+            int p3X = fx2;
+            int p3Y = fy2;
+            int p4X = fx2;
+            int p4Y = fy;
 
             float x1, y1, x2, y2, x3, y3, x4, y4;
 
             // rotate
             if ( rotation != 0 )
             {
-                var cos = MathUtils.CosDeg( rotation );
-                var sin = MathUtils.SinDeg( rotation );
+                float cos = MathUtils.CosDeg( rotation );
+                float sin = MathUtils.SinDeg( rotation );
 
                 x1 = ( cos * p1X ) - ( sin * p1Y );
                 y1 = ( sin * p1X ) + ( cos * p1Y );
@@ -1594,10 +1594,10 @@ public class SpriteBatch : IBatch
             x4 += worldOriginX;
             y4 += worldOriginY;
 
-            var u  = textureRegion.U;
-            var v  = textureRegion.V2;
-            var u2 = textureRegion.U2;
-            var v2 = textureRegion.V;
+            float u  = textureRegion.U;
+            float v  = textureRegion.V2;
+            float u2 = textureRegion.U2;
+            float v2 = textureRegion.V;
 
             SetVertices( x1,
                          y1,
@@ -1644,7 +1644,7 @@ public class SpriteBatch : IBatch
         {
             Validate( textureRegion );
 
-            var texture = textureRegion.Texture;
+            Texture? texture = textureRegion.Texture;
 
             if ( texture != LastTexture )
             {
@@ -1656,12 +1656,12 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            var worldOriginX = destination.X + origin.X;
-            var worldOriginY = destination.Y + origin.Y;
-            var fx           = -origin.X;
-            var fy           = -origin.Y;
-            var fx2          = destination.Width - origin.X;
-            var fy2          = destination.Height - origin.Y;
+            int worldOriginX = destination.X + origin.X;
+            int worldOriginY = destination.Y + origin.Y;
+            int fx           = -origin.X;
+            int fy           = -origin.Y;
+            int fx2          = destination.Width - origin.X;
+            int fy2          = destination.Height - origin.Y;
 
             // scale
             if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
@@ -1676,28 +1676,28 @@ public class SpriteBatch : IBatch
             // start from top left and go counter clockwise
 
             // -- Top left --
-            var p1X = fx;
-            var p1Y = fy;
+            int p1X = fx;
+            int p1Y = fy;
 
             // -- Bottom left --
-            var p2X = fx;
-            var p2Y = fy2;
+            int p2X = fx;
+            int p2Y = fy2;
 
             // -- Bottom right --
-            var p3X = fx2;
-            var p3Y = fy2;
+            int p3X = fx2;
+            int p3Y = fy2;
 
             // -- Top right --
-            var p4X = fx2;
-            var p4Y = fy;
+            int p4X = fx2;
+            int p4Y = fy;
 
             float x1, y1, x2, y2, x3, y3, x4, y4;
 
             // rotate
             if ( rotation != 0 )
             {
-                var cos = MathUtils.CosDeg( rotation );
-                var sin = MathUtils.SinDeg( rotation );
+                float cos = MathUtils.CosDeg( rotation );
+                float sin = MathUtils.SinDeg( rotation );
 
                 x1 = ( cos * p1X ) - ( sin * p1Y );
                 y1 = ( sin * p1X ) + ( cos * p1Y );
@@ -1809,19 +1809,19 @@ public class SpriteBatch : IBatch
             }
 
             // construct corner points
-            var x1 = transform.M02;
-            var y1 = transform.M12;
-            var x2 = ( transform.M01 * height ) + transform.M02;
-            var y2 = ( transform.M11 * height ) + transform.M12;
-            var x3 = ( transform.M00 * width ) + ( transform.M01 * height ) + transform.M02;
-            var y3 = ( transform.M10 * width ) + ( transform.M11 * height ) + transform.M12;
-            var x4 = ( transform.M00 * width ) + transform.M02;
-            var y4 = ( transform.M10 * width ) + transform.M12;
+            float x1 = transform.M02;
+            float y1 = transform.M12;
+            float x2 = ( transform.M01 * height ) + transform.M02;
+            float y2 = ( transform.M11 * height ) + transform.M12;
+            float x3 = ( transform.M00 * width ) + ( transform.M01 * height ) + transform.M02;
+            float y3 = ( transform.M10 * width ) + ( transform.M11 * height ) + transform.M12;
+            float x4 = ( transform.M00 * width ) + transform.M02;
+            float y4 = ( transform.M10 * width ) + transform.M12;
 
-            var u  = region.U;
-            var v  = region.V2;
-            var u2 = region.U2;
-            var v2 = region.V;
+            float u  = region.U;
+            float v  = region.V2;
+            float u2 = region.U2;
+            float v2 = region.V;
 
             SetVertices( x1,
                          y1,
@@ -2080,7 +2080,7 @@ public class SpriteBatch : IBatch
     {
         Ready,
         Drawing,
-        Disposed,
+        Disposed
     }
 
     // ========================================================================

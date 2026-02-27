@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Input;
 using LughSharp.Core.Maths;
 
@@ -105,8 +106,8 @@ public class DragListener : InputListener
         }
 
         if ( !IsDragging
-             && ( ( Math.Abs( TouchDownX - x ) > TapSquareSize )
-                  || ( Math.Abs( TouchDownY - y ) > TapSquareSize ) ) )
+          && ( ( Math.Abs( TouchDownX - x ) > TapSquareSize )
+            || ( Math.Abs( TouchDownY - y ) > TapSquareSize ) ) )
         {
             IsDragging = true;
             DragStartX = x;
@@ -217,4 +218,3 @@ public class DragListener : InputListener
 
 // ============================================================================
 // ============================================================================
-

@@ -37,7 +37,7 @@ public enum BufferTarget
     CopyReadBuffer          = IGL.GL_COPY_READ_BUFFER,
     CopyWriteBuffer         = IGL.GL_COPY_WRITE_BUFFER,
     TextureBuffer           = IGL.GL_TEXTURE_BUFFER,
-    UniformBuffer           = IGL.GL_UNIFORM_BUFFER,
+    UniformBuffer           = IGL.GL_UNIFORM_BUFFER
 }
 
 [PublicAPI]
@@ -45,7 +45,7 @@ public enum BufferAccess
 {
     ReadOnly  = IGL.GL_READ_ONLY,
     ReadWrite = IGL.GL_READ_WRITE,
-    WriteOnly = IGL.GL_WRITE_ONLY,
+    WriteOnly = IGL.GL_WRITE_ONLY
 }
 
 [PublicAPI]
@@ -59,7 +59,7 @@ public enum BufferUsageHint
     DynamicRead = IGL.GL_DYNAMIC_READ,
     StreamDraw  = IGL.GL_STREAM_DRAW,
     StreamCopy  = IGL.GL_STREAM_COPY,
-    StreamRead  = IGL.GL_STREAM_READ,
+    StreamRead  = IGL.GL_STREAM_READ
 }
 
 [PublicAPI]
@@ -78,7 +78,7 @@ public enum BufferBinding
     StaticDraw                     = IGL.GL_STATIC_DRAW,
     TextureCoordArrayBufferBinding = IGL.GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING,
     VertexArrayBinding             = IGL.GL_VERTEX_ARRAY_BINDING,
-    VertexArrayBufferBinding       = IGL.GL_VERTEX_ARRAY_BUFFER_BINDING,
+    VertexArrayBufferBinding       = IGL.GL_VERTEX_ARRAY_BUFFER_BINDING
 }
 
 // ============================================================================

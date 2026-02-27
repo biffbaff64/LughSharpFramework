@@ -26,6 +26,7 @@ using System;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maps.Tiled.Tiles;
@@ -102,7 +103,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
 
         BeginRender();
 
-        foreach ( var layer in TiledMap.Layers )
+        foreach ( MapLayer layer in TiledMap.Layers )
         {
             RenderMapLayer( layer );
         }
@@ -120,7 +121,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
 
         BeginRender();
 
-        foreach ( var layer in layers )
+        foreach ( int layer in layers )
         {
             RenderMapLayer( TiledMap.Layers.Get( layer ) );
         }
@@ -139,11 +140,11 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     {
         Batch.SetProjectionMatrix( camera.Combined );
 
-        var width  = camera.ViewportWidth * camera.Zoom;
-        var height = camera.ViewportHeight * camera.Zoom;
+        float width  = camera.ViewportWidth * camera.Zoom;
+        float height = camera.ViewportHeight * camera.Zoom;
 
-        var w = ( width * Math.Abs( camera.Up.Y ) ) + ( height * Math.Abs( camera.Up.X ) );
-        var h = ( height * Math.Abs( camera.Up.Y ) ) + ( width * Math.Abs( camera.Up.X ) );
+        float w = ( width * Math.Abs( camera.Up.Y ) ) + ( height * Math.Abs( camera.Up.X ) );
+        float h = ( height * Math.Abs( camera.Up.Y ) ) + ( width * Math.Abs( camera.Up.X ) );
 
         ViewBounds.Set( camera.Position.X - ( w / 2 ), camera.Position.Y - ( h / 2 ), w, h );
     }
@@ -209,7 +210,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// <param name="layer"></param>
     public void RenderObjects( MapLayer layer )
     {
-        foreach ( var obj in layer.Objects )
+        foreach ( MapObject obj in layer.Objects )
         {
             RenderObject( obj );
         }
@@ -234,33 +235,33 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// <param name="layer"></param>
     public void RenderImageLayer( TiledMapImageLayer layer )
     {
-        var color = Color.ToFloatBitsAbgr( Batch.Color.R,
-                                           Batch.Color.G,
-                                           Batch.Color.B,
-                                           Batch.Color.A * layer.Opacity );
+        float color = Color.ToFloatBitsAbgr( Batch.Color.R,
+                                             Batch.Color.G,
+                                             Batch.Color.B,
+                                             Batch.Color.A * layer.Opacity );
 
-        var region = layer.Region;
+        TextureRegion? region = layer.Region;
 
         if ( region == null )
         {
             return;
         }
 
-        var x  = layer.X;
-        var y  = layer.Y;
-        var x1 = x * UnitScale;
-        var y1 = y * UnitScale;
-        var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
-        var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
+        float x  = layer.X;
+        float y  = layer.Y;
+        float x1 = x * UnitScale;
+        float y1 = y * UnitScale;
+        float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+        float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
         ImageBounds.Set( x1, y1, x2 - x1, y2 - y1 );
 
         if ( ViewBounds.Contains( ImageBounds ) || ViewBounds.Overlaps( ImageBounds ) )
         {
-            var u1 = region.U;
-            var v1 = region.V2;
-            var u2 = region.U2;
-            var v2 = region.V;
+            float u1 = region.U;
+            float v1 = region.V2;
+            float u2 = region.U2;
+            float v2 = region.V;
 
             Vertices[ IBatch.X1 ] = x1;
             Vertices[ IBatch.Y1 ] = y1;
@@ -298,11 +299,11 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// </summary>
     private void RenderGroupLayerChildren( MapGroupLayer groupLayer )
     {
-        var childLayers = groupLayer.Layers;
+        MapLayers childLayers = groupLayer.Layers;
 
         for ( var i = 0; i < childLayers.LayersCount; i++ )
         {
-            var childLayer = childLayers.Get( i );
+            MapLayer childLayer = childLayers.Get( i );
 
             if ( !childLayer.Visible )
             {

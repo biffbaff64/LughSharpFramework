@@ -40,7 +40,7 @@ public interface IPreferences
     /// 
     /// </summary>
     int Count { get; }
-    
+
     // ------------------------------------------------------------------------
 
     /// <summary>

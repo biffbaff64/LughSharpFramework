@@ -84,7 +84,8 @@ public abstract class DataUtils
     {
         input = ( ( input & 0x00ff00ff00ff00ffL ) << 8 ) | ( ( input >>> 8 ) & 0x00ff00ff00ff00ffL );
 
-        return ( input << 48 ) | ( ( input & 0xffff0000L ) << 16 ) | ( ( input >>> 16 ) & 0xffff0000L ) | ( input >>> 48 );
+        return ( input << 48 ) | ( ( input & 0xffff0000L ) << 16 ) | ( ( input >>> 16 ) & 0xffff0000L )
+             | ( input >>> 48 );
     }
 
     /// <summary>

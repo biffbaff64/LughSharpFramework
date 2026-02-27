@@ -258,7 +258,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     {
         Modified();
 
-        var sizeNeeded = Size + count;
+        int sizeNeeded = Size + count;
 
         if ( sizeNeeded > _items.Length )
         {
@@ -390,7 +390,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
             throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Size}" );
         }
 
-        var value = _items[ index ];
+        T value = _items[ index ];
 
         Size--;
 
@@ -429,7 +429,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
             throw new ArgumentOutOfRangeException( $"start can't be > end - {start} > {end}" );
         }
 
-        var count = ( end - start ) + 1;
+        int count = end - start + 1;
 
         if ( Ordered )
         {
@@ -437,7 +437,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
         }
         else
         {
-            var lastIndex = Size - 1;
+            int lastIndex = Size - 1;
 
             for ( var i = 0; i < count; i++ )
             {
@@ -457,12 +457,12 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     {
         Modified();
 
-        var size      = Size;
-        var startSize = size;
+        int size      = Size;
+        int startSize = size;
 
         for ( int i = 0, n = arrayList.Size; i < n; i++ )
         {
-            var item = arrayList.GetAt( i );
+            T item = arrayList.GetAt( i );
 
             for ( var ii = 0; ii < size; ii++ )
             {
@@ -506,7 +506,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     /// <param name="value"> The value to search for. May be null. </param>
     public bool Contains( T? value )
     {
-        var i = Size - 1;
+        int i = Size - 1;
 
         while ( i >= 0 )
         {
@@ -544,7 +544,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
 
         --Size;
 
-        var item = _items[ Size ];
+        T item = _items[ Size ];
 
         _items[ Size ] = default( T )!;
 
@@ -582,7 +582,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     {
         const int PRIME = 31;
 
-        var result = PRIME + 43;
+        int result = PRIME + 43;
         result = ( PRIME * result ) + 34;
 
         return result;
@@ -608,7 +608,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
             return false;
         }
 
-        var n = Size;
+        int n = Size;
 
         if ( n != array.Size )
         {

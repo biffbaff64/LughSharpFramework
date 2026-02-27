@@ -23,7 +23,10 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+
 using JetBrains.Annotations;
+
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics;
@@ -60,13 +63,13 @@ public static class CIM
             output.Write( pixmap.Height );
             output.Write( pixmap.GetColorFormat() );
 
-            var pixelBuf = pixmap.ByteBuffer;
+            Buffer< byte > pixelBuf = pixmap.ByteBuffer;
 
             pixelBuf.Position = 0;
             pixelBuf.Limit    = pixelBuf.Capacity;
 
-            var remainingBytes = pixelBuf.Capacity % BUFFER_SIZE;
-            var iterations     = pixelBuf.Capacity / BUFFER_SIZE;
+            int remainingBytes = pixelBuf.Capacity % BUFFER_SIZE;
+            int iterations     = pixelBuf.Capacity / BUFFER_SIZE;
 
             lock ( _writeBuffer )
             {
@@ -99,12 +102,12 @@ public static class CIM
     {
         try
         {
-            var input    = new BinaryReader( new InflaterInputStream( file.OpenRead() ) );
-            var width    = input.Read();
-            var height   = input.Read();
-            var format   = PixelFormat.PNGColorToLughFormat( input.Read() );
-            var pixmap   = new Pixmap( width, height, format );
-            var pixelBuf = pixmap.ByteBuffer;
+            var            input    = new BinaryReader( new InflaterInputStream( file.OpenRead() ) );
+            int            width    = input.Read();
+            int            height   = input.Read();
+            int            format   = PixelFormat.PNGColorToLughFormat( input.Read() );
+            var            pixmap   = new Pixmap( width, height, format );
+            Buffer< byte > pixelBuf = pixmap.ByteBuffer;
 
             pixelBuf.Position = 0;
             pixelBuf.Limit    = pixelBuf.Capacity;

@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Collections;
@@ -143,7 +145,7 @@ public class DelayedRemovalList< T > : List< T >
             {
                 for ( int i = 0, n = _remove.Count; i < n; i++ )
                 {
-                    var index = _remove.Pop();
+                    int index = _remove.Pop();
 
                     if ( index >= _clear )
                     {
@@ -151,7 +153,7 @@ public class DelayedRemovalList< T > : List< T >
                     }
                 }
 
-                for ( var i = _clear - 1; i >= 0; i-- )
+                for ( int i = _clear - 1; i >= 0; i-- )
                 {
                     RemoveAt( i );
                 }
@@ -174,7 +176,7 @@ public class DelayedRemovalList< T > : List< T >
 
         for ( int i = 0, n = _remove.Count; i < n; i++ )
         {
-            var removeIndex = _remove[ i ];
+            int removeIndex = _remove[ i ];
 
             if ( index == removeIndex )
             {
@@ -204,7 +206,7 @@ public class DelayedRemovalList< T > : List< T >
     {
         if ( _iterating > 0 )
         {
-            var index = IndexOf( value );
+            int index = IndexOf( value );
 
             if ( index == -1 )
             {
@@ -250,7 +252,7 @@ public class DelayedRemovalList< T > : List< T >
     {
         if ( _iterating > 0 )
         {
-            for ( var i = end; i >= start; i-- )
+            for ( int i = end; i >= start; i-- )
             {
                 Remove( i );
             }
@@ -330,7 +332,7 @@ public class DelayedRemovalList< T > : List< T >
             throw new RuntimeException( "Invalid between begin/end." );
         }
 
-        var insertItem = base[ index ];
+        T insertItem = base[ index ];
 
         for ( var i = 0; i < count; i++ )
         {
@@ -369,7 +371,7 @@ public class DelayedRemovalList< T > : List< T >
             throw new RuntimeException( "Invalid between begin/end." );
         }
 
-        var t = base[ ^1 ];
+        T t = base[ ^1 ];
 
         RemoveAt( Count - 1 );
 

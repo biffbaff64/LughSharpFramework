@@ -75,7 +75,7 @@ public enum JoystickHat : byte
     /// <summary>
     /// Hat is pointing down and to the left.
     /// </summary>
-    LeftDown = Left | Down,
+    LeftDown = Left | Down
 }
 
 // ========================================================================

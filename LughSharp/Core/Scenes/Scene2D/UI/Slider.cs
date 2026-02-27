@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Input;
@@ -58,7 +59,11 @@ public class Slider : ProgressBar
     private float    _threshold;
 
     public Slider( float min, float max, float stepSize, bool vertical, Skin skin )
-        : this( min, max, stepSize, vertical, skin.Get< SliderStyle >( "default-" + ( vertical ? "vertical" : "horizontal" ) ) )
+        : this( min,
+                max,
+                stepSize,
+                vertical,
+                skin.Get< SliderStyle >( "default-" + ( vertical ? "vertical" : "horizontal" ) ) )
     {
     }
 
@@ -198,46 +203,47 @@ public class Slider : ProgressBar
 
     private bool CalculatePositionAndValue( float x, float y )
     {
-        var style = GetStyle();
-        var knob  = style.Knob;
-        var bg    = GetBackgroundDrawable();
+        SliderStyle     style = GetStyle();
+        ISceneDrawable? knob  = style.Knob;
+        ISceneDrawable? bg    = GetBackgroundDrawable();
 
         float value;
-        var   oldPosition = KnobPosition;
+        float oldPosition = KnobPosition;
 
-        var min = MinValue;
-        var max = MaxValue;
+        float min = MinValue;
+        float max = MaxValue;
 
         if ( IsVertical )
         {
-            var height     = Height - bg!.TopHeight - bg.BottomHeight;
-            var knobHeight = knob?.MinHeight ?? 0;
+            float height     = Height - bg!.TopHeight - bg.BottomHeight;
+            float knobHeight = knob?.MinHeight ?? 0;
 
             KnobPosition = y - bg.BottomHeight - ( knobHeight * 0.5f );
-            value        = min + ( ( max - min ) * VisualInterpolationInverse.Apply( KnobPosition / ( height - knobHeight ) ) );
+            value = min + ( ( max - min )
+                          * VisualInterpolationInverse.Apply( KnobPosition / ( height - knobHeight ) ) );
             KnobPosition = Math.Max( Math.Min( 0, bg.BottomHeight ), KnobPosition );
             KnobPosition = Math.Min( height - knobHeight, KnobPosition );
         }
         else
         {
-            var width     = Width - bg!.LeftWidth - bg.RightWidth;
-            var knobWidth = knob?.MinWidth ?? 0;
+            float width     = Width - bg!.LeftWidth - bg.RightWidth;
+            float knobWidth = knob?.MinWidth ?? 0;
 
             KnobPosition = x - bg.LeftWidth - ( knobWidth * 0.5f );
-            value        = min + ( ( max - min ) * VisualInterpolationInverse.Apply( KnobPosition / ( width - knobWidth ) ) );
+            value = min + ( ( max - min ) * VisualInterpolationInverse.Apply( KnobPosition / ( width - knobWidth ) ) );
             KnobPosition = Math.Max( Math.Min( 0, bg.LeftWidth ), KnobPosition );
             KnobPosition = Math.Min( width - knobWidth, KnobPosition );
         }
 
-        var oldValue = value;
+        float oldValue = value;
 
         if ( !Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_LEFT )
-             && !Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT ) )
+          && !Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT ) )
         {
             value = GetSnapped( value );
         }
 
-        var valueSet = SetBarPosition( value );
+        bool valueSet = SetBarPosition( value );
 
         if ( value.Equals( oldValue ) )
         {
@@ -256,9 +262,9 @@ public class Slider : ProgressBar
 
         float bestDiff = -1, bestValue = 0;
 
-        foreach ( var snapValue in _snapValues! )
+        foreach ( float snapValue in _snapValues! )
         {
-            var diff = Math.Abs( value - snapValue );
+            float diff = Math.Abs( value - snapValue );
 
             if ( diff <= _threshold )
             {
@@ -317,7 +323,7 @@ public class Slider : ProgressBar
         public ISceneDrawable? KnobAfterDown  { get; set; }
 
         // ====================================================================
-        
+
         public SliderStyle()
         {
         }

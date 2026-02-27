@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Viewports;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
@@ -54,7 +56,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     // ========================================================================
 
     private float _defaultZoom;
-    private Shake _shake    = new();
+    private Shake _shake = new();
     private bool  _disposed;
 
     // ========================================================================
@@ -238,7 +240,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         if ( IsInUse )
         {
-            var temp = Camera.Position;
+            Vector3 temp = Camera.Position;
 
             temp.X = Camera.Position.X + ( ( x - Camera.Position.X ) * 0.1f );
             temp.Y = Camera.Position.Y + ( ( y - Camera.Position.Y ) * 0.1f );
@@ -346,7 +348,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                                         Camera.ViewportHeight * PPM,
                                         Camera );
 
-        Viewport.SetScreenBounds( 0, 0,
+        Viewport.SetScreenBounds( 0,
+                                  0,
                                   ( int )( Camera.ViewportWidth * PPM ),
                                   ( int )( Camera.ViewportHeight * PPM ) );
 
@@ -368,7 +371,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         Viewport = new FitViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
 
-        Viewport.SetScreenBounds( 0, 0,
+        Viewport.SetScreenBounds( 0,
+                                  0,
                                   ( int )( Camera.ViewportWidth * PPM ),
                                   ( int )( Camera.ViewportHeight * PPM ) );
 
@@ -382,7 +386,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         Viewport = new ExtendViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
 
-        Viewport.SetScreenBounds( 0, 0,
+        Viewport.SetScreenBounds( 0,
+                                  0,
                                   ( int )( Camera.ViewportWidth * PPM ),
                                   ( int )( Camera.ViewportHeight * PPM ) );
 
@@ -396,7 +401,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         Viewport = new FillViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
 
-        Viewport.SetScreenBounds( 0, 0,
+        Viewport.SetScreenBounds( 0,
+                                  0,
                                   ( int )( Camera.ViewportWidth * PPM ),
                                   ( int )( Camera.ViewportHeight * PPM ) );
 
@@ -410,7 +416,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         Viewport = new ScreenViewport();
 
-        Viewport.SetScreenBounds( 0, 0,
+        Viewport.SetScreenBounds( 0,
+                                  0,
                                   ( int )( Camera.ViewportWidth * PPM ),
                                   ( int )( Camera.ViewportHeight * PPM ) );
 
@@ -424,7 +431,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         Viewport = new ScalingViewport( scaling, Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
 
-        Viewport.SetScreenBounds( 0, 0,
+        Viewport.SetScreenBounds( 0,
+                                  0,
                                   ( int )( Camera.ViewportWidth * PPM ),
                                   ( int )( Camera.ViewportHeight * PPM ) );
 

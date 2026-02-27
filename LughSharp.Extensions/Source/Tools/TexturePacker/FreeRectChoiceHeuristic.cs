@@ -55,5 +55,5 @@ public enum FreeRectChoiceHeuristic
     /// CP: Chooses the placement where the rectangle touches other rects as much
     /// as possible.
     /// </summary>
-    ContactPointRule,
+    ContactPointRule
 }

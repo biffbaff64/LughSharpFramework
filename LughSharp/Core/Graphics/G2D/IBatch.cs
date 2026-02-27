@@ -25,6 +25,7 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
@@ -371,7 +372,8 @@ public interface IBatch : IDisposable
     /// <param name="dstFuncAlpha">
     /// the destination alpha function, e.g. GL20.GL_ONE_MINUS_SRC_ALPHA.
     /// </param>
-    void SetBlendFunctionSeparate( BlendMode srcFuncColor, BlendMode dstFuncColor, BlendMode srcFuncAlpha, BlendMode dstFuncAlpha );
+    void SetBlendFunctionSeparate( BlendMode srcFuncColor, BlendMode dstFuncColor, BlendMode srcFuncAlpha,
+                                   BlendMode dstFuncAlpha );
 
     /// <summary>
     /// Sets the projection matrix to be used by this Batch.

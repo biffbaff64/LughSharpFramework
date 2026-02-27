@@ -45,7 +45,7 @@ public class VertexConstants
         Generic            = 32,
         BoneWeight         = 64,
         Tangent            = 128,
-        BiNormal           = 256,
+        BiNormal           = 256
     }
 
     public const int POSITION_COMPONENTS = 2;

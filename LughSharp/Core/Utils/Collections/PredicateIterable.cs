@@ -24,6 +24,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Collections;
@@ -96,5 +97,3 @@ public class PredicateIterable< T > : IEnumerable< T >
 
 // ============================================================================
 // ============================================================================
-
-

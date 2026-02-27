@@ -25,6 +25,7 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
@@ -130,7 +131,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
             throw new NullReferenceException();
         }
 
-        var sprite = Region is AtlasRegion region
+        Sprite sprite = Region is AtlasRegion region
             ? new AtlasSprite( region )
             : new Sprite( Region! );
 
@@ -142,7 +143,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
             LeftWidth    = LeftWidth,
             RightWidth   = RightWidth,
             TopHeight    = TopHeight,
-            BottomHeight = BottomHeight,
+            BottomHeight = BottomHeight
         };
 
         return drawable;

@@ -140,7 +140,7 @@ public class FreeType
         // so SharedLibraryLoader().load("gdx-freetype"); is not directly translated.
         // You ensure the DLL/SO/DYLIB is in a place where the .NET runtime can find it.
 
-        var address = InitFreeTypeJniNative();
+        IntPtr address = InitFreeTypeJniNative();
 
         if ( address == IntPtr.Zero )
         {
@@ -170,7 +170,7 @@ public class FreeType
 
         protected Pointer( IntPtr address )
         {
-            this.Address = address;
+            Address = address;
         }
     }
 
@@ -221,7 +221,7 @@ public class FreeType
 
             if ( ( data == null ) || ( data.Length == 0 ) )
             {
-                using ( var input = fontFile.OpenRead() )
+                using ( FileStream input = fontFile.OpenRead() )
                 {
                     try
                     {
@@ -257,10 +257,10 @@ public class FreeType
         public Face NewMemoryFace( byte[] buffer, int faceIndex )
         {
             // Pin the byte array to get a stable memory address
-            var handle        = GCHandle.Alloc( buffer, GCHandleType.Pinned );
-            var pinnedAddress = handle.AddrOfPinnedObject();
+            GCHandle handle        = GCHandle.Alloc( buffer, GCHandleType.Pinned );
+            IntPtr   pinnedAddress = handle.AddrOfPinnedObject();
 
-            var faceAddress = NewMemoryFaceNative( Address, pinnedAddress, buffer.Length, faceIndex );
+            IntPtr faceAddress = NewMemoryFaceNative( Address, pinnedAddress, buffer.Length, faceIndex );
 
             // Unpin the handle immediately after the native call, as we'll manage the buffer's lifetime
             // through the FontData dictionary. This is a bit tricky, the original Java implies
@@ -303,7 +303,7 @@ public class FreeType
 
         public Stroker CreateStroker()
         {
-            var strokerAddress = StrokerNewNative( Address );
+            IntPtr strokerAddress = StrokerNewNative( Address );
 
             if ( strokerAddress == IntPtr.Zero )
             {
@@ -340,7 +340,7 @@ public class FreeType
                     Address = IntPtr.Zero; // SetMark as disposed
 
                     // Dispose of any pinned byte buffers
-                    foreach ( var buffer in FontData.Values )
+                    foreach ( byte[] buffer in FontData.Values )
                     {
 //TODO:                        if ( BufferUtils.IsUnsafeByteBuffer( buffer ) )
                         {
@@ -410,106 +410,163 @@ public class FreeType
         [DllImport( NATIVE_LIB, EntryPoint = "getFaceFlags", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetFaceFlagsNative( IntPtr face );
 
-        public int GetFaceFlags() => GetFaceFlagsNative( Address );
+        public int GetFaceFlags()
+        {
+            return GetFaceFlagsNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getStyleFlags", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetStyleFlagsNative( IntPtr face );
 
-        public int GetStyleFlags() => GetStyleFlagsNative( Address );
+        public int GetStyleFlags()
+        {
+            return GetStyleFlagsNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getNumGlyphs", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetNumGlyphsNative( IntPtr face );
 
-        public int GetNumGlyphs() => GetNumGlyphsNative( Address );
+        public int GetNumGlyphs()
+        {
+            return GetNumGlyphsNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getAscender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAscenderNative( IntPtr face );
 
-        public int GetAscender() => GetAscenderNative( Address );
+        public int GetAscender()
+        {
+            return GetAscenderNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getDescender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetDescenderNative( IntPtr face );
 
-        public int GetDescender() => GetDescenderNative( Address );
+        public int GetDescender()
+        {
+            return GetDescenderNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHeightNative( IntPtr face );
 
-        public int GetHeight() => GetHeightNative( Address );
+        public int GetHeight()
+        {
+            return GetHeightNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getMaxAdvanceWidth", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetMaxAdvanceWidthNative( IntPtr face );
 
-        public int GetMaxAdvanceWidth() => GetMaxAdvanceWidthNative( Address );
+        public int GetMaxAdvanceWidth()
+        {
+            return GetMaxAdvanceWidthNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getMaxAdvanceHeight", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetMaxAdvanceHeightNative( IntPtr face );
 
-        public int GetMaxAdvanceHeight() => GetMaxAdvanceHeightNative( Address );
+        public int GetMaxAdvanceHeight()
+        {
+            return GetMaxAdvanceHeightNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getUnderlinePosition", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetUnderlinePositionNative( IntPtr face );
 
-        public int GetUnderlinePosition() => GetUnderlinePositionNative( Address );
+        public int GetUnderlinePosition()
+        {
+            return GetUnderlinePositionNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getUnderlineThickness", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetUnderlineThicknessNative( IntPtr face );
 
-        public int GetUnderlineThickness() => GetUnderlineThicknessNative( Address );
+        public int GetUnderlineThickness()
+        {
+            return GetUnderlineThicknessNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "selectSize", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool SelectSizeNative( IntPtr face, int strike_index );
 
-        public bool SelectSize( int strikeIndex ) => SelectSizeNative( Address, strikeIndex );
+        public bool SelectSize( int strikeIndex )
+        {
+            return SelectSizeNative( Address, strikeIndex );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "setCharSize", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool SetCharSizeNative( IntPtr face, int charWidth, int charHeight, int horzResolution,
                                                       int vertResolution );
 
-        public bool SetCharSize( int charWidth, int charHeight, int horzResolution, int vertResolution ) =>
-            SetCharSizeNative( Address, charWidth, charHeight, horzResolution, vertResolution );
+        public bool SetCharSize( int charWidth, int charHeight, int horzResolution, int vertResolution )
+        {
+            return SetCharSizeNative( Address, charWidth, charHeight, horzResolution, vertResolution );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "setPixelSizes", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool SetPixelSizesNative( IntPtr face, int pixelWidth, int pixelHeight );
 
-        public bool SetPixelSizes( int pixelWidth, int pixelHeight ) =>
-            SetPixelSizesNative( Address, pixelWidth, pixelHeight );
+        public bool SetPixelSizes( int pixelWidth, int pixelHeight )
+        {
+            return SetPixelSizesNative( Address, pixelWidth, pixelHeight );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "loadGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool LoadGlyphNative( IntPtr face, int glyphIndex, int loadFlags );
 
-        public bool LoadGlyph( int glyphIndex, int loadFlags ) => LoadGlyphNative( Address, glyphIndex, loadFlags );
+        public bool LoadGlyph( int glyphIndex, int loadFlags )
+        {
+            return LoadGlyphNative( Address, glyphIndex, loadFlags );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "loadChar", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool LoadCharNative( IntPtr face, int charCode, int loadFlags );
 
-        public bool LoadChar( int charCode, int loadFlags ) => LoadCharNative( Address, charCode, loadFlags );
+        public bool LoadChar( int charCode, int loadFlags )
+        {
+            return LoadCharNative( Address, charCode, loadFlags );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetGlyphNative( IntPtr face );
 
-        public GlyphSlot GetGlyph() => new GlyphSlot( GetGlyphNative( Address ) );
+        public GlyphSlot GetGlyph()
+        {
+            return new GlyphSlot( GetGlyphNative( Address ) );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getSize", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetSizeNative( IntPtr face );
 
-        public Size GetSize() => new Size( GetSizeNative( Address ) );
+        public Size GetSize()
+        {
+            return new Size( GetSizeNative( Address ) );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "hasKerning", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool HasKerningNative( IntPtr face );
 
-        public bool HasKerning() => HasKerningNative( Address );
+        public bool HasKerning()
+        {
+            return HasKerningNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getKerning", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetKerningNative( IntPtr face, int leftGlyph, int rightGlyph, int kernMode );
 
-        public int GetKerning( int leftGlyph, int rightGlyph, int kernMode ) =>
-            GetKerningNative( Address, leftGlyph, rightGlyph, kernMode );
+        public int GetKerning( int leftGlyph, int rightGlyph, int kernMode )
+        {
+            return GetKerningNative( Address, leftGlyph, rightGlyph, kernMode );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getCharIndex", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetCharIndexNative( IntPtr face, int charCode );
 
-        public int GetCharIndex( int charCode ) => GetCharIndexNative( Address, charCode );
+        public int GetCharIndex( int charCode )
+        {
+            return GetCharIndexNative( Address, charCode );
+        }
     }
 
     // ========================================================================
@@ -525,7 +582,10 @@ public class FreeType
         [DllImport( NATIVE_LIB, EntryPoint = "getMetrics", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetMetricsNative( IntPtr address );
 
-        public SizeMetrics GetMetrics() => new SizeMetrics( GetMetricsNative( Address ) );
+        public SizeMetrics GetMetrics()
+        {
+            return new SizeMetrics( GetMetricsNative( Address ) );
+        }
     }
 
     // ========================================================================
@@ -541,42 +601,66 @@ public class FreeType
         [DllImport( NATIVE_LIB, EntryPoint = "getXppem", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetXppemNative( IntPtr metrics );
 
-        public int GetXppem() => GetXppemNative( Address );
+        public int GetXppem()
+        {
+            return GetXppemNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getYppem", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetYppemNative( IntPtr metrics );
 
-        public int GetYppem() => GetYppemNative( Address );
+        public int GetYppem()
+        {
+            return GetYppemNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getXscale", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetXScaleNative( IntPtr metrics );
 
-        public int GetXScale() => GetXScaleNative( Address );
+        public int GetXScale()
+        {
+            return GetXScaleNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getYscale", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetYscaleNative( IntPtr metrics );
 
-        public int GetYscale() => GetYscaleNative( Address );
+        public int GetYscale()
+        {
+            return GetYscaleNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getAscender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAscenderNative( IntPtr metrics );
 
-        public int GetAscender() => GetAscenderNative( Address );
+        public int GetAscender()
+        {
+            return GetAscenderNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getDescender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetDescenderNative( IntPtr metrics );
 
-        public int GetDescender() => GetDescenderNative( Address );
+        public int GetDescender()
+        {
+            return GetDescenderNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHeightNative( IntPtr metrics );
 
-        public int GetHeight() => GetHeightNative( Address );
+        public int GetHeight()
+        {
+            return GetHeightNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getMaxAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetMaxAdvanceNative( IntPtr metrics );
 
-        public int GetMaxAdvance() => GetMaxAdvanceNative( Address );
+        public int GetMaxAdvance()
+        {
+            return GetMaxAdvanceNative( Address );
+        }
     }
 
     // ========================================================================
@@ -592,59 +676,89 @@ public class FreeType
         [DllImport( NATIVE_LIB, EntryPoint = "getMetrics", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetMetricsNative( IntPtr slot );
 
-        public GlyphMetrics GetMetrics() => new GlyphMetrics( GetMetricsNative( Address ) );
+        public GlyphMetrics GetMetrics()
+        {
+            return new GlyphMetrics( GetMetricsNative( Address ) );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getLinearHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetLinearHoriAdvanceNative( IntPtr slot );
 
-        public int GetLinearHoriAdvance() => GetLinearHoriAdvanceNative( Address );
+        public int GetLinearHoriAdvance()
+        {
+            return GetLinearHoriAdvanceNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getLinearVertAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetLinearVertAdvanceNative( IntPtr slot );
 
-        public int GetLinearVertAdvance() => GetLinearVertAdvanceNative( Address );
+        public int GetLinearVertAdvance()
+        {
+            return GetLinearVertAdvanceNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getAdvanceX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAdvanceXNative( IntPtr slot );
 
-        public int GetAdvanceX() => GetAdvanceXNative( Address );
+        public int GetAdvanceX()
+        {
+            return GetAdvanceXNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getAdvanceY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAdvanceYNative( IntPtr slot );
 
-        public int GetAdvanceY() => GetAdvanceYNative( Address );
+        public int GetAdvanceY()
+        {
+            return GetAdvanceYNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getFormat", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetFormatNative( IntPtr slot );
 
-        public int GetFormat() => GetFormatNative( Address );
+        public int GetFormat()
+        {
+            return GetFormatNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getBitmap", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetBitmapNative( IntPtr slot );
 
-        public Bitmap GetBitmap() => new Bitmap( GetBitmapNative( Address ) );
+        public Bitmap GetBitmap()
+        {
+            return new Bitmap( GetBitmapNative( Address ) );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getBitmapLeft", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetBitmapLeftNative( IntPtr slot );
 
-        public int GetBitmapLeft() => GetBitmapLeftNative( Address );
+        public int GetBitmapLeft()
+        {
+            return GetBitmapLeftNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getBitmapTop", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetBitmapTopNative( IntPtr slot );
 
-        public int GetBitmapTop() => GetBitmapTopNative( Address );
+        public int GetBitmapTop()
+        {
+            return GetBitmapTopNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "renderGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool RenderGlyphNative( IntPtr slot, int renderMode );
 
-        public bool RenderGlyph( int renderMode ) => RenderGlyphNative( Address, renderMode );
+        public bool RenderGlyph( int renderMode )
+        {
+            return RenderGlyphNative( Address, renderMode );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetGlyphFromSlotNative( IntPtr glyphSlot );
 
         public Glyph GetGlyph()
         {
-            var glyphAddress = GetGlyphFromSlotNative( Address );
+            IntPtr glyphAddress = GetGlyphFromSlotNative( Address );
 
             if ( glyphAddress == IntPtr.Zero )
             {
@@ -706,7 +820,7 @@ public class FreeType
 
         public void ToBitmap( int renderMode )
         {
-            var bitmapAddress = ToBitmapNative( Address, renderMode );
+            IntPtr bitmapAddress = ToBitmapNative( Address, renderMode );
 
             if ( bitmapAddress == IntPtr.Zero )
             {
@@ -767,26 +881,35 @@ public class FreeType
         {
         }
 
-        public int GetRows() => GetRowsNative( Address );
+        public int GetRows()
+        {
+            return GetRowsNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getRows", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetRowsNative( IntPtr bitmap );
 
-        public int GetWidth() => GetWidthNative( Address );
+        public int GetWidth()
+        {
+            return GetWidthNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getWidth", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetWidthNative( IntPtr bitmap );
 
-        public int GetPitch() => GetPitchNative( Address );
+        public int GetPitch()
+        {
+            return GetPitchNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getPitch", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetPitchNative( IntPtr bitmap );
 
         public byte[] GetBuffer()
         {
-            var rows  = GetRows();
-            var width = GetWidth();
-            var pitch = Math.Abs( GetPitch() );
+            int rows  = GetRows();
+            int width = GetWidth();
+            int pitch = Math.Abs( GetPitch() );
 
             if ( rows == 0 )
             {
@@ -794,7 +917,7 @@ public class FreeType
                 return new byte[ 1 ];
             }
 
-            var nativeBufferPtr = GetBufferNative( Address );
+            IntPtr nativeBufferPtr = GetBufferNative( Address );
 
             if ( nativeBufferPtr == IntPtr.Zero )
             {
@@ -815,11 +938,11 @@ public class FreeType
 
         public Pixmap GetPixmap( int format, Color color, float gamma )
         {
-            var    width     = GetWidth();
-            var    rows      = GetRows();
-            var    src       = GetBuffer(); // Get the managed byte array copy of the native buffer
-            var    pixelMode = GetPixelMode();
-            var    rowBytes  = Math.Abs( GetPitch() );
+            int    width     = GetWidth();
+            int    rows      = GetRows();
+            byte[] src       = GetBuffer(); // Get the managed byte array copy of the native buffer
+            int    pixelMode = GetPixelMode();
+            int    rowBytes  = Math.Abs( GetPitch() );
             Pixmap pixmap;
 
             if ( ( color == Color.White )
@@ -837,9 +960,9 @@ public class FreeType
             {
                 pixmap = new Pixmap( width, rows, LughFormat.RGBA8888 );
 
-                var rgba   = Color.ToRgba8888( color ); // Assuming Color has a ToRGBA8888 method
-                var srcRow = new byte[ rowBytes ];
-                var dstRow = new int[ width ];
+                uint rgba   = Color.ToRgba8888( color ); // Assuming Color has a ToRGBA8888 method
+                var  srcRow = new byte[ rowBytes ];
+                var  dstRow = new int[ width ];
 
                 // Directly access Pixmap's pixel buffer, assuming it's a Buffer< byte > or similar
                 // and can be wrapped by an Buffer< int > for efficiency.
@@ -859,7 +982,7 @@ public class FreeType
 
                         for ( int i = 0, x = 0; x < width; i++, x += 8 )
                         {
-                            var b = srcRow[ i ];
+                            byte b = srcRow[ i ];
 
                             for ( int ii = 0, n = Math.Min( 8, width - x ); ii < n; ii++ )
                             {
@@ -879,8 +1002,8 @@ public class FreeType
                 }
                 else
                 {
-                    var rgb = rgba & 0xffffff00;
-                    var a   = rgba & 0xff;
+                    uint rgb = rgba & 0xffffff00;
+                    uint a   = rgba & 0xff;
 
                     for ( var y = 0; y < rows; y++ )
                     {
@@ -888,7 +1011,7 @@ public class FreeType
 
                         for ( var x = 0; x < width; x++ )
                         {
-                            var alpha = srcRow[ x ] & 0xff;
+                            int alpha = srcRow[ x ] & 0xff;
 
                             if ( alpha == 0 )
                             {
@@ -910,13 +1033,13 @@ public class FreeType
                 }
             }
 
-            var converted = pixmap;
+            Pixmap converted = pixmap;
 
             if ( format != pixmap.GLPixelFormat )
             {
                 converted          = new Pixmap( pixmap.Width, pixmap.Height, format );
                 converted.Blending = Pixmap.BlendType.None;       // Assuming SetBlending method
-                converted.DrawPixmap( pixmap, 0, 0 );              // Assuming DrawPixmap method
+                converted.DrawPixmap( pixmap, 0, 0 );             // Assuming DrawPixmap method
                 converted.Blending = Pixmap.BlendType.SourceOver; // Assuming SetBlending method
 
                 pixmap.Dispose();
@@ -928,12 +1051,18 @@ public class FreeType
         [DllImport( NATIVE_LIB, EntryPoint = "getNumGray", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetNumGrayNative( IntPtr bitmap );
 
-        public int GetNumGray() => GetNumGrayNative( Address );
+        public int GetNumGray()
+        {
+            return GetNumGrayNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getPixelMode", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetPixelModeNative( IntPtr bitmap );
 
-        public int GetPixelMode() => GetPixelModeNative( Address );
+        public int GetPixelMode()
+        {
+            return GetPixelModeNative( Address );
+        }
     }
 
     // ========================================================================
@@ -949,42 +1078,66 @@ public class FreeType
         [DllImport( NATIVE_LIB, EntryPoint = "getWidth", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetWidthNative( IntPtr metrics );
 
-        public int GetWidth() => GetWidthNative( Address );
+        public int GetWidth()
+        {
+            return GetWidthNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHeightNative( IntPtr metrics );
 
-        public int GetHeight() => GetHeightNative( Address );
+        public int GetHeight()
+        {
+            return GetHeightNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getHoriBearingX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriBearingXNative( IntPtr metrics );
 
-        public int GetHoriBearingX() => GetHoriBearingXNative( Address );
+        public int GetHoriBearingX()
+        {
+            return GetHoriBearingXNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getHoriBearingY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriBearingYNative( IntPtr metrics );
 
-        public int GetHoriBearingY() => GetHoriBearingYNative( Address );
+        public int GetHoriBearingY()
+        {
+            return GetHoriBearingYNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriAdvanceNative( IntPtr metrics );
 
-        public int GetHoriAdvance() => GetHoriAdvanceNative( Address );
+        public int GetHoriAdvance()
+        {
+            return GetHoriAdvanceNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getVertBearingX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertBearingXNative( IntPtr metrics );
 
-        public int GetVertBearingX() => GetVertBearingXNative( Address );
+        public int GetVertBearingX()
+        {
+            return GetVertBearingXNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getVertBearingY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertBearingYNative( IntPtr metrics );
 
-        public int GetVertBearingY() => GetVertBearingYNative( Address );
+        public int GetVertBearingY()
+        {
+            return GetVertBearingYNative( Address );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "getVertAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertAdvanceNative( IntPtr metrics );
 
-        public int GetVertAdvance() => GetVertAdvanceNative( Address );
+        public int GetVertAdvance()
+        {
+            return GetVertAdvanceNative( Address );
+        }
     }
 
     // ========================================================================
@@ -1000,8 +1153,10 @@ public class FreeType
         [DllImport( NATIVE_LIB, EntryPoint = "set", CallingConvention = CallingConvention.Cdecl )]
         private static extern void SetNative( IntPtr stroker, int radius, int lineCap, int lineJoin, int miterLimit );
 
-        public void Set( int radius, int lineCap, int lineJoin, int miterLimit ) =>
+        public void Set( int radius, int lineCap, int lineJoin, int miterLimit )
+        {
             SetNative( Address, radius, lineCap, lineJoin, miterLimit );
+        }
 
         [DllImport( NATIVE_LIB, EntryPoint = "done", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneStrokerNative( IntPtr stroker );

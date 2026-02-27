@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Input;
@@ -55,7 +56,7 @@ public class InputEventQueue
     private const int MOUSE_SCROLLED = 7;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Processes and drains the events in the queue using the specified input processor.
     /// </summary>
@@ -83,12 +84,13 @@ public class InputEventQueue
         }
 
         var index = 0;
-        var count = processingArray.Length;
+        int count = processingArray.Length;
 
         while ( index < count )
         {
-            var eventType = processingArray[ index++ ];
-            CurrentEventTime = ( ( long )processingArray[ index++ ] << 32 ) | ( processingArray[ index++ ] & 0xFFFFFFFFL );
+            int eventType = processingArray[ index++ ];
+            CurrentEventTime = ( ( long )processingArray[ index++ ] << 32 )
+                             | ( processingArray[ index++ ] & 0xFFFFFFFFL );
 
             switch ( eventType )
             {
@@ -167,11 +169,11 @@ public class InputEventQueue
     {
         lock ( this )
         {
-            var q = _queue.ToArray();
+            int[] q = _queue.ToArray();
 
-            for ( var n = _queue.Count; i < n; )
+            for ( int n = _queue.Count; i < n; )
             {
-                var type = q[ i ];
+                int type = q[ i ];
 
                 if ( type == nextType )
                 {
@@ -360,7 +362,7 @@ public class InputEventQueue
         lock ( this )
         {
             // Skip any queued touch dragged events for the same pointer.
-            for ( var i = Next( TOUCH_DRAGGED, 0 ); i >= 0; i = Next( TOUCH_DRAGGED, i + 6 ) )
+            for ( int i = Next( TOUCH_DRAGGED, 0 ); i >= 0; i = Next( TOUCH_DRAGGED, i + 6 ) )
             {
                 if ( _queue[ i + 5 ] == pointer )
                 {
@@ -394,7 +396,7 @@ public class InputEventQueue
         lock ( this )
         {
             // Skip any queued mouse moved events.
-            for ( var i = Next( MOUSE_MOVED, 0 ); i >= 0; i = Next( MOUSE_MOVED, i + 5 ) )
+            for ( int i = Next( MOUSE_MOVED, 0 ); i >= 0; i = Next( MOUSE_MOVED, i + 5 ) )
             {
                 _queue[ i ]     = SKIP;
                 _queue[ i + 3 ] = 2;
@@ -436,4 +438,3 @@ public class InputEventQueue
 
 // ============================================================================
 // ============================================================================
-

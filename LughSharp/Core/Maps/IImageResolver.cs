@@ -24,7 +24,9 @@
 
 using System;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
@@ -82,9 +84,10 @@ public interface IImageResolver
                 throw new ArgumentException( "Image name cannot be null or whitespace", nameof( name ) );
             }
 
-            if ( !_images.TryGetValue( name, out var texture ) )
+            if ( !_images.TryGetValue( name, out Texture? texture ) )
             {
-                throw new KeyNotFoundException( $"The image with name '{name}' was not found in the images dictionary." );
+                throw new
+                    KeyNotFoundException( $"The image with name '{name}' was not found in the images dictionary." );
             }
 
             return new TextureRegion( texture );
@@ -106,7 +109,7 @@ public interface IImageResolver
         public AssetManagerImageResolver( AssetManager assetManager )
         {
             _assetManager = assetManager
-                            ?? throw new ArgumentNullException( nameof( assetManager ), "AssetManager cannot be null" );
+                         ?? throw new ArgumentNullException( nameof( assetManager ), "AssetManager cannot be null" );
         }
 
         /// <summary>
@@ -173,4 +176,3 @@ public interface IImageResolver
 
 // ============================================================================
 // ============================================================================
-

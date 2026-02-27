@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Input;
 using LughSharp.Core.Main;
@@ -34,6 +35,7 @@ using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
+
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -46,7 +48,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// <typeparam name="TNode"> The type of nodes in the tree. </typeparam>
 /// <typeparam name="TValue"> The type of values for each node. </typeparam>
 [PublicAPI]
-public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue>.TreeStyle >
+public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValue >.TreeStyle >
     where TNode : Tree< TNode, TValue >.Node
 {
     public TNode?         RangeStart    { get; set; }
@@ -110,7 +112,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         _selection = new TreeSelection( this )
         {
             Actor    = this,
-            Multiple = true,
+            Multiple = true
         };
 
         SetStyle( style );
@@ -160,7 +162,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         }
         else
         {
-            var existingIndex = RootNodes.IndexOf( node );
+            int existingIndex = RootNodes.IndexOf( node );
 
             if ( existingIndex != -1 )
             {
@@ -197,7 +199,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         }
         else
         {
-            var before = RootNodes[ index - 1 ];
+            TNode before = RootNodes[ index - 1 ];
 
             actorIndex = before.Actor!.GetZIndex() + before.CountActors();
         }
@@ -223,7 +225,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
             return;
         }
 
-        var actorIndex = node.Actor!.GetZIndex();
+        int actorIndex = node.Actor!.GetZIndex();
 
         if ( actorIndex != -1 )
         {
@@ -260,7 +262,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
             throw new RuntimeException( "Style should not be null!" );
         }
 
-        var width = Math.Max( Style.Plus.MinWidth, Style.Minus.MinWidth );
+        float width = Math.Max( Style.Plus.MinWidth, Style.Minus.MinWidth );
 
         if ( Style.PlusOver != null )
         {
@@ -288,14 +290,14 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
     private void ComputeSize( List< TNode > nodes, float indent, float plusMinusWidth )
     {
-        var ySpacing = YSpacing;
-        var spacing  = _iconSpacingLeft + _iconSpacingRight;
+        float ySpacing = YSpacing;
+        float spacing  = _iconSpacingLeft + _iconSpacingRight;
 
         for ( int i = 0, n = nodes.Count; i < n; i++ )
         {
-            var node     = nodes[ i ];
-            var rowWidth = indent + plusMinusWidth;
-            var actor    = node.Actor;
+            TNode  node     = nodes[ i ];
+            float  rowWidth = indent + plusMinusWidth;
+            Actor? actor    = node.Actor;
 
             if ( actor != null )
             {
@@ -340,14 +342,14 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
     private float Layout( List< TNode > nodes, float indent, float y, float plusMinusWidth )
     {
-        var ySpacing        = YSpacing;
-        var iconSpacingLeft = _iconSpacingLeft;
-        var spacing         = iconSpacingLeft + _iconSpacingRight;
+        float ySpacing        = YSpacing;
+        float iconSpacingLeft = _iconSpacingLeft;
+        float spacing         = iconSpacingLeft + _iconSpacingRight;
 
         for ( int i = 0, n = nodes.Count; i < n; i++ )
         {
-            var node = nodes[ i ];
-            var x    = indent + plusMinusWidth;
+            TNode node = nodes[ i ];
+            float x    = indent + plusMinusWidth;
 
             if ( node.Icon != null )
             {
@@ -407,9 +409,9 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
     private void Draw( IBatch batch, List< TNode > nodes, float indent, float plusMinusWidth )
     {
-        var   cullingArea = CullingArea;
-        float cullBottom  = 0;
-        float cullTop     = 0;
+        Rectangle? cullingArea = CullingArea;
+        float      cullBottom  = 0;
+        float      cullTop     = 0;
 
         if ( cullingArea != null )
         {
@@ -417,19 +419,19 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
             cullTop    = cullBottom + cullingArea.Height;
         }
 
-        var style = Style;
+        TreeStyle? style = Style;
 
-        var x       = X;
-        var y       = Y;
-        var expandX = x + indent;
-        var iconX   = expandX + plusMinusWidth + _iconSpacingLeft;
+        float x       = X;
+        float y       = Y;
+        float expandX = x + indent;
+        float iconX   = expandX + plusMinusWidth + _iconSpacingLeft;
 
         for ( int i = 0, n = nodes.Count; i < n; i++ )
         {
-            var node   = nodes[ i ];
-            var actor  = node.Actor ?? throw new RuntimeException( "node.Actor cannot be null!" );
-            var actorY = actor.Y;
-            var height = node.Height;
+            TNode node   = nodes[ i ];
+            Actor actor  = node.Actor ?? throw new RuntimeException( "node.Actor cannot be null!" );
+            float actorY = actor.Y;
+            float height = node.Height;
 
             if ( ( cullingArea == null ) || ( ( ( actorY + height ) >= cullBottom ) && ( actorY <= cullTop ) ) )
             {
@@ -439,18 +441,18 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                                    style.Selection,
                                    batch,
                                    x,
-                                   ( y + actorY ) - ( YSpacing / 2 ),
+                                   y + actorY - ( YSpacing / 2 ),
                                    Width,
                                    height + YSpacing );
                 }
                 else if ( ( node == OverNode ) && ( style?.Over != null ) )
                 {
-                    DrawOver( node, style.Over, batch, x, ( y + actorY ) - ( YSpacing / 2 ), Width, height + YSpacing );
+                    DrawOver( node, style.Over, batch, x, y + actorY - ( YSpacing / 2 ), Width, height + YSpacing );
                 }
 
                 if ( node.Icon != null )
                 {
-                    var iconY = y + actorY + Math.Round( ( height - node.Icon.MinHeight ) / 2 );
+                    double iconY = y + actorY + Math.Round( ( height - node.Icon.MinHeight ) / 2 );
 
                     batch.Color = actor.Color;
                     DrawIcon( node, node.Icon, batch, iconX, ( float )iconY );
@@ -459,8 +461,8 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
                 if ( node.NodeChildren?.Count > 0 )
                 {
-                    var expandIcon = GetExpandIcon( node, iconX );
-                    var iconY      = y + actorY + Math.Round( ( height - expandIcon.MinHeight ) / 2 );
+                    ISceneDrawable expandIcon = GetExpandIcon( node, iconX );
+                    double         iconY      = y + actorY + Math.Round( ( height - expandIcon.MinHeight ) / 2 );
 
                     DrawExpandIcon( node, expandIcon, batch, expandX, ( float )iconY );
                 }
@@ -478,12 +480,14 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         }
     }
 
-    protected void DrawSelection( TNode node, ISceneDrawable selection, IBatch batch, float x, float y, float width, float height )
+    protected void DrawSelection( TNode node, ISceneDrawable selection, IBatch batch, float x, float y, float width,
+                                  float height )
     {
         selection.Draw( batch, x, y, width, height );
     }
 
-    protected void DrawOver( TNode node, ISceneDrawable over, IBatch batch, float x, float y, float width, float height )
+    protected void DrawOver( TNode node, ISceneDrawable over, IBatch batch, float x, float y, float width,
+                             float height )
     {
         over.Draw( batch, x, y, width, height );
     }
@@ -509,10 +513,10 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         var over = false;
 
         if ( ( node == OverNode )
-             && ( Engine.Api.App.AppType == Platform.ApplicationType.WindowsGL )
-             && ( !_selection.Multiple || ( !InputUtils.CtrlKey() && !InputUtils.ShiftKey() ) ) )
+          && ( Engine.Api.App.AppType == Platform.ApplicationType.WindowsGL )
+          && ( !_selection.Multiple || ( !InputUtils.CtrlKey() && !InputUtils.ShiftKey() ) ) )
         {
-            var mouseX = ScreenToLocalCoordinates( _tmp.Set( Engine.Api.Input.GetX(), 0 ) ).X;
+            float mouseX = ScreenToLocalCoordinates( _tmp.Set( Engine.Api.Input.GetX(), 0 ) ).X;
 
             if ( ( mouseX >= 0 ) && ( mouseX < iconX ) )
             {
@@ -527,7 +531,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
         if ( over )
         {
-            var icon = node.IsExpanded ? Style.MinusOver : Style.PlusOver;
+            ISceneDrawable? icon = node.IsExpanded ? Style.MinusOver : Style.PlusOver;
 
             if ( icon != null )
             {
@@ -550,8 +554,8 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
     {
         for ( int i = 0, n = nodes.Count; i < n; i++ )
         {
-            var node   = nodes[ i ];
-            var height = node.Height;
+            TNode node   = nodes[ i ];
+            float height = node.Height;
 
             rowY -= node.Height - height; // Node subclass may increase getHeight.
 
@@ -583,7 +587,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
     {
         for ( int i = 0, n = nodes.Count; i < n; i++ )
         {
-            var node = nodes[ i ];
+            TNode node = nodes[ i ];
 
             if ( node.Actor?.Y < low )
             {
@@ -638,8 +642,8 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
     {
         for ( int i = 0, n = RootNodes.Count; i < n; i++ )
         {
-            var node       = RootNodes[ i ];
-            var actorIndex = node.Actor!.GetZIndex();
+            TNode node       = RootNodes[ i ];
+            int   actorIndex = node.Actor!.GetZIndex();
 
             if ( actorIndex != -1 )
             {
@@ -685,7 +689,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
     {
         for ( int i = 0, n = values.Count; i < n; i++ )
         {
-            var node = FindNode( values[ i ] );
+            TNode? node = FindNode( values[ i ] );
 
             if ( node != null )
             {
@@ -718,7 +722,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         for ( int i = 0, n = nodes.Count; i < n; i++ )
         {
             //TODO: Refactor to remove recursiveness 
-            var found = FindNode( nodes[ i ].NodeChildren!, value );
+            Node? found = FindNode( nodes[ i ].NodeChildren!, value );
 
             if ( found != null )
             {
@@ -827,11 +831,11 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         protected override void OnChanged()
         {
             _parent.RangeStart = Size() switch
-            {
-                0     => null,
-                1     => First(),
-                var _ => _parent.RangeStart,
-            };
+                                 {
+                                     0     => null,
+                                     1     => First(),
+                                     var _ => _parent.RangeStart
+                                 };
         }
     }
 
@@ -853,7 +857,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         public ISceneDrawable? Background { get; set; }
 
         // ====================================================================
-        
+
         public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
         {
             Plus      = plus;
@@ -904,7 +908,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         public List< TNode >? NodeChildren { get; set; } = [ ];
 
         // ====================================================================
-        
+
         private Actor? _actor;
 
         /// <summary>
@@ -927,11 +931,11 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
             {
                 if ( _actor != null )
                 {
-                    var tree = GetTree();
+                    Tree< TNode, TValue >? tree = GetTree();
 
                     if ( tree != null )
                     {
-                        var index = _actor.GetZIndex();
+                        int index = _actor.GetZIndex();
 
                         tree.RemoveActorAt( index, true );
                         tree.AddActorAt( index, value! );
@@ -951,7 +955,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
             IsExpanded = expanded;
 
-            var tree = GetTree();
+            Tree< TNode, TValue >? tree = GetTree();
 
             if ( ( tree == null ) || ( NodeChildren == null ) || ( _actor == null ) )
             {
@@ -963,8 +967,8 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                 return;
             }
 
-            var children   = NodeChildren.ToArray();
-            var actorIndex = _actor.GetZIndex() + 1;
+            TNode[]? children   = NodeChildren.ToArray();
+            int      actorIndex = _actor.GetZIndex() + 1;
 
             if ( expanded )
             {
@@ -995,8 +999,8 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                 return 1;
             }
 
-            var childIndex = actorIndex + 1;
-            var children   = NodeChildren!.ToArray();
+            int     childIndex = actorIndex + 1;
+            TNode[] children   = NodeChildren!.ToArray();
 
             for ( int i = 0, n = children.Length; i < n; i++ )
             {
@@ -1017,7 +1021,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                 return;
             }
 
-            var children = NodeChildren?.ToArray();
+            TNode[]? children = NodeChildren?.ToArray();
 
             if ( children == null )
             {
@@ -1068,7 +1072,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                 return;
             }
 
-            var tree = GetTree();
+            Tree< TNode, TValue >? tree = GetTree();
 
             if ( tree != null )
             {
@@ -1084,7 +1088,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                 }
                 else
                 {
-                    var before = NodeChildren[ childIndex - 1 ];
+                    TNode before = NodeChildren[ childIndex - 1 ];
                     actorIndex = before.Actor!.GetZIndex() + before.CountActors();
                 }
 
@@ -1120,7 +1124,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         /// </summary>
         public void Remove()
         {
-            var tree = GetTree();
+            Tree< TNode, TValue >? tree = GetTree();
 
             if ( tree != null )
             {
@@ -1139,14 +1143,14 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         public void Remove( TNode? node )
         {
             if ( ( node == null )
-                 || ( NodeChildren == null )
-                 || !NodeChildren.Remove( node )
-                 || !IsExpanded )
+              || ( NodeChildren == null )
+              || !NodeChildren.Remove( node )
+              || !IsExpanded )
             {
                 return;
             }
 
-            var tree = GetTree();
+            Tree< TNode, TValue >? tree = GetTree();
 
             if ( ( tree == null ) || ( node.Actor == null ) )
             {
@@ -1163,11 +1167,11 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         {
             if ( IsExpanded && ( _actor != null ) )
             {
-                var tree = GetTree();
+                Tree< TNode, TValue >? tree = GetTree();
 
                 if ( ( tree != null ) && ( NodeChildren != null ) )
                 {
-                    var actorIndex = _actor.GetZIndex() + 1;
+                    int actorIndex = _actor.GetZIndex() + 1;
 
                     for ( int i = 0, n = NodeChildren.Count; i < n; i++ )
                     {
@@ -1212,16 +1216,16 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                 return;
             }
 
-            var tree = GetTree();
+            Tree< TNode, TValue >? tree = GetTree();
 
             if ( tree == null )
             {
                 return;
             }
 
-            var children   = NodeChildren?.ToArray();
-            var n          = NodeChildren?.Count;
-            var actorIndex = _actor!.GetZIndex() + 1;
+            TNode[]? children   = NodeChildren?.ToArray();
+            int?     n          = NodeChildren?.Count;
+            int      actorIndex = _actor!.GetZIndex() + 1;
 
             for ( var i = 0; i < n; i++ )
             {
@@ -1236,8 +1240,8 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
         public int GetLevel()
         {
-            var level   = 0;
-            var current = this;
+            var   level   = 0;
+            Node? current = this;
 
             do
             {
@@ -1291,7 +1295,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         /// </summary>
         public void ExpandTo()
         {
-            var node = Parent;
+            TNode? node = Parent;
 
             while ( node != null )
             {
@@ -1303,7 +1307,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         public void FindExpandedValues( List< TValue > values )
         {
             if ( IsExpanded
-                 && !Tree< TNode, TValue >.FindExpandedValues( NodeChildren!, values ) )
+              && !Tree< TNode, TValue >.FindExpandedValues( NodeChildren!, values ) )
             {
                 values.Add( Value! );
             }
@@ -1313,7 +1317,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         {
             for ( int i = 0, n = values.Count; i < n; i++ )
             {
-                var node = FindNode( values[ i ] );
+                TNode? node = FindNode( values[ i ] );
 
                 if ( node is not null )
                 {
@@ -1340,7 +1344,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
         {
             Guard.Against.Null( node );
 
-            var current = node;
+            TNode? current = node;
 
             do
             {
@@ -1366,7 +1370,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                 return false;
             }
 
-            var parent = this;
+            Node? parent = this;
 
             do
             {
@@ -1393,7 +1397,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
         public override void OnClicked( InputEvent ev, float x, float y )
         {
-            var node = _tree.GetNodeAt( y );
+            TNode? node = _tree.GetNodeAt( y );
 
             if ( node == null )
             {
@@ -1410,7 +1414,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                 // Select range (shift).
                 _tree.RangeStart ??= node;
 
-                var rangeStart = _tree.RangeStart;
+                TNode? rangeStart = _tree.RangeStart;
 
                 if ( !InputUtils.CtrlKey() )
                 {
@@ -1422,8 +1426,8 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
                     return;
                 }
 
-                var start = rangeStart.Actor.Y;
-                var end   = node.Actor.Y;
+                float start = rangeStart.Actor.Y;
+                float end   = node.Actor.Y;
 
                 if ( start > end )
                 {
@@ -1444,7 +1448,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
             if ( ( node.NodeChildren?.Count > 0 ) && ( !_tree._selection.Multiple || !InputUtils.CtrlKey() ) )
             {
                 // Toggle expanded if left of icon.
-                var rowX = node.Actor?.X;
+                float? rowX = node.Actor?.X;
 
                 if ( node.Icon != null )
                 {
@@ -1499,4 +1503,3 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree<TNode, TValue
 
 // ============================================================================
 // ============================================================================
-

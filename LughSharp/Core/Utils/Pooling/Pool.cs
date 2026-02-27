@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Pooling;
@@ -146,7 +147,7 @@ public class Pool< T > where T : class
     {
         for ( int i = 0, n = objects.Count; i < n; i++ )
         {
-            var obj = objects[ i ];
+            T obj = objects[ i ];
 
             if ( _freeObjects.Count < MaxFreeObjects )
             {
@@ -167,7 +168,7 @@ public class Pool< T > where T : class
     /// </summary>
     public void Clear()
     {
-        foreach ( var obj in _freeObjects )
+        foreach ( T obj in _freeObjects )
         {
             Discard( obj );
         }
@@ -178,7 +179,10 @@ public class Pool< T > where T : class
     /// <summary>
     /// The number of objects available to be obtained.
     /// </summary>
-    public int GetFree() => _freeObjects.Count;
+    public int GetFree()
+    {
+        return _freeObjects.Count;
+    }
 }
 
 // ============================================================================

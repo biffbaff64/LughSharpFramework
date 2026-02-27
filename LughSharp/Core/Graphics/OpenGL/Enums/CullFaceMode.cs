@@ -37,14 +37,14 @@ public enum CullFaceMode
     Back         = IGL.GL_BACK,
     Left         = IGL.GL_LEFT,
     Right        = IGL.GL_RIGHT,
-    FrontAndBack = IGL.GL_FRONT_AND_BACK,
+    FrontAndBack = IGL.GL_FRONT_AND_BACK
 }
 
 [PublicAPI]
 public enum FrontFaceDirection
 {
     Clockwise        = IGL.GL_CW,
-    CounterClockwise = IGL.GL_CCW,
+    CounterClockwise = IGL.GL_CCW
 }
 
 // ========================================================================

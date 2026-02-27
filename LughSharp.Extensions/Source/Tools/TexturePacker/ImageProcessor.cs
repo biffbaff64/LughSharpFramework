@@ -30,12 +30,15 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 using Rectangle = System.Drawing.Rectangle;
@@ -102,12 +105,12 @@ public class ImageProcessor
             throw new RuntimeException( $"Error reading image: {file}", ex );
         }
 
-        var name = file.FullName;
+        string name = file.FullName;
 
         // Strip extension.
         name = Path.GetFileNameWithoutExtension( name );
 
-        var rect = AddImage( image, name );
+        TexturePackerRect? rect = AddImage( image, name );
 
         if ( ( rect != null ) && Settings.LimitMemory )
         {
@@ -125,7 +128,7 @@ public class ImageProcessor
     /// <returns></returns>
     public TexturePackerRect? AddImage( Bitmap? image, string? name )
     {
-        var rect = ProcessImage( image, name );
+        TexturePackerRect? rect = ProcessImage( image, name );
 
         if ( rect == null )
         {
@@ -134,9 +137,9 @@ public class ImageProcessor
 
         if ( Settings.IsAlias )
         {
-            var crc = Hash( rect.GetImage( this ) );
+            string crc = Hash( rect.GetImage( this ) );
 
-            if ( _crcs.TryGetValue( crc, out var existing ) )
+            if ( _crcs.TryGetValue( crc, out TexturePackerRect? existing ) )
             {
                 // Image already exists, add current rect as an alias to the existing one.
                 existing?.Aliases.Add( new TexturePackerAlias( rect ) );
@@ -178,8 +181,8 @@ public class ImageProcessor
 
         name ??= string.Empty;
 
-        var width  = image.Width;
-        var height = image.Height;
+        int width  = image.Width;
+        int height = image.Height;
 
         if ( image.PixelFormat != PixelFormat.Format32bppArgb )
         {
@@ -188,7 +191,7 @@ public class ImageProcessor
             Graphics.FromImage( image ).DrawImage( image, 0, 0, width, height );
         }
 
-        var    isPatch = name.EndsWith( ".9" );
+        bool   isPatch = name.EndsWith( ".9" );
         int[]? splits  = null;
         int[]? pads    = null;
 
@@ -203,7 +206,7 @@ public class ImageProcessor
             pads   = GetPads( image, name, splits );
 
             // Preserve reference to the large image before re-assigning the 'image' variable.
-            var sourceImage = image;
+            Bitmap sourceImage = image;
 
             // Strip split pixels.
             width  -= 2;
@@ -214,12 +217,14 @@ public class ImageProcessor
 
             // Draw the content from the original image (starting at 1,1)
             // onto the new smaller bitmap (starting at 0,0).
-            using ( var g = Graphics.FromImage( newImage ) )
+            using ( Graphics g = Graphics.FromImage( newImage ) )
             {
                 g.DrawImage( sourceImage,
                              new Rectangle( 0, 0, width, height ), // Destination Rectangle (0, 0 to new W, H)
-                             1, 1,                                 // Source X, Y (Start at 1, 1 to skip border)
-                             width, height,                        // Source Width, Height (FIXED DIMENSIONS)
+                             1,
+                             1, // Source X, Y (Start at 1, 1 to skip border)
+                             width,
+                             height, // Source Width, Height (FIXED DIMENSIONS)
                              GraphicsUnit.Pixel );
             }
 
@@ -239,7 +244,7 @@ public class ImageProcessor
             if ( Scale < 1 )
             {
                 // Scaling down: Use HighQualityBicubic for good quality downscaling
-                var g = Graphics.FromImage( newImage );
+                Graphics g = Graphics.FromImage( newImage );
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.DrawImage( image, 0, 0, width, height );
                 g.Dispose();
@@ -247,7 +252,7 @@ public class ImageProcessor
             else
             {
                 // Scaling up or no scaling: Apply rendering hints
-                var g = Graphics.FromImage( newImage );
+                Graphics g = Graphics.FromImage( newImage );
                 g.CompositingQuality = CompositingQuality.HighQuality;   // VALUE_RENDER_QUALITY
                 g.InterpolationMode  = Resampling.ToInterpolationMode(); // Map resampling value
                 g.DrawImage( image, 0, 0, width, height );
@@ -256,11 +261,11 @@ public class ImageProcessor
         }
 
         // Strip digits, if any, from the end of name and use as index.
-        var index = -1;
+        int index = -1;
 
         if ( Settings.UseIndexes )
         {
-            var match = _indexPattern.Match( name );
+            Match match = _indexPattern.Match( name );
 
             if ( match.Success )
             {
@@ -281,7 +286,7 @@ public class ImageProcessor
             {
                 Splits    = splits,
                 Pads      = pads,
-                CanRotate = false,
+                CanRotate = false
             };
         }
         else
@@ -335,20 +340,20 @@ public class ImageProcessor
             return new TexturePackerRect( source, 0, 0, width, height, false );
         }
 
-        var bitmapData = source.LockBits( new Rectangle( 0, 0, width, height ),
-                                          ImageLockMode.ReadOnly,
-                                          PixelFormat.Format32bppArgb );
+        BitmapData bitmapData = source.LockBits( new Rectangle( 0, 0, width, height ),
+                                                 ImageLockMode.ReadOnly,
+                                                 PixelFormat.Format32bppArgb );
 
         try
         {
             unsafe
             {
                 var ptr    = ( byte* )bitmapData.Scan0;
-                var stride = bitmapData.Stride;
+                int stride = bitmapData.Stride;
 
                 // Y-Stripping Logic
                 var top    = 0;
-                var bottom = height;
+                int bottom = height;
 
                 if ( Settings.StripWhitespaceY )
                 {
@@ -357,7 +362,7 @@ public class ImageProcessor
 
                     for ( var y = 0; y < height; y++ )
                     {
-                        var rowPtr = ptr + ( y * stride );
+                        byte* rowPtr = ptr + ( y * stride );
 
                         for ( var x = 0; x < width; x++ )
                         {
@@ -374,9 +379,9 @@ public class ImageProcessor
                     // Find BOTTOM
                 outer2:
 
-                    for ( var y = height - 1; y >= top; y-- )
+                    for ( int y = height - 1; y >= top; y-- )
                     {
-                        var rowPtr = ptr + ( y * stride );
+                        byte* rowPtr = ptr + ( y * stride );
 
                         for ( var x = 0; x < width; x++ )
                         {
@@ -405,7 +410,7 @@ public class ImageProcessor
 
                 // X-Stripping Logic
                 var left  = 0;
-                var right = width;
+                int right = width;
 
                 if ( Settings.StripWhitespaceX )
                 {
@@ -414,9 +419,9 @@ public class ImageProcessor
 
                     for ( var x = 0; x < width; x++ )
                     {
-                        for ( var y = top; y < bottom; y++ )
+                        for ( int y = top; y < bottom; y++ )
                         {
-                            var rowPtr = ptr + ( y * stride );
+                            byte* rowPtr = ptr + ( y * stride );
 
                             if ( rowPtr[ ( x * 4 ) + 3 ] > Settings.AlphaThreshold )
                             {
@@ -430,11 +435,11 @@ public class ImageProcessor
                     // Find RIGHT
                 outer4:
 
-                    for ( var x = width - 1; x >= left; x-- )
+                    for ( int x = width - 1; x >= left; x-- )
                     {
-                        for ( var y = top; y < bottom; y++ )
+                        for ( int y = top; y < bottom; y++ )
                         {
-                            var rowPtr = ptr + ( y * stride );
+                            byte* rowPtr = ptr + ( y * stride );
 
                             if ( rowPtr[ ( x * 4 ) + 3 ] > Settings.AlphaThreshold )
                             {
@@ -459,8 +464,8 @@ public class ImageProcessor
                     }
                 }
 
-                var newWidth  = right - left;
-                var newHeight = bottom - top;
+                int newWidth  = right - left;
+                int newHeight = bottom - top;
 
                 if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
                 {
@@ -472,7 +477,7 @@ public class ImageProcessor
                 // Create a new Bitmap representing the stripped area
                 var strippedImage = new Bitmap( newWidth, newHeight, source.PixelFormat );
 
-                using ( var g = Graphics.FromImage( strippedImage ) )
+                using ( Graphics g = Graphics.FromImage( strippedImage ) )
                 {
                     g.DrawImage( source,
                                  new Rectangle( 0, 0, newWidth, newHeight ),
@@ -499,9 +504,9 @@ public class ImageProcessor
     /// <returns> The Alpha value. </returns>
     private unsafe int GetAlpha( BitmapData data, int x, int y )
     {
-        var ptr      = ( byte* )data.Scan0;
-        var pixelPtr = ptr + ( y * data.Stride ) + ( x * 4 ); // 4 bytes per pixel (ARGB)
-        int alpha    = pixelPtr[ 3 ];
+        var   ptr      = ( byte* )data.Scan0;
+        byte* pixelPtr = ptr + ( y * data.Stride ) + ( x * 4 ); // 4 bytes per pixel (ARGB)
+        int   alpha    = pixelPtr[ 3 ];
 
         return alpha;
     }
@@ -512,10 +517,10 @@ public class ImageProcessor
     /// </summary>
     private int[]? GetSplits( Bitmap image, string name )
     {
-        var startX = GetSplitPoint( image, name, 1, 0, true, true );
-        var endX   = GetSplitPoint( image, name, startX, 0, false, true );
-        var startY = GetSplitPoint( image, name, 0, 1, true, false );
-        var endY   = GetSplitPoint( image, name, 0, startY, false, false );
+        int startX = GetSplitPoint( image, name, 1, 0, true, true );
+        int endX   = GetSplitPoint( image, name, startX, 0, false, true );
+        int startY = GetSplitPoint( image, name, 0, 1, true, false );
+        int endY   = GetSplitPoint( image, name, 0, startY, false, false );
 
         // Ensure pixels after the end are not invalid.
         GetSplitPoint( image, name, endX + 1, 0, true, true );
@@ -568,11 +573,11 @@ public class ImageProcessor
     /// </summary>
     private int[]? GetPads( Bitmap image, string name, int[]? splits )
     {
-        var bottom = image.Height - 1;
-        var right  = image.Width - 1;
+        int bottom = image.Height - 1;
+        int right  = image.Width - 1;
 
-        var startX = GetSplitPoint( image, name, 1, bottom, true, true );
-        var startY = GetSplitPoint( image, name, right, 1, true, false );
+        int startX = GetSplitPoint( image, name, 1, bottom, true, true );
+        int startY = GetSplitPoint( image, name, right, 1, true, false );
 
         // No need to hunt for the end if a start was never found.
         var endX = 0;
@@ -646,7 +651,7 @@ public class ImageProcessor
             endY   = ( int )Math.Round( endY * Scale );
         }
 
-        var pads = new[] { startX, endX, startY, endY };
+        int[] pads = new[] { startX, endX, startY, endY };
 
         if ( ( splits != null ) && Equals( pads, splits ) )
         {
@@ -668,16 +673,16 @@ public class ImageProcessor
     {
         var rgba = new int[ 4 ];
 
-        var next   = xAxis ? startX : startY;
-        var end    = xAxis ? bitmap.Width : bitmap.Height;
-        var breakA = startPoint ? 255 : 0;
+        int next   = xAxis ? startX : startY;
+        int end    = xAxis ? bitmap.Width : bitmap.Height;
+        int breakA = startPoint ? 255 : 0;
 
-        var x = startX;
-        var y = startY;
+        int x = startX;
+        int y = startY;
 
-        var bitmapData = bitmap.LockBits( new Rectangle( 0, 0, bitmap.Width, bitmap.Height ),
-                                          ImageLockMode.ReadOnly,
-                                          PixelFormat.Format32bppArgb );
+        BitmapData bitmapData = bitmap.LockBits( new Rectangle( 0, 0, bitmap.Width, bitmap.Height ),
+                                                 ImageLockMode.ReadOnly,
+                                                 PixelFormat.Format32bppArgb );
 
         try
         {
@@ -696,7 +701,7 @@ public class ImageProcessor
                         y = next;
                     }
 
-                    var pixelPtr = ptr + ( y * bitmapData.Stride ) + ( x * 4 ); // 4 bytes per pixel (ARGB)
+                    byte* pixelPtr = ptr + ( y * bitmapData.Stride ) + ( x * 4 ); // 4 bytes per pixel (ARGB)
 
                     rgba[ 0 ] = pixelPtr[ 2 ]; // Red
                     rgba[ 1 ] = pixelPtr[ 1 ]; // Green
@@ -736,14 +741,14 @@ public class ImageProcessor
             using var sha1 = SHA1.Create();
 
             // Ensure image is the correct format.
-            var width  = image.Width;
-            var height = image.Height;
+            int width  = image.Width;
+            int height = image.Height;
 
             if ( image.PixelFormat != PixelFormat.Format32bppArgb )
             {
                 var convertedImage = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-                using ( var g = Graphics.FromImage( convertedImage ) )
+                using ( Graphics g = Graphics.FromImage( convertedImage ) )
                 {
                     g.DrawImage( image, 0, 0 );
                 }
@@ -751,9 +756,9 @@ public class ImageProcessor
                 image = convertedImage;
             }
 
-            var bitmapData = image.LockBits( new Rectangle( 0, 0, width, height ),
-                                             ImageLockMode.ReadOnly,
-                                             PixelFormat.Format32bppArgb );
+            BitmapData bitmapData = image.LockBits( new Rectangle( 0, 0, width, height ),
+                                                    ImageLockMode.ReadOnly,
+                                                    PixelFormat.Format32bppArgb );
 
             try
             {
@@ -764,7 +769,7 @@ public class ImageProcessor
 
                 for ( var y = 0; y < height; y++ )
                 {
-                    var row = bitmapData.Scan0 + ( y * bitmapData.Stride );
+                    IntPtr row = bitmapData.Scan0 + ( y * bitmapData.Stride );
                     // Copy the row data from the unmanaged pointer into the managed byte array
                     Marshal.Copy( row, pixels, 0, width * BYTES_PER_PIXEL );
 
@@ -779,7 +784,7 @@ public class ImageProcessor
                 // Finalize the hash with any remaining data in the internal buffer
                 sha1.TransformFinalBlock( [ ], 0, 0 ); // Pass an empty byte array
 
-                var hashBytes = sha1.Hash;
+                byte[]? hashBytes = sha1.Hash;
 
                 return new BigInteger( hashBytes! ).ToString( "x" ).ToLower();
             }

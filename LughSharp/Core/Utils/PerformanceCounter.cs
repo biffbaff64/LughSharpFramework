@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Logging;
 
@@ -69,7 +70,7 @@ public class PerformanceCounter
     public bool Valid { get; set; }
 
     // ========================================================================
-    
+
     private const float NANO2_SECONDS = 1f / 1000000000.0f;
 
     private long _lastTick;
@@ -101,7 +102,7 @@ public class PerformanceCounter
     /// </summary>
     public void Tick()
     {
-        var t = TimeHelpers.NanoTime();
+        long t = TimeHelpers.NanoTime();
 
         if ( _lastTick > 0L )
         {
@@ -127,7 +128,7 @@ public class PerformanceCounter
 
         Time.Put( Current );
 
-        var currentLoad = delta == 0f ? 0f : Current / delta;
+        float currentLoad = delta == 0f ? 0f : Current / delta;
 
         Load.Put( delta > 1f ? currentLoad : ( delta * currentLoad ) + ( ( 1f - delta ) * Load.Latest ) );
 

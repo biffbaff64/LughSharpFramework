@@ -24,6 +24,7 @@
 
 using System.Drawing.Drawing2D;
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -34,7 +35,7 @@ public enum Resampling
     None,
     Nearest,
     Bilinear,
-    Bicubic,
+    Bicubic
 }
 
 [PublicAPI]
@@ -44,11 +45,11 @@ public static class ResamplingExtensions
     public static InterpolationMode ToInterpolationMode( this Resampling resampling )
     {
         return resampling switch
-        {
-            Resampling.Nearest  => InterpolationMode.NearestNeighbor,
-            Resampling.Bilinear => InterpolationMode.Bilinear,
-            Resampling.Bicubic  => InterpolationMode.Bicubic,
-            var _               => InterpolationMode.Default,
-        };
+               {
+                   Resampling.Nearest  => InterpolationMode.NearestNeighbor,
+                   Resampling.Bilinear => InterpolationMode.Bilinear,
+                   Resampling.Bicubic  => InterpolationMode.Bicubic,
+                   var _               => InterpolationMode.Default
+               };
     }
 }

@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Input;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Utils.Collections;
@@ -171,7 +172,7 @@ public class Selection< T > : IDisableable, IDisposable
     {
         _old.Clear();
 
-        foreach ( var item in Selected )
+        foreach ( T item in Selected )
         {
             _old.Add( item );
         }
@@ -181,7 +182,7 @@ public class Selection< T > : IDisableable, IDisposable
     {
         Selected.Clear();
 
-        foreach ( var item in _old )
+        foreach ( T item in _old )
         {
             Selected.Add( item );
         }
@@ -233,7 +234,7 @@ public class Selection< T > : IDisableable, IDisposable
 
         for ( int i = 0, n = items.Count; i < n; i++ )
         {
-            var item = items[ i ];
+            T item = items[ i ];
 
             if ( item == null )
             {
@@ -296,7 +297,7 @@ public class Selection< T > : IDisableable, IDisposable
 
         for ( int i = 0, n = items.Count; i < n; i++ )
         {
-            var item = items[ i ];
+            T item = items[ i ];
 
             if ( item == null )
             {
@@ -353,7 +354,7 @@ public class Selection< T > : IDisableable, IDisposable
 
         for ( int i = 0, n = items.Count; i < n; i++ )
         {
-            var item = items[ i ];
+            T item = items[ i ];
 
             if ( item == null )
             {
@@ -468,7 +469,7 @@ public class Selection< T > : IDisableable, IDisposable
 
     public List< T > ToArray( List< T > array )
     {
-        var list = Selected.ToList();
+        List< T > list = Selected.ToList();
 
         list.AddRange( array );
 

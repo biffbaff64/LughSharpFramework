@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Audio;
 using LughSharp.Core.Main;
@@ -86,7 +87,7 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
     /// <returns>The loaded sound asset, or null if no sound is loaded.</returns>
     public override ISound? LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
-        var sound = LoadedSound;
+        ISound? sound = LoadedSound;
 
         LoadedSound = null;
 

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -71,14 +72,14 @@ public class RepeatablePolygonSprite
         var intersectionPoly = new Polygon();
         var triangulator     = new EarClippingTriangulator();
 
-        var boundRect = polygon.BoundingRectangle;
+        Rectangle boundRect = polygon.BoundingRectangle;
 
         if ( density is -1 )
         {
             density = boundRect.Width / region.GetRegionWidth();
         }
 
-        var regionAspectRatio = region.GetRegionHeight() / region.GetRegionWidth();
+        int regionAspectRatio = region.GetRegionHeight() / region.GetRegionWidth();
 
         _cols       = ( int )Math.Ceiling( density );
         _gridWidth  = boundRect.Width / density;
@@ -111,7 +112,7 @@ public class RepeatablePolygonSprite
                 {
                     _parts.Add( SnapToGrid( verts ) );
 
-                    var arr = triangulator.ComputeTriangles( verts );
+                    List< short > arr = triangulator.ComputeTriangles( verts );
 
                     _indices.Add( arr.ToArray() );
                 }
@@ -138,8 +139,8 @@ public class RepeatablePolygonSprite
     {
         for ( var i = 0; i < vertices?.Length; i += 2 )
         {
-            var numX = ( vertices[ i ] / _gridWidth ) % 1;
-            var numY = ( vertices[ i + 1 ] / _gridHeight ) % 1;
+            float numX = vertices[ i ] / _gridWidth % 1;
+            float numY = vertices[ i + 1 ] / _gridHeight % 1;
 
             if ( ( numX > 0.99f ) || ( numX < 0.01f ) )
             {
@@ -201,17 +202,17 @@ public class RepeatablePolygonSprite
 
         for ( var i = 0; i < _parts.Count; i++ )
         {
-            var verts = _parts[ i ];
+            float[]? verts = _parts[ i ];
 
             if ( verts == null )
             {
                 continue;
             }
 
-            var fullVerts = new float[ ( 5 * verts.Length ) / 2 ];
+            var fullVerts = new float[ 5 * verts.Length / 2 ];
             var idx       = 0;
-            var col       = i / _rows;
-            var row       = i % _rows;
+            int col       = i / _rows;
+            int row       = i % _rows;
 
             for ( var j = 0; j < verts.Length; j += 2 )
             {
@@ -220,8 +221,8 @@ public class RepeatablePolygonSprite
 
                 fullVerts[ idx++ ] = _color.ToFloatBitsAbgr();
 
-                var u = ( verts[ j ] % _gridWidth ) / _gridWidth;
-                var v = ( verts[ j + 1 ] % _gridHeight ) / _gridHeight;
+                float u = verts[ j ] % _gridWidth / _gridWidth;
+                float v = verts[ j + 1 ] % _gridHeight / _gridHeight;
 
                 if ( verts[ j ].Equals( col * _gridWidth ) )
                 {

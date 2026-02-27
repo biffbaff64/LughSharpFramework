@@ -39,7 +39,7 @@ namespace LughSharp.Core.Maps;
 public class MapLayers : IEnumerable< MapLayer >
 {
     private readonly List< MapLayer > _layers = new();
-    
+
     // ========================================================================
 
     /// <summary>
@@ -76,7 +76,7 @@ public class MapLayers : IEnumerable< MapLayer >
     /// </summary>
     public int GetIndex( string name )
     {
-        var layer = Get( name );
+        MapLayer? layer = Get( name );
 
         return layer != null ? GetIndex( layer ) : -1;
     }
@@ -156,4 +156,3 @@ public class MapLayers : IEnumerable< MapLayer >
 
 // ============================================================================
 // ============================================================================
-

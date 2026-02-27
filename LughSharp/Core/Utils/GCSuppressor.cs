@@ -24,6 +24,7 @@
 
 using System;
 using System.Runtime;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;

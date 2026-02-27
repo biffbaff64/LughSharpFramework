@@ -42,5 +42,5 @@ public enum TextureLimit
     MaxCombinedTextureImageUnits = IGL.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
 
     // The following is the number of texture coordinates available which usually is 8
-    MaxTextureCoords = IGL.GL_MAX_TEXTURE_COORDS,
+    MaxTextureCoords = IGL.GL_MAX_TEXTURE_COORDS
 }

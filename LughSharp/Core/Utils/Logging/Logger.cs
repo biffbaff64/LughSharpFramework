@@ -27,7 +27,9 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using Environment = System.Environment;
 
 namespace LughSharp.Core.Utils.Logging;
@@ -135,7 +137,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        var str = CreateMessage( DEBUG_TAG, callerID, message );
+        string str = CreateMessage( DEBUG_TAG, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -168,7 +170,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        var str = CreateMessage( ERROR_TAG, callerID, message );
+        string str = CreateMessage( ERROR_TAG, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -194,8 +196,8 @@ public static class Logger
             return;
         }
 
-        var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-        var str      = CreateMessage( DEBUG_TAG, callerID, message );
+        CallerID callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
+        string   str      = CreateMessage( DEBUG_TAG, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -232,7 +234,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        var str = CreateMessage( CHECKPOINT_TAG, callerID, "<Checkpoint>" );
+        string str = CreateMessage( CHECKPOINT_TAG, callerID, "<Checkpoint>" );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -261,8 +263,8 @@ public static class Logger
         var lineContent = new string( ch, length );
 
         // 2. Prepend the tag and space.
-        var fullLine = DEBUG_TAG + " : " + lineContent;
-        
+        string fullLine = DEBUG_TAG + " : " + lineContent;
+
         // 3. Loop only to output the line the required number of times.
         for ( var i = 0; i < lineCount; i++ )
         {
@@ -321,7 +323,7 @@ public static class Logger
             }
 
             // Get the base directory
-            var baseDirectory = AppContext.BaseDirectory;
+            string baseDirectory = AppContext.BaseDirectory;
 
             // Construct the log directory path
             _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";
@@ -334,8 +336,8 @@ public static class Logger
 
             using ( _streamWriter = new StreamWriter( _debugFilePath + _debugFileName, true ) )
             {
-                var dateTime = DateTime.Now;
-                var time     = dateTime.ToShortTimeString();
+                DateTime dateTime = DateTime.Now;
+                string   time     = dateTime.ToShortTimeString();
 
                 _streamWriter.Write( DIVIDER );
                 _streamWriter.Write( time, 0, time.Length );
@@ -359,7 +361,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void WriteToFile( string text )
     {
-        var filePath = _debugFilePath + _debugFileName;
+        string filePath = _debugFilePath + _debugFileName;
 
         // Check if the file exists before attempting to write
         if ( !File.Exists( filePath ) )
@@ -370,7 +372,7 @@ public static class Logger
         try
         {
             // Determine whether to add a new line based on the content itself
-            var contentToWrite = text;
+            string contentToWrite = text;
 
             if ( !text.EndsWith( Environment.NewLine ) )
             {
@@ -505,11 +507,11 @@ public static class Logger
     private static CallerID MakeCallerID( string callerFilePath, string callerMethod, int callerLine )
     {
         return new CallerID
-               {
-                   FileName   = Path.GetFileNameWithoutExtension( callerFilePath ),
-                   MethodName = callerMethod,
-                   LineNumber = callerLine,
-               };
+        {
+            FileName   = Path.GetFileNameWithoutExtension( callerFilePath ),
+            MethodName = callerMethod,
+            LineNumber = callerLine
+        };
     }
 
     /// <summary>
@@ -546,7 +548,7 @@ public static class Logger
                {
                    LOG_DEBUG
                        or LOG_ERROR => ( TraceLevel & traceLevel ) != 0,
-                   var _ => false,
+                   var _ => false
                };
     }
 

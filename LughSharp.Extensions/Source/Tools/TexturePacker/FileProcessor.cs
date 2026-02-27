@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Text.RegularExpressions;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Collections;
@@ -165,7 +167,7 @@ public class FileProcessor
             Guard.Against.Null( fileList, $"Could not get files from directory: {inputFileOrDir.FullName}" );
         }
 
-        var result = Process( fileList, outputRoot );
+        List< Entry > result = Process( fileList, outputRoot );
 
         return result;
     }
@@ -188,9 +190,9 @@ public class FileProcessor
 
         var allEntries = new List< Entry >();
 
-        foreach ( var mapEntry in dirToEntries )
+        foreach ( KeyValuePair< DirectoryInfo, List< Entry >? > mapEntry in dirToEntries )
         {
-            var dirEntries = mapEntry.Value;
+            List< Entry >? dirEntries = mapEntry.Value;
 
             if ( dirEntries == null )
             {
@@ -202,8 +204,8 @@ public class FileProcessor
                 dirEntries.Sort( EntryComparator );
             }
 
-            var inputDir     = mapEntry.Key;
-            var newOutputDir = default( DirectoryInfo? );
+            DirectoryInfo inputDir     = mapEntry.Key;
+            var           newOutputDir = default( DirectoryInfo? );
 
             if ( FlattenOutput )
             {
@@ -214,11 +216,11 @@ public class FileProcessor
                 newOutputDir = dirEntries.First().OutputDirectory;
             }
 
-            var outputName = inputDir.Name;
+            string outputName = inputDir.Name;
 
             if ( OutputSuffix != null )
             {
-                var match = RegexUtils.MatchFinalFolderPatternRegex().Match( outputName );
+                Match match = RegexUtils.MatchFinalFolderPatternRegex().Match( outputName );
 
                 if ( match.Success )
                 {
@@ -229,7 +231,7 @@ public class FileProcessor
             var entry = new Entry
             {
                 InputFile       = inputDir,
-                OutputDirectory = newOutputDir,
+                OutputDirectory = newOutputDir
             };
 
             if ( newOutputDir != null )
@@ -256,7 +258,7 @@ public class FileProcessor
             allEntries.Sort( EntryComparator );
         }
 
-        foreach ( var entry in allEntries )
+        foreach ( Entry entry in allEntries )
         {
             try
             {
@@ -297,9 +299,9 @@ public class FileProcessor
                                  Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
     {
         // Store empty entries for every directory.
-        foreach ( var file in files )
+        foreach ( FileInfo file in files )
         {
-            var dir = file.Directory;
+            DirectoryInfo? dir = file.Directory;
 
             if ( dir == null )
             {
@@ -317,7 +319,7 @@ public class FileProcessor
             }
         }
 
-        foreach ( var file in files )
+        foreach ( FileInfo file in files )
         {
             // Only process files, not directories
             if ( ( file.Attributes & FileAttributes.Directory ) != 0 )
@@ -329,7 +331,7 @@ public class FileProcessor
             // Apply input regex filters if any are set
             if ( InputRegex.Count > 0 )
             {
-                var found = InputRegex.Any( pattern => pattern.IsMatch( file.Name ) );
+                bool found = InputRegex.Any( pattern => pattern.IsMatch( file.Name ) );
 
                 if ( !found )
                 {
@@ -344,7 +346,7 @@ public class FileProcessor
             }
 
             // Determine output file name, applying suffix if needed
-            var outputName = file.Name;
+            string outputName = file.Name;
 
             if ( OutputSuffix != null )
             {
@@ -360,12 +362,12 @@ public class FileProcessor
                 OutputDirectory = outputDir,
                 OutputFileName = FlattenOutput
                     ? Path.Combine( outputRoot.FullName, outputName )
-                    : Path.Combine( outputDir.FullName, outputName ),
+                    : Path.Combine( outputDir.FullName, outputName )
             };
 
-            var dir = file.Directory!;
+            DirectoryInfo dir = file.Directory!;
 
-            if ( dirToEntries.TryGetValue( dir, out var value ) )
+            if ( dirToEntries.TryGetValue( dir, out List< Entry >? value ) )
             {
                 value?.Add( entry );
             }
@@ -377,15 +379,15 @@ public class FileProcessor
                 // getting only the subdirectories.
 
                 // Get the directory containing these files (assuming a non-flat structure)
-                var inputDir = files.FirstOrDefault( f => f.Directory != null )?.Directory;
+                DirectoryInfo? inputDir = files.FirstOrDefault( f => f.Directory != null )?.Directory;
 
                 if ( inputDir != null )
                 {
-                    var subdirectories = inputDir.GetDirectories();
+                    DirectoryInfo[] subdirectories = inputDir.GetDirectories();
 
-                    foreach ( var subdirInfo in subdirectories )
+                    foreach ( DirectoryInfo subdirInfo in subdirectories )
                     {
-                        var subdirOutput = outputDir.FullName.Length == 0
+                        DirectoryInfo subdirOutput = outputDir.FullName.Length == 0
                             ? new DirectoryInfo( subdirInfo.Name )
                             : new DirectoryInfo( Path.Combine( outputDir.FullName, subdirInfo.Name ) );
 
@@ -448,7 +450,7 @@ public class FileProcessor
     /// <param name="suffixes"></param>
     public void AddInputSuffix( params string[] suffixes )
     {
-        foreach ( var suffix in suffixes )
+        foreach ( string suffix in suffixes )
         {
             AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
         }
@@ -462,15 +464,15 @@ public class FileProcessor
     /// <returns> This IFileProcessor for chaining. </returns>
     public virtual void AddInputRegex( params string[] regexes )
     {
-        foreach ( var regex in regexes )
+        foreach ( string regex in regexes )
         {
             InputRegex.Add( new Regex( regex ) );
         }
     }
-    
+
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
     /// File processing information, detauiling:-
     /// <li>The input file, or directory, to be processed.</li>
@@ -516,7 +518,7 @@ public class FileProcessor
         {
             if ( args is { Length: > 0 } )
             {
-                foreach ( var t in args )
+                foreach ( object? t in args )
                 {
                     switch ( t )
                     {

@@ -26,8 +26,10 @@
 
 using System;
 using System.Text;
+
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
+
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -91,7 +93,7 @@ public unsafe partial class GLBindings
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        var utf8 = Encoding.UTF8.GetBytes( name );
+        byte[] utf8 = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLBINDATTRIBLOCATIONPROC >( "glBindAttribLocation", out _glBindAttribLocation );
 
@@ -188,7 +190,8 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DisableVertexAttribArray( GLuint index )
     {
-        GetDelegateForFunction< PFNGLDISABLEVERTEXATTRIBARRAYPROC >( "glDisableVertexAttribArray", out _glDisableVertexAttribArray );
+        GetDelegateForFunction< PFNGLDISABLEVERTEXATTRIBARRAYPROC >( "glDisableVertexAttribArray",
+                                                                     out _glDisableVertexAttribArray );
 
         _glDisableVertexAttribArray( index );
     }
@@ -198,7 +201,8 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void EnableVertexAttribArray( GLuint index )
     {
-        GetDelegateForFunction< PFNGLENABLEVERTEXATTRIBARRAYPROC >( "glEnableVertexAttribArray", out _glEnableVertexAttribArray );
+        GetDelegateForFunction< PFNGLENABLEVERTEXATTRIBARRAYPROC >( "glEnableVertexAttribArray",
+                                                                    out _glEnableVertexAttribArray );
 
         _glEnableVertexAttribArray( index );
     }
@@ -206,7 +210,8 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetActiveAttrib( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name )
+    public void GetActiveAttrib( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size,
+                                 GLenum* type, GLchar* name )
     {
         if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
@@ -228,7 +233,7 @@ public unsafe partial class GLBindings
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        var     name = stackalloc GLchar[ bufSize ];
+        GLchar* name = stackalloc GLchar[ bufSize ];
         GLsizei len;
 
         GetDelegateForFunction< PFNGLGETACTIVEATTRIBPROC >( "glGetActiveAttrib", out _glGetActiveAttrib );
@@ -247,7 +252,8 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetActiveUniform( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name )
+    public void GetActiveUniform( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size,
+                                  GLenum* type, GLchar* name )
     {
         if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
@@ -269,7 +275,7 @@ public unsafe partial class GLBindings
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        var     name = stackalloc GLchar[ bufSize ];
+        GLchar* name = stackalloc GLchar[ bufSize ];
         GLsizei len;
 
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMPROC >( "glGetActiveUniform", out _glGetActiveUniform );
@@ -416,7 +422,7 @@ public unsafe partial class GLBindings
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        var     infoLog = stackalloc GLchar[ bufSize ];
+        GLchar* infoLog = stackalloc GLchar[ bufSize ];
         GLsizei len;
 
         GetDelegateForFunction< PFNGLGETSHADERINFOLOGPROC >( "glGetShaderInfoLog", out _glGetShaderInfoLog );
@@ -451,7 +457,7 @@ public unsafe partial class GLBindings
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        var     source = stackalloc GLchar[ bufSize ];
+        GLchar* source = stackalloc GLchar[ bufSize ];
         GLsizei len;
 
         GetDelegateForFunction< PFNGLGETSHADERSOURCEPROC >( "glGetShaderSource", out _glGetShaderSource );
@@ -529,7 +535,8 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetVertexAttribPointerv( GLuint index, GLenum pname, IntPtr* pointer )
     {
-        GetDelegateForFunction< PFNGLGETVERTEXATTRIBPOINTERVPROC >( "glGetVertexAttribPointerv", out _glGetVertexAttribPointerv );
+        GetDelegateForFunction< PFNGLGETVERTEXATTRIBPOINTERVPROC >( "glGetVertexAttribPointerv",
+                                                                    out _glGetVertexAttribPointerv );
 
         _glGetVertexAttribPointerv( index, pname, pointer );
     }
@@ -539,7 +546,8 @@ public unsafe partial class GLBindings
     {
         var ptr = new void*[ pointer.Length ];
 
-        GetDelegateForFunction< PFNGLGETVERTEXATTRIBPOINTERVPROC >( "glGetVertexAttribPointerv", out _glGetVertexAttribPointerv );
+        GetDelegateForFunction< PFNGLGETVERTEXATTRIBPOINTERVPROC >( "glGetVertexAttribPointerv",
+                                                                    out _glGetVertexAttribPointerv );
 
         fixed ( void** p = &ptr[ 0 ] )
         {
@@ -588,7 +596,7 @@ public unsafe partial class GLBindings
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        var count   = stringParam.Length;
+        int count   = stringParam.Length;
         var strings = new GLchar[ count ][];
         var lengths = new GLint[ count ];
 
@@ -598,8 +606,8 @@ public unsafe partial class GLBindings
             lengths[ i ] = stringParam[ i ].Length;
         }
 
-        var pstring = stackalloc GLchar*[ count ];
-        var length  = stackalloc GLint[ count ];
+        GLchar** pstring = stackalloc GLchar*[ count ];
+        GLint*   length  = stackalloc GLint[ count ];
 
         for ( var i = 0; i < count; i++ )
         {
@@ -1232,13 +1240,15 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLuint pointer )
+    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride,
+                                     GLuint pointer )
     {
         VertexAttribPointer( index, size, type, normalized, stride, ( IntPtr )pointer );
     }
 
     /// <inheritdoc />
-    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer )
+    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride,
+                                     IntPtr pointer )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBPOINTERPROC >( "glVertexAttribPointer", out _glVertexAttribPointer );
 

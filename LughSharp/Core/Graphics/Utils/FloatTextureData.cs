@@ -25,10 +25,12 @@
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+
 using Platform = LughSharp.Core.Main.Platform;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -118,8 +120,8 @@ public class FloatTextureData : ITextureData
     public void ConsumeCustomData( int target )
     {
         if ( ( Engine.Api.App.AppType == Platform.ApplicationType.Android )
-             || ( Engine.Api.App.AppType == Platform.ApplicationType.IOS )
-             || ( Engine.Api.App.AppType == Platform.ApplicationType.WebGL ) )
+          || ( Engine.Api.App.AppType == Platform.ApplicationType.IOS )
+          || ( Engine.Api.App.AppType == Platform.ApplicationType.WebGL ) )
         {
             if ( !Engine.Api.Graphics.SupportsExtension( "OES_texture_float" ) )
             {

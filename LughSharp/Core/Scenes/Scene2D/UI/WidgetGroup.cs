@@ -26,6 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -96,12 +97,12 @@ public class WidgetGroup : Group, ILayout
             return;
         }
 
-        var parent = Parent;
+        Group? parent = Parent;
 
         if ( FillParent && ( parent != null ) )
         {
-            float parentWidth, parentHeight;
-            var   stage = Stage;
+            float  parentWidth, parentHeight;
+            Stage? stage = Stage;
 
             if ( ( stage != null ) && ( parent == stage.RootGroup ) )
             {
@@ -171,7 +172,7 @@ public class WidgetGroup : Group, ILayout
 
     protected void LoadActors( params Actor[] actors )
     {
-        foreach ( var actor in actors )
+        foreach ( Actor actor in actors )
         {
             AddActor( actor );
         }
@@ -185,11 +186,11 @@ public class WidgetGroup : Group, ILayout
 
     private static void SetLayoutEnabled( Group parent, bool enabled )
     {
-        var children = parent.Children;
+        SnapshotArrayList< Actor? > children = parent.Children;
 
         for ( int i = 0, n = children.Size; i < n; i++ )
         {
-            var actor = children.GetAt( i );
+            Actor? actor = children.GetAt( i );
 
             if ( actor is ILayout layout )
             {

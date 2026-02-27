@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
@@ -56,9 +57,9 @@ public class DistanceFieldFont : BitmapFont
         base.Load( data );
 
         // Distance field font rendering requires font texture to be filtered linear.
-        var regions = GetRegions();
+        List< TextureRegion > regions = GetRegions();
 
-        foreach ( var region in regions )
+        foreach ( TextureRegion region in regions )
         {
             region.Texture?.SetFilter( TextureFilterMode.Linear, TextureFilterMode.Linear );
         }
@@ -97,51 +98,51 @@ public class DistanceFieldFont : BitmapFont
     public ShaderProgram CreateDistanceFieldShader()
     {
         const string VERTEX_SHADER = "in vec4 "
-                                     + "a_position"
-                                     + ";\n" //
-                                     + "in vec4 "
-                                     + "a_color"
-                                     + ";\n" //
-                                     + "in vec2 "
-                                     + "u_texCoord" + "0;\n"
-                                     + "uniform mat4 u_projTrans;\n"
-                                     + "out vec4 v_color;\n"
-                                     + "out vec2 v_texCoords;\n"
-                                     + "\n"
-                                     + "void main() {\n"
-                                     + "	v_color = "
-                                     + "a_color"
-                                     + ";\n"
-                                     + "	v_color.a = v_color.a * (255.0/254.0);\n"
-                                     + "	v_texCoords = "
-                                     + "u_texCoord"
-                                     + "0;\n" //
-                                     + "	gl_Position =  u_projTrans * "
-                                     + "a_position"
-                                     + ";\n" //
-                                     + "}\n";
+                                   + "a_position"
+                                   + ";\n" //
+                                   + "in vec4 "
+                                   + "a_color"
+                                   + ";\n" //
+                                   + "in vec2 "
+                                   + "u_texCoord" + "0;\n"
+                                   + "uniform mat4 u_projTrans;\n"
+                                   + "out vec4 v_color;\n"
+                                   + "out vec2 v_texCoords;\n"
+                                   + "\n"
+                                   + "void main() {\n"
+                                   + "	v_color = "
+                                   + "a_color"
+                                   + ";\n"
+                                   + "	v_color.a = v_color.a * (255.0/254.0);\n"
+                                   + "	v_texCoords = "
+                                   + "u_texCoord"
+                                   + "0;\n" //
+                                   + "	gl_Position =  u_projTrans * "
+                                   + "a_position"
+                                   + ";\n" //
+                                   + "}\n";
 
         const string FRAGMENT_SHADER = "#ifdef GL_ES\n"
-                                       + "#define LOWP lowp\n"
-                                       + "precision mediump float;\n"
-                                       + "#endif\n"
-                                       + "\n"
-                                       + "uniform sampler2D u_texture;\n"
-                                       + "uniform float u_smoothing;\n"
-                                       + "in vec4 v_color;\n"
-                                       + "in vec2 v_texCoords;\n"
-                                       + "out vec4 fragColor;\n"
-                                       + "\n"
-                                       + "void main() {\n"
-                                       + "	if (u_smoothing > 0.0) {\n"
-                                       + "		float smoothing = 0.25 / u_smoothing;\n"
-                                       + "		float distance = texture(u_texture, v_texCoords).a;\n"
-                                       + "		float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, distance);\n"
-                                       + "		fragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
-                                       + "	} else {\n"
-                                       + "		fragColor = v_color * texture(u_texture, v_texCoords);\n"
-                                       + "	}\n"
-                                       + "}\n";
+                                     + "#define LOWP lowp\n"
+                                     + "precision mediump float;\n"
+                                     + "#endif\n"
+                                     + "\n"
+                                     + "uniform sampler2D u_texture;\n"
+                                     + "uniform float u_smoothing;\n"
+                                     + "in vec4 v_color;\n"
+                                     + "in vec2 v_texCoords;\n"
+                                     + "out vec4 fragColor;\n"
+                                     + "\n"
+                                     + "void main() {\n"
+                                     + "	if (u_smoothing > 0.0) {\n"
+                                     + "		float smoothing = 0.25 / u_smoothing;\n"
+                                     + "		float distance = texture(u_texture, v_texCoords).a;\n"
+                                     + "		float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, distance);\n"
+                                     + "		fragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
+                                     + "	} else {\n"
+                                     + "		fragColor = v_color * texture(u_texture, v_texCoords);\n"
+                                     + "	}\n"
+                                     + "}\n";
 
         var shader = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
 

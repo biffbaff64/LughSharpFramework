@@ -23,12 +23,14 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.Utils.Logging;
+
 using Quaternion = LughSharp.Core.Maths.Quaternion;
 
 namespace LughSharp.Core.Graphics.Cameras;
@@ -130,12 +132,12 @@ public abstract class Camera
     /// <param name="z"> the z-coordinate of the point to look at.</param>
     protected void LookAt( float x, float y, float z )
     {
-        var tmpVec = new Vector3().Set( x, y, z ).Sub( Position ).Nor();
+        Vector3 tmpVec = new Vector3().Set( x, y, z ).Sub( Position ).Nor();
 
         if ( !tmpVec.IsZero() )
         {
             // up and direction must ALWAYS be orthonormal vectors
-            var dot = tmpVec.Dot( Up );
+            float dot = tmpVec.Dot( Up );
 
             if ( Math.Abs( dot - 1 ) < NumberUtils.FLOAT_TOLERANCE )
             {
@@ -160,7 +162,7 @@ public abstract class Camera
     /// </summary>
     protected void NormalizeUp()
     {
-        var tmpVec = new Vector3().Set( Direction ).Crs( Up );
+        Vector3 tmpVec = new Vector3().Set( Direction ).Crs( Up );
         Up.Set( tmpVec ).Crs( Direction ).Nor();
     }
 
@@ -224,7 +226,7 @@ public abstract class Camera
     /// <param name="angle"> the angle, in degrees  </param>
     public void RotateAround( Vector3 point, Vector3 axis, float angle )
     {
-        var tmpVec = new Vector3().Set( point ).Sub( Position );
+        Vector3 tmpVec = new Vector3().Set( point ).Sub( Position );
 
         Translate( tmpVec );
         Rotate( axis, angle );
@@ -288,11 +290,11 @@ public abstract class Camera
                               float viewportWidth,
                               float viewportHeight )
     {
-        var x = screenCoords.X - viewportX;
-        var y = Engine.Api.Graphics.WindowHeight - screenCoords.Y - viewportY;
+        float x = screenCoords.X - viewportX;
+        float y = Engine.Api.Graphics.WindowHeight - screenCoords.Y - viewportY;
 
-        screenCoords.X = ( ( 2 * x ) / viewportWidth ) - 1;
-        screenCoords.Y = ( ( 2 * y ) / viewportHeight ) - 1;
+        screenCoords.X = ( 2 * x / viewportWidth ) - 1;
+        screenCoords.Y = ( 2 * y / viewportHeight ) - 1;
         screenCoords.Z = ( 2 * screenCoords.Z ) - 1;
         screenCoords.Prj( InvProjectionView );
 
@@ -362,8 +364,8 @@ public abstract class Camera
     {
         worldCoords.Prj( Combined );
 
-        worldCoords.X = ( ( viewportWidth * ( worldCoords.X + 1 ) ) / 2 ) + viewportX;
-        worldCoords.Y = ( ( viewportHeight * ( worldCoords.Y + 1 ) ) / 2 ) + viewportY;
+        worldCoords.X = ( viewportWidth * ( worldCoords.X + 1 ) / 2 ) + viewportX;
+        worldCoords.Y = ( viewportHeight * ( worldCoords.Y + 1 ) / 2 ) + viewportY;
         worldCoords.Z = ( worldCoords.Z + 1 ) / 2;
 
         return worldCoords;

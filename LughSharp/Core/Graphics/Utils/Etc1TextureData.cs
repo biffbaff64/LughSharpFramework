@@ -24,7 +24,9 @@
 
 using System;
 using System.IO;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -149,17 +151,17 @@ public class Etc1TextureData : ITextureData
 
         if ( !Engine.Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
-            var pixmap = _etc1.DecodeImage( _data, LughFormat.RGB565 );
+            Pixmap pixmap = _etc1.DecodeImage( _data, LughFormat.RGB565 );
 
             Engine.GL.TexImage2D( target,
-                           0,
-                           pixmap.GLInternalPixelFormat,
-                           pixmap.Width,
-                           pixmap.Height,
-                           0,
-                           pixmap.GLPixelFormat,
-                           pixmap.GLDataType,
-                           pixmap.PixelData );
+                                  0,
+                                  pixmap.GLInternalPixelFormat,
+                                  pixmap.Width,
+                                  pixmap.Height,
+                                  0,
+                                  pixmap.GLPixelFormat,
+                                  pixmap.GLDataType,
+                                  pixmap.PixelData );
 
             if ( UseMipMaps )
             {
@@ -174,13 +176,13 @@ public class Etc1TextureData : ITextureData
             fixed ( void* ptr = &_data.CompressedData.BackingArray()[ 0 ] )
             {
                 Engine.GL.CompressedTexImage2D( target,
-                                         0,
-                                         ETC1.ETC1_RGB8_OES,
-                                         Width,
-                                         Height,
-                                         0,
-                                         _data.CompressedData.Capacity - _data.DataOffset,
-                                         ( IntPtr )ptr );
+                                                0,
+                                                ETC1.ETC1_RGB8_OES,
+                                                Width,
+                                                Height,
+                                                0,
+                                                _data.CompressedData.Capacity - _data.DataOffset,
+                                                ( IntPtr )ptr );
             }
 
             if ( UseMipMaps )

@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
@@ -77,7 +78,7 @@ public class ParticleEffectLoader : SynchronousAssetLoader< ParticleEffect >
 
         var effect = new ParticleEffect();
         var param  = parameters as ParticleEffectParameter;
-        
+
         switch ( param )
         {
             case { AtlasFile: not null }:

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding;
@@ -92,8 +93,10 @@ public class PushbackStream
             else
             {
                 // Read from the underlying stream
-                var countBytesToRead = ( length - index ) > _temporaryBuffer.Length ? _temporaryBuffer.Length : length - index;
-                var countBytesRead   = _stream.Read( _temporaryBuffer, 0, countBytesToRead );
+                int countBytesToRead = ( length - index ) > _temporaryBuffer.Length
+                    ? _temporaryBuffer.Length
+                    : length - index;
+                int countBytesRead = _stream.Read( _temporaryBuffer, 0, countBytesToRead );
 
                 canReadStream = countBytesRead >= countBytesToRead;
 
@@ -138,4 +141,3 @@ public class PushbackStream
 
 // ============================================================================
 // ============================================================================
-

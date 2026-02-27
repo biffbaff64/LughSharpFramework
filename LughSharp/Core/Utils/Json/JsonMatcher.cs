@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Json;
@@ -30,7 +29,6 @@ namespace LughSharp.Core.Utils.Json;
 [PublicAPI]
 public class JsonMatcher
 {
-    
 }
 
 // ============================================================================

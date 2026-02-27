@@ -54,7 +54,7 @@ public class BodyDef
         /// <summary>
         /// positive mass, non-zero velocity determined by forces, moved by solver
         /// </summary>
-        DynamicBody = 2,
+        DynamicBody = 2
     }
 
     /// <summary>

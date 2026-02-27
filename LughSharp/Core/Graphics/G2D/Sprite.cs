@@ -292,8 +292,8 @@ public class Sprite : TextureRegion
             return;
         }
 
-        var x2 = x + width;
-        var y2 = y + height;
+        float x2 = x + width;
+        float y2 = y + height;
 
         Vertices[ IBatch.X1 ] = x; // Bottom left
         Vertices[ IBatch.Y1 ] = y;
@@ -334,19 +334,19 @@ public class Sprite : TextureRegion
             return;
         }
 
-        var x2 = _x + width;
-        var y2 = _y + height;
+        float x2 = _x + width;
+        float y2 = _y + height;
 
-        Vertices[ IBatch.X1 ] = _x;     // Bottom left
+        Vertices[ IBatch.X1 ] = _x; // Bottom left
         Vertices[ IBatch.Y1 ] = _y;
 
-        Vertices[ IBatch.X2 ] = _x;     // Top left
+        Vertices[ IBatch.X2 ] = _x; // Top left
         Vertices[ IBatch.Y2 ] = y2;
 
-        Vertices[ IBatch.X3 ] = x2;     // Top right
+        Vertices[ IBatch.X3 ] = x2; // Top right
         Vertices[ IBatch.Y3 ] = y2;
 
-        Vertices[ IBatch.X4 ] = x2;     // Bottom right
+        Vertices[ IBatch.X4 ] = x2; // Bottom right
         Vertices[ IBatch.Y4 ] = _y;
     }
 
@@ -373,19 +373,19 @@ public class Sprite : TextureRegion
             return;
         }
 
-        var x2 = x + Width;
-        var y2 = y + Height;
+        float x2 = x + Width;
+        float y2 = y + Height;
 
-        Vertices[ IBatch.X1 ] = x;      // Bottom left
+        Vertices[ IBatch.X1 ] = x; // Bottom left
         Vertices[ IBatch.Y1 ] = y;
 
-        Vertices[ IBatch.X2 ] = x;      // Top left
+        Vertices[ IBatch.X2 ] = x; // Top left
         Vertices[ IBatch.Y2 ] = y2;
 
-        Vertices[ IBatch.X3 ] = x2;     // Top right
+        Vertices[ IBatch.X3 ] = x2; // Top right
         Vertices[ IBatch.Y3 ] = y2;
 
-        Vertices[ IBatch.X4 ] = x2;     // Bottom right
+        Vertices[ IBatch.X4 ] = x2; // Bottom right
         Vertices[ IBatch.Y4 ] = y;
     }
 
@@ -497,16 +497,16 @@ public class Sprite : TextureRegion
             return;
         }
 
-        Vertices[ IBatch.X1 ] += xAmount;   // Bottom left
+        Vertices[ IBatch.X1 ] += xAmount; // Bottom left
         Vertices[ IBatch.Y1 ] += yAmount;
 
-        Vertices[ IBatch.X2 ] += xAmount;   // Top left
+        Vertices[ IBatch.X2 ] += xAmount; // Top left
         Vertices[ IBatch.Y2 ] += yAmount;
 
-        Vertices[ IBatch.X3 ] += xAmount;   // Top right
+        Vertices[ IBatch.X3 ] += xAmount; // Top right
         Vertices[ IBatch.Y3 ] += yAmount;
 
-        Vertices[ IBatch.X4 ] += xAmount;   // Bottom right
+        Vertices[ IBatch.X4 ] += xAmount; // Bottom right
         Vertices[ IBatch.Y4 ] += yAmount;
     }
 
@@ -518,7 +518,7 @@ public class Sprite : TextureRegion
     {
         Color.Set( tint );
 
-        var color = tint.ToFloatBitsAbgr();
+        float color = tint.ToFloatBitsAbgr();
 
         Vertices[ IBatch.C1 ] = color;
         Vertices[ IBatch.C2 ] = color;
@@ -533,7 +533,7 @@ public class Sprite : TextureRegion
     {
         Color.Set( r, g, b, a );
 
-        var color = Color.ToFloatBitsAbgr();
+        float color = Color.ToFloatBitsAbgr();
 
         Vertices[ IBatch.C1 ] = color;
         Vertices[ IBatch.C2 ] = color;
@@ -585,7 +585,7 @@ public class Sprite : TextureRegion
     {
         if ( clockwise )
         {
-            var temp = Vertices[ IBatch.V1 ];
+            float temp = Vertices[ IBatch.V1 ];
 
             Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];
             Vertices[ IBatch.V4 ] = Vertices[ IBatch.V3 ];
@@ -601,7 +601,7 @@ public class Sprite : TextureRegion
         }
         else
         {
-            var temp = Vertices[ IBatch.V1 ];
+            float temp = Vertices[ IBatch.V1 ];
 
             Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
             Vertices[ IBatch.V2 ] = Vertices[ IBatch.V3 ];
@@ -669,16 +669,16 @@ public class Sprite : TextureRegion
 
         _isDirty = false;
 
-        var originX = Width / 2f;
-        var originY = Height / 2f;
+        float originX = Width / 2f;
+        float originY = Height / 2f;
 
         // Local corners relative to center
-        var localX1      = -originX;
-        var localY1      = -originY;
-        var localX2      = localX1 + Width;
-        var localY2      = localY1 + Height;
-        var worldOriginX = _x - localX1;
-        var worldOriginY = _y - localY1;
+        float localX1      = -originX;
+        float localY1      = -originY;
+        float localX2      = localX1 + Width;
+        float localY2      = localY1 + Height;
+        float worldOriginX = _x - localX1;
+        float worldOriginY = _y - localY1;
 
         if ( ScaleX is not 1 || ScaleY is not 1 )
         {
@@ -690,30 +690,30 @@ public class Sprite : TextureRegion
 
         if ( Rotation != 0 )
         {
-            var cos = MathUtils.CosDeg( Rotation );
-            var sin = MathUtils.SinDeg( Rotation );
+            float cos = MathUtils.CosDeg( Rotation );
+            float sin = MathUtils.SinDeg( Rotation );
 
-            var localXCos  = localX1 * cos;
-            var localXSin  = localX1 * sin;
-            var localYCos  = localY1 * cos;
-            var localYSin  = localY1 * sin;
-            var localX2Cos = localX2 * cos;
-            var localX2Sin = localX2 * sin;
-            var localY2Cos = localY2 * cos;
-            var localY2Sin = localY2 * sin;
+            float localXCos  = localX1 * cos;
+            float localXSin  = localX1 * sin;
+            float localYCos  = localY1 * cos;
+            float localYSin  = localY1 * sin;
+            float localX2Cos = localX2 * cos;
+            float localX2Sin = localX2 * sin;
+            float localY2Cos = localY2 * cos;
+            float localY2Sin = localY2 * sin;
 
-            var x1 = localXCos - localYSin + worldOriginX;
-            var y1 = localYCos + localXSin + worldOriginY;
+            float x1 = localXCos - localYSin + worldOriginX;
+            float y1 = localYCos + localXSin + worldOriginY;
             Vertices[ IBatch.X1 ] = x1;
             Vertices[ IBatch.Y1 ] = y1;
 
-            var x2 = localXCos - localY2Sin + worldOriginX;
-            var y2 = localY2Cos + localXSin + worldOriginY;
+            float x2 = localXCos - localY2Sin + worldOriginX;
+            float y2 = localY2Cos + localXSin + worldOriginY;
             Vertices[ IBatch.X2 ] = x2;
             Vertices[ IBatch.Y2 ] = y2;
 
-            var x3 = localX2Cos - localY2Sin + worldOriginX;
-            var y3 = localY2Cos + localX2Sin + worldOriginY;
+            float x3 = localX2Cos - localY2Sin + worldOriginX;
+            float y3 = localY2Cos + localX2Sin + worldOriginY;
             Vertices[ IBatch.X3 ] = x3;
             Vertices[ IBatch.Y3 ] = y3;
 
@@ -722,10 +722,10 @@ public class Sprite : TextureRegion
         }
         else
         {
-            var x1 = localX1 + worldOriginX;
-            var y1 = localY1 + worldOriginY;
-            var x2 = localX2 + worldOriginX;
-            var y2 = localY2 + worldOriginY;
+            float x1 = localX1 + worldOriginX;
+            float y1 = localY1 + worldOriginY;
+            float x2 = localX2 + worldOriginX;
+            float y2 = localY2 + worldOriginY;
 
             Vertices[ IBatch.X1 ] = x1;
             Vertices[ IBatch.Y1 ] = y1;
@@ -749,12 +749,12 @@ public class Sprite : TextureRegion
     /// <returns> the bounding Rectangle </returns>
     public Rectangle GetBoundingRectangle()
     {
-        var vertices = GetVertices();
+        float[] vertices = GetVertices();
 
-        var minx = vertices[ IBatch.X1 ];
-        var miny = vertices[ IBatch.Y1 ];
-        var maxx = vertices[ IBatch.X1 ];
-        var maxy = vertices[ IBatch.Y1 ];
+        float minx = vertices[ IBatch.X1 ];
+        float miny = vertices[ IBatch.Y1 ];
+        float maxx = vertices[ IBatch.X1 ];
+        float maxy = vertices[ IBatch.Y1 ];
 
         minx = minx > vertices[ IBatch.X2 ] ? vertices[ IBatch.X2 ] : minx;
         minx = minx > vertices[ IBatch.X3 ] ? vertices[ IBatch.X3 ] : minx;
@@ -792,7 +792,7 @@ public class Sprite : TextureRegion
 
     public void Draw( IBatch batch, float alphaModulation )
     {
-        var oldAlpha = Alpha;
+        float oldAlpha = Alpha;
 
         Alpha = oldAlpha * alphaModulation;
 
@@ -954,7 +954,7 @@ public class Sprite : TextureRegion
     {
         set
         {
-            var color = Color;
+            Color color = Color;
 
             Color.Abgr8888ToColor( ref color, value );
 
@@ -975,10 +975,10 @@ public class Sprite : TextureRegion
     {
         get
         {
-            var minx = Vertices[ IBatch.X1 ];
-            var miny = Vertices[ IBatch.Y1 ];
-            var maxx = Vertices[ IBatch.X1 ];
-            var maxy = Vertices[ IBatch.Y1 ];
+            float minx = Vertices[ IBatch.X1 ];
+            float miny = Vertices[ IBatch.Y1 ];
+            float maxx = Vertices[ IBatch.X1 ];
+            float maxy = Vertices[ IBatch.Y1 ];
 
             minx = minx > Vertices[ IBatch.X2 ] ? Vertices[ IBatch.X2 ] : minx;
             minx = minx > Vertices[ IBatch.X3 ] ? Vertices[ IBatch.X3 ] : minx;
@@ -1017,7 +1017,7 @@ public class Sprite : TextureRegion
         {
             _color.A = value;
 
-            var color = Color.ToFloatBitsAbgr();
+            float color = Color.ToFloatBitsAbgr();
 
             Vertices[ IBatch.C1 ] = color;
             Vertices[ IBatch.C2 ] = color;
@@ -1049,9 +1049,9 @@ public class Sprite : TextureRegion
     {
         get
         {
-            var intBits = NumberUtils.FloatToIntColor( Vertices[ IBatch.C1 ] );
+            int intBits = NumberUtils.FloatToIntColor( Vertices[ IBatch.C1 ] );
 
-            var color = _color;
+            Color color = _color;
 
             color.R = ( intBits & 0xff ) / 255f;
             color.G = ( ( intBits >>> 8 ) & 0xff ) / 255f;
@@ -1062,9 +1062,15 @@ public class Sprite : TextureRegion
         }
     }
 
-    public virtual float GetX() => _x;
+    public virtual float GetX()
+    {
+        return _x;
+    }
 
-    public virtual float GetY() => _y;
+    public virtual float GetY()
+    {
+        return _y;
+    }
 
     /// <summary>
     /// Sets the x position where the sprite will be drawn. If origin, rotation,

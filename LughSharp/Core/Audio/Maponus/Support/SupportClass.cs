@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Audio.Maponus.Support;
@@ -122,9 +123,9 @@ public class SupportClass
     public static int ReadInput( Stream sourceStream, ref sbyte[] target, int start, int count )
     {
         var receiver  = new byte[ target.Length ];
-        var bytesRead = sourceStream.Read( receiver, start, count );
+        int bytesRead = sourceStream.Read( receiver, start, count );
 
-        for ( var i = start; i < ( start + bytesRead ); i++ )
+        for ( int i = start; i < ( start + bytesRead ); i++ )
         {
             target[ i ] = ( sbyte )receiver[ i ];
         }
@@ -181,8 +182,8 @@ public class SupportClass
                                             ref sbyte[] destinationArray,
                                             int destinationStart )
     {
-        var sourceCounter      = sourceStart;
-        var destinationCounter = destinationStart;
+        int sourceCounter      = sourceStart;
+        int destinationCounter = destinationStart;
 
         while ( sourceCounter < sourceEnd )
         {
@@ -195,4 +196,3 @@ public class SupportClass
 
 // ============================================================================
 // ============================================================================
-

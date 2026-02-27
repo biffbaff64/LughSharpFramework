@@ -48,10 +48,11 @@ public abstract class BaseClassFactory
     /// <returns>
     /// An initialized instance of the specified derived class.
     /// </returns>
-    public static T Create<T>() where T : BaseClassFactory, new()
+    public static T Create< T >() where T : BaseClassFactory, new()
     {
         var instance = new T();
         instance.InitializeInternal();
+
         return instance;
     }
 }

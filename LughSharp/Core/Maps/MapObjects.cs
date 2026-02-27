@@ -61,7 +61,7 @@ public class MapObjects : IEnumerable< MapObject >
     {
         for ( int i = 0, n = _objects.Count; i < n; i++ )
         {
-            var obj = _objects[ i ];
+            MapObject obj = _objects[ i ];
 
             if ( name.Equals( obj.Name ) )
             {
@@ -84,7 +84,7 @@ public class MapObjects : IEnumerable< MapObject >
 
         for ( int i = 0, n = _objects.Count; i < n; i++ )
         {
-            var obj = _objects[ i ];
+            MapObject obj = _objects[ i ];
 
             if ( obj.GetType() == typeof( T ) )
             {
@@ -100,25 +100,43 @@ public class MapObjects : IEnumerable< MapObject >
     /// first occurrence within this MapObject collection.
     /// </summary>
     /// <param name="name"> The name of the object to locate. </param>
-    public int GetIndex( string name ) => GetIndex( Get( name ) );
+    public int GetIndex( string name )
+    {
+        return GetIndex( Get( name ) );
+    }
 
     /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
-    public int GetIndex( MapObject obj ) => _objects.IndexOf( obj );
+    public int GetIndex( MapObject obj )
+    {
+        return _objects.IndexOf( obj );
+    }
 
     /// <inheritdoc cref="List{MapObject}.Count"/>
-    public int GetCount() => _objects.Count;
+    public int GetCount()
+    {
+        return _objects.Count;
+    }
 
     /// <inheritdoc cref="List{MapObject}.Add"/>
-    public virtual void Add( MapObject obj ) => _objects.Add( obj );
+    public virtual void Add( MapObject obj )
+    {
+        _objects.Add( obj );
+    }
 
     /// <inheritdoc cref="List{MapObject}.RemoveAt"/>
-    public void RemoveIndex( int index ) => _objects.RemoveAt( index );
+    public void RemoveIndex( int index )
+    {
+        _objects.RemoveAt( index );
+    }
 
     /// <inheritdoc cref="List{MapObject}.Remove"/>
-    public void Remove( MapObject obj ) => _objects.Remove( obj );
+    public void Remove( MapObject obj )
+    {
+        _objects.Remove( obj );
+    }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public IEnumerator< MapObject > GetEnumerator()
     {
@@ -134,4 +152,3 @@ public class MapObjects : IEnumerable< MapObject >
 
 // ============================================================================
 // ============================================================================
-

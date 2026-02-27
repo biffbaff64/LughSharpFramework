@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Window;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Input;
 using LughSharp.Core.Utils;
@@ -242,8 +244,8 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     {
         if ( _window.AppConfig.HdpiMode == HdpiMode.Pixels )
         {
-            var xScale = _window.Graphics.LogicalWidth / ( float )_window.Graphics.BackBufferWidth;
-            var yScale = _window.Graphics.LogicalHeight / ( float )_window.Graphics.BackBufferHeight;
+            float xScale = _window.Graphics.LogicalWidth / ( float )_window.Graphics.BackBufferWidth;
+            float yScale = _window.Graphics.LogicalHeight / ( float )_window.Graphics.BackBufferHeight;
 
             x = ( int )( x * xScale );
             y = ( int )( y * yScale );
@@ -277,7 +279,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Unknown MouseButton: {button}" ),
+                   var _ => throw new RuntimeException( $"Unknown MouseButton: {button}" )
                };
     }
 
@@ -290,7 +292,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                    IInput.Keys.FORWARD_DEL  => ( char )127,
                    IInput.Keys.NUMPAD_ENTER => '\n',
                    IInput.Keys.ENTER        => '\n',
-                   var _                    => ( char )0,
+                   var _                    => ( char )0
                };
     }
 
@@ -418,7 +420,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                    DotGLFW.Key.RightAlt     => IInput.Keys.ALT_RIGHT,
                    DotGLFW.Key.RightSuper   => IInput.Keys.SYM,
                    DotGLFW.Key.Menu         => IInput.Keys.MENU,
-                   var _                    => IInput.Keys.UNKNOWN,
+                   var _                    => IInput.Keys.UNKNOWN
                };
     }
 
@@ -462,7 +464,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                 _window.Graphics.RequestRendering();
                 _lastCharacter = ( char )0;
 
-                var character = CharacterForKeyCode( gdxKey );
+                char character = CharacterForKeyCode( gdxKey );
 
                 if ( character != 0 )
                 {
@@ -520,7 +522,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     public void MouseCallback( DotGLFW.Window window, DotGLFW.MouseButton button, DotGLFW.InputState state,
                                DotGLFW.ModifierKey mods )
     {
-        var gdxButton = button switch
+        int gdxButton = button switch
                         {
                             DotGLFW.MouseButton.ButtonLeft   => IInput.Buttons.LEFT,
                             DotGLFW.MouseButton.ButtonRight  => IInput.Buttons.RIGHT,
@@ -530,7 +532,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
                             // ----------------------------------
 
-                            var _ => -1,
+                            var _ => -1
                         };
 
         if ( Enum.IsDefined( typeof( DotGLFW.MouseButton ), button ) && ( gdxButton == -1 ) )
@@ -538,7 +540,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
             return;
         }
 
-        var time = TimeUtils.NanoTime();
+        long time = TimeUtils.NanoTime();
 
         if ( state == DotGLFW.InputState.Press )
         {
@@ -574,8 +576,8 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         if ( _window.AppConfig.HdpiMode == HdpiMode.Pixels )
         {
             // null check can be surpressed here because of above
-            var xScale = _window.Graphics.BackBufferWidth / ( float )_window.Graphics.LogicalWidth;
-            var yScale = _window.Graphics.BackBufferHeight / ( float )_window.Graphics.LogicalHeight;
+            float xScale = _window.Graphics.BackBufferWidth / ( float )_window.Graphics.LogicalWidth;
+            float yScale = _window.Graphics.BackBufferHeight / ( float )_window.Graphics.LogicalHeight;
 
             _deltaX = ( int )( _deltaX * xScale );
             _deltaY = ( int )( _deltaY * yScale );

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding;
@@ -52,4 +53,3 @@ public struct DecoderErrors
 
 // ============================================================================
 // ============================================================================
-

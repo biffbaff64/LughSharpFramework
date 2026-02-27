@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics;

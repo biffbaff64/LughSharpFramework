@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Assets;
@@ -74,7 +75,6 @@ public class AssetLoaderParameters : ILoaderParameters
 [PublicAPI]
 public class DefaultLoadedCallback( int refCount ) : ILoadedCallback
 {
-    
     public void FinishedLoading( AssetManager assetManager, string filename, Type? type )
     {
         assetManager.SetReferenceCount( filename, refCount );

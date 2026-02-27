@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics;
+
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;

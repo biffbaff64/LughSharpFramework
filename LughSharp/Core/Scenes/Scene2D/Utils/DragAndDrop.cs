@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.UI;
@@ -93,7 +94,7 @@ public class DragAndDrop
 
     public void RemoveSource( DragSource source )
     {
-        _sourceListeners.Remove( source, out var dragListener );
+        _sourceListeners.Remove( source, out DragListener? dragListener );
 
         source.Actor.RemoveCaptureListener( dragListener! );
     }
@@ -115,7 +116,7 @@ public class DragAndDrop
     {
         _targets.Clear();
 
-        foreach ( var entry in _sourceListeners )
+        foreach ( KeyValuePair< DragSource, DragListener > entry in _sourceListeners )
         {
             entry.Key.Actor.RemoveCaptureListener( entry.Value );
         }
@@ -135,7 +136,7 @@ public class DragAndDrop
             return;
         }
 
-        var stage = except.Actor.Stage;
+        Stage? stage = except.Actor.Stage;
 
         stage?.CancelTouchFocusExcept( listener, except.Actor );
     }
@@ -216,7 +217,7 @@ public class DragAndDrop
 
             if ( _parent is { CancelTouchFocus: true, DragPayload: not null } )
             {
-                var stage = _source.Actor.Stage;
+                Stage? stage = _source.Actor.Stage;
 
                 stage?.CancelTouchFocusExcept( this, _source.Actor );
             }
@@ -232,12 +233,12 @@ public class DragAndDrop
 
             _source.Drag( ev, x, y, pointer );
 
-            var stage = ev.Stage;
+            Stage? stage = ev.Stage;
 
             // Move the drag actor away, so it cannot be hit.
-            var   oldDragActor  = _parent.DragActor;
-            float oldDragActorX = 0;
-            float oldDragActorY = 0;
+            Actor? oldDragActor  = _parent.DragActor;
+            float  oldDragActorX = 0;
+            float  oldDragActorY = 0;
 
             if ( oldDragActor != null )
             {
@@ -246,10 +247,10 @@ public class DragAndDrop
                 oldDragActor.SetPosition( int.MaxValue, int.MaxValue );
             }
 
-            var stageX = ev.StageX + _parent._touchOffsetX;
-            var stageY = ev.StageY + _parent._touchOffsetY;
+            float stageX = ev.StageX + _parent._touchOffsetX;
+            float stageY = ev.StageY + _parent._touchOffsetY;
 
-            var hit = ev.Stage?.Hit( stageX, stageY, true )
+            Actor? hit = ev.Stage?.Hit( stageX, stageY, true )
                       ?? ev.Stage?.Hit( stageX, stageY, false );
 
             oldDragActor?.SetPosition( oldDragActorX, oldDragActorY );
@@ -263,7 +264,7 @@ public class DragAndDrop
             {
                 for ( int i = 0, n = _parent._targets.Count; i < n; i++ )
                 {
-                    var target = _parent._targets[ i ];
+                    DragTarget target = _parent._targets[ i ];
 
                     if ( !target.Actor.IsAscendantOf( hit ) )
                     {
@@ -330,8 +331,8 @@ public class DragAndDrop
             }
 
             // Position the drag actor.
-            var actorX = ( ev.StageX - actor.Width ) + _parent._dragActorX;
-            var actorY = ev.StageY + _parent._dragActorY;
+            float actorX = ev.StageX - actor.Width + _parent._dragActorX;
+            float actorY = ev.StageY + _parent._dragActorY;
 
             if ( _parent.KeepWithinStage )
             {
@@ -375,15 +376,19 @@ public class DragAndDrop
 
             if ( _parent._isValidTarget )
             {
-                var stageX = ev.StageX + _parent._touchOffsetX;
-                var stageY = ev.StageY + _parent._touchOffsetY;
+                float stageX = ev.StageX + _parent._touchOffsetX;
+                float stageY = ev.StageY + _parent._touchOffsetY;
 
                 _parent.Target?.Actor.StageToLocalCoordinates( _tmpVector.Set( stageX, stageY ) );
                 _parent.Target?.Drop( _parent.Source!, _parent.DragPayload, _tmpVector.X, _tmpVector.Y, pointer );
             }
 
-            _parent.Source?.DragStop
-                ( ev, x, y, pointer, _parent.DragPayload, _parent._isValidTarget ? _parent.Target : null );
+            _parent.Source?.DragStop( ev,
+                                      x,
+                                      y,
+                                      pointer,
+                                      _parent.DragPayload,
+                                      _parent._isValidTarget ? _parent.Target : null );
 
             _parent.Target?.Reset( _parent.Source!, _parent.DragPayload );
 
@@ -469,7 +474,7 @@ public class DragAndDrop
             Guard.Against.Null( actor );
 
             Actor = actor;
-            var stage = actor.Stage;
+            Stage? stage = actor.Stage;
 
             if ( ( stage != null ) && ( actor == stage.RootGroup ) )
             {

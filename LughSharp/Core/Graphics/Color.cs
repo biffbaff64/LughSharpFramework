@@ -24,7 +24,9 @@
 
 using System;
 using System.Diagnostics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -138,7 +140,7 @@ public class Color : ICloneable, IEquatable< Color >
     public Color() : this( 0, 0, 0, 0 )
     {
     }
-    
+
     /// <summary>
     /// Constructor, sets all the components to 0.
     /// </summary>
@@ -249,10 +251,10 @@ public class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public static float ToFloatBitsRgba( float r, float g, float b, float a )
     {
-        var floatBits = ( ( uint )( 255f * r ) << 24 )
-                      | ( ( uint )( 255f * g ) << 16 )
-                      | ( ( uint )( 255f * b ) << 8 )
-                      | ( ( uint )( 255f * a ) );
+        uint floatBits = ( ( uint )( 255f * r ) << 24 )
+                       | ( ( uint )( 255f * g ) << 16 )
+                       | ( ( uint )( 255f * b ) << 8 )
+                       | ( uint )( 255f * a );
 
         return floatBits;
     }
@@ -287,10 +289,10 @@ public class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public static float ToFloatBitsAbgr( float a, float b, float g, float r )
     {
-        var floatBits = ( ( uint )( a * 255f ) << 24 )
-                      | ( ( uint )( b * 255f ) << 16 )
-                      | ( ( uint )( g * 255f ) << 8 )
-                      | ( ( uint )( r * 255f ) );
+        uint floatBits = ( ( uint )( a * 255f ) << 24 )
+                       | ( ( uint )( b * 255f ) << 16 )
+                       | ( ( uint )( g * 255f ) << 8 )
+                       | ( uint )( r * 255f );
 
         return floatBits;
     }
@@ -480,11 +482,20 @@ public class Color : ICloneable, IEquatable< Color >
         color.B = ( value & 0x000000ff ) / 255f;
     }
 
-    public static Color FromArgb( float a, float r, float g, float b ) => new( r, g, b, a );
+    public static Color FromArgb( float a, float r, float g, float b )
+    {
+        return new Color( r, g, b, a );
+    }
 
-    public static Color FromRgba( float r, float g, float b, float a ) => new( r, g, b, a );
+    public static Color FromRgba( float r, float g, float b, float a )
+    {
+        return new Color( r, g, b, a );
+    }
 
-    public static Color FromRgb( float r, float g, float b ) => new( r, g, b, 1.0f );
+    public static Color FromRgb( float r, float g, float b )
+    {
+        return new Color( r, g, b, 1.0f );
+    }
 
     /// <summary>
     /// Converts a 32-bit RGBA8888 integer value to a Color object.
@@ -539,7 +550,7 @@ public class Color : ICloneable, IEquatable< Color >
     public static void Abgr8888ToColor( ref Color color, float value )
     {
         // Convert the float value to an integer representing the color
-        var c = NumberUtils.FloatToIntColor( value );
+        int c = NumberUtils.FloatToIntColor( value );
 
         // Extract and assign color components using bitwise operations
         color.A = ( ( c & 0xff000000 ) >>> 24 ) / 255f;
@@ -707,11 +718,11 @@ public class Color : ICloneable, IEquatable< Color >
             h += 360;
         }
 
-        var i = ( uint )( h / 60 ) % 6;
-        var f = ( h / 60 ) - i;
-        var p = v * ( 1 - s );
-        var q = v * ( 1 - ( s * f ) );
-        var t = v * ( 1 - ( s * ( 1 - f ) ) );
+        uint  i = ( uint )( h / 60 ) % 6;
+        float f = ( h / 60 ) - i;
+        float p = v * ( 1 - s );
+        float q = v * ( 1 - ( s * f ) );
+        float t = v * ( 1 - ( s * ( 1 - f ) ) );
 
         ( R, G, B ) = i switch
                       {
@@ -720,7 +731,7 @@ public class Color : ICloneable, IEquatable< Color >
                           2     => ( p, v, t ),
                           3     => ( p, q, v ),
                           4     => ( t, p, v ),
-                          var _ => ( v, p, q ),
+                          var _ => ( v, p, q )
                       };
 
         return Clamp();
@@ -753,9 +764,9 @@ public class Color : ICloneable, IEquatable< Color >
             throw new ArgumentException( "The hsv array must have at least 3 elements.", nameof( hsv ) );
         }
 
-        var max   = Math.Max( Math.Max( R, G ), B );
-        var min   = Math.Min( Math.Min( R, G ), B );
-        var range = max - min;
+        float max   = Math.Max( Math.Max( R, G ), B );
+        float min   = Math.Min( Math.Min( R, G ), B );
+        float range = max - min;
 
         // Hue calculation
         if ( Math.Abs( range ) < NumberUtils.FLOAT_TOLERANCE )
@@ -764,15 +775,15 @@ public class Color : ICloneable, IEquatable< Color >
         }
         else if ( Math.Abs( max - R ) < NumberUtils.FLOAT_TOLERANCE )
         {
-            hsv[ 0 ] = ( ( ( 60 * ( G - B ) ) / range ) + 360 ) % 360;
+            hsv[ 0 ] = ( ( 60 * ( G - B ) / range ) + 360 ) % 360;
         }
         else if ( Math.Abs( max - G ) < NumberUtils.FLOAT_TOLERANCE )
         {
-            hsv[ 0 ] = ( ( ( 60 * ( B - R ) ) / range ) + 120 ) % 360;
+            hsv[ 0 ] = ( ( 60 * ( B - R ) / range ) + 120 ) % 360;
         }
         else // max == B
         {
-            hsv[ 0 ] = ( ( ( 60 * ( R - G ) ) / range ) + 240 ) % 360;
+            hsv[ 0 ] = ( ( 60 * ( R - G ) / range ) + 240 ) % 360;
         }
 
         // Saturation calculation
@@ -814,7 +825,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <returns> This color for chaining. </returns>
     public Color Set( uint rgba )
     {
-        var color = this;
+        Color color = this;
 
         Rgba8888ToColor( ref color, rgba );
 
@@ -1186,7 +1197,10 @@ public class Color : ICloneable, IEquatable< Color >
         return ( ( uint )( luminance * 255.0f ) << 8 ) | ( uint )( alpha * 255 );
     }
 
-    public static Color FromHex( uint hex ) => new( hex );
+    public static Color FromHex( uint hex )
+    {
+        return new Color( hex );
+    }
 
     #endregion Utility methods
 
@@ -1210,7 +1224,7 @@ public class Color : ICloneable, IEquatable< Color >
     {
         return $"A:{A},B:{B},G:{G},R:{R}";
     }
-    
+
     // ========================================================================
     // ========================================================================
 

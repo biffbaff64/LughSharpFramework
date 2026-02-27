@@ -25,6 +25,7 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -43,7 +44,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class ImageButton : Button
 {
     public override string? Name => "ImageButton";
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -110,8 +111,8 @@ public class ImageButton : Button
     {
     }
 
-    public     Scene2DImage            Scene2DImage { get; }
-    public new ImageButtonStyle Style { get; private set; } = null!;
+    public     Scene2DImage     Scene2DImage { get; }
+    public new ImageButtonStyle Style        { get; private set; } = null!;
 
     private void ConstructorHelper()
     {
@@ -193,7 +194,7 @@ public class ImageButton : Button
     /// </summary>
     protected void UpdateImage()
     {
-        var drawable = GetImageDrawable();
+        ISceneDrawable? drawable = GetImageDrawable();
 
         if ( drawable != null )
         {
@@ -223,8 +224,8 @@ public class ImageButton : Button
             return Name;
         }
 
-        var className = GetType().Name;
-        var dotIndex  = className.LastIndexOf( '.' );
+        string className = GetType().Name;
+        int    dotIndex  = className.LastIndexOf( '.' );
 
         if ( dotIndex != -1 )
         {
@@ -304,4 +305,3 @@ public class ImageButton : Button
 
 // ============================================================================
 // ============================================================================
-

@@ -208,7 +208,11 @@ public unsafe partial class GLBindings
             {
                 fixed ( GLsizei* ptrStrides = &strides[ 0 ] )
                 {
-                    _glVertexArrayVertexBuffers( vaobj, first, ( GLsizei )buffers.Length, ptrBuffers, ptrOffsets,
+                    _glVertexArrayVertexBuffers( vaobj,
+                                                 first,
+                                                 ( GLsizei )buffers.Length,
+                                                 ptrBuffers,
+                                                 ptrOffsets,
                                                  ptrStrides );
                 }
             }

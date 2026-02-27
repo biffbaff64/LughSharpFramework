@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -56,12 +57,12 @@ public class GridPacker( TexturePackerSettings settings ) : IPacker
 
         // Rects are packed with right and top padding, so the max size is increased
         // to match. After packing the padding is subtracted from the page size.
-        var paddingX = settings.PaddingX;
-        var paddingY = settings.PaddingY;
+        int paddingX = settings.PaddingX;
+        int paddingY = settings.PaddingY;
 
         // Resetting adjustX/Y to a sane default of padding before applying edge rules.
-        var adjustX = paddingX;
-        var adjustY = paddingY;
+        int adjustX = paddingX;
+        int adjustY = paddingY;
 
         // NOTE: The padding adjustment logic here is preserved from the original code,
         // but it is mathematically complex and may be incorrect for generic grid padding.
@@ -79,16 +80,16 @@ public class GridPacker( TexturePackerSettings settings ) : IPacker
             }
         }
 
-        var maxWidth   = settings.MaxWidth + adjustX;
-        var maxHeight  = settings.MaxHeight + adjustY;
-        var numRects   = inputRects.Count;
+        int maxWidth   = settings.MaxWidth + adjustX;
+        int maxHeight  = settings.MaxHeight + adjustY;
+        int numRects   = inputRects.Count;
         var cellWidth  = 0;
         var cellHeight = 0;
 
         // 1. Determine the maximum required cell size.
         for ( var i = 0; i < numRects; i++ )
         {
-            var rect = inputRects[ i ];
+            TexturePackerRect rect = inputRects[ i ];
 
             cellWidth  = Math.Max( cellWidth, rect.Width );
             cellHeight = Math.Max( cellHeight, rect.Height );
@@ -105,7 +106,7 @@ public class GridPacker( TexturePackerSettings settings ) : IPacker
         {
             if ( progress != null )
             {
-                progress.Count = ( numRects - remainingRects.Count ) + 1;
+                progress.Count = numRects - remainingRects.Count + 1;
 
                 if ( progress.Update( progress.Count, numRects ) )
                 {
@@ -114,7 +115,8 @@ public class GridPacker( TexturePackerSettings settings ) : IPacker
             }
 
             // Pack the page and get the list of rects that were successfully placed.
-            var (page, packedRects) = PackPage( remainingRects, cellWidth, cellHeight, maxWidth, maxHeight );
+            ( TexturePackerPage page, List< TexturePackerRect > packedRects ) =
+                PackPage( remainingRects, cellWidth, cellHeight, maxWidth, maxHeight );
 
             // Update the list of remaining rectangles by excluding those that were packed.
             remainingRects = remainingRects.Except( packedRects ).ToList();
@@ -147,18 +149,18 @@ public class GridPacker( TexturePackerSettings settings ) : IPacker
     {
         TexturePackerPage page = new()
         {
-            OutputRects = [ ],
+            OutputRects = [ ]
         };
         List< TexturePackerRect > packedRects = [ ];
 
-        var n = inputRects.Count;
+        int n = inputRects.Count;
         var x = 0;
         var y = 0;
 
         // Iterate forward through the list for O(1) tracking.
         for ( var i = 0; i < n; i++ )
         {
-            var rect = inputRects[ i ];
+            TexturePackerRect rect = inputRects[ i ];
 
             // Check if the next cell position exceeds the max width.
             if ( ( x + cellWidth ) > maxWidth )
@@ -196,9 +198,9 @@ public class GridPacker( TexturePackerSettings settings ) : IPacker
         }
 
         // Flip Y coordinates so the first row starts at the top (Y=0).
-        for ( var i = page.OutputRects.Count - 1; i >= 0; i-- )
+        for ( int i = page.OutputRects.Count - 1; i >= 0; i-- )
         {
-            var rect = page.OutputRects[ i ];
+            TexturePackerRect rect = page.OutputRects[ i ];
             rect.Y = page.Height - rect.Y - rect.Height;
         }
 

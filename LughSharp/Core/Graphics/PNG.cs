@@ -143,7 +143,7 @@ public class PNG : IDisposable
 
         _deflater.Reset();
 
-        var lineLen = pixmap.Width * 4;
+        int lineLen = pixmap.Width * 4;
 
         byte[] lineOut;
         byte[] curLine;
@@ -174,12 +174,12 @@ public class PNG : IDisposable
 
         _lastLineLen = lineLen;
 
-        var oldPosition = pixmap.ByteBuffer.Position;
-        var isRgba8888  = pixmap.IsRGBA8888();
+        int  oldPosition = pixmap.ByteBuffer.Position;
+        bool isRgba8888  = pixmap.IsRGBA8888();
 
         for ( int y = 0, h = pixmap.Height; y < h; y++ )
         {
-            var py = FlipY ? h - y - 1 : y;
+            int py = FlipY ? h - y - 1 : y;
 
             if ( isRgba8888 )
             {
@@ -190,7 +190,7 @@ public class PNG : IDisposable
             {
                 for ( int px = 0, x = 0; px < pixmap.Width; px++ )
                 {
-                    var pixel = pixmap.GetPixel( px, py );
+                    int pixel = pixmap.GetPixel( px, py );
 
                     curLine[ x++ ] = ( byte )( ( pixel >> 24 ) & 0xff );
                     curLine[ x++ ] = ( byte )( ( pixel >> 16 ) & 0xff );
@@ -206,25 +206,25 @@ public class PNG : IDisposable
 
             for ( var x = 4; x < lineLen; x++ )
             {
-                var a  = curLine[ x - 4 ] & 0xff;
-                var b  = prevLine[ x ] & 0xff;
-                var c  = prevLine[ x - 4 ] & 0xff;
-                var p  = ( a + b ) - c;
-                var pa = p - a;
+                int a  = curLine[ x - 4 ] & 0xff;
+                int b  = prevLine[ x ] & 0xff;
+                int c  = prevLine[ x - 4 ] & 0xff;
+                int p  = a + b - c;
+                int pa = p - a;
 
                 if ( pa < 0 )
                 {
                     pa = -pa;
                 }
 
-                var pb = p - b;
+                int pb = p - b;
 
                 if ( pb < 0 )
                 {
                     pb = -pb;
                 }
 
-                var pc = p - c;
+                int pc = p - c;
 
                 if ( pc < 0 )
                 {

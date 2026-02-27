@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -120,8 +121,8 @@ public class FileTextureData : ITextureData
 
         if ( _pixmap == null )
         {
-            var ext   = File.Extension;
-            var isCim = ext.Equals( "cim", StringComparison.OrdinalIgnoreCase );
+            string ext   = File.Extension;
+            bool   isCim = ext.Equals( "cim", StringComparison.OrdinalIgnoreCase );
 
             _pixmap = isCim ? PixmapIO.ReadCIM( File ) : new Pixmap( File );
             IsOwned = true;
@@ -165,7 +166,7 @@ public class FileTextureData : ITextureData
             throw new RuntimeException( "Call prepare() before calling FetchPixmap()" );
         }
 
-        var pixmap = _pixmap;
+        Pixmap? pixmap = _pixmap;
 
         if ( pixmap == null )
         {

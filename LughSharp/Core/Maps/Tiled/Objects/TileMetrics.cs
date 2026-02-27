@@ -60,18 +60,18 @@ public record TileMetrics
     /// <param name="spacing"></param>
     /// <param name="margin"></param>
     public TileMetrics( string? name,
-                           uint firstGid,
-                           int tileWidth,
-                           int tileHeight,
-                           int spacing = 0,
-                           int margin = 0 )
+                        uint firstGid,
+                        int tileWidth,
+                        int tileHeight,
+                        int spacing = 0,
+                        int margin = 0 )
     {
-        this.Name       = name;
-        this.Firstgid   = firstGid;
-        this.Tilewidth  = tileWidth;
-        this.Tileheight = tileHeight;
-        this.Spacing    = spacing;
-        this.Margin     = margin;
+        Name       = name;
+        Firstgid   = firstGid;
+        Tilewidth  = tileWidth;
+        Tileheight = tileHeight;
+        Spacing    = spacing;
+        Margin     = margin;
     }
 
     public void Deconstruct( out string? name,
@@ -81,12 +81,12 @@ public record TileMetrics
                              out int spacing,
                              out int margin )
     {
-        name       = this.Name;
-        firstGid   = this.Firstgid;
-        tileWidth  = this.Tilewidth;
-        tileHeight = this.Tileheight;
-        spacing    = this.Spacing;
-        margin     = this.Margin;
+        name       = Name;
+        firstGid   = Firstgid;
+        tileWidth  = Tilewidth;
+        tileHeight = Tileheight;
+        spacing    = Spacing;
+        margin     = Margin;
     }
 }
 

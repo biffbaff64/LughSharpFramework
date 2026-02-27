@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.Cameras;
@@ -104,10 +105,11 @@ public class Shake
                 if ( _elapsedTime < _shakeDuration )
                 {
                     // Calculate the amount of shake based on how long it has been shaking already
-                    var currentPower = _shakeIntensity * camera.Zoom * ( ( _shakeDuration - _elapsedTime ) / _shakeDuration );
+                    float currentPower = _shakeIntensity * camera.Zoom
+                                                         * ( ( _shakeDuration - _elapsedTime ) / _shakeDuration );
 
-                    var x = ( MathUtils.Random() - 0.5f ) * currentPower;
-                    var y = ( MathUtils.Random() - 0.5f ) * currentPower;
+                    float x = ( MathUtils.Random() - 0.5f ) * currentPower;
+                    float y = ( MathUtils.Random() - 0.5f ) * currentPower;
 
                     camera.Translate( -x, -y );
 

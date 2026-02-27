@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -78,7 +79,7 @@ public class PerformanceCounters
     /// </summary>
     public void Tick()
     {
-        var t = TimeHelpers.NanoTime();
+        long t = TimeHelpers.NanoTime();
 
         if ( _lastTick > 0L )
         {
@@ -93,7 +94,7 @@ public class PerformanceCounters
     /// <param name="deltaTime"></param>
     public void Tick( in float deltaTime )
     {
-        foreach ( var t in Counters )
+        foreach ( PerformanceCounter t in Counters )
         {
             t.Tick( deltaTime );
         }
@@ -102,4 +103,3 @@ public class PerformanceCounters
 
 // ============================================================================
 // ============================================================================
-

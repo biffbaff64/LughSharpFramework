@@ -57,14 +57,14 @@ public class FPSLogger
     {
         _fps = frames;
     }
-    
+
     /// <summary>
     /// Logs the current frames per second to the console.
     /// </summary>
     public void LogFPS()
     {
-        var currentTime = TimeHelpers.NanoTime();
-        var elapsedTime = TimeSpan.FromTicks( currentTime - _lastLogTime );
+        long     currentTime = TimeHelpers.NanoTime();
+        TimeSpan elapsedTime = TimeSpan.FromTicks( currentTime - _lastLogTime );
 
         // Log FPS if at least one second has passed
         if ( elapsedTime.TotalSeconds >= 1 )

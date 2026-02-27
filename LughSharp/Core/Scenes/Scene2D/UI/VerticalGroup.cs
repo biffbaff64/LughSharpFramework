@@ -26,9 +26,11 @@ using System;
 using System.Collections.Generic;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -133,9 +135,9 @@ public class VerticalGroup : WidgetGroup
     {
         _sizeInvalid = false;
 
-        var children = Children;
+        SnapshotArrayList< Actor? > children = Children;
 
-        var n = children.Size;
+        int n = children.Size;
 
         _prefWidth = 0;
 
@@ -152,12 +154,12 @@ public class VerticalGroup : WidgetGroup
                 _columnSizes.Clear();
             }
 
-            var columnSizes = _columnSizes;
+            List< float >? columnSizes = _columnSizes;
 
-            var space       = Space;
-            var wrapSpace   = WrapSpace;
-            var pad         = PadTop + PadBottom;
-            var groupHeight = Height - pad;
+            float space       = Space;
+            float wrapSpace   = WrapSpace;
+            float pad         = PadTop + PadBottom;
+            float groupHeight = Height - pad;
 
             float x           = 0;
             float y           = 0;
@@ -174,13 +176,13 @@ public class VerticalGroup : WidgetGroup
 
             for ( ; i != n; i += incr )
             {
-                var child = children.GetAt( i );
+                Actor? child = children.GetAt( i );
 
                 if ( child == null )
                 {
                     continue;
                 }
-                
+
                 float width;
                 float height;
 
@@ -200,7 +202,7 @@ public class VerticalGroup : WidgetGroup
                     height = child.Height;
                 }
 
-                var incrY = height + ( y > 0 ? space : 0 );
+                float incrY = height + ( y > 0 ? space : 0 );
 
                 if ( ( ( y + incrY ) > groupHeight ) && ( y > 0 ) )
                 {
@@ -242,13 +244,13 @@ public class VerticalGroup : WidgetGroup
 
             for ( var i = 0; i < n; i++ )
             {
-                var child = children.GetAt( i );
+                Actor? child = children.GetAt( i );
 
                 if ( child == null )
                 {
                     continue;
                 }
-                
+
                 if ( child is ILayout layoutChild )
                 {
                     _prefWidth  =  Math.Max( _prefWidth, layoutChild.GetPrefWidth() );
@@ -285,13 +287,13 @@ public class VerticalGroup : WidgetGroup
             return;
         }
 
-        var round       = _round;
-        var align       = Alignment;
-        var space       = Space;
-        var padLeft     = PadLeft;
-        var fill        = Fill;
-        var columnWidth = ( Expand ? Width : _prefWidth ) - padLeft - PadRight;
-        var y           = ( _prefHeight - PadTop ) + space;
+        bool  round       = _round;
+        int   align       = Alignment;
+        float space       = Space;
+        float padLeft     = PadLeft;
+        float fill        = Fill;
+        float columnWidth = ( Expand ? Width : _prefWidth ) - padLeft - PadRight;
+        float y           = _prefHeight - PadTop + space;
 
         if ( ( align & Align.TOP ) != 0 )
         {
@@ -319,10 +321,10 @@ public class VerticalGroup : WidgetGroup
 
         align = _columnAlign;
 
-        var children = Children;
+        SnapshotArrayList< Actor? > children = Children;
 
         var i    = 0;
-        var n    = children.Size;
+        int n    = children.Size;
         var incr = 1;
 
         if ( _reverse )
@@ -334,7 +336,7 @@ public class VerticalGroup : WidgetGroup
 
         for ( ; i != n; i += incr )
         {
-            var child = children.GetAt( i );
+            Actor? child = children.GetAt( i );
 
             float    width;
             float    height;
@@ -361,7 +363,7 @@ public class VerticalGroup : WidgetGroup
             {
                 width = Math.Max( width, layout.GetMinWidth() );
 
-                var maxWidth = layout.GetMaxWidth();
+                float maxWidth = layout.GetMaxWidth();
 
                 if ( ( maxWidth > 0 ) && ( width > maxWidth ) )
                 {
@@ -369,7 +371,7 @@ public class VerticalGroup : WidgetGroup
                 }
             }
 
-            var x = startX;
+            float x = startX;
 
             if ( ( align & Align.RIGHT ) != 0 )
             {
@@ -402,7 +404,7 @@ public class VerticalGroup : WidgetGroup
 
     private void LayoutWrapped()
     {
-        var prefWidth = GetPrefWidth();
+        float prefWidth = GetPrefWidth();
 
         if ( !prefWidth.Equals( _lastPrefWidth ) )
         {
@@ -410,18 +412,18 @@ public class VerticalGroup : WidgetGroup
             InvalidateHierarchy();
         }
 
-        var align       = Alignment;
-        var round       = _round;
-        var space       = Space;
-        var padLeft     = PadLeft;
-        var fill        = Fill;
-        var wrapSpace   = WrapSpace;
-        var maxHeight   = _prefHeight - PadTop - PadBottom;
-        var columnX     = padLeft;
-        var groupHeight = Height;
-        var yStart      = ( _prefHeight - PadTop ) + space;
-        var y           = 0f;
-        var columnWidth = 0f;
+        int   align       = Alignment;
+        bool  round       = _round;
+        float space       = Space;
+        float padLeft     = PadLeft;
+        float fill        = Fill;
+        float wrapSpace   = WrapSpace;
+        float maxHeight   = _prefHeight - PadTop - PadBottom;
+        float columnX     = padLeft;
+        float groupHeight = Height;
+        float yStart      = _prefHeight - PadTop + space;
+        var   y           = 0f;
+        var   columnWidth = 0f;
 
         if ( ( align & Align.RIGHT ) != 0 )
         {
@@ -444,11 +446,11 @@ public class VerticalGroup : WidgetGroup
         groupHeight -= PadTop;
         align       =  _columnAlign;
 
-        var columnSizes = _columnSizes!;
-        var children    = Children;
+        List< float >?              columnSizes = _columnSizes!;
+        SnapshotArrayList< Actor? > children    = Children;
 
         var i    = 0;
-        var n    = children.Size;
+        int n    = children.Size;
         var incr = 1;
 
         if ( _reverse )
@@ -460,13 +462,13 @@ public class VerticalGroup : WidgetGroup
 
         for ( var r = 0; i != n; i += incr )
         {
-            var child = children.GetAt( i );
+            Actor? child = children.GetAt( i );
 
             if ( child == null )
             {
                 continue;
             }
-            
+
             float    width;
             float    height;
             ILayout? layout = null;
@@ -523,7 +525,7 @@ public class VerticalGroup : WidgetGroup
             {
                 width = Math.Max( width, layout.GetMinWidth() );
 
-                var maxWidth = layout.GetMaxWidth();
+                float maxWidth = layout.GetMaxWidth();
 
                 if ( ( maxWidth > 0 ) && ( width > maxWidth ) )
                 {
@@ -531,7 +533,7 @@ public class VerticalGroup : WidgetGroup
                 }
             }
 
-            var x = columnX;
+            float x = columnX;
 
             if ( ( align & Align.RIGHT ) != 0 )
             {

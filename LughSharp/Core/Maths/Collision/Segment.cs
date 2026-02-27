@@ -107,7 +107,7 @@ public class Segment
     {
         const int PRIME = 71;
 
-        var result = PRIME + _vecA.GetHashCode();
+        int result = PRIME + _vecA.GetHashCode();
         result = ( PRIME * result ) + _vecB.GetHashCode();
 
         return result;

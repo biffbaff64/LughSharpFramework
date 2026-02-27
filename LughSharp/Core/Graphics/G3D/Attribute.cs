@@ -84,7 +84,7 @@ public abstract class Attribute : IComparable< Attribute >
     /// </summary>
     public static string? GetAttributeAlias( long type )
     {
-        var idx = -1;
+        int idx = -1;
 
         while ( ( type != 0 ) && ( ++idx < 63 ) && ( ( ( type >> idx ) & 1 ) == 0 ) )
         {
@@ -108,7 +108,7 @@ public abstract class Attribute : IComparable< Attribute >
     /// </returns>
     protected static long Register( string alias )
     {
-        var result = GetAttributeType( alias );
+        long result = GetAttributeType( alias );
 
         if ( result > 0 )
         {

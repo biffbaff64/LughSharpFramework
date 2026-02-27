@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Graphics.Viewports;
@@ -87,7 +89,8 @@ public class ExtendViewport : Viewport
     /// <param name="maxWorldWidth"> Use zero for no maximum width. </param>
     /// <param name="maxWorldHeight"> Use zero for no maximum height. </param>
     /// <param name="camera"> The camera to associate with this viewport. </param>
-    public ExtendViewport( float minWorldWidth, float minWorldHeight, float maxWorldWidth, float maxWorldHeight, Camera camera )
+    public ExtendViewport( float minWorldWidth, float minWorldHeight, float maxWorldWidth, float maxWorldHeight,
+                           Camera camera )
         : base( camera )
     {
         MinWorldWidth  = minWorldWidth;
@@ -105,9 +108,9 @@ public class ExtendViewport : Viewport
     public override void Update( int screenWidth, int screenHeight, bool centerCamera = false )
     {
         // Fit min size to the screen.
-        var worldWidth  = MinWorldWidth;
-        var worldHeight = MinWorldHeight;
-        var scaled      = Scaling.Fit.Apply( worldWidth, worldHeight, screenWidth, screenHeight );
+        float   worldWidth  = MinWorldWidth;
+        float   worldHeight = MinWorldHeight;
+        Vector2 scaled      = Scaling.Fit.Apply( worldWidth, worldHeight, screenWidth, screenHeight );
 
         // Extend in the short direction.
         var viewportWidth  = ( int )Math.Round( scaled.X, MidpointRounding.AwayFromZero );
@@ -115,9 +118,9 @@ public class ExtendViewport : Viewport
 
         if ( viewportWidth < screenWidth )
         {
-            var toViewportSpace = viewportHeight / worldHeight;
-            var toWorldSpace    = worldHeight / viewportHeight;
-            var lengthen        = ( screenWidth - viewportWidth ) * toWorldSpace;
+            float toViewportSpace = viewportHeight / worldHeight;
+            float toWorldSpace    = worldHeight / viewportHeight;
+            float lengthen        = ( screenWidth - viewportWidth ) * toWorldSpace;
 
             if ( MaxWorldWidth > 0 )
             {
@@ -129,9 +132,9 @@ public class ExtendViewport : Viewport
         }
         else if ( viewportHeight < screenHeight )
         {
-            var toViewportSpace = viewportWidth / worldWidth;
-            var toWorldSpace    = worldWidth / viewportWidth;
-            var lengthen        = ( screenHeight - viewportHeight ) * toWorldSpace;
+            float toViewportSpace = viewportWidth / worldWidth;
+            float toWorldSpace    = worldWidth / viewportWidth;
+            float lengthen        = ( screenHeight - viewportHeight ) * toWorldSpace;
 
             if ( MaxWorldHeight > 0 )
             {

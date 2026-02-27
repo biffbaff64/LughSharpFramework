@@ -56,7 +56,7 @@ public class Header
     [
         [ 22050, 24000, 16000, 1 ],
         [ 44100, 48000, 32000, 1 ],
-        [ 11025, 12000, 8000, 1 ],
+        [ 11025, 12000, 8000, 1 ]
     ];
 
     /// <summary>
@@ -69,45 +69,45 @@ public class Header
         [
             [
                 0, 32000, 48000, 56000, 64000, 80000, 96000, 112000,
-                128000, 144000, 160000, 176000, 192000, 224000, 256000, 0,
+                128000, 144000, 160000, 176000, 192000, 224000, 256000, 0
             ],
             [
                 0, 8000, 16000, 24000, 32000, 40000, 48000, 56000,
-                64000, 80000, 96000, 112000, 128000, 144000, 160000, 0,
+                64000, 80000, 96000, 112000, 128000, 144000, 160000, 0
             ],
             [
                 0, 8000, 16000, 24000, 32000, 40000, 48000, 56000,
-                64000, 80000, 96000, 112000, 128000, 144000, 160000, 0,
-            ],
+                64000, 80000, 96000, 112000, 128000, 144000, 160000, 0
+            ]
         ],
         [
             [
                 0, 32000, 64000, 96000, 128000, 160000, 192000, 224000,
-                256000, 288000, 320000, 352000, 384000, 416000, 448000, 0,
+                256000, 288000, 320000, 352000, 384000, 416000, 448000, 0
             ],
             [
                 0, 32000, 48000, 56000, 64000, 80000, 96000, 112000,
-                128000, 160000, 192000, 224000, 256000, 320000, 384000, 0,
+                128000, 160000, 192000, 224000, 256000, 320000, 384000, 0
             ],
             [
                 0, 32000, 40000, 48000, 56000, 64000, 80000, 96000,
-                112000, 128000, 160000, 192000, 224000, 256000, 320000, 0,
-            ],
+                112000, 128000, 160000, 192000, 224000, 256000, 320000, 0
+            ]
         ],
         [
             [
                 0, 32000, 48000, 56000, 64000, 80000, 96000, 112000,
-                128000, 144000, 160000, 176000, 192000, 224000, 256000, 0,
+                128000, 144000, 160000, 176000, 192000, 224000, 256000, 0
             ],
             [
                 0, 8000, 16000, 24000, 32000, 40000, 48000, 56000,
-                64000, 80000, 96000, 112000, 128000, 144000, 160000, 0,
+                64000, 80000, 96000, 112000, 128000, 144000, 160000, 0
             ],
             [
                 0, 8000, 16000, 24000, 32000, 40000, 48000, 56000,
-                64000, 80000, 96000, 112000, 128000, 144000, 160000, 0,
-            ],
-        ],
+                64000, 80000, 96000, 112000, 128000, 144000, 160000, 0
+            ]
+        ]
     ];
 
     /// <summary>
@@ -120,57 +120,57 @@ public class Header
             [
                 "free format", "32 kbit/s", "48 kbit/s", "56 kbit/s", "64 kbit/s", "80 kbit/s", "96 kbit/s",
                 "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s", "176 kbit/s", "192 kbit/s", "224 kbit/s",
-                "256 kbit/s", "forbidden",
+                "256 kbit/s", "forbidden"
             ],
             [
                 "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
                 "56 kbit/s",
                 "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
-                "forbidden",
+                "forbidden"
             ],
             [
                 "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
                 "56 kbit/s",
                 "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
-                "forbidden",
-            ],
+                "forbidden"
+            ]
         ],
         [
             [
                 "free format", "32 kbit/s", "64 kbit/s", "96 kbit/s", "128 kbit/s", "160 kbit/s", "192 kbit/s",
                 "224 kbit/s", "256 kbit/s", "288 kbit/s", "320 kbit/s", "352 kbit/s", "384 kbit/s", "416 kbit/s",
-                "448 kbit/s", "forbidden",
+                "448 kbit/s", "forbidden"
             ],
             [
                 "free format", "32 kbit/s", "48 kbit/s", "56 kbit/s", "64 kbit/s", "80 kbit/s", "96 kbit/s",
                 "112 kbit/s", "128 kbit/s", "160 kbit/s", "192 kbit/s", "224 kbit/s", "256 kbit/s", "320 kbit/s",
-                "384 kbit/s", "forbidden",
+                "384 kbit/s", "forbidden"
             ],
             [
                 "free format", "32 kbit/s", "40 kbit/s", "48 kbit/s", "56 kbit/s", "64 kbit/s", "80 kbit/s",
                 "96 kbit/s", "112 kbit/s", "128 kbit/s", "160 kbit/s", "192 kbit/s", "224 kbit/s", "256 kbit/s",
-                "320 kbit/s", "forbidden",
-            ],
+                "320 kbit/s", "forbidden"
+            ]
         ],
         [
             [
                 "free format", "32 kbit/s", "48 kbit/s", "56 kbit/s", "64 kbit/s", "80 kbit/s", "96 kbit/s",
                 "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s", "176 kbit/s", "192 kbit/s", "224 kbit/s",
-                "256 kbit/s", "forbidden",
+                "256 kbit/s", "forbidden"
             ],
             [
                 "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
                 "56 kbit/s",
                 "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
-                "forbidden",
+                "forbidden"
             ],
             [
                 "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
                 "56 kbit/s",
                 "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
-                "forbidden",
-            ],
-        ],
+                "forbidden"
+            ]
+        ]
     ];
 
     // ========================================================================
@@ -270,7 +270,7 @@ public class Header
             }
             else
             {
-                var channelBitrate = _bitrateIndex;
+                int channelBitrate = _bitrateIndex;
 
                 // calculate bitrate per channel:
                 if ( _mode != SINGLE_CHANNEL )
@@ -481,7 +481,7 @@ public class Header
     {
         if ( _layer == 1 )
         {
-            Framesize = ( 12 * Bitrates[ _version ][ 0 ][ _bitrateIndex ] )
+            Framesize = 12 * Bitrates[ _version ][ 0 ][ _bitrateIndex ]
                       / Frequencies[ _version ][ _sampleFrequency ];
 
             if ( _paddingBit != 0 )
@@ -494,7 +494,7 @@ public class Header
         }
         else
         {
-            Framesize = ( 144 * Bitrates[ _version ][ _layer - 1 ][ _bitrateIndex ] )
+            Framesize = 144 * Bitrates[ _version ][ _layer - 1 ][ _bitrateIndex ]
                       / Frequencies[ _version ][ _sampleFrequency ];
 
             if ( _version is MPEG2_LSF or MPEG25_LSF )
@@ -539,12 +539,12 @@ public class Header
     /// </summary>
     public int MaxNumberOfFrame( int streamsize )
     {
-        if ( ( ( Framesize + 4 ) - _paddingBit ) == 0 )
+        if ( ( Framesize + 4 - _paddingBit ) == 0 )
         {
             return 0;
         }
 
-        return streamsize / ( ( Framesize + 4 ) - _paddingBit );
+        return streamsize / ( Framesize + 4 - _paddingBit );
     }
 
     /// <summary>
@@ -552,12 +552,12 @@ public class Header
     /// </summary>
     public int MinNumberOfFrames( int streamsize )
     {
-        if ( ( ( Framesize + 5 ) - _paddingBit ) == 0 )
+        if ( ( Framesize + 5 - _paddingBit ) == 0 )
         {
             return 0;
         }
 
-        return streamsize / ( ( Framesize + 5 ) - _paddingBit );
+        return streamsize / ( Framesize + 5 - _paddingBit );
     }
 
     /// <summary>
@@ -568,7 +568,7 @@ public class Header
         float[][] msPerFrameArray =
         [
             [ 8.707483f, 8.0f, 12.0f ], [ 26.12245f, 24.0f, 36.0f ],
-            [ 26.12245f, 24.0f, 36.0f ],
+            [ 26.12245f, 24.0f, 36.0f ]
         ];
 
         return msPerFrameArray[ _layer - 1 ][ _sampleFrequency ];
@@ -593,7 +593,7 @@ public class Header
                    1     => "I",
                    2     => "II",
                    3     => "III",
-                   var _ => null,
+                   var _ => null
                };
     }
 
@@ -731,4 +731,3 @@ public class Header
 
 // ============================================================================
 // ============================================================================
-

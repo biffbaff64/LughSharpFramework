@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
@@ -40,9 +39,9 @@ public class StyleFactory
     // ========================================================================
 
     private TextureAtlas? _atlas;
-    
+
     // ========================================================================
-    
+
     public void Initialise()
     {
     }

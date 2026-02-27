@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -40,7 +42,7 @@ public class ImageUtils
 
         // --------------------------------------
 
-        Unknown,
+        Unknown
     }
 
     // ========================================================================

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Maps.Objects;
@@ -31,9 +32,9 @@ namespace LughSharp.Core.Maps.Objects;
 public class RectangleMapObject : MapObject
 {
     public Rectangle Rectangle { get; set; }
-    
+
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a rectangle object whose lower left corner is at (0, 0)
     /// with width=1 and height=1
@@ -58,4 +59,3 @@ public class RectangleMapObject : MapObject
 
 // ============================================================================
 // ============================================================================
-

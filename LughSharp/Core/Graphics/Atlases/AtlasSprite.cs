@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 
 namespace LughSharp.Core.Graphics.Atlases;
@@ -76,8 +77,8 @@ public class AtlasSprite : Sprite
 
         SetOrigin( region.OriginalWidth / 2f, region.OriginalHeight / 2f );
 
-        var width  = region.GetRegionWidth();
-        var height = region.GetRegionHeight();
+        int width  = region.GetRegionWidth();
+        int height = region.GetRegionHeight();
 
         if ( region.Rotate )
         {
@@ -118,18 +119,18 @@ public class AtlasSprite : Sprite
     {
         base.SetY( y + Region.OffsetY );
     }
-    
+
     /// <inheritdoc />
     public override void SetBounds( float x, float y, float width, float height )
     {
-        var widthRatio  = width / Region.OriginalWidth;
-        var heightRatio = height / Region.OriginalHeight;
+        float widthRatio  = width / Region.OriginalWidth;
+        float heightRatio = height / Region.OriginalHeight;
 
         Region.OffsetX = OriginalOffsetX * widthRatio;
         Region.OffsetY = OriginalOffsetY * heightRatio;
 
-        var packedWidth  = Region.Rotate ? Region.PackedHeight : Region.PackedWidth;
-        var packedHeight = Region.Rotate ? Region.PackedWidth : Region.PackedHeight;
+        int packedWidth  = Region.Rotate ? Region.PackedHeight : Region.PackedWidth;
+        int packedHeight = Region.Rotate ? Region.PackedWidth : Region.PackedHeight;
 
         base.SetBounds( x + Region.OffsetX,
                         y + Region.OffsetY,
@@ -168,13 +169,13 @@ public class AtlasSprite : Sprite
             base.Flip( x, y );
         }
 
-        var oldOriginX = GetOriginX();
-        var oldOriginY = GetOriginY();
-        var oldOffsetX = Region.OffsetX;
-        var oldOffsetY = Region.OffsetY;
+        float oldOriginX = GetOriginX();
+        float oldOriginY = GetOriginY();
+        float oldOffsetX = Region.OffsetX;
+        float oldOffsetY = Region.OffsetY;
 
-        var widthRatio  = GetWidthRatio();
-        var heightRatio = GetHeightRatio();
+        float widthRatio  = GetWidthRatio();
+        float heightRatio = GetHeightRatio();
 
         Region.OffsetX = OriginalOffsetX;
         Region.OffsetY = OriginalOffsetY;
@@ -197,29 +198,29 @@ public class AtlasSprite : Sprite
         // Rotate texture.
         base.Rotate90( clockwise );
 
-        var oldOriginX = GetOriginX();
-        var oldOriginY = GetOriginY();
-        var oldOffsetX = Region.OffsetX;
-        var oldOffsetY = Region.OffsetY;
+        float oldOriginX = GetOriginX();
+        float oldOriginY = GetOriginY();
+        float oldOffsetX = Region.OffsetX;
+        float oldOffsetY = Region.OffsetY;
 
-        var widthRatio  = GetWidthRatio();
-        var heightRatio = GetHeightRatio();
+        float widthRatio  = GetWidthRatio();
+        float heightRatio = GetHeightRatio();
 
         if ( clockwise )
         {
             Region.OffsetX = oldOffsetY;
 
             Region.OffsetY = ( Region.OriginalHeight * heightRatio )
-                             - oldOffsetX
-                             - ( Region.PackedWidth * widthRatio );
+                           - oldOffsetX
+                           - ( Region.PackedWidth * widthRatio );
         }
         else
         {
             Region.OffsetY = oldOffsetX;
 
             Region.OffsetX = ( Region.OriginalWidth * widthRatio )
-                             - oldOffsetY
-                             - ( Region.PackedHeight * heightRatio );
+                           - oldOffsetY
+                           - ( Region.PackedHeight * heightRatio );
         }
 
         // Update position and origin with new offsets.
@@ -227,22 +228,34 @@ public class AtlasSprite : Sprite
         SetOrigin( oldOriginX, oldOriginY );
     }
 
-    public override float GetX() => base.GetX() - Region.OffsetX;
+    public override float GetX()
+    {
+        return base.GetX() - Region.OffsetX;
+    }
 
-    public override float GetY() => base.GetY() - Region.OffsetY;
+    public override float GetY()
+    {
+        return base.GetY() - Region.OffsetY;
+    }
 
-    public float GetOriginX() => OriginX + Region.OffsetX;
+    public float GetOriginX()
+    {
+        return OriginX + Region.OffsetX;
+    }
 
-    public float GetOriginY() => OriginY + Region.OffsetY;
+    public float GetOriginY()
+    {
+        return OriginY + Region.OffsetY;
+    }
 
     public float GetWidth()
     {
-        return ( Width / Region.RotatedPackedWidth ) * Region.OriginalWidth;
+        return Width / Region.RotatedPackedWidth * Region.OriginalWidth;
     }
 
     public float GetHeight()
     {
-        return ( Height / Region.RotatedPackedHeight ) * Region.OriginalHeight;
+        return Height / Region.RotatedPackedHeight * Region.OriginalHeight;
     }
 
     /// <summary>

@@ -130,7 +130,7 @@ public class Pixmap : IDisposable
         try
         {
             // Read the file into a byte array.
-            var data = File.ReadAllBytes( file.FullName );
+            byte[] data = File.ReadAllBytes( file.FullName );
 
             // The data now loaded contains the PNG header information
             // ( see http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html )
@@ -213,7 +213,7 @@ public class Pixmap : IDisposable
                        LughFormat.RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
                        LughFormat.INDEXED_COLOR   => IGL.GL_UNSIGNED_BYTE,
 
-                       var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap.ColorFormat}" ),
+                       var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap.ColorFormat}" )
                    };
         }
     }
@@ -309,26 +309,41 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Fills the complete bitmap with the currently set color.
     /// </summary>
-    public void FillWithCurrentColor() => Gdx2DPixmap.ClearWithColor( Color );
+    public void FillWithCurrentColor()
+    {
+        Gdx2DPixmap.ClearWithColor( Color );
+    }
 
     /// <summary>
     /// Fills the complete bitmap with the currently set color.
     /// </summary>
-    public void FillWithColor( Color color ) => Gdx2DPixmap.ClearWithColor( color );
+    public void FillWithColor( Color color )
+    {
+        Gdx2DPixmap.ClearWithColor( color );
+    }
 
     /// <summary>
     /// </summary>
-    public int GetColorFormat() => Gdx2DPixmap.ColorFormat;
+    public int GetColorFormat()
+    {
+        return Gdx2DPixmap.ColorFormat;
+    }
 
     /// <summary>
     /// Gets the number of bits per pixel.
     /// </summary>
-    public int GetBitDepth() => Gdx2DPixmap.BitDepth;
+    public int GetBitDepth()
+    {
+        return Gdx2DPixmap.BitDepth;
+    }
 
     /// <summary>
     /// Returns TRUE if this pixmaps color format is RGBA8888.
     /// </summary>
-    public bool IsRGBA8888() => GetColorFormat() == LughFormat.RGBA8888;
+    public bool IsRGBA8888()
+    {
+        return GetColorFormat() == LughFormat.RGBA8888;
+    }
 
     /// <summary>
     /// Draws a line between the given coordinates using the currently set color.
@@ -585,14 +600,14 @@ public class Pixmap : IDisposable
                     + $"{PixelFormat.GetFormatString( Gdx2DPixmap.ColorFormat )}" );
         Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
-        var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
+        byte[] a = Gdx2DPixmap.PixmapBuffer.BackingArray();
 
         Guard.Against.Null( a );
 
         Logger.Debug( $"Buffer Length : {a.Length}" );
 
-        var strings      = PNGDecoder.StandardPNGSignature.Select( b => b.ToString( "X2" ) );
-        var finalStrings = string.Join( ", ", strings );
+        IEnumerable< string > strings      = PNGDecoder.StandardPNGSignature.Select( b => b.ToString( "X2" ) );
+        string                finalStrings = string.Join( ", ", strings );
         Logger.Debug( $"({finalStrings})" );
 
         for ( var i = 0; i < ( 2 * 8 ); i += 8 )
@@ -673,7 +688,7 @@ public class Pixmap : IDisposable
 
         // ------------------
 
-        Default = Bilinear,
+        Default = Bilinear
     }
 
     /// <summary>
@@ -687,7 +702,7 @@ public class Pixmap : IDisposable
 
         // ------------------
 
-        Default = SourceOver,
+        Default = SourceOver
     }
 
     /// <summary>
@@ -701,7 +716,7 @@ public class Pixmap : IDisposable
 
         // ------------------
 
-        Default = BiLinear,
+        Default = BiLinear
     }
 
     #endregion

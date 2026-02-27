@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.G2D;
@@ -40,7 +41,7 @@ public class Animation< T >
         Loop,
         LoopReversed,
         LoopPingpong,
-        LoopRandom,
+        LoopRandom
     }
 
     // ========================================================================
@@ -127,7 +128,7 @@ public class Animation< T >
     {
         // we set the play mode by overriding the previous mode
         // based on looping parameter value
-        var oldPlayMode = PlayMode;
+        AnimMode oldPlayMode = PlayMode;
 
         if ( looping
           && ( ( PlayMode == AnimMode.Normal )
@@ -144,7 +145,7 @@ public class Animation< T >
                 : AnimMode.Loop;
         }
 
-        var frame = GetKeyFrame( stateTime );
+        T frame = GetKeyFrame( stateTime );
         PlayMode = oldPlayMode;
 
         return frame;
@@ -160,7 +161,7 @@ public class Animation< T >
     /// <returns> the frame of animation for the given state time.</returns>
     public T GetKeyFrame( float stateTime )
     {
-        var frameNumber = GetKeyFrameIndex( stateTime );
+        int frameNumber = GetKeyFrameIndex( stateTime );
 
         return KeyFrames[ frameNumber ];
     }

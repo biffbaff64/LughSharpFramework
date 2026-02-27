@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -150,7 +152,7 @@ public abstract class GLTexture : IDisposable
     // ========================================================================
 
     private static float       _maxAnisotropicFilterLevel;
-    private        TextureUnit _activeTextureUnit         = TextureUnit.None;
+    private        TextureUnit _activeTextureUnit = TextureUnit.None;
 
     // ========================================================================
 
@@ -220,7 +222,7 @@ public abstract class GLTexture : IDisposable
     /// </param>
     public void Bind( uint unit )
     {
-        var list = Enum.GetValues( typeof( TextureUnit ) ).Cast< TextureUnit >().ToList();
+        List< TextureUnit > list = Enum.GetValues( typeof( TextureUnit ) ).Cast< TextureUnit >().ToList();
 
         if ( !list.Contains( ( TextureUnit )( ( int )TextureUnit.Texture0 + unit ) ) )
         {
@@ -327,7 +329,7 @@ public abstract class GLTexture : IDisposable
     /// </returns>
     public float UnsafeSetAnisotropicFilter( float level, bool force = false )
     {
-        var max = GetMaxAnisotropicFilterLevel();
+        float max = GetMaxAnisotropicFilterLevel();
 
         if ( Math.Abs( max - 1f ) < 0.1f )
         {
@@ -353,7 +355,7 @@ public abstract class GLTexture : IDisposable
     /// <returns> A float holding the new level. </returns>
     public float SetAnisotropicFilter( float level )
     {
-        var max = GetMaxAnisotropicFilterLevel();
+        float max = GetMaxAnisotropicFilterLevel();
 
         if ( Math.Abs( max - 1f ) < 0.1f )
         {
@@ -428,7 +430,7 @@ public abstract class GLTexture : IDisposable
             data.Prepare();
         }
 
-        var type = data.TextureDataType;
+        ITextureData.TextureType type = data.TextureDataType;
 
         if ( type == ITextureData.TextureType.Custom )
         {
@@ -437,8 +439,8 @@ public abstract class GLTexture : IDisposable
             return;
         }
 
-        var pixmap        = data.ConsumePixmap();
-        var disposePixmap = data.ShouldDisposePixmap();
+        Pixmap? pixmap        = data.ConsumePixmap();
+        bool    disposePixmap = data.ShouldDisposePixmap();
 
         Guard.Against.Null( pixmap );
 
@@ -468,9 +470,15 @@ public abstract class GLTexture : IDisposable
         }
         else
         {
-            Engine.GL.TexImage2D( target, miplevel, pixmap.GLInternalPixelFormat,
-                           pixmap.Width, pixmap.Height, 0,
-                           pixmap.GLPixelFormat, pixmap.GLDataType, pixmap.PixelData );
+            Engine.GL.TexImage2D( target,
+                                  miplevel,
+                                  pixmap.GLInternalPixelFormat,
+                                  pixmap.Width,
+                                  pixmap.Height,
+                                  0,
+                                  pixmap.GLPixelFormat,
+                                  pixmap.GLDataType,
+                                  pixmap.PixelData );
             CheckGLError( "TexImage2D" );
         }
 
@@ -487,7 +495,7 @@ public abstract class GLTexture : IDisposable
     /// <exception cref="RuntimeException"></exception>
     private static void CheckGLError( string operation )
     {
-        var error = Engine.GL.GetError();
+        int error = Engine.GL.GetError();
 
         if ( error != ( int )DotGLFW.ErrorCode.NoError )
         {
@@ -557,8 +565,8 @@ public abstract class GLTexture : IDisposable
             Logger.Debug( $"Number of Pixels       : {pixmap.Width * pixmap.Height}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );
 
-            var a  = pixmap.PixelData;
-            var sb = new StringBuilder();
+            byte[] a  = pixmap.PixelData;
+            var    sb = new StringBuilder();
 
             const int BLOCK_SIZE = 20;
 

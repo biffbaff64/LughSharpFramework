@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Scenes.Scene2D.Listeners;
@@ -77,11 +78,11 @@ public class InputListener : IEventListener
         switch ( inputEvent.Type )
         {
             case InputEvent.EventType.TouchDown:
-                var handled = TouchDown( inputEvent,
-                                         _tmpCoords.X,
-                                         _tmpCoords.Y,
-                                         inputEvent.Pointer,
-                                         inputEvent.Button );
+                bool handled = TouchDown( inputEvent,
+                                          _tmpCoords.X,
+                                          _tmpCoords.Y,
+                                          inputEvent.Pointer,
+                                          inputEvent.Button );
 
                 if ( handled && inputEvent.TouchFocus )
                 {
@@ -241,4 +242,3 @@ public class InputListener : IEventListener
 
 // ============================================================================
 // ============================================================================
-

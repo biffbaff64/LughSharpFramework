@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics.CodeAnalysis;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
@@ -133,8 +135,8 @@ public class FacedCubemapData : ICubemapData
             }
             else
             {
-                var pixmap        = _data[ i ]!.ConsumePixmap()!;
-                var disposePixmap = _data[ i ]!.ShouldDisposePixmap();
+                Pixmap pixmap        = _data[ i ]!.ConsumePixmap()!;
+                bool   disposePixmap = _data[ i ]!.ShouldDisposePixmap();
 
                 if ( _data[ i ]!.GetPixelFormat() != pixmap.GetColorFormat() )
                 {
@@ -152,12 +154,12 @@ public class FacedCubemapData : ICubemapData
                     disposePixmap = true;
                 }
 
-                var alignment = pixmap.GLPixelFormat switch
-                {
-                    IGL.GL_RGB or IGL.GL_RGBA or IGL.GL_RGBA4 or IGL.GL_RGB565 => 4,
-                    IGL.GL_ALPHA or IGL.GL_LUMINANCE                           => 1,
-                    var _                                                      => 1,
-                };
+                int alignment = pixmap.GLPixelFormat switch
+                                {
+                                    IGL.GL_RGB or IGL.GL_RGBA or IGL.GL_RGBA4 or IGL.GL_RGB565 => 4,
+                                    IGL.GL_ALPHA or IGL.GL_LUMINANCE                           => 1,
+                                    var _                                                      => 1
+                                };
 
                 Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
                 Engine.GL.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, 0, pixmap );
@@ -181,25 +183,25 @@ public class FacedCubemapData : ICubemapData
             var width = 0;
 
             if ( ( _data[ Cubemap.CubemapSide.PositiveZ.Index ] != null )
-                 && ( ( tmp = _data[ Cubemap.CubemapSide.PositiveZ.Index ]!.Width ) > width ) )
+              && ( ( tmp = _data[ Cubemap.CubemapSide.PositiveZ.Index ]!.Width ) > width ) )
             {
                 width = tmp;
             }
 
             if ( ( _data[ Cubemap.CubemapSide.NegativeZ.Index ] != null )
-                 && ( ( tmp = _data[ Cubemap.CubemapSide.NegativeZ.Index ]!.Width ) > width ) )
+              && ( ( tmp = _data[ Cubemap.CubemapSide.NegativeZ.Index ]!.Width ) > width ) )
             {
                 width = tmp;
             }
 
             if ( ( _data[ Cubemap.CubemapSide.PositiveY.Index ] != null )
-                 && ( ( tmp = _data[ Cubemap.CubemapSide.PositiveY.Index ]!.Width ) > width ) )
+              && ( ( tmp = _data[ Cubemap.CubemapSide.PositiveY.Index ]!.Width ) > width ) )
             {
                 width = tmp;
             }
 
             if ( ( _data[ Cubemap.CubemapSide.NegativeY.Index ] != null )
-                 && ( ( tmp = _data[ Cubemap.CubemapSide.NegativeY.Index ]!.Width ) > width ) )
+              && ( ( tmp = _data[ Cubemap.CubemapSide.NegativeY.Index ]!.Width ) > width ) )
             {
                 width = tmp;
             }
@@ -219,25 +221,25 @@ public class FacedCubemapData : ICubemapData
             var height = 0;
 
             if ( ( _data[ Cubemap.CubemapSide.PositiveZ.Index ] != null )
-                 && ( ( tmp = _data[ Cubemap.CubemapSide.PositiveZ.Index ]!.Height ) > height ) )
+              && ( ( tmp = _data[ Cubemap.CubemapSide.PositiveZ.Index ]!.Height ) > height ) )
             {
                 height = tmp;
             }
 
             if ( ( _data[ Cubemap.CubemapSide.NegativeZ.Index ] != null )
-                 && ( ( tmp = _data[ Cubemap.CubemapSide.NegativeZ.Index ]!.Height ) > height ) )
+              && ( ( tmp = _data[ Cubemap.CubemapSide.NegativeZ.Index ]!.Height ) > height ) )
             {
                 height = tmp;
             }
 
             if ( ( _data[ Cubemap.CubemapSide.PositiveX.Index ] != null )
-                 && ( ( tmp = _data[ Cubemap.CubemapSide.PositiveX.Index ]!.Height ) > height ) )
+              && ( ( tmp = _data[ Cubemap.CubemapSide.PositiveX.Index ]!.Height ) > height ) )
             {
                 height = tmp;
             }
 
             if ( ( _data[ Cubemap.CubemapSide.NegativeX.Index ] != null )
-                 && ( ( tmp = _data[ Cubemap.CubemapSide.NegativeX.Index ]!.Height ) > height ) )
+              && ( ( tmp = _data[ Cubemap.CubemapSide.NegativeX.Index ]!.Height ) > height ) )
             {
                 height = tmp;
             }
@@ -259,7 +261,7 @@ public class FacedCubemapData : ICubemapData
                 throw new NullReferenceException();
             }
 
-            foreach ( var data in _data )
+            foreach ( ITextureData? data in _data )
             {
                 if ( data is { IsManaged: false } )
                 {
@@ -289,7 +291,7 @@ public class FacedCubemapData : ICubemapData
             throw new RuntimeException( "Cubemap data must be complete before use!" );
         }
 
-        foreach ( var data in _data )
+        foreach ( ITextureData? data in _data )
         {
             if ( data is { IsPrepared: false } )
             {
@@ -314,7 +316,7 @@ public class FacedCubemapData : ICubemapData
         }
 
         _data[ side.Index ] = TextureDataFactory.LoadFromFile( file, false )
-                              ?? throw new RuntimeException( $"Error loading {file.Name}" );
+                           ?? throw new RuntimeException( $"Error loading {file.Name}" );
     }
 
     /// <summary>
@@ -333,7 +335,7 @@ public class FacedCubemapData : ICubemapData
         }
 
         _data[ side.Index ] = ( pixmap == null ? null : new PixmapTextureData( pixmap, 0, false, false ) )
-                              ?? throw new RuntimeException( "Error loadin pixmap" );
+                           ?? throw new RuntimeException( "Error loadin pixmap" );
     }
 
     /// <summary>
@@ -350,7 +352,7 @@ public class FacedCubemapData : ICubemapData
     /// </summary>
     public bool IsComplete()
     {
-        foreach ( var data in _data )
+        foreach ( ITextureData? data in _data )
         {
             if ( data == null )
             {

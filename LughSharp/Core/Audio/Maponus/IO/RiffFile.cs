@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Support;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -54,7 +55,7 @@ public class RiffFile
     private          int             _fmode;      // current file I/O mode
 
     // ========================================================================
-    
+
     public RiffFile()
     {
         _file  = null;
@@ -63,7 +64,7 @@ public class RiffFile
         _riffHeader = new RiffChunkHeader( this )
         {
             CkId   = FourCC( "RIFF" ),
-            CkSize = 0,
+            CkSize = 0
         };
     }
 
@@ -80,7 +81,7 @@ public class RiffFile
     /// </summary>
     public virtual int Open( string filename, int newMode )
     {
-        var retcode = DDC_SUCCESS;
+        int retcode = DDC_SUCCESS;
 
         if ( _fmode != RF_UNKNOWN )
         {
@@ -147,14 +148,14 @@ public class RiffFile
                             _fmode = RF_READ;
 
                             _riffHeader.CkId = ( ( br[ 0 ] << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
-                                               | ( ( br[ 1 ] << 16 ) & 0x00FF0000 )
-                                               | ( ( br[ 2 ] << 8 ) & 0x0000FF00 )
-                                               | ( br[ 3 ] & 0x000000FF );
+                                             | ( ( br[ 1 ] << 16 ) & 0x00FF0000 )
+                                             | ( ( br[ 2 ] << 8 ) & 0x0000FF00 )
+                                             | ( br[ 3 ] & 0x000000FF );
 
                             _riffHeader.CkSize = ( ( br[ 4 ] << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
-                                                 | ( ( br[ 5 ] << 16 ) & 0x00FF0000 )
-                                                 | ( ( br[ 6 ] << 8 ) & 0x0000FF00 )
-                                                 | ( br[ 7 ] & 0x000000FF );
+                                               | ( ( br[ 5 ] << 16 ) & 0x00FF0000 )
+                                               | ( ( br[ 6 ] << 8 ) & 0x0000FF00 )
+                                               | ( br[ 7 ] & 0x000000FF );
                         }
                         catch
                         {
@@ -185,7 +186,7 @@ public class RiffFile
     /// </summary>
     public virtual int Open( Stream stream, int newMode )
     {
-        var retcode = DDC_SUCCESS;
+        int retcode = DDC_SUCCESS;
 
         if ( _fmode != RF_UNKNOWN )
         {
@@ -256,14 +257,14 @@ public class RiffFile
                             _fmode = RF_READ;
 
                             _riffHeader.CkId = ( ( br[ 0 ] << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
-                                               | ( ( br[ 1 ] << 16 ) & 0x00FF0000 )
-                                               | ( ( br[ 2 ] << 8 ) & 0x0000FF00 )
-                                               | ( br[ 3 ] & 0x000000FF );
+                                             | ( ( br[ 1 ] << 16 ) & 0x00FF0000 )
+                                             | ( ( br[ 2 ] << 8 ) & 0x0000FF00 )
+                                             | ( br[ 3 ] & 0x000000FF );
 
                             _riffHeader.CkSize = ( ( br[ 4 ] << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
-                                                 | ( ( br[ 5 ] << 16 ) & 0x00FF0000 )
-                                                 | ( ( br[ 6 ] << 8 ) & 0x0000FF00 )
-                                                 | ( br[ 7 ] & 0x000000FF );
+                                               | ( ( br[ 5 ] << 16 ) & 0x00FF0000 )
+                                               | ( ( br[ 6 ] << 8 ) & 0x0000FF00 )
+                                               | ( br[ 7 ] & 0x000000FF );
                         }
                         catch
                         {
@@ -448,7 +449,7 @@ public class RiffFile
     /// </summary>
     public virtual int Read( sbyte[] data, int numBytes )
     {
-        var retcode = DDC_SUCCESS;
+        int retcode = DDC_SUCCESS;
 
         try
         {
@@ -495,7 +496,7 @@ public class RiffFile
     /// </summary>
     public virtual int Close()
     {
-        var retcode = DDC_SUCCESS;
+        int retcode = DDC_SUCCESS;
 
         switch ( _fmode )
         {
@@ -643,10 +644,10 @@ public class RiffFile
 
         SupportClass.GetSBytesFromString( chunkName, 0, 4, ref p, 0 );
 
-        var ret = ( ( p[ 0 ] << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
-                  | ( ( p[ 1 ] << 16 ) & 0x00FF0000 )
-                  | ( ( p[ 2 ] << 8 ) & 0x0000FF00 )
-                  | ( p[ 3 ] & 0x000000FF );
+        int ret = ( ( p[ 0 ] << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
+                | ( ( p[ 1 ] << 16 ) & 0x00FF0000 )
+                | ( ( p[ 2 ] << 8 ) & 0x0000FF00 )
+                | ( p[ 3 ] & 0x000000FF );
 
         return ret;
     }
@@ -674,4 +675,3 @@ public class RiffFile
 
 // ============================================================================
 // ============================================================================
-

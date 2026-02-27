@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
@@ -34,6 +35,7 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Collections;
+
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
@@ -85,18 +87,18 @@ public class ScissorStack
         else
         {
             // merge scissors
-            var parent = _scissors[ ^1 ];
+            Rectangle parent = _scissors[ ^1 ];
 
-            var minX = Math.Max( parent.X, scissor.X );
-            var maxX = Math.Min( parent.X + parent.Width, scissor.X + scissor.Width );
+            float minX = Math.Max( parent.X, scissor.X );
+            float maxX = Math.Min( parent.X + parent.Width, scissor.X + scissor.Width );
 
             if ( ( maxX - minX ) < 1 )
             {
                 return false;
             }
 
-            var minY = Math.Max( parent.Y, scissor.Y );
-            var maxY = Math.Min( parent.Y + parent.Height, scissor.Y + scissor.Height );
+            float minY = Math.Max( parent.Y, scissor.Y );
+            float maxY = Math.Min( parent.Y + parent.Height, scissor.Y + scissor.Height );
 
             if ( ( maxY - minY ) < 1 )
             {
@@ -129,7 +131,7 @@ public class ScissorStack
     /// </summary>
     public static Rectangle PopScissors()
     {
-        var old = _scissors.Pop();
+        Rectangle old = _scissors.Pop();
 
         if ( _scissors.Count == 0 )
         {
@@ -137,7 +139,7 @@ public class ScissorStack
         }
         else
         {
-            var scissor = _scissors.Peek();
+            Rectangle scissor = _scissors.Peek();
 
             HdpiUtils.GLScissor( ( int )scissor.X,
                                  ( int )scissor.Y,
@@ -182,7 +184,14 @@ public class ScissorStack
                                           Rectangle area,
                                           Rectangle scissor )
     {
-        CalculateScissors( camera, 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight, batchTransform, area, scissor );
+        CalculateScissors( camera,
+                           0,
+                           0,
+                           Engine.Api.Graphics.WindowWidth,
+                           Engine.Api.Graphics.WindowHeight,
+                           batchTransform,
+                           area,
+                           scissor );
     }
 
     /// <summary>
@@ -239,7 +248,7 @@ public class ScissorStack
             return _viewport;
         }
 
-        var scissor = _scissors.Peek();
+        Rectangle scissor = _scissors.Peek();
         _viewport.Set( scissor );
 
         return _viewport;

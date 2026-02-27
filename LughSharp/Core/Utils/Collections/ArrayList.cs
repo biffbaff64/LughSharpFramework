@@ -167,7 +167,7 @@ public class ArrayList< T >
     /// <param name="count">The number of items to copy.</param>
     public virtual void AddAll( T?[] array, int start, int count )
     {
-        var sizeNeeded = Count + count;
+        int sizeNeeded = Count + count;
 
         if ( sizeNeeded > Items.Length )
         {
@@ -262,7 +262,7 @@ public class ArrayList< T >
 
         Guard.Against.Null( Items );
 
-        var sizeNeeded = Count + count;
+        int sizeNeeded = Count + count;
 
         if ( sizeNeeded > Items.Length )
         {
@@ -364,7 +364,7 @@ public class ArrayList< T >
             throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Count}" );
         }
 
-        var value = Items[ index ];
+        T value = Items[ index ];
 
         Count--;
 
@@ -400,7 +400,7 @@ public class ArrayList< T >
             throw new ArgumentOutOfRangeException( $"start can't be > end - {start} > {end}" );
         }
 
-        var count = ( end - start ) + 1;
+        int count = end - start + 1;
 
         if ( Ordered )
         {
@@ -408,7 +408,7 @@ public class ArrayList< T >
         }
         else
         {
-            var lastIndex = Count - 1;
+            int lastIndex = Count - 1;
 
             for ( var i = 0; i < count; i++ )
             {
@@ -426,12 +426,12 @@ public class ArrayList< T >
     /// <returns> <b>True</b> if successful. </returns>
     public virtual bool RemoveAll( ArrayList< T > arrayList )
     {
-        var size      = Count;
-        var startSize = size;
+        int size      = Count;
+        int startSize = size;
 
         for ( int i = 0, n = arrayList.Count; i < n; i++ )
         {
-            var item = arrayList.GetAt( i );
+            T item = arrayList.GetAt( i );
 
             for ( var ii = 0; ii < size; ii++ )
             {
@@ -461,7 +461,7 @@ public class ArrayList< T >
 
         --Count;
 
-        var item = Items[ Count ];
+        T item = Items[ Count ];
 
         Items[ Count ] = default( T )!;
 
@@ -563,7 +563,7 @@ public class ArrayList< T >
     /// <returns> The resized backing array. </returns>
     public virtual T?[] EnsureCapacity( int additionalCapacity )
     {
-        var sizeNeeded = Count + additionalCapacity;
+        int sizeNeeded = Count + additionalCapacity;
 
         if ( sizeNeeded > Items.Length )
         {
@@ -652,7 +652,7 @@ public class ArrayList< T >
     {
         for ( int i = 0, lastIndex = Count - 1, n = Count / 2; i < n; i++ )
         {
-            var ii = lastIndex - i;
+            int ii = lastIndex - i;
 
             ( Items[ i ], Items[ ii ] ) = ( Items[ ii ], Items[ i ] );
         }
@@ -663,9 +663,9 @@ public class ArrayList< T >
     /// </summary>
     public virtual void Shuffle()
     {
-        for ( var i = Count - 1; i >= 0; i-- )
+        for ( int i = Count - 1; i >= 0; i-- )
         {
-            var ii = MathUtils.Random( i );
+            int ii = MathUtils.Random( i );
 
             ( Items[ i ], Items[ ii ] ) = ( Items[ ii ], Items[ i ] );
         }
@@ -712,7 +712,7 @@ public class ArrayList< T >
             return;
         }
 
-        for ( var i = newSize; i < Count; i++ )
+        for ( int i = newSize; i < Count; i++ )
         {
             Items[ i ] = default( T )!;
         }
@@ -736,7 +736,7 @@ public class ArrayList< T >
     [MustUseReturnValue]
     public virtual T[] ToArray()
     {
-        var memberInfo = Items.GetType().BaseType;
+        Type? memberInfo = Items.GetType().BaseType;
 
         return memberInfo != null ? ToArray( memberInfo ) : ( T[] )Array.CreateInstance( Items.GetType(), Count );
     }
@@ -760,7 +760,7 @@ public class ArrayList< T >
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        var h = 31 * GetType().GetHashCode();
+        int h = 31 * GetType().GetHashCode();
         h *= 67 + 689696484;
 
         return h;
@@ -786,7 +786,7 @@ public class ArrayList< T >
             return false;
         }
 
-        var n = Count;
+        int n = Count;
 
         if ( n != array.Count )
         {

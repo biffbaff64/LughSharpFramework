@@ -26,6 +26,7 @@ using System;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Assets.Loaders.Resolvers;
@@ -92,9 +93,9 @@ public class ResolutionFileResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string filename )
     {
-        var      bestResolution = Choose( Descriptors );
-        FileInfo originalHandle = new( filename );
-        var      handle         = BaseResolver.Resolve( Resolve( originalHandle, bestResolution.AssetsFolder ) );
+        Resolution bestResolution = Choose( Descriptors );
+        FileInfo   originalHandle = new( filename );
+        FileInfo   handle         = BaseResolver.Resolve( Resolve( originalHandle, bestResolution.AssetsFolder ) );
 
         if ( !handle.Exists )
         {
@@ -112,8 +113,8 @@ public class ResolutionFileResolver : IFileHandleResolver
     /// <returns>The resolved file path.</returns>
     protected static string Resolve( FileInfo originalHandle, string suffix )
     {
-        var parentstring = "";
-        var parent       = originalHandle.Directory;
+        var            parentstring = "";
+        DirectoryInfo? parent       = originalHandle.Directory;
 
         if ( ( parent != null ) && !parent.Name.Equals( "" ) )
         {
@@ -131,22 +132,22 @@ public class ResolutionFileResolver : IFileHandleResolver
     /// <returns>The best resolution.</returns>
     public static Resolution Choose( params Resolution[] descs )
     {
-        var w = Engine.Api.Graphics.BackBufferWidth;
-        var h = Engine.Api.Graphics.BackBufferHeight;
+        int w = Engine.Api.Graphics.BackBufferWidth;
+        int h = Engine.Api.Graphics.BackBufferHeight;
 
         // Prefer the shortest side.
-        var best = descs[ 0 ];
+        Resolution best = descs[ 0 ];
 
         if ( w < h )
         {
             for ( int i = 0, n = descs.Length; i < n; i++ )
             {
-                var other = descs[ i ];
+                Resolution other = descs[ i ];
 
                 if ( ( w >= other.PortraitWidth )
-                     && ( other.PortraitWidth >= best.PortraitWidth )
-                     && ( h >= other.PortraitHeight )
-                     && ( other.PortraitHeight >= best.PortraitHeight ) )
+                  && ( other.PortraitWidth >= best.PortraitWidth )
+                  && ( h >= other.PortraitHeight )
+                  && ( other.PortraitHeight >= best.PortraitHeight ) )
                 {
                     best = descs[ i ];
                 }
@@ -156,12 +157,12 @@ public class ResolutionFileResolver : IFileHandleResolver
         {
             for ( int i = 0, n = descs.Length; i < n; i++ )
             {
-                var other = descs[ i ];
+                Resolution other = descs[ i ];
 
                 if ( ( w >= other.PortraitHeight )
-                     && ( other.PortraitHeight >= best.PortraitHeight )
-                     && ( h >= other.PortraitWidth )
-                     && ( other.PortraitWidth >= best.PortraitWidth ) )
+                  && ( other.PortraitHeight >= best.PortraitHeight )
+                  && ( h >= other.PortraitWidth )
+                  && ( other.PortraitWidth >= best.PortraitWidth ) )
                 {
                     best = descs[ i ];
                 }
@@ -196,7 +197,7 @@ public class ResolutionFileResolver : IFileHandleResolver
         public string AssetsFolder { get; }
 
         // ====================================================================
-        
+
         /// <summary>
         /// Constructs a new instance of the <see cref="Resolution"/> class with
         /// the specified portrait width, portrait height, and assets folder.

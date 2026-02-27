@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.CompilerServices;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Shaders;
@@ -112,6 +113,7 @@ public class VertexArray : IVertexData
         }
 
         fixed ( float* sourcePtr = &vertices[ offset ] )
+        {
             fixed ( byte* destPtr = _byteBuffer.BackingArray() )
             {
                 Unsafe.CopyBlock( destPtr + _byteBuffer.Position, sourcePtr, ( uint )( count * sizeof( float ) ) );
@@ -119,6 +121,7 @@ public class VertexArray : IVertexData
                 _buffer.Position     =  0;
                 _buffer.Limit        =  count;
             }
+        }
     }
 
     /// <summary>
@@ -136,11 +139,14 @@ public class VertexArray : IVertexData
         }
 
         fixed ( float* sourcePtr = &vertices[ sourceOffset ] )
+        {
             fixed ( byte* destPtr = _byteBuffer.BackingArray() )
             {
-                Unsafe.CopyBlock( destPtr + ( targetOffset * sizeof( float ) ), sourcePtr,
+                Unsafe.CopyBlock( destPtr + ( targetOffset * sizeof( float ) ),
+                                  sourcePtr,
                                   ( uint )( count * sizeof( float ) ) );
             }
+        }
     }
 
     /// <summary>
@@ -153,12 +159,12 @@ public class VertexArray : IVertexData
         _byteBuffer.Position = 0;
         _buffer.Position     = 0;
 
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         for ( var i = 0; i < numAttributes; i++ )
         {
-            var attribute = Attributes.Get( i );
-            var location  = locations?[ i ] ?? shader.GetAttributeLocation( attribute.Alias );
+            VertexAttribute attribute = Attributes.Get( i );
+            int             location  = locations?[ i ] ?? shader.GetAttributeLocation( attribute.Alias );
 
             if ( location < 0 )
             {
@@ -167,11 +173,11 @@ public class VertexArray : IVertexData
 
             Engine.GL.EnableVertexAttribArray( ( uint )location );
 
-            var byteOffset    = attribute.Offset;
-            var type          = attribute.ComponentType;
-            var numComponents = attribute.NumComponents;
-            var normalized    = attribute.Normalized;
-            var stride        = Attributes.VertexSize;
+            int  byteOffset    = attribute.Offset;
+            int  type          = attribute.ComponentType;
+            int  numComponents = attribute.NumComponents;
+            bool normalized    = attribute.Normalized;
+            int  stride        = Attributes.VertexSize;
 
             Engine.GL.VertexAttribPointer( ( uint )location,
                                            numComponents,
@@ -189,11 +195,11 @@ public class VertexArray : IVertexData
     /// <param name="locations"> array containing the attribute locations.</param>
     public void Unbind( ShaderProgram? shader, int[]? locations = null )
     {
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         for ( var i = 0; i < numAttributes; i++ )
         {
-            var location = locations?[ i ] ?? shader?.GetAttributeLocation( Attributes.Get( i ).Alias ) ?? -1;
+            int location = locations?[ i ] ?? shader?.GetAttributeLocation( Attributes.Get( i ).Alias ) ?? -1;
 
             if ( location >= 0 )
             {
@@ -221,4 +227,3 @@ public class VertexArray : IVertexData
 
 // ============================================================================
 // ============================================================================
-

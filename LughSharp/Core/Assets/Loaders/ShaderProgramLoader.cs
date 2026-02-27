@@ -27,11 +27,13 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using File = System.IO.File;
 
 namespace LughSharp.Core.Assets.Loaders;
@@ -149,12 +151,12 @@ public class ShaderProgramLoader : AsynchronousAssetLoader
             fragFileName = file.Name[ ..^_vertexFileSuffix.Length ] + _fragmentFileSuffix;
         }
 
-        var vertexFile   = vertFileName == null ? file : Resolve( vertFileName );
-        var fragmentFile = fragFileName == null ? file : Resolve( fragFileName );
+        FileInfo vertexFile   = vertFileName == null ? file : Resolve( vertFileName );
+        FileInfo fragmentFile = fragFileName == null ? file : Resolve( fragFileName );
 
-        var vertexCode = File.ReadAllText( Path.GetFullPath( vertexFile.Name ) );
+        string vertexCode = File.ReadAllText( Path.GetFullPath( vertexFile.Name ) );
 
-        var fragmentCode = vertexFile.Equals( fragmentFile )
+        string fragmentCode = vertexFile.Equals( fragmentFile )
             ? vertexCode
             : File.ReadAllText( Path.GetFullPath( fragmentFile.Name ) );
 

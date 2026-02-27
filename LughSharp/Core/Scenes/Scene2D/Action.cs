@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Pooling;
 
@@ -95,8 +96,8 @@ public abstract class Action : IAction, IResetable
     /// <inheritdoc />
     public override string ToString()
     {
-        var name     = GetType().Name;
-        var dotIndex = name.LastIndexOf( '.' );
+        string name     = GetType().Name;
+        int    dotIndex = name.LastIndexOf( '.' );
 
         if ( dotIndex != -1 )
         {
@@ -116,4 +117,3 @@ public abstract class Action : IAction, IResetable
 
 // ============================================================================
 // ============================================================================
-

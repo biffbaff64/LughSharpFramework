@@ -28,9 +28,11 @@
 
 using System;
 using System.Text;
+
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -159,7 +161,7 @@ public unsafe partial class GLBindings : IGLBindings
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        var     infoLog = stackalloc GLchar[ bufSize ];
+        GLchar* infoLog = stackalloc GLchar[ bufSize ];
         GLsizei len;
 
         GetDelegateForFunction< PFNGLGETPROGRAMINFOLOGPROC >( "glGetProgramInfoLog", out _glGetProgramInfoLog );
@@ -215,7 +217,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void GetProgramBinary( GLuint program, GLsizei bufSize, GLsizei* length, GLenum* binaryFormat, IntPtr binary )
+    public void GetProgramBinary( GLuint program, GLsizei bufSize, GLsizei* length, GLenum* binaryFormat,
+                                  IntPtr binary )
     {
         GetDelegateForFunction< PFNGLGETPROGRAMBINARYPROC >( "glGetProgramBinary", out _glGetProgramBinary );
 
@@ -292,7 +295,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLuint CreateShaderProgramv( GLenum type, GLsizei count, GLchar** strings )
     {
-        GetDelegateForFunction< PFNGLCREATESHADERPROGRAMVPROC >( "glCreateShaderProgramv", out _glCreateShaderProgramv );
+        GetDelegateForFunction< PFNGLCREATESHADERPROGRAMVPROC >( "glCreateShaderProgramv",
+                                                                 out _glCreateShaderProgramv );
 
         return _glCreateShaderProgramv( type, count, strings );
     }
@@ -316,7 +320,8 @@ public unsafe partial class GLBindings : IGLBindings
             }
         }
 
-        GetDelegateForFunction< PFNGLCREATESHADERPROGRAMVPROC >( "glCreateShaderProgramv", out _glCreateShaderProgramv );
+        GetDelegateForFunction< PFNGLCREATESHADERPROGRAMVPROC >( "glCreateShaderProgramv",
+                                                                 out _glCreateShaderProgramv );
 
         fixed ( GLchar** pStrings = &stringsPtrs[ 0 ] )
         {
@@ -337,14 +342,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void DeleteProgramPipelines( GLsizei n, GLuint* pipelines )
     {
-        GetDelegateForFunction< PFNGLDELETEPROGRAMPIPELINESPROC >( "glDeleteProgramPipelines", out _glDeleteProgramPipelines );
+        GetDelegateForFunction< PFNGLDELETEPROGRAMPIPELINESPROC >( "glDeleteProgramPipelines",
+                                                                   out _glDeleteProgramPipelines );
 
         _glDeleteProgramPipelines( n, pipelines );
     }
 
     public void DeleteProgramPipelines( params GLuint[] pipelines )
     {
-        GetDelegateForFunction< PFNGLDELETEPROGRAMPIPELINESPROC >( "glDeleteProgramPipelines", out _glDeleteProgramPipelines );
+        GetDelegateForFunction< PFNGLDELETEPROGRAMPIPELINESPROC >( "glDeleteProgramPipelines",
+                                                                   out _glDeleteProgramPipelines );
 
         fixed ( GLuint* pPipelines = &pipelines[ 0 ] )
         {
@@ -393,14 +400,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetProgramPipelineiv( GLuint pipeline, GLenum pname, GLint* param )
     {
-        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEIVPROC >( "glGetProgramPipelineiv", out _glGetProgramPipelineiv );
+        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEIVPROC >( "glGetProgramPipelineiv",
+                                                                 out _glGetProgramPipelineiv );
 
         _glGetProgramPipelineiv( pipeline, pname, param );
     }
 
     public void GetProgramPipelineiv( GLuint pipeline, GLenum pname, ref GLint[] param )
     {
-        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEIVPROC >( "glGetProgramPipelineiv", out _glGetProgramPipelineiv );
+        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEIVPROC >( "glGetProgramPipelineiv",
+                                                                 out _glGetProgramPipelineiv );
 
         fixed ( GLint* pParam = &param[ 0 ] )
         {
@@ -858,16 +867,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                         GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2FVPROC >( "glProgramUniformMatrix2fv", out _glProgramUniformMatrix2fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2FVPROC >( "glProgramUniformMatrix2fv",
+                                                                    out _glProgramUniformMatrix2fv );
 
         _glProgramUniformMatrix2fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2FVPROC >( "glProgramUniformMatrix2fv", out _glProgramUniformMatrix2fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2FVPROC >( "glProgramUniformMatrix2fv",
+                                                                    out _glProgramUniformMatrix2fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -877,16 +889,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                         GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3FVPROC >( "glProgramUniformMatrix3fv", out _glProgramUniformMatrix3fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3FVPROC >( "glProgramUniformMatrix3fv",
+                                                                    out _glProgramUniformMatrix3fv );
 
         _glProgramUniformMatrix3fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3FVPROC >( "glProgramUniformMatrix3fv", out _glProgramUniformMatrix3fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3FVPROC >( "glProgramUniformMatrix3fv",
+                                                                    out _glProgramUniformMatrix3fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -896,16 +911,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                         GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4FVPROC >( "glProgramUniformMatrix4fv", out _glProgramUniformMatrix4fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4FVPROC >( "glProgramUniformMatrix4fv",
+                                                                    out _glProgramUniformMatrix4fv );
 
         _glProgramUniformMatrix4fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4FVPROC >( "glProgramUniformMatrix4fv", out _glProgramUniformMatrix4fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4FVPROC >( "glProgramUniformMatrix4fv",
+                                                                    out _glProgramUniformMatrix4fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -915,16 +933,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                         GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2DVPROC >( "glProgramUniformMatrix2dv", out _glProgramUniformMatrix2dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2DVPROC >( "glProgramUniformMatrix2dv",
+                                                                    out _glProgramUniformMatrix2dv );
 
         _glProgramUniformMatrix2dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2DVPROC >( "glProgramUniformMatrix2dv", out _glProgramUniformMatrix2dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2DVPROC >( "glProgramUniformMatrix2dv",
+                                                                    out _glProgramUniformMatrix2dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -934,16 +955,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                         GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3DVPROC >( "glProgramUniformMatrix3dv", out _glProgramUniformMatrix3dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3DVPROC >( "glProgramUniformMatrix3dv",
+                                                                    out _glProgramUniformMatrix3dv );
 
         _glProgramUniformMatrix3dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3DVPROC >( "glProgramUniformMatrix3dv", out _glProgramUniformMatrix3dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3DVPROC >( "glProgramUniformMatrix3dv",
+                                                                    out _glProgramUniformMatrix3dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -953,16 +977,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                         GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4DVPROC >( "glProgramUniformMatrix4dv", out _glProgramUniformMatrix4dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4DVPROC >( "glProgramUniformMatrix4dv",
+                                                                    out _glProgramUniformMatrix4dv );
 
         _glProgramUniformMatrix4dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4DVPROC >( "glProgramUniformMatrix4dv", out _glProgramUniformMatrix4dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4DVPROC >( "glProgramUniformMatrix4dv",
+                                                                    out _glProgramUniformMatrix4dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -972,16 +999,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix2x3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix2x3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC >( "glProgramUniformMatrix2x3fv", out _glProgramUniformMatrix2x3fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC >( "glProgramUniformMatrix2x3fv",
+                                                                      out _glProgramUniformMatrix2x3fv );
 
         _glProgramUniformMatrix2x3fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2x3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC >( "glProgramUniformMatrix2x3fv", out _glProgramUniformMatrix2x3fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC >( "glProgramUniformMatrix2x3fv",
+                                                                      out _glProgramUniformMatrix2x3fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -991,16 +1021,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix3x2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix3x2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC >( "glProgramUniformMatrix3x2fv", out _glProgramUniformMatrix3x2fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC >( "glProgramUniformMatrix3x2fv",
+                                                                      out _glProgramUniformMatrix3x2fv );
 
         _glProgramUniformMatrix3x2fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3x2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC >( "glProgramUniformMatrix3x2fv", out _glProgramUniformMatrix3x2fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC >( "glProgramUniformMatrix3x2fv",
+                                                                      out _glProgramUniformMatrix3x2fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -1010,16 +1043,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix2x4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix2x4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC >( "glProgramUniformMatrix2x4fv", out _glProgramUniformMatrix2x4fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC >( "glProgramUniformMatrix2x4fv",
+                                                                      out _glProgramUniformMatrix2x4fv );
 
         _glProgramUniformMatrix2x4fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2x4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC >( "glProgramUniformMatrix2x4fv", out _glProgramUniformMatrix2x4fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC >( "glProgramUniformMatrix2x4fv",
+                                                                      out _glProgramUniformMatrix2x4fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -1029,16 +1065,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix4x2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix4x2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC >( "glProgramUniformMatrix4x2fv", out _glProgramUniformMatrix4x2fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC >( "glProgramUniformMatrix4x2fv",
+                                                                      out _glProgramUniformMatrix4x2fv );
 
         _glProgramUniformMatrix4x2fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4x2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC >( "glProgramUniformMatrix4x2fv", out _glProgramUniformMatrix4x2fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC >( "glProgramUniformMatrix4x2fv",
+                                                                      out _glProgramUniformMatrix4x2fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -1048,16 +1087,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix3x4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix3x4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC >( "glProgramUniformMatrix3x4fv", out _glProgramUniformMatrix3x4fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC >( "glProgramUniformMatrix3x4fv",
+                                                                      out _glProgramUniformMatrix3x4fv );
 
         _glProgramUniformMatrix3x4fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3x4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC >( "glProgramUniformMatrix3x4fv", out _glProgramUniformMatrix3x4fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC >( "glProgramUniformMatrix3x4fv",
+                                                                      out _glProgramUniformMatrix3x4fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -1067,16 +1109,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix4x3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void ProgramUniformMatrix4x3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLfloat* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC >( "glProgramUniformMatrix4x3fv", out _glProgramUniformMatrix4x3fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC >( "glProgramUniformMatrix4x3fv",
+                                                                      out _glProgramUniformMatrix4x3fv );
 
         _glProgramUniformMatrix4x3fv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4x3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC >( "glProgramUniformMatrix4x3fv", out _glProgramUniformMatrix4x3fv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC >( "glProgramUniformMatrix4x3fv",
+                                                                      out _glProgramUniformMatrix4x3fv );
 
         fixed ( GLfloat* pValue = &value[ 0 ] )
         {
@@ -1086,16 +1131,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix2x3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix2x3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC >( "glProgramUniformMatrix2x3dv", out _glProgramUniformMatrix2x3dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC >( "glProgramUniformMatrix2x3dv",
+                                                                      out _glProgramUniformMatrix2x3dv );
 
         _glProgramUniformMatrix2x3dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2x3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC >( "glProgramUniformMatrix2x3dv", out _glProgramUniformMatrix2x3dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC >( "glProgramUniformMatrix2x3dv",
+                                                                      out _glProgramUniformMatrix2x3dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -1105,16 +1153,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix3x2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix3x2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC >( "glProgramUniformMatrix3x2dv", out _glProgramUniformMatrix3x2dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC >( "glProgramUniformMatrix3x2dv",
+                                                                      out _glProgramUniformMatrix3x2dv );
 
         _glProgramUniformMatrix3x2dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3x2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC >( "glProgramUniformMatrix3x2dv", out _glProgramUniformMatrix3x2dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC >( "glProgramUniformMatrix3x2dv",
+                                                                      out _glProgramUniformMatrix3x2dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -1124,16 +1175,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix2x4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix2x4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC >( "glProgramUniformMatrix2x4dv", out _glProgramUniformMatrix2x4dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC >( "glProgramUniformMatrix2x4dv",
+                                                                      out _glProgramUniformMatrix2x4dv );
 
         _glProgramUniformMatrix2x4dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix2x4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC >( "glProgramUniformMatrix2x4dv", out _glProgramUniformMatrix2x4dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC >( "glProgramUniformMatrix2x4dv",
+                                                                      out _glProgramUniformMatrix2x4dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -1143,16 +1197,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix4x2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix4x2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC >( "glProgramUniformMatrix4x2dv", out _glProgramUniformMatrix4x2dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC >( "glProgramUniformMatrix4x2dv",
+                                                                      out _glProgramUniformMatrix4x2dv );
 
         _glProgramUniformMatrix4x2dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4x2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC >( "glProgramUniformMatrix4x2dv", out _glProgramUniformMatrix4x2dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC >( "glProgramUniformMatrix4x2dv",
+                                                                      out _glProgramUniformMatrix4x2dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -1162,16 +1219,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix3x4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix3x4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC >( "glProgramUniformMatrix3x4dv", out _glProgramUniformMatrix3x4dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC >( "glProgramUniformMatrix3x4dv",
+                                                                      out _glProgramUniformMatrix3x4dv );
 
         _glProgramUniformMatrix3x4dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix3x4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC >( "glProgramUniformMatrix3x4dv", out _glProgramUniformMatrix3x4dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC >( "glProgramUniformMatrix3x4dv",
+                                                                      out _glProgramUniformMatrix3x4dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -1181,16 +1241,19 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ProgramUniformMatrix4x3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void ProgramUniformMatrix4x3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose,
+                                           GLdouble* value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC >( "glProgramUniformMatrix4x3dv", out _glProgramUniformMatrix4x3dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC >( "glProgramUniformMatrix4x3dv",
+                                                                      out _glProgramUniformMatrix4x3dv );
 
         _glProgramUniformMatrix4x3dv( program, location, count, transpose, value );
     }
 
     public void ProgramUniformMatrix4x3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
     {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC >( "glProgramUniformMatrix4x3dv", out _glProgramUniformMatrix4x3dv );
+        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC >( "glProgramUniformMatrix4x3dv",
+                                                                      out _glProgramUniformMatrix4x3dv );
 
         fixed ( GLdouble* pValue = &value[ 0 ] )
         {
@@ -1202,7 +1265,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void ValidateProgramPipeline( GLuint pipeline )
     {
-        GetDelegateForFunction< PFNGLVALIDATEPROGRAMPIPELINEPROC >( "glValidateProgramPipeline", out _glValidateProgramPipeline );
+        GetDelegateForFunction< PFNGLVALIDATEPROGRAMPIPELINEPROC >( "glValidateProgramPipeline",
+                                                                    out _glValidateProgramPipeline );
 
         _glValidateProgramPipeline( pipeline );
     }
@@ -1211,7 +1275,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetProgramPipelineInfoLog( GLuint pipeline, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
     {
-        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEINFOLOGPROC >( "glGetProgramPipelineInfoLog", out _glGetProgramPipelineInfoLog );
+        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEINFOLOGPROC >( "glGetProgramPipelineInfoLog",
+                                                                      out _glGetProgramPipelineInfoLog );
 
         _glGetProgramPipelineInfoLog( pipeline, bufSize, length, infoLog );
     }
@@ -1220,7 +1285,8 @@ public unsafe partial class GLBindings : IGLBindings
     {
         var infoLog = new GLchar[ bufSize ];
 
-        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEINFOLOGPROC >( "glGetProgramPipelineInfoLog", out _glGetProgramPipelineInfoLog );
+        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEINFOLOGPROC >( "glGetProgramPipelineInfoLog",
+                                                                      out _glGetProgramPipelineInfoLog );
 
         fixed ( GLchar* pInfoLog = &infoLog[ 0 ] )
         {
@@ -1243,7 +1309,8 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
+        GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv",
+                                                                  out _glGetProgramInterfaceiv );
 
         _glGetProgramInterfaceiv( ( uint )program, programInterface, pname, parameters );
     }
@@ -1257,7 +1324,8 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
+        GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv",
+                                                                  out _glGetProgramInterfaceiv );
 
         fixed ( GLint* pParameters = &parameters[ 0 ] )
         {
@@ -1274,7 +1342,8 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex",
+                                                                    out _glGetProgramResourceIndex );
 
         return _glGetProgramResourceIndex( ( uint )program, programInterface, name );
     }
@@ -1286,9 +1355,10 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        var nameBytes = Encoding.UTF8.GetBytes( name );
+        byte[] nameBytes = Encoding.UTF8.GetBytes( name );
 
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex",
+                                                                    out _glGetProgramResourceIndex );
 
         fixed ( GLchar* pName = &nameBytes[ 0 ] )
         {
@@ -1298,7 +1368,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void GetProgramResourceName( GLint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei* length,
+    public void GetProgramResourceName( GLint program, GLenum programInterface, GLuint index, GLsizei bufSize,
+                                        GLsizei* length,
                                         GLchar* name )
     {
         if ( !IsProgram( program ) )
@@ -1306,7 +1377,8 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName",
+                                                                   out _glGetProgramResourceName );
 
         _glGetProgramResourceName( ( uint )program, programInterface, index, bufSize, length, name );
     }
@@ -1320,7 +1392,8 @@ public unsafe partial class GLBindings : IGLBindings
 
         var name = new GLchar[ bufSize ];
 
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName",
+                                                                   out _glGetProgramResourceName );
 
         fixed ( GLchar* pName = &name[ 0 ] )
         {
@@ -1342,12 +1415,21 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv",
+                                                                 out _glGetProgramResourceiv );
 
-        _glGetProgramResourceiv( ( uint )program, programInterface, index, propCount, props, bufSize, length, parameters );
+        _glGetProgramResourceiv( ( uint )program,
+                                 programInterface,
+                                 index,
+                                 propCount,
+                                 props,
+                                 bufSize,
+                                 length,
+                                 parameters );
     }
 
-    public void GetProgramResourceiv( GLint program, GLenum programInterface, GLuint index, GLenum[] props, GLsizei bufSize,
+    public void GetProgramResourceiv( GLint program, GLenum programInterface, GLuint index, GLenum[] props,
+                                      GLsizei bufSize,
                                       ref GLint[] parameters )
     {
         if ( !IsProgram( program ) )
@@ -1355,14 +1437,22 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv",
+                                                                 out _glGetProgramResourceiv );
 
         fixed ( GLenum* pProps = &props[ 0 ] )
         {
             fixed ( GLint* pParams = &parameters[ 0 ] )
             {
                 GLsizei length;
-                _glGetProgramResourceiv( ( uint )program, programInterface, index, props.Length, pProps, bufSize, &length, pParams );
+                _glGetProgramResourceiv( ( uint )program,
+                                         programInterface,
+                                         index,
+                                         props.Length,
+                                         pProps,
+                                         bufSize,
+                                         &length,
+                                         pParams );
             }
         }
     }
@@ -1371,7 +1461,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLint GetProgramResourceLocation( GLint program, GLenum programInterface, GLchar* name )
     {
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONPROC >( "glGetProgramResourceLocation", out _glGetProgramResourceLocation );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONPROC >( "glGetProgramResourceLocation",
+                                                                       out _glGetProgramResourceLocation );
 
         return _glGetProgramResourceLocation( ( uint )program, programInterface, name );
     }
@@ -1383,9 +1474,10 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        var nameBytes = Encoding.UTF8.GetBytes( name );
+        byte[] nameBytes = Encoding.UTF8.GetBytes( name );
 
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONPROC >( "glGetProgramResourceLocation", out _glGetProgramResourceLocation );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONPROC >( "glGetProgramResourceLocation",
+                                                                       out _glGetProgramResourceLocation );
 
         fixed ( GLchar* pName = &nameBytes[ 0 ] )
         {
@@ -1403,7 +1495,7 @@ public unsafe partial class GLBindings : IGLBindings
         }
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
-                                                                                                         out _glGetProgramResourceLocationIndex );
+                                                                            out _glGetProgramResourceLocationIndex );
 
         return _glGetProgramResourceLocationIndex( ( uint )program, programInterface, name );
     }
@@ -1415,10 +1507,10 @@ public unsafe partial class GLBindings : IGLBindings
             throw new RuntimeException( $"Invalid program ID: {program}" );
         }
 
-        var nameBytes = Encoding.UTF8.GetBytes( name );
+        byte[] nameBytes = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
-                                                                                                         out _glGetProgramResourceLocationIndex );
+                                                                            out _glGetProgramResourceLocationIndex );
 
         fixed ( GLchar* pName = &nameBytes[ 0 ] )
         {
@@ -1430,7 +1522,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void CreateProgramPipelines( GLsizei n, GLuint* pipelines )
     {
-        GetDelegateForFunction< PFNGLCREATEPROGRAMPIPELINESPROC >( "glCreateProgramPipelines", out _glCreateProgramPipelines );
+        GetDelegateForFunction< PFNGLCREATEPROGRAMPIPELINESPROC >( "glCreateProgramPipelines",
+                                                                   out _glCreateProgramPipelines );
 
         _glCreateProgramPipelines( n, pipelines );
     }
@@ -1439,7 +1532,8 @@ public unsafe partial class GLBindings : IGLBindings
     {
         var pipelines = new GLuint[ n ];
 
-        GetDelegateForFunction< PFNGLCREATEPROGRAMPIPELINESPROC >( "glCreateProgramPipelines", out _glCreateProgramPipelines );
+        GetDelegateForFunction< PFNGLCREATEPROGRAMPIPELINESPROC >( "glCreateProgramPipelines",
+                                                                   out _glCreateProgramPipelines );
 
         fixed ( GLuint* ptrPipelines = &pipelines[ 0 ] )
         {

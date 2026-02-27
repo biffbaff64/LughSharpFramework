@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Decoding;
+
 using Decoder = LughSharp.Core.Audio.Maponus.Decoding.Decoder;
 
 namespace LughSharp.Core.Audio.Maponus;
@@ -78,13 +80,13 @@ public class Mp3Stream : Stream
         IsEof |= !ReadFrame();
 
         Format = ChannelCount switch
-        {
-            1 => SoundFormat.Pcm16BitMono,
-            2 => SoundFormat.Pcm16BitStereo,
-            var _ => throw new Mp3SharpException
-                ( $"Unhandled channel count rep: {ChannelCount} "
-                  + $"(allowed values are 1-mono and 2-stereo)." ),
-        };
+                 {
+                     1 => SoundFormat.Pcm16BitMono,
+                     2 => SoundFormat.Pcm16BitStereo,
+                     var _ => throw new Mp3SharpException
+                         ( $"Unhandled channel count rep: {ChannelCount} "
+                         + $"(allowed values are 1-mono and 2-stereo)." )
+                 };
 
         if ( Format == SoundFormat.Pcm16BitMono )
         {
@@ -281,7 +283,7 @@ public class Mp3Stream : Stream
     private bool ReadFrame()
     {
         // Read a frame from the bitstream.
-        var header = _bitStream.ReadFrame();
+        Header? header = _bitStream.ReadFrame();
 
         if ( header == null )
         {
@@ -295,7 +297,7 @@ public class Mp3Stream : Stream
             Frequency    = header.Frequency();
 
             // Decode the frame.
-            var decoderOutput = _decoder.DecodeFrame( header, _bitStream );
+            AudioBase? decoderOutput = _decoder.DecodeFrame( header, _bitStream );
 
             if ( decoderOutput != _buffer )
             {
@@ -314,4 +316,3 @@ public class Mp3Stream : Stream
 
 // ============================================================================
 // ============================================================================
-

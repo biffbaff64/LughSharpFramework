@@ -74,7 +74,7 @@ public class FloatCounter
     public WindowedMean? Mean { get; set; }
 
     // ========================================================================
-    
+
     public FloatCounter( int windowSize )
     {
         Mean = windowSize > 1 ? new WindowedMean( windowSize ) : null;
@@ -137,7 +137,7 @@ public class FloatCounter
     public override string ToString()
     {
         return $"FloatCounter: count={Count}, total={Total}, min={Min},"
-               + $"max={Max}, average={Average}, latest={Latest}, value={Value}";
+             + $"max={Max}, average={Average}, latest={Latest}, value={Value}";
     }
 }
 

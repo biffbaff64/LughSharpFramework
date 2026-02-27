@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
@@ -115,7 +116,8 @@ public class VertexBufferObject : IVertexData
     /// <param name="data">The byte buffer containing the vertex data.</param>
     /// <param name="ownsBuffer">Indicates whether this object should take ownership of the buffer.</param>
     /// <param name="attributes">The vertex attributes that define the structure of the vertex data.</param>
-    public VertexBufferObject( BufferUsageHint usage, Buffer< byte > data, bool ownsBuffer, VertexAttributes attributes )
+    public VertexBufferObject( BufferUsageHint usage, Buffer< byte > data, bool ownsBuffer,
+                               VertexAttributes attributes )
     {
         // Generate a new buffer handle using OpenGL and assign it to _bufferHandle.
         _bufferHandle = ( int )Engine.GL.GenBuffer();
@@ -209,7 +211,7 @@ public class VertexBufferObject : IVertexData
         _isDirty = true;
 
         // Save the current position of the byte buffer.
-        var pos = _byteBuffer.Position;
+        int pos = _byteBuffer.Position;
 
         // Set the position of the byte buffer to the target offset, converted to bytes.
         _byteBuffer.Position = targetOffset * 4;
@@ -256,13 +258,13 @@ public class VertexBufferObject : IVertexData
             }
         }
 
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         for ( var i = 0; i < numAttributes; i++ )
         {
-            var attribute = Attributes.Get( i );
+            VertexAttribute attribute = Attributes.Get( i );
 
-            var location = locations == null
+            int location = locations == null
                 ? shader.GetAttributeLocation( attribute.Alias )
                 : locations[ i ];
 
@@ -295,7 +297,7 @@ public class VertexBufferObject : IVertexData
     public void Unbind( ShaderProgram shader, int[]? locations = null )
     {
         // Get the number of attributes in the vertex attributes.
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         // If no specific locations are provided, disable attributes using their aliases.
         if ( locations == null )
@@ -311,7 +313,7 @@ public class VertexBufferObject : IVertexData
             // If specific locations are provided, disable attributes based on the locations array.
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var location = locations[ i ];
+                int location = locations[ i ];
 
                 // Disable the vertex attribute at the given location if it is valid (>= 0).
                 if ( location >= 0 )
@@ -381,7 +383,7 @@ public class VertexBufferObject : IVertexData
             throw new RuntimeException( "Only Buffer< byte > is currently supported" );
         }
 
-        var lim = _byteBuffer.Limit;
+        int lim = _byteBuffer.Limit;
 
         _ownsBuffer        = ownsBuffer;
         _byteBuffer.Limit  = _byteBuffer.Capacity;

@@ -46,7 +46,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class Widget : Actor, ILayout
 {
     public override string? Name => "Widget";
-    
+
     /// <summary>
     /// </summary>
     public bool NeedsLayout { get; set; } = true;
@@ -89,7 +89,7 @@ public class Widget : Actor, ILayout
             return;
         }
 
-        var parent = Parent;
+        Group? parent = Parent;
 
         if ( FillParent && ( parent != null ) )
         {
@@ -216,17 +216,35 @@ public class Widget : Actor, ILayout
         Invalidate();
     }
 
-    public float GetMinWidth() => GetPrefWidth();
+    public float GetMinWidth()
+    {
+        return GetPrefWidth();
+    }
 
-    public float GetMinHeight() => GetPrefHeight();
+    public float GetMinHeight()
+    {
+        return GetPrefHeight();
+    }
 
-    public virtual float GetPrefWidth() => 0;
+    public virtual float GetPrefWidth()
+    {
+        return 0;
+    }
 
-    public virtual float GetPrefHeight() => 0;
+    public virtual float GetPrefHeight()
+    {
+        return 0;
+    }
 
-    public float GetMaxWidth() => 0;
+    public float GetMaxWidth()
+    {
+        return 0;
+    }
 
-    public float GetMaxHeight() => 0;
+    public float GetMaxHeight()
+    {
+        return 0;
+    }
 }
 
 // ============================================================================

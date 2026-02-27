@@ -23,8 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
+
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Graphics.G2D;
@@ -42,7 +44,7 @@ public class PolygonSprite
     public float          Rotation { get; set; }
 
     // ========================================================================
-    
+
     private readonly Rectangle _bounds = new();
 
     private bool     _dirty;
@@ -225,7 +227,7 @@ public class PolygonSprite
     {
         Color.Set( tint );
 
-        var color = tint.ToFloatBitsAbgr();
+        float color = tint.ToFloatBitsAbgr();
 
         for ( var i = 2; i < _vertices?.Length; i += Sprite.VERTEX_SIZE )
         {
@@ -304,28 +306,28 @@ public class PolygonSprite
 
         _dirty = false;
 
-        var originX  = OriginX;
-        var originY  = OriginY;
-        var scaleX   = ScaleX;
-        var scaleY   = ScaleY;
-        var vertices = _vertices;
+        float    originX  = OriginX;
+        float    originY  = OriginY;
+        float    scaleX   = ScaleX;
+        float    scaleY   = ScaleY;
+        float[]? vertices = _vertices;
 
-        var regionVertices = Region.Vertices;
+        float[]? regionVertices = Region.Vertices;
 
-        var region = Region;
+        PolygonRegion? region = Region;
 
-        var worldOriginX = _x + originX;
-        var worldOriginY = _y + originY;
-        var sX           = Width / region.Region.GetRegionWidth();
-        var sY           = Height / region.Region.GetRegionHeight();
-        var cos          = MathUtils.CosDeg( Rotation );
-        var sin          = MathUtils.SinDeg( Rotation );
+        float worldOriginX = _x + originX;
+        float worldOriginY = _y + originY;
+        float sX           = Width / region.Region.GetRegionWidth();
+        float sY           = Height / region.Region.GetRegionHeight();
+        float cos          = MathUtils.CosDeg( Rotation );
+        float sin          = MathUtils.SinDeg( Rotation );
 
         for ( int i = 0, v = 0, n = regionVertices!.Length; i < n; i += 2, v += 5 )
         {
-            var fx = ( ( regionVertices[ i ] * sX ) - originX ) * scaleX;
-            var fy = ( ( regionVertices[ i + 1 ] * sY ) - originY ) * scaleY;
-            vertices[ v ]     = ( ( cos * fx ) - ( sin * fy ) ) + worldOriginX;
+            float fx = ( ( regionVertices[ i ] * sX ) - originX ) * scaleX;
+            float fy = ( ( regionVertices[ i + 1 ] * sY ) - originY ) * scaleY;
+            vertices[ v ]     = ( cos * fx ) - ( sin * fy ) + worldOriginX;
             vertices[ v + 1 ] = ( sin * fx ) + ( cos * fy ) + worldOriginY;
         }
 
@@ -341,22 +343,22 @@ public class PolygonSprite
     /// <returns> the bounding Rectangle </returns>
     public Rectangle GetBoundingRectangle()
     {
-        var vertices = GetVertices();
+        float[]? vertices = GetVertices();
 
         if ( vertices == null )
         {
             throw new NullReferenceException();
         }
 
-        var minx = vertices[ 0 ];
-        var miny = vertices[ 1 ];
-        var maxx = vertices[ 0 ];
-        var maxy = vertices[ 1 ];
+        float minx = vertices[ 0 ];
+        float miny = vertices[ 1 ];
+        float maxx = vertices[ 0 ];
+        float maxy = vertices[ 1 ];
 
         for ( var i = 5; i < vertices.Length; i += 5 )
         {
-            var x = vertices[ i ];
-            var y = vertices[ i + 1 ];
+            float x = vertices[ i ];
+            float y = vertices[ i + 1 ];
 
             minx = minx > x ? x : minx;
             maxx = maxx < x ? x : maxx;
@@ -390,8 +392,8 @@ public class PolygonSprite
 
     public void Draw( PolygonSpriteBatch spriteBatch, float alphaModulation )
     {
-        var color    = Color;
-        var oldAlpha = color.A;
+        Color color    = Color;
+        float oldAlpha = color.A;
 
         color.A *= alphaModulation;
         SetColor( color );
@@ -410,7 +412,7 @@ public class PolygonSprite
     /// </summary>
     public Color GetPackedColor()
     {
-        var color = Color;
+        Color color = Color;
 
         if ( _vertices != null )
         {
@@ -429,10 +431,10 @@ public class PolygonSprite
 
         Region = region;
 
-        var regionVertices = region.Vertices;
-        var textureCoords  = region.TextureCoords;
+        float[]? regionVertices = region.Vertices;
+        float[]  textureCoords  = region.TextureCoords;
 
-        var verticesLength = ( regionVertices!.Length / 2 ) * 5;
+        int verticesLength = regionVertices!.Length / 2 * 5;
 
         if ( ( _vertices == null ) || ( _vertices.Length != verticesLength ) )
         {
@@ -453,4 +455,3 @@ public class PolygonSprite
 
 // ============================================================================
 // ============================================================================
-

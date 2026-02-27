@@ -25,8 +25,11 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
+
 using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.ImagePacker;
@@ -129,12 +132,12 @@ public class ImagePacker
             throw new Exception( $"Key with name '{name}' is already in map" );
         }
 
-        var borderPixels = _padding + ( _duplicateBorder ? 1 : 0 );
+        int borderPixels = _padding + ( _duplicateBorder ? 1 : 0 );
 
         borderPixels <<= 1;
 
-        var rect = new Rectangle( 0, 0, image.Width + borderPixels, image.Height + borderPixels );
-        var node = Insert( rect );
+        var   rect = new Rectangle( 0, 0, image.Width + borderPixels, image.Height + borderPixels );
+        Node? node = Insert( rect );
 
         if ( node == null )
         {
@@ -151,7 +154,7 @@ public class ImagePacker
 
         Rects.Add( name, rect );
 
-        using ( var g = Graphics.FromImage( Image ) )
+        using ( Graphics g = Graphics.FromImage( Image ) )
         {
             g.DrawImage( image, rect.X, rect.Y );
 
@@ -209,7 +212,8 @@ public class ImagePacker
                 g.DrawImage( image,
                              new Rectangle( rect.X + rect.Width, rect.Y + rect.Height, 1, 1 ),
                              new Rectangle( image.Width - 1, image.Height - 1, 1, 1 ),
-                             GraphicsUnit.Pixel ); }
+                             GraphicsUnit.Pixel );
+            }
         }
     }
 
@@ -230,10 +234,10 @@ public class ImagePacker
 
         while ( stack.Count > 0 )
         {
-            var node = stack.Pop();
+            Node node = stack.Pop();
 
             if ( ( node.LeaveName == null )
-                 && node is { LeftChild: not null, RightChild: not null } )
+              && node is { LeftChild: not null, RightChild: not null } )
             {
                 stack.Push( node.RightChild );
                 stack.Push( node.LeftChild );
@@ -242,14 +246,14 @@ public class ImagePacker
             }
 
             if ( ( node.LeaveName != null )
-                 || ( node.Rect.Width < rect.Width )
-                 || ( node.Rect.Height < rect.Height ) )
+              || ( node.Rect.Width < rect.Width )
+              || ( node.Rect.Height < rect.Height ) )
             {
                 continue;
             }
 
             if ( ( node.Rect.Width == rect.Width )
-                 && ( node.Rect.Height == rect.Height ) )
+              && ( node.Rect.Height == rect.Height ) )
             {
                 return node;
             }
@@ -274,7 +278,7 @@ public class ImagePacker
     {
         var bitmap = new Bitmap( width, height, pixelFormat );
 
-        using ( var gfx = Graphics.FromImage( bitmap ) )
+        using ( Graphics gfx = Graphics.FromImage( bitmap ) )
         {
             gfx.Clear( color );
         }
@@ -311,8 +315,8 @@ public class ImagePacker
         {
             LeftChild = new Node( Rect.X, Rect.Y, rect.Width, rect.Height );
 
-            var deltaWidth  = Rect.Width - rect.Width;
-            var deltaHeight = Rect.Height - rect.Height;
+            int deltaWidth  = Rect.Width - rect.Width;
+            int deltaHeight = Rect.Height - rect.Height;
 
             RightChild = deltaWidth > deltaHeight
                 ? new Node( Rect.X + rect.Width, Rect.Y, deltaWidth, Rect.Height )

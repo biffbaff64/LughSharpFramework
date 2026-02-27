@@ -99,14 +99,14 @@ public class Polygon : IShape2D
                 _worldVertices = new float[ _localVertices!.Length ];
             }
 
-            var scale = ScaleX is not 1 || ScaleY is not 1;
-            var cos   = MathUtils.CosDeg( Rotation );
-            var sin   = MathUtils.SinDeg( Rotation );
+            bool  scale = ScaleX is not 1 || ScaleY is not 1;
+            float cos   = MathUtils.CosDeg( Rotation );
+            float sin   = MathUtils.SinDeg( Rotation );
 
             for ( int i = 0, n = _localVertices.Length; i < n; i += 2 )
             {
-                var x = _localVertices[ i ] - OriginX;
-                var y = _localVertices[ i + 1 ] - OriginY;
+                float x = _localVertices[ i ] - OriginX;
+                float y = _localVertices[ i + 1 ] - OriginY;
 
                 // scale if needed
                 if ( scale )
@@ -118,7 +118,7 @@ public class Polygon : IShape2D
                 // rotate if needed
                 if ( Rotation != 0 )
                 {
-                    var oldX = x;
+                    float oldX = x;
 
                     x = ( cos * x ) - ( sin * y );
                     y = ( sin * oldX ) + ( cos * y );
@@ -196,14 +196,14 @@ public class Polygon : IShape2D
     {
         get
         {
-            var vertices = TransformedVertices;
+            float[]? vertices = TransformedVertices;
 
-            var minX = vertices![ 0 ];
-            var minY = vertices[ 1 ];
-            var maxX = vertices[ 0 ];
-            var maxY = vertices[ 1 ];
+            float minX = vertices![ 0 ];
+            float minY = vertices[ 1 ];
+            float maxX = vertices[ 0 ];
+            float maxY = vertices[ 1 ];
 
-            var numFloats = vertices.Length;
+            int numFloats = vertices.Length;
 
             for ( var i = 2; i < numFloats; i += 2 )
             {
@@ -229,18 +229,18 @@ public class Polygon : IShape2D
     /// </summary>
     public bool Contains( float x, float y )
     {
-        var numFloats  = TransformedVertices!.Length;
+        int numFloats  = TransformedVertices!.Length;
         var intersects = 0;
 
         for ( var i = 0; i < numFloats; i += 2 )
         {
-            var x1 = TransformedVertices[ i ];
-            var y1 = TransformedVertices[ i + 1 ];
-            var x2 = TransformedVertices[ ( i + 2 ) % numFloats ];
-            var y2 = TransformedVertices[ ( i + 3 ) % numFloats ];
+            float x1 = TransformedVertices[ i ];
+            float y1 = TransformedVertices[ i + 1 ];
+            float x2 = TransformedVertices[ ( i + 2 ) % numFloats ];
+            float y2 = TransformedVertices[ ( i + 3 ) % numFloats ];
 
             if ( ( ( ( y1 <= y ) && ( y < y2 ) ) || ( ( y2 <= y ) && ( y < y1 ) ) )
-                 && ( x < ( ( ( ( x2 - x1 ) / ( y2 - y1 ) ) * ( y - y1 ) ) + x1 ) ) )
+              && ( x < ( ( ( x2 - x1 ) / ( y2 - y1 ) * ( y - y1 ) ) + x1 ) ) )
             {
                 intersects++;
             }

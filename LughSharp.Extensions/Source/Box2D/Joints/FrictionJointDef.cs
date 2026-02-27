@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Box2D.Joints;
@@ -30,7 +29,6 @@ namespace Extensions.Source.Box2D.Joints;
 [PublicAPI]
 public class FrictionJointDef
 {
-    
 }
 
 // ============================================================================

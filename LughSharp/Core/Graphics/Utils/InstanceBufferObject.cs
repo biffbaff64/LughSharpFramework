@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -60,7 +62,7 @@ public class InstanceBufferObject : IInstanceData
 
         var data = new Buffer< byte >( instanceAttributes.VertexSize * numVertices )
         {
-            Limit = 0,
+            Limit = 0
         };
 
         SetBuffer( data, true, instanceAttributes );
@@ -88,7 +90,7 @@ public class InstanceBufferObject : IInstanceData
 
     public VertexAttributes Attributes { get; set; } = null!;
 
-    public int NumInstances    => ( _buffer.Limit * 4 ) / Attributes.VertexSize;
+    public int NumInstances    => _buffer.Limit * 4 / Attributes.VertexSize;
     public int NumMaxInstances => _byteBuffer!.Capacity / Attributes.VertexSize;
 
     public Buffer< float > GetBuffer( bool forWriting = true )
@@ -135,7 +137,7 @@ public class InstanceBufferObject : IInstanceData
 
         _isDirty = true;
 
-        var pos = _byteBuffer.Position;
+        int pos = _byteBuffer.Position;
 
         _byteBuffer.Position = targetOffset * 4;
 
@@ -153,7 +155,7 @@ public class InstanceBufferObject : IInstanceData
 
         _isDirty = true;
 
-        var pos = _byteBuffer.Position;
+        int pos = _byteBuffer.Position;
 
         _byteBuffer.Position = targetOffset * 4;
         data.Position        = sourceOffset * 4;
@@ -188,22 +190,22 @@ public class InstanceBufferObject : IInstanceData
             _isDirty = false;
         }
 
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         if ( locations == null )
         {
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var attribute = Attributes.Get( i );
+                VertexAttribute attribute = Attributes.Get( i );
 
-                var location = shader.GetAttributeLocation( attribute.Alias );
+                int location = shader.GetAttributeLocation( attribute.Alias );
 
                 if ( location < 0 )
                 {
                     continue;
                 }
 
-                var unitOffset = +attribute.Unit;
+                int unitOffset = +attribute.Unit;
                 shader.EnableVertexAttribute( location + unitOffset );
 
                 shader.SetVertexAttribute( location + unitOffset,
@@ -220,15 +222,15 @@ public class InstanceBufferObject : IInstanceData
         {
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var attribute = Attributes.Get( i );
-                var location  = locations[ i ];
+                VertexAttribute attribute = Attributes.Get( i );
+                int             location  = locations[ i ];
 
                 if ( location < 0 )
                 {
                     continue;
                 }
 
-                var unitOffset = +attribute.Unit;
+                int unitOffset = +attribute.Unit;
                 shader.EnableVertexAttribute( location + unitOffset );
 
                 shader.SetVertexAttribute( location + unitOffset,
@@ -250,21 +252,21 @@ public class InstanceBufferObject : IInstanceData
     /// </summary>
     public void Unbind( ShaderProgram shader, int[]? locations = null )
     {
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         if ( locations == null )
         {
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var attribute = Attributes.Get( i );
-                var location  = shader.GetAttributeLocation( attribute.Alias );
+                VertexAttribute attribute = Attributes.Get( i );
+                int             location  = shader.GetAttributeLocation( attribute.Alias );
 
                 if ( location < 0 )
                 {
                     continue;
                 }
 
-                var unitOffset = +attribute.Unit;
+                int unitOffset = +attribute.Unit;
                 shader.DisableVertexAttribute( location + unitOffset );
             }
         }
@@ -272,15 +274,15 @@ public class InstanceBufferObject : IInstanceData
         {
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var attribute = Attributes.Get( i );
-                var location  = locations[ i ];
+                VertexAttribute attribute = Attributes.Get( i );
+                int             location  = locations[ i ];
 
                 if ( location < 0 )
                 {
                     continue;
                 }
 
-                var unitOffset = +attribute.Unit;
+                int unitOffset = +attribute.Unit;
                 shader.DisableVertexAttribute( location + unitOffset );
             }
         }
@@ -344,7 +346,7 @@ public class InstanceBufferObject : IInstanceData
 
         _ownsBuffer = ownsBuffer;
 
-        var lim = _byteBuffer.Limit;
+        int lim = _byteBuffer.Limit;
 
         _byteBuffer.Limit = _byteBuffer.Capacity;
         _buffer           = _byteBuffer.AsFloatBuffer();

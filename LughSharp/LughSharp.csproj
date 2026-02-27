@@ -20,7 +20,7 @@
         <PackageTags>CSharp;2D;Framework;OpenGL;</PackageTags>
         <Copyright>Copyright 2024 Richard Ikin</Copyright>
         <Company>Richard Ikin</Company>
-        <PackageReleaseNotes>SpriteBatch/Mesh rendering issues fixed. TexturePacker up and running.  </PackageReleaseNotes>
+        <PackageReleaseNotes>SpriteBatch/Mesh rendering issues fixed. TexturePacker up and running.</PackageReleaseNotes>
         <UserSecretsId>15077a63-55d3-46e9-b882-0b5cf985e7cc</UserSecretsId>
         <AssemblyName>LughSharp</AssemblyName>
         <RootNamespace>LughSharp</RootNamespace>
@@ -54,26 +54,26 @@
 
     <ItemGroup>
         <PackageReference Include="DotGLFW" Version="1.2.0"/>
-        <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-        <PackageReference Include="RestSharp" Version="113.0.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.4"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4"/>
+        <PackageReference Include="RestSharp" Version="113.0.0"/>
         <PackageReference Include="SharpZipLib" Version="1.4.2"/>
         <PackageReference Include="StbiSharp" Version="1.2.1"/>
-        <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
+        <PackageReference Include="System.Drawing.Common" Version="10.0.0"/>
         <PackageReference Include="System.Drawing.Primitives" Version="4.3.0"/>
-        <PackageReference Include="System.IO.Abstractions" Version="22.1.0" />
-        <PackageReference Include="System.IO.Hashing" Version="10.0.0" />
+        <PackageReference Include="System.IO.Abstractions" Version="22.1.0"/>
+        <PackageReference Include="System.IO.Hashing" Version="10.0.0"/>
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2"/>
-        <PackageReference Include="System.Text.Json" Version="10.0.0" />
+        <PackageReference Include="System.Text.Json" Version="10.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
         <Content Include="lib\net8.0\gdx2d.dll" Pack="true" PackagePath="lib\net8.0\">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <Content Include="lib\net8.0\freetype.dll" Pack="true" PackagePath="lib\net8.0\">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 

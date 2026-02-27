@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Main;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
@@ -132,7 +133,7 @@ public class VertexBufferObjectWithVAO : IVertexData
                 return 0;
             }
 
-            return ( _buffer.Limit * 4 ) / Attributes.VertexSize;
+            return _buffer.Limit * 4 / Attributes.VertexSize;
         }
     }
 
@@ -193,7 +194,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     public void UpdateVertices( int targetOffset, float[] vertices, int sourceOffset, int count )
     {
         _isDirty = true;
-        var pos = _byteBuffer.Position;
+        int pos = _byteBuffer.Position;
 
         _byteBuffer.Position = targetOffset * 4;
 
@@ -281,8 +282,8 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     private void BindAttributes( ShaderProgram shader, int[]? locations )
     {
-        var stillValid    = _cachedLocations.Count != 0;
-        var numAttributes = Attributes.Size;
+        bool stillValid    = _cachedLocations.Count != 0;
+        int  numAttributes = Attributes.Size;
 
         if ( stillValid )
         {
@@ -290,8 +291,8 @@ public class VertexBufferObjectWithVAO : IVertexData
             {
                 for ( var i = 0; stillValid && ( i < numAttributes ); i++ )
                 {
-                    var attribute = Attributes.Get( i );
-                    var location  = shader.GetAttributeLocation( attribute.Alias );
+                    VertexAttribute attribute = Attributes.Get( i );
+                    int             location  = shader.GetAttributeLocation( attribute.Alias );
 
                     stillValid = location == _cachedLocations[ i ];
                 }
@@ -317,13 +318,13 @@ public class VertexBufferObjectWithVAO : IVertexData
 
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var attribute = Attributes.Get( i );
+                VertexAttribute attribute = Attributes.Get( i );
 
                 _cachedLocations.Add( locations == null
                                           ? shader.GetAttributeLocation( attribute.Alias )
                                           : locations[ i ] );
 
-                var location = _cachedLocations[ i ];
+                int location = _cachedLocations[ i ];
 
                 if ( location < 0 )
                 {
@@ -349,11 +350,11 @@ public class VertexBufferObjectWithVAO : IVertexData
             return;
         }
 
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         for ( var i = 0; i < numAttributes; i++ )
         {
-            var location = _cachedLocations[ i ];
+            int location = _cachedLocations[ i ];
 
             if ( location < 0 )
             {

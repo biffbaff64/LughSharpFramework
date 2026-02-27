@@ -24,7 +24,9 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using Environment = System.Environment;
 
 namespace LughSharp.Core.Audio.OpenAL;
@@ -40,7 +42,7 @@ public class ALC
         REFRESH,
         SYNC,
         MONO_SOURCES,
-        STEREO_SOURCES,
+        STEREO_SOURCES
     ];
 
     // ========================================================================
@@ -56,7 +58,7 @@ public class ALC
 
     private static IntPtr ImportResolver( string libraryName, Assembly assembly, DllImportSearchPath? searchPath )
     {
-        var libHandle = IntPtr.Zero;
+        IntPtr libHandle = IntPtr.Zero;
 
         if ( libraryName == OPEN_AL_DLL )
         {
@@ -338,4 +340,3 @@ public class ALC
 
 // ============================================================================
 // ============================================================================
-

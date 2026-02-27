@@ -23,10 +23,12 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -34,8 +36,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ImageTextButton : Button
 {
-    public override string? Name => "ImageTextButton";
-    private readonly Scene2DImage?                _image;
+    public override  string?               Name => "ImageTextButton";
+    private readonly Scene2DImage?         _image;
     private          Label?                _label;
     private          ImageTextButtonStyle? _style;
 
@@ -97,11 +99,11 @@ public class ImageTextButton : Button
 
         if ( _label != null )
         {
-            var labelStyle = _label.Style;
+            Label.LabelStyle labelStyle = _label.Style;
 
             labelStyle.Font      = textButtonStyle.Font!;
             labelStyle.FontColor = GetFontColor();
-            _label.Style = labelStyle;
+            _label.Style         = labelStyle;
         }
     }
 
@@ -213,7 +215,7 @@ public class ImageTextButton : Button
             }
         }
 
-        var focused = HasKeyboardFocus();
+        bool focused = HasKeyboardFocus();
 
         if ( IsChecked )
         {
@@ -302,8 +304,8 @@ public class ImageTextButton : Button
             return Name;
         }
 
-        var className = GetType().Name;
-        var dotIndex  = className.LastIndexOf( '.' );
+        string className = GetType().Name;
+        int    dotIndex  = className.LastIndexOf( '.' );
 
         if ( dotIndex != -1 )
         {
@@ -311,8 +313,8 @@ public class ImageTextButton : Button
         }
 
         return ( className.IndexOf( '$' ) != -1 ? "ImageTextButton " : "" )
-               + className
-               + $":  {_image?.Drawable}  {_label?.Text}";
+             + className
+             + $":  {_image?.Drawable}  {_label?.Text}";
     }
 
     /// <summary>

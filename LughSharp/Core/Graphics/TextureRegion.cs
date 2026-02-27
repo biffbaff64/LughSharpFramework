@@ -184,13 +184,13 @@ public class TextureRegion
             Logger.Debug( $"Negative height: {height}, this region will be Y flipped" );
         }
 
-        var invTexWidth  = 1f / Texture.Width;
-        var invTexHeight = 1f / Texture.Height;
+        float invTexWidth  = 1f / Texture.Width;
+        float invTexHeight = 1f / Texture.Height;
 
-        SetRegionSafe( u: x * invTexWidth,
-                       v: y * invTexHeight,
-                       u2: ( x + width ) * invTexWidth,
-                       v2: ( y + height ) * invTexHeight );
+        SetRegionSafe( x * invTexWidth,
+                       y * invTexHeight,
+                       ( x + width ) * invTexWidth,
+                       ( y + height ) * invTexHeight );
 
         _regionWidth  = Math.Abs( width );
         _regionHeight = Math.Abs( height );
@@ -222,8 +222,8 @@ public class TextureRegion
             throw new RuntimeException( "Texture cannot be null" );
         }
 
-        var texWidth  = Texture.Width;
-        var texHeight = Texture.Height;
+        int texWidth  = Texture.Width;
+        int texHeight = Texture.Height;
 
         _regionWidth  = ( int )Math.Round( Math.Abs( u2 - u ) * texWidth );
         _regionHeight = ( int )Math.Round( Math.Abs( v2 - v ) * texHeight );
@@ -232,12 +232,12 @@ public class TextureRegion
         // artifacts on AMD GPUs when drawing very stretched.
         if ( ( _regionWidth == 1 ) && ( _regionHeight == 1 ) )
         {
-            var xAdjustment = 0.25f / texWidth;
+            float xAdjustment = 0.25f / texWidth;
 
             u  += xAdjustment;
             u2 -= xAdjustment;
 
-            var yAdjustment = 0.25f / texHeight;
+            float yAdjustment = 0.25f / texHeight;
 
             v  += yAdjustment;
             v2 -= yAdjustment;
@@ -328,7 +328,7 @@ public class TextureRegion
 
         if ( xAmount != 0 )
         {
-            var width = ( U2 - U ) * Texture.Width;
+            float width = ( U2 - U ) * Texture.Width;
 
             U  = ( U + xAmount ) % 1;
             U2 = U + ( width / Texture.Width );
@@ -336,7 +336,7 @@ public class TextureRegion
 
         if ( yAmount != 0 )
         {
-            var height = ( V2 - V ) * Texture.Height;
+            float height = ( V2 - V ) * Texture.Height;
 
             V  = ( V + yAmount ) % 1;
             V2 = V + ( height / Texture.Height );
@@ -356,15 +356,15 @@ public class TextureRegion
     /// <returns>A 2D array of TextureRegions index by [row, column].</returns>
     public TextureRegion[ , ] Split( int tileWidth, int tileHeight )
     {
-        var x      = RegionX;
-        var y      = RegionY;
-        var width  = _regionWidth;
-        var height = _regionHeight;
+        int x      = RegionX;
+        int y      = RegionY;
+        int width  = _regionWidth;
+        int height = _regionHeight;
 
-        var rows = height / tileHeight;
-        var cols = width / tileWidth;
+        int rows = height / tileHeight;
+        int cols = width / tileWidth;
 
-        var startX = x;
+        int startX = x;
         var tiles  = new TextureRegion[ rows, cols ];
 
         for ( var row = 0; row < rows; row++, y += tileHeight )
@@ -563,7 +563,7 @@ public class TextureRegion
         }
 
         // Calculate the difference in U coordinates needed
-        var uDiff = ( float )desiredRegionWidth / Texture.Width;
+        float uDiff = ( float )desiredRegionWidth / Texture.Width;
 
         if ( isFlipX )
         {
@@ -610,7 +610,7 @@ public class TextureRegion
         }
 
         // Calculate the difference in V coordinates needed
-        var vDiff = ( float )desiredRegionHeight / Texture.Height;
+        float vDiff = ( float )desiredRegionHeight / Texture.Height;
 
         if ( isFlipY )
         {

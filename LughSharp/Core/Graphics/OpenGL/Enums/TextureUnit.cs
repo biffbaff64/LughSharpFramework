@@ -50,5 +50,5 @@ public enum TextureUnit
     Texture16     = IGL.GL_TEXTURE16,
     Texture17     = IGL.GL_TEXTURE17,
     Texture18     = IGL.GL_TEXTURE18,
-    Texture19     = IGL.GL_TEXTURE19,
+    Texture19     = IGL.GL_TEXTURE19
 }

@@ -38,10 +38,10 @@ public class LughFormat
     public const int INDEXED_COLOR   = 7; // Was GDX_2D_FORMAT_COLOR_INDEX
 
     // ------------------------------------------
-    
-    public const int DEFAULT         = RGBA8888; // Was GDX_2D_FORMAT_DEFAULT
-    public const int INVALID         = -1;       // Was GDX_2D_FORMAT_INVALID
-    public const int UNDEFINED       = 0;
+
+    public const int DEFAULT   = RGBA8888; // Was GDX_2D_FORMAT_DEFAULT
+    public const int INVALID   = -1;       // Was GDX_2D_FORMAT_INVALID
+    public const int UNDEFINED = 0;
 }
 
 // ============================================================================

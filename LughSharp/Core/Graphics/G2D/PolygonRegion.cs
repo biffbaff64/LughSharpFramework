@@ -33,9 +33,9 @@ public class PolygonRegion
     public float[]       TextureCoords { get; set; } // texture coordinates in atlas coordinates
     public float[]?      Vertices      { get; set; } // pixel coordinates relative to source image.
     public short[]       Triangles     { get; set; }
-    
+
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a PolygonRegion by triangulating the polygon coordinates in vertices
     /// and calculates uvs based on that. TextureRegion can come from an atlas.
@@ -52,12 +52,12 @@ public class PolygonRegion
         Triangles     = triangles;
         TextureCoords = new float[ vertices!.Length ];
 
-        var u        = region.U;
-        var v        = region.V;
-        var uvWidth  = region.U2 - u;
-        var uvHeight = region.V2 - v;
-        var width    = region.GetRegionWidth();
-        var height   = region.GetRegionHeight();
+        float u        = region.U;
+        float v        = region.V;
+        float uvWidth  = region.U2 - u;
+        float uvHeight = region.V2 - v;
+        int   width    = region.GetRegionWidth();
+        int   height   = region.GetRegionHeight();
 
         for ( int i = 0, n = vertices.Length; i < n; i += 2 )
         {
@@ -69,4 +69,3 @@ public class PolygonRegion
 
 // ============================================================================
 // ============================================================================
-

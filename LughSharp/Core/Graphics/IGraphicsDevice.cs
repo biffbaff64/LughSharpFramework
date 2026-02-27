@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.Utils;
 
@@ -387,7 +388,7 @@ public interface IGraphicsDevice
     /// </summary>
     /// <param name="systemCursor"> The system cursor to use. </param>
     void SetSystemCursor( ICursor.SystemCursor systemCursor );
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -454,4 +455,3 @@ public interface IGraphicsDevice
 
 // ============================================================================
 // ============================================================================
-

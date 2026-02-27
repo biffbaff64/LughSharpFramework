@@ -24,7 +24,9 @@
 
 using System;
 using System.Threading.Tasks;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils;
@@ -47,7 +49,7 @@ public class AsyncResult< T >
     /// <param name="task">The underlying Task representing the asynchronous operation.</param>
     public AsyncResult( Task< T? > task )
     {
-        this._task = task ?? throw new ArgumentNullException( nameof( task ) );
+        _task = task ?? throw new ArgumentNullException( nameof( task ) );
     }
 
     /// <summary>
@@ -80,7 +82,7 @@ public class AsyncResult< T >
             // exception(s). We unwrap the cause and throw a RuntimeException.
 
             // Get the first inner exception that caused the fault.
-            var innerException = ex.InnerException;
+            Exception? innerException = ex.InnerException;
 
             // Note: If the task was canceled, AggregateException wraps a TaskCanceledException.
             // We will re-throw the actual cause.

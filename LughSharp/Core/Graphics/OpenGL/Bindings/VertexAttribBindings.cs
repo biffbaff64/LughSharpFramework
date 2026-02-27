@@ -25,6 +25,7 @@
 // ============================================================================
 
 using System;
+
 using GLenum = int;
 using GLint = int;
 using GLsizei = int;
@@ -290,14 +291,16 @@ public unsafe partial class GLBindings
 
     public void VertexAttribLPointer( GLuint index, GLint size, GLenum type, GLsizei stride, IntPtr pointer )
     {
-        GetDelegateForFunction< PFNGLVERTEXATTRIBLPOINTERPROC >( "glVertexAttribLPointer", out _glVertexAttribLPointer );
+        GetDelegateForFunction< PFNGLVERTEXATTRIBLPOINTERPROC >( "glVertexAttribLPointer",
+                                                                 out _glVertexAttribLPointer );
 
         _glVertexAttribLPointer( index, size, type, stride, pointer );
     }
 
     public void VertexAttribLPointer( GLuint index, GLint size, GLenum type, GLsizei stride, GLsizei pointer )
     {
-        GetDelegateForFunction< PFNGLVERTEXATTRIBLPOINTERPROC >( "glVertexAttribLPointer", out _glVertexAttribLPointer );
+        GetDelegateForFunction< PFNGLVERTEXATTRIBLPOINTERPROC >( "glVertexAttribLPointer",
+                                                                 out _glVertexAttribLPointer );
 
         _glVertexAttribLPointer( index, size, type, stride, ( IntPtr )pointer );
     }
@@ -323,7 +326,8 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void VertexAttribFormat( GLuint attribindex, GLint size, GLenum type, GLboolean normalized, GLuint relativeoffset )
+    public void VertexAttribFormat( GLuint attribindex, GLint size, GLenum type, GLboolean normalized,
+                                    GLuint relativeoffset )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBFORMATPROC >( "glVertexAttribFormat", out _glVertexAttribFormat );
 
@@ -361,7 +365,8 @@ public unsafe partial class GLBindings
 
     public void VertexBindingDivisor( GLuint bindingindex, GLuint divisor )
     {
-        GetDelegateForFunction< PFNGLVERTEXBINDINGDIVISORPROC >( "glVertexBindingDivisor", out _glVertexBindingDivisor );
+        GetDelegateForFunction< PFNGLVERTEXBINDINGDIVISORPROC >( "glVertexBindingDivisor",
+                                                                 out _glVertexBindingDivisor );
 
         _glVertexBindingDivisor( bindingindex, divisor );
     }
@@ -370,7 +375,8 @@ public unsafe partial class GLBindings
 
     public void VertexAttribIPointer( GLuint index, GLint size, GLenum type, GLsizei stride, IntPtr pointer )
     {
-        GetDelegateForFunction< PFNGLVERTEXATTRIBIPOINTERPROC >( "glVertexAttribIPointer", out _glVertexAttribIPointer );
+        GetDelegateForFunction< PFNGLVERTEXATTRIBIPOINTERPROC >( "glVertexAttribIPointer",
+                                                                 out _glVertexAttribIPointer );
 
         _glVertexAttribIPointer( index, size, type, stride, pointer );
     }
@@ -379,7 +385,8 @@ public unsafe partial class GLBindings
 
     public void VertexAttribIPointer( GLuint index, GLint size, GLenum type, GLsizei stride, uint pointer )
     {
-        GetDelegateForFunction< PFNGLVERTEXATTRIBIPOINTERPROC >( "glVertexAttribIPointer", out _glVertexAttribIPointer );
+        GetDelegateForFunction< PFNGLVERTEXATTRIBIPOINTERPROC >( "glVertexAttribIPointer",
+                                                                 out _glVertexAttribIPointer );
 
         _glVertexAttribIPointer( index, size, type, stride, ( IntPtr )pointer );
     }

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -68,8 +69,8 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( int format )
     {
-        var glFormat = PixelFormat.ToGLFormat( format );
-        var glType   = PixelFormat.ToGLDataType( format );
+        int glFormat = PixelFormat.ToGLFormat( format );
+        int glType   = PixelFormat.ToGLDataType( format );
 
         return AddColorTextureAttachment( glFormat, glFormat, glType );
     }
@@ -89,7 +90,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         var spec = new FrameBufferTextureAttachmentSpec( internalFormat, format, type )
         {
             IsFloat   = true,
-            IsGpuOnly = gpuOnly,
+            IsGpuOnly = gpuOnly
         };
 
         TextureAttachmentSpecs.Add( spec );
@@ -106,7 +107,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     {
         var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GL_DEPTH_COMPONENT, type )
         {
-            IsDepth = true,
+            IsDepth = true
         };
 
         TextureAttachmentSpecs.Add( spec );
@@ -123,7 +124,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     {
         var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GL_STENCIL_ATTACHMENT, type )
         {
-            IsStencil = true,
+            IsStencil = true
         };
 
         TextureAttachmentSpecs.Add( spec );

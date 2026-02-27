@@ -27,7 +27,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Files;
@@ -221,7 +223,7 @@ public class Texture : GLTexture, IManaged
         UnsafeSetWrap( UWrap, VWrap, true );
         UnsafeSetAnisotropicFilter( AnisotropicFilterLevel, true );
 
-        Engine.GL.BindTexture( GLTarget, 0 ); 
+        Engine.GL.BindTexture( GLTarget, 0 );
 
         if ( ColorFormat == LughFormat.ALPHA )
         {
@@ -236,7 +238,7 @@ public class Texture : GLTexture, IManaged
             // Map Red -> RGB (Luminance), Green -> Alpha
             int[] swizzle = { IGL.GL_RED, IGL.GL_RED, IGL.GL_RED, IGL.GL_GREEN };
             Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D,
-                                      ( int )TextureParameter.TextureSwizzleRgba, 
+                                      ( int )TextureParameter.TextureSwizzleRgba,
                                       swizzle );
         }
     }
@@ -275,12 +277,14 @@ public class Texture : GLTexture, IManaged
         Bind();
 
         Engine.GL.TexSubImage2D( GLTarget,
-                          0, x, y,
-                          pixmap.Width,
-                          pixmap.Height,
-                          pixmap.GLPixelFormat,
-                          pixmap.GLDataType,
-                          pixmap.PixelData );
+                                 0,
+                                 x,
+                                 y,
+                                 pixmap.Width,
+                                 pixmap.Height,
+                                 pixmap.GLPixelFormat,
+                                 pixmap.GLDataType,
+                                 pixmap.PixelData );
     }
 
     /// <summary>
@@ -290,7 +294,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="texture"></param>
     private void AddManagedTexture( IApplication app, Texture texture )
     {
-        var managedTextureArray = _managedTextures.TryGetValue( app, out var managedTexture )
+        List< Texture > managedTextureArray = _managedTextures.TryGetValue( app, out List< Texture >? managedTexture )
             ? managedTexture
             : [ ];
 
@@ -306,7 +310,7 @@ public class Texture : GLTexture, IManaged
     {
         if ( _assetManager == null )
         {
-            foreach ( var t in _managedTextures[ app ] )
+            foreach ( Texture t in _managedTextures[ app ] )
             {
                 t.Reload();
             }
@@ -322,9 +326,9 @@ public class Texture : GLTexture, IManaged
             // asset manager.
             var textures = new List< Texture >( _managedTextures[ app ] );
 
-            foreach ( var texture in textures )
+            foreach ( Texture texture in textures )
             {
-                var filename = _assetManager.GetAssetFileName( texture );
+                string? filename = _assetManager.GetAssetFileName( texture );
 
                 if ( filename == null )
                 {
@@ -336,7 +340,7 @@ public class Texture : GLTexture, IManaged
                     // we can actually remove it from the assetmanager. Also set the
                     // handle to zero, otherwise we might accidentially dispose
                     // already reloaded textures.
-                    var refCount = _assetManager.GetReferenceCount( filename );
+                    int refCount = _assetManager.GetReferenceCount( filename );
 
                     _assetManager.SetReferenceCount( filename, 0 );
                     texture.GLTextureHandle = 0;
@@ -352,7 +356,7 @@ public class Texture : GLTexture, IManaged
                         WrapV          = texture.VWrap,
                         GenMipMaps     = texture.TextureData is { UseMipMaps: true },
                         Texture        = texture,
-                        LoadedCallback = new LoadedCallbackInnerClass( refCount ),
+                        LoadedCallback = new LoadedCallbackInnerClass( refCount )
                     };
 
                     // unload the texture, create a new gl handle then reload it.
@@ -375,7 +379,7 @@ public class Texture : GLTexture, IManaged
     {
         var builder = new StringBuilder( "Managed textures/app: { " );
 
-        foreach ( var app in _managedTextures.Keys )
+        foreach ( IApplication app in _managedTextures.Keys )
         {
             builder.Append( _managedTextures[ app ].Count );
             builder.Append( ' ' );
@@ -451,7 +455,7 @@ public class Texture : GLTexture, IManaged
             TextureData.Prepare();
         }
 
-        var pixmap = TextureData.ConsumePixmap();
+        Pixmap? pixmap = TextureData.ConsumePixmap();
 
         Logger.Debug( $"Dimensions        : {Width} x {Height} = {Width * Height}" );
         Logger.Debug( $"Format            : {TextureData.GetPixelFormat()}" );

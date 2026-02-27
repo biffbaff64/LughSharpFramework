@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Exceptions;
@@ -93,7 +94,7 @@ public class PixmapLoader : AsynchronousAssetLoader, IDisposable
                                             FileInfo file,
                                             TP? parameter ) where TP : class
     {
-        var pixmap = _pixmap;
+        Pixmap? pixmap = _pixmap;
 
         _pixmap = null;
 
@@ -107,7 +108,7 @@ public class PixmapLoader : AsynchronousAssetLoader, IDisposable
     public void Dispose()
     {
         Dispose( true );
-            
+
         GC.SuppressFinalize( this );
     }
 

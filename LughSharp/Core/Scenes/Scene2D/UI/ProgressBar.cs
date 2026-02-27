@@ -195,25 +195,25 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
     /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        var knob        = Style.Knob;
-        var currentKnob = GetKnobDrawable();
-        var bg          = GetBackgroundDrawable();
-        var knobBefore  = GetKnobBeforeDrawable();
-        var knobAfter   = GetKnobAfterDrawable();
+        ISceneDrawable? knob        = Style.Knob;
+        ISceneDrawable? currentKnob = GetKnobDrawable();
+        ISceneDrawable? bg          = GetBackgroundDrawable();
+        ISceneDrawable? knobBefore  = GetKnobBeforeDrawable();
+        ISceneDrawable? knobAfter   = GetKnobAfterDrawable();
 
-        var x          = X;
-        var y          = Y;
-        var width      = Width;
-        var height     = Height;
-        var knobHeight = knob?.MinHeight ?? 0;
-        var knobWidth  = knob?.MinWidth ?? 0;
-        var percent    = GetVisualPercent();
+        float x          = X;
+        float y          = Y;
+        float width      = Width;
+        float height     = Height;
+        float knobHeight = knob?.MinHeight ?? 0;
+        float knobWidth  = knob?.MinWidth ?? 0;
+        float percent    = GetVisualPercent();
 
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
         if ( IsVertical )
         {
-            var   positionHeight = height;
+            float positionHeight = height;
             float bgTopHeight    = 0;
             float bgBottomHeight = 0;
 
@@ -296,8 +296,8 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
 
             if ( currentKnob != null )
             {
-                var w = currentKnob.MinWidth;
-                var h = currentKnob.MinHeight;
+                float w = currentKnob.MinWidth;
+                float h = currentKnob.MinHeight;
 
                 x += ( width - w ) * 0.5f;
                 y += ( ( knobHeight - h ) * 0.5f ) + KnobPosition;
@@ -315,9 +315,9 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
         }
         else
         {
-            var positionWidth = width;
-            var bgLeftWidth   = 0f;
-            var bgRightWidth  = 0f;
+            float positionWidth = width;
+            var   bgLeftWidth   = 0f;
+            var   bgRightWidth  = 0f;
 
             if ( bg != null )
             {
@@ -398,8 +398,8 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
 
             if ( currentKnob != null )
             {
-                var w = currentKnob.MinWidth;
-                var h = currentKnob.MinHeight;
+                float w = currentKnob.MinWidth;
+                float h = currentKnob.MinHeight;
 
                 x += ( ( knobWidth - w ) * 0.5f ) + KnobPosition;
                 y += ( height - h ) * 0.5f;
@@ -431,14 +431,14 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
     {
         value = Clamp( Round( value ) );
 
-        var oldValue = Value;
+        float oldValue = Value;
 
         if ( value.Equals( oldValue ) )
         {
             return false;
         }
 
-        var oldVisualValue = GetVisualValue();
+        float oldVisualValue = GetVisualValue();
 
         Value = value;
 
@@ -446,7 +446,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
         {
             var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
-            var cancelled = Fire( changeEvent );
+            bool cancelled = Fire( changeEvent );
 
             // It is safe to suppress nullability warnings for 'changeEvent'
             // here because Fire() will throw an exception is it is null.
@@ -524,8 +524,8 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
     {
         if ( IsVertical )
         {
-            var knob = Style.Knob;
-            var bg   = GetBackgroundDrawable();
+            ISceneDrawable? knob = Style.Knob;
+            ISceneDrawable? bg   = GetBackgroundDrawable();
 
             return Math.Max( knob?.MinWidth ?? 0, bg?.MinWidth ?? 0 );
         }
@@ -550,8 +550,8 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
             return DEFAULT_PREF_HEIGHT;
         }
 
-        var knob = Style.Knob;
-        var bg   = GetBackgroundDrawable();
+        ISceneDrawable? knob = Style.Knob;
+        ISceneDrawable? bg   = GetBackgroundDrawable();
 
         return Math.Max( knob?.MinHeight ?? 0, bg?.MinHeight ?? 0 );
     }

@@ -28,8 +28,11 @@ using System.IO;
 using System.Reflection.Metadata;
 using System.Xml;
 using System.Xml.Linq;
+
 using Extensions.Source.Tools.TexturePacker;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Atlases;
@@ -92,7 +95,7 @@ public class TiledMapPacker
     /// </summary>
     public TiledMapPacker( TiledMapPackerSettings settings )
     {
-        this._settings = settings;
+        _settings = settings;
     }
 
     /// <summary>
@@ -105,20 +108,20 @@ public class TiledMapPacker
     {
         Guard.Against.Null( InputDir );
 
-        var inputDirHandle       = new DirectoryInfo( InputDir.FullName );
-        var mapFilesInCurrentDir = InputDir.GetFiles( "*.tmx" );
+        var        inputDirHandle       = new DirectoryInfo( InputDir.FullName );
+        FileInfo[] mapFilesInCurrentDir = InputDir.GetFiles( "*.tmx" );
 
         _tilesetsToPack = new ObjectMap< string, TiledMapTileSet >();
 
         // Processes the maps inside inputDir
-        foreach ( var mapFile in mapFilesInCurrentDir )
+        foreach ( FileInfo mapFile in mapFilesInCurrentDir )
         {
             ProcessSingleMap( mapFile, inputDirHandle, texturePackerSettings );
         }
 
         ProcessSubdirectories( inputDirHandle, texturePackerSettings );
 
-        var combineTilesets = _settings.CombineTilesets;
+        bool combineTilesets = _settings.CombineTilesets;
 
         if ( combineTilesets )
         {
@@ -145,12 +148,12 @@ public class TiledMapPacker
 
         while ( stack.Count > 0 )
         {
-            var currentDir = stack.Pop();
+            DirectoryInfo currentDir = stack.Pop();
 
             // 1. Process .tmx files in the current directory
-            var mapFiles = currentDir.GetFiles( "*.tmx" );
+            FileInfo[] mapFiles = currentDir.GetFiles( "*.tmx" );
 
-            foreach ( var mapFile in mapFiles )
+            foreach ( FileInfo mapFile in mapFiles )
             {
                 ProcessSingleMap( mapFile, currentDir, texturePackerSettings );
             }
@@ -158,7 +161,7 @@ public class TiledMapPacker
             // 2. Add all subdirectories to the stack to be processed in next iterations
             try
             {
-                foreach ( var subDir in currentDir.GetDirectories() )
+                foreach ( DirectoryInfo subDir in currentDir.GetDirectories() )
                 {
                     stack.Push( subDir );
                 }
@@ -180,7 +183,7 @@ public class TiledMapPacker
                                    DirectoryInfo dirHandle,
                                    TexturePackerSettings texturePackerSettings )
     {
-        var combineTilesets = this._settings.CombineTilesets;
+        bool combineTilesets = _settings.CombineTilesets;
 
         if ( !combineTilesets )
         {
@@ -191,7 +194,7 @@ public class TiledMapPacker
         _map = _mapLoader.Load( mapFile.FullName );
 
         // if enabled, build a list of used tileids for the tileset used by this map
-        var stripUnusedTiles = this._settings.StripUnusedTiles;
+        bool stripUnusedTiles = _settings.StripUnusedTiles;
 
         if ( stripUnusedTiles )
         {
@@ -199,9 +202,9 @@ public class TiledMapPacker
         }
         else
         {
-            foreach ( var tileset in _map.Tilesets )
+            foreach ( TiledMapTileSet tileset in _map.Tilesets )
             {
-                var tilesetName = tileset.Name;
+                string tilesetName = tileset.Name;
 
                 if ( !_tilesetsToPack.ContainsKey( tilesetName ) )
                 {
@@ -231,10 +234,10 @@ public class TiledMapPacker
 
         var mapWidth   = _map.Properties.Get< int >( "width" );
         var mapHeight  = _map.Properties.Get< int >( "height" );
-        var numlayers  = _map.Layers.LayersCount;
-        var bucketSize = mapWidth * mapHeight * numlayers;
+        int numlayers  = _map.Layers.LayersCount;
+        int bucketSize = mapWidth * mapHeight * numlayers;
 
-        foreach ( var layer in _map!.Layers )
+        foreach ( MapLayer layer in _map!.Layers )
         {
             // some layers can be plain MapLayer instances (ie. object groups),
             // just ignore them
@@ -246,13 +249,13 @@ public class TiledMapPacker
                     {
                         if ( tlayer.GetCell( x, y ) != null )
                         {
-                            var tile = tlayer.GetCell( x, y )?.GetTile();
+                            ITiledMapTile? tile = tlayer.GetCell( x, y )?.GetTile();
 
                             if ( tile != null )
                             {
                                 if ( tile is AnimatedTiledMapTile aTile )
                                 {
-                                    foreach ( var t in aTile.GetFrameTiles() )
+                                    foreach ( StaticTiledMapTile t in aTile.GetFrameTiles() )
                                     {
                                         AddTile( t, bucketSize );
                                     }
@@ -275,17 +278,17 @@ public class TiledMapPacker
     /// <param name="bucketSize"></param>
     private void AddTile( ITiledMapTile tile, int bucketSize )
     {
-        var tileid      = ( int )( tile.ID & ~0xE0000000 );
-        var tilesetName = TilesetNameFromTileID( _map, tileid );
-        var usedIds     = GetUsedIdsBucket( tilesetName, bucketSize );
+        var          tileid      = ( int )( tile.ID & ~0xE0000000 );
+        string       tilesetName = TilesetNameFromTileID( _map, tileid );
+        List< int >? usedIds     = GetUsedIdsBucket( tilesetName, bucketSize );
 
         if ( usedIds == null )
         {
             Logger.Debug( "NULL UsedIDsBucket returned!" );
-            
+
             return;
         }
-        
+
         usedIds.Add( tileid );
 
         // track this tileset to be packed if not already tracked
@@ -307,7 +310,7 @@ public class TiledMapPacker
 
         if ( tileid != 0 )
         {
-            foreach ( var tileset in map.Tilesets )
+            foreach ( TiledMapTileSet tileset in map.Tilesets )
             {
                 var firstgid = tileset.Properties.Get< int >( "firstgid", -1 );
 
@@ -341,7 +344,7 @@ public class TiledMapPacker
     /// </param>
     private List< int >? GetUsedIdsBucket( string tilesetName, int size )
     {
-        if ( _tilesetUsedIds.TryGetValue( tilesetName, out var idsBucket ) )
+        if ( _tilesetUsedIds.TryGetValue( tilesetName, out List< int >? idsBucket ) )
         {
             return idsBucket;
         }

@@ -25,7 +25,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Collections;
@@ -117,12 +119,12 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     /// <inheritdoc />
     public override TV? Put( TK key, TV? value )
     {
-        var i = LocateKey( key );
+        int i = LocateKey( key );
 
         if ( i >= 0 )
         {
             // Existing key was found.
-            var oldValue = ValueTable[ i ];
+            TV? oldValue = ValueTable[ i ];
             ValueTable[ i ] = value;
 
             return oldValue;
@@ -149,12 +151,12 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     {
         EnsureCapacity( map.Size );
 
-        var keys   = map.KeyTable ?? throw new NullReferenceException();
-        var values = map.ValueTable ?? throw new NullReferenceException();
+        TK?[] keys   = map.KeyTable ?? throw new NullReferenceException();
+        TV?[] values = map.ValueTable ?? throw new NullReferenceException();
 
         for ( int i = 0, n = keys.Length; i < n; i++ )
         {
-            var key = keys[ i ];
+            TK? key = keys[ i ];
 
             if ( key != null )
             {
@@ -197,7 +199,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             return false;
         }
 
-        var index = _keys.IndexOf( before );
+        int index = _keys.IndexOf( before );
 
         if ( index == -1 )
         {
@@ -415,7 +417,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             buffer.Append( /*_keys[ i ] == this ? "(this)" :*/ _keys[ i ] );
             buffer.Append( '=' );
 
-            var value = Get( _keys[ i ] );
+            TV? value = Get( _keys[ i ] );
             buffer.Append( /*value == this ? "(this)" :*/ value );
         }
 
@@ -525,7 +527,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
                 throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
-            var key = _keys[ NextIndex ];
+            TK key = _keys[ NextIndex ];
 
             CurrentIndex = NextIndex;
             NextIndex++;
@@ -601,7 +603,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
                 throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
-            var value = Map.Get( _keys[ NextIndex ] );
+            TV? value = Map.Get( _keys[ NextIndex ] );
 
             CurrentIndex = NextIndex;
             NextIndex++;
@@ -627,13 +629,13 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         /// <inheritdoc />
         public override List< TV > ToArray( List< TV > array )
         {
-            var n = _keys.Count;
+            int n = _keys.Count;
 
             array.EnsureCapacity( n - NextIndex );
 
-            var keys = _keys;
+            List< TK > keys = _keys;
 
-            for ( var i = NextIndex; i < n; i++ )
+            for ( int i = NextIndex; i < n; i++ )
             {
                 array.Add( Map.Get( keys[ i ] ) ?? throw new NullReferenceException() );
             }

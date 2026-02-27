@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.G2D;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -33,7 +34,6 @@ public class PixmapPackerTest : ILughTest
     [SetUp]
     public void Setup()
     {
-        
     }
 
     [Test]

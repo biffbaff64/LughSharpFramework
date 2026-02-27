@@ -23,9 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
@@ -61,22 +63,22 @@ public class TiledSceneDrawable : TextureRegionDrawable
     /// <inheritdoc />
     public override void Draw( IBatch batch, float x, float y, float width, float height )
     {
-        var region = Region;
+        TextureRegion? region = Region;
 
         if ( region != null )
         {
-            var oldColor = batch.ColorPackedABGR;
+            float oldColor = batch.ColorPackedABGR;
 
             batch.Color = Color.Mul( batch.Color );
 
-            var regionWidth  = region.GetRegionWidth() * Scale;
-            var regionHeight = region.GetRegionHeight() * Scale;
-            var fullX        = ( int )( width / regionWidth );
-            var fullY        = ( int )( height / regionHeight );
-            var remainingX   = width - ( regionWidth * fullX );
-            var remainingY   = height - ( regionHeight * fullY );
-            var startX       = x;
-            var startY       = y;
+            float regionWidth  = region.GetRegionWidth() * Scale;
+            float regionHeight = region.GetRegionHeight() * Scale;
+            var   fullX        = ( int )( width / regionWidth );
+            var   fullY        = ( int )( height / regionHeight );
+            float remainingX   = width - ( regionWidth * fullX );
+            float remainingY   = height - ( regionHeight * fullY );
+            float startX       = x;
+            float startY       = y;
 
             for ( var i = 0; i < fullX; i++ )
             {
@@ -91,21 +93,21 @@ public class TiledSceneDrawable : TextureRegionDrawable
                 x += regionWidth;
             }
 
-            var texture = region.Texture;
+            Texture? texture = region.Texture;
 
             if ( texture == null )
             {
                 return;
             }
 
-            var u  = region.U;
-            var v2 = region.V2;
+            float u  = region.U;
+            float v2 = region.V2;
 
             if ( remainingX > 0 )
             {
                 // Right edge.
-                var u2 = u + ( remainingX / ( texture.Width * Scale ) );
-                var v  = region.V;
+                float u2 = u + ( remainingX / ( texture.Width * Scale ) );
+                float v  = region.V;
 
                 y = startY;
 
@@ -114,7 +116,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
                     X      = ( int )x,
                     Y      = ( int )y,
                     Width  = ( int )remainingX,
-                    Height = ( int )regionHeight,
+                    Height = ( int )regionHeight
                 };
 
                 for ( var ii = 0; ii < fullY; ii++ )
@@ -134,7 +136,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
                         X      = ( int )x,
                         Y      = ( int )y,
                         Width  = ( int )remainingX,
-                        Height = ( int )remainingY,
+                        Height = ( int )remainingY
                     };
 
                     batch.Draw( texture, rect, u, v2, u2, v );
@@ -144,8 +146,8 @@ public class TiledSceneDrawable : TextureRegionDrawable
             if ( remainingY > 0 )
             {
                 // Top edge.
-                var u2 = region.U2;
-                var v  = v2 - ( remainingY / ( texture.Height * Scale ) );
+                float u2 = region.U2;
+                float v  = v2 - ( remainingY / ( texture.Height * Scale ) );
 
                 x = startX;
 
@@ -154,7 +156,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
                     X      = ( int )x,
                     Y      = ( int )y,
                     Width  = ( int )regionWidth,
-                    Height = ( int )remainingY,
+                    Height = ( int )remainingY
                 };
 
                 for ( var i = 0; i < fullX; i++ )

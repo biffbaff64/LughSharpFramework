@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics;
@@ -66,12 +67,12 @@ public class NewColor
     internal const int ARGB_RED_SHIFT   = 16;
     internal const int ARGB_GREEN_SHIFT = 8;
     internal const int ARGB_BLUE_SHIFT  = 0;
-    
+
     internal const int RGBA_RED_SHIFT   = 24;
     internal const int RGBA_GREEN_SHIFT = 16;
     internal const int RGBA_BLUE_SHIFT  = 8;
     internal const int RGBA_ALPHA_SHIFT = 0;
-    
+
     // ========================================================================
 
     internal NewColor()
@@ -173,7 +174,7 @@ public class NewColor
         Magenta,
         Purple,
         Violet,
-        Maroon,
+        Maroon
     };
 
     // ========================================================================
@@ -214,7 +215,7 @@ public class NewColor
         0xFF00FFFF, // Magenta
         0xA020F0FF, // Purple
         0xEE82EEFF, // Violet
-        0xB03060FF, // Maroon
+        0xB03060FF  // Maroon
     };
 }
 

@@ -26,7 +26,9 @@ using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
 using Extensions.Source.Tools.ImagePacker;
+
 using LughSharp.Core.Files;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -50,13 +52,13 @@ public class ImagePackerTest
 
         for ( var i = 0; i < images.Length; i++ )
         {
-            var color = Color.FromArgb( 255,
-                                        ( byte )rand.Next( 256 ),
-                                        ( byte )rand.Next( 256 ),
-                                        ( byte )rand.Next( 256 ) );
+            Color color = Color.FromArgb( 255,
+                                          ( byte )rand.Next( 256 ),
+                                          ( byte )rand.Next( 256 ),
+                                          ( byte )rand.Next( 256 ) );
 
-            var width  = rand.Next( 10, 61 );
-            var height = rand.Next( 10, 61 );
+            int width  = rand.Next( 10, 61 );
+            int height = rand.Next( 10, 61 );
 
             images[ i ] = ImagePacker.CreateImage( width, height, PixelFormat.Format32bppArgb, color );
         }

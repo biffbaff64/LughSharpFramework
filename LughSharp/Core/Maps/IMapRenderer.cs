@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Maths;
 
@@ -47,10 +48,10 @@ public interface IMapRenderer
     /// by the projection matrix coincides with the viewbounds.
     /// </summary>
     void SetView( Matrix4 projectionMatrix,
-                         float viewboundsX,
-                         float viewboundsY,
-                         float viewboundsWidth,
-                         float viewboundsHeight );
+                  float viewboundsX,
+                  float viewboundsY,
+                  float viewboundsWidth,
+                  float viewboundsHeight );
 
     /// <summary>
     /// Renders all the layers of a map.
@@ -66,4 +67,3 @@ public interface IMapRenderer
 
 // ============================================================================
 // ============================================================================
-

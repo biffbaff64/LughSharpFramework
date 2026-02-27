@@ -34,7 +34,7 @@ public enum ClearBufferMask
     AccumBufferBit      = IGL.GL_ACCUM_BUFFER_BIT,
     StencilBufferBit    = IGL.GL_STENCIL_BUFFER_BIT,
     ColorBufferBit      = IGL.GL_COLOR_BUFFER_BIT,
-    CoverageBufferBitNv = IGL.GL_COVERAGE_BUFFER_BIT_NV,
+    CoverageBufferBitNv = IGL.GL_COVERAGE_BUFFER_BIT_NV
 }
 
 // ========================================================================

@@ -54,7 +54,7 @@ public class FileService : IFileService
         }
 
         // Identify the parent directory of the provided file
-        var baseDirectory = baseFile.DirectoryName;
+        string? baseDirectory = baseFile.DirectoryName;
 
         if ( baseDirectory == null )
         {
@@ -62,8 +62,8 @@ public class FileService : IFileService
         }
 
         // Path.Combine joins the parts; Path.GetFullPath resolves the ".." and "." segments
-        var combinedPath = Path.Combine( baseDirectory, relativePath );
-        var resolvedPath = Path.GetFullPath( combinedPath );
+        string combinedPath = Path.Combine( baseDirectory, relativePath );
+        string resolvedPath = Path.GetFullPath( combinedPath );
 
         // Security check: only perform if a root limit is provided
         if ( !string.IsNullOrEmpty( rootLimit ) )
@@ -87,7 +87,7 @@ public class FileService : IFileService
     public bool IsPathSafe( string fullPath, string rootPath )
     {
         // Normalize the root path to ensure it is absolute
-        var normalizedRoot = Path.GetFullPath( rootPath );
+        string normalizedRoot = Path.GetFullPath( rootPath );
 
         // Ensure the root ends with a separator to prevent 'partial name' bypasses
         // e.g., prevents "C:\Data" from incorrectly allowing "C:\DataArchive"

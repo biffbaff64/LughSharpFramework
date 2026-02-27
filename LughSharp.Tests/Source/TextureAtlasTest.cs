@@ -23,9 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -36,19 +38,19 @@ namespace LughSharp.Tests.Source;
 public class TextureAtlasTest : ILughTest
 {
     private Sprite? _sprite;
-    
+
     [SetUp]
     public void Setup()
     {
     }
-    
+
     [Test]
     public void Run()
     {
         var atlasData = new TextureAtlasData( Api.Files.Internal( @"Assets\PackedImages\Output\input.atlas" ),
                                               new DirectoryInfo( IOUtils.InternalPath +
                                                                  @"\Assets\PackedImages\Output" ) );
-        
+
         var atlas = new TextureAtlas( atlasData );
 
         _sprite = atlas.CreateSprite( "button_b" );
@@ -62,7 +64,7 @@ public class TextureAtlasTest : ILughTest
     {
         _sprite?.Draw( spriteBatch );
     }
-    
+
     [TearDown]
     public void TearDown()
     {

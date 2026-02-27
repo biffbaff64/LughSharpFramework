@@ -24,7 +24,9 @@
 
 using System;
 using System.Runtime.Serialization;
+
 using JetBrains.Annotations;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Audio.Maponus;
@@ -79,4 +81,3 @@ public class Mp3SharpException : ApplicationException
 
 // ============================================================================
 // ============================================================================
-

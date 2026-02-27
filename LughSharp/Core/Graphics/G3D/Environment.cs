@@ -43,7 +43,7 @@ public class Environment : AttributesGroup
     /// <returns></returns>
     public Environment Add( params BaseLight[] lights )
     {
-        foreach ( var light in lights )
+        foreach ( BaseLight light in lights )
         {
             Add( light );
         }
@@ -53,7 +53,7 @@ public class Environment : AttributesGroup
 
     public Environment Add( List< BaseLight > lights )
     {
-        foreach ( var light in lights )
+        foreach ( BaseLight light in lights )
         {
             Add( light );
         }
@@ -127,7 +127,7 @@ public class Environment : AttributesGroup
 
     public Environment Remove( params BaseLight[] lights )
     {
-        foreach ( var light in lights )
+        foreach ( BaseLight light in lights )
         {
             Remove( light );
         }
@@ -137,7 +137,7 @@ public class Environment : AttributesGroup
 
     public Environment Remove( List< BaseLight > lights )
     {
-        foreach ( var light in lights )
+        foreach ( BaseLight light in lights )
         {
             Remove( light );
         }

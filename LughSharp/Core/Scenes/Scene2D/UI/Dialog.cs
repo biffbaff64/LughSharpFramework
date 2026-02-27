@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Actions;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
@@ -40,7 +42,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Dialog : Window
 {
-    public override string? Name => "Dialog";
+    public override  string?         Name => "Dialog";
     private readonly IgnoreTouchDown _ignoreTouchDown = null!;
 
     private ChangeListener _dialogChangeListener = null!;
@@ -300,7 +302,7 @@ public class Dialog : Window
     /// </param>
     public void Hide( Action? action )
     {
-        var stage = Stage;
+        Stage? stage = Stage;
 
         if ( stage != null )
         {
@@ -332,7 +334,8 @@ public class Dialog : Window
             AddCaptureListener( _ignoreTouchDown );
 
             AddAction( Scene2D.Actions.Actions.Sequence( action,
-                                                         Scene2D.Actions.Actions.RemoveListener( _ignoreTouchDown, true ),
+                                                         Scene2D.Actions.Actions.RemoveListener( _ignoreTouchDown,
+                                                             true ),
                                                          Scene2D.Actions.Actions.RemoveActor() ) );
         }
         else
@@ -409,7 +412,7 @@ public class Dialog : Window
     private void DefaultSkinProvided()
     {
         Logger.Debug( "This method may only be used if the dialog was constructed "
-                      + "with a Skin, a default Skin has been provided." );
+                    + "with a Skin, a default Skin has been provided." );
     }
 
     // ========================================================================

@@ -68,7 +68,7 @@ public class AttributesGroup : IComparer< Attribute >
     {
         if ( Has( type ) )
         {
-            foreach ( var att in _attributes )
+            foreach ( Attribute att in _attributes )
             {
                 if ( att.type == type )
                 {
@@ -87,7 +87,7 @@ public class AttributesGroup : IComparer< Attribute >
 
     public List< Attribute > Get( List< Attribute > output, long type )
     {
-        foreach ( var att in _attributes )
+        foreach ( Attribute att in _attributes )
         {
             if ( ( att.type & type ) != 0 )
             {
@@ -125,7 +125,7 @@ public class AttributesGroup : IComparer< Attribute >
     /// </summary>
     public void Set( Attribute attribute )
     {
-        var idx = IndexOf( attribute.type );
+        int idx = IndexOf( attribute.type );
 
         if ( idx < 0 )
         {
@@ -187,7 +187,7 @@ public class AttributesGroup : IComparer< Attribute >
     /// </summary>
     public void Set( params Attribute[] attribs )
     {
-        foreach ( var attr in attribs )
+        foreach ( Attribute attr in attribs )
         {
             Set( attr );
         }
@@ -199,7 +199,7 @@ public class AttributesGroup : IComparer< Attribute >
     /// </summary>
     public void Set( IEnumerable< Attribute > attribs )
     {
-        foreach ( var attr in attribs )
+        foreach ( Attribute attr in attribs )
         {
             Set( attr );
         }
@@ -211,9 +211,9 @@ public class AttributesGroup : IComparer< Attribute >
     /// </summary>
     public void Remove( long mask )
     {
-        for ( var i = _attributes.Count - 1; i >= 0; i-- )
+        for ( int i = _attributes.Count - 1; i >= 0; i-- )
         {
-            var type = _attributes[ i ].type;
+            long type = _attributes[ i ].type;
 
             if ( ( mask & type ) == type )
             {
@@ -309,9 +309,9 @@ public class AttributesGroup : IComparer< Attribute >
     {
         Sort();
 
-        var n      = _attributes.Count;
-        var result = 71 + _mask;
-        var m      = 1;
+        int  n      = _attributes.Count;
+        long result = 71 + _mask;
+        var  m      = 1;
 
         for ( var i = 0; i < n; i++ )
         {
@@ -353,7 +353,7 @@ public class AttributesGroup : IComparer< Attribute >
 
         for ( var i = 0; i < _attributes.Count; i++ )
         {
-            var c = _attributes[ i ].CompareTo( other._attributes[ i ] );
+            int c = _attributes[ i ].CompareTo( other._attributes[ i ] );
 
             if ( c != 0 )
             {

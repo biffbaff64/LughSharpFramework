@@ -37,20 +37,20 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ParticleEffectActor : Actor, IDisposable
 {
-    public override string? Name => "ParticleEffectActor";
-    public bool           IsRunning      { get; set; }
-    public bool           AutoRemove     { get; set; }
-    public ParticleEffect ParticleEffect { get; }
+    public override string?        Name           => "ParticleEffectActor";
+    public          bool           IsRunning      { get; set; }
+    public          bool           AutoRemove     { get; set; }
+    public          ParticleEffect ParticleEffect { get; }
 
     // ========================================================================
-    
-    protected readonly bool OwnsEffect;
-    protected float LastDelta;
+
+    protected readonly bool  OwnsEffect;
+    protected          float LastDelta;
 
     // ========================================================================
 
     private bool _resetOnStart;
-    
+
     // ========================================================================
 
     public ParticleEffectActor( ParticleEffect particleEffect, bool resetOnStart )
@@ -72,6 +72,7 @@ public class ParticleEffectActor : Actor, IDisposable
         ParticleEffect.Load( particleFile, imagesDir );
         OwnsEffect = true;
     }
+
     public override void Draw( IBatch batch, float parentAlpha )
     {
         ParticleEffect.SetPosition( X, Y );
@@ -177,4 +178,3 @@ public class ParticleEffectActor : Actor, IDisposable
 
 // ============================================================================
 // ============================================================================
-

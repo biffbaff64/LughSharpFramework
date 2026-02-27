@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -41,8 +42,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Container< T > : WidgetGroup where T : Actor
 {
-    public override string? Name => "Container";
-    public bool Rounding { get; set; } = true;
+    public override string? Name     => "Container";
+    public          bool    Rounding { get; set; } = true;
 
     private T?              _actor;
     private int             _align;
@@ -102,7 +103,10 @@ public class Container< T > : WidgetGroup where T : Actor
             }
             else
             {
-                SetPadding( background.TopHeight, background.LeftWidth, background.BottomHeight, background.RightWidth );
+                SetPadding( background.TopHeight,
+                            background.LeftWidth,
+                            background.BottomHeight,
+                            background.RightWidth );
             }
 
             Invalidate();
@@ -128,16 +132,16 @@ public class Container< T > : WidgetGroup where T : Actor
             return;
         }
 
-        var padLeft         = _padLeft.Get( this );
-        var padBottom       = _padBottom.Get( this );
-        var containerWidth  = Width - padLeft - _padRight.Get( this );
-        var containerHeight = Height - padBottom - _padTop.Get( this );
-        var minWidth        = _minWidth.Get( _actor );
-        var minHeight       = _minHeight.Get( _actor );
-        var prefWidth       = _prefWidth.Get( _actor );
-        var prefHeight      = _prefHeight.Get( _actor );
-        var maxWidth        = _maxWidth.Get( _actor );
-        var maxHeight       = _maxHeight.Get( _actor );
+        float padLeft         = _padLeft.Get( this );
+        float padBottom       = _padBottom.Get( this );
+        float containerWidth  = Width - padLeft - _padRight.Get( this );
+        float containerHeight = Height - padBottom - _padTop.Get( this );
+        float minWidth        = _minWidth.Get( _actor );
+        float minHeight       = _minHeight.Get( _actor );
+        float prefWidth       = _prefWidth.Get( _actor );
+        float prefHeight      = _prefHeight.Get( _actor );
+        float maxWidth        = _maxWidth.Get( _actor );
+        float maxHeight       = _maxHeight.Get( _actor );
 
         float width;
 
@@ -181,7 +185,7 @@ public class Container< T > : WidgetGroup where T : Actor
             height = maxHeight;
         }
 
-        var x = padLeft;
+        float x = padLeft;
 
         if ( ( _align & Align.RIGHT ) != 0 )
         {
@@ -192,7 +196,7 @@ public class Container< T > : WidgetGroup where T : Actor
             x += ( containerWidth - width ) / 2;
         }
 
-        var y = padBottom;
+        float y = padBottom;
 
         if ( ( _align & Align.TOP ) != 0 )
         {
@@ -292,7 +296,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public override Actor? RemoveActorAt( int index, bool unfocus )
     {
-        var actor = base.RemoveActorAt( index, unfocus );
+        Actor? actor = base.RemoveActorAt( index, unfocus );
 
         if ( actor == _actor )
         {
@@ -526,7 +530,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public override float GetMaxWidth()
     {
-        var v = _maxWidth.Get( _actor );
+        float v = _maxWidth.Get( _actor );
 
         if ( v > 0 )
         {
@@ -600,7 +604,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public override float GetMaxHeight()
     {
-        var v = _maxHeight.Get( _actor );
+        float v = _maxHeight.Get( _actor );
 
         if ( v > 0 )
         {
@@ -843,7 +847,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public override float GetPrefWidth()
     {
-        var v = _prefWidth.Get( _actor );
+        float v = _prefWidth.Get( _actor );
 
         if ( _background != null )
         {
@@ -855,7 +859,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     public override float GetPrefHeight()
     {
-        var v = _prefHeight.Get( _actor );
+        float v = _prefHeight.Get( _actor );
 
         if ( _background != null )
         {
@@ -1148,8 +1152,8 @@ public class Container< T > : WidgetGroup where T : Actor
             {
                 batch.Flush();
 
-                var padLeft   = _padLeft.Get( this );
-                var padBottom = _padBottom.Get( this );
+                float padLeft   = _padLeft.Get( this );
+                float padBottom = _padBottom.Get( this );
 
                 if ( ClipBegin(
                                padLeft,
@@ -1204,10 +1208,10 @@ public class Container< T > : WidgetGroup where T : Actor
             {
                 shapes.Flush();
 
-                var padLeft   = _padLeft.Get( this );
-                var padBottom = _padBottom.Get( this );
+                float padLeft   = _padLeft.Get( this );
+                float padBottom = _padBottom.Get( this );
 
-                var draw = _background == null
+                bool draw = _background == null
                     ? ClipBegin( 0, 0, Width, Height )
                     : ClipBegin(
                                 padLeft,

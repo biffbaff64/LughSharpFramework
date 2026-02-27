@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -52,7 +53,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 [PublicAPI]
 public class DragScrollListener : DragListener
 {
-    private static readonly Vector2             TmpCoords     = new();
+    private static readonly Vector2             TmpCoords      = new();
     private readonly        Interpolation.ExpIn _interpolation = Interpolation.Exp5In;
     private readonly        ScrollPane          _scrollPane;
 
@@ -64,7 +65,7 @@ public class DragScrollListener : DragListener
     private ScrollDown _scrollDown;
     private ScrollUp   _scrollUp;
     private long       _startTime;
-    private float      _tickSecs  = 0.05f;
+    private float      _tickSecs = 0.05f;
 
     // ========================================================================
     // ========================================================================

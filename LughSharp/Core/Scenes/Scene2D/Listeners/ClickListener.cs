@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Input;
 using LughSharp.Core.Utils;
 
@@ -178,7 +179,7 @@ public class ClickListener : InputListener
         {
             if ( !_cancelled )
             {
-                var touchUpOver = IsOver( ev?.ListenerActor, x, y );
+                bool touchUpOver = IsOver( ev?.ListenerActor, x, y );
 
                 // Ignore touch up if the wrong mouse button.
                 if ( touchUpOver && ( pointer == 0 ) && ( Button != -1 ) && ( button != Button ) )
@@ -188,7 +189,7 @@ public class ClickListener : InputListener
 
                 if ( touchUpOver )
                 {
-                    var time = TimeUtils.NanoTime();
+                    long time = TimeUtils.NanoTime();
 
                     if ( ( time - _lastTapTime ) > TapCountInterval )
                     {
@@ -257,7 +258,7 @@ public class ClickListener : InputListener
     /// </summary>
     public bool IsOver( Actor? actor, float x, float y )
     {
-        var hit = actor?.Hit( x, y, true );
+        Actor? hit = actor?.Hit( x, y, true );
 
         if ( ( hit == null ) || !hit.IsDescendantOf( actor ) )
         {
@@ -278,7 +279,7 @@ public class ClickListener : InputListener
         }
 
         return ( Math.Abs( x - TouchDownX ) < TapSquareSize )
-               && ( Math.Abs( y - TouchDownY ) < TapSquareSize );
+            && ( Math.Abs( y - TouchDownY ) < TapSquareSize );
     }
 
     /// <summary>

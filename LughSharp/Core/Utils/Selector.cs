@@ -25,6 +25,7 @@
 using System.Collections.Generic;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils;
@@ -49,7 +50,7 @@ public class Selector< T >
 
     public T Select( T[] items, IComparer< T > comp, int kthLowest, int size )
     {
-        var idx = SelectIndex( items, comp, kthLowest, size );
+        int idx = SelectIndex( items, comp, kthLowest, size );
 
         return items[ idx ];
     }
@@ -101,7 +102,7 @@ public class Selector< T >
 
         for ( var i = 1; i < size; i++ )
         {
-            var comparison = comp.Compare( items[ i ], items[ lowestIdx ] );
+            int comparison = comp.Compare( items[ i ], items[ lowestIdx ] );
 
             if ( comparison < 0 )
             {
@@ -121,7 +122,7 @@ public class Selector< T >
 
         for ( var i = 1; i < size; i++ )
         {
-            var comparison = comp.Compare( items[ i ], items[ highestIdx ] );
+            int comparison = comp.Compare( items[ i ], items[ highestIdx ] );
 
             if ( comparison > 0 )
             {

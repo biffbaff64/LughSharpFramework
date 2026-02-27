@@ -22,9 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
 
@@ -71,7 +73,7 @@ public class PixmapPackerIO
         var writer = new StreamWriter( file.FullName ); //= file.writer( false );
         var index  = 0;
 
-        foreach ( var page in packer.Pages )
+        foreach ( PixmapPacker.Page page in packer.Pages )
         {
             if ( page.Rects.Count > 0 )
             {
@@ -101,14 +103,14 @@ public class PixmapPackerIO
                 writer.Write( $"filter: {parameters.MinFilter}, {parameters.MagFilter}\n" );
                 writer.Write( "repeat: none\n" );
 
-                foreach ( var name in page.Rects.Keys )
+                foreach ( string name in page.Rects.Keys )
                 {
-                    var imageIndex = -1;
-                    var imageName  = name;
+                    int    imageIndex = -1;
+                    string imageName  = name;
 
                     if ( parameters.UseIndexes )
                     {
-                        var matches = RegexUtils.ItemWithUnderscoreSuffixRegex().Matches( imageName );
+                        MatchCollection matches = RegexUtils.ItemWithUnderscoreSuffixRegex().Matches( imageName );
 
                         if ( matches.Count > 0 )
                         {
@@ -122,7 +124,7 @@ public class PixmapPackerIO
 
                     writer.Write( imageName + "\n" );
 
-                    var rect = page.Rects[ name ];
+                    PixmapPacker.PixmapPackerRectangle? rect = page.Rects[ name ];
 
                     if ( rect != null )
                     {
@@ -133,24 +135,24 @@ public class PixmapPackerIO
                         if ( rect.Splits != null )
                         {
                             writer.Write( $"  split: {rect.Splits[ 0 ]}, "
-                                          + $"{rect.Splits[ 1 ]}, "
-                                          + $"{rect.Splits[ 2 ]}, "
-                                          + $"{rect.Splits[ 3 ]}\n" );
+                                        + $"{rect.Splits[ 1 ]}, "
+                                        + $"{rect.Splits[ 2 ]}, "
+                                        + $"{rect.Splits[ 3 ]}\n" );
 
                             if ( rect.Pads != null )
                             {
                                 writer.Write( $"  pad: {rect.Pads[ 0 ]}, "
-                                              + $"{rect.Pads[ 1 ]}, "
-                                              + $"{rect.Pads[ 2 ]}, "
-                                              + $"{rect.Pads[ 3 ]}\n" );
+                                            + $"{rect.Pads[ 1 ]}, "
+                                            + $"{rect.Pads[ 2 ]}, "
+                                            + $"{rect.Pads[ 3 ]}\n" );
                             }
                         }
 
                         writer.Write( $"  orig: {rect.OriginalWidth}, {rect.OriginalHeight}\n" );
 
                         writer.Write( $"  offset: {rect.OffsetX}, "
-                                      + $"{( int )( rect.OriginalHeight -
-                                                    rect.Height - rect.OffsetY )}\n" );
+                                    + $"{( int )( rect.OriginalHeight -
+                                                  rect.Height - rect.OffsetY )}\n" );
 
                         writer.Write( $"  index: {imageIndex}\n" );
                     }

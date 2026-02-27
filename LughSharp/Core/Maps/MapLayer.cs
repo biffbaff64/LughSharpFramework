@@ -41,7 +41,7 @@ public class MapLayer
     public bool          Visible    { get; set; }  = true;
     public float         ParallaxX  { get; set; }  = 1.0f;
     public float         ParallaxY  { get; set; }  = 1.0f;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -122,7 +122,7 @@ public class MapLayer
     }
 
     // ========================================================================
-    
+
     private float     _offsetX;
     private float     _offsetY;
     private MapLayer? _parent;

@@ -25,7 +25,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Utils.Exceptions;
@@ -92,7 +94,7 @@ public class TextureAtlas : IDisposable
     public TextureAtlas( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
     {
         Guard.Against.Null( imagesDir );
-        
+
         var atlasData = new TextureAtlasData( packFile, imagesDir, flip );
 
         Load( atlasData );
@@ -114,7 +116,7 @@ public class TextureAtlas : IDisposable
     {
         Textures.EnsureCapacity( data.Pages.Count );
 
-        foreach ( var page in data.Pages )
+        foreach ( TextureAtlasData.Page page in data.Pages )
         {
             page.Texture ??= new Texture( page.TextureFile!, page.Format, page.UseMipMaps );
             page.Texture.SetFilter( page.MinFilter, page.MagFilter );
@@ -125,7 +127,7 @@ public class TextureAtlas : IDisposable
 
         Regions.EnsureCapacity( data.Regions.Count );
 
-        foreach ( var region in data.Regions )
+        foreach ( TextureAtlasData.Region region in data.Regions )
         {
             var atlasRegion = new AtlasRegion( region.Page?.Texture,
                                                region.Left,
@@ -142,7 +144,7 @@ public class TextureAtlas : IDisposable
                 Rotate         = region.Rotate,
                 Degrees        = region.Degrees,
                 Names          = region.Names,
-                Values         = region.Values,
+                Values         = region.Values
             };
 
             if ( region.Flip )
@@ -164,7 +166,7 @@ public class TextureAtlas : IDisposable
 
         var region = new AtlasRegion( texture, x, y, width, height )
         {
-            Name = name,
+            Name = name
         };
 
         Regions.Add( region );
@@ -184,7 +186,7 @@ public class TextureAtlas : IDisposable
 
         var region = new AtlasRegion( textureRegion )
         {
-            Name = name,
+            Name = name
         };
 
         Regions.Add( region );
@@ -219,7 +221,7 @@ public class TextureAtlas : IDisposable
     {
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
-            var region = Regions[ i ];
+            AtlasRegion? region = Regions[ i ];
 
             if ( ( region?.Name != name ) || ( region.Index != index ) )
             {
@@ -244,7 +246,7 @@ public class TextureAtlas : IDisposable
 
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
-            var region = Regions[ i ];
+            AtlasRegion? region = Regions[ i ];
 
             if ( region?.Name == name )
             {
@@ -301,7 +303,7 @@ public class TextureAtlas : IDisposable
     {
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
-            var region = Regions[ i ];
+            AtlasRegion? region = Regions[ i ];
 
             if ( ( region?.Index != index ) || ( region.Name != name ) )
             {
@@ -329,7 +331,7 @@ public class TextureAtlas : IDisposable
 
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
-            var region = Regions[ i ];
+            AtlasRegion? region = Regions[ i ];
 
             if ( region?.Name == name )
             {
@@ -349,7 +351,7 @@ public class TextureAtlas : IDisposable
         Guard.Against.Null( region );
 
         if ( ( region.PackedWidth == region.OriginalWidth )
-             && ( region.PackedHeight == region.OriginalHeight ) )
+          && ( region.PackedHeight == region.OriginalHeight ) )
         {
             if ( region.Rotate )
             {
@@ -377,19 +379,19 @@ public class TextureAtlas : IDisposable
     {
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
-            var region = Regions[ i ];
+            AtlasRegion? region = Regions[ i ];
 
             if ( region?.Name == name )
             {
-                var splits = region.FindValue( "split" );
+                int[]? splits = region.FindValue( "split" );
 
                 if ( splits == null )
                 {
                     throw new ArgumentException( "Region does not have ninepatch splits: " + name );
                 }
 
-                var patch = new NinePatch( region, splits[ 0 ], splits[ 1 ], splits[ 2 ], splits[ 3 ] );
-                var pads  = region.FindValue( "pad" );
+                var    patch = new NinePatch( region, splits[ 0 ], splits[ 1 ], splits[ 2 ], splits[ 3 ] );
+                int[]? pads  = region.FindValue( "pad" );
 
                 if ( pads != null )
                 {
@@ -423,7 +425,7 @@ public class TextureAtlas : IDisposable
     {
         if ( disposing )
         {
-            foreach ( var texture in Textures )
+            foreach ( Texture texture in Textures )
             {
                 texture.Dispose();
             }

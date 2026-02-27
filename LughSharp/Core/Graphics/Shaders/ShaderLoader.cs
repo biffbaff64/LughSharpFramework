@@ -89,7 +89,7 @@ public class ShaderLoader
     {
         var shaders = new Dictionary< string, string >();
 
-        foreach ( var filePath in filePaths )
+        foreach ( string filePath in filePaths )
         {
             shaders[ filePath ] = Load( filePath );
         }

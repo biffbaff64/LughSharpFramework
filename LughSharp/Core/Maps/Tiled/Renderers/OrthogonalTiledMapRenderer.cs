@@ -25,7 +25,10 @@
 using System;
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;
@@ -85,39 +88,41 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
     /// <param name="layer"></param>
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
-        var batchColor = Batch.Color;
-        var color      = Color.ToFloatBitsAbgr( batchColor.R, batchColor.G, batchColor.B, batchColor.A * layer.Opacity );
+        Color batchColor = Batch.Color;
+        float color = Color.ToFloatBitsAbgr( batchColor.R, batchColor.G, batchColor.B, batchColor.A * layer.Opacity );
 
-        var layerWidth  = layer.Width;
-        var layerHeight = layer.Height;
+        int layerWidth  = layer.Width;
+        int layerHeight = layer.Height;
 
-        var layerTileWidth  = layer.TileWidth * UnitScale;
-        var layerTileHeight = layer.TileHeight * UnitScale;
-        var layerOffsetX    = layer.RenderOffsetX * UnitScale;
+        float layerTileWidth  = layer.TileWidth * UnitScale;
+        float layerTileHeight = layer.TileHeight * UnitScale;
+        float layerOffsetX    = layer.RenderOffsetX * UnitScale;
 
         // offset in tiled is y down, so we flip it
-        var layerOffsetY = -layer.RenderOffsetY * UnitScale;
+        float layerOffsetY = -layer.RenderOffsetY * UnitScale;
 
-        var col1 = Math.Max( 0, ( int )( ( ViewBounds.X - layerOffsetX ) / layerTileWidth ) );
+        int col1 = Math.Max( 0, ( int )( ( ViewBounds.X - layerOffsetX ) / layerTileWidth ) );
 
-        var col2 = Math.Min( layerWidth,
-                             ( int )( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth ) - layerOffsetX ) / layerTileWidth ) );
+        int col2 = Math.Min( layerWidth,
+                             ( int )( ( ViewBounds.X + ViewBounds.Width + layerTileWidth - layerOffsetX )
+                                    / layerTileWidth ) );
 
-        var row1 = Math.Max( 0, ( int )( ( ViewBounds.Y - layerOffsetY ) / layerTileHeight ) );
+        int row1 = Math.Max( 0, ( int )( ( ViewBounds.Y - layerOffsetY ) / layerTileHeight ) );
 
-        var row2 = Math.Min( layerHeight,
-                             ( int )( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight ) );
+        int row2 = Math.Min( layerHeight,
+                             ( int )( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight - layerOffsetY )
+                                    / layerTileHeight ) );
 
-        var y      = ( row2 * layerTileHeight ) + layerOffsetY;
-        var xStart = ( col1 * layerTileWidth ) + layerOffsetX;
+        float y      = ( row2 * layerTileHeight ) + layerOffsetY;
+        float xStart = ( col1 * layerTileWidth ) + layerOffsetX;
 
-        for ( var row = row2; row >= row1; row-- )
+        for ( int row = row2; row >= row1; row-- )
         {
-            var x = xStart;
+            float x = xStart;
 
-            for ( var col = col1; col < col2; col++ )
+            for ( int col = col1; col < col2; col++ )
             {
-                var cell = layer?.GetCell( col, row );
+                TiledMapTileLayer.Cell? cell = layer?.GetCell( col, row );
 
                 if ( cell == null )
                 {
@@ -126,45 +131,45 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
                     continue;
                 }
 
-                var tile = cell.GetTile();
+                ITiledMapTile? tile = cell.GetTile();
 
                 if ( tile != null )
                 {
-                    var flipX     = cell.GetFlipHorizontally();
-                    var flipY     = cell.GetFlipVertically();
-                    var rotations = cell.GetRotation();
+                    bool flipX     = cell.GetFlipHorizontally();
+                    bool flipY     = cell.GetFlipVertically();
+                    int  rotations = cell.GetRotation();
 
-                    var region = tile.TextureRegion;
+                    TextureRegion region = tile.TextureRegion;
 
-                    var x1 = x + ( tile.OffsetX * UnitScale );
-                    var y1 = y + ( tile.OffsetY * UnitScale );
-                    var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
-                    var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
+                    float x1 = x + ( tile.OffsetX * UnitScale );
+                    float y1 = y + ( tile.OffsetY * UnitScale );
+                    float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+                    float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
-                    var u1 = region.U;
-                    var v1 = region.V2;
-                    var u2 = region.U2;
-                    var v2 = region.V;
+                    float u1 = region.U;
+                    float v1 = region.V2;
+                    float u2 = region.U2;
+                    float v2 = region.V;
 
-                    Vertices[ IBatch.X1 ] = x1;     // Bottom left
+                    Vertices[ IBatch.X1 ] = x1; // Bottom left
                     Vertices[ IBatch.Y1 ] = y1;
                     Vertices[ IBatch.C1 ] = color;
                     Vertices[ IBatch.U1 ] = u1;
                     Vertices[ IBatch.V1 ] = v1;
 
-                    Vertices[ IBatch.X2 ] = x1;     // Top left
+                    Vertices[ IBatch.X2 ] = x1; // Top left
                     Vertices[ IBatch.Y2 ] = y2;
                     Vertices[ IBatch.C2 ] = color;
                     Vertices[ IBatch.U2 ] = u1;
                     Vertices[ IBatch.V2 ] = v2;
 
-                    Vertices[ IBatch.X3 ] = x2;     // Top right
+                    Vertices[ IBatch.X3 ] = x2; // Top right
                     Vertices[ IBatch.Y3 ] = y2;
                     Vertices[ IBatch.C3 ] = color;
                     Vertices[ IBatch.U3 ] = u2;
                     Vertices[ IBatch.V3 ] = v2;
 
-                    Vertices[ IBatch.X4 ] = x2;     // Bottom right
+                    Vertices[ IBatch.X4 ] = x2; // Bottom right
                     Vertices[ IBatch.Y4 ] = y1;
                     Vertices[ IBatch.C4 ] = color;
                     Vertices[ IBatch.U4 ] = u2;
@@ -194,13 +199,13 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
                         {
                             case TiledMapTileLayer.Cell.ROTATE90:
                             {
-                                var tempV = Vertices[ IBatch.V1 ];
+                                float tempV = Vertices[ IBatch.V1 ];
                                 Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
                                 Vertices[ IBatch.V2 ] = Vertices[ IBatch.V3 ];
                                 Vertices[ IBatch.V3 ] = Vertices[ IBatch.V4 ];
                                 Vertices[ IBatch.V4 ] = tempV;
 
-                                var tempU = Vertices[ IBatch.U1 ];
+                                float tempU = Vertices[ IBatch.U1 ];
                                 Vertices[ IBatch.U1 ] = Vertices[ IBatch.U2 ];
                                 Vertices[ IBatch.U2 ] = Vertices[ IBatch.U3 ];
                                 Vertices[ IBatch.U3 ] = Vertices[ IBatch.U4 ];
@@ -228,13 +233,13 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
 
                             case TiledMapTileLayer.Cell.ROTATE270:
                             {
-                                var tempV = Vertices[ IBatch.V1 ];
+                                float tempV = Vertices[ IBatch.V1 ];
                                 Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];
                                 Vertices[ IBatch.V4 ] = Vertices[ IBatch.V3 ];
                                 Vertices[ IBatch.V3 ] = Vertices[ IBatch.V2 ];
                                 Vertices[ IBatch.V2 ] = tempV;
 
-                                var tempU = Vertices[ IBatch.U1 ];
+                                float tempU = Vertices[ IBatch.U1 ];
                                 Vertices[ IBatch.U1 ] = Vertices[ IBatch.U4 ];
                                 Vertices[ IBatch.U4 ] = Vertices[ IBatch.U3 ];
                                 Vertices[ IBatch.U3 ] = Vertices[ IBatch.U2 ];
@@ -261,4 +266,3 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
 
 // ============================================================================
 // ============================================================================
-

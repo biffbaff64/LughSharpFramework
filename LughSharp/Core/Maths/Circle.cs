@@ -117,8 +117,8 @@ public class Circle : IShape2D
     /// <returns> true if this circle contains this point; false otherwise.  </returns>
     public bool Contains( Vector2 point )
     {
-        var dx = X - point.X;
-        var dy = Y - point.Y;
+        float dx = X - point.X;
+        float dy = Y - point.Y;
 
         return ( ( dx * dx ) + ( dy * dy ) ) <= ( Radius * Radius );
     }
@@ -198,17 +198,17 @@ public class Circle : IShape2D
     /// <param name="c"> the other <see cref="Circle"/> </param>
     public bool Contains( Circle c )
     {
-        var radiusDiff = Radius - c.Radius;
+        float radiusDiff = Radius - c.Radius;
 
         if ( radiusDiff < 0f )
         {
             return false; // Can't contain bigger circle
         }
 
-        var dx        = X - c.X;
-        var dy        = Y - c.Y;
-        var dst       = ( dx * dx ) + ( dy * dy );
-        var radiusSum = Radius + c.Radius;
+        float dx        = X - c.X;
+        float dy        = Y - c.Y;
+        float dst       = ( dx * dx ) + ( dy * dy );
+        float radiusSum = Radius + c.Radius;
 
         return !( ( radiusDiff * radiusDiff ) < dst ) && ( dst < ( radiusSum * radiusSum ) );
     }
@@ -219,10 +219,10 @@ public class Circle : IShape2D
     /// <param name="c"> the other <see cref="Circle"/> </param>
     public bool Overlaps( Circle c )
     {
-        var dx        = X - c.X;
-        var dy        = Y - c.Y;
-        var distance  = ( dx * dx ) + ( dy * dy );
-        var radiusSum = Radius + c.Radius;
+        float dx        = X - c.X;
+        float dy        = Y - c.Y;
+        float distance  = ( dx * dx ) + ( dy * dy );
+        float radiusSum = Radius + c.Radius;
 
         return distance < ( radiusSum * radiusSum );
     }
@@ -270,8 +270,8 @@ public class Circle : IShape2D
         var c = ( Circle )o;
 
         return MathUtils.IsEqual( X, c.X )
-               || MathUtils.IsEqual( Y, c.Y )
-               || MathUtils.IsEqual( Radius, c.Radius );
+            || MathUtils.IsEqual( Y, c.Y )
+            || MathUtils.IsEqual( Radius, c.Radius );
     }
 
     /// <inheritdoc />
@@ -279,7 +279,7 @@ public class Circle : IShape2D
     {
         const int PRIME = 41;
 
-        var result = PRIME + 43;
+        int result = PRIME + 43;
         result = ( PRIME * result ) + 45;
         result = ( PRIME * result ) + 47;
 

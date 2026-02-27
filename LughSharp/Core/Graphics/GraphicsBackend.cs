@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics;
@@ -75,7 +76,7 @@ public class GraphicsBackend
         IOSGL,
         IOSGLES,
         IOSMetal,
-        IOSVulkan,
+        IOSVulkan
     }
 
     /// <summary>
@@ -87,7 +88,7 @@ public class GraphicsBackend
         GL10,
         GL20,
         GL30,
-        GL40,
+        GL40
     }
 
     /// <summary>
@@ -104,7 +105,7 @@ public class GraphicsBackend
     [StructLayout( LayoutKind.Sequential )]
     public struct BackendInfo
     {
-        public BackendType         Type        { get; set; }
+        public BackendType       Type        { get; set; }
         public OpenGLSubCategory SubCategory { get; set; }
     }
 }

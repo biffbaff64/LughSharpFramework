@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Versioning;
+
 using DesktopGLBackend;
+
 using Extensions.Source.Tools.TexturePacker;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Main;
 
@@ -30,7 +33,7 @@ public static class DesktopLauncher
             ForegroundFPS      = 60,
             DisableAudio       = true,
             Debug              = true,
-            GLProfilingEnabled = true,
+            GLProfilingEnabled = true
         };
 
         Engine.Api.CheckEnableDevMode().CheckEnableGodMode();
@@ -68,7 +71,7 @@ public static class DesktopLauncher
             DuplicatePadding = false,                 // Disable duplicate padding
             MinWidth         = 16,                    // 
             MinHeight        = 16,                    // 
-            Grid             = false,                 // Use GridPacker over MaxRectsPacker
+            Grid             = false                  // Use GridPacker over MaxRectsPacker
         };
 
         // Build the Atlases from the specified parameters :-
@@ -77,15 +80,17 @@ public static class DesktopLauncher
         // 3. name of atlas, without extension (the extension '.atlas' will be added
         //    automatically). If an extension is specified, it will be removed.
         // 4. configuration settings
-        var inputFolder  = IOUtils.AssetPath( @"Assets\PackedImages\objects" );
-        var outputFolder = IOUtils.AssetPath( @"Assets\PackedImages\output" );
+        string inputFolder  = IOUtils.AssetPath( @"Assets\PackedImages\objects" );
+        string outputFolder = IOUtils.AssetPath( @"Assets\PackedImages\output" );
 
         // Make sure we have a settings file to use. Comment out if not needed,
         // or to test with default settings.
-        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
+        string settingsFilePath = Path.Combine( inputFolder, "pack.json" );
         settings.WriteToJsonFile( settingsFilePath );
 
-        TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\animations" ), outputFolder, "animations",
+        TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\animations" ),
+                               outputFolder,
+                               "animations",
                                settings );
         TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\input" ), outputFolder, "input", settings );
         TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\objects" ), outputFolder, "objects", settings );

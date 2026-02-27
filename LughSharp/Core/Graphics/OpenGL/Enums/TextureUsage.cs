@@ -29,13 +29,13 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum TextureUsage
 {
-    ColorLdr,     // Albedo/UI in linear color
-    ColorSrgb,    // Albedo/base color in sRGB
-    NormalMap,    // Tangent-space normals
-    MaskR8,       // Single-channel masks (font atlas, AO, etc.)
-    HdrColor,     // HDR content (environment maps, light buffers, etc.)
-    DepthOnly,    //
-    DepthStencil, //
+    ColorLdr,    // Albedo/UI in linear color
+    ColorSrgb,   // Albedo/base color in sRGB
+    NormalMap,   // Tangent-space normals
+    MaskR8,      // Single-channel masks (font atlas, AO, etc.)
+    HdrColor,    // HDR content (environment maps, light buffers, etc.)
+    DepthOnly,   //
+    DepthStencil //
 }
 
 // ========================================================================

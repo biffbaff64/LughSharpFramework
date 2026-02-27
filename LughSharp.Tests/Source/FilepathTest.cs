@@ -24,6 +24,7 @@
 
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -42,12 +43,12 @@ public class FilepathTest
     {
         try
         {
-            Logger.Debug( $"Absolute : {Engine.Api.Files.Absolute( "C:/Development/Projects/CSharp/Template/bin/Debug/net8.0/PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Assembly : {Engine.Api.Files.Assembly( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Classpath: {Engine.Api.Files.Classpath( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"External : {Engine.Api.Files.External( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Internal : {Engine.Api.Files.Internal( "PackedImages/objects/rover_wheel.png" ).FullName}" );
-            Logger.Debug( $"Local    : {Engine.Api.Files.Local( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Absolute : {Api.Files.Absolute( "C:/Development/Projects/CSharp/Template/bin/Debug/net8.0/PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Assembly : {Api.Files.Assembly( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Classpath: {Api.Files.Classpath( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"External : {Api.Files.External( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Internal : {Api.Files.Internal( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Local    : {Api.Files.Local( "PackedImages/objects/rover_wheel.png" ).FullName}" );
         }
         catch ( Exception )
         {

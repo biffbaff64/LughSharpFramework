@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Globalization;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics.Text;
@@ -468,7 +469,7 @@ public class CharacterUtils
     /// <returns><c>true</c> if the character is a space character; <c>false</c> otherwise.</returns>
     public static bool IsSpaceChar( int codePoint )
     {
-        var category = CharUnicodeInfo.GetUnicodeCategory( codePoint );
+        UnicodeCategory category = CharUnicodeInfo.GetUnicodeCategory( codePoint );
 
         return ( category == UnicodeCategory.SpaceSeparator ) ||
                ( category == UnicodeCategory.LineSeparator ) ||
@@ -546,7 +547,7 @@ public class CharacterUtils
     {
         // Optimized form of:
         //     codePoint >= MIN_CODE_POINT && codePoint <= MAX_CODE_POINT
-        var plane = codePoint >> 16;
+        int plane = codePoint >> 16;
 
         return plane < ( ( MAX_CODE_POINT + 1 ) >> 16 );
     }

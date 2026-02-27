@@ -24,6 +24,8 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Utils.Pooling;
+
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 [PublicAPI]
@@ -72,7 +74,7 @@ public abstract class DelegateAction : Action
     /// </returns>
     public override bool Act( float delta )
     {
-        var pool = Pool;
+        Pool< Action >? pool = Pool;
 
         // Ensure this action can't be returned to the pool inside the delegate action.
         Pool = null;

@@ -25,7 +25,9 @@
 using System;
 using System.Diagnostics;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -133,10 +135,10 @@ public class BinaryHeap< T > where T : BinaryHeapNode
             return false;
         }
 
-        foreach ( var n in _nodes )
+        foreach ( BinaryHeapNode n in _nodes )
         {
             if ( ( identity && ( n == node ) )
-                 || ( !identity && n.Equals( node ) ) )
+              || ( !identity && n.Equals( node ) ) )
             {
                 return true;
             }
@@ -170,7 +172,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     {
         RuntimeException.ThrowIfNull( _nodes );
 
-        var removed = _nodes[ 0 ];
+        BinaryHeapNode removed = _nodes[ 0 ];
 
         if ( --Size > 0 )
         {
@@ -198,7 +200,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
 
         if ( --Size > 0 )
         {
-            var moved = _nodes[ Size ];
+            BinaryHeapNode moved = _nodes[ Size ];
             _nodes[ Size ]       = null!;
             _nodes[ node.Index ] = moved;
 
@@ -240,7 +242,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// </summary>
     public void SetValue( T node, float value )
     {
-        var oldValue = node.Value;
+        float oldValue = node.Value;
 
         node.Value = value;
 
@@ -262,13 +264,13 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     {
         RuntimeException.ThrowIfNull( _nodes );
 
-        var ix = index;
+        int ix = index;
 
         while ( ix > 0 )
         {
-            var parentIndex = ( ix - 1 ) >> 1;
+            int parentIndex = ( ix - 1 ) >> 1;
 
-            var parent = _nodes[ parentIndex ];
+            BinaryHeapNode parent = _nodes[ parentIndex ];
 
             if ( ( _nodes[ index ].Value < parent.Value ) ^ _isMaxHeap )
             {
@@ -294,15 +296,15 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     {
         RuntimeException.ThrowIfNull( _nodes );
 
-        var node = _nodes[ index ];
+        BinaryHeapNode node = _nodes[ index ];
 
-        var size  = Size;
-        var value = node.Value;
+        int   size  = Size;
+        float value = node.Value;
 
         while ( true )
         {
-            var leftIndex  = 1 + ( index << 1 );
-            var rightIndex = leftIndex + 1;
+            int leftIndex  = 1 + ( index << 1 );
+            int rightIndex = leftIndex + 1;
 
             if ( leftIndex >= size )
             {
@@ -310,8 +312,8 @@ public class BinaryHeap< T > where T : BinaryHeapNode
             }
 
             // Always has a left child.
-            var leftNode  = _nodes[ leftIndex ];
-            var leftValue = leftNode.Value;
+            BinaryHeapNode leftNode  = _nodes[ leftIndex ];
+            float          leftValue = leftNode.Value;
 
             // May have a right child.
             BinaryHeapNode? rightNode;
@@ -392,7 +394,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        var hash = 37 + GetType().GetHashCode();
+        int hash = 37 + GetType().GetHashCode();
 
         hash = ( hash * 67 ) + NumberUtils.FloatToIntBits( hash );
 
@@ -407,8 +409,8 @@ public class BinaryHeap< T > where T : BinaryHeapNode
             return "[]";
         }
 
-        var nodes  = _nodes;
-        var buffer = new StringBuilder( 32 );
+        BinaryHeapNode[]? nodes  = _nodes;
+        var               buffer = new StringBuilder( 32 );
 
         buffer.Append( '[' );
         buffer.Append( nodes[ 0 ].Value );

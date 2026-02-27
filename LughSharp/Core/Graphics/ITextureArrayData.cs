@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Utils;
 
 namespace LughSharp.Core.Graphics;
@@ -116,4 +117,3 @@ public class TextureArrayDataFactory
 
 // ============================================================================
 // ============================================================================
-

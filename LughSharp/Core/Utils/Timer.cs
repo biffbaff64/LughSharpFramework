@@ -23,9 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
+
 using Exception = System.Exception;
 using Monitor = System.Threading.Monitor;
 
@@ -59,7 +61,7 @@ public class Timer
     {
         lock ( _threadLock )
         {
-            var thread = Thread() ?? throw new RuntimeException( "Thread instance is null!" );
+            TimerThread thread = Thread() ?? throw new RuntimeException( "Thread instance is null!" );
 
             return thread.ThreadInstance ??= new Timer();
         }
@@ -124,8 +126,8 @@ public class Timer
                 {
                     task.Timer = this;
 
-                    var timeMillis        = TimeUtils.NanoTime() / 1000000;
-                    var executeTimeMillis = timeMillis + ( long )( delaySeconds * 1000 );
+                    long timeMillis        = TimeUtils.NanoTime() / 1000000;
+                    long executeTimeMillis = timeMillis + ( long )( delaySeconds * 1000 );
 
                     if ( _thread?.PauseTimeMillis > 0 )
                     {
@@ -271,7 +273,7 @@ public class Timer
         {
             for ( int i = 0, n = Tasks.Count; i < n; i++ )
             {
-                var task = Tasks[ i ]!;
+                Task task = Tasks[ i ]!;
 
                 lock ( task )
                 {
@@ -428,7 +430,7 @@ public class Timer
 
             var thread = new Thread( Run )
             {
-                Name = "Timer",
+                Name = "Timer"
             };
 
             thread.Start();
@@ -448,7 +450,7 @@ public class Timer
         {
             lock ( _threadLock )
             {
-                var delayMillis = TimeUtils.NanosToMillis() - PauseTimeMillis;
+                long delayMillis = TimeUtils.NanosToMillis() - PauseTimeMillis;
 
                 for ( int i = 0, n = Instances.Count; i < n; i++ )
                 {
@@ -481,7 +483,7 @@ public class Timer
 
                 if ( PauseTimeMillis == 0 )
                 {
-                    var timeMillis = TimeUtils.NanoTime() / 1000000;
+                    long timeMillis = TimeUtils.NanoTime() / 1000000;
 
                     for ( int i = 0, n = Instances.Count; i < n; i++ )
                     {

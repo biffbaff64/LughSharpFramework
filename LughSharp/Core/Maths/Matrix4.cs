@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -559,12 +561,12 @@ public class Matrix4
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4 Transpose()
     {
-        var m01 = Val[ M01_4 ];
-        var m02 = Val[ M02_8 ];
-        var m03 = Val[ M03_12 ];
-        var m12 = Val[ M12_9 ];
-        var m13 = Val[ M13_13 ];
-        var m23 = Val[ M23_14 ];
+        float m01 = Val[ M01_4 ];
+        float m02 = Val[ M02_8 ];
+        float m03 = Val[ M03_12 ];
+        float m12 = Val[ M12_9 ];
+        float m13 = Val[ M13_13 ];
+        float m23 = Val[ M23_14 ];
 
         Val[ M01_4 ]  = Val[ M10_1 ];
         Val[ M02_8 ]  = Val[ M20_2 ];
@@ -649,31 +651,30 @@ public class Matrix4
     public Matrix4 Invert()
     {
         //@formatter:off
-        var lDet = (((((((((((
-              (Val[M30_3] * Val[M21_6] * Val[M12_9] * Val[M03_12])
-            - (Val[M20_2] * Val[M31_7] * Val[M12_9] * Val[M03_12])
-            - (Val[M30_3] * Val[M11_5] * Val[M22_10] * Val[M03_12]))
-            + (Val[M10_1] * Val[M31_7] * Val[M22_10] * Val[M03_12])
-            + (Val[M20_2] * Val[M11_5] * Val[M32_11] * Val[M03_12]))
-            - (Val[M10_1] * Val[M21_6] * Val[M32_11] * Val[M03_12])
-            - (Val[M30_3] * Val[M21_6] * Val[M02_8] * Val[M13_13]))
-            + (Val[M20_2] * Val[M31_7] * Val[M02_8] * Val[M13_13])
-            + (Val[M30_3] * Val[M01_4] * Val[M22_10] * Val[M13_13]))
-            - (Val[M00_0] * Val[M31_7] * Val[M22_10] * Val[M13_13])
-            - (Val[M20_2] * Val[M01_4] * Val[M32_11] * Val[M13_13]))
-            + (Val[M00_0] * Val[M21_6] * Val[M32_11] * Val[M13_13])
-            + (Val[M30_3] * Val[M11_5] * Val[M02_8] * Val[M23_14]))
-            - (Val[M10_1] * Val[M31_7] * Val[M02_8] * Val[M23_14])
-            - (Val[M30_3] * Val[M01_4] * Val[M12_9] * Val[M23_14]))
-            + (Val[M00_0] * Val[M31_7] * Val[M12_9] * Val[M23_14])
-            + (Val[M10_1] * Val[M01_4] * Val[M32_11] * Val[M23_14]))
-            - (Val[M00_0] * Val[M11_5] * Val[M32_11] * Val[M23_14])
-            - (Val[M20_2] * Val[M11_5] * Val[M02_8] * Val[M33_15]))
-            + (Val[M10_1] * Val[M21_6] * Val[M02_8] * Val[M33_15])
-            + (Val[M20_2] * Val[M01_4] * Val[M12_9] * Val[M33_15]))
-            - (Val[M00_0] * Val[M21_6] * Val[M12_9] * Val[M33_15])
-            - (Val[M10_1] * Val[M01_4] * Val[M22_10] * Val[M33_15]))
-            + (Val[M00_0] * Val[M11_5] * Val[M22_10] * Val[M33_15]);
+        float lDet = (Val[M30_3] * Val[M21_6] * Val[M12_9] * Val[M03_12])
+                   - (Val[M20_2] * Val[M31_7] * Val[M12_9] * Val[M03_12])
+                   - (Val[M30_3] * Val[M11_5] * Val[M22_10] * Val[M03_12])
+                   + (Val[M10_1] * Val[M31_7] * Val[M22_10] * Val[M03_12])
+                   + (Val[M20_2] * Val[M11_5] * Val[M32_11] * Val[M03_12])
+                   - (Val[M10_1] * Val[M21_6] * Val[M32_11] * Val[M03_12])
+                   - (Val[M30_3] * Val[M21_6] * Val[M02_8] * Val[M13_13])
+                   + (Val[M20_2] * Val[M31_7] * Val[M02_8] * Val[M13_13])
+                   + (Val[M30_3] * Val[M01_4] * Val[M22_10] * Val[M13_13])
+                   - (Val[M00_0] * Val[M31_7] * Val[M22_10] * Val[M13_13])
+                   - (Val[M20_2] * Val[M01_4] * Val[M32_11] * Val[M13_13])
+                   + (Val[M00_0] * Val[M21_6] * Val[M32_11] * Val[M13_13])
+                   + (Val[M30_3] * Val[M11_5] * Val[M02_8] * Val[M23_14])
+                   - (Val[M10_1] * Val[M31_7] * Val[M02_8] * Val[M23_14])
+                   - (Val[M30_3] * Val[M01_4] * Val[M12_9] * Val[M23_14])
+                   + (Val[M00_0] * Val[M31_7] * Val[M12_9] * Val[M23_14])
+                   + (Val[M10_1] * Val[M01_4] * Val[M32_11] * Val[M23_14])
+                   - (Val[M00_0] * Val[M11_5] * Val[M32_11] * Val[M23_14])
+                   - (Val[M20_2] * Val[M11_5] * Val[M02_8] * Val[M33_15])
+                   + (Val[M10_1] * Val[M21_6] * Val[M02_8] * Val[M33_15])
+                   + (Val[M20_2] * Val[M01_4] * Val[M12_9] * Val[M33_15])
+                   - (Val[M00_0] * Val[M21_6] * Val[M12_9] * Val[M33_15])
+                   - (Val[M10_1] * Val[M01_4] * Val[M22_10] * Val[M33_15])
+                   + (Val[M00_0] * Val[M11_5] * Val[M22_10] * Val[M33_15]);
         //@formatter:on
 
         if ( lDet == 0f )
@@ -682,120 +683,120 @@ public class Matrix4
         }
 
         //@formatter:off
-        var m00 = ((((Val[M12_9] * Val[M23_14] * Val[M31_7])
-                      - (Val[M13_13] * Val[M22_10] * Val[M31_7]))
-                      + (Val[M13_13] * Val[M21_6] * Val[M32_11]))
-                      - (Val[M11_5] * Val[M23_14] * Val[M32_11])
-                      - (Val[M12_9] * Val[M21_6] * Val[M33_15]))
-                      + (Val[M11_5] * Val[M22_10] * Val[M33_15]);
+        float m00 = (Val[M12_9] * Val[M23_14] * Val[M31_7])
+                  - (Val[M13_13] * Val[M22_10] * Val[M31_7])
+                  + (Val[M13_13] * Val[M21_6] * Val[M32_11])
+                  - (Val[M11_5] * Val[M23_14] * Val[M32_11])
+                  - (Val[M12_9] * Val[M21_6] * Val[M33_15])
+                  + (Val[M11_5] * Val[M22_10] * Val[M33_15]);
 
-        var m01 = (((Val[M03_12] * Val[M22_10] * Val[M31_7])
-                    - (Val[M02_8] * Val[M23_14] * Val[M31_7])
-                    - (Val[M03_12] * Val[M21_6] * Val[M32_11]))
-                    + (Val[M01_4] * Val[M23_14] * Val[M32_11])
-                    + (Val[M02_8] * Val[M21_6] * Val[M33_15]))
-                    - (Val[M01_4] * Val[M22_10] * Val[M33_15]);
+        float m01 = (Val[M03_12] * Val[M22_10] * Val[M31_7])
+                  - (Val[M02_8] * Val[M23_14] * Val[M31_7])
+                  - (Val[M03_12] * Val[M21_6] * Val[M32_11])
+                  + (Val[M01_4] * Val[M23_14] * Val[M32_11])
+                  + (Val[M02_8] * Val[M21_6] * Val[M33_15])
+                  - (Val[M01_4] * Val[M22_10] * Val[M33_15]);
 
-        var m02 = ((((Val[M02_8] * Val[M13_13] * Val[M31_7])
-                      - (Val[M03_12] * Val[M12_9] * Val[M31_7]))
-                      + (Val[M03_12] * Val[M11_5] * Val[M32_11]))
-                      - (Val[M01_4] * Val[M13_13] * Val[M32_11])
-                      - (Val[M02_8] * Val[M11_5] * Val[M33_15]))
-                      + (Val[M01_4] * Val[M12_9] * Val[M33_15]);
+        float m02 = (Val[M02_8] * Val[M13_13] * Val[M31_7])
+                  - (Val[M03_12] * Val[M12_9] * Val[M31_7])
+                  + (Val[M03_12] * Val[M11_5] * Val[M32_11])
+                  - (Val[M01_4] * Val[M13_13] * Val[M32_11])
+                  - (Val[M02_8] * Val[M11_5] * Val[M33_15])
+                  + (Val[M01_4] * Val[M12_9] * Val[M33_15]);
 
-        var m03 = (((Val[M03_12] * Val[M12_9] * Val[M21_6])
-                    - (Val[M02_8] * Val[M13_13] * Val[M21_6])
-                    - (Val[M03_12] * Val[M11_5] * Val[M22_10]))
-                    + (Val[M01_4] * Val[M13_13] * Val[M22_10])
-                    + (Val[M02_8] * Val[M11_5] * Val[M23_14]))
-                    - (Val[M01_4] * Val[M12_9] * Val[M23_14]);
+        float m03 = (Val[M03_12] * Val[M12_9] * Val[M21_6])
+                  - (Val[M02_8] * Val[M13_13] * Val[M21_6])
+                  - (Val[M03_12] * Val[M11_5] * Val[M22_10])
+                  + (Val[M01_4] * Val[M13_13] * Val[M22_10])
+                  + (Val[M02_8] * Val[M11_5] * Val[M23_14])
+                  - (Val[M01_4] * Val[M12_9] * Val[M23_14]);
 
-        var m10 = (((Val[M13_13] * Val[M22_10] * Val[M30_3])
-                    - (Val[M12_9] * Val[M23_14] * Val[M30_3])
-                    - (Val[M13_13] * Val[M20_2] * Val[M32_11]))
-                    + (Val[M10_1] * Val[M23_14] * Val[M32_11])
-                    + (Val[M12_9] * Val[M20_2] * Val[M33_15]))
-                    - (Val[M10_1] * Val[M22_10] * Val[M33_15]);
+        float m10 = (Val[M13_13] * Val[M22_10] * Val[M30_3])
+                  - (Val[M12_9] * Val[M23_14] * Val[M30_3])
+                  - (Val[M13_13] * Val[M20_2] * Val[M32_11])
+                  + (Val[M10_1] * Val[M23_14] * Val[M32_11])
+                  + (Val[M12_9] * Val[M20_2] * Val[M33_15])
+                  - (Val[M10_1] * Val[M22_10] * Val[M33_15]);
 
-        var m11 = ((((Val[M02_8] * Val[M23_14] * Val[M30_3])
-                      - (Val[M03_12] * Val[M22_10] * Val[M30_3]))
-                      + (Val[M03_12] * Val[M20_2] * Val[M32_11]))
-                      - (Val[M00_0] * Val[M23_14] * Val[M32_11])
-                      - (Val[M02_8] * Val[M20_2] * Val[M33_15]))
-                      + (Val[M00_0] * Val[M22_10] * Val[M33_15]);
+        float m11 = (Val[M02_8] * Val[M23_14] * Val[M30_3])
+                  - (Val[M03_12] * Val[M22_10] * Val[M30_3])
+                  + (Val[M03_12] * Val[M20_2] * Val[M32_11])
+                  - (Val[M00_0] * Val[M23_14] * Val[M32_11])
+                  - (Val[M02_8] * Val[M20_2] * Val[M33_15])
+                  + (Val[M00_0] * Val[M22_10] * Val[M33_15]);
 
-        var m12 = (((Val[M03_12] * Val[M12_9] * Val[M30_3])
-                    - (Val[M02_8] * Val[M13_13] * Val[M30_3])
-                    - (Val[M03_12] * Val[M10_1] * Val[M32_11]))
-                    + (Val[M00_0] * Val[M13_13] * Val[M32_11])
-                    + (Val[M02_8] * Val[M10_1] * Val[M33_15]))
-                    - (Val[M00_0] * Val[M12_9] * Val[M33_15]);
+        float m12 = (Val[M03_12] * Val[M12_9] * Val[M30_3])
+                  - (Val[M02_8] * Val[M13_13] * Val[M30_3])
+                  - (Val[M03_12] * Val[M10_1] * Val[M32_11])
+                  + (Val[M00_0] * Val[M13_13] * Val[M32_11])
+                  + (Val[M02_8] * Val[M10_1] * Val[M33_15])
+                  - (Val[M00_0] * Val[M12_9] * Val[M33_15]);
 
-        var m13 = ((((Val[M02_8] * Val[M13_13] * Val[M20_2])
-                      - (Val[M03_12] * Val[M12_9] * Val[M20_2]))
-                      + (Val[M03_12] * Val[M10_1] * Val[M22_10]))
-                      - (Val[M00_0] * Val[M13_13] * Val[M22_10])
-                      - (Val[M02_8] * Val[M10_1] * Val[M23_14]))
-                      + (Val[M00_0] * Val[M12_9] * Val[M23_14]);
+        float m13 = (Val[M02_8] * Val[M13_13] * Val[M20_2])
+                  - (Val[M03_12] * Val[M12_9] * Val[M20_2])
+                  + (Val[M03_12] * Val[M10_1] * Val[M22_10])
+                  - (Val[M00_0] * Val[M13_13] * Val[M22_10])
+                  - (Val[M02_8] * Val[M10_1] * Val[M23_14])
+                  + (Val[M00_0] * Val[M12_9] * Val[M23_14]);
 
-        var m20 = ((((Val[M11_5] * Val[M23_14] * Val[M30_3])
-                      - (Val[M13_13] * Val[M21_6] * Val[M30_3]))
-                      + (Val[M13_13] * Val[M20_2] * Val[M31_7]))
-                      - (Val[M10_1] * Val[M23_14] * Val[M31_7])
-                      - (Val[M11_5] * Val[M20_2] * Val[M33_15]))
-                      + (Val[M10_1] * Val[M21_6] * Val[M33_15]);
+        float m20 = (Val[M11_5] * Val[M23_14] * Val[M30_3])
+                  - (Val[M13_13] * Val[M21_6] * Val[M30_3])
+                  + (Val[M13_13] * Val[M20_2] * Val[M31_7])
+                  - (Val[M10_1] * Val[M23_14] * Val[M31_7])
+                  - (Val[M11_5] * Val[M20_2] * Val[M33_15])
+                  + (Val[M10_1] * Val[M21_6] * Val[M33_15]);
 
-        var m21 = (((Val[M03_12] * Val[M21_6] * Val[M30_3])
-                    - (Val[M01_4] * Val[M23_14] * Val[M30_3])
-                    - (Val[M03_12] * Val[M20_2] * Val[M31_7]))
-                    + (Val[M00_0] * Val[M23_14] * Val[M31_7])
-                    + (Val[M01_4] * Val[M20_2] * Val[M33_15]))
-                    - (Val[M00_0] * Val[M21_6] * Val[M33_15]);
+        float m21 = (Val[M03_12] * Val[M21_6] * Val[M30_3])
+                  - (Val[M01_4] * Val[M23_14] * Val[M30_3])
+                  - (Val[M03_12] * Val[M20_2] * Val[M31_7])
+                  + (Val[M00_0] * Val[M23_14] * Val[M31_7])
+                  + (Val[M01_4] * Val[M20_2] * Val[M33_15])
+                  - (Val[M00_0] * Val[M21_6] * Val[M33_15]);
 
-        var m22 = ((((Val[M01_4] * Val[M13_13] * Val[M30_3])
-                      - (Val[M03_12] * Val[M11_5] * Val[M30_3]))
-                      + (Val[M03_12] * Val[M10_1] * Val[M31_7]))
-                      - (Val[M00_0] * Val[M13_13] * Val[M31_7])
-                      - (Val[M01_4] * Val[M10_1] * Val[M33_15]))
-                      + (Val[M00_0] * Val[M11_5] * Val[M33_15]);
+        float m22 = (Val[M01_4] * Val[M13_13] * Val[M30_3])
+                  - (Val[M03_12] * Val[M11_5] * Val[M30_3])
+                  + (Val[M03_12] * Val[M10_1] * Val[M31_7])
+                  - (Val[M00_0] * Val[M13_13] * Val[M31_7])
+                  - (Val[M01_4] * Val[M10_1] * Val[M33_15])
+                  + (Val[M00_0] * Val[M11_5] * Val[M33_15]);
 
-        var m23 = (((Val[M03_12] * Val[M11_5] * Val[M20_2])
-                    - (Val[M01_4] * Val[M13_13] * Val[M20_2])
-                    - (Val[M03_12] * Val[M10_1] * Val[M21_6]))
-                    + (Val[M00_0] * Val[M13_13] * Val[M21_6])
-                    + (Val[M01_4] * Val[M10_1] * Val[M23_14]))
-                    - (Val[M00_0] * Val[M11_5] * Val[M23_14]);
+        float m23 = (Val[M03_12] * Val[M11_5] * Val[M20_2])
+                  - (Val[M01_4] * Val[M13_13] * Val[M20_2])
+                  - (Val[M03_12] * Val[M10_1] * Val[M21_6])
+                  + (Val[M00_0] * Val[M13_13] * Val[M21_6])
+                  + (Val[M01_4] * Val[M10_1] * Val[M23_14])
+                  - (Val[M00_0] * Val[M11_5] * Val[M23_14]);
 
-        var m30 = (((Val[M12_9] * Val[M21_6] * Val[M30_3])
-                    - (Val[M11_5] * Val[M22_10] * Val[M30_3])
-                    - (Val[M12_9] * Val[M20_2] * Val[M31_7]))
-                    + (Val[M10_1] * Val[M22_10] * Val[M31_7])
-                    + (Val[M11_5] * Val[M20_2] * Val[M32_11]))
-                    - (Val[M10_1] * Val[M21_6] * Val[M32_11]);
+        float m30 = (Val[M12_9] * Val[M21_6] * Val[M30_3])
+                  - (Val[M11_5] * Val[M22_10] * Val[M30_3])
+                  - (Val[M12_9] * Val[M20_2] * Val[M31_7])
+                  + (Val[M10_1] * Val[M22_10] * Val[M31_7])
+                  + (Val[M11_5] * Val[M20_2] * Val[M32_11])
+                  - (Val[M10_1] * Val[M21_6] * Val[M32_11]);
 
-        var m31 = ((((Val[M01_4] * Val[M22_10] * Val[M30_3])
-                      - (Val[M02_8] * Val[M21_6] * Val[M30_3]))
-                     + (Val[M02_8] * Val[M20_2] * Val[M31_7]))
-                     - (Val[M00_0] * Val[M22_10] * Val[M31_7])
-                     - (Val[M01_4] * Val[M20_2] * Val[M32_11]))
-                     + (Val[M00_0] * Val[M21_6] * Val[M32_11]);
+        float m31 = (Val[M01_4] * Val[M22_10] * Val[M30_3])
+                  - (Val[M02_8] * Val[M21_6] * Val[M30_3])
+                  + (Val[M02_8] * Val[M20_2] * Val[M31_7])
+                  - (Val[M00_0] * Val[M22_10] * Val[M31_7])
+                  - (Val[M01_4] * Val[M20_2] * Val[M32_11])
+                  + (Val[M00_0] * Val[M21_6] * Val[M32_11]);
 
-        var m32 = (((Val[M02_8] * Val[M11_5] * Val[M30_3])
-                    - (Val[M01_4] * Val[M12_9] * Val[M30_3])
-                    - (Val[M02_8] * Val[M10_1] * Val[M31_7]))
-                    + (Val[M00_0] * Val[M12_9] * Val[M31_7])
-                    + (Val[M01_4] * Val[M10_1] * Val[M32_11]))
-                    - (Val[M00_0] * Val[M11_5] * Val[M32_11]);
+        float m32 = (Val[M02_8] * Val[M11_5] * Val[M30_3])
+                  - (Val[M01_4] * Val[M12_9] * Val[M30_3])
+                  - (Val[M02_8] * Val[M10_1] * Val[M31_7])
+                  + (Val[M00_0] * Val[M12_9] * Val[M31_7])
+                  + (Val[M01_4] * Val[M10_1] * Val[M32_11])
+                  - (Val[M00_0] * Val[M11_5] * Val[M32_11]);
 
-        var m33 = ((((Val[M01_4] * Val[M12_9] * Val[M20_2])
-                      - (Val[M02_8] * Val[M11_5] * Val[M20_2]))
-                      + (Val[M02_8] * Val[M10_1] * Val[M21_6]))
-                      - (Val[M00_0] * Val[M12_9] * Val[M21_6])
-                      - (Val[M01_4] * Val[M10_1] * Val[M22_10]))
-                      + (Val[M00_0] * Val[M11_5] * Val[M22_10]);
+        float m33 = (Val[M01_4] * Val[M12_9] * Val[M20_2])
+                  - (Val[M02_8] * Val[M11_5] * Val[M20_2])
+                  + (Val[M02_8] * Val[M10_1] * Val[M21_6])
+                  - (Val[M00_0] * Val[M12_9] * Val[M21_6])
+                  - (Val[M01_4] * Val[M10_1] * Val[M22_10])
+                  + (Val[M00_0] * Val[M11_5] * Val[M22_10]);
         //@formatter:on
 
-        var invDet = 1.0f / lDet;
+        float invDet = 1.0f / lDet;
 
         Val[ M00_0 ]  = m00 * invDet;
         Val[ M10_1 ]  = m10 * invDet;
@@ -824,30 +825,29 @@ public class Matrix4
     public float Determinant()
     {
         //@formatter:off
-        return (((((((((((
-                  (Val[M30_3] * Val[M21_6] * Val[M12_9] * Val[M03_12])
-                - (Val[M20_2] * Val[M31_7] * Val[M12_9] * Val[M03_12])
-                - (Val[M30_3] * Val[M11_5] * Val[M22_10] * Val[M03_12]))
-                + (Val[M10_1] * Val[M31_7] * Val[M22_10] * Val[M03_12])
-                + (Val[M20_2] * Val[M11_5] * Val[M32_11] * Val[M03_12]))
-                - (Val[M10_1] * Val[M21_6] * Val[M32_11] * Val[M03_12])
-                - (Val[M30_3] * Val[M21_6] * Val[M02_8] * Val[M13_13]))
-                + (Val[M20_2] * Val[M31_7] * Val[M02_8] * Val[M13_13])
-                + (Val[M30_3] * Val[M01_4] * Val[M22_10] * Val[M13_13]))
-                - (Val[M00_0] * Val[M31_7] * Val[M22_10] * Val[M13_13])
-                - (Val[M20_2] * Val[M01_4] * Val[M32_11] * Val[M13_13]))
-                + (Val[M00_0] * Val[M21_6] * Val[M32_11] * Val[M13_13])
-                + (Val[M30_3] * Val[M11_5] * Val[M02_8] * Val[M23_14]))
-                - (Val[M10_1] * Val[M31_7] * Val[M02_8] * Val[M23_14])
-                - (Val[M30_3] * Val[M01_4] * Val[M12_9] * Val[M23_14]))
-                + (Val[M00_0] * Val[M31_7] * Val[M12_9] * Val[M23_14])
-                + (Val[M10_1] * Val[M01_4] * Val[M32_11] * Val[M23_14]))
-                - (Val[M00_0] * Val[M11_5] * Val[M32_11] * Val[M23_14])
-                - (Val[M20_2] * Val[M11_5] * Val[M02_8] * Val[M33_15]))
-                + (Val[M10_1] * Val[M21_6] * Val[M02_8] * Val[M33_15])
-                + (Val[M20_2] * Val[M01_4] * Val[M12_9] * Val[M33_15]))
-                - (Val[M00_0] * Val[M21_6] * Val[M12_9] * Val[M33_15])
-                - (Val[M10_1] * Val[M01_4] * Val[M22_10] * Val[M33_15]))
+        return (Val[M30_3] * Val[M21_6] * Val[M12_9] * Val[M03_12])
+             - (Val[M20_2] * Val[M31_7] * Val[M12_9] * Val[M03_12])
+             - (Val[M30_3] * Val[M11_5] * Val[M22_10] * Val[M03_12])
+             + (Val[M10_1] * Val[M31_7] * Val[M22_10] * Val[M03_12])
+             + (Val[M20_2] * Val[M11_5] * Val[M32_11] * Val[M03_12])
+             - (Val[M10_1] * Val[M21_6] * Val[M32_11] * Val[M03_12])
+             - (Val[M30_3] * Val[M21_6] * Val[M02_8] * Val[M13_13])
+             + (Val[M20_2] * Val[M31_7] * Val[M02_8] * Val[M13_13])
+             + (Val[M30_3] * Val[M01_4] * Val[M22_10] * Val[M13_13])
+             - (Val[M00_0] * Val[M31_7] * Val[M22_10] * Val[M13_13])
+             - (Val[M20_2] * Val[M01_4] * Val[M32_11] * Val[M13_13])
+             + (Val[M00_0] * Val[M21_6] * Val[M32_11] * Val[M13_13])
+             + (Val[M30_3] * Val[M11_5] * Val[M02_8] * Val[M23_14])
+             - (Val[M10_1] * Val[M31_7] * Val[M02_8] * Val[M23_14])
+             - (Val[M30_3] * Val[M01_4] * Val[M12_9] * Val[M23_14])
+             + (Val[M00_0] * Val[M31_7] * Val[M12_9] * Val[M23_14])
+             + (Val[M10_1] * Val[M01_4] * Val[M32_11] * Val[M23_14])
+             - (Val[M00_0] * Val[M11_5] * Val[M32_11] * Val[M23_14])
+             - (Val[M20_2] * Val[M11_5] * Val[M02_8] * Val[M33_15])
+             + (Val[M10_1] * Val[M21_6] * Val[M02_8] * Val[M33_15])
+             + (Val[M20_2] * Val[M01_4] * Val[M12_9] * Val[M33_15])
+             - (Val[M00_0] * Val[M21_6] * Val[M12_9] * Val[M33_15])
+             - (Val[M10_1] * Val[M01_4] * Val[M22_10] * Val[M33_15])
                 + (Val[M00_0] * Val[M11_5] * Val[M22_10] * Val[M33_15]);
         //@formatter:on
     }
@@ -858,9 +858,9 @@ public class Matrix4
     /// <returns>The determinant of the 3x3 submatrix.</returns>
     public float Determinant3X3()
     {
-        return ( ( Val[ M00_0 ] * Val[ M11_5 ] * Val[ M22_10 ] )
-               + ( Val[ M01_4 ] * Val[ M12_9 ] * Val[ M20_2 ] )
-               + ( Val[ M02_8 ] * Val[ M10_1 ] * Val[ M21_6 ] ) )
+        return ( Val[ M00_0 ] * Val[ M11_5 ] * Val[ M22_10 ] )
+             + ( Val[ M01_4 ] * Val[ M12_9 ] * Val[ M20_2 ] )
+             + ( Val[ M02_8 ] * Val[ M10_1 ] * Val[ M21_6 ] )
              - ( Val[ M00_0 ] * Val[ M12_9 ] * Val[ M21_6 ] )
              - ( Val[ M01_4 ] * Val[ M10_1 ] * Val[ M22_10 ] )
              - ( Val[ M02_8 ] * Val[ M11_5 ] * Val[ M20_2 ] );
@@ -881,9 +881,9 @@ public class Matrix4
     {
         ToIdentity();
 
-        var lfd = ( float )( ( double )1.0f / Math.Tan( ( double )( fovy * ( Math.PI / 1800 ) ) / ( double )2.0f ) );
-        var la1 = ( far + near ) / ( near - far );
-        var la2 = ( 2.0f * far * near ) / ( near - far );
+        var   lfd = ( float )( ( double )1.0f / Math.Tan( ( double )( fovy * ( Math.PI / 1800 ) ) / ( double )2.0f ) );
+        float la1 = ( far + near ) / ( near - far );
+        float la2 = 2.0f * far * near / ( near - far );
 
         Val[ M00_0 ] = lfd / aspectRatio;
         Val[ M10_1 ] = 0;
@@ -923,13 +923,13 @@ public class Matrix4
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4 SetToProjection( float left, float right, float bottom, float top, float near, float far )
     {
-        Val[ M00_0 ] = ( 2.0f * near ) / ( right - left );
+        Val[ M00_0 ] = 2.0f * near / ( right - left );
         Val[ M10_1 ] = 0;
         Val[ M20_2 ] = 0;
         Val[ M30_3 ] = 0;
 
         Val[ M01_4 ] = 0;
-        Val[ M11_5 ] = ( 2.0f * near ) / ( top - bottom );
+        Val[ M11_5 ] = 2.0f * near / ( top - bottom );
         Val[ M21_6 ] = 0;
         Val[ M31_7 ] = 0;
 
@@ -940,7 +940,7 @@ public class Matrix4
 
         Val[ M03_12 ] = 0;
         Val[ M13_13 ] = 0;
-        Val[ M23_14 ] = ( 2 * far * near ) / ( near - far );
+        Val[ M23_14 ] = 2 * far * near / ( near - far );
         Val[ M33_15 ] = 0;
 
         return this;
@@ -1014,13 +1014,13 @@ public class Matrix4
             throw new ArgumentException( "Far and near cannot be equal." );
         }
 
-        var xOrth = 2f / ( right - left );
-        var yOrth = 2f / ( top - bottom );
-        var zOrth = 2f / ( far - near );
+        float xOrth = 2f / ( right - left );
+        float yOrth = 2f / ( top - bottom );
+        float zOrth = 2f / ( far - near );
 
-        var tx = -( right + left ) / ( right - left );
-        var ty = -( top + bottom ) / ( top - bottom );
-        var tz = -( far + near ) / ( far - near );
+        float tx = -( right + left ) / ( right - left );
+        float ty = -( top + bottom ) / ( top - bottom );
+        float tz = -( far + near ) / ( far - near );
 
         // Column 1
         Val[ M00_0 ] = xOrth;
@@ -1437,7 +1437,7 @@ public class Matrix4
     /// <returns> This matrix for chaining  </returns>
     public Matrix4 Average( Matrix4[] t )
     {
-        var w = 1.0f / t.Length;
+        float w = 1.0f / t.Length;
 
         TmpVec.Set( t[ 0 ].GetScale( TmpUp ).Scale( w ) );
         Quat.Set( t[ 0 ].GetRotation( Quat2 ).Exp( w ) );
@@ -1750,36 +1750,64 @@ public class Matrix4
     /// </summary>
     /// <param name="mata"> the first matrix. </param>
     /// <param name="matb"> the second matrix.  </param>
-    public static void Mul(float[] mata, float[] matb)
+    public static void Mul( float[] mata, float[] matb )
     {
         // Row 0
-        var m00 = mata[0] * matb[0] + mata[4] * matb[1] + mata[8] * matb[2] + mata[12] * matb[3];
-        var m01 = mata[0] * matb[4] + mata[4] * matb[5] + mata[8] * matb[6] + mata[12] * matb[7];
-        var m02 = mata[0] * matb[8] + mata[4] * matb[9] + mata[8] * matb[10] + mata[12] * matb[11];
-        var m03 = mata[0] * matb[12] + mata[4] * matb[13] + mata[8] * matb[14] + mata[12] * matb[15];
+        float m00 = ( mata[ 0 ] * matb[ 0 ] ) + ( mata[ 4 ] * matb[ 1 ] ) + ( mata[ 8 ] * matb[ 2 ] )
+                  + ( mata[ 12 ] * matb[ 3 ] );
+        float m01 = ( mata[ 0 ] * matb[ 4 ] ) + ( mata[ 4 ] * matb[ 5 ] ) + ( mata[ 8 ] * matb[ 6 ] )
+                  + ( mata[ 12 ] * matb[ 7 ] );
+        float m02 = ( mata[ 0 ] * matb[ 8 ] ) + ( mata[ 4 ] * matb[ 9 ] ) + ( mata[ 8 ] * matb[ 10 ] )
+                  + ( mata[ 12 ] * matb[ 11 ] );
+        float m03 = ( mata[ 0 ] * matb[ 12 ] ) + ( mata[ 4 ] * matb[ 13 ] ) + ( mata[ 8 ] * matb[ 14 ] )
+                  + ( mata[ 12 ] * matb[ 15 ] );
 
         // Row 1
-        var m10 = mata[1] * matb[0] + mata[5] * matb[1] + mata[9] * matb[2] + mata[13] * matb[3];
-        var m11 = mata[1] * matb[4] + mata[5] * matb[5] + mata[9] * matb[6] + mata[13] * matb[7];
-        var m12 = mata[1] * matb[8] + mata[5] * matb[9] + mata[9] * matb[10] + mata[13] * matb[11];
-        var m13 = mata[1] * matb[12] + mata[5] * matb[13] + mata[9] * matb[14] + mata[13] * matb[15];
+        float m10 = ( mata[ 1 ] * matb[ 0 ] ) + ( mata[ 5 ] * matb[ 1 ] ) + ( mata[ 9 ] * matb[ 2 ] )
+                  + ( mata[ 13 ] * matb[ 3 ] );
+        float m11 = ( mata[ 1 ] * matb[ 4 ] ) + ( mata[ 5 ] * matb[ 5 ] ) + ( mata[ 9 ] * matb[ 6 ] )
+                  + ( mata[ 13 ] * matb[ 7 ] );
+        float m12 = ( mata[ 1 ] * matb[ 8 ] ) + ( mata[ 5 ] * matb[ 9 ] ) + ( mata[ 9 ] * matb[ 10 ] )
+                  + ( mata[ 13 ] * matb[ 11 ] );
+        float m13 = ( mata[ 1 ] * matb[ 12 ] ) + ( mata[ 5 ] * matb[ 13 ] ) + ( mata[ 9 ] * matb[ 14 ] )
+                  + ( mata[ 13 ] * matb[ 15 ] );
 
         // Row 2
-        var m20 = mata[2] * matb[0] + mata[6] * matb[1] + mata[10] * matb[2] + mata[14] * matb[3];
-        var m21 = mata[2] * matb[4] + mata[6] * matb[5] + mata[10] * matb[6] + mata[14] * matb[7];
-        var m22 = mata[2] * matb[8] + mata[6] * matb[9] + mata[10] * matb[10] + mata[14] * matb[11];
-        var m23 = mata[2] * matb[12] + mata[6] * matb[13] + mata[10] * matb[14] + mata[14] * matb[15];
+        float m20 = ( mata[ 2 ] * matb[ 0 ] ) + ( mata[ 6 ] * matb[ 1 ] ) + ( mata[ 10 ] * matb[ 2 ] )
+                  + ( mata[ 14 ] * matb[ 3 ] );
+        float m21 = ( mata[ 2 ] * matb[ 4 ] ) + ( mata[ 6 ] * matb[ 5 ] ) + ( mata[ 10 ] * matb[ 6 ] )
+                  + ( mata[ 14 ] * matb[ 7 ] );
+        float m22 = ( mata[ 2 ] * matb[ 8 ] ) + ( mata[ 6 ] * matb[ 9 ] ) + ( mata[ 10 ] * matb[ 10 ] )
+                  + ( mata[ 14 ] * matb[ 11 ] );
+        float m23 = ( mata[ 2 ] * matb[ 12 ] ) + ( mata[ 6 ] * matb[ 13 ] ) + ( mata[ 10 ] * matb[ 14 ] )
+                  + ( mata[ 14 ] * matb[ 15 ] );
 
         // Row 3
-        var m30 = mata[3] * matb[0] + mata[7] * matb[1] + mata[11] * matb[2] + mata[15] * matb[3];
-        var m31 = mata[3] * matb[4] + mata[7] * matb[5] + mata[11] * matb[6] + mata[15] * matb[7];
-        var m32 = mata[3] * matb[8] + mata[7] * matb[9] + mata[11] * matb[10] + mata[15] * matb[11];
-        var m33 = mata[3] * matb[12] + mata[7] * matb[13] + mata[11] * matb[14] + mata[15] * matb[15];
+        float m30 = ( mata[ 3 ] * matb[ 0 ] ) + ( mata[ 7 ] * matb[ 1 ] ) + ( mata[ 11 ] * matb[ 2 ] )
+                  + ( mata[ 15 ] * matb[ 3 ] );
+        float m31 = ( mata[ 3 ] * matb[ 4 ] ) + ( mata[ 7 ] * matb[ 5 ] ) + ( mata[ 11 ] * matb[ 6 ] )
+                  + ( mata[ 15 ] * matb[ 7 ] );
+        float m32 = ( mata[ 3 ] * matb[ 8 ] ) + ( mata[ 7 ] * matb[ 9 ] ) + ( mata[ 11 ] * matb[ 10 ] )
+                  + ( mata[ 15 ] * matb[ 11 ] );
+        float m33 = ( mata[ 3 ] * matb[ 12 ] ) + ( mata[ 7 ] * matb[ 13 ] ) + ( mata[ 11 ] * matb[ 14 ] )
+                  + ( mata[ 15 ] * matb[ 15 ] );
 
-        mata[0] = m00; mata[4] = m01; mata[8]  = m02; mata[12] = m03;
-        mata[1] = m10; mata[5] = m11; mata[9]  = m12; mata[13] = m13;
-        mata[2] = m20; mata[6] = m21; mata[10] = m22; mata[14] = m23;
-        mata[3] = m30; mata[7] = m31; mata[11] = m32; mata[15] = m33;
+        mata[ 0 ]  = m00;
+        mata[ 4 ]  = m01;
+        mata[ 8 ]  = m02;
+        mata[ 12 ] = m03;
+        mata[ 1 ]  = m10;
+        mata[ 5 ]  = m11;
+        mata[ 9 ]  = m12;
+        mata[ 13 ] = m13;
+        mata[ 2 ]  = m20;
+        mata[ 6 ]  = m21;
+        mata[ 10 ] = m22;
+        mata[ 14 ] = m23;
+        mata[ 3 ]  = m30;
+        mata[ 7 ]  = m31;
+        mata[ 11 ] = m32;
+        mata[ 15 ] = m33;
     }
 //    public static void Mul( float[] mata, float[] matb )
 //    {
@@ -1898,10 +1926,12 @@ public class Matrix4
     /// <param name="vec"> the vector.  </param>
     public static void MulVec( float[] mat, float[] vec )
     {
-        var x = ( vec[ 0 ] * mat[ M00_0 ] ) + ( vec[ 1 ] * mat[ M01_4 ] ) + ( vec[ 2 ] * mat[ M02_8 ] ) + mat[ M03_12 ];
-        var y = ( vec[ 0 ] * mat[ M10_1 ] ) + ( vec[ 1 ] * mat[ M11_5 ] ) + ( vec[ 2 ] * mat[ M12_9 ] ) + mat[ M13_13 ];
-        var z = ( vec[ 0 ] * mat[ M20_2 ] ) + ( vec[ 1 ] * mat[ M21_6 ] ) + ( vec[ 2 ] * mat[ M22_10 ] ) +
-                mat[ M23_14 ];
+        float x = ( vec[ 0 ] * mat[ M00_0 ] ) + ( vec[ 1 ] * mat[ M01_4 ] ) + ( vec[ 2 ] * mat[ M02_8 ] )
+                + mat[ M03_12 ];
+        float y = ( vec[ 0 ] * mat[ M10_1 ] ) + ( vec[ 1 ] * mat[ M11_5 ] ) + ( vec[ 2 ] * mat[ M12_9 ] )
+                + mat[ M13_13 ];
+        float z = ( vec[ 0 ] * mat[ M20_2 ] ) + ( vec[ 1 ] * mat[ M21_6 ] ) + ( vec[ 2 ] * mat[ M22_10 ] ) +
+                  mat[ M23_14 ];
 
         vec[ 0 ] = x;
         vec[ 1 ] = y;
@@ -1920,25 +1950,25 @@ public class Matrix4
     /// <param name="vec"> the vector.  </param>
     public static void Prj( float[] mat, float[] vec )
     {
-        var invW = 1.0f / ( ( vec[ 0 ] * mat[ M30_3 ] )
-                          + ( vec[ 1 ] * mat[ M31_7 ] )
-                          + ( vec[ 2 ] * mat[ M32_11 ] )
-                          + mat[ M33_15 ] );
+        float invW = 1.0f / ( ( vec[ 0 ] * mat[ M30_3 ] )
+                            + ( vec[ 1 ] * mat[ M31_7 ] )
+                            + ( vec[ 2 ] * mat[ M32_11 ] )
+                            + mat[ M33_15 ] );
 
-        var x = ( ( vec[ 0 ] * mat[ M00_0 ] )
-                + ( vec[ 1 ] * mat[ M01_4 ] )
-                + ( vec[ 2 ] * mat[ M02_8 ] )
-                + mat[ M03_12 ] ) * invW;
+        float x = ( ( vec[ 0 ] * mat[ M00_0 ] )
+                  + ( vec[ 1 ] * mat[ M01_4 ] )
+                  + ( vec[ 2 ] * mat[ M02_8 ] )
+                  + mat[ M03_12 ] ) * invW;
 
-        var y = ( ( vec[ 0 ] * mat[ M10_1 ] )
-                + ( vec[ 1 ] * mat[ M11_5 ] )
-                + ( vec[ 2 ] * mat[ M12_9 ] )
-                + mat[ M13_13 ] ) * invW;
+        float y = ( ( vec[ 0 ] * mat[ M10_1 ] )
+                  + ( vec[ 1 ] * mat[ M11_5 ] )
+                  + ( vec[ 2 ] * mat[ M12_9 ] )
+                  + mat[ M13_13 ] ) * invW;
 
-        var z = ( ( vec[ 0 ] * mat[ M20_2 ] )
-                + ( vec[ 1 ] * mat[ M21_6 ] )
-                + ( vec[ 2 ] * mat[ M22_10 ] )
-                + mat[ M23_14 ] ) * invW;
+        float z = ( ( vec[ 0 ] * mat[ M20_2 ] )
+                  + ( vec[ 1 ] * mat[ M21_6 ] )
+                  + ( vec[ 2 ] * mat[ M22_10 ] )
+                  + mat[ M23_14 ] ) * invW;
 
         vec[ 0 ] = x;
         vec[ 1 ] = y;
@@ -1957,9 +1987,9 @@ public class Matrix4
     /// <param name="vec"> the vector.  </param>
     public static void Rot( float[] mat, float[] vec )
     {
-        var x = ( vec[ 0 ] * mat[ M00_0 ] ) + ( vec[ 1 ] * mat[ M01_4 ] ) + ( vec[ 2 ] * mat[ M02_8 ] );
-        var y = ( vec[ 0 ] * mat[ M10_1 ] ) + ( vec[ 1 ] * mat[ M11_5 ] ) + ( vec[ 2 ] * mat[ M12_9 ] );
-        var z = ( vec[ 0 ] * mat[ M20_2 ] ) + ( vec[ 1 ] * mat[ M21_6 ] ) + ( vec[ 2 ] * mat[ M22_10 ] );
+        float x = ( vec[ 0 ] * mat[ M00_0 ] ) + ( vec[ 1 ] * mat[ M01_4 ] ) + ( vec[ 2 ] * mat[ M02_8 ] );
+        float y = ( vec[ 0 ] * mat[ M10_1 ] ) + ( vec[ 1 ] * mat[ M11_5 ] ) + ( vec[ 2 ] * mat[ M12_9 ] );
+        float z = ( vec[ 0 ] * mat[ M20_2 ] ) + ( vec[ 1 ] * mat[ M21_6 ] ) + ( vec[ 2 ] * mat[ M22_10 ] );
         vec[ 0 ] = x;
         vec[ 1 ] = y;
         vec[ 2 ] = z;
@@ -1973,7 +2003,7 @@ public class Matrix4
     /// <returns> false in case the inverse could not be calculated, true otherwise.  </returns>
     public static bool Invert( float[] values )
     {
-        var lDet = Determinant( values );
+        float lDet = Determinant( values );
 
         if ( lDet == 0 )
         {
@@ -1981,120 +2011,120 @@ public class Matrix4
         }
 
         //@formatter:off
-        var m00 = ((((values[M12_9] * values[M23_14] * values[M31_7])
-                      - (values[M13_13] * values[M22_10] * values[M31_7]))
-                      + (values[M13_13] * values[M21_6] * values[M32_11]))
-                      - (values[M11_5] * values[M23_14] * values[M32_11])
-                      - (values[M12_9] * values[M21_6] * values[M33_15]))
-                      + (values[M11_5] * values[M22_10] * values[M33_15]);
+        float m00 = (values[M12_9] * values[M23_14] * values[M31_7])
+                  - (values[M13_13] * values[M22_10] * values[M31_7])
+                  + (values[M13_13] * values[M21_6] * values[M32_11])
+                  - (values[M11_5] * values[M23_14] * values[M32_11])
+                  - (values[M12_9] * values[M21_6] * values[M33_15])
+                  + (values[M11_5] * values[M22_10] * values[M33_15]);
 
-        var m01 = (((values[M03_12] * values[M22_10] * values[M31_7])
-                    - (values[M02_8] * values[M23_14] * values[M31_7])
-                    - (values[M03_12] * values[M21_6] * values[M32_11]))
-                    + (values[M01_4] * values[M23_14] * values[M32_11])
-                    + (values[M02_8] * values[M21_6] * values[M33_15]))
-                    - (values[M01_4] * values[M22_10] * values[M33_15]);
+        float m01 = (values[M03_12] * values[M22_10] * values[M31_7])
+                  - (values[M02_8] * values[M23_14] * values[M31_7])
+                  - (values[M03_12] * values[M21_6] * values[M32_11])
+                  + (values[M01_4] * values[M23_14] * values[M32_11])
+                  + (values[M02_8] * values[M21_6] * values[M33_15])
+                  - (values[M01_4] * values[M22_10] * values[M33_15]);
 
-        var m02 = ((((values[M02_8] * values[M13_13] * values[M31_7])
-                      - (values[M03_12] * values[M12_9] * values[M31_7]))
-                      + (values[M03_12] * values[M11_5] * values[M32_11]))
-                      - (values[M01_4] * values[M13_13] * values[M32_11])
-                      - (values[M02_8] * values[M11_5] * values[M33_15]))
-                      + (values[M01_4] * values[M12_9] * values[M33_15]);
+        float m02 = (values[M02_8] * values[M13_13] * values[M31_7])
+                  - (values[M03_12] * values[M12_9] * values[M31_7])
+                  + (values[M03_12] * values[M11_5] * values[M32_11])
+                  - (values[M01_4] * values[M13_13] * values[M32_11])
+                  - (values[M02_8] * values[M11_5] * values[M33_15])
+                  + (values[M01_4] * values[M12_9] * values[M33_15]);
 
-        var m03 = (((values[M03_12] * values[M12_9] * values[M21_6])
-                    - (values[M02_8] * values[M13_13] * values[M21_6])
-                    - (values[M03_12] * values[M11_5] * values[M22_10]))
-                    + (values[M01_4] * values[M13_13] * values[M22_10])
-                    + (values[M02_8] * values[M11_5] * values[M23_14]))
-                    - (values[M01_4] * values[M12_9] * values[M23_14]);
+        float m03 = (values[M03_12] * values[M12_9] * values[M21_6])
+                  - (values[M02_8] * values[M13_13] * values[M21_6])
+                  - (values[M03_12] * values[M11_5] * values[M22_10])
+                  + (values[M01_4] * values[M13_13] * values[M22_10])
+                  + (values[M02_8] * values[M11_5] * values[M23_14])
+                  - (values[M01_4] * values[M12_9] * values[M23_14]);
 
-        var m10 = (((values[M13_13] * values[M22_10] * values[M30_3])
-                    - (values[M12_9] * values[M23_14] * values[M30_3])
-                    - (values[M13_13] * values[M20_2] * values[M32_11]))
-                    + (values[M10_1] * values[M23_14] * values[M32_11])
-                    + (values[M12_9] * values[M20_2] * values[M33_15]))
-                    - (values[M10_1] * values[M22_10] * values[M33_15]);
+        float m10 = (values[M13_13] * values[M22_10] * values[M30_3])
+                  - (values[M12_9] * values[M23_14] * values[M30_3])
+                  - (values[M13_13] * values[M20_2] * values[M32_11])
+                  + (values[M10_1] * values[M23_14] * values[M32_11])
+                  + (values[M12_9] * values[M20_2] * values[M33_15])
+                  - (values[M10_1] * values[M22_10] * values[M33_15]);
 
-        var m11 = ((((values[M02_8] * values[M23_14] * values[M30_3])
-                      - (values[M03_12] * values[M22_10] * values[M30_3]))
-                      + (values[M03_12] * values[M20_2] * values[M32_11]))
-                      - (values[M00_0] * values[M23_14] * values[M32_11])
-                      - (values[M02_8] * values[M20_2] * values[M33_15]))
-                      + (values[M00_0] * values[M22_10] * values[M33_15]);
+        float m11 = (values[M02_8] * values[M23_14] * values[M30_3])
+                  - (values[M03_12] * values[M22_10] * values[M30_3])
+                  + (values[M03_12] * values[M20_2] * values[M32_11])
+                  - (values[M00_0] * values[M23_14] * values[M32_11])
+                  - (values[M02_8] * values[M20_2] * values[M33_15])
+                  + (values[M00_0] * values[M22_10] * values[M33_15]);
 
-        var m12 = (((values[M03_12] * values[M12_9] * values[M30_3])
-                    - (values[M02_8] * values[M13_13] * values[M30_3])
-                    - (values[M03_12] * values[M10_1] * values[M32_11]))
-                    + (values[M00_0] * values[M13_13] * values[M32_11])
-                    + (values[M02_8] * values[M10_1] * values[M33_15]))
-                    - (values[M00_0] * values[M12_9] * values[M33_15]);
+        float m12 = (values[M03_12] * values[M12_9] * values[M30_3])
+                  - (values[M02_8] * values[M13_13] * values[M30_3])
+                  - (values[M03_12] * values[M10_1] * values[M32_11])
+                  + (values[M00_0] * values[M13_13] * values[M32_11])
+                  + (values[M02_8] * values[M10_1] * values[M33_15])
+                  - (values[M00_0] * values[M12_9] * values[M33_15]);
 
-        var m13 = ((((values[M02_8] * values[M13_13] * values[M20_2])
-                      - (values[M03_12] * values[M12_9] * values[M20_2]))
-                      + (values[M03_12] * values[M10_1] * values[M22_10]))
-                      - (values[M00_0] * values[M13_13] * values[M22_10])
-                      - (values[M02_8] * values[M10_1] * values[M23_14]))
-                      + (values[M00_0] * values[M12_9] * values[M23_14]);
+        float m13 = (values[M02_8] * values[M13_13] * values[M20_2])
+                  - (values[M03_12] * values[M12_9] * values[M20_2])
+                  + (values[M03_12] * values[M10_1] * values[M22_10])
+                  - (values[M00_0] * values[M13_13] * values[M22_10])
+                  - (values[M02_8] * values[M10_1] * values[M23_14])
+                  + (values[M00_0] * values[M12_9] * values[M23_14]);
 
-        var m20 = ((((values[M11_5] * values[M23_14] * values[M30_3])
-                      - (values[M13_13] * values[M21_6] * values[M30_3]))
-                      + (values[M13_13] * values[M20_2] * values[M31_7]))
-                      - (values[M10_1] * values[M23_14] * values[M31_7])
-                      - (values[M11_5] * values[M20_2] * values[M33_15]))
-                      + (values[M10_1] * values[M21_6] * values[M33_15]);
+        float m20 = (values[M11_5] * values[M23_14] * values[M30_3])
+                  - (values[M13_13] * values[M21_6] * values[M30_3])
+                  + (values[M13_13] * values[M20_2] * values[M31_7])
+                  - (values[M10_1] * values[M23_14] * values[M31_7])
+                  - (values[M11_5] * values[M20_2] * values[M33_15])
+                  + (values[M10_1] * values[M21_6] * values[M33_15]);
 
-        var m21 = (((values[M03_12] * values[M21_6] * values[M30_3])
-                    - (values[M01_4] * values[M23_14] * values[M30_3])
-                    - (values[M03_12] * values[M20_2] * values[M31_7]))
-                    + (values[M00_0] * values[M23_14] * values[M31_7])
-                    + (values[M01_4] * values[M20_2] * values[M33_15]))
-                    - (values[M00_0] * values[M21_6] * values[M33_15]);
+        float m21 = (values[M03_12] * values[M21_6] * values[M30_3])
+                  - (values[M01_4] * values[M23_14] * values[M30_3])
+                  - (values[M03_12] * values[M20_2] * values[M31_7])
+                  + (values[M00_0] * values[M23_14] * values[M31_7])
+                  + (values[M01_4] * values[M20_2] * values[M33_15])
+                  - (values[M00_0] * values[M21_6] * values[M33_15]);
 
-        var m22 = ((((values[M01_4] * values[M13_13] * values[M30_3])
-                      - (values[M03_12] * values[M11_5] * values[M30_3]))
-                      + (values[M03_12] * values[M10_1] * values[M31_7]))
-                      - (values[M00_0] * values[M13_13] * values[M31_7])
-                      - (values[M01_4] * values[M10_1] * values[M33_15]))
-                      + (values[M00_0] * values[M11_5] * values[M33_15]);
+        float m22 = (values[M01_4] * values[M13_13] * values[M30_3])
+                  - (values[M03_12] * values[M11_5] * values[M30_3])
+                  + (values[M03_12] * values[M10_1] * values[M31_7])
+                  - (values[M00_0] * values[M13_13] * values[M31_7])
+                  - (values[M01_4] * values[M10_1] * values[M33_15])
+                  + (values[M00_0] * values[M11_5] * values[M33_15]);
 
-        var m23 = (((values[M03_12] * values[M11_5] * values[M20_2])
-                    - (values[M01_4] * values[M13_13] * values[M20_2])
-                    - (values[M03_12] * values[M10_1] * values[M21_6]))
-                    + (values[M00_0] * values[M13_13] * values[M21_6])
-                    + (values[M01_4] * values[M10_1] * values[M23_14]))
-                    - (values[M00_0] * values[M11_5] * values[M23_14]);
+        float m23 = (values[M03_12] * values[M11_5] * values[M20_2])
+                  - (values[M01_4] * values[M13_13] * values[M20_2])
+                  - (values[M03_12] * values[M10_1] * values[M21_6])
+                  + (values[M00_0] * values[M13_13] * values[M21_6])
+                  + (values[M01_4] * values[M10_1] * values[M23_14])
+                  - (values[M00_0] * values[M11_5] * values[M23_14]);
 
-        var m30 = (((values[M12_9] * values[M21_6] * values[M30_3])
-                    - (values[M11_5] * values[M22_10] * values[M30_3])
-                    - (values[M12_9] * values[M20_2] * values[M31_7]))
-                    + (values[M10_1] * values[M22_10] * values[M31_7])
-                    + (values[M11_5] * values[M20_2] * values[M32_11]))
-                    - (values[M10_1] * values[M21_6] * values[M32_11]);
+        float m30 = (values[M12_9] * values[M21_6] * values[M30_3])
+                  - (values[M11_5] * values[M22_10] * values[M30_3])
+                  - (values[M12_9] * values[M20_2] * values[M31_7])
+                  + (values[M10_1] * values[M22_10] * values[M31_7])
+                  + (values[M11_5] * values[M20_2] * values[M32_11])
+                  - (values[M10_1] * values[M21_6] * values[M32_11]);
 
-        var m31 = ((((values[M01_4] * values[M22_10] * values[M30_3])
-                      - (values[M02_8] * values[M21_6] * values[M30_3]))
-                      + (values[M02_8] * values[M20_2] * values[M31_7]))
-                      - (values[M00_0] * values[M22_10] * values[M31_7])
-                      - (values[M01_4] * values[M20_2] * values[M32_11]))
-                      + (values[M00_0] * values[M21_6] * values[M32_11]);
+        float m31 = (values[M01_4] * values[M22_10] * values[M30_3])
+                  - (values[M02_8] * values[M21_6] * values[M30_3])
+                  + (values[M02_8] * values[M20_2] * values[M31_7])
+                  - (values[M00_0] * values[M22_10] * values[M31_7])
+                  - (values[M01_4] * values[M20_2] * values[M32_11])
+                  + (values[M00_0] * values[M21_6] * values[M32_11]);
 
-        var m32 = (((values[M02_8] * values[M11_5] * values[M30_3])
-                    - (values[M01_4] * values[M12_9] * values[M30_3])
-                    - (values[M02_8] * values[M10_1] * values[M31_7]))
-                    + (values[M00_0] * values[M12_9] * values[M31_7])
-                    + (values[M01_4] * values[M10_1] * values[M32_11]))
-                    - (values[M00_0] * values[M11_5] * values[M32_11]);
+        float m32 = (values[M02_8] * values[M11_5] * values[M30_3])
+                  - (values[M01_4] * values[M12_9] * values[M30_3])
+                  - (values[M02_8] * values[M10_1] * values[M31_7])
+                  + (values[M00_0] * values[M12_9] * values[M31_7])
+                  + (values[M01_4] * values[M10_1] * values[M32_11])
+                  - (values[M00_0] * values[M11_5] * values[M32_11]);
 
-        var m33 = ((((values[M01_4] * values[M12_9] * values[M20_2])
-                      - (values[M02_8] * values[M11_5] * values[M20_2]))
-                      + (values[M02_8] * values[M10_1] * values[M21_6]))
-                      - (values[M00_0] * values[M12_9] * values[M21_6])
-                      - (values[M01_4] * values[M10_1] * values[M22_10]))
-                      + (values[M00_0] * values[M11_5] * values[M22_10]);
+        float m33 = (values[M01_4] * values[M12_9] * values[M20_2])
+                  - (values[M02_8] * values[M11_5] * values[M20_2])
+                  + (values[M02_8] * values[M10_1] * values[M21_6])
+                  - (values[M00_0] * values[M12_9] * values[M21_6])
+                  - (values[M01_4] * values[M10_1] * values[M22_10])
+                  + (values[M00_0] * values[M11_5] * values[M22_10]);
         //@formatter:on
 
-        var invDet = 1.0f / lDet;
+        float invDet = 1.0f / lDet;
         values[ M00_0 ]  = m00 * invDet;
         values[ M10_1 ]  = m10 * invDet;
         values[ M20_2 ]  = m20 * invDet;
@@ -2125,43 +2155,42 @@ public class Matrix4
     {
         //@formatter:off
         // BE VERY CAREFUL WITH EDITING THIS!!!!
-        return (((((((((((
         // --------------------------------------------------------------  
-           (values[M30_3] * values[M21_6] * values[M12_9] * values[M03_12])
-         - (values[M20_2] * values[M31_7] * values[M12_9] * values[M03_12])
-         - (values[M30_3] * values[M11_5] * values[M22_10] * values[M03_12]))
-        // --------------------------------------------------------------  
-         + (values[M10_1] * values[M31_7] * values[M22_10] * values[M03_12])
-         + (values[M20_2] * values[M11_5] * values[M32_11] * values[M03_12]))
-        // --------------------------------------------------------------  
-        - (values[M10_1] * values[M21_6] * values[M32_11] * values[M03_12])
-        - (values[M30_3] * values[M21_6] * values[M02_8] * values[M13_13]))
-        // --------------------------------------------------------------  
-        + (values[M20_2] * values[M31_7] * values[M02_8] * values[M13_13])
-        + (values[M30_3] * values[M01_4] * values[M22_10] * values[M13_13]))
-        // --------------------------------------------------------------  
-        - (values[M00_0] * values[M31_7] * values[M22_10] * values[M13_13])
-        - (values[M20_2] * values[M01_4] * values[M32_11] * values[M13_13]))
-        // --------------------------------------------------------------  
-        + (values[M00_0] * values[M21_6] * values[M32_11] * values[M13_13])
-        + (values[M30_3] * values[M11_5] * values[M02_8] * values[M23_14]))
-        // --------------------------------------------------------------  
-        - (values[M10_1] * values[M31_7] * values[M02_8] * values[M23_14])
-        - (values[M30_3] * values[M01_4] * values[M12_9] * values[M23_14]))
-        // --------------------------------------------------------------  
-        + (values[M00_0] * values[M31_7] * values[M12_9] * values[M23_14])
-        + (values[M10_1] * values[M01_4] * values[M32_11] * values[M23_14]))
-        // --------------------------------------------------------------  
-        - (values[M00_0] * values[M11_5] * values[M32_11] * values[M23_14])
-        - (values[M20_2] * values[M11_5] * values[M02_8] * values[M33_15]))
-        // --------------------------------------------------------------  
-        + (values[M10_1] * values[M21_6] * values[M02_8] * values[M33_15])
-        + (values[M20_2] * values[M01_4] * values[M12_9] * values[M33_15]))
-        // --------------------------------------------------------------  
-        - (values[M00_0] * values[M21_6] * values[M12_9] * values[M33_15])
-        - (values[M10_1] * values[M01_4] * values[M22_10] * values[M33_15]))
-        // --------------------------------------------------------------  
-        + (values[M00_0] * values[M11_5] * values[M22_10] * values[M33_15]);
+        return (values[M30_3] * values[M21_6] * values[M12_9] * values[M03_12])
+             - (values[M20_2] * values[M31_7] * values[M12_9] * values[M03_12])
+             - (values[M30_3] * values[M11_5] * values[M22_10] * values[M03_12])
+               // --------------------------------------------------------------  
+             + (values[M10_1] * values[M31_7] * values[M22_10] * values[M03_12])
+             + (values[M20_2] * values[M11_5] * values[M32_11] * values[M03_12])
+               // --------------------------------------------------------------  
+             - (values[M10_1] * values[M21_6] * values[M32_11] * values[M03_12])
+             - (values[M30_3] * values[M21_6] * values[M02_8] * values[M13_13])
+               // --------------------------------------------------------------  
+             + (values[M20_2] * values[M31_7] * values[M02_8] * values[M13_13])
+             + (values[M30_3] * values[M01_4] * values[M22_10] * values[M13_13])
+               // --------------------------------------------------------------  
+             - (values[M00_0] * values[M31_7] * values[M22_10] * values[M13_13])
+             - (values[M20_2] * values[M01_4] * values[M32_11] * values[M13_13])
+               // --------------------------------------------------------------  
+             + (values[M00_0] * values[M21_6] * values[M32_11] * values[M13_13])
+             + (values[M30_3] * values[M11_5] * values[M02_8] * values[M23_14])
+               // --------------------------------------------------------------  
+             - (values[M10_1] * values[M31_7] * values[M02_8] * values[M23_14])
+             - (values[M30_3] * values[M01_4] * values[M12_9] * values[M23_14])
+               // --------------------------------------------------------------  
+             + (values[M00_0] * values[M31_7] * values[M12_9] * values[M23_14])
+             + (values[M10_1] * values[M01_4] * values[M32_11] * values[M23_14])
+               // --------------------------------------------------------------  
+             - (values[M00_0] * values[M11_5] * values[M32_11] * values[M23_14])
+             - (values[M20_2] * values[M11_5] * values[M02_8] * values[M33_15])
+               // --------------------------------------------------------------  
+             + (values[M10_1] * values[M21_6] * values[M02_8] * values[M33_15])
+             + (values[M20_2] * values[M01_4] * values[M12_9] * values[M33_15])
+               // --------------------------------------------------------------  
+             - (values[M00_0] * values[M21_6] * values[M12_9] * values[M33_15])
+             - (values[M10_1] * values[M01_4] * values[M22_10] * values[M33_15])
+               // --------------------------------------------------------------  
+             + (values[M00_0] * values[M11_5] * values[M22_10] * values[M33_15]);
         //@formatter:on
     }
 
@@ -2282,44 +2311,44 @@ public class Matrix4
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4 Rotate( Quaternion rotation )
     {
-        var x = rotation.X;
-        var y = rotation.Y;
-        var z = rotation.Z;
-        var w = rotation.W;
+        float x = rotation.X;
+        float y = rotation.Y;
+        float z = rotation.Z;
+        float w = rotation.W;
 
-        var xx = x * x;
-        var xy = x * y;
-        var xz = x * z;
-        var xw = x * w;
-        var yy = y * y;
-        var yz = y * z;
-        var yw = y * w;
-        var zz = z * z;
-        var zw = z * w;
+        float xx = x * x;
+        float xy = x * y;
+        float xz = x * z;
+        float xw = x * w;
+        float yy = y * y;
+        float yz = y * z;
+        float yw = y * w;
+        float zz = z * z;
+        float zw = z * w;
 
         // Set matrix from quaternion
-        var r00 = 1 - ( 2 * ( yy + zz ) );
-        var r01 = 2 * ( xy - zw );
-        var r02 = 2 * ( xz + yw );
-        var r10 = 2 * ( xy + zw );
-        var r11 = 1 - ( 2 * ( xx + zz ) );
-        var r12 = 2 * ( yz - xw );
-        var r20 = 2 * ( xz - yw );
-        var r21 = 2 * ( yz + xw );
-        var r22 = 1 - ( 2 * ( xx + yy ) );
+        float r00 = 1 - ( 2 * ( yy + zz ) );
+        float r01 = 2 * ( xy - zw );
+        float r02 = 2 * ( xz + yw );
+        float r10 = 2 * ( xy + zw );
+        float r11 = 1 - ( 2 * ( xx + zz ) );
+        float r12 = 2 * ( yz - xw );
+        float r20 = 2 * ( xz - yw );
+        float r21 = 2 * ( yz + xw );
+        float r22 = 1 - ( 2 * ( xx + yy ) );
 
-        var m00 = ( Val[ M00_0 ] * r00 ) + ( Val[ M01_4 ] * r10 ) + ( Val[ M02_8 ] * r20 );
-        var m01 = ( Val[ M00_0 ] * r01 ) + ( Val[ M01_4 ] * r11 ) + ( Val[ M02_8 ] * r21 );
-        var m02 = ( Val[ M00_0 ] * r02 ) + ( Val[ M01_4 ] * r12 ) + ( Val[ M02_8 ] * r22 );
-        var m10 = ( Val[ M10_1 ] * r00 ) + ( Val[ M11_5 ] * r10 ) + ( Val[ M12_9 ] * r20 );
-        var m11 = ( Val[ M10_1 ] * r01 ) + ( Val[ M11_5 ] * r11 ) + ( Val[ M12_9 ] * r21 );
-        var m12 = ( Val[ M10_1 ] * r02 ) + ( Val[ M11_5 ] * r12 ) + ( Val[ M12_9 ] * r22 );
-        var m20 = ( Val[ M20_2 ] * r00 ) + ( Val[ M21_6 ] * r10 ) + ( Val[ M22_10 ] * r20 );
-        var m21 = ( Val[ M20_2 ] * r01 ) + ( Val[ M21_6 ] * r11 ) + ( Val[ M22_10 ] * r21 );
-        var m22 = ( Val[ M20_2 ] * r02 ) + ( Val[ M21_6 ] * r12 ) + ( Val[ M22_10 ] * r22 );
-        var m30 = ( Val[ M30_3 ] * r00 ) + ( Val[ M31_7 ] * r10 ) + ( Val[ M32_11 ] * r20 );
-        var m31 = ( Val[ M30_3 ] * r01 ) + ( Val[ M31_7 ] * r11 ) + ( Val[ M32_11 ] * r21 );
-        var m32 = ( Val[ M30_3 ] * r02 ) + ( Val[ M31_7 ] * r12 ) + ( Val[ M32_11 ] * r22 );
+        float m00 = ( Val[ M00_0 ] * r00 ) + ( Val[ M01_4 ] * r10 ) + ( Val[ M02_8 ] * r20 );
+        float m01 = ( Val[ M00_0 ] * r01 ) + ( Val[ M01_4 ] * r11 ) + ( Val[ M02_8 ] * r21 );
+        float m02 = ( Val[ M00_0 ] * r02 ) + ( Val[ M01_4 ] * r12 ) + ( Val[ M02_8 ] * r22 );
+        float m10 = ( Val[ M10_1 ] * r00 ) + ( Val[ M11_5 ] * r10 ) + ( Val[ M12_9 ] * r20 );
+        float m11 = ( Val[ M10_1 ] * r01 ) + ( Val[ M11_5 ] * r11 ) + ( Val[ M12_9 ] * r21 );
+        float m12 = ( Val[ M10_1 ] * r02 ) + ( Val[ M11_5 ] * r12 ) + ( Val[ M12_9 ] * r22 );
+        float m20 = ( Val[ M20_2 ] * r00 ) + ( Val[ M21_6 ] * r10 ) + ( Val[ M22_10 ] * r20 );
+        float m21 = ( Val[ M20_2 ] * r01 ) + ( Val[ M21_6 ] * r11 ) + ( Val[ M22_10 ] * r21 );
+        float m22 = ( Val[ M20_2 ] * r02 ) + ( Val[ M21_6 ] * r12 ) + ( Val[ M22_10 ] * r22 );
+        float m30 = ( Val[ M30_3 ] * r00 ) + ( Val[ M31_7 ] * r10 ) + ( Val[ M32_11 ] * r20 );
+        float m31 = ( Val[ M30_3 ] * r01 ) + ( Val[ M31_7 ] * r11 ) + ( Val[ M32_11 ] * r21 );
+        float m32 = ( Val[ M30_3 ] * r02 ) + ( Val[ M31_7 ] * r12 ) + ( Val[ M32_11 ] * r22 );
 
         Val[ M00_0 ] = m00;
         Val[ M10_1 ] = m10;
@@ -2364,18 +2393,18 @@ public class Matrix4
         LVex.Set( direction ).Crs( up ).Nor();
         LVey.Set( LVex ).Crs( LVez ).Nor();
 
-        var m00 = ( Val[ M00_0 ] * LVex.X ) + ( Val[ M01_4 ] * LVex.Y ) + ( Val[ M02_8 ] * LVex.Z );
-        var m01 = ( Val[ M00_0 ] * LVey.X ) + ( Val[ M01_4 ] * LVey.Y ) + ( Val[ M02_8 ] * LVey.Z );
-        var m02 = ( Val[ M00_0 ] * -LVez.X ) + ( Val[ M01_4 ] * -LVez.Y ) + ( Val[ M02_8 ] * -LVez.Z );
-        var m10 = ( Val[ M10_1 ] * LVex.X ) + ( Val[ M11_5 ] * LVex.Y ) + ( Val[ M12_9 ] * LVex.Z );
-        var m11 = ( Val[ M10_1 ] * LVey.X ) + ( Val[ M11_5 ] * LVey.Y ) + ( Val[ M12_9 ] * LVey.Z );
-        var m12 = ( Val[ M10_1 ] * -LVez.X ) + ( Val[ M11_5 ] * -LVez.Y ) + ( Val[ M12_9 ] * -LVez.Z );
-        var m20 = ( Val[ M20_2 ] * LVex.X ) + ( Val[ M21_6 ] * LVex.Y ) + ( Val[ M22_10 ] * LVex.Z );
-        var m21 = ( Val[ M20_2 ] * LVey.X ) + ( Val[ M21_6 ] * LVey.Y ) + ( Val[ M22_10 ] * LVey.Z );
-        var m22 = ( Val[ M20_2 ] * -LVez.X ) + ( Val[ M21_6 ] * -LVez.Y ) + ( Val[ M22_10 ] * -LVez.Z );
-        var m30 = ( Val[ M30_3 ] * LVex.X ) + ( Val[ M31_7 ] * LVex.Y ) + ( Val[ M32_11 ] * LVex.Z );
-        var m31 = ( Val[ M30_3 ] * LVey.X ) + ( Val[ M31_7 ] * LVey.Y ) + ( Val[ M32_11 ] * LVey.Z );
-        var m32 = ( Val[ M30_3 ] * -LVez.X ) + ( Val[ M31_7 ] * -LVez.Y ) + ( Val[ M32_11 ] * -LVez.Z );
+        float m00 = ( Val[ M00_0 ] * LVex.X ) + ( Val[ M01_4 ] * LVex.Y ) + ( Val[ M02_8 ] * LVex.Z );
+        float m01 = ( Val[ M00_0 ] * LVey.X ) + ( Val[ M01_4 ] * LVey.Y ) + ( Val[ M02_8 ] * LVey.Z );
+        float m02 = ( Val[ M00_0 ] * -LVez.X ) + ( Val[ M01_4 ] * -LVez.Y ) + ( Val[ M02_8 ] * -LVez.Z );
+        float m10 = ( Val[ M10_1 ] * LVex.X ) + ( Val[ M11_5 ] * LVex.Y ) + ( Val[ M12_9 ] * LVex.Z );
+        float m11 = ( Val[ M10_1 ] * LVey.X ) + ( Val[ M11_5 ] * LVey.Y ) + ( Val[ M12_9 ] * LVey.Z );
+        float m12 = ( Val[ M10_1 ] * -LVez.X ) + ( Val[ M11_5 ] * -LVez.Y ) + ( Val[ M12_9 ] * -LVez.Z );
+        float m20 = ( Val[ M20_2 ] * LVex.X ) + ( Val[ M21_6 ] * LVex.Y ) + ( Val[ M22_10 ] * LVex.Z );
+        float m21 = ( Val[ M20_2 ] * LVey.X ) + ( Val[ M21_6 ] * LVey.Y ) + ( Val[ M22_10 ] * LVey.Z );
+        float m22 = ( Val[ M20_2 ] * -LVez.X ) + ( Val[ M21_6 ] * -LVez.Y ) + ( Val[ M22_10 ] * -LVez.Z );
+        float m30 = ( Val[ M30_3 ] * LVex.X ) + ( Val[ M31_7 ] * LVex.Y ) + ( Val[ M32_11 ] * LVex.Z );
+        float m31 = ( Val[ M30_3 ] * LVey.X ) + ( Val[ M31_7 ] * LVey.Y ) + ( Val[ M32_11 ] * LVey.Z );
+        float m32 = ( Val[ M30_3 ] * -LVez.X ) + ( Val[ M31_7 ] * -LVez.Y ) + ( Val[ M32_11 ] * -LVez.Z );
 
         Val[ M00_0 ] = m00;
         Val[ M10_1 ] = m10;
@@ -2500,10 +2529,10 @@ public class Matrix4
     {
         for ( var i = 0; i < numVecs; i++ )
         {
-            var idx = offset + ( i * stride );
-            var x   = vecs[ idx ];
-            var y   = vecs[ idx + 1 ];
-            var z   = vecs[ idx + 2 ];
+            int   idx = offset + ( i * stride );
+            float x   = vecs[ idx ];
+            float y   = vecs[ idx + 1 ];
+            float z   = vecs[ idx + 2 ];
 
             vecs[ idx ]     = ( mat[ M00_0 ] * x ) + ( mat[ M01_4 ] * y ) + ( mat[ M02_8 ] * z ) + mat[ M03_12 ];
             vecs[ idx + 1 ] = ( mat[ M10_1 ] * x ) + ( mat[ M11_5 ] * y ) + ( mat[ M12_9 ] * z ) + mat[ M13_13 ];
@@ -2531,24 +2560,24 @@ public class Matrix4
     {
         for ( var i = 0; i < numVecs; i++ )
         {
-            var vecIndex = offset + ( i * stride );
-            var invW = 1.0f / ( ( vecs[ vecIndex ] * mat[ M30_3 ] )
-                              + ( vecs[ vecIndex + 1 ] * mat[ M31_7 ] )
-                              + ( vecs[ vecIndex + 2 ] * mat[ M32_11 ] )
-                              + mat[ M33_15 ] );
+            int vecIndex = offset + ( i * stride );
+            float invW = 1.0f / ( ( vecs[ vecIndex ] * mat[ M30_3 ] )
+                                + ( vecs[ vecIndex + 1 ] * mat[ M31_7 ] )
+                                + ( vecs[ vecIndex + 2 ] * mat[ M32_11 ] )
+                                + mat[ M33_15 ] );
 
-            var x = ( ( vecs[ vecIndex ] * mat[ M00_0 ] )
-                    + ( vecs[ vecIndex + 1 ] * mat[ M01_4 ] )
-                    + ( vecs[ vecIndex + 2 ] * mat[ M02_8 ] )
-                    + mat[ M03_12 ] ) * invW;
-            var y = ( ( vecs[ vecIndex ] * mat[ M10_1 ] )
-                    + ( vecs[ vecIndex + 1 ] * mat[ M11_5 ] )
-                    + ( vecs[ vecIndex + 2 ] * mat[ M12_9 ] )
-                    + mat[ M13_13 ] ) * invW;
-            var z = ( ( vecs[ vecIndex ] * mat[ M20_2 ] )
-                    + ( vecs[ vecIndex + 1 ] * mat[ M21_6 ] )
-                    + ( vecs[ vecIndex + 2 ] * mat[ M22_10 ] )
-                    + mat[ M23_14 ] ) * invW;
+            float x = ( ( vecs[ vecIndex ] * mat[ M00_0 ] )
+                      + ( vecs[ vecIndex + 1 ] * mat[ M01_4 ] )
+                      + ( vecs[ vecIndex + 2 ] * mat[ M02_8 ] )
+                      + mat[ M03_12 ] ) * invW;
+            float y = ( ( vecs[ vecIndex ] * mat[ M10_1 ] )
+                      + ( vecs[ vecIndex + 1 ] * mat[ M11_5 ] )
+                      + ( vecs[ vecIndex + 2 ] * mat[ M12_9 ] )
+                      + mat[ M13_13 ] ) * invW;
+            float z = ( ( vecs[ vecIndex ] * mat[ M20_2 ] )
+                      + ( vecs[ vecIndex + 1 ] * mat[ M21_6 ] )
+                      + ( vecs[ vecIndex + 2 ] * mat[ M22_10 ] )
+                      + mat[ M23_14 ] ) * invW;
 
             vecs[ vecIndex ]     = x;
             vecs[ vecIndex + 1 ] = y;
@@ -2575,10 +2604,10 @@ public class Matrix4
     {
         for ( var i = 0; i < numVecs; i++ )
         {
-            var idx = offset + ( i * stride );
-            var x   = vecs[ idx ];
-            var y   = vecs[ idx + 1 ];
-            var z   = vecs[ idx + 2 ];
+            int   idx = offset + ( i * stride );
+            float x   = vecs[ idx ];
+            float y   = vecs[ idx + 1 ];
+            float z   = vecs[ idx + 2 ];
 
             vecs[ idx ]     = ( mat[ M00_0 ] * x ) + ( mat[ M01_4 ] * y ) + ( mat[ M02_8 ] * z );
             vecs[ idx + 1 ] = ( mat[ M10_1 ] * x ) + ( mat[ M11_5 ] * y ) + ( mat[ M12_9 ] * z );
@@ -2621,7 +2650,7 @@ public class Matrix4
     /// </summary>
     public Vector4 GetColumn( int index )
     {
-        Guard.Against.OutOfRange(  index, 0, 3 );
+        Guard.Against.OutOfRange( index, 0, 3 );
 
         return new Vector4( Val[ ( index * 4 ) + 0 ],
                             Val[ ( index * 4 ) + 1 ],

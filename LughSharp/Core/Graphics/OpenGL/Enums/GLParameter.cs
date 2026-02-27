@@ -120,7 +120,7 @@ public enum GLParameter
     MaxVertexUniformVectors       = IGL.GL_MAX_VERTEX_UNIFORM_VECTORS,
     MaxVaryingVectors             = IGL.GL_MAX_VARYING_VECTORS,
     MaxFragmentUniformVectors     = IGL.GL_MAX_FRAGMENT_UNIFORM_VECTORS,
-    VertexArrayBinding            = IGL.GL_VERTEX_ARRAY_BINDING,
+    VertexArrayBinding            = IGL.GL_VERTEX_ARRAY_BINDING
 }
 
 // ========================================================================

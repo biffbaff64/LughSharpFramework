@@ -64,7 +64,7 @@ public class XmlReader
     /// <returns></returns>
     public Element? Parse( string xml )
     {
-        var data = xml.ToCharArray();
+        char[] data = xml.ToCharArray();
 
         return Parse( data, 0, data.Length );
     }
@@ -84,7 +84,7 @@ public class XmlReader
 
             while ( true )
             {
-                var length = reader.Read( data, offset, data.Length - offset );
+                int length = reader.Read( data, offset, data.Length - offset );
 
                 if ( length == 0 )
                 {
@@ -129,7 +129,7 @@ public class XmlReader
             return null;
         }
 
-        var reader = file.OpenText();
+        StreamReader reader = file.OpenText();
 
         return Parse( reader );
     }
@@ -166,8 +166,8 @@ public class XmlReader
     public Element? Parse( char[] data, int offset, int length )
     {
         int     cs;
-        var     p             = offset;
-        var     pe            = length;
+        int     p             = offset;
+        int     pe            = length;
         var     s             = 0;
         string? attributeName = null;
         var     hasBody       = false;
@@ -213,8 +213,8 @@ public class XmlReader
 
                     if ( klen > 0 )
                     {
-                        var lower = keys;
-                        var upper = keys + klen - 1;
+                        int lower = keys;
+                        int upper = keys + klen - 1;
 
                         while ( true )
                         {
@@ -223,7 +223,7 @@ public class XmlReader
                                 break;
                             }
 
-                            var mid = lower + ( ( upper - lower ) >> 1 );
+                            int mid = lower + ( ( upper - lower ) >> 1 );
 
                             if ( data[ p ] < _xmlTransKeys[ mid ] )
                             {
@@ -235,7 +235,7 @@ public class XmlReader
                             }
                             else
                             {
-                                trans   += ( mid - keys );
+                                trans   += mid - keys;
                                 matched =  true;
 
                                 break;
@@ -255,8 +255,8 @@ public class XmlReader
 
                         if ( klen > 0 )
                         {
-                            var lower = keys;
-                            var upper = keys + ( klen << 1 ) - 2;
+                            int lower = keys;
+                            int upper = keys + ( klen << 1 ) - 2;
 
                             while ( true )
                             {
@@ -265,7 +265,7 @@ public class XmlReader
                                     break;
                                 }
 
-                                var mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
+                                int mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
 
                                 if ( data[ p ] < _xmlTransKeys[ mid ] )
                                 {
@@ -277,7 +277,7 @@ public class XmlReader
                                 }
                                 else
                                 {
-                                    trans   += ( ( mid - keys ) >> 1 );
+                                    trans   += ( mid - keys ) >> 1;
                                     matched =  true;
 
                                     break;
@@ -309,7 +309,7 @@ public class XmlReader
                                     break;
 
                                 case 1:
-                                    var c = data[ s ];
+                                    char c = data[ s ];
 
                                     if ( c is '?' or '!' )
                                     {
@@ -390,11 +390,11 @@ public class XmlReader
                                     break;
 
                                 case 6:
-                                    var end = p;
+                                    int end = p;
 
                                     while ( end != s )
                                     {
-                                        var last = data[ end - 1 ];
+                                        char last = data[ end - 1 ];
 
                                         if ( last == ' ' || last == '\t' || last == '\n' || last == '\r' )
                                         {
@@ -406,7 +406,7 @@ public class XmlReader
                                         break;
                                     }
 
-                                    var currentPos  = s;
+                                    int currentPos  = s;
                                     var entityFound = false;
 
                                     while ( currentPos != end )
@@ -416,7 +416,7 @@ public class XmlReader
                                             continue;
                                         }
 
-                                        var entityStart = currentPos;
+                                        int entityStart = currentPos;
 
                                         while ( currentPos != end )
                                         {
@@ -427,8 +427,8 @@ public class XmlReader
 
                                             _textBuffer.Append( data, s, entityStart - s - 1 );
 
-                                            var name  = new string( data, entityStart, currentPos - entityStart - 1 );
-                                            var value = Entity( name );
+                                            var name = new string( data, entityStart, currentPos - entityStart - 1 );
+                                            string? value = Entity( name );
 
                                             _textBuffer.Append( value ?? name );
                                             s           = currentPos;
@@ -517,14 +517,14 @@ public class XmlReader
 
         if ( _elements.Count != 0 )
         {
-            var element = _elements[ _elements.Count - 1 ];
+            Element element = _elements[ _elements.Count - 1 ];
             _elements.Clear();
 
             throw new SerializationException( "Error parsing XML, unclosed element: " + element.Name );
         }
 
-        var finalRoot = this._root;
-        this._root = null;
+        Element? finalRoot = _root;
+        _root = null;
 
         return finalRoot;
     }
@@ -617,7 +617,7 @@ public class XmlReader
         {
             throw new RuntimeException( $"Invalid attribute name or value: {name}, {value}" );
         }
-        
+
         _current?.SetAttribute( name, value );
     }
 
@@ -655,8 +655,8 @@ public class XmlReader
 
     protected virtual void Text( string? text )
     {
-        var existing = _current?.Text;
-        _current?.Text = ( existing != null ? existing + text : text );
+        string? existing = _current?.Text;
+        _current?.Text = existing != null ? existing + text : text;
     }
 
     protected virtual void Close()
@@ -685,8 +685,8 @@ public class XmlReader
 
         public Element( string name, Element? parent )
         {
-            this.Name    = name;
-            this._parent = parent;
+            Name    = name;
+            _parent = parent;
         }
 
         /// <summary>
@@ -697,9 +697,9 @@ public class XmlReader
         /// <exception cref="Exception"> If the attribute doesn't exist. </exception>
         public string? GetAttribute( string name )
         {
-            if ( _attributes == null || !_attributes.TryGetValue( name, out var value ) )
+            if ( _attributes == null || !_attributes.TryGetValue( name, out string? value ) )
             {
-                throw new Exception( $"Element {this.Name} doesn't have attribute: {name}" );
+                throw new Exception( $"Element {Name} doesn't have attribute: {name}" );
             }
 
             return value;
@@ -718,9 +718,9 @@ public class XmlReader
                 return defaultValue;
             }
 
-            var value = defaultValue;
-            
-            if ( _attributes.TryGetValue( name, out var attribute ) )
+            string? value = defaultValue;
+
+            if ( _attributes.TryGetValue( name, out string? attribute ) )
             {
                 value = attribute;
             }
@@ -754,7 +754,7 @@ public class XmlReader
                 return null;
             }
 
-            foreach ( var e in _children )
+            foreach ( Element? e in _children )
             {
                 if ( e?.Name == name )
                 {
@@ -772,7 +772,7 @@ public class XmlReader
                 return null;
             }
 
-            foreach ( var element in _children )
+            foreach ( Element? element in _children )
             {
                 if ( element == null )
                 {
@@ -784,7 +784,7 @@ public class XmlReader
                     return element;
                 }
 
-                var found = element.GetChildByNameRecursive( name );
+                Element? found = element.GetChildByNameRecursive( name );
 
                 if ( found != null )
                 {
@@ -824,7 +824,7 @@ public class XmlReader
                 return result;
             }
 
-            foreach ( var child in _children )
+            foreach ( Element? child in _children )
             {
                 if ( child?.Name != null )
                 {
@@ -854,7 +854,7 @@ public class XmlReader
                 return;
             }
 
-            foreach ( var child in _children )
+            foreach ( Element? child in _children )
             {
                 if ( child?.Name != null )
                 {
@@ -878,21 +878,21 @@ public class XmlReader
         // Helper for parsing numeric attributes
         public float GetFloatAttribute( string name, float defaultValue = 0 )
         {
-            return float.TryParse( GetAttribute( name, "" ), out var res )
+            return float.TryParse( GetAttribute( name, "" ), out float res )
                 ? res
                 : defaultValue;
         }
 
         public int GetIntAttribute( string name, int defaultValue = 0 )
         {
-            return int.TryParse( GetAttribute( name, "" ), out var res )
+            return int.TryParse( GetAttribute( name, "" ), out int res )
                 ? res
                 : defaultValue;
         }
 
         public uint GetUIntAttribute( string name, uint defaultValue = 0 )
         {
-            return uint.TryParse( GetAttribute( name, "" ), out var res )
+            return uint.TryParse( GetAttribute( name, "" ), out uint res )
                 ? res
                 : defaultValue;
         }
@@ -911,7 +911,7 @@ public class XmlReader
                 }
             }
 
-            var child = GetChildByName( name );
+            Element? child = GetChildByName( name );
 
             if ( child == null )
             {
@@ -928,16 +928,31 @@ public class XmlReader
         /// <summary>
         /// Returns true if the element has an attribute with the given name.
         /// </summary>
-        public bool HasAttribute( string name ) => _attributes?.ContainsKey( name ) ?? false;
+        public bool HasAttribute( string name )
+        {
+            return _attributes?.ContainsKey( name ) ?? false;
+        }
 
-        public void RemoveChild( int index ) => _children?.RemoveAt( index );
+        public void RemoveChild( int index )
+        {
+            _children?.RemoveAt( index );
+        }
 
-        public void RemoveChild( Element? element ) => _children?.Remove( element );
+        public void RemoveChild( Element? element )
+        {
+            _children?.Remove( element );
+        }
 
-        public void Remove() => _parent?.RemoveChild( this );
+        public void Remove()
+        {
+            _parent?.RemoveChild( this );
+        }
 
-        public int GetChildCount() => _children?.Count ?? 0;
-        
+        public int GetChildCount()
+        {
+            return _children?.Count ?? 0;
+        }
+
         // ====================================================================
 
         /// <summary>
@@ -952,7 +967,10 @@ public class XmlReader
             return _children?.GetEnumerator() ?? Enumerable.Empty< Element? >().GetEnumerator();
         }
 
-        public override string ToString() => ToString( "" );
+        public override string ToString()
+        {
+            return ToString( "" );
+        }
 
         public string ToString( string indent )
         {
@@ -961,7 +979,7 @@ public class XmlReader
 
             if ( _attributes != null )
             {
-                foreach ( var entry in _attributes )
+                foreach ( KeyValuePair< string, string? > entry in _attributes )
                 {
                     sb.Append( ' ' ).Append( entry.Key ).Append( "=\"" ).Append( entry.Value ).Append( '\"' );
                 }
@@ -974,7 +992,7 @@ public class XmlReader
             else
             {
                 sb.Append( ">\n" );
-                var childIndent = indent + "\t";
+                string childIndent = indent + "\t";
 
                 if ( !string.IsNullOrEmpty( Text ) )
                 {
@@ -983,7 +1001,7 @@ public class XmlReader
 
                 if ( _children != null )
                 {
-                    foreach ( var child in _children )
+                    foreach ( Element? child in _children )
                     {
                         sb.Append( child?.ToString( childIndent ) ).Append( '\n' );
                     }

@@ -22,23 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text;
 
 using JetBrains.Annotations;
 
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Json;
 
 namespace LughSharp.Core.Utils.Json;
 
 [PublicAPI]
-public class JsonValue : IEnumerator< JsonValue >
+public class JsonValue : IDisposable
 {
     public string?    Name        { get; set; } = string.Empty;
     public JsonValue? Child       { get; set; }
@@ -64,13 +59,13 @@ public class JsonValue : IEnumerator< JsonValue >
 
     // ========================================================================
 
-    private bool _disposed = false;
+    private bool _disposed;
 
     // ========================================================================
 
     public JsonValue( ValueType type )
     {
-        this.Type = type;
+        Type = type;
     }
 
     public JsonValue( string? value )
@@ -231,11 +226,11 @@ public class JsonValue : IEnumerator< JsonValue >
 
         if ( child.Prev == null )
         {
-            this.Child = child.Next;
+            Child = child.Next;
 
-            if ( this.Child != null )
+            if ( Child != null )
             {
-                this.Child.Prev = null;
+                Child.Prev = null;
             }
         }
         else
@@ -269,11 +264,11 @@ public class JsonValue : IEnumerator< JsonValue >
 
         if ( child.Prev == null )
         {
-            this.Child = child.Next;
+            Child = child.Next;
 
-            if ( this.Child != null )
+            if ( Child != null )
             {
-                this.Child.Prev = null;
+                Child.Prev = null;
             }
         }
         else
@@ -425,7 +420,7 @@ public class JsonValue : IEnumerator< JsonValue >
 
     private void Indent( int count, StringBuilder buffer )
     {
-        for ( int i = 0; i < count; i++ )
+        for ( var i = 0; i < count; i++ )
         {
             buffer.Append( '\t' );
         }
@@ -433,7 +428,7 @@ public class JsonValue : IEnumerator< JsonValue >
 
     private void Indent( int count, TextWriter writer )
     {
-        for ( int i = 0; i < count; i++ )
+        for ( var i = 0; i < count; i++ )
         {
             writer.Write( '\t' );
         }
@@ -658,7 +653,7 @@ public class JsonValue : IEnumerator< JsonValue >
         }
 
         string?[] array = new string[ Size ];
-        int       i     = 0;
+        var       i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -708,8 +703,8 @@ public class JsonValue : IEnumerator< JsonValue >
             throw new RuntimeException( $"Value is not an array: {Type}" );
         }
 
-        float[] array = new float[ Size ];
-        int     i     = 0;
+        var array = new float[ Size ];
+        var i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -754,8 +749,8 @@ public class JsonValue : IEnumerator< JsonValue >
             throw new RuntimeException( $"Value is not an array: {Type}" );
         }
 
-        double[] array = new double[ Size ];
-        int      i     = 0;
+        var array = new double[ Size ];
+        var i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -800,8 +795,8 @@ public class JsonValue : IEnumerator< JsonValue >
             throw new RuntimeException( $"Value is not an array: {Type}" );
         }
 
-        long[] array = new long[ Size ];
-        int    i     = 0;
+        var array = new long[ Size ];
+        var i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -846,8 +841,8 @@ public class JsonValue : IEnumerator< JsonValue >
             throw new RuntimeException( $"Value is not an array: {Type}" );
         }
 
-        int[] array = new int[ Size ];
-        int   i     = 0;
+        var array = new int[ Size ];
+        var i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -894,8 +889,8 @@ public class JsonValue : IEnumerator< JsonValue >
             throw new RuntimeException( $"Value is not an array: {Type}" );
         }
 
-        bool[] array = new bool[ Size ];
-        int    i     = 0;
+        var array = new bool[ Size ];
+        var i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -940,8 +935,8 @@ public class JsonValue : IEnumerator< JsonValue >
             throw new RuntimeException( $"Value is not an array: {Type}" );
         }
 
-        byte[] array = new byte[ Size ];
-        int    i     = 0;
+        var array = new byte[ Size ];
+        var i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -986,8 +981,8 @@ public class JsonValue : IEnumerator< JsonValue >
             throw new RuntimeException( $"Value is not an array: {Type}" );
         }
 
-        short[] array = new short[ Size ];
-        int     i     = 0;
+        var array = new short[ Size ];
+        var i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -1032,8 +1027,8 @@ public class JsonValue : IEnumerator< JsonValue >
             throw new RuntimeException( $"Value is not an array: {Type}" );
         }
 
-        char[] array = new char[ Size ];
-        int    i     = 0;
+        var array = new char[ Size ];
+        var i     = 0;
 
         for ( JsonValue? value = Child; value != null; value = value.Next, i++ )
         {
@@ -1726,7 +1721,7 @@ public class JsonValue : IEnumerator< JsonValue >
             return AsString();
         }
 
-        StringWriter writer = new StringWriter( new StringBuilder( 512 ) );
+        var writer = new StringWriter( new StringBuilder( 512 ) );
 
         try
         {
@@ -1746,7 +1741,7 @@ public class JsonValue : IEnumerator< JsonValue >
         {
             writer.Write( '{' );
 
-            for ( JsonValue? child = this.Child; child != null; child = child.Next )
+            for ( JsonValue? child = Child; child != null; child = child.Next )
             {
                 writer.Write( JsonOutput.QuoteName( child.Name, outputType ) );
                 writer.Write( ':' );
@@ -1764,7 +1759,7 @@ public class JsonValue : IEnumerator< JsonValue >
         {
             writer.Write( '[' );
 
-            for ( JsonValue? child = this.Child; child != null; child = child.Next )
+            for ( JsonValue? child = Child; child != null; child = child.Next )
             {
                 child.ToJson( outputType, writer );
 
@@ -1846,7 +1841,7 @@ public class JsonValue : IEnumerator< JsonValue >
         {
             trace = "[]";
 
-            int i = 0;
+            var i = 0;
 
             for ( JsonValue? child = Parent.Child; child != null; child = child.Next, i++ )
             {
@@ -1872,7 +1867,7 @@ public class JsonValue : IEnumerator< JsonValue >
 
     public string PrettyPrint( JsonOutputType outputType, int singleLineColumns )
     {
-        PrettyPrintSettings settings = new PrettyPrintSettings
+        var settings = new PrettyPrintSettings
         {
             OutputType        = outputType,
             SingleLineColumns = singleLineColumns
@@ -1883,7 +1878,7 @@ public class JsonValue : IEnumerator< JsonValue >
 
     public string PrettyPrint( PrettyPrintSettings settings )
     {
-        StringBuilder buffer = new StringBuilder( 512 );
+        var buffer = new StringBuilder( 512 );
         PrettyPrint( this, buffer, 0, settings );
 
         return buffer.ToString();
@@ -2039,9 +2034,9 @@ public class JsonValue : IEnumerator< JsonValue >
     /// </summary>
     public void PrettyPrint( JsonOutputType outputType, TextWriter writer )
     {
-        var settings = new PrettyPrintSettings()
+        var settings = new PrettyPrintSettings
         {
-            OutputType = outputType,
+            OutputType = outputType
         };
 
         PrettyPrint( this, writer, 0, settings );
@@ -2103,8 +2098,6 @@ public class JsonValue : IEnumerator< JsonValue >
 
                 writer.Write( newLines ? "[\n" : "[ " );
 
-                int i = 0;
-
                 for ( JsonValue? child = obj.Child; child != null; child = child.Next )
                 {
                     if ( newLines )
@@ -2138,14 +2131,14 @@ public class JsonValue : IEnumerator< JsonValue >
         {
             double doubleValue = obj.AsDouble();
             long   longValue   = obj.AsLong();
-            
+
             writer.Write( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
                               ? longValue.ToString()
                               : doubleValue.ToString( CultureInfo.InvariantCulture ) );
         }
-        else if ( object.isLong() )
+        else if ( obj.IsLong() )
         {
-            writer.write( Long.toString( object.AsLong() ) );
+            writer.Write( obj.AsLong().ToString() );
         }
         else if ( obj.IsBoolean() )
         {
@@ -2164,47 +2157,47 @@ public class JsonValue : IEnumerator< JsonValue >
     // ========================================================================
     // ========================================================================
 
-    /// <summary>
-    /// Advances the enumerator to the next element of the collection.
-    /// </summary>
-    /// <exception cref="T:System.InvalidOperationException">
-    /// The collection was modified after the enumerator was created.
-    /// </exception>
-    /// <returns>
-    /// <c>true</c> if the enumerator was successfully advanced to the next element,
-    /// <c>false</c> if the enumerator has passed the end of the collection.
-    /// </returns>
-    public bool MoveNext()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// Sets the enumerator to its initial position, which is before the first
-    /// element in the collection.
-    /// </summary>
-    /// <exception cref="T:System.InvalidOperationException">
-    /// The collection was modified after the enumerator was created.
-    /// </exception>
-    /// <exception cref="T:System.NotSupportedException">
-    /// The enumerator does not support being reset.
-    /// </exception>
-    public void Reset()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// Gets the element in the collection at the current position of the enumerator.
-    /// </summary>
-    /// <returns>The element in the collection at the current position of the enumerator.</returns>
-    public JsonValue Current { get; set; }
-
-    /// <summary>
-    /// Gets the element in the collection at the current position of the enumerator.
-    /// </summary>
-    /// <returns>The element in the collection at the current position of the enumerator.</returns>
-    object? IEnumerator.Current { get; }
+//    /// <summary>
+//    /// Advances the enumerator to the next element of the collection.
+//    /// </summary>
+//    /// <exception cref="T:System.InvalidOperationException">
+//    /// The collection was modified after the enumerator was created.
+//    /// </exception>
+//    /// <returns>
+//    /// <c>true</c> if the enumerator was successfully advanced to the next element,
+//    /// <c>false</c> if the enumerator has passed the end of the collection.
+//    /// </returns>
+//    public bool MoveNext()
+//    {
+//        throw new NotImplementedException();
+//    }
+//
+//    /// <summary>
+//    /// Sets the enumerator to its initial position, which is before the first
+//    /// element in the collection.
+//    /// </summary>
+//    /// <exception cref="T:System.InvalidOperationException">
+//    /// The collection was modified after the enumerator was created.
+//    /// </exception>
+//    /// <exception cref="T:System.NotSupportedException">
+//    /// The enumerator does not support being reset.
+//    /// </exception>
+//    public void Reset()
+//    {
+//        throw new NotImplementedException();
+//    }
+//
+//    /// <summary>
+//    /// Gets the element in the collection at the current position of the enumerator.
+//    /// </summary>
+//    /// <returns>The element in the collection at the current position of the enumerator.</returns>
+//    public JsonValue Current { get; set; }
+//
+//    /// <summary>
+//    /// Gets the element in the collection at the current position of the enumerator.
+//    /// </summary>
+//    /// <returns>The element in the collection at the current position of the enumerator.</returns>
+//    object? IEnumerator.Current { get; }
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing,

@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
@@ -42,7 +44,7 @@ public static class GLUtils
     /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
     public static void GLErrorCheck( string stage )
     {
-        var error = Engine.GL.GetError();
+        int error = Engine.GL.GetError();
 
         if ( error != ( int )DotGLFW.ErrorCode.NoError )
         {
@@ -63,24 +65,24 @@ public static class GLUtils
     public static string GetErrorString( int errorCode )
     {
         return errorCode switch
-        {
-            IGL.GL_INVALID_ENUM                  => "Invalid Enum",
-            IGL.GL_INVALID_OPERATION             => "Invalid Operation",
-            IGL.GL_INVALID_VALUE                 => "Invalid Value",
-            IGL.GL_OUT_OF_MEMORY                 => "Out of memory",
-            IGL.GL_INVALID_FRAMEBUFFER_OPERATION => "Invalid Framebuffer operation",
-            IGL.GL_STACK_OVERFLOW                => "Stack Overflow",
-            IGL.GL_STACK_UNDERFLOW               => "Stack Underflow",
-            IGL.GL_CONTEXT_LOST                  => "Context Lost",
+               {
+                   IGL.GL_INVALID_ENUM                  => "Invalid Enum",
+                   IGL.GL_INVALID_OPERATION             => "Invalid Operation",
+                   IGL.GL_INVALID_VALUE                 => "Invalid Value",
+                   IGL.GL_OUT_OF_MEMORY                 => "Out of memory",
+                   IGL.GL_INVALID_FRAMEBUFFER_OPERATION => "Invalid Framebuffer operation",
+                   IGL.GL_STACK_OVERFLOW                => "Stack Overflow",
+                   IGL.GL_STACK_UNDERFLOW               => "Stack Underflow",
+                   IGL.GL_CONTEXT_LOST                  => "Context Lost",
 
-            // ----------------------------------
+                   // ----------------------------------
 
-            IGL.GL_NO_ERROR => "No Error",
+                   IGL.GL_NO_ERROR => "No Error",
 
-            // ----------------------------------
+                   // ----------------------------------
 
-            var _ => $"Unknown GL Error Code: {errorCode}",
-        };
+                   var _ => $"Unknown GL Error Code: {errorCode}"
+               };
     }
 
     /// <summary>
@@ -139,7 +141,7 @@ public static class GLUtils
     {
         Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, vbo );
 
-        var dataPtr = Engine.GL.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
+        IntPtr dataPtr = Engine.GL.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
 
         if ( dataPtr == IntPtr.Zero )
         {
@@ -169,7 +171,7 @@ public static class GLUtils
     /// </param>
     public static void PrintVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
     {
-        var data = GetVboData( vbo, sizeInBytes, vertexSizeInFloats );
+        float[]? data = GetVboData( vbo, sizeInBytes, vertexSizeInFloats );
 
         if ( data == null )
         {

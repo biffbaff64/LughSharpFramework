@@ -36,11 +36,12 @@ public class SubbandLayer1 : ASubband
     // Factors and offsets for sample requantization
     public static readonly float[] TableFactor =
     [
-        0.0f, ( 1.0f / 2.0f ) * ( 4.0f / 3.0f ), ( 1.0f / 4.0f ) * ( 8.0f / 7.0f ), ( 1.0f / 8.0f ) * ( 16.0f / 15.0f ),
-        ( 1.0f / 16.0f ) * ( 32.0f / 31.0f ), ( 1.0f / 32.0f ) * ( 64.0f / 63.0f ), ( 1.0f / 64.0f ) * ( 128.0f / 127.0f ),
-        ( 1.0f / 128.0f ) * ( 256.0f / 255.0f ), ( 1.0f / 256.0f ) * ( 512.0f / 511.0f ), ( 1.0f / 512.0f ) * ( 1024.0f / 1023.0f ),
-        ( 1.0f / 1024.0f ) * ( 2048.0f / 2047.0f ), ( 1.0f / 2048.0f ) * ( 4096.0f / 4095.0f ), ( 1.0f / 4096.0f ) * ( 8192.0f / 8191.0f ),
-        ( 1.0f / 8192.0f ) * ( 16384.0f / 16383.0f ), ( 1.0f / 16384.0f ) * ( 32768.0f / 32767.0f ),
+        0.0f, 1.0f / 2.0f * ( 4.0f / 3.0f ), 1.0f / 4.0f * ( 8.0f / 7.0f ), 1.0f / 8.0f * ( 16.0f / 15.0f ),
+        1.0f / 16.0f * ( 32.0f / 31.0f ), 1.0f / 32.0f * ( 64.0f / 63.0f ), 1.0f / 64.0f * ( 128.0f / 127.0f ),
+        1.0f / 128.0f * ( 256.0f / 255.0f ), 1.0f / 256.0f * ( 512.0f / 511.0f ), 1.0f / 512.0f * ( 1024.0f / 1023.0f ),
+        1.0f / 1024.0f * ( 2048.0f / 2047.0f ), 1.0f / 2048.0f * ( 4096.0f / 4095.0f ),
+        1.0f / 4096.0f * ( 8192.0f / 8191.0f ),
+        1.0f / 8192.0f * ( 16384.0f / 16383.0f ), 1.0f / 16384.0f * ( 32768.0f / 32767.0f )
     ];
 
     public static readonly float[] TableOffset =
@@ -51,7 +52,8 @@ public class SubbandLayer1 : ASubband
         ( ( 1.0f / 128.0f ) - 1.0f ) * ( 256.0f / 255.0f ), ( ( 1.0f / 256.0f ) - 1.0f ) * ( 512.0f / 511.0f ),
         ( ( 1.0f / 512.0f ) - 1.0f ) * ( 1024.0f / 1023.0f ), ( ( 1.0f / 1024.0f ) - 1.0f ) * ( 2048.0f / 2047.0f ),
         ( ( 1.0f / 2048.0f ) - 1.0f ) * ( 4096.0f / 4095.0f ), ( ( 1.0f / 4096.0f ) - 1.0f ) * ( 8192.0f / 8191.0f ),
-        ( ( 1.0f / 8192.0f ) - 1.0f ) * ( 16384.0f / 16383.0f ), ( ( 1.0f / 16384.0f ) - 1.0f ) * ( 32768.0f / 32767.0f ),
+        ( ( 1.0f / 8192.0f ) - 1.0f ) * ( 16384.0f / 16383.0f ),
+        ( ( 1.0f / 16384.0f ) - 1.0f ) * ( 32768.0f / 32767.0f )
     ];
 
     protected readonly int Subbandnumber;
@@ -63,7 +65,7 @@ public class SubbandLayer1 : ASubband
     protected int   Samplelength;
     protected int   Samplenumber;
     protected float Scalefactor;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -71,8 +73,8 @@ public class SubbandLayer1 : ASubband
     /// </summary>
     public SubbandLayer1( int subbandnumber )
     {
-        this.Subbandnumber = subbandnumber;
-        Samplenumber       = 0;
+        Subbandnumber = subbandnumber;
+        Samplenumber  = 0;
     }
 
     /// <summary>
@@ -130,7 +132,7 @@ public class SubbandLayer1 : ASubband
     {
         if ( ( Allocation != 0 ) && ( channels != OutputChannels.RIGHT_CHANNEL ) )
         {
-            var scaledSample = ( ( Sample * Factor ) + Offset ) * Scalefactor;
+            float scaledSample = ( ( Sample * Factor ) + Offset ) * Scalefactor;
             filter1?.AddSample( scaledSample, Subbandnumber );
         }
 
@@ -140,4 +142,3 @@ public class SubbandLayer1 : ASubband
 
 // ============================================================================
 // ============================================================================
-

@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Main;
+
 using Keys = LughSharp.Core.Input.IInput.Keys;
 
 namespace LughSharp.Core.Input;
@@ -100,11 +102,12 @@ public static class InputUtils
     /// </summary>
     public static bool CtrlKey()
     {
-#if MACOS
+        #if MACOS
         return Api.Input.isKeyPressed( Keys.SYM );
-#else
-        return Engine.Api.Input.IsKeyPressed( Keys.CONTROL_LEFT ) || Engine.Api.Input.IsKeyPressed( Keys.CONTROL_RIGHT );
-#endif
+        #else
+        return Engine.Api.Input.IsKeyPressed( Keys.CONTROL_LEFT )
+            || Engine.Api.Input.IsKeyPressed( Keys.CONTROL_RIGHT );
+        #endif
     }
 
     /// <summary>
@@ -112,11 +115,11 @@ public static class InputUtils
     /// </summary>
     public static bool CtrlKey( int keycode )
     {
-#if MACOS
+        #if MACOS
         return keycode == Keys.SYM;
-#else
+        #else
         return keycode is Keys.CONTROL_LEFT or Keys.CONTROL_RIGHT;
-#endif
+        #endif
     }
 
     /// <summary>
@@ -138,4 +141,3 @@ public static class InputUtils
 
 // ============================================================================
 // ============================================================================
-

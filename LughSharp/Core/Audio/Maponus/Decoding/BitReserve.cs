@@ -71,7 +71,7 @@ public class BitReserve
         _totbit += n;
 
         var val = 0;
-        var pos = _bufByteIdx;
+        int pos = _bufByteIdx;
 
         if ( ( pos + n ) < BUFSIZE )
         {
@@ -103,7 +103,7 @@ public class BitReserve
     {
         _totbit++;
 
-        var val = _buffer[ _bufByteIdx ];
+        int val = _buffer[ _bufByteIdx ];
 
         _bufByteIdx = ( _bufByteIdx + 1 ) & BUFSIZE_MASK;
 
@@ -115,7 +115,7 @@ public class BitReserve
     /// </summary>
     public void PutBuffer( int val )
     {
-        var ofs = _offset;
+        int ofs = _offset;
 
         _buffer[ ofs++ ] = val & 0x80;
         _buffer[ ofs++ ] = val & 0x40;
@@ -148,7 +148,7 @@ public class BitReserve
     /// </summary>
     public void RewindStreamBytes( int byteCount )
     {
-        var bits = byteCount << 3;
+        int bits = byteCount << 3;
         _totbit     -= bits;
         _bufByteIdx -= bits;
 
@@ -161,4 +161,3 @@ public class BitReserve
 
 // ============================================================================
 // ============================================================================
-

@@ -29,7 +29,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Audio;
@@ -45,6 +47,7 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using BitmapFontLoader = LughSharp.Core.Assets.Loaders.BitmapFontLoader;
 
 namespace LughSharp.Core.Assets;
@@ -69,7 +72,7 @@ public class AssetManager : IDisposable
         typeof( ShaderProgram ),
         typeof( Skin ),
         typeof( Texture ),
-        typeof( TextureAtlas ),
+        typeof( TextureAtlas )
     ];
 
     // ========================================================================
@@ -187,10 +190,10 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            var type = GetAssetType( name );
+            Type type = GetAssetType( name );
 
-            _assets.TryGetValue( type, out var assetsByType );
-            assetsByType!.TryGetValue( name, out var assetContainer );
+            _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetsByType );
+            assetsByType!.TryGetValue( name, out IRefCountedContainer? assetContainer );
 
             return assetContainer != null
                 ? assetContainer.Asset
@@ -218,7 +221,7 @@ public class AssetManager : IDisposable
                 return true;
             }
 
-            foreach ( var lq in _loadQueue )
+            foreach ( AssetDescriptor lq in _loadQueue )
             {
                 if ( lq.AssetName.Equals( filename ) )
                 {
@@ -252,7 +255,7 @@ public class AssetManager : IDisposable
             Guard.Against.Null( _assets );
 
             // Retrieve all assets of the required type
-            _assets.TryGetValue( type, out var assetsByType );
+            _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetsByType );
 
             return assetsByType?[ filename ] != null;
         }
@@ -328,7 +331,7 @@ public class AssetManager : IDisposable
         }
 
         // Get the type of the asset
-        if ( !_assetTypes.TryGetValue( filename, out var type ) )
+        if ( !_assetTypes.TryGetValue( filename, out Type? type ) )
         {
             throw new RuntimeException( $"Asset not loaded: {filename}" );
         }
@@ -390,17 +393,17 @@ public class AssetManager : IDisposable
         {
             lock ( this )
             {
-                var type = _assetTypes.Get( filename );
+                Type? type = _assetTypes.Get( filename );
 
                 // If type is null, asset has not finished loading, and has
                 // not been added to assetTypes.
                 if ( type != null )
                 {
-                    _assets.TryGetValue( type, out var assetsByType );
+                    _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetsByType );
 
-                    assetsByType!.TryGetValue( filename, out var assetContainer );
+                    assetsByType!.TryGetValue( filename, out IRefCountedContainer? assetContainer );
 
-                    var asset = assetContainer?.Asset;
+                    object? asset = assetContainer?.Asset;
 
                     if ( asset != null )
                     {
@@ -441,10 +444,10 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            var type = GetAssetType( name );
+            Type type = GetAssetType( name );
 
-            _assets.TryGetValue( type, out var assetsByType );
-            assetsByType!.TryGetValue( name, out var assetContainer );
+            _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetsByType );
+            assetsByType!.TryGetValue( name, out IRefCountedContainer? assetContainer );
 
             if ( assetContainer != null )
             {
@@ -488,8 +491,8 @@ public class AssetManager : IDisposable
 
         lock ( this )
         {
-            _assets.TryGetValue( type, out var assetsByType );
-            assetsByType!.TryGetValue( name, out var assetContainer );
+            _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetsByType );
+            assetsByType!.TryGetValue( name, out IRefCountedContainer? assetContainer );
 
             if ( required && ( assetContainer == null ) )
             {
@@ -520,12 +523,13 @@ public class AssetManager : IDisposable
         {
             lock ( this )
             {
-                if ( !_assets.TryGetValue( type, out var assetsByType ) || ( assetsByType == null ) )
+                if ( !_assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetsByType )
+                  || ( assetsByType == null ) )
                 {
                     throw new RuntimeException( $"No assets loaded for type {type.FullName}" );
                 }
 
-                foreach ( var assetContainer in assetsByType.Values )
+                foreach ( IRefCountedContainer assetContainer in assetsByType.Values )
                 {
                     if ( assetContainer.Asset is T asset )
                     {
@@ -561,7 +565,7 @@ public class AssetManager : IDisposable
                 }
             }
 
-            foreach ( var assetDesc in _loadQueue )
+            foreach ( AssetDescriptor assetDesc in _loadQueue )
             {
                 if ( ( assetDesc.AssetType == typeof( T ) )
                   && assetDesc.AssetName.Equals( filename ) )
@@ -589,14 +593,14 @@ public class AssetManager : IDisposable
                 return false;
             }
 
-            _assets.TryGetValue( asset.GetType(), out var assetsByType );
+            _assets.TryGetValue( asset.GetType(), out Dictionary< string, IRefCountedContainer >? assetsByType );
 
             if ( assetsByType == null )
             {
                 return false;
             }
 
-            foreach ( var assetRef in assetsByType.Values )
+            foreach ( IRefCountedContainer assetRef in assetsByType.Values )
             {
                 if ( assetRef.Asset != null )
                 {
@@ -629,18 +633,18 @@ public class AssetManager : IDisposable
                 return null;
             }
 
-            foreach ( var assetType in _assets.Keys )
+            foreach ( Type assetType in _assets.Keys )
             {
-                _assets.TryGetValue( assetType, out var assetsByType );
+                _assets.TryGetValue( assetType, out Dictionary< string, IRefCountedContainer >? assetsByType );
 
                 if ( assetsByType == null )
                 {
                     throw new RuntimeException( $"Failed to get assets by type: {assetType}" );
                 }
 
-                foreach ( var entry in assetsByType )
+                foreach ( KeyValuePair< string, IRefCountedContainer > entry in assetsByType )
                 {
-                    var otherAsset = entry.Value.Asset;
+                    object? otherAsset = entry.Value.Asset;
 
                     if ( ( otherAsset?.GetType() == asset.GetType() )
                       || asset.Equals( otherAsset ) )
@@ -664,7 +668,7 @@ public class AssetManager : IDisposable
             Guard.Against.Null( _assets );
             Guard.Against.Null( filename );
 
-            _assets.TryGetValue( typeof( T ), out var assetsByType );
+            _assets.TryGetValue( typeof( T ), out Dictionary< string, IRefCountedContainer >? assetsByType );
 
             return assetsByType?[ filename ] != null;
         }
@@ -690,7 +694,7 @@ public class AssetManager : IDisposable
     /// <typeparam name="T"></typeparam>
     public void Load< T >( List< FileInfo > files )
     {
-        foreach ( var asset in files )
+        foreach ( FileInfo asset in files )
         {
             Load< T >( asset.FullName );
         }
@@ -703,7 +707,7 @@ public class AssetManager : IDisposable
     /// <typeparam name="T"></typeparam>
     public void Load< T >( List< string > files )
     {
-        foreach ( var asset in files )
+        foreach ( string asset in files )
         {
             Load< T >( asset );
         }
@@ -717,23 +721,23 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            var assetDesc = _loadQueue.RemoveIndex( 0 );
-            var isLoaded  = false;
+            AssetDescriptor assetDesc = _loadQueue.RemoveIndex( 0 );
+            var             isLoaded  = false;
 
             if ( IsLoaded( assetDesc.AssetName ) )
             {
-                var type = GetAssetType( assetDesc.AssetName );
-                var assetRef = _assets[ type ]![ assetDesc.AssetName ];
+                Type                 type     = GetAssetType( assetDesc.AssetName );
+                IRefCountedContainer assetRef = _assets[ type ]![ assetDesc.AssetName ];
 
                 assetRef.RefCount++;
-                
+
                 IncrementRefCountedDependencies( assetDesc.AssetName );
 
                 if ( assetDesc.Parameters is { LoadedCallback: not null } )
                 {
                     assetDesc.Parameters.LoadedCallback.FinishedLoading( this, assetDesc.AssetName, type );
                 }
-                
+
                 _loaded++;
             }
             else
@@ -768,7 +772,7 @@ public class AssetManager : IDisposable
     /// </exception>
     private void AddTask( AssetDescriptor assetDesc )
     {
-        var loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
+        AssetLoader? loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
 
         if ( loader == null )
         {
@@ -789,7 +793,7 @@ public class AssetManager : IDisposable
     {
         if ( ( _tasks.Count > 0 ) && ( _tasks.Peek().AssetDesc.AssetName == filename ) )
         {
-            var task = _tasks.Pop();
+            AssetLoadingTask task = _tasks.Pop();
             task.Cancel = true;
             task.Unload();
 
@@ -807,7 +811,7 @@ public class AssetManager : IDisposable
     /// </returns>
     private bool UpdateTask()
     {
-        if ( _tasks.TryPeek( out var task ) )
+        if ( _tasks.TryPeek( out AssetLoadingTask? task ) )
         {
             var complete = true;
 
@@ -842,7 +846,8 @@ public class AssetManager : IDisposable
 
                 if ( task.AssetDesc.Parameters is { LoadedCallback: not null } )
                 {
-                    task.AssetDesc.Parameters.LoadedCallback.FinishedLoading( this, task.AssetDesc.AssetName,
+                    task.AssetDesc.Parameters.LoadedCallback.FinishedLoading( this,
+                                                                              task.AssetDesc.AssetName,
                                                                               task.AssetDesc.AssetType );
                 }
 
@@ -866,14 +871,14 @@ public class AssetManager : IDisposable
         }
 
         // pop the faulty task from the stack
-        var task      = _tasks.Pop();
-        var assetDesc = task.AssetDesc;
+        AssetLoadingTask task      = _tasks.Pop();
+        AssetDescriptor  assetDesc = task.AssetDesc;
 
         // remove all dependencies if dependences are loaded and
         // those dependencies actually exist...
         if ( task is { DependenciesLoaded: true, Dependencies: not null } )
         {
-            foreach ( var desc in task.Dependencies )
+            foreach ( AssetDescriptor desc in task.Dependencies )
             {
                 Unload( desc.AssetName );
             }
@@ -892,7 +897,7 @@ public class AssetManager : IDisposable
             throw new RuntimeException( t );
         }
     }
-    
+
     /// <summary>
     /// Updates the asset manager, loading new assets and processing asset loading tasks.
     /// Returns true if all assets are loaded, otherwise false.
@@ -943,11 +948,11 @@ public class AssetManager : IDisposable
     {
         try
         {
-            var endTime = TimeUtils.Millis() + millis;
+            long endTime = TimeUtils.Millis() + millis;
 
             while ( true )
             {
-                var done = Update();
+                bool done = Update();
 
                 if ( done || ( TimeUtils.Millis() >= endTime ) )
                 {
@@ -978,7 +983,7 @@ public class AssetManager : IDisposable
 
         lock ( this )
         {
-            foreach ( var desc in dependendAssetDescs )
+            foreach ( AssetDescriptor desc in dependendAssetDescs )
             {
                 Guard.Against.Null( desc.AssetName );
 
@@ -1009,7 +1014,7 @@ public class AssetManager : IDisposable
         lock ( this )
         {
             // Ensure the parent asset has a dependency list initialized.
-            if ( !_assetDependencies.TryGetValue( parentAssetFilename, out var dependencies ) )
+            if ( !_assetDependencies.TryGetValue( parentAssetFilename, out List< string >? dependencies ) )
             {
                 dependencies = [ ];
                 _assetDependencies.Add( parentAssetFilename, dependencies );
@@ -1021,11 +1026,11 @@ public class AssetManager : IDisposable
             // If the asset is already loaded, increase its reference count.
             if ( IsLoaded( dependendAssetDesc.AssetName ) )
             {
-                _assetTypes.TryGetValue( dependendAssetDesc.AssetName, out var type );
+                _assetTypes.TryGetValue( dependendAssetDesc.AssetName, out Type? type );
 
                 Guard.Against.Null( type );
 
-                _assets.TryGetValue( type, out var asset );
+                _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? asset );
 
                 if ( asset != null )
                 {
@@ -1057,20 +1062,20 @@ public class AssetManager : IDisposable
 
         while ( stack.Count > 0 )
         {
-            var current = stack.Pop();
+            string current = stack.Pop();
 
-            if ( _assetDependencies.TryGetValue( current, out var assetDependency ) )
+            if ( _assetDependencies.TryGetValue( current, out List< string >? assetDependency ) )
             {
-                foreach ( var dependency in assetDependency )
+                foreach ( string dependency in assetDependency )
                 {
-                    _assetTypes.TryGetValue( dependency, out var type );
+                    _assetTypes.TryGetValue( dependency, out Type? type );
 
                     if ( type == null )
                     {
                         throw new RuntimeException( "type cannot be null!" );
                     }
 
-                    _assets.TryGetValue( type, out var asset );
+                    _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? asset );
 
                     if ( asset == null )
                     {
@@ -1099,7 +1104,7 @@ public class AssetManager : IDisposable
     public AssetLoader? GetLoader( Type type, string? filename = null )
     {
         // Check if the type exists in _loaders before accessing it.
-        if ( !_loaders.TryGetValue( type, out var typeLoaders )
+        if ( !_loaders.TryGetValue( type, out Dictionary< string, AssetLoader >? typeLoaders )
           || ( typeLoaders.Count < 1 ) )
         {
             return null;
@@ -1114,10 +1119,10 @@ public class AssetManager : IDisposable
         }
         else
         {
-            var len = -1;
+            int len = -1;
 
             // Iterate over the retrieved dictionary
-            foreach ( var entry in typeLoaders )
+            foreach ( KeyValuePair< string, AssetLoader > entry in typeLoaders )
             {
                 if ( ( entry.Key.Length > len ) && filename.EndsWith( entry.Key ) )
                 {
@@ -1143,7 +1148,7 @@ public class AssetManager : IDisposable
     {
         Guard.Against.Null( type );
         Guard.Against.Null( loader );
-        
+
         // Normalize the suffix
         suffix = string.IsNullOrEmpty( suffix ) ? "" : suffix;
 
@@ -1151,7 +1156,7 @@ public class AssetManager : IDisposable
 
         try
         {
-            if ( !_loaders.TryGetValue( type, out var typeLoaders ) )
+            if ( !_loaders.TryGetValue( type, out Dictionary< string, AssetLoader >? typeLoaders ) )
             {
                 typeLoaders      = new Dictionary< string, AssetLoader >();
                 _loaders[ type ] = typeLoaders;
@@ -1210,11 +1215,11 @@ public class AssetManager : IDisposable
                 return 1f;
             }
 
-            var fractionalLoaded = _loaded;
+            int fractionalLoaded = _loaded;
 
             if ( _peakTasks > 0 )
             {
-                fractionalLoaded += ( ( _peakTasks - _tasks.Count ) / _peakTasks );
+                fractionalLoaded += ( _peakTasks - _tasks.Count ) / _peakTasks;
             }
 
             return Math.Min( 1f, fractionalLoaded / ( float )_toLoad );
@@ -1230,14 +1235,14 @@ public class AssetManager : IDisposable
         {
             var uniqueKeys = new HashSet< string? >();
 
-            foreach ( var innerDictionary in _assets.Values )
+            foreach ( Dictionary< string, IRefCountedContainer >? innerDictionary in _assets.Values )
             {
                 if ( innerDictionary == null )
                 {
                     continue;
                 }
 
-                foreach ( var key in innerDictionary.Keys )
+                foreach ( string key in innerDictionary.Keys )
                 {
                     uniqueKeys.Add( key );
                 }
@@ -1256,7 +1261,7 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            _assetDependencies.TryGetValue( name, out var dependencies );
+            _assetDependencies.TryGetValue( name, out List< string >? dependencies );
 
             return dependencies ?? [ ];
         }
@@ -1271,7 +1276,7 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            var result = _assetTypes.TryGetValue( name, out var assetType );
+            bool result = _assetTypes.TryGetValue( name, out Type? assetType );
 
             if ( !result || ( assetType == null ) )
             {
@@ -1301,22 +1306,22 @@ public class AssetManager : IDisposable
             // for each asset, figure out how often it was referenced
             dependencyCount.Clear();
 
-            var assets = _assetTypes.Keys.ToList();
+            List< string > assets = _assetTypes.Keys.ToList();
 
-            foreach ( var asset in assets )
+            foreach ( string asset in assets )
             {
                 dependencyCount[ asset ] = 0;
             }
 
-            foreach ( var asset in assets )
+            foreach ( string asset in assets )
             {
-                _assetDependencies.TryGetValue( asset, out var dependencies );
+                _assetDependencies.TryGetValue( asset, out List< string >? dependencies );
 
                 if ( dependencies != null )
                 {
-                    foreach ( var dependency in dependencies )
+                    foreach ( string dependency in dependencies )
                     {
-                        dependencyCount.TryGetValue( dependency, out var count );
+                        dependencyCount.TryGetValue( dependency, out int count );
                         count++;
                         dependencyCount[ dependency ] = count;
                     }
@@ -1324,9 +1329,9 @@ public class AssetManager : IDisposable
             }
 
             // only dispose of assets that are root assets (not referenced)
-            foreach ( var asset in assets )
+            foreach ( string asset in assets )
             {
-                if ( !dependencyCount.TryGetValue( asset, out var _ ) )
+                if ( !dependencyCount.TryGetValue( asset, out int _ ) )
                 {
                     Unload( asset );
                 }
@@ -1353,7 +1358,7 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            _assetTypes.TryGetValue( filename, out var type );
+            _assetTypes.TryGetValue( filename, out Type? type );
 
             if ( type == null )
             {
@@ -1372,7 +1377,7 @@ public class AssetManager : IDisposable
     {
         lock ( this )
         {
-            _assetTypes.TryGetValue( filename, out var type );
+            _assetTypes.TryGetValue( filename, out Type? type );
 
             if ( type == null )
             {
@@ -1384,7 +1389,7 @@ public class AssetManager : IDisposable
                 throw new RuntimeException( "_assets list is null!" );
             }
 
-            _assets.TryGetValue( type, out var asset );
+            _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? asset );
 
             return asset == null
                 ? throw new RuntimeException( $"Asset not loaded: {filename}" )
@@ -1405,7 +1410,7 @@ public class AssetManager : IDisposable
         lock ( this )
         {
             _assetTypes[ filename ] = type;
-            _assets.TryGetValue( type, out var typeToAssets );
+            _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? typeToAssets );
 
             if ( typeToAssets == null )
             {
@@ -1432,7 +1437,7 @@ public class AssetManager : IDisposable
                 throw new RuntimeException( $"File '{filename}' not found!" );
             }
 
-            foreach ( var desc in _loadQueue )
+            foreach ( AssetDescriptor desc in _loadQueue )
             {
                 if ( ( desc.AssetName == filename ) && ( desc.AssetType != type ) )
                 {
@@ -1446,7 +1451,7 @@ public class AssetManager : IDisposable
             // asset, but with a different asset type.
             for ( var i = 0; i < _tasks.Count; i++ )
             {
-                var desc = _tasks.ElementAt( i ).AssetDesc;
+                AssetDescriptor desc = _tasks.ElementAt( i ).AssetDesc;
 
                 if ( ( desc.AssetName == filename ) && ( desc.AssetType != type ) )
                 {
@@ -1460,7 +1465,7 @@ public class AssetManager : IDisposable
             // name as this asset, but which has a different asset type.
             if ( _assetTypes.ContainsKey( filename ) )
             {
-                var otherType = _assetTypes.Get( filename );
+                Type? otherType = _assetTypes.Get( filename );
 
                 if ( ( otherType != null ) && ( otherType != type ) )
                 {
@@ -1488,7 +1493,7 @@ public class AssetManager : IDisposable
             {
                 _toLoad--;
 
-                var desc = _loadQueue[ i ];
+                AssetDescriptor desc = _loadQueue[ i ];
                 _loadQueue.RemoveAt( i );
 
                 // Notify callback if the asset was already loaded
@@ -1518,8 +1523,8 @@ public class AssetManager : IDisposable
 
         IRefCountedContainer? container = null;
 
-        if ( !_assets.TryGetValue( type, out var assetRef )
-          && ( ( assetRef != null ) && !assetRef.TryGetValue( filename, out container ) ) )
+        if ( !_assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetRef )
+          && ( assetRef != null ) && !assetRef.TryGetValue( filename, out container ) )
         {
             throw new RuntimeException( $"Asset not loaded: {filename}" );
         }
@@ -1560,12 +1565,12 @@ public class AssetManager : IDisposable
     /// <returns>A task representing the asynchronous removal of dependencies.</returns>
     private void RemoveDependencies( string filename )
     {
-        if ( !_assetDependencies.TryGetValue( filename, out var dependencies ) )
+        if ( !_assetDependencies.TryGetValue( filename, out List< string >? dependencies ) )
         {
             return;
         }
 
-        foreach ( var dependency in dependencies )
+        foreach ( string dependency in dependencies )
         {
             if ( IsLoaded( dependency ) )
             {
@@ -1582,7 +1587,7 @@ public class AssetManager : IDisposable
     // ========================================================================
     // Debug methods
     // ========================================================================
- 
+
     [Conditional( "DEBUG" )]
     public void DisplayMetrics()
     {
@@ -1591,11 +1596,11 @@ public class AssetManager : IDisposable
             Logger.Divider();
             Logger.Debug( $"_assetTypes[].Count: {_assetTypes.Count}" );
 
-            foreach ( var key in _assetTypes.Keys )
+            foreach ( string key in _assetTypes.Keys )
             {
                 Logger.Debug( $"Key: {key}: " );
 
-                foreach ( var value in _assetTypes.Values )
+                foreach ( Type value in _assetTypes.Values )
                 {
                     Logger.Debug( $"Value: {value}" );
                 }
@@ -1609,7 +1614,7 @@ public class AssetManager : IDisposable
             Logger.Debug( $"_tasks Count        : {_tasks.Count}" );
             Logger.Divider();
 
-            var names = GetAssetNames();
+            List< string? > names = GetAssetNames();
 
             if ( names.Count == 0 )
             {
@@ -1618,12 +1623,12 @@ public class AssetManager : IDisposable
                 return;
             }
 
-            foreach ( var name in names )
+            foreach ( string? name in names )
             {
                 if ( name != null )
                 {
-                    var type  = GetAssetType( name );
-                    var asset = Get( name );
+                    Type    type  = GetAssetType( name );
+                    object? asset = Get( name );
 
                     Logger.Debug( $"Asset: {name}, Type: {type.Name}, " +
                                   $"Asset: {( asset != null ? "Loaded" : "NULL" )}" );
@@ -1646,19 +1651,19 @@ public class AssetManager : IDisposable
             Logger.Debug( $"\n--- Asset Loader Debug Dump ({_loaders.Count} Asset Types Registered) ---" );
 
             // Iterate over the outer Dictionary (Key: Asset Type)
-            foreach ( var outerEntry in _loaders )
+            foreach ( KeyValuePair< Type, Dictionary< string, AssetLoader > > outerEntry in _loaders )
             {
-                var assetType    = outerEntry.Key;
-                var innerLoaders = outerEntry.Value;
+                Type                              assetType    = outerEntry.Key;
+                Dictionary< string, AssetLoader > innerLoaders = outerEntry.Value;
 
                 Logger.Debug( $"\n[ASSET TYPE]: {assetType.Name} (Total Loaders: {innerLoaders.Count})" );
                 Logger.Debug( "--------------------------------------------------" );
 
                 // Iterate over the inner Dictionary (Key: Asset Name, Value: Concrete Loader)
-                foreach ( var innerEntry in innerLoaders )
+                foreach ( KeyValuePair< string, AssetLoader > innerEntry in innerLoaders )
                 {
-                    var assetName = innerEntry.Key;
-                    var loader    = innerEntry.Value;
+                    string      assetName = innerEntry.Key;
+                    AssetLoader loader    = innerEntry.Value;
 
                     if ( assetName == string.Empty )
                     {
@@ -1666,7 +1671,7 @@ public class AssetManager : IDisposable
                     }
 
                     // Get the actual derived class name (e.g., "TextureLoader" or "SoundLoader")
-                    var concreteType = loader.GetType();
+                    Type concreteType = loader.GetType();
 
                     Logger.Debug( $"  - Suffix        : '{assetName}'" );
                     Logger.Debug( $"    [Loader Class]: {concreteType.Name}" );

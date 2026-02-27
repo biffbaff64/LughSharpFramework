@@ -148,8 +148,8 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
         if ( Stage.Camera is OrthographicCamera orthographicCamera )
         {
-            var parentWidth  = Stage.Width;
-            var parentHeight = Stage.Height;
+            float parentWidth  = Stage.Width;
+            float parentHeight = Stage.Height;
 
             if ( ( GetX( Align.RIGHT ) - Stage.Camera.Position.X )
                > ( parentWidth / 2 / orthographicCamera.Zoom ) )
@@ -184,8 +184,8 @@ public class Window : Table, IStyleable< Window.WindowStyle >
         }
         else if ( Parent == Stage.RootGroup )
         {
-            var parentWidth  = Stage.Width;
-            var parentHeight = Stage.Height;
+            float parentWidth  = Stage.Width;
+            float parentHeight = Stage.Height;
 
             if ( X < 0 )
             {
@@ -257,8 +257,8 @@ public class Window : Table, IStyleable< Window.WindowStyle >
             _titleTable.Color.A = Color.A;
         }
 
-        var padTop  = GetPadTop();
-        var padLeft = GetPadLeft();
+        float padTop  = GetPadTop();
+        float padLeft = GetPadLeft();
 
         _titleTable?.SetSize( Width - padLeft - GetPadRight(), padTop );
         _titleTable?.SetPosition( padLeft, Height - padTop );
@@ -278,7 +278,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
             return null;
         }
 
-        var hit = base.Hit( x, y, touchable );
+        Actor? hit = base.Hit( x, y, touchable );
 
         if ( ( hit == null ) && IsModal && ( !touchable || ( Touchable == Touchable.Enabled ) ) )
         {
@@ -293,7 +293,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
         if ( ( y <= Height ) && ( y >= ( Height - GetPadTop() ) ) && ( x >= 0 ) && ( x <= Width ) )
         {
             // Hit the title bar, don't use the hit child if it is in the Window's table.
-            var current = hit;
+            Actor? current = hit;
 
             while ( current?.Parent != this )
             {
@@ -335,7 +335,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
                     TitleLabel.Style = new Label.LabelStyle( field.TitleFont, field.TitleFontColor );
                 }
             }
-        
+
             InvalidateHierarchy();
         }
     }
@@ -435,22 +435,22 @@ public class Window : Table, IStyleable< Window.WindowStyle >
                 return;
             }
 
-            var width     = _window.Width;
-            var height    = _window.Height;
-            var windowX   = _window.X;
-            var windowY   = _window.Y;
-            var minWidth  = _window.GetMinWidth();
-            var minHeight = _window.GetMinHeight();
-            var stage     = _window.Stage;
+            float  width     = _window.Width;
+            float  height    = _window.Height;
+            float  windowX   = _window.X;
+            float  windowY   = _window.Y;
+            float  minWidth  = _window.GetMinWidth();
+            float  minHeight = _window.GetMinHeight();
+            Stage? stage     = _window.Stage;
 
-            var clampPosition = _window.KeepWithinStage
-                             && ( stage != null )
-                             && ( _window.Parent == stage.RootGroup );
+            bool clampPosition = _window.KeepWithinStage
+                              && ( stage != null )
+                              && ( _window.Parent == stage.RootGroup );
 
             if ( ( _window.Edge & MOVE ) != 0 )
             {
-                var amountX = x - _startX;
-                var amountY = y - _startY;
+                float amountX = x - _startX;
+                float amountY = y - _startY;
 
                 windowX += amountX;
                 windowY += amountY;
@@ -458,7 +458,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
             if ( ( _window.Edge & Align.LEFT ) != 0 )
             {
-                var amountX = x - _startX;
+                float amountX = x - _startX;
 
                 if ( ( width - amountX ) < minWidth )
                 {
@@ -476,7 +476,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
             if ( ( _window.Edge & Align.BOTTOM ) != 0 )
             {
-                var amountY = y - _startY;
+                float amountY = y - _startY;
 
                 if ( ( height - amountY ) < minHeight )
                 {
@@ -494,7 +494,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
             if ( ( _window.Edge & Align.RIGHT ) != 0 )
             {
-                var amountX = x - _lastX - width;
+                float amountX = x - _lastX - width;
 
                 if ( ( width + amountX ) < minWidth )
                 {
@@ -511,7 +511,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
             if ( ( _window.Edge & Align.TOP ) != 0 )
             {
-                var amountY = y - _lastY - height;
+                float amountY = y - _lastY - height;
 
                 if ( ( height + amountY ) < minHeight )
                 {
@@ -567,15 +567,15 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
         private void UpdateEdge( float x, float y )
         {
-            var border = _window.ResizeBorder / 2f;
-            var width  = _window.Width;
-            var height = _window.Height;
+            float border = _window.ResizeBorder / 2f;
+            float width  = _window.Width;
+            float height = _window.Height;
 
-            var padTop    = _window.GetPadTop();
-            var padLeft   = _window.GetPadLeft();
-            var padBottom = _window.GetPadBottom();
-            var padRight  = _window.GetPadRight();
-            var right     = width - padRight;
+            float padTop    = _window.GetPadTop();
+            float padLeft   = _window.GetPadLeft();
+            float padBottom = _window.GetPadBottom();
+            float padRight  = _window.GetPadRight();
+            float right     = width - padRight;
 
             _window.Edge = 0;
 

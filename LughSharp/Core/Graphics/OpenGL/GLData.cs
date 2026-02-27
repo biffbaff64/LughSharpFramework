@@ -42,7 +42,7 @@ public class GLData
     public const int NUM_EXTENSIONS = 0x821D;
 
     // ========================================================================
-    
+
     /// <summary>
     /// As named, this is the currently bound FBO, used to keep track.
     /// </summary>

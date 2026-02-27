@@ -25,7 +25,9 @@
 using System;
 
 using DotGLFW;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -37,7 +39,7 @@ public class OpenGL
 {
     public class Initialisation
     {
-        public static OpenGL.Capabilities Capabilities { get; } = new();
+        public static Capabilities Capabilities { get; } = new();
 
         // ====================================================================
 
@@ -53,7 +55,7 @@ public class OpenGL
             var minorVersion    = 0;
             var revisionVersion = 0;
 
-            var version = Engine.GL.GetString( IGL.GL_VERSION )->ToString();
+            string version = Engine.GL.GetString( IGL.GL_VERSION )->ToString();
 
             Capabilities.IsGLES     = version.StartsWith( "OpenGL ES" );
             Capabilities.IsEmulated = false;
@@ -88,9 +90,9 @@ public class OpenGL
             if ( Capabilities.IsGLES )
             {
                 if ( TryParseOpenGLVersionFromString( Engine.GL.GetString( IGL.GL_VERSION )->ToString(),
-                                                      out var glesMajorVersion,
-                                                      out var glesMinorVersion,
-                                                      out var glesRevisionVersion ) )
+                                                      out int glesMajorVersion,
+                                                      out int glesMinorVersion,
+                                                      out int glesRevisionVersion ) )
                 {
                     if ( ( glesMajorVersion != Capabilities.MajorVersion )
                       || ( glesMinorVersion != Capabilities.MinorVersion ) )
@@ -115,7 +117,7 @@ public class OpenGL
             ? str.Substring( "OpenGL ES ".Length )
             : str.Substring( "OpenGL ".Length );
 
-        var components = str.Split( [ ' ', '.' ], StringSplitOptions.RemoveEmptyEntries );
+        string[] components = str.Split( [ ' ', '.' ], StringSplitOptions.RemoveEmptyEntries );
 
         if ( ( components.Length < 2 )
           || !int.TryParse( components[ 0 ], out major )

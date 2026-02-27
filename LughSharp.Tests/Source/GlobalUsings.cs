@@ -28,11 +28,9 @@ global using System.Drawing;
 global using System.IO;
 
 // ============================================================================
-
 global using JetBrains.Annotations;
 
 // ============================================================================
-
 global using static LughSharp.Core.Main.Engine;
 
 // ============================================================================

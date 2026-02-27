@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio;
 using LughSharp.Core.Audio.OpenAL;
 using LughSharp.Core.Utils;
@@ -43,7 +44,7 @@ public class OpenALSound( OpenALAudio audio ) : ISound
             return 0;
         }
 
-        var sourceID = audio.ObtainSource( false );
+        int sourceID = audio.ObtainSource( false );
 
         if ( sourceID == -1 )
         {
@@ -62,7 +63,7 @@ public class OpenALSound( OpenALAudio audio ) : ISound
             return -1;
         }
 
-        var soundId = audio.GetSoundId( sourceID );
+        long soundId = audio.GetSoundId( sourceID );
 
         AL.Sourcei( ( uint )sourceID, AL.BUFFER, _bufferID );
         AL.Sourcei( ( uint )sourceID, AL.LOOPING, AL.FALSE );
@@ -79,14 +80,14 @@ public class OpenALSound( OpenALAudio audio ) : ISound
             return 0;
         }
 
-        var sourceID = audio.ObtainSource( false );
+        int sourceID = audio.ObtainSource( false );
 
         if ( sourceID == -1 )
         {
             return -1;
         }
 
-        var soundId = audio.GetSoundId( sourceID );
+        long soundId = audio.GetSoundId( sourceID );
 
         AL.Sourcei( ( uint )sourceID, AL.BUFFER, _bufferID );
         AL.Sourcei( ( uint )sourceID, AL.LOOPING, AL.TRUE );
@@ -219,7 +220,7 @@ public class OpenALSound( OpenALAudio audio ) : ISound
 
     public long Play( float volume, float pitch, float pan )
     {
-        var id = Play();
+        long id = Play();
 
         SetPitch( id, pitch );
         SetPan( id, pan, volume );
@@ -229,7 +230,7 @@ public class OpenALSound( OpenALAudio audio ) : ISound
 
     public long Loop( float volume, float pitch, float pan )
     {
-        var id = Loop();
+        long id = Loop();
 
         SetPitch( id, pitch );
         SetPan( id, pan, volume );
@@ -239,12 +240,12 @@ public class OpenALSound( OpenALAudio audio ) : ISound
 
     protected void Setup( byte[] pcm, int channels, int sampleRate )
     {
-        var bytes   = pcm.Length - ( pcm.Length % ( channels > 1 ? 4 : 2 ) );
-        var samples = bytes / ( 2 * channels );
+        int bytes   = pcm.Length - ( pcm.Length % ( channels > 1 ? 4 : 2 ) );
+        int samples = bytes / ( 2 * channels );
 
         Duration = samples / ( float )sampleRate;
 
-        var buffer = Buffer< byte >.Allocate( bytes );
+        Buffer< byte > buffer = Buffer< byte >.Allocate( bytes );
 
         buffer.SetOrder( ByteOrder.NativeOrder );
         buffer.PutBytes( pcm, 0, 0, bytes );

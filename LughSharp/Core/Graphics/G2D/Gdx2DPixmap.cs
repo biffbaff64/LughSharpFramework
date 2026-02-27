@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -55,11 +57,11 @@ public class Gdx2DPixmap : IDisposable
     [StructLayout( LayoutKind.Sequential )]
     private struct NativePixmapStruct
     {
-        public uint Width;
-        public uint Height;
-        public uint ColorFormat;
-        public uint Blend;
-        public uint Scale;
+        public uint   Width;
+        public uint   Height;
+        public uint   ColorFormat;
+        public uint   Blend;
+        public uint   Scale;
         public IntPtr Pixels;
     }
 
@@ -108,7 +110,7 @@ public class Gdx2DPixmap : IDisposable
     public Gdx2DPixmap( byte[] encodedData, int offset, int len, int requestedFormat )
     {
         PixmapBuffer = InitializeFromBuffer( encodedData, offset, len );
-        
+
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorFormat ) )
         {
             ConvertPixelFormatTo( requestedFormat );
@@ -143,7 +145,7 @@ public class Gdx2DPixmap : IDisposable
             writer.Write( bytesRead );
         }
 
-        var buffer = memoryStream.ToArray();
+        byte[] buffer = memoryStream.ToArray();
 
         PixmapBuffer = InitializeFromBuffer( buffer, 0, buffer.Length );
 
@@ -181,8 +183,8 @@ public class Gdx2DPixmap : IDisposable
         Blend       = ( uint )Pixmap.BlendType.Default;
         Scale       = ( uint )Pixmap.ScaleType.Default;
 
-        var length = width * height * PixelFormat.BytesPerPixel( format );
-        
+        int length = width * height * PixelFormat.BytesPerPixel( format );
+
         Pixels = new byte[ length ];
 
         PixmapBuffer = new Buffer< byte >( length );
@@ -200,11 +202,11 @@ public class Gdx2DPixmap : IDisposable
     /// <returns>A byte buffer wrapping the initialized pixmap data.</returns>
     private Buffer< byte > InitializeFromBuffer( byte[] buffer, int offset, int len )
     {
-        var bufferHandle  = GCHandle.Alloc( buffer, GCHandleType.Pinned );
-        var pixmapPtr     = load( bufferHandle.AddrOfPinnedObject() + offset, len );
-        var pixmap        = Marshal.PtrToStructure< NativePixmapStruct >( pixmapPtr );
-        var dataBlockSize = ( int )( pixmap.Width * pixmap.Height * bytes_per_pixel( pixmap.ColorFormat ) );
-        
+        GCHandle bufferHandle  = GCHandle.Alloc( buffer, GCHandleType.Pinned );
+        IntPtr   pixmapPtr     = load( bufferHandle.AddrOfPinnedObject() + offset, len );
+        var      pixmap        = Marshal.PtrToStructure< NativePixmapStruct >( pixmapPtr );
+        var      dataBlockSize = ( int )( pixmap.Width * pixmap.Height * bytes_per_pixel( pixmap.ColorFormat ) );
+
         bufferHandle.Free();
 
         Width         = ( int )pixmap.Width;
@@ -212,10 +214,10 @@ public class Gdx2DPixmap : IDisposable
         ColorFormat   = ( int )pixmap.ColorFormat;
         BytesPerPixel = ( int )bytes_per_pixel( pixmap.ColorFormat );
         Pixels        = new byte[ dataBlockSize ];
-        
+
         Marshal.Copy( pixmap.Pixels, Pixels, 0, dataBlockSize );
 
-        var byteBuffer = Buffer< byte >.Wrap( Pixels );
+        Buffer< byte > byteBuffer = Buffer< byte >.Wrap( Pixels );
 
         return byteBuffer;
 
@@ -277,12 +279,18 @@ public class Gdx2DPixmap : IDisposable
     /// <summary>
     /// Returns the pixel from this pixmap at the specified coordinates.
     /// </summary>
-    public int GetPixel( int x, int y ) => GetPixelNative( x, y );
+    public int GetPixel( int x, int y )
+    {
+        return GetPixelNative( x, y );
+    }
 
     /// <summary>
     /// Sets the pixel at the specified coordinates to the specified color.
     /// </summary>
-    public void SetPixel( int x, int y, Color color ) => SetPixelNative( x, y, color );
+    public void SetPixel( int x, int y, Color color )
+    {
+        SetPixelNative( x, y, color );
+    }
 
     /// <summary>
     /// Sets the color of a specific pixel in the pixmap. This method handles color values
@@ -324,10 +332,10 @@ public class Gdx2DPixmap : IDisposable
             Pixels       = null!;
         }
     }
-    
+
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -335,7 +343,7 @@ public class Gdx2DPixmap : IDisposable
     public void Clear( int color )
     {
         var colorObj = new Color();
-        
+
         Color.Rgba8888ToColor( ref colorObj, ( uint )color );
 
         ClearWithColor( colorObj );
@@ -400,7 +408,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="size">The total size of the pixmap in bytes.</param>
     private void ClearAlpha( Color color, uint size )
     {
-        Array.Fill( Pixels, ( byte )( color.A * 255 ), 0, ( Width * Height ) );
+        Array.Fill( Pixels, ( byte )( color.A * 255 ), 0, Width * Height );
     }
 
     /// <summary>
@@ -429,10 +437,10 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="size">The size of the pixmap data in bytes.</param>
     private void ClearRGB888( Color color, uint size )
     {
-        var col = Color.Rgb888( color );
-        var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
-        var g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
-        var r   = ( byte )( ( col & 0xff000000 ) >> 24 );
+        uint col = Color.Rgb888( color );
+        var  b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
+        var  g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
+        var  r   = ( byte )( ( col & 0xff000000 ) >> 24 );
 
         for ( var pixel = 0; pixel < size; )
         {
@@ -454,11 +462,11 @@ public class Gdx2DPixmap : IDisposable
             throw new RuntimeException( "Invalid size for RGBA8888 format" );
         }
 
-        var col = Color.ToRgba8888( color );
-        var a   = ( byte )( col & 0x000000ff );
-        var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
-        var g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
-        var r   = ( byte )( ( col & 0xff000000 ) >> 24 );
+        uint col = Color.ToRgba8888( color );
+        var  a   = ( byte )( col & 0x000000ff );
+        var  b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
+        var  g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
+        var  r   = ( byte )( ( col & 0xff000000 ) >> 24 );
 
         for ( var pixel = 0; pixel < size; )
         {
@@ -476,7 +484,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="size">The total size of the pixmap data to be cleared.</param>
     private void ClearRGB565( Color color, uint size )
     {
-        var col = Color.Rgb565( color );
+        uint col = Color.Rgb565( color );
 
         for ( var i = 0; i < size; i += 2 )
         {
@@ -492,7 +500,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="size">The size of the pixmap data in bytes.</param>
     private void ClearRGBA4444( Color color, uint size )
     {
-        var col = Color.Rgba4444( color );
+        uint col = Color.Rgba4444( color );
 
         for ( var i = 0; i < size; i += 2 )
         {
@@ -538,7 +546,7 @@ public class Gdx2DPixmap : IDisposable
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
                 a = color & 0xff;
-                var l = ( ( uint )( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
+                uint l = ( ( uint )( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
 
                 return ( l & 0xffffff00 ) | a;
 
@@ -683,8 +691,14 @@ public class Gdx2DPixmap : IDisposable
     {
         gdx2d_draw_pixmap( new NativePixmapStruct(),
                            new NativePixmapStruct(),
-                           srcX, srcY, width, height,
-                           dstX, dstY, width, height );
+                           srcX,
+                           srcY,
+                           width,
+                           height,
+                           dstX,
+                           dstY,
+                           width,
+                           height );
     }
 
     /// <summary>
@@ -697,8 +711,14 @@ public class Gdx2DPixmap : IDisposable
     {
         gdx2d_draw_pixmap( new NativePixmapStruct(),
                            new NativePixmapStruct(),
-                           srcX, srcY, srcWidth, srcHeight,
-                           dstX, dstY, dstWidth, dstHeight );
+                           srcX,
+                           srcY,
+                           srcWidth,
+                           srcHeight,
+                           dstX,
+                           dstY,
+                           dstWidth,
+                           dstHeight );
     }
 
     // ========================================================================

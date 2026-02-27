@@ -105,11 +105,11 @@ public class TextButton : Button
 
             if ( Label != null )
             {
-                var labelStyle = Label.Style;
+                Label.LabelStyle labelStyle = Label.Style;
 
                 labelStyle.Font      = value.Font ?? new BitmapFont();
                 labelStyle.FontColor = value.FontColor ?? Color.White;
-                Label.Style = labelStyle;
+                Label.Style          = labelStyle;
             }
         }
     }
@@ -173,7 +173,7 @@ public class TextButton : Button
             }
         }
 
-        var focused = HasKeyboardFocus();
+        bool focused = HasKeyboardFocus();
 
         if ( IsChecked )
         {
@@ -245,8 +245,8 @@ public class TextButton : Button
             return Name;
         }
 
-        var className = GetType().Name;
-        var dotIndex  = className.LastIndexOf( '.' );
+        string className = GetType().Name;
+        int    dotIndex  = className.LastIndexOf( '.' );
 
         if ( dotIndex != -1 )
         {

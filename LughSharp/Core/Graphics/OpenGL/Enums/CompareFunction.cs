@@ -36,7 +36,7 @@ public enum CompareFunction
     Greater      = IGL.GL_GREATER,
     NotEqual     = IGL.GL_NOTEQUAL,
     GreaterEqual = IGL.GL_GEQUAL,
-    Always       = IGL.GL_ALWAYS,
+    Always       = IGL.GL_ALWAYS
 }
 
 // ========================================================================

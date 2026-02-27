@@ -107,7 +107,7 @@ public class AtlasRegion : TextureRegion, IDisposable
     // ========================================================================
 
     private bool _isDisposed;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -236,7 +236,7 @@ public class AtlasRegion : TextureRegion, IDisposable
             if ( disposing )
             {
             }
-            
+
             _isDisposed = true;
         }
     }

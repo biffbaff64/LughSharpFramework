@@ -24,6 +24,8 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Utils.Pooling;
+
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
 /// <summary>
@@ -40,7 +42,7 @@ public class SequenceAction : ParallelAction
 
     public SequenceAction( params Action[] actions )
     {
-        foreach ( var action in actions )
+        foreach ( Action action in actions )
         {
             AddAction( action );
         }
@@ -54,7 +56,7 @@ public class SequenceAction : ParallelAction
             return true;
         }
 
-        var pool = Pool;
+        Pool< Action >? pool = Pool;
 
         // Ensure this action can't be returned to the pool while executings.
         Pool = null;

@@ -25,6 +25,7 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Maps.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
@@ -46,7 +47,7 @@ public class TiledMapTileMapObject : TextureMapObject
     public bool          FlipVertically   { get; set; }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a new <see cref="MapObject"/> with an attached <see cref="ITiledMapTile"/>.
     /// </summary>
@@ -69,4 +70,3 @@ public class TiledMapTileMapObject : TextureMapObject
 
 // ============================================================================
 // ============================================================================
-

@@ -51,7 +51,7 @@ public class StyleRegistry
     /// <returns> This StyleRegistry instance for chaining. </returns>
     public StyleRegistry RegisterSection< T >() where T : class
     {
-        var type = typeof( T );
+        Type type = typeof( T );
 
         if ( !_data.ContainsKey( type ) )
         {
@@ -102,7 +102,8 @@ public class StyleRegistry
 
     public T Get< T >( string name ) where T : class
     {
-        if ( _data.TryGetValue( typeof( T ), out var map ) && map.TryGetValue( name, out var style ) )
+        if ( _data.TryGetValue( typeof( T ), out Dictionary< string, object >? map )
+          && map.TryGetValue( name, out object? style ) )
         {
             return ( T )style;
         }
@@ -125,22 +126,22 @@ public class StyleRegistry
         var defaultFont = new BitmapFont();
 
         // ----- ButtonStyle -----
-        var btnStyle = new ButtonStyle()
+        var btnStyle = new ButtonStyle
         {
             Up       = btnUp,
             Down     = btnDown,
             Disabled = btnDisabled
         };
 
-        this.Add( "default", btnStyle ).Add( "toggle", btnStyle with { Checked = btnStyle.Down } );
+        Add( "default", btnStyle ).Add( "toggle", btnStyle with { Checked = btnStyle.Down } );
 
         // ----- TextButtonStyle -----
         var tbStyle = new TextButton.TextButtonStyle( btnUp, btnDown, btnChecked, defaultFont );
 
-        this.Add( "default", tbStyle );
+        Add( "default", tbStyle );
 
         // ----- ScrollPaneStyle -----
-        var spStyle = new ScrollPane.ScrollPaneStyle()
+        var spStyle = new ScrollPane.ScrollPaneStyle
         {
             Background  = new TextureRegionDrawable( atlas.FindRegion( "default-rect" ) ),
             Corner      = new TextureRegionDrawable( atlas.FindRegion( "default-rect-corner" ) ),
@@ -150,17 +151,17 @@ public class StyleRegistry
             HScrollKnob = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) )
         };
 
-        this.Add( "default", spStyle );
+        Add( "default", spStyle );
 
         // ----- SplitPaneStyle -----
         var horizHandle = new TextureRegionDrawable( atlas.FindRegion( "default-splitpane" ) );
         var vertHandle  = new TextureRegionDrawable( atlas.FindRegion( "default-splitpane-vertical" ) );
 
-        this.Add( "default-vertical", new SplitPane.SplitPaneStyle { Handle   = vertHandle } )
+        Add( "default-vertical", new SplitPane.SplitPaneStyle { Handle        = vertHandle } )
             .Add( "default-horizontal", new SplitPane.SplitPaneStyle { Handle = horizHandle } );
 
         // ----- WindowStyle -----
-        var winStyle = new Window.WindowStyle()
+        var winStyle = new Window.WindowStyle
         {
             Background      = new TextureRegionDrawable( atlas.FindRegion( "default-window" ) ),
             TitleFont       = defaultFont,
@@ -168,17 +169,17 @@ public class StyleRegistry
             StageBackground = new TextureRegionDrawable( atlas.FindRegion( "dialogDim" ) )
         };
 
-        this.Add( "default", winStyle ).Add( "dialog", winStyle );
+        Add( "default", winStyle ).Add( "dialog", winStyle );
 
         // ----- ProgressBarStyle -----
-        this.Add( "default-horizontal",
-                  new ProgressBar.ProgressBarStyle()
-                  {
-                      Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
-                      Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-slider-knob" ) )
-                  } )
+        Add( "default-horizontal",
+             new ProgressBar.ProgressBarStyle
+             {
+                 Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
+                 Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-slider-knob" ) )
+             } )
             .Add( "default-vertical",
-                  new ProgressBar.ProgressBarStyle()
+                  new ProgressBar.ProgressBarStyle
                   {
                       Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
                       Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) )
@@ -187,51 +188,51 @@ public class StyleRegistry
         // ----- SliderStyle -----
         var sliderStyle = new Slider.SliderStyle();
 
-        this.Add( "default-horizontal", sliderStyle ).Add( "default-vertical", sliderStyle );
-        
+        Add( "default-horizontal", sliderStyle ).Add( "default-vertical", sliderStyle );
+
         // ----- LabelStyle -----
-        var labelStyle = new Label.LabelStyle()
+        var labelStyle = new Label.LabelStyle
         {
             Font      = defaultFont,
             FontColor = Color.White
         };
 
-        this.Add( "default", labelStyle );
-        
+        Add( "default", labelStyle );
+
         // ----- TextFieldStyle -----
-        var tfStyle = new TextField.TextFieldStyle()
+        var tfStyle = new TextField.TextFieldStyle
         {
-            Selection = new TextureRegionDrawable( atlas.FindRegion( "selection" ) ),
+            Selection  = new TextureRegionDrawable( atlas.FindRegion( "selection" ) ),
             Background = new TextureRegionDrawable( atlas.FindRegion( "textfield" ) ),
             Font       = defaultFont,
             FontColor  = Color.White,
-            Cursor = new TextureRegionDrawable( atlas.FindRegion( "cursor" ) )
+            Cursor     = new TextureRegionDrawable( atlas.FindRegion( "cursor" ) )
         };
-        
-        this.Add( "default", tfStyle );
+
+        Add( "default", tfStyle );
 
         // ----- CheckBoxStyle -----
-        var cbStyle = new CheckBox.CheckBoxStyle()
+        var cbStyle = new CheckBox.CheckBoxStyle
         {
-            CheckboxOn = new TextureRegionDrawable( atlas.FindRegion( "check-on" ) ),
+            CheckboxOn  = new TextureRegionDrawable( atlas.FindRegion( "check-on" ) ),
             CheckboxOff = new TextureRegionDrawable( atlas.FindRegion( "check-off" ) ),
-            Font = defaultFont,
-            FontColor = Color.White
+            Font        = defaultFont,
+            FontColor   = Color.White
         };
 
-        this.Add( "default", cbStyle );
-        
+        Add( "default", cbStyle );
+
         // ----- ListStyle -----
 //        var listStyle = new ListBox<>.ListBoxStyle();
 
         // ----- TouchpadStyle -----
-        var tpStyle = new Touchpad.TouchpadStyle()
+        var tpStyle = new Touchpad.TouchpadStyle
         {
             Background = new TextureRegionDrawable( atlas.FindRegion( "default-pane" ) ),
             Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) )
         };
-        
-        this.Add( "default", tpStyle );
+
+        Add( "default", tpStyle );
 
         // ----- TreeStyle -----
 //        var treeStyle = new Tree< , >.TreeStyle();

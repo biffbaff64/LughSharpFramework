@@ -29,7 +29,6 @@ namespace Extensions.Source.Box2D;
 [PublicAPI]
 public class CIrcleShape
 {
-    
 }
 
 // ============================================================================

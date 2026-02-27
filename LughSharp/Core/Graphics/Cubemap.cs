@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Graphics.OpenGL;
@@ -193,7 +195,7 @@ public class Cubemap : GLTexture, IManaged
     /// <param name="cubemap"></param>
     private static void AddManagedCubemap( IApplication app, Cubemap cubemap )
     {
-        var managedCubemapArray = ManagedCubemaps[ app ] ?? new List< Cubemap >();
+        List< Cubemap > managedCubemapArray = ManagedCubemaps[ app ] ?? new List< Cubemap >();
 
         managedCubemapArray.Add( cubemap );
         ManagedCubemaps.Put( app, managedCubemapArray );
@@ -212,7 +214,7 @@ public class Cubemap : GLTexture, IManaged
     /// </summary>
     public static void InvalidateAllCubemaps( IApplication app )
     {
-        var managedCubemapArray = ManagedCubemaps[ app ];
+        List< Cubemap >? managedCubemapArray = ManagedCubemaps[ app ];
 
         if ( managedCubemapArray == null )
         {
@@ -221,7 +223,7 @@ public class Cubemap : GLTexture, IManaged
 
         if ( AssetManager == null )
         {
-            foreach ( var cubemap in managedCubemapArray )
+            foreach ( Cubemap cubemap in managedCubemapArray )
             {
                 cubemap.Reload();
             }
@@ -237,9 +239,9 @@ public class Cubemap : GLTexture, IManaged
             // asset manager.
             var cubemaps = new List< Cubemap >( managedCubemapArray );
 
-            foreach ( var cubemap in cubemaps )
+            foreach ( Cubemap cubemap in cubemaps )
             {
-                var filename = AssetManager.GetAssetFileName( cubemap );
+                string? filename = AssetManager.GetAssetFileName( cubemap );
 
                 if ( filename == null )
                 {
@@ -251,7 +253,7 @@ public class Cubemap : GLTexture, IManaged
                     // can actually remove it from the assetmanager. Also set the
                     // handle to zero, otherwise we might accidentially dispose
                     // already reloaded cubemaps.
-                    var refCount = AssetManager.GetReferenceCount( filename );
+                    int refCount = AssetManager.GetReferenceCount( filename );
 
                     AssetManager.SetReferenceCount( filename, 0 );
 
@@ -269,7 +271,7 @@ public class Cubemap : GLTexture, IManaged
 
                         // special parameter which will ensure that the references stay the same.
                         Cubemap        = cubemap,
-                        LoadedCallback = new DefaultLoadedCallback( refCount ),
+                        LoadedCallback = new DefaultLoadedCallback( refCount )
                     };
 
                     // unload the c, create a new gl handle then reload it.
@@ -292,7 +294,7 @@ public class Cubemap : GLTexture, IManaged
     {
         var builder = new StringBuilder( "Managed cubemap/app: { " );
 
-        foreach ( var app in ManagedCubemaps.Keys )
+        foreach ( IApplication app in ManagedCubemaps.Keys )
         {
             builder.Append( ManagedCubemaps[ app ]!.Count );
             builder.Append( ' ' );
@@ -369,7 +371,7 @@ public class Cubemap : GLTexture, IManaged
             PositiveY,
             NegativeY,
             PositiveZ,
-            NegativeZ,
+            NegativeZ
         }
 
         // ====================================================================
@@ -401,7 +403,7 @@ public class Cubemap : GLTexture, IManaged
 
         // ====================================================================
 
-        private static List< CubemapSide > _valueList   = new();
+        private static List< CubemapSide > _valueList = new();
         private static int                 _nextOrdinal;
         private        string              _nameValue;
 
@@ -472,7 +474,7 @@ public class Cubemap : GLTexture, IManaged
         /// <exception cref="ArgumentException">Thrown if no cubemap side with the specified name exists.</exception>
         public static CubemapSide ValueOf( string name )
         {
-            foreach ( var enumInstance in _valueList )
+            foreach ( CubemapSide enumInstance in _valueList )
             {
                 if ( enumInstance._nameValue == name )
                 {

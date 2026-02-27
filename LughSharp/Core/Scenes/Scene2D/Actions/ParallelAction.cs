@@ -23,7 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Text;
+
 using JetBrains.Annotations;
+
+using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
@@ -83,7 +86,7 @@ public class ParallelAction : Action
 
         _complete = true;
 
-        var pool = Pool;
+        Pool< Action >? pool = Pool;
 
         // Ensure this action can't be returned to the pool while executing.
         Pool = null;
@@ -92,7 +95,7 @@ public class ParallelAction : Action
         {
             for ( int i = 0, n = _actions.Count; ( i < n ) && ( Actor != null ); i++ )
             {
-                var currentAction = _actions[ i ];
+                Action currentAction = _actions[ i ];
 
                 if ( ( currentAction.Actor != null ) && !currentAction.Act( delta ) )
                 {

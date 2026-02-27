@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
@@ -34,6 +35,7 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
+
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
@@ -48,7 +50,7 @@ public class Table : WidgetGroup
         All,
         Table,
         Cell,
-        Actor,
+        Actor
     }
 
     // ========================================================================
@@ -81,9 +83,9 @@ public class Table : WidgetGroup
     /// </summary>
     public bool Round { get; set; } = true;
 
-    public int          Rows         { get; private set; }
-    public int          Columns      { get; set; }
-    public Cell         CellDefaults { get; set; }
+    public int  Rows         { get; private set; }
+    public int  Columns      { get; set; }
+    public Cell CellDefaults { get; set; }
 
     public Pool< Cell > CellPool { get; } = new()
     {
@@ -161,8 +163,8 @@ public class Table : WidgetGroup
 
     public Cell ObtainCell()
     {
-        var cell = CellPool.Obtain();
-        
+        Cell cell = CellPool.Obtain();
+
         cell.Table = this;
 
         return cell;
@@ -181,8 +183,8 @@ public class Table : WidgetGroup
             {
                 batch.Flush();
 
-                var padLeft   = _padLeft.Get( this );
-                var padBottom = _padBottom.Get( this );
+                float padLeft   = _padLeft.Get( this );
+                float padBottom = _padBottom.Get( this );
 
                 if ( ClipBegin( padLeft,
                                 padBottom,
@@ -249,27 +251,27 @@ public class Table : WidgetGroup
             return;
         }
 
-        var padTopOld    = GetPadTop();
-        var padLeftOld   = GetPadLeft();
-        var padBottomOld = GetPadBottom();
-        var padRightOld  = GetPadRight();
+        float padTopOld    = GetPadTop();
+        float padLeftOld   = GetPadLeft();
+        float padBottomOld = GetPadBottom();
+        float padRightOld  = GetPadRight();
 
         _background = background; // The default pad values use the background's padding.
 
-        var padTopNew    = GetPadTop();
-        var padLeftNew   = GetPadLeft();
-        var padBottomNew = GetPadBottom();
-        var padRightNew  = GetPadRight();
+        float padTopNew    = GetPadTop();
+        float padLeftNew   = GetPadLeft();
+        float padBottomNew = GetPadBottom();
+        float padRightNew  = GetPadRight();
 
         if ( !( padTopOld + padBottomOld ).Equals( padTopNew + padBottomNew )
-             || !( padLeftOld + padRightOld ).Equals( padLeftNew + padRightNew ) )
+          || !( padLeftOld + padRightOld ).Equals( padLeftNew + padRightNew ) )
         {
             InvalidateHierarchy();
         }
         else if ( !padTopOld.Equals( padTopNew )
-                  || !padLeftOld.Equals( padLeftNew )
-                  || !padBottomOld.Equals( padBottomNew )
-                  || !padRightOld.Equals( padRightNew ) )
+               || !padLeftOld.Equals( padLeftNew )
+               || !padBottomOld.Equals( padBottomNew )
+               || !padRightOld.Equals( padRightNew ) )
         {
             Invalidate();
         }
@@ -343,7 +345,7 @@ public class Table : WidgetGroup
     /// </summary>
     public Cell Add< T >( T? actor ) where T : Actor
     {
-        var cell = ObtainCell();
+        Cell cell = ObtainCell();
         cell.Actor = actor;
 
         // The row was ended for layout, not by the user, so revert it.
@@ -354,12 +356,12 @@ public class Table : WidgetGroup
             _cells.Peek().EndRow = false;
         }
 
-        var cellCount = _cells.Count;
+        int cellCount = _cells.Count;
 
         if ( cellCount > 0 )
         {
             // Set cell column and row.
-            var lastCell = _cells.Peek();
+            Cell lastCell = _cells.Peek();
 
             if ( !lastCell.EndRow )
             {
@@ -375,9 +377,9 @@ public class Table : WidgetGroup
             // Set the index of the cell above.
             if ( cell.Row > 0 )
             {
-                for ( var i = cellCount - 1; i >= 0; i-- )
+                for ( int i = cellCount - 1; i >= 0; i-- )
                 {
-                    var other = _cells[ i ];
+                    Cell other = _cells[ i ];
 
                     for ( int column = other.Column, nn = column + other.Colspan; column < nn; column++ )
                     {
@@ -389,7 +391,7 @@ public class Table : WidgetGroup
                         }
                     }
                 }
-                
+
             outer: ;
             }
         }
@@ -522,7 +524,7 @@ public class Table : WidgetGroup
 
     public override Actor? RemoveActorAt( int index, bool unfocus )
     {
-        var actor = base.RemoveActorAt( index, unfocus );
+        Actor? actor = base.RemoveActorAt( index, unfocus );
 
         GetCell( actor )!.Actor = null;
 
@@ -534,9 +536,9 @@ public class Table : WidgetGroup
     /// </summary>
     public override void ClearChildren()
     {
-        var cells = _cells.ToArray();
+        Cell[] cells = _cells.ToArray();
 
-        for ( var i = _cells.Count - 1; i >= 0; i-- )
+        for ( int i = _cells.Count - 1; i >= 0; i-- )
         {
             cells[ i ].Actor?.Remove();
         }
@@ -626,12 +628,12 @@ public class Table : WidgetGroup
 
     private void EndRow()
     {
-        var cells      = _cells.ToArray();
-        var rowColumns = 0;
+        Cell[] cells      = _cells.ToArray();
+        var    rowColumns = 0;
 
-        for ( var i = _cells.Count - 1; i >= 0; i-- )
+        for ( int i = _cells.Count - 1; i >= 0; i-- )
         {
-            var cell = cells[ i ];
+            Cell cell = cells[ i ];
 
             if ( cell.EndRow )
             {
@@ -655,7 +657,7 @@ public class Table : WidgetGroup
     /// <param name="column"></param>
     public Cell ColumnDefaults( int column )
     {
-        var cell = _columnDefaults.Count > column ? _columnDefaults[ column ] : null;
+        Cell? cell = _columnDefaults.Count > column ? _columnDefaults[ column ] : null;
 
         if ( cell == null )
         {
@@ -664,7 +666,7 @@ public class Table : WidgetGroup
 
             if ( column >= _columnDefaults.Count )
             {
-                for ( var i = _columnDefaults.Count; i < column; i++ )
+                for ( int i = _columnDefaults.Count; i < column; i++ )
                 {
                     _columnDefaults.Add( null! );
                 }
@@ -690,11 +692,11 @@ public class Table : WidgetGroup
             throw new ArgumentException( "actor cannot be null." );
         }
 
-        var cells = _cells.ToArray();
+        Cell[] cells = _cells.ToArray();
 
         for ( int i = 0, n = _cells.Count; i < n; i++ )
         {
-            var c = cells[ i ];
+            Cell c = cells[ i ];
 
             if ( c.Actor == actor )
             {
@@ -720,7 +722,7 @@ public class Table : WidgetGroup
             ComputeSize();
         }
 
-        var width = _tablePrefWidth;
+        float width = _tablePrefWidth;
 
         return _background != null ? Math.Max( width, _background.MinWidth ) : width;
     }
@@ -732,7 +734,7 @@ public class Table : WidgetGroup
             ComputeSize();
         }
 
-        var height = _tablePrefHeight;
+        float height = _tablePrefHeight;
 
         return _background != null ? Math.Max( height, _background.MinHeight ) : height;
     }
@@ -1071,7 +1073,7 @@ public class Table : WidgetGroup
     /// <param name="y"> The y coordinate, where 0 is the top of the table. </param>
     public int GetRow( float y )
     {
-        var n = _cells.Count;
+        int n = _cells.Count;
 
         if ( n == 0 )
         {
@@ -1080,11 +1082,11 @@ public class Table : WidgetGroup
 
         y += GetPadTop();
 
-        var cells = _cells.ToArray();
+        Cell[] cells = _cells.ToArray();
 
         for ( int i = 0, row = 0; i < n; )
         {
-            var c = cells[ i++ ];
+            Cell c = cells[ i++ ];
 
             if ( ( c.ActorY + c.ComputedPadTop ) < y )
             {
@@ -1190,8 +1192,8 @@ public class Table : WidgetGroup
     {
         _sizeInvalid = false;
 
-        var cells     = _cells.ToArray();
-        var cellCount = _cells.Count;
+        Cell[] cells     = _cells.ToArray();
+        int    cellCount = _cells.Count;
 
         // Implicitly end the row for layout purposes.
         if ( ( cellCount > 0 ) && !cells[ cellCount - 1 ].EndRow )
@@ -1201,20 +1203,20 @@ public class Table : WidgetGroup
             _implicitEndRow = true;
         }
 
-        var columns         = Columns;
-        var rows            = Rows;
-        var columnMinWidth  = _columnMinWidth = EnsureSize( _columnMinWidth, columns );
-        var rowMinHeight    = _rowMinHeight = EnsureSize( _rowMinHeight, rows );
-        var columnPrefWidth = _columnPrefWidth = EnsureSize( _columnPrefWidth, columns );
-        var rowPrefHeight   = _rowPrefHeight = EnsureSize( _rowPrefHeight, rows );
-        var expandWidth     = _expandWidth = EnsureSize( _expandWidth, columns );
-        var expandHeight    = _expandHeight = EnsureSize( _expandHeight, rows );
+        int     columns         = Columns;
+        int     rows            = Rows;
+        float[] columnMinWidth  = _columnMinWidth = EnsureSize( _columnMinWidth, columns );
+        float[] rowMinHeight    = _rowMinHeight = EnsureSize( _rowMinHeight, rows );
+        float[] columnPrefWidth = _columnPrefWidth = EnsureSize( _columnPrefWidth, columns );
+        float[] rowPrefHeight   = _rowPrefHeight = EnsureSize( _rowPrefHeight, rows );
+        float[] expandWidth     = _expandWidth = EnsureSize( _expandWidth, columns );
+        float[] expandHeight    = _expandHeight = EnsureSize( _expandHeight, rows );
 
         float? spaceRightLast = 0;
 
         for ( var i = 0; i < cellCount; i++ )
         {
-            var c = cells[ i ];
+            Cell c = cells[ i ];
 
             // Collect rows that expand and colspan=1 columns that expand.
             if ( ( c.ExpandY != 0 ) && ( expandHeight[ c.Row ] == 0 ) )
@@ -1230,36 +1232,40 @@ public class Table : WidgetGroup
             // Compute combined padding/spacing for cells.
             // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
             c.ComputedPadLeft = ( float )( c.PadLeft?.Get( c.Actor )
-                                           + ( c.Column == 0
+                                         + ( c.Column == 0
                                                ? 0
-                                               : Math.Max( 0f, ( float )( c.SpaceLeft?.Get( c.Actor ) - spaceRightLast )! ) ) )!;
+                                               : Math.Max( 0f,
+                                                           ( float )( c.SpaceLeft?.Get( c.Actor )
+                                                                    - spaceRightLast )! ) ) )!;
 
             c.ComputedPadTop = c.PadTop!.Get( c.Actor );
 
             if ( c.CellAboveIndex != -1 )
             {
-                var above = cells[ c.CellAboveIndex ];
+                Cell above = cells[ c.CellAboveIndex ];
 
-                c.ComputedPadTop += Math.Max( 0, ( float )( c.SpaceTop?.Get( c.Actor ) - above.SpaceBottom?.Get( c.Actor ) )! );
+                c.ComputedPadTop += Math.Max( 0,
+                                              ( float )( c.SpaceTop?.Get( c.Actor )
+                                                       - above.SpaceBottom?.Get( c.Actor ) )! );
             }
 
-            var spaceRight = c.SpaceRight?.Get( c.Actor );
+            float? spaceRight = c.SpaceRight?.Get( c.Actor );
 
             c.ComputedPadRight = ( float )( c.PadRight?.Get( c.Actor )
-                                            + ( ( c.Column + c.Colspan ) == columns ? 0f : spaceRight ) )!;
+                                          + ( ( c.Column + c.Colspan ) == columns ? 0f : spaceRight ) )!;
 
             c.ComputedPadBottom = ( float )( c.PadBottom?.Get( c.Actor )
-                                             + ( c.Row == ( rows - 1 ) ? 0 : c.SpaceBottom?.Get( c.Actor ) ) )!;
+                                           + ( c.Row == ( rows - 1 ) ? 0 : c.SpaceBottom?.Get( c.Actor ) ) )!;
 
             spaceRightLast = spaceRight ?? 0f;
 
             // Determine minimum and preferred cell sizes.
-            var prefWidth  = c.PrefWidth?.Get( c.Actor );
-            var prefHeight = c.PrefHeight?.Get( c.Actor );
-            var minWidth   = c.MinWidth?.Get( c.Actor );
-            var minHeight  = c.MinHeight?.Get( c.Actor );
-            var maxWidth   = c.MaxWidth?.Get( c.Actor );
-            var maxHeight  = c.MaxHeight?.Get( c.Actor );
+            float? prefWidth  = c.PrefWidth?.Get( c.Actor );
+            float? prefHeight = c.PrefHeight?.Get( c.Actor );
+            float? minWidth   = c.MinWidth?.Get( c.Actor );
+            float? minHeight  = c.MinHeight?.Get( c.Actor );
+            float? maxWidth   = c.MaxWidth?.Get( c.Actor );
+            float? maxHeight  = c.MaxHeight?.Get( c.Actor );
 
             if ( prefWidth < minWidth )
             {
@@ -1292,7 +1298,7 @@ public class Table : WidgetGroup
             if ( c.Colspan == 1 )
             {
                 // Spanned column min and pref width is added later.
-                var hpadding = c.ComputedPadLeft + c.ComputedPadRight;
+                float hpadding = c.ComputedPadLeft + c.ComputedPadRight;
 
                 columnPrefWidth[ c.Column ] = Math.Max(
                                                        columnPrefWidth[ c.Column ],
@@ -1305,7 +1311,7 @@ public class Table : WidgetGroup
                                                      );
             }
 
-            var vpadding = c.ComputedPadTop + c.ComputedPadBottom;
+            float vpadding = c.ComputedPadTop + c.ComputedPadBottom;
 
             rowPrefHeight[ c.Row ] = Math.Max( rowPrefHeight[ c.Row ], ( float )( prefHeight + vpadding )! );
             rowMinHeight[ c.Row ]  = Math.Max( rowMinHeight[ c.Row ], ( float )( minHeight + vpadding )! );
@@ -1316,18 +1322,18 @@ public class Table : WidgetGroup
 
         for ( var i = 0; i < cellCount; i++ )
         {
-            var c      = cells[ i ];
-            var column = c.Column;
+            Cell c      = cells[ i ];
+            int  column = c.Column;
 
             // Colspan with expand will expand all spanned columns
             // if none of the spanned columns have expand.
-            var expandX = c.ExpandX;
+            int expandX = c.ExpandX;
 
             if ( expandX != 0 )
             {
-                var nn = column + c.Colspan;
+                int nn = column + c.Colspan;
 
-                for ( var ii = column; ii < nn; ii++ )
+                for ( int ii = column; ii < nn; ii++ )
                 {
                     if ( expandWidth[ ii ] != 0 )
                     {
@@ -1335,7 +1341,7 @@ public class Table : WidgetGroup
                     }
                 }
 
-                for ( var ii = column; ii < nn; ii++ )
+                for ( int ii = column; ii < nn; ii++ )
                 {
                     expandWidth[ ii ] = expandX;
                 }
@@ -1344,7 +1350,7 @@ public class Table : WidgetGroup
             // Collect uniform sizes.
             if ( c is { UniformX: true, Colspan: 1 } )
             {
-                var hpadding = c.ComputedPadLeft + c.ComputedPadRight;
+                float hpadding = c.ComputedPadLeft + c.ComputedPadRight;
 
                 uniformMinWidth  = Math.Max( uniformMinWidth, columnMinWidth[ column ] - hpadding );
                 uniformPrefWidth = Math.Max( uniformPrefWidth, columnPrefWidth[ column ] - hpadding );
@@ -1352,7 +1358,7 @@ public class Table : WidgetGroup
 
             if ( c.UniformY )
             {
-                var vpadding = c.ComputedPadTop + c.ComputedPadBottom;
+                float vpadding = c.ComputedPadTop + c.ComputedPadBottom;
 
                 uniformMinHeight  = Math.Max( uniformMinHeight, rowMinHeight[ c.Row ] - vpadding );
                 uniformPrefHeight = Math.Max( uniformPrefHeight, rowPrefHeight[ c.Row ] - vpadding );
@@ -1364,11 +1370,11 @@ public class Table : WidgetGroup
         {
             for ( var i = 0; i < cellCount; i++ )
             {
-                var c = cells[ i ];
+                Cell c = cells[ i ];
 
                 if ( ( uniformPrefWidth > 0 ) && c is { UniformX: true, Colspan: 1 } )
                 {
-                    var computedPadding = c.ComputedPadLeft + c.ComputedPadRight;
+                    float computedPadding = c.ComputedPadLeft + c.ComputedPadRight;
 
                     columnMinWidth[ c.Column ]  = uniformMinWidth + computedPadding;
                     columnPrefWidth[ c.Column ] = uniformPrefWidth + computedPadding;
@@ -1376,7 +1382,7 @@ public class Table : WidgetGroup
 
                 if ( ( uniformPrefHeight > 0 ) && c.UniformY )
                 {
-                    var computedPadding = c.ComputedPadTop + c.ComputedPadBottom;
+                    float computedPadding = c.ComputedPadTop + c.ComputedPadBottom;
 
                     rowMinHeight[ c.Row ]  = uniformMinHeight + computedPadding;
                     rowPrefHeight[ c.Row ] = uniformPrefHeight + computedPadding;
@@ -1387,18 +1393,18 @@ public class Table : WidgetGroup
         // Distribute any additional min and pref width added by colspanned cells to the columns spanned.
         for ( var i = 0; i < cellCount; i++ )
         {
-            var c       = cells[ i ];
-            var colspan = c.Colspan;
+            Cell c       = cells[ i ];
+            int  colspan = c.Colspan;
 
             if ( colspan == 1 )
             {
                 continue;
             }
 
-            var column    = c.Column;
-            var minWidth  = c.MinWidth?.Get( c.Actor );
-            var prefWidth = c.PrefWidth?.Get( c.Actor );
-            var maxWidth  = c.MaxWidth?.Get( c.Actor );
+            int    column    = c.Column;
+            float? minWidth  = c.MinWidth?.Get( c.Actor );
+            float? prefWidth = c.PrefWidth?.Get( c.Actor );
+            float? maxWidth  = c.MaxWidth?.Get( c.Actor );
 
             if ( prefWidth < minWidth )
             {
@@ -1428,12 +1434,12 @@ public class Table : WidgetGroup
                 totalExpandWidth += expandWidth[ ii ];
             }
 
-            var extraMinWidth  = Math.Max( 0, ( float )( minWidth - spannedMinWidth )! );
-            var extraPrefWidth = Math.Max( 0, ( float )( prefWidth - spannedPrefWidth )! );
+            float extraMinWidth  = Math.Max( 0, ( float )( minWidth - spannedMinWidth )! );
+            float extraPrefWidth = Math.Max( 0, ( float )( prefWidth - spannedPrefWidth )! );
 
             for ( int ii = column, nn = ii + colspan; ii < nn; ii++ )
             {
-                var ratio = totalExpandWidth == 0 ? 1f / colspan : expandWidth[ ii ] / totalExpandWidth;
+                float ratio = totalExpandWidth == 0 ? 1f / colspan : expandWidth[ ii ] / totalExpandWidth;
 
                 columnMinWidth[ ii ]  += extraMinWidth * ratio;
                 columnPrefWidth[ ii ] += extraPrefWidth * ratio;
@@ -1441,8 +1447,8 @@ public class Table : WidgetGroup
         }
 
         // Determine table min and pref size.
-        var hpad = _padLeft.Get( this ) + _padRight.Get( this );
-        var vpad = _padTop.Get( this ) + _padBottom.Get( this );
+        float hpad = _padLeft.Get( this ) + _padRight.Get( this );
+        float vpad = _padTop.Get( this ) + _padBottom.Get( this );
 
         _tableMinWidth  = hpad;
         _tablePrefWidth = hpad;
@@ -1478,21 +1484,21 @@ public class Table : WidgetGroup
             ComputeSize();
         }
 
-        var layoutWidth  = Width;
-        var layoutHeight = Height;
-        var columns      = Columns;
-        var rows         = Rows;
-        var columnWidth  = _columnWidth;
-        var rowHeight    = _rowHeight;
-        var padLeft      = _padLeft.Get( this );
-        var hpadding     = padLeft + _padRight.Get( this );
-        var padTop       = _padTop.Get( this );
-        var vpadding     = padTop + _padBottom.Get( this );
+        float   layoutWidth  = Width;
+        float   layoutHeight = Height;
+        int     columns      = Columns;
+        int     rows         = Rows;
+        float[] columnWidth  = _columnWidth;
+        float[] rowHeight    = _rowHeight;
+        float   padLeft      = _padLeft.Get( this );
+        float   hpadding     = padLeft + _padRight.Get( this );
+        float   padTop       = _padTop.Get( this );
+        float   vpadding     = padTop + _padBottom.Get( this );
 
         // Size columns and rows between min and pref size using (preferred - min)
         // size to weight distribution of extra space.
         float[] columnWeightedWidth;
-        var     totalGrowWidth = _tablePrefWidth - _tableMinWidth;
+        float   totalGrowWidth = _tablePrefWidth - _tableMinWidth;
 
         if ( totalGrowWidth == 0 )
         {
@@ -1500,23 +1506,23 @@ public class Table : WidgetGroup
         }
         else
         {
-            var extraWidth = Math.Min( totalGrowWidth, Math.Max( 0, layoutWidth - _tableMinWidth ) );
+            float extraWidth = Math.Min( totalGrowWidth, Math.Max( 0, layoutWidth - _tableMinWidth ) );
 
             columnWeightedWidth = _columnWeightedWidth = EnsureSize( _columnWeightedWidth, columns );
 
-            var columnMinWidth  = _columnMinWidth;
-            var columnPrefWidth = _columnPrefWidth;
+            float[] columnMinWidth  = _columnMinWidth;
+            float[] columnPrefWidth = _columnPrefWidth;
 
             for ( var i = 0; i < columns; i++ )
             {
-                var growWidth = columnPrefWidth[ i ] - columnMinWidth[ i ];
-                var growRatio = growWidth / totalGrowWidth;
+                float growWidth = columnPrefWidth[ i ] - columnMinWidth[ i ];
+                float growRatio = growWidth / totalGrowWidth;
                 columnWeightedWidth[ i ] = columnMinWidth[ i ] + ( extraWidth * growRatio );
             }
         }
 
         float[] rowWeightedHeight;
-        var     totalGrowHeight = _tablePrefHeight - _tableMinHeight;
+        float   totalGrowHeight = _tablePrefHeight - _tableMinHeight;
 
         if ( totalGrowHeight == 0 )
         {
@@ -1526,45 +1532,45 @@ public class Table : WidgetGroup
         {
             rowWeightedHeight = _rowWeightedHeight = EnsureSize( _rowWeightedHeight, rows );
 
-            var extraHeight   = Math.Min( totalGrowHeight, Math.Max( 0, layoutHeight - _tableMinHeight ) );
-            var rowMinHeight  = _rowMinHeight;
-            var rowPrefHeight = _rowPrefHeight;
+            float   extraHeight   = Math.Min( totalGrowHeight, Math.Max( 0, layoutHeight - _tableMinHeight ) );
+            float[] rowMinHeight  = _rowMinHeight;
+            float[] rowPrefHeight = _rowPrefHeight;
 
             for ( var i = 0; i < rows; i++ )
             {
-                var growHeight = rowPrefHeight[ i ] - rowMinHeight[ i ];
-                var growRatio  = growHeight / totalGrowHeight;
+                float growHeight = rowPrefHeight[ i ] - rowMinHeight[ i ];
+                float growRatio  = growHeight / totalGrowHeight;
                 rowWeightedHeight[ i ] = rowMinHeight[ i ] + ( extraHeight * growRatio );
             }
         }
 
         // Determine actor and cell sizes (before expand or fill).
-        var cells     = _cells.ToArray();
-        var cellCount = _cells.Count;
+        Cell[] cells     = _cells.ToArray();
+        int    cellCount = _cells.Count;
 
         for ( var i = 0; i < cellCount; i++ )
         {
-            var c      = cells[ i ];
-            var column = c.Column;
-            var row    = c.Row;
-            var a      = c.Actor!;
+            Cell  c      = cells[ i ];
+            int   column = c.Column;
+            int   row    = c.Row;
+            Actor a      = c.Actor!;
 
             float spannedWeightedWidth = 0;
-            var   colspan              = c.Colspan;
+            int   colspan              = c.Colspan;
 
             for ( int ii = column, nn = ii + colspan; ii < nn; ii++ )
             {
                 spannedWeightedWidth += columnWeightedWidth[ ii ];
             }
 
-            var weightedHeight = rowWeightedHeight[ row ];
+            float weightedHeight = rowWeightedHeight[ row ];
 
-            var prefWidth  = c.PrefWidth?.Get( a );
-            var prefHeight = c.PrefHeight?.Get( a );
-            var minWidth   = c.MinWidth?.Get( a );
-            var minHeight  = c.MinHeight?.Get( a );
-            var maxWidth   = c.MaxWidth?.Get( a );
-            var maxHeight  = c.MaxHeight?.Get( a );
+            float? prefWidth  = c.PrefWidth?.Get( a );
+            float? prefHeight = c.PrefHeight?.Get( a );
+            float? minWidth   = c.MinWidth?.Get( a );
+            float? minHeight  = c.MinHeight?.Get( a );
+            float? maxWidth   = c.MaxWidth?.Get( a );
+            float? maxHeight  = c.MaxHeight?.Get( a );
 
             if ( prefWidth < minWidth )
             {
@@ -1586,7 +1592,8 @@ public class Table : WidgetGroup
                 prefHeight = maxHeight;
             }
 
-            c.ActorWidth = Math.Min( spannedWeightedWidth - c.ComputedPadLeft - c.ComputedPadRight, ( float )prefWidth! );
+            c.ActorWidth = Math.Min( spannedWeightedWidth - c.ComputedPadLeft - c.ComputedPadRight,
+                                     ( float )prefWidth! );
 
             c.ActorHeight = Math.Min( weightedHeight - c.ComputedPadTop - c.ComputedPadBottom, ( float )prefHeight! );
 
@@ -1599,9 +1606,9 @@ public class Table : WidgetGroup
         }
 
         // Distribute remaining space to any expanding columns/rows.
-        var   expandWidth  = _expandWidth;
-        var   expandHeight = _expandHeight;
-        float totalExpand  = 0;
+        float[] expandWidth  = _expandWidth;
+        float[] expandHeight = _expandHeight;
+        float   totalExpand  = 0;
 
         for ( var i = 0; i < columns; i++ )
         {
@@ -1610,7 +1617,7 @@ public class Table : WidgetGroup
 
         if ( totalExpand > 0 )
         {
-            var extra = layoutWidth - hpadding;
+            float extra = layoutWidth - hpadding;
 
             for ( var i = 0; i < columns; i++ )
             {
@@ -1630,7 +1637,7 @@ public class Table : WidgetGroup
                         continue;
                     }
 
-                    var amount = ( extra * expandWidth[ i ] ) / totalExpand;
+                    float amount = extra * expandWidth[ i ] / totalExpand;
 
                     _columnWidth[ i ] += amount;
 
@@ -1651,7 +1658,7 @@ public class Table : WidgetGroup
 
         if ( totalExpand > 0 )
         {
-            var extra = layoutHeight - vpadding;
+            float extra = layoutHeight - vpadding;
 
             for ( var i = 0; i < rows; i++ )
             {
@@ -1671,7 +1678,7 @@ public class Table : WidgetGroup
                         continue;
                     }
 
-                    var amount = ( extra * expandHeight[ i ] ) / totalExpand;
+                    float amount = extra * expandHeight[ i ] / totalExpand;
                     rowHeight[ i ] += amount;
                     used           += amount;
                     lastIndex      =  i;
@@ -1684,8 +1691,8 @@ public class Table : WidgetGroup
         // Distribute any additional width added by colspanned cells to the columns spanned.
         for ( var i = 0; i < cellCount; i++ )
         {
-            var c       = cells[ i ];
-            var colspan = c.Colspan;
+            Cell c       = cells[ i ];
+            int  colspan = c.Colspan;
 
             if ( colspan == 1 )
             {
@@ -1713,8 +1720,8 @@ public class Table : WidgetGroup
         }
 
         // Determine table size.
-        var tableWidth  = hpadding;
-        var tableHeight = vpadding;
+        float tableWidth  = hpadding;
+        float tableHeight = vpadding;
 
         for ( var i = 0; i < columns; i++ )
         {
@@ -1727,7 +1734,7 @@ public class Table : WidgetGroup
         }
 
         // Position table within the container.
-        var x = padLeft;
+        float x = padLeft;
 
         if ( ( _alignment & Align.RIGHT ) != 0 )
         {
@@ -1738,7 +1745,7 @@ public class Table : WidgetGroup
             x += ( layoutWidth - tableWidth ) / 2;
         }
 
-        var y = padTop;
+        float y = padTop;
 
         if ( ( _alignment & Align.BOTTOM ) != 0 )
         {
@@ -1754,7 +1761,7 @@ public class Table : WidgetGroup
 
         for ( var i = 0; i < cellCount; i++ )
         {
-            var c = cells[ i ];
+            Cell c = cells[ i ];
 
             float spannedCellWidth = 0;
 
@@ -1767,14 +1774,14 @@ public class Table : WidgetGroup
 
             currentX += c.ComputedPadLeft;
 
-            var fillX = c.FillX;
-            var fillY = c.FillY;
+            float fillX = c.FillX;
+            float fillY = c.FillY;
 
             if ( fillX > 0 )
             {
                 c.ActorWidth = Math.Max( spannedCellWidth * fillX, c.MinWidth!.Get( c.Actor ) );
 
-                var maxWidth = c.MaxWidth?.Get( c.Actor );
+                float? maxWidth = c.MaxWidth?.Get( c.Actor );
 
                 if ( maxWidth > 0 )
                 {
@@ -1789,7 +1796,7 @@ public class Table : WidgetGroup
                                          c.MinHeight!.Get( c.Actor )
                                         );
 
-                var maxHeight = c.MaxHeight?.Get( c.Actor );
+                float? maxHeight = c.MaxHeight?.Get( c.Actor );
 
                 if ( maxHeight > 0 )
                 {
@@ -1805,7 +1812,7 @@ public class Table : WidgetGroup
             }
             else if ( ( _alignment & Align.RIGHT ) != 0 )
             {
-                c.ActorX = ( currentX + spannedCellWidth ) - c.ActorWidth;
+                c.ActorX = currentX + spannedCellWidth - c.ActorWidth;
             }
             else
             {
@@ -1822,7 +1829,7 @@ public class Table : WidgetGroup
             }
             else
             {
-                c.ActorY = ( ( ( rowHeight[ c.Row ] - c.ActorHeight ) + c.ComputedPadTop ) - c.ComputedPadBottom ) / 2;
+                c.ActorY = ( rowHeight[ c.Row ] - c.ActorHeight + c.ComputedPadTop - c.ComputedPadBottom ) / 2;
             }
 
             c.ActorY = layoutHeight - currentY - c.ActorY - c.ActorHeight;
@@ -1854,7 +1861,7 @@ public class Table : WidgetGroup
             if ( Children.GetAt( i ) is ILayout )
             {
                 var child = Children.GetAt( i ) as ILayout;
-                
+
                 child?.Validate();
             }
         }
@@ -1882,8 +1889,8 @@ public class Table : WidgetGroup
         public DebugRect()
         {
             Color = Color.Red;
-            
-            Pool = new Pool< DebugRect >()
+
+            Pool = new Pool< DebugRect >
             {
                 NewObjectFactory = GetNewDebugRect
             };
@@ -2003,7 +2010,7 @@ public class Table : WidgetGroup
     {
         var rect = new DebugRect
         {
-            Color = color,
+            Color = color
         };
 
         rect.Set( x, y, w, h );
@@ -2021,11 +2028,11 @@ public class Table : WidgetGroup
             AddDebugRect( currentX, currentY, width, height, DebugTableColor );
         }
 
-        var x = currentX;
+        float x = currentX;
 
         for ( int i = 0, n = _cells.Count; i < n; i++ )
         {
-            var c = _cells[ i ];
+            Cell c = _cells[ i ];
 
             // Actor bounds.
             if ( TableDebug is DebugType.Actor or DebugType.All )
@@ -2076,10 +2083,10 @@ public class Table : WidgetGroup
             {
                 shapes.Flush();
 
-                var x      = 0.0f;
-                var y      = 0.0f;
-                var width  = Width;
-                var height = Height;
+                var   x      = 0.0f;
+                var   y      = 0.0f;
+                float width  = Width;
+                float height = Height;
 
                 if ( _background != null )
                 {
@@ -2134,7 +2141,7 @@ public class Table : WidgetGroup
 
         for ( int i = 0, n = _debugRects.Count; i < n; i++ )
         {
-            var debugRect = _debugRects[ i ];
+            DebugRect debugRect = _debugRects[ i ];
 
             shapes.Color = debugRect.Color;
             shapes.Rect( x + debugRect.X, y + debugRect.Y, debugRect.Width, debugRect.Height );

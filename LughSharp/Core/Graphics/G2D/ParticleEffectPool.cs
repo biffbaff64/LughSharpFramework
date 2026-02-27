@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Graphics.G2D;
@@ -68,16 +69,16 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
         effect1.Reset( false ); // copy parameters exactly to avoid introducing error
 
         if ( !effect1.XSizeScale.Equals( _effect!.XSizeScale )
-             || !effect1.YSizeScale.Equals( _effect.YSizeScale )
-             || !effect1.MotionScale.Equals( _effect.MotionScale ) )
+          || !effect1.YSizeScale.Equals( _effect.YSizeScale )
+          || !effect1.MotionScale.Equals( _effect.MotionScale ) )
         {
-            var emitters         = effect1.GetEmitters();
-            var templateEmitters = _effect.GetEmitters();
+            List< ParticleEmitter >  emitters         = effect1.GetEmitters();
+            List< ParticleEmitter >? templateEmitters = _effect.GetEmitters();
 
             for ( var i = 0; i < emitters.Count; i++ )
             {
-                var emitter         = emitters[ i ];
-                var templateEmitter = templateEmitters?[ i ];
+                ParticleEmitter  emitter         = emitters[ i ];
+                ParticleEmitter? templateEmitter = templateEmitters?[ i ];
 
                 if ( templateEmitter != null )
                 {
@@ -93,7 +94,7 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// 
     /// </summary>

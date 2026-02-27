@@ -31,7 +31,7 @@ public enum PolygonMode
 {
     Point = IGL.GL_POINT,
     Line  = IGL.GL_LINE,
-    Fill  = IGL.GL_FILL,
+    Fill  = IGL.GL_FILL
 }
 
 // ========================================================================

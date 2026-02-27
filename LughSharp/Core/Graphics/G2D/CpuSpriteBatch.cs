@@ -538,13 +538,13 @@ public class CpuSpriteBatch : SpriteBatch
     {
         Guard.Against.Null( texture );
 
-        var invWidth  = 1.0f / texture.Width;
-        var invHeight = 1.0f / texture.Height;
+        float invWidth  = 1.0f / texture.Width;
+        float invHeight = 1.0f / texture.Height;
 
-        var u  = srcX * invWidth;
-        var v  = ( srcY + srcHeight ) * invHeight;
-        var u2 = ( srcX + srcWidth ) * invWidth;
-        var v2 = srcY * invHeight;
+        float u  = srcX * invWidth;
+        float v  = ( srcY + srcHeight ) * invHeight;
+        float u2 = ( srcX + srcWidth ) * invWidth;
+        float v2 = srcY * invHeight;
 
         DrawAdjustedUV( texture,
                         x,
@@ -599,12 +599,12 @@ public class CpuSpriteBatch : SpriteBatch
         }
 
         // bottom left and top right corner points relative to origin
-        var worldOriginX = x + originX;
-        var worldOriginY = y + originY;
-        var fx           = -originX;
-        var fy           = -originY;
-        var fx2          = width - originX;
-        var fy2          = height - originY;
+        float worldOriginX = x + originX;
+        float worldOriginY = y + originY;
+        float fx           = -originX;
+        float fy           = -originY;
+        float fx2          = width - originX;
+        float fy2          = height - originY;
 
         // scale
         if ( scaleX is not 1 || scaleY is not 1 )
@@ -616,14 +616,14 @@ public class CpuSpriteBatch : SpriteBatch
         }
 
         // construct corner points, start from top left and go counter clockwise
-        var p1X = fx;
-        var p1Y = fy;
-        var p2X = fx;
-        var p2Y = fy2;
-        var p3X = fx2;
-        var p3Y = fy2;
-        var p4X = fx2;
-        var p4Y = fy;
+        float p1X = fx;
+        float p1Y = fy;
+        float p2X = fx;
+        float p2Y = fy2;
+        float p3X = fx2;
+        float p3Y = fy2;
+        float p4X = fx2;
+        float p4Y = fy;
 
         float x1;
         float y1;
@@ -637,8 +637,8 @@ public class CpuSpriteBatch : SpriteBatch
         // rotate
         if ( rotation != 0 )
         {
-            var cos = MathUtils.CosDeg( rotation );
-            var sin = MathUtils.SinDeg( rotation );
+            float cos = MathUtils.CosDeg( rotation );
+            float sin = MathUtils.SinDeg( rotation );
 
             x1 = ( cos * p1X ) - ( sin * p1Y );
             y1 = ( sin * p1X ) + ( cos * p1Y );
@@ -742,12 +742,12 @@ public class CpuSpriteBatch : SpriteBatch
         }
 
         // bottom left and top right corner points relative to origin
-        var worldOriginX = x + originX;
-        var worldOriginY = y + originY;
-        var fx           = -originX;
-        var fy           = -originY;
-        var fx2          = width - originX;
-        var fy2          = height - originY;
+        float worldOriginX = x + originX;
+        float worldOriginY = y + originY;
+        float fx           = -originX;
+        float fy           = -originY;
+        float fx2          = width - originX;
+        float fy2          = height - originY;
 
         // scale
         if ( scaleX is not 1 || scaleY is not 1 )
@@ -759,14 +759,14 @@ public class CpuSpriteBatch : SpriteBatch
         }
 
         // construct corner points, start from top left and go counter clockwise
-        var p1X = fx;
-        var p1Y = fy;
-        var p2X = fx;
-        var p2Y = fy2;
-        var p3X = fx2;
-        var p3Y = fy2;
-        var p4X = fx2;
-        var p4Y = fy;
+        float p1X = fx;
+        float p1Y = fy;
+        float p2X = fx;
+        float p2Y = fy2;
+        float p3X = fx2;
+        float p3Y = fy2;
+        float p4X = fx2;
+        float p4Y = fy;
 
         float x1;
         float y1;
@@ -780,8 +780,8 @@ public class CpuSpriteBatch : SpriteBatch
         // rotate
         if ( rotation != 0 )
         {
-            var cos = MathUtils.CosDeg( rotation );
-            var sin = MathUtils.SinDeg( rotation );
+            float cos = MathUtils.CosDeg( rotation );
+            float sin = MathUtils.SinDeg( rotation );
 
             x1 = ( cos * p1X ) - ( sin * p1Y );
             y1 = ( sin * p1X ) + ( cos * p1Y );
@@ -890,20 +890,20 @@ public class CpuSpriteBatch : SpriteBatch
         }
 
         // construct corner points
-        var x1 = transform.M02;
-        var y1 = transform.M12;
-        var x2 = ( transform.M01 * height ) + transform.M02;
-        var y2 = ( transform.M11 * height ) + transform.M12;
-        var x3 = ( transform.M00 * width ) + ( transform.M01 * height ) + transform.M02;
-        var y3 = ( transform.M10 * width ) + ( transform.M11 * height ) + transform.M12;
-        var x4 = ( transform.M00 * width ) + transform.M02;
-        var y4 = ( transform.M10 * width ) + transform.M12;
+        float x1 = transform.M02;
+        float y1 = transform.M12;
+        float x2 = ( transform.M01 * height ) + transform.M02;
+        float y2 = ( transform.M11 * height ) + transform.M12;
+        float x3 = ( transform.M00 * width ) + ( transform.M01 * height ) + transform.M02;
+        float y3 = ( transform.M10 * width ) + ( transform.M11 * height ) + transform.M12;
+        float x4 = ( transform.M00 * width ) + transform.M02;
+        float y4 = ( transform.M10 * width ) + transform.M12;
 
         // v must be flipped
-        var u  = region.U;
-        var v  = region.V2;
-        var u2 = region.U2;
-        var v2 = region.V;
+        float u  = region.U;
+        float v  = region.V2;
+        float u2 = region.U2;
+        float v2 = region.V;
 
         Vertices[ Idx + 0 ] = ( _adjustAffine.M00 * x1 ) + ( _adjustAffine.M01 * y1 ) + _adjustAffine.M02;
         Vertices[ Idx + 1 ] = ( _adjustAffine.M10 * x1 ) + ( _adjustAffine.M11 * y1 ) + _adjustAffine.M12;
@@ -946,7 +946,7 @@ public class CpuSpriteBatch : SpriteBatch
             SwitchTexture( texture );
         }
 
-        var copyCount = Math.Min( Vertices.Length - Idx, count );
+        int copyCount = Math.Min( Vertices.Length - Idx, count );
 
         do
         {
@@ -954,14 +954,14 @@ public class CpuSpriteBatch : SpriteBatch
 
             while ( copyCount > 0 )
             {
-                var x = spriteVertices[ offset ];
-                var y = spriteVertices[ offset + 1 ];
+                float x = spriteVertices[ offset ];
+                float y = spriteVertices[ offset + 1 ];
 
                 Vertices[ Idx ]     = ( _adjustAffine.M00 * x ) + ( _adjustAffine.M01 * y ) + _adjustAffine.M02; // x
                 Vertices[ Idx + 1 ] = ( _adjustAffine.M10 * x ) + ( _adjustAffine.M11 * y ) + _adjustAffine.M12; // y
-                Vertices[ Idx + 2 ] = spriteVertices[ offset + 2 ];                                              // color
-                Vertices[ Idx + 3 ] = spriteVertices[ offset + 3 ];                                              // u
-                Vertices[ Idx + 4 ] = spriteVertices[ offset + 4 ];                                              // v
+                Vertices[ Idx + 2 ] = spriteVertices[ offset + 2 ]; // color
+                Vertices[ Idx + 3 ] = spriteVertices[ offset + 3 ]; // u
+                Vertices[ Idx + 4 ] = spriteVertices[ offset + 4 ]; // v
 
                 Idx       += Sprite.VERTEX_SIZE;
                 offset    += Sprite.VERTEX_SIZE;
@@ -986,36 +986,36 @@ public class CpuSpriteBatch : SpriteBatch
 
         // matrices are assumed to be 2D transformations
         return a.Val[ Matrix4.M00_0 ].Equals( b.Val[ Matrix4.M00_0 ] )
-               && a.Val[ Matrix4.M10_1 ].Equals( b.Val[ Matrix4.M10_1 ] )
-               && a.Val[ Matrix4.M01_4 ].Equals( b.Val[ Matrix4.M01_4 ] )
-               && a.Val[ Matrix4.M11_5 ].Equals( b.Val[ Matrix4.M11_5 ] )
-               && a.Val[ Matrix4.M03_12 ].Equals( b.Val[ Matrix4.M03_12 ] )
-               && a.Val[ Matrix4.M13_13 ].Equals( b.Val[ Matrix4.M13_13 ] );
+            && a.Val[ Matrix4.M10_1 ].Equals( b.Val[ Matrix4.M10_1 ] )
+            && a.Val[ Matrix4.M01_4 ].Equals( b.Val[ Matrix4.M01_4 ] )
+            && a.Val[ Matrix4.M11_5 ].Equals( b.Val[ Matrix4.M11_5 ] )
+            && a.Val[ Matrix4.M03_12 ].Equals( b.Val[ Matrix4.M03_12 ] )
+            && a.Val[ Matrix4.M13_13 ].Equals( b.Val[ Matrix4.M13_13 ] );
     }
 
     private static bool CheckEqual( Matrix4 matrix, Affine2 affine )
     {
-        var val = matrix.Values;
+        float[] val = matrix.Values;
 
         // matrix is assumed to be 2D transformation
         return val[ Matrix4.M00_0 ].Equals( affine.M00 )
-               && val[ Matrix4.M10_1 ].Equals( affine.M10 )
-               && val[ Matrix4.M01_4 ].Equals( affine.M01 )
-               && val[ Matrix4.M11_5 ].Equals( affine.M11 )
-               && val[ Matrix4.M03_12 ].Equals( affine.M02 )
-               && val[ Matrix4.M13_13 ].Equals( affine.M12 );
+            && val[ Matrix4.M10_1 ].Equals( affine.M10 )
+            && val[ Matrix4.M01_4 ].Equals( affine.M01 )
+            && val[ Matrix4.M11_5 ].Equals( affine.M11 )
+            && val[ Matrix4.M03_12 ].Equals( affine.M02 )
+            && val[ Matrix4.M13_13 ].Equals( affine.M12 );
     }
 
     private static bool CheckIdt( Matrix4 matrix )
     {
-        var val = matrix.Values;
+        float[] val = matrix.Values;
 
         // matrix is assumed to be 2D transformation
         return val[ Matrix4.M00_0 ] is 1
-               && val[ Matrix4.M10_1 ] is 0
-               && val[ Matrix4.M01_4 ] is 0
-               && val[ Matrix4.M11_5 ] is 1
-               && val[ Matrix4.M03_12 ] is 0
-               && val[ Matrix4.M13_13 ] is 0;
+            && val[ Matrix4.M10_1 ] is 0
+            && val[ Matrix4.M01_4 ] is 0
+            && val[ Matrix4.M11_5 ] is 1
+            && val[ Matrix4.M03_12 ] is 0
+            && val[ Matrix4.M13_13 ] is 0;
     }
 }

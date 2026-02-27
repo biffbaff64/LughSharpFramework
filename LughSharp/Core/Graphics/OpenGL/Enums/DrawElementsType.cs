@@ -31,7 +31,7 @@ public enum DrawElementsType
 {
     UnsignedByte  = IGL.GL_UNSIGNED_BYTE,
     UnsignedShort = IGL.GL_UNSIGNED_SHORT,
-    UnsignedInt   = IGL.GL_UNSIGNED_INT,
+    UnsignedInt   = IGL.GL_UNSIGNED_INT
 }
 
 // ========================================================================

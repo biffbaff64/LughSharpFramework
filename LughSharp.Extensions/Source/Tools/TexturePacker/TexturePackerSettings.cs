@@ -2,7 +2,9 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -256,11 +258,11 @@ public class TexturePackerSettings
         WriteIndented       = true,
         Converters =
         {
-          new JsonStringEnumConverter(),
-        },
+          new JsonStringEnumConverter()
+        }
     };
     //@formatter:on
-    
+
     // ====================================================================
 
     /// <summary>
@@ -391,7 +393,7 @@ public class TexturePackerSettings
         else
         {
             // Otherwise if scale != 1 or multiple scales, use subdirectory.
-            var scaleValue = Scale[ scaleIndex ];
+            float scaleValue = Scale[ scaleIndex ];
 
             if ( Scale.Length != 1 )
             {
@@ -414,10 +416,10 @@ public class TexturePackerSettings
             return;
         }
 
-        var properties = typeof( TexturePackerSettings ).GetProperties( BindingFlags.Public
-                                                                      | BindingFlags.Instance );
+        PropertyInfo[] properties = typeof( TexturePackerSettings ).GetProperties( BindingFlags.Public
+               | BindingFlags.Instance );
 
-        foreach ( var property in properties )
+        foreach ( PropertyInfo property in properties )
         {
             switch ( property )
             {
@@ -438,7 +440,7 @@ public class TexturePackerSettings
                 // Handle other property types as needed
                 case { CanRead: true, CanWrite: true } when property.PropertyType != typeof( bool ):
                 {
-                    var sourceValue = property.GetValue( source );
+                    object? sourceValue = property.GetValue( source );
 
                     if ( sourceValue != null )
                     {
@@ -457,7 +459,7 @@ public class TexturePackerSettings
     /// </summary>
     public TexturePackerSettings? ReadFromJsonFile( FileInfo settingsFile )
     {
-        var jsonString = File.ReadAllText( settingsFile.FullName );
+        string jsonString = File.ReadAllText( settingsFile.FullName );
 
         return JsonSerializer.Deserialize< TexturePackerSettings >( jsonString, _defaultJsonSerializerOptions );
     }
@@ -469,24 +471,24 @@ public class TexturePackerSettings
     /// <param name="filename"></param>
     public void WriteToJsonFile( string filename )
     {
-        var jsonString      = WriteToJsonString();
-        var writeableString = new UTF8Encoding( true ).GetBytes( jsonString );
+        string jsonString      = WriteToJsonString();
+        byte[] writeableString = new UTF8Encoding( true ).GetBytes( jsonString );
 
         if ( writeableString.Length > 0 )
         {
             // Ensure the directory exists before creating the file
-            var name = Path.GetDirectoryName( filename );
+            string? name = Path.GetDirectoryName( filename );
 
             if ( !string.IsNullOrEmpty( name ) )
             {
-                var directoryPath = name;
+                string directoryPath = name;
 
                 if ( !string.IsNullOrEmpty( directoryPath ) )
                 {
                     Directory.CreateDirectory( directoryPath );
                 }
 
-                using ( var fs = File.Create( filename ) )
+                using ( FileStream fs = File.Create( filename ) )
                 {
                     fs.Write( writeableString );
                 }

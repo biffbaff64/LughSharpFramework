@@ -34,7 +34,7 @@ public enum TextureFormat
     RGB            = IGL.GL_RGB,
     RGBA           = IGL.GL_RGBA,
     DepthComponent = IGL.GL_DEPTH_COMPONENT,
-    StencilIndex   = IGL.GL_STENCIL_INDEX,
+    StencilIndex   = IGL.GL_STENCIL_INDEX
 }
 
 // ========================================================================

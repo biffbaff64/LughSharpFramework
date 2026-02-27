@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Logging;
 
@@ -73,7 +75,7 @@ public static class Colors
         { "MAGENTA",        Color.Magenta       }, // 
         { "PURPLE",         Color.Purple        }, // 
         { "VIOLET",         Color.Violet        }, // 
-        { "MAROON",         Color.Maroon        }, // 
+        { "MAROON",         Color.Maroon        }  // 
         //@formatter:on
     };
 
@@ -91,15 +93,15 @@ public static class Colors
     {
         return Map.GetValueOrDefault( name );
     }
-    
+
     /// <summary>
     /// Prints all the colors in the <see cref="Map"/> to the log.
     /// </summary>
     public static void PrintAll()
     {
-        foreach ( var (name, color) in Map )
+        foreach ( ( string name, Color color ) in Map )
         {
-            Logger.Debug( $"{name, -12} = {color.RgbaToString()}" );
+            Logger.Debug( $"{name,-12} = {color.RgbaToString()}" );
         }
     }
 }

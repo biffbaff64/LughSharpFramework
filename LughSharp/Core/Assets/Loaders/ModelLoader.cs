@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G3D;
@@ -82,7 +83,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
     public Model? LoadModel< T >( in FileInfo fileHandle, ITextureProvider textureProvider, T? parameters )
         where T : ModelLoaderParameters
     {
-        var data = LoadModelData( fileHandle, parameters );
+        ModelData? data = LoadModelData( fileHandle, parameters );
 
         return data == null ? null : new Model( data, textureProvider );
     }
@@ -131,7 +132,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
         List< AssetDescriptor > deps = [ ];
 
-        var data = LoadModelData( file );
+        ModelData? data = LoadModelData( file );
 
         if ( data == null )
         {
@@ -141,7 +142,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
         var item = new ObjectMap< string, ModelData >.Entry
         {
             Key   = filename,
-            Value = data,
+            Value = data
         };
 
         lock ( Items )
@@ -149,15 +150,15 @@ public abstract class ModelLoader : AsynchronousAssetLoader
             Items.Add( item );
         }
 
-        var textureLoaderParameters = p != null
+        TextureLoader.TextureLoaderParameters textureLoaderParameters = p != null
             ? p.TextureLoaderParameters
             : DefaultLoaderParameters.TextureLoaderParameters;
 
-        foreach ( var modelMaterial in data.Materials! )
+        foreach ( ModelMaterial modelMaterial in data.Materials! )
         {
             if ( modelMaterial.Textures is not null )
             {
-                foreach ( var modelTexture in modelMaterial.Textures )
+                foreach ( ModelTexture modelTexture in modelMaterial.Textures )
                 {
                     deps.Add( new AssetDescriptor( modelTexture.FileName,
                                                    typeof( Texture ),
@@ -200,11 +201,11 @@ public abstract class ModelLoader : AsynchronousAssetLoader
 
         // need to remove the textures from the managed disposables,
         // or ref counting won't work!
-        var disposables = result.GetManagedDisposables().GetEnumerator();
+        IEnumerator< IDisposable > disposables = result.GetManagedDisposables().GetEnumerator();
 
         while ( disposables.MoveNext() )
         {
-            var disposable = disposables.Current;
+            IDisposable disposable = disposables.Current;
 
             if ( disposable is Texture )
             {
@@ -230,7 +231,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
         public TextureLoader.TextureLoaderParameters TextureLoaderParameters { get; set; }
 
         // ====================================================================
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelLoaderParameters"/>
         /// class with default values.
@@ -242,7 +243,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
                 MinFilter = TextureFilterMode.Linear,
                 MagFilter = TextureFilterMode.Linear,
                 WrapU     = TextureWrapMode.Repeat,
-                WrapV     = TextureWrapMode.Repeat,
+                WrapV     = TextureWrapMode.Repeat
             };
         }
     }

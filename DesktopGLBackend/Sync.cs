@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics;
+
 using JetBrains.Annotations;
 
 namespace DesktopGLBackend;
@@ -66,10 +67,10 @@ public class Sync
             Initialise();
         }
 
-        var targetTime  = _nextFrame;
-        var currentTime = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );
+        long targetTime  = _nextFrame;
+        long currentTime = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );
 
-        var sleepTime = targetTime - currentTime;
+        long sleepTime = targetTime - currentTime;
 
         switch ( sleepTime )
         {

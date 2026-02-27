@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
@@ -70,7 +72,7 @@ public abstract class TemporalAction : Action
             return true;
         }
 
-        var pool = Pool;
+        Pool< Action >? pool = Pool;
 
         // Ensure this action can't be returned to the pool while executing.
         Pool = null;
@@ -86,7 +88,7 @@ public abstract class TemporalAction : Action
             Time       += delta;
             IsComplete =  Time >= Duration;
 
-            var percent = IsComplete ? 1 : Time / Duration;
+            float percent = IsComplete ? 1 : Time / Duration;
 
             if ( Interpolation != null )
             {

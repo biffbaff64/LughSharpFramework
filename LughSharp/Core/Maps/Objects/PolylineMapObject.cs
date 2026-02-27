@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Maps.Objects;
@@ -31,9 +32,9 @@ namespace LughSharp.Core.Maps.Objects;
 public class PolylineMapObject : MapObject
 {
     public Polyline Polyline { get; set; }
-    
+
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a new, empty, PolylineMapObject.
     /// </summary>
@@ -62,4 +63,3 @@ public class PolylineMapObject : MapObject
 
 // ============================================================================
 // ============================================================================
-

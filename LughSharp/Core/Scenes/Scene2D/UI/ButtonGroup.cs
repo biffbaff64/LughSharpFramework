@@ -70,7 +70,7 @@ public class ButtonGroup< T > where T : Button
     {
         button.ButtonGroup = null!;
 
-        var shouldCheck = button.IsChecked || ( Buttons.Count < _minCheckCount );
+        bool shouldCheck = button.IsChecked || ( Buttons.Count < _minCheckCount );
 
         button.SetChecked( false );
         button.ButtonGroup = ( this as ButtonGroup< Button > )!;
@@ -158,7 +158,7 @@ public class ButtonGroup< T > where T : Button
             {
                 if ( _uncheckLast )
                 {
-                    var old = _minCheckCount;
+                    int old = _minCheckCount;
 
                     _minCheckCount = 0;
                     _lastChecked.SetChecked( false );
@@ -183,13 +183,13 @@ public class ButtonGroup< T > where T : Button
     /// </summary>
     public void UncheckAll()
     {
-        var old = _minCheckCount;
+        int old = _minCheckCount;
 
         _minCheckCount = 0;
 
         for ( int i = 0, n = Buttons.Count; i < n; i++ )
         {
-            var button = Buttons[ i ];
+            T button = Buttons[ i ];
             button.SetChecked( false );
         }
 
@@ -254,4 +254,3 @@ public class ButtonGroup< T > where T : Button
 
 // ============================================================================
 // ============================================================================
-

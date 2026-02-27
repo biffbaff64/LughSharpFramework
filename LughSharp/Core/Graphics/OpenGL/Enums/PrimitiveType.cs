@@ -36,7 +36,7 @@ public enum PrimitiveType
     Triangles     = 0x0004,
     TriangleStrip = 0x0005,
     TriangleFan   = 0x0006,
-    Quads         = 0x0007,
+    Quads         = 0x0007
 }
 
 // ========================================================================

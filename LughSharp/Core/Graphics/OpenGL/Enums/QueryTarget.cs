@@ -33,14 +33,14 @@ public enum QueryTarget
     AnySamplesPassed                   = IGL.GL_ANY_SAMPLES_PASSED,
     PrimitivesGenerated                = IGL.GL_PRIMITIVES_GENERATED,
     TimeElapsed                        = IGL.GL_TIME_ELAPSED,
-    TransformFeedbackPrimitivesWritten = IGL.GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN,
+    TransformFeedbackPrimitivesWritten = IGL.GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN
 }
 
 [PublicAPI]
 public enum QueryParameter
 {
     QueryResult          = IGL.GL_QUERY_RESULT,
-    QueryResultAvailable = IGL.GL_QUERY_RESULT_AVAILABLE,
+    QueryResultAvailable = IGL.GL_QUERY_RESULT_AVAILABLE
 }
 
 // ========================================================================

@@ -46,10 +46,9 @@ public interface ICursor
         Crosshair,
         Hand,
         HorizontalResize,
-        VerticalResize,
+        VerticalResize
     }
 }
 
 // ============================================================================
 // ============================================================================
-

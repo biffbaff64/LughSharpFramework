@@ -28,6 +28,7 @@ using System.IO;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.Utils.Exceptions;
@@ -131,7 +132,7 @@ public class ParticleEffect : IDisposable
     {
         for ( int i = 0, n = _emitters.Count; i < n; i++ )
         {
-            var emitter = _emitters[ i ];
+            ParticleEmitter emitter = _emitters[ i ];
 
             if ( !emitter.IsComplete() )
             {
@@ -146,7 +147,7 @@ public class ParticleEffect : IDisposable
     {
         for ( int i = 0, n = _emitters.Count; i < n; i++ )
         {
-            var emitter = _emitters[ i ];
+            ParticleEmitter emitter = _emitters[ i ];
 
             emitter.Continuous    = false;
             emitter.Duration      = duration;
@@ -190,7 +191,7 @@ public class ParticleEffect : IDisposable
     {
         for ( int i = 0, n = _emitters.Count; i < n; i++ )
         {
-            var emitter = _emitters[ i ];
+            ParticleEmitter emitter = _emitters[ i ];
 
             if ( emitter.Name.Equals( name ) )
             {
@@ -207,7 +208,7 @@ public class ParticleEffect : IDisposable
     /// </summary>
     public void PreAllocateParticles()
     {
-        foreach ( var emitter in _emitters )
+        foreach ( ParticleEmitter emitter in _emitters )
         {
             emitter.PreAllocateParticles();
         }
@@ -219,7 +220,7 @@ public class ParticleEffect : IDisposable
 
         for ( int i = 0, n = _emitters.Count; i < n; i++ )
         {
-            var emitter = _emitters[ i ];
+            ParticleEmitter emitter = _emitters[ i ];
 
             if ( index++ > 0 )
             {
@@ -274,7 +275,7 @@ public class ParticleEffect : IDisposable
 
             while ( true )
             {
-                var emitter = NewEmitter( reader );
+                ParticleEmitter emitter = NewEmitter( reader );
                 _emitters.Add( emitter );
 
                 if ( reader.ReadLine() == null )
@@ -313,7 +314,7 @@ public class ParticleEffect : IDisposable
     {
         for ( int i = 0, n = _emitters.Count; i < n; i++ )
         {
-            var emitter = _emitters[ i ];
+            ParticleEmitter emitter = _emitters[ i ];
 
             if ( !emitter.ImagePaths.Any() )
             {
@@ -322,10 +323,10 @@ public class ParticleEffect : IDisposable
 
             var sprites = new List< Sprite >();
 
-            foreach ( var imagePath in emitter.ImagePaths )
+            foreach ( string imagePath in emitter.ImagePaths )
             {
-                var imageName    = Path.GetFileName( imagePath.Replace( '\\', '/' ) );
-                var lastDotIndex = imageName.LastIndexOf( '.' );
+                string imageName    = Path.GetFileName( imagePath.Replace( '\\', '/' ) );
+                int    lastDotIndex = imageName.LastIndexOf( '.' );
 
                 if ( lastDotIndex != -1 )
                 {
@@ -337,7 +338,7 @@ public class ParticleEffect : IDisposable
                     imageName = atlasPrefix + imageName;
                 }
 
-                var sprite = atlas.CreateSprite( imageName );
+                Sprite? sprite = atlas.CreateSprite( imageName );
 
                 if ( sprite == null )
                 {
@@ -384,11 +385,11 @@ public class ParticleEffect : IDisposable
 
             var sprites = new List< Sprite >();
 
-            foreach ( var imagePath in _emitters[ i ].ImagePaths )
+            foreach ( string imagePath in _emitters[ i ].ImagePaths )
             {
-                var imageName = Path.GetFileName( imagePath.Replace( '\\', '/' ) );
+                string imageName = Path.GetFileName( imagePath.Replace( '\\', '/' ) );
 
-                var sprite = loadedSprites[ imageName ];
+                Sprite? sprite = loadedSprites[ imageName ];
 
                 if ( sprite == null )
                 {
@@ -430,10 +431,10 @@ public class ParticleEffect : IDisposable
     {
         _bounds ??= new BoundingBox();
 
-        var box = _bounds;
+        BoundingBox? box = _bounds;
         box.ToInfinity();
 
-        foreach ( var emitter in _emitters )
+        foreach ( ParticleEmitter emitter in _emitters )
         {
             box.Extend( emitter.GetBoundingBox() );
         }
@@ -478,7 +479,7 @@ public class ParticleEffect : IDisposable
         YSizeScale  *= ySizeScaleFactor;
         MotionScale *= motionScaleFactor;
 
-        foreach ( var particleEmitter in _emitters )
+        foreach ( ParticleEmitter particleEmitter in _emitters )
         {
             particleEmitter.ScaleSize( xSizeScaleFactor, ySizeScaleFactor );
             particleEmitter.ScaleMotion( motionScaleFactor );
@@ -525,9 +526,9 @@ public class ParticleEffect : IDisposable
 
             for ( int i = 0, n = _emitters.Count; i < n; i++ )
             {
-                var emitter = _emitters[ i ];
+                ParticleEmitter emitter = _emitters[ i ];
 
-                foreach ( var sprite in emitter.Sprites )
+                foreach ( Sprite sprite in emitter.Sprites )
                 {
                     sprite.Texture?.Dispose();
                 }

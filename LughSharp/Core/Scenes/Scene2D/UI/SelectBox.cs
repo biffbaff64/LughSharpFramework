@@ -32,6 +32,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
 using LughSharp.Core.Maths;
+using LughSharp.Core.Scenes.Scene2D.Actions;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -110,7 +111,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
         _selection = new SelectBoxArraySelection< T >( this, Items )
         {
             Actor    = this,
-            Required = true,
+            Required = true
         };
 
         _scrollPane   = new SelectBoxScrollPane( this );
@@ -168,7 +169,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     {
         Guard.Against.Null( newItems );
 
-        var oldPrefWidth = PrefWidth;
+        float oldPrefWidth = PrefWidth;
 
         Items.Clear();
         Items.AddAll( newItems );
@@ -190,7 +191,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     {
         Guard.Against.Null( newItems );
 
-        var oldPrefWidth = PrefWidth;
+        float oldPrefWidth = PrefWidth;
 
         if ( newItems != Items )
         {
@@ -231,12 +232,12 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
             throw new RuntimeException( "SelectBoxStyle cannot be null." );
         }
 
-        var bg   = Style.Background;
-        var font = Style.Font;
+        ISceneDrawable? bg   = Style.Background;
+        BitmapFont      font = Style.Font;
 
         if ( bg != null )
         {
-            PrefHeight = Math.Max( ( bg.TopHeight + bg.BottomHeight + font.GetCapHeight() )
+            PrefHeight = Math.Max( bg.TopHeight + bg.BottomHeight + font.GetCapHeight()
                                  - ( font.GetDescent() * 2 ),
                                    bg.MinHeight );
         }
@@ -245,8 +246,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
             PrefHeight = font.GetCapHeight() - ( font.GetDescent() * 2 );
         }
 
-        var layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
-        var layout     = layoutPool.Obtain();
+        Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
+        GlyphLayout         layout     = layoutPool.Obtain();
 
         if ( _selectedPrefWidth )
         {
@@ -257,7 +258,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
                 PrefWidth = bg.LeftWidth + bg.RightWidth;
             }
 
-            var selected = GetSelected();
+            T? selected = GetSelected();
 
             if ( selected != null )
             {
@@ -269,7 +270,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
         {
             float maxItemWidth = 0;
 
-            foreach ( var t in Items )
+            foreach ( T t in Items )
             {
                 layout.SetText( font, ToString( t ) ?? "" );
                 maxItemWidth = Math.Max( layout.Width, maxItemWidth );
@@ -282,10 +283,10 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
                 PrefWidth = Math.Max( PrefWidth + bg.LeftWidth + bg.RightWidth, bg.MinWidth );
             }
 
-            var listStyle   = Style.ListBoxStyle;
-            var scrollStyle = Style.ScrollStyle;
+            ListBox< T >.ListBoxStyle  listStyle   = Style.ListBoxStyle;
+            ScrollPane.ScrollPaneStyle scrollStyle = Style.ScrollStyle;
 
-            var listWidth = maxItemWidth + listStyle.Selection?.LeftWidth + listStyle.Selection?.RightWidth;
+            float? listWidth = maxItemWidth + listStyle.Selection?.LeftWidth + listStyle.Selection?.RightWidth;
 
             bg = scrollStyle.Background;
 
@@ -352,22 +353,22 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     {
         Validate();
 
-        var background = GetBackgroundIDrawable();
-        var fontColor  = GetFontColor();
-        var font       = Style.Font;
+        ISceneDrawable? background = GetBackgroundIDrawable();
+        Color           fontColor  = GetFontColor();
+        BitmapFont      font       = Style.Font;
 
         // Make copies of x,y,width and height for local modification
         // and preserving the originals.
-        var x      = X;
-        var y      = Y;
-        var width  = Width;
-        var height = Height;
+        float x      = X;
+        float y      = Y;
+        float width  = Width;
+        float height = Height;
 
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
         background?.Draw( batch, x, y, width, height );
 
-        var selected = _selection.First();
+        T? selected = _selection.First();
 
         if ( selected != null )
         {
@@ -391,7 +392,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
     protected GlyphLayout DrawItem( IBatch batch, BitmapFont font, T item, float x, float y, float width )
     {
-        var str = ToString( item ) ?? "";
+        string str = ToString( item ) ?? "";
 
         return font.Draw( batch, str, x, y, 0, str.Length, width, _alignment, false, "..." );
     }
@@ -453,7 +454,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     /// </returns>
     public int GetSelectedIndex()
     {
-        var selected = _selection.Items();
+        SortedSet< T > selected = _selection.Items();
 
         return selected.Count == 0 ? -1 : Items.IndexOf( selected.First() );
     }
@@ -480,17 +481,17 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     /// </summary>
     public float GetMaxSelectedPrefWidth()
     {
-        var   layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
-        var   layout     = layoutPool.Obtain();
-        float width      = 0;
+        Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
+        GlyphLayout         layout     = layoutPool.Obtain();
+        float               width      = 0;
 
-        foreach ( var t in Items )
+        foreach ( T t in Items )
         {
             layout.SetText( Style.Font, ToString( t ) ?? "" );
             width = Math.Max( layout.Width, width );
         }
 
-        var bg = Style.Background;
+        ISceneDrawable? bg = Style.Background;
 
         if ( bg != null )
         {
@@ -589,9 +590,9 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     {
         selectBox.Color.A = 1f;
 
-        var action1  = Scene2D.Actions.Actions.FadeOut( 0.15f, Interpolation.Fade );
-        var action2  = Scene2D.Actions.Actions.RemoveActor();
-        var sequence = Scene2D.Actions.Actions.Sequence( action1, action2 );
+        AlphaAction       action1  = Scene2D.Actions.Actions.FadeOut( 0.15f, Interpolation.Fade );
+        RemoveActorAction action2  = Scene2D.Actions.Actions.RemoveActor();
+        SequenceAction    sequence = Scene2D.Actions.Actions.Sequence( action1, action2 );
 
         selectBox.AddAction( sequence );
     }
@@ -636,7 +637,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
             ListBox = new ListBox< T >( SelectBox.Style.ListBoxStyle )
             {
                 Touchable    = Touchable.Disabled,
-                TypeToSelect = true,
+                TypeToSelect = true
             };
 
             SetActor( ListBox );
@@ -664,29 +665,29 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
             // Show the list above or below the select box, limited to a number
             // of items and the available height in the stage.
-            var itemHeight = ListBox.ItemHeight;
+            float itemHeight = ListBox.ItemHeight;
 
-            var height = itemHeight * ( MaxListCount <= 0
+            float height = itemHeight * ( MaxListCount <= 0
                 ? SelectBox.Items.Count
                 : Math.Min( MaxListCount, SelectBox.Items.Count ) );
 
-            var scrollPaneBackground = Style.Background;
+            ISceneDrawable? scrollPaneBackground = Style.Background;
 
             if ( scrollPaneBackground != null )
             {
                 height += scrollPaneBackground.TopHeight + scrollPaneBackground.BottomHeight;
             }
 
-            var listBackground = ListBox.Style?.Background;
+            ISceneDrawable? listBackground = ListBox.Style?.Background;
 
             if ( listBackground != null )
             {
                 height += listBackground.TopHeight + listBackground.BottomHeight;
             }
 
-            var heightBelow = _stagePosition.Y;
-            var heightAbove = stage.Height - heightBelow - SelectBox.Height;
-            var below       = true;
+            float heightBelow = _stagePosition.Y;
+            float heightAbove = stage.Height - heightBelow - SelectBox.Height;
+            var   below       = true;
 
             if ( height > heightBelow )
             {
@@ -713,10 +714,10 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
             Height = height;
             Validate();
 
-            var width = Math.Max( SelectBox.PrefWidth, SelectBox.Width );
+            float width = Math.Max( SelectBox.PrefWidth, SelectBox.Width );
             Width = width;
 
-            var x = _stagePosition.X;
+            float x = _stagePosition.X;
 
             if ( x + width > stage.Width )
             {
@@ -738,7 +739,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
             _previousScrollFocus = null;
 
-            var actor = stage.ScrollFocus;
+            Actor? actor = stage.ScrollFocus;
 
             if ( ( actor != null ) && !actor.IsDescendantOf( this ) )
             {
@@ -928,7 +929,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
         public override void OnClicked( InputEvent? ev, float x, float y )
         {
-            var selected = _parent.ListBox.GetSelected();
+            T? selected = _parent.ListBox.GetSelected();
 
             // Force clicking the already selected item to trigger a change event.
             if ( selected != null )
@@ -942,7 +943,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
         public override bool MouseMoved( InputEvent? ev, float x, float y )
         {
-            var index = _parent.ListBox.GetItemIndexAt( y );
+            int index = _parent.ListBox.GetItemIndexAt( y );
 
             if ( index != -1 )
             {
@@ -1016,7 +1017,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
         public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
-            var target = ev?.TargetActor;
+            Actor? target = ev?.TargetActor;
 
             if ( _parent.IsAscendantOf( target ) )
             {
@@ -1068,14 +1069,14 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     {
         public BitmapFont                 Font               { get; } = null!;
         public ScrollPane.ScrollPaneStyle ScrollStyle        { get; } = null!;
-        public ListBox< T >.ListBoxStyle     ListBoxStyle          { get; } = null!;
+        public ListBox< T >.ListBoxStyle  ListBoxStyle       { get; } = null!;
         public Color                      FontColor          { get; } = new( 1, 1, 1, 1 );
         public Color?                     OverFontColor      { get; }
         public Color?                     DisabledFontColor  { get; }
-        public ISceneDrawable?                 Background         { get; }
-        public ISceneDrawable?                 BackgroundOver     { get; }
-        public ISceneDrawable?                 BackgroundOpen     { get; }
-        public ISceneDrawable?                 BackgroundDisabled { get; }
+        public ISceneDrawable?            Background         { get; }
+        public ISceneDrawable?            BackgroundOver     { get; }
+        public ISceneDrawable?            BackgroundOpen     { get; }
+        public ISceneDrawable?            BackgroundDisabled { get; }
 
         // ====================================================================
 
@@ -1089,10 +1090,10 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
                                ScrollPane.ScrollPaneStyle scrollStyle,
                                ListBox< T >.ListBoxStyle listBoxStyle )
         {
-            Font        = font;
-            Background  = background;
-            ScrollStyle = scrollStyle;
-            ListBoxStyle   = listBoxStyle;
+            Font         = font;
+            Background   = background;
+            ScrollStyle  = scrollStyle;
+            ListBoxStyle = listBoxStyle;
 
             FontColor.Set( fontColor );
         }
@@ -1114,9 +1115,9 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
                 DisabledFontColor = new Color( style.DisabledFontColor );
             }
 
-            Background  = style.Background;
-            ScrollStyle = new ScrollPane.ScrollPaneStyle( style.ScrollStyle );
-            ListBoxStyle   = new ListBox< T >.ListBoxStyle( style.ListBoxStyle );
+            Background   = style.Background;
+            ScrollStyle  = new ScrollPane.ScrollPaneStyle( style.ScrollStyle );
+            ListBoxStyle = new ListBox< T >.ListBoxStyle( style.ListBoxStyle );
 
             BackgroundOver     = style.BackgroundOver;
             BackgroundOpen     = style.BackgroundOpen;

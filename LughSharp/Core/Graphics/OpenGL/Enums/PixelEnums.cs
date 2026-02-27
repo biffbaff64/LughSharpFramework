@@ -32,7 +32,7 @@ public enum PixelType
     UnsignedShort4444 = IGL.GL_UNSIGNED_SHORT_4_4_4_4,
     UnsignedShort5551 = IGL.GL_UNSIGNED_SHORT_5_5_5_1,
     UnsignedShort565  = IGL.GL_UNSIGNED_SHORT_5_6_5,
-    UnsignedByte      = IGL.GL_UNSIGNED_BYTE,
+    UnsignedByte      = IGL.GL_UNSIGNED_BYTE
 }
 
 [PublicAPI]
@@ -47,7 +47,7 @@ public enum GLPixelFormat
     Rgba           = IGL.GL_RGBA,
     Red            = IGL.GL_RED,
     Green          = IGL.GL_GREEN,
-    Blue           = IGL.GL_BLUE,
+    Blue           = IGL.GL_BLUE
 }
 
 [PublicAPI]
@@ -58,7 +58,7 @@ public enum PixelInternalFormat
     Rgba           = IGL.GL_RGBA,
     Rgba8          = IGL.GL_RGBA8,
     Luminance      = IGL.GL_LUMINANCE,
-    LuminanceAlpha = IGL.GL_LUMINANCE_ALPHA,
+    LuminanceAlpha = IGL.GL_LUMINANCE_ALPHA
 }
 
 [PublicAPI]
@@ -69,7 +69,7 @@ public enum PixelStoreParameter
     UnpackRowLength  = IGL.GL_UNPACK_ROW_LENGTH,
     PackRowLength    = IGL.GL_PACK_ROW_LENGTH,
     UnpackSkipPixels = IGL.GL_UNPACK_SKIP_PIXELS,
-    PackSkipPixels   = IGL.GL_PACK_SKIP_PIXELS,
+    PackSkipPixels   = IGL.GL_PACK_SKIP_PIXELS
 }
 
 // ========================================================================

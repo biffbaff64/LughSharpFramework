@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Maths;
@@ -57,9 +58,9 @@ public class Affine2
     /// Constructs a matrix from the given affine matrix.
     /// </summary>
     /// <param name="other">The affine matrix to copy. This matrix will not be modified.</param>
-    public Affine2(Affine2 other)
+    public Affine2( Affine2 other )
     {
-        SetFrom(other);
+        SetFrom( other );
     }
 
     /// <summary>
@@ -83,7 +84,7 @@ public class Affine2
     /// </summary>
     /// <param name="other">The affine matrix to copy.</param>
     /// <returns>This matrix for the purposes of chaining.</returns>
-    public Affine2 SetFrom(Affine2 other)
+    public Affine2 SetFrom( Affine2 other )
     {
         M00 = other.M00;
         M01 = other.M01;
@@ -100,16 +101,16 @@ public class Affine2
     /// </summary>
     /// <param name="matrix"> The matrix to copy, assumed to be an affine transformation. </param>
     /// <returns> This matrix for the purposes of chaining.  </returns>
-    public Affine2 SetFrom(Matrix3 matrix)
+    public Affine2 SetFrom( Matrix3 matrix )
     {
-        var other = matrix.Val;
+        float[] other = matrix.Val;
 
-        M00 = other[Matrix3.M00];
-        M01 = other[Matrix3.M01];
-        M02 = other[Matrix3.M02];
-        M10 = other[Matrix3.M10];
-        M11 = other[Matrix3.M11];
-        M12 = other[Matrix3.M12];
+        M00 = other[ Matrix3.M00 ];
+        M01 = other[ Matrix3.M01 ];
+        M02 = other[ Matrix3.M02 ];
+        M10 = other[ Matrix3.M10 ];
+        M11 = other[ Matrix3.M11 ];
+        M12 = other[ Matrix3.M12 ];
 
         return this;
     }
@@ -128,16 +129,16 @@ public class Affine2
     /// This matrix will not be modified.
     /// </param>
     /// <returns>This matrix for the purpose of chaining operations.</returns>
-    public Affine2 SetFrom(Matrix4 matrix)
+    public Affine2 SetFrom( Matrix4 matrix )
     {
-        var other = matrix.Val;
+        float[] other = matrix.Val;
 
-        M00 = other[Matrix4.M00_0];
-        M01 = other[Matrix4.M01_4];
-        M02 = other[Matrix4.M03_12];
-        M10 = other[Matrix4.M10_1];
-        M11 = other[Matrix4.M11_5];
-        M12 = other[Matrix4.M13_13];
+        M00 = other[ Matrix4.M00_0 ];
+        M01 = other[ Matrix4.M01_4 ];
+        M02 = other[ Matrix4.M03_12 ];
+        M10 = other[ Matrix4.M10_1 ];
+        M11 = other[ Matrix4.M11_5 ];
+        M12 = other[ Matrix4.M13_13 ];
 
         return this;
     }
@@ -148,7 +149,7 @@ public class Affine2
     /// <param name="x"> The translation in x </param>
     /// <param name="y"> The translation in y </param>
     /// <returns> This matrix for the purpose of chaining operations.</returns>
-    public Affine2 SetToTranslation(float x, float y)
+    public Affine2 SetToTranslation( float x, float y )
     {
         M00 = 1;
         M01 = 0;
@@ -165,9 +166,9 @@ public class Affine2
     /// </summary>
     /// <param name="trn"> The translation vector. </param>
     /// <returns> This matrix for the purpose of chaining operations.</returns>
-    public Affine2 SetToTranslation(Vector2 trn)
+    public Affine2 SetToTranslation( Vector2 trn )
     {
-        return SetToTranslation(trn.X, trn.Y);
+        return SetToTranslation( trn.X, trn.Y );
     }
 
     /// <summary>
@@ -176,7 +177,7 @@ public class Affine2
     /// <param name="scaleX"> The scale in x. </param>
     /// <param name="scaleY"> The scale in y. </param>
     /// <returns> This matrix for the purpose of chaining operations.</returns>
-    public Affine2 SetToScaling(float scaleX, float scaleY)
+    public Affine2 SetToScaling( float scaleX, float scaleY )
     {
         M00 = scaleX;
         M01 = 0;
@@ -193,9 +194,9 @@ public class Affine2
     /// </summary>
     /// <param name="scale">The scale vector.</param>
     /// <returns>This matrix for the purpose of chaining operations.</returns>
-    public Affine2 SetToScaling(Vector2 scale)
+    public Affine2 SetToScaling( Vector2 scale )
     {
-        return SetToScaling(scale.X, scale.Y);
+        return SetToScaling( scale.X, scale.Y );
     }
 
     /// <summary>
@@ -204,10 +205,10 @@ public class Affine2
     /// </summary>
     /// <param name="degrees"> The angle in degrees. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToRotation(float degrees)
+    public Affine2 SetToRotation( float degrees )
     {
-        var cos = MathUtils.CosDeg(degrees);
-        var sin = MathUtils.SinDeg(degrees);
+        float cos = MathUtils.CosDeg( degrees );
+        float sin = MathUtils.SinDeg( degrees );
 
         M00 = cos;
         M01 = -sin;
@@ -225,10 +226,10 @@ public class Affine2
     /// </summary>
     /// <param name="radians"> The angle in radians. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToRotationRad(float radians)
+    public Affine2 SetToRotationRad( float radians )
     {
-        var cos = MathUtils.Cos(radians);
-        var sin = MathUtils.Sin(radians);
+        float cos = MathUtils.Cos( radians );
+        float sin = MathUtils.Sin( radians );
 
         M00 = cos;
         M01 = -sin;
@@ -247,7 +248,7 @@ public class Affine2
     /// <param name="cos"> The angle cosine. </param>
     /// <param name="sin"> The angle sine. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToRotation(float cos, float sin)
+    public Affine2 SetToRotation( float cos, float sin )
     {
         M00 = cos;
         M01 = -sin;
@@ -265,7 +266,7 @@ public class Affine2
     /// <param name="shearX"> The shear in x direction. </param>
     /// <param name="shearY"> The shear in y direction. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToShearing(float shearX, float shearY)
+    public Affine2 SetToShearing( float shearX, float shearY )
     {
         M00 = 1;
         M01 = shearX;
@@ -282,9 +283,9 @@ public class Affine2
     /// </summary>
     /// <param name="shear"> The shear vector. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToShearing(Vector2 shear)
+    public Affine2 SetToShearing( Vector2 shear )
     {
-        return SetToShearing(shear.X, shear.Y);
+        return SetToShearing( shear.X, shear.Y );
     }
 
     /// <summary>
@@ -298,12 +299,12 @@ public class Affine2
     /// <param name="scaleX"> The scale in y. </param>
     /// <param name="scaleY"> The scale in x. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToTrnRotScl(float x, float y, float degrees, float scaleX, float scaleY)
+    public Affine2 SetToTrnRotScl( float x, float y, float degrees, float scaleX, float scaleY )
     {
         M02 = x;
         M12 = y;
 
-        if (degrees == 0)
+        if ( degrees == 0 )
         {
             M00 = scaleX;
             M01 = 0;
@@ -312,8 +313,8 @@ public class Affine2
         }
         else
         {
-            var sin = MathUtils.SinDeg(degrees);
-            var cos = MathUtils.CosDeg(degrees);
+            float sin = MathUtils.SinDeg( degrees );
+            float cos = MathUtils.CosDeg( degrees );
 
             M00 = cos * scaleX;
             M01 = -sin * scaleY;
@@ -333,9 +334,9 @@ public class Affine2
     /// <param name="degrees"> The angle in degrees. </param>
     /// <param name="scale"> The scale vector. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToTrnRotScl(Vector2 trn, float degrees, Vector2 scale)
+    public Affine2 SetToTrnRotScl( Vector2 trn, float degrees, Vector2 scale )
     {
-        return SetToTrnRotScl(trn.X, trn.Y, degrees, scale.X, scale.Y);
+        return SetToTrnRotScl( trn.X, trn.Y, degrees, scale.X, scale.Y );
     }
 
     /// <summary>
@@ -349,12 +350,12 @@ public class Affine2
     /// <param name="scaleX"> The scale in y. </param>
     /// <param name="scaleY"> The scale in x. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToTrnRotRadScl(float x, float y, float radians, float scaleX, float scaleY)
+    public Affine2 SetToTrnRotRadScl( float x, float y, float radians, float scaleX, float scaleY )
     {
         M02 = x;
         M12 = y;
 
-        if (radians == 0)
+        if ( radians == 0 )
         {
             M00 = scaleX;
             M01 = 0;
@@ -363,8 +364,8 @@ public class Affine2
         }
         else
         {
-            var sin = MathUtils.Sin(radians);
-            var cos = MathUtils.Cos(radians);
+            float sin = MathUtils.Sin( radians );
+            float cos = MathUtils.Cos( radians );
 
             M00 = cos * scaleX;
             M01 = -sin * scaleY;
@@ -383,9 +384,9 @@ public class Affine2
     /// <param name="radians"> The angle in radians. </param>
     /// <param name="scale"> The scale vector. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToTrnRotRadScl(Vector2 trn, float radians, Vector2 scale)
+    public Affine2 SetToTrnRotRadScl( Vector2 trn, float radians, Vector2 scale )
     {
-        return SetToTrnRotRadScl(trn.X, trn.Y, radians, scale.X, scale.Y);
+        return SetToTrnRotRadScl( trn.X, trn.Y, radians, scale.X, scale.Y );
     }
 
     /// <summary>
@@ -397,7 +398,7 @@ public class Affine2
     /// <param name="scaleX"> The scale in y. </param>
     /// <param name="scaleY"> The scale in x. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToTrnScl(float x, float y, float scaleX, float scaleY)
+    public Affine2 SetToTrnScl( float x, float y, float scaleX, float scaleY )
     {
         M00 = scaleX;
         M01 = 0;
@@ -416,9 +417,9 @@ public class Affine2
     /// <param name="trn"> The translation vector. </param>
     /// <param name="scale"> The scale vector. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToTrnScl(Vector2 trn, Vector2 scale)
+    public Affine2 SetToTrnScl( Vector2 trn, Vector2 scale )
     {
-        return SetToTrnScl(trn.X, trn.Y, scale.X, scale.Y);
+        return SetToTrnScl( trn.X, trn.Y, scale.X, scale.Y );
     }
 
     /// <summary>
@@ -427,14 +428,14 @@ public class Affine2
     /// <param name="l"> Left matrix. </param>
     /// <param name="r"> Right matrix. </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 SetToProduct(Affine2 l, Affine2 r)
+    public Affine2 SetToProduct( Affine2 l, Affine2 r )
     {
-        M00 = (l.M00 * r.M00) + (l.M01 * r.M10);
-        M01 = (l.M00 * r.M01) + (l.M01 * r.M11);
-        M02 = (l.M00 * r.M02) + (l.M01 * r.M12) + l.M02;
-        M10 = (l.M10 * r.M00) + (l.M11 * r.M10);
-        M11 = (l.M10 * r.M01) + (l.M11 * r.M11);
-        M12 = (l.M10 * r.M02) + (l.M11 * r.M12) + l.M12;
+        M00 = ( l.M00 * r.M00 ) + ( l.M01 * r.M10 );
+        M01 = ( l.M00 * r.M01 ) + ( l.M01 * r.M11 );
+        M02 = ( l.M00 * r.M02 ) + ( l.M01 * r.M12 ) + l.M02;
+        M10 = ( l.M10 * r.M00 ) + ( l.M11 * r.M10 );
+        M11 = ( l.M10 * r.M01 ) + ( l.M11 * r.M11 );
+        M12 = ( l.M10 * r.M02 ) + ( l.M11 * r.M12 ) + l.M12;
 
         return this;
     }
@@ -446,21 +447,21 @@ public class Affine2
     /// <exception cref="RuntimeException"> if the matrix is singular (not invertible)  </exception>
     public Affine2 Invert()
     {
-        var det = GetDeterminant();
+        float det = GetDeterminant();
 
-        if (det == 0)
+        if ( det == 0 )
         {
-            throw new RuntimeException("Can't invert a singular affine matrix");
+            throw new RuntimeException( "Can't invert a singular affine matrix" );
         }
 
-        var invDet = 1.0f / det;
+        float invDet = 1.0f / det;
 
-        var tmp00 = M11;
-        var tmp01 = -M01;
-        var tmp02 = (M01 * M12) - (M11 * M02);
-        var tmp10 = -M10;
-        var tmp11 = M00;
-        var tmp12 = (M10 * M02) - (M00 * M12);
+        float tmp00 = M11;
+        float tmp01 = -M01;
+        float tmp02 = ( M01 * M12 ) - ( M11 * M02 );
+        float tmp10 = -M10;
+        float tmp11 = M00;
+        float tmp12 = ( M10 * M02 ) - ( M00 * M12 );
 
         M00 = invDet * tmp00;
         M01 = invDet * tmp01;
@@ -478,14 +479,14 @@ public class Affine2
     /// </summary>
     /// <param name="other"> Matrix to multiply by. </param>
     /// <returns> This matrix for the purpose of chaining operations together.</returns>
-    public Affine2 Mul(Affine2 other)
+    public Affine2 Mul( Affine2 other )
     {
-        var tmp00 = (M00 * other.M00) + (M01 * other.M10);
-        var tmp01 = (M00 * other.M01) + (M01 * other.M11);
-        var tmp02 = (M00 * other.M02) + (M01 * other.M12) + M02;
-        var tmp10 = (M10 * other.M00) + (M11 * other.M10);
-        var tmp11 = (M10 * other.M01) + (M11 * other.M11);
-        var tmp12 = (M10 * other.M02) + (M11 * other.M12) + M12;
+        float tmp00 = ( M00 * other.M00 ) + ( M01 * other.M10 );
+        float tmp01 = ( M00 * other.M01 ) + ( M01 * other.M11 );
+        float tmp02 = ( M00 * other.M02 ) + ( M01 * other.M12 ) + M02;
+        float tmp10 = ( M10 * other.M00 ) + ( M11 * other.M10 );
+        float tmp11 = ( M10 * other.M01 ) + ( M11 * other.M11 );
+        float tmp12 = ( M10 * other.M02 ) + ( M11 * other.M12 ) + M12;
 
         M00 = tmp00;
         M01 = tmp01;
@@ -505,14 +506,14 @@ public class Affine2
     /// </summary>
     /// <param name="other"> The other Matrix to multiply by </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>
-    public Affine2 PreMul(Affine2 other)
+    public Affine2 PreMul( Affine2 other )
     {
-        var tmp00 = (other.M00 * M00) + (other.M01 * M10);
-        var tmp01 = (other.M00 * M01) + (other.M01 * M11);
-        var tmp02 = (other.M00 * M02) + (other.M01 * M12) + other.M02;
-        var tmp10 = (other.M10 * M00) + (other.M11 * M10);
-        var tmp11 = (other.M10 * M01) + (other.M11 * M11);
-        var tmp12 = (other.M10 * M02) + (other.M11 * M12) + other.M12;
+        float tmp00 = ( other.M00 * M00 ) + ( other.M01 * M10 );
+        float tmp01 = ( other.M00 * M01 ) + ( other.M01 * M11 );
+        float tmp02 = ( other.M00 * M02 ) + ( other.M01 * M12 ) + other.M02;
+        float tmp10 = ( other.M10 * M00 ) + ( other.M11 * M10 );
+        float tmp11 = ( other.M10 * M01 ) + ( other.M11 * M11 );
+        float tmp12 = ( other.M10 * M02 ) + ( other.M11 * M12 ) + other.M12;
 
         M00 = tmp00;
         M01 = tmp01;
@@ -530,10 +531,10 @@ public class Affine2
     /// <param name="x"> The x-component of the translation vector. </param>
     /// <param name="y"> The y-component of the translation vector. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 Translate(float x, float y)
+    public Affine2 Translate( float x, float y )
     {
-        M02 += (M00 * x) + (M01 * y);
-        M12 += (M10 * x) + (M11 * y);
+        M02 += ( M00 * x ) + ( M01 * y );
+        M12 += ( M10 * x ) + ( M11 * y );
 
         return this;
     }
@@ -543,9 +544,9 @@ public class Affine2
     /// </summary>
     /// <param name="trn"> The translation vector. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 Translate(Vector2 trn)
+    public Affine2 Translate( Vector2 trn )
     {
-        return Translate(trn.X, trn.Y);
+        return Translate( trn.X, trn.Y );
     }
 
     /// <summary>
@@ -554,7 +555,7 @@ public class Affine2
     /// <param name="x"> The x-component of the translation vector. </param>
     /// <param name="y"> The y-component of the translation vector. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 PreTranslate(float x, float y)
+    public Affine2 PreTranslate( float x, float y )
     {
         M02 += x;
         M12 += y;
@@ -567,9 +568,9 @@ public class Affine2
     /// <param name="trn">The translation vector.</param>
     /// <returns>This matrix for the purpose of chaining.</returns>
     /// </summary>
-    public Affine2 PreTranslate(Vector2 trn)
+    public Affine2 PreTranslate( Vector2 trn )
     {
-        return PreTranslate(trn.X, trn.Y);
+        return PreTranslate( trn.X, trn.Y );
     }
 
     /// <summary>
@@ -578,7 +579,7 @@ public class Affine2
     /// <param name="scaleX"> The scale in the x-axis. </param>
     /// <param name="scaleY"> The scale in the y-axis. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 Scale(float scaleX, float scaleY)
+    public Affine2 Scale( float scaleX, float scaleY )
     {
         M00 *= scaleX;
         M01 *= scaleY;
@@ -593,9 +594,9 @@ public class Affine2
     /// </summary>
     /// <param name="scale"> The scale vector. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 Scale(Vector2 scale)
+    public Affine2 Scale( Vector2 scale )
     {
-        return Scale(scale.X, scale.Y);
+        return Scale( scale.X, scale.Y );
     }
 
     /// <summary>
@@ -604,7 +605,7 @@ public class Affine2
     /// <param name="scaleX"> The scale in the x-axis. </param>
     /// <param name="scaleY"> The scale in the y-axis. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 PreScale(float scaleX, float scaleY)
+    public Affine2 PreScale( float scaleX, float scaleY )
     {
         M00 *= scaleX;
         M01 *= scaleX;
@@ -621,9 +622,9 @@ public class Affine2
     /// </summary>
     /// <param name="scale"> The scale vector. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 PreScale(Vector2 scale)
+    public Affine2 PreScale( Vector2 scale )
     {
-        return PreScale(scale.X, scale.Y);
+        return PreScale( scale.X, scale.Y );
     }
 
     /// <summary>
@@ -633,20 +634,20 @@ public class Affine2
     /// <returns>
     /// This matrix for the purpose of chaining.
     /// </returns>
-    public Affine2 Rotate(float degrees)
+    public Affine2 Rotate( float degrees )
     {
-        if (degrees == 0)
+        if ( degrees == 0 )
         {
             return this;
         }
 
-        var cos = MathUtils.CosDeg(degrees);
-        var sin = MathUtils.SinDeg(degrees);
+        float cos = MathUtils.CosDeg( degrees );
+        float sin = MathUtils.SinDeg( degrees );
 
-        var tmp00 = (M00 * cos) + (M01 * sin);
-        var tmp01 = (M00 * -sin) + (M01 * cos);
-        var tmp10 = (M10 * cos) + (M11 * sin);
-        var tmp11 = (M10 * -sin) + (M11 * cos);
+        float tmp00 = ( M00 * cos ) + ( M01 * sin );
+        float tmp01 = ( M00 * -sin ) + ( M01 * cos );
+        float tmp10 = ( M10 * cos ) + ( M11 * sin );
+        float tmp11 = ( M10 * -sin ) + ( M11 * cos );
 
         M00 = tmp00;
         M01 = tmp01;
@@ -661,20 +662,20 @@ public class Affine2
     /// </summary>
     /// <param name="radians"> The angle in radians </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 RotateRad(float radians)
+    public Affine2 RotateRad( float radians )
     {
-        if (radians == 0)
+        if ( radians == 0 )
         {
             return this;
         }
 
-        var cos = MathUtils.Cos(radians);
-        var sin = MathUtils.Sin(radians);
+        float cos = MathUtils.Cos( radians );
+        float sin = MathUtils.Sin( radians );
 
-        var tmp00 = (M00 * cos) + (M01 * sin);
-        var tmp01 = (M00 * -sin) + (M01 * cos);
-        var tmp10 = (M10 * cos) + (M11 * sin);
-        var tmp11 = (M10 * -sin) + (M11 * cos);
+        float tmp00 = ( M00 * cos ) + ( M01 * sin );
+        float tmp01 = ( M00 * -sin ) + ( M01 * cos );
+        float tmp10 = ( M10 * cos ) + ( M11 * sin );
+        float tmp11 = ( M10 * -sin ) + ( M11 * cos );
 
         M00 = tmp00;
         M01 = tmp01;
@@ -689,22 +690,22 @@ public class Affine2
     /// </summary>
     /// <param name="degrees"> The angle in degrees </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 PreRotate(float degrees)
+    public Affine2 PreRotate( float degrees )
     {
-        if (degrees == 0)
+        if ( degrees == 0 )
         {
             return this;
         }
 
-        var cos = MathUtils.CosDeg(degrees);
-        var sin = MathUtils.SinDeg(degrees);
+        float cos = MathUtils.CosDeg( degrees );
+        float sin = MathUtils.SinDeg( degrees );
 
-        var tmp00 = (cos * M00) - (sin * M10);
-        var tmp01 = (cos * M01) - (sin * M11);
-        var tmp02 = (cos * M02) - (sin * M12);
-        var tmp10 = (sin * M00) + (cos * M10);
-        var tmp11 = (sin * M01) + (cos * M11);
-        var tmp12 = (sin * M02) + (cos * M12);
+        float tmp00 = ( cos * M00 ) - ( sin * M10 );
+        float tmp01 = ( cos * M01 ) - ( sin * M11 );
+        float tmp02 = ( cos * M02 ) - ( sin * M12 );
+        float tmp10 = ( sin * M00 ) + ( cos * M10 );
+        float tmp11 = ( sin * M01 ) + ( cos * M11 );
+        float tmp12 = ( sin * M02 ) + ( cos * M12 );
 
         M00 = tmp00;
         M01 = tmp01;
@@ -721,22 +722,22 @@ public class Affine2
     /// </summary>
     /// <param name="radians"> The angle in radians </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 PreRotateRad(float radians)
+    public Affine2 PreRotateRad( float radians )
     {
-        if (radians == 0)
+        if ( radians == 0 )
         {
             return this;
         }
 
-        var cos = MathUtils.Cos(radians);
-        var sin = MathUtils.Sin(radians);
+        float cos = MathUtils.Cos( radians );
+        float sin = MathUtils.Sin( radians );
 
-        var tmp00 = (cos * M00) - (sin * M10);
-        var tmp01 = (cos * M01) - (sin * M11);
-        var tmp02 = (cos * M02) - (sin * M12);
-        var tmp10 = (sin * M00) + (cos * M10);
-        var tmp11 = (sin * M01) + (cos * M11);
-        var tmp12 = (sin * M02) + (cos * M12);
+        float tmp00 = ( cos * M00 ) - ( sin * M10 );
+        float tmp01 = ( cos * M01 ) - ( sin * M11 );
+        float tmp02 = ( cos * M02 ) - ( sin * M12 );
+        float tmp10 = ( sin * M00 ) + ( cos * M10 );
+        float tmp11 = ( sin * M01 ) + ( cos * M11 );
+        float tmp12 = ( sin * M02 ) + ( cos * M12 );
 
         M00 = tmp00;
         M01 = tmp01;
@@ -754,16 +755,16 @@ public class Affine2
     /// <param name="shearX"> The shear in x direction.</param>
     /// <param name="shearY"> The shear in y direction.</param>
     /// <returns> This matrix for the purpose of chaining.</returns>
-    public Affine2 Shear(float shearX, float shearY)
+    public Affine2 Shear( float shearX, float shearY )
     {
-        var tmp0 = M00 + (shearY * M01);
-        var tmp1 = M01 + (shearX * M00);
+        float tmp0 = M00 + ( shearY * M01 );
+        float tmp1 = M01 + ( shearX * M00 );
 
         M00 = tmp0;
         M01 = tmp1;
 
-        tmp0 = M10 + (shearY * M11);
-        tmp1 = M11 + (shearX * M10);
+        tmp0 = M10 + ( shearY * M11 );
+        tmp1 = M11 + ( shearX * M10 );
 
         M10 = tmp0;
         M11 = tmp1;
@@ -776,9 +777,9 @@ public class Affine2
     /// </summary>
     /// <param name="shear"> The shear vector. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 Shear(Vector2 shear)
+    public Affine2 Shear( Vector2 shear )
     {
-        return Shear(shear.X, shear.Y);
+        return Shear( shear.X, shear.Y );
     }
 
     /// <summary>
@@ -787,14 +788,14 @@ public class Affine2
     /// <param name="shearX"> The shear in x direction. </param>
     /// <param name="shearY"> The shear in y direction. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 PreShear(float shearX, float shearY)
+    public Affine2 PreShear( float shearX, float shearY )
     {
-        var tmp00 = M00 + (shearX * M10);
-        var tmp01 = M01 + (shearX * M11);
-        var tmp02 = M02 + (shearX * M12);
-        var tmp10 = M10 + (shearY * M00);
-        var tmp11 = M11 + (shearY * M01);
-        var tmp12 = M12 + (shearY * M02);
+        float tmp00 = M00 + ( shearX * M10 );
+        float tmp01 = M01 + ( shearX * M11 );
+        float tmp02 = M02 + ( shearX * M12 );
+        float tmp10 = M10 + ( shearY * M00 );
+        float tmp11 = M11 + ( shearY * M01 );
+        float tmp12 = M12 + ( shearY * M02 );
 
         M00 = tmp00;
         M01 = tmp01;
@@ -811,9 +812,9 @@ public class Affine2
     /// </summary>
     /// <param name="shear"> The shear vector. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Affine2 PreShear(Vector2 shear)
+    public Affine2 PreShear( Vector2 shear )
     {
-        return PreShear(shear.X, shear.Y);
+        return PreShear( shear.X, shear.Y );
     }
 
     /// <summary>
@@ -822,7 +823,7 @@ public class Affine2
     /// <returns> The determinant of this matrix.</returns>
     public float GetDeterminant()
     {
-        return (M00 * M11) - (M01 * M10);
+        return ( M00 * M11 ) - ( M01 * M10 );
     }
 
     /// <summary>
@@ -830,7 +831,7 @@ public class Affine2
     /// </summary>
     /// <param name="position"> Output vector. </param>
     /// <returns> Filled position.  </returns>
-    public Vector2 GetTranslation(Vector2 position)
+    public Vector2 GetTranslation( Vector2 position )
     {
         position.X = M02;
         position.Y = M12;
@@ -845,9 +846,9 @@ public class Affine2
     public bool IsTranslation()
     {
         return M00 is 1f
-               && M11 is 1
-               && M01 is 0
-               && M10 is 0;
+            && M11 is 1
+            && M01 is 0
+            && M10 is 0;
     }
 
     /// <summary>
@@ -857,23 +858,23 @@ public class Affine2
     public bool IsIdentityMatrix()
     {
         return M00 is 1
-               && M02 is 0
-               && M12 is 0
-               && M11 is 1
-               && M01 is 0
-               && M10 is 0;
+            && M02 is 0
+            && M12 is 0
+            && M11 is 1
+            && M01 is 0
+            && M10 is 0;
     }
 
     /// <summary>
     /// Applies the affine transformation on a vector.
     /// </summary>
-    public void ApplyTo(Vector2 point)
+    public void ApplyTo( Vector2 point )
     {
-        var x = point.X;
-        var y = point.Y;
+        float x = point.X;
+        float y = point.Y;
 
-        point.X = (M00 * x) + (M01 * y) + M02;
-        point.Y = (M10 * x) + (M11 * y) + M12;
+        point.X = ( M00 * x ) + ( M01 * y ) + M02;
+        point.Y = ( M10 * x ) + ( M11 * y ) + M12;
     }
 
     /// <inheritdoc />

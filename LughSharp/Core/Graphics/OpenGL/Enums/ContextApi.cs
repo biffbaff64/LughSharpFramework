@@ -40,7 +40,7 @@ public enum ContextApi
     /// <summary>
     /// Uses Egl to create the window context.
     /// </summary>
-    EglContextApi = 0x00036002,
+    EglContextApi = 0x00036002
 }
 
 // ========================================================================

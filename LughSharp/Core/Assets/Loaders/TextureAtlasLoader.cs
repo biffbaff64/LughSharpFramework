@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
@@ -62,13 +63,13 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
     public override TextureAtlas Load( AssetManager assetManager, FileInfo? file, AssetLoaderParameters? parameter )
     {
         Logger.Checkpoint();
-        
+
         if ( _data == null )
         {
             throw new RuntimeException( "TextureAtlasData cannot be null!" );
         }
 
-        foreach ( var page in _data.Pages )
+        foreach ( TextureAtlasData.Page page in _data.Pages )
         {
             if ( page.TextureFile != null )
             {
@@ -95,25 +96,25 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
     {
         Guard.Against.Null( atlasFile );
 
-        var p      = parameter as TextureAtlasParameter;
-        var imgDir = atlasFile.Directory;
+        var            p      = parameter as TextureAtlasParameter;
+        DirectoryInfo? imgDir = atlasFile.Directory;
 
         Guard.Against.Null( imgDir );
-        
+
         _data = p != null
             ? new TextureAtlasData( atlasFile, imgDir, p.FlipVertically )
             : new TextureAtlasData( atlasFile, imgDir );
 
         var dependencies = new List< AssetDescriptor >();
 
-        foreach ( var page in _data.Pages )
+        foreach ( TextureAtlasData.Page page in _data.Pages )
         {
             var tparams = new TextureLoader.TextureLoaderParameters
             {
                 Format     = page.Format,
                 GenMipMaps = page.UseMipMaps,
                 MinFilter  = page.MinFilter,
-                MagFilter  = page.MagFilter,
+                MagFilter  = page.MagFilter
             };
 
             if ( page.TextureFile != null )

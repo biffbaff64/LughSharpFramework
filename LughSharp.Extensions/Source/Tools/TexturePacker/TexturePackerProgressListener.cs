@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Collections;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -76,7 +77,7 @@ public class TexturePackerProgressListener
     {
         _scale = _portions.Pop();
 
-        var portion = _portions.Pop();
+        float portion = _portions.Pop();
 
         _lastUpdate = _portions.Pop() + portion;
 
@@ -111,4 +112,3 @@ public class TexturePackerProgressListener
 
 // ============================================================================
 // ============================================================================
-

@@ -26,7 +26,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Utils;
@@ -61,17 +63,17 @@ public static class PropertiesUtils
         ArgumentNullException.ThrowIfNull( properties );
         ArgumentNullException.ThrowIfNull( reader );
 
-        var mode      = NONE;
+        int mode      = NONE;
         var unicode   = 0;
         var count     = 0;
         var buf       = new char[ 40 ];
         var offset    = 0;
-        var keyLength = -1;
+        int keyLength = -1;
         var firstChar = true;
 
         while ( true )
         {
-            var intVal = reader.Read();
+            int intVal = reader.Read();
 
             if ( intVal == -1 )
             {
@@ -90,8 +92,8 @@ public static class PropertiesUtils
             switch ( mode )
             {
                 case UNICODE:
-                    var num   = char.GetNumericValue( nextChar.ToString(), 16 );
-                    var digit = ( int )num;
+                    double num   = char.GetNumericValue( nextChar.ToString(), 16 );
+                    var    digit = ( int )num;
 
                     if ( digit >= 0 )
                     {
@@ -283,9 +285,9 @@ public static class PropertiesUtils
 
         if ( keyLength >= 0 )
         {
-            var temp  = new string( buf, 0, offset );
-            var key   = temp.Substring( 0, keyLength );
-            var value = temp.Substring( keyLength );
+            var    temp  = new string( buf, 0, offset );
+            string key   = temp.Substring( 0, keyLength );
+            string value = temp.Substring( keyLength );
 
             if ( mode == SLASH )
             {
@@ -303,7 +305,8 @@ public static class PropertiesUtils
     /// <param name="writer">The writer to write the properties to.</param>
     /// <param name="comment">An optional comment to include at the top of the output.</param>
     /// <param name="escapeUnicode">Whether to escape non-ASCII Unicode characters.</param>
-    public static void Store( Dictionary< string, string > properties, StreamWriter writer, string? comment, bool escapeUnicode = false )
+    public static void Store( Dictionary< string, string > properties, StreamWriter writer, string? comment,
+                              bool escapeUnicode = false )
     {
         if ( comment != null )
         {
@@ -316,7 +319,7 @@ public static class PropertiesUtils
 
         var sb = new StringBuilder( 200 );
 
-        foreach ( var entry in properties )
+        foreach ( KeyValuePair< string, string > entry in properties )
         {
             DumpString( sb, entry.Key, true, escapeUnicode );
             sb.Append( '=' );
@@ -338,11 +341,11 @@ public static class PropertiesUtils
     /// <param name="escapeUnicode">Whether to escape non-ASCII Unicode characters.</param>
     private static void DumpString( StringBuilder outBuffer, string str, bool escapeSpace, bool escapeUnicode )
     {
-        var len = str.Length;
+        int len = str.Length;
 
         for ( var i = 0; i < len; i++ )
         {
-            var ch = str[ i ];
+            char ch = str[ i ];
 
             if ( ( ch > 61 ) && ( ch < 127 ) )
             {
@@ -425,13 +428,13 @@ public static class PropertiesUtils
     {
         writer.Write( "#" );
 
-        var len       = comment.Length;
+        int len       = comment.Length;
         var curIndex  = 0;
         var lastIndex = 0;
 
         while ( curIndex < len )
         {
-            var c = comment[ curIndex ];
+            char c = comment[ curIndex ];
 
             if ( c is > '\u00ff' or '\n' or '\r' )
             {
@@ -461,7 +464,8 @@ public static class PropertiesUtils
                         curIndex++;
                     }
 
-                    if ( ( curIndex == ( len - 1 ) ) || ( ( comment[ curIndex + 1 ] != '#' ) && ( comment[ curIndex + 1 ] != '!' ) ) )
+                    if ( ( curIndex == ( len - 1 ) )
+                      || ( ( comment[ curIndex + 1 ] != '#' ) && ( comment[ curIndex + 1 ] != '!' ) ) )
                     {
                         writer.Write( "#" );
                     }

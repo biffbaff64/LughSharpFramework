@@ -25,7 +25,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Collections;
@@ -160,7 +162,7 @@ public class PredicateIterator< T > : IEnumerator< T >, IDisposable
 
         while ( Enumerator.MoveNext() )
         {
-            var n = Enumerator.Current;
+            T? n = Enumerator.Current;
 
             if ( Predicate.Evaluate( n ) )
             {
@@ -186,7 +188,7 @@ public class PredicateIterator< T > : IEnumerator< T >, IDisposable
             return default( T );
         }
 
-        var result = NextItem;
+        T? result = NextItem;
         NextItem = default( T );
         Peeked   = false;
 
@@ -218,4 +220,3 @@ public class PredicateIterator< T > : IEnumerator< T >, IDisposable
 
 // ============================================================================
 // ============================================================================
-

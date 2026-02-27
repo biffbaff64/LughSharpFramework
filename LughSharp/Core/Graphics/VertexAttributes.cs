@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Text;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics;
@@ -91,7 +92,7 @@ public class VertexAttributes
             {
                 long result = 0;
 
-                foreach ( var t in _attributes )
+                foreach ( VertexAttribute t in _attributes )
                 {
                     result |= ( uint )t.Usage;
                 }
@@ -119,7 +120,7 @@ public class VertexAttributes
     /// <param name="defaultIfNotFound"></param>
     protected int GetOffset( int usage, int defaultIfNotFound )
     {
-        var vertexAttribute = FindByUsage( usage );
+        VertexAttribute? vertexAttribute = FindByUsage( usage );
 
         if ( vertexAttribute == null )
         {
@@ -144,7 +145,7 @@ public class VertexAttributes
     /// <param name="usage"> The usage of the VertexAttribute to find.  </param>
     public VertexAttribute? FindByUsage( int usage )
     {
-        var len = Size;
+        int len = Size;
 
         for ( var i = 0; i < len; i++ )
         {
@@ -168,7 +169,7 @@ public class VertexAttributes
     {
         var count = 0;
 
-        foreach ( var attribute in _attributes )
+        foreach ( VertexAttribute attribute in _attributes )
         {
             attribute.Offset =  count;
             count            += attribute.GetSizeInBytes();
@@ -192,7 +193,7 @@ public class VertexAttributes
         var builder = new StringBuilder();
         builder.Append( '[' );
 
-        foreach ( var t in _attributes )
+        foreach ( VertexAttribute t in _attributes )
         {
             builder.Append( '(' );
             builder.Append( t.Alias );
@@ -245,7 +246,7 @@ public class VertexAttributes
     {
         long result = 61 * _attributes.Length;
 
-        foreach ( var t in _attributes )
+        foreach ( VertexAttribute t in _attributes )
         {
             result = ( result * 61 ) + t.GetHashCode();
         }
@@ -271,18 +272,18 @@ public class VertexAttributes
             return _attributes.Length - o._attributes.Length;
         }
 
-        var m1 = Mask;
-        var m2 = o.Mask;
+        long m1 = Mask;
+        long m2 = o.Mask;
 
         if ( m1 != m2 )
         {
             return m1 < m2 ? -1 : 1;
         }
 
-        for ( var i = _attributes.Length - 1; i >= 0; --i )
+        for ( int i = _attributes.Length - 1; i >= 0; --i )
         {
-            var va0 = _attributes[ i ];
-            var va1 = o._attributes[ i ];
+            VertexAttribute va0 = _attributes[ i ];
+            VertexAttribute va1 = o._attributes[ i ];
 
             if ( va0.Usage != va1.Usage )
             {

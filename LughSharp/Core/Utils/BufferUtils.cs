@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils;
@@ -48,7 +50,7 @@ public class BufferUtils
             throw new ArgumentException( "Source and destination buffers cannot be the same instance." );
         }
 
-        var bytesToCopy =
+        int bytesToCopy =
             Math.Min( source.Remaining(), destination.Remaining() ); // Copy up to the smaller remaining size
 
         if ( bytesToCopy < 0 )

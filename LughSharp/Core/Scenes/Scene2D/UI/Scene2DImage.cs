@@ -42,12 +42,12 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Scene2DImage : Widget
 {
-    public override string? Name => "Scene2DImage";
-    public float           ImageX      { get; set; }
-    public float           ImageY      { get; set; }
-    public float           ImageWidth  { get; set; }
-    public float           ImageHeight { get; set; }
-    public ISceneDrawable? Drawable    { get; private set; }
+    public override string?         Name        => "Scene2DImage";
+    public          float           ImageX      { get; set; }
+    public          float           ImageY      { get; set; }
+    public          float           ImageWidth  { get; set; }
+    public          float           ImageHeight { get; set; }
+    public          ISceneDrawable? Drawable    { get; private set; }
 
     // ========================================================================
 
@@ -149,17 +149,29 @@ public class Scene2DImage : Widget
     /// minimum width of the associated drawable if one is set, or 0 if no
     /// drawable is assigned.
     /// </summary>
-    public override float GetPrefWidth() => GetPrefWidthSafe();
+    public override float GetPrefWidth()
+    {
+        return GetPrefWidthSafe();
+    }
 
-    protected float GetPrefWidthSafe() => Drawable?.MinWidth ?? 0;
+    protected float GetPrefWidthSafe()
+    {
+        return Drawable?.MinWidth ?? 0;
+    }
 
     /// <summary>
     /// The preferred height of the widget, typically derived from the minimum
     /// height of the drawable.
     /// </summary>
-    public override float GetPrefHeight() => GetPrefHeightSafe();
+    public override float GetPrefHeight()
+    {
+        return GetPrefHeightSafe();
+    }
 
-    protected float GetPrefHeightSafe() => Drawable?.MinHeight ?? 0;
+    protected float GetPrefHeightSafe()
+    {
+        return Drawable?.MinHeight ?? 0;
+    }
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor has
@@ -174,13 +186,13 @@ public class Scene2DImage : Widget
         {
             throw new InvalidOperationException( "Drawable cannot be null" );
         }
-        
-        var regionWidth  = Drawable.MinWidth;
-        var regionHeight = Drawable.MinHeight;
-        var width        = Width;
-        var height       = Height;
 
-        var size = _scaling.Apply( regionWidth, regionHeight, width, height );
+        float regionWidth  = Drawable.MinWidth;
+        float regionHeight = Drawable.MinHeight;
+        float width        = Width;
+        float height       = Height;
+
+        Vector2 size = _scaling.Apply( regionWidth, regionHeight, width, height );
 
         ImageWidth  = size.X;
         ImageHeight = size.Y;
@@ -235,14 +247,14 @@ public class Scene2DImage : Widget
 
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
-        var x      = X;
-        var y      = Y;
-        var scaleX = ScaleX;
-        var scaleY = ScaleY;
+        float x      = X;
+        float y      = Y;
+        float scaleX = ScaleX;
+        float scaleY = ScaleY;
 
         if ( Drawable is ITransformDrawable drawable )
         {
-            var rotation = Rotation;
+            float rotation = Rotation;
 
             if ( scaleX is not 1 || scaleY is not 1 || rotation is not 0 )
             {
@@ -251,19 +263,19 @@ public class Scene2DImage : Widget
                     X      = ( int )( x + ImageX ),
                     Y      = ( int )( y + ImageY ),
                     Width  = ( int )ImageWidth,
-                    Height = ( int )ImageHeight,
+                    Height = ( int )ImageHeight
                 };
 
                 var origin = new Point2D
                 {
                     X = ( int )( OriginX - ImageX ),
-                    Y = ( int )( OriginY - ImageY ),
+                    Y = ( int )( OriginY - ImageY )
                 };
 
                 var scale = new Point2D
                 {
                     X = ( int )scaleX,
-                    Y = ( int )scaleY,
+                    Y = ( int )scaleY
                 };
 
                 drawable.Draw( batch, region, origin, scale, rotation );
@@ -320,15 +332,15 @@ public class Scene2DImage : Widget
     /// <inheritdoc />
     public override string ToString()
     {
-        var name = Name;
+        string? name = Name;
 
         if ( name != null )
         {
             return name;
         }
 
-        var className = GetType().Name;
-        var dotIndex  = className.LastIndexOf( '.' );
+        string className = GetType().Name;
+        int    dotIndex  = className.LastIndexOf( '.' );
 
         if ( dotIndex != -1 )
         {

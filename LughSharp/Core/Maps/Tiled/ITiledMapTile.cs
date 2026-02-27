@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 
 namespace LughSharp.Core.Maps.Tiled;
@@ -37,7 +38,7 @@ public interface ITiledMapTile
     enum Blendmode
     {
         None,
-        Alpha,
+        Alpha
     }
 
     /// <summary>
@@ -78,4 +79,3 @@ public interface ITiledMapTile
 
 // ============================================================================
 // ============================================================================
-

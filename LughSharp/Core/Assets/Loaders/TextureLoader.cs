@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -104,7 +105,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.TextureData == null )
         {
-            var format     = LughFormat.RGBA8888;
+            int format     = LughFormat.RGBA8888;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;
@@ -140,8 +141,8 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
                                             FileInfo file,
                                             TP? parameter ) where TP : class
     {
-        var p       = parameter as TextureLoaderParameters;
-        var texture = _loaderInfo.Texture;
+        var      p       = parameter as TextureLoaderParameters;
+        Texture? texture = _loaderInfo.Texture;
 
         if ( texture != null )
         {

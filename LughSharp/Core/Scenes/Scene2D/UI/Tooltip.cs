@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
@@ -99,11 +100,11 @@ public class Tooltip< T > : InputListener where T : Actor
 
         Container.Pack();
 
-        var offsetX = Manager.OffsetX;
-        var offsetY = Manager.OffsetY;
-        var dist    = Manager.EdgeDistance;
+        float offsetX = Manager.OffsetX;
+        float offsetY = Manager.OffsetY;
+        float dist    = Manager.EdgeDistance;
 
-        var point = actor.LocalToStageCoordinates( _tmp.Set( x + offsetX, y - offsetY - Container.Height ) );
+        Vector2 point = actor.LocalToStageCoordinates( _tmp.Set( x + offsetX, y - offsetY - Container.Height ) );
 
         if ( point.Y < dist )
         {
@@ -140,7 +141,7 @@ public class Tooltip< T > : InputListener where T : Actor
             return;
         }
 
-        var actor = ev?.ListenerActor;
+        Actor? actor = ev?.ListenerActor;
 
         if ( ( fromActor != null ) && fromActor.IsDescendantOf( actor ) )
         {

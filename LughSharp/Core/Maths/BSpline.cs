@@ -56,9 +56,9 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
 
     public T ValueAt( in T output, in float t )
     {
-        var n = SpanCount;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = SpanCount;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -67,9 +67,9 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
 
     public virtual T DerivativeAt( in T output, in float t )
     {
-        var n = SpanCount;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = SpanCount;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -120,9 +120,9 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The value of out  </returns>
     public static T Cubic( T output, float t, T[] points, bool continuous, T tmp )
     {
-        var n = continuous ? points.Length : points.Length - 3;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = continuous ? points.Length : points.Length - 3;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -140,9 +140,9 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The value of out  </returns>
     public static T CubicDerivative( T output, float t, T[] points, bool continuous, T tmp )
     {
-        var n = continuous ? points.Length : points.Length - 3;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = continuous ? points.Length : points.Length - 3;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -163,16 +163,16 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The value of out  </returns>
     public static T Cubic( T output, int i, float u, T[] points, bool continuous, T tmp )
     {
-        var n  = points.Length;
-        var dt = 1f - u;
-        var t2 = u * u;
-        var t3 = t2 * u;
+        int   n  = points.Length;
+        float dt = 1f - u;
+        float t2 = u * u;
+        float t3 = t2 * u;
 
-        output.Set( points[ i ] ).Scale( ( ( ( 3f * t3 ) - ( 6f * t2 ) ) + 4f ) * D6 );
+        output.Set( points[ i ] ).Scale( ( ( 3f * t3 ) - ( 6f * t2 ) + 4f ) * D6 );
 
         if ( continuous || ( i > 0 ) )
         {
-            output.Add( tmp.Set( points[ ( ( n + i ) - 1 ) % n ] )
+            output.Add( tmp.Set( points[ ( n + i - 1 ) % n ] )
                            .Scale( dt * dt * dt * D6 ) );
         }
 
@@ -204,15 +204,15 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The value of out  </returns>
     public static T CubicDerivative( T output, int i, float u, T[] points, bool continuous, T tmp )
     {
-        var n  = points.Length;
-        var dt = 1f - u;
-        var t2 = u * u;
+        int   n  = points.Length;
+        float dt = 1f - u;
+        float t2 = u * u;
 
         output.Set( points[ i ] ).Scale( ( 1.5f * t2 ) - ( 2 * u ) );
 
         if ( continuous || ( i > 0 ) )
         {
-            output.Add( tmp.Set( points[ ( ( n + i ) - 1 ) % n ] )
+            output.Add( tmp.Set( points[ ( n + i - 1 ) % n ] )
                            .Scale( -0.5f * dt * dt ) );
         }
 
@@ -242,9 +242,9 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The value of out  </returns>
     public static T Calculate( T output, float t, T[] points, int degree, bool continuous, T tmp )
     {
-        var n = continuous ? points.Length : points.Length - degree;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = continuous ? points.Length : points.Length - degree;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -263,9 +263,9 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The value of out  </returns>
     public static T Derivative( T output, float t, T[] points, int degree, bool continuous, T tmp )
     {
-        var n = continuous ? points.Length : points.Length - degree;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = continuous ? points.Length : points.Length - degree;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -391,13 +391,13 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
             start += SpanCount;
         }
 
-        var result = start % SpanCount;
-        var dst    = input.Distance2( Knots![ result ] );
+        int   result = start % SpanCount;
+        float dst    = input.Distance2( Knots![ result ] );
 
         for ( var i = 1; i < count; i++ )
         {
-            var idx = ( start + i ) % SpanCount;
-            var d   = input.Distance2( Knots[ idx ] );
+            int   idx = ( start + i ) % SpanCount;
+            float d   = input.Distance2( Knots[ idx ] );
 
             if ( d < dst )
             {
@@ -416,17 +416,17 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
 
     protected virtual float Approximate( T input, int near )
     {
-        var n = near;
+        int n = near;
 
-        var nearest  = Knots![ n ];
-        var previous = Knots[ n > 0 ? n - 1 : SpanCount - 1 ];
-        var next     = Knots[ ( n + 1 ) % SpanCount ];
+        T nearest  = Knots![ n ];
+        T previous = Knots[ n > 0 ? n - 1 : SpanCount - 1 ];
+        T next     = Knots[ ( n + 1 ) % SpanCount ];
 
-        var dstPrev2 = input.Distance2( previous );
-        var dstNext2 = input.Distance2( next );
-        T   p1;
-        T   p2;
-        T   p3;
+        float dstPrev2 = input.Distance2( previous );
+        float dstNext2 = input.Distance2( next );
+        T     p1;
+        T     p2;
+        T     p3;
 
         if ( dstNext2 < dstPrev2 )
         {
@@ -442,12 +442,12 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
             n  = n > 0 ? n - 1 : SpanCount - 1;
         }
 
-        var l1Sqr = p1.Distance2( p2 );
-        var l2Sqr = p3.Distance2( p2 );
-        var l3Sqr = p3.Distance2( p1 );
-        var l1    = ( float )Math.Sqrt( l1Sqr );
-        var s     = ( ( l2Sqr + l1Sqr ) - l3Sqr ) / ( 2 * l1 );
-        var u     = MathUtils.Clamp( ( l1 - s ) / l1, 0f, 1f );
+        float l1Sqr = p1.Distance2( p2 );
+        float l2Sqr = p3.Distance2( p2 );
+        float l3Sqr = p3.Distance2( p1 );
+        var   l1    = ( float )Math.Sqrt( l1Sqr );
+        float s     = ( l2Sqr + l1Sqr - l3Sqr ) / ( 2 * l1 );
+        float u     = MathUtils.Clamp( ( l1 - s ) / l1, 0f, 1f );
 
         return ( n + u ) / SpanCount;
     }

@@ -23,7 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Reflection;
+using System.Text.RegularExpressions;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -61,10 +64,10 @@ public class LibraryVersion
 
         try
         {
-            var matches = RegexUtils.VersionNumberRegex().Matches( _version.ToString() );
-            var v       = string.Empty;
+            MatchCollection matches = RegexUtils.VersionNumberRegex().Matches( _version.ToString() );
+            var             v       = string.Empty;
 
-            foreach ( var match in matches )
+            foreach ( object? match in matches )
             {
                 v += match;
             }

@@ -25,8 +25,10 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Decoding.Decoders.LayerIII;
 using LughSharp.Core.Audio.Maponus.Support;
+
 using OutputChannelsEnum = LughSharp.Core.Audio.Maponus.Decoding.OutputChannels.OutputChannelsEnum;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
@@ -43,7 +45,7 @@ public class LayerIIIDecoder : IFrameDecoder
     private static readonly int[][] _slen =
     [
         [ 0, 0, 0, 0, 3, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4 ],
-        [ 0, 1, 2, 3, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3, 2, 3 ],
+        [ 0, 1, 2, 3, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3, 2, 3 ]
     ];
 
     public static readonly int[] Pretab = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 2, 0 ];
@@ -62,7 +64,7 @@ public class LayerIIIDecoder : IFrameDecoder
         1.6858739404e-07f, 1.1920928955e-07f, 8.4293697022e-08f, 5.9604644775e-08f, 4.2146848511e-08f,
         2.9802322388e-08f, 2.1073424255e-08f, 1.4901161194e-08f, 1.0536712128e-08f, 7.4505805969e-09f,
         5.2683560639e-09f, 3.7252902985e-09f, 2.6341780319e-09f, 1.8626451492e-09f, 1.3170890160e-09f,
-        9.3132257462e-10f, 6.5854450798e-10f, 4.6566128731e-10f, 3.2927225399e-10f,
+        9.3132257462e-10f, 6.5854450798e-10f, 4.6566128731e-10f, 3.2927225399e-10f
     ];
 
     public static readonly float[] PowerTable;
@@ -76,7 +78,7 @@ public class LayerIIIDecoder : IFrameDecoder
             7.4325444691e-02f, 6.2500000003e-02f, 5.2556025956e-02f, 4.4194173826e-02f, 3.7162722346e-02f,
             3.1250000002e-02f, 2.6278012978e-02f, 2.2097086913e-02f, 1.8581361173e-02f, 1.5625000001e-02f,
             1.3139006489e-02f, 1.1048543457e-02f, 9.2906805866e-03f, 7.8125000006e-03f, 6.5695032447e-03f,
-            5.5242717285e-03f, 4.6453402934e-03f,
+            5.5242717285e-03f, 4.6453402934e-03f
         ],
         [
             1.0000000000e+00f, 7.0710678119e-01f, 5.0000000000e-01f, 3.5355339060e-01f, 2.5000000000e-01f,
@@ -85,14 +87,14 @@ public class LayerIIIDecoder : IFrameDecoder
             5.5242717282e-03f, 3.9062500001e-03f, 2.7621358641e-03f, 1.9531250001e-03f, 1.3810679321e-03f,
             9.7656250004e-04f, 6.9053396603e-04f, 4.8828125002e-04f, 3.4526698302e-04f, 2.4414062501e-04f,
             1.7263349151e-04f, 1.2207031251e-04f, 8.6316745755e-05f, 6.1035156254e-05f, 4.3158372878e-05f,
-            3.0517578127e-05f, 2.1579186439e-05f,
-        ],
+            3.0517578127e-05f, 2.1579186439e-05f
+        ]
     ];
 
     public static readonly float[] Tan12 =
     [
         0.0f, 0.26794919f, 0.57735027f, 1.0f, 1.73205081f, 3.73205081f, 9.9999999e10f, -3.73205081f, -1.73205081f,
-        -1.0f, -0.57735027f, -0.26794919f, 0.0f, 0.26794919f, 0.57735027f, 1.0f,
+        -1.0f, -0.57735027f, -0.26794919f, 0.0f, 0.26794919f, 0.57735027f, 1.0f
     ];
 
     private static int[][]? _reorderTable; // Generated on demand
@@ -100,13 +102,13 @@ public class LayerIIIDecoder : IFrameDecoder
     private static readonly float[] _cs =
     [
         0.857492925712f, 0.881741997318f, 0.949628649103f, 0.983314592492f, 0.995517816065f, 0.999160558175f,
-        0.999899195243f, 0.999993155067f,
+        0.999899195243f, 0.999993155067f
     ];
 
     private static readonly float[] _ca =
     [
         -0.5144957554270f, -0.4717319685650f, -0.3133774542040f, -0.1819131996110f, -0.0945741925262f,
-        -0.0409655828852f, -0.0141985685725f, -0.00369997467375f,
+        -0.0409655828852f, -0.0141985685725f, -0.00369997467375f
     ];
 
     public static readonly float[][] Win =
@@ -119,7 +121,7 @@ public class LayerIIIDecoder : IFrameDecoder
             -2.8939587111e-01f, -2.6880081906e-01f, -5.0000000266e-01f, -2.3251417468e-01f, -2.1596714708e-01f,
             -2.0004979098e-01f, -1.8449493497e-01f, -1.6905846094e-01f, -1.5350360518e-01f, -1.3758624925e-01f,
             -1.2103922149e-01f, -2.0710679058e-01f, -8.4752577594e-02f, -6.4157525656e-02f, -4.1131172614e-02f,
-            -1.4790705759e-02f,
+            -1.4790705759e-02f
         ],
         [
             -1.6141214951e-02f, -5.3603178919e-02f, -1.0070713296e-01f, -1.6280817573e-01f, -4.9999999679e-01f,
@@ -129,7 +131,7 @@ public class LayerIIIDecoder : IFrameDecoder
             -2.9642226150e-01f, -2.8184548650e-01f, -5.4119610000e-01f, -2.6213228100e-01f, -2.5387916537e-01f,
             -2.3296291359e-01f, -1.9852728987e-01f, -1.5233534808e-01f, -9.6496400054e-02f, -3.3423828516e-02f,
             0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f,
-            0.0000000000e+00f,
+            0.0000000000e+00f
         ],
         [
             -4.8300800645e-02f, -1.5715656932e-01f, -2.8325045177e-01f, -4.2953747763e-01f, -1.2071067795e+00f,
@@ -139,7 +141,7 @@ public class LayerIIIDecoder : IFrameDecoder
             0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f,
             0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f,
             0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f,
-            0.0000000000e+00f,
+            0.0000000000e+00f
         ],
         [
             0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f,
@@ -149,8 +151,8 @@ public class LayerIIIDecoder : IFrameDecoder
             -2.8939587111e-01f, -2.6880081906e-01f, -5.0000000266e-01f, -2.3251417468e-01f, -2.1596714708e-01f,
             -2.0004979098e-01f,
             -1.8449493497e-01f, -1.6905846094e-01f, -1.5350360518e-01f, -1.3758624925e-01f, -1.2103922149e-01f,
-            -2.0710679058e-01f, -8.4752577594e-02f, -6.4157525656e-02f, -4.1131172614e-02f, -1.4790705759e-02f,
-        ],
+            -2.0710679058e-01f, -8.4752577594e-02f, -6.4157525656e-02f, -4.1131172614e-02f, -1.4790705759e-02f
+        ]
     ];
 
     public static readonly int[][][] NrOfSfbBlock =
@@ -160,7 +162,7 @@ public class LayerIIIDecoder : IFrameDecoder
         [ [ 11, 10, 0, 0 ], [ 18, 18, 0, 0 ], [ 15, 18, 0, 0 ] ],
         [ [ 7, 7, 7, 0 ], [ 12, 12, 12, 0 ], [ 6, 15, 12, 0 ] ],
         [ [ 6, 6, 6, 3 ], [ 12, 9, 9, 6 ], [ 6, 12, 9, 6 ] ],
-        [ [ 8, 8, 5, 0 ], [ 15, 12, 9, 0 ], [ 6, 18, 9, 0 ] ],
+        [ [ 8, 8, 5, 0 ], [ 15, 12, 9, 0 ], [ 6, 18, 9, 0 ] ]
     ];
 
     // ========================================================================
@@ -288,35 +290,35 @@ public class LayerIIIDecoder : IFrameDecoder
 
         int[] l0 =
         [
-            0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522, 576,
+            0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522, 576
         ];
 
         int[] s0 = [ 0, 4, 8, 12, 18, 24, 32, 42, 56, 74, 100, 132, 174, 192 ];
 
         int[] l1 =
         [
-            0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 114, 136, 162, 194, 232, 278, 330, 394, 464, 540, 576,
+            0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 114, 136, 162, 194, 232, 278, 330, 394, 464, 540, 576
         ];
 
         int[] s1 = [ 0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 136, 180, 192 ];
 
         int[] l2 =
         [
-            0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522, 576,
+            0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522, 576
         ];
 
         int[] s2 = [ 0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192 ];
 
         int[] l3 =
         [
-            0, 4, 8, 12, 16, 20, 24, 30, 36, 44, 52, 62, 74, 90, 110, 134, 162, 196, 238, 288, 342, 418, 576,
+            0, 4, 8, 12, 16, 20, 24, 30, 36, 44, 52, 62, 74, 90, 110, 134, 162, 196, 238, 288, 342, 418, 576
         ];
 
         int[] s3 = [ 0, 4, 8, 12, 16, 22, 30, 40, 52, 66, 84, 106, 136, 192 ];
 
         int[] l4 =
         [
-            0, 4, 8, 12, 16, 20, 24, 30, 36, 42, 50, 60, 72, 88, 106, 128, 156, 190, 230, 276, 330, 384, 576,
+            0, 4, 8, 12, 16, 20, 24, 30, 36, 42, 50, 60, 72, 88, 106, 128, 156, 190, 230, 276, 330, 384, 576
         ];
 
         int[] s4 = [ 0, 4, 8, 12, 16, 22, 28, 38, 50, 64, 80, 100, 126, 192 ];
@@ -324,7 +326,7 @@ public class LayerIIIDecoder : IFrameDecoder
         int[] l5 =
         [
             0, 4, 8, 12, 16, 20, 24, 30, 36, 44, 54, 66, 82, 102, 126, 156, 194, 240, 296, 364, 448, 550,
-            576,
+            576
         ];
 
         int[] s5 = [ 0, 4, 8, 12, 16, 22, 30, 42, 58, 78, 104, 138, 180, 192 ];
@@ -333,7 +335,7 @@ public class LayerIIIDecoder : IFrameDecoder
         int[] l6 =
         [
             0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522,
-            576,
+            576
         ];
 
         int[] s6 = [ 0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192 ];
@@ -341,7 +343,7 @@ public class LayerIIIDecoder : IFrameDecoder
         int[] l7 =
         [
             0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522,
-            576,
+            576
         ];
 
         int[] s7 = [ 0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192 ];
@@ -349,7 +351,7 @@ public class LayerIIIDecoder : IFrameDecoder
         int[] l8 =
         [
             0, 12, 24, 36, 48, 60, 72, 88, 108, 132, 160, 192, 232, 280, 336, 400, 476, 566, 568, 570, 572,
-            574, 576,
+            574, 576
         ];
 
         int[] s8 = [ 0, 8, 16, 24, 36, 52, 72, 96, 124, 160, 162, 164, 166, 192 ];
@@ -491,7 +493,7 @@ public class LayerIIIDecoder : IFrameDecoder
 
     public void Decode()
     {
-        var nSlots = _header.Slots();
+        int nSlots = _header.Slots();
         int flushMain;
         int gr;
         int i;
@@ -503,7 +505,7 @@ public class LayerIIIDecoder : IFrameDecoder
             _bitReserve.PutBuffer( _stream.GetBitsFromBuffer( 8 ) );
         }
 
-        var mainDataEnd = SupportClass.URShift( _bitReserve.HssTell(), 3 ); // of previous frame
+        int mainDataEnd = SupportClass.URShift( _bitReserve.HssTell(), 3 ); // of previous frame
 
         if ( ( flushMain = _bitReserve.HssTell() & 7 ) != 0 )
         {
@@ -511,7 +513,7 @@ public class LayerIIIDecoder : IFrameDecoder
             mainDataEnd++;
         }
 
-        var bytesToDiscard = _frameStart - mainDataEnd - _sideInfo.MainDataBegin;
+        int bytesToDiscard = _frameStart - mainDataEnd - _sideInfo.MainDataBegin;
 
         _frameStart += nSlots;
 
@@ -703,7 +705,8 @@ public class LayerIIIDecoder : IFrameDecoder
                             _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count = 7;
                         }
 
-                        _sideInfo.Channels[ ch ].Granules[ gr ].Region1Count = 20 - _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count;
+                        _sideInfo.Channels[ ch ].Granules[ gr ].Region1Count =
+                            20 - _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count;
                     }
                     else
                     {
@@ -756,14 +759,15 @@ public class LayerIIIDecoder : IFrameDecoder
                     }
 
                     if ( ( _sideInfo.Channels[ ch ].Granules[ 0 ].BlockType == 2 )
-                         && ( _sideInfo.Channels[ ch ].Granules[ 0 ].MixedBlockFlag == 0 ) )
+                      && ( _sideInfo.Channels[ ch ].Granules[ 0 ].MixedBlockFlag == 0 ) )
                     {
                         _sideInfo.Channels[ ch ].Granules[ 0 ].Region0Count = 8;
                     }
                     else
                     {
                         _sideInfo.Channels[ ch ].Granules[ 0 ].Region0Count = 7;
-                        _sideInfo.Channels[ ch ].Granules[ 0 ].Region1Count = 20 - _sideInfo.Channels[ ch ].Granules[ 0 ].Region0Count;
+                        _sideInfo.Channels[ ch ].Granules[ 0 ].Region1Count =
+                            20 - _sideInfo.Channels[ ch ].Granules[ 0 ].Region0Count;
                     }
                 }
                 else
@@ -788,10 +792,10 @@ public class LayerIIIDecoder : IFrameDecoder
     /// </summary>
     private void ReadScaleFactors( int ch, int gr )
     {
-        var grInfo    = _sideInfo.Channels[ ch ].Granules[ gr ];
-        var scaleComp = grInfo.ScaleFacCompress;
-        var length0   = _slen[ 0 ][ scaleComp ];
-        var length1   = _slen[ 1 ][ scaleComp ];
+        GranuleInfo grInfo    = _sideInfo.Channels[ ch ].Granules[ gr ];
+        int         scaleComp = grInfo.ScaleFacCompress;
+        int         length0   = _slen[ 0 ][ scaleComp ];
+        int         length1   = _slen[ 1 ][ scaleComp ];
 
         if ( ( grInfo.WindowSwitchingFlag != 0 ) && ( grInfo.BlockType == 2 ) )
         {
@@ -810,7 +814,8 @@ public class LayerIIIDecoder : IFrameDecoder
                 {
                     for ( window = 0; window < 3; window++ )
                     {
-                        _scalefac[ ch ].S[ window ][ sfb ] = _bitReserve.ReadBits( _slen[ 0 ][ grInfo.ScaleFacCompress ] );
+                        _scalefac[ ch ].S[ window ][ sfb ] =
+                            _bitReserve.ReadBits( _slen[ 0 ][ grInfo.ScaleFacCompress ] );
                     }
                 }
 
@@ -818,7 +823,8 @@ public class LayerIIIDecoder : IFrameDecoder
                 {
                     for ( window = 0; window < 3; window++ )
                     {
-                        _scalefac[ ch ].S[ window ][ sfb ] = _bitReserve.ReadBits( _slen[ 1 ][ grInfo.ScaleFacCompress ] );
+                        _scalefac[ ch ].S[ window ][ sfb ] =
+                            _bitReserve.ReadBits( _slen[ 1 ][ grInfo.ScaleFacCompress ] );
                     }
                 }
 
@@ -922,22 +928,22 @@ public class LayerIIIDecoder : IFrameDecoder
 
     private void GetLsfScaleData( int ch, int gr )
     {
-        var modeExt = _header.ModeExtension();
+        int modeExt = _header.ModeExtension();
         int blocktypenumber;
         var blocknumber = 0;
 
-        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
+        GranuleInfo grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
-        var scalefacComp = grInfo.ScaleFacCompress;
+        int scalefacComp = grInfo.ScaleFacCompress;
 
         if ( grInfo.BlockType == 2 )
         {
             blocktypenumber = grInfo.MixedBlockFlag switch
-            {
-                0     => 1,
-                1     => 2,
-                var _ => 0,
-            };
+                              {
+                                  0     => 1,
+                                  1     => 2,
+                                  var _ => 0
+                              };
         }
         else
         {
@@ -980,12 +986,12 @@ public class LayerIIIDecoder : IFrameDecoder
 
         if ( modeExt is 1 or 3 && ( ch == 1 ) )
         {
-            var intScalefacComp = SupportClass.URShift( scalefacComp, 1 );
+            int intScalefacComp = SupportClass.URShift( scalefacComp, 1 );
 
             if ( intScalefacComp < 180 )
             {
                 _newSlen[ 0 ] = intScalefacComp / 36;
-                _newSlen[ 1 ] = ( intScalefacComp % 36 ) / 6;
+                _newSlen[ 1 ] = intScalefacComp % 36 / 6;
                 _newSlen[ 2 ] = intScalefacComp % 36 % 6;
                 _newSlen[ 3 ] = 0;
 
@@ -1040,7 +1046,7 @@ public class LayerIIIDecoder : IFrameDecoder
     {
         var m = 0;
 
-        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
+        GranuleInfo grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         GetLsfScaleData( ch, gr );
 
@@ -1112,7 +1118,7 @@ public class LayerIIIDecoder : IFrameDecoder
         V[ 0 ] = 0;
         W[ 0 ] = 0;
 
-        var part23End = _part2Start + _sideInfo.Channels[ ch ].Granules[ gr ].Part23Length;
+        int part23End = _part2Start + _sideInfo.Channels[ ch ].Granules[ gr ].Part23Length;
 
         int region1Start;
         int region2Start;
@@ -1122,7 +1128,7 @@ public class LayerIIIDecoder : IFrameDecoder
         // Find region boundary for short block case
 
         if ( ( _sideInfo.Channels[ ch ].Granules[ gr ].WindowSwitchingFlag != 0 )
-             && ( _sideInfo.Channels[ ch ].Granules[ gr ].BlockType == 2 ) )
+          && ( _sideInfo.Channels[ ch ].Granules[ gr ].BlockType == 2 ) )
         {
             // Region2.
             // Extrahandling for 8KHZ
@@ -1133,8 +1139,8 @@ public class LayerIIIDecoder : IFrameDecoder
         {
             // Find region boundary for long block case
 
-            var buf  = _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count + 1;
-            var buf1 = buf + _sideInfo.Channels[ ch ].Granules[ gr ].Region1Count + 1;
+            int buf  = _sideInfo.Channels[ ch ].Granules[ gr ].Region0Count + 1;
+            int buf1 = buf + _sideInfo.Channels[ ch ].Granules[ gr ].Region1Count + 1;
 
             if ( buf1 > ( _sfBandIndex[ _sfreq ].L.Length - 1 ) )
             {
@@ -1174,7 +1180,7 @@ public class LayerIIIDecoder : IFrameDecoder
 
         // Read count1 area
         h = Huffman.GetHuffmanTable()[ _sideInfo.Channels[ ch ].Granules[ gr ].Count1TableSelect + 32 ];
-        var nuBits = _bitReserve.HssTell();
+        int nuBits = _bitReserve.HssTell();
 
         while ( ( nuBits < part23End ) && ( index < 576 ) )
         {
@@ -1253,13 +1259,13 @@ public class LayerIIIDecoder : IFrameDecoder
     /// </summary>
     private void DequantizeSample( float[][] xr, int ch, int gr )
     {
-        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
-        var cb     = 0;
-        int nextCbBoundary;
-        var cbBegin = 0;
-        var cbWidth = 0;
-        var index   = 0;
-        int j;
+        GranuleInfo grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
+        var         cb     = 0;
+        int         nextCbBoundary;
+        var         cbBegin = 0;
+        var         cbWidth = 0;
+        var         index   = 0;
+        int         j;
 
         // choose correct scalefactor band per block type, initalize boundary
 
@@ -1289,8 +1295,8 @@ public class LayerIIIDecoder : IFrameDecoder
 
         for ( j = 0; j < _nonzero[ ch ]; j++ )
         {
-            var reste   = j % SSLIMIT;
-            var quotien = ( j - reste ) / SSLIMIT;
+            int reste   = j % SSLIMIT;
+            int quotien = ( j - reste ) / SSLIMIT;
 
             if ( _is1D[ j ] == 0 )
             {
@@ -1298,7 +1304,7 @@ public class LayerIIIDecoder : IFrameDecoder
             }
             else
             {
-                var abv = _is1D[ j ];
+                int abv = _is1D[ j ];
 
                 // Begin Patch
                 // This was taken from a patch to the original java file. Ported by DamianMehers
@@ -1340,8 +1346,8 @@ public class LayerIIIDecoder : IFrameDecoder
         // apply formula per block type
         for ( j = 0; j < _nonzero[ ch ]; j++ )
         {
-            var reste   = j % SSLIMIT;
-            var quotien = ( j - reste ) / SSLIMIT;
+            int reste   = j % SSLIMIT;
+            int quotien = ( j - reste ) / SSLIMIT;
 
             if ( index == nextCbBoundary )
             {
@@ -1395,15 +1401,15 @@ public class LayerIIIDecoder : IFrameDecoder
             // Do long/short dependent scaling operations
 
             if ( ( grInfo.WindowSwitchingFlag != 0 )
-                 && ( grInfo is { BlockType: 2, MixedBlockFlag: 0 }
-                      || ( ( grInfo.BlockType == 2 ) && ( grInfo.MixedBlockFlag != 0 ) && ( j >= 36 ) ) ) )
+              && ( grInfo is { BlockType: 2, MixedBlockFlag: 0 }
+                || ( ( grInfo.BlockType == 2 ) && ( grInfo.MixedBlockFlag != 0 ) && ( j >= 36 ) ) ) )
             {
-                var tIndex = ( index - cbBegin ) / cbWidth;
+                int tIndex = ( index - cbBegin ) / cbWidth;
                 /*
                  xr[sb][ss] *= pow(2.0, ((-2.0 * gr_info.subblock_gain[t_index])
                 -(0.5 * (1.0 + gr_info.scalefac_scale) * scalefac[ch].s[t_index][cb])));
                  */
-                var idx = _scalefac[ ch ].S[ tIndex ][ cb ] << grInfo.ScaleFacScale;
+                int idx = _scalefac[ ch ].S[ tIndex ][ cb ] << grInfo.ScaleFacScale;
                 idx += grInfo.SubblockGain[ tIndex ] << 2;
 
                 xr[ quotien ][ reste ] *= TwoToNegativeHalfPow[ idx ];
@@ -1414,7 +1420,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 /*
                  xr[sb][ss] *= pow(2.0, -0.5 * (1.0+gr_info.scalefac_scale) * (scalefac[ch].l[cb] + gr_info.preflag * pretab[cb]));
                  */
-                var idx = _scalefac[ ch ].L[ cb ];
+                int idx = _scalefac[ ch ].L[ cb ];
 
                 if ( grInfo.Preflag != 0 )
                 {
@@ -1431,8 +1437,8 @@ public class LayerIIIDecoder : IFrameDecoder
 
         for ( j = _nonzero[ ch ]; j < 576; j++ )
         {
-            var reste   = j % SSLIMIT;
-            var quotien = ( j - reste ) / SSLIMIT;
+            int reste   = j % SSLIMIT;
+            int quotien = ( j - reste ) / SSLIMIT;
 
             if ( reste < 0 )
             {
@@ -1452,7 +1458,7 @@ public class LayerIIIDecoder : IFrameDecoder
     /// </summary>
     private void Reorder( float[][] xr, int ch, int gr )
     {
-        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
+        GranuleInfo grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         if ( ( grInfo.WindowSwitchingFlag != 0 ) && ( grInfo.BlockType == 2 ) )
         {
@@ -1466,26 +1472,28 @@ public class LayerIIIDecoder : IFrameDecoder
                 // NO REORDER FOR LOW 2 SUBBANDS
                 for ( var index = 0; index < 36; index++ )
                 {
-                    var reste   = index % SSLIMIT;
-                    var quotien = ( index - reste ) / SSLIMIT;
+                    int reste   = index % SSLIMIT;
+                    int quotien = ( index - reste ) / SSLIMIT;
 
                     _out1D[ index ] = xr[ quotien ][ reste ];
                 }
 
                 // REORDERING FOR REST SWITCHED SHORT
-                for ( int sfb = 3, sfbStart = _sfBandIndex[ _sfreq ].S[ 3 ], sfbLines = _sfBandIndex[ _sfreq ].S[ 4 ] - sfbStart;
+                for ( int sfb = 3,
+                          sfbStart = _sfBandIndex[ _sfreq ].S[ 3 ],
+                          sfbLines = _sfBandIndex[ _sfreq ].S[ 4 ] - sfbStart;
                      sfb < 13;
                      sfb++, sfbStart = _sfBandIndex[ _sfreq ].S[ sfb ],
                      sfbLines = _sfBandIndex[ _sfreq ].S[ sfb + 1 ] - sfbStart )
                 {
-                    var sfbStart3 = ( sfbStart << 2 ) - sfbStart;
+                    int sfbStart3 = ( sfbStart << 2 ) - sfbStart;
 
                     for ( int freq = 0, freq3 = 0; freq < sfbLines; freq++, freq3 += 3 )
                     {
-                        var srcLine = sfbStart3 + freq;
-                        var desLine = sfbStart3 + freq3;
-                        var reste   = srcLine % SSLIMIT;
-                        var quotien = ( srcLine - reste ) / SSLIMIT;
+                        int srcLine = sfbStart3 + freq;
+                        int desLine = sfbStart3 + freq3;
+                        int reste   = srcLine % SSLIMIT;
+                        int quotien = ( srcLine - reste ) / SSLIMIT;
 
                         _out1D[ desLine ] =  xr[ quotien ][ reste ];
                         srcLine           += sfbLines;
@@ -1510,9 +1518,9 @@ public class LayerIIIDecoder : IFrameDecoder
                 // pure short
                 for ( var index = 0; index < 576; index++ )
                 {
-                    var j       = _reorderTable![ _sfreq ][ index ];
-                    var reste   = j % SSLIMIT;
-                    var quotien = ( j - reste ) / SSLIMIT;
+                    int j       = _reorderTable![ _sfreq ][ index ];
+                    int reste   = j % SSLIMIT;
+                    int quotien = ( j - reste ) / SSLIMIT;
 
                     _out1D[ index ] = xr[ quotien ][ reste ];
                 }
@@ -1523,8 +1531,8 @@ public class LayerIIIDecoder : IFrameDecoder
             // long blocks
             for ( var index = 0; index < 576; index++ )
             {
-                var reste   = index % SSLIMIT;
-                var quotien = ( index - reste ) / SSLIMIT;
+                int reste   = index % SSLIMIT;
+                int quotien = ( index - reste ) / SSLIMIT;
 
                 _out1D[ index ] = xr[ quotien ][ reste ];
             }
@@ -1551,15 +1559,15 @@ public class LayerIIIDecoder : IFrameDecoder
         }
         else
         {
-            var grInfo  = _sideInfo.Channels[ 0 ].Granules[ gr ];
-            var modeExt = _header.ModeExtension();
-            int i;
+            GranuleInfo grInfo  = _sideInfo.Channels[ 0 ].Granules[ gr ];
+            int         modeExt = _header.ModeExtension();
+            int         i;
 
-            var msStereo = ( _header.Mode() == Header.JOINT_STEREO ) && ( ( modeExt & 0x2 ) != 0 );
-            var iStereo  = ( _header.Mode() == Header.JOINT_STEREO ) && ( ( modeExt & 0x1 ) != 0 );
-            var lsf      = ( _header.Version() == Header.MPEG2_LSF ) || ( _header.Version() == Header.MPEG25_LSF ); // SZD
+            bool msStereo = ( _header.Mode() == Header.JOINT_STEREO ) && ( ( modeExt & 0x2 ) != 0 );
+            bool iStereo = ( _header.Mode() == Header.JOINT_STEREO ) && ( ( modeExt & 0x1 ) != 0 );
+            bool lsf = ( _header.Version() == Header.MPEG2_LSF ) || ( _header.Version() == Header.MPEG25_LSF ); // SZD
 
-            var ioType = grInfo.ScaleFacCompress & 1;
+            int ioType = grInfo.ScaleFacCompress & 1;
 
             // initialization
 
@@ -1592,7 +1600,7 @@ public class LayerIIIDecoder : IFrameDecoder
                             {
                                 i     = _sfBandIndex[ _sfreq ].S[ sfb ];
                                 lines = _sfBandIndex[ _sfreq ].S[ sfb + 1 ] - i;
-                                i     = ( ( ( i << 2 ) - i ) + ( ( j + 1 ) * lines ) ) - 1;
+                                i     = ( i << 2 ) - i + ( ( j + 1 ) * lines ) - 1;
 
                                 while ( lines > 0 )
                                 {
@@ -1623,7 +1631,7 @@ public class LayerIIIDecoder : IFrameDecoder
                             {
                                 temp = _sfBandIndex[ _sfreq ].S[ sfb ];
                                 sb   = _sfBandIndex[ _sfreq ].S[ sfb + 1 ] - temp;
-                                i    = ( ( temp << 2 ) - temp ) + ( j * sb );
+                                i    = ( temp << 2 ) - temp + ( j * sb );
 
                                 for ( ; sb > 0; sb-- )
                                 {
@@ -1650,10 +1658,10 @@ public class LayerIIIDecoder : IFrameDecoder
 
                             sfb  = _sfBandIndex[ _sfreq ].S[ 10 ];
                             sb   = _sfBandIndex[ _sfreq ].S[ 11 ] - sfb;
-                            sfb  = ( ( sfb << 2 ) - sfb ) + ( j * sb );
+                            sfb  = ( sfb << 2 ) - sfb + ( j * sb );
                             temp = _sfBandIndex[ _sfreq ].S[ 11 ];
                             sb   = _sfBandIndex[ _sfreq ].S[ 12 ] - temp;
-                            i    = ( ( temp << 2 ) - temp ) + ( j * sb );
+                            i    = ( temp << 2 ) - temp + ( j * sb );
 
                             for ( ; sb > 0; sb-- )
                             {
@@ -1748,13 +1756,13 @@ public class LayerIIIDecoder : IFrameDecoder
                         // if (gr_info.mixed_block_flag)
                         for ( var j = 0; j < 3; j++ )
                         {
-                            var sfbcnt = -1;
+                            int sfbcnt = -1;
 
                             for ( sfb = 12; sfb >= 0; sfb-- )
                             {
                                 temp  = _sfBandIndex[ _sfreq ].S[ sfb ];
                                 lines = _sfBandIndex[ _sfreq ].S[ sfb + 1 ] - temp;
-                                i     = ( ( ( temp << 2 ) - temp ) + ( ( j + 1 ) * lines ) ) - 1;
+                                i     = ( temp << 2 ) - temp + ( ( j + 1 ) * lines ) - 1;
 
                                 while ( lines > 0 )
                                 {
@@ -1780,7 +1788,7 @@ public class LayerIIIDecoder : IFrameDecoder
                             {
                                 temp = _sfBandIndex[ _sfreq ].S[ sfb ];
                                 sb   = _sfBandIndex[ _sfreq ].S[ sfb + 1 ] - temp;
-                                i    = ( ( temp << 2 ) - temp ) + ( j * sb );
+                                i    = ( temp << 2 ) - temp + ( j * sb );
 
                                 for ( ; sb > 0; sb-- )
                                 {
@@ -1807,12 +1815,12 @@ public class LayerIIIDecoder : IFrameDecoder
 
                             temp = _sfBandIndex[ _sfreq ].S[ 10 ];
 
-                            var temp2 = _sfBandIndex[ _sfreq ].S[ 11 ];
+                            int temp2 = _sfBandIndex[ _sfreq ].S[ 11 ];
 
                             sb  = temp2 - temp;
-                            sfb = ( ( temp << 2 ) - temp ) + ( j * sb );
+                            sfb = ( temp << 2 ) - temp + ( j * sb );
                             sb  = _sfBandIndex[ _sfreq ].S[ 12 ] - temp2;
-                            i   = ( ( temp2 << 2 ) - temp2 ) + ( j * sb );
+                            i   = ( temp2 << 2 ) - temp2 + ( j * sb );
 
                             for ( ; sb > 0; sb-- )
                             {
@@ -1974,9 +1982,9 @@ public class LayerIIIDecoder : IFrameDecoder
     /// </summary>
     private void Antialias( int ch, int gr )
     {
-        int sb18;
-        int sb18Lim;
-        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
+        int         sb18;
+        int         sb18Lim;
+        GranuleInfo grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         // 31 alias-reduction operations between each pair of sub-bands
         // with 8 butterflies between each pair
@@ -1999,10 +2007,10 @@ public class LayerIIIDecoder : IFrameDecoder
         {
             for ( var ss = 0; ss < 8; ss++ )
             {
-                var srcIdx1 = ( sb18 + 17 ) - ss;
-                var srcIdx2 = sb18 + 18 + ss;
-                var bu      = _out1D[ srcIdx1 ];
-                var bd      = _out1D[ srcIdx2 ];
+                int   srcIdx1 = sb18 + 17 - ss;
+                int   srcIdx2 = sb18 + 18 + ss;
+                float bu      = _out1D[ srcIdx1 ];
+                float bd      = _out1D[ srcIdx2 ];
                 _out1D[ srcIdx1 ] = ( bu * _cs[ ss ] ) - ( bd * _ca[ ss ] );
                 _out1D[ srcIdx2 ] = ( bd * _cs[ ss ] ) + ( bu * _ca[ ss ] );
             }
@@ -2011,18 +2019,18 @@ public class LayerIIIDecoder : IFrameDecoder
 
     private void Hybrid( int ch, int gr )
     {
-        int sb18;
-        var grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
+        int         sb18;
+        GranuleInfo grInfo = _sideInfo.Channels[ ch ].Granules[ gr ];
 
         for ( sb18 = 0; sb18 < 576; sb18 += 18 )
         {
-            var bt = ( grInfo.WindowSwitchingFlag != 0 )
-                     && ( grInfo.MixedBlockFlag != 0 )
-                     && ( sb18 < 36 )
+            int bt = ( grInfo.WindowSwitchingFlag != 0 )
+                  && ( grInfo.MixedBlockFlag != 0 )
+                  && ( sb18 < 36 )
                 ? 0
                 : grInfo.BlockType;
 
-            var tsOut = _out1D;
+            float[] tsOut = _out1D;
 
             for ( var cc = 0; cc < 18; cc++ )
             {
@@ -2037,7 +2045,7 @@ public class LayerIIIDecoder : IFrameDecoder
             }
 
             // overlap addition
-            var prvblk = _prevblck;
+            float[][] prvblk = _prevblck;
 
             tsOut[ 0 + sb18 ]         = Rawout[ 0 ] + prvblk[ ch ][ sb18 + 0 ];
             prvblk[ ch ][ sb18 + 0 ]  = Rawout[ 18 ];
@@ -2171,9 +2179,9 @@ public class LayerIIIDecoder : IFrameDecoder
                 inValues[ 9 + i ]  += inValues[ 3 + i ];
 
                 // 3 point IDCT on even indices
-                var pp2 = inValues[ 12 + i ] * 0.500000000f;
-                var pp1 = inValues[ 6 + i ] * 0.866025403f;
-                var sum = inValues[ 0 + i ] + pp2;
+                float pp2 = inValues[ 12 + i ] * 0.500000000f;
+                float pp1 = inValues[ 6 + i ] * 0.866025403f;
+                float sum = inValues[ 0 + i ] + pp2;
                 tmpf1 = inValues[ 0 + i ] - inValues[ 12 + i ];
                 tmpf0 = sum + pp1;
                 tmpf2 = sum - pp1;
@@ -2195,7 +2203,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 tmpf5 *= 0.517638090f;
 
                 // Output butterflies on 2 3 point IDCT's (for 6 point IDCT)
-                var save = tmpf0;
+                float save = tmpf0;
                 tmpf0 += tmpf5;
                 tmpf5 =  save - tmpf5;
                 save  =  tmpf1;
@@ -2298,58 +2306,60 @@ public class LayerIIIDecoder : IFrameDecoder
             // 9 point IDCT on even indices
 
             // 5 points on odd indices (not realy an IDCT)
-            var i00   = inValues[ 0 ] + inValues[ 0 ];
-            var iip12 = i00 + inValues[ 12 ];
+            float i00   = inValues[ 0 ] + inValues[ 0 ];
+            float iip12 = i00 + inValues[ 12 ];
 
-            var tmp0 = iip12 + ( inValues[ 4 ] * 1.8793852415718f ) + ( inValues[ 8 ] * 1.532088886238f ) +
-                       ( inValues[ 16 ] * 0.34729635533386f );
-            var tmp1 = ( i00 + inValues[ 4 ] ) - inValues[ 8 ] - inValues[ 12 ] - inValues[ 12 ] - inValues[ 16 ];
-            var tmp2 = ( iip12 - ( inValues[ 4 ] * 0.34729635533386f ) - ( inValues[ 8 ] * 1.8793852415718f ) ) +
-                       ( inValues[ 16 ] * 1.532088886238f );
-            var tmp3 = ( ( iip12 - ( inValues[ 4 ] * 1.532088886238f ) ) + ( inValues[ 8 ] * 0.34729635533386f ) ) -
-                       ( inValues[ 16 ] * 1.8793852415718f );
-            var tmp4 = ( ( ( inValues[ 0 ] - inValues[ 4 ] ) + inValues[ 8 ] ) - inValues[ 12 ] ) + inValues[ 16 ];
+            float tmp0 = iip12 + ( inValues[ 4 ] * 1.8793852415718f ) + ( inValues[ 8 ] * 1.532088886238f ) +
+                         ( inValues[ 16 ] * 0.34729635533386f );
+            float tmp1 = i00 + inValues[ 4 ] - inValues[ 8 ] - inValues[ 12 ] - inValues[ 12 ] - inValues[ 16 ];
+            float tmp2 = iip12 - ( inValues[ 4 ] * 0.34729635533386f ) - ( inValues[ 8 ] * 1.8793852415718f ) +
+                         ( inValues[ 16 ] * 1.532088886238f );
+            float tmp3 = iip12 - ( inValues[ 4 ] * 1.532088886238f ) + ( inValues[ 8 ] * 0.34729635533386f ) -
+                         ( inValues[ 16 ] * 1.8793852415718f );
+            float tmp4 = inValues[ 0 ] - inValues[ 4 ] + inValues[ 8 ] - inValues[ 12 ] + inValues[ 16 ];
 
             // 4 points on even indices
-            var i66 = inValues[ 6 ] * 1.732050808f; // Sqrt[3]
+            float i66 = inValues[ 6 ] * 1.732050808f; // Sqrt[3]
 
-            var tmp0X = ( inValues[ 2 ] * 1.9696155060244f ) + i66 + ( inValues[ 10 ] * 1.2855752193731f ) +
-                        ( inValues[ 14 ] * 0.68404028665134f );
-            var tmp1X = ( inValues[ 2 ] - inValues[ 10 ] - inValues[ 14 ] ) * 1.732050808f;
-            var tmp2X = ( ( inValues[ 2 ] * 1.2855752193731f ) - i66 - ( inValues[ 10 ] * 0.68404028665134f ) ) +
-                        ( inValues[ 14 ] * 1.9696155060244f );
-            var tmp3X = ( ( ( inValues[ 2 ] * 0.68404028665134f ) - i66 ) + ( inValues[ 10 ] * 1.9696155060244f ) ) -
-                        ( inValues[ 14 ] * 1.2855752193731f );
+            float tmp0X = ( inValues[ 2 ] * 1.9696155060244f ) + i66 + ( inValues[ 10 ] * 1.2855752193731f ) +
+                          ( inValues[ 14 ] * 0.68404028665134f );
+            float tmp1X = ( inValues[ 2 ] - inValues[ 10 ] - inValues[ 14 ] ) * 1.732050808f;
+            float tmp2X = ( inValues[ 2 ] * 1.2855752193731f ) - i66 - ( inValues[ 10 ] * 0.68404028665134f ) +
+                          ( inValues[ 14 ] * 1.9696155060244f );
+            float tmp3X = ( inValues[ 2 ] * 0.68404028665134f ) - i66 + ( inValues[ 10 ] * 1.9696155060244f ) -
+                          ( inValues[ 14 ] * 1.2855752193731f );
 
             // 9 point IDCT on odd indices
             // 5 points on odd indices (not realy an IDCT)
-            var i0    = inValues[ 0 + 1 ] + inValues[ 0 + 1 ];
-            var i0P12 = i0 + inValues[ 12 + 1 ];
+            float i0    = inValues[ 0 + 1 ] + inValues[ 0 + 1 ];
+            float i0P12 = i0 + inValues[ 12 + 1 ];
 
-            var tmp0O = i0P12 + ( inValues[ 4 + 1 ] * 1.8793852415718f ) + ( inValues[ 8 + 1 ] * 1.532088886238f ) +
-                        ( inValues[ 16 + 1 ] * 0.34729635533386f );
-            var tmp1O = ( i0 + inValues[ 4 + 1 ] ) - inValues[ 8 + 1 ] - inValues[ 12 + 1 ] - inValues[ 12 + 1 ] - inValues[ 16 + 1 ];
+            float tmp0O = i0P12 + ( inValues[ 4 + 1 ] * 1.8793852415718f ) + ( inValues[ 8 + 1 ] * 1.532088886238f ) +
+                          ( inValues[ 16 + 1 ] * 0.34729635533386f );
+            float tmp1O = i0 + inValues[ 4 + 1 ] - inValues[ 8 + 1 ] - inValues[ 12 + 1 ] - inValues[ 12 + 1 ]
+                        - inValues[ 16 + 1 ];
 
-            var tmp2O = ( i0P12 - ( inValues[ 4 + 1 ] * 0.34729635533386f ) - ( inValues[ 8 + 1 ] * 1.8793852415718f ) )
+            float tmp2O = i0P12 - ( inValues[ 4 + 1 ] * 0.34729635533386f ) - ( inValues[ 8 + 1 ] * 1.8793852415718f )
                         + ( inValues[ 16 + 1 ] * 1.532088886238f );
 
-            var tmp3O = ( ( i0P12 - ( inValues[ 4 + 1 ] * 1.532088886238f ) ) + ( inValues[ 8 + 1 ] * 0.34729635533386f ) )
+            float tmp3O = i0P12 - ( inValues[ 4 + 1 ] * 1.532088886238f ) + ( inValues[ 8 + 1 ] * 0.34729635533386f )
                         - ( inValues[ 16 + 1 ] * 1.8793852415718f );
 
-            var tmp4O = ( ( ( ( inValues[ 0 + 1 ] - inValues[ 4 + 1 ] ) + inValues[ 8 + 1 ] ) - inValues[ 12 + 1 ] ) + inValues[ 16 + 1 ] )
+            float tmp4O = ( inValues[ 0 + 1 ] - inValues[ 4 + 1 ] + inValues[ 8 + 1 ] - inValues[ 12 + 1 ]
+                          + inValues[ 16 + 1 ] )
                         * 0.707106781f; // Twiddled
 
             // 4 points on even indices
-            var i6 = inValues[ 6 + 1 ] * 1.732050808f; // Sqrt[3]
+            float i6 = inValues[ 6 + 1 ] * 1.732050808f; // Sqrt[3]
 
-            var tmp0Xo = ( inValues[ 2 + 1 ] * 1.9696155060244f ) + i6 + ( inValues[ 10 + 1 ] * 1.2855752193731f ) +
-                         ( inValues[ 14 + 1 ] * 0.68404028665134f );
-            var tmp1Xo = ( inValues[ 2 + 1 ] - inValues[ 10 + 1 ] - inValues[ 14 + 1 ] ) * 1.732050808f;
+            float tmp0Xo = ( inValues[ 2 + 1 ] * 1.9696155060244f ) + i6 + ( inValues[ 10 + 1 ] * 1.2855752193731f ) +
+                           ( inValues[ 14 + 1 ] * 0.68404028665134f );
+            float tmp1Xo = ( inValues[ 2 + 1 ] - inValues[ 10 + 1 ] - inValues[ 14 + 1 ] ) * 1.732050808f;
 
-            var tmp2Xo = ( ( inValues[ 2 + 1 ] * 1.2855752193731f ) - i6 - ( inValues[ 10 + 1 ] * 0.68404028665134f ) )
+            float tmp2Xo = ( inValues[ 2 + 1 ] * 1.2855752193731f ) - i6 - ( inValues[ 10 + 1 ] * 0.68404028665134f )
                          + ( inValues[ 14 + 1 ] * 1.9696155060244f );
 
-            var tmp3Xo = ( ( ( inValues[ 2 + 1 ] * 0.68404028665134f ) - i6 ) + ( inValues[ 10 + 1 ] * 1.9696155060244f ) )
+            float tmp3Xo = ( inValues[ 2 + 1 ] * 0.68404028665134f ) - i6 + ( inValues[ 10 + 1 ] * 1.9696155060244f )
                          - ( inValues[ 14 + 1 ] * 1.2855752193731f );
 
             // Twiddle factors on odd indices
@@ -2357,34 +2367,34 @@ public class LayerIIIDecoder : IFrameDecoder
             // Butterflies on 9 point IDCT's
             // and
             // twiddle factors for 36 point IDCT
-            var e = tmp0 + tmp0X;
-            var o = ( tmp0O + tmp0Xo ) * 0.501909918f;
+            float e = tmp0 + tmp0X;
+            float o = ( tmp0O + tmp0Xo ) * 0.501909918f;
 
             tmpf0 = e + o;
-            var tmpf17 = e - o;
+            float tmpf17 = e - o;
             e     = tmp1 + tmp1X;
             o     = ( tmp1O + tmp1Xo ) * 0.517638090f;
             tmpf1 = e + o;
 
-            var tmpf16 = e - o;
+            float tmpf16 = e - o;
             e     = tmp2 + tmp2X;
             o     = ( tmp2O + tmp2Xo ) * 0.551688959f;
             tmpf2 = e + o;
 
-            var tmpf15 = e - o;
+            float tmpf15 = e - o;
             e     = tmp3 + tmp3X;
             o     = ( tmp3O + tmp3Xo ) * 0.610387294f;
             tmpf3 = e + o;
 
-            var tmpf14 = e - o;
+            float tmpf14 = e - o;
             tmpf4 = tmp4 + tmp4O;
 
-            var tmpf13 = tmp4 - tmp4O;
+            float tmpf13 = tmp4 - tmp4O;
             e     = tmp3 - tmp3X;
             o     = ( tmp3O - tmp3Xo ) * 0.871723397f;
             tmpf5 = e + o;
 
-            var tmpf12 = e - o;
+            float tmpf12 = e - o;
             e      = tmp2 - tmp2X;
             o      = ( tmp2O - tmp2Xo ) * 1.183100792f;
             tmpf6  = e + o;
@@ -2400,7 +2410,7 @@ public class LayerIIIDecoder : IFrameDecoder
 
             // end 36 point IDCT */
             // shift to modified IDCT
-            var winBt = Win[ blockType ];
+            float[] winBt = Win[ blockType ];
 
             outValues[ 0 ]  = -tmpf9 * winBt[ 0 ];
             outValues[ 1 ]  = -tmpf10 * winBt[ 1 ];
@@ -2462,12 +2472,12 @@ public class LayerIIIDecoder : IFrameDecoder
 
         for ( var sfb = 0; sfb < 13; sfb++ )
         {
-            var start = scalefacBand[ sfb ];
-            var end   = scalefacBand[ sfb + 1 ];
+            int start = scalefacBand[ sfb ];
+            int end   = scalefacBand[ sfb + 1 ];
 
             for ( var window = 0; window < 3; window++ )
             {
-                for ( var i = start; i < end; i++ )
+                for ( int i = start; i < end; i++ )
                 {
                     ix[ ( 3 * i ) + window ] = j++;
                 }
@@ -2480,4 +2490,3 @@ public class LayerIIIDecoder : IFrameDecoder
 
 // ============================================================================
 // ============================================================================
-

@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Maths;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -110,8 +111,8 @@ public class Matrix4Tests
     {
         var matrix = new Matrix4();
         matrix.Trn( 10f, 20f, 30f ); // Add some translation to make it non-identity
-        var original = matrix.Cpy();
-        var identity = new Matrix4();
+        Matrix4 original = matrix.Cpy();
+        var     identity = new Matrix4();
 
         matrix.Mul( identity );
 
@@ -131,7 +132,7 @@ public class Matrix4Tests
         m1.Trn( 1f, 2f, 3f );
         m2.Trn( 4f, 5f, 6f );
 
-        var result = m1.Cpy().Mul( m2 );
+        Matrix4 result = m1.Cpy().Mul( m2 );
 
         // The translation components should add
         Assert.Multiple( () =>
@@ -181,7 +182,7 @@ public class Matrix4Tests
 
         // Setup projection for 800x600 screen
         matrix.SetToOrtho2D( 0, 0, 800, 600 );
-        var projection = matrix.Cpy();
+        Matrix4 projection = matrix.Cpy();
 
         // Create transform matrix with translation
         var transform = new Matrix4();
@@ -194,8 +195,8 @@ public class Matrix4Tests
         // In normalized device coordinates (NDC):
         // x goes from -1 (left) to 1 (right)
         // y goes from -1 (bottom) to 1 (top)
-        var x = matrix.Val[ Matrix4.M03_12 ]; // Translation X after projection
-        var y = matrix.Val[ Matrix4.M13_13 ]; // Translation Y after projection
+        float x = matrix.Val[ Matrix4.M03_12 ]; // Translation X after projection
+        float y = matrix.Val[ Matrix4.M13_13 ]; // Translation Y after projection
 
         Assert.Multiple( () =>
         {

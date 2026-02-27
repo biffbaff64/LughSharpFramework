@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Graphics.Viewports;
@@ -88,7 +90,7 @@ public class ScalingViewport : Viewport
     /// <param name="centerCamera"> True to center the camera in the middle of the screen. </param>
     public override void Update( int screenWidth, int screenHeight, bool centerCamera = false )
     {
-        var scaled = Scaling.Apply( WorldWidth, WorldHeight, screenWidth, screenHeight );
+        Vector2 scaled = Scaling.Apply( WorldWidth, WorldHeight, screenWidth, screenHeight );
 
         var viewportWidth  = ( int )Math.Round( scaled.X, MidpointRounding.AwayFromZero );
         var viewportHeight = ( int )Math.Round( scaled.Y, MidpointRounding.AwayFromZero );

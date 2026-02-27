@@ -103,11 +103,11 @@ public class MathUtils
         if ( x == 0f )
         {
             return y switch
-            {
-                > 0f  => PI / 2,
-                0f    => 0f,
-                var _ => -PI / 2,
-            };
+                   {
+                       > 0f  => PI / 2,
+                       0f    => 0f,
+                       var _ => -PI / 2
+                   };
         }
 
         float atan, z = y / x;
@@ -142,7 +142,7 @@ public class MathUtils
     /// </summary>
     public static int Random( int start, int end )
     {
-        return start + _rand.Next( ( end - start ) + 1 );
+        return start + _rand.Next( end - start + 1 );
     }
 
     /// <summary>
@@ -257,8 +257,8 @@ public class MathUtils
     /// <param name="mode"> the point around which the values are more likely  </param>
     public static float RandomTriangular( float min, float max, float mode )
     {
-        var u = ( float )_rand.NextDouble();
-        var d = max - min;
+        var   u = ( float )_rand.NextDouble();
+        float d = max - min;
 
         if ( u <= ( ( mode - min ) / d ) )
         {
@@ -423,7 +423,7 @@ public class MathUtils
     /// <returns> the interpolated angle in the range [0, PI2[  </returns>
     public static float LerpAngle( float fromRadians, float toRadians, float progress )
     {
-        var delta = ( ( ( toRadians - fromRadians ) + PI2 + PI ) % PI2 ) - PI;
+        float delta = ( ( toRadians - fromRadians + PI2 + PI ) % PI2 ) - PI;
 
         return ( fromRadians + ( delta * progress ) + PI2 ) % PI2;
     }
@@ -439,7 +439,7 @@ public class MathUtils
     /// <returns> the interpolated angle in the range [0, 360[  </returns>
     public static float LerpAngleDeg( float fromDegrees, float toDegrees, float progress )
     {
-        var delta = ( ( ( toDegrees - fromDegrees ) + 360 + 180 ) % 360 ) - 180;
+        float delta = ( ( toDegrees - fromDegrees + 360 + 180 ) % 360 ) - 180;
 
         return ( fromDegrees + ( delta * progress ) + 360 ) % 360;
     }
@@ -580,7 +580,7 @@ public class MathUtils
         {
             for ( var i = 0; i < SIN_COUNT; i++ )
             {
-                Table[ i ] = ( float )Math.Sin( ( ( i + 0.5f ) / SIN_COUNT ) * RAD_FULL );
+                Table[ i ] = ( float )Math.Sin( ( i + 0.5f ) / SIN_COUNT * RAD_FULL );
             }
 
             for ( var i = 0; i < 360; i += 90 )

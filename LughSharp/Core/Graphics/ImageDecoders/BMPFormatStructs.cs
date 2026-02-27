@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics.ImageDecoders;
@@ -76,7 +77,7 @@ public enum BitmapCompressionMode : uint
     BI_RLE4      = 2,
     BI_BITFIELDS = 3,
     BI_JPEG      = 4,
-    BI_PNG       = 5,
+    BI_PNG       = 5
 }
 
 // ========================================================================

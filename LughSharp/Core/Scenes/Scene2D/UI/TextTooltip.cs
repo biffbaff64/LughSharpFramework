@@ -66,7 +66,7 @@ public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltip.TextTooltip
     {
         var label = new Label( text, style.Label )
         {
-            Wrap = true,
+            Wrap = true
         };
 
         Container.SetActor( label );
@@ -81,7 +81,7 @@ public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltip.TextTooltip
         set
         {
             field = value;
-            
+
             if ( Container == null )
             {
                 throw new NullReferenceException( "Container cannot be null" );
@@ -123,4 +123,3 @@ public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltip.TextTooltip
 
 // ============================================================================
 // ============================================================================
-

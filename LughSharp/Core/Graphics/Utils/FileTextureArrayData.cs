@@ -24,7 +24,9 @@
 
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
@@ -107,10 +109,10 @@ public class FileTextureArrayData : ITextureArrayData
     /// </summary>
     public void Prepare()
     {
-        var width  = -1;
-        var height = -1;
+        int width  = -1;
+        int height = -1;
 
-        foreach ( var data in _textureData )
+        foreach ( ITextureData? data in _textureData )
         {
             if ( data == null )
             {
@@ -130,7 +132,7 @@ public class FileTextureArrayData : ITextureArrayData
             if ( ( width != data.Width ) || ( height != data.Height ) )
             {
                 throw new RuntimeException( "Error whilst preparing TextureArray:"
-                                               + "TextureArray Textures must have equal dimensions." );
+                                          + "TextureArray Textures must have equal dimensions." );
             }
         }
 
@@ -159,9 +161,9 @@ public class FileTextureArrayData : ITextureArrayData
             }
             else
             {
-                var texData       = _textureData[ i ];
-                var pixmap        = texData?.ConsumePixmap();
-                var disposePixmap = texData?.ShouldDisposePixmap() ?? false;
+                ITextureData? texData       = _textureData[ i ];
+                Pixmap?       pixmap        = texData?.ConsumePixmap();
+                bool          disposePixmap = texData?.ShouldDisposePixmap() ?? false;
 
                 Debug.Assert( texData != null, nameof( texData ) + " == null" );
                 Debug.Assert( pixmap != null, nameof( pixmap ) + " == null" );
@@ -220,7 +222,7 @@ public class FileTextureArrayData : ITextureArrayData
     {
         get
         {
-            foreach ( var data in _textureData )
+            foreach ( ITextureData? data in _textureData )
             {
                 if ( data is { IsManaged: false } )
                 {

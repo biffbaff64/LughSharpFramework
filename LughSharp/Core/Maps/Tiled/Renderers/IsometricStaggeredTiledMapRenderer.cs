@@ -23,8 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Utils.Exceptions;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;
@@ -54,63 +57,65 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
 
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
-        var color = Color.ToFloatBitsAbgr( Batch.Color.R,
-                                           Batch.Color.G,
-                                           Batch.Color.B,
-                                           Batch.Color.A * layer.Opacity );
+        float color = Color.ToFloatBitsAbgr( Batch.Color.R,
+                                             Batch.Color.G,
+                                             Batch.Color.B,
+                                             Batch.Color.A * layer.Opacity );
 
-        var layerWidth  = layer.Width;
-        var layerHeight = layer.Height;
+        int layerWidth  = layer.Width;
+        int layerHeight = layer.Height;
 
-        var layerOffsetX = layer.RenderOffsetX * UnitScale;
+        float layerOffsetX = layer.RenderOffsetX * UnitScale;
 
         // offset in tiled is y down, so we flip it
-        var layerOffsetY = -layer.RenderOffsetY * UnitScale;
+        float layerOffsetY = -layer.RenderOffsetY * UnitScale;
 
-        var layerTileWidth  = layer.TileWidth * UnitScale;
-        var layerTileHeight = layer.TileHeight * UnitScale;
+        float layerTileWidth  = layer.TileWidth * UnitScale;
+        float layerTileHeight = layer.TileHeight * UnitScale;
 
-        var layerTileWidth50  = layerTileWidth * 0.50f;
-        var layerTileHeight50 = layerTileHeight * 0.50f;
+        float layerTileWidth50  = layerTileWidth * 0.50f;
+        float layerTileHeight50 = layerTileHeight * 0.50f;
 
-        var minX = Math.Max( 0, ( int )( ( ViewBounds.X - layerTileWidth50 - layerOffsetX ) / layerTileWidth ) );
+        int minX = Math.Max( 0, ( int )( ( ViewBounds.X - layerTileWidth50 - layerOffsetX ) / layerTileWidth ) );
 
-        var maxX = Math.Min( layerWidth,
-                             ( int )( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth + layerTileWidth50 ) - layerOffsetX ) /
+        int maxX = Math.Min( layerWidth,
+                             ( int )( ( ViewBounds.X + ViewBounds.Width + layerTileWidth + layerTileWidth50
+                                      - layerOffsetX ) /
                                       layerTileWidth ) );
 
-        var minY = Math.Max( 0, ( int )( ( ViewBounds.Y - layerTileHeight - layerOffsetY ) / layerTileHeight ) );
+        int minY = Math.Max( 0, ( int )( ( ViewBounds.Y - layerTileHeight - layerOffsetY ) / layerTileHeight ) );
 
-        var maxY = Math.Min( layerHeight,
-                             ( int )( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight50 ) );
+        int maxY = Math.Min( layerHeight,
+                             ( int )( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight - layerOffsetY )
+                                    / layerTileHeight50 ) );
 
-        for ( var y = maxY - 1; y >= minY; y-- )
+        for ( int y = maxY - 1; y >= minY; y-- )
         {
-            var offsetX = ( y % 2 ) == 1 ? layerTileWidth50 : 0;
+            float offsetX = ( y % 2 ) == 1 ? layerTileWidth50 : 0;
 
-            for ( var x = maxX - 1; x >= minX; x-- )
+            for ( int x = maxX - 1; x >= minX; x-- )
             {
-                var cell = layer.GetCell( x, y );
-                var tile = cell?.GetTile();
+                TiledMapTileLayer.Cell? cell = layer.GetCell( x, y );
+                ITiledMapTile?          tile = cell?.GetTile();
 
                 if ( ( cell != null ) && ( tile != null ) )
                 {
-                    var flipX     = cell.GetFlipHorizontally();
-                    var flipY     = cell.GetFlipVertically();
-                    var rotations = cell.GetRotation();
-                    var region    = tile.TextureRegion;
+                    bool          flipX     = cell.GetFlipHorizontally();
+                    bool          flipY     = cell.GetFlipVertically();
+                    int           rotations = cell.GetRotation();
+                    TextureRegion region    = tile.TextureRegion;
 
                     Guard.Against.Null( region.Texture );
 
-                    var x1 = ( ( x * layerTileWidth ) - offsetX ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
-                    var y1 = ( y * layerTileHeight50 ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
-                    var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
-                    var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
+                    float x1 = ( x * layerTileWidth ) - offsetX + ( tile.OffsetX * UnitScale ) + layerOffsetX;
+                    float y1 = ( y * layerTileHeight50 ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
+                    float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+                    float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
-                    var u1 = region.U;
-                    var v1 = region.V2;
-                    var u2 = region.U2;
-                    var v2 = region.V;
+                    float u1 = region.U;
+                    float v1 = region.V2;
+                    float u2 = region.U2;
+                    float v2 = region.V;
 
                     Vertices[ IBatch.X1 ] = x1;
                     Vertices[ IBatch.Y1 ] = y1;
@@ -160,13 +165,13 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
                         {
                             case TiledMapTileLayer.Cell.ROTATE90:
                             {
-                                var tempV = Vertices[ IBatch.V1 ];
+                                float tempV = Vertices[ IBatch.V1 ];
                                 Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
                                 Vertices[ IBatch.V2 ] = Vertices[ IBatch.V3 ];
                                 Vertices[ IBatch.V3 ] = Vertices[ IBatch.V4 ];
                                 Vertices[ IBatch.V4 ] = tempV;
 
-                                var tempU = Vertices[ IBatch.U1 ];
+                                float tempU = Vertices[ IBatch.U1 ];
                                 Vertices[ IBatch.U1 ] = Vertices[ IBatch.U2 ];
                                 Vertices[ IBatch.U2 ] = Vertices[ IBatch.U3 ];
                                 Vertices[ IBatch.U3 ] = Vertices[ IBatch.U4 ];
@@ -194,13 +199,13 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
 
                             case TiledMapTileLayer.Cell.ROTATE270:
                             {
-                                var tempV = Vertices[ IBatch.V1 ];
+                                float tempV = Vertices[ IBatch.V1 ];
                                 Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];
                                 Vertices[ IBatch.V4 ] = Vertices[ IBatch.V3 ];
                                 Vertices[ IBatch.V3 ] = Vertices[ IBatch.V2 ];
                                 Vertices[ IBatch.V2 ] = tempV;
 
-                                var tempU = Vertices[ IBatch.U1 ];
+                                float tempU = Vertices[ IBatch.U1 ];
                                 Vertices[ IBatch.U1 ] = Vertices[ IBatch.U4 ];
                                 Vertices[ IBatch.U4 ] = Vertices[ IBatch.U3 ];
                                 Vertices[ IBatch.U3 ] = Vertices[ IBatch.U2 ];
@@ -220,4 +225,3 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
 
 // ============================================================================
 // ============================================================================
-

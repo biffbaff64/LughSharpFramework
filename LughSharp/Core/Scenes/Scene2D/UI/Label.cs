@@ -254,10 +254,10 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
     {
         Guard.Against.Null( FontCache );
 
-        var font = FontCache.Font;
+        BitmapFont font = FontCache.Font;
 
-        var oldScaleX = font.GetScaleX();
-        var oldScaleY = font.GetScaleY();
+        float oldScaleX = font.GetScaleX();
+        float oldScaleY = font.GetScaleY();
 
         if ( _fontScaleChanged )
         {
@@ -280,7 +280,7 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
 
         if ( Wrap && ( _ellipsis == null ) )
         {
-            var width = Width;
+            float width = Width;
 
             if ( Style.Background != null )
             {
@@ -303,20 +303,20 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
     {
         Guard.Against.Null( FontCache );
 
-        var font      = FontCache.Font;
-        var oldScaleX = font.GetScaleX();
-        var oldScaleY = font.GetScaleY();
+        BitmapFont font      = FontCache.Font;
+        float      oldScaleX = font.GetScaleX();
+        float      oldScaleY = font.GetScaleY();
 
         if ( _fontScaleChanged )
         {
             font.FontData.SetScale( _fontScaleX, _fontScaleY );
         }
 
-        var wrap = Wrap && ( _ellipsis == null );
+        bool wrap = Wrap && ( _ellipsis == null );
 
         if ( wrap )
         {
-            var prefHeight = GetPrefHeight();
+            float prefHeight = GetPrefHeight();
 
             if ( !prefHeight.Equals( _lastPrefHeight ) )
             {
@@ -325,8 +325,8 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
             }
         }
 
-        var   width  = Width;
-        var   height = Height;
+        float width  = Width;
+        float height = Height;
         float x      = 0;
         float y      = 0;
 
@@ -338,8 +338,8 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
             height -= Style.Background.BottomHeight + Style.Background.TopHeight;
         }
 
-        var   layout = GlyphLayout;
-        float textWidth, textHeight;
+        GlyphLayout layout = GlyphLayout;
+        float       textWidth, textHeight;
 
         if ( wrap || ( Text.ToString().IndexOf( "\n", StringComparison.Ordinal ) != -1 ) )
         {
@@ -403,7 +403,7 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
     {
         Validate();
 
-        var color = _tempColor.Set( Color );
+        Color color = _tempColor.Set( Color );
         color.A *= parentAlpha;
 
         if ( Style.Background != null )
@@ -424,7 +424,10 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
 
     // ========================================================================
 
-    public override float GetPrefWidth() => GetPrefWidthSafe();
+    public override float GetPrefWidth()
+    {
+        return GetPrefWidthSafe();
+    }
 
     public float GetPrefWidthSafe()
     {
@@ -438,7 +441,7 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
             ScaleAndComputePrefSize();
         }
 
-        var width = _prefSize.X;
+        float width = _prefSize.X;
 
         if ( Style.Background != null )
         {
@@ -451,7 +454,10 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
 
     // ========================================================================
 
-    public override float GetPrefHeight() => GetPrefHeightSafe();
+    public override float GetPrefHeight()
+    {
+        return GetPrefHeightSafe();
+    }
 
     public float GetPrefHeightSafe()
     {
@@ -467,7 +473,7 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
             descentScaleCorrection = _fontScaleY / Style.Font.GetScaleY();
         }
 
-        var height = _prefSize.Y - ( Style.Font.GetDescent() * descentScaleCorrection * 2 );
+        float height = _prefSize.Y - ( Style.Font.GetDescent() * descentScaleCorrection * 2 );
 
         if ( Style.Background != null )
         {
@@ -555,15 +561,15 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
     /// <inheritdoc />
     public override string ToString()
     {
-        var name = Name;
+        string? name = Name;
 
         if ( name != null )
         {
             return name;
         }
 
-        var className = GetType().Name;
-        var dotIndex  = className.LastIndexOf( '.' );
+        string className = GetType().Name;
+        int    dotIndex  = className.LastIndexOf( '.' );
 
         if ( dotIndex != -1 )
         {

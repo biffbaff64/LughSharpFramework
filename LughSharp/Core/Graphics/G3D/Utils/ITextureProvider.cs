@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics.G3D.Models.Data;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -105,4 +106,3 @@ public interface ITextureProvider
 
 // ============================================================================
 // ============================================================================
-

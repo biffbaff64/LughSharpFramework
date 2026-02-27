@@ -36,7 +36,7 @@ public enum DataType
     Int           = IGL.GL_INT,
     UnsignedInt   = IGL.GL_UNSIGNED_INT,
     Float         = IGL.GL_FLOAT,
-    Double        = IGL.GL_DOUBLE,
+    Double        = IGL.GL_DOUBLE
 }
 
 [PublicAPI]
@@ -44,7 +44,7 @@ public enum IndexType
 {
     UnsignedByte  = IGL.GL_UNSIGNED_BYTE,
     UnsignedShort = IGL.GL_UNSIGNED_SHORT,
-    UnsignedInt   = IGL.GL_UNSIGNED_INT,
+    UnsignedInt   = IGL.GL_UNSIGNED_INT
 }
 
 // ========================================================================

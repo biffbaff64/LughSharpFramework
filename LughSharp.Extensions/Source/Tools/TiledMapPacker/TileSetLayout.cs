@@ -23,10 +23,12 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maps.Tiled;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+
 using SixLabors.ImageSharp;
 
 namespace Extensions.Source.Tools.TiledMapPacker;
@@ -65,7 +67,7 @@ public class TileSetLayout
         var margin     = tileset.Properties.Get< int >( "margin" );
         var spacing    = tileset.Properties.Get< int >( "spacing" );
 
-        this.Firstgid = firstgid;
+        Firstgid = firstgid;
 
         var imagePath = tileset.Properties.Get< string >( "imagesource" );
 
@@ -82,8 +84,8 @@ public class TileSetLayout
         NumRows = 0;
         NumCols = 0;
 
-        var stopWidth  = Image.Width - tileWidth;
-        var stopHeight = Image.Height - tileHeight;
+        int stopWidth  = Image.Width - tileWidth;
+        int stopHeight = Image.Height - tileHeight;
 
         for ( y = margin; y <= stopHeight; y += tileHeight + spacing )
         {

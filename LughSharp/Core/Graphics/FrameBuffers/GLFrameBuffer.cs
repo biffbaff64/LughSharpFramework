@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -106,7 +108,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     /// </summary>
     public void Dispose()
     {
-        foreach ( var texture in TextureAttachments )
+        foreach ( T texture in TextureAttachments )
         {
             DisposeColorTexture( texture );
         }
@@ -190,8 +192,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     {
         InitialiseFrameBufferHandle();
 
-        var width  = BufferBuilder.Width;
-        var height = BufferBuilder.Height;
+        int width  = BufferBuilder.Width;
+        int height = BufferBuilder.Height;
 
         SetupDepthStencilRenderBuffers( width, height );
 
@@ -225,12 +227,12 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 
         Engine.GL.BindRenderbuffer( IGL.GL_RENDERBUFFER, 0 );
 
-        foreach ( var texture in TextureAttachments )
+        foreach ( T texture in TextureAttachments )
         {
             Engine.GL.BindTexture( texture.GLTarget, 0 );
         }
 
-        var result = Engine.GL.CheckFramebufferStatus( IGL.GL_FRAMEBUFFER );
+        int result = Engine.GL.CheckFramebufferStatus( IGL.GL_FRAMEBUFFER );
 
         result = HandleUnsupportedFrameBuffer( result, width, height );
 
@@ -301,12 +303,12 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
         // If there are multiple textures present, attach each one to the framebuffer
         if ( HasMultipleTexturesPresent )
         {
-            foreach ( var attachmentSpec in BufferBuilder.TextureAttachmentSpecs )
+            foreach ( FrameBufferTextureAttachmentSpec attachmentSpec in BufferBuilder.TextureAttachmentSpecs )
             {
-                var texture = CreateTexture( attachmentSpec );
+                T texture = CreateTexture( attachmentSpec );
                 TextureAttachments.Add( texture );
 
-                var tempHandle = texture.GLTextureHandle;
+                uint tempHandle = texture.GLTextureHandle;
 
                 // Attach color texture to the specified color attachment point
                 if ( attachmentSpec.IsColorTexture )
@@ -345,7 +347,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
         // If there's only one texture present, attach it to the framebuffer
         else
         {
-            var texture = CreateTexture( BufferBuilder.TextureAttachmentSpecs.First() );
+            T texture = CreateTexture( BufferBuilder.TextureAttachmentSpecs.First() );
             TextureAttachments.Add( texture );
 
             Engine.GL.BindTexture( texture.GLTarget, texture.GLTextureHandle );
@@ -386,9 +388,9 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     private int HandleUnsupportedFrameBuffer( int result, int width, int height )
     {
         if ( ( result == IGL.GL_FRAMEBUFFER_UNSUPPORTED )
-             && BufferBuilder is { HasDepthRenderBuffer: true, HasStencilRenderBuffer: true }
-             && ( Engine.Api.Graphics.SupportsExtension( "GL_OES_packed_depth_stencil" )
-               || Engine.Api.Graphics.SupportsExtension( "GL_EXT_packed_depth_stencil" ) ) )
+          && BufferBuilder is { HasDepthRenderBuffer: true, HasStencilRenderBuffer: true }
+          && ( Engine.Api.Graphics.SupportsExtension( "GL_OES_packed_depth_stencil" )
+            || Engine.Api.Graphics.SupportsExtension( "GL_EXT_packed_depth_stencil" ) ) )
         {
             // Delete existing render buffers
             if ( BufferBuilder.HasDepthRenderBuffer )
@@ -418,9 +420,13 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
             Engine.GL.BindRenderbuffer( IGL.GL_RENDERBUFFER, 0 );
 
             // Attach the new buffer to the framebuffer
-            Engine.GL.FramebufferRenderbuffer( IGL.GL_FRAMEBUFFER, IGL.GL_DEPTH_ATTACHMENT, IGL.GL_RENDERBUFFER,
+            Engine.GL.FramebufferRenderbuffer( IGL.GL_FRAMEBUFFER,
+                                               IGL.GL_DEPTH_ATTACHMENT,
+                                               IGL.GL_RENDERBUFFER,
                                                ( uint )DepthStencilPackedBufferHandle );
-            Engine.GL.FramebufferRenderbuffer( IGL.GL_FRAMEBUFFER, IGL.GL_STENCIL_ATTACHMENT, IGL.GL_RENDERBUFFER,
+            Engine.GL.FramebufferRenderbuffer( IGL.GL_FRAMEBUFFER,
+                                               IGL.GL_STENCIL_ATTACHMENT,
+                                               IGL.GL_RENDERBUFFER,
                                                ( uint )DepthStencilPackedBufferHandle );
 
             // Re-check the framebuffer status
@@ -440,7 +446,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
         if ( result != IGL.GL_FRAMEBUFFER_COMPLETE )
         {
             // Dispose color textures
-            foreach ( var texture in TextureAttachments )
+            foreach ( T texture in TextureAttachments )
             {
                 DisposeColorTexture( texture );
             }
@@ -484,7 +490,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 
             if ( result == IGL.GL_FRAMEBUFFER_UNSUPPORTED )
             {
-                throw new RuntimeException( "Frame buffer couldn't be constructed: unsupported combination of formats" );
+                throw
+                    new RuntimeException( "Frame buffer couldn't be constructed: unsupported combination of formats" );
             }
 
             throw new RuntimeException( "Frame buffer couldn't be constructed: unknown error " + result );
@@ -593,7 +600,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
             throw new RuntimeException( "Buffers is NULL!" );
         }
 
-        var managedResources = Buffers[ app ] ?? [ ];
+        List< GLFrameBuffer< T > > managedResources = Buffers[ app ] ?? [ ];
 
         managedResources.Add( frameBuffer );
         Buffers.Put( app, managedResources );
@@ -643,7 +650,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
         {
             if ( Buffers?.Keys != null )
             {
-                foreach ( var app in Buffers.Keys )
+                foreach ( IApplication app in Buffers.Keys )
                 {
                     builder.Append( Buffers[ app ]?.Count );
                     builder.Append( ' ' );

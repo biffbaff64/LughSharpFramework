@@ -23,9 +23,12 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Exceptions;
+
 using Environment = System.Environment;
 
 namespace LughSharp.Core.Main;
@@ -114,7 +117,7 @@ public static class Platform
         /// </summary>
         MacOs,
 
-        Default = WindowsGL,
+        Default = WindowsGL
     }
 
     /// <summary>
@@ -126,7 +129,7 @@ public static class Platform
         Unknown,
         Mobile,  // Android, IOS
         Desktop, // WindowsGL, UWP, WebGL, Linux, MacOS
-        Console, // XBox, Playstation, Nintendo
+        Console  // XBox, Playstation, Nintendo
     }
 
     // ========================================================================
@@ -175,7 +178,7 @@ public static class Platform
 
                            // ----------------------------------------
 
-                           var _ => throw new RuntimeException( $"Unsupported Target Platform: {value.ToString()}" ),
+                           var _ => throw new RuntimeException( $"Unsupported Target Platform: {value.ToString()}" )
                        };
     }
 
@@ -198,7 +201,7 @@ public static class Platform
 
                            // ----------------------------------------
 
-                           var _ => throw new RuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
+                           var _ => throw new RuntimeException( $"Unsupported Family Group: {value.ToString()}" )
                        };
     }
 
@@ -214,7 +217,7 @@ public static class Platform
 
                    // ----------------------------------
 
-                   var _ => false,
+                   var _ => false
                };
     }
 

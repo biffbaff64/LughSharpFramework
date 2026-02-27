@@ -26,7 +26,9 @@ using System;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Support;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding;
@@ -61,7 +63,7 @@ public class Bitstream
     [
         0x00000000, 0x00000001, 0x00000003, 0x00000007, 0x0000000F, 0x0000001F,
         0x0000003F, 0x0000007F, 0x000000FF, 0x000001FF, 0x000003FF, 0x000007FF,
-        0x00000FFF, 0x00001FFF, 0x00003FFF, 0x00007FFF, 0x0000FFFF, 0x0001FFFF,
+        0x00000FFF, 0x00001FFF, 0x00003FFF, 0x00007FFF, 0x0000FFFF, 0x0001FFFF
     ];
 
     private readonly Crc16[] _crc;
@@ -200,12 +202,12 @@ public class Bitstream
     /// </summary>
     public bool IsSyncCurrentPosition( int syncmode )
     {
-        var read = ReadBytes( _syncBuffer, 0, 4 );
+        int read = ReadBytes( _syncBuffer, 0, 4 );
 
-        var headerstring = ( ( _syncBuffer[ 0 ] << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
-                           | ( ( _syncBuffer[ 1 ] << 16 ) & 0x00FF0000 )
-                           | ( ( _syncBuffer[ 2 ] << 8 ) & 0x0000FF00 )
-                           | ( ( _syncBuffer[ 3 ] << 0 ) & 0x000000FF );
+        int headerstring = ( ( _syncBuffer[ 0 ] << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
+                         | ( ( _syncBuffer[ 1 ] << 16 ) & 0x00FF0000 )
+                         | ( ( _syncBuffer[ 2 ] << 8 ) & 0x0000FF00 )
+                         | ( ( _syncBuffer[ 3 ] << 0 ) & 0x000000FF );
 
         try
         {
@@ -248,16 +250,16 @@ public class Bitstream
         var sync = false;
 
         // read additional 2 bytes
-        var bytesRead = ReadBytes( _syncBuffer, 0, 3 );
+        int bytesRead = ReadBytes( _syncBuffer, 0, 3 );
 
         if ( bytesRead != 3 )
         {
             throw new BitstreamException( BitstreamErrors.STREAM_EOF );
         }
 
-        var headerstring = ( ( _syncBuffer[ 0 ] << 16 ) & 0x00FF0000 )
-                           | ( ( _syncBuffer[ 1 ] << 8 ) & 0x0000FF00 )
-                           | ( ( _syncBuffer[ 2 ] << 0 ) & 0x000000FF );
+        int headerstring = ( ( _syncBuffer[ 0 ] << 16 ) & 0x00FF0000 )
+                         | ( ( _syncBuffer[ 1 ] << 8 ) & 0x0000FF00 )
+                         | ( ( _syncBuffer[ 2 ] << 0 ) & 0x000000FF );
 
         do
         {
@@ -280,8 +282,8 @@ public class Bitstream
                 }
 
                 headerstring = ( ( _syncBuffer[ 0 ] << 16 ) & 0x00FF0000 )
-                               | ( ( _syncBuffer[ 1 ] << 8 ) & 0x0000FF00 )
-                               | ( ( _syncBuffer[ 2 ] << 0 ) & 0x000000FF );
+                             | ( ( _syncBuffer[ 1 ] << 8 ) & 0x0000FF00 )
+                             | ( ( _syncBuffer[ 2 ] << 0 ) & 0x000000FF );
 
                 continue;
             }
@@ -302,7 +304,7 @@ public class Bitstream
     /// </summary>
     public bool CheckAndSkipId3Tag( int headerstring )
     {
-        var id3 = ( headerstring & 0xFFFFFF00 ) == 0x49443300;
+        bool id3 = ( headerstring & 0xFFFFFF00 ) == 0x49443300;
 
         if ( id3 )
         {
@@ -349,7 +351,7 @@ public class Bitstream
         {
             //sync = ((headerstring & 0xFFF80C00) == word) 
             sync = ( ( headerstring & 0xFFE00000 ) == 0xFFE00000 ) // -- THIS IS PROBABLY WRONG. A WEAKER CHECK.
-                   && ( ( headerstring & 0x000000C0 ) == 0x000000C0 == _singleChMode );
+                && ( ( headerstring & 0x000000C0 ) == 0x000000C0 == _singleChMode );
         }
 
         // filter out invalid sample rate
@@ -400,13 +402,13 @@ public class Bitstream
     public void ParseFrame()
     {
         // Convert Bytes read to int
-        var b        = 0;
-        var byteread = _frameBytes;
-        var bytesize = _frameSize;
+        var     b        = 0;
+        sbyte[] byteread = _frameBytes;
+        int     bytesize = _frameSize;
 
         for ( var k = 0; k < bytesize; k += 4 )
         {
-            var   b0 = byteread[ k ];
+            sbyte b0 = byteread[ k ];
             sbyte b1 = 0;
             sbyte b2 = 0;
             sbyte b3 = 0;
@@ -427,9 +429,9 @@ public class Bitstream
             }
 
             _frameBuffer[ b++ ] = ( ( b0 << 24 ) & ( int )SupportClass.Identity( 0xFF000000 ) )
-                                  | ( ( b1 << 16 ) & 0x00FF0000 )
-                                  | ( ( b2 << 8 ) & 0x0000FF00 )
-                                  | ( b3 & 0x000000FF );
+                                | ( ( b1 << 16 ) & 0x00FF0000 )
+                                | ( ( b2 << 8 ) & 0x0000FF00 )
+                                | ( b3 & 0x000000FF );
         }
 
         _wordPointer = 0;
@@ -444,7 +446,7 @@ public class Bitstream
     public int GetBitsFromBuffer( int countBits )
     {
         int returnvalue;
-        var sum = _bitIndex + countBits;
+        int sum = _bitIndex + countBits;
 
         if ( _wordPointer < 0 )
         {
@@ -465,14 +467,14 @@ public class Bitstream
             return returnvalue;
         }
 
-        var right = _frameBuffer[ _wordPointer ] & 0x0000FFFF;
+        int right = _frameBuffer[ _wordPointer ] & 0x0000FFFF;
 
         _wordPointer++;
 
-        var left = _frameBuffer[ _wordPointer ] & ( int )SupportClass.Identity( 0xFFFF0000 );
+        int left = _frameBuffer[ _wordPointer ] & ( int )SupportClass.Identity( 0xFFFF0000 );
 
         returnvalue = ( ( right << 16 ) & ( int )SupportClass.Identity( 0xFFFF0000 ) )
-                      | ( SupportClass.URShift( left, 16 ) & 0x0000FFFF );
+                    | ( SupportClass.URShift( left, 16 ) & 0x0000FFFF );
 
         returnvalue =  SupportClass.URShift( returnvalue, 48 - sum );
         returnvalue &= _bitmask[ countBits ];
@@ -501,7 +503,7 @@ public class Bitstream
         {
             while ( len > 0 )
             {
-                var bytesread = _sourceStream.Read( b, offs, len );
+                int bytesread = _sourceStream.Read( b, offs, len );
 
                 if ( bytesread is -1 or 0 ) // t/DD -- .NET returns 0 at end-of-stream!
                 {
@@ -538,7 +540,7 @@ public class Bitstream
         {
             while ( len > 0 )
             {
-                var bytesread = _sourceStream.Read( b, offs, len );
+                int bytesread = _sourceStream.Read( b, offs, len );
 
                 // for (int i = 0; i < len; i++) b[i] = (sbyte)Temp[i];
                 if ( bytesread is -1 or 0 )
@@ -562,4 +564,3 @@ public class Bitstream
 
 // ============================================================================
 // ============================================================================
-

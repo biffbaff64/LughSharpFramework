@@ -125,30 +125,30 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     private void ResetToDefaults()
     {
-        this.MinWidth    = Value.MinWidth;
-        this.MinHeight   = Value.MinHeight;
-        this.PrefWidth   = Value.PrefWidth;
-        this.PrefHeight  = Value.PrefHeight;
-        this.MaxWidth    = Value.MaxWidth;
-        this.MaxHeight   = Value.MaxHeight;
-        this.SpaceTop    = Value.Zero;
-        this.SpaceLeft   = Value.Zero;
-        this.SpaceBottom = Value.Zero;
-        this.SpaceRight  = Value.Zero;
-        this.PadTop      = Value.Zero;
-        this.PadLeft     = Value.Zero;
-        this.PadBottom   = Value.Zero;
-        this.PadRight    = Value.Zero;
-        this.FillX       = ZEROF;
-        this.FillY       = ZEROF;
-        this.Alignment   = CENTERI;
-        this.ExpandX     = ZEROI;
-        this.ExpandY     = ZEROI;
-        this.Colspan     = ONEI;
-        this.UniformX    = false;
-        this.UniformY    = false;
+        MinWidth    = Value.MinWidth;
+        MinHeight   = Value.MinHeight;
+        PrefWidth   = Value.PrefWidth;
+        PrefHeight  = Value.PrefHeight;
+        MaxWidth    = Value.MaxWidth;
+        MaxHeight   = Value.MaxHeight;
+        SpaceTop    = Value.Zero;
+        SpaceLeft   = Value.Zero;
+        SpaceBottom = Value.Zero;
+        SpaceRight  = Value.Zero;
+        PadTop      = Value.Zero;
+        PadLeft     = Value.Zero;
+        PadBottom   = Value.Zero;
+        PadRight    = Value.Zero;
+        FillX       = ZEROF;
+        FillY       = ZEROF;
+        Alignment   = CENTERI;
+        ExpandX     = ZEROI;
+        ExpandY     = ZEROI;
+        Colspan     = ONEI;
+        UniformX    = false;
+        UniformY    = false;
     }
-    
+
     /// <summary>
     /// Sets the actor in this cell and adds the actor to the cell's table.
     /// If null, removes any current actor.

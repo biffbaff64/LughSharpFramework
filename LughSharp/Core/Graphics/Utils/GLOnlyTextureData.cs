@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
@@ -142,7 +143,10 @@ public class GLOnlyTextureData : ITextureData
     /// </summary>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
-    public int GetPixelFormat() => LughFormat.RGBA8888;
+    public int GetPixelFormat()
+    {
+        return LughFormat.RGBA8888;
+    }
 
     public Pixmap ConsumePixmap()
     {

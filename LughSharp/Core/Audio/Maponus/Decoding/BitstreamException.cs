@@ -24,8 +24,11 @@
 
 using System;
 using System.Runtime.Serialization;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding;
@@ -107,7 +110,8 @@ public class BitstreamException : Mp3SharpException
 
     /// <inheritdoc />
     [Obsolete( "This API supports obsolete formatter-based serialization. It should not be called or extended by application code.",
-               DiagnosticId = "SYSLIB0051", UrlFormat = "https://aka.ms/dotnet-warnings/{0}" )]
+               DiagnosticId = "SYSLIB0051",
+               UrlFormat = "https://aka.ms/dotnet-warnings/{0}" )]
     public override void GetObjectData( SerializationInfo info, StreamingContext context )
     {
         //TODO: This needs replacing!!
@@ -131,4 +135,3 @@ public class BitstreamException : Mp3SharpException
 
 // ============================================================================
 // ============================================================================
-

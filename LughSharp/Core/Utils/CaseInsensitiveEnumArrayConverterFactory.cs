@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -51,7 +52,7 @@ public class CaseInsensitiveEnumArrayConverterFactory : JsonConverterFactory
             return false;
         }
 
-        var elementType = typeToConvert.GetElementType();
+        Type? elementType = typeToConvert.GetElementType();
 
         return elementType is { IsEnum: true };
     }
@@ -66,8 +67,8 @@ public class CaseInsensitiveEnumArrayConverterFactory : JsonConverterFactory
     /// </returns>
     public override JsonConverter? CreateConverter( Type typeToConvert, JsonSerializerOptions options )
     {
-        var elementType   = typeToConvert.GetElementType();
-        var converterType = typeof( CaseInsensitiveEnumArrayConverter<> ).MakeGenericType( elementType! );
+        Type? elementType   = typeToConvert.GetElementType();
+        Type  converterType = typeof( CaseInsensitiveEnumArrayConverter<> ).MakeGenericType( elementType! );
 
         return ( JsonConverter? )Activator.CreateInstance( converterType );
     }
@@ -114,9 +115,9 @@ public class CaseInsensitiveEnumArrayConverter< Tenum > : JsonConverter< Tenum[]
 
             if ( reader.TokenType == JsonTokenType.String )
             {
-                var stringValue = reader.GetString();
+                string? stringValue = reader.GetString();
 
-                if ( Enum.TryParse< Tenum >( stringValue, true, out var enumValue ) ) // Case-insensitive parse
+                if ( Enum.TryParse< Tenum >( stringValue, true, out Tenum enumValue ) ) // Case-insensitive parse
                 {
                     list.Add( enumValue );
                 }
@@ -144,7 +145,7 @@ public class CaseInsensitiveEnumArrayConverter< Tenum > : JsonConverter< Tenum[]
     {
         writer.WriteStartArray();
 
-        foreach ( var enumValue in value )
+        foreach ( Tenum enumValue in value )
         {
             writer.WriteStringValue( enumValue.ToString() );
         }

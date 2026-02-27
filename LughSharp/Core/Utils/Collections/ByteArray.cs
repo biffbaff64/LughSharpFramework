@@ -24,7 +24,9 @@
 
 using System;
 using System.Text;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -122,7 +124,7 @@ public class ByteArray
     /// <param name="values"> One, or more, values to add. </param>
     public void Add( params byte[] values )
     {
-        foreach ( var value in values )
+        foreach ( byte value in values )
         {
             if ( Size == Items.Length )
             {
@@ -306,7 +308,7 @@ public class ByteArray
             throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
         }
 
-        var sizeNeeded = Size + count;
+        int sizeNeeded = Size + count;
 
         if ( sizeNeeded > Items.Length )
         {
@@ -344,7 +346,7 @@ public class ByteArray
     /// <returns></returns>
     public bool Contains( byte value )
     {
-        var i = Size - 1;
+        int i = Size - 1;
 
         while ( i >= 0 )
         {
@@ -380,7 +382,7 @@ public class ByteArray
     /// <returns></returns>
     public int LastIndexOf( byte value )
     {
-        for ( var i = Size - 1; i >= 0; i-- )
+        for ( int i = Size - 1; i >= 0; i-- )
         {
             if ( Items[ i ] == value )
             {
@@ -452,7 +454,7 @@ public class ByteArray
     /// <exception cref="IndexOutOfRangeException"></exception>
     public void RemoveRange( int start, int end )
     {
-        var n = Size;
+        int n = Size;
 
         if ( end >= n )
         {
@@ -464,8 +466,8 @@ public class ByteArray
             throw new IndexOutOfRangeException( $"start can't be > end: {start} > {end}" );
         }
 
-        var count     = ( end - start ) + 1;
-        var lastIndex = n - count;
+        int count     = end - start + 1;
+        int lastIndex = n - count;
 
         if ( Ordered )
         {
@@ -473,7 +475,7 @@ public class ByteArray
         }
         else
         {
-            var i = Math.Max( lastIndex, end + 1 );
+            int i = Math.Max( lastIndex, end + 1 );
             Array.Copy( Items, i, Items, start, n - i );
         }
 
@@ -487,8 +489,8 @@ public class ByteArray
     /// <returns> true if this array was modified. </returns>
     public bool RemoveAll( ByteArray array )
     {
-        var size      = Size;
-        var startSize = size;
+        int size      = Size;
+        int startSize = size;
 
         for ( int i = 0, n = array.Size; i < n; i++ )
         {
@@ -588,7 +590,7 @@ public class ByteArray
             throw new ArgumentException( $"additionalCapacity must be >= 0: {additionalCapacity}" );
         }
 
-        var sizeNeeded = Size + additionalCapacity;
+        int sizeNeeded = Size + additionalCapacity;
 
         if ( sizeNeeded > Items.Length )
         {
@@ -627,8 +629,8 @@ public class ByteArray
     /// <returns></returns>
     protected byte[] Resize( int newSize )
     {
-        var newItems = new byte[ newSize ];
-        var items    = Items;
+        var    newItems = new byte[ newSize ];
+        byte[] items    = Items;
 
         Array.Copy( items, 0, newItems, 0, Math.Min( Size, newItems.Length ) );
 
@@ -650,7 +652,7 @@ public class ByteArray
     {
         for ( int i = 0, lastIndex = Size - 1, n = Size / 2; i < n; i++ )
         {
-            var ii = lastIndex - i;
+            int ii = lastIndex - i;
 
             ( Items[ i ], Items[ ii ] ) = ( Items[ ii ], Items[ i ] );
         }
@@ -660,9 +662,9 @@ public class ByteArray
     /// </summary>
     public void Shuffle()
     {
-        for ( var i = Size - 1; i >= 0; i-- )
+        for ( int i = Size - 1; i >= 0; i-- )
         {
-            var ii = MathUtils.Random( i );
+            int ii = MathUtils.Random( i );
 
             ( Items[ i ], Items[ ii ] ) = ( Items[ ii ], Items[ i ] );
         }
@@ -740,15 +742,15 @@ public class ByteArray
             return false;
         }
 
-        var n = Size;
+        int n = Size;
 
         if ( n != array.Size )
         {
             return false;
         }
 
-        var items1 = Items;
-        var items2 = array.Items;
+        byte[] items1 = Items;
+        byte[] items2 = array.Items;
 
         for ( var i = 0; i < n; i++ )
         {
@@ -769,8 +771,8 @@ public class ByteArray
             return "[]";
         }
 
-        var items  = Items;
-        var buffer = new StringBuilder( 32 );
+        byte[] items  = Items;
+        var    buffer = new StringBuilder( 32 );
 
         buffer.Append( '[' );
         buffer.Append( items[ 0 ] );
@@ -797,8 +799,8 @@ public class ByteArray
             return "";
         }
 
-        var items  = Items;
-        var buffer = new StringBuilder( 32 );
+        byte[] items  = Items;
+        var    buffer = new StringBuilder( 32 );
 
         buffer.Append( items[ 0 ] );
 

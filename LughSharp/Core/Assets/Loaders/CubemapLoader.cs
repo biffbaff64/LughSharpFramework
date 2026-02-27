@@ -25,7 +25,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -52,7 +54,7 @@ public class CubemapLoader : AsynchronousAssetLoader
     {
         Filename    = "",
         Cubemap     = null!,
-        CubemapData = null!,
+        CubemapData = null!
     };
 
     /// <summary>
@@ -100,8 +102,8 @@ public class CubemapLoader : AsynchronousAssetLoader
     /// <param name="parameter">The AssetLoader parameters object.</param>
     public override object LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
-        var p       = parameter as CubemapParameter;
-        var cubemap = _loaderInfo.Cubemap;
+        var      p       = parameter as CubemapParameter;
+        Cubemap? cubemap = _loaderInfo.Cubemap;
 
         if ( cubemap != null )
         {

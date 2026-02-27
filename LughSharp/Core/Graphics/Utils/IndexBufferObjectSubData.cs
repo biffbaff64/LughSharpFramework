@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Main;
@@ -123,7 +124,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <inheritdoc />
     public unsafe void SetIndices( Buffer< int > indices )
     {
-        var pos = indices.Position;
+        int pos = indices.Position;
 
         _isDirty = true;
 
@@ -152,7 +153,7 @@ public class IndexBufferObjectSubData : IIndexData
     {
         _isDirty = true;
 
-        var pos = _byteBuffer.Position;
+        int pos = _byteBuffer.Position;
 
         _byteBuffer.Position = targetOffset * sizeof( int );
 
@@ -230,7 +231,7 @@ public class IndexBufferObjectSubData : IIndexData
 
     private int CreateBufferObject()
     {
-        var result = Engine.GL.GenBuffer();
+        uint result = Engine.GL.GenBuffer();
 
         Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, result );
         Engine.GL.BufferData( BufferTarget.ElementArrayBuffer, _byteBuffer.Capacity, 0, _usage );

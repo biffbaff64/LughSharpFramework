@@ -46,7 +46,7 @@ public record TileContext
     public TileContext()
     {
     }
-    
+
     /// <summary>
     /// Context: The "Big" objects required for processing
     /// </summary>
@@ -57,16 +57,16 @@ public record TileContext
     {
         this.TmxFile       = TmxFile;
         this.ImageResolver = ImageResolver;
-        this.Tileset       = TileSet;
+        Tileset            = TileSet;
     }
 
     public void Deconstruct( out FileInfo tmxFile,
                              out IImageResolver imageResolver,
                              out TiledMapTileSet tileSet )
     {
-        tmxFile       = this.TmxFile;
-        imageResolver = this.ImageResolver;
-        tileSet       = this.Tileset;
+        tmxFile       = TmxFile;
+        imageResolver = ImageResolver;
+        tileSet       = Tileset;
     }
 }
 

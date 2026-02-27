@@ -36,7 +36,7 @@ namespace LughSharp.Core.Main;
 public abstract class Game : IApplicationListener
 {
     private bool _isDisposed;
-    
+
     /// <summary>
     /// Sets the current screen. Screen.hide() is called on any old screen, and
     /// Screen.show() is called on the new screen, if any.
@@ -129,7 +129,7 @@ public abstract class Game : IApplicationListener
             {
                 Screen?.Hide();
             }
-        
+
             _isDisposed = true;
         }
     }

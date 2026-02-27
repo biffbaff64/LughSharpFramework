@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Box2D.Graphics;
@@ -30,7 +29,6 @@ namespace Extensions.Source.Box2D.Graphics;
 [PublicAPI]
 public class ParticleEmitterBox2D
 {
-    
 }
 
 // ============================================================================

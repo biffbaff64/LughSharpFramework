@@ -25,7 +25,9 @@
 using System;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Decoding.Decoders;
+
 using Exception = System.Exception;
 using OutputChannelsEnum = LughSharp.Core.Audio.Maponus.Decoding.OutputChannels.OutputChannelsEnum;
 
@@ -71,7 +73,7 @@ public class Decoder
 
         parameters ??= _decoderDefaultParams;
 
-        var eq = parameters.InitialEqualizerSettings;
+        Equalizer? eq = parameters.InitialEqualizerSettings;
 
         if ( eq != null )
         {
@@ -98,7 +100,7 @@ public class Decoder
                 _equalizer.SetFromEqualizer = value;
 
                 // Get the band factors from the new equalizer
-                var factors = _equalizer.BandFactors;
+                float[] factors = _equalizer.BandFactors;
 
                 // Update the left channel filter's equalizer settings if the filter exists
                 if ( _leftChannelFilter != null )
@@ -191,11 +193,11 @@ public class Decoder
             Initialise( header );
         }
 
-        var layer = header.Layer();
+        int layer = header.Layer();
 
         _output?.ClearBuffer();
 
-        var decoder = RetrieveDecoder( header, stream, layer );
+        IFrameDecoder decoder = RetrieveDecoder( header, stream, layer );
 
         decoder.DecodeFrame();
         _output?.WriteBuffer( 1 );
@@ -333,12 +335,12 @@ public class Decoder
     /// </remarks>
     private void Initialise( Header header )
     {
-        var channels = header.Mode() == Header.SINGLE_CHANNEL ? 1 : 2;
+        int channels = header.Mode() == Header.SINGLE_CHANNEL ? 1 : 2;
 
         // Set up output buffer if not set up by client.
         _output ??= new SampleBuffer( header.Frequency(), channels );
 
-        var factors = _equalizer?.BandFactors;
+        float[]? factors = _equalizer?.BandFactors;
 
         _leftChannelFilter = new SynthesisFilter( 0, ScaleFactor, factors );
 
@@ -352,9 +354,9 @@ public class Decoder
 
         _isInitialized = true;
     }
-    
+
     // ========================================================================
-    
+
     /// <summary>
     /// The Parameters class presents the customizable aspects of the decoder.
     /// Instances of this class are not thread safe.

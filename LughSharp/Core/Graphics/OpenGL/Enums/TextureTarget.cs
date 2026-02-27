@@ -40,7 +40,7 @@ public enum TextureTarget
     TextureCubeMapPositiveY = IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
     TextureCubeMapNegativeY = IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
     TextureCubeMapPositiveZ = IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-    TextureCubeMapNegativeZ = IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+    TextureCubeMapNegativeZ = IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
 }
 
 [PublicAPI]

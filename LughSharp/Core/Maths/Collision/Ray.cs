@@ -156,7 +156,7 @@ public class Ray
     {
         const int PRIME = 73;
 
-        var result = PRIME + Direction.GetHashCode();
+        int result = PRIME + Direction.GetHashCode();
         result = ( PRIME * result ) + Origin.GetHashCode();
 
         return result;

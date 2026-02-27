@@ -27,8 +27,10 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils.Exceptions;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Graphics.Atlases;
@@ -84,16 +86,13 @@ public class TextureAtlasData
                 page.Width  = int.Parse( entry[ 1 ] );
                 page.Height = int.Parse( entry[ 2 ] );
             },
-            [ "format" ] = page =>
-            {
-                page.Format = int.Parse( entry[ 1 ] );
-            },
+            [ "format" ] = page => { page.Format = int.Parse( entry[ 1 ] ); },
             [ "filter" ] = page =>
             {
                 page.MinFilter = Enum.Parse< TextureFilterMode >( entry[ 1 ] );
                 page.MagFilter = Enum.Parse< TextureFilterMode >( entry[ 2 ] );
                 page.UseMipMaps = ( page.MinFilter != TextureFilterMode.Nearest )
-                                  && ( page.MinFilter != TextureFilterMode.Linear );
+                               && ( page.MinFilter != TextureFilterMode.Linear );
             },
             [ "repeat" ] = page =>
             {
@@ -107,10 +106,7 @@ public class TextureAtlasData
                     page.VWrap = TextureWrapMode.Repeat;
                 }
             },
-            [ "pma" ] = page =>
-            {
-                page.PreMultipliedAlpha = entry[ 1 ] == "true";
-            }
+            [ "pma" ] = page => { page.PreMultipliedAlpha = entry[ 1 ] == "true"; }
         };
 
         var hasIndexes = false;
@@ -154,14 +150,14 @@ public class TextureAtlasData
             },
             [ "rotate" ] = region =>
             {
-                var value = entry[ 1 ];
+                string value = entry[ 1 ];
 
                 if ( value == "true" )
                 {
                     region.Degrees = 90;
                 }
                 else if ( ( value != "false" )
-                         && ( int.TryParse( value, out var degrees ) ) )
+                       && int.TryParse( value, out int degrees ) )
                 {
                     region.Degrees = degrees;
                 }
@@ -183,7 +179,7 @@ public class TextureAtlasData
 
         try
         {
-            var line = reader.ReadLine();
+            string? line = reader.ReadLine();
 
             // Ignore empty lines before first entry
             while ( ( line != null ) && ( line.Trim().Length == 0 ) )
@@ -230,7 +226,7 @@ public class TextureAtlasData
                     {
                         page = new Page
                         {
-                            TextureFile = new FileInfo( Path.Combine( imagesDir.FullName, line ) ),
+                            TextureFile = new FileInfo( Path.Combine( imagesDir.FullName, line ) )
                         };
 
                         while ( true )
@@ -240,7 +236,7 @@ public class TextureAtlasData
                                 break;
                             }
 
-                            if ( pageFields.TryGetValue( entry[ 0 ], out var field ) )
+                            if ( pageFields.TryGetValue( entry[ 0 ], out Action< Page >? field ) )
                             {
                                 field( page );
                             }
@@ -254,7 +250,7 @@ public class TextureAtlasData
                     var region = new Region
                     {
                         Page = page,
-                        Name = line.Trim(),
+                        Name = line.Trim()
                     };
 
                     if ( flip )
@@ -264,14 +260,14 @@ public class TextureAtlasData
 
                     while ( true )
                     {
-                        var count = ReadEntry( entry, line = reader.ReadLine() );
+                        int count = ReadEntry( entry, line = reader.ReadLine() );
 
                         if ( count == 0 )
                         {
                             break;
                         }
 
-                        if ( regionFields.TryGetValue( entry[ 0 ], out var field ) )
+                        if ( regionFields.TryGetValue( entry[ 0 ], out Action< Region >? field ) )
                         {
                             field( region );
                         }
@@ -285,7 +281,7 @@ public class TextureAtlasData
 
                             for ( var i = 0; i < count; i++ )
                             {
-                                if ( int.TryParse( entry[ i + 1 ], out var val ) )
+                                if ( int.TryParse( entry[ i + 1 ], out int val ) )
                                 {
                                     entryValues[ i ] = val;
                                 }
@@ -323,8 +319,8 @@ public class TextureAtlasData
         {
             Regions.Sort( ( region1, region2 ) =>
             {
-                var i1 = region1.Index != -1 ? region1.Index : int.MaxValue;
-                var i2 = region2.Index != -1 ? region2.Index : int.MaxValue;
+                int i1 = region1.Index != -1 ? region1.Index : int.MaxValue;
+                int i2 = region2.Index != -1 ? region2.Index : int.MaxValue;
 
                 return i1.CompareTo( i2 );
             } );
@@ -351,7 +347,7 @@ public class TextureAtlasData
             return 0;
         }
 
-        var colon = line.IndexOf( ':' );
+        int colon = line.IndexOf( ':' );
 
         if ( colon == -1 )
         {
@@ -362,7 +358,7 @@ public class TextureAtlasData
 
         for ( int i = 1, lastMatch = colon + 1;; i++ )
         {
-            var comma = line.IndexOf( ',', lastMatch );
+            int comma = line.IndexOf( ',', lastMatch );
 
             if ( comma == -1 )
             {
@@ -408,14 +404,14 @@ public class TextureAtlasData
         /// </summary>
         public FileInfo? TextureFile { get; set; }
 
-        public bool              UseMipMaps         { get; set; }
-        public int               Format             { get; set; } = LughFormat.RGBA8888; // Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
-        public TextureFilterMode MinFilter          { get; set; } = TextureFilterMode.Nearest;
-        public TextureFilterMode MagFilter          { get; set; } = TextureFilterMode.Nearest;
-        public TextureWrapMode   UWrap              { get; set; } = TextureWrapMode.ClampToEdge;
-        public TextureWrapMode   VWrap              { get; set; } = TextureWrapMode.ClampToEdge;
-        public float             Width              { get; set; }
-        public float             Height             { get; set; }
+        public bool              UseMipMaps { get; set; }
+        public int               Format { get; set; } = LughFormat.RGBA8888; // Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
+        public TextureFilterMode MinFilter { get; set; } = TextureFilterMode.Nearest;
+        public TextureFilterMode MagFilter { get; set; } = TextureFilterMode.Nearest;
+        public TextureWrapMode   UWrap { get; set; } = TextureWrapMode.ClampToEdge;
+        public TextureWrapMode   VWrap { get; set; } = TextureWrapMode.ClampToEdge;
+        public float             Width { get; set; }
+        public float             Height { get; set; }
         public bool              PreMultipliedAlpha { get; set; }
     }
 

@@ -33,5 +33,5 @@ public enum StringName
     Renderer               = IGL.GL_RENDERER,
     Vendor                 = IGL.GL_VENDOR,
     Version                = IGL.GL_VERSION,
-    ShadingLanguageVersion = IGL.GL_SHADING_LANGUAGE_VERSION,
+    ShadingLanguageVersion = IGL.GL_SHADING_LANGUAGE_VERSION
 }

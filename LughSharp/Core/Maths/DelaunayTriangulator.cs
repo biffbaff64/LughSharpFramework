@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Maths;
@@ -91,7 +92,7 @@ public class DelaunayTriangulator
             throw new ArgumentException( "count must be <= " + 32767 );
         }
 
-        var triangles = _triangles;
+        List< int > triangles = _triangles;
         triangles.Clear();
 
         if ( count < 6 )
@@ -116,15 +117,15 @@ public class DelaunayTriangulator
             Sort( points, count );
         }
 
-        var end = offset + count;
+        int end = offset + count;
 
         // Determine bounds for super triangle.
         float xmin = points[ 0 ], ymin = points[ 1 ];
         float xmax = xmin,        ymax = ymin;
 
-        for ( var i = offset + 2; i < end; i++ )
+        for ( int i = offset + 2; i < end; i++ )
         {
-            var value = points[ i ];
+            float value = points[ i ];
 
             if ( value < xmin )
             {
@@ -151,11 +152,11 @@ public class DelaunayTriangulator
         }
 
         float dx   = xmax - xmin, dy = ymax - ymin;
-        var   dmax = ( dx > dy ? dx : dy ) * 20f;
+        float dmax = ( dx > dy ? dx : dy ) * 20f;
         float xmid = ( xmax + xmin ) / 2f, ymid = ( ymax + ymin ) / 2f;
 
         // Setup the super triangle, which contains all points.
-        var superTriangle = _superTriangle;
+        float[] superTriangle = _superTriangle;
 
         superTriangle[ 0 ] = xmid - dmax;
         superTriangle[ 1 ] = ymid - dmax;
@@ -178,27 +179,27 @@ public class DelaunayTriangulator
         int[] trianglesArray;
 
         // Include each point one at a time into the existing mesh.
-        for ( var pointIndex = offset; pointIndex < end; pointIndex += 2 )
+        for ( int pointIndex = offset; pointIndex < end; pointIndex += 2 )
         {
             float x = points[ pointIndex ], y = points[ pointIndex + 1 ];
 
             // If x,y lies inside the circumcircle of a triangle, the edges
             // are stored and the triangle removed.
             trianglesArray = triangles.ToArray();
-            var completeArray = _complete.ToArray();
+            bool[] completeArray = _complete.ToArray();
 
-            for ( var triangleIndex = triangles.Count - 1; triangleIndex >= 0; triangleIndex -= 3 )
+            for ( int triangleIndex = triangles.Count - 1; triangleIndex >= 0; triangleIndex -= 3 )
             {
-                var completeIndex = triangleIndex / 3;
+                int completeIndex = triangleIndex / 3;
 
                 if ( completeArray[ completeIndex ] )
                 {
                     continue;
                 }
 
-                var p1 = trianglesArray[ triangleIndex - 2 ];
-                var p2 = trianglesArray[ triangleIndex - 1 ];
-                var p3 = trianglesArray[ triangleIndex ];
+                int p1 = trianglesArray[ triangleIndex - 2 ];
+                int p2 = trianglesArray[ triangleIndex - 1 ];
+                int p3 = trianglesArray[ triangleIndex ];
 
                 float x1;
                 float y1;
@@ -209,7 +210,7 @@ public class DelaunayTriangulator
 
                 if ( p1 >= end )
                 {
-                    var i = p1 - end;
+                    int i = p1 - end;
                     x1 = superTriangle[ i ];
                     y1 = superTriangle[ i + 1 ];
                 }
@@ -221,7 +222,7 @@ public class DelaunayTriangulator
 
                 if ( p2 >= end )
                 {
-                    var i = p2 - end;
+                    int i = p2 - end;
                     x2 = superTriangle[ i ];
                     y2 = superTriangle[ i + 1 ];
                 }
@@ -233,7 +234,7 @@ public class DelaunayTriangulator
 
                 if ( p3 >= end )
                 {
-                    var i = p3 - end;
+                    int i = p3 - end;
                     x3 = superTriangle[ i ];
                     y3 = superTriangle[ i + 1 ];
                 }
@@ -261,23 +262,23 @@ public class DelaunayTriangulator
                 }
             }
 
-            var edgesArray = _edges.ToArray();
+            int[] edgesArray = _edges.ToArray();
 
             for ( int i = 0, n = _edges.Count; i < n; i += 2 )
             {
                 // Skip multiple edges. If all triangles are anticlockwise then
                 // all interior edges are opposite pointing in direction.
-                var p1 = edgesArray[ i ];
+                int p1 = edgesArray[ i ];
 
                 if ( p1 == -1 )
                 {
                     continue;
                 }
 
-                var p2   = edgesArray[ i + 1 ];
+                int p2   = edgesArray[ i + 1 ];
                 var skip = false;
 
-                for ( var ii = i + 2; ii < n; ii += 2 )
+                for ( int ii = i + 2; ii < n; ii += 2 )
                 {
                     if ( ( p1 == edgesArray[ ii + 1 ] ) && ( p2 == edgesArray[ ii ] ) )
                     {
@@ -305,11 +306,11 @@ public class DelaunayTriangulator
         // Remove triangles with super triangle vertices.
         trianglesArray = triangles.ToArray();
 
-        for ( var i = triangles.Count - 1; i >= 0; i -= 3 )
+        for ( int i = triangles.Count - 1; i >= 0; i -= 3 )
         {
             if ( ( trianglesArray[ i ] >= end )
-                 || ( trianglesArray[ i - 1 ] >= end )
-                 || ( trianglesArray[ i - 2 ] >= end ) )
+              || ( trianglesArray[ i - 1 ] >= end )
+              || ( trianglesArray[ i - 2 ] >= end ) )
             {
                 triangles.RemoveAt( i );
                 triangles.RemoveAt( i - 1 );
@@ -320,7 +321,7 @@ public class DelaunayTriangulator
         // Convert sorted to unsorted indices.
         if ( !sorted )
         {
-            var originalIndicesArray = _originalIndices.ToArray();
+            int[] originalIndicesArray = _originalIndices.ToArray();
 
             for ( int i = 0, n = triangles.Count; i < n; i++ )
             {
@@ -368,8 +369,8 @@ public class DelaunayTriangulator
         float xc;
         float yc;
 
-        var y1Y2 = Math.Abs( y1 - y2 );
-        var y2Y3 = Math.Abs( y2 - y3 );
+        float y1Y2 = Math.Abs( y1 - y2 );
+        float y2Y3 = Math.Abs( y2 - y3 );
 
         if ( y1Y2 < EPSILON )
         {
@@ -378,18 +379,18 @@ public class DelaunayTriangulator
                 return INCOMPLETE;
             }
 
-            var m2  = -( x3 - x2 ) / ( y3 - y2 );
-            var mx2 = ( x2 + x3 ) / 2f;
-            var my2 = ( y2 + y3 ) / 2f;
+            float m2  = -( x3 - x2 ) / ( y3 - y2 );
+            float mx2 = ( x2 + x3 ) / 2f;
+            float my2 = ( y2 + y3 ) / 2f;
 
             xc = ( x2 + x1 ) / 2f;
             yc = ( m2 * ( xc - mx2 ) ) + my2;
         }
         else
         {
-            var m1  = -( x2 - x1 ) / ( y2 - y1 );
-            var mx1 = ( x1 + x2 ) / 2f;
-            var my1 = ( y1 + y2 ) / 2f;
+            float m1  = -( x2 - x1 ) / ( y2 - y1 );
+            float mx1 = ( x1 + x2 ) / 2f;
+            float my1 = ( y1 + y2 ) / 2f;
 
             if ( y2Y3 < EPSILON )
             {
@@ -397,25 +398,25 @@ public class DelaunayTriangulator
             }
             else
             {
-                var m2  = -( x3 - x2 ) / ( y3 - y2 );
-                var mx2 = ( x2 + x3 ) / 2f;
-                var my2 = ( y2 + y3 ) / 2f;
+                float m2  = -( x3 - x2 ) / ( y3 - y2 );
+                float mx2 = ( x2 + x3 ) / 2f;
+                float my2 = ( y2 + y3 ) / 2f;
 
-                xc = ( ( ( ( m1 * mx1 ) - ( m2 * mx2 ) ) + my2 ) - my1 ) / ( m1 - m2 );
+                xc = ( ( m1 * mx1 ) - ( m2 * mx2 ) + my2 - my1 ) / ( m1 - m2 );
             }
 
             yc = ( m1 * ( xc - mx1 ) ) + my1;
         }
 
-        var dx   = x2 - xc;
-        var dy   = y2 - yc;
-        var rsqr = ( dx * dx ) + ( dy * dy );
+        float dx   = x2 - xc;
+        float dy   = y2 - yc;
+        float rsqr = ( dx * dx ) + ( dy * dy );
 
         dx =  xp - xc;
         dx *= dx;
         dy =  yp - yc;
 
-        if ( ( ( dx + ( dy * dy ) ) - rsqr ) <= EPSILON )
+        if ( ( dx + ( dy * dy ) - rsqr ) <= EPSILON )
         {
             return INSIDE;
         }
@@ -430,12 +431,12 @@ public class DelaunayTriangulator
     /// <param name="count"> Number of indices, must be even. </param>
     private void Sort( float[] values, int count )
     {
-        var pointCount = count / 2;
+        int pointCount = count / 2;
 
         _originalIndices.Clear();
         _originalIndices.EnsureCapacity( pointCount );
 
-        var originalIndicesArray = _originalIndices.ToArray();
+        int[] originalIndicesArray = _originalIndices.ToArray();
 
         for ( short i = 0; i < pointCount; i++ )
         {
@@ -443,7 +444,7 @@ public class DelaunayTriangulator
         }
 
         var lower = 0;
-        var upper = count - 1;
+        int upper = count - 1;
 
         _quicksortStack.Add( lower );
         _quicksortStack.Add( upper - 1 );
@@ -458,7 +459,7 @@ public class DelaunayTriangulator
                 continue;
             }
 
-            var i = QuicksortPartition( values, lower, upper, originalIndicesArray );
+            int i = QuicksortPartition( values, lower, upper, originalIndicesArray );
 
             if ( ( i - lower ) > ( upper - i ) )
             {
@@ -479,9 +480,9 @@ public class DelaunayTriangulator
 
     private int QuicksortPartition( float[] values, int lower, int upper, int[] originalIndices )
     {
-        var value = values[ lower ];
-        var up    = upper;
-        var down  = lower + 2;
+        float value = values[ lower ];
+        int   up    = upper;
+        int   down  = lower + 2;
 
         while ( down < up )
         {
@@ -526,13 +527,13 @@ public class DelaunayTriangulator
     /// </summary>
     public void Trim( List< short > triangles, float[] points, float[] hull, int offset, int count )
     {
-        var trianglesArray = triangles.ToArray();
+        short[] trianglesArray = triangles.ToArray();
 
-        for ( var i = triangles.Count - 1; i >= 0; i -= 3 )
+        for ( int i = triangles.Count - 1; i >= 0; i -= 3 )
         {
-            var p1 = trianglesArray[ i - 2 ] * 2;
-            var p2 = trianglesArray[ i - 1 ] * 2;
-            var p3 = trianglesArray[ i ] * 2;
+            int p1 = trianglesArray[ i - 2 ] * 2;
+            int p2 = trianglesArray[ i - 1 ] * 2;
+            int p3 = trianglesArray[ i ] * 2;
 
             GeometryUtils.TriangleCentroid( points[ p1 ],
                                             points[ p1 + 1 ],

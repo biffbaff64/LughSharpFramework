@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
@@ -48,18 +49,27 @@ public class TextureUtils
     public static void DebugTexture2D( uint textureId )
     {
         // Save state
-        Engine.GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out var activeTex );
-        Engine.GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out var prevBinding );
+        Engine.GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out int activeTex );
+        Engine.GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out int prevBinding );
 
         // Ensure we are inspecting the right object on the active unit
         Engine.GL.BindTexture( TextureTarget.Texture2D, textureId );
 
-        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out var w );
-        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out var h );
-        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureInternalFormat, out var internalFmt );
-        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.TextureMaxLevel, out var maxLevel );
-        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.MinFilter, out var minFilter );
-        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.MagFilter, out var magFilter );
+        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out int w );
+        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out int h );
+        Engine.GL.GetTexLevelParameteriv( TextureTarget.Texture2D,
+                                          0,
+                                          TextureParameter.TextureInternalFormat,
+                                          out int internalFmt );
+        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D,
+                                     ( int )TextureParameter.TextureMaxLevel,
+                                     out int maxLevel );
+        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D,
+                                     ( int )TextureParameter.MinFilter,
+                                     out int minFilter );
+        Engine.GL.GetTexParameteriv( ( int )TextureTarget.Texture2D,
+                                     ( int )TextureParameter.MagFilter,
+                                     out int magFilter );
 
         Logger.Debug( $"[Tex {textureId}] L0 Size: {w}x{h}, InternalFormat: 0x{internalFmt:X}" );
         Logger.Debug( $"[Tex {textureId}] MinFilter: 0x{minFilter:X}, MagFilter: 0x{magFilter:X}, MaxLevel: {maxLevel}" );
@@ -79,7 +89,7 @@ public class TextureUtils
     /// <returns></returns>
     public static uint CreateTexture2D( int width, int height, PixelInternalFormat internalFormat )
     {
-        var textureHandle = Engine.GL.GenTexture();
+        uint textureHandle = Engine.GL.GenTexture();
 
         Engine.GL.BindTexture( TextureTarget.Texture2D, textureHandle );
 
@@ -91,13 +101,13 @@ public class TextureUtils
         else
         {
             Engine.GL.TexImage2D( ( int )TextureTarget.Texture2D,
-                           0,
-                           ( int )internalFormat,
-                           width,
-                           height,
-                           0,
-                           ( int )GLPixelFormat.Rgba,
-                           ( int )PixelType.UnsignedByte );
+                                  0,
+                                  ( int )internalFormat,
+                                  width,
+                                  height,
+                                  0,
+                                  ( int )GLPixelFormat.Rgba,
+                                  ( int )PixelType.UnsignedByte );
         }
 
         return textureHandle;

@@ -95,7 +95,7 @@ public class RandomXS128 : Random
     {
         set
         {
-            var seed0 = MurmurHash3( value == 0 ? long.MinValue : value );
+            long seed0 = MurmurHash3( value == 0 ? long.MinValue : value );
             SetState( seed0, MurmurHash3( seed0 ) );
         }
     }
@@ -109,8 +109,8 @@ public class RandomXS128 : Random
     /// </summary>
     public long NextLong()
     {
-        var s1 = _seed0;
-        var s0 = _seed1;
+        long s1 = _seed0;
+        long s0 = _seed1;
 
         _seed0 = s0;
 
@@ -180,10 +180,10 @@ public class RandomXS128 : Random
 
         for ( ;; )
         {
-            var bits  = NextLong() >>> 1;
-            var value = bits % n;
+            long bits  = NextLong() >>> 1;
+            long value = bits % n;
 
-            if ( ( ( bits - value ) + ( n - 1 ) ) >= 0 )
+            if ( ( bits - value + ( n - 1 ) ) >= 0 )
             {
                 return value;
             }
@@ -236,13 +236,13 @@ public class RandomXS128 : Random
     /// </summary>
     public void NextBytes( in sbyte[] bytes )
     {
-        var i = bytes.Length;
+        int i = bytes.Length;
 
         while ( i != 0 )
         {
-            var n = i < 8 ? i : 8;
+            int n = i < 8 ? i : 8;
 
-            for ( var bits = NextLong(); n-- != 0; bits >>= 8 )
+            for ( long bits = NextLong(); n-- != 0; bits >>= 8 )
             {
                 bytes[ --i ] = ( sbyte )bits;
             }

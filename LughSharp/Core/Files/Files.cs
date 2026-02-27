@@ -27,6 +27,7 @@ using System.IO;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Files;
@@ -59,21 +60,21 @@ public class Files : IFiles
         }
 
         return type switch
-        {
-            PathType.Classpath => Classpath( path ),
-            PathType.Internal  => Internal( path ),
-            PathType.Absolute  => Absolute( path ),
-            PathType.Assembly  => Assembly( path ),
-            PathType.External  => External( path ),
-            PathType.Local     => Local( path ),
-            PathType.Assets    => Assets( path ),
+               {
+                   PathType.Classpath => Classpath( path ),
+                   PathType.Internal  => Internal( path ),
+                   PathType.Absolute  => Absolute( path ),
+                   PathType.Assembly  => Assembly( path ),
+                   PathType.External  => External( path ),
+                   PathType.Local     => Local( path ),
+                   PathType.Assets    => Assets( path ),
 
-            // ----------------------------------
+                   // ----------------------------------
 
-            var _ => throw new RuntimeException( $"Invalid path type: {type}\nValid types are: " +
-                                                    $"Classpath, Internal, Absolute, " +
-                                                    $"Assembly, External, Local" ),
-        };
+                   var _ => throw new RuntimeException( $"Invalid path type: {type}\nValid types are: " +
+                                                        $"Classpath, Internal, Absolute, " +
+                                                        $"Assembly, External, Local" )
+               };
     }
 
     // ========================================================================
@@ -96,9 +97,9 @@ public class Files : IFiles
         if ( path.Contains( ".." ) )
         {
             throw new RuntimeException( $"Path traversal is not allowed in classpath resources: {path}\n" +
-                                           "Example valid path: 'Resources/Textures/sprite.png'\n" +
-                                           "Note: '../' is not allowed for security reasons. Use absolute " +
-                                           "paths or paths relative to the classpath root." );
+                                        "Example valid path: 'Resources/Textures/sprite.png'\n" +
+                                        "Note: '../' is not allowed for security reasons. Use absolute " +
+                                        "paths or paths relative to the classpath root." );
         }
 
         try
@@ -107,17 +108,17 @@ public class Files : IFiles
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             // Convert path separators to dots for resource name format
-            var resourcePath = path.TrimStart( '/' ).Replace( '/', '.' ).Replace( '\\', '.' );
+            string resourcePath = path.TrimStart( '/' ).Replace( '/', '.' ).Replace( '\\', '.' );
 
             // Try to find the resource in the assembly's manifest
-            var manifestResourceNames = assembly.GetManifestResourceNames();
-            var matchingResource = manifestResourceNames
+            string[] manifestResourceNames = assembly.GetManifestResourceNames();
+            string? matchingResource = manifestResourceNames
                 .FirstOrDefault( r => r.EndsWith( resourcePath, StringComparison.OrdinalIgnoreCase ) );
 
             if ( matchingResource != null )
             {
                 // If found in assembly resources, create a FileInfo pointing to the assembly location
-                var assemblyLocation = Path.GetDirectoryName( assembly.Location )
+                string assemblyLocation = Path.GetDirectoryName( assembly.Location )
                                        ?? throw new RuntimeException( "Unable to determine assembly location" );
 
                 return new FileInfo( Path.Combine( assemblyLocation, path ) );
@@ -132,14 +133,15 @@ public class Files : IFiles
             }
 
             throw new RuntimeException( $"Classpath resource not found: {path}\n" +
-                                           "Example valid path: 'Resources/Textures/sprite.png'\n" +
-                                           "Note: Make sure the file exists and is included " +
-                                           "as an embedded resource." );
+                                        "Example valid path: 'Resources/Textures/sprite.png'\n" +
+                                        "Note: Make sure the file exists and is included " +
+                                        "as an embedded resource." );
         }
         catch ( Exception ex ) when ( ex is not RuntimeException )
         {
             throw new RuntimeException( $"Error accessing classpath resource: {path}\n" +
-                                           "Example valid path: 'Resources/Textures/sprite.png'", ex );
+                                        "Example valid path: 'Resources/Textures/sprite.png'",
+                                        ex );
         }
     }
 
@@ -162,20 +164,20 @@ public class Files : IFiles
         if ( !IsInternalStorageAvailable() )
         {
             throw new RuntimeException( $"Internal storage is not available for path: {path}\n" +
-                                           "Example valid path: 'Assets/Config/settings.json'\n" +
-                                           "Note: Check if the application has proper permissions " +
-                                           "and storage is mounted." );
+                                        "Example valid path: 'Assets/Config/settings.json'\n" +
+                                        "Note: Check if the application has proper permissions " +
+                                        "and storage is mounted." );
         }
 
         if ( path.Contains( ".." ) )
         {
             throw new RuntimeException( $"Path traversal is not allowed in internal storage: {path}\n" +
-                                           "Example valid path: 'Assets/Config/settings.json'\n" +
-                                           "Note: '../' is not allowed for security reasons. " +
-                                           "Use paths relative to internal storage root." );
+                                        "Example valid path: 'Assets/Config/settings.json'\n" +
+                                        "Note: '../' is not allowed for security reasons. " +
+                                        "Use paths relative to internal storage root." );
         }
 
-        var internalPath = GetInternalStoragePath();
+        string internalPath = GetInternalStoragePath();
 
         return new FileInfo( Path.Combine( internalPath, path ) );
     }
@@ -186,7 +188,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetInternalStoragePath()
     {
-        var path = IOUtils.InternalPath;
+        string path = IOUtils.InternalPath;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine internal storage path" )
@@ -202,7 +204,7 @@ public class Files : IFiles
     {
         try
         {
-            var path = GetInternalStoragePath();
+            string path = GetInternalStoragePath();
 
             return Directory.Exists( path );
         }
@@ -232,9 +234,9 @@ public class Files : IFiles
         if ( !Path.IsPathRooted( path ) )
         {
             throw new RuntimeException( $"Invalid absolute path: {path}\n" +
-                                           "Example Windows: 'C:/Games/MyGame/config.json'\n" +
-                                           "Example Unix: '/usr/local/share/game/config.json'\n" +
-                                           "Note: Absolute paths must be fully qualified from the root directory." );
+                                        "Example Windows: 'C:/Games/MyGame/config.json'\n" +
+                                        "Example Unix: '/usr/local/share/game/config.json'\n" +
+                                        "Note: Absolute paths must be fully qualified from the root directory." );
         }
 
         return new FileInfo( path );
@@ -259,19 +261,19 @@ public class Files : IFiles
         if ( !IsExternalStorageAvailable() )
         {
             throw new RuntimeException( $"External storage is not available for path: {path}\n" +
-                                           "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
-                                           "Note: Check if external storage is mounted and accessible." );
+                                        "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
+                                        "Note: Check if external storage is mounted and accessible." );
         }
 
         if ( path.Contains( ".." ) )
         {
             throw new RuntimeException( $"Path traversal is not allowed in external storage: {path}\n" +
-                                           "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
-                                           "Note: '../' is not allowed for security reasons. " +
-                                           "Use paths relative to external storage root." );
+                                        "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
+                                        "Note: '../' is not allowed for security reasons. " +
+                                        "Use paths relative to external storage root." );
         }
 
-        var externalPath = GetExternalStoragePath();
+        string externalPath = GetExternalStoragePath();
 
         return new FileInfo( Path.Combine( externalPath, path ) );
     }
@@ -282,7 +284,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetExternalStoragePath()
     {
-        var path = IOUtils.ExternalPath;
+        string path = IOUtils.ExternalPath;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine external storage path" )
@@ -298,7 +300,7 @@ public class Files : IFiles
     {
         try
         {
-            var path = GetExternalStoragePath();
+            string path = GetExternalStoragePath();
 
             return Directory.Exists( path );
         }
@@ -327,12 +329,12 @@ public class Files : IFiles
         if ( path.Contains( ".." ) )
         {
             throw new RuntimeException( $"Path traversal is not allowed in assets storage: {path}\n" +
-                                           "Example valid path: 'Textures/sprite.png'\n" +
-                                           "Note: '../' is not allowed for security reasons. " +
-                                           "Use paths relative to internal storage root." );
+                                        "Example valid path: 'Textures/sprite.png'\n" +
+                                        "Note: '../' is not allowed for security reasons. " +
+                                        "Use paths relative to internal storage root." );
         }
 
-        var assetsPath = GetAssetsStoragePath();
+        string assetsPath = GetAssetsStoragePath();
 
         return new FileInfo( Path.Combine( assetsPath, path ) );
     }
@@ -342,13 +344,13 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetAssetsStoragePath()
     {
-        var path = IOUtils.AssetsRoot;
+        string path = IOUtils.AssetsRoot;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine default assets storage path" )
             : path;
     }
-    
+
     // ========================================================================
     // ========================================================================
     // Assembly path
@@ -368,12 +370,12 @@ public class Files : IFiles
         if ( path.Contains( ".." ) )
         {
             throw new RuntimeException( $"Path traversal is not allowed in assembly resources: {path}\n" +
-                                           "Example valid path: 'Resources/Shaders/default.glsl'\n" +
-                                           "Note: '../' is not allowed for security reasons. " +
-                                           "Use paths relative to assembly location." );
+                                        "Example valid path: 'Resources/Shaders/default.glsl'\n" +
+                                        "Note: '../' is not allowed for security reasons. " +
+                                        "Use paths relative to assembly location." );
         }
 
-        var assemblyPath = GetAssemblyStoragePath();
+        string assemblyPath = GetAssemblyStoragePath();
 
         return new FileInfo( Path.Combine( assemblyPath, path ) );
     }
@@ -384,7 +386,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetAssemblyStoragePath()
     {
-        var path = IOUtils.AssemblyDirectory;
+        string path = IOUtils.AssemblyDirectory;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine assembly storage path" )
@@ -400,7 +402,7 @@ public class Files : IFiles
     {
         try
         {
-            var path = GetAssemblyStoragePath();
+            string path = GetAssemblyStoragePath();
 
             return Directory.Exists( path );
         }
@@ -429,19 +431,19 @@ public class Files : IFiles
         if ( !IsLocalStorageAvailable() )
         {
             throw new RuntimeException( $"Local storage is not available for path: {path}\n" +
-                                           "Example valid path: 'UserData/preferences.xml'\n" +
-                                           "Note: Check if local storage directory exists and is accessible." );
+                                        "Example valid path: 'UserData/preferences.xml'\n" +
+                                        "Note: Check if local storage directory exists and is accessible." );
         }
 
         if ( path.Contains( ".." ) )
         {
             throw new RuntimeException( $"Path traversal is not allowed in local storage: {path}\n" +
-                                           "Example valid path: 'UserData/preferences.xml'\n" +
-                                           "Note: '../' is not allowed for security reasons. " +
-                                           "Use paths relative to local storage root." );
+                                        "Example valid path: 'UserData/preferences.xml'\n" +
+                                        "Note: '../' is not allowed for security reasons. " +
+                                        "Use paths relative to local storage root." );
         }
 
-        var localPath = GetLocalStoragePath();
+        string localPath = GetLocalStoragePath();
 
         return new FileInfo( Path.Combine( localPath, path ) );
     }
@@ -452,7 +454,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetLocalStoragePath()
     {
-        var path = IOUtils.LocalPath;
+        string path = IOUtils.LocalPath;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine local storage path" )
@@ -468,7 +470,7 @@ public class Files : IFiles
     {
         try
         {
-            var path = GetLocalStoragePath();
+            string path = GetLocalStoragePath();
 
             return Directory.Exists( path );
         }

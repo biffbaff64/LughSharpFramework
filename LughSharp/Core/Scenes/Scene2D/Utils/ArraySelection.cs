@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Input;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -74,16 +75,16 @@ public class ArraySelection< T > : Selection< T >
 
         if ( ( Selected.Count > 0 ) && InputUtils.ShiftKey() )
         {
-            var rangeStartIndex = _rangeStart == null ? -1 : _array!.IndexOf( _rangeStart, 0 );
+            int rangeStartIndex = _rangeStart == null ? -1 : _array!.IndexOf( _rangeStart, 0 );
 
             if ( rangeStartIndex != -1 )
             {
-                var oldRangeStart = _rangeStart;
+                T? oldRangeStart = _rangeStart;
                 Snapshot();
 
                 // Select new range.
-                var start = rangeStartIndex;
-                var end   = _array!.IndexOf( item, 0 );
+                int start = rangeStartIndex;
+                int end   = _array!.IndexOf( item, 0 );
 
                 if ( start > end )
                 {
@@ -95,7 +96,7 @@ public class ArraySelection< T > : Selection< T >
                     Selected.Clear(); // Clear( 8 );
                 }
 
-                for ( var i = start; i <= end; i++ )
+                for ( int i = start; i <= end; i++ )
                 {
                     Selected.Add( _array[ i ] );
                 }
@@ -146,7 +147,7 @@ public class ArraySelection< T > : Selection< T >
 
         var changed = false;
 
-        foreach ( var item in Items() )
+        foreach ( T item in Items() )
         {
             if ( !_array!.Contains( item ) )
             {
@@ -168,4 +169,3 @@ public class ArraySelection< T > : Selection< T >
 
 // ============================================================================
 // ============================================================================
-

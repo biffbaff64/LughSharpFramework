@@ -47,10 +47,10 @@ public class ModelData
     public List< ModelAnimation > Animations { get; set; } = [ ];
 
     // ========================================================================
-    
+
     public virtual void AddMesh( ModelMesh mesh )
     {
-        foreach ( var other in Meshes )
+        foreach ( ModelMesh other in Meshes )
         {
             if ( ( other.ID != null ) && other.ID.Equals( mesh.ID ) )
             {
@@ -64,4 +64,3 @@ public class ModelData
 
 // ============================================================================
 // ============================================================================
-

@@ -24,7 +24,9 @@
 
 using System.Collections.Generic;
 using System.IO;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 
 namespace LughSharp.Core.Assets.Loaders;
@@ -37,7 +39,7 @@ namespace LughSharp.Core.Assets.Loaders;
 public enum AssetLoaderType
 {
     Synchronous,
-    Asynchronous,
+    Asynchronous
 }
 
 // ============================================================================

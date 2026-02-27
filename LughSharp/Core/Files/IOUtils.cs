@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Reflection;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Files;
@@ -45,7 +47,7 @@ public class IOUtils
     /// </code>
     /// </para>
     /// </summary>
-    public static string ExternalPath => $"{System.Environment.GetFolderPath( System.Environment.SpecialFolder.UserProfile )}\\";
+    public static string ExternalPath => $"{Environment.GetFolderPath( Environment.SpecialFolder.UserProfile )}\\";
 
     /// <summary>
     /// Path relative to the asset directory on Android and to the application's root
@@ -98,7 +100,7 @@ public class IOUtils
     public static string AssetsRoot => $"{AssemblyDirectory}Assets\\";
 
     // ========================================================================
-    
+
     /// <summary>
     /// Validates the provided asset path by ensuring it is relative to the assets
     /// directory and normalizing it to use consistent directory separators.
@@ -123,7 +125,7 @@ public class IOUtils
     /// <returns>A <see cref="FileStream"/> object for the created file.</returns>
     public static FileStream CreateFileWithDirectories( string filePath )
     {
-        var directoryPath = Path.GetDirectoryName( filePath );
+        string? directoryPath = Path.GetDirectoryName( filePath );
 
         if ( !string.IsNullOrEmpty( directoryPath ) )
         {
@@ -171,9 +173,9 @@ public class IOUtils
         else
         {
             // If the directory exists, remove all files in it.
-            var files = dir.GetFiles( "*" );
+            FileInfo[] files = dir.GetFiles( "*" );
 
-            foreach ( var file in files )
+            foreach ( FileInfo file in files )
             {
                 file.Delete();
             }
@@ -258,7 +260,7 @@ public class IOUtils
     /// </returns>
     public static string StripAssetsPath( string path )
     {
-        var position = path.IndexOf( "Assets", StringComparison.Ordinal );
+        int position = path.IndexOf( "Assets", StringComparison.Ordinal );
 
         return path.Substring( position, path.Length - position );
     }

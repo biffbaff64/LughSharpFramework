@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -49,13 +50,13 @@ public class QuickSelect< T >
 
     private int Partition( int left, int right, int pivot )
     {
-        var pivotValue = _array[ pivot ];
+        T pivotValue = _array[ pivot ];
 
         Swap( right, pivot );
 
-        var storage = left;
+        int storage = left;
 
-        for ( var i = left; i < right; i++ )
+        for ( int i = left; i < right; i++ )
         {
             if ( _comp.Compare( _array[ i ], pivotValue ) < 0 )
             {
@@ -76,9 +77,9 @@ public class QuickSelect< T >
             return left;
         }
 
-        var pivotIndex    = MedianOfThreePivot( left, right );
-        var pivotNewIndex = Partition( left, right, pivotIndex );
-        var pivotDist     = ( pivotNewIndex - left ) + 1;
+        int pivotIndex    = MedianOfThreePivot( left, right );
+        int pivotNewIndex = Partition( left, right, pivotIndex );
+        int pivotDist     = pivotNewIndex - left + 1;
 
         int result;
 
@@ -104,10 +105,10 @@ public class QuickSelect< T >
     /// </summary>
     private int MedianOfThreePivot( int leftIdx, int rightIdx )
     {
-        var left   = _array[ leftIdx ];
-        var midIdx = ( leftIdx + rightIdx ) / 2;
-        var mid    = _array[ midIdx ];
-        var right  = _array[ rightIdx ];
+        T   left   = _array[ leftIdx ];
+        int midIdx = ( leftIdx + rightIdx ) / 2;
+        T   mid    = _array[ midIdx ];
+        T   right  = _array[ rightIdx ];
 
         // spaghetti median of three algorithm
         // does at most 3 comparisons

@@ -54,7 +54,7 @@ public class Stats
     {
         if ( _prefs != null )
         {
-            _prefs.PutInteger( meter, ( _prefs.GetInteger( meter, 0 ) + amount ) );
+            _prefs.PutInteger( meter, _prefs.GetInteger( meter, 0 ) + amount );
             _prefs.Flush();
         }
     }
@@ -63,7 +63,7 @@ public class Stats
     {
         if ( _prefs != null )
         {
-            _prefs.PutInteger( meter, ( _prefs.GetInteger( meter, 0 ) - 1 ) );
+            _prefs.PutInteger( meter, _prefs.GetInteger( meter, 0 ) - 1 );
             _prefs.Flush();
         }
     }
@@ -72,7 +72,7 @@ public class Stats
     {
         if ( _prefs != null )
         {
-            _prefs.PutInteger( meter, ( _prefs.GetInteger( meter, 0 ) + 1 ) );
+            _prefs.PutInteger( meter, _prefs.GetInteger( meter, 0 ) + 1 );
             _prefs.Flush();
         }
     }
@@ -90,13 +90,13 @@ public class Stats
     {
         if ( _prefs != null )
         {
-            var pd = _prefs.ToDictionary();
+            Dictionary< string, object > pd = _prefs.ToDictionary();
 
-            foreach ( var key in pd.Keys )
+            foreach ( string key in pd.Keys )
             {
                 _prefs.PutInteger( key, 0 );
             }
-            
+
             _prefs.Flush();
         }
     }

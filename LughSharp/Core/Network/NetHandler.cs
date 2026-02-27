@@ -23,12 +23,13 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using static LughSharp.Core.Network.INet;
 
 namespace LughSharp.Core.Network;
 
 [PublicAPI]
-public abstract class 
+public abstract class
     NetHandler : INet
 {
     /// <inheritdoc />

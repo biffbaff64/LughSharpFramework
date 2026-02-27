@@ -87,11 +87,10 @@ public class FreetypeFontLoader : AsynchronousAssetLoader
                                                               typeof( FreeTypeFontGenerator ),
                                                               true );
 
-        var font = generator?.GenerateFont( parameter!.FontParameters );
+        BitmapFont? font = generator?.GenerateFont( parameter!.FontParameters );
 
         return font;
     }
-
 
     /// <summary>
     /// Returns the assets this asset requires to be loaded first. This method may be
@@ -115,7 +114,7 @@ public class FreetypeFontLoader : AsynchronousAssetLoader
     }
 
     // ========================================================================
-    
+
     public class FreeTypeFontLoaderParameter : BitmapFontParameter
     {
         /// the name of the TTF file to be used to load the font

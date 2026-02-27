@@ -33,7 +33,7 @@ public enum DebugSeverityControl
     Medium       = IGL.GL_DEBUG_SEVERITY_MEDIUM,
     Low          = IGL.GL_DEBUG_SEVERITY_LOW,
     Notification = IGL.GL_DEBUG_SEVERITY_NOTIFICATION,
-    DontCare     = IGL.GL_DONT_CARE,
+    DontCare     = IGL.GL_DONT_CARE
 }
 
 [PublicAPI]
@@ -45,7 +45,7 @@ public enum DebugSourceControl
     ThirdParty     = IGL.GL_DEBUG_SOURCE_THIRD_PARTY,
     Application    = IGL.GL_DEBUG_SOURCE_APPLICATION,
     Other          = IGL.GL_DEBUG_SOURCE_OTHER,
-    DontCare       = IGL.GL_DONT_CARE,
+    DontCare       = IGL.GL_DONT_CARE
 }
 
 [PublicAPI]
@@ -58,7 +58,7 @@ public enum DebugTypeControl
     Performance        = IGL.GL_DEBUG_TYPE_PERFORMANCE,
     Marker             = IGL.GL_DEBUG_TYPE_MARKER,
     Other              = IGL.GL_DEBUG_TYPE_OTHER,
-    DontCare           = IGL.GL_DONT_CARE,
+    DontCare           = IGL.GL_DONT_CARE
 }
 
 // ========================================================================

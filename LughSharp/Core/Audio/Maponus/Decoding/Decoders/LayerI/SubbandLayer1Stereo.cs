@@ -38,9 +38,9 @@ public class SubbandLayer1Stereo : SubbandLayer1
     protected float Channel2Sample;
     protected int   Channel2Samplelength;
     protected float Channel2Scalefactor;
-    
+
     // ========================================================================
-    
+
     public SubbandLayer1Stereo( int subbandnumber )
         : base( subbandnumber )
     {
@@ -99,7 +99,7 @@ public class SubbandLayer1Stereo : SubbandLayer1
     /// </summary>
     public override bool ReadSampleData( Bitstream stream )
     {
-        var returnvalue = base.ReadSampleData( stream );
+        bool returnvalue = base.ReadSampleData( stream );
 
         if ( Channel2Allocation != 0 )
         {
@@ -117,7 +117,7 @@ public class SubbandLayer1Stereo : SubbandLayer1
 
         if ( ( Channel2Allocation != 0 ) && ( channels != OutputChannels.LEFT_CHANNEL ) )
         {
-            var sample2 = ( ( Channel2Sample * Channel2Factor ) + Channel2Offset ) * Channel2Scalefactor;
+            float sample2 = ( ( Channel2Sample * Channel2Factor ) + Channel2Offset ) * Channel2Scalefactor;
 
             if ( channels == OutputChannels.BOTH_CHANNELS )
             {
@@ -135,4 +135,3 @@ public class SubbandLayer1Stereo : SubbandLayer1
 
 // ============================================================================
 // ============================================================================
-

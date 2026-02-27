@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Exceptions;

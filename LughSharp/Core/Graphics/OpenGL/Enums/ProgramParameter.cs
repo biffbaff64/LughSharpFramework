@@ -35,9 +35,8 @@ public enum ProgramParameter
     InfoLogLength    = IGL.GL_INFO_LOG_LENGTH,
     AttachedShaders  = IGL.GL_ATTACHED_SHADERS,
     ActiveAttributes = IGL.GL_ACTIVE_ATTRIBUTES,
-    ActiveUniforms   = IGL.GL_ACTIVE_UNIFORMS,
+    ActiveUniforms   = IGL.GL_ACTIVE_UNIFORMS
 }
 
 // ========================================================================
 // ========================================================================
-

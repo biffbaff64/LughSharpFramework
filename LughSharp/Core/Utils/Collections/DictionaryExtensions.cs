@@ -25,7 +25,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Collections;
@@ -43,12 +45,12 @@ public static class DictionaryExtension
     /// </summary>
     public static TK? FindKey< TK, TV >( this Dictionary< TK, TV > self, TV value ) where TK : notnull
     {
-        var keyTable   = self.Keys.ToArray();
-        var valueTable = self.Values.ToArray();
+        TK[] keyTable   = self.Keys.ToArray();
+        TV[] valueTable = self.Values.ToArray();
 
         if ( value == null )
         {
-            for ( var i = keyTable.Length - 1; i >= 0; i-- )
+            for ( int i = keyTable.Length - 1; i >= 0; i-- )
             {
                 if ( valueTable[ i ] == null )
                 {
@@ -58,7 +60,7 @@ public static class DictionaryExtension
         }
         else
         {
-            for ( var i = valueTable.Length - 1; i >= 0; i-- )
+            for ( int i = valueTable.Length - 1; i >= 0; i-- )
             {
                 if ( value.Equals( valueTable[ i ] ) )
                 {
@@ -99,7 +101,7 @@ public static class DictionaryExtension
             throw new RuntimeException( "key is null" );
         }
 
-        return self.TryGetValue( key, out var value ) ? value : default( TV );
+        return self.TryGetValue( key, out TV? value ) ? value : default( TV );
     }
 
     /// <summary>
@@ -126,8 +128,8 @@ public static class DictionaryExtension
     {
         self.EnsureCapacity( map.Count );
 
-        var keyTable   = map.Keys.ToArray();
-        var valueTable = map.Values.ToArray();
+        TK[] keyTable   = map.Keys.ToArray();
+        TV[] valueTable = map.Values.ToArray();
 
         for ( int i = 0, n = keyTable.Length; i < n; i++ )
         {
@@ -137,8 +139,8 @@ public static class DictionaryExtension
 
     public static void DebugPrint< TK, TV >( this Dictionary< TK, TV > self ) where TK : notnull
     {
-        var keyTable   = self.Keys.ToArray();
-        var valueTable = self.Values.ToArray();
+        TK[] keyTable   = self.Keys.ToArray();
+        TV[] valueTable = self.Values.ToArray();
 
         for ( var i = 0; i < keyTable.Length; i++ )
         {

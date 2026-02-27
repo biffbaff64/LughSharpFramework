@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
@@ -72,7 +73,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
     {
         Guard.Against.Null( file );
 
-        var p = parameters as PolygonRegionParameters ?? _defaultParameters;
+        PolygonRegionParameters p = parameters as PolygonRegionParameters ?? _defaultParameters;
 
         string? image = null;
 
@@ -80,7 +81,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
         {
             var reader = new StreamReader( file.FullName );
 
-            for ( var line = reader.ReadLine(); line != null; line = reader.ReadLine() )
+            for ( string? line = reader.ReadLine(); line != null; line = reader.ReadLine() )
             {
                 if ( line.StartsWith( p.TexturePrefix! ) )
                 {
@@ -101,10 +102,10 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
 
         if ( image == null )
         {
-            var directory = Path.GetDirectoryName( filename );
-            var fileNoExt = Path.GetFileNameWithoutExtension( filename );
+            string? directory = Path.GetDirectoryName( filename );
+            string  fileNoExt = Path.GetFileNameWithoutExtension( filename );
 
-            foreach ( var extension in p.TextureExtensions )
+            foreach ( string extension in p.TextureExtensions )
             {
                 siblingFilePath = Path.Combine( directory!, fileNoExt + extension );
 
@@ -144,7 +145,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
         {
             while ( true )
             {
-                var line = reader.ReadLine();
+                string? line = reader.ReadLine();
 
                 if ( line == null )
                 {
@@ -154,8 +155,8 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
                 if ( line.StartsWith( "s" ) )
                 {
                     // Read shape.
-                    var polygonStrings = line.Substring( 1 ).Trim().Split( "," );
-                    var vertices       = new float[ polygonStrings.Length ];
+                    string[] polygonStrings = line.Substring( 1 ).Trim().Split( "," );
+                    var      vertices       = new float[ polygonStrings.Length ];
 
                     for ( int i = 0, n = vertices.Length; i < n; i++ )
                     {
@@ -195,7 +196,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
         public readonly string[] TextureExtensions =
         [
             "png", "PNG", "jpeg", "JPEG", "jpg", "JPG", "cim", "CIM",
-            "etc1", "ETC1", "ktx", "KTX", "zktx", "ZKTX",
+            "etc1", "ETC1", "ktx", "KTX", "zktx", "ZKTX"
         ];
 
         /// <summary>

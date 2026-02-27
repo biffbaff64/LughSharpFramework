@@ -86,7 +86,7 @@ public class FontUtils
             var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( fontFile ) );
             var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
             {
-                Size = size,
+                Size = size
             };
 
             font = generator.GenerateFont( parameter );

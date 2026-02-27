@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
@@ -55,7 +57,7 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
     public bool ResetOnTouchUp { get; set; } = true;
 
     // ========================================================================
-    
+
     private readonly Circle  _deadzoneBounds = new( 0, 0, 0 );
     private readonly Circle  _knobBounds     = new( 0, 0, 0 );
     private readonly Vector2 _knobPercent    = new();
@@ -163,12 +165,12 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
 
     private void CalculatePositionAndValue( float x, float y, bool isTouchUp )
     {
-        var oldPositionX = _knobPosition.X;
-        var oldPositionY = _knobPosition.Y;
-        var oldPercentX  = _knobPercent.X;
-        var oldPercentY  = _knobPercent.Y;
-        var centerX      = _knobBounds.X;
-        var centerY      = _knobBounds.Y;
+        float oldPositionX = _knobPosition.X;
+        float oldPositionY = _knobPosition.Y;
+        float oldPercentX  = _knobPercent.X;
+        float oldPercentY  = _knobPercent.Y;
+        float centerX      = _knobBounds.X;
+        float centerY      = _knobBounds.Y;
 
         _knobPosition.Set( centerX, centerY );
         _knobPercent.Set( 0f, 0f );
@@ -179,7 +181,7 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
             {
                 _knobPercent.Set( ( x - centerX ) / _knobBounds.Radius, ( y - centerY ) / _knobBounds.Radius );
 
-                var length = _knobPercent.Len();
+                float length = _knobPercent.Len();
 
                 if ( length > 1 )
                 {
@@ -192,7 +194,8 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
                 }
                 else
                 {
-                    _knobPosition.Set( _knobPercent ).Nor().Scale( _knobBounds.Radius ).Add( _knobBounds.X, _knobBounds.Y );
+                    _knobPosition.Set( _knobPercent ).Nor().Scale( _knobBounds.Radius )
+                                 .Add( _knobBounds.X, _knobBounds.Y );
                 }
             }
         }
@@ -234,9 +237,9 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
     public void Layout()
     {
         // Recalc pad and deadzone bounds
-        var halfWidth  = Width / 2;
-        var halfHeight = Height / 2;
-        var radius     = Math.Min( halfWidth, halfHeight );
+        float halfWidth  = Width / 2;
+        float halfHeight = Height / 2;
+        float radius     = Math.Min( halfWidth, halfHeight );
 
         _touchBounds.Set( halfWidth, halfHeight, radius );
 
@@ -257,17 +260,17 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
     {
         Validate();
 
-        var c = Color;
+        Color c = Color;
         batch.SetColor( c.R, c.G, c.B, c.A * parentAlpha );
 
-        var x = X;
-        var y = Y;
+        float x = X;
+        float y = Y;
 
-        var bg = _style.Background;
+        ISceneDrawable? bg = _style.Background;
 
         bg?.Draw( batch, x, y, Width, Height );
 
-        var knob = _style.Knob;
+        ISceneDrawable? knob = _style.Knob;
 
         if ( knob != null )
         {
@@ -361,4 +364,3 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
 
 // ============================================================================
 // ============================================================================
-

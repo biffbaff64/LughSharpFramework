@@ -65,7 +65,7 @@ public class Group : Actor, ICullable
     public Rectangle? CullingArea { get; set; }
 
     public override string? Name => "Group";
-    
+
     // ========================================================================
 
     private readonly Matrix4 _computedTransform = new();
@@ -80,7 +80,7 @@ public class Group : Actor, ICullable
     {
         base.Act( delta );
 
-        var actors = Children.Begin();
+        Actor?[] actors = Children.Begin();
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
@@ -133,29 +133,29 @@ public class Group : Actor, ICullable
     {
         parentAlpha *= Color.A;
 
-        var actors = Children.Begin();
+        Actor?[] actors = Children.Begin();
 
         if ( CullingArea != null )
         {
             // Draw children only if inside culling area.
-            var cullLeft   = CullingArea.X;
-            var cullRight  = cullLeft + CullingArea.Width;
-            var cullBottom = CullingArea.Y;
-            var cullTop    = cullBottom + CullingArea.Height;
+            float cullLeft   = CullingArea.X;
+            float cullRight  = cullLeft + CullingArea.Width;
+            float cullBottom = CullingArea.Y;
+            float cullTop    = cullBottom + CullingArea.Height;
 
             if ( Transform )
             {
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
-                    var child = actors[ i ];
+                    Actor? child = actors[ i ];
 
                     if ( child is not { IsVisible: true } )
                     {
                         continue;
                     }
 
-                    var cx = child.X;
-                    var cy = child.Y;
+                    float cx = child.X;
+                    float cy = child.Y;
 
                     if ( ( cx <= cullRight )
                       && ( cy <= cullTop )
@@ -169,23 +169,23 @@ public class Group : Actor, ICullable
             else
             {
                 // No transform for this group, offset each child.
-                var offsetX = X;
-                var offsetY = Y;
+                float offsetX = X;
+                float offsetY = Y;
 
                 X = 0;
                 Y = 0;
 
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
-                    var child = actors[ i ];
+                    Actor? child = actors[ i ];
 
                     if ( child is not { IsVisible: true } )
                     {
                         continue;
                     }
 
-                    var cx = child.X;
-                    var cy = child.Y;
+                    float cx = child.X;
+                    float cy = child.Y;
 
                     if ( ( cx <= cullRight )
                       && ( cy <= cullTop )
@@ -213,7 +213,7 @@ public class Group : Actor, ICullable
             {
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
-                    var child = actors[ i ];
+                    Actor? child = actors[ i ];
 
                     if ( child is not { IsVisible: true } )
                     {
@@ -226,23 +226,23 @@ public class Group : Actor, ICullable
             else
             {
                 // No transform for this group, offset each child.
-                var offsetX = X;
-                var offsetY = Y;
+                float offsetX = X;
+                float offsetY = Y;
 
                 X = 0;
                 Y = 0;
 
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
-                    var child = actors[ i ];
+                    Actor? child = actors[ i ];
 
                     if ( child is not { IsVisible: true } )
                     {
                         continue;
                     }
 
-                    var cx = child.X;
-                    var cy = child.Y;
+                    float cx = child.X;
+                    float cy = child.Y;
 
                     child.X = cx + offsetX;
                     child.Y = cy + offsetY;
@@ -296,14 +296,14 @@ public class Group : Actor, ICullable
     /// </summary>
     protected void DrawDebugChildren( ShapeRenderer shapes )
     {
-        var actors = Children.Begin();
+        Actor?[] actors = Children.Begin();
 
         // No culling, draw all children.
         if ( Transform )
         {
             for ( int i = 0, n = Children.Size; i < n; i++ )
             {
-                var child = actors[ i ];
+                Actor? child = actors[ i ];
 
                 if ( child == null )
                 {
@@ -328,15 +328,15 @@ public class Group : Actor, ICullable
         else
         {
             // No transform for this group, offset each child.
-            var offsetX = X;
-            var offsetY = Y;
+            float offsetX = X;
+            float offsetY = Y;
 
             X = 0;
             Y = 0;
 
             for ( int i = 0, n = Children.Size; i < n; i++ )
             {
-                var child = actors[ i ];
+                Actor? child = actors[ i ];
 
                 if ( child == null )
                 {
@@ -353,8 +353,8 @@ public class Group : Actor, ICullable
                     continue;
                 }
 
-                var cx = child.X;
-                var cy = child.Y;
+                float cx = child.X;
+                float cy = child.Y;
 
                 child.X = cx + offsetX;
                 child.Y = cy + offsetY;
@@ -383,7 +383,7 @@ public class Group : Actor, ICullable
         }
 
         // Find the first parent that transforms.
-        var parentGroup = Parent;
+        Group? parentGroup = Parent;
 
         while ( parentGroup != null )
         {
@@ -474,9 +474,9 @@ public class Group : Actor, ICullable
             return null;
         }
 
-        for ( var i = Children.Size - 1; i >= 0; i-- )
+        for ( int i = Children.Size - 1; i >= 0; i-- )
         {
-            var child = Children.GetAt( i );
+            Actor? child = Children.GetAt( i );
 
             if ( child == null )
             {
@@ -485,7 +485,7 @@ public class Group : Actor, ICullable
 
             child.ParentToLocalCoordinates( _tmp.Set( x, y ) );
 
-            var hit = child.Hit( _tmp.X, _tmp.Y, touchable );
+            Actor? hit = child.Hit( _tmp.X, _tmp.Y, touchable );
 
             if ( hit != null )
             {
@@ -518,7 +518,7 @@ public class Group : Actor, ICullable
 
             actor.Parent.RemoveActor( actor, false );
         }
-        
+
         Children.Add( actor );
 
         actor.Parent = this;
@@ -578,7 +578,7 @@ public class Group : Actor, ICullable
             actor.Parent.RemoveActor( actor, false );
         }
 
-        var index = Children.IndexOf( actorBefore );
+        int index = Children.IndexOf( actorBefore );
 
         Children.Insert( index, actor );
 
@@ -606,7 +606,7 @@ public class Group : Actor, ICullable
             actor.Parent.RemoveActor( actor, false );
         }
 
-        var index = Children.IndexOf( actorAfter );
+        int index = Children.IndexOf( actorAfter );
 
         if ( ( index == Children.Size ) || ( index == -1 ) )
         {
@@ -630,7 +630,7 @@ public class Group : Actor, ICullable
     /// </summary>
     public virtual bool RemoveActor( Actor actor, bool unfocus )
     {
-        var index = Children.IndexOf( actor );
+        int index = Children.IndexOf( actor );
 
         if ( index == -1 )
         {
@@ -653,7 +653,7 @@ public class Group : Actor, ICullable
     /// <returns> The actor removed from this group. </returns>
     public virtual Actor? RemoveActorAt( int index, bool unfocus )
     {
-        var actor = Children.RemoveAt( index );
+        Actor? actor = Children.RemoveAt( index );
 
         if ( actor != null )
         {
@@ -676,7 +676,7 @@ public class Group : Actor, ICullable
     /// </summary>
     public virtual void ClearChildren()
     {
-        var actors = Children.Begin();
+        Actor?[] actors = Children.Begin();
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
@@ -707,7 +707,7 @@ public class Group : Actor, ICullable
     {
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            var child = Children.GetAt( i );
+            Actor? child = Children.GetAt( i );
 
             if ( name.Equals( child?.Name ) )
             {
@@ -717,7 +717,7 @@ public class Group : Actor, ICullable
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            var child = Children.GetAt( i );
+            Actor? child = Children.GetAt( i );
 
             if ( child is Group group )
             {
@@ -752,7 +752,7 @@ public class Group : Actor, ICullable
     /// </summary>
     public bool SwapActor( int first, int second )
     {
-        var maxIndex = Children.Size;
+        int maxIndex = Children.Size;
 
         if ( ( first < 0 ) || ( first >= maxIndex ) )
         {
@@ -775,8 +775,8 @@ public class Group : Actor, ICullable
     /// </summary>
     public bool SwapActor( Actor first, Actor second )
     {
-        var firstIndex  = Children.IndexOf( first );
-        var secondIndex = Children.IndexOf( second );
+        int firstIndex  = Children.IndexOf( first );
+        int secondIndex = Children.IndexOf( second );
 
         if ( ( firstIndex == -1 ) || ( secondIndex == -1 ) )
         {
@@ -813,7 +813,7 @@ public class Group : Actor, ICullable
     /// </exception>
     public Vector2 LocalToDescendantCoordinates( Actor descendant, Vector2 localCoords )
     {
-        var parent = descendant.Parent;
+        Group? parent = descendant.Parent;
 
         if ( parent == null )
         {
@@ -842,7 +842,7 @@ public class Group : Actor, ICullable
 
         if ( recursively )
         {
-            foreach ( var child in Children )
+            foreach ( Actor? child in Children )
             {
                 if ( child is Group group )
                 {
@@ -887,7 +887,7 @@ public class Group : Actor, ICullable
         buffer.Append( base.ToString() ?? string.Empty );
         buffer.Append( '\n' );
 
-        var actors = Children.Begin();
+        Actor?[] actors = Children.Begin();
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {

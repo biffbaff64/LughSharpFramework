@@ -287,7 +287,7 @@ public class GestureDetector : InputAdapter
         // handle pinch zoom
         if ( _pinching )
         {
-            var result = _listener.Pinch( _initialPointer1, _initialPointer2, _pointer1, _pointer2 );
+            bool result = _listener.Pinch( _initialPointer1, _initialPointer2, _pointer1, _pointer2 );
 
             return _listener.Zoom( _initialPointer1.Distance( _initialPointer2 ),
                                    _pointer1.Distance( _pointer2 ) )
@@ -333,7 +333,7 @@ public class GestureDetector : InputAdapter
             _inTapRectangle = false;
         }
 
-        var wasPanning = _panning;
+        bool wasPanning = _panning;
         _panning = false;
 
         CancelLongPressTask();
@@ -396,7 +396,7 @@ public class GestureDetector : InputAdapter
         }
 
         // handle fling
-        var time = Engine.Api.Input.GetCurrentEventTime();
+        long time = Engine.Api.Input.GetCurrentEventTime();
 
         if ( ( time - _touchDownTime ) <= _maxFlingDelay )
         {
@@ -678,11 +678,11 @@ public class GestureDetector : InputAdapter
             _lastX = x;
             _lastY = y;
 
-            var deltaTime = currTime - LastTime;
+            long deltaTime = currTime - LastTime;
 
             LastTime = currTime;
 
-            var index = _numSamples % _sampleSize;
+            int index = _numSamples % _sampleSize;
 
             _meanX[ index ]    = DeltaX;
             _meanY[ index ]    = DeltaY;
@@ -692,8 +692,8 @@ public class GestureDetector : InputAdapter
 
         public float GetVelocityX()
         {
-            var meanX    = GetAverage( _meanX, _numSamples );
-            var meanTime = GetAverage( _meanTime, _numSamples ) / 1000000000.0f;
+            float meanX    = GetAverage( _meanX, _numSamples );
+            float meanTime = GetAverage( _meanTime, _numSamples ) / 1000000000.0f;
 
             if ( meanTime == 0 )
             {
@@ -705,8 +705,8 @@ public class GestureDetector : InputAdapter
 
         public float GetVelocityY()
         {
-            var meanY    = GetAverage( _meanY, _numSamples );
-            var meanTime = GetAverage( _meanTime, _numSamples ) / 1000000000.0f;
+            float meanY    = GetAverage( _meanY, _numSamples );
+            float meanTime = GetAverage( _meanTime, _numSamples ) / 1000000000.0f;
 
             if ( meanTime == 0 )
             {
@@ -769,4 +769,3 @@ public class GestureDetector : InputAdapter
 
 // ============================================================================
 // ============================================================================
-

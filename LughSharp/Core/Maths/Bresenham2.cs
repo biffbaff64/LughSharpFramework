@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Maths;
@@ -40,8 +41,9 @@ namespace LughSharp.Core.Maths;
 [PublicAPI]
 public class Bresenham2
 {
-    private readonly List< GridPoint2 >  _points = [ ];
-    private readonly Pool< GridPoint2 >? _pool   = new()
+    private readonly List< GridPoint2 > _points = [ ];
+
+    private readonly Pool< GridPoint2 >? _pool = new()
     {
         NewObjectFactory = GetNewObject
     };
@@ -93,8 +95,8 @@ public class Bresenham2
                                             Pool< GridPoint2 > pool,
                                             List< GridPoint2 > output )
     {
-        var w   = endX - startX;
-        var h   = endY - startY;
+        int w   = endX - startX;
+        int h   = endY - startY;
         var dx1 = 0;
         var dy1 = 0;
         var dx2 = 0;
@@ -120,8 +122,8 @@ public class Bresenham2
             dy1 = 1;
         }
 
-        var longest  = Math.Abs( w );
-        var shortest = Math.Abs( h );
+        int longest  = Math.Abs( w );
+        int shortest = Math.Abs( h );
 
         if ( longest < shortest )
         {
@@ -140,13 +142,13 @@ public class Bresenham2
             dx2 = 0;
         }
 
-        var shortest2 = shortest << 1;
-        var longest2  = longest << 1;
+        int shortest2 = shortest << 1;
+        int longest2  = longest << 1;
         var numerator = 0;
 
         for ( var i = 0; i <= longest; i++ )
         {
-            var point = pool.Obtain();
+            GridPoint2? point = pool.Obtain();
 
             point?.Set( startX, startY );
             output.Add( point! );

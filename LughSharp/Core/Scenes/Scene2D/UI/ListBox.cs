@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
@@ -37,6 +38,7 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
+
 using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
@@ -66,9 +68,9 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
     // ========================================================================
 
     public override string? Name => "ListBox";
-    
+
     // ========================================================================
-    
+
     private int   _overIndex = -1;
     private float _prefHeight;
     private float _prefWidth;
@@ -114,7 +116,10 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         return _prefWidth;
     }
 
-    public void SetPrefWidth( float value ) => _prefWidth = value;
+    public void SetPrefWidth( float value )
+    {
+        _prefWidth = value;
+    }
 
     public override float GetPrefHeight()
     {
@@ -123,7 +128,10 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         return _prefHeight;
     }
 
-    public void SetPrefHeight( float value ) => _prefHeight = value;
+    public void SetPrefHeight( float value )
+    {
+        _prefHeight = value;
+    }
 
     /// <summary>
     /// Returns the list's style. Modifying the returned style may not have an
@@ -136,7 +144,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         Selection = new ArraySelection< T >( Items )
         {
             Actor    = this,
-            Required = true,
+            Required = true
         };
 
         SetStyle( boxStyle );
@@ -157,8 +165,8 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
     public override void SetLayout()
     {
-        var font             = Style?.Font;
-        var selectedDrawable = Style?.Selection;
+        BitmapFont?     font             = Style?.Font;
+        ISceneDrawable? selectedDrawable = Style?.Selection;
 
         if ( font == null )
         {
@@ -175,10 +183,10 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
         _prefWidth = 0;
 
-        var layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
-        var layout     = layoutPool.Obtain();
+        Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
+        GlyphLayout         layout     = layoutPool.Obtain();
 
-        foreach ( var item in Items )
+        foreach ( T item in Items )
         {
             layout.SetText( font, ToString( item ) );
             _prefWidth = Math.Max( layout.Width, _prefWidth );
@@ -188,12 +196,13 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         _prefWidth  += selectedDrawable.LeftWidth + selectedDrawable.RightWidth;
         _prefHeight =  Items.Count * ItemHeight;
 
-        var background = Style?.Background;
+        ISceneDrawable? background = Style?.Background;
 
         if ( background != null )
         {
-            _prefWidth  = Math.Max( _prefWidth + background.LeftWidth + background.RightWidth, background.MinWidth );
-            _prefHeight = Math.Max( _prefHeight + background.TopHeight + background.BottomHeight, background.MinHeight );
+            _prefWidth = Math.Max( _prefWidth + background.LeftWidth + background.RightWidth, background.MinWidth );
+            _prefHeight = Math.Max( _prefHeight + background.TopHeight + background.BottomHeight,
+                                    background.MinHeight );
         }
     }
 
@@ -203,43 +212,47 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
         DrawBackground( batch, parentAlpha );
 
-        var font                = Style?.Font;
-        var selectedDrawable    = Style?.Selection;
-        var fontColorSelected   = Style?.FontColorSelected;
-        var fontColorUnselected = Style?.FontColorUnselected;
+        BitmapFont?     font                = Style?.Font;
+        ISceneDrawable? selectedDrawable    = Style?.Selection;
+        Color?          fontColorSelected   = Style?.FontColorSelected;
+        Color?          fontColorUnselected = Style?.FontColorUnselected;
 
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
-        var x      = X;
-        var y      = Y;
-        var width  = Width;
-        var height = Height;
-        var itemY  = height;
+        float x      = X;
+        float y      = Y;
+        float width  = Width;
+        float height = Height;
+        float itemY  = height;
 
-        var background = Style?.Background;
+        ISceneDrawable? background = Style?.Background;
 
         if ( background != null )
         {
-            var leftWidth = background.LeftWidth;
+            float leftWidth = background.LeftWidth;
 
             x     += leftWidth;
             itemY -= background.TopHeight;
             width -= leftWidth + background.RightWidth;
         }
 
-        var textOffsetX = selectedDrawable?.LeftWidth;
-        var textWidth   = width - textOffsetX - selectedDrawable?.RightWidth;
-        var textOffsetY = selectedDrawable!.TopHeight - font!.GetDescent();
+        float? textOffsetX = selectedDrawable?.LeftWidth;
+        float? textWidth   = width - textOffsetX - selectedDrawable?.RightWidth;
+        float  textOffsetY = selectedDrawable!.TopHeight - font!.GetDescent();
 
-        font.SetColor( fontColorUnselected!.R, fontColorUnselected.G, fontColorUnselected.B, fontColorUnselected.A * parentAlpha );
+        font.SetColor( fontColorUnselected!.R,
+                       fontColorUnselected.G,
+                       fontColorUnselected.B,
+                       fontColorUnselected.A * parentAlpha );
 
         for ( var i = 0; i < Items.Count; i++ )
         {
             if ( ( CullingArea == null )
-                 || ( ( ( itemY - ItemHeight ) <= ( CullingArea.Y + CullingArea.Height ) ) && ( itemY >= CullingArea.Y ) ) )
+              || ( ( ( itemY - ItemHeight ) <= ( CullingArea.Y + CullingArea.Height ) )
+                && ( itemY >= CullingArea.Y ) ) )
             {
-                var             item     = Items[ i ];
-                var             selected = Selection.Contains( item );
+                T               item     = Items[ i ];
+                bool            selected = Selection.Contains( item );
                 ISceneDrawable? drawable = null;
 
                 if ( ( _pressedIndex == i ) && ( Style?.Down != null ) )
@@ -249,16 +262,25 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
                 else if ( selected )
                 {
                     drawable = selectedDrawable;
-                    font.SetColor( fontColorSelected!.R, fontColorSelected.G, fontColorSelected.B, fontColorSelected.A * parentAlpha );
+                    font.SetColor( fontColorSelected!.R,
+                                   fontColorSelected.G,
+                                   fontColorSelected.B,
+                                   fontColorSelected.A * parentAlpha );
                 }
                 else if ( ( _overIndex == i ) && ( Style?.Over != null ) )
                 {
                     drawable = Style.Over;
                 }
 
-                drawable?.Draw( batch, x, ( y + itemY ) - ItemHeight, width, ItemHeight );
+                drawable?.Draw( batch, x, y + itemY - ItemHeight, width, ItemHeight );
 
-                DrawItem( batch, font, i, item, ( float )( x + textOffsetX )!, ( y + itemY ) - textOffsetY, ( float )textWidth! );
+                DrawItem( batch,
+                          font,
+                          i,
+                          item,
+                          ( float )( x + textOffsetX )!,
+                          y + itemY - textOffsetY,
+                          ( float )textWidth! );
 
                 if ( selected )
                 {
@@ -292,7 +314,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
     protected GlyphLayout DrawItem( IBatch batch, BitmapFont font, int index, T item, float x, float y, float width )
     {
-        var str = ToString( item );
+        string str = ToString( item );
 
         return font.Draw( batch, str, x, y, 0, str.Length, width, Alignment, false, "..." );
     }
@@ -331,7 +353,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
     /// </summary>
     public int GetSelectedIndex()
     {
-        var selected = Selection.ToArray();
+        List< T > selected = Selection.ToArray();
 
         return selected.Count == 0 ? -1 : Items.IndexOf( selected.First() );
     }
@@ -369,7 +391,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
     public T? GetItemAt( float y )
     {
-        var index = GetItemIndexAt( y );
+        int index = GetItemIndexAt( y );
 
         return index == -1 ? default( T? ) : Items[ index ];
     }
@@ -379,8 +401,8 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
     /// <returns> -1 if not over an item. </returns>
     public int GetItemIndexAt( float y )
     {
-        var height     = Height;
-        var background = Style?.Background;
+        float           height     = Height;
+        ISceneDrawable? background = Style?.Background;
 
         if ( background != null )
         {
@@ -402,8 +424,8 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
     {
         Guard.Against.Null( newItems );
 
-        var oldPrefWidth  = GetPrefWidth();
-        var oldPrefHeight = GetPrefHeight();
+        float oldPrefWidth  = GetPrefWidth();
+        float oldPrefHeight = GetPrefHeight();
 
         Items.Clear();
         Items.AddAll( newItems );
@@ -430,8 +452,8 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
     {
         Guard.Against.Null( newItems );
 
-        var oldPrefWidth  = GetPrefWidth();
-        var oldPrefHeight = GetPrefHeight();
+        float oldPrefWidth  = GetPrefWidth();
+        float oldPrefHeight = GetPrefHeight();
 
         if ( !newItems.Equals( Items ) )
         {
@@ -563,7 +585,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
                 return false;
             }
 
-            var time = TimeUtils.Millis();
+            long time = TimeUtils.Millis();
 
             if ( time > _typeTimeout )
             {
@@ -621,7 +643,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
                 return true;
             }
 
-            var index = _parent.GetItemIndexAt( y );
+            int index = _parent.GetItemIndexAt( y );
 
             if ( index == -1 )
             {
@@ -684,7 +706,8 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
             Font = new BitmapFont();
         }
 
-        public ListBoxStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected, ISceneDrawable selection )
+        public ListBoxStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected,
+                             ISceneDrawable selection )
         {
             Font = font;
             FontColorSelected.Set( fontColorSelected );

@@ -24,11 +24,13 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using Environment = System.Environment;
 
 namespace LughSharp.Core.Audio.OpenAL;
- 
+
 [PublicAPI]
 public static class AL
 {
@@ -45,7 +47,7 @@ public static class AL
 
     private static IntPtr ImportResolver( string libraryName, Assembly assembly, DllImportSearchPath? searchPath )
     {
-        var libHandle = IntPtr.Zero;
+        IntPtr libHandle = IntPtr.Zero;
 
         if ( libraryName == OPEN_AL_DLL )
         {
@@ -278,7 +280,7 @@ public static class AL
 
     public static void GenSource( out uint source )
     {
-        GenSources( 1, out var sources );
+        GenSources( 1, out uint[] sources );
         source = sources[ 0 ];
     }
 
@@ -471,7 +473,7 @@ public static class AL
 
     public static void GenBuffer( out uint buffer )
     {
-        GenBuffers( 1, out var buffers );
+        GenBuffers( 1, out uint[] buffers );
         buffer = buffers[ 0 ];
     }
 
@@ -514,4 +516,3 @@ public static class AL
 
 // ============================================================================
 // ============================================================================
-

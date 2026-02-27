@@ -73,7 +73,7 @@ public class CumulativeDistribution< T >
     {
         float sum = 0;
 
-        foreach ( var cv in _values )
+        foreach ( CumulativeValue cv in _values )
         {
             sum          += cv.Interval;
             cv.Frequency =  sum;
@@ -88,14 +88,14 @@ public class CumulativeDistribution< T >
     {
         float sum = 0;
 
-        foreach ( var cv in _values )
+        foreach ( CumulativeValue cv in _values )
         {
             sum += cv.Interval;
         }
 
         float intervalSum = 0;
 
-        foreach ( var cv in _values )
+        foreach ( CumulativeValue cv in _values )
         {
             intervalSum  += cv.Interval / sum;
             cv.Frequency =  intervalSum;
@@ -108,7 +108,7 @@ public class CumulativeDistribution< T >
     /// </summary>
     public virtual void GenerateUniform()
     {
-        var freq = 1f / _values.Count;
+        float freq = 1f / _values.Count;
 
         for ( var i = 0; i < _values.Count; ++i )
         {
@@ -126,13 +126,13 @@ public class CumulativeDistribution< T >
     /// <returns> the value whose interval contains the probability  </returns>
     protected virtual T Value( float probability )
     {
-        var imax = _values.Count - 1;
+        int imax = _values.Count - 1;
         var imin = 0;
 
         while ( imin <= imax )
         {
-            var imid  = imin + ( ( imax - imin ) / 2 );
-            var value = _values[ imid ];
+            int             imid  = imin + ( ( imax - imin ) / 2 );
+            CumulativeValue value = _values[ imid ];
 
             if ( probability < value.Frequency )
             {
@@ -185,7 +185,7 @@ public class CumulativeDistribution< T >
     /// </summary>
     public virtual void SetInterval( T obj, float intervalSize )
     {
-        foreach ( var value in _values )
+        foreach ( CumulativeValue value in _values )
         {
             if ( Equals( value.Value, obj ) )
             {

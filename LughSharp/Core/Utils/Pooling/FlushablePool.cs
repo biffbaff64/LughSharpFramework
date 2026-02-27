@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Pooling;
@@ -66,7 +67,7 @@ public class FlushablePool< T > : Pool< T > where T : class
     /// <returns> The instance, or null if it was not possible to obtain one. </returns>
     public override T Obtain()
     {
-        var result = base.Obtain();
+        T result = base.Obtain();
 
         Obtained.Add( result );
 
@@ -112,7 +113,7 @@ public class FlushablePool< T > : Pool< T > where T : class
             var hashSet = new HashSet< T >( objects );
 
             // Iterate backwards when removing to keep indices stable
-            for ( var i = Obtained.Count - 1; i >= 0; i-- )
+            for ( int i = Obtained.Count - 1; i >= 0; i-- )
             {
                 if ( hashSet.Contains( Obtained[ i ] ) )
                 {

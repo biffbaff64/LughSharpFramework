@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -58,7 +59,7 @@ public class Bits
     {
         get
         {
-            foreach ( var t in _bits )
+            foreach ( long t in _bits )
             {
                 if ( t != 0L )
                 {
@@ -77,7 +78,7 @@ public class Bits
     /// <returns> whether the bit is set </returns>
     public bool IsSet( int index )
     {
-        var word = index >>> 6;
+        int word = index >>> 6;
 
         if ( word >= _bits.Length )
         {
@@ -94,14 +95,14 @@ public class Bits
     /// <returns> whether the bit was set before invocation </returns>
     public bool GetAndClear( int index )
     {
-        var word = index >>> 6;
+        int word = index >>> 6;
 
         if ( word >= _bits.Length )
         {
             return false;
         }
 
-        var oldBits = _bits[ word ];
+        long oldBits = _bits[ word ];
 
         _bits[ word ] &= ~( 1L << ( index & 0x3F ) );
 
@@ -115,11 +116,11 @@ public class Bits
     /// <returns>whether the bit was set before invocation</returns>
     public bool GetAndSet( int index )
     {
-        var word = index >>> 6;
+        int word = index >>> 6;
 
         EnsureCapacity( word );
 
-        var oldBits = _bits[ word ];
+        long oldBits = _bits[ word ];
 
         _bits[ word ] |= 1L << ( index & 0x3F );
 
@@ -132,7 +133,7 @@ public class Bits
     /// <param name="index"> the index of the bit to set </param>
     public void Set( int index )
     {
-        var word = index >>> 6;
+        int word = index >>> 6;
 
         EnsureCapacity( word );
 
@@ -145,7 +146,7 @@ public class Bits
     /// <param name="index"> the index of the bit to flip </param>
     public void Flip( int index )
     {
-        var word = index >>> 6;
+        int word = index >>> 6;
 
         EnsureCapacity( word );
 
@@ -174,7 +175,7 @@ public class Bits
     /// <param name="index"> the index of the bit to clear </param>
     public void ClearBit( int index )
     {
-        var word = index >>> 6;
+        int word = index >>> 6;
 
         if ( word >= _bits.Length )
         {
@@ -207,9 +208,9 @@ public class Bits
     /// <returns> the logical size of this bitset  </returns>
     public int Length()
     {
-        for ( var word = _bits.Length - 1; word >= 0; --word )
+        for ( int word = _bits.Length - 1; word >= 0; --word )
         {
-            var bitsAtWord = _bits[ word ];
+            long bitsAtWord = _bits[ word ];
 
             if ( bitsAtWord != 0 )
             {
@@ -233,18 +234,18 @@ public class Bits
     /// </summary>
     public int NextSetBit( int fromIndex )
     {
-        var word = fromIndex >>> 6;
+        int word = fromIndex >>> 6;
 
         if ( word >= _bits.Length )
         {
             return -1;
         }
 
-        var bitsAtWord = _bits[ word ];
+        long bitsAtWord = _bits[ word ];
 
         if ( bitsAtWord != 0 )
         {
-            for ( var i = fromIndex & 0x3f; i < 64; i++ )
+            for ( int i = fromIndex & 0x3f; i < 64; i++ )
             {
                 if ( ( bitsAtWord & ( 1L << ( i & 0x3F ) ) ) != 0L )
                 {
@@ -281,16 +282,16 @@ public class Bits
     /// </summary>
     public int NextClearBit( int fromIndex )
     {
-        var word = fromIndex >>> 6;
+        int word = fromIndex >>> 6;
 
         if ( word >= _bits.Length )
         {
             return _bits.Length << 6;
         }
 
-        var bitsAtWord = _bits[ word ];
+        long bitsAtWord = _bits[ word ];
 
-        for ( var i = fromIndex & 0x3f; i < 64; i++ )
+        for ( int i = fromIndex & 0x3f; i < 64; i++ )
         {
             if ( ( bitsAtWord & ( 1L << ( i & 0x3F ) ) ) == 0L )
             {
@@ -328,7 +329,7 @@ public class Bits
     /// <param name="other"> a bit set  </param>
     public void And( Bits other )
     {
-        var commonWords = Math.Min( _bits.Length, other._bits.Length );
+        int commonWords = Math.Min( _bits.Length, other._bits.Length );
 
         for ( var i = 0; commonWords > i; i++ )
         {
@@ -366,7 +367,7 @@ public class Bits
     /// <param name="other"> a bit set  </param>
     public void Or( Bits other )
     {
-        var commonWords = Math.Min( _bits.Length, other._bits.Length );
+        int commonWords = Math.Min( _bits.Length, other._bits.Length );
 
         for ( var i = 0; commonWords > i; i++ )
         {
@@ -400,7 +401,7 @@ public class Bits
     /// <param name="other">The other bitset.</param>
     public void Xor( Bits other )
     {
-        var commonWords = Math.Min( _bits.Length, other._bits.Length );
+        int commonWords = Math.Min( _bits.Length, other._bits.Length );
 
         for ( var i = 0; commonWords > i; i++ )
         {
@@ -426,10 +427,10 @@ public class Bits
     /// <returns>bool indicating whether this bit set intersects the specified bit set</returns>
     public bool Intersects( Bits other )
     {
-        var bits      = _bits;
-        var otherBits = other._bits;
+        long[] bits      = _bits;
+        long[] otherBits = other._bits;
 
-        for ( var i = Math.Min( bits.Length, otherBits.Length ) - 1; i >= 0; i-- )
+        for ( int i = Math.Min( bits.Length, otherBits.Length ) - 1; i >= 0; i-- )
         {
             if ( ( bits[ i ] & otherBits[ i ] ) != 0 )
             {
@@ -450,12 +451,12 @@ public class Bits
     /// </returns>
     public bool ContainsAll( Bits other )
     {
-        var bits            = _bits;
-        var otherBits       = other._bits;
-        var otherBitsLength = otherBits.Length;
-        var bitsLength      = bits.Length;
+        long[] bits            = _bits;
+        long[] otherBits       = other._bits;
+        int    otherBitsLength = otherBits.Length;
+        int    bitsLength      = bits.Length;
 
-        for ( var i = bitsLength; i < otherBitsLength; i++ )
+        for ( int i = bitsLength; i < otherBitsLength; i++ )
         {
             if ( otherBits[ i ] != 0 )
             {
@@ -463,7 +464,7 @@ public class Bits
             }
         }
 
-        for ( var i = Math.Min( bitsLength, otherBitsLength ) - 1; i >= 0; i-- )
+        for ( int i = Math.Min( bitsLength, otherBitsLength ) - 1; i >= 0; i-- )
         {
             if ( ( bits[ i ] & otherBits[ i ] ) != otherBits[ i ] )
             {
@@ -479,7 +480,7 @@ public class Bits
     {
         const int PRIME = 73;
 
-        var result = PRIME + 43;
+        int result = PRIME + 43;
         result = ( PRIME * result ) + 34;
 
         return result;
@@ -503,10 +504,10 @@ public class Bits
             return false;
         }
 
-        var other     = ( Bits )obj;
-        var otherBits = other._bits;
+        var    other     = ( Bits )obj;
+        long[] otherBits = other._bits;
 
-        var commonWords = Math.Min( _bits.Length, otherBits.Length );
+        int commonWords = Math.Min( _bits.Length, otherBits.Length );
 
         for ( var i = 0; commonWords > i; i++ )
         {

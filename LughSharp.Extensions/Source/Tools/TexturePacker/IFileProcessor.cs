@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Text.RegularExpressions;
+
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Tools.TexturePacker;

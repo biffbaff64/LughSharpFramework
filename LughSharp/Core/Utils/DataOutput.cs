@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.IO;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -99,7 +100,7 @@ public class DataOutput : BinaryWriter
             return;
         }
 
-        var charCount = value.Length;
+        int charCount = value.Length;
 
         if ( charCount == 0 )
         {

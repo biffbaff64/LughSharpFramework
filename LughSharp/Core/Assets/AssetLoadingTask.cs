@@ -28,6 +28,7 @@ using System.IO;
 using System.Threading.Tasks;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
@@ -107,7 +108,7 @@ public class AssetLoadingTask : IAssetTask
         }
 
         var asyncLoader = ( AsynchronousAssetLoader )Loader;
-        
+
         if ( !DependenciesLoaded )
         {
             Dependencies = asyncLoader.GetDependencies( AssetDesc.AssetName,
@@ -190,7 +191,7 @@ public class AssetLoadingTask : IAssetTask
                     {
                         // C# interpolated string and retaining RuntimeException
                         // Get the first inner exception, which is usually the original exception.
-                        var inner = e.InnerException ?? e;
+                        Exception inner = e.InnerException ?? e;
 
                         throw new RuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", inner );
                     }
@@ -240,8 +241,8 @@ public class AssetLoadingTask : IAssetTask
         {
             DependenciesLoaded = true;
             Dependencies = syncLoader?.GetDependencies( AssetDesc.AssetName,
-                                                       Resolve( Loader, AssetDesc )!,
-                                                       AssetDesc.Parameters );
+                                                        Resolve( Loader, AssetDesc )!,
+                                                        AssetDesc.Parameters );
 
             if ( Dependencies == null )
             {
@@ -300,10 +301,10 @@ public class AssetLoadingTask : IAssetTask
     {
         for ( var i = 0; i < array.Count; ++i )
         {
-            var fn   = array[ i ].AssetName;
-            var type = array[ i ].AssetType;
+            string fn   = array[ i ].AssetName;
+            Type   type = array[ i ].AssetType;
 
-            for ( var j = array.Count - 1; j > i; --j )
+            for ( int j = array.Count - 1; j > i; --j )
             {
                 if ( type == array[ j ].AssetType && fn.Equals( array[ j ].AssetName ) )
                 {

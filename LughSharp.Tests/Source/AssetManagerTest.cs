@@ -27,6 +27,7 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -37,7 +38,7 @@ public class AssetManagerTest
     private readonly AssetManager? _assetManager;
 
     // ========================================================================
-    
+
     public AssetManagerTest( AssetManager? assetManager )
     {
         _assetManager = assetManager;
@@ -66,15 +67,15 @@ public class AssetManagerTest
             Api.Files.Assets( "PackedImages/input/button_b.png" ),
             Api.Files.Assets( "PackedImages/input/button_x.png" ),
             Api.Files.Assets( "PackedImages/input/button_y.png" ),
-            Api.Files.Assets( "title_background.png" ),
+            Api.Files.Assets( "title_background.png" )
         };
 
         _assetManager.Load< Texture >( files );
         _assetManager.FinishLoading();
 
         Logger.Debug( "Checking loaded assets...", true );
-        
-        foreach ( var file in files )
+
+        foreach ( FileInfo file in files )
         {
             CheckAsset( file );
         }
@@ -82,24 +83,24 @@ public class AssetManagerTest
         Logger.Debug( "Checking TextureAtlas assets...", true );
 
         // ====================================================================
-        
+
         const string OBJECTS_ATLAS = @"Assets\PackedImages\output\objects.atlas";
-        
-        Logger.Debug( $"Loading atlas: {Engine.Api.Files.Internal( OBJECTS_ATLAS )}" );
-        
-        var objectsAtlas = new TextureAtlas( Engine.Api.Files.Internal( OBJECTS_ATLAS ) );
-        
+
+        Logger.Debug( $"Loading atlas: {Api.Files.Internal( OBJECTS_ATLAS )}" );
+
+        var objectsAtlas = new TextureAtlas( Api.Files.Internal( OBJECTS_ATLAS ) );
+
         Logger.Debug( "Fetching atlas region..." );
 
-        var region = objectsAtlas.FindRegion( "bar9" );
-        
+        AtlasRegion? region = objectsAtlas.FindRegion( "bar9" );
+
         if ( region == null )
         {
             Logger.Error( "Unable to find requested region in objects.atlas" );
         }
-        
+
         Logger.Debug( $"region size: {region?.GetRegionWidth()}, {region?.GetRegionHeight()}" );
-        
+
         Logger.Debug( "Finished!", true );
     }
 

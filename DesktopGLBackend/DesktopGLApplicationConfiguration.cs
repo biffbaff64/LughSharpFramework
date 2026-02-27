@@ -24,7 +24,11 @@
 
 using DesktopGLBackend.Graphics;
 using DesktopGLBackend.Window;
+
+using DotGLFW;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Main;
 
@@ -73,31 +77,33 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
-        var videoMode = DotGLFW.Glfw.GetVideoMode( monitor );
+        Vidmode? videoMode = Glfw.GetVideoMode( monitor );
 
         return new DesktopGLGraphics.DesktopGLDisplayMode( monitor,
                                                            videoMode.Width,
                                                            videoMode.Height,
                                                            videoMode.RefreshRate,
-                                                           videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits );
+                                                           videoMode.RedBits + videoMode.GreenBits
+                                                                             + videoMode.BlueBits );
     }
 
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
-        var videoModes = DotGLFW.Glfw.GetVideoModes( DotGLFW.Glfw.GetPrimaryMonitor() );
+        Vidmode[]? videoModes = Glfw.GetVideoModes( Glfw.GetPrimaryMonitor() );
 
         var result = new IGraphicsDevice.DisplayMode[ videoModes.Length ];
 
         for ( var i = 0; i < result.Length; i++ )
         {
-            var videoMode = videoModes[ i ];
+            Vidmode videoMode = videoModes[ i ];
 
-            result[ i ] = new DesktopGLGraphics.DesktopGLDisplayMode( DotGLFW.Glfw.GetPrimaryMonitor(),
+            result[ i ] = new DesktopGLGraphics.DesktopGLDisplayMode( Glfw.GetPrimaryMonitor(),
                                                                       videoMode.Width,
                                                                       videoMode.Height,
                                                                       videoMode.RefreshRate,
-                                                                      videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits );
+                                                                      videoMode.RedBits + videoMode.GreenBits
+                                                                    + videoMode.BlueBits );
         }
 
         return result;
@@ -106,19 +112,20 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {
-        var videoModes = DotGLFW.Glfw.GetVideoModes( monitor );
+        Vidmode[]? videoModes = Glfw.GetVideoModes( monitor );
 
         var vmode = new IGraphicsDevice.DisplayMode[ videoModes.Length ];
 
         for ( var i = 0; i < vmode.Length; i++ )
         {
-            var videoMode = videoModes[ i ];
+            Vidmode videoMode = videoModes[ i ];
 
             vmode[ i ] = new DesktopGLGraphics.DesktopGLDisplayMode( monitor,
                                                                      videoMode.Width,
                                                                      videoMode.Height,
                                                                      videoMode.RefreshRate,
-                                                                     videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits );
+                                                                     videoMode.RedBits + videoMode.GreenBits
+                                                                   + videoMode.BlueBits );
         }
 
         return vmode;

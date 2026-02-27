@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Support;
 
 namespace LughSharp.Core.Audio.Maponus.Decoding;
@@ -49,7 +50,7 @@ public class Crc16
     /// </summary>
     public void AddBits( int bitstring, int length )
     {
-        var bitmask = 1 << ( length - 1 );
+        int bitmask = 1 << ( length - 1 );
 
         do
         {
@@ -71,7 +72,7 @@ public class Crc16
     /// </summary>
     public short Checksum()
     {
-        var sum = _crc;
+        short sum = _crc;
 
         _crc = ( short )SupportClass.Identity( 0xFFFF );
 
@@ -81,4 +82,3 @@ public class Crc16
 
 // ============================================================================
 // ============================================================================
-

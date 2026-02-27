@@ -23,8 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Decoding;
 using LughSharp.Core.Utils.Exceptions;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Audio.Maponus;
@@ -42,7 +44,7 @@ public class Buffer16BitStereo : AudioBase
 
     // Write offset used in append_bytes
     private readonly byte[] _buffer               = new byte[ OBUFFERSIZE * 2 ]; // all channels interleaved
-    private readonly int[]  _bufferChannelOffsets = new int[ MAXCHANNELS ];      // contains write offset for each channel.
+    private readonly int[]  _bufferChannelOffsets = new int[ MAXCHANNELS ]; // contains write offset for each channel.
 
     // end marker, one past end of array. Same as bufferp[0], but
     // without the array bounds check.
@@ -93,7 +95,7 @@ public class Buffer16BitStereo : AudioBase
             throw new ArgumentException( "The sum of offset and count is larger than the buffer length" );
         }
 
-        var remaining = BytesLeft;
+        int remaining = BytesLeft;
         int copySize;
 
         if ( count > remaining )
@@ -103,7 +105,7 @@ public class Buffer16BitStereo : AudioBase
         else
         {
             // Copy an even number of sample frames
-            var remainder = count % ( 2 * OUTPUT_CHANNELS );
+            int remainder = count % ( 2 * OUTPUT_CHANNELS );
             copySize = count - remainder;
         }
 
@@ -149,20 +151,20 @@ public class Buffer16BitStereo : AudioBase
             throw new Exception( "Song is closing..." );
         }
 
-        var pos = _bufferChannelOffsets[ channel ];
+        int pos = _bufferChannelOffsets[ channel ];
 
         // Always, 32 samples are appended
         for ( var i = 0; i < 32; i++ )
         {
-            var fs = samples[ i ];
+            float fs = samples[ i ];
 
             fs = fs switch
-            {
-                // clamp values
-                > 32767.0f  => 32767.0f,
-                < -32767.0f => -32767.0f,
-                var _       => fs,
-            };
+                 {
+                     // clamp values
+                     > 32767.0f  => 32767.0f,
+                     < -32767.0f => -32767.0f,
+                     var _       => fs
+                 };
 
             var sample = ( int )fs;
 
@@ -218,4 +220,3 @@ public class Buffer16BitStereo : AudioBase
 
 // ============================================================================
 // ============================================================================
-

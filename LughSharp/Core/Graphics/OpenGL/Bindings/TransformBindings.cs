@@ -25,6 +25,7 @@
 // ============================================================================
 
 using System.Text;
+
 using GLenum = int;
 using GLint = int;
 using GLsizei = int;
@@ -45,7 +46,8 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BeginTransformFeedback( GLenum primitiveMode )
     {
-        GetDelegateForFunction< PFNGLBEGINTRANSFORMFEEDBACKPROC >( "glBeginTransformFeedback", out _glBeginTransformFeedback );
+        GetDelegateForFunction< PFNGLBEGINTRANSFORMFEEDBACKPROC >( "glBeginTransformFeedback",
+                                                                   out _glBeginTransformFeedback );
 
         _glBeginTransformFeedback( primitiveMode );
     }
@@ -55,7 +57,8 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void EndTransformFeedback()
     {
-        GetDelegateForFunction< PFNGLENDTRANSFORMFEEDBACKPROC >( "glEndTransformFeedback", out _glEndTransformFeedback );
+        GetDelegateForFunction< PFNGLENDTRANSFORMFEEDBACKPROC >( "glEndTransformFeedback",
+                                                                 out _glEndTransformFeedback );
 
         _glEndTransformFeedback();
     }
@@ -64,7 +67,8 @@ public unsafe partial class GLBindings
 
     public void BindTransformFeedback( GLenum target, GLuint id )
     {
-        GetDelegateForFunction< PFNGLBINDTRANSFORMFEEDBACKPROC >( "glBindTransformFeedback", out _glBindTransformFeedback );
+        GetDelegateForFunction< PFNGLBINDTRANSFORMFEEDBACKPROC >( "glBindTransformFeedback",
+                                                                  out _glBindTransformFeedback );
 
         _glBindTransformFeedback( target, id );
     }
@@ -73,14 +77,16 @@ public unsafe partial class GLBindings
 
     public void DeleteTransformFeedbacks( GLsizei n, GLuint* ids )
     {
-        GetDelegateForFunction< PFNGLDELETETRANSFORMFEEDBACKSPROC >( "glDeleteTransformFeedbacks", out _glDeleteTransformFeedbacks );
+        GetDelegateForFunction< PFNGLDELETETRANSFORMFEEDBACKSPROC >( "glDeleteTransformFeedbacks",
+                                                                     out _glDeleteTransformFeedbacks );
 
         _glDeleteTransformFeedbacks( n, ids );
     }
 
     public void DeleteTransformFeedbacks( params GLuint[] ids )
     {
-        GetDelegateForFunction< PFNGLDELETETRANSFORMFEEDBACKSPROC >( "glDeleteTransformFeedbacks", out _glDeleteTransformFeedbacks );
+        GetDelegateForFunction< PFNGLDELETETRANSFORMFEEDBACKSPROC >( "glDeleteTransformFeedbacks",
+                                                                     out _glDeleteTransformFeedbacks );
 
         fixed ( GLuint* p = &ids[ 0 ] )
         {
@@ -92,7 +98,8 @@ public unsafe partial class GLBindings
 
     public void GenTransformFeedbacks( GLsizei n, GLuint* ids )
     {
-        GetDelegateForFunction< PFNGLGENTRANSFORMFEEDBACKSPROC >( "glGenTransformFeedbacks", out _glGenTransformFeedbacks );
+        GetDelegateForFunction< PFNGLGENTRANSFORMFEEDBACKSPROC >( "glGenTransformFeedbacks",
+                                                                  out _glGenTransformFeedbacks );
 
         _glGenTransformFeedbacks( n, ids );
     }
@@ -101,7 +108,8 @@ public unsafe partial class GLBindings
     {
         var r = new GLuint[ n ];
 
-        GetDelegateForFunction< PFNGLGENTRANSFORMFEEDBACKSPROC >( "glGenTransformFeedbacks", out _glGenTransformFeedbacks );
+        GetDelegateForFunction< PFNGLGENTRANSFORMFEEDBACKSPROC >( "glGenTransformFeedbacks",
+                                                                  out _glGenTransformFeedbacks );
 
         fixed ( GLuint* p = &r[ 0 ] )
         {
@@ -129,7 +137,8 @@ public unsafe partial class GLBindings
 
     public void PauseTransformFeedback()
     {
-        GetDelegateForFunction< PFNGLPAUSETRANSFORMFEEDBACKPROC >( "glPauseTransformFeedback", out _glPauseTransformFeedback );
+        GetDelegateForFunction< PFNGLPAUSETRANSFORMFEEDBACKPROC >( "glPauseTransformFeedback",
+                                                                   out _glPauseTransformFeedback );
 
         _glPauseTransformFeedback();
     }
@@ -138,7 +147,8 @@ public unsafe partial class GLBindings
 
     public void ResumeTransformFeedback()
     {
-        GetDelegateForFunction< PFNGLRESUMETRANSFORMFEEDBACKPROC >( "glResumeTransformFeedback", out _glResumeTransformFeedback );
+        GetDelegateForFunction< PFNGLRESUMETRANSFORMFEEDBACKPROC >( "glResumeTransformFeedback",
+                                                                    out _glResumeTransformFeedback );
 
         _glResumeTransformFeedback();
     }
@@ -147,7 +157,8 @@ public unsafe partial class GLBindings
 
     public void DrawTransformFeedback( GLenum mode, GLuint id )
     {
-        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKPROC >( "glDrawTransformFeedback", out _glDrawTransformFeedback );
+        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKPROC >( "glDrawTransformFeedback",
+                                                                  out _glDrawTransformFeedback );
 
         _glDrawTransformFeedback( mode, id );
     }
@@ -157,7 +168,7 @@ public unsafe partial class GLBindings
     public void DrawTransformFeedbackStream( GLenum mode, GLuint id, GLuint stream )
     {
         GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKSTREAMPROC >( "glDrawTransformFeedbackStream",
-                                                                                                     out _glDrawTransformFeedbackStream );
+                                                                        out _glDrawTransformFeedbackStream );
 
         _glDrawTransformFeedbackStream( mode, id, stream );
     }
@@ -167,7 +178,7 @@ public unsafe partial class GLBindings
     public void DrawTransformFeedbackInstanced( GLenum mode, GLuint id, GLsizei instancecount )
     {
         GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKINSTANCEDPROC >( "glDrawTransformFeedbackInstanced",
-                                                                                                        out _glDrawTransformFeedbackInstanced );
+                                                                           out _glDrawTransformFeedbackInstanced );
 
         _glDrawTransformFeedbackInstanced( mode, id, instancecount );
     }
@@ -176,8 +187,9 @@ public unsafe partial class GLBindings
 
     public void DrawTransformFeedbackStreamInstanced( GLenum mode, GLuint id, GLuint stream, GLsizei instancecount )
     {
-        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC >( "glDrawTransformFeedbackStreamInstanced",
-                                                                                                              out _glDrawTransformFeedbackStreamInstanced );
+        GetDelegateForFunction<
+            PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC >( "glDrawTransformFeedbackStreamInstanced",
+                                                             out _glDrawTransformFeedbackStreamInstanced );
 
         _glDrawTransformFeedbackStreamInstanced( mode, id, stream, instancecount );
     }
@@ -186,7 +198,8 @@ public unsafe partial class GLBindings
 
     public void CreateTransformFeedbacks( GLsizei n, GLuint* ids )
     {
-        GetDelegateForFunction< PFNGLCREATETRANSFORMFEEDBACKSPROC >( "glCreateTransformFeedbacks", out _glCreateTransformFeedbacks );
+        GetDelegateForFunction< PFNGLCREATETRANSFORMFEEDBACKSPROC >( "glCreateTransformFeedbacks",
+                                                                     out _glCreateTransformFeedbacks );
 
         _glCreateTransformFeedbacks( n, ids );
     }
@@ -195,7 +208,8 @@ public unsafe partial class GLBindings
     {
         var ids = new GLuint[ n ];
 
-        GetDelegateForFunction< PFNGLCREATETRANSFORMFEEDBACKSPROC >( "glCreateTransformFeedbacks", out _glCreateTransformFeedbacks );
+        GetDelegateForFunction< PFNGLCREATETRANSFORMFEEDBACKSPROC >( "glCreateTransformFeedbacks",
+                                                                     out _glCreateTransformFeedbacks );
 
         fixed ( GLuint* pIds = &ids[ 0 ] )
         {
@@ -215,17 +229,18 @@ public unsafe partial class GLBindings
     public void TransformFeedbackBufferBase( GLuint xfb, GLuint index, GLuint buffer )
     {
         GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKBUFFERBASEPROC >( "glTransformFeedbackBufferBase",
-                                                                                                     out _glTransformFeedbackBufferBase );
+                                                                        out _glTransformFeedbackBufferBase );
 
         _glTransformFeedbackBufferBase( xfb, index, buffer );
     }
 
     // ========================================================================
 
-    public void TransformFeedbackBufferRange( GLuint xfb, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size )
+    public void TransformFeedbackBufferRange( GLuint xfb, GLuint index, GLuint buffer, GLintptr offset,
+                                              GLsizeiptr size )
     {
         GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKBUFFERRANGEPROC >( "glTransformFeedbackBufferRange",
-                                                                                                      out _glTransformFeedbackBufferRange );
+                                                                         out _glTransformFeedbackBufferRange );
 
         _glTransformFeedbackBufferRange( xfb, index, buffer, offset, size );
     }
@@ -234,14 +249,16 @@ public unsafe partial class GLBindings
 
     public void GetTransformFeedbackiv( GLuint xfb, GLenum pname, GLint* param )
     {
-        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKIVPROC >( "glGetTransformFeedbackiv", out _glGetTransformFeedbackiv );
+        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKIVPROC >( "glGetTransformFeedbackiv",
+                                                                   out _glGetTransformFeedbackiv );
 
         _glGetTransformFeedbackiv( xfb, pname, param );
     }
 
     public void GetTransformFeedbackiv( GLuint xfb, GLenum pname, ref GLint[] param )
     {
-        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKIVPROC >( "glGetTransformFeedbackiv", out _glGetTransformFeedbackiv );
+        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKIVPROC >( "glGetTransformFeedbackiv",
+                                                                   out _glGetTransformFeedbackiv );
 
         fixed ( GLint* pParam = &param[ 0 ] )
         {
@@ -253,14 +270,16 @@ public unsafe partial class GLBindings
 
     public void GetTransformFeedbacki_v( GLuint xfb, GLenum pname, GLuint index, GLint* param )
     {
-        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKI_VPROC >( "glGetTransformFeedbacki_v", out _glGetTransformFeedbacki_v );
+        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKI_VPROC >( "glGetTransformFeedbacki_v",
+                                                                    out _glGetTransformFeedbacki_v );
 
         _glGetTransformFeedbacki_v( xfb, pname, index, param );
     }
 
     public void GetTransformFeedbacki_v( GLuint xfb, GLenum pname, GLuint index, ref GLint[] param )
     {
-        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKI_VPROC >( "glGetTransformFeedbacki_v", out _glGetTransformFeedbacki_v );
+        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKI_VPROC >( "glGetTransformFeedbacki_v",
+                                                                    out _glGetTransformFeedbacki_v );
 
         fixed ( GLint* pParam = &param[ 0 ] )
         {
@@ -272,14 +291,16 @@ public unsafe partial class GLBindings
 
     public void GetTransformFeedbacki64_v( GLuint xfb, GLenum pname, GLuint index, GLint64* param )
     {
-        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKI64_VPROC >( "glGetTransformFeedbacki64_v", out _glGetTransformFeedbacki64_v );
+        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKI64_VPROC >( "glGetTransformFeedbacki64_v",
+                                                                      out _glGetTransformFeedbacki64_v );
 
         _glGetTransformFeedbacki64_v( xfb, pname, index, param );
     }
 
     public void GetTransformFeedbacki64_v( GLuint xfb, GLenum pname, GLuint index, ref GLint64[] param )
     {
-        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKI64_VPROC >( "glGetTransformFeedbacki64_v", out _glGetTransformFeedbacki64_v );
+        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKI64_VPROC >( "glGetTransformFeedbacki64_v",
+                                                                      out _glGetTransformFeedbacki64_v );
 
         fixed ( GLint64* pParam = &param[ 0 ] )
         {
@@ -291,7 +312,8 @@ public unsafe partial class GLBindings
 
     public void TransformFeedbackVaryings( GLuint program, GLsizei count, GLchar** varyings, GLenum bufferMode )
     {
-        GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKVARYINGSPROC >( "glTransformFeedbackVaryings", out _glTransformFeedbackVaryings );
+        GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKVARYINGSPROC >( "glTransformFeedbackVaryings",
+                                                                      out _glTransformFeedbackVaryings );
 
         _glTransformFeedbackVaryings( ( uint )program, count, varyings, bufferMode );
     }
@@ -318,7 +340,7 @@ public unsafe partial class GLBindings
         }
 
         GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKVARYINGSPROC >( "glTransformFeedbackVaryings",
-                                                                                                   out _glTransformFeedbackVaryings );
+                                                                      out _glTransformFeedbackVaryings );
 
         fixed ( GLchar** p = &varyingsPtrs[ 0 ] )
         {
@@ -337,19 +359,20 @@ public unsafe partial class GLBindings
                                              GLchar* name )
     {
         GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKVARYINGPROC >( "glGetTransformFeedbackVarying",
-                                                                                                     out _glGetTransformFeedbackVarying );
+                                                                        out _glGetTransformFeedbackVarying );
 
         _glGetTransformFeedbackVarying( ( uint )program, index, bufSize, length, size, type, name );
     }
 
     // ========================================================================
 
-    public string GetTransformFeedbackVarying( GLuint program, GLuint index, GLsizei bufSize, out GLsizei size, out GLenum type )
+    public string GetTransformFeedbackVarying( GLuint program, GLuint index, GLsizei bufSize, out GLsizei size,
+                                               out GLenum type )
     {
         var name = new GLchar[ bufSize ];
 
         GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKVARYINGPROC >( "glGetTransformFeedbackVarying",
-                                                                                                     out _glGetTransformFeedbackVarying );
+                                                                        out _glGetTransformFeedbackVarying );
 
         fixed ( GLsizei* pSize = &size )
         {

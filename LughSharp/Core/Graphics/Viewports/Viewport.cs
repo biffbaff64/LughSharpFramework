@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -30,6 +31,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Logging;
+
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Graphics.Viewports;
@@ -50,7 +52,7 @@ public abstract class Viewport
         Fit,
         Stretch,
         Screen,
-        Scaling,
+        Scaling
     }
 
     // ========================================================================
@@ -139,7 +141,7 @@ public abstract class Viewport
         {
             X = screenCoords.X,
             Y = screenCoords.Y,
-            Z = 1.0f,
+            Z = 1.0f
         };
 
         Camera.Unproject( _tmp, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
@@ -228,7 +230,14 @@ public abstract class Viewport
             return;
         }
 
-        ScissorStack.CalculateScissors( Camera, ScreenX, ScreenY, ScreenWidth, ScreenHeight, batchTransform, area, scissor );
+        ScissorStack.CalculateScissors( Camera,
+                                        ScreenX,
+                                        ScreenY,
+                                        ScreenWidth,
+                                        ScreenHeight,
+                                        batchTransform,
+                                        area,
+                                        scissor );
     }
 
     /// <summary>

@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
@@ -99,7 +101,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// <summary>
     /// Returns the number of vertices this VertexData stores.
     /// </summary>
-    public int NumVertices => ( _floatBuffer.Limit * 4 ) / Attributes.VertexSize;
+    public int NumVertices => _floatBuffer.Limit * 4 / Attributes.VertexSize;
 
     /// <summary>
     /// Returns the maximum number of vertices this VertedData can store.
@@ -157,7 +159,7 @@ public class VertexBufferObjectSubData : IVertexData
 
         if ( _isDirect )
         {
-            var pos = ByteBuffer.Position;
+            int pos = ByteBuffer.Position;
 
             ByteBuffer.Position = targetOffset * 4;
             BufferUtils.Copy( vertices, sourceOffset, count, ByteBuffer );
@@ -206,14 +208,14 @@ public class VertexBufferObjectSubData : IVertexData
             _isDirty = false;
         }
 
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         if ( locations == null )
         {
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var attribute = Attributes.Get( i );
-                var location  = shader.GetAttributeLocation( attribute.Alias );
+                VertexAttribute attribute = Attributes.Get( i );
+                int             location  = shader.GetAttributeLocation( attribute.Alias );
 
                 if ( location < 0 )
                 {
@@ -234,8 +236,8 @@ public class VertexBufferObjectSubData : IVertexData
         {
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var attribute = Attributes.Get( i );
-                var location  = locations[ i ];
+                VertexAttribute attribute = Attributes.Get( i );
+                int             location  = locations[ i ];
 
                 if ( location < 0 )
                 {
@@ -265,7 +267,7 @@ public class VertexBufferObjectSubData : IVertexData
     {
         Debug.Assert( Attributes != null, "Attributes != null" );
 
-        var numAttributes = Attributes.Size;
+        int numAttributes = Attributes.Size;
 
         if ( locations == null )
         {
@@ -278,7 +280,7 @@ public class VertexBufferObjectSubData : IVertexData
         {
             for ( var i = 0; i < numAttributes; i++ )
             {
-                var location = locations[ i ];
+                int location = locations[ i ];
 
                 if ( location >= 0 )
                 {
@@ -316,7 +318,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// </summary>
     private int CreateBufferObject()
     {
-        var result = Engine.GL.GenBuffer();
+        uint result = Engine.GL.GenBuffer();
 
         Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, result );
         Engine.GL.BufferData( BufferTarget.ArrayBuffer, ByteBuffer.Capacity, 0, _usage );
@@ -341,4 +343,3 @@ public class VertexBufferObjectSubData : IVertexData
 
 // ============================================================================
 // ============================================================================
-

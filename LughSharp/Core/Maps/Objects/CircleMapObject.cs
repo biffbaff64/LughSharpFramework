@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Maps.Objects;
@@ -33,7 +34,7 @@ public class CircleMapObject : MapObject
     public Circle Circle { get; set; }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a circle map object at (0,0) with radius of 1.0f
     /// </summary>
@@ -55,4 +56,3 @@ public class CircleMapObject : MapObject
 
 // ============================================================================
 // ============================================================================
-

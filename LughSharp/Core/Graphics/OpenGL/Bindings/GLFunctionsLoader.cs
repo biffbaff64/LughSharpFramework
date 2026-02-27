@@ -22,11 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.OpenGL.Bindings;
@@ -51,14 +51,14 @@ public partial class GLBindings
     /// <returns></returns>
     public static bool GetDelegateForFunction< T >( string functionName, out T functionDelegate ) where T : Delegate
     {
-        if ( LoadedFunctions.TryGetValue( functionName, out var existingDelegate ) )
+        if ( LoadedFunctions.TryGetValue( functionName, out Delegate? existingDelegate ) )
         {
             functionDelegate = ( T )existingDelegate;
 
             return true; // Already loaded
         }
 
-        var functionPtr = WglGetProcAddress( functionName );
+        IntPtr functionPtr = WglGetProcAddress( functionName );
 
         if ( functionPtr == IntPtr.Zero )
         {
@@ -89,7 +89,7 @@ public partial class GLBindings
 
     public static T GetDelegateFor< T >( string functionName ) where T : Delegate
     {
-        var functionPtr = WglGetProcAddress( functionName );
+        IntPtr functionPtr = WglGetProcAddress( functionName );
 
         if ( functionPtr == IntPtr.Zero )
         {

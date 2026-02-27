@@ -28,7 +28,9 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using NUnit.Framework;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Tests.Source;
@@ -53,7 +55,7 @@ public class SpriteBatchTests
 
         // Create and verify the pixmap
         var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, LughFormat.RGBA8888 );
-        
+
         Assert.That( pixmap, Is.Not.Null, "Pixmap creation failed" );
         Assert.That( pixmap.Gdx2DPixmap, Is.Not.Null, "pixmap.Gdx2DPixmap is null" );
         Assert.That( pixmap.Width, Is.EqualTo( TEST_WIDTH ), "Pixmap width incorrect" );
@@ -63,11 +65,11 @@ public class SpriteBatchTests
         pixmap.FillWithCurrentColor();
 
         var textureData = new PixmapTextureData( pixmap, LughFormat.RGBA8888, false, false );
-        
+
         Assert.That( textureData, Is.Not.Null, "TextureData creation failed" );
 
         _testTexture = new Texture( textureData );
-        
+
         Assert.That( _testTexture, Is.Not.Null, "Texture creation failed" );
 
         pixmap.Dispose(); // Clean up the pixmap after creating texture

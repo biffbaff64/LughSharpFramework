@@ -23,9 +23,12 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using Platform = LughSharp.Core.Main.Platform;
 using Capabilities = LughSharp.Core.Graphics.OpenGL.OpenGL.Capabilities;
 
@@ -52,15 +55,15 @@ public class AppVersion
     public AppVersion( Platform.ApplicationType appType, DotGLFW.OpenGLProfile profile )
     {
         BackendType = appType switch
-        {
-            Platform.ApplicationType.Android     => GraphicsBackend.BackendType.AndroidGLES,
-            Platform.ApplicationType.WindowsGles => GraphicsBackend.BackendType.OpenGLES,
-            Platform.ApplicationType.WindowsGL   => GraphicsBackend.BackendType.OpenGL,
-            Platform.ApplicationType.WebGL       => GraphicsBackend.BackendType.WebGL,
-            Platform.ApplicationType.IOS         => GraphicsBackend.BackendType.IOSGLES,
+                      {
+                          Platform.ApplicationType.Android     => GraphicsBackend.BackendType.AndroidGLES,
+                          Platform.ApplicationType.WindowsGles => GraphicsBackend.BackendType.OpenGLES,
+                          Platform.ApplicationType.WindowsGL   => GraphicsBackend.BackendType.OpenGL,
+                          Platform.ApplicationType.WebGL       => GraphicsBackend.BackendType.WebGL,
+                          Platform.ApplicationType.IOS         => GraphicsBackend.BackendType.IOSGLES,
 
-            var _ => throw new RuntimeException( $"Unknown Platform ApplicationType: {appType}" ),
-        };
+                          var _ => throw new RuntimeException( $"Unknown Platform ApplicationType: {appType}" )
+                      };
 
         OpenGL.OpenGL.Initialisation.LoadVersion();
         Capabilities.OpenGLProfile = profile;
@@ -78,8 +81,8 @@ public class AppVersion
     public bool IsVersionEqualToOrHigher( int testMajorVersion, int testMinorVersion )
     {
         return ( Capabilities.MajorVersion > testMajorVersion )
-               || ( ( Capabilities.MajorVersion == testMajorVersion )
-                    && ( Capabilities.MinorVersion >= testMinorVersion ) );
+            || ( ( Capabilities.MajorVersion == testMajorVersion )
+              && ( Capabilities.MinorVersion >= testMinorVersion ) );
     }
 
     /// <summary>

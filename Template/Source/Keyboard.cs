@@ -31,12 +31,12 @@ public class Keyboard : InputAdapter
     /// <inheritdoc />
     public override bool KeyDown( int keycode )
     {
-        var flag = keycode switch
-        {
-            IInput.Keys.UP   => true,
-            IInput.Keys.DOWN => true,
-            var _            => false,
-        };
+        bool flag = keycode switch
+                    {
+                        IInput.Keys.UP   => true,
+                        IInput.Keys.DOWN => true,
+                        var _            => false
+                    };
 
         return flag;
     }
@@ -44,12 +44,12 @@ public class Keyboard : InputAdapter
     /// <inheritdoc />
     public override bool KeyUp( int keycode )
     {
-        var flag = keycode switch
-        {
-            IInput.Keys.UP or IInput.Keys.RIGHT  => true,
-            IInput.Keys.DOWN or IInput.Keys.LEFT => true,
-            var _                                => false,
-        };
+        bool flag = keycode switch
+                    {
+                        IInput.Keys.UP or IInput.Keys.RIGHT  => true,
+                        IInput.Keys.DOWN or IInput.Keys.LEFT => true,
+                        var _                                => false
+                    };
 
         return flag;
     }

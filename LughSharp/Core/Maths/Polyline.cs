@@ -91,29 +91,29 @@ public class Polyline : IShape2D
 
         _dirty = false;
 
-        var localVertices = LocalVertices;
+        float[] localVertices = LocalVertices;
 
         if ( ( _worldVertices == null ) || ( _worldVertices.Length < localVertices.Length ) )
         {
             _worldVertices = new float[ localVertices.Length ];
         }
 
-        var worldVertices = _worldVertices;
-        var positionX     = X;
-        var positionY     = Y;
-        var originX       = OriginX;
-        var originY       = OriginY;
-        var scaleX        = ScaleX;
-        var scaleY        = ScaleY;
-        var scale         = scaleX is not 1 || scaleY is not 1;
-        var rotation      = Rotation;
-        var cos           = MathUtils.CosDeg( rotation );
-        var sin           = MathUtils.SinDeg( rotation );
+        float[]? worldVertices = _worldVertices;
+        float    positionX     = X;
+        float    positionY     = Y;
+        float    originX       = OriginX;
+        float    originY       = OriginY;
+        float    scaleX        = ScaleX;
+        float    scaleY        = ScaleY;
+        bool     scale         = scaleX is not 1 || scaleY is not 1;
+        float    rotation      = Rotation;
+        float    cos           = MathUtils.CosDeg( rotation );
+        float    sin           = MathUtils.SinDeg( rotation );
 
         for ( int i = 0, n = localVertices.Length; i < n; i += 2 )
         {
-            var x = localVertices[ i ] - originX;
-            var y = localVertices[ i + 1 ] - originY;
+            float x = localVertices[ i ] - originX;
+            float y = localVertices[ i + 1 ] - originY;
 
             // scale if needed
             if ( scale )
@@ -125,7 +125,7 @@ public class Polyline : IShape2D
             // rotate if needed
             if ( rotation != 0 )
             {
-                var oldX = x;
+                float oldX = x;
                 x = ( cos * x ) - ( sin * y );
                 y = ( sin * oldX ) + ( cos * y );
             }
@@ -153,8 +153,8 @@ public class Polyline : IShape2D
 
         for ( int i = 0, n = LocalVertices.Length - 2; i < n; i += 2 )
         {
-            var x = LocalVertices[ i + 2 ] - LocalVertices[ i ];
-            var y = LocalVertices[ i + 1 ] - LocalVertices[ i + 3 ];
+            float x = LocalVertices[ i + 2 ] - LocalVertices[ i ];
+            float y = LocalVertices[ i + 1 ] - LocalVertices[ i + 3 ];
             _length += ( float )Math.Sqrt( ( x * x ) + ( y * y ) );
         }
 
@@ -177,8 +177,8 @@ public class Polyline : IShape2D
 
         for ( int i = 0, n = LocalVertices.Length - 2; i < n; i += 2 )
         {
-            var x = ( LocalVertices[ i + 2 ] * ScaleX ) - ( LocalVertices[ i ] * ScaleX );
-            var y = ( LocalVertices[ i + 1 ] * ScaleY ) - ( LocalVertices[ i + 3 ] * ScaleY );
+            float x = ( LocalVertices[ i + 2 ] * ScaleX ) - ( LocalVertices[ i ] * ScaleX );
+            float y = ( LocalVertices[ i + 1 ] * ScaleY ) - ( LocalVertices[ i + 3 ] * ScaleY );
             _scaledLength += ( float )Math.Sqrt( ( x * x ) + ( y * y ) );
         }
 

@@ -48,5 +48,5 @@ public enum TextureWrapMode
     /// Wraps texture coordinates, causing the texture to repeat when
     /// coordinates exceed the range [0.0, 1.0].
     /// </summary>
-    Repeat = IGL.GL_REPEAT,
+    Repeat = IGL.GL_REPEAT
 }

@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Graphics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 
@@ -50,7 +52,8 @@ public class DesktopGLClipboard : IClipboard
     public string? Contents
     {
         get => DotGLFW.Glfw.GetClipboardString( ( ( DesktopGLGraphics )Engine.Api.Graphics ).GLWindow!.GlfwWindow );
-        set => DotGLFW.Glfw.SetClipboardString( ( ( DesktopGLGraphics )Engine.Api.Graphics ).GLWindow!.GlfwWindow, value );
+        set => DotGLFW.Glfw.SetClipboardString( ( ( DesktopGLGraphics )Engine.Api.Graphics ).GLWindow!.GlfwWindow,
+                                                value );
     }
 }
 

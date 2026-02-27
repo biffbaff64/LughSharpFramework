@@ -51,7 +51,7 @@ public class InputMultiplexer : IInputProcessor
     /// </summary>
     public InputMultiplexer( params IInputProcessor[] processors )
     {
-        foreach ( var inputProcessor in processors )
+        foreach ( IInputProcessor inputProcessor in processors )
         {
             Processors.Add( inputProcessor );
         }
@@ -60,7 +60,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool KeyDown( int keycode )
     {
-        var items = Processors.Begin();
+        IInputProcessor[] items = Processors.Begin();
 
         try
         {
@@ -83,7 +83,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool KeyUp( int keycode )
     {
-        var items = Processors.Begin();
+        IInputProcessor[] items = Processors.Begin();
 
         try
         {
@@ -106,7 +106,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool KeyTyped( char character )
     {
-        var items = Processors.Begin();
+        IInputProcessor[] items = Processors.Begin();
 
         try
         {
@@ -129,7 +129,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool TouchDown( int screenX, int screenY, int pointer, int button )
     {
-        var items = Processors.Begin();
+        IInputProcessor[] items = Processors.Begin();
 
         try
         {
@@ -152,7 +152,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool TouchUp( int screenX, int screenY, int pointer, int button )
     {
-        var items = Processors.Begin();
+        IInputProcessor[] items = Processors.Begin();
 
         try
         {
@@ -175,7 +175,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool TouchDragged( int screenX, int screenY, int pointer )
     {
-        var items = Processors.Begin();
+        IInputProcessor[] items = Processors.Begin();
 
         try
         {
@@ -198,7 +198,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool MouseMoved( int screenX, int screenY )
     {
-        var items = Processors.Begin();
+        IInputProcessor[] items = Processors.Begin();
 
         try
         {
@@ -221,7 +221,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool Scrolled( float amountX, float amountY )
     {
-        var items = Processors.Begin();
+        IInputProcessor[] items = Processors.Begin();
 
         try
         {
@@ -326,4 +326,3 @@ public class InputMultiplexer : IInputProcessor
 
 // ============================================================================
 // ============================================================================
-

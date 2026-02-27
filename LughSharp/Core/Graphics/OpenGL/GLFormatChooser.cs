@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics.CodeAnalysis;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
@@ -149,7 +151,7 @@ public class GLFormatChooser
                 break;
         }
 
-        foreach ( var fmt in candidates )
+        foreach ( int fmt in candidates )
         {
             if ( !IsSupported( fmt ) )
             {
@@ -187,7 +189,7 @@ public class GLFormatChooser
     {
         if ( _caps.HasInternalFormatQuery )
         {
-            _gl.GetInternalformativ( GLData.TEXTURE_2D, internalFormat, GLIFQ.INTERNALFORMAT_SUPPORTED, 1, out var v );
+            _gl.GetInternalformativ( GLData.TEXTURE_2D, internalFormat, GLIFQ.INTERNALFORMAT_SUPPORTED, 1, out int v );
 
             return v != 0;
         }
@@ -231,11 +233,15 @@ public class GLFormatChooser
         if ( !_caps.HasInternalFormatQuery )
         {
             // Heuristic: known good color/depth formats
-            return internalFormat is GLIF.RGBA8 or GLIF.SRGB8_ALPHA8 or GLIF.R11F_G11F_B10F or GLIF.RGBA16F
-                                     or GLIF.DEPTH_COMPONENT24 or GLIF.DEPTH24_STENCIL8;
+            return internalFormat is GLIF.RGBA8
+                or GLIF.SRGB8_ALPHA8
+                or GLIF.R11F_G11F_B10F
+                or GLIF.RGBA16F
+                or GLIF.DEPTH_COMPONENT24
+                or GLIF.DEPTH24_STENCIL8;
         }
 
-        _gl.GetInternalformativ( GLData.TEXTURE_2D, internalFormat, GLIFQ.FRAMEBUFFER_RENDERABLE, 1, out var v );
+        _gl.GetInternalformativ( GLData.TEXTURE_2D, internalFormat, GLIFQ.FRAMEBUFFER_RENDERABLE, 1, out int v );
 
         return v != 0;
     }
@@ -247,9 +253,14 @@ public class GLFormatChooser
     /// <returns></returns>
     private static bool IsCoreFormat( int f )
     {
-        return f is GLIF.R8 or GLIF.RG8 or GLIF.RGBA8 or GLIF.SRGB8_ALPHA8
-                    or GLIF.R11F_G11F_B10F or GLIF.RGBA16F
-                    or GLIF.DEPTH_COMPONENT24 or GLIF.DEPTH24_STENCIL8;
+        return f is GLIF.R8
+            or GLIF.RG8
+            or GLIF.RGBA8
+            or GLIF.SRGB8_ALPHA8
+            or GLIF.R11F_G11F_B10F
+            or GLIF.RGBA16F
+            or GLIF.DEPTH_COMPONENT24
+            or GLIF.DEPTH24_STENCIL8;
     }
 
     /// <summary>
@@ -259,9 +270,10 @@ public class GLFormatChooser
     /// <returns></returns>
     private static bool IsS3TC( int f )
     {
-        return f is GLIF.COMPRESSED_RGB_S3TC_DXT1_EXT or GLIF.COMPRESSED_RGBA_S3TC_DXT1_EXT
-                                                      or GLIF.COMPRESSED_RGBA_S3TC_DXT3_EXT
-                                                      or GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+        return f is GLIF.COMPRESSED_RGB_S3TC_DXT1_EXT
+            or GLIF.COMPRESSED_RGBA_S3TC_DXT1_EXT
+            or GLIF.COMPRESSED_RGBA_S3TC_DXT3_EXT
+            or GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT;
     }
 
     /// <summary>
@@ -281,9 +293,10 @@ public class GLFormatChooser
     /// <returns></returns>
     private static bool IsBPTC( int f )
     {
-        return f is GLIF.COMPRESSED_RGBA_BPTC_UNORM or GLIF.COMPRESSED_SRGB_ALPHA_BPTC_UNORM
-                                                    or GLIF.COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT
-                                                    or GLIF.COMPRESSED_RGB_BPTC_SIGNED_FLOAT;
+        return f is GLIF.COMPRESSED_RGBA_BPTC_UNORM
+            or GLIF.COMPRESSED_SRGB_ALPHA_BPTC_UNORM
+            or GLIF.COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT
+            or GLIF.COMPRESSED_RGB_BPTC_SIGNED_FLOAT;
     }
 
     /// <summary>
@@ -294,7 +307,7 @@ public class GLFormatChooser
     private static bool IsETC2( int f )
     {
         return f is GLIF.COMPRESSED_SRGB8_ALPHA8_ETC2
-                    or GLIF.COMPRESSED_RGBA8_ETC2_EAC;
+            or GLIF.COMPRESSED_RGBA8_ETC2_EAC;
     }
 }
 

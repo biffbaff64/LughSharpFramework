@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Maths;
@@ -84,7 +85,7 @@ public class ConvexHull
     /// </returns>
     public List< float > ComputePolygon( float[] points, int offset, int count, bool sorted )
     {
-        var end = offset + count;
+        int end = offset + count;
 
         if ( !sorted )
         {
@@ -103,10 +104,10 @@ public class ConvexHull
         _hull.Clear();
 
         // Lower hull.
-        for ( var i = offset; i < end; i += 2 )
+        for ( int i = offset; i < end; i += 2 )
         {
-            var x = points[ i ];
-            var y = points[ i + 1 ];
+            float x = points[ i ];
+            float y = points[ i + 1 ];
 
             while ( ( _hull.Count >= 4 ) && ( Ccw( x, y ) <= 0 ) )
             {
@@ -120,8 +121,8 @@ public class ConvexHull
         // Upper hull.
         for ( int i = end - 4, t = _hull.Count + 2; i >= offset; i -= 2 )
         {
-            var x = points[ i ];
-            var y = points[ i + 1 ];
+            float x = points[ i ];
+            float y = points[ i + 1 ];
 
             while ( ( _hull.Count >= t ) && ( Ccw( x, y ) <= 0 ) )
             {
@@ -148,7 +149,7 @@ public class ConvexHull
             throw new ArgumentException( "count must be <= " + 32767 );
         }
 
-        var end = offset + count;
+        int end = offset + count;
 
         if ( !sorted )
         {
@@ -165,17 +166,17 @@ public class ConvexHull
             SortWithIndices( points, count, yDown );
         }
 
-        var indices = _indices;
+        List< int > indices = _indices;
         indices.Clear();
 
-        var hull = _hull;
+        List< float > hull = _hull;
         hull.Clear();
 
         // Lower hull.
         for ( int i = offset, index = i / 2; i < end; i += 2, index++ )
         {
-            var x = points[ i ];
-            var y = points[ i + 1 ];
+            float x = points[ i ];
+            float y = points[ i + 1 ];
 
             while ( ( hull.Count >= 4 ) && ( Ccw( x, y ) <= 0 ) )
             {
@@ -191,8 +192,8 @@ public class ConvexHull
         // Upper hull.
         for ( int i = end - 4, index = i / 2, t = hull.Count + 2; i >= offset; i -= 2, index-- )
         {
-            var x = points[ i ];
-            var y = points[ i + 1 ];
+            float x = points[ i ];
+            float y = points[ i + 1 ];
 
             while ( ( hull.Count >= t ) && ( Ccw( x, y ) <= 0 ) )
             {
@@ -225,11 +226,11 @@ public class ConvexHull
     /// <param name="py"></param>
     private float Ccw( float px, float py )
     {
-        var size = _hull.Count;
-        var p1X  = _hull[ size - 4 ];
-        var p1Y  = _hull[ size - 3 ];
-        var p2X  = _hull[ size - 2 ];
-        var p2Y  = _hull.Peek();
+        int   size = _hull.Count;
+        float p1X  = _hull[ size - 4 ];
+        float p1Y  = _hull[ size - 3 ];
+        float p2X  = _hull[ size - 2 ];
+        float p2Y  = _hull.Peek();
 
         return ( ( p2X - p1X ) * ( py - p1Y ) ) - ( ( p2Y - p1Y ) * ( px - p1X ) );
     }
@@ -242,9 +243,9 @@ public class ConvexHull
     private void Sort( float[] values, int count )
     {
         var lower = 0;
-        var upper = count - 1;
+        int upper = count - 1;
 
-        var stack = _quicksortStack;
+        List< int > stack = _quicksortStack;
 
         stack.Add( lower );
         stack.Add( upper - 1 );
@@ -259,7 +260,7 @@ public class ConvexHull
                 continue;
             }
 
-            var i = QuicksortPartition( values, lower, upper );
+            int i = QuicksortPartition( values, lower, upper );
 
             if ( ( i - lower ) > ( upper - i ) )
             {
@@ -280,10 +281,10 @@ public class ConvexHull
 
     private int QuicksortPartition( float[] values, int lower, int upper )
     {
-        var x    = values[ lower ];
-        var y    = values[ lower + 1 ];
-        var up   = upper;
-        var down = lower;
+        float x    = values[ lower ];
+        float y    = values[ lower + 1 ];
+        int   up   = upper;
+        int   down = lower;
 
         while ( down < up )
         {
@@ -324,7 +325,7 @@ public class ConvexHull
     /// <param name="yDown"></param>
     private void SortWithIndices( float[] values, int count, bool yDown )
     {
-        var pointCount = count / 2;
+        int pointCount = count / 2;
 
         _originalIndices.Clear();
         _originalIndices.EnsureCapacity( pointCount );
@@ -335,9 +336,9 @@ public class ConvexHull
         }
 
         var lower = 0;
-        var upper = count - 1;
+        int upper = count - 1;
 
-        var stack = _quicksortStack;
+        List< int > stack = _quicksortStack;
 
         stack.Add( lower );
         stack.Add( upper - 1 );
@@ -352,7 +353,7 @@ public class ConvexHull
                 continue;
             }
 
-            var i = QuicksortPartitionWithIndices( values, lower, upper, yDown, _originalIndices.ToArray() );
+            int i = QuicksortPartitionWithIndices( values, lower, upper, yDown, _originalIndices.ToArray() );
 
             if ( ( i - lower ) > ( upper - i ) )
             {
@@ -377,10 +378,10 @@ public class ConvexHull
                                                bool yDown,
                                                short[] originalIndices )
     {
-        var x    = values[ lower ];
-        var y    = values[ lower + 1 ];
-        var up   = upper;
-        var down = lower;
+        float x    = values[ lower ];
+        float y    = values[ lower + 1 ];
+        int   up   = upper;
+        int   down = lower;
 
         while ( down < up )
         {
@@ -392,7 +393,7 @@ public class ConvexHull
             if ( yDown )
             {
                 while ( ( values[ up ] > x )
-                        || ( values[ up ].Equals( x ) && ( values[ up + 1 ] < y ) ) )
+                     || ( values[ up ].Equals( x ) && ( values[ up + 1 ] < y ) ) )
                 {
                     up -= 2;
                 }
@@ -400,7 +401,7 @@ public class ConvexHull
             else
             {
                 while ( ( values[ up ] > x )
-                        || ( values[ up ].Equals( x ) && ( values[ up + 1 ] > y ) ) )
+                     || ( values[ up ].Equals( x ) && ( values[ up + 1 ] > y ) ) )
                 {
                     up -= 2;
                 }
@@ -417,8 +418,8 @@ public class ConvexHull
         }
 
         if ( ( x > values[ up ] )
-             || ( x.Equals( values[ up ] )
-                  && ( yDown ? y < values[ up + 1 ] : y > values[ up + 1 ] ) ) )
+          || ( x.Equals( values[ up ] )
+            && ( yDown ? y < values[ up + 1 ] : y > values[ up + 1 ] ) ) )
         {
             values[ lower ] = values[ up ];
             values[ up ]    = x;

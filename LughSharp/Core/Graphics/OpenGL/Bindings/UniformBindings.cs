@@ -27,9 +27,11 @@
 // ============================================================================
 
 using System.Text;
+
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -477,23 +479,23 @@ public unsafe partial class GLBindings
         if ( ( value.Length % 16 ) != 0 )
         {
             throw new RuntimeException( $"Error: value array length ({value.Length}) is not a multiple " +
-                                           $"of 16.  Must provide a whole number of 4x4 matrices." );
+                                        $"of 16.  Must provide a whole number of 4x4 matrices." );
         }
 
         GetDelegateForFunction< PFNGLGETERRORPROC >( "glGetError", out _glGetError );
 
-        var matrixCount = value.Length / 16;
+        int matrixCount = value.Length / 16;
 
         fixed ( GLfloat* p = &value[ 0 ] )
         {
             _glUniformMatrix4fv( location, matrixCount, transpose, p );
 
-            var error = _glGetError();
+            int error = _glGetError();
 
             if ( error != IGL.GL_NO_ERROR )
             {
                 throw new RuntimeException( $"OpenGL Error: {error} after glUniformMatrix4fv. Location: {location}, " +
-                                               $"Matrix Count: {matrixCount}, Transpose: {transpose}" );
+                                            $"Matrix Count: {matrixCount}, Transpose: {transpose}" );
             }
         }
     }
@@ -889,7 +891,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLuint[] GetUniformIndices( GLuint program, params string[] uniformNames )
     {
-        var uniformCount     = uniformNames.Length;
+        int uniformCount     = uniformNames.Length;
         var uniformNamesPtrs = new GLchar[ uniformCount ][];
 
         for ( var i = 0; i < uniformCount; i++ )
@@ -898,7 +900,7 @@ public unsafe partial class GLBindings
         }
 
         {
-            var pUniformNames = stackalloc GLchar*[ uniformCount ];
+            GLchar** pUniformNames = stackalloc GLchar*[ uniformCount ];
 
             for ( var i = 0; i < uniformCount; i++ )
             {
@@ -924,7 +926,8 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetActiveUniformsiv( GLuint program, GLsizei uniformCount, GLuint* uniformIndices, GLenum pname, GLint* parameters )
+    public void GetActiveUniformsiv( GLuint program, GLsizei uniformCount, GLuint* uniformIndices, GLenum pname,
+                                     GLint* parameters )
     {
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMSIVPROC >( "glGetActiveUniformsiv", out _glGetActiveUniformsiv );
 
@@ -934,7 +937,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint[] GetActiveUniformsiv( GLuint program, GLenum pname, params GLuint[] uniformIndices )
     {
-        var uniformCount = uniformIndices.Length;
+        int uniformCount = uniformIndices.Length;
         var parameters   = new GLint[ uniformCount ];
 
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMSIVPROC >( "glGetActiveUniformsiv", out _glGetActiveUniformsiv );
@@ -955,9 +958,11 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetActiveUniformName( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformName )
+    public void GetActiveUniformName( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei* length,
+                                      GLchar* uniformName )
     {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName", out _glGetActiveUniformName );
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName",
+                                                                 out _glGetActiveUniformName );
 
         _glGetActiveUniformName( program, uniformIndex, bufSize, length, uniformName );
     }
@@ -965,10 +970,11 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetActiveUniformName( GLuint program, GLuint uniformIndex, GLsizei bufSize )
     {
-        var     uniformName = stackalloc GLchar[ bufSize ];
+        GLchar* uniformName = stackalloc GLchar[ bufSize ];
         GLsizei length;
 
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName", out _glGetActiveUniformName );
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName",
+                                                                 out _glGetActiveUniformName );
 
         _glGetActiveUniformName( program, uniformIndex, bufSize, &length, uniformName );
 
@@ -980,7 +986,8 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLuint GetUniformBlockIndex( GLuint program, GLchar* uniformBlockName )
     {
-        GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex", out _glGetUniformBlockIndex );
+        GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex",
+                                                                 out _glGetUniformBlockIndex );
 
         return _glGetUniformBlockIndex( program, uniformBlockName );
     }
@@ -988,9 +995,10 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLuint GetUniformBlockIndex( GLuint program, string uniformBlockName )
     {
-        var uniformBlockNameBytes = Encoding.UTF8.GetBytes( uniformBlockName );
+        byte[] uniformBlockNameBytes = Encoding.UTF8.GetBytes( uniformBlockName );
 
-        GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex", out _glGetUniformBlockIndex );
+        GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex",
+                                                                 out _glGetUniformBlockIndex );
 
         {
             fixed ( GLchar* p = &uniformBlockNameBytes[ 0 ] )
@@ -1005,15 +1013,18 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetActiveUniformBlockiv( GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint* parameters )
     {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv", out _glGetActiveUniformBlockiv );
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv",
+                                                                    out _glGetActiveUniformBlockiv );
 
         _glGetActiveUniformBlockiv( program, uniformBlockIndex, pname, parameters );
     }
 
     /// <inheritdoc />
-    public void GetActiveUniformBlockiv( GLuint program, GLuint uniformBlockIndex, GLenum pname, ref GLint[] parameters )
+    public void GetActiveUniformBlockiv( GLuint program, GLuint uniformBlockIndex, GLenum pname,
+                                         ref GLint[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv", out _glGetActiveUniformBlockiv );
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv",
+                                                                    out _glGetActiveUniformBlockiv );
 
         {
             fixed ( GLint* p = &parameters[ 0 ] )
@@ -1029,7 +1040,8 @@ public unsafe partial class GLBindings
     public void GetActiveUniformBlockName( GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei* length,
                                            GLchar* uniformBlockName )
     {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName",
+                                                                      out _glGetActiveUniformBlockName );
 
         _glGetActiveUniformBlockName( program, uniformBlockIndex, bufSize, length, uniformBlockName );
     }
@@ -1039,11 +1051,12 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetActiveUniformBlockName( GLuint program, GLuint uniformBlockIndex, GLsizei bufSize )
     {
-        var uniformBlockName = stackalloc GLchar[ bufSize ];
+        GLchar* uniformBlockName = stackalloc GLchar[ bufSize ];
 
         GLsizei length;
 
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName",
+                                                                      out _glGetActiveUniformBlockName );
 
         _glGetActiveUniformBlockName( program, uniformBlockIndex, bufSize, &length, uniformBlockName );
 
@@ -1064,14 +1077,16 @@ public unsafe partial class GLBindings
 
     public void UniformSubroutinesuiv( GLenum shadertype, GLsizei count, GLuint* indices )
     {
-        GetDelegateForFunction< PFNGLUNIFORMSUBROUTINESUIVPROC >( "glUniformSubroutinesuiv", out _glUniformSubroutinesuiv );
+        GetDelegateForFunction< PFNGLUNIFORMSUBROUTINESUIVPROC >( "glUniformSubroutinesuiv",
+                                                                  out _glUniformSubroutinesuiv );
 
         _glUniformSubroutinesuiv( shadertype, count, indices );
     }
 
     public void UniformSubroutinesuiv( GLenum shadertype, GLuint[] indices )
     {
-        GetDelegateForFunction< PFNGLUNIFORMSUBROUTINESUIVPROC >( "glUniformSubroutinesuiv", out _glUniformSubroutinesuiv );
+        GetDelegateForFunction< PFNGLUNIFORMSUBROUTINESUIVPROC >( "glUniformSubroutinesuiv",
+                                                                  out _glUniformSubroutinesuiv );
 
         fixed ( GLuint* p = &indices[ 0 ] )
         {
@@ -1083,14 +1098,16 @@ public unsafe partial class GLBindings
 
     public void GetUniformSubroutineuiv( GLenum shadertype, GLint location, GLuint* parameters )
     {
-        GetDelegateForFunction< PFNGLGETUNIFORMSUBROUTINEUIVPROC >( "glGetUniformSubroutineuiv", out _glGetUniformSubroutineuiv );
+        GetDelegateForFunction< PFNGLGETUNIFORMSUBROUTINEUIVPROC >( "glGetUniformSubroutineuiv",
+                                                                    out _glGetUniformSubroutineuiv );
 
         _glGetUniformSubroutineuiv( shadertype, location, parameters );
     }
 
     public void GetUniformSubroutineuiv( GLenum shadertype, GLint location, ref GLuint[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETUNIFORMSUBROUTINEUIVPROC >( "glGetUniformSubroutineuiv", out _glGetUniformSubroutineuiv );
+        GetDelegateForFunction< PFNGLGETUNIFORMSUBROUTINEUIVPROC >( "glGetUniformSubroutineuiv",
+                                                                    out _glGetUniformSubroutineuiv );
 
         fixed ( GLuint* p = &parameters[ 0 ] )
         {

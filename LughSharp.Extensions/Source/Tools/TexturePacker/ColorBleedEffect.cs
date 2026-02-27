@@ -26,7 +26,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
+
 using Rectangle = System.Drawing.Rectangle;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -39,18 +41,18 @@ public class ColorBleedEffect
 
     public Bitmap ProcessImage( Bitmap image, int maxIterations )
     {
-        var width  = image.Width;
-        var height = image.Height;
+        int width  = image.Width;
+        int height = image.Height;
 
         var processedImage = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-        var imageData = image.LockBits( new Rectangle( 0, 0, width, height ),
-                                        ImageLockMode.ReadOnly,
-                                        PixelFormat.Format32bppArgb );
+        BitmapData imageData = image.LockBits( new Rectangle( 0, 0, width, height ),
+                                               ImageLockMode.ReadOnly,
+                                               PixelFormat.Format32bppArgb );
 
-        var processedImageData = processedImage.LockBits( new Rectangle( 0, 0, width, height ),
-                                                          ImageLockMode.WriteOnly,
-                                                          PixelFormat.Format32bppArgb );
+        BitmapData processedImageData = processedImage.LockBits( new Rectangle( 0, 0, width, height ),
+                                                                 ImageLockMode.WriteOnly,
+                                                                 PixelFormat.Format32bppArgb );
 
         try
         {
@@ -60,7 +62,7 @@ public class ColorBleedEffect
 
             var mask        = new Mask( rgb );
             var iterations  = 0;
-            var lastPending = -1;
+            int lastPending = -1;
 
             while ( ( mask.PendingSize > 0 ) && ( mask.PendingSize != lastPending ) && ( iterations < maxIterations ) )
             {
@@ -82,31 +84,31 @@ public class ColorBleedEffect
 
     private static void ExecuteIteration( int[] rgb, Mask mask, int width, int height )
     {
-        var iterator = mask.NewMaskIterator();
+        Mask.MaskIterator iterator = mask.NewMaskIterator();
 
         while ( iterator.HasNext() )
         {
-            var pixelIndex = iterator.Next();
-            var x          = pixelIndex % width;
-            var y          = pixelIndex / width;
+            int pixelIndex = iterator.Next();
+            int x          = pixelIndex % width;
+            int y          = pixelIndex / width;
             int r          = 0, g = 0, b = 0;
             var count      = 0;
 
             for ( int i = 0, n = Offsets.Length; i < n; i += 2 )
             {
-                var column = x + Offsets[ i ];
-                var row    = y + Offsets[ i + 1 ];
+                int column = x + Offsets[ i ];
+                int row    = y + Offsets[ i + 1 ];
 
                 if ( ( column < 0 ) || ( column >= width ) || ( row < 0 ) || ( row >= height ) )
                 {
                     continue;
                 }
 
-                var currentPixelIndex = GetPixelIndex( width, column, row );
+                int currentPixelIndex = GetPixelIndex( width, column, row );
 
                 if ( !mask.IsBlank( currentPixelIndex ) )
                 {
-                    var argb = rgb[ currentPixelIndex ];
+                    int argb = rgb[ currentPixelIndex ];
 
                     r += Red( argb );
                     g += Green( argb );
@@ -147,7 +149,8 @@ public class ColorBleedEffect
 
     private static int Argb( int a, int r, int g, int b )
     {
-        if ( ( a < 0 ) || ( a > 255 ) || ( r < 0 ) || ( r > 255 ) || ( g < 0 ) || ( g > 255 ) || ( b < 0 ) || ( b > 255 ) )
+        if ( ( a < 0 ) || ( a > 255 ) || ( r < 0 ) || ( r > 255 ) || ( g < 0 ) || ( g > 255 ) || ( b < 0 )
+          || ( b > 255 ) )
         {
             throw new ArgumentException( "Invalid RGBA: " + r + ", " + g + "," + b + "," + a );
         }
@@ -168,7 +171,7 @@ public class ColorBleedEffect
 
         public Mask( int[] rgb )
         {
-            var n = rgb.Length;
+            int n = rgb.Length;
 
             _blank    = new bool[ n ];
             _pending  = new int[ n ];
@@ -197,7 +200,7 @@ public class ColorBleedEffect
                 throw new IndexOutOfRangeException( index.ToString() );
             }
 
-            var value = _pending[ index ];
+            int value = _pending[ index ];
 
             PendingSize--;
             _pending[ index ] = _pending[ PendingSize ];

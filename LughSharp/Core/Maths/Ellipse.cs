@@ -127,9 +127,9 @@ public class Ellipse : IShape2D
         x -= X;
         y -= Y;
 
-        return ( ( ( x * x ) / ( Width * 0.5f * Width * 0.5f ) )
-                 + ( ( y * y ) / ( Height * 0.5f * Height * 0.5f ) ) )
-               <= 1.0f;
+        return ( ( x * x / ( Width * 0.5f * Width * 0.5f ) )
+               + ( y * y / ( Height * 0.5f * Height * 0.5f ) ) )
+            <= 1.0f;
     }
 
     /// <summary>
@@ -242,7 +242,7 @@ public class Ellipse : IShape2D
     /// </returns>
     public float Area()
     {
-        return ( MathUtils.PI * ( Width * Height ) ) / 4;
+        return MathUtils.PI * ( Width * Height ) / 4;
     }
 
     /// <summary>
@@ -256,15 +256,15 @@ public class Ellipse : IShape2D
     /// </returns>
     public float Circumference()
     {
-        var a = Width / 2;
-        var b = Height / 2;
+        float a = Width / 2;
+        float b = Height / 2;
 
         if ( ( ( a * 3 ) > b ) || ( ( b * 3 ) > a ) )
         {
             // If one dimension is three times as long as the other...
             return ( float )( MathUtils.PI
-                              * ( ( 3 * ( a + b ) )
-                                  - Math.Sqrt( ( ( 3 * a ) + b ) * ( a + ( 3 * b ) ) ) ) );
+                            * ( ( 3 * ( a + b ) )
+                              - Math.Sqrt( ( ( 3 * a ) + b ) * ( a + ( 3 * b ) ) ) ) );
         }
 
         // We can use the simpler approximation, then
@@ -287,9 +287,9 @@ public class Ellipse : IShape2D
         var e = ( Ellipse )o;
 
         return X.Equals( e.X )
-               && Y.Equals( e.Y )
-               && Width.Equals( e.Width )
-               && Height.Equals( e.Height );
+            && Y.Equals( e.Y )
+            && Width.Equals( e.Width )
+            && Height.Equals( e.Height );
     }
 
     /// <inheritdoc />
@@ -297,7 +297,7 @@ public class Ellipse : IShape2D
     {
         const int PRIME = 53;
 
-        var result = PRIME + 31;
+        int result = PRIME + 31;
         result = ( PRIME * result ) + 33;
         result = ( PRIME * result ) + 35;
         result = ( PRIME * result ) + 37;

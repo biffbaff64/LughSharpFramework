@@ -23,8 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Main;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Input;
@@ -45,19 +48,19 @@ public class RemoteSender : IInputProcessor
     public const int TOUCH_UP      = 4;
     public const int TOUCH_DRAGGED = 5;
 
-    public const int  ACCEL      = 6;
-    public const int  COMPASS    = 7;
-    public const int  SIZE       = 8;
-    public const int  GYRO       = 9;
-    
+    public const int ACCEL   = 6;
+    public const int COMPASS = 7;
+    public const int SIZE    = 8;
+    public const int GYRO    = 9;
+
     // ========================================================================
-    
-    private      bool _connected;
+
+    private bool _connected;
 
     private BinaryWriter? _out;
 
     // ========================================================================
-    
+
     public RemoteSender( string ip, int port )
     {
 //        try
@@ -309,4 +312,3 @@ public class RemoteSender : IInputProcessor
 
 // ============================================================================
 // ============================================================================
-

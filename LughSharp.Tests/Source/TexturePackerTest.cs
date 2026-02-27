@@ -23,8 +23,11 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+
 using Extensions.Source.Tools.TexturePacker;
+
 using LughSharp.Core.Files;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -55,13 +58,13 @@ public class TexturePackerTest
             PowerOfTwo       = true,                  // 
             Debug            = DRAW_DEBUG_LINES,      // 
             IsAlias          = KEEP_DUPLICATE_IMAGES, // 
-            Silent           = true,                 // 
+            Silent           = true,                  // 
             PaddingX         = 2,                     // Increase padding
             PaddingY         = 2,                     // Increase padding
             EdgePadding      = true,                  // Disable edge padding initially
             DuplicatePadding = false,                 // Disable duplicate padding
             MinWidth         = 16,                    // 
-            MinHeight        = 16,                    // 
+            MinHeight        = 16                     // 
 //            Grid             = true,                  // 
         };
 
@@ -71,12 +74,12 @@ public class TexturePackerTest
         // 3. name of atlas, without extension (the extension '.atlas' will be added
         //    automatically). If an extension is specified, it will be removed.
         // 4. configuration settings
-        var inputFolder  = IOUtils.AssetPath( @"Assets\PackedImages\objects" );
-        var outputFolder = IOUtils.AssetPath( @"Assets\PackedImages\output" );
+        string inputFolder  = IOUtils.AssetPath( @"Assets\PackedImages\objects" );
+        string outputFolder = IOUtils.AssetPath( @"Assets\PackedImages\output" );
 
         // Make sure we have a settings file to use. Comment out if not needed,
         // or to test with default settings.
-        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
+        string settingsFilePath = Path.Combine( inputFolder, "pack.json" );
         settings.WriteToJsonFile( settingsFilePath );
 
         // Calls to TexturePacker.Process() do not modify the paths with any IOUtils

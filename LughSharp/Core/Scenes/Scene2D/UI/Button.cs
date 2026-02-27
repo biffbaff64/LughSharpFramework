@@ -204,11 +204,14 @@ public class Button : Table, IDisableable, IStyleable< Button.ButtonStyle >
         }
     }
 
-    public override float GetPrefWidth() => GetPrefWidthSafe();
+    public override float GetPrefWidth()
+    {
+        return GetPrefWidthSafe();
+    }
 
     protected float GetPrefWidthSafe()
     {
-        var width = base.GetPrefWidth();
+        float width = base.GetPrefWidth();
 
         if ( Style?.Up != null )
         {
@@ -228,11 +231,14 @@ public class Button : Table, IDisableable, IStyleable< Button.ButtonStyle >
         return width;
     }
 
-    public override float GetPrefHeight() => GetPrefHeightSafe();
+    public override float GetPrefHeight()
+    {
+        return GetPrefHeightSafe();
+    }
 
     public float GetPrefHeightSafe()
     {
-        var height = base.GetPrefHeight();
+        float height = base.GetPrefHeight();
 
         if ( Style?.Up != null )
         {
@@ -303,7 +309,7 @@ public class Button : Table, IDisableable, IStyleable< Button.ButtonStyle >
             }
         }
 
-        var focused = HasKeyboardFocus();
+        bool focused = HasKeyboardFocus();
 
         if ( IsChecked )
         {
@@ -359,11 +365,11 @@ public class Button : Table, IDisableable, IStyleable< Button.ButtonStyle >
             offsetY = Style.UnpressedOffsetY;
         }
 
-        var offset = ( offsetX != 0 ) || ( offsetY != 0 );
+        bool offset = ( offsetX != 0 ) || ( offsetY != 0 );
 
         if ( offset )
         {
-            foreach ( var actor in Children )
+            foreach ( Actor? actor in Children )
             {
                 actor?.MoveBy( offsetX, offsetY );
             }

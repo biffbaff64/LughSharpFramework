@@ -52,9 +52,9 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
 
     public T ValueAt( in T outp, in float t )
     {
-        var n = SpanCount;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = SpanCount;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
         u -= i;
 
         return ValueAt( outp, i, u );
@@ -62,9 +62,9 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
 
     public T DerivativeAt( in T outp, in float t )
     {
-        var n = SpanCount;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = SpanCount;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
         u -= i;
 
         return DerivativeAt( outp, i, u );
@@ -160,13 +160,13 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
             start += SpanCount;
         }
 
-        var result = start % SpanCount;
-        var dst    = inp.Distance2( ControlPoints[ result ] );
+        int   result = start % SpanCount;
+        float dst    = inp.Distance2( ControlPoints[ result ] );
 
         for ( var i = 1; i < count; i++ )
         {
-            var idx = ( start + i ) % SpanCount;
-            var d   = inp.Distance2( ControlPoints[ idx ] );
+            int   idx = ( start + i ) % SpanCount;
+            float d   = inp.Distance2( ControlPoints[ idx ] );
 
             if ( d < dst )
             {
@@ -185,12 +185,12 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
 
     public float Approximate( in T inp, int near )
     {
-        var n        = near;
-        var nearest  = ControlPoints[ n ];
-        var previous = ControlPoints[ n > 0 ? n - 1 : SpanCount - 1 ];
-        var next     = ControlPoints[ ( n + 1 ) % SpanCount ];
-        var dstPrev2 = inp.Distance2( previous );
-        var dstNext2 = inp.Distance2( next );
+        int   n        = near;
+        T     nearest  = ControlPoints[ n ];
+        T     previous = ControlPoints[ n > 0 ? n - 1 : SpanCount - 1 ];
+        T     next     = ControlPoints[ ( n + 1 ) % SpanCount ];
+        float dstPrev2 = inp.Distance2( previous );
+        float dstNext2 = inp.Distance2( next );
 
         T p1, p2, p3;
 
@@ -208,12 +208,12 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
             n  = n > 0 ? n - 1 : SpanCount - 1;
         }
 
-        var l1Sqr = p1.Distance2( p2 );
-        var l2Sqr = p3.Distance2( p2 );
-        var l3Sqr = p3.Distance2( p1 );
-        var l1    = ( float )Math.Sqrt( l1Sqr );
-        var s     = ( ( l2Sqr + l1Sqr ) - l3Sqr ) / ( 2f * l1 );
-        var u     = MathUtils.Clamp( ( l1 - s ) / l1, 0f, 1f );
+        float l1Sqr = p1.Distance2( p2 );
+        float l2Sqr = p3.Distance2( p2 );
+        float l3Sqr = p3.Distance2( p1 );
+        var   l1    = ( float )Math.Sqrt( l1Sqr );
+        float s     = ( l2Sqr + l1Sqr - l3Sqr ) / ( 2f * l1 );
+        float u     = MathUtils.Clamp( ( l1 - s ) / l1, 0f, 1f );
 
         return ( n + u ) / SpanCount;
     }
@@ -229,9 +229,9 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
     /// <returns></returns>
     public static T Calculate( T outvec, float t, T[] points, bool continuous, T tmp )
     {
-        var n = continuous ? points.Length : points.Length - 3;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = continuous ? points.Length : points.Length - 3;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -257,15 +257,15 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
                                bool continuous,
                                T? tmp )
     {
-        var n  = points.Length;
-        var u2 = u * u;
+        int   n  = points.Length;
+        float u2 = u * u;
 
-        var u3 = u2 * u;
-        outp.Set( points[ i ] ).Scale( ( ( 1.5f * u3 ) - ( 2.5f * u2 ) ) + 1.0f );
+        float u3 = u2 * u;
+        outp.Set( points[ i ] ).Scale( ( 1.5f * u3 ) - ( 2.5f * u2 ) + 1.0f );
 
         if ( ( tmp != null ) && ( continuous || ( i > 0 ) ) )
         {
-            outp.Add( tmp.Set( points[ ( ( n + i ) - 1 ) % n ] ).Scale( ( ( -0.5f * u3 ) + u2 ) - ( 0.5f * u ) ) );
+            outp.Add( tmp.Set( points[ ( n + i - 1 ) % n ] ).Scale( ( -0.5f * u3 ) + u2 - ( 0.5f * u ) ) );
         }
 
         if ( ( tmp != null ) && ( continuous || ( i < ( n - 1 ) ) ) )
@@ -296,9 +296,9 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
                                 bool continuous,
                                 T tmp )
     {
-        var n = continuous ? points.Length : points.Length - 3;
-        var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int )u;
+        int   n = continuous ? points.Length : points.Length - 3;
+        float u = t * n;
+        int   i = t >= 1f ? n - 1 : ( int )u;
         u -= i;
 
         return Derivative( outp, i, u, points, continuous, tmp );
@@ -327,23 +327,23 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
         /*
          * catmull'(u) = 0.5 *((-p0 + p2) + 2 * (2*p0 - 5*p1 + 4*p2 - p3) * u + 3 * (-p0 + 3*p1 - 3*p2 + p3) * u * u)
          */
-        var n = points.Length;
+        int n = points.Length;
 
-        var u2 = u * u;
+        float u2 = u * u;
 
         // float u3 = u2 * u;
         outp.Set( points[ i ] ).Scale( ( -u * 5 ) + ( u2 * 4.5f ) );
 
         if ( ( tmp != null ) && ( continuous || ( i > 0 ) ) )
         {
-            outp.Add( tmp.Set( points[ ( ( n + i ) - 1 ) % n ] )
-                         .Scale( ( -0.5f + ( u * 2 ) ) - ( u2 * 1.5f ) ) );
+            outp.Add( tmp.Set( points[ ( n + i - 1 ) % n ] )
+                         .Scale( -0.5f + ( u * 2 ) - ( u2 * 1.5f ) ) );
         }
 
         if ( ( tmp != null ) && ( continuous || ( i < ( n - 1 ) ) ) )
         {
             outp.Add( tmp.Set( points[ ( i + 1 ) % n ] )
-                         .Scale( ( 0.5f + ( u * 4 ) ) - ( u2 * 4.5f ) ) );
+                         .Scale( 0.5f + ( u * 4 ) - ( u2 * 4.5f ) ) );
         }
 
         if ( ( tmp != null ) && ( continuous || ( i < ( n - 2 ) ) ) )

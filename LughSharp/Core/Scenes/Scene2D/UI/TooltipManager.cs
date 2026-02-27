@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -58,7 +59,7 @@ public class TooltipManager< T > where T : Actor
         //@formatter:off
         _showTask = new Task( () =>
         {
-            var stage = _showTooltip.TargetActor?.Stage;
+            Stage? stage = _showTooltip.TargetActor?.Stage;
 
             if ( stage == null )
             {
@@ -134,7 +135,7 @@ public class TooltipManager< T > where T : Actor
     /// </summary>
     protected void ShowAction( Tooltip< T > tooltip )
     {
-        var actionTime = Animations ? _time > 0 ? 0.5f : 0.15f : 0.1f;
+        float actionTime = Animations ? _time > 0 ? 0.5f : 0.15f : 0.1f;
 
         tooltip.Container.Transform = true;
         tooltip.Container.Color.A   = 0.2f;
@@ -142,11 +143,10 @@ public class TooltipManager< T > where T : Actor
 
         tooltip.Container.AddAction
             (
-             Actions.Actions.Parallel
-                 (
-                  Actions.Actions.FadeIn( actionTime, Interpolation.Fade ),
-                  Actions.Actions.ScaleTo( 1, 1, actionTime, Interpolation.Fade )
-                 )
+             Actions.Actions.Parallel(
+                                      Actions.Actions.FadeIn( actionTime, Interpolation.Fade ),
+                                      Actions.Actions.ScaleTo( 1, 1, actionTime, Interpolation.Fade )
+                                     )
             );
     }
 
@@ -159,15 +159,16 @@ public class TooltipManager< T > where T : Actor
     {
         tooltip.Container.AddAction
             (
-             Actions.Actions.Sequence
-                 (
-                  Actions.Actions.Parallel
-                      (
-                       Actions.Actions.Alpha( 0.2f, 0.2f, Interpolation.Fade ),
-                       Actions.Actions.ScaleTo( 0.05f, 0.05f, 0.2f, Interpolation.Fade )
-                      ),
-                  Actions.Actions.RemoveActor()
-                 )
+             Actions.Actions.Sequence(
+                                      Actions.Actions.Parallel(
+                                                               Actions.Actions.Alpha( 0.2f, 0.2f, Interpolation.Fade ),
+                                                               Actions.Actions.ScaleTo( 0.05f,
+                                                                   0.05f,
+                                                                   0.2f,
+                                                                   Interpolation.Fade )
+                                                              ),
+                                      Actions.Actions.RemoveActor()
+                                     )
             );
     }
 
@@ -178,7 +179,7 @@ public class TooltipManager< T > where T : Actor
         _time        = InitialTime;
         _showTooltip = null!;
 
-        foreach ( var tooltip in _activeTooltips )
+        foreach ( Tooltip< T > tooltip in _activeTooltips )
         {
             tooltip.Hide();
         }

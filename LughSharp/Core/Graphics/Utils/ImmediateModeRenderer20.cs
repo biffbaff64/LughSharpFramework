@@ -110,19 +110,20 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <param name="hasColors"></param>
     /// <param name="numTexCoords"></param>
     /// <param name="shader"></param>
-    public ImmediateModeRenderer20( int maxVertices, bool hasNormals, bool hasColors, int numTexCoords, ShaderProgram shader )
+    public ImmediateModeRenderer20( int maxVertices, bool hasNormals, bool hasColors, int numTexCoords,
+                                    ShaderProgram shader )
     {
         MaxVertices   = maxVertices;
         _numTexCoords = numTexCoords;
         _shader       = shader;
 
-        var attribs = BuildVertexAttributes( hasNormals, hasColors, numTexCoords );
+        VertexAttribute[] attribs = BuildVertexAttributes( hasNormals, hasColors, numTexCoords );
 
         _mesh       = new Mesh( false, maxVertices, 0, attribs );
         _vertices   = new float[ maxVertices * ( _mesh.VertexAttributes!.VertexSize / 4 ) ];
         _vertexSize = _mesh.VertexAttributes.VertexSize / 4;
 
-        var attribute = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.Normal );
+        VertexAttribute? attribute = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.Normal );
 
         _normalOffset       = attribute != null ? attribute.Offset / 4 : 0;
         attribute           = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.ColorPacked );
@@ -212,7 +213,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <param name="v"></param>
     public void TexCoord( float u, float v )
     {
-        var idx = _vertexIdx + _texCoordOffset;
+        int idx = _vertexIdx + _texCoordOffset;
 
         _vertices[ idx + _numSetTexCoords ]     =  u;
         _vertices[ idx + _numSetTexCoords + 1 ] =  v;
@@ -226,7 +227,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <param name="z"></param>
     public void Normal( float x, float y, float z )
     {
-        var idx = _vertexIdx + _normalOffset;
+        int idx = _vertexIdx + _normalOffset;
 
         _vertices[ idx ]     = x;
         _vertices[ idx + 1 ] = y;
@@ -259,7 +260,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     {
         var attribs = new List< VertexAttribute >
         {
-            new( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS, "a_position" ),
+            new( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS, "a_position" )
         };
 
         if ( hasColor )
@@ -301,9 +302,9 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <returns></returns>
     private static string CreateVertexShader( bool hasNormals, bool hasColors, int numTexCoords )
     {
-        var shader = "in vec4 " + "a_position" + ";\n"
-                     + ( hasColors ? "in vec4 " + ShaderConstants.A_COLOR + ";\n" : "" )
-                     + ( hasNormals ? "in vec3 " + "a_normal" + ";\n" : "" );
+        string shader = "in vec4 " + "a_position" + ";\n"
+                      + ( hasColors ? "in vec4 " + ShaderConstants.A_COLOR + ";\n" : "" )
+                      + ( hasNormals ? "in vec3 " + "a_normal" + ";\n" : "" );
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
@@ -318,12 +319,12 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         }
 
         shader += "void main() {\n"
-                  + "   gl_Position = u_projModelView * " + "a_position" + ";\n";
+                + "   gl_Position = u_projModelView * " + "a_position" + ";\n";
 
         if ( hasColors )
         {
             shader += "   v_col = " + ShaderConstants.A_COLOR + ";\n"
-                      + "   v_col.a *= 255.0 / 254.0;\n";
+                    + "   v_col.a *= 255.0 / 254.0;\n";
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
@@ -332,7 +333,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         }
 
         shader += "   gl_PointSize = 1.0;\n"
-                  + "}\n";
+                + "}\n";
 
         return shader;
     }
@@ -358,7 +359,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         }
 
         shader += "out vec4 fragColor;\n"
-                  + "void main() {\n" +
+                + "void main() {\n" +
                   "   fragColor = " + ( hasColors ? "v_col" : "vec4(1, 1, 1, 1)" );
 
         if ( numTexCoords > 0 )
@@ -388,9 +389,9 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// </summary>
     public static ShaderProgram CreateDefaultShader( bool hasNormals, bool hasColors, int numTexCoords )
     {
-        var vertexShader   = CreateVertexShader( hasNormals, hasColors, numTexCoords );
-        var fragmentShader = CreateFragmentShader( hasColors, numTexCoords );
-        var program        = new ShaderProgram( vertexShader, fragmentShader );
+        string vertexShader   = CreateVertexShader( hasNormals, hasColors, numTexCoords );
+        string fragmentShader = CreateFragmentShader( hasColors, numTexCoords );
+        var    program        = new ShaderProgram( vertexShader, fragmentShader );
 
         if ( !program.IsCompiled )
         {

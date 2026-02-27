@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Scenes.Scene2D.UI;
@@ -57,7 +58,7 @@ public class SkinLoader : AsynchronousAssetLoader
 
         if ( p?.TextureAtlasPath == null )
         {
-            var path = Path.ChangeExtension( file.FullName, ".atlas" );
+            string path = Path.ChangeExtension( file.FullName, ".atlas" );
 
             deps.Add( new AssetDescriptor( path, typeof( TextureAtlas ), new SkinLoaderParameters() ) );
         }
@@ -87,7 +88,7 @@ public class SkinLoader : AsynchronousAssetLoader
 
         var p = parameter as SkinLoaderParameters;
 
-        var textureAtlasPath = Path.ChangeExtension( file.FullName, ".atlas" );
+        string? textureAtlasPath = Path.ChangeExtension( file.FullName, ".atlas" );
 
         Dictionary< string, object >? resources = null;
 
@@ -104,12 +105,12 @@ public class SkinLoader : AsynchronousAssetLoader
             }
         }
 
-        var atlas = manager.Get< TextureAtlas >( textureAtlasPath! );
-        var skin  = NewSkin( atlas );
+        var  atlas = manager.Get< TextureAtlas >( textureAtlasPath! );
+        Skin skin  = NewSkin( atlas );
 
         if ( resources != null )
         {
-            foreach ( var entry in resources )
+            foreach ( KeyValuePair< string, object > entry in resources )
             {
                 skin.Add( entry.Key, entry.Value );
             }

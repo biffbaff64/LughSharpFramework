@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using NUnit.Framework;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Tests.Source.Core.Graphics;
@@ -84,8 +85,8 @@ public class ColorTest
     [Test]
     public void ToFloatBitsRgba_ReturnsCorrectValue()
     {
-        var color     = new Color( 1f, 0.5f, 0f, 0.5f );
-        var floatBits = color.ToFloatBitsRgba();
+        var   color     = new Color( 1f, 0.5f, 0f, 0.5f );
+        float floatBits = color.ToFloatBitsRgba();
 
 //        Assert.AreEqual( NumberUtils.UIntToFloatColor( 0xff7f007f ), floatBits );
     }
@@ -93,8 +94,8 @@ public class ColorTest
     [Test]
     public void ToFloatBitsAbgr_ReturnsCorrectValue()
     {
-        var color     = new Color( 1f, 0.5f, 0f, 0.5f );
-        var floatBits = color.ToFloatBitsAbgr();
+        var   color     = new Color( 1f, 0.5f, 0f, 0.5f );
+        float floatBits = color.ToFloatBitsAbgr();
 
 //        Assert.AreEqual( NumberUtils.UIntToFloatColor( 0x7f007fff ), floatBits );
     }
@@ -200,7 +201,7 @@ public class ColorTest
     {
         var color = new Color( 1f, 0.5f, 0f, 1f );
 
-        var packed = color.PackedColorRgba();
+        uint packed = color.PackedColorRgba();
 
         Assert.That( packed, Is.EqualTo( 0xff7f00ff ) );
     }
@@ -208,7 +209,7 @@ public class ColorTest
     [Test]
     public void FromHexString_ParsesCorrectly()
     {
-        var color = Color.FromHexString( "#ff00ff" );
+        Color color = Color.FromHexString( "#ff00ff" );
 
         Assert.That( color.R, Is.EqualTo( 0xff ) );
         Assert.That( color.G, Is.EqualTo( 0f ).Within( 0.0001f ) );

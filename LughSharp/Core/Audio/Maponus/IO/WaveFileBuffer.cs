@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Decoding;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -115,4 +116,3 @@ public class WaveFileBuffer : AudioBase
 
 // ============================================================================
 // ============================================================================
-

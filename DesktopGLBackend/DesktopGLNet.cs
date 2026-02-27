@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Network;
 
 namespace DesktopGLBackend;
@@ -35,7 +36,8 @@ public class DesktopGLNet : NetHandler
     }
 
     /// <inheritdoc />
-    public override void SendHttpRequest( INet.HttpRequest httpRequest, INet.IHttpResponseListener httpResponseListener )
+    public override void SendHttpRequest( INet.HttpRequest httpRequest,
+                                          INet.IHttpResponseListener httpResponseListener )
     {
     }
 
@@ -45,7 +47,8 @@ public class DesktopGLNet : NetHandler
     }
 
     /// <inheritdoc />
-    public override IServerSocket? NewServerSocket( INet.Protocol protocol, string hostname, int port, ServerSocketHints hints )
+    public override IServerSocket? NewServerSocket( INet.Protocol protocol, string hostname, int port,
+                                                    ServerSocketHints hints )
     {
         return null;
     }

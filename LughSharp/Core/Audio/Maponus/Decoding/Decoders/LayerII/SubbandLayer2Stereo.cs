@@ -42,7 +42,7 @@ public class SubbandLayer2Stereo : SubbandLayer2
     protected          float   Channel2Scalefactor2;
     protected          float   Channel2Scalefactor3;
     protected          int     Channel2Scfsi;
-    
+
     // ========================================================================
 
     public SubbandLayer2Stereo( int subbandnumber )
@@ -55,7 +55,7 @@ public class SubbandLayer2Stereo : SubbandLayer2
     /// </summary>
     public override void ReadAllocation( Bitstream stream, Header? header, Crc16? crc )
     {
-        var length = GetAllocationLength( header );
+        int length = GetAllocationLength( header );
         Allocation         = stream.GetBitsFromBuffer( length );
         Channel2Allocation = stream.GetBitsFromBuffer( length );
 
@@ -138,13 +138,13 @@ public class SubbandLayer2Stereo : SubbandLayer2
     /// </summary>
     public override bool ReadSampleData( Bitstream stream )
     {
-        var returnvalue = base.ReadSampleData( stream );
+        bool returnvalue = base.ReadSampleData( stream );
 
         if ( Channel2Allocation != 0 )
         {
             if ( Groupingtable[ 1 ] != null )
             {
-                var samplecode = stream.GetBitsFromBuffer( Channel2Codelength[ 0 ] );
+                int samplecode = stream.GetBitsFromBuffer( Channel2Codelength[ 0 ] );
 
                 // create requantized samples:
                 samplecode += samplecode << 1;
@@ -160,10 +160,10 @@ public class SubbandLayer2Stereo : SubbandLayer2
                 target[tmp] = source[samplecode + temp];
                 // memcpy (channel2_samples, channel2_groupingtable + samplecode, 3 * sizeof (real));
                 */
-                var target = Channel2Samples;
-                var source = Groupingtable[ 1 ];
-                var tmp    = 0;
-                var temp   = samplecode;
+                float[]  target = Channel2Samples;
+                float[]? source = Groupingtable[ 1 ];
+                var      tmp    = 0;
+                int      temp   = samplecode;
 
                 target[ tmp ] = source![ temp ];
                 temp++;
@@ -193,11 +193,11 @@ public class SubbandLayer2Stereo : SubbandLayer2
     /// </summary>
     public override bool PutNextSample( int channels, SynthesisFilter? filter1, SynthesisFilter? filter2 )
     {
-        var returnvalue = base.PutNextSample( channels, filter1, filter2 );
+        bool returnvalue = base.PutNextSample( channels, filter1, filter2 );
 
         if ( ( Channel2Allocation != 0 ) && ( channels != OutputChannels.LEFT_CHANNEL ) )
         {
-            var sample = Channel2Samples[ Samplenumber - 1 ];
+            float sample = Channel2Samples[ Samplenumber - 1 ];
 
             if ( Groupingtable[ 1 ] == null )
             {
@@ -205,11 +205,11 @@ public class SubbandLayer2Stereo : SubbandLayer2
             }
 
             sample *= Groupnumber switch
-            {
-                <= 4  => Channel2Scalefactor1,
-                <= 8  => Channel2Scalefactor2,
-                var _ => Channel2Scalefactor3,
-            };
+                      {
+                          <= 4  => Channel2Scalefactor1,
+                          <= 8  => Channel2Scalefactor2,
+                          var _ => Channel2Scalefactor3
+                      };
 
             if ( channels == OutputChannels.BOTH_CHANNELS )
             {
@@ -227,4 +227,3 @@ public class SubbandLayer2Stereo : SubbandLayer2
 
 // ============================================================================
 // ============================================================================
-

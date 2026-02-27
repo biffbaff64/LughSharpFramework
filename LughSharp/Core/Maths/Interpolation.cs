@@ -66,12 +66,12 @@ public class Interpolation
             a = a * a * ( 3 - ( 2 * a ) );
 
             return a * a * ( 3 - ( 2 * a ) );
-        },
+        }
     };
 
     public static Interpolator Smoother = new()
     {
-        Interp = a => a * a * a * ( ( a * ( ( a * 6 ) - 15 ) ) + 10 ),
+        Interp = a => a * a * a * ( ( a * ( ( a * 6 ) - 15 ) ) + 10 )
     };
 
     public static Interpolator Fade = Smoother;
@@ -88,32 +88,32 @@ public class Interpolation
             }
 
             return 1 - ( float )Math.Sqrt( -( a - 1 ) );
-        },
+        }
     };
 
     public static Interpolator Pow3InInverse = new()
     {
-        Interp = a => ( float )Math.Cbrt( a ),
+        Interp = a => ( float )Math.Cbrt( a )
     };
 
     public static Interpolator Pow3OutInverse = new()
     {
-        Interp = a => 1 - ( float )Math.Cbrt( -( a - 1 ) ),
+        Interp = a => 1 - ( float )Math.Cbrt( -( a - 1 ) )
     };
 
     public static Interpolator Sine = new()
     {
-        Interp = a => ( 1 - MathUtils.Cos( a * MathUtils.PI ) ) / 2,
+        Interp = a => ( 1 - MathUtils.Cos( a * MathUtils.PI ) ) / 2
     };
 
     public static Interpolator SineIn = new()
     {
-        Interp = a => 1 - MathUtils.Cos( a * ( MathUtils.PI / 2 ) ),
+        Interp = a => 1 - MathUtils.Cos( a * ( MathUtils.PI / 2 ) )
     };
 
     public static Interpolator SineOut = new()
     {
-        Interp = a => MathUtils.Sin( a * ( MathUtils.PI / 2 ) ),
+        Interp = a => MathUtils.Sin( a * ( MathUtils.PI / 2 ) )
     };
 
     public static Interpolator Circle = new()
@@ -131,12 +131,12 @@ public class Interpolation
             a *= 2;
 
             return ( ( float )Math.Sqrt( 1 - ( a * a ) ) + 1 ) / 2;
-        },
+        }
     };
 
     public static Interpolator CircleIn = new()
     {
-        Interp = a => 1 - ( float )Math.Sqrt( 1 - ( a * a ) ),
+        Interp = a => 1 - ( float )Math.Sqrt( 1 - ( a * a ) )
     };
 
     public static Interpolator CircleOut = new()
@@ -146,7 +146,7 @@ public class Interpolation
             a--;
 
             return ( float )Math.Sqrt( 1 - ( a * a ) );
-        },
+        }
     };
 
     // ========================================================================
@@ -253,7 +253,7 @@ public class Interpolation
         {
             if ( a <= 0.5f )
             {
-                return ( ( ( float )Math.Pow( Value, Power * ( ( a * 2 ) - 1 ) ) - Min ) * Scale ) / 2;
+                return ( ( float )Math.Pow( Value, Power * ( ( a * 2 ) - 1 ) ) - Min ) * Scale / 2;
             }
 
             return ( 2 - ( ( ( float )Math.Pow( Value, -Power * ( ( a * 2 ) - 1 ) ) - Min ) * Scale ) ) / 2;
@@ -310,13 +310,13 @@ public class Interpolation
             {
                 a *= 2;
 
-                return ( ( float )Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale ) / 2;
+                return ( float )Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale / 2;
             }
 
             a =  1 - a;
             a *= 2;
 
-            return 1 - ( ( ( float )Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale ) / 2 );
+            return 1 - ( ( float )Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale / 2 );
         }
     }
 
@@ -375,7 +375,7 @@ public class Interpolation
 
         private float Out( float a )
         {
-            var test = a + ( Widths[ 0 ] / 2 );
+            float test = a + ( Widths[ 0 ] / 2 );
 
             if ( test < Widths[ 0 ] )
             {
@@ -497,7 +497,7 @@ public class Interpolation
 
             a /= width;
 
-            var z = ( 4 / width ) * height * a;
+            float z = 4 / width * height * a;
 
             return 1 - ( ( z - ( z * a ) ) * width );
         }
@@ -538,13 +538,13 @@ public class Interpolation
             {
                 a *= 2;
 
-                return ( a * a * ( ( ( Scale + 1 ) * a ) - Scale ) ) / 2;
+                return a * a * ( ( ( Scale + 1 ) * a ) - Scale ) / 2;
             }
 
             a--;
             a *= 2;
 
-            return ( ( a * a * ( ( ( Scale + 1 ) * a ) + Scale ) ) / 2 ) + 1;
+            return ( a * a * ( ( ( Scale + 1 ) * a ) + Scale ) / 2 ) + 1;
         }
     }
 

@@ -56,15 +56,15 @@ public class GeometryUtils
     /// <returns> barycentricOut </returns>
     public static Vector2 ToBarycentricCoord( Vector2 p, Vector2 a, Vector2 b, Vector2 c, Vector2 barycentricOut )
     {
-        var v0    = _tmp1.Set( b ).Sub( a );
-        var v1    = _tmp2.Set( c ).Sub( a );
-        var v2    = _tmp3.Set( p ).Sub( a );
-        var d00   = v0.Dot( v0 );
-        var d01   = v0.Dot( v1 );
-        var d11   = v1.Dot( v1 );
-        var d20   = v2.Dot( v0 );
-        var d21   = v2.Dot( v1 );
-        var denom = ( d00 * d11 ) - ( d01 * d01 );
+        Vector2 v0    = _tmp1.Set( b ).Sub( a );
+        Vector2 v1    = _tmp2.Set( c ).Sub( a );
+        Vector2 v2    = _tmp3.Set( p ).Sub( a );
+        float   d00   = v0.Dot( v0 );
+        float   d01   = v0.Dot( v1 );
+        float   d11   = v1.Dot( v1 );
+        float   d20   = v2.Dot( v0 );
+        float   d21   = v2.Dot( v1 );
+        float   denom = ( d00 * d11 ) - ( d01 * d01 );
 
         barycentricOut.X = ( ( d11 * d20 ) - ( d01 * d21 ) ) / denom;
         barycentricOut.Y = ( ( d00 * d21 ) - ( d01 * d20 ) ) / denom;
@@ -85,9 +85,10 @@ public class GeometryUtils
     /// a triangle and the values at each vertex.
     /// </summary>
     /// <returns> interpolatedOut </returns>
-    public static Vector2 FromBarycentricCoord( Vector2 barycentric, Vector2 a, Vector2 b, Vector2 c, Vector2 interpolatedOut )
+    public static Vector2 FromBarycentricCoord( Vector2 barycentric, Vector2 a, Vector2 b, Vector2 c,
+                                                Vector2 interpolatedOut )
     {
-        var u = 1 - barycentric.X - barycentric.Y;
+        float u = 1 - barycentric.X - barycentric.Y;
 
         interpolatedOut.X = ( u * a.X ) + ( barycentric.X * b.X ) + ( barycentric.Y * c.X );
         interpolatedOut.Y = ( u * a.Y ) + ( barycentric.X * b.Y ) + ( barycentric.Y * c.Y );
@@ -102,7 +103,7 @@ public class GeometryUtils
     /// <returns> interpolatedOut </returns>
     public static float FromBarycentricCoord( Vector2 barycentric, float a, float b, float c )
     {
-        var u = 1 - barycentric.X - barycentric.Y;
+        float u = 1 - barycentric.X - barycentric.Y;
 
         return ( u * a ) + ( barycentric.X * b ) + ( barycentric.Y * c );
     }
@@ -117,17 +118,17 @@ public class GeometryUtils
     /// <returns> the lowest positive root or Float.Nan  </returns>
     public static float LowestPositiveRoot( float a, float b, float c )
     {
-        var det = ( b * b ) - ( 4 * a * c );
+        float det = ( b * b ) - ( 4 * a * c );
 
         if ( det < 0 )
         {
             return float.NaN;
         }
 
-        var sqrtD = ( float )Math.Sqrt( det );
-        var invA  = 1 / ( 2 * a );
-        var r1    = ( -b - sqrtD ) * invA;
-        var r2    = ( -b + sqrtD ) * invA;
+        var   sqrtD = ( float )Math.Sqrt( det );
+        float invA  = 1 / ( 2 * a );
+        float r1    = ( -b - sqrtD ) * invA;
+        float r2    = ( -b + sqrtD ) * invA;
 
         if ( r1 > r2 )
         {
@@ -154,11 +155,11 @@ public class GeometryUtils
     /// <returns></returns>
     public static bool Colinear( float x1, float y1, float x2, float y2, float x3, float y3 )
     {
-        var dx21 = x2 - x1;
-        var dy21 = y2 - y1;
-        var dx32 = x3 - x2;
-        var dy32 = y3 - y2;
-        var det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
+        float dx21 = x2 - x1;
+        float dy21 = y2 - y1;
+        float dx32 = x3 - x2;
+        float dy32 = y3 - y2;
+        float det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
 
         return Math.Abs( det ) < NumberUtils.FLOAT_TOLERANCE;
     }
@@ -199,13 +200,13 @@ public class GeometryUtils
                                                 float y3,
                                                 Vector2 circumcenter )
     {
-        var dx21 = x2 - x1;
-        var dy21 = y2 - y1;
-        var dx32 = x3 - x2;
-        var dy32 = y3 - y2;
-        var dx13 = x1 - x3;
-        var dy13 = y1 - y3;
-        var det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
+        float dx21 = x2 - x1;
+        float dy21 = y2 - y1;
+        float dx32 = x3 - x2;
+        float dy32 = y3 - y2;
+        float dx13 = x1 - x3;
+        float dy13 = y1 - y3;
+        float det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
 
         if ( Math.Abs( det ) < NumberUtils.FLOAT_TOLERANCE )
         {
@@ -214,9 +215,9 @@ public class GeometryUtils
 
         det *= 2;
 
-        var sqr1 = ( x1 * x1 ) + ( y1 * y1 );
-        var sqr2 = ( x2 * x2 ) + ( y2 * y2 );
-        var sqr3 = ( x3 * x3 ) + ( y3 * y3 );
+        float sqr1 = ( x1 * x1 ) + ( y1 * y1 );
+        float sqr2 = ( x2 * x2 ) + ( y2 * y2 );
+        float sqr3 = ( x3 * x3 ) + ( y3 * y3 );
 
         circumcenter.Set( ( ( sqr1 * dy32 ) + ( sqr2 * dy13 ) + ( sqr3 * dy21 ) ) / det,
                           -( ( sqr1 * dx32 ) + ( sqr2 * dx13 ) + ( sqr3 * dx21 ) ) / det );
@@ -269,7 +270,7 @@ public class GeometryUtils
             mx2 = ( x2 + x3 ) / 2;
             my1 = ( y1 + y2 ) / 2;
             my2 = ( y2 + y3 ) / 2;
-            x   = ( ( ( ( m1 * mx1 ) - ( m2 * mx2 ) ) + my2 ) - my1 ) / ( m1 - m2 );
+            x   = ( ( m1 * mx1 ) - ( m2 * mx2 ) + my2 - my1 ) / ( m1 - m2 );
             y   = ( m1 * ( x - mx1 ) ) + my1;
         }
 
@@ -328,10 +329,10 @@ public class GeometryUtils
                                                  float y4,
                                                  Vector2 centroid )
     {
-        var avgX1 = ( x1 + x2 + x3 ) / 3;
-        var avgY1 = ( y1 + y2 + y3 ) / 3;
-        var avgX2 = ( x1 + x4 + x3 ) / 3;
-        var avgY2 = ( y1 + y4 + y3 ) / 3;
+        float avgX1 = ( x1 + x2 + x3 ) / 3;
+        float avgY1 = ( y1 + y2 + y3 ) / 3;
+        float avgX2 = ( x1 + x4 + x3 ) / 3;
+        float avgY2 = ( y1 + y4 + y3 ) / 3;
 
         centroid.X = avgX1 - ( ( avgX1 - avgX2 ) / 2 );
         centroid.Y = avgY1 - ( ( avgY1 - avgY2 ) / 2 );
@@ -352,15 +353,15 @@ public class GeometryUtils
         float area = 0;
         float x    = 0;
         float y    = 0;
-        var   last = ( offset + count ) - 2;
-        var   x1   = polygon[ last ];
-        var   y1   = polygon[ last + 1 ];
+        int   last = offset + count - 2;
+        float x1   = polygon[ last ];
+        float y1   = polygon[ last + 1 ];
 
-        for ( var i = offset; i <= last; i += 2 )
+        for ( int i = offset; i <= last; i += 2 )
         {
-            var x2 = polygon[ i ];
-            var y2 = polygon[ i + 1 ];
-            var a  = ( x1 * y2 ) - ( x2 * y1 );
+            float x2 = polygon[ i ];
+            float y2 = polygon[ i + 1 ];
+            float a  = ( x1 * y2 ) - ( x2 * y1 );
 
             area += a;
 
@@ -391,14 +392,14 @@ public class GeometryUtils
     public static float PolygonArea( float[] polygon, int offset, int count )
     {
         float area = 0;
-        var   last = ( offset + count ) - 2;
-        var   x1   = polygon[ last ];
-        var   y1   = polygon[ last + 1 ];
+        int   last = offset + count - 2;
+        float x1   = polygon[ last ];
+        float y1   = polygon[ last + 1 ];
 
-        for ( var i = offset; i <= last; i += 2 )
+        for ( int i = offset; i <= last; i += 2 )
         {
-            var x2 = polygon[ i ];
-            var y2 = polygon[ i + 1 ];
+            float x2 = polygon[ i ];
+            float y2 = polygon[ i + 1 ];
             area += ( x1 * y2 ) - ( x2 * y1 );
             x1   =  x2;
             y1   =  y2;
@@ -429,13 +430,13 @@ public class GeometryUtils
             return;
         }
 
-        var lastX = ( offset + count ) - 2;
+        int lastX = offset + count - 2;
 
         for ( int i = offset, n = offset + ( count / 2 ); i < n; i += 2 )
         {
-            var other = lastX - i;
-            var x     = polygon[ i ];
-            var y     = polygon[ i + 1 ];
+            int   other = lastX - i;
+            float x     = polygon[ i ];
+            float y     = polygon[ i + 1 ];
 
             polygon[ i ]         = polygon[ other ];
             polygon[ i + 1 ]     = polygon[ other + 1 ];
@@ -460,14 +461,14 @@ public class GeometryUtils
 
         float area = 0;
 
-        var last = ( offset + count ) - 2;
-        var x1   = polygon[ last ];
-        var y1   = polygon[ last + 1 ];
+        int   last = offset + count - 2;
+        float x1   = polygon[ last ];
+        float y1   = polygon[ last + 1 ];
 
-        for ( var i = offset; i <= last; i += 2 )
+        for ( int i = offset; i <= last; i += 2 )
         {
-            var x2 = polygon[ i ];
-            var y2 = polygon[ i + 1 ];
+            float x2 = polygon[ i ];
+            float y2 = polygon[ i + 1 ];
 
             area += ( x1 * y2 ) - ( x2 * y1 );
             x1   =  x2;

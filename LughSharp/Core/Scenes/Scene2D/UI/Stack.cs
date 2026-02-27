@@ -23,14 +23,16 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public class Stack : WidgetGroup
 {
-    private bool  _sizeInvalid = true;
+    private bool _sizeInvalid = true;
 
     // ========================================================================
 
@@ -140,25 +142,25 @@ public class Stack : WidgetGroup
     private void ComputeSize()
     {
         _sizeInvalid = false;
-        PrefWidth   = 0;
-        PrefHeight  = 0;
-        MinWidth    = 0;
-        MinHeight   = 0;
-        MaxWidth    = 0;
-        MaxHeight   = 0;
+        PrefWidth    = 0;
+        PrefHeight   = 0;
+        MinWidth     = 0;
+        MinHeight    = 0;
+        MaxWidth     = 0;
+        MaxHeight    = 0;
 
-        var children = Children;
+        SnapshotArrayList< Actor? > children = Children;
 
         for ( int i = 0, n = children.Size; i < n; i++ )
         {
-            var   child = children.GetAt( i );
-            float childMaxWidth, childMaxHeight;
+            Actor? child = children.GetAt( i );
+            float  childMaxWidth, childMaxHeight;
 
             if ( child == null )
             {
                 continue;
             }
-            
+
             if ( child is ILayout layout )
             {
                 PrefWidth  = Math.Max( PrefWidth, layout.GetPrefWidth() );
@@ -199,14 +201,14 @@ public class Stack : WidgetGroup
             ComputeSize();
         }
 
-        var width  = Width;
-        var height = Height;
+        float width  = Width;
+        float height = Height;
 
-        var children = Children;
+        SnapshotArrayList< Actor? > children = Children;
 
         for ( int i = 0, n = children.Size; i < n; i++ )
         {
-            var child = children.GetAt( i );
+            Actor? child = children.GetAt( i );
             child?.SetBounds( 0, 0, width, height );
 
             if ( child is ILayout layout )
@@ -219,4 +221,3 @@ public class Stack : WidgetGroup
 
 // ============================================================================
 // ============================================================================
-

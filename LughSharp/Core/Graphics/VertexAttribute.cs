@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
@@ -330,15 +331,15 @@ public class VertexAttribute
     public int GetSizeInBytes()
     {
         return ComponentType switch
-        {
-            IGL.GL_FLOAT          => 4 * NumComponents,
-            IGL.GL_FIXED          => 4 * NumComponents,
-            IGL.GL_UNSIGNED_SHORT => 2 * NumComponents,
-            IGL.GL_SHORT          => 2 * NumComponents,
-            IGL.GL_UNSIGNED_BYTE  => NumComponents,
-            IGL.GL_BYTE           => NumComponents,
-            var _                 => 0,
-        };
+               {
+                   IGL.GL_FLOAT          => 4 * NumComponents,
+                   IGL.GL_FIXED          => 4 * NumComponents,
+                   IGL.GL_UNSIGNED_SHORT => 2 * NumComponents,
+                   IGL.GL_SHORT          => 2 * NumComponents,
+                   IGL.GL_UNSIGNED_BYTE  => NumComponents,
+                   IGL.GL_BYTE           => NumComponents,
+                   var _                 => 0
+               };
     }
 
     /// <summary>
@@ -369,18 +370,18 @@ public class VertexAttribute
     public bool Equals( VertexAttribute? other )
     {
         return ( other != null )
-               && ( Usage == other.Usage )
-               && ( NumComponents == other.NumComponents )
-               && ( ComponentType == other.ComponentType )
-               && ( Normalized == other.Normalized )
-               && Alias.Equals( other.Alias )
-               && ( Unit == other.Unit );
+            && ( Usage == other.Usage )
+            && ( NumComponents == other.NumComponents )
+            && ( ComponentType == other.ComponentType )
+            && ( Normalized == other.Normalized )
+            && Alias.Equals( other.Alias )
+            && ( Unit == other.Unit );
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        var result = GetKey();
+        int result = GetKey();
 
         result = ( 541 * result ) + NumComponents;
         result = ( 541 * result ) + ( Alias.Length * Unit );

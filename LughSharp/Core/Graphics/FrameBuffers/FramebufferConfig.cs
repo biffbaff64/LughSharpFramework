@@ -89,6 +89,6 @@ public class FramebufferConfig
     public override string ToString()
     {
         return $"r - {R}, g - {G}, b - {B}, a - {A}, depth - {Depth}, stencil - "
-               + $"{Stencil}, num samples - {Samples}, coverage sampling - {CoverageSampling}";
+             + $"{Stencil}, num samples - {Samples}, coverage sampling - {CoverageSampling}";
     }
 }

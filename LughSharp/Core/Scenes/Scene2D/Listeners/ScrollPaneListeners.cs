@@ -114,7 +114,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
             if ( _parent!.HKnobBounds.Contains( x, y ) )
             {
                 _parent!.LastPoint.Set( x, y );
-                _handlePosition           = _parent!.HKnobBounds.X;
+                _handlePosition          = _parent!.HKnobBounds.X;
                 _parent!.TouchScrollH    = true;
                 _parent!.DraggingPointer = pointer;
 
@@ -136,7 +136,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
             if ( _parent!.VKnobBounds.Contains( x, y ) )
             {
                 _parent!.LastPoint.Set( x, y );
-                _handlePosition           = _parent!.VKnobBounds.Y;
+                _handlePosition          = _parent!.VKnobBounds.Y;
                 _parent!.TouchScrollV    = true;
                 _parent!.DraggingPointer = pointer;
 
@@ -176,17 +176,17 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
 
         if ( _parent!.TouchScrollH )
         {
-            var delta   = x - _parent!.LastPoint.X;
-            var scrollH = _handlePosition + delta;
+            float delta   = x - _parent!.LastPoint.X;
+            float scrollH = _handlePosition + delta;
 
             _handlePosition = scrollH;
             scrollH         = Math.Max( _parent!.HScrollBounds.X, scrollH );
 
-            scrollH = Math.Min( ( _parent!.HScrollBounds.X + _parent!.HScrollBounds.Width )
+            scrollH = Math.Min( _parent!.HScrollBounds.X + _parent!.HScrollBounds.Width
                               - _parent!.HKnobBounds.Width,
                                 scrollH );
 
-            var total = _parent!.HScrollBounds.Width - _parent!.HKnobBounds.Width;
+            float total = _parent!.HScrollBounds.Width - _parent!.HKnobBounds.Width;
 
             if ( total != 0 )
             {
@@ -197,17 +197,17 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
         }
         else if ( _parent!.TouchScrollV )
         {
-            var delta   = y - _parent!.LastPoint.Y;
-            var scrollV = _handlePosition + delta;
+            float delta   = y - _parent!.LastPoint.Y;
+            float scrollV = _handlePosition + delta;
 
             _handlePosition = scrollV;
             scrollV         = Math.Max( _parent!.VScrollBounds.Y, scrollV );
 
-            scrollV = Math.Min( ( _parent!.VScrollBounds.Y + _parent!.VScrollBounds.Height )
+            scrollV = Math.Min( _parent!.VScrollBounds.Y + _parent!.VScrollBounds.Height
                               - _parent!.VKnobBounds.Height,
                                 scrollV );
 
-            var total = _parent!.VScrollBounds.Height - _parent!.VKnobBounds.Height;
+            float total = _parent!.VScrollBounds.Height - _parent!.VKnobBounds.Height;
 
             if ( total != 0 )
             {
@@ -270,7 +270,7 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
         if ( ( Math.Abs( x ) > 150 ) && _parent!.IsScrollX )
         {
             _parent!.FlingTimer = _parent!.FlingTime;
-            _parent!.VelocityX   = x;
+            _parent!.VelocityX  = x;
 
             if ( _parent!.CancelTouchFocus )
             {
@@ -281,7 +281,7 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
         if ( ( Math.Abs( y ) > 150 ) && _parent!.IsScrollY )
         {
             _parent!.FlingTimer = _parent!.FlingTime;
-            _parent!.VelocityY   = -y;
+            _parent!.VelocityY  = -y;
 
             if ( _parent!.CancelTouchFocus )
             {

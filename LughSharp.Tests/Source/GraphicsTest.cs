@@ -25,6 +25,7 @@
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Main;
+
 using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
@@ -42,10 +43,10 @@ public class GraphicsTest
     {
         var files = new List< FileInfo >
         {
-            Engine.Api.Files.Assets( "PackedImages/Objects/red7logo.png" ),
-            Engine.Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" ),
-            Engine.Api.Files.Assets( "PackedImages/Objects/libgdx.png" ),
-            Engine.Api.Files.Assets( "title_background.png" ),
+            Api.Files.Assets( "PackedImages/Objects/red7logo.png" ),
+            Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" ),
+            Api.Files.Assets( "PackedImages/Objects/libgdx.png" ),
+            Api.Files.Assets( "title_background.png" )
         };
 
 //        Pixmap pixmap;
@@ -56,7 +57,7 @@ public class GraphicsTest
         assetManager.Load< Pixmap >( files[ 2 ].FullName );
         assetManager.Load< Pixmap >( files[ 3 ].FullName );
         assetManager.FinishLoading();
-        
+
 //        pixmap = new Pixmap( files[ 0 ] );
 //        pixmap.DebugPrint();
 //        pixmap = new Pixmap( files[ 1 ] );

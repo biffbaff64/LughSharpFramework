@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Audio;
 using LughSharp.Core.Main;
@@ -102,7 +103,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     public void Dispose()
     {
         Dispose( true );
-        
+
         GC.SuppressFinalize( this );
     }
 

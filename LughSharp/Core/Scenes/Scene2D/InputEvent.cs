@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Scenes.Scene2D;
@@ -84,7 +85,7 @@ public class InputEvent : Event
         /// <summary>
         /// A keyboard key has been pressed and released.
         /// </summary>
-        KeyTyped,
+        KeyTyped
     }
 
     /// <summary>
@@ -149,7 +150,7 @@ public class InputEvent : Event
     /// </summary>
     public bool TouchFocusCancel
         => MathUtils.IsEqual( StageX, int.MinValue )
-           || MathUtils.IsEqual( StageY, int.MinValue );
+        || MathUtils.IsEqual( StageY, int.MinValue );
 
     /// <summary>
     /// If false, <see cref="Event.SetHandled"/> will not add the listener

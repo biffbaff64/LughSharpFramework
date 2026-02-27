@@ -40,9 +40,8 @@ public enum SoundFormat
     /// <summary>
     /// PCM encoded, 16-bit Stereo sound format.
     /// </summary>
-    Pcm16BitStereo,
+    Pcm16BitStereo
 }
 
 // ============================================================================
 // ============================================================================
-

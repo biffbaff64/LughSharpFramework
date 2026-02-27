@@ -38,5 +38,5 @@ public enum VertexAttribType
     Float         = IGL.GL_FLOAT,
     Double        = IGL.GL_DOUBLE,
     HalfFloat     = IGL.GL_HALF_FLOAT,
-    Fixed         = IGL.GL_FIXED,
+    Fixed         = IGL.GL_FIXED
 }

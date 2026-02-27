@@ -23,11 +23,14 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
+
 using Bitmap = System.Drawing.Bitmap;
 
 namespace Extensions.Source.Tools.TexturePacker;
@@ -177,13 +180,13 @@ public class TexturePacker
             if ( settings.MaxWidth != MathUtils.NextPowerOfTwo( settings.MaxWidth ) )
             {
                 throw new RuntimeException( $"If pot is true, maxWidth must be a power "
-                                             + $"of two: {settings.MaxWidth}" );
+                                          + $"of two: {settings.MaxWidth}" );
             }
 
             if ( settings.MaxHeight != MathUtils.NextPowerOfTwo( settings.MaxHeight ) )
             {
                 throw new RuntimeException( $"If pot is true, maxHeight must be a power "
-                                             + $"of two: {settings.MaxHeight}" );
+                                          + $"of two: {settings.MaxHeight}" );
             }
         }
 
@@ -192,20 +195,20 @@ public class TexturePacker
             if ( ( settings.MaxWidth % 4 ) != 0 )
             {
                 throw new RuntimeException( $"If MultipleOfFour is true, maxWidth must be evenly "
-                                             + $"divisible by 4: {settings.MaxWidth}" );
+                                          + $"divisible by 4: {settings.MaxWidth}" );
             }
 
             if ( ( settings.MaxHeight % 4 ) != 0 )
             {
                 throw new RuntimeException( $"If MultipleOfFour is true, maxHeight must be evenly "
-                                             + $"divisible by 4: {settings.MaxHeight}" );
+                                          + $"divisible by 4: {settings.MaxHeight}" );
             }
         }
 
         Packer = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
 
         _imageProcessor = new ImageProcessor( settings );
-        _writer = new TexturePackerWriter( _settings, null, _imageProcessor );
+        _writer         = new TexturePackerWriter( _settings, null, _imageProcessor );
 
         SetRootDir( rootDir );
     }
@@ -304,7 +307,7 @@ public class TexturePacker
         ProgressListener.Start( 1 );
 
         // Performs the process once for each scale factor.
-        var n = _settings.Scale.Length;
+        int n = _settings.Scale.Length;
 
         for ( var i = 0; i < n; i++ )
         {
@@ -325,7 +328,7 @@ public class TexturePacker
 
             for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
-                var inputImage = _inputImages[ ii ];
+                TexturePackerInputImage inputImage = _inputImages[ ii ];
 
                 if ( inputImage.FileInfo != null )
                 {
@@ -348,13 +351,13 @@ public class TexturePacker
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
-            var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
+            List< TexturePackerPage > pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
             ProgressListener.End();
 
             // ---------- Handle writing of the texture atlas ----------
 
-            var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
+            string scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
 
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
@@ -425,7 +428,7 @@ public class TexturePacker
         {
             FileInfo = file,
             RootPath = RootPath,
-            Name     = file.Name,
+            Name     = file.Name
         };
 
         _inputImages.Add( inputImage );
@@ -438,10 +441,10 @@ public class TexturePacker
     /// <param name="name"> The name for this image. </param>
     public void AddImage( Bitmap image, string name )
     {
-        var inputImage = new TexturePackerInputImage()
+        var inputImage = new TexturePackerInputImage
         {
             Image = image,
-            Name  = name,
+            Name  = name
         };
 
         _inputImages.Add( inputImage );

@@ -38,7 +38,7 @@ public class Plane
     {
         OnPlane,
         Back,
-        Front,
+        Front
     }
 
     /// <summary>
@@ -53,9 +53,9 @@ public class Plane
     /// </summary>
     /// <param name="normal">The plane normal</param>
     /// <param name="dto">The distance to the origin</param>
-    public Plane(Vector3 normal, float dto)
+    public Plane( Vector3 normal, float dto )
     {
-        Normal.Set(normal).Nor();
+        Normal.Set( normal ).Nor();
         DistanceToOrigin = dto;
     }
 
@@ -64,10 +64,10 @@ public class Plane
     /// </summary>
     /// <param name="normal"> The normal </param>
     /// <param name="point"> The point on the plane  </param>
-    public Plane(Vector3 normal, Vector3 point)
+    public Plane( Vector3 normal, Vector3 point )
     {
-        Normal.Set(normal).Nor();
-        DistanceToOrigin = -Normal.Dot(point);
+        Normal.Set( normal ).Nor();
+        DistanceToOrigin = -Normal.Dot( point );
     }
 
     /// <summary>
@@ -78,9 +78,9 @@ public class Plane
     /// <param name="point1"> The first point </param>
     /// <param name="point2"> The second point </param>
     /// <param name="point3"> The third point  </param>
-    public Plane(Vector3 point1, Vector3 point2, Vector3 point3)
+    public Plane( Vector3 point1, Vector3 point2, Vector3 point3 )
     {
-        Set(point1, point2, point3);
+        Set( point1, point2, point3 );
     }
 
     /// <returns> The normal </returns>
@@ -99,14 +99,14 @@ public class Plane
     /// <param name="point1"> </param>
     /// <param name="point2"> </param>
     /// <param name="point3">  </param>
-    public void Set(Vector3 point1, Vector3 point2, Vector3 point3)
+    public void Set( Vector3 point1, Vector3 point2, Vector3 point3 )
     {
-        Normal.Set(point1)
-              .Sub(point2)
-              .Crs(point2.X - point3.X, point2.Y - point3.Y, point2.Z - point3.Z)
+        Normal.Set( point1 )
+              .Sub( point2 )
+              .Crs( point2.X - point3.X, point2.Y - point3.Y, point2.Z - point3.Z )
               .Nor();
 
-        DistanceToOrigin = -point1.Dot(Normal);
+        DistanceToOrigin = -point1.Dot( Normal );
     }
 
     /// <summary>
@@ -116,9 +116,9 @@ public class Plane
     /// <param name="ny"> normal y-component </param>
     /// <param name="nz"> normal z-component </param>
     /// <param name="d"> distance to origin  </param>
-    public void Set(float nx, float ny, float nz, float d)
+    public void Set( float nx, float ny, float nz, float d )
     {
-        Normal.Set(nx, ny, nz);
+        Normal.Set( nx, ny, nz );
         DistanceToOrigin = d;
     }
 
@@ -127,9 +127,9 @@ public class Plane
     /// </summary>
     /// <param name="point">The point</param>
     /// <returns>the shortest signed distance between the plane and the point</returns>
-    public float Distance(Vector3 point)
+    public float Distance( Vector3 point )
     {
-        return Normal.Dot(point) + DistanceToOrigin;
+        return Normal.Dot( point ) + DistanceToOrigin;
     }
 
     /// <summary>
@@ -138,11 +138,11 @@ public class Plane
     /// </summary>
     /// <param name="point"> The point </param>
     /// <returns> The side the point lies relative to the plane  </returns>
-    public PlaneSide TestPoint(Vector3 point)
+    public PlaneSide TestPoint( Vector3 point )
     {
-        var dist = Normal.Dot(point) + DistanceToOrigin;
+        float dist = Normal.Dot( point ) + DistanceToOrigin;
 
-        if (dist == 0)
+        if ( dist == 0 )
         {
             return PlaneSide.OnPlane;
         }
@@ -158,11 +158,11 @@ public class Plane
     /// <param name="y"> </param>
     /// <param name="z"> </param>
     /// <returns> The side the point lies relative to the plane  </returns>
-    public PlaneSide TestPoint(float x, float y, float z)
+    public PlaneSide TestPoint( float x, float y, float z )
     {
-        var dist = Normal.Dot(x, y, z) + DistanceToOrigin;
+        float dist = Normal.Dot( x, y, z ) + DistanceToOrigin;
 
-        if (dist == 0)
+        if ( dist == 0 )
         {
             return PlaneSide.OnPlane;
         }
@@ -178,9 +178,9 @@ public class Plane
     /// </summary>
     /// <param name="direction"> the direction </param>
     /// <returns> whether the plane is front facing  </returns>
-    public bool IsFrontFacing(Vector3 direction)
+    public bool IsFrontFacing( Vector3 direction )
     {
-        return Normal.Dot(direction) <= 0;
+        return Normal.Dot( direction ) <= 0;
     }
 
     /// <summary>
@@ -188,10 +188,10 @@ public class Plane
     /// </summary>
     /// <param name="point">the point on the plane</param>
     /// <param name="norm">the normal of the plane</param>
-    public void Set(Vector3 point, Vector3 norm)
+    public void Set( Vector3 point, Vector3 norm )
     {
-        Normal.Set(norm);
-        DistanceToOrigin = -point.Dot(norm);
+        Normal.Set( norm );
+        DistanceToOrigin = -point.Dot( norm );
     }
 
     /// <summary>
@@ -202,19 +202,19 @@ public class Plane
     /// <param name="norX"></param>
     /// <param name="norY"></param>
     /// <param name="norZ"></param>
-    public void Set(float pointX, float pointY, float pointZ, float norX, float norY, float norZ)
+    public void Set( float pointX, float pointY, float pointZ, float norX, float norY, float norZ )
     {
-        Normal.Set(norX, norY, norZ);
-        DistanceToOrigin = -((pointX * norX) + (pointY * norY) + (pointZ * norZ));
+        Normal.Set( norX, norY, norZ );
+        DistanceToOrigin = -( ( pointX * norX ) + ( pointY * norY ) + ( pointZ * norZ ) );
     }
 
     /// <summary>
     /// Sets this plane from the given plane
     /// </summary>
     /// <param name="plane"> the plane  </param>
-    public void Set(Plane plane)
+    public void Set( Plane plane )
     {
-        Normal.Set(plane.Normal);
+        Normal.Set( plane.Normal );
         DistanceToOrigin = plane.DistanceToOrigin;
     }
 

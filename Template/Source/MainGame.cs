@@ -117,7 +117,7 @@ public class MainGame : Game
     public override void Render()
     {
         // Clear and set viewport
-        ScreenUtils.Clear( color: Color.Blue, clearDepth: true );
+        ScreenUtils.Clear( Color.Blue, true );
 
         // --------------------------------------
 
@@ -137,7 +137,7 @@ public class MainGame : Game
 
             if ( _gameCam is { IsInUse: true } )
             {
-                _gameCam.Viewport?.Apply( centerCamera: true );
+                _gameCam.Viewport?.Apply( true );
                 _spriteBatch.SetProjectionMatrix( _gameCam.Camera.Combined );
                 _spriteBatch.Begin();
 
@@ -153,7 +153,7 @@ public class MainGame : Game
         // ----- Draw the Stage, if enabled -----
         if ( _stage != null && IsDrawingStage )
         {
-            _stage.Act( Math.Min( Engine.Api.DeltaTime, ( 1.0f / 60.0f ) ) );
+            _stage.Act( Math.Min( Engine.Api.DeltaTime, 1.0f / 60.0f ) );
             _stage.Draw();
         }
     }
@@ -298,11 +298,11 @@ public class MainGame : Game
         {
             TitleFont      = _font,
             TitleFontColor = Color.White,
-            Background     = new TextureRegionDrawable( new Texture( Assets.WINDOW_BACKGROUND ) ),
+            Background     = new TextureRegionDrawable( new Texture( Assets.WINDOW_BACKGROUND ) )
         };
         _windowActor = new Window( "Window Title", windowStyle )
         {
-            IsVisible = true,
+            IsVisible = true
         };
         _windowActor.SetPosition( 200, 180 );
 
@@ -312,13 +312,13 @@ public class MainGame : Game
 //        _progressBar = new ProgressBar( 0f, 10f, 1f, false, skin );
 //        _progressBar.SetPosition( 20, 550 );
 
-        foreach ( var resource in skin.Resources )
+        foreach ( KeyValuePair< Type, Dictionary< string, object >? > resource in skin.Resources )
         {
             if ( resource.Value != null )
             {
                 Console.WriteLine( $"{resource.Key.Name}" );
-                
-                foreach ( var value in resource.Value )
+
+                foreach ( KeyValuePair< string, object > value in resource.Value )
                 {
                     Console.WriteLine( $"  {value.Key}: {value.Value.GetType().Name}" );
                 }
@@ -370,7 +370,7 @@ public class MainGame : Game
         var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AMBLE_REGULAR_26_FONT ) );
         var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
         {
-            Size = 40,
+            Size = 40
         };
 
         _font = generator.GenerateFont( parameter );

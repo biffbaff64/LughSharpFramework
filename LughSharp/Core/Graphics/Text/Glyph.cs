@@ -67,13 +67,13 @@ public class Glyph
     {
         if ( Kerning != null )
         {
-            var page = Kerning[ ch >>> BitmapFont.LOG2_PAGE_SIZE ];
+            byte[]? page = Kerning[ ch >>> BitmapFont.LOG2_PAGE_SIZE ];
 
             if ( page != null )
             {
                 return page[ ch & ( BitmapFont.PAGE_SIZE - 1 ) ];
             }
-            
+
             // else drop through to return 0
         }
 
@@ -90,7 +90,7 @@ public class Glyph
     {
         Kerning ??= new byte[ BitmapFont.PAGES ][];
 
-        var page = Kerning[ ch >>> BitmapFont.LOG2_PAGE_SIZE ];
+        byte[]? page = Kerning[ ch >>> BitmapFont.LOG2_PAGE_SIZE ];
 
         if ( page == null )
         {

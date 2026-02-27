@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Maths;
@@ -50,9 +51,9 @@ public struct Vector4 : IEquatable< Vector4 >
     public bool Equals( Vector4 other )
     {
         return X.Equals( other.X )
-               && Y.Equals( other.Y )
-               && Z.Equals( other.Z )
-               && W.Equals( other.W );
+            && Y.Equals( other.Y )
+            && Z.Equals( other.Z )
+            && W.Equals( other.W );
     }
 
     public override bool Equals( object? obj )

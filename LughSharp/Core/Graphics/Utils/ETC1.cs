@@ -25,11 +25,14 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -57,8 +60,8 @@ public class ETC1
     /// <returns> the <see cref="ETC1Data"/> </returns>
     public ETC1Data EncodeImage( Pixmap pixmap )
     {
-        var pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
-        var compressedData = EncodeImage( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
+        int            pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
+        Buffer< byte > compressedData = EncodeImage( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
 
 //        BufferUtils.NewUnsafeByteBuffer( compressedData );
 
@@ -74,8 +77,8 @@ public class ETC1
     /// <returns> the <see cref="ETC1Data"/> </returns>
     public ETC1Data EncodeImagePKM( Pixmap pixmap )
     {
-        var pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
-        var compressedData = EncodeImagePKM( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
+        int            pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
+        Buffer< byte > compressedData = EncodeImagePKM( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
 
 //        BufferUtils.NewUnsafeByteBuffer( compressedData );
 
@@ -111,7 +114,7 @@ public class ETC1
             height     = etc1Data.Height;
         }
 
-        var pixelSize = GetPixelSize( format );
+        int pixelSize = GetPixelSize( format );
         var pixmap    = new Pixmap( width, height, format );
 
         DecodeImage( etc1Data.CompressedData, dataOffset, pixmap.ByteBuffer, 0, width, height, pixelSize );
@@ -126,14 +129,14 @@ public class ETC1
     private int GetPixelSize( int format )
     {
         return format switch
-        {
-            LughFormat.RGB565   => RGB565_PIXEL_SIZE,
-            LughFormat.RGBA8888 => RGB888_PIXEL_SIZE,
+               {
+                   LughFormat.RGB565   => RGB565_PIXEL_SIZE,
+                   LughFormat.RGBA8888 => RGB888_PIXEL_SIZE,
 
-            // ----------------------------------
+                   // ----------------------------------
 
-            var _ => throw new RuntimeException( "Can only handle RGB565 or RGB888 images" )
-        };
+                   var _ => throw new RuntimeException( "Can only handle RGB565 or RGB888 images" )
+               };
     }
 
     // ========================================================================
@@ -254,7 +257,8 @@ public class ETC1
     /// <param name="height"> the height in pixels </param>
     /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (GDX_2D_FORMAT_RGB888) </param>
     /// <returns> a new direct native order Buffer containing the compressed image data </returns>
-    public virtual Buffer< byte > EncodeImage( Buffer< byte > imageData, int offset, int width, int height, int pixelSize )
+    public virtual Buffer< byte > EncodeImage( Buffer< byte > imageData, int offset, int width, int height,
+                                               int pixelSize )
     {
         throw new NotImplementedException();
     }
@@ -276,7 +280,8 @@ public class ETC1
     /// <param name="height"> the height in pixels </param>
     /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (GDX_2D_FORMAT_RGB888) </param>
     /// <returns> a new direct native order Buffer containing the compressed image data </returns>
-    public virtual Buffer< byte > EncodeImagePKM( Buffer< byte >? imageData, int offset, int width, int height, int pixelSize )
+    public virtual Buffer< byte > EncodeImagePKM( Buffer< byte >? imageData, int offset, int width, int height,
+                                                  int pixelSize )
     {
         throw new NotImplementedException();
     }
@@ -317,7 +322,7 @@ public class ETC1
 
                 input = new BinaryReader( bufferedStream );
 
-                var fileSize = input.ReadInt32();
+                int fileSize = input.ReadInt32();
 
                 CompressedData = new Buffer< byte >( fileSize );
 
@@ -442,8 +447,8 @@ public class ETC1
             if ( HasPKMHeader() )
             {
                 return $"{( _etc1.IsValidPKM( CompressedData, 0 ) ? "valid" : "invalid" )} "
-                       + $"pkm [{_etc1.GetWidthPKM( CompressedData, 0 )}x{_etc1.GetHeightPKM( CompressedData, 0 )}], "
-                       + $"compressed: {CompressedData.Capacity - PKM_HEADER_SIZE}";
+                     + $"pkm [{_etc1.GetWidthPKM( CompressedData, 0 )}x{_etc1.GetHeightPKM( CompressedData, 0 )}], "
+                     + $"compressed: {CompressedData.Capacity - PKM_HEADER_SIZE}";
             }
 
             return $"raw [{Width}x{Height}], compressed: {CompressedData.Capacity - PKM_HEADER_SIZE}";

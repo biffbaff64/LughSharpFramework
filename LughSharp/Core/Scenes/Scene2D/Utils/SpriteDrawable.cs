@@ -23,10 +23,12 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
@@ -79,8 +81,8 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
             return;
         }
 
-        var spriteColor = Sprite.Color;
-        var oldColor    = spriteColor.ToFloatBitsAbgr();
+        Color spriteColor = Sprite.Color;
+        float oldColor    = spriteColor.ToFloatBitsAbgr();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
 
@@ -106,8 +108,8 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
             return;
         }
 
-        var spriteColor = Sprite.Color;
-        var oldColor    = spriteColor.ToFloatBitsAbgr();
+        Color spriteColor = Sprite.Color;
+        float oldColor    = spriteColor.ToFloatBitsAbgr();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
 
@@ -144,7 +146,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
             LeftWidth    = LeftWidth,
             RightWidth   = RightWidth,
             TopHeight    = TopHeight,
-            BottomHeight = BottomHeight,
+            BottomHeight = BottomHeight
         };
 
         return drawable;

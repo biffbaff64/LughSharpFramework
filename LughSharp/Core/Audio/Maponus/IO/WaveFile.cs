@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Audio.Maponus.Support;
 
 namespace LughSharp.Core.Audio.Maponus.IO;
@@ -89,10 +90,10 @@ public class WaveFile : RiffFile
             ( sbyte )SupportClass.Identity( 'W' ),
             ( sbyte )SupportClass.Identity( 'A' ),
             ( sbyte )SupportClass.Identity( 'V' ),
-            ( sbyte )SupportClass.Identity( 'E' ),
+            ( sbyte )SupportClass.Identity( 'E' )
         ];
 
-        var retcode = Write( theWave, 4 );
+        int retcode = Write( theWave, 4 );
 
         if ( retcode == DDC_SUCCESS )
         {
@@ -120,7 +121,7 @@ public class WaveFile : RiffFile
     /// </summary>
     public virtual int WriteData( short[] data, int numData )
     {
-        var extraBytes = numData * 2;
+        int extraBytes = numData * 2;
         _pcmData.CkSize += extraBytes;
 
         return Write( data, extraBytes );
@@ -128,7 +129,7 @@ public class WaveFile : RiffFile
 
     public override int Close()
     {
-        var rc = DDC_SUCCESS;
+        int rc = DDC_SUCCESS;
 
         if ( CurrentFileMode() == RF_WRITE )
         {
@@ -150,7 +151,7 @@ public class WaveFile : RiffFile
     {
         _justWriteLengthBytes = justWriteLengthBytes;
 
-        var ret = Close();
+        int ret = Close();
 
         _justWriteLengthBytes = false;
 
@@ -216,8 +217,8 @@ public class WaveFormatChunkData
         NumSamplesPerSec  = newSamplingRate;
         NumChannels       = newNumChannels;
         NumBitsPerSample  = newBitsPerSample;
-        NumAvgBytesPerSec = ( NumChannels * NumSamplesPerSec * NumBitsPerSample ) / 8;
-        NumBlockAlign     = ( short )( ( NumChannels * NumBitsPerSample ) / 8 );
+        NumAvgBytesPerSec = NumChannels * NumSamplesPerSec * NumBitsPerSample / 8;
+        NumBlockAlign     = ( short )( NumChannels * NumBitsPerSample / 8 );
     }
 }
 
@@ -239,10 +240,11 @@ public class WaveFormatChunk
 
     public virtual int VerifyValidity()
     {
-        var ret = ( Header.CkId == RiffFile.FourCC( "fmt " ) )
-                  && Data.NumChannels is 1 or 2
-                  && ( Data.NumAvgBytesPerSec == ( ( Data.NumChannels * Data.NumSamplesPerSec * Data.NumBitsPerSample ) / 8 ) )
-                  && ( Data.NumBlockAlign == ( ( Data.NumChannels * Data.NumBitsPerSample ) / 8 ) );
+        bool ret = ( Header.CkId == RiffFile.FourCC( "fmt " ) )
+                && Data.NumChannels is 1 or 2
+                && ( Data.NumAvgBytesPerSec
+                  == ( Data.NumChannels * Data.NumSamplesPerSec * Data.NumBitsPerSample / 8 ) )
+                && ( Data.NumBlockAlign == ( Data.NumChannels * Data.NumBitsPerSample / 8 ) );
 
         return ret ? 1 : 0;
     }
@@ -263,4 +265,3 @@ public class WaveFileSample
 
 // ============================================================================
 // ============================================================================
-

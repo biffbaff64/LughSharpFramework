@@ -93,8 +93,8 @@ public class GridPoint2
     /// <returns> the squared distance between this point and the other point.</returns>
     public float Distance2( GridPoint2 other )
     {
-        var xd = other.X - X;
-        var yd = other.Y - Y;
+        int xd = other.X - X;
+        int yd = other.Y - Y;
 
         return ( xd * xd ) + ( yd * yd );
     }
@@ -106,8 +106,8 @@ public class GridPoint2
     /// <returns> the squared distance between this point and the other point.</returns>
     public float Distance2( int x, int y )
     {
-        var xd = x - X;
-        var yd = y - Y;
+        int xd = x - X;
+        int yd = y - Y;
 
         return ( xd * xd ) + ( yd * yd );
     }
@@ -118,8 +118,8 @@ public class GridPoint2
     /// <returns> the distance between this point and the other vector. </returns>
     public float Distance( GridPoint2 other )
     {
-        var xd = other.X - X;
-        var yd = other.Y - Y;
+        int xd = other.X - X;
+        int yd = other.Y - Y;
 
         return ( float )Math.Sqrt( ( xd * xd ) + ( yd * yd ) );
     }
@@ -131,8 +131,8 @@ public class GridPoint2
     /// <returns> the distance between this point and the other point. </returns>
     public float Distance( int x, int y )
     {
-        var xd = x - X;
-        var yd = y - Y;
+        int xd = x - X;
+        int yd = y - Y;
 
         return ( float )Math.Sqrt( ( xd * xd ) + ( yd * yd ) );
     }
@@ -222,7 +222,7 @@ public class GridPoint2
     {
         const int PRIME = 53;
 
-        var result = PRIME + 31;
+        int result = PRIME + 31;
         result = ( PRIME * result ) + 32;
 
         return result;

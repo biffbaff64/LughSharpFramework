@@ -24,6 +24,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Maps.Tiled;
@@ -76,7 +77,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// <returns> tile matching ID, null if it doesn't exist  </returns>
     public ITiledMapTile? GetTile( uint id )
     {
-        var tile = _tiles.TryGetValue( id, out var tileValue ) ? tileValue : null;
+        ITiledMapTile? tile = _tiles.TryGetValue( id, out ITiledMapTile? tileValue ) ? tileValue : null;
 
         return tile;
     }
@@ -101,7 +102,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public IEnumerator< ITiledMapTile > GetEnumerator()
     {
@@ -117,4 +118,3 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
 
 // ============================================================================
 // ============================================================================
-

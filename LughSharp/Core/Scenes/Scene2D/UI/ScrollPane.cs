@@ -24,6 +24,7 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -278,8 +279,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
     {
         base.Act( delta );
 
-        var panning   = _flickScrollListener.Detector.IsPanning();
-        var animating = false;
+        bool panning   = _flickScrollListener.Detector.IsPanning();
+        var  animating = false;
 
         if ( ( FadeAlpha > 0 ) && FadeScrollBars && !panning && !TouchScrollH && !TouchScrollV )
         {
@@ -297,7 +298,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
         {
             SetScrollbarsVisible( true );
 
-            var alpha = FlingTimer / FlingTime;
+            float alpha = FlingTimer / FlingTime;
 
             AmountX -= VelocityX * alpha * delta;
             AmountY -= VelocityY * alpha * delta;
@@ -397,8 +398,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
                     SetScrollbarsVisible( true );
 
                     AmountX += ( OverscrollSpeedMin
-                               + ( ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                   * -AmountX )
+                               + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
+                                 * -AmountX
                                  / OverscrollDistance ) )
                              * delta;
 
@@ -414,8 +415,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
                     SetScrollbarsVisible( true );
 
                     AmountX -= ( OverscrollSpeedMin
-                               + ( ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                   * -( MaxScrollX - AmountX ) )
+                               + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
+                                 * -( MaxScrollX - AmountX )
                                  / OverscrollDistance ) )
                              * delta;
 
@@ -435,8 +436,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
                     SetScrollbarsVisible( true );
 
                     AmountY += ( OverscrollSpeedMin
-                               + ( ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                   * -AmountY )
+                               + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
+                                 * -AmountY
                                  / OverscrollDistance ) )
                              * delta;
 
@@ -452,8 +453,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
                     SetScrollbarsVisible( true );
 
                     AmountY -= ( OverscrollSpeedMin
-                               + ( ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                   * -( MaxScrollY - AmountY ) )
+                               + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
+                                 * -( MaxScrollY - AmountY )
                                  / OverscrollDistance ) )
                              * delta;
 
@@ -478,9 +479,9 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
 
     public override void SetLayout()
     {
-        var bg          = Style.Background;
-        var hScrollKnob = Style.HScrollKnob;
-        var vScrollKnob = Style.VScrollKnob;
+        ISceneDrawable? bg          = Style.Background;
+        ISceneDrawable? hScrollKnob = Style.HScrollKnob;
+        ISceneDrawable? vScrollKnob = Style.VScrollKnob;
 
         if ( bg == null )
         {
@@ -596,8 +597,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
         {
             if ( hScrollKnob != null )
             {
-                var x = ScrollbarsOnTop ? bg.LeftWidth : WidgetArea.X;
-                var y = HScrollOnBottom ? bg.BottomHeight : Height - bg.TopHeight - scrollbarHeight;
+                float x = ScrollbarsOnTop ? bg.LeftWidth : WidgetArea.X;
+                float y = HScrollOnBottom ? bg.BottomHeight : Height - bg.TopHeight - scrollbarHeight;
 
                 HScrollBounds.Set( x, y, WidgetArea.Width, scrollbarHeight );
 
@@ -614,7 +615,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
                 if ( VariableSizeKnobs )
                 {
                     HKnobBounds.Width = Math.Max( hScrollKnob.MinWidth,
-                                                  ( int )( ( HScrollBounds.Width * WidgetArea.Width ) /
+                                                  ( int )( HScrollBounds.Width * WidgetArea.Width /
                                                            widgetWidth ) );
                 }
                 else
@@ -643,8 +644,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
         {
             if ( vScrollKnob != null )
             {
-                var x = VScrollOnRight ? Width - bg.RightWidth - scrollbarWidth : bg.LeftWidth;
-                var y = ScrollbarsOnTop ? bg.BottomHeight : WidgetArea.Y;
+                float x = VScrollOnRight ? Width - bg.RightWidth - scrollbarWidth : bg.LeftWidth;
+                float y = ScrollbarsOnTop ? bg.BottomHeight : WidgetArea.Y;
 
                 VScrollBounds.Set( x, y, scrollbarWidth, WidgetArea.Height );
 
@@ -663,7 +664,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
                 if ( VariableSizeKnobs )
                 {
                     VKnobBounds.Height = Math.Max( vScrollKnob.MinHeight,
-                                                   ( int )( ( VScrollBounds.Height * WidgetArea.Height ) /
+                                                   ( int )( VScrollBounds.Height * WidgetArea.Height /
                                                             widgetHeight ) );
                 }
                 else
@@ -700,8 +701,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
     private void UpdateWidgetPosition()
     {
         // Calculate the widget's position depending on the scroll state and available widget area.
-        var x = WidgetArea.X - ( IsScrollX ? ( int )VisualAmountX : 0 );
-        var y = WidgetArea.Y - ( int )( IsScrollY ? MaxScrollY - VisualAmountY : MaxScrollY );
+        float x = WidgetArea.X - ( IsScrollX ? ( int )VisualAmountX : 0 );
+        float y = WidgetArea.Y - ( int )( IsScrollY ? MaxScrollY - VisualAmountY : MaxScrollY );
 
         Widget?.SetPosition( x, y );
 
@@ -744,8 +745,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
         UpdateWidgetPosition();
 
         // Draw the background ninepatch.
-        var color = Color;
-        var alpha = color.A * parentAlpha;
+        Color color = Color;
+        float alpha = color.A * parentAlpha;
 
         if ( Style.Background != null )
         {
@@ -788,8 +789,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
 
         batch.SetColor( r, g, b, a );
 
-        var x = IsScrollX && ( HKnobBounds.Width > 0 );
-        var y = IsScrollY && ( VKnobBounds.Height > 0 );
+        bool x = IsScrollX && ( HKnobBounds.Width > 0 );
+        bool y = IsScrollY && ( VKnobBounds.Height > 0 );
 
         if ( x && y )
         {
@@ -872,7 +873,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
             width = Widget.Width;
         }
 
-        var background = Style.Background;
+        ISceneDrawable? background = Style.Background;
 
         if ( background != null )
         {
@@ -912,7 +913,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
             height = Widget.Height;
         }
 
-        var background = Style.Background;
+        ISceneDrawable? background = Style.Background;
 
         if ( background != null )
         {
@@ -996,7 +997,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
 
     public override Actor? RemoveActorAt( int index, bool unfocus )
     {
-        var actor = base.RemoveActorAt( index, unfocus );
+        Actor? actor = base.RemoveActorAt( index, unfocus );
 
         if ( actor == Widget )
         {
@@ -1152,17 +1153,17 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
     {
         Validate();
 
-        var amountX = AmountX;
+        float amountX = AmountX;
 
         if ( centerHorizontal )
         {
-            amountX = ( x - ( WidgetArea.Width / 2 ) ) + ( width / 2 );
+            amountX = x - ( WidgetArea.Width / 2 ) + ( width / 2 );
         }
         else
         {
             if ( ( x + width ) > ( amountX + WidgetArea.Width ) )
             {
-                amountX = ( x + width ) - WidgetArea.Width;
+                amountX = x + width - WidgetArea.Width;
             }
 
             if ( x < amountX )
@@ -1173,17 +1174,17 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
 
         AmountX = MathUtils.Clamp( amountX, 0, MaxScrollX );
 
-        var amountY = AmountY;
+        float amountY = AmountY;
 
         if ( centerVertical )
         {
-            amountY = ( ( MaxScrollY - y ) + ( WidgetArea.Height / 2 ) ) - ( height / 2 );
+            amountY = MaxScrollY - y + ( WidgetArea.Height / 2 ) - ( height / 2 );
         }
         else
         {
-            if ( amountY > ( ( MaxScrollY - y - height ) + WidgetArea.Height ) )
+            if ( amountY > ( MaxScrollY - y - height + WidgetArea.Height ) )
             {
-                amountY = ( MaxScrollY - y - height ) + WidgetArea.Height;
+                amountY = MaxScrollY - y - height + WidgetArea.Height;
             }
 
             if ( amountY < ( MaxScrollY - y ) )

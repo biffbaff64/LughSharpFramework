@@ -24,8 +24,11 @@
 
 using System;
 using System.Runtime.CompilerServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Maths;
@@ -132,7 +135,7 @@ public class Vector2 : IVector< Vector2 >
     /// <returns></returns>
     public Vector2 Nor()
     {
-        var len = Len();
+        float len = Len();
 
         if ( len != 0 )
         {
@@ -190,16 +193,16 @@ public class Vector2 : IVector< Vector2 >
 
     public float Distance( Vector2 v )
     {
-        var xD = v.X - X;
-        var yD = v.Y - Y;
+        float xD = v.X - X;
+        float yD = v.Y - Y;
 
         return ( float )Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
     }
 
     public float Distance2( Vector2 v )
     {
-        var xD = v.X - X;
-        var yD = v.Y - Y;
+        float xD = v.X - X;
+        float yD = v.Y - Y;
 
         return ( xD * xD ) + ( yD * yD );
     }
@@ -211,28 +214,28 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 Limit2( float limit2 )
     {
-        var len2 = Len2();
+        float len2 = Len2();
 
         return len2 > limit2 ? Scale( ( float )Math.Sqrt( limit2 / len2 ) ) : this;
     }
 
     public Vector2 Clamp( float min, float max )
     {
-        var len2 = Len2();
+        float len2 = Len2();
 
         if ( len2 == 0f )
         {
             return this;
         }
 
-        var max2 = max * max;
+        float max2 = max * max;
 
         if ( len2 > max2 )
         {
             return Scale( ( float )Math.Sqrt( max2 / len2 ) );
         }
 
-        var min2 = min * min;
+        float min2 = min * min;
 
         return len2 < min2 ? Scale( ( float )Math.Sqrt( min2 / len2 ) ) : this;
     }
@@ -244,14 +247,16 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 SetLength2( float len2 )
     {
-        var oldLen2 = Len2();
+        float oldLen2 = Len2();
 
-        return ( oldLen2 == 0 ) || MathUtils.IsEqual( oldLen2, len2 ) ? this : Scale( ( float )Math.Sqrt( len2 / oldLen2 ) );
+        return ( oldLen2 == 0 ) || MathUtils.IsEqual( oldLen2, len2 )
+            ? this
+            : Scale( ( float )Math.Sqrt( len2 / oldLen2 ) );
     }
 
     public Vector2 Lerp( Vector2 target, float alpha )
     {
-        var invAlpha = 1.0f - alpha;
+        float invAlpha = 1.0f - alpha;
         X = ( X * invAlpha ) + ( target.X * alpha );
         Y = ( Y * invAlpha ) + ( target.Y * alpha );
 
@@ -265,7 +270,7 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 SetToRandomDirection()
     {
-        var theta = MathUtils.Random( 0f, MathUtils.PI2 );
+        float theta = MathUtils.Random( 0f, MathUtils.PI2 );
 
         return Set( MathUtils.Cos( theta ), MathUtils.Sin( theta ) );
     }
@@ -430,32 +435,32 @@ public class Vector2 : IVector< Vector2 >
 
     public static float Dst( float x1, float y1, float x2, float y2 )
     {
-        var xD = x2 - x1;
-        var yD = y2 - y1;
+        float xD = x2 - x1;
+        float yD = y2 - y1;
 
         return ( float )Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
     }
 
     public float Dst( float x, float y )
     {
-        var xD = x - X;
-        var yD = y - Y;
+        float xD = x - X;
+        float yD = y - Y;
 
         return ( float )Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
     }
 
     public static float Dst2( float x1, float y1, float x2, float y2 )
     {
-        var xD = x2 - x1;
-        var yD = y2 - y1;
+        float xD = x2 - x1;
+        float yD = y2 - y1;
 
         return ( xD * xD ) + ( yD * yD );
     }
 
     public float Dst2( float x, float y )
     {
-        var xD = x - X;
-        var yD = y - Y;
+        float xD = x - X;
+        float yD = y - Y;
 
         return ( xD * xD ) + ( yD * yD );
     }
@@ -467,15 +472,15 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 FromString( string v )
     {
-        var s = v.IndexOf( ',', 1 );
+        int s = v.IndexOf( ',', 1 );
 
         // Note - v[ ^1 ] is equivalent to v[ v.Length-1 ].
         if ( ( s != -1 ) && ( v[ 0 ] == '(' ) && ( v[ ^1 ] == ')' ) )
         {
             try
             {
-                var x = float.Parse( v.Substring( 1, s ) );
-                var y = float.Parse( v.Substring( s + 1, v.Length - 1 ) );
+                float x = float.Parse( v.Substring( 1, s ) );
+                float y = float.Parse( v.Substring( s + 1, v.Length - 1 ) );
 
                 return Set( x, y );
             }
@@ -490,8 +495,8 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 Mul( Matrix3 mat )
     {
-        var x = ( X * mat.Val[ 0 ] ) + ( Y * mat.Val[ 3 ] ) + mat.Val[ 6 ];
-        var y = ( X * mat.Val[ 1 ] ) + ( Y * mat.Val[ 4 ] ) + mat.Val[ 7 ];
+        float x = ( X * mat.Val[ 0 ] ) + ( Y * mat.Val[ 3 ] ) + mat.Val[ 6 ];
+        float y = ( X * mat.Val[ 1 ] ) + ( Y * mat.Val[ 4 ] ) + mat.Val[ 7 ];
 
         X = x;
         Y = y;
@@ -511,7 +516,7 @@ public class Vector2 : IVector< Vector2 >
 
     public float Angle()
     {
-        var angle = ( float )Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
+        float angle = ( float )Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
 
         if ( angle < 0 )
         {
@@ -528,7 +533,7 @@ public class Vector2 : IVector< Vector2 >
 
     public float AngleDeg()
     {
-        var angle = ( float )Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
+        float angle = ( float )Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
 
         if ( angle < 0 )
         {
@@ -540,7 +545,8 @@ public class Vector2 : IVector< Vector2 >
 
     public float AngleDeg( Vector2 reference )
     {
-        var angle = ( float )Math.Atan2( reference.Crs( this ), reference.Dot( this ) ) * MathUtils.RADIANS_TO_DEGREES;
+        float angle = ( float )Math.Atan2( reference.Crs( this ), reference.Dot( this ) )
+                    * MathUtils.RADIANS_TO_DEGREES;
 
         if ( angle < 0 )
         {
@@ -598,8 +604,8 @@ public class Vector2 : IVector< Vector2 >
         var cos = ( float )Math.Cos( radians );
         var sin = ( float )Math.Sin( radians );
 
-        var newX = ( X * cos ) - ( Y * sin );
-        var newY = ( X * sin ) + ( Y * cos );
+        float newX = ( X * cos ) - ( Y * sin );
+        float newY = ( X * sin ) + ( Y * cos );
 
         X = newX;
         Y = newY;
@@ -619,7 +625,7 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 Rotate90( int dir )
     {
-        var x = X;
+        float x = X;
 
         if ( dir >= 0 )
         {
@@ -639,7 +645,7 @@ public class Vector2 : IVector< Vector2 >
     {
         const int PRIME = 31;
 
-        var result = PRIME + NumberUtils.FloatToIntBits( 1f );
+        int result = PRIME + NumberUtils.FloatToIntBits( 1f );
         result = ( PRIME * result ) + NumberUtils.FloatToIntBits( 20f );
 
         return result;

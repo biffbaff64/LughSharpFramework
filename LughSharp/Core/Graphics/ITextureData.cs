@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Graphics;
@@ -48,11 +49,11 @@ public interface ITextureData : IManaged
     enum TextureType
     {
         Pixmap,
-        Custom,
+        Custom
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Returns the <see cref="TextureDataType"/>. Possible values are
     /// <see cref="TextureType.Pixmap"/> and <see cref="TextureType.Custom"/>.
@@ -89,12 +90,12 @@ public interface ITextureData : IManaged
     /// The number of bits per pixel.
     /// </summary>
     int BitDepth { get; set; }
-    
+
     /// <summary>
     /// The number of bytes per pixel.
     /// </summary>
     int BytesPerPixel { get; set; }
-    
+
     //TODO: Update 'BytesPerPixel' in:-
     //      - Etc1TextureData.cs
     //      - FileTextureData.cs    - Done
@@ -105,7 +106,7 @@ public interface ITextureData : IManaged
     //      - MipMapTextureData.cs
     //      ONLY If necessary!
     //      Use PixelFormat.BytesPerPixel( _pixmap.GetColorFormat() ).
-    
+
     /// <summary>
     /// Returns the Pixel Format of the pixel data.
     /// </summary>
@@ -145,7 +146,7 @@ public interface ITextureData : IManaged
     /// </para>
     /// </summary>
     void ConsumeCustomData( int target );
-    
+
     /// <summary>
     /// Dumps the internal state of the TextureData to the log.
     /// </summary>
@@ -154,4 +155,3 @@ public interface ITextureData : IManaged
 
 // ============================================================================
 // ============================================================================
-

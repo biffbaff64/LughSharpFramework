@@ -25,6 +25,7 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -58,7 +59,7 @@ public class MinimalCrc32 : HashAlgorithm
 
     protected override void HashCore( byte[] array, int ibStart, int cbSize )
     {
-        for ( var i = ibStart; i < ( ibStart + cbSize ); i++ )
+        for ( int i = ibStart; i < ( ibStart + cbSize ); i++ )
         {
             _crc = _table[ ( byte )( _crc ^ array[ i ] ) ] ^ ( _crc >> 8 );
         }
@@ -66,7 +67,7 @@ public class MinimalCrc32 : HashAlgorithm
 
     protected override byte[] HashFinal()
     {
-        var hash = BitConverter.GetBytes( ~_crc );
+        byte[] hash = BitConverter.GetBytes( ~_crc );
 
         if ( BitConverter.IsLittleEndian )
         {

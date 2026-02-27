@@ -24,7 +24,9 @@
 
 using System;
 using System.IO;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Utils;
 
 namespace LughSharp.Core.Graphics;
@@ -85,8 +87,9 @@ public static class TextureDataFactory
             case ".png":
             default:
                 var pixmap = new Pixmap( file );
-                
+
                 data = new FileTextureData( file, pixmap, format, useMipMaps );
+
                 break;
         }
 

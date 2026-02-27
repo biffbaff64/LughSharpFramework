@@ -208,7 +208,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
     {
         return GetPrefHeightSafe();
     }
-    
+
     protected float GetPrefHeightSafe()
     {
         float topAndBottom = 0, minHeight = 0;
@@ -268,20 +268,20 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
     /// </summary>
     public virtual void CalculateOffsets()
     {
-        var visibleWidth = Width;
-        var background   = GetBackgroundDrawable();
+        float           visibleWidth = Width;
+        ISceneDrawable? background   = GetBackgroundDrawable();
 
         if ( background != null )
         {
             visibleWidth -= background.LeftWidth + background.RightWidth;
         }
 
-        var glyphCount     = GlyphPositions.Count;
-        var glyphPositions = GlyphPositions.ToArray();
+        int     glyphCount     = GlyphPositions.Count;
+        float[] glyphPositions = GlyphPositions.ToArray();
 
         // Check if the cursor has gone out the left or right side of
         // the visible area and adjust renderOffset if necessary.
-        var distance = glyphPositions[ Math.Max( 0, Cursor - 1 ) ] + _renderOffset;
+        float distance = glyphPositions[ Math.Max( 0, Cursor - 1 ) ] + _renderOffset;
 
         if ( distance <= 0 )
         {
@@ -289,8 +289,8 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         }
         else
         {
-            var index = Math.Min( glyphCount - 1, Cursor + 1 );
-            var minX  = glyphPositions[ index ] - visibleWidth;
+            int   index = Math.Min( glyphCount - 1, Cursor + 1 );
+            float minX  = glyphPositions[ index ] - visibleWidth;
 
             if ( -_renderOffset < minX )
             {
@@ -299,12 +299,12 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         }
 
         // Prevent renderOffset from starting too close to the end, eg after text was deleted.
-        var maxOffset = 0f;
-        var width     = glyphPositions[ glyphCount - 1 ];
+        var   maxOffset = 0f;
+        float width     = glyphPositions[ glyphCount - 1 ];
 
-        for ( var i = glyphCount - 2; i >= 0; i-- )
+        for ( int i = glyphCount - 2; i >= 0; i-- )
         {
-            var x = glyphPositions[ i ];
+            float x = glyphPositions[ i ];
 
             if ( ( width - x ) > visibleWidth )
             {
@@ -336,10 +336,10 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         }
 
         // calculate last visible char based on visible width and render offset
-        var end  = _visibleTextStart + 1;
-        var endX = visibleWidth - _renderOffset;
+        int   end  = _visibleTextStart + 1;
+        float endX = visibleWidth - _renderOffset;
 
-        for ( var n = Math.Min( DisplayText!.Length, glyphCount ); end <= n; end++ )
+        for ( int n = Math.Min( DisplayText!.Length, glyphCount ); end <= n; end++ )
         {
             if ( glyphPositions[ end ] > endX )
             {
@@ -351,7 +351,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
         if ( ( _textAlign & Align.LEFT ) == 0 )
         {
-            TextOffset = ( visibleWidth - glyphPositions[ _visibleTextEnd ] - FontOffset ) + startX;
+            TextOffset = visibleWidth - glyphPositions[ _visibleTextEnd ] - FontOffset + startX;
 
             if ( ( _textAlign & Align.CENTER ) != 0 )
             {
@@ -366,11 +366,11 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         // calculate selection x position and width
         if ( HasSelection )
         {
-            var minIndex = Math.Min( Cursor, SelectionStart );
-            var maxIndex = Math.Max( Cursor, SelectionStart );
-            var minX     = Math.Max( glyphPositions[ minIndex ] - glyphPositions[ _visibleTextStart ], -TextOffset );
-            var maxX = Math.Min( glyphPositions[ maxIndex ] - glyphPositions[ _visibleTextStart ],
-                                 visibleWidth - TextOffset );
+            int   minIndex = Math.Min( Cursor, SelectionStart );
+            int   maxIndex = Math.Max( Cursor, SelectionStart );
+            float minX     = Math.Max( glyphPositions[ minIndex ] - glyphPositions[ _visibleTextStart ], -TextOffset );
+            float maxX = Math.Min( glyphPositions[ maxIndex ] - glyphPositions[ _visibleTextStart ],
+                                   visibleWidth - TextOffset );
 
             _selectionX     = minX;
             _selectionWidth = maxX - minX - Style!.Font!.FontData.CursorX;
@@ -384,17 +384,17 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             return GlyphPositions.Count - 1;
         }
 
-        x -= ( TextOffset + FontOffset ) - Style.Font!.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
+        x -= TextOffset + FontOffset - Style.Font!.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
 
-        var background = GetBackgroundDrawable();
+        ISceneDrawable? background = GetBackgroundDrawable();
 
         if ( background != null )
         {
             x -= Style.Background!.LeftWidth;
         }
 
-        var n              = GlyphPositions.Count;
-        var glyphPositions = GlyphPositions.ToArray();
+        int     n              = GlyphPositions.Count;
+        float[] glyphPositions = GlyphPositions.ToArray();
 
         for ( var i = 1; i < n; i++ )
         {
@@ -419,10 +419,10 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
     protected virtual int[] WordUnderCursor( int at )
     {
-        var text  = Text;
-        var right = Text!.Length;
-        var left  = 0;
-        var index = at;
+        string? text  = Text;
+        int     right = Text!.Length;
+        var     left  = 0;
+        int     index = at;
 
         if ( at >= text?.Length )
         {
@@ -490,7 +490,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             return;
         }
 
-        var focused = HasKeyboardFocus();
+        bool focused = HasKeyboardFocus();
 
         if ( ( focused != _focused ) || ( focused && ( _blinkTask?.Status != TaskStatus.Running ) ) )
         {
@@ -512,26 +512,26 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             _cursorOn = false;
         }
 
-        var font = Style.Font!;
+        BitmapFont font = Style.Font!;
 
         //@formatter:off
-        var fontColor = Disabled && ( Style.DisabledFontColor != null )
+        Color? fontColor = Disabled && ( Style.DisabledFontColor != null )
                             ? Style.DisabledFontColor
                             : focused && ( Style.FocusedFontColor != null )
                                 ? Style.FocusedFontColor
                                 : Style.FontColor;
         //@formatter:on
 
-        var selection   = Style.Selection;
-        var cursorPatch = Style.Cursor;
-        var background  = GetBackgroundDrawable();
+        ISceneDrawable? selection   = Style.Selection;
+        ISceneDrawable? cursorPatch = Style.Cursor;
+        ISceneDrawable? background  = GetBackgroundDrawable();
 
-        var x            = X;
-        var y            = Y;
-        var width        = Width;
-        var height       = Height;
-        var bgLeftWidth  = 0f;
-        var bgRightWidth = 0f;
+        float x            = X;
+        float y            = Y;
+        float width        = Width;
+        float height       = Height;
+        var   bgLeftWidth  = 0f;
+        var   bgRightWidth = 0f;
 
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
@@ -542,7 +542,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             bgRightWidth = background.RightWidth;
         }
 
-        var textY = GetTextY( font, background );
+        float textY = GetTextY( font, background );
 
         CalculateOffsets();
 
@@ -551,13 +551,13 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             DrawSelection( selection, batch, font, x + bgLeftWidth, y + textY );
         }
 
-        var yOffset = font.Flipped ? -TextHeight : 0;
+        float yOffset = font.Flipped ? -TextHeight : 0;
 
         if ( DisplayText?.Length == 0 )
         {
             if ( !focused && ( MessageText != null ) )
             {
-                var messageFont = Style?.MessageFont ?? font;
+                BitmapFont messageFont = Style?.MessageFont ?? font;
 
                 if ( Style?.MessageFontColor != null )
                 {
@@ -592,12 +592,12 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
     protected virtual float GetTextY( BitmapFont font, ISceneDrawable? background )
     {
-        var height = Height;
-        var textY  = ( TextHeight / 2 ) + font.GetDescent();
+        float height = Height;
+        float textY  = ( TextHeight / 2 ) + font.GetDescent();
 
         if ( background != null )
         {
-            var bottom = background.BottomHeight;
+            float bottom = background.BottomHeight;
 
             textY = textY + ( ( height - background.TopHeight - bottom ) / 2 ) + bottom;
         }
@@ -650,8 +650,8 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
     protected virtual void DrawCursor( ISceneDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
     {
         cursorPatch.Draw( batch,
-                          ( ( x + TextOffset + GlyphPositions[ Cursor ] )
-                          - GlyphPositions[ _visibleTextStart ] )
+                          x + TextOffset + GlyphPositions[ Cursor ]
+                        - GlyphPositions[ _visibleTextStart ]
                         + FontOffset
                         + font.FontData.CursorX,
                           y - TextHeight - font.GetDescent(),
@@ -661,15 +661,15 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
     public virtual void UpdateDisplayText()
     {
-        var font       = Style?.Font ?? new BitmapFont();
-        var data       = font.FontData;
-        var text       = Text ?? string.Empty;
-        var textLength = text.Length;
-        var buffer     = new StringBuilder();
+        BitmapFont     font       = Style?.Font ?? new BitmapFont();
+        BitmapFontData data       = font.FontData;
+        string         text       = Text ?? string.Empty;
+        int            textLength = text.Length;
+        var            buffer     = new StringBuilder();
 
         for ( var i = 0; i < textLength; i++ )
         {
-            var c = text[ i ];
+            char c = text[ i ];
             buffer.Append( data.HasGlyph( c ) ? c : ' ' );
         }
 
@@ -685,7 +685,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             }
             else
             {
-                for ( var i = _passwordBuffer.Length; i < textLength; i++ )
+                for ( int i = _passwordBuffer.Length; i < textLength; i++ )
                 {
                     _passwordBuffer.Append( _passwordCharacter );
                 }
@@ -705,8 +705,8 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
         if ( Layout.Runs.Count > 0 )
         {
-            var run       = Layout.Runs.First();
-            var xAdvances = run.XAdvances;
+            GlyphLayout.GlyphRun run       = Layout.Runs.First();
+            List< float >        xAdvances = run.XAdvances;
 
             FontOffset = xAdvances.First();
 
@@ -743,7 +743,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
         ClearSelection();
 
-        var oldText = Text;
+        string? oldText = Text;
         Text = string.Empty;
 
         Paste( str, false );
@@ -798,14 +798,14 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         }
 
         var buffer     = new StringBuilder();
-        var textLength = Text.Length;
+        int textLength = Text.Length;
 
         if ( HasSelection )
         {
             textLength -= Math.Abs( Cursor - SelectionStart );
         }
 
-        var data = Style!.Font!.FontData;
+        BitmapFontData data = Style!.Font!.FontData;
 
         for ( int i = 0, n = content.Length; i < n; i++ )
         {
@@ -814,7 +814,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                 break;
             }
 
-            var c = content[ i ];
+            char c = content[ i ];
 
             if ( !( WriteEnters && c is NEWLINE or CARRIAGE_RETURN ) )
             {
@@ -874,13 +874,13 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             return 0;
         }
 
-        var from     = SelectionStart;
-        var to       = Cursor;
-        var minIndex = Math.Min( from, to );
-        var maxIndex = Math.Max( from, to );
+        int from     = SelectionStart;
+        int to       = Cursor;
+        int minIndex = Math.Min( from, to );
+        int maxIndex = Math.Max( from, to );
 
-        var newText = ( minIndex > 0 ? Text.Substring( 0, minIndex ) : "" )
-                    + ( maxIndex < Text.Length ? Text.Substring( maxIndex, Text.Length ) : "" );
+        string newText = ( minIndex > 0 ? Text.Substring( 0, minIndex ) : "" )
+                       + ( maxIndex < Text.Length ? Text.Substring( maxIndex, Text.Length ) : "" );
 
         if ( fireChangeEvent )
         {
@@ -912,12 +912,12 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             return;
         }
 
-        var current       = this;
-        var currentCoords = current.Parent!.LocalToStageCoordinates( _tmp2.Set( current.X, current.Y ) );
+        TextField current       = this;
+        Vector2   currentCoords = current.Parent!.LocalToStageCoordinates( _tmp2.Set( current.X, current.Y ) );
 
         while ( true )
         {
-            var textField = current.FindNextTextField( Stage.Actors, null, _tmp1, currentCoords, up );
+            TextField? textField = current.FindNextTextField( Stage.Actors, null, _tmp1, currentCoords, up );
 
             if ( textField == null )
             {
@@ -966,7 +966,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
         for ( int i = 0, n = actors.Size; i < n; i++ )
         {
-            var actor = actors.GetAt( i );
+            Actor? actor = actors.GetAt( i );
 
             if ( actor is TextField textField )
             {
@@ -980,23 +980,24 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                     continue;
                 }
 
-                var actorCoords = textField.Parent?.LocalToStageCoordinates( _tmp3.Set( textField.X, textField.Y ) );
+                Vector2? actorCoords =
+                    textField.Parent?.LocalToStageCoordinates( _tmp3.Set( textField.X, textField.Y ) );
 
                 if ( actorCoords is null )
                 {
                     continue;
                 }
 
-                var below = !actorCoords.Y.Equals( currentCoords.Y ) && ( ( actorCoords.Y < currentCoords.Y ) ^ up );
-                var right = actorCoords.Y.Equals( currentCoords.Y ) && ( ( actorCoords.X > currentCoords.X ) ^ up );
+                bool below = !actorCoords.Y.Equals( currentCoords.Y ) && ( ( actorCoords.Y < currentCoords.Y ) ^ up );
+                bool right = actorCoords.Y.Equals( currentCoords.Y ) && ( ( actorCoords.X > currentCoords.X ) ^ up );
 
                 if ( !below && !right )
                 {
                     continue;
                 }
 
-                var better = ( best == null )
-                          || ( !actorCoords.Y.Equals( bestCoords.Y ) && ( ( actorCoords.Y > bestCoords.Y ) ^ up ) );
+                bool better = ( best == null )
+                           || ( !actorCoords.Y.Equals( bestCoords.Y ) && ( ( actorCoords.Y > bestCoords.Y ) ^ up ) );
 
                 if ( !better )
                 {
@@ -1043,7 +1044,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             return false;
         }
 
-        var cancelled = Fire( changeEvent );
+        bool cancelled = Fire( changeEvent );
 
         if ( cancelled )
         {
@@ -1062,8 +1063,8 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
     protected virtual void MoveCursor( bool forward, bool jump )
     {
-        var limit      = forward ? Text?.Length ?? 0 : 0;
-        var charOffset = forward ? 0 : -1;
+        int limit      = forward ? Text?.Length ?? 0 : 0;
+        int charOffset = forward ? 0 : -1;
 
         while ( ( forward ? ++Cursor < limit : --Cursor > limit ) && jump )
         {
@@ -1264,9 +1265,9 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         public ISceneDrawable? Selection          { get; set; }
         public BitmapFont?     MessageFont        { get; set; }
         public Color?          MessageFontColor   { get; set; }
-        
+
         // ====================================================================
-        
+
         public TextFieldStyle()
         {
         }
@@ -1339,7 +1340,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         /// <inheritdoc />
         public override void OnClicked( InputEvent ev, float x, float y )
         {
-            var count = TapCount % 4;
+            int count = TapCount % 4;
 
             if ( count == 0 )
             {
@@ -1348,7 +1349,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
             if ( count == 2 )
             {
-                var array = _tf.WordUnderCursor( x );
+                int[] array = _tf.WordUnderCursor( x );
                 _tf.SetSelection( array[ 0 ], array[ 1 ] );
             }
 
@@ -1439,10 +1440,10 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                 return false;
             }
 
-            var repeat  = false;
-            var ctrl    = InputUtils.CtrlKey();
-            var jump    = ctrl && !_tf._passwordMode;
-            var handled = true;
+            var  repeat  = false;
+            bool ctrl    = InputUtils.CtrlKey();
+            bool jump    = ctrl && !_tf._passwordMode;
+            var  handled = true;
 
             if ( ctrl )
             {
@@ -1471,7 +1472,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                         return true;
 
                     case IInput.Keys.Z:
-                        var oldText = _tf.Text;
+                        string? oldText = _tf.Text;
 
                         _tf.SetText( _tf._undoText );
                         _tf._undoText = oldText;
@@ -1501,7 +1502,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                         break;
                 }
 
-                var temp = _tf.Cursor;
+                int temp = _tf.Cursor;
 
                 switch ( keycode )
                 {
@@ -1655,20 +1656,20 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             }
             else
             {
-                var enter     = character is CARRIAGE_RETURN or NEWLINE;
-                var delete    = character == DELETE;
-                var backspace = character == BACKSPACE;
+                bool enter     = character is CARRIAGE_RETURN or NEWLINE;
+                bool delete    = character == DELETE;
+                bool backspace = character == BACKSPACE;
 
-                var add = enter
+                bool add = enter
                     ? _tf.WriteEnters
                     : !_tf._onlyFontChars || _tf.Style!.Font!.FontData.HasGlyph( character );
 
-                var remove = backspace || delete;
+                bool remove = backspace || delete;
 
                 if ( add || remove )
                 {
-                    var oldText   = _tf.Text;
-                    var oldCursor = _tf.Cursor;
+                    string? oldText   = _tf.Text;
+                    int     oldCursor = _tf.Cursor;
 
                     if ( remove )
                     {
@@ -1714,14 +1715,14 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                             _tf.Cursor = _tf.Delete( false );
                         }
 
-                        var insertion = enter ? "\n" : character.ToString();
+                        string insertion = enter ? "\n" : character.ToString();
 
                         _tf.Text = _tf.Insert( _tf.Cursor++, insertion, _tf.Text );
                     }
 
                     if ( _tf.ChangeText( oldText, _tf.Text ) )
                     {
-                        var time = TimeUtils.Millis();
+                        long time = TimeUtils.Millis();
 
                         if ( ( time - 750 ) > _tf._lastChangeTime )
                         {

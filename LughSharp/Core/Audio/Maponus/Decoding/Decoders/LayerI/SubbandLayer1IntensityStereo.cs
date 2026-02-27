@@ -71,7 +71,7 @@ public class SubbandLayer1IntensityStereo : SubbandLayer1
 
                 case OutputChannels.LEFT_CHANNEL:
                 {
-                    var sample1 = Sample * Scalefactor;
+                    float sample1 = Sample * Scalefactor;
                     filter1?.AddSample( sample1, Subbandnumber );
 
                     break;
@@ -79,7 +79,7 @@ public class SubbandLayer1IntensityStereo : SubbandLayer1
 
                 default:
                 {
-                    var sample2 = Sample * Channel2Scalefactor;
+                    float sample2 = Sample * Channel2Scalefactor;
                     filter1?.AddSample( sample2, Subbandnumber );
 
                     break;
@@ -93,4 +93,3 @@ public class SubbandLayer1IntensityStereo : SubbandLayer1
 
 // ============================================================================
 // ============================================================================
-

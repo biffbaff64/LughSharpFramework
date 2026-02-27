@@ -24,6 +24,7 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
@@ -94,19 +95,19 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
     {
         get
         {
-            var first = _firstWidget switch
-                        {
-                            null           => 0,
-                            ILayout widget => widget.GetPrefWidth(),
-                            var _          => _firstWidget.Width,
-                        };
+            float first = _firstWidget switch
+                          {
+                              null           => 0,
+                              ILayout widget => widget.GetPrefWidth(),
+                              var _          => _firstWidget.Width
+                          };
 
-            var second = _secondWidget switch
-                         {
-                             null           => 0,
-                             ILayout layout => layout.GetPrefWidth(),
-                             var _          => _secondWidget.Width,
-                         };
+            float second = _secondWidget switch
+                           {
+                               null           => 0,
+                               ILayout layout => layout.GetPrefWidth(),
+                               var _          => _secondWidget.Width
+                           };
 
             if ( _vertical )
             {
@@ -121,19 +122,19 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
     {
         get
         {
-            var first = _firstWidget switch
-                        {
-                            null           => 0,
-                            ILayout widget => widget.GetPrefHeight(),
-                            var _          => _firstWidget.Height,
-                        };
+            float first = _firstWidget switch
+                          {
+                              null           => 0,
+                              ILayout widget => widget.GetPrefHeight(),
+                              var _          => _firstWidget.Height
+                          };
 
-            var second = _secondWidget switch
-                         {
-                             null           => 0,
-                             ILayout layout => layout.GetPrefHeight(),
-                             var _          => _secondWidget.Height,
-                         };
+            float second = _secondWidget switch
+                           {
+                               null           => 0,
+                               ILayout layout => layout.GetPrefHeight(),
+                               var _          => _secondWidget.Height
+                           };
 
             if ( !_vertical )
             {
@@ -148,8 +149,8 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
     {
         get
         {
-            var first  = _firstWidget is ILayout layout ? layout.GetMinWidth() : 0;
-            var second = _secondWidget is ILayout widget ? widget.GetMinWidth() : 0;
+            float first  = _firstWidget is ILayout layout ? layout.GetMinWidth() : 0;
+            float second = _secondWidget is ILayout widget ? widget.GetMinWidth() : 0;
 
             if ( _vertical )
             {
@@ -164,8 +165,8 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
     {
         get
         {
-            var first  = _firstWidget is ILayout layout ? layout.GetMinHeight() : 0;
-            var second = _secondWidget is ILayout widget ? widget.GetMinHeight() : 0;
+            float first  = _firstWidget is ILayout layout ? layout.GetMinHeight() : 0;
+            float second = _secondWidget is ILayout widget ? widget.GetMinHeight() : 0;
 
             if ( !_vertical )
             {
@@ -199,7 +200,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
             CalculateVertBoundsAndPositions();
         }
 
-        var firstWidget = _firstWidget;
+        Actor? firstWidget = _firstWidget;
 
         if ( firstWidget != null )
         {
@@ -214,7 +215,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
             }
         }
 
-        var secondWidget = _secondWidget;
+        Actor? secondWidget = _secondWidget;
 
         if ( secondWidget != null )
         {
@@ -258,13 +259,13 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
 
     private void CalculateHorizBoundsAndPositions()
     {
-        var handle = Style.Handle;
+        ISceneDrawable handle = Style.Handle;
 
-        var height         = Height;
-        var availWidth     = Width - handle.MinWidth;
-        var leftAreaWidth  = availWidth * _splitAmount;
-        var rightAreaWidth = availWidth - leftAreaWidth;
-        var handleWidth    = handle.MinWidth;
+        float height         = Height;
+        float availWidth     = Width - handle.MinWidth;
+        float leftAreaWidth  = availWidth * _splitAmount;
+        float rightAreaWidth = availWidth - leftAreaWidth;
+        float handleWidth    = handle.MinWidth;
 
         _firstWidgetBounds.Set( 0, 0, leftAreaWidth, height );
         _secondWidgetBounds.Set( leftAreaWidth + handleWidth, 0, rightAreaWidth, height );
@@ -273,15 +274,15 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
 
     private void CalculateVertBoundsAndPositions()
     {
-        var handle = Style.Handle;
+        ISceneDrawable handle = Style.Handle;
 
-        var width  = Width;
-        var height = Height;
+        float width  = Width;
+        float height = Height;
 
-        var availHeight      = height - handle.MinHeight;
-        var topAreaHeight    = availHeight * _splitAmount;
-        var bottomAreaHeight = availHeight - topAreaHeight;
-        var handleHeight     = handle.MinHeight;
+        float availHeight      = height - handle.MinHeight;
+        float topAreaHeight    = availHeight * _splitAmount;
+        float bottomAreaHeight = availHeight - topAreaHeight;
+        float handleHeight     = handle.MinHeight;
 
         _firstWidgetBounds.Set( 0, height - topAreaHeight, width, topAreaHeight );
         _secondWidgetBounds.Set( 0, 0, width, bottomAreaHeight );
@@ -290,7 +291,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
 
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        var stage = Stage;
+        Stage? stage = Stage;
 
         if ( stage == null )
         {
@@ -299,8 +300,8 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
 
         Validate();
 
-        var color = Color;
-        var alpha = color.A * parentAlpha;
+        Color color = Color;
+        float alpha = color.A * parentAlpha;
 
         ApplyTransform( batch, ComputeTransform() );
 
@@ -367,7 +368,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
 
         if ( _vertical )
         {
-            var availableHeight = Height - Style.Handle.MinHeight;
+            float availableHeight = Height - Style.Handle.MinHeight;
 
             if ( _firstWidget is ILayout layout )
             {
@@ -383,7 +384,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
         }
         else
         {
-            var availableWidth = Width - Style.Handle.MinWidth;
+            float availableWidth = Width - Style.Handle.MinWidth;
 
             if ( _firstWidget is ILayout layout )
             {
@@ -521,7 +522,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
 
     public override Actor? RemoveActorAt( int index, bool unfocus )
     {
-        var actor = base.RemoveActorAt( index, unfocus );
+        Actor? actor = base.RemoveActorAt( index, unfocus );
 
         if ( actor != null )
         {
@@ -601,13 +602,13 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
                 return;
             }
 
-            var handle = _parent.Style.Handle;
+            ISceneDrawable handle = _parent.Style.Handle;
 
             if ( !_parent._vertical )
             {
-                var delta      = x - _parent.LastPoint.X;
-                var availWidth = _parent.Width - handle.MinWidth;
-                var dragX      = _parent._handlePosition.X + delta;
+                float delta      = x - _parent.LastPoint.X;
+                float availWidth = _parent.Width - handle.MinWidth;
+                float dragX      = _parent._handlePosition.X + delta;
 
                 _parent._handlePosition.X = dragX;
 
@@ -618,9 +619,9 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
             }
             else
             {
-                var delta       = y - _parent.LastPoint.Y;
-                var availHeight = _parent.Height - handle.MinHeight;
-                var dragY       = _parent._handlePosition.Y + delta;
+                float delta       = y - _parent.LastPoint.Y;
+                float availHeight = _parent.Height - handle.MinHeight;
+                float dragY       = _parent._handlePosition.Y + delta;
 
                 _parent._handlePosition.Y = dragY;
 

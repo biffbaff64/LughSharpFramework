@@ -134,7 +134,7 @@ public class BoundingBox
     {
         ToInfinity();
 
-        foreach ( var lPoint in points )
+        foreach ( Vector3 lPoint in points )
         {
             Extend( lPoint );
         }
@@ -151,7 +151,7 @@ public class BoundingBox
     {
         ToInfinity();
 
-        foreach ( var lPoint in points )
+        foreach ( Vector3 lPoint in points )
         {
             Extend( lPoint );
         }
@@ -377,12 +377,12 @@ public class BoundingBox
     /// <returns>This bounding box for chaining.</returns>
     public BoundingBox Multiply( Matrix4 transform )
     {
-        var x0 = Min.X;
-        var y0 = Min.Y;
-        var z0 = Min.Z;
-        var x1 = Max.X;
-        var y1 = Max.Y;
-        var z1 = Max.Z;
+        float x0 = Min.X;
+        float y0 = Min.Y;
+        float z0 = Min.Z;
+        float x1 = Max.X;
+        float y1 = Max.Y;
+        float z1 = Max.Z;
 
         ToInfinity();
 
@@ -406,12 +406,12 @@ public class BoundingBox
     public bool Contains( BoundingBox b )
     {
         return !Valid
-               || ( ( Min.X <= b.Min.X )
-                    && ( Min.Y <= b.Min.Y )
-                    && ( Min.Z <= b.Min.Z )
-                    && ( Max.X >= b.Max.X )
-                    && ( Max.Y >= b.Max.Y )
-                    && ( Max.Z >= b.Max.Z ) );
+            || ( ( Min.X <= b.Min.X )
+              && ( Min.Y <= b.Min.Y )
+              && ( Min.Z <= b.Min.Z )
+              && ( Max.X >= b.Max.X )
+              && ( Max.Y >= b.Max.Y )
+              && ( Max.Z >= b.Max.Z ) );
     }
 
     /// <summary>
@@ -429,14 +429,14 @@ public class BoundingBox
 
         // test using SAT (separating axis theorem)
 
-        var lx   = Math.Abs( _cnt.X - b._cnt.X );
-        var sumx = ( _dim.X / 2.0f ) + ( b._dim.X / 2.0f );
+        float lx   = Math.Abs( _cnt.X - b._cnt.X );
+        float sumx = ( _dim.X / 2.0f ) + ( b._dim.X / 2.0f );
 
-        var ly   = Math.Abs( _cnt.Y - b._cnt.Y );
-        var sumy = ( _dim.Y / 2.0f ) + ( b._dim.Y / 2.0f );
+        float ly   = Math.Abs( _cnt.Y - b._cnt.Y );
+        float sumy = ( _dim.Y / 2.0f ) + ( b._dim.Y / 2.0f );
 
-        var lz   = Math.Abs( _cnt.Z - b._cnt.Z );
-        var sumz = ( _dim.Z / 2.0f ) + ( b._dim.Z / 2.0f );
+        float lz   = Math.Abs( _cnt.Z - b._cnt.Z );
+        float sumz = ( _dim.Z / 2.0f ) + ( b._dim.Z / 2.0f );
 
         return ( lx <= sumx ) && ( ly <= sumy ) && ( lz <= sumz );
     }
@@ -449,11 +449,11 @@ public class BoundingBox
     public bool Contains( Vector3 v )
     {
         return ( Min.X <= v.X )
-               && ( Max.X >= v.X )
-               && ( Min.Y <= v.Y )
-               && ( Max.Y >= v.Y )
-               && ( Min.Z <= v.Z )
-               && ( Max.Z >= v.Z );
+            && ( Max.X >= v.X )
+            && ( Min.Y <= v.Y )
+            && ( Max.Y >= v.Y )
+            && ( Min.Z <= v.Z )
+            && ( Max.Z >= v.Z );
     }
 
     /// <inheritdoc />

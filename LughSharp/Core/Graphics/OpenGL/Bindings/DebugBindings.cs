@@ -24,7 +24,9 @@
 
 using System;
 using System.Text;
+
 using LughSharp.Core.Utils.Logging;
+
 using GLenum = int;
 using GLsizei = int;
 using GLuint = uint;
@@ -38,7 +40,8 @@ namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings
 {
-    public void DebugMessageControl( GLenum source, GLenum type, GLenum severity, GLsizei count, GLuint* ids, GLboolean enabled )
+    public void DebugMessageControl( GLenum source, GLenum type, GLenum severity, GLsizei count, GLuint* ids,
+                                     GLboolean enabled )
     {
         GetDelegateForFunction< PFNGLDEBUGMESSAGECONTROLPROC >( "glDebugMessageControl", out _glDebugMessageControl );
 
@@ -47,7 +50,8 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void DebugMessageInsert( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar* buf )
+    public void DebugMessageInsert( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+                                    GLchar* buf )
     {
         GetDelegateForFunction< PFNGLDEBUGMESSAGEINSERTPROC >( "glDebugMessageInsert", out _glDebugMessageInsert );
 
@@ -58,7 +62,8 @@ public unsafe partial class GLBindings
 
     public void DebugMessageCallback( GLDEBUGPROC callback, void* userParam )
     {
-        GetDelegateForFunction< PFNGLDEBUGMESSAGECALLBACKPROC >( "glDebugMessageCallback", out _glDebugMessageCallback );
+        GetDelegateForFunction< PFNGLDEBUGMESSAGECALLBACKPROC >( "glDebugMessageCallback",
+                                                                 out _glDebugMessageCallback );
 
         _glDebugMessageCallback( callback, ( IntPtr )userParam );
     }
@@ -105,37 +110,37 @@ public unsafe partial class GLBindings
     {
         var message = new string( ( GLbyte* )msg, 0, length, Encoding.UTF8 );
 
-        var srcStr = source switch
-        {
-            IGL.GL_DEBUG_SOURCE_API             => "API",
-            IGL.GL_DEBUG_SOURCE_WINDOW_SYSTEM   => "WINDOW SYSTEM",
-            IGL.GL_DEBUG_SOURCE_SHADER_COMPILER => "SHADER COMPILER",
-            IGL.GL_DEBUG_SOURCE_THIRD_PARTY     => "THIRD PARTY",
-            IGL.GL_DEBUG_SOURCE_APPLICATION     => "APPLICATION",
-            IGL.GL_DEBUG_SOURCE_OTHER           => "OTHER",
-            var _                               => "UNKNOWN",
-        };
+        string srcStr = source switch
+                        {
+                            IGL.GL_DEBUG_SOURCE_API             => "API",
+                            IGL.GL_DEBUG_SOURCE_WINDOW_SYSTEM   => "WINDOW SYSTEM",
+                            IGL.GL_DEBUG_SOURCE_SHADER_COMPILER => "SHADER COMPILER",
+                            IGL.GL_DEBUG_SOURCE_THIRD_PARTY     => "THIRD PARTY",
+                            IGL.GL_DEBUG_SOURCE_APPLICATION     => "APPLICATION",
+                            IGL.GL_DEBUG_SOURCE_OTHER           => "OTHER",
+                            var _                               => "UNKNOWN"
+                        };
 
-        var typeStr = type switch
-        {
-            IGL.GL_DEBUG_TYPE_ERROR               => "ERROR",
-            IGL.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR => "DEPRECATED_BEHAVIOR",
-            IGL.GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR  => "UNDEFINED_BEHAVIOR",
-            IGL.GL_DEBUG_TYPE_PORTABILITY         => "PORTABILITY",
-            IGL.GL_DEBUG_TYPE_PERFORMANCE         => "PERFORMANCE",
-            IGL.GL_DEBUG_TYPE_MARKER              => "MARKER",
-            IGL.GL_DEBUG_TYPE_OTHER               => "OTHER",
-            var _                                 => "UNKNOWN",
-        };
+        string typeStr = type switch
+                         {
+                             IGL.GL_DEBUG_TYPE_ERROR               => "ERROR",
+                             IGL.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR => "DEPRECATED_BEHAVIOR",
+                             IGL.GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR  => "UNDEFINED_BEHAVIOR",
+                             IGL.GL_DEBUG_TYPE_PORTABILITY         => "PORTABILITY",
+                             IGL.GL_DEBUG_TYPE_PERFORMANCE         => "PERFORMANCE",
+                             IGL.GL_DEBUG_TYPE_MARKER              => "MARKER",
+                             IGL.GL_DEBUG_TYPE_OTHER               => "OTHER",
+                             var _                                 => "UNKNOWN"
+                         };
 
-        var severityStr = severity switch
-        {
-            IGL.GL_DEBUG_SEVERITY_NOTIFICATION => "NOTIFICATION",
-            IGL.GL_DEBUG_SEVERITY_LOW          => "LOW",
-            IGL.GL_DEBUG_SEVERITY_MEDIUM       => "MEDIUM",
-            IGL.GL_DEBUG_SEVERITY_HIGH         => "HIGH",
-            var _                              => "UNKNOWN",
-        };
+        string severityStr = severity switch
+                             {
+                                 IGL.GL_DEBUG_SEVERITY_NOTIFICATION => "NOTIFICATION",
+                                 IGL.GL_DEBUG_SEVERITY_LOW          => "LOW",
+                                 IGL.GL_DEBUG_SEVERITY_MEDIUM       => "MEDIUM",
+                                 IGL.GL_DEBUG_SEVERITY_HIGH         => "HIGH",
+                                 var _                              => "UNKNOWN"
+                             };
 
         Logger.Error( $"{srcStr}, {typeStr}, {severityStr}, {id}: {message}" );
     }
@@ -186,8 +191,15 @@ public unsafe partial class GLBindings
                         {
                             fixed ( GLchar* pMessageLogBytes = &messageLogBytes[ 0 ] )
                             {
-                                var pstart = pMessageLogBytes;
-                                var ret    = _glGetDebugMessageLog( count, bufSize, pSources, pTypes, pIds, pSeverities, pLengths, pMessageLogBytes );
+                                GLchar* pstart = pMessageLogBytes;
+                                uint ret = _glGetDebugMessageLog( count,
+                                                                  bufSize,
+                                                                  pSources,
+                                                                  pTypes,
+                                                                  pIds,
+                                                                  pSeverities,
+                                                                  pLengths,
+                                                                  pMessageLogBytes );
 
                                 messageLog = new string[ count ];
 
@@ -223,7 +235,7 @@ public unsafe partial class GLBindings
 
     public void PushDebugGroup( GLenum source, GLuint id, string message )
     {
-        var messageBytes = Encoding.UTF8.GetBytes( message );
+        byte[] messageBytes = Encoding.UTF8.GetBytes( message );
 
         GetDelegateForFunction< PFNGLPUSHDEBUGGROUPPROC >( "glPushDebugGroup", out _glPushDebugGroup );
 

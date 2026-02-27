@@ -155,7 +155,7 @@ public class PooledLinkedList< T >
             return default( T? );
         }
 
-        var payload = _iterator.Payload;
+        T? payload = _iterator.Payload;
 
         _current  = _iterator;
         _iterator = _iterator.Next;
@@ -174,7 +174,7 @@ public class PooledLinkedList< T >
             return default( T? );
         }
 
-        var payload = _iterator.Payload;
+        T? payload = _iterator.Payload;
 
         _current  = _iterator;
         _iterator = _iterator.Prev;
@@ -194,9 +194,9 @@ public class PooledLinkedList< T >
 
         Size--;
 
-        var c = _current;
-        var n = _current.Next;
-        var p = _current.Prev;
+        Item< T >? c = _current;
+        Item< T >? n = _current.Next;
+        Item< T >? p = _current.Prev;
 
         _pool.Free( _current );
         _current = null;
@@ -239,11 +239,11 @@ public class PooledLinkedList< T >
             return default( T? );
         }
 
-        var payload = _tail.Payload;
+        T? payload = _tail.Payload;
 
         Size--;
 
-        var p = _tail.Prev;
+        Item< T >? p = _tail.Prev;
 
         _pool.Free( _tail );
 

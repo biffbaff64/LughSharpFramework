@@ -23,8 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
 
@@ -60,7 +62,7 @@ public class RunnableAction : Action
             throw new RuntimeException( "Runnable is not initialised!" );
         }
 
-        var pool = Pool;
+        Pool< Action >? pool = Pool;
 
         // Ensure this action can't be returned to the pool inside the runnable.
         Pool = null;

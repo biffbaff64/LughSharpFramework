@@ -22,12 +22,14 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Logging;
+
 using Bitmap = System.Drawing.Bitmap;
 
 namespace LughSharp.Core.Graphics.ImageDecoders;
@@ -54,10 +56,11 @@ public static class BmpUtils
             {
                 if ( fs.Read( _fileHeaderBytes, 0, _fileHeaderBytes.Length ) > 0 )
                 {
-                    var fileHeaderHandle = GCHandle.Alloc( _fileHeaderBytes, GCHandleType.Pinned );
-                    var fileHeader = ( BitmapFileHeader )( Marshal.PtrToStructure( fileHeaderHandle.AddrOfPinnedObject(),
-                                                                                   typeof( BitmapFileHeader ) )
-                                                           ?? new BitmapFileHeader() );
+                    GCHandle fileHeaderHandle = GCHandle.Alloc( _fileHeaderBytes, GCHandleType.Pinned );
+                    var fileHeader =
+                        ( BitmapFileHeader )( Marshal.PtrToStructure( fileHeaderHandle.AddrOfPinnedObject(),
+                                                                      typeof( BitmapFileHeader ) )
+                                           ?? new BitmapFileHeader() );
                     fileHeaderHandle.Free();
 
                     Logger.Debug( $"--- BMP File Header for: {filePath} ---" );
@@ -72,10 +75,11 @@ public static class BmpUtils
 
                 if ( fs.Read( _infoHeaderBytes, 0, _infoHeaderBytes.Length ) > 0 )
                 {
-                    var infoHeaderHandle = GCHandle.Alloc( _infoHeaderBytes, GCHandleType.Pinned );
-                    var infoHeader = ( BitmapFileInfoHeader )( Marshal.PtrToStructure( infoHeaderHandle.AddrOfPinnedObject(),
-                                                                                       typeof( BitmapFileInfoHeader ) )
-                                                               ?? new BitmapFileInfoHeader() );
+                    GCHandle infoHeaderHandle = GCHandle.Alloc( _infoHeaderBytes, GCHandleType.Pinned );
+                    var infoHeader =
+                        ( BitmapFileInfoHeader )( Marshal.PtrToStructure( infoHeaderHandle.AddrOfPinnedObject(),
+                                                                          typeof( BitmapFileInfoHeader ) )
+                                               ?? new BitmapFileInfoHeader() );
                     infoHeaderHandle.Free();
 
                     Logger.Debug( $"--- BMP Info Header ---" );
@@ -113,15 +117,15 @@ public static class BmpUtils
             Logger.Debug( $"Flags                : {bmp.Flags} (hex: 0x{bmp.Flags:X})" );
 
             // Get more detailed info from PixelFormat
-            var bitsPerPixel = System.Drawing.Image.GetPixelFormatSize( bmp.PixelFormat );
+            int bitsPerPixel = System.Drawing.Image.GetPixelFormatSize( bmp.PixelFormat );
             Logger.Debug( $"Bits per Pixel: {bitsPerPixel}" );
 
             // Check for Alpha Channel
             if ( bmp.PixelFormat is System.Drawing.Imaging.PixelFormat.Format32bppArgb
-                                    or System.Drawing.Imaging.PixelFormat.Format32bppPArgb
-                                    or System.Drawing.Imaging.PixelFormat.Format64bppArgb
-                                    or System.Drawing.Imaging.PixelFormat.Format64bppPArgb
-                                    or System.Drawing.Imaging.PixelFormat.Format16bppArgb1555 )
+                or System.Drawing.Imaging.PixelFormat.Format32bppPArgb
+                or System.Drawing.Imaging.PixelFormat.Format64bppArgb
+                or System.Drawing.Imaging.PixelFormat.Format64bppPArgb
+                or System.Drawing.Imaging.PixelFormat.Format16bppArgb1555 )
             {
                 Logger.Debug( "Image has an Alpha channel." );
             }
@@ -136,8 +140,8 @@ public static class BmpUtils
 
             // Check if it's Indexed
             if ( bmp.PixelFormat is System.Drawing.Imaging.PixelFormat.Format1bppIndexed
-                                    or System.Drawing.Imaging.PixelFormat.Format4bppIndexed
-                                    or System.Drawing.Imaging.PixelFormat.Format8bppIndexed )
+                or System.Drawing.Imaging.PixelFormat.Format4bppIndexed
+                or System.Drawing.Imaging.PixelFormat.Format8bppIndexed )
             {
                 Logger.Debug( "Image is Indexed (uses a color palette)." );
                 Logger.Debug( $"Palette Entries: {bmp.Palette.Entries.Length}" );
@@ -148,7 +152,7 @@ public static class BmpUtils
             }
 
             // Get PropertyItems (can contain EXIF data, etc.)
-            foreach ( var propItem in bmp.PropertyItems )
+            foreach ( PropertyItem propItem in bmp.PropertyItems )
             {
                 Logger.Debug( $"- PropertyItem ID: 0x{propItem.Id:X}, Type: {propItem.Type}, Length: {propItem.Len}" );
 

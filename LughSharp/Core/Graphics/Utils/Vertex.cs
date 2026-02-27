@@ -23,7 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -39,4 +41,3 @@ public struct Vertex( Vector3 position, float color, Vector2 texCoords )
 
 // ============================================================================
 // ============================================================================
-

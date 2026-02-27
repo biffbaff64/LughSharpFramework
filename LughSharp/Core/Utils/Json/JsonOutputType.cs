@@ -64,7 +64,7 @@ public enum JsonOutputType
     /// C style comments may be used: <c>//...</c> or <c>/*...*<b></b>/</c>
     /// </li>
     /// </summary>
-    Minimal,
+    Minimal
 }
 
 // ============================================================================
@@ -80,16 +80,16 @@ public static class JsonOutput
             return "null";
         }
 
-        string? stringValue = value.ToString();
+        var stringValue = value.ToString();
 
         if ( NumberUtils.IsNumeric( value ) || value is bool )
         {
             return stringValue;
         }
 
-        bool quote = false;
+        var quote = false;
 
-        for ( int i = 0; i < stringValue?.Length; i++ )
+        for ( var i = 0; i < stringValue?.Length; i++ )
         {
             switch ( stringValue[ i ] )
             {
@@ -137,9 +137,9 @@ public static class JsonOutput
 
     public static string QuoteName( string? value, JsonOutputType outputType )
     {
-        bool quote = false;
+        var quote = false;
 
-        for ( int i = 0; i < value.Length; i++ )
+        for ( var i = 0; i < value.Length; i++ )
         {
             switch ( value[ i ] )
             {
@@ -186,7 +186,7 @@ public static class JsonOutput
 
     private static string Escape( string value, int i )
     {
-        StringBuilder buffer = new StringBuilder( value.Length + 6 );
+        var buffer = new StringBuilder( value.Length + 6 );
 
         buffer.Append( value, 0, i );
 
@@ -228,11 +228,11 @@ public static class JsonOutput
 
     private static string EscapeQuote( string value )
     {
-        StringBuilder buffer = new StringBuilder( value.Length + 6 );
+        var buffer = new StringBuilder( value.Length + 6 );
 
         buffer.Append( '"' );
 
-        foreach ( var c in value )
+        foreach ( char c in value )
         {
             if ( c == '"' )
             {

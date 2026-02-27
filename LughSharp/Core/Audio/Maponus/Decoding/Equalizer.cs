@@ -83,7 +83,7 @@ public class Equalizer
         {
             Reset();
 
-            var max = value.Length > BANDS ? BANDS : value.Length;
+            int max = value.Length > BANDS ? BANDS : value.Length;
 
             for ( var i = 0; i < max; i++ )
             {
@@ -203,12 +203,12 @@ public class Equalizer
     private static float Limit( float eq )
     {
         return eq switch
-        {
-            BAND_NOT_PRESENT => eq,
-            > 1.0f           => 1.0f,
-            < -1.0f          => -1.0f,
-            var _            => eq,
-        };
+               {
+                   BAND_NOT_PRESENT => eq,
+                   > 1.0f           => 1.0f,
+                   < -1.0f          => -1.0f,
+                   var _            => eq
+               };
     }
 
     /// <summary>
@@ -252,4 +252,3 @@ public class Equalizer
 
 // ============================================================================
 // ============================================================================
-

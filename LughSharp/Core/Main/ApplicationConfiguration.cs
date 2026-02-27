@@ -23,11 +23,14 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Utils.Logging;
+
 using static LughSharp.Core.Graphics.GraphicsBackend;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Main;
@@ -43,7 +46,7 @@ public class ApplicationConfiguration
     public HdpiMode        HdpiMode                       { get; set; } = HdpiMode.Logical;
     public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
     public string          PreferencesDirectory           { get; set; } = ".prefs/";
-    public PathType       PreferencesFileType            { get; set; } = PathType.External;
+    public PathType        PreferencesFileType            { get; set; } = PathType.External;
     public bool            DisableAudio                   { get; set; }
     public int             AudioDeviceSimultaneousSources { get; set; } = 16;
     public int             AudioDeviceBufferSize          { get; set; } = 512;
@@ -95,7 +98,7 @@ public class ApplicationConfiguration
     public int       WindowMinHeight    { get; set; } = DEFAULT_WINDOW_MIN_HEIGHT;
     public int       WindowMaxWidth     { get; set; } = DEFAULT_WINDOW_MAX_WIDTH;
     public int       WindowMaxHeight    { get; set; } = DEFAULT_WINDOW_MAX_HEIGHT;
-    public PathType WindowIconFileType { get; set; }
+    public PathType  WindowIconFileType { get; set; }
     public string[]? WindowIconPaths    { get; set; }
 
     /// <summary>
@@ -159,7 +162,7 @@ public class ApplicationConfiguration
         GL20,
         GL30,
         GL31,
-        GL32,
+        GL32
     }
 
     // ========================================================================

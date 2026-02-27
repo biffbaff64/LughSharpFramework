@@ -23,9 +23,12 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Utils.Exceptions;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;
@@ -138,40 +141,44 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
     /// <inheritdoc />
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
-        var color = Color.ToFloatBitsAbgr( Batch.Color.R, Batch.Color.G, Batch.Color.B, Batch.Color.A * layer.Opacity );
+        float color =
+            Color.ToFloatBitsAbgr( Batch.Color.R, Batch.Color.G, Batch.Color.B, Batch.Color.A * layer.Opacity );
 
-        var layerWidth      = layer.Width;
-        var layerHeight     = layer.Height;
-        var layerTileWidth  = layer.TileWidth * UnitScale;
-        var layerTileHeight = layer.TileHeight * UnitScale;
-        var layerOffsetX    = layer.RenderOffsetX * UnitScale;
-        var layerOffsetY    = -layer.RenderOffsetY * UnitScale; // offset in tiled is y down, so we flip it
-        var layerHexLength  = _hexSideLength * UnitScale;
+        int   layerWidth      = layer.Width;
+        int   layerHeight     = layer.Height;
+        float layerTileWidth  = layer.TileWidth * UnitScale;
+        float layerTileHeight = layer.TileHeight * UnitScale;
+        float layerOffsetX    = layer.RenderOffsetX * UnitScale;
+        float layerOffsetY    = -layer.RenderOffsetY * UnitScale; // offset in tiled is y down, so we flip it
+        float layerHexLength  = _hexSideLength * UnitScale;
 
         if ( _staggerAxisX )
         {
-            var tileWidthLowerCorner = ( layerTileWidth - layerHexLength ) / 2;
-            var tileWidthUpperCorner = ( layerTileWidth + layerHexLength ) / 2;
-            var layerTileHeight50    = layerTileHeight * 0.50f;
+            float tileWidthLowerCorner = ( layerTileWidth - layerHexLength ) / 2;
+            float tileWidthUpperCorner = ( layerTileWidth + layerHexLength ) / 2;
+            float layerTileHeight50    = layerTileHeight * 0.50f;
 
-            var row1 = Math.Max( 0, ( int )( ( ViewBounds.Y - layerTileHeight50 - layerOffsetX ) / layerTileHeight ) );
+            int row1 = Math.Max( 0, ( int )( ( ViewBounds.Y - layerTileHeight50 - layerOffsetX ) / layerTileHeight ) );
 
-            var row2 = Math.Min( layerHeight,
-                                 ( int )( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetX ) / layerTileHeight ) );
+            int row2 = Math.Min( layerHeight,
+                                 ( int )( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight - layerOffsetX )
+                                        / layerTileHeight ) );
 
-            var col1 = Math.Max( 0, ( int )( ( ViewBounds.X - tileWidthLowerCorner - layerOffsetY ) / tileWidthUpperCorner ) );
+            int col1 = Math.Max( 0,
+                                 ( int )( ( ViewBounds.X - tileWidthLowerCorner - layerOffsetY )
+                                        / tileWidthUpperCorner ) );
 
-            var col2 = Math.Min( layerWidth,
-                                 ( int )( ( ( ViewBounds.X + ViewBounds.Width + tileWidthUpperCorner ) - layerOffsetY )
-                                          / tileWidthUpperCorner ) );
+            int col2 = Math.Min( layerWidth,
+                                 ( int )( ( ViewBounds.X + ViewBounds.Width + tileWidthUpperCorner - layerOffsetY )
+                                        / tileWidthUpperCorner ) );
 
             // depending on the stagger index either draw all even before the odd or vice versa
-            var colA = _staggerIndexEven == ( ( col1 % 2 ) == 0 ) ? col1 + 1 : col1;
-            var colB = _staggerIndexEven == ( ( col1 % 2 ) == 0 ) ? col1 : col1 + 1;
+            int colA = _staggerIndexEven == ( ( col1 % 2 ) == 0 ) ? col1 + 1 : col1;
+            int colB = _staggerIndexEven == ( ( col1 % 2 ) == 0 ) ? col1 : col1 + 1;
 
-            for ( var row = row2 - 1; row >= row1; row-- )
+            for ( int row = row2 - 1; row >= row1; row-- )
             {
-                for ( var col = colA; col < col2; col += 2 )
+                for ( int col = colA; col < col2; col += 2 )
                 {
                     RenderCell( layer.GetCell( col, row ),
                                 ( tileWidthUpperCorner * col ) + layerOffsetX,
@@ -179,7 +186,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
                                 color );
                 }
 
-                for ( var col = colB; col < col2; col += 2 )
+                for ( int col = colB; col < col2; col += 2 )
                 {
                     RenderCell( layer.GetCell( col, row ),
                                 ( tileWidthUpperCorner * col ) + layerOffsetX,
@@ -190,28 +197,30 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
         }
         else
         {
-            var tileHeightLowerCorner = ( layerTileHeight - layerHexLength ) / 2;
-            var tileHeightUpperCorner = ( layerTileHeight + layerHexLength ) / 2;
-            var layerTileWidth50      = layerTileWidth * 0.50f;
+            float tileHeightLowerCorner = ( layerTileHeight - layerHexLength ) / 2;
+            float tileHeightUpperCorner = ( layerTileHeight + layerHexLength ) / 2;
+            float layerTileWidth50      = layerTileWidth * 0.50f;
 
-            var row1 = Math.Max( 0, ( int )( ( ViewBounds.Y - tileHeightLowerCorner - layerOffsetX ) / tileHeightUpperCorner ) );
+            int row1 = Math.Max( 0,
+                                 ( int )( ( ViewBounds.Y - tileHeightLowerCorner - layerOffsetX )
+                                        / tileHeightUpperCorner ) );
 
-            var row2 = Math.Min( layerHeight,
-                                 ( int )( ( ( ViewBounds.Y + ViewBounds.Height + tileHeightUpperCorner ) - layerOffsetX )
-                                          / tileHeightUpperCorner ) );
+            int row2 = Math.Min( layerHeight,
+                                 ( int )( ( ViewBounds.Y + ViewBounds.Height + tileHeightUpperCorner - layerOffsetX )
+                                        / tileHeightUpperCorner ) );
 
-            var col1 = Math.Max( 0, ( int )( ( ViewBounds.X - layerTileWidth50 - layerOffsetY ) / layerTileWidth ) );
+            int col1 = Math.Max( 0, ( int )( ( ViewBounds.X - layerTileWidth50 - layerOffsetY ) / layerTileWidth ) );
 
-            var col2 = Math.Min( layerWidth,
-                                 ( int )( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth ) - layerOffsetY )
-                                          / layerTileWidth ) );
+            int col2 = Math.Min( layerWidth,
+                                 ( int )( ( ViewBounds.X + ViewBounds.Width + layerTileWidth - layerOffsetY )
+                                        / layerTileWidth ) );
 
-            for ( var row = row2 - 1; row >= row1; row-- )
+            for ( int row = row2 - 1; row >= row1; row-- )
             {
                 // depending on the stagger index either shift for even or uneven indexes
-                var shiftX = ( row % 2 ) == 0 == _staggerIndexEven ? layerTileWidth50 : 0;
+                float shiftX = ( row % 2 ) == 0 == _staggerIndexEven ? layerTileWidth50 : 0;
 
-                for ( var col = col1; col < col2; col++ )
+                for ( int col = col1; col < col2; col++ )
                 {
                     RenderCell( layer.GetCell( col, row ),
                                 ( layerTileWidth * col ) + shiftX + layerOffsetX,
@@ -226,7 +235,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
     {
         Guard.Against.Null( cell );
 
-        var tile = cell.GetTile();
+        ITiledMapTile? tile = cell.GetTile();
 
         if ( tile != null )
         {
@@ -235,23 +244,23 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
                 return;
             }
 
-            var flipX     = cell.GetFlipHorizontally();
-            var flipY     = cell.GetFlipVertically();
-            var rotations = cell.GetRotation();
+            bool flipX     = cell.GetFlipHorizontally();
+            bool flipY     = cell.GetFlipVertically();
+            int  rotations = cell.GetRotation();
 
-            var region = tile.TextureRegion;
+            TextureRegion region = tile.TextureRegion;
 
             Guard.Against.Null( region.Texture );
 
-            var x1 = x + ( tile.OffsetX * UnitScale );
-            var y1 = y + ( tile.OffsetY * UnitScale );
-            var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
-            var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
+            float x1 = x + ( tile.OffsetX * UnitScale );
+            float y1 = y + ( tile.OffsetY * UnitScale );
+            float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+            float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
-            var u1 = region.U;
-            var v1 = region.V2;
-            var u2 = region.U2;
-            var v2 = region.V;
+            float u1 = region.U;
+            float v1 = region.V2;
+            float u2 = region.U2;
+            float v2 = region.V;
 
             Vertices[ IBatch.X1 ] = x1;
             Vertices[ IBatch.Y1 ] = y1;
@@ -317,4 +326,3 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
 
 // ============================================================================
 // ============================================================================
-

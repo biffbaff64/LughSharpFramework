@@ -29,7 +29,7 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
 
-using Array = System.Array;
+using Array = Array;
 
 [PublicAPI]
 public static class SystemArrayUtils
@@ -45,7 +45,7 @@ public static class SystemArrayUtils
     public static bool AreEqual( float[] array1, float[] array2, float epsilon = 0.0001f )
     {
         return ( array1.Length == array2.Length )
-               && array1.Zip( array2, ( a, b ) => Math.Abs( a - b ) <= epsilon ).All( x => x );
+            && array1.Zip( array2, ( a, b ) => Math.Abs( a - b ) <= epsilon ).All( x => x );
     }
 
     /// <summary>
@@ -60,7 +60,8 @@ public static class SystemArrayUtils
             return true;
         }
 
-        if ( ( array1 == null ) || ( array2 == null ) || ( array1.Rank != array2.Rank ) || ( array1.Length != array2.Length ) )
+        if ( ( array1 == null ) || ( array2 == null ) || ( array1.Rank != array2.Rank )
+          || ( array1.Length != array2.Length ) )
         {
             return false;
         }
@@ -81,8 +82,8 @@ public static class SystemArrayUtils
     {
         if ( dimension == array1.Rank )
         {
-            var element1 = array1.GetValue( indices );
-            var element2 = array2.GetValue( indices );
+            object? element1 = array1.GetValue( indices );
+            object? element2 = array2.GetValue( indices );
 
             if ( element1 is Array nestedArray1 && element2 is Array nestedArray2 )
             {
@@ -94,7 +95,7 @@ public static class SystemArrayUtils
             }
         }
 
-        for ( var i = array1.GetLowerBound( dimension ); i <= array1.GetUpperBound( dimension ); i++ )
+        for ( int i = array1.GetLowerBound( dimension ); i <= array1.GetUpperBound( dimension ); i++ )
         {
             indices[ dimension ] = i;
 

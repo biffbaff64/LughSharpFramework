@@ -107,9 +107,9 @@ public class GridPoint3
     /// <returns> the squared distance between this point and the other point. </returns>
     public virtual float Dst2( GridPoint3 other )
     {
-        var xd = other.X - X;
-        var yd = other.Y - Y;
-        var zd = other.Z - Z;
+        int xd = other.X - X;
+        int yd = other.Y - Y;
+        int zd = other.Z - Z;
 
         return ( xd * xd ) + ( yd * yd ) + ( zd * zd );
     }
@@ -122,9 +122,9 @@ public class GridPoint3
     /// <returns> the squared distance between this point and the other point. </returns>
     public virtual float Dst2( int x, int y, int z )
     {
-        var xd = x - X;
-        var yd = y - Y;
-        var zd = z - Z;
+        int xd = x - X;
+        int yd = y - Y;
+        int zd = z - Z;
 
         return ( xd * xd ) + ( yd * yd ) + ( zd * zd );
     }
@@ -135,9 +135,9 @@ public class GridPoint3
     /// <returns> the distance between this point and the other vector. </returns>
     public virtual float Dst( GridPoint3 other )
     {
-        var xd = other.X - X;
-        var yd = other.Y - Y;
-        var zd = other.Z - Z;
+        int xd = other.X - X;
+        int yd = other.Y - Y;
+        int zd = other.Z - Z;
 
         return ( float )Math.Sqrt( ( xd * xd ) + ( yd * yd ) + ( zd * zd ) );
     }
@@ -150,9 +150,9 @@ public class GridPoint3
     /// <returns> the distance between this point and the other point. </returns>
     public virtual float Dst( int x, int y, int z )
     {
-        var xd = x - X;
-        var yd = y - Y;
-        var zd = z - Z;
+        int xd = x - X;
+        int yd = y - Y;
+        int zd = z - Z;
 
         return ( float )Math.Sqrt( ( xd * xd ) + ( yd * yd ) + ( zd * zd ) );
     }
@@ -248,7 +248,7 @@ public class GridPoint3
     {
         const int PRIME = 17;
 
-        var result = PRIME + 31;
+        int result = PRIME + 31;
         result = ( PRIME * result ) + 33;
         result = ( PRIME * result ) + 33;
 

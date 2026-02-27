@@ -23,10 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;
@@ -105,79 +108,79 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
 
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
-        var batchColor = Batch.Color;
+        Color batchColor = Batch.Color;
 
-        var color = Color.ToFloatBitsAbgr( batchColor.R,
-                                           batchColor.G,
-                                           batchColor.B,
-                                           batchColor.A * layer.Opacity );
+        float color = Color.ToFloatBitsAbgr( batchColor.R,
+                                             batchColor.G,
+                                             batchColor.B,
+                                             batchColor.A * layer.Opacity );
 
-        var tileWidth    = layer.TileWidth * UnitScale;
-        var tileHeight   = layer.TileHeight * UnitScale;
-        var layerOffsetX = layer.RenderOffsetX * UnitScale;
+        float tileWidth    = layer.TileWidth * UnitScale;
+        float tileHeight   = layer.TileHeight * UnitScale;
+        float layerOffsetX = layer.RenderOffsetX * UnitScale;
 
         // offset in tiled is y down, so we flip it
-        var layerOffsetY = -layer.RenderOffsetY * UnitScale;
+        float layerOffsetY = -layer.RenderOffsetY * UnitScale;
 
-        var halfTileWidth  = tileWidth * 0.5f;
-        var halfTileHeight = tileHeight * 0.5f;
+        float halfTileWidth  = tileWidth * 0.5f;
+        float halfTileHeight = tileHeight * 0.5f;
 
         // setting up the screen points
         // COL1
-        _topRight.Set( ( ViewBounds.X + ViewBounds.Width ) - layerOffsetX, ViewBounds.Y - layerOffsetY );
+        _topRight.Set( ViewBounds.X + ViewBounds.Width - layerOffsetX, ViewBounds.Y - layerOffsetY );
 
         // COL2
-        _bottomLeft.Set( ViewBounds.X - layerOffsetX, ( ViewBounds.Y + ViewBounds.Height ) - layerOffsetY );
+        _bottomLeft.Set( ViewBounds.X - layerOffsetX, ViewBounds.Y + ViewBounds.Height - layerOffsetY );
 
         // ROW1
         _topLeft.Set( ViewBounds.X - layerOffsetX, ViewBounds.Y - layerOffsetY );
 
         // ROW2
-        _bottomRight.Set( ( ViewBounds.X + ViewBounds.Width ) - layerOffsetX,
-                          ( ViewBounds.Y + ViewBounds.Height ) - layerOffsetY );
+        _bottomRight.Set( ViewBounds.X + ViewBounds.Width - layerOffsetX,
+                          ViewBounds.Y + ViewBounds.Height - layerOffsetY );
 
         // transforming screen coordinates to iso coordinates
-        var row1 = ( int )( TranslateScreenToIsometric( _topLeft ).Y / tileWidth ) - 2;
-        var row2 = ( int )( TranslateScreenToIsometric( _bottomRight ).Y / tileWidth ) + 2;
+        int row1 = ( int )( TranslateScreenToIsometric( _topLeft ).Y / tileWidth ) - 2;
+        int row2 = ( int )( TranslateScreenToIsometric( _bottomRight ).Y / tileWidth ) + 2;
 
-        var col1 = ( int )( TranslateScreenToIsometric( _bottomLeft ).X / tileWidth ) - 2;
-        var col2 = ( int )( TranslateScreenToIsometric( _topRight ).X / tileWidth ) + 2;
+        int col1 = ( int )( TranslateScreenToIsometric( _bottomLeft ).X / tileWidth ) - 2;
+        int col2 = ( int )( TranslateScreenToIsometric( _topRight ).X / tileWidth ) + 2;
 
-        for ( var row = row2; row >= row1; row-- )
+        for ( int row = row2; row >= row1; row-- )
         {
-            for ( var col = col1; col <= col2; col++ )
+            for ( int col = col1; col <= col2; col++ )
             {
-                var x = ( col * halfTileWidth ) + ( row * halfTileWidth );
-                var y = ( row * halfTileHeight ) - ( col * halfTileHeight );
+                float x = ( col * halfTileWidth ) + ( row * halfTileWidth );
+                float y = ( row * halfTileHeight ) - ( col * halfTileHeight );
 
-                var cell = layer.GetCell( col, row );
+                TiledMapTileLayer.Cell? cell = layer.GetCell( col, row );
 
                 if ( cell == null )
                 {
                     return;
                 }
 
-                var tile = cell.GetTile();
+                ITiledMapTile? tile = cell.GetTile();
 
                 if ( tile != null )
                 {
-                    var flipX     = cell.GetFlipHorizontally();
-                    var flipY     = cell.GetFlipVertically();
-                    var rotations = cell.GetRotation();
+                    bool flipX     = cell.GetFlipHorizontally();
+                    bool flipY     = cell.GetFlipVertically();
+                    int  rotations = cell.GetRotation();
 
-                    var region = tile.TextureRegion;
+                    TextureRegion region = tile.TextureRegion;
 
                     Guard.Against.Null( region.Texture );
 
-                    var x1 = x + ( tile.OffsetX * UnitScale ) + layerOffsetX;
-                    var y1 = y + ( tile.OffsetY * UnitScale ) + layerOffsetY;
-                    var x2 = x1 + ( region.GetRegionWidth() * UnitScale );
-                    var y2 = y1 + ( region.GetRegionHeight() * UnitScale );
+                    float x1 = x + ( tile.OffsetX * UnitScale ) + layerOffsetX;
+                    float y1 = y + ( tile.OffsetY * UnitScale ) + layerOffsetY;
+                    float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+                    float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
 
-                    var u1 = region.U;
-                    var v1 = region.V2;
-                    var u2 = region.U2;
-                    var v2 = region.V;
+                    float u1 = region.U;
+                    float v1 = region.V2;
+                    float u2 = region.U2;
+                    float v2 = region.V;
 
                     Vertices[ IBatch.X1 ] = x1;
                     Vertices[ IBatch.Y1 ] = y1;
@@ -227,13 +230,13 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
                         {
                             case TiledMapTileLayer.Cell.ROTATE90:
                             {
-                                var tempV = Vertices[ IBatch.V1 ];
+                                float tempV = Vertices[ IBatch.V1 ];
                                 Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
                                 Vertices[ IBatch.V2 ] = Vertices[ IBatch.V3 ];
                                 Vertices[ IBatch.V3 ] = Vertices[ IBatch.V4 ];
                                 Vertices[ IBatch.V4 ] = tempV;
 
-                                var tempU = Vertices[ IBatch.U1 ];
+                                float tempU = Vertices[ IBatch.U1 ];
                                 Vertices[ IBatch.U1 ] = Vertices[ IBatch.U2 ];
                                 Vertices[ IBatch.U2 ] = Vertices[ IBatch.U3 ];
                                 Vertices[ IBatch.U3 ] = Vertices[ IBatch.U4 ];
@@ -261,13 +264,13 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
 
                             case TiledMapTileLayer.Cell.ROTATE270:
                             {
-                                var tempV = Vertices[ IBatch.V1 ];
+                                float tempV = Vertices[ IBatch.V1 ];
                                 Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];
                                 Vertices[ IBatch.V4 ] = Vertices[ IBatch.V3 ];
                                 Vertices[ IBatch.V3 ] = Vertices[ IBatch.V2 ];
                                 Vertices[ IBatch.V2 ] = tempV;
 
-                                var tempU = Vertices[ IBatch.U1 ];
+                                float tempU = Vertices[ IBatch.U1 ];
                                 Vertices[ IBatch.U1 ] = Vertices[ IBatch.U4 ];
                                 Vertices[ IBatch.U4 ] = Vertices[ IBatch.U3 ];
                                 Vertices[ IBatch.U3 ] = Vertices[ IBatch.U2 ];
@@ -287,4 +290,3 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
 
 // ============================================================================
 // ============================================================================
-

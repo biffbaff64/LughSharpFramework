@@ -36,7 +36,7 @@ public enum StencilFunction
     GEqual   = IGL.GL_GEQUAL,
     Equal    = IGL.GL_EQUAL,
     NotEqual = IGL.GL_NOTEQUAL,
-    Always   = IGL.GL_ALWAYS,
+    Always   = IGL.GL_ALWAYS
 }
 
 public enum StencilOp
@@ -48,7 +48,7 @@ public enum StencilOp
     IncrementWrap = IGL.GL_INCR_WRAP,
     Decrement     = IGL.GL_DECR,
     DecrementWrap = IGL.GL_DECR_WRAP,
-    Invert        = IGL.GL_INVERT,
+    Invert        = IGL.GL_INVERT
 }
 
 // ========================================================================

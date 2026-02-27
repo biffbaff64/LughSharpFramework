@@ -22,8 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.Cameras;
 
 namespace LughSharp.Core.Maths;
@@ -43,7 +43,7 @@ public class Frustrum
         Left,
         Right,
         Top,
-        Bottom,
+        Bottom
     }
 
     protected static readonly Vector3[] ClipSpacePlanePoints =
@@ -56,11 +56,11 @@ public class Frustrum
         new( -1, -1,  1 ),
         new(  1, -1,  1 ),
         new(  1,  1,  1 ),
-        new( -1,  1,  1 ),
+        new( -1,  1,  1 )
         //@formatter:on
     ];
 
-    protected static readonly float[] ClipSpacePlanePointsArray = new float[8 * 3];
+    protected static readonly float[] ClipSpacePlanePointsArray = new float[ 8 * 3 ];
 
     /// <system>
     /// Eight points making up the near and far clipping "rectangles".
@@ -69,10 +69,10 @@ public class Frustrum
     public readonly Vector3[] PlanePoints =
     [
         new(), new(), new(), new(),
-        new(), new(), new(), new(),
+        new(), new(), new(), new()
     ];
 
-    protected readonly float[] PlanePointsArray = new float[8 * 3];
+    protected readonly float[] PlanePointsArray = new float[ 8 * 3 ];
 
     // ========================================================================
 
@@ -80,26 +80,26 @@ public class Frustrum
     {
         var j = 0;
 
-        foreach (var v in ClipSpacePlanePoints)
+        foreach ( Vector3 v in ClipSpacePlanePoints )
         {
-            ClipSpacePlanePointsArray[j++] = v.X;
-            ClipSpacePlanePointsArray[j++] = v.Y;
-            ClipSpacePlanePointsArray[j++] = v.Z;
+            ClipSpacePlanePointsArray[ j++ ] = v.X;
+            ClipSpacePlanePointsArray[ j++ ] = v.Y;
+            ClipSpacePlanePointsArray[ j++ ] = v.Z;
         }
     }
 
     public Frustrum()
     {
-        for (var i = 0; i < 6; i++)
+        for ( var i = 0; i < 6; i++ )
         {
-            Planes[i] = new Plane(new Vector3(), 0);
+            Planes[ i ] = new Plane( new Vector3(), 0 );
         }
     }
 
     /// <system>
     /// the six clipping planes, near, far, left, right, top, bottom
     /// </system>
-    public Plane[] Planes { get; set; } = new Plane[6];
+    public Plane[] Planes { get; set; } = new Plane[ 6 ];
 
     /// <summary>
     /// Updates the clipping plane's based on the given inverse combined
@@ -107,27 +107,27 @@ public class Frustrum
     /// or <see cref="PerspectiveCamera"/>.
     /// </summary>
     /// <param name="inverseProjectionView">The combined projection and view matrices.</param>
-    public virtual void Update(Matrix4 inverseProjectionView)
+    public virtual void Update( Matrix4 inverseProjectionView )
     {
-        Array.Copy(ClipSpacePlanePointsArray, 0, PlanePointsArray, 0, ClipSpacePlanePointsArray.Length);
+        Array.Copy( ClipSpacePlanePointsArray, 0, PlanePointsArray, 0, ClipSpacePlanePointsArray.Length );
 
-        Matrix4.Prj(inverseProjectionView.Val, PlanePointsArray, 0, 8, 3);
+        Matrix4.Prj( inverseProjectionView.Val, PlanePointsArray, 0, 8, 3 );
 
-        for (int i = 0, j = 0; i < 8; i++)
+        for ( int i = 0, j = 0; i < 8; i++ )
         {
-            var v = PlanePoints[i];
+            Vector3 v = PlanePoints[ i ];
 
-            v.X = PlanePointsArray[j++];
-            v.Y = PlanePointsArray[j++];
-            v.Z = PlanePointsArray[j++];
+            v.X = PlanePointsArray[ j++ ];
+            v.Y = PlanePointsArray[ j++ ];
+            v.Z = PlanePointsArray[ j++ ];
         }
 
-        Planes[0].Set(PlanePoints[1], PlanePoints[0], PlanePoints[2]);
-        Planes[1].Set(PlanePoints[4], PlanePoints[5], PlanePoints[7]);
-        Planes[2].Set(PlanePoints[0], PlanePoints[4], PlanePoints[3]);
-        Planes[3].Set(PlanePoints[5], PlanePoints[1], PlanePoints[6]);
-        Planes[4].Set(PlanePoints[2], PlanePoints[3], PlanePoints[6]);
-        Planes[5].Set(PlanePoints[4], PlanePoints[0], PlanePoints[1]);
+        Planes[ 0 ].Set( PlanePoints[ 1 ], PlanePoints[ 0 ], PlanePoints[ 2 ] );
+        Planes[ 1 ].Set( PlanePoints[ 4 ], PlanePoints[ 5 ], PlanePoints[ 7 ] );
+        Planes[ 2 ].Set( PlanePoints[ 0 ], PlanePoints[ 4 ], PlanePoints[ 3 ] );
+        Planes[ 3 ].Set( PlanePoints[ 5 ], PlanePoints[ 1 ], PlanePoints[ 6 ] );
+        Planes[ 4 ].Set( PlanePoints[ 2 ], PlanePoints[ 3 ], PlanePoints[ 6 ] );
+        Planes[ 5 ].Set( PlanePoints[ 4 ], PlanePoints[ 0 ], PlanePoints[ 1 ] );
     }
 
     /// <summary>
@@ -135,13 +135,13 @@ public class Frustrum
     /// </summary>
     /// <param name="point"> The point </param>
     /// <returns> Whether the point is in the frustum.  </returns>
-    public virtual bool PointInFrustum(Vector3 point)
+    public virtual bool PointInFrustum( Vector3 point )
     {
-        foreach (var t in Planes)
+        foreach ( Plane t in Planes )
         {
-            var result = t.TestPoint(point);
+            Plane.PlaneSide result = t.TestPoint( point );
 
-            if (result == Plane.PlaneSide.Back)
+            if ( result == Plane.PlaneSide.Back )
             {
                 return false;
             }

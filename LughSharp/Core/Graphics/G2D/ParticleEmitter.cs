@@ -28,6 +28,7 @@ using System.IO;
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Maths;
@@ -35,6 +36,7 @@ using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Graphics.G2D;
@@ -48,7 +50,7 @@ public class ParticleEmitter
     {
         Both,
         Top,
-        Bottom,
+        Bottom
     }
 
     // ========================================================================
@@ -58,7 +60,7 @@ public class ParticleEmitter
         Point,
         Line,
         Square,
-        Ellipse,
+        Ellipse
     }
 
     // ========================================================================
@@ -67,7 +69,7 @@ public class ParticleEmitter
     {
         Single,
         Random,
-        Animated,
+        Animated
     }
 
     private const int DEFAULT_MAX_PARTICLE_COUNT = 4;
@@ -190,14 +192,14 @@ public class ParticleEmitter
 
     public void AddParticle()
     {
-        var activeCount = ActiveCount;
+        int activeCount = ActiveCount;
 
         if ( activeCount == MaxParticleCount )
         {
             return;
         }
 
-        var active = IsActive;
+        bool[] active = IsActive;
 
         for ( int i = 0, n = active.Length; i < n; i++ )
         {
@@ -221,8 +223,8 @@ public class ParticleEmitter
             return;
         }
 
-        var active = IsActive;
-        int index  = 0, n = active.Length;
+        bool[] active = IsActive;
+        int    index  = 0, n = active.Length;
 
 //    outer:
 
@@ -291,7 +293,7 @@ public class ParticleEmitter
             {
                 _emissionDelta += deltaMillis;
 
-                var emissionTime = _emission + ( _emissionDiff * EmissionValue.GetScale( DurationTimer / Duration ) );
+                float emissionTime = _emission + ( _emissionDiff * EmissionValue.GetScale( DurationTimer / Duration ) );
 
                 if ( emissionTime > 0 )
                 {
@@ -299,7 +301,7 @@ public class ParticleEmitter
 
                     if ( _emissionDelta >= emissionTime )
                     {
-                        var emitCount = _emissionDelta / emissionTime;
+                        float emitCount = _emissionDelta / emissionTime;
                         emitCount = Math.Min( emitCount, MaxParticleCount - ActiveCount );
 
                         _emissionDelta -= emitCount * emissionTime;
@@ -390,8 +392,8 @@ public class ParticleEmitter
             batch.SetBlendFunction( BlendMode.SrcAlpha, BlendMode.OneMinusSrcAlpha );
         }
 
-        var active      = IsActive;
-        var activeCount = ActiveCount;
+        bool[] active      = IsActive;
+        int    activeCount = ActiveCount;
 
         for ( int i = 0, n = active.Length; i < n; i++ )
         {
@@ -444,7 +446,7 @@ public class ParticleEmitter
         }
 
         _emissionDelta += deltaMillis;
-        var emissionTime = _emission + ( _emissionDiff * EmissionValue.GetScale( DurationTimer / Duration ) );
+        float emissionTime = _emission + ( _emissionDiff * EmissionValue.GetScale( DurationTimer / Duration ) );
 
         if ( emissionTime > 0 )
         {
@@ -479,7 +481,7 @@ public class ParticleEmitter
     {
         _emissionDelta = 0;
         DurationTimer  = Duration;
-        var active = IsActive;
+        bool[] active = IsActive;
 
         for ( int i = 0, n = active.Length; i < n; i++ )
         {
@@ -582,13 +584,13 @@ public class ParticleEmitter
 
     private void ActivateParticle( int index )
     {
-        var sprite = SpriteMode switch
-        {
-            ParticleSpriteMode.Single   => Sprites.First(),
-            ParticleSpriteMode.Animated => Sprites.First(),
-            ParticleSpriteMode.Random   => Sprites.Random(),
-            var _                => null!,
-        };
+        Sprite? sprite = SpriteMode switch
+                         {
+                             ParticleSpriteMode.Single   => Sprites.First(),
+                             ParticleSpriteMode.Animated => Sprites.First(),
+                             ParticleSpriteMode.Random   => Sprites.Random(),
+                             var _                       => null!
+                         };
 
         if ( sprite == null )
         {
@@ -609,8 +611,8 @@ public class ParticleEmitter
         // and we already know that _particles is not null. There may be compiler
         // warnings though so we can suppress those...
 
-        var percent     = DurationTimer / Duration;
-        var updateFlags = _updateFlags;
+        float percent     = DurationTimer / Duration;
+        int   updateFlags = _updateFlags;
 
         if ( LifeValue.Independent )
         {
@@ -654,8 +656,8 @@ public class ParticleEmitter
             _particles[ index ]!.AngleSin = MathUtils.SinDeg( angle );
         }
 
-        var spriteWidth  = sprite.Width;
-        var spriteHeight = sprite.Height;
+        float spriteWidth  = sprite.Width;
+        float spriteHeight = sprite.Height;
 
         _particles[ index ]!.XScale     = XScaleValue.NewLowValue() / spriteWidth;
         _particles[ index ]!.XScaleDiff = XScaleValue.NewHighValue() / spriteWidth;
@@ -676,13 +678,16 @@ public class ParticleEmitter
             }
 
             _particles[ index ]!.SetScale(
-                                          _particles[ index ]!.XScale + ( _particles[ index ]!.XScaleDiff * XScaleValue.GetScale( 0 ) ),
-                                          _particles[ index ]!.YScale + ( _particles[ index ]!.YScaleDiff * YScaleValue.GetScale( 0 ) )
+                                          _particles[ index ]!.XScale + ( _particles[ index ]!.XScaleDiff
+                                                                        * XScaleValue.GetScale( 0 ) ),
+                                          _particles[ index ]!.YScale + ( _particles[ index ]!.YScaleDiff
+                                                                        * YScaleValue.GetScale( 0 ) )
                                          );
         }
         else
         {
-            _particles[ index ]!.SetScale( _particles[ index ]!.XScale + ( _particles[ index ]!.XScaleDiff * XScaleValue.GetScale( 0 ) ) );
+            _particles[ index ]!.SetScale( _particles[ index ]!.XScale
+                                         + ( _particles[ index ]!.XScaleDiff * XScaleValue.GetScale( 0 ) ) );
         }
 
         if ( RotationValue.Active )
@@ -695,7 +700,8 @@ public class ParticleEmitter
                 _particles[ index ]!.RotationDiff -= _particles[ index ]!.Rotation;
             }
 
-            var rotation = _particles[ index ]!.Rotation + ( _particles[ index ]!.RotationDiff * RotationValue.GetScale( 0 ) );
+            float rotation = _particles[ index ]!.Rotation
+                           + ( _particles[ index ]!.RotationDiff * RotationValue.GetScale( 0 ) );
 
             if ( Aligned )
             {
@@ -727,14 +733,14 @@ public class ParticleEmitter
             }
         }
 
-        var color = _particles[ index ]?.Tint;
+        float[]? color = _particles[ index ]?.Tint;
 
         if ( color == null )
         {
             _particles[ index ]!.Tint = color = new float[ 3 ];
         }
 
-        var temp = TintValue.GetColor( 0 );
+        float[] temp = TintValue.GetColor( 0 );
         color[ 0 ] = temp[ 0 ];
         color[ 1 ] = temp[ 1 ];
         color[ 2 ] = temp[ 2 ];
@@ -743,14 +749,14 @@ public class ParticleEmitter
         _particles[ index ]!.TransparencyDiff = TransparencyValue.NewHighValue() - _particles[ index ]!.Transparency;
 
         // Spawn.
-        var x = X;
+        float x = X;
 
         if ( XOffsetValue.Active )
         {
             x += XOffsetValue.NewLowValue();
         }
 
-        var y = Y;
+        float y = Y;
 
         if ( YOffsetValue.Active )
         {
@@ -761,8 +767,8 @@ public class ParticleEmitter
         {
             case SpawnShape.Square:
             {
-                var width  = _spawnWidth + ( _spawnWidthDiff * SpawnWidthValue.GetScale( percent ) );
-                var height = _spawnHeight + ( _spawnHeightDiff * SpawnHeightValue.GetScale( percent ) );
+                float width  = _spawnWidth + ( _spawnWidthDiff * SpawnWidthValue.GetScale( percent ) );
+                float height = _spawnHeight + ( _spawnHeightDiff * SpawnHeightValue.GetScale( percent ) );
 
                 x += MathUtils.Random( width ) - ( width / 2 );
                 y += MathUtils.Random( height ) - ( height / 2 );
@@ -772,33 +778,33 @@ public class ParticleEmitter
 
             case SpawnShape.Ellipse:
             {
-                var width   = _spawnWidth + ( _spawnWidthDiff * SpawnWidthValue.GetScale( percent ) );
-                var height  = _spawnHeight + ( _spawnHeightDiff * SpawnHeightValue.GetScale( percent ) );
-                var radiusX = width / 2;
-                var radiusY = height / 2;
+                float width   = _spawnWidth + ( _spawnWidthDiff * SpawnWidthValue.GetScale( percent ) );
+                float height  = _spawnHeight + ( _spawnHeightDiff * SpawnHeightValue.GetScale( percent ) );
+                float radiusX = width / 2;
+                float radiusY = height / 2;
 
                 if ( ( radiusX == 0 ) || ( radiusY == 0 ) )
                 {
                     break;
                 }
 
-                var scaleY = radiusX / radiusY;
+                float scaleY = radiusX / radiusY;
 
                 if ( SpawnShapeValue.Edges )
                 {
-                    var spawnAngle = SpawnShapeValue.Side switch
-                    {
-                        // Note the minus sign...
-                        SpawnEllipseSide.Top    => -MathUtils.Random( 179f ),
-                        SpawnEllipseSide.Bottom => MathUtils.Random( 179f ),
-                        var _                   => MathUtils.Random( 360f ),
-                    };
+                    float spawnAngle = SpawnShapeValue.Side switch
+                                       {
+                                           // Note the minus sign...
+                                           SpawnEllipseSide.Top    => -MathUtils.Random( 179f ),
+                                           SpawnEllipseSide.Bottom => MathUtils.Random( 179f ),
+                                           var _                   => MathUtils.Random( 360f )
+                                       };
 
-                    var cosDeg = MathUtils.CosDeg( spawnAngle );
-                    var sinDeg = MathUtils.SinDeg( spawnAngle );
+                    float cosDeg = MathUtils.CosDeg( spawnAngle );
+                    float sinDeg = MathUtils.SinDeg( spawnAngle );
 
                     x += cosDeg * radiusX;
-                    y += ( sinDeg * radiusX ) / scaleY;
+                    y += sinDeg * radiusX / scaleY;
 
                     if ( ( updateFlags & _updateAngle ) == 0 )
                     {
@@ -809,12 +815,12 @@ public class ParticleEmitter
                 }
                 else
                 {
-                    var radius2 = radiusX * radiusX;
+                    float radius2 = radiusX * radiusX;
 
                     while ( true )
                     {
-                        var px = MathUtils.Random( width ) - radiusX;
-                        var py = MathUtils.Random( width ) - radiusX;
+                        float px = MathUtils.Random( width ) - radiusX;
+                        float py = MathUtils.Random( width ) - radiusX;
 
                         if ( ( ( px * px ) + ( py * py ) ) <= radius2 )
                         {
@@ -831,12 +837,12 @@ public class ParticleEmitter
 
             case SpawnShape.Line:
             {
-                var width  = _spawnWidth + ( _spawnWidthDiff * SpawnWidthValue.GetScale( percent ) );
-                var height = _spawnHeight + ( _spawnHeightDiff * SpawnHeightValue.GetScale( percent ) );
+                float width  = _spawnWidth + ( _spawnWidthDiff * SpawnWidthValue.GetScale( percent ) );
+                float height = _spawnHeight + ( _spawnHeightDiff * SpawnHeightValue.GetScale( percent ) );
 
                 if ( width != 0 )
                 {
-                    var lineX = width * MathUtils.Random();
+                    float lineX = width * MathUtils.Random();
                     x += lineX;
                     y += lineX * ( height / width );
                 }
@@ -868,7 +874,7 @@ public class ParticleEmitter
     {
         Guard.Against.Null( particle );
 
-        var life = particle.CurrentLife - deltaMillis;
+        int life = particle.CurrentLife - deltaMillis;
 
         if ( life <= 0 )
         {
@@ -877,8 +883,8 @@ public class ParticleEmitter
 
         particle.CurrentLife = life;
 
-        var percent     = 1 - ( particle.CurrentLife / ( float )particle.Life );
-        var updateFlags = _updateFlags;
+        float percent     = 1 - ( particle.CurrentLife / ( float )particle.Life );
+        int   updateFlags = _updateFlags;
 
         if ( ( updateFlags & _updateScale ) != 0 )
         {
@@ -897,20 +903,21 @@ public class ParticleEmitter
 
         if ( ( updateFlags & _updateVelocity ) != 0 )
         {
-            var velocity = ( particle.Velocity + ( particle.VelocityDiff * VelocityValue.GetScale( percent ) ) ) * delta;
+            float velocity = ( particle.Velocity + ( particle.VelocityDiff * VelocityValue.GetScale( percent ) ) )
+                           * delta;
 
             float velocityX, velocityY;
 
             if ( ( updateFlags & _updateAngle ) != 0 )
             {
-                var angle = particle.Angle + ( particle.AngleDiff * AngleValue.GetScale( percent ) );
+                float angle = particle.Angle + ( particle.AngleDiff * AngleValue.GetScale( percent ) );
 
                 velocityX = velocity * MathUtils.CosDeg( angle );
                 velocityY = velocity * MathUtils.SinDeg( angle );
 
                 if ( ( updateFlags & _updateRotation ) != 0 )
                 {
-                    var rotation = particle.Rotation + ( particle.RotationDiff * RotationValue.GetScale( percent ) );
+                    float rotation = particle.Rotation + ( particle.RotationDiff * RotationValue.GetScale( percent ) );
 
                     if ( Aligned )
                     {
@@ -927,7 +934,7 @@ public class ParticleEmitter
 
                 if ( Aligned || ( ( updateFlags & _updateRotation ) != 0 ) )
                 {
-                    var rotation = particle.Rotation + ( particle.RotationDiff * RotationValue.GetScale( percent ) );
+                    float rotation = particle.Rotation + ( particle.RotationDiff * RotationValue.GetScale( percent ) );
 
                     if ( Aligned )
                     {
@@ -958,14 +965,14 @@ public class ParticleEmitter
             }
         }
 
-        var color = ( updateFlags & _updateTint ) != 0
+        float[] color = ( updateFlags & _updateTint ) != 0
             ? TintValue.GetColor( percent )
             : particle.Tint;
 
         if ( PremultipliedAlpha )
         {
             float alphaMultiplier = Additive ? 0 : 1;
-            var   a               = particle.Transparency + ( particle.TransparencyDiff * TransparencyValue.GetScale( percent ) );
+            float a = particle.Transparency + ( particle.TransparencyDiff * TransparencyValue.GetScale( percent ) );
             particle.SetColor( color[ 0 ] * a, color[ 1 ] * a, color[ 2 ] * a, a * alphaMultiplier );
         }
         else
@@ -974,19 +981,20 @@ public class ParticleEmitter
                               color[ 0 ],
                               color[ 1 ],
                               color[ 2 ],
-                              particle.Transparency + ( particle.TransparencyDiff * TransparencyValue.GetScale( percent ) )
+                              particle.Transparency
+                            + ( particle.TransparencyDiff * TransparencyValue.GetScale( percent ) )
                              );
         }
 
         if ( ( updateFlags & _updateSprite ) != 0 )
         {
-            var frame = Math.Min( ( int )( percent * Sprites.Count ), Sprites.Count - 1 );
+            int frame = Math.Min( ( int )( percent * Sprites.Count ), Sprites.Count - 1 );
 
             if ( particle.Frame != frame )
             {
-                var sprite           = Sprites[ frame ];
-                var prevSpriteWidth  = particle.Width;
-                var prevSpriteHeight = particle.Height;
+                Sprite sprite           = Sprites[ frame ];
+                float  prevSpriteWidth  = particle.Width;
+                float  prevSpriteHeight = particle.Height;
 
                 particle.SetRegion( sprite );
                 particle.SetSize( sprite.Width, sprite.Height );
@@ -1025,9 +1033,9 @@ public class ParticleEmitter
     {
         if ( Attached )
         {
-            var xAmount = x - X;
-            var yAmount = y - Y;
-            var active  = IsActive;
+            float  xAmount = x - X;
+            float  yAmount = y - Y;
+            bool[] active  = IsActive;
 
             for ( int i = 0, n = active.Length; i < n; i++ )
             {
@@ -1075,7 +1083,7 @@ public class ParticleEmitter
                 case ParticleSpriteMode.Animated:
                     if ( _particles[ i ] != null )
                     {
-                        var percent = 1 - ( _particles[ i ]!.CurrentLife / ( float )_particles[ i ]!.Life );
+                        float percent = 1 - ( _particles[ i ]!.CurrentLife / ( float )_particles[ i ]!.Life );
                         _particles[ i ]!.Frame = Math.Min( ( int )( percent * sprites.Count ), sprites.Count - 1 );
 
                         sprite = sprites[ _particles[ i ]!.Frame ];
@@ -1100,7 +1108,8 @@ public class ParticleEmitter
     {
         if ( Sprites.Count == 0 )
         {
-            throw new RuntimeException( "ParticleEmitter.SetSprites() must have been called before PreAllocateParticles()" );
+            throw new
+                RuntimeException( "ParticleEmitter.SetSprites() must have been called before PreAllocateParticles()" );
         }
 
         for ( var index = 0; index < _particles.Length; index++ )
@@ -1182,7 +1191,7 @@ public class ParticleEmitter
     {
         _bounds ??= new BoundingBox();
 
-        var bounds = _bounds;
+        BoundingBox? bounds = _bounds;
 
         bounds.ToInfinity();
 
@@ -1190,7 +1199,7 @@ public class ParticleEmitter
         {
             if ( IsActive[ i ] )
             {
-                var r = _particles[ i ]!.BoundingRectangle;
+                Rectangle r = _particles[ i ]!.BoundingRectangle;
 
                 bounds.Extend( r.X, r.Y, 0 );
                 bounds.Extend( r.X + r.Width, r.Y + r.Height, 0 );
@@ -1264,12 +1273,12 @@ public class ParticleEmitter
             return;
         }
 
-        foreach ( var value in GetXSizeValues() )
+        foreach ( RangedNumericValue value in GetXSizeValues() )
         {
             value.Scale( scaleX );
         }
 
-        foreach ( var value in GetYSizeValues() )
+        foreach ( RangedNumericValue value in GetYSizeValues() )
         {
             value.Scale( scaleY );
         }
@@ -1286,7 +1295,7 @@ public class ParticleEmitter
             return;
         }
 
-        foreach ( var value in GetMotionValues() )
+        foreach ( RangedNumericValue value in GetMotionValues() )
         {
             value.Scale( scale );
         }
@@ -1306,8 +1315,8 @@ public class ParticleEmitter
      */
     public void MatchXSize( ParticleEmitter template )
     {
-        var values         = GetXSizeValues();
-        var templateValues = template.GetXSizeValues();
+        RangedNumericValue[] values         = GetXSizeValues();
+        RangedNumericValue[] templateValues = template.GetXSizeValues();
 
         for ( var i = 0; i < values.Length; i++ )
         {
@@ -1320,8 +1329,8 @@ public class ParticleEmitter
      */
     public void MatchYSize( ParticleEmitter template )
     {
-        var values         = GetYSizeValues();
-        var templateValues = template.GetYSizeValues();
+        RangedNumericValue[] values         = GetYSizeValues();
+        RangedNumericValue[] templateValues = template.GetYSizeValues();
 
         for ( var i = 0; i < values.Length; i++ )
         {
@@ -1334,8 +1343,8 @@ public class ParticleEmitter
      */
     public void MatchMotion( ParticleEmitter template )
     {
-        var values         = GetMotionValues();
-        var templateValues = template.GetMotionValues();
+        RangedNumericValue[] values         = GetMotionValues();
+        RangedNumericValue[] templateValues = template.GetMotionValues();
 
         for ( var i = 0; i < values.Length; i++ )
         {
@@ -1397,7 +1406,7 @@ public class ParticleEmitter
         output.Write( "spriteMode: " + SpriteMode + "\n" );
         output.Write( "- Image Paths -\n" );
 
-        foreach ( var imagePath in ImagePaths )
+        foreach ( string imagePath in ImagePaths )
         {
             output.Write( imagePath + "\n" );
         }
@@ -1436,7 +1445,7 @@ public class ParticleEmitter
             reader.ReadLine();
             SpawnHeightValue.Load( reader );
 
-            var line = reader.ReadLine();
+            string? line = reader.ReadLine();
 
             if ( ( line != null ) && line.Trim().Equals( "- Scale -" ) )
             {
@@ -1511,7 +1520,7 @@ public class ParticleEmitter
 
     private static string ReadString( StreamReader reader, string name )
     {
-        var line = reader.ReadLine();
+        string? line = reader.ReadLine();
 
         if ( line == null )
         {
@@ -1799,13 +1808,13 @@ public class ParticleEmitter
 
         public float GetScale( float percent )
         {
-            var endIndex = -1;
-            var timeline = Timeline;
-            var n        = timeline.Length;
+            int     endIndex = -1;
+            float[] timeline = Timeline;
+            int     n        = timeline.Length;
 
             for ( var i = 1; i < n; i++ )
             {
-                var t = timeline[ i ];
+                float t = timeline[ i ];
 
                 if ( t > percent )
                 {
@@ -1820,13 +1829,14 @@ public class ParticleEmitter
                 return Scaling[ n - 1 ];
             }
 
-            var scaling    = Scaling;
-            var startIndex = endIndex - 1;
-            var startValue = scaling[ startIndex ];
-            var startTime  = timeline[ startIndex ];
+            float[] scaling    = Scaling;
+            int     startIndex = endIndex - 1;
+            float   startValue = scaling[ startIndex ];
+            float   startTime  = timeline[ startIndex ];
 
             return startValue +
-                   ( ( scaling[ endIndex ] - startValue ) * ( ( percent - startTime ) / ( timeline[ endIndex ] - startTime ) ) );
+                   ( ( scaling[ endIndex ] - startValue )
+                   * ( ( percent - startTime ) / ( timeline[ endIndex ] - startTime ) ) );
         }
 
         public override void Save( StreamWriter output )
@@ -1951,7 +1961,7 @@ public class ParticleEmitter
 //                reader.mark( 100 );
 //            }
 
-            var line = reader.ReadLine();
+            string? line = reader.ReadLine();
 
             if ( line == null )
             {
@@ -1972,8 +1982,8 @@ public class ParticleEmitter
                 // BufferedReader.MarkSupported may return false in some platforms,
                 // in which case backwards commpatibility is not possible.
                 const string ERROR_MESSAGE = "The loaded particle effect descriptor file uses an old invalid format. "
-                                             + "Please download the latest version of the Particle Editor tool and "
-                                             + "recreate the file by loading and saving it again.";
+                                           + "Please download the latest version of the Particle Editor tool and "
+                                           + "recreate the file by loading and saving it again.";
 
                 Logger.Error( ERROR_MESSAGE );
 
@@ -2005,13 +2015,13 @@ public class ParticleEmitter
 
         public float[] GetColor( float percent )
         {
-            int startIndex = 0, endIndex = -1;
-            var timeline   = Timeline;
-            var n          = timeline.Length;
+            int     startIndex = 0, endIndex = -1;
+            float[] timeline   = Timeline;
+            int     n          = timeline.Length;
 
             for ( var i = 1; i < n; i++ )
             {
-                var t = timeline[ i ];
+                float t = timeline[ i ];
 
                 if ( t > percent )
                 {
@@ -2023,13 +2033,13 @@ public class ParticleEmitter
                 startIndex = i;
             }
 
-            var startTime = timeline[ startIndex ];
+            float startTime = timeline[ startIndex ];
 
             startIndex *= 3;
 
-            var r1 = Colors[ startIndex ];
-            var g1 = Colors[ startIndex + 1 ];
-            var b1 = Colors[ startIndex + 2 ];
+            float r1 = Colors[ startIndex ];
+            float g1 = Colors[ startIndex + 1 ];
+            float b1 = Colors[ startIndex + 2 ];
 
             if ( endIndex == -1 )
             {
@@ -2040,7 +2050,7 @@ public class ParticleEmitter
                 return _temp;
             }
 
-            var factor = ( percent - startTime ) / ( timeline[ endIndex ] - startTime );
+            float factor = ( percent - startTime ) / ( timeline[ endIndex ] - startTime );
 
             endIndex *= 3;
 
@@ -2188,7 +2198,7 @@ public class ParticleEmitter
     public bool CleansUpBlendFunction { get; set; } = true;
 
     public List< Sprite >                Sprites           { get; set; } = [ ];
-    public ParticleSpriteMode                   SpriteMode        { get; set; } = ParticleSpriteMode.Single;
+    public ParticleSpriteMode            SpriteMode        { get; set; } = ParticleSpriteMode.Single;
     public List< string >                ImagePaths        { get; set; } = [ ];
     public ScaledNumericValue            XScaleValue       { get; set; } = new();
     public ScaledNumericValue            YScaleValue       { get; set; } = new();
@@ -2231,4 +2241,3 @@ public class ParticleEmitter
 
 // ============================================================================
 // ============================================================================
-

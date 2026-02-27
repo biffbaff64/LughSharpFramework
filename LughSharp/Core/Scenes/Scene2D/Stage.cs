@@ -133,7 +133,8 @@ public class Stage : InputAdapter, IDisposable
         : this( new ScalingViewport( Scaling.Stretch,
                                      Engine.Api.Graphics.WindowWidth,
                                      Engine.Api.Graphics.WindowHeight,
-                                     new OrthographicCamera() ), batch )
+                                     new OrthographicCamera() ),
+                batch )
     {
         _ownsBatch = false;
     }
@@ -189,7 +190,7 @@ public class Stage : InputAdapter, IDisposable
         // which can fire enter/exit without an input event.
         for ( int pointer = 0, n = _pointerOverActors.Length; pointer < n; pointer++ )
         {
-            var overLast = _pointerOverActors[ pointer ];
+            Actor? overLast = _pointerOverActors[ pointer ];
 
             if ( _pointerTouched[ pointer ] )
             {
@@ -280,7 +281,7 @@ public class Stage : InputAdapter, IDisposable
         // Find the actor under the point.
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var over = Hit( _tempCoords.X, _tempCoords.Y, true );
+        Actor? over = Hit( _tempCoords.X, _tempCoords.Y, true );
 
         if ( over == overLast )
         {
@@ -296,7 +297,7 @@ public class Stage : InputAdapter, IDisposable
             {
                 throw new RuntimeException( "Null InputEvent for FireEnterAndExit [Exit Overlast]!" );
             }
-            
+
             inputEvent.Type         = InputEvent.EventType.Exit;
             inputEvent.Stage        = this;
             inputEvent.StageX       = _tempCoords.Y;
@@ -317,7 +318,7 @@ public class Stage : InputAdapter, IDisposable
             {
                 throw new RuntimeException( "Null InputEvent for FireEnterAndExit [Exit Over]!" );
             }
-            
+
             inputEvent.Stage        = this;
             inputEvent.StageX       = _tempCoords.X;
             inputEvent.StageY       = _tempCoords.Y;
@@ -385,7 +386,7 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.Pointer = pointer;
         inputEvent.Button  = button;
 
-        var target = Hit( _tempCoords.X, _tempCoords.Y, true );
+        Actor? target = Hit( _tempCoords.X, _tempCoords.Y, true );
 
         if ( target == null )
         {
@@ -399,7 +400,7 @@ public class Stage : InputAdapter, IDisposable
             target.Fire( inputEvent );
         }
 
-        var handled = inputEvent.IsHandled;
+        bool handled = inputEvent.IsHandled;
 
         Pools.Free< InputEvent >( inputEvent );
 
@@ -442,7 +443,7 @@ public class Stage : InputAdapter, IDisposable
 
         for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
         {
-            var focus = focuses[ i ];
+            TouchFocus? focus = focuses[ i ];
 
             if ( focus?.Pointer != pointer )
             {
@@ -466,7 +467,7 @@ public class Stage : InputAdapter, IDisposable
 
         TouchFocuses.End();
 
-        var handled = inputEvent.IsHandled;
+        bool handled = inputEvent.IsHandled;
 
         Pools.Free< InputEvent >( inputEvent );
 
@@ -510,7 +511,7 @@ public class Stage : InputAdapter, IDisposable
 
         for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
         {
-            var focus = focuses[ i ];
+            TouchFocus? focus = focuses[ i ];
 
             if ( ( focus?.Pointer != pointer ) || ( focus.Button != button ) )
             {
@@ -536,7 +537,7 @@ public class Stage : InputAdapter, IDisposable
 
         TouchFocuses.End();
 
-        var handled = inputEvent.IsHandled;
+        bool handled = inputEvent.IsHandled;
         Pools.Free< InputEvent >( inputEvent );
 
         return handled;
@@ -579,7 +580,7 @@ public class Stage : InputAdapter, IDisposable
         }
 
         target.Fire( inputEvent );
-        var handled = inputEvent.IsHandled;
+        bool handled = inputEvent.IsHandled;
 
         Pools.Free< InputEvent >( inputEvent );
 
@@ -593,7 +594,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool Scrolled( float amountX, float amountY )
     {
-        var target = ScrollFocus ?? RootGroup;
+        Actor target = ScrollFocus ?? RootGroup;
 
         ScreenToStageCoordinates( _tempCoords.Set( _mouseScreenX, _mouseScreenY ) );
 
@@ -612,7 +613,7 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.StageY        = _tempCoords.Y;
 
         target.Fire( inputEvent );
-        var handled = inputEvent.IsHandled;
+        bool handled = inputEvent.IsHandled;
         Pools.Free< InputEvent >( inputEvent );
 
         return handled;
@@ -625,8 +626,8 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool KeyDown( int keyCode )
     {
-        var target     = KeyboardFocus ?? RootGroup;
-        var inputEvent = Pools.Obtain< InputEvent >();
+        Actor target     = KeyboardFocus ?? RootGroup;
+        var   inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -638,7 +639,7 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.KeyCode = keyCode;
 
         target.Fire( inputEvent );
-        var handled = inputEvent.IsHandled;
+        bool handled = inputEvent.IsHandled;
         Pools.Free< InputEvent >( inputEvent );
 
         return handled;
@@ -650,8 +651,8 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool KeyUp( int keyCode )
     {
-        var target     = KeyboardFocus ?? RootGroup;
-        var inputEvent = Pools.Obtain< InputEvent >();
+        Actor target     = KeyboardFocus ?? RootGroup;
+        var   inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -663,7 +664,7 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.KeyCode = keyCode;
 
         target.Fire( inputEvent );
-        var handled = inputEvent.IsHandled;
+        bool handled = inputEvent.IsHandled;
         Pools.Free< InputEvent >( inputEvent );
 
         return handled;
@@ -675,8 +676,8 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool KeyTyped( char character )
     {
-        var target     = KeyboardFocus ?? RootGroup;
-        var inputEvent = Pools.Obtain< InputEvent >();
+        Actor target     = KeyboardFocus ?? RootGroup;
+        var   inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -688,7 +689,7 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.Character = character;
 
         target.Fire( inputEvent );
-        var handled = inputEvent.IsHandled;
+        bool handled = inputEvent.IsHandled;
         Pools.Free< InputEvent >( inputEvent );
 
         return handled;
@@ -734,9 +735,9 @@ public class Stage : InputAdapter, IDisposable
                                   int pointer,
                                   int button )
     {
-        for ( var i = TouchFocuses.Size - 1; i >= 0; i-- )
+        for ( int i = TouchFocuses.Size - 1; i >= 0; i-- )
         {
-            var focus = TouchFocuses.GetAt( i );
+            TouchFocus focus = TouchFocuses.GetAt( i );
 
             if ( ( focus.Listener == listener )
               && ( focus.ListenerActor == listenerActor )
@@ -763,7 +764,7 @@ public class Stage : InputAdapter, IDisposable
 
         for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
         {
-            var focus = items[ i ];
+            TouchFocus? focus = items[ i ];
 
             if ( focus?.ListenerActor != listenerActor )
             {
@@ -780,7 +781,7 @@ public class Stage : InputAdapter, IDisposable
                 inputEvent = Pools.Obtain< InputEvent >();
 
                 //TODO: throw exception here if inputEvent is STILL null, or create a new one?
-                
+
                 inputEvent.Stage  = this;
                 inputEvent.Type   = InputEvent.EventType.TouchUp;
                 inputEvent.StageX = int.MinValue;
@@ -836,7 +837,7 @@ public class Stage : InputAdapter, IDisposable
 
         for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
         {
-            var focus = items[ i ];
+            TouchFocus? focus = items[ i ];
 
             if ( ( focus?.Listener == exceptListener )
               && ( focus?.ListenerActor == exceptActor ) )
@@ -1073,7 +1074,7 @@ public class Stage : InputAdapter, IDisposable
             focusEvent.Stage = this;
             focusEvent.Type  = FocusListener.FocusEvent.FeType.Keyboard;
 
-            var oldKeyboardFocus = field;
+            Actor? oldKeyboardFocus = field;
 
             if ( oldKeyboardFocus != null )
             {
@@ -1083,7 +1084,7 @@ public class Stage : InputAdapter, IDisposable
                 oldKeyboardFocus.Fire( focusEvent );
             }
 
-            var success = !focusEvent.IsCancelled;
+            bool success = !focusEvent.IsCancelled;
 
             if ( success )
             {
@@ -1131,7 +1132,7 @@ public class Stage : InputAdapter, IDisposable
             focusEvent.Stage = this;
             focusEvent.Type  = FocusListener.FocusEvent.FeType.Scroll;
 
-            var oldScrollFocus = ScrollFocus;
+            Actor? oldScrollFocus = ScrollFocus;
 
             if ( oldScrollFocus != null )
             {
@@ -1140,7 +1141,7 @@ public class Stage : InputAdapter, IDisposable
                 oldScrollFocus.Fire( focusEvent );
             }
 
-            var success = !focusEvent.IsCancelled;
+            bool success = !focusEvent.IsCancelled;
 
             if ( success )
             {
@@ -1238,7 +1239,7 @@ public class Stage : InputAdapter, IDisposable
         {
             ScreenToStageCoordinates( _tempCoords.Set( Engine.Api.Input.GetX(), Engine.Api.Input.GetY() ) );
 
-            var actor = Hit( _tempCoords.X, _tempCoords.Y, true );
+            Actor? actor = Hit( _tempCoords.X, _tempCoords.Y, true );
 
             if ( actor == null )
             {
@@ -1335,10 +1336,10 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public virtual bool IsInsideViewport( int screenX, int screenY )
     {
-        var x0 = Viewport.ScreenX;
-        var x1 = x0 + Viewport.ScreenWidth;
-        var y0 = Viewport.ScreenY;
-        var y1 = y0 + Viewport.ScreenHeight;
+        int x0 = Viewport.ScreenX;
+        int x1 = x0 + Viewport.ScreenWidth;
+        int y0 = Viewport.ScreenY;
+        int y1 = y0 + Viewport.ScreenHeight;
 
         screenY = Engine.Api.Graphics.WindowHeight - 1 - screenY;
 

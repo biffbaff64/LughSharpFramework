@@ -120,7 +120,7 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
     {
         if ( Allocation != 0 )
         {
-            var sample = Samples[ Samplenumber ];
+            float sample = Samples[ Samplenumber ];
 
             if ( Groupingtable[ 0 ] == null )
             {
@@ -131,7 +131,7 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
             {
                 case OutputChannels.BOTH_CHANNELS:
                 {
-                    var sample2 = sample;
+                    float sample2 = sample;
 
                     switch ( Groupnumber )
                     {
@@ -162,11 +162,11 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
 
                 case OutputChannels.LEFT_CHANNEL:
                     sample *= Groupnumber switch
-                    {
-                        <= 4  => Scalefactor1,
-                        <= 8  => Scalefactor2,
-                        var _ => Scalefactor3,
-                    };
+                              {
+                                  <= 4  => Scalefactor1,
+                                  <= 8  => Scalefactor2,
+                                  var _ => Scalefactor3
+                              };
 
                     filter1?.AddSample( sample, Subbandnumber );
 
@@ -174,11 +174,11 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
 
                 default:
                     sample *= Groupnumber switch
-                    {
-                        <= 4  => Channel2Scalefactor1,
-                        <= 8  => Channel2Scalefactor2,
-                        var _ => Channel2Scalefactor3,
-                    };
+                              {
+                                  <= 4  => Channel2Scalefactor1,
+                                  <= 8  => Channel2Scalefactor2,
+                                  var _ => Channel2Scalefactor3
+                              };
 
                     filter1?.AddSample( sample, Subbandnumber );
 
@@ -192,4 +192,3 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
 
 // ============================================================================
 // ============================================================================
-

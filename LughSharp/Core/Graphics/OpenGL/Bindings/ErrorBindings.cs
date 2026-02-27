@@ -49,7 +49,7 @@ public partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGETERRORPROC >( "glGetError", out _glGetError );
 
-        var error = _glGetError();
+        int error = _glGetError();
 
         while ( error != IGL.GL_NO_ERROR )
         {

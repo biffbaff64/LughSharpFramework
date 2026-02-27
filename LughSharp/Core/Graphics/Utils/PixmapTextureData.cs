@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using JetBrains.Annotations;
+
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -65,13 +66,22 @@ public class PixmapTextureData : ITextureData
     /// whether the caller of <see cref="ITextureData.ConsumePixmap"/> should dispose the
     /// Pixmap returned by <see cref="ITextureData.ConsumePixmap"/>
     /// </returns>
-    public bool ShouldDisposePixmap() => DisposePixmap;
+    public bool ShouldDisposePixmap()
+    {
+        return DisposePixmap;
+    }
 
     /// <inheritdoc />
-    public int GetPixelFormat() => _pixelFormat;
+    public int GetPixelFormat()
+    {
+        return _pixelFormat;
+    }
 
     /// <inheritdoc />
-    public Pixmap ConsumePixmap() => Pixmap;
+    public Pixmap ConsumePixmap()
+    {
+        return Pixmap;
+    }
 
     public int Width
     {

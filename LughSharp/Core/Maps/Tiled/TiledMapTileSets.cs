@@ -38,7 +38,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     private readonly List< TiledMapTileSet > _tilesets;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Creates an empty collection of tilesets.
     /// </summary>
@@ -63,7 +63,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     /// <returns> tileset with matching name, null if it doesn't exist  </returns>
     public virtual TiledMapTileSet? GetTileSet( string name )
     {
-        foreach ( var tileset in _tilesets )
+        foreach ( TiledMapTileSet tileset in _tilesets )
         {
             if ( name.Equals( tileset.Name ) )
             {
@@ -116,10 +116,10 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     /// <returns> A tile with matching id, or null if it doesn't exist  </returns>
     public virtual ITiledMapTile? GetTile( uint id )
     {
-        for ( var i = _tilesets.Count - 1; i >= 0; i-- )
+        for ( int i = _tilesets.Count - 1; i >= 0; i-- )
         {
-            var tileset = _tilesets[ i ];
-            var tile    = tileset.GetTile( id );
+            TiledMapTileSet tileset = _tilesets[ i ];
+            ITiledMapTile?  tile    = tileset.GetTile( id );
 
             if ( tile != null )
             {
@@ -151,4 +151,3 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
 
 // ============================================================================
 // ============================================================================
-

@@ -68,10 +68,10 @@ public record ImageDetails
                              out int height,
                              out FileInfo? image )
     {
-        imageSource = this.ImageSource;
-        width       = this.Width;
-        height      = this.Height;
-        image       = this.Image;
+        imageSource = ImageSource;
+        width       = Width;
+        height      = Height;
+        image       = Image;
     }
 }
 

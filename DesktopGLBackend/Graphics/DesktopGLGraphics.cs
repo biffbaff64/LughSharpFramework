@@ -24,7 +24,9 @@
 
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
+
 using JetBrains.Annotations;
+
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
@@ -34,6 +36,8 @@ using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
+
+using Monitor = DotGLFW.Monitor;
 
 namespace DesktopGLBackend.Graphics;
 
@@ -153,7 +157,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
             throw new RuntimeException( "GLWindow ( or GlfwWindow ) is null!" );
         }
 
-        DotGLFW.Glfw.GetFramebufferSize( GLWindow.GlfwWindow, out var tmpWidth, out var tmpHeight );
+        DotGLFW.Glfw.GetFramebufferSize( GLWindow.GlfwWindow, out int tmpWidth, out int tmpHeight );
 
         BackBufferWidth  = tmpWidth;
         BackBufferHeight = tmpHeight;
@@ -172,7 +176,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
             Depth            = GLWindow.AppConfig.Depth,
             Stencil          = GLWindow.AppConfig.Stencil,
             Samples          = GLWindow.AppConfig.Samples,
-            CoverageSampling = false,
+            CoverageSampling = false
         };
 
         Engine.GL.Enable( EnableCap.FramebufferSrgb );
@@ -185,7 +189,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// </summary>
     public override void Update()
     {
-        var time = TimeUtils.NanoTime();
+        long time = TimeUtils.NanoTime();
 
         if ( _lastFrameTime == -1 )
         {
@@ -232,14 +236,14 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         GLWindow?.Input.ResetPollingStates();
 
-        var monitor = DotGLFW.Glfw.GetPrimaryMonitor();
+        Monitor? monitor = DotGLFW.Glfw.GetPrimaryMonitor();
 
         if ( !IsFullscreen )
         {
             if ( ( width != LogicalWidth ) || ( height != LogicalHeight ) )
             {
                 //Center window
-                DotGLFW.Glfw.GetMonitorWorkarea( monitor, out var x, out var y, out var w, out var h );
+                DotGLFW.Glfw.GetMonitorWorkarea( monitor, out int x, out int y, out int w, out int h );
                 DotGLFW.Glfw.SetWindowPos( GLWindow!.GlfwWindow, x, y );
 
                 GLWindow?.SetPosition( x + ( ( w - width ) / 2 ), y + ( ( h - height ) / 2 ) );
@@ -256,7 +260,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
 
             if ( ( width != _windowWidthBeforeFullscreen ) || ( height != _windowHeightBeforeFullscreen ) )
             {
-                DotGLFW.Glfw.GetMonitorWorkarea( monitor, out var x, out var y, out var w, out var h );
+                DotGLFW.Glfw.GetMonitorWorkarea( monitor, out int x, out int y, out int w, out int h );
 
                 DotGLFW.Glfw.SetWindowMonitor( GLWindow!.GlfwWindow,
                                                monitor,
@@ -376,7 +380,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     }
 
     /// <inheritdoc />
-    public override IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
+    public override IGraphicsDevice.DisplayMode[] GetDisplayModes( Monitor monitor )
     {
         Guard.Against.Null( GLWindow );
 
@@ -392,7 +396,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     }
 
     /// <inheritdoc />
-    public override IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
+    public override IGraphicsDevice.DisplayMode GetDisplayMode( Monitor monitor )
     {
         Guard.Against.Null( GLWindow );
 
@@ -497,10 +501,10 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override (float X, float Y) GetPpcXY()
     {
-        DotGLFW.Glfw.GetMonitorPhysicalSize( DotGLFW.Glfw.GetPrimaryMonitor(), out var sizeX, out var sizeY );
+        DotGLFW.Glfw.GetMonitorPhysicalSize( DotGLFW.Glfw.GetPrimaryMonitor(), out int sizeX, out int sizeY );
 
-        return ( ( GetDisplayMode().Width / ( float )sizeX ) * 10,
-            ( GetDisplayMode().Height / ( float )sizeY ) * 10 );
+        return ( GetDisplayMode().Width / ( float )sizeX * 10,
+            GetDisplayMode().Height / ( float )sizeY * 10 );
     }
 
     // ========================================================================
@@ -563,7 +567,10 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// system UI elements or device bezels (e.g., notches, rounded corners).
     /// </summary>
     /// <returns>The left safe area inset in pixels.</returns>
-    public override int GetSafeInsetLeft() => 0;
+    public override int GetSafeInsetLeft()
+    {
+        return 0;
+    }
 
     /// <summary>
     /// Returns the top safe area inset in pixels.
@@ -571,7 +578,10 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// system UI elements or device bezels (e.g., notches, rounded corners).
     /// </summary>
     /// <returns>The top safe area inset in pixels.</returns>
-    public override int GetSafeInsetTop() => 0;
+    public override int GetSafeInsetTop()
+    {
+        return 0;
+    }
 
     /// <summary>
     /// Returns the bottom safe area inset in pixels.
@@ -579,7 +589,10 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// system UI elements or device bezels (e.g., notches, rounded corners).
     /// </summary>
     /// <returns>The bottom safe area inset in pixels.</returns>
-    public override int GetSafeInsetBottom() => 0;
+    public override int GetSafeInsetBottom()
+    {
+        return 0;
+    }
 
     /// <summary>
     /// Returns the right safe area inset in pixels.
@@ -587,20 +600,29 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// system UI elements or device bezels (e.g., notches, rounded corners).
     /// </summary>
     /// <returns>The right safe area inset in pixels.</returns>
-    public override int GetSafeInsetRight() => 0;
+    public override int GetSafeInsetRight()
+    {
+        return 0;
+    }
 
     /// <summary>
     /// Returns the current frame ID. The frame ID is typically incremented with each rendered frame.
     /// </summary>
     /// <returns>The current frame ID.</returns>
-    public override long GetFrameID() => _frameId;
+    public override long GetFrameID()
+    {
+        return _frameId;
+    }
 
     /// <summary>
     /// Returns the current frames per second (FPS). This value is usually calculated as a moving
     /// average over a short period to provide a smooth FPS reading.
     /// </summary>
     /// <returns>The current frames per second.</returns>
-    public override int GetFramesPerSecond() => _fps;
+    public override int GetFramesPerSecond()
+    {
+        return _fps;
+    }
 
     // ========================================================================
 
@@ -624,15 +646,15 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
             {
                 //TODO:
             }
-            
-            _isDisposed =  true;
+
+            _isDisposed = true;
         }
     }
 
     #endregion IDisposable implementation
-    
+
     // ========================================================================
-    
+
     /// <summary>
     /// Describes a Display Mode for a <see cref="DotGLFW.Monitor"/>
     /// </summary>
@@ -642,7 +664,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
         /// <summary>
         /// The <see cref="DotGLFW.Monitor"/> this <see cref="IGraphicsDevice.DisplayMode"/> applies to.
         /// </summary>
-        public DotGLFW.Monitor MonitorHandle { get; set; }
+        public Monitor MonitorHandle { get; set; }
 
         /// <summary>
         /// Creates a new Display Mode and its properties.
@@ -652,7 +674,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
         /// <param name="height"> Monior display height. </param>
         /// <param name="refreshRate"> The refresh rate. </param>
         /// <param name="bitsPerPixel"> The bits per pixel. </param>
-        public DesktopGLDisplayMode( DotGLFW.Monitor monitor,
+        public DesktopGLDisplayMode( Monitor monitor,
                                      int width,
                                      int height,
                                      int refreshRate,
@@ -664,18 +686,18 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Wrapper for a <see cref="DotGLFW.Monitor"/> which adds virtual X & Y, plus a name.
     /// Virtual positions are for multiple monitors.
     /// </summary>
     [PublicAPI]
-    public class DesktopGLMonitor( DotGLFW.Monitor monitor, int virtualX, int virtualY, string name )
+    public class DesktopGLMonitor( Monitor monitor, int virtualX, int virtualY, string name )
     {
         /// <summary>
         /// The <see cref="DotGLFW.Monitor"/>.
         /// </summary>
-        public DotGLFW.Monitor MonitorHandle { get; private set; } = monitor;
+        public Monitor MonitorHandle { get; private set; } = monitor;
 
         public int    VirtualX { get; set; } = virtualX;
         public int    VirtualY { get; set; } = virtualY;
