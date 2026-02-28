@@ -23,13 +23,17 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Utils.Json;
 
@@ -66,6 +70,12 @@ public class Json
 
     private JsonWriter? _writer;
     private JsonReader  _reader = new();
+
+    private readonly Dictionary< Type, Func< object > >                  _constructorCache = new();
+    private readonly Dictionary< Type, Dictionary< string, FieldInfo > > _fieldCache       = new();
+    private readonly Dictionary< Type, List< CachedField > >             _typeCache        = new();
+    private readonly Dictionary< Type, Dictionary< string, object > >    _enumCache        = new();
+    private readonly Dictionary< string, Type >                          _typeAliases      = new();
 
     // ========================================================================
     // ========================================================================
@@ -130,16 +140,17 @@ public class Json
         return _classToTag.GetValueOrDefault( type );
     }
 
-    public Type? GetTagType( string? valueMapName )
-    {
-        throw new NotImplementedException();
-    }
-
+    /// <summary>
+    /// Gets the serializer for the specified class, or null if no serializer is found.
+    /// </summary>
     public ISerializer< object >? GetSerializer( Type type )
     {
         return _classToSerializer.GetValueOrDefault( type );
     }
 
+    /// <summary>
+    /// Sets the default serializer for the specified class.
+    /// </summary>
     public void SetSerializer< T >( Type type, ISerializer< object > serializer )
     {
         _classToSerializer[ type ] = serializer;
@@ -156,7 +167,7 @@ public class Json
     /// <exception cref="SerializationException"></exception>
     public void SetElementType( Type type, string fieldName, Type elementType )
     {
-        FieldMetadata metadata = GetFields( type ).Get( fieldName );
+        FieldMetadata? metadata = GetFields( type ).Get( fieldName );
 
         if ( metadata == null )
         {
@@ -171,7 +182,7 @@ public class Json
     /// </summary>
     public void SetDeprecated( Type type, string fieldName, bool deprecated )
     {
-        FieldMetadata metadata = GetFields( type ).Get( fieldName );
+        FieldMetadata? metadata = GetFields( type ).Get( fieldName );
 
         if ( metadata == null )
         {
@@ -183,341 +194,602 @@ public class Json
 
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    /// <param name="jsonMap"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public virtual T? ReadValue< T >( string name, Type? type, JsonValue jsonMap )
     {
-//        return readValue( type, null, jsonMap.get( name ) );
-        throw new NotImplementedException();
+        return ReadValue< T >( type, null, jsonMap.Get( name ) );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    /// <param name="defaultValue"></param>
+    /// <param name="jsonMap"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public virtual T? ReadValue< T >( string name, Type? type, T defaultValue, JsonValue jsonMap )
     {
         JsonValue? jsonValue = jsonMap.Get( name );
 
-        if ( jsonValue == null )
+        return jsonValue == null ? defaultValue : ReadValue< T >( type, null, jsonValue );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    /// <param name="elementType"></param>
+    /// <param name="jsonMap"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public virtual T? ReadValue< T >( string name, Type? type, Type? elementType, JsonValue jsonMap )
+    {
+        return ReadValue< T >( type, elementType, jsonMap.Get( name ) );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    /// <param name="elementType"></param>
+    /// <param name="defaultValue"></param>
+    /// <param name="jsonMap"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public virtual T? ReadValue< T >( string name, Type? type, Type? elementType, T defaultValue, JsonValue jsonMap )
+    {
+        JsonValue? jsonValue = jsonMap.Get( name );
+
+        return ReadValue< T >( type, elementType, defaultValue, jsonValue );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="elementType"></param>
+    /// <param name="defaultValue"></param>
+    /// <param name="jsonData"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public virtual T? ReadValue< T >( Type? type, Type? elementType, T defaultValue, JsonValue? jsonData )
+    {
+        if ( jsonData == null )
         {
             return defaultValue;
         }
 
-        return ReadValue< T >( type, null, jsonValue );
+        return ReadValue< T >( type, elementType, jsonData );
     }
 
-    public virtual T? ReadValue< T >( string name, Type? type, Type? elementType, JsonValue jsonMap )
-    {
-//        return readValue( type, elementType, jsonMap.get( name ) );
-        throw new NotImplementedException();
-    }
-
-    public virtual T? ReadValue< T >( string name, Type? type, Type? elementType, T defaultValue, JsonValue jsonMap )
-    {
-//        JsonValue jsonValue = jsonMap.get( name );
-//
-//        return readValue( type, elementType, defaultValue, jsonValue );
-        throw new NotImplementedException();
-    }
-
-    public virtual T? ReadValue< T >( Type? type, Type? elementType, T defaultValue, JsonValue jsonData )
-    {
-//        if ( jsonData == null ) return defaultValue;
-//
-//        return readValue( type, elementType, jsonData );
-        throw new NotImplementedException();
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="jsonData"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public virtual T? ReadValue< T >( Type? type, JsonValue jsonData )
     {
-//        return readValue( type, null, jsonData );
-        throw new NotImplementedException();
+        return ReadValue< T >( type, null, jsonData );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="jsonData"></param>
+    /// <returns></returns>
     public virtual object? ReadValue( Type? type, JsonValue jsonData )
     {
-//        return readValue( type, null, jsonData );
-        throw new NotImplementedException();
+        return ReadValue< object >( type, null, jsonData );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="elementType"></param>
+    /// <param name="jsonData"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="SerializationException"></exception>
     public virtual T? ReadValue< T >( Type? type, Type? elementType, JsonValue? jsonData )
     {
-//        if ( jsonData == null ) return null;
-//
-//        if ( jsonData.isObject() )
-//        {
-//            string className = typeName == null ? null : jsonData.getString( typeName, null );
-//
-//            if ( className != null )
-//            {
-//                type = getClass( className );
-//
-//                if ( type == null )
-//                {
-//                    try
-//                    {
-//                        type = ClassReflection.forName( className );
-//                    }
-//                    catch ( ReflectionException ex )
-//                    {
-//                        throw new SerializationException( ex );
-//                    }
-//                }
-//            }
-//
-//            if ( type == null )
-//            {
-//                if ( defaultSerializer != null ) return ( T )defaultSerializer.read( this, jsonData, type );
-//
-//                return ( T )jsonData;
-//            }
-//
-//            if ( typeName != null && ClassReflection.isAssignableFrom( Collection.class, type)) {
-//                // JSON object wrapper to specify type.
-//                jsonData = jsonData.get( "items" );
-//
-//                if ( jsonData == null )
-//                    throw new SerializationException(
-//                                                     "Unable to convert object to collection: " + jsonData + " ("
-//                                                   + type.getName() + ")" );
-//            } else {
-//                Serializer serializer = classToSerializer.get( type );
-//
-//                if ( serializer != null ) return ( T )serializer.read( this, jsonData, type );
-//
-//                if ( type == string.class || type == Integer.class || type == Boolean.class || type == Float.class
-//                || type == Long.class || type == Double.class || type == Short.class || type == Byte.class
-//                || type == Character.class || ClassReflection.isAssignableFrom( Enum.class, type)) {
-//                    return readValue( "value", type, jsonData );
-//                }
-//
-//                Object object = newInstance( type );
-//
-//                if ( object instanceof Serializable) {
-//                    ( ( Serializable )object ).read( this, jsonData );
-//
-//                    return ( T )object;
-//                }
-//
-//                // JSON object special cases.
-//                if ( object instanceof ObjectMap) {
-//                    ObjectMap result = ( ObjectMap )object;
-//                    for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                        result.put( child.name, readValue( elementType, null, child ) );
-//
-//                    return ( T )result;
-//                }
-//                if ( object instanceof ObjectIntMap) {
-//                    ObjectIntMap result = ( ObjectIntMap )object;
-//                    for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                        result.put( child.name, readValue( Integer.class, null, child));
-//
-//                    return ( T )result;
-//                }
-//                if ( object instanceof ObjectFloatMap) {
-//                    ObjectFloatMap result = ( ObjectFloatMap )object;
-//                    for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                        result.put( child.name, readValue( Float.class, null, child));
-//
-//                    return ( T )result;
-//                }
-//                if ( object instanceof ObjectSet) {
-//                    ObjectSet result = ( ObjectSet )object;
-//                    for ( JsonValue child = jsonData.getChild( "values" ); child != null; child = child.next )
-//                        result.add( readValue( elementType, null, child ) );
-//
-//                    return ( T )result;
-//                }
-//                if ( object instanceof IntMap) {
-//                    IntMap result = ( IntMap )object;
-//                    for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                        result.put( Integer.parseInt( child.name ), readValue( elementType, null, child ) );
-//
-//                    return ( T )result;
-//                }
-//                if ( object instanceof LongMap) {
-//                    LongMap result = ( LongMap )object;
-//                    for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                        result.put( Long.parseLong( child.name ), readValue( elementType, null, child ) );
-//
-//                    return ( T )result;
-//                }
-//                if ( object instanceof IntSet) {
-//                    IntSet result = ( IntSet )object;
-//                    for ( JsonValue child = jsonData.getChild( "values" ); child != null; child = child.next )
-//                        result.add( child.asInt() );
-//
-//                    return ( T )result;
-//                }
-//                if ( object instanceof ArrayMap) {
-//                    ArrayMap result = ( ArrayMap )object;
-//                    for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                        result.put( child.name, readValue( elementType, null, child ) );
-//
-//                    return ( T )result;
-//                }
-//                if ( object instanceof Map) {
-//                    Map result = ( Map )object;
-//
-//                    for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                    {
-//                        if ( child.name.equals( typeName ) ) continue;
-//
-//                        result.put( child.name, readValue( elementType, null, child ) );
-//                    }
-//
-//                    return ( T )result;
-//                }
-//
-//                readFields( object, jsonData );
-//
-//                return ( T )object;
-//            }
-//        }
-//
-//        if ( type != null )
-//        {
-//            Serializer serializer = classToSerializer.get( type );
-//
-//            if ( serializer != null ) return ( T )serializer.read( this, jsonData, type );
-//
-//            if ( ClassReflection.isAssignableFrom( Serializable.class, type)) {
-//                // A Serializable may be read as an array, string, etc, even though it will be written as an object.
-//                Object object = newInstance( type );
-//                ( ( Serializable )object ).read( this, jsonData );
-//
-//                return ( T )object;
-//            }
-//        }
-//
-//        if ( jsonData.isArray() )
-//        {
-//            // JSON array special cases.
-//            if ( type == null || type == Object.class) type = ( Class< T > )Array.class;
-//            if ( ClassReflection.isAssignableFrom( Array.class, type)) {
-//                Array result = type == Array.class ? new Array() : ( Array )newInstance( type );
-//                for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                    result.add( readValue( elementType, null, child ) );
-//
-//                return ( T )result;
-//            }
-//            if ( ClassReflection.isAssignableFrom( Queue.class, type)) {
-//                Queue result = type == Queue.class ? new Queue() : ( Queue )newInstance( type );
-//                for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                    result.addLast( readValue( elementType, null, child ) );
-//
-//                return ( T )result;
-//            }
-//            if ( ClassReflection.isAssignableFrom( Collection.class, type)) {
-//                Collection result = type.isInterface() ? new ArrayList() : ( Collection )newInstance( type );
-//                for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                    result.add( readValue( elementType, null, child ) );
-//
-//                return ( T )result;
-//            }
-//
-//            if ( type.isArray() )
-//            {
-//                Class componentType                    = type.getComponentType();
-//                if ( elementType == null ) elementType = componentType;
-//                Object result                          = ArrayReflection.newInstance( componentType, jsonData.size );
-//                int    i                               = 0;
-//                for ( JsonValue child = jsonData.child; child != null; child = child.next )
-//                    ArrayReflection.set( result, i++, readValue( elementType, null, child ) );
-//
-//                return ( T )result;
-//            }
-//
-//            throw new SerializationException( "Unable to convert value to required type: " + jsonData + " ("
-//                                            + type.getName() + ")" );
-//        }
-//
-//        if ( jsonData.isNumber() )
-//        {
-//            try
-//            {
-//                if ( type == null || type == float.class || type == Float.class) return
-//                    ( T )( Float )jsonData.asFloat();
-//
-//                if ( type == int.class || type == Integer.class) return ( T )( Integer )jsonData.asInt();
-//
-//                if ( type == long.class || type == Long.class) return ( T )( Long )jsonData.asLong();
-//
-//                if ( type == double.class || type == Double.class) return ( T )( Double )jsonData.asDouble();
-//
-//                if ( type == string.class) return ( T )jsonData.asString();
-//
-//                if ( type == short.class || type == Short.class) return ( T )( Short )jsonData.asShort();
-//
-//                if ( type == byte.class || type == Byte.class) return ( T )( Byte )jsonData.asByte();
-//
-//                if ( type == char.class || type == Character.class) return ( T )( Character )jsonData.asChar();
-//            }
-//            catch ( NumberFormatException ignored )
-//            {
-//            }
-//
-//            jsonData = new JsonValue( jsonData.asString() );
-//        }
-//
-//        if ( jsonData.isBoolean() )
-//        {
-//            try
-//            {
-//                if ( type == null || type == boolean.class || type == Boolean.class) return ( T )( Boolean )jsonData
-//                    .asBoolean();
-//            }
-//            catch ( NumberFormatException ignored )
-//            {
-//            }
-//
-//            jsonData = new JsonValue( jsonData.asString() );
-//        }
-//
-//        if ( jsonData.isString() )
-//        {
-//            string string = jsonData.asString();
-//            if ( type == null || type == string.class) return ( T )string;
-//
-//            try
-//            {
-//                if ( type == int.class || type == Integer.class) return ( T )Integer.valueOf( string );
-//
-//                if ( type == float.class || type == Float.class) return ( T )Float.valueOf( string );
-//
-//                if ( type == long.class || type == Long.class) return ( T )Long.valueOf( string );
-//
-//                if ( type == double.class || type == Double.class) return ( T )Double.valueOf( string );
-//
-//                if ( type == short.class || type == Short.class) return ( T )Short.valueOf( string );
-//
-//                if ( type == byte.class || type == Byte.class) return ( T )Byte.valueOf( string );
-//            }
-//            catch ( NumberFormatException ignored )
-//            {
-//            }
-//
-//            if ( type == boolean.class || type == Boolean.class) return ( T )Boolean.valueOf( string );
-//
-//            if ( type == char.class || type == Character.class) return ( T )( Character )string.charAt( 0 );
-//
-//            if ( ClassReflection.isAssignableFrom( Enum.class, type)) {
-//                Enum[] constants = ( Enum[] )type.getEnumConstants();
-//
-//                for ( int i = 0, n = constants.length; i < n; i++ )
-//                {
-//                    Enum e = constants[ i ];
-//
-//                    if ( string.equals( convertToString( e ) ) ) return ( T )e;
-//                }
-//            }
-//            if ( type == CharSequence.class) return ( T )string;
-//
-//            throw new SerializationException( "Unable to convert value to required type: " + jsonData + " ("
-//                                            + type.getName() + ")" );
-//        }
-//
-//        return null;
-        throw new NotImplementedException();
+        if ( jsonData == null )
+        {
+            return default;
+        }
+
+        if ( jsonData.IsObject() )
+        {
+            // Resolve Type from JSON tag if necessary
+            string? className = TypeName == null ? null : jsonData.GetString( TypeName, null );
+
+            if ( className != null )
+            {
+                Type? concreteType = GetClass( className ) ?? ResolveType( className );
+
+                if ( concreteType != null )
+                {
+                    // Use the concreteType for instantiation,  even if the 'type'
+                    // parameter passed in was an interface!
+                    type = concreteType;
+                }
+            }
+
+            if ( type == null )
+            {
+                if ( DefaultSerializer != null )
+                {
+                    return ( T? )DefaultSerializer.Read( this, jsonData, type );
+                }
+
+                return ( T? )( object )jsonData; // Direct cast to T if possible
+            }
+
+            // Handle Collection Wrapper (JSON object with "items" key)
+            if ( TypeName != null && typeof( IEnumerable ).IsAssignableFrom( type )
+                                  && !typeof( IDictionary ).IsAssignableFrom( type ) )
+            {
+                jsonData = jsonData.Get( "items" );
+
+                if ( jsonData == null )
+                {
+                    throw new SerializationException( $"Unable to convert object to collection: {type.Name}" );
+                }
+            }
+            else
+            {
+                // Custom Serializers
+                if ( _classToSerializer.TryGetValue( type, out ISerializer< object >? serializer ) )
+                {
+                    return ( T? )serializer.Read( this, jsonData, type );
+                }
+
+                // Primitive/Enum "Value" Wrapper check
+                if ( type.IsPrimitive || type == typeof( string ) || type == typeof( decimal ) || type.IsEnum )
+                {
+                    return ReadValue< T >( type, null, jsonData.Get( "value" ) );
+                }
+
+                object obj = NewInstance( type );
+
+                // Interface-based Serialization (ISerializable)
+                if ( obj is ISerializable serializable )
+                {
+                    serializable.Read( this, jsonData );
+
+                    return ( T? )obj;
+                }
+
+                // Map / Dictionary handling
+                if ( obj is IDictionary dictionary )
+                {
+                    for ( JsonValue? child = jsonData.Child; child != null; child = child.Next )
+                    {
+                        if ( child.Name == TypeName )
+                        {
+                            continue;
+                        }
+
+                        // Dictionary keys are usually strings here, but also check for numeric maps
+                        object? key = child.Name;
+
+                        if ( child.Name is { Length: > 0 } )
+                        {
+                            if ( obj is IDictionary< int, object > )
+                            {
+                                key = int.Parse( child.Name );
+                            }
+                            else if ( obj is IDictionary< long, object > )
+                            {
+                                key = long.Parse( child.Name );
+                            }
+
+                            if ( key != null )
+                            {
+                                dictionary.Add( key, ReadValue< object >( elementType, null, child ) );
+                            }
+                        }
+                    }
+
+                    return ( T? )obj;
+                }
+
+                // Handle Sets (HashSet-like objects)
+                if ( obj is ISet< object? > set )
+                {
+                    for ( JsonValue? child = jsonData.Get( "values" )?.Child; child != null; child = child.Next )
+                    {
+                        set.Add( ReadValue< object >( elementType, null, child ) );
+                    }
+
+                    return ( T? )obj;
+                }
+
+                // Fallback to Field Reflection
+                ReadFields( obj, jsonData );
+
+                return ( T? )obj;
+            }
+        }
+
+        // --- Array Handling ---
+        if ( jsonData.IsArray() )
+        {
+            if ( type == null || type == typeof( object ) )
+            {
+                type = typeof( List< object > );
+            }
+
+            // List/Collection Handling
+            if ( typeof( IEnumerable ).IsAssignableFrom( type ) && !type.IsArray )
+            {
+                var list = ( IList )( type.IsInterface ? new List< object >() : NewInstance( type ) );
+
+                for ( JsonValue? child = jsonData.Child; child != null; child = child.Next )
+                {
+                    list.Add( ReadValue< object >( elementType, null, child ) );
+                }
+
+                return ( T? )list;
+            }
+
+            // Native Array Handling (T[])
+            if ( type.IsArray )
+            {
+                Type componentType = type.GetElementType()!;
+
+                elementType ??= componentType;
+
+                var resultArray = Array.CreateInstance( componentType, jsonData.Size );
+                var i           = 0;
+
+                for ( JsonValue? child = jsonData.Child; child != null; child = child.Next )
+                {
+                    resultArray.SetValue( ReadValue< object >( elementType, null, child ), i++ );
+                }
+
+                return ( T? )( object )resultArray;
+            }
+
+            throw new SerializationException( $"Unable to convert array to: {type.Name}" );
+        }
+
+        // --- Primitive Value Handling (Number, Bool, String) ---
+        return ( T? )ConvertPrimitive( type, jsonData );
     }
 
-    public virtual void ReadFields( object obj, JsonValue jsonMap )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="type"></param>
+    public void AddAlias( string name, Type type )
     {
+        _typeAliases[ name ] = type;
+    }
+
+    private Type? ResolveType( string name )
+    {
+        // Check short-name aliases first
+        if ( _typeAliases.TryGetValue( name, out Type? type ) )
+        {
+            return type;
+        }
+
+        // Try to find the type normally
+        return Type.GetType( name );
+    }
+
+    private object? ConvertPrimitive( Type? type, JsonValue jsonData )
+    {
+        if ( jsonData.IsNumber() )
+        {
+            if ( type == null || type == typeof( float ) )
+            {
+                return jsonData.AsFloat();
+            }
+
+            if ( type.IsEnum )
+            {
+                // C# can cast numbers directly to the enum underlying type
+                return Enum.ToObject( type, jsonData.AsInt() );
+            }
+
+            if ( type == typeof( int ) )
+            {
+                return jsonData.AsInt();
+            }
+
+            if ( type == typeof( long ) )
+            {
+                return jsonData.AsLong();
+            }
+
+            return type == typeof( double )
+                ? jsonData.AsDouble()
+                : Convert.ChangeType( jsonData.AsShort(), type );
+        }
+
+        if ( jsonData.IsBoolean() )
+        {
+            return jsonData.AsBoolean();
+        }
+
+        if ( jsonData.IsString() )
+        {
+            string? s = jsonData.AsString();
+
+            if ( s is { Length: > 0 } )
+            {
+                if ( type == null || type == typeof( string ) )
+                {
+                    return s;
+                }
+
+                return type.IsEnum
+                    ? ParseEnum( type, jsonData.AsString()! )
+                    : Convert.ChangeType( s, type );
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    /// <exception cref="SerializationException"></exception>
+    private object NewInstance( Type type )
+    {
+        if ( type.IsInterface || type.IsAbstract )
+        {
+            throw new SerializationException( $"Cannot create an instance of {type.Name}. " +
+                                              $"Is it missing a '{TypeName}' tag in the JSON?" );
+        }
+
+        if ( _constructorCache.TryGetValue( type, out Func< object >? factory ) )
+        {
+            return factory();
+        }
+
+        ConstructorInfo? constructor = type.GetConstructor( BindingFlags.Public
+                                                          | BindingFlags.NonPublic
+                                                          | BindingFlags.Instance,
+                                                            null,
+                                                            Type.EmptyTypes,
+                                                            null );
+
+        if ( constructor == null && !type.IsValueType )
+        {
+            throw new SerializationException( $"No parameterless constructor for {type.Name}" );
+        }
+
+        _constructorCache[ type ] = NewFactory;
+
+        return NewFactory();
+
+        // --------------------------------------
+
+        // Create a delegate to call the constructor (much faster for subsequent calls)
+        object NewFactory()
+        {
+            return constructor != null ? constructor.Invoke( null ) : Activator.CreateInstance( type )!;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="jsonData"></param>
+    private void ReadFields( object obj, JsonValue jsonData )
+    {
+        Type type = obj.GetType();
+
+        // Ensure cache is built
+        if ( !_typeCache.TryGetValue( type, out var cachedFields ) )
+        {
+            cachedFields       = BuildFieldCache( type );
+            _typeCache[ type ] = cachedFields;
+        }
+
+        // Track what we find
+        var fieldsFound = new HashSet< string >( StringComparer.OrdinalIgnoreCase );
+
+        for ( JsonValue? child = jsonData.Child; child != null; child = child.Next )
+        {
+            if ( child.Name == TypeName )
+            {
+                continue;
+            }
+
+            // Find the matching cached field by its JSON name
+            CachedField? target =
+                cachedFields.Find( f => f.JsonName.Equals( child.Name, StringComparison.OrdinalIgnoreCase ) );
+
+            if ( target != null )
+            {
+                var value = ReadValue< object >( target.Field.FieldType, null, child );
+                target.Field.SetValue( obj, value );
+                fieldsFound.Add( target.JsonName );
+            }
+        }
+
+        // Post-Loop Validation: Check for missing required fields
+        foreach ( CachedField fieldMeta in cachedFields )
+        {
+            if ( fieldMeta.IsRequired && !fieldsFound.Contains( fieldMeta.JsonName ) )
+            {
+                throw new SerializationException( $"Required field '{fieldMeta.JsonName}' "
+                                                + $"was missing in JSON for type {type.Name}" );
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="enumType"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private object ParseEnum( Type enumType, string value )
+    {
+        // Check the cache
+        if ( !_enumCache.TryGetValue( enumType, out var nameMap ) )
+        {
+            nameMap = new Dictionary< string, object >( StringComparer.OrdinalIgnoreCase );
+
+            // Reflect on all enum members
+            foreach ( FieldInfo field in enumType.GetFields( BindingFlags.Public | BindingFlags.Static ) )
+            {
+                var    attr = field.GetCustomAttribute< JsonNameAttribute >();
+                string name = attr?.Name ?? field.Name;
+
+                // GetValue(null) works because enum members are static constants
+                nameMap[ name ] = field.GetValue( null )!;
+            }
+
+            _enumCache[ enumType ] = nameMap;
+        }
+
+        return nameMap.TryGetValue( value, out object? result )
+            ? result
+            // Fallback: Try standard C# parsing (handles integers or exact names)
+            : Enum.Parse( enumType, value, true );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="fieldNames"></param>
+    public virtual void SortFieldNames( Type type, List< string > fieldNames )
+    {
+        if ( SortFields )
+        {
+            fieldNames.Sort();
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private Dictionary< string, FieldMetadata > GetFields( Type type )
+    {
+        Dictionary< string, FieldMetadata >? fields = _typeToFields.Get( type );
+
+        if ( fields != null )
+        {
+            return fields;
+        }
+
+        List< Type? > classHierarchy = [ ];
+        Type?         nextClass      = type;
+
+        while ( nextClass != typeof( object ) )
+        {
+            classHierarchy.Add( nextClass );
+            nextClass = nextClass?.BaseType;
+        }
+
+        List< FieldInfo > allFields = [ ];
+
+        foreach ( Type? currentType in classHierarchy )
+        {
+            if ( currentType == null )
+            {
+                continue;
+            }
+
+            allFields.AddRange( currentType.GetFields( BindingFlags.Instance
+                                                     | BindingFlags.NonPublic
+                                                     | BindingFlags.Public ) );
+        }
+
+        var nameToField = new Dictionary< string, FieldMetadata >( allFields.Count );
+
+        foreach ( FieldInfo field in allFields )
+        {
+            if ( field.IsStatic )
+            {
+                continue;
+            }
+
+            nameToField[ field.Name ] = new FieldMetadata( field );
+        }
+
+        SortFieldNames( type, nameToField.Keys.ToList() );
+
+        _typeToFields[ type ] = nameToField;
+
+        return nameToField;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private List< CachedField > BuildFieldCache( Type type )
+    {
+        var list = new List< CachedField >();
+        FieldInfo[] allFields = type.GetFields( BindingFlags.Public
+                                              | BindingFlags.NonPublic
+                                              | BindingFlags.Instance );
+
+        foreach ( FieldInfo f in allFields )
+        {
+            if ( f.IsDefined( typeof( NonSerializedAttribute ) ) )
+            {
+                continue;
+            }
+
+            var    attr       = f.GetCustomAttribute< JsonFieldAttribute >();
+            string jsonName   = attr?.Name ?? f.Name;
+            bool   isRequired = attr?.Required ?? false;
+
+            list.Add( new CachedField( f, jsonName, isRequired ) );
+        }
+
+        return list;
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Simple Field Metadata container
+    /// </summary>
+    private class CachedField
+    {
+        public FieldInfo Field      { get; }
+        public string    JsonName   { get; }
+        public bool      IsRequired { get; }
+
+        public CachedField( FieldInfo field, string jsonName, bool isRequired )
+        {
+            Field      = field;
+            JsonName   = jsonName;
+            IsRequired = isRequired;
+        }
     }
 
     // ========================================================================
@@ -527,8 +799,8 @@ public class Json
     public class FieldMetadata
     {
         public FieldInfo Field       { get; private set; }
-        public Type?     ElementType { get; private set; }
-        public bool      Deprecated  { get; private set; }
+        public Type?     ElementType { get; set; }
+        public bool      Deprecated  { get; set; }
 
         public FieldMetadata( FieldInfo field )
         {
@@ -576,7 +848,7 @@ public class Json
     {
         public void Write( Json json, T obj, Type knownType );
 
-        public object Read( Json json, JsonValue jsonData, Type type );
+        public object Read( Json json, JsonValue jsonData, Type? type );
     }
 
     // ========================================================================
@@ -606,7 +878,7 @@ public class Json
         /// <param name="jsonData"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public abstract object Read( Json json, JsonValue jsonData, Type type );
+        public abstract object Read( Json json, JsonValue jsonData, Type? type );
     }
 
     // ========================================================================

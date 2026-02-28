@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Globalization;
+using System.IO;
 using System.Text;
 
 using JetBrains.Annotations;
@@ -107,6 +109,12 @@ public class JsonValue : IDisposable
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="other"></param>
+    /// <param name="otherLast"></param>
+    /// <param name="parent"></param>
     private JsonValue( JsonValue other, JsonValue? otherLast, JsonValue? parent )
     {
         Type        = other.Type;
@@ -137,11 +145,21 @@ public class JsonValue : IDisposable
         Size = other.Size;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public bool Has( string name )
     {
         return Get( name ) != null;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public JsonValue? Get( int index )
     {
         if ( index == Size - 1 )
@@ -160,6 +178,11 @@ public class JsonValue : IDisposable
         return current;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public JsonValue? Get( string name )
     {
         JsonValue? current = Child;
@@ -173,6 +196,11 @@ public class JsonValue : IDisposable
         return current;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public JsonValue? GetIgnoreCase( string name )
     {
         JsonValue? current = Child;
@@ -186,6 +214,12 @@ public class JsonValue : IDisposable
         return current;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public JsonValue Require( int index )
     {
         JsonValue? current = Get( index );
@@ -198,6 +232,12 @@ public class JsonValue : IDisposable
         return current;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public JsonValue Require( string name )
     {
         JsonValue? current = Get( name );
@@ -210,6 +250,11 @@ public class JsonValue : IDisposable
         return current;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public JsonValue? Remove( int index )
     {
         JsonValue? child = Get( index );
@@ -248,6 +293,11 @@ public class JsonValue : IDisposable
         return child;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public JsonValue? Remove( string name )
     {
         JsonValue? child = Get( name );
@@ -336,16 +386,28 @@ public class JsonValue : IDisposable
         return Size == 0;
     }
 
+    /// <summary>
+    /// Returns true if this JsonValue is an ArrayType.
+    /// </summary>
+    /// <returns></returns>
     public bool IsArray()
     {
         return Type == ValueType.ArrayType;
     }
 
+    /// <summary>
+    /// Returns true if this JsonValue is an ObjectType.
+    /// </summary>
+    /// <returns></returns>
     public bool IsObject()
     {
         return Type == ValueType.ObjectType;
     }
 
+    /// <summary>
+    /// Returns true if this JsonValue is a StringValue.
+    /// </summary>
+    /// <returns></returns>
     public bool IsString()
     {
         return Type == ValueType.StringValue;

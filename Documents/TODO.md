@@ -936,6 +936,7 @@ UTILS
     -      -      -      - IReadable
     -      -      -      - IResetable
     -      -      -      - IRunnable
+    -      -      -      - JsonFieldAttribute
     -      -      -      - MinimalCrc32
     -      -      -      - PerformanceCounter
     -      -      -      - PerformanceCounters
@@ -1035,3 +1036,4 @@ UTILS/XML
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+

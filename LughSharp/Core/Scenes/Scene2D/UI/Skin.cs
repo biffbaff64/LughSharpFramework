@@ -22,7 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 using JetBrains.Annotations;
@@ -196,7 +199,8 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Helper method for constructors.
+    /// Copies the table of default tag classes into the working dictionary.
     /// </summary>
     private void Setup()
     {
@@ -244,8 +248,18 @@ public class Skin : IDisposable
                 name += $"_{region?.Index}";
             }
 
-            Add( name, region, typeof( TextureRegion ) );
+            Add< TextureRegion >( name, region );
         }
+    }
+
+    /// <summary>
+    /// Adds the spcified resource to the skin.
+    /// </summary>
+    /// <param name="name"> The resource name. </param>
+    /// <param name="resource"> The resource to add. </param>
+    public void Add( string name, object resource )
+    {
+        Add( name, resource, resource.GetType() );
     }
 
     /// <summary>
@@ -253,11 +267,12 @@ public class Skin : IDisposable
     /// </summary>
     /// <param name="name"></param>
     /// <param name="resource"></param>
-    public void Add( string name, object resource )
+    /// <typeparam name="T"></typeparam>
+    public void Add< T >( string? name, T? resource ) where T : class
     {
-        Add( name, resource, resource.GetType() );
+        Add( name, resource, typeof( T ) );
     }
-
+    
     /// <summary>
     /// 
     /// </summary>
@@ -442,7 +457,7 @@ public class Skin : IDisposable
 
         region = new TextureRegion( texture );
 
-        Add( name, region, typeof( TextureRegion ) );
+        Add< TextureRegion >( name, region );
 
         return region;
     }
@@ -498,7 +513,7 @@ public class Skin : IDisposable
             tiled.Scale = Scale;
         }
 
-        Add( name, tiled, typeof( TiledSceneDrawable ) );
+        Add< TiledSceneDrawable >( name, tiled );
 
         return tiled;
     }
@@ -546,7 +561,7 @@ public class Skin : IDisposable
                 patch.Scale( Scale, Scale );
             }
 
-            Add( name, patch, typeof( NinePatch ) );
+            Add< NinePatch >( name, patch );
 
             return patch;
         }
@@ -592,7 +607,7 @@ public class Skin : IDisposable
                 sprite.SetSize( sprite.Width * Scale, sprite.Height * Scale );
             }
 
-            Add( name, sprite, typeof( Sprite ) );
+            Add< Sprite >( name, sprite );
 
             return sprite;
         }
@@ -681,7 +696,7 @@ public class Skin : IDisposable
             baseDrawable.Name = name;
         }
 
-        Add( name, drawable, typeof( ISceneDrawable ) );
+        Add< ISceneDrawable >( name, drawable );
 
         return drawable;
     }
@@ -1276,7 +1291,7 @@ public class Skin : IDisposable
 
                     // 1. Try to get type from Json's internal tag map
                     // 2. If not found, try to resolve the type string directly
-                    Type? type = json.GetTagType( valueMap.Name ) ?? Type.GetType( valueMap.Name );
+                    Type? type = json.GetClass( valueMap.Name ) ?? Type.GetType( valueMap.Name );
 
                     if ( type == null )
                     {
@@ -1492,6 +1507,7 @@ public class Skin : IDisposable
 
                         // Deserialize the (potentially merged) object and add to skin
                         var finalObject = resourceToken.ToObject( targetType, serializer );
+                        
                         _skin.Add( resourceName, finalObject, targetType );
                     }
                 }
