@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
+// Copyright (c) 2024 Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,57 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.IO;
 
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Json;
 
 [PublicAPI]
-public class JsonWriter : IJsonWriter
+public interface IJsonWriter
 {
-    public bool           QuoteLongValues { get; set; } = true;
-    public JsonOutputType OutputType      { get; set; }
-
-    private readonly StreamWriter _writer;
     
-    // ========================================================================
-
-    public JsonWriter( StreamWriter writer )
-    {
-        _writer = writer;
-    }
-
-    public void Set( string typeName, string className )
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void Pop()
-    {
-    }
-
-    public void Array()
-    {
-    }
-
-    public void Object()
-    {
-    }
-
-    public void Name( string? name)
-    {
-    }
-
-    public void Value( string? convertToString )
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void Value( object convertToString )
-    {
-        throw new System.NotImplementedException();
-    }
 }
 
 // ============================================================================

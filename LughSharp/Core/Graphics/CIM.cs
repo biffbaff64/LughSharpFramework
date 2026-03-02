@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 using JetBrains.Annotations;

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.IO;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Json;
@@ -29,6 +31,30 @@ namespace LughSharp.Core.Utils.Json;
 [PublicAPI]
 public class JsonReader
 {
+    public JsonValue? Parse( string json )
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public JsonValue? Parse( char[] data, int offset, int length )
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public JsonValue? Parse( FileInfo file )
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public JsonValue? Parse( Stream input )
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public JsonValue? Parse( StreamReader reader )
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
 // ============================================================================
