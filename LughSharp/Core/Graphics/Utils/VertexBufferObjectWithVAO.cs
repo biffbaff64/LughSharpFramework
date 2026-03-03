@@ -41,7 +41,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     // ========================================================================
 
-    private static readonly Buffer< int > TmpHandle = new( 1 );
+    private static readonly Buffer< int > _tmpHandle = new( 1 );
 
     private readonly Buffer< float > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
@@ -391,11 +391,11 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         if ( _vaoHandle != -1 )
         {
-            TmpHandle.Clear();
-            TmpHandle.PutInt( _vaoHandle );
-            TmpHandle.Flip();
+            _tmpHandle.Clear();
+            _tmpHandle.PutInt( _vaoHandle );
+            _tmpHandle.Flip();
 
-            fixed ( int* intptr = &TmpHandle.ToArray()[ 0 ] )
+            fixed ( int* intptr = &_tmpHandle.ToArray()[ 0 ] )
             {
                 Engine.GL.DeleteVertexArrays( 1, ( uint* )intptr );
             }

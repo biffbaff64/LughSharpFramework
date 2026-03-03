@@ -38,7 +38,7 @@ namespace LughSharp.Core.Audio.Maponus.IO;
 [PublicAPI]
 public class WaveFile : RiffFile
 {
-    public const int MAX_WAVE_CHANNELS = 2;
+    public const int MaxWaveChannels = 2;
 
     private readonly int             _numSamples;
     private readonly RiffChunkHeader _pcmData;
@@ -71,18 +71,18 @@ public class WaveFile : RiffFile
         // Verify parameters...
         if ( ( ( bitsPerSample != 8 ) && ( bitsPerSample != 16 ) ) || ( numChannels < 1 ) || ( numChannels > 2 ) )
         {
-            return DDC_INVALID_CALL;
+            return DdcInvalidCall;
         }
 
         _waveFormat.Data.Config( samplingRate, bitsPerSample, numChannels );
 
         if ( stream != null )
         {
-            Open( stream, RF_WRITE );
+            Open( stream, RfWrite );
         }
         else
         {
-            Open( filename, RF_WRITE );
+            Open( filename, RfWrite );
         }
 
         sbyte[] theWave =
@@ -95,7 +95,7 @@ public class WaveFile : RiffFile
 
         int retcode = Write( theWave, 4 );
 
-        if ( retcode == DDC_SUCCESS )
+        if ( retcode == DdcSuccess )
         {
             Write( _waveFormat.Header, 8 );
             Write( _waveFormat.Data.FormatTag, 2 );
@@ -106,7 +106,7 @@ public class WaveFile : RiffFile
 
             retcode = Write( _waveFormat.Data.NumBitsPerSample, 2 );
 
-            if ( retcode == DDC_SUCCESS )
+            if ( retcode == DdcSuccess )
             {
                 _pcmDataOffset = CurrentFilePosition();
                 retcode        = Write( _pcmData, 8 );
@@ -129,16 +129,16 @@ public class WaveFile : RiffFile
 
     public override int Close()
     {
-        int rc = DDC_SUCCESS;
+        int rc = DdcSuccess;
 
-        if ( CurrentFileMode() == RF_WRITE )
+        if ( CurrentFileMode() == RfWrite )
         {
             rc = Backpatch( _pcmDataOffset, _pcmData, 8 );
         }
 
         if ( !_justWriteLengthBytes )
         {
-            if ( rc == DDC_SUCCESS )
+            if ( rc == DdcSuccess )
             {
                 rc = base.Close();
             }
@@ -256,7 +256,7 @@ public class WaveFileSample
     public WaveFileSample( WaveFile enclosingInstance )
     {
         EnclosingInstance = enclosingInstance;
-        Chan              = new short[ WaveFile.MAX_WAVE_CHANNELS ];
+        Chan              = new short[ WaveFile.MaxWaveChannels ];
     }
 
     public short[]  Chan              { get; set; }

@@ -769,15 +769,15 @@ public class Color : ICloneable, IEquatable< Color >
         float range = max - min;
 
         // Hue calculation
-        if ( Math.Abs( range ) < NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( range ) < NumberUtils.FloatTolerance )
         {
             hsv[ 0 ] = 0; // Undefined hue, achromatic case
         }
-        else if ( Math.Abs( max - R ) < NumberUtils.FLOAT_TOLERANCE )
+        else if ( Math.Abs( max - R ) < NumberUtils.FloatTolerance )
         {
             hsv[ 0 ] = ( ( 60 * ( G - B ) / range ) + 360 ) % 360;
         }
-        else if ( Math.Abs( max - G ) < NumberUtils.FLOAT_TOLERANCE )
+        else if ( Math.Abs( max - G ) < NumberUtils.FloatTolerance )
         {
             hsv[ 0 ] = ( ( 60 * ( B - R ) / range ) + 120 ) % 360;
         }

@@ -114,7 +114,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                Engine.GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( IGL.GLElementArrayBuffer, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -141,7 +141,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                Engine.GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( IGL.GLElementArrayBuffer, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -166,7 +166,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                Engine.GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( IGL.GLElementArrayBuffer, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -197,7 +197,7 @@ public class IndexBufferObjectSubData : IIndexData
 
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                Engine.GL.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                Engine.GL.BufferSubData( IGL.GLElementArrayBuffer, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;

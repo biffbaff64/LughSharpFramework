@@ -665,13 +665,13 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <returns></returns>
     public override int GetHashCode()
     {
-        const int PRIME = 31;
+        const int Prime = 31;
 
         //TODO: Do this properly without referencing Tmp.
-        int result = PRIME + NumberUtils.FloatToRawIntBits( Tmp.X );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( Tmp.Y );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( Tmp.Width );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( Tmp.Height );
+        int result = Prime + NumberUtils.FloatToRawIntBits( Tmp.X );
+        result = ( Prime * result ) + NumberUtils.FloatToRawIntBits( Tmp.Y );
+        result = ( Prime * result ) + NumberUtils.FloatToRawIntBits( Tmp.Width );
+        result = ( Prime * result ) + NumberUtils.FloatToRawIntBits( Tmp.Height );
 
         return result;
     }

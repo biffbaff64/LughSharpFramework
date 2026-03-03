@@ -226,6 +226,11 @@ public static class JsonOutput
         return buffer.ToString();
     }
 
+    /// <summary>
+    /// Escapes the specified value with double quotes.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     private static string EscapeQuote( string value )
     {
         var buffer = new StringBuilder( value.Length + 6 );

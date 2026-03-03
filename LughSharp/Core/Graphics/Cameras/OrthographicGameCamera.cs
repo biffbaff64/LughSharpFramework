@@ -69,12 +69,12 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// and <see cref="IDisposable"/> for proper resource management.
     /// <para>
     /// This constructor creates a new instance of <see cref="OrthographicGameCamera"/> with
-    /// default values for scene width (<see cref="CameraData.DEFAULT_SCENE_WIDTH"/>) and height
-    /// (<see cref="CameraData.DEFAULT_SCENE_HEIGHT"/>), and a PPM value of <see cref="CameraData.DEFAULT_PPM"/>.
+    /// default values for scene width (<see cref="CameraData.DefaultSceneWidth"/>) and height
+    /// (<see cref="CameraData.DefaultSceneHeight"/>), and a PPM value of <see cref="CameraData.DefaultPPM"/>.
     /// </para>
     /// </summary>
     public OrthographicGameCamera()
-        : this( CameraData.DEFAULT_SCENE_WIDTH, CameraData.DEFAULT_SCENE_HEIGHT )
+        : this( CameraData.DefaultSceneWidth, CameraData.DefaultSceneHeight )
     {
     }
 
@@ -101,7 +101,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     public OrthographicGameCamera( float sceneWidth,
                                    float sceneHeight,
                                    Viewport.ViewportType viewportType = Viewport.ViewportType.Stretch,
-                                   float ppm = CameraData.DEFAULT_PPM,
+                                   float ppm = CameraData.DefaultPPM,
                                    string name = "" )
     {
         Name             = name;
@@ -448,7 +448,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </summary>
     public void Reset()
     {
-        CameraZoom = CameraData.DEFAULT_ZOOM;
+        CameraZoom = CameraData.DefaultZoom;
 
         Camera.Position.SetZero();
         Camera.Update();

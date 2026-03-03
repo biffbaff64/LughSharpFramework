@@ -40,10 +40,10 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public static class CIM
 {
-    private const int BUFFER_SIZE = 32000;
+    private const int BufferSize = 32000;
 
-    private static readonly byte[] _writeBuffer = new byte[ BUFFER_SIZE ];
-    private static readonly byte[] _readBuffer  = new byte[ BUFFER_SIZE ];
+    private static readonly byte[] _writeBuffer = new byte[ BufferSize ];
+    private static readonly byte[] _readBuffer  = new byte[ BufferSize ];
 
     // ========================================================================
 
@@ -71,8 +71,8 @@ public static class CIM
             pixelBuf.Position = 0;
             pixelBuf.Limit    = pixelBuf.Capacity;
 
-            int remainingBytes = pixelBuf.Capacity % BUFFER_SIZE;
-            int iterations     = pixelBuf.Capacity / BUFFER_SIZE;
+            int remainingBytes = pixelBuf.Capacity % BufferSize;
+            int iterations     = pixelBuf.Capacity / BufferSize;
 
             lock ( _writeBuffer )
             {

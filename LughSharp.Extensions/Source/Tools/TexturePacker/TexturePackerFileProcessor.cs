@@ -61,7 +61,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// and the default packfile name ( "pack.atlas" ).
     /// </summary>
     public TexturePackerFileProcessor()
-        : this( new TexturePackerSettings(), DEFAULT_PACKFILE_NAME )
+        : this( new TexturePackerSettings(), DefaultPackfileName )
     {
     }
 
@@ -500,7 +500,7 @@ public class TexturePackerFileProcessor : FileProcessor
     public virtual void DeleteOutput( DirectoryInfo outputRoot )
     {
         // Load root settings to get scale.
-        var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, DEFAULT_PACKFILE_NAME ) );
+        var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, DefaultPackfileName ) );
         TexturePackerSettings rootSettings = _defaultSettings;
 
         if ( settingsFile.Exists )

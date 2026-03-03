@@ -47,7 +47,7 @@ public static class TextureDataFactory
     /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
     public static ITextureData LoadFromFile( FileInfo file, bool useMipMaps = true )
     {
-        return LoadFromFile( file, LughFormat.DEFAULT, useMipMaps );
+        return LoadFromFile( file, LughFormat.Default, useMipMaps );
     }
 
     /// <summary>

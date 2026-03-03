@@ -31,19 +31,19 @@ namespace LughSharp.Core.Maths;
 [PublicAPI]
 public abstract class NumberUtils
 {
-    public const int   NOT_SET           = -1;
-    public const float PI                = 3.14159265358979323846f;
-    public const float MIN_NORMAL        = 1.17549435E-38f;
-    public const int   SIGNIFICAND_WIDTH = 24;
-    public const int   MAX_EXPONENT      = 127;
-    public const int   MIN_EXPONENT      = -126;
-    public const int   MIN_SUB_EXPONENT  = -149;
-    public const int   EXP_BIAS          = 127;
-    public const int   SIGN_BIT_MASK     = int.MinValue;
-    public const int   EXP_BIT_MASK      = 2139095040;
-    public const int   SIGNIF_BIT_MASK   = 8388607;
-    public const float FLOAT_TOLERANCE   = 0.000000000000001f; // 32 bits
-    public const float FLOAT_EPSILON     = 1e-6f;              // 32 bits
+    public const int   NotSet           = -1;
+    public const float Pi                = 3.14159265358979323846f;
+    public const float MinNormal        = 1.17549435E-38f;
+    public const int   SignificandWidth = 24;
+    public const int   MaxExponent      = 127;
+    public const int   MinExponent      = -126;
+    public const int   MinSubExponent  = -149;
+    public const int   ExpBias          = 127;
+    public const int   SignBitMask     = int.MinValue;
+    public const int   ExpBitMask      = 2139095040;
+    public const int   SignifBitMask   = 8388607;
+    public const float FloatTolerance   = 0.000000000000001f; // 32 bits
+    public const float FloatEpsilon     = 1e-6f;              // 32 bits
 
     // ========================================================================
 
@@ -58,8 +58,8 @@ public abstract class NumberUtils
 
         // Check for NaN based on values of bit fields, maximum
         // exponent and nonzero significand.
-        if ( ( ( result & EXP_BIT_MASK ) == EXP_BIT_MASK )
-          && ( ( result & SIGNIF_BIT_MASK ) != 0 ) )
+        if ( ( ( result & ExpBitMask ) == ExpBitMask )
+          && ( ( result & SignifBitMask ) != 0 ) )
         {
             result = 0x7fc00000;
         }

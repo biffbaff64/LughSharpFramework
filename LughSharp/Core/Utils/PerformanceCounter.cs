@@ -71,7 +71,7 @@ public class PerformanceCounter
 
     // ========================================================================
 
-    private const float NANO2_SECONDS = 1f / 1000000000.0f;
+    private const float Nano2Seconds = 1f / 1000000000.0f;
 
     private long _lastTick;
     private long _startTime;
@@ -106,7 +106,7 @@ public class PerformanceCounter
 
         if ( _lastTick > 0L )
         {
-            Tick( ( t - _lastTick ) * NANO2_SECONDS );
+            Tick( ( t - _lastTick ) * Nano2Seconds );
         }
 
         _lastTick = t;
@@ -155,7 +155,7 @@ public class PerformanceCounter
     {
         if ( _startTime > 0L )
         {
-            Current    += ( TimeHelpers.NanoTime() - _startTime ) * NANO2_SECONDS;
+            Current    += ( TimeHelpers.NanoTime() - _startTime ) * Nano2Seconds;
             _startTime =  0L;
             Valid      =  true;
         }

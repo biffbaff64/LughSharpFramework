@@ -272,7 +272,7 @@ public class Skin : IDisposable
     {
         Add( name, resource, typeof( T ) );
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -964,7 +964,7 @@ public class Skin : IDisposable
     /// </summary>
     protected class SkinJson : Json
     {
-        private const    string PARENT_FIELD_NAME = "parent";
+        private const    string ParentFieldName = "parent";
         private readonly Skin   _skin;
 
         // ====================================================================
@@ -1007,9 +1007,9 @@ public class Skin : IDisposable
         /// <exception cref="SerializationException"></exception>
         public override void ReadFields( object obj, JsonValue jsonMap )
         {
-            if ( jsonMap.Has( PARENT_FIELD_NAME ) )
+            if ( jsonMap.Has( ParentFieldName ) )
             {
-                var   parentName = ReadValue< string >( PARENT_FIELD_NAME, typeof( string ), jsonMap );
+                var   parentName = ReadValue< string >( ParentFieldName, typeof( string ), jsonMap );
                 Type? parentType = obj.GetType();
 
                 while ( true )
@@ -1051,7 +1051,7 @@ public class Skin : IDisposable
         /// <returns></returns>
         public override bool IgnoreUnknownField( Type type, string fieldName )
         {
-            return fieldName == PARENT_FIELD_NAME;
+            return fieldName == ParentFieldName;
         }
     }
 
@@ -1079,7 +1079,7 @@ public class Skin : IDisposable
         /// <param name="jsonData"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public override Color Read( Json json, JsonValue jsonData, Type type )
+        public override Color Read( Json json, JsonValue jsonData, Type? type )
         {
             if ( jsonData.IsString() )
             {
@@ -1113,6 +1113,8 @@ public class Skin : IDisposable
         private readonly Skin     _skin;
         private readonly FileInfo _skinFile;
 
+        // ====================================================================
+
         /// <summary>
         /// 
         /// </summary>
@@ -1132,7 +1134,7 @@ public class Skin : IDisposable
         /// <param name="type"></param>
         /// <returns></returns>
         /// <exception cref="SerializationException"></exception>
-        public override BitmapFont Read( Json json, JsonValue jsonData, Type type )
+        public override BitmapFont Read( Json json, JsonValue jsonData, Type? type )
         {
             var path                = json.ReadValue< string >( "file", typeof( string ), jsonData );
             var scaledSize          = json.ReadValue< float >( "scaledSize", typeof( float ), -1f, jsonData );
@@ -1188,7 +1190,7 @@ public class Skin : IDisposable
                 font.FontData.MarkupEnabled = markupEnabled;
                 font.UseIntegerPositions    = useIntegerPositions;
 
-                if ( Math.Abs( scaledSize - -1 ) > NumberUtils.FLOAT_TOLERANCE )
+                if ( Math.Abs( scaledSize - -1 ) > NumberUtils.FloatTolerance )
                 {
                     font.FontData.SetScale( scaledSize / font.GetCapHeight() );
                 }
@@ -1230,7 +1232,7 @@ public class Skin : IDisposable
         /// <param name="type"></param>
         /// <returns></returns>
         /// <exception cref="SerializationException"></exception>
-        public override object Read( Json json, JsonValue jsonData, Type type )
+        public override object Read( Json json, JsonValue jsonData, Type? type )
         {
             var name  = json.ReadValue< string >( "name", typeof( string ), jsonData );
             var color = json.ReadValue< Color >( "color", typeof( Color ), jsonData );
@@ -1278,7 +1280,7 @@ public class Skin : IDisposable
         /// <param name="ignored"></param>
         /// <returns></returns>
         /// <exception cref="SerializationException"></exception>
-        public override Skin Read( Json json, JsonValue typeToValueMap, Type ignored )
+        public override Skin Read( Json json, JsonValue typeToValueMap, Type? ignored )
         {
             for ( JsonValue? valueMap = typeToValueMap.Child; valueMap != null; valueMap = valueMap.Next )
             {
@@ -1424,7 +1426,7 @@ public class Skin : IDisposable
     [PublicAPI]
     public class SkinConverter : JsonConverter< Skin >
     {
-        private const    string PARENT_FIELD_NAME = "parent";
+        private const    string ParentFieldName = "parent";
         private readonly Skin   _skin;
 
         /// <summary>
@@ -1473,9 +1475,9 @@ public class Skin : IDisposable
                         JToken resourceToken = resourceProperty.Value;
 
                         if ( resourceToken is JObject resourceObj
-                          && resourceObj[ PARENT_FIELD_NAME ] != null )
+                          && resourceObj[ ParentFieldName ] != null )
                         {
-                            var parentName = resourceObj[ PARENT_FIELD_NAME ]?.ToString();
+                            var parentName = resourceObj[ ParentFieldName ]?.ToString();
 
                             if ( string.IsNullOrWhiteSpace( parentName ) )
                             {
@@ -1507,7 +1509,7 @@ public class Skin : IDisposable
 
                         // Deserialize the (potentially merged) object and add to skin
                         var finalObject = resourceToken.ToObject( targetType, serializer );
-                        
+
                         _skin.Add( resourceName, finalObject, targetType );
                     }
                 }

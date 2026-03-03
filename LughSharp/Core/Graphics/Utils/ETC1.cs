@@ -44,10 +44,10 @@ namespace LughSharp.Core.Graphics.Utils;
 [PublicAPI]
 public class ETC1
 {
-    public const int PKM_HEADER_SIZE   = 16; // In bytes
-    public const int ETC1_RGB8_OES     = 0x00008d64;
-    public const int RGB565_PIXEL_SIZE = 2;
-    public const int RGB888_PIXEL_SIZE = 3;
+    public const int PkmHeaderSize   = 16; // In bytes
+    public const int ETC1RGB8Oes     = 0x00008d64;
+    public const int RGB565PixelSize = 2;
+    public const int RGB888PixelSize = 3;
 
     // ========================================================================
 
@@ -75,10 +75,10 @@ public class ETC1
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap"/> </param>
     /// <returns> the <see cref="ETC1Data"/> </returns>
-    public ETC1Data EncodeImagePKM( Pixmap pixmap )
+    public ETC1Data EncodeImagePkm( Pixmap pixmap )
     {
         int            pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
-        Buffer< byte > compressedData = EncodeImagePKM( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
+        Buffer< byte > compressedData = EncodeImagePkm( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
 
 //        BufferUtils.NewUnsafeByteBuffer( compressedData );
 
@@ -101,11 +101,11 @@ public class ETC1
         int width;
         int height;
 
-        if ( etc1Data.HasPKMHeader() )
+        if ( etc1Data.HasPkmHeader() )
         {
             dataOffset = 16;
-            width      = GetWidthPKM( etc1Data.CompressedData, 0 );
-            height     = GetHeightPKM( etc1Data.CompressedData, 0 );
+            width      = GetWidthPkm( etc1Data.CompressedData, 0 );
+            height     = GetHeightPkm( etc1Data.CompressedData, 0 );
         }
         else
         {
@@ -130,8 +130,8 @@ public class ETC1
     {
         return format switch
                {
-                   LughFormat.RGB565   => RGB565_PIXEL_SIZE,
-                   LughFormat.RGBA8888 => RGB888_PIXEL_SIZE,
+                   LughFormat.RGB565   => RGB565PixelSize,
+                   LughFormat.RGBA8888 => RGB888PixelSize,
 
                    // ----------------------------------
 
@@ -180,7 +180,7 @@ public class ETC1
     /// <param name="offset">
     /// the offset in bytes to the PKM header from the ByteBuffer's start
     /// </param>
-    public virtual int GetWidthPKM( Buffer< byte >? header, int offset )
+    public virtual int GetWidthPkm( Buffer< byte >? header, int offset )
     {
         throw new NotImplementedException();
     }
@@ -194,7 +194,7 @@ public class ETC1
     /// </summary>
     /// <param name="header"> direct native order Buffer holding the PKM header </param>
     /// <param name="offset"> the offset in bytes to the PKM header from the Buffer's start </param>
-    public virtual int GetHeightPKM( Buffer< byte >? header, int offset )
+    public virtual int GetHeightPkm( Buffer< byte >? header, int offset )
     {
         throw new NotImplementedException();
     }
@@ -208,7 +208,7 @@ public class ETC1
     /// </summary>
     /// <param name="header"> direct native order Buffer holding the PKM header. </param>
     /// <param name="offset"> the offset in bytes to the PKM header from the Buffer's start. </param>
-    public virtual bool IsValidPKM( Buffer< byte > header, int offset )
+    public virtual bool IsValidPkm( Buffer< byte > header, int offset )
     {
         throw new NotImplementedException();
     }
@@ -280,7 +280,7 @@ public class ETC1
     /// <param name="height"> the height in pixels </param>
     /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (GDX_2D_FORMAT_RGB888) </param>
     /// <returns> a new direct native order Buffer containing the compressed image data </returns>
-    public virtual Buffer< byte > EncodeImagePKM( Buffer< byte >? imageData, int offset, int width, int height,
+    public virtual Buffer< byte > EncodeImagePkm( Buffer< byte >? imageData, int offset, int width, int height,
                                                   int pixelSize )
     {
         throw new NotImplementedException();
@@ -305,7 +305,7 @@ public class ETC1
             CompressedData = compressedData;
             DataOffset     = dataOffset;
 
-            CheckNPOT();
+            CheckNpot();
         }
 
         public ETC1Data( FileInfo pkmFile, ETC1 etc )
@@ -345,12 +345,12 @@ public class ETC1
                 input?.Close();
             }
 
-            Width      = _etc1.GetWidthPKM( CompressedData, 0 );
-            Height     = _etc1.GetHeightPKM( CompressedData, 0 );
-            DataOffset = PKM_HEADER_SIZE;
+            Width      = _etc1.GetWidthPkm( CompressedData, 0 );
+            Height     = _etc1.GetHeightPkm( CompressedData, 0 );
+            DataOffset = PkmHeaderSize;
 
             CompressedData.Position = DataOffset;
-            CheckNPOT();
+            CheckNpot();
         }
 
         /// <summary>
@@ -387,12 +387,12 @@ public class ETC1
         /// <summary>
         /// Returns whether this ETC1Data has a PKM header.
         /// </summary>
-        public bool HasPKMHeader()
+        public bool HasPkmHeader()
         {
             return DataOffset == 16;
         }
 
-        private void CheckNPOT()
+        private void CheckNpot()
         {
             if ( !MathUtils.IsPowerOfTwo( Width ) || !MathUtils.IsPowerOfTwo( Height ) )
             {
@@ -444,14 +444,14 @@ public class ETC1
         /// <inheritdoc />
         public override string ToString()
         {
-            if ( HasPKMHeader() )
+            if ( HasPkmHeader() )
             {
-                return $"{( _etc1.IsValidPKM( CompressedData, 0 ) ? "valid" : "invalid" )} "
-                     + $"pkm [{_etc1.GetWidthPKM( CompressedData, 0 )}x{_etc1.GetHeightPKM( CompressedData, 0 )}], "
-                     + $"compressed: {CompressedData.Capacity - PKM_HEADER_SIZE}";
+                return $"{( _etc1.IsValidPkm( CompressedData, 0 ) ? "valid" : "invalid" )} "
+                     + $"pkm [{_etc1.GetWidthPkm( CompressedData, 0 )}x{_etc1.GetHeightPkm( CompressedData, 0 )}], "
+                     + $"compressed: {CompressedData.Capacity - PkmHeaderSize}";
             }
 
-            return $"raw [{Width}x{Height}], compressed: {CompressedData.Capacity - PKM_HEADER_SIZE}";
+            return $"raw [{Width}x{Height}], compressed: {CompressedData.Capacity - PkmHeaderSize}";
         }
     }
 

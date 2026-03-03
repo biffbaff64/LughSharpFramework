@@ -30,6 +30,8 @@ using System.Text;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Files;
+
 using Environment = System.Environment;
 
 namespace LughSharp.Core.Utils.Logging;
@@ -47,32 +49,24 @@ namespace LughSharp.Core.Utils.Logging;
 [PublicAPI]
 public static class Logger
 {
-    #region constants
-
     // Enable / Disable flags.
-    public const int LOG_NONE  = 0;
-    public const int LOG_DEBUG = 1;
-    public const int LOG_ERROR = 2;
+    public const int LogNone  = 0;
+    public const int LogDebug = 1;
+    public const int LogError = 2;
 
-    private const string DEBUG_TAG              = "[DEBUG.....]";
-    private const string ERROR_TAG              = "[WARNING...]";
-    private const string CHECKPOINT_TAG         = "[CHECKPOINT]";
-    private const string PREFS_FOLDER           = "logs";
-    private const string DEFAULT_TRACE_FILENAME = "trace.txt";
+    private const string DebugTag              = "[DEBUG.....]";
+    private const string ErrorTag              = "[WARNING...]";
+    private const string CheckpointTag         = "[CHECKPOINT]";
+    private const string PrefsFolder           = "logs";
+    private const string DefaultTraceFilename = "trace.txt";
 
-    private const string DIVIDER = "-----------------------------------------------------";
-
-    #endregion constants
+    private const string DividerString = "-----------------------------------------------------";
 
     // ========================================================================
 
-    #region properties
-
     public static bool EnableWriteToFile { get; set; }
-    public static int  TraceLevel        { get; set; } = LOG_NONE;
+    public static int  TraceLevel        { get; set; } = LogNone;
     public static bool IsMinimal         { get; set; }
-
-    #endregion properties
 
     // ========================================================================
 
@@ -92,9 +86,9 @@ public static class Logger
     /// <param name="enableWriteToFile"> TRUE to enable outputting messages to a file. </param>
     /// <param name="filename"> The name of the file to write to. Default is trace.txt. </param>
     [Conditional( "DEBUG" )]
-    public static void Initialise( int logLevel = LOG_DEBUG | LOG_ERROR,
+    public static void Initialise( int logLevel = LogDebug | LogError,
                                    bool enableWriteToFile = true,
-                                   string filename = DEFAULT_TRACE_FILENAME )
+                                   string filename = DefaultTraceFilename )
     {
         TraceLevel        = logLevel;
         EnableWriteToFile = enableWriteToFile;
@@ -123,7 +117,7 @@ public static class Logger
                               [CallerMemberName] string callerMethod = "",
                               [CallerLineNumber] int callerLine = 0 )
     {
-        if ( !IsEnabled( LOG_DEBUG ) )
+        if ( !IsEnabled( LogDebug ) )
         {
             return;
         }
@@ -137,7 +131,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        string str = CreateMessage( DEBUG_TAG, callerID, message );
+        string str = CreateMessage( DebugTag, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -161,7 +155,7 @@ public static class Logger
                               [CallerMemberName] string callerMethod = "",
                               [CallerLineNumber] int callerLine = 0 )
     {
-        if ( !IsEnabled( LOG_ERROR ) )
+        if ( !IsEnabled( LogError ) )
         {
             return;
         }
@@ -170,7 +164,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        string str = CreateMessage( ERROR_TAG, callerID, message );
+        string str = CreateMessage( ErrorTag, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -191,13 +185,13 @@ public static class Logger
                                        [CallerMemberName] string callerMethod = "",
                                        [CallerLineNumber] int callerLine = 0 )
     {
-        if ( !IsEnabled( LOG_DEBUG ) || !condition )
+        if ( !IsEnabled( LogDebug ) || !condition )
         {
             return;
         }
 
         CallerID callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-        string   str      = CreateMessage( DEBUG_TAG, callerID, message );
+        string   str      = CreateMessage( DebugTag, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -220,7 +214,7 @@ public static class Logger
                                    [CallerMemberName] string callerMethod = "",
                                    [CallerLineNumber] int callerLine = 0 )
     {
-        if ( !IsEnabled( LOG_DEBUG ) )
+        if ( !IsEnabled( LogDebug ) )
         {
             return;
         }
@@ -234,7 +228,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        string str = CreateMessage( CHECKPOINT_TAG, callerID, "<Checkpoint>" );
+        string str = CreateMessage( CheckpointTag, callerID, "<Checkpoint>" );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -254,7 +248,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void Divider( char ch = '-', int length = 80, int lineCount = 1 )
     {
-        if ( !IsEnabled( LOG_DEBUG ) )
+        if ( !IsEnabled( LogDebug ) )
         {
             return;
         }
@@ -263,7 +257,7 @@ public static class Logger
         var lineContent = new string( ch, length );
 
         // 2. Prepend the tag and space.
-        string fullLine = DEBUG_TAG + " : " + lineContent;
+        string fullLine = DebugTag + " : " + lineContent;
 
         // 3. Loop only to output the line the required number of times.
         for ( var i = 0; i < lineCount; i++ )
@@ -295,7 +289,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void NewLine()
     {
-        if ( IsEnabled( LOG_DEBUG ) )
+        if ( IsEnabled( LogDebug ) )
         {
             Console.WriteLine( Environment.NewLine );
             WriteToFile( Environment.NewLine );
@@ -319,7 +313,7 @@ public static class Logger
         {
             if ( fileName.Equals( string.Empty ) )
             {
-                fileName = DEFAULT_TRACE_FILENAME;
+                fileName = DefaultTraceFilename;
             }
 
             // Get the base directory
@@ -339,9 +333,9 @@ public static class Logger
                 DateTime dateTime = DateTime.Now;
                 string   time     = dateTime.ToShortTimeString();
 
-                _streamWriter.Write( DIVIDER );
+                _streamWriter.Write( DividerString );
                 _streamWriter.Write( time, 0, time.Length );
-                _streamWriter.WriteLine( DIVIDER );
+                _streamWriter.WriteLine( DividerString );
             }
         }
         catch ( Exception )
@@ -400,7 +394,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void CloseDebugFile()
     {
-        _streamWriter?.Close();
+        StreamUtils.CloseQuietly( _streamWriter );
     }
 
     /// <summary>
@@ -409,7 +403,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void DisableDebugLogging()
     {
-        TraceLevel &= ~LOG_DEBUG;
+        TraceLevel &= ~LogDebug;
     }
 
     /// <summary>
@@ -418,7 +412,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void DisableErrorLogging()
     {
-        TraceLevel &= ~LOG_ERROR;
+        TraceLevel &= ~LogError;
     }
 
     /// <summary>
@@ -427,7 +421,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void EnableDebugLogging()
     {
-        TraceLevel |= LOG_DEBUG;
+        TraceLevel |= LogDebug;
     }
 
     /// <summary>
@@ -436,7 +430,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void EnableErrorLogging()
     {
-        TraceLevel |= LOG_ERROR;
+        TraceLevel |= LogError;
     }
 
     /// <summary>
@@ -546,8 +540,8 @@ public static class Logger
     {
         return traceLevel switch
                {
-                   LOG_DEBUG
-                       or LOG_ERROR => ( TraceLevel & traceLevel ) != 0,
+                   LogDebug
+                       or LogError => ( TraceLevel & traceLevel ) != 0,
                    var _ => false
                };
     }

@@ -52,12 +52,12 @@ public record TileContext
     /// </summary>
     /// <param name="TmxFile"></param>
     /// <param name="ImageResolver"></param>
-    /// <param name="TileSet"></param>
-    public TileContext( FileInfo TmxFile, IImageResolver ImageResolver, TiledMapTileSet TileSet )
+    /// <param name="tileSet"></param>
+    public TileContext( FileInfo TmxFile, IImageResolver ImageResolver, TiledMapTileSet tileSet )
     {
         this.TmxFile       = TmxFile;
         this.ImageResolver = ImageResolver;
-        Tileset            = TileSet;
+        Tileset            = tileSet;
     }
 
     public void Deconstruct( out FileInfo tmxFile,

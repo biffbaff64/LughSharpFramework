@@ -29,6 +29,7 @@ using System.Reflection;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Files;

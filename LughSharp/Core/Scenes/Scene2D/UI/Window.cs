@@ -63,13 +63,13 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
     // ========================================================================
 
-    protected int Edge { get; set; }
+    protected Align Edge { get; set; }
 
     // ========================================================================
 
-    private const int DEFAULT_WIDTH  = 150;
-    private const int DEFAULT_HEIGHT = 150;
-    private const int MOVE           = 1 << 5;
+    private const int   DefaultWidth  = 150;
+    private const int   DefaultHeight = 150;
+    private const Align Move          = Align.Special;
 
     private static readonly Vector2 _tmpPosition = new();
     private static readonly Vector2 _tmpSize     = new();
@@ -107,7 +107,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
     /// <summary>
     /// Creates a window with the specified title, and using the specified
     /// <see cref="WindowStyle"/>. The window size will be set to the default sizes
-    /// of <see cref="DEFAULT_WIDTH"/> and <see cref="DEFAULT_HEIGHT"/>. A new
+    /// of <see cref="DefaultWidth"/> and <see cref="DefaultHeight"/>. A new
     /// <see cref="WindowCaptureListener"/> and <see cref="WindowInputListener"/>
     /// will be added to the window, and the window will be added to the stage.
     /// </summary>
@@ -127,7 +127,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
         AddActor( _titleTable );
 
         Style = style;
-        SetSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
+        SetSize( DefaultWidth, DefaultHeight );
 
         AddCaptureListener( new WindowCaptureListener( this ) );
         AddListener( new WindowInputListener( this ) );
@@ -151,35 +151,35 @@ public class Window : Table, IStyleable< Window.WindowStyle >
             float parentWidth  = Stage.Width;
             float parentHeight = Stage.Height;
 
-            if ( ( GetX( Align.RIGHT ) - Stage.Camera.Position.X )
+            if ( ( GetX( Align.Right ) - Stage.Camera.Position.X )
                > ( parentWidth / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( Stage.Camera.Position.X + ( parentWidth / 2 / orthographicCamera.Zoom ),
-                             GetY( Align.RIGHT ),
-                             Align.RIGHT );
+                             GetY( Align.Right ),
+                             Align.Right );
             }
 
-            if ( ( GetX( Align.LEFT ) - Stage.Camera.Position.X )
+            if ( ( GetX( Align.Left ) - Stage.Camera.Position.X )
                < ( -parentWidth / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( Stage.Camera.Position.X - ( parentWidth / 2 / orthographicCamera.Zoom ),
-                             GetY( Align.LEFT ),
-                             Align.LEFT );
+                             GetY( Align.Left ),
+                             Align.Left );
             }
 
-            if ( ( GetY( Align.TOP ) - Stage.Camera.Position.Y ) > ( parentHeight / 2 / orthographicCamera.Zoom ) )
+            if ( ( GetY( Align.Top ) - Stage.Camera.Position.Y ) > ( parentHeight / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( GetX( Align.TOP ),
+                SetPosition( GetX( Align.Top ),
                              Stage.Camera.Position.Y + ( parentHeight / 2 / orthographicCamera.Zoom ),
-                             Align.TOP );
+                             Align.Top );
             }
 
-            if ( ( GetY( Align.BOTTOM ) - Stage.Camera.Position.Y )
+            if ( ( GetY( Align.Bottom ) - Stage.Camera.Position.Y )
                < ( -parentHeight / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( GetX( Align.BOTTOM ),
+                SetPosition( GetX( Align.Bottom ),
                              Stage.Camera.Position.Y - ( parentHeight / 2 / orthographicCamera.Zoom ),
-                             Align.BOTTOM );
+                             Align.Bottom );
             }
         }
         else if ( Parent == Stage.RootGroup )
@@ -375,7 +375,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
             _window = window;
         }
 
-        public new bool TouchDown( InputEvent ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             _window.BringToFront();
 
@@ -407,7 +407,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
             _window = window;
         }
 
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( button == 0 )
             {
@@ -423,12 +423,12 @@ public class Window : Table, IStyleable< Window.WindowStyle >
             return ( _window.Edge != 0 ) || _window.IsModal;
         }
 
-        public override void TouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+        public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             _window.Dragging = false;
         }
 
-        public override void TouchDragged( InputEvent? ev, float x, float y, int pointer )
+        public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             if ( !_window.Dragging )
             {
@@ -447,7 +447,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
                               && ( stage != null )
                               && ( _window.Parent == stage.RootGroup );
 
-            if ( ( _window.Edge & MOVE ) != 0 )
+            if ( ( _window.Edge & Move ) != 0 )
             {
                 float amountX = x - _startX;
                 float amountY = y - _startY;
@@ -456,7 +456,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
                 windowY += amountY;
             }
 
-            if ( ( _window.Edge & Align.LEFT ) != 0 )
+            if ( ( _window.Edge & Align.Left ) != 0 )
             {
                 float amountX = x - _startX;
 
@@ -474,7 +474,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
                 windowX += amountX;
             }
 
-            if ( ( _window.Edge & Align.BOTTOM ) != 0 )
+            if ( ( _window.Edge & Align.Bottom ) != 0 )
             {
                 float amountY = y - _startY;
 
@@ -492,7 +492,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
                 windowY += amountY;
             }
 
-            if ( ( _window.Edge & Align.RIGHT ) != 0 )
+            if ( ( _window.Edge & Align.Right ) != 0 )
             {
                 float amountX = x - _lastX - width;
 
@@ -509,7 +509,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
                 width += amountX;
             }
 
-            if ( ( _window.Edge & Align.TOP ) != 0 )
+            if ( ( _window.Edge & Align.Top ) != 0 )
             {
                 float amountY = y - _lastY - height;
 
@@ -532,24 +532,24 @@ public class Window : Table, IStyleable< Window.WindowStyle >
                                ( float )Math.Round( height ) );
         }
 
-        public override bool MouseMoved( InputEvent? ev, float x, float y )
+        public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             UpdateEdge( x, y );
 
             return _window.IsModal;
         }
 
-        public bool Scrolled( InputEvent ev, float x, float y, int amount )
+        public bool OnScrolled( InputEvent ev, float x, float y, int amount )
         {
             return _window.IsModal;
         }
 
-        public override bool KeyDown( InputEvent? ev, int keycode )
+        public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             return _window.IsModal;
         }
 
-        public override bool KeyUp( InputEvent? ev, int keycode )
+        public override bool OnKeyUp( InputEvent? ev, int keycode )
         {
             return _window.IsModal;
         }
@@ -560,7 +560,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
         /// <param name="ev"></param>
         /// <param name="character"></param>
         /// <returns></returns>
-        public override bool KeyTyped( InputEvent? ev, char character )
+        public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             return _window.IsModal;
         }
@@ -586,17 +586,17 @@ public class Window : Table, IStyleable< Window.WindowStyle >
             {
                 if ( x < ( padLeft + border ) )
                 {
-                    _window.Edge |= Align.LEFT;
+                    _window.Edge |= Align.Left;
                 }
 
                 if ( x > ( right - border ) )
                 {
-                    _window.Edge |= Align.RIGHT;
+                    _window.Edge |= Align.Right;
                 }
 
                 if ( y < ( padBottom + border ) )
                 {
-                    _window.Edge |= Align.BOTTOM;
+                    _window.Edge |= Align.Bottom;
                 }
 
                 if ( _window.Edge != 0 )
@@ -606,17 +606,17 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
                 if ( x < ( padLeft + border ) )
                 {
-                    _window.Edge |= Align.LEFT;
+                    _window.Edge |= Align.Left;
                 }
 
                 if ( x > ( right - border ) )
                 {
-                    _window.Edge |= Align.RIGHT;
+                    _window.Edge |= Align.Right;
                 }
 
                 if ( y < ( padBottom + border ) )
                 {
-                    _window.Edge |= Align.BOTTOM;
+                    _window.Edge |= Align.Bottom;
                 }
             }
 
@@ -627,7 +627,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
               && ( x <= right )
                )
             {
-                _window.Edge = MOVE;
+                _window.Edge = Move;
             }
         }
     }

@@ -42,19 +42,22 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Scene2DImage : Widget
 {
-    public override string?         Name        => "Scene2DImage";
-    public          float           ImageX      { get; set; }
-    public          float           ImageY      { get; set; }
-    public          float           ImageWidth  { get; set; }
-    public          float           ImageHeight { get; set; }
-    public          ISceneDrawable? Drawable    { get; private set; }
+    public float           ImageX      { get; set; }
+    public float           ImageY      { get; set; }
+    public float           ImageWidth  { get; set; }
+    public float           ImageHeight { get; set; }
+    public ISceneDrawable? Drawable    { get; private set; }
+
+    // ========================================================================
+
+    public override string? Name => "Scene2DImage";
 
     // ========================================================================
 
     /// <summary>
     /// The alignment of the image within the widget.
     /// </summary>
-    public int Alignment
+    public Align Alignment
     {
         get;
         set
@@ -129,12 +132,12 @@ public class Scene2DImage : Widget
 
     /// <summary>
     /// Creates a new Image instance with the specified <see cref="ISceneDrawable"/>,
-    /// <see cref="Scaling"/>Mode, and alignment. Alignment defaults to <see cref="Align.CENTER"/>.
+    /// <see cref="Scaling"/>Mode, and alignment. Alignment defaults to <see cref="Align.Center"/>.
     /// </summary>
     /// <param name="drawable"></param>
     /// <param name="scaling"></param>
     /// <param name="align"></param>
-    public Scene2DImage( ISceneDrawable drawable, Scaling scaling, int align = Align.CENTER )
+    public Scene2DImage( ISceneDrawable drawable, Scaling scaling, Align align = Align.Center )
     {
         SetDrawable( drawable );
 
@@ -197,11 +200,11 @@ public class Scene2DImage : Widget
         ImageWidth  = size.X;
         ImageHeight = size.Y;
 
-        if ( ( Alignment & Align.LEFT ) != 0 )
+        if ( ( Alignment & Align.Left ) != 0 )
         {
             ImageX = 0;
         }
-        else if ( ( Alignment & Align.RIGHT ) != 0 )
+        else if ( ( Alignment & Align.Right ) != 0 )
         {
             ImageX = ( int )( width - ImageWidth );
         }
@@ -210,11 +213,11 @@ public class Scene2DImage : Widget
             ImageX = ( int )( ( width / 2 ) - ( ImageWidth / 2 ) );
         }
 
-        if ( ( Alignment & Align.TOP ) != 0 )
+        if ( ( Alignment & Align.Top ) != 0 )
         {
             ImageY = ( int )( height - ImageHeight );
         }
-        else if ( ( Alignment & Align.BOTTOM ) != 0 )
+        else if ( ( Alignment & Align.Bottom ) != 0 )
         {
             ImageY = 0;
         }

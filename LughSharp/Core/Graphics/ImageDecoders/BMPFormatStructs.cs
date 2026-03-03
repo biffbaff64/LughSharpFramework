@@ -72,12 +72,12 @@ public struct BitmapFileInfoHeader
 [PublicAPI]
 public enum BitmapCompressionMode : uint
 {
-    BI_RGB       = 0,
-    BI_RLE8      = 1,
-    BI_RLE4      = 2,
-    BI_BITFIELDS = 3,
-    BI_JPEG      = 4,
-    BI_PNG       = 5
+    BiRGB       = 0,
+    BiRle8      = 1,
+    BiRle4      = 2,
+    BiBitfields = 3,
+    BiJpeg      = 4,
+    BiPNG       = 5
 }
 
 // ========================================================================
@@ -86,7 +86,7 @@ public enum BitmapCompressionMode : uint
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
-public struct BMPPixelArray
+public struct BmpPixelArray
 {
     public byte[] PixelData { get; set; } // Array of color data for each pixel in the image.  
 }

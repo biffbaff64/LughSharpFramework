@@ -37,9 +37,9 @@ namespace LughSharp.Tests.Source;
 [SupportedOSPlatform( "windows" )]
 public class TexturePackerTest
 {
-    private const bool REMOVE_DUPLICATE_IMAGES = true;
-    private const bool KEEP_DUPLICATE_IMAGES   = false;
-    private const bool DRAW_DEBUG_LINES        = false;
+    private const bool RemoveDuplicateImages = true;
+    private const bool KeepDuplicateImages   = false;
+    private const bool DrawDebugLines        = false;
 
     // ========================================================================
 
@@ -56,8 +56,8 @@ public class TexturePackerTest
             MaxWidth         = 2048,                  // Maximum Width of final atlas image
             MaxHeight        = 2048,                  // Maximum Height of final atlas image
             PowerOfTwo       = true,                  // 
-            Debug            = DRAW_DEBUG_LINES,      // 
-            IsAlias          = KEEP_DUPLICATE_IMAGES, // 
+            Debug            = DrawDebugLines,      // 
+            IsAlias          = KeepDuplicateImages, // 
             Silent           = true,                  // 
             PaddingX         = 2,                     // Increase padding
             PaddingY         = 2,                     // Increase padding

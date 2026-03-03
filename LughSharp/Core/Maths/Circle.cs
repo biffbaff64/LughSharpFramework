@@ -238,20 +238,20 @@ public class Circle : IShape2D
 
     /// <summary>
     /// Returns the circumference of this circle:-
-    /// (as 2 * <see cref="MathUtils.PI2"/>) * <code>radius</code>
+    /// (as 2 * <see cref="MathUtils.Pi2"/>) * <code>radius</code>
     /// </summary>
     public float Circumference()
     {
-        return Radius * MathUtils.PI2;
+        return Radius * MathUtils.Pi2;
     }
 
     /// <summary>
     /// Returns the area of this circle:-
-    /// (as <see cref="MathUtils.PI"/> * radius * radius).
+    /// (as <see cref="MathUtils.Pi"/> * radius * radius).
     /// </summary>
     public float Area()
     {
-        return Radius * Radius * MathUtils.PI;
+        return Radius * Radius * MathUtils.Pi;
     }
 
     /// <inheritdoc />
@@ -277,11 +277,11 @@ public class Circle : IShape2D
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        const int PRIME = 41;
+        const int Prime = 41;
 
-        int result = PRIME + 43;
-        result = ( PRIME * result ) + 45;
-        result = ( PRIME * result ) + 47;
+        int result = Prime + 43;
+        result = ( Prime * result ) + 45;
+        result = ( Prime * result ) + 47;
 
         return result;
     }

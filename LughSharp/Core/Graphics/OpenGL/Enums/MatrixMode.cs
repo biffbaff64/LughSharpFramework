@@ -29,10 +29,10 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum MatrixMode
 {
-    Modelview  = IGL.GL_MODELVIEW,
-    Projection = IGL.GL_PROJECTION,
-    Texture    = IGL.GL_TEXTURE,
-    Color      = IGL.GL_COLOR
+    Modelview  = IGL.GLModelview,
+    Projection = IGL.GLProjection,
+    Texture    = IGL.GLTexture,
+    Color      = IGL.GLColor
 }
 
 // ========================================================================

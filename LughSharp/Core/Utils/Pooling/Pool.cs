@@ -35,7 +35,7 @@ namespace LughSharp.Core.Utils.Pooling;
 [PublicAPI]
 public class Pool< T > where T : class
 {
-    public const int DEFAULT_INITIAL_CAPACITY = 16;
+    public const int DefaultInitialCapacity = 16;
 
     public int MaxFreeObjects  { get; private set; }
     public int PeakFreeObjects { get; set; }
@@ -58,7 +58,7 @@ public class Pool< T > where T : class
     /// Use <see cref="Fill(int)"/> after instantiation if needed.
     /// </param>
     /// <param name="max">The maximum number of free objects to store in this pool.</param>
-    public Pool( int initialCapacity = DEFAULT_INITIAL_CAPACITY, int max = int.MaxValue )
+    public Pool( int initialCapacity = DefaultInitialCapacity, int max = int.MaxValue )
     {
         _freeObjects   = new Stack< T >( initialCapacity );
         MaxFreeObjects = max;

@@ -38,10 +38,10 @@ namespace LughSharp.Core.Utils;
 [PublicAPI]
 public class QuadTreeFloat : IResetable
 {
-    public const int VALUE   = 0;
-    public const int XPOS    = 1;
-    public const int YPOS    = 2;
-    public const int DISTSQR = 3;
+    public const int Value   = 0;
+    public const int Xpos    = 1;
+    public const int Ypos    = 2;
+    public const int Distsqr = 3;
 
     public int            MaxValues { get; }
     public int            MaxDepth  { get; }

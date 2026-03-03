@@ -29,7 +29,7 @@ namespace LughSharp.Core.Graphics.Shaders;
 [PublicAPI]
 public class Shaders
 {
-    public const string DEFAULT_VERTEX_SHADER =
+    public const string DefaultVertexShader =
         "#version 450 core\n" +
         "layout (location = 0) in vec2 a_position;\n" +
         "layout (location = 1) in float a_color;\n" +
@@ -53,7 +53,7 @@ public class Shaders
         "    gl_Position = u_combinedMatrix * vec4(a_position, 0.0, 1.0);\n" +
         "}\n";
 
-    public const string DEFAULT_FRAGMENT_SHADER =
+    public const string DefaultFragmentShader =
         "#version 450 core\n" +
         "in vec4 v_color;     // Unpacked RGBA from Vertex Shader\n" +
         "in vec2 v_texCoords; // Interpolated UVs\n" +
@@ -65,7 +65,7 @@ public class Shaders
         "    fragColor = texture(u_texture, v_texCoords);\n" +
         "}\n";
 
-    public const string OLD_DEFAULT_FRAGMENT_SHADER =
+    public const string OldDefaultFragmentShader =
         "#version 450 core\n" +
         "in vec4 v_color;     // Unpacked RGBA from Vertex Shader\n" +
         "in vec2 v_texCoords; // Interpolated UVs\n" +

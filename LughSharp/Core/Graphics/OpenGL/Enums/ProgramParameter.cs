@@ -29,13 +29,13 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum ProgramParameter
 {
-    DeleteStatus     = IGL.GL_DELETE_STATUS,
-    LinkStatus       = IGL.GL_LINK_STATUS,
-    ValidateStatus   = IGL.GL_VALIDATE_STATUS,
-    InfoLogLength    = IGL.GL_INFO_LOG_LENGTH,
-    AttachedShaders  = IGL.GL_ATTACHED_SHADERS,
-    ActiveAttributes = IGL.GL_ACTIVE_ATTRIBUTES,
-    ActiveUniforms   = IGL.GL_ACTIVE_UNIFORMS
+    DeleteStatus     = IGL.GLDeleteStatus,
+    LinkStatus       = IGL.GLLinkStatus,
+    ValidateStatus   = IGL.GLValidateStatus,
+    InfoLogLength    = IGL.GLInfoLogLength,
+    AttachedShaders  = IGL.GLAttachedShaders,
+    ActiveAttributes = IGL.GLActiveAttributes,
+    ActiveUniforms   = IGL.GLActiveUniforms
 }
 
 // ========================================================================

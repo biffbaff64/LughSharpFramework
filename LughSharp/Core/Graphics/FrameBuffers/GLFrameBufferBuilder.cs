@@ -105,7 +105,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddDepthTextureAttachment( int internalFormat, int type )
     {
-        var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GL_DEPTH_COMPONENT, type )
+        var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GLDepthComponent, type )
         {
             IsDepth = true
         };
@@ -122,7 +122,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddStencilTextureAttachment( int internalFormat, int type )
     {
-        var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GL_STENCIL_ATTACHMENT, type )
+        var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GLStencilAttachment, type )
         {
             IsStencil = true
         };
@@ -173,7 +173,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicDepthRenderBuffer()
     {
-        return AddDepthRenderBuffer( IGL.GL_DEPTH_COMPONENT16 );
+        return AddDepthRenderBuffer( IGL.GLDepthComponent16 );
     }
 
     /// <summary>
@@ -181,7 +181,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicStencilRenderBuffer()
     {
-        return AddStencilRenderBuffer( IGL.GL_STENCIL_INDEX8 );
+        return AddStencilRenderBuffer( IGL.GLStencilIndex8 );
     }
 
     /// <summary>
@@ -189,7 +189,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicStencilDepthPackedRenderBuffer()
     {
-        return AddStencilDepthPackedRenderBuffer( IGL.GL_DEPTH24_STENCIL8 );
+        return AddStencilDepthPackedRenderBuffer( IGL.GLDepth24Stencil8 );
     }
 
     /// <summary>

@@ -37,66 +37,66 @@ namespace Extensions.Source.Freetype;
 [PublicAPI]
 public class FreeType
 {
-    public const int FT_PIXEL_MODE_NONE                  = 0;
-    public const int FT_PIXEL_MODE_MONO                  = 1;
-    public const int FT_PIXEL_MODE_GRAY                  = 2;
-    public const int FT_PIXEL_MODE_GRAY2                 = 3;
-    public const int FT_PIXEL_MODE_GRAY4                 = 4;
-    public const int FT_PIXEL_MODE_LCD                   = 5;
-    public const int FT_PIXEL_MODE_LCD_V                 = 6;
-    public const int FT_FACE_FLAG_SCALABLE               = 1 << 0;
-    public const int FT_FACE_FLAG_FIXED_SIZES            = 1 << 1;
-    public const int FT_FACE_FLAG_FIXED_WIDTH            = 1 << 2;
-    public const int FT_FACE_FLAG_SFNT                   = 1 << 3;
-    public const int FT_FACE_FLAG_HORIZONTAL             = 1 << 4;
-    public const int FT_FACE_FLAG_VERTICAL               = 1 << 5;
-    public const int FT_FACE_FLAG_KERNING                = 1 << 6;
-    public const int FT_FACE_FLAG_FAST_GLYPHS            = 1 << 7;
-    public const int FT_FACE_FLAG_MULTIPLE_MASTERS       = 1 << 8;
-    public const int FT_FACE_FLAG_GLYPH_NAMES            = 1 << 9;
-    public const int FT_FACE_FLAG_EXTERNAL_STREAM        = 1 << 10;
-    public const int FT_FACE_FLAG_HINTER                 = 1 << 11;
-    public const int FT_FACE_FLAG_CID_KEYED              = 1 << 12;
-    public const int FT_FACE_FLAG_TRICKY                 = 1 << 13;
-    public const int FT_STYLE_FLAG_ITALIC                = 1 << 0;
-    public const int FT_STYLE_FLAG_BOLD                  = 1 << 1;
-    public const int FT_LOAD_DEFAULT                     = 0x0;
-    public const int FT_LOAD_NO_SCALE                    = 0x1;
-    public const int FT_LOAD_NO_HINTING                  = 0x2;
-    public const int FT_LOAD_RENDER                      = 0x4;
-    public const int FT_LOAD_NO_BITMAP                   = 0x8;
-    public const int FT_LOAD_VERTICAL_LAYOUT             = 0x10;
-    public const int FT_LOAD_FORCE_AUTOHINT              = 0x20;
-    public const int FT_LOAD_CROP_BITMAP                 = 0x40;
-    public const int FT_LOAD_PEDANTIC                    = 0x80;
-    public const int FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH = 0x200;
-    public const int FT_LOAD_NO_RECURSE                  = 0x400;
-    public const int FT_LOAD_IGNORE_TRANSFORM            = 0x800;
-    public const int FT_LOAD_MONOCHROME                  = 0x1000;
-    public const int FT_LOAD_LINEAR_DESIGN               = 0x2000;
-    public const int FT_LOAD_NO_AUTOHINT                 = 0x8000;
-    public const int FT_LOAD_TARGET_NORMAL               = 0x0;
-    public const int FT_LOAD_TARGET_LIGHT                = 0x10000;
-    public const int FT_LOAD_TARGET_MONO                 = 0x20000;
-    public const int FT_LOAD_TARGET_LCD                  = 0x30000;
-    public const int FT_LOAD_TARGET_LCD_V                = 0x40000;
-    public const int FT_RENDER_MODE_NORMAL               = 0;
-    public const int FT_RENDER_MODE_LIGHT                = 1;
-    public const int FT_RENDER_MODE_MONO                 = 2;
-    public const int FT_RENDER_MODE_LCD                  = 3;
-    public const int FT_RENDER_MODE_LCD_V                = 4;
-    public const int FT_RENDER_MODE_MAX                  = 5;
-    public const int FT_KERNING_DEFAULT                  = 0;
-    public const int FT_KERNING_UNFITTED                 = 1;
-    public const int FT_KERNING_UNSCALED                 = 2;
-    public const int FT_STROKER_LINECAP_BUTT             = 0;
-    public const int FT_STROKER_LINECAP_ROUND            = 1;
-    public const int FT_STROKER_LINECAP_SQUARE           = 2;
-    public const int FT_STROKER_LINEJOIN_ROUND           = 0;
-    public const int FT_STROKER_LINEJOIN_BEVEL           = 1;
-    public const int FT_STROKER_LINEJOIN_MITER_VARIABLE  = 2;
-    public const int FT_STROKER_LINEJOIN_MITER           = FT_STROKER_LINEJOIN_MITER_VARIABLE;
-    public const int FT_STROKER_LINEJOIN_MITER_FIXED     = 3;
+    public const int FtPixelModeNone                  = 0;
+    public const int FtPixelModeMono                  = 1;
+    public const int FtPixelModeGray                  = 2;
+    public const int FtPixelModeGray2                 = 3;
+    public const int FtPixelModeGray4                 = 4;
+    public const int FtPixelModeLcd                   = 5;
+    public const int FtPixelModeLcdV                 = 6;
+    public const int FtFaceFlagScalable               = 1 << 0;
+    public const int FtFaceFlagFixedSizes            = 1 << 1;
+    public const int FtFaceFlagFixedWidth            = 1 << 2;
+    public const int FtFaceFlagSfnt                   = 1 << 3;
+    public const int FtFaceFlagHorizontal             = 1 << 4;
+    public const int FtFaceFlagVertical               = 1 << 5;
+    public const int FtFaceFlagKerning                = 1 << 6;
+    public const int FtFaceFlagFastGlyphs            = 1 << 7;
+    public const int FtFaceFlagMultipleMasters       = 1 << 8;
+    public const int FtFaceFlagGlyphNames            = 1 << 9;
+    public const int FtFaceFlagExternalStream        = 1 << 10;
+    public const int FtFaceFlagHinter                 = 1 << 11;
+    public const int FtFaceFlagCidKeyed              = 1 << 12;
+    public const int FtFaceFlagTricky                 = 1 << 13;
+    public const int FtStyleFlagItalic                = 1 << 0;
+    public const int FtStyleFlagBold                  = 1 << 1;
+    public const int FtLoadDefault                     = 0x0;
+    public const int FtLoadNoScale                    = 0x1;
+    public const int FtLoadNoHinting                  = 0x2;
+    public const int FtLoadRender                      = 0x4;
+    public const int FtLoadNoBitmap                   = 0x8;
+    public const int FtLoadVerticalLayout             = 0x10;
+    public const int FtLoadForceAutohint              = 0x20;
+    public const int FtLoadCropBitmap                 = 0x40;
+    public const int FtLoadPedantic                    = 0x80;
+    public const int FtLoadIgnoreGlobalAdvanceWidth = 0x200;
+    public const int FtLoadNoRecurse                  = 0x400;
+    public const int FtLoadIgnoreTransform            = 0x800;
+    public const int FtLoadMonochrome                  = 0x1000;
+    public const int FtLoadLinearDesign               = 0x2000;
+    public const int FtLoadNoAutohint                 = 0x8000;
+    public const int FtLoadTargetNormal               = 0x0;
+    public const int FtLoadTargetLight                = 0x10000;
+    public const int FtLoadTargetMono                 = 0x20000;
+    public const int FtLoadTargetLcd                  = 0x30000;
+    public const int FtLoadTargetLcdV                = 0x40000;
+    public const int FtRenderModeNormal               = 0;
+    public const int FtRenderModeLight                = 1;
+    public const int FtRenderModeMono                 = 2;
+    public const int FtRenderModeLcd                  = 3;
+    public const int FtRenderModeLcdV                = 4;
+    public const int FtRenderModeMax                  = 5;
+    public const int FtKerningDefault                  = 0;
+    public const int FtKerningUnfitted                 = 1;
+    public const int FtKerningUnscaled                 = 2;
+    public const int FtStrokerLinecapButt             = 0;
+    public const int FtStrokerLinecapRound            = 1;
+    public const int FtStrokerLinecapSquare           = 2;
+    public const int FtStrokerLinejoinRound           = 0;
+    public const int FtStrokerLinejoinBevel           = 1;
+    public const int FtStrokerLinejoinMiterVariable  = 2;
+    public const int FtStrokerLinejoinMiter           = FtStrokerLinejoinMiterVariable;
+    public const int FtStrokerLinejoinMiterFixed     = 3;
 
     // ========================================================================
 
@@ -117,7 +117,7 @@ public class FreeType
 
     // ========================================================================
 
-    private const string NATIVE_LIB = "lib/net8.0/freetype.dll";
+    private const string NativeLib = "lib/net8.0/freetype.dll";
 
     private static int _lastError;
 
@@ -130,7 +130,7 @@ public class FreeType
     {
         return GetLastErrorCodeNative();
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getLastErrorCode", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getLastErrorCode", CallingConvention = CallingConvention.Cdecl )]
         static extern int GetLastErrorCodeNative();
     }
 
@@ -152,7 +152,7 @@ public class FreeType
 
         // --------------------------------------
 
-        [DllImport( NATIVE_LIB, EntryPoint = "initFreeTypeJni", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "initFreeTypeJni", CallingConvention = CallingConvention.Cdecl )]
         static extern IntPtr InitFreeTypeJniNative();
     }
 
@@ -297,7 +297,7 @@ public class FreeType
                 return new Face( faceAddress, this );
             }
 
-            [DllImport( NATIVE_LIB, EntryPoint = "newMemoryFace", CallingConvention = CallingConvention.Cdecl )]
+            [DllImport( NativeLib, EntryPoint = "newMemoryFace", CallingConvention = CallingConvention.Cdecl )]
             static extern IntPtr NewMemoryFaceNative( IntPtr library, IntPtr data, int dataSize, int faceIndex );
         }
 
@@ -313,7 +313,7 @@ public class FreeType
 
             return new Stroker( strokerAddress );
 
-            [DllImport( NATIVE_LIB, EntryPoint = "strokerNew", CallingConvention = CallingConvention.Cdecl )]
+            [DllImport( NativeLib, EntryPoint = "strokerNew", CallingConvention = CallingConvention.Cdecl )]
             static extern IntPtr StrokerNewNative( IntPtr library );
         }
 
@@ -353,7 +353,7 @@ public class FreeType
             }
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "doneFreeType", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "doneFreeType", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneFreeTypeNative( IntPtr library );
     }
 
@@ -372,7 +372,7 @@ public class FreeType
             _associatedBufferAddress = associatedBufferAddress;
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "doneFace", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "doneFace", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneFaceNative( IntPtr face );
 
         public void Dispose()
@@ -407,7 +407,7 @@ public class FreeType
             Dispose( false );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getFaceFlags", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getFaceFlags", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetFaceFlagsNative( IntPtr face );
 
         public int GetFaceFlags()
@@ -415,7 +415,7 @@ public class FreeType
             return GetFaceFlagsNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getStyleFlags", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getStyleFlags", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetStyleFlagsNative( IntPtr face );
 
         public int GetStyleFlags()
@@ -423,7 +423,7 @@ public class FreeType
             return GetStyleFlagsNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getNumGlyphs", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getNumGlyphs", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetNumGlyphsNative( IntPtr face );
 
         public int GetNumGlyphs()
@@ -431,7 +431,7 @@ public class FreeType
             return GetNumGlyphsNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getAscender", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getAscender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAscenderNative( IntPtr face );
 
         public int GetAscender()
@@ -439,7 +439,7 @@ public class FreeType
             return GetAscenderNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getDescender", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getDescender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetDescenderNative( IntPtr face );
 
         public int GetDescender()
@@ -447,7 +447,7 @@ public class FreeType
             return GetDescenderNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHeightNative( IntPtr face );
 
         public int GetHeight()
@@ -455,7 +455,7 @@ public class FreeType
             return GetHeightNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getMaxAdvanceWidth", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getMaxAdvanceWidth", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetMaxAdvanceWidthNative( IntPtr face );
 
         public int GetMaxAdvanceWidth()
@@ -463,7 +463,7 @@ public class FreeType
             return GetMaxAdvanceWidthNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getMaxAdvanceHeight", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getMaxAdvanceHeight", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetMaxAdvanceHeightNative( IntPtr face );
 
         public int GetMaxAdvanceHeight()
@@ -471,7 +471,7 @@ public class FreeType
             return GetMaxAdvanceHeightNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getUnderlinePosition", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getUnderlinePosition", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetUnderlinePositionNative( IntPtr face );
 
         public int GetUnderlinePosition()
@@ -479,7 +479,7 @@ public class FreeType
             return GetUnderlinePositionNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getUnderlineThickness", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getUnderlineThickness", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetUnderlineThicknessNative( IntPtr face );
 
         public int GetUnderlineThickness()
@@ -487,15 +487,15 @@ public class FreeType
             return GetUnderlineThicknessNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "selectSize", CallingConvention = CallingConvention.Cdecl )]
-        private static extern bool SelectSizeNative( IntPtr face, int strike_index );
+        [DllImport( NativeLib, EntryPoint = "selectSize", CallingConvention = CallingConvention.Cdecl )]
+        private static extern bool SelectSizeNative( IntPtr face, int strikeIndex );
 
         public bool SelectSize( int strikeIndex )
         {
             return SelectSizeNative( Address, strikeIndex );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "setCharSize", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "setCharSize", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool SetCharSizeNative( IntPtr face, int charWidth, int charHeight, int horzResolution,
                                                       int vertResolution );
 
@@ -504,7 +504,7 @@ public class FreeType
             return SetCharSizeNative( Address, charWidth, charHeight, horzResolution, vertResolution );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "setPixelSizes", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "setPixelSizes", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool SetPixelSizesNative( IntPtr face, int pixelWidth, int pixelHeight );
 
         public bool SetPixelSizes( int pixelWidth, int pixelHeight )
@@ -512,7 +512,7 @@ public class FreeType
             return SetPixelSizesNative( Address, pixelWidth, pixelHeight );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "loadGlyph", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "loadGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool LoadGlyphNative( IntPtr face, int glyphIndex, int loadFlags );
 
         public bool LoadGlyph( int glyphIndex, int loadFlags )
@@ -520,7 +520,7 @@ public class FreeType
             return LoadGlyphNative( Address, glyphIndex, loadFlags );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "loadChar", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "loadChar", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool LoadCharNative( IntPtr face, int charCode, int loadFlags );
 
         public bool LoadChar( int charCode, int loadFlags )
@@ -528,7 +528,7 @@ public class FreeType
             return LoadCharNative( Address, charCode, loadFlags );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getGlyph", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetGlyphNative( IntPtr face );
 
         public GlyphSlot GetGlyph()
@@ -536,7 +536,7 @@ public class FreeType
             return new GlyphSlot( GetGlyphNative( Address ) );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getSize", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getSize", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetSizeNative( IntPtr face );
 
         public Size GetSize()
@@ -544,7 +544,7 @@ public class FreeType
             return new Size( GetSizeNative( Address ) );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "hasKerning", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "hasKerning", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool HasKerningNative( IntPtr face );
 
         public bool HasKerning()
@@ -552,7 +552,7 @@ public class FreeType
             return HasKerningNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getKerning", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getKerning", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetKerningNative( IntPtr face, int leftGlyph, int rightGlyph, int kernMode );
 
         public int GetKerning( int leftGlyph, int rightGlyph, int kernMode )
@@ -560,7 +560,7 @@ public class FreeType
             return GetKerningNative( Address, leftGlyph, rightGlyph, kernMode );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getCharIndex", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getCharIndex", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetCharIndexNative( IntPtr face, int charCode );
 
         public int GetCharIndex( int charCode )
@@ -579,7 +579,7 @@ public class FreeType
         {
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getMetrics", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getMetrics", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetMetricsNative( IntPtr address );
 
         public SizeMetrics GetMetrics()
@@ -598,7 +598,7 @@ public class FreeType
         {
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getXppem", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getXppem", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetXppemNative( IntPtr metrics );
 
         public int GetXppem()
@@ -606,7 +606,7 @@ public class FreeType
             return GetXppemNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getYppem", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getYppem", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetYppemNative( IntPtr metrics );
 
         public int GetYppem()
@@ -614,7 +614,7 @@ public class FreeType
             return GetYppemNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getXscale", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getXscale", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetXScaleNative( IntPtr metrics );
 
         public int GetXScale()
@@ -622,7 +622,7 @@ public class FreeType
             return GetXScaleNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getYscale", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getYscale", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetYscaleNative( IntPtr metrics );
 
         public int GetYscale()
@@ -630,7 +630,7 @@ public class FreeType
             return GetYscaleNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getAscender", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getAscender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAscenderNative( IntPtr metrics );
 
         public int GetAscender()
@@ -638,7 +638,7 @@ public class FreeType
             return GetAscenderNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getDescender", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getDescender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetDescenderNative( IntPtr metrics );
 
         public int GetDescender()
@@ -646,7 +646,7 @@ public class FreeType
             return GetDescenderNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHeightNative( IntPtr metrics );
 
         public int GetHeight()
@@ -654,7 +654,7 @@ public class FreeType
             return GetHeightNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getMaxAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getMaxAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetMaxAdvanceNative( IntPtr metrics );
 
         public int GetMaxAdvance()
@@ -673,7 +673,7 @@ public class FreeType
         {
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getMetrics", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getMetrics", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetMetricsNative( IntPtr slot );
 
         public GlyphMetrics GetMetrics()
@@ -681,7 +681,7 @@ public class FreeType
             return new GlyphMetrics( GetMetricsNative( Address ) );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getLinearHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getLinearHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetLinearHoriAdvanceNative( IntPtr slot );
 
         public int GetLinearHoriAdvance()
@@ -689,7 +689,7 @@ public class FreeType
             return GetLinearHoriAdvanceNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getLinearVertAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getLinearVertAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetLinearVertAdvanceNative( IntPtr slot );
 
         public int GetLinearVertAdvance()
@@ -697,7 +697,7 @@ public class FreeType
             return GetLinearVertAdvanceNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getAdvanceX", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getAdvanceX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAdvanceXNative( IntPtr slot );
 
         public int GetAdvanceX()
@@ -705,7 +705,7 @@ public class FreeType
             return GetAdvanceXNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getAdvanceY", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getAdvanceY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAdvanceYNative( IntPtr slot );
 
         public int GetAdvanceY()
@@ -713,7 +713,7 @@ public class FreeType
             return GetAdvanceYNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getFormat", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getFormat", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetFormatNative( IntPtr slot );
 
         public int GetFormat()
@@ -721,7 +721,7 @@ public class FreeType
             return GetFormatNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getBitmap", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getBitmap", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetBitmapNative( IntPtr slot );
 
         public Bitmap GetBitmap()
@@ -729,7 +729,7 @@ public class FreeType
             return new Bitmap( GetBitmapNative( Address ) );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getBitmapLeft", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getBitmapLeft", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetBitmapLeftNative( IntPtr slot );
 
         public int GetBitmapLeft()
@@ -737,7 +737,7 @@ public class FreeType
             return GetBitmapLeftNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getBitmapTop", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getBitmapTop", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetBitmapTopNative( IntPtr slot );
 
         public int GetBitmapTop()
@@ -745,7 +745,7 @@ public class FreeType
             return GetBitmapTopNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "renderGlyph", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "renderGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool RenderGlyphNative( IntPtr slot, int renderMode );
 
         public bool RenderGlyph( int renderMode )
@@ -753,7 +753,7 @@ public class FreeType
             return RenderGlyphNative( Address, renderMode );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getGlyph", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetGlyphFromSlotNative( IntPtr glyphSlot );
 
         public Glyph GetGlyph()
@@ -781,7 +781,7 @@ public class FreeType
         {
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "done", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "done", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneNative( IntPtr glyph );
 
         public void Dispose()
@@ -807,7 +807,7 @@ public class FreeType
             Dispose( false );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "strokeBorder", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "strokeBorder", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr StrokeBorderNative( IntPtr glyph, IntPtr stroker, bool inside );
 
         public void StrokeBorder( Stroker stroker, bool inside )
@@ -815,7 +815,7 @@ public class FreeType
             Address = StrokeBorderNative( Address, stroker.Address, inside );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "toBitmap", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "toBitmap", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr ToBitmapNative( IntPtr glyph, int renderMode );
 
         public void ToBitmap( int renderMode )
@@ -831,7 +831,7 @@ public class FreeType
             _rendered = true;
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getBitmap", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getBitmap", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetBitmapFromGlyphNative( IntPtr glyph );
 
         public Bitmap GetBitmap()
@@ -844,7 +844,7 @@ public class FreeType
             return new Bitmap( GetBitmapFromGlyphNative( Address ) );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getLeft", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getLeft", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetLeftNative( IntPtr glyph );
 
         public int GetLeft()
@@ -857,7 +857,7 @@ public class FreeType
             return GetLeftNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getTop", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getTop", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetTopNative( IntPtr glyph );
 
         public int GetTop()
@@ -886,7 +886,7 @@ public class FreeType
             return GetRowsNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getRows", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getRows", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetRowsNative( IntPtr bitmap );
 
         public int GetWidth()
@@ -894,7 +894,7 @@ public class FreeType
             return GetWidthNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getWidth", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getWidth", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetWidthNative( IntPtr bitmap );
 
         public int GetPitch()
@@ -902,7 +902,7 @@ public class FreeType
             return GetPitchNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getPitch", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getPitch", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetPitchNative( IntPtr bitmap );
 
         public byte[] GetBuffer()
@@ -933,7 +933,7 @@ public class FreeType
             return managedBuffer;
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getBuffer", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getBuffer", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetBufferNative( IntPtr bitmap ); // Returns a pointer to the native buffer
 
         public Pixmap GetPixmap( int format, Color color, float gamma )
@@ -946,11 +946,11 @@ public class FreeType
             Pixmap pixmap;
 
             if ( ( color == Color.White )
-              && ( pixelMode == FT_PIXEL_MODE_GRAY )
+              && ( pixelMode == FtPixelModeGray )
               && ( rowBytes == width )
-              && ( Math.Abs( gamma - 1f ) < NumberUtils.FLOAT_TOLERANCE ) )
+              && ( Math.Abs( gamma - 1f ) < NumberUtils.FloatTolerance ) )
             {
-                pixmap = new Pixmap( width, rows, LughFormat.ALPHA );
+                pixmap = new Pixmap( width, rows, LughFormat.Alpha );
 
                 // Assuming Pixmap has a way to directly set pixel data from a byte array
                 // or BufferUtils.copy can handle byte[] to Pixmap's internal buffer
@@ -974,7 +974,7 @@ public class FreeType
                 // or a way to get a direct int[] view of the Pixmap's buffer.
                 // For simplicity, I'll provide a conceptual approach for writing rows.
 
-                if ( pixelMode == FT_PIXEL_MODE_MONO )
+                if ( pixelMode == FtPixelModeMono )
                 {
                     for ( var y = 0; y < rows; y++ )
                     {
@@ -1048,7 +1048,7 @@ public class FreeType
             return converted;
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getNumGray", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getNumGray", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetNumGrayNative( IntPtr bitmap );
 
         public int GetNumGray()
@@ -1056,7 +1056,7 @@ public class FreeType
             return GetNumGrayNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getPixelMode", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getPixelMode", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetPixelModeNative( IntPtr bitmap );
 
         public int GetPixelMode()
@@ -1075,7 +1075,7 @@ public class FreeType
         {
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getWidth", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getWidth", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetWidthNative( IntPtr metrics );
 
         public int GetWidth()
@@ -1083,7 +1083,7 @@ public class FreeType
             return GetWidthNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHeightNative( IntPtr metrics );
 
         public int GetHeight()
@@ -1091,7 +1091,7 @@ public class FreeType
             return GetHeightNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getHoriBearingX", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getHoriBearingX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriBearingXNative( IntPtr metrics );
 
         public int GetHoriBearingX()
@@ -1099,7 +1099,7 @@ public class FreeType
             return GetHoriBearingXNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getHoriBearingY", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getHoriBearingY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriBearingYNative( IntPtr metrics );
 
         public int GetHoriBearingY()
@@ -1107,7 +1107,7 @@ public class FreeType
             return GetHoriBearingYNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriAdvanceNative( IntPtr metrics );
 
         public int GetHoriAdvance()
@@ -1115,7 +1115,7 @@ public class FreeType
             return GetHoriAdvanceNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getVertBearingX", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getVertBearingX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertBearingXNative( IntPtr metrics );
 
         public int GetVertBearingX()
@@ -1123,7 +1123,7 @@ public class FreeType
             return GetVertBearingXNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getVertBearingY", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getVertBearingY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertBearingYNative( IntPtr metrics );
 
         public int GetVertBearingY()
@@ -1131,7 +1131,7 @@ public class FreeType
             return GetVertBearingYNative( Address );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "getVertAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "getVertAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertAdvanceNative( IntPtr metrics );
 
         public int GetVertAdvance()
@@ -1150,7 +1150,7 @@ public class FreeType
         {
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "set", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "set", CallingConvention = CallingConvention.Cdecl )]
         private static extern void SetNative( IntPtr stroker, int radius, int lineCap, int lineJoin, int miterLimit );
 
         public void Set( int radius, int lineCap, int lineJoin, int miterLimit )
@@ -1158,7 +1158,7 @@ public class FreeType
             SetNative( Address, radius, lineCap, lineJoin, miterLimit );
         }
 
-        [DllImport( NATIVE_LIB, EntryPoint = "done", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "done", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneStrokerNative( IntPtr stroker );
 
         public void Dispose()

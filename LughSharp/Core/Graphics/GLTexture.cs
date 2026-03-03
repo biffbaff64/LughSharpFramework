@@ -160,7 +160,7 @@ public abstract class GLTexture : IDisposable
     /// Default constructor. Creates a new GLTexture object using the
     /// default GL_TEXTURE_2D target.
     /// </summary>
-    protected GLTexture() : this( IGL.GL_TEXTURE_2D, Engine.GL.GenTexture() )
+    protected GLTexture() : this( IGL.GLTexture2D, Engine.GL.GenTexture() )
     {
     }
 
@@ -246,13 +246,13 @@ public abstract class GLTexture : IDisposable
     {
         if ( force || ( UWrap != s ) )
         {
-            Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )s );
+            Engine.GL.TexParameteri( GLTarget, IGL.GLTextureWrapS, ( int )s );
             UWrap = s;
         }
 
         if ( force || ( VWrap != t ) )
         {
-            Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )t );
+            Engine.GL.TexParameteri( GLTarget, IGL.GLTextureWrapT, ( int )t );
             VWrap = t;
         }
     }
@@ -270,8 +270,8 @@ public abstract class GLTexture : IDisposable
 
         Bind();
 
-        Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_S, ( int )s );
-        Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_WRAP_T, ( int )t );
+        Engine.GL.TexParameteri( GLTarget, IGL.GLTextureWrapS, ( int )s );
+        Engine.GL.TexParameteri( GLTarget, IGL.GLTextureWrapT, ( int )t );
     }
 
     /// <summary>
@@ -288,13 +288,13 @@ public abstract class GLTexture : IDisposable
     {
         if ( force || ( MinFilter != minFilter ) )
         {
-            Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MIN_FILTER, ( int )minFilter );
+            Engine.GL.TexParameteri( GLTarget, IGL.GLTextureMinFilter, ( int )minFilter );
             MinFilter = minFilter;
         }
 
         if ( force || ( MagFilter != magFilter ) )
         {
-            Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MAG_FILTER, ( int )magFilter );
+            Engine.GL.TexParameteri( GLTarget, IGL.GLTextureMagFilter, ( int )magFilter );
             MagFilter = magFilter;
         }
     }
@@ -312,8 +312,8 @@ public abstract class GLTexture : IDisposable
 
         Bind();
 
-        Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MIN_FILTER, ( int )minFilter );
-        Engine.GL.TexParameteri( GLTarget, IGL.GL_TEXTURE_MAG_FILTER, ( int )magFilter );
+        Engine.GL.TexParameteri( GLTarget, IGL.GLTextureMinFilter, ( int )minFilter );
+        Engine.GL.TexParameteri( GLTarget, IGL.GLTextureMagFilter, ( int )magFilter );
     }
 
     /// <summary>
@@ -343,7 +343,7 @@ public abstract class GLTexture : IDisposable
             return AnisotropicFilterLevel;
         }
 
-        Engine.GL.TexParameterf( GLTarget, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
+        Engine.GL.TexParameterf( GLTarget, IGL.GLTextureMaxAnisotropyExt, level );
 
         return AnisotropicFilterLevel = level;
     }
@@ -371,7 +371,7 @@ public abstract class GLTexture : IDisposable
 
         Bind();
 
-        Engine.GL.TexParameterf( GLTarget, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
+        Engine.GL.TexParameterf( GLTarget, IGL.GLTextureMaxAnisotropyExt, level );
 
         return AnisotropicFilterLevel = level;
     }
@@ -393,7 +393,7 @@ public abstract class GLTexture : IDisposable
         {
             var buffer = new float[ 16 ];
 
-            Engine.GL.GetFloatv( IGL.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, ref buffer );
+            Engine.GL.GetFloatv( IGL.GLMaxTextureMaxAnisotropyExt, ref buffer );
 
             return _maxAnisotropicFilterLevel = buffer[ 0 ];
         }
@@ -568,13 +568,13 @@ public abstract class GLTexture : IDisposable
             byte[] a  = pixmap.PixelData;
             var    sb = new StringBuilder();
 
-            const int BLOCK_SIZE = 20;
+            const int BlockSize = 20;
 
-            for ( var i = 0; i < 100; i += BLOCK_SIZE )
+            for ( var i = 0; i < 100; i += BlockSize )
             {
                 sb.Clear();
 
-                for ( var j = 0; j < BLOCK_SIZE; j++ )
+                for ( var j = 0; j < BlockSize; j++ )
                 {
                     sb.Append( $"{a[ i + j ]:X2}," );
                 }

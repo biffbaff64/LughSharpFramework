@@ -149,12 +149,12 @@ public interface INet
     [PublicAPI]
     public interface IHttpMethods
     {
-        const string HEAD   = "HEAD";
-        const string GET    = "GET";
-        const string POST   = "POST";
-        const string PUT    = "PUT";
-        const string PATCH  = "PATCH";
-        const string DELETE = "DELETE";
+        const string Head   = "HEAD";
+        const string Get    = "GET";
+        const string Post   = "POST";
+        const string Put    = "PUT";
+        const string Patch  = "PATCH";
+        const string Delete = "DELETE";
     }
 
     // ========================================================================

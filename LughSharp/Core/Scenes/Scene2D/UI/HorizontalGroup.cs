@@ -60,7 +60,7 @@ public class HorizontalGroup : WidgetGroup
     public          bool    Wrap      { get; set; }
     public          float   Fill      { get; set; }
     public          bool    Expand    { get; set; }
-    public          int     Alignment { get; set; } = Align.LEFT;
+    public          Align   Alignment { get; set; } = Align.Left;
     public          float   PadTop    { get; set; }
     public          float   PadLeft   { get; set; }
     public          float   PadBottom { get; set; }
@@ -96,7 +96,7 @@ public class HorizontalGroup : WidgetGroup
     private float          _lastPrefHeight;
     private float          _prefHeight;
     private float          _prefWidth;
-    private int            _rowAlign;
+    private Align          _rowAlign;
     private List< float >? _rowSizes; // row width, row height, ...
     private bool           _sizeInvalid = true;
 
@@ -271,29 +271,29 @@ public class HorizontalGroup : WidgetGroup
         }
 
         bool  round     = Round;
-        int   align     = Alignment;
+        Align align     = Alignment;
         float space     = Space;
         float padBottom = PadBottom;
         float fill      = Fill;
         float rowHeight = ( Expand ? Height : _prefHeight ) - PadTop - padBottom;
         float x         = PadLeft;
 
-        if ( ( align & Align.RIGHT ) != 0 )
+        if ( ( align & Align.Right ) != 0 )
         {
             x += Width - _prefWidth;
         }
-        else if ( ( align & Align.LEFT ) == 0 ) // center
+        else if ( ( align & Align.Left ) == 0 ) // center
         {
             x += ( Width - _prefWidth ) / 2;
         }
 
         float startY;
 
-        if ( ( align & Align.BOTTOM ) != 0 )
+        if ( ( align & Align.Bottom ) != 0 )
         {
             startY = padBottom;
         }
-        else if ( ( align & Align.TOP ) != 0 )
+        else if ( ( align & Align.Top ) != 0 )
         {
             startY = Height - PadTop - rowHeight;
         }
@@ -362,11 +362,11 @@ public class HorizontalGroup : WidgetGroup
 
             float y = startY;
 
-            if ( ( align & Align.TOP ) != 0 )
+            if ( ( align & Align.Top ) != 0 )
             {
                 y += rowHeight - height;
             }
-            else if ( ( align & Align.BOTTOM ) == 0 ) // center
+            else if ( ( align & Align.Bottom ) == 0 ) // center
             {
                 y += ( rowHeight - height ) / 2;
             }
@@ -402,7 +402,7 @@ public class HorizontalGroup : WidgetGroup
             InvalidateHierarchy();
         }
 
-        int   align      = Alignment;
+        Align align      = Alignment;
         bool  round      = Round;
         float space      = Space;
         float fill       = Fill;
@@ -420,11 +420,11 @@ public class HorizontalGroup : WidgetGroup
             throw new RuntimeException( "_rowSizes cannot be null!" );
         }
 
-        if ( ( align & Align.TOP ) != 0 )
+        if ( ( align & Align.Top ) != 0 )
         {
             rowY += Height - prefHeight;
         }
-        else if ( ( align & Align.BOTTOM ) == 0 ) // center
+        else if ( ( align & Align.Bottom ) == 0 ) // center
         {
             rowY += ( Height - prefHeight ) / 2;
         }
@@ -435,11 +435,11 @@ public class HorizontalGroup : WidgetGroup
             rowDir =  1;
         }
 
-        if ( ( align & Align.RIGHT ) != 0 )
+        if ( ( align & Align.Right ) != 0 )
         {
             xStart += groupWidth - _prefWidth;
         }
-        else if ( ( align & Align.LEFT ) == 0 ) // center
+        else if ( ( align & Align.Left ) == 0 ) // center
         {
             xStart += ( groupWidth - _prefWidth ) / 2;
         }
@@ -498,11 +498,11 @@ public class HorizontalGroup : WidgetGroup
                               rowSizes.Count - 2 ); // In case an actor changed size without invalidating this layout.
                 x = xStart;
 
-                if ( ( align & Align.RIGHT ) != 0 )
+                if ( ( align & Align.Right ) != 0 )
                 {
                     x += maxWidth - rowSizes[ r ];
                 }
-                else if ( ( align & Align.LEFT ) == 0 ) // center
+                else if ( ( align & Align.Left ) == 0 ) // center
                 {
                     x += ( maxWidth - rowSizes[ r ] ) / 2;
                 }
@@ -537,11 +537,11 @@ public class HorizontalGroup : WidgetGroup
 
             float y = rowY;
 
-            if ( ( align & Align.TOP ) != 0 )
+            if ( ( align & Align.Top ) != 0 )
             {
                 y += rowHeight - height;
             }
-            else if ( ( align & Align.BOTTOM ) == 0 ) // center
+            else if ( ( align & Align.Bottom ) == 0 ) // center
             {
                 y += ( rowHeight - height ) / 2;
             }
@@ -773,12 +773,12 @@ public class HorizontalGroup : WidgetGroup
     /// <summary>
     /// Sets the alignment of all widgets within the horizontal group.
     /// <para>
-    /// Set to <see cref="Align.CENTER"/>, <see cref="Align.LEFT"/>,
-    /// <see cref="Align.RIGHT"/>, <see cref="Align.TOP"/>,
-    /// <see cref="Align.BOTTOM"/>, or any combination of those.
+    /// Set to <see cref="Align.Center"/>, <see cref="Align.Left"/>,
+    /// <see cref="Align.Right"/>, <see cref="Align.Top"/>,
+    /// <see cref="Align.Bottom"/>, or any combination of those.
     /// </para>
     /// </summary>
-    public HorizontalGroup SetAlign( int align )
+    public HorizontalGroup SetAlign( Align align )
     {
         Alignment = align;
 
@@ -787,59 +787,59 @@ public class HorizontalGroup : WidgetGroup
 
     /// <summary>
     /// Sets the alignment of all widgets within the horizontal group to
-    /// <see cref="Align.CENTER"/>. This clears any other alignment.
+    /// <see cref="Align.Center"/>. This clears any other alignment.
     /// </summary>
     public HorizontalGroup AlignCenter()
     {
-        Alignment = Align.CENTER;
+        Alignment = Align.Center;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for
+    /// Sets <see cref="Align.Top"/> and clears <see cref="Align.Bottom"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignTop()
     {
-        Alignment |= Align.TOP;
-        Alignment &= ~Align.BOTTOM;
+        Alignment |= Align.Top;
+        Alignment &= ~Align.Bottom;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for
+    /// Sets <see cref="Align.Bottom"/> and clears <see cref="Align.Top"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignBottom()
     {
-        Alignment |= Align.BOTTOM;
-        Alignment &= ~Align.TOP;
+        Alignment |= Align.Bottom;
+        Alignment &= ~Align.Top;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for
+    /// Sets <see cref="Align.Left"/> and clears <see cref="Align.Right"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignLeft()
     {
-        Alignment |= Align.LEFT;
-        Alignment &= ~Align.RIGHT;
+        Alignment |= Align.Left;
+        Alignment &= ~Align.Right;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/> for
+    /// Adds <see cref="Align.Right"/> and clears <see cref="Align.Left"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignRight()
     {
-        Alignment |= Align.RIGHT;
-        Alignment &= ~Align.LEFT;
+        Alignment |= Align.Right;
+        Alignment &= ~Align.Left;
 
         return this;
     }
@@ -849,12 +849,12 @@ public class HorizontalGroup : WidgetGroup
     /// is enabled and sets the vertical alignment of widgets within each row.
     /// </summary>
     /// <param name="rowAlign">
-    /// Set to <see cref="Align.CENTER"/>, <see cref="Align.LEFT"/>,
-    /// <see cref="Align.RIGHT"/>,
-    /// <see cref="Align.TOP"/>, <see cref="Align.BOTTOM"/> or any combination of those.
+    /// Set to <see cref="Align.Center"/>, <see cref="Align.Left"/>,
+    /// <see cref="Align.Right"/>,
+    /// <see cref="Align.Top"/>, <see cref="Align.Bottom"/> or any combination of those.
     /// </param>
     /// <returns></returns>
-    public HorizontalGroup RowAlign( int rowAlign )
+    public HorizontalGroup RowAlign( Align rowAlign )
     {
         _rowAlign = rowAlign;
 
@@ -862,60 +862,60 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the alignment of widgets within each row to <see cref="Align.CENTER"/>.
+    /// Sets the alignment of widgets within each row to <see cref="Align.Center"/>.
     /// This clears any other alignment.
     /// </summary>
     public HorizontalGroup RowCenter()
     {
-        _rowAlign = Align.CENTER;
+        _rowAlign = Align.Center;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for
+    /// Sets <see cref="Align.Top"/> and clears <see cref="Align.Bottom"/> for
     /// the alignment of widgets within each row.
     /// </summary>
     public HorizontalGroup RowTop()
     {
-        _rowAlign |= Align.TOP;
-        _rowAlign &= ~Align.BOTTOM;
+        _rowAlign |= Align.Top;
+        _rowAlign &= ~Align.Bottom;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for
+    /// Adds <see cref="Align.Left"/> and clears <see cref="Align.Right"/> for
     /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
     /// </summary>
     public HorizontalGroup RowLeft()
     {
-        _rowAlign |= Align.LEFT;
-        _rowAlign &= ~Align.RIGHT;
+        _rowAlign |= Align.Left;
+        _rowAlign &= ~Align.Right;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for
+    /// Sets <see cref="Align.Bottom"/> and clears <see cref="Align.Top"/> for
     /// the alignment of widgets within each row.
     /// </summary>
     public HorizontalGroup RowBottom()
     {
-        _rowAlign |= Align.BOTTOM;
-        _rowAlign &= ~Align.TOP;
+        _rowAlign |= Align.Bottom;
+        _rowAlign &= ~Align.Top;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/> for
+    /// Adds <see cref="Align.Right"/> and clears <see cref="Align.Left"/> for
     /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
     /// </summary>
     public HorizontalGroup RowRight()
     {
-        _rowAlign |= Align.RIGHT;
-        _rowAlign &= ~Align.LEFT;
+        _rowAlign |= Align.Right;
+        _rowAlign &= ~Align.Left;
 
         return this;
     }

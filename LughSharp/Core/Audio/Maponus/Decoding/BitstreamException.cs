@@ -68,7 +68,7 @@ public class BitstreamException : Mp3SharpException
     public BitstreamException( string message, Exception? inner = null )
         : base( message, inner )
     {
-        ErrorCode = BitstreamErrors.UNKNOWN_ERROR;
+        ErrorCode = BitstreamErrors.UnknownError;
     }
 
     /// <summary>

@@ -34,7 +34,7 @@ public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListene
     private readonly ScrollPane? _parent = parent;
 
     /// <inheritdoc />
-    public override bool Scrolled( InputEvent? inputEvent, float x, float y, float scrollAmountX, float scrollAmountY )
+    public override bool OnScrolled( InputEvent? inputEvent, float x, float y, float scrollAmountX, float scrollAmountY )
     {
         Guard.Against.Null( _parent );
 
@@ -75,7 +75,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
     private          float       _handlePosition;
 
     /// <inheritdoc />
-    public override bool TouchDown( InputEvent? inputEvent, float x, float y, int pointer, int button )
+    public override bool OnTouchDown( InputEvent? inputEvent, float x, float y, int pointer, int button )
     {
         Guard.Against.Null( _parent );
 
@@ -152,7 +152,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
     }
 
     /// <inheritdoc />
-    public override void TouchUp( InputEvent? inputEvent, float x, float y, int pointer, int button )
+    public override void OnTouchUp( InputEvent? inputEvent, float x, float y, int pointer, int button )
     {
         Guard.Against.Null( _parent );
 
@@ -165,7 +165,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
     }
 
     /// <inheritdoc />
-    public override void TouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
+    public override void OnTouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
     {
         Guard.Against.Null( _parent );
 
@@ -219,7 +219,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
     }
 
     /// <inheritdoc />
-    public override bool MouseMoved( InputEvent? inputEvent, float x, float y )
+    public override bool OnMouseMoved( InputEvent? inputEvent, float x, float y )
     {
         Guard.Against.Null( _parent );
 

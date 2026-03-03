@@ -29,7 +29,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Actions;
 [PublicAPI]
 public class RepeatAction : DelegateAction
 {
-    public const int FOREVER = -1;
+    public const int Forever = -1;
 
     public int  RepeatCount   { get; set; }
     public int  ExecutedCount { get; set; }

@@ -37,7 +37,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 [SupportedOSPlatform( "windows" )]
 public class ColorBleedEffect
 {
-    private static readonly int[] Offsets = [ -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 ];
+    private static readonly int[] _offsets = [ -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 ];
 
     public Bitmap ProcessImage( Bitmap image, int maxIterations )
     {
@@ -94,10 +94,10 @@ public class ColorBleedEffect
             int r          = 0, g = 0, b = 0;
             var count      = 0;
 
-            for ( int i = 0, n = Offsets.Length; i < n; i += 2 )
+            for ( int i = 0, n = _offsets.Length; i < n; i += 2 )
             {
-                int column = x + Offsets[ i ];
-                int row    = y + Offsets[ i + 1 ];
+                int column = x + _offsets[ i ];
+                int row    = y + _offsets[ i + 1 ];
 
                 if ( ( column < 0 ) || ( column >= width ) || ( row < 0 ) || ( row >= height ) )
                 {

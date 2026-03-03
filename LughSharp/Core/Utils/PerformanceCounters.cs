@@ -34,7 +34,7 @@ namespace LughSharp.Core.Utils;
 [PublicAPI]
 public class PerformanceCounters
 {
-    private const float NANO2_SECONDS = 1f / 1000000000.0f;
+    private const float Nano2Seconds = 1f / 1000000000.0f;
 
     private long _lastTick;
 
@@ -83,7 +83,7 @@ public class PerformanceCounters
 
         if ( _lastTick > 0L )
         {
-            Tick( ( t - _lastTick ) * NANO2_SECONDS );
+            Tick( ( t - _lastTick ) * Nano2Seconds );
         }
 
         _lastTick = t;

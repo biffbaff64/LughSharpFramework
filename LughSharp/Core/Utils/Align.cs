@@ -29,55 +29,48 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
 
-///// <summary>
-///// Provides bit flag constants for alignment.
-///// </summary>
-//[PublicAPI]
-//[Flags]
-//public enum Align
-//{
-//    None   = 0,
-//    Center = 1 << 0,
-//    Top    = 1 << 1,
-//    Bottom = 1 << 2,
-//    Left   = 1 << 3,
-//    Right  = 1 << 4,
-//
-//    TopLeft     = Top | Left,
-//    TopRight    = Top | Right,
-//    BottomLeft  = Bottom | Left,
-//    BottomRight = Bottom | Right,
-//}
+/// <summary>
+/// Provides bit flag constants for alignment.
+/// </summary>
+[PublicAPI]
+[Flags]
+public enum Align
+{
+    None   = 0,
+    Center = 1 << 0,
+    Top    = 1 << 1,
+    Bottom = 1 << 2,
+    Left   = 1 << 3,
+    Right  = 1 << 4,
+    
+    Special = 1 << 5,
+    
+    TopLeft      = Top | Left,
+    TopCenter    = Top | Center,
+    TopRight     = Top | Right,
+    MiddleLeft   = Center | Left,
+    MiddleCenter = Center,
+    MiddleRight  = Center | Right,
+    BottomLeft   = Bottom | Left,
+    BottomCenter = Bottom | Center,
+    BottomRight  = Bottom | Right,
+}
 
 /// <summary>
 /// Provides utility methods and constants for handling alignment
 /// using bit flags.
 /// </summary>
 [PublicAPI]
-public sealed class Align
+public sealed class AlignUtils
 {
-    public const int NONE   = 0;
-    public const int CENTER = 1 << 0;
-    public const int TOP    = 1 << 1;
-    public const int BOTTOM = 1 << 2;
-    public const int LEFT   = 1 << 3;
-    public const int RIGHT  = 1 << 4;
-
-    public const int TOP_LEFT     = TOP | LEFT;
-    public const int TOP_RIGHT    = TOP | RIGHT;
-    public const int BOTTOM_LEFT  = BOTTOM | LEFT;
-    public const int BOTTOM_RIGHT = BOTTOM | RIGHT;
-
-    // ========================================================================
-
     /// <summary>
     /// Determines whether the specified position is aligned to the left.
     /// </summary>
     /// <param name="position">The alignment position value.</param>
     /// <returns><c>true</c> if aligned to the left; otherwise, <c>false</c>.</returns>
-    public static bool IsLeft( int position )
+    public static bool IsLeft( Align position )
     {
-        return ( position & LEFT ) != 0;
+        return position.HasFlag( Align.Left );
     }
 
     /// <summary>
@@ -85,9 +78,9 @@ public sealed class Align
     /// </summary>
     /// <param name="position">The alignment position value.</param>
     /// <returns><c>true</c> if aligned to the right; otherwise, <c>false</c>.</returns>
-    public static bool IsRight( int position )
+    public static bool IsRight( Align position )
     {
-        return ( position & RIGHT ) != 0;
+        return position.HasFlag( Align.Right );
     }
 
     /// <summary>
@@ -95,9 +88,9 @@ public sealed class Align
     /// </summary>
     /// <param name="position">The alignment position value.</param>
     /// <returns><c>true</c> if aligned to the top; otherwise, <c>false</c>.</returns>
-    public static bool IsTop( int position )
+    public static bool IsTop( Align position )
     {
-        return ( position & TOP ) != 0;
+        return position.HasFlag( Align.Top );
     }
 
     /// <summary>
@@ -105,9 +98,9 @@ public sealed class Align
     /// </summary>
     /// <param name="position">The alignment position value.</param>
     /// <returns><c>true</c> if aligned to the bottom; otherwise, <c>false</c>.</returns>
-    public static bool IsBottom( int position )
+    public static bool IsBottom( Align position )
     {
-        return ( position & BOTTOM ) != 0;
+        return position.HasFlag( Align.Bottom );
     }
 
     /// <summary>
@@ -115,9 +108,9 @@ public sealed class Align
     /// </summary>
     /// <param name="position">The alignment position value.</param>
     /// <returns><c>true</c> if horizontally centered; otherwise, <c>false</c>.</returns>
-    public static bool IsCenterHorizontal( int position )
+    public static bool IsCenterHorizontal( Align position )
     {
-        return ( ( position & LEFT ) == 0 ) && ( ( position & RIGHT ) == 0 );
+        return !position.HasFlag( Align.Left ) && !position.HasFlag( Align.Right );
     }
 
     /// <summary>
@@ -125,9 +118,9 @@ public sealed class Align
     /// </summary>
     /// <param name="position">The alignment position value.</param>
     /// <returns><c>true</c> if vertically centered; otherwise, <c>false</c>.</returns>
-    public static bool IsCenterVertical( int position )
+    public static bool IsCenterVertical( Align position )
     {
-        return ( ( position & TOP ) == 0 ) && ( ( position & BOTTOM ) == 0 );
+        return !position.HasFlag( Align.Top ) && !position.HasFlag( Align.Bottom );
     }
 
     // ========================================================================
@@ -137,15 +130,15 @@ public sealed class Align
     /// </summary>
     /// <param name="position">The alignment position value.</param>
     /// <returns>A string describing the alignment.</returns>
-    public static string ToString( int position )
+    public static string ToString( Align position )
     {
         var buffer = new StringBuilder( "[" );
 
-        if ( ( position & TOP ) != 0 )
+        if ( position.HasFlag( Align.Top ) )
         {
             buffer.Append( "Top" );
         }
-        else if ( ( position & BOTTOM ) != 0 )
+        else if ( position.HasFlag( Align.Bottom ) )
         {
             buffer.Append( "Bottom" );
         }
@@ -156,11 +149,11 @@ public sealed class Align
 
         buffer.Append( "] [" );
 
-        if ( ( position & LEFT ) != 0 )
+        if ( position.HasFlag( Align.Left ) )
         {
             buffer.Append( "Left" );
         }
-        else if ( ( position & RIGHT ) != 0 )
+        else if ( position.HasFlag( Align.Right ) )
         {
             buffer.Append( "Right" );
         }

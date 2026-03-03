@@ -54,7 +54,7 @@ public class Mesh : IDisposable
 
     // ========================================================================
 
-    private static readonly Dictionary< IApplication, List< Mesh >? > Meshes = new();
+    private static readonly Dictionary< IApplication, List< Mesh >? > _meshes = new();
 
     private readonly bool          _isVertexArray;
     private readonly Buffer< int > _intBuffer = new( 100 );
@@ -265,9 +265,9 @@ public class Mesh : IDisposable
         {
             var builder = new StringBuilder( "Managed meshes/app: { " );
 
-            foreach ( IApplication app in Meshes.Keys )
+            foreach ( IApplication app in _meshes.Keys )
             {
-                builder.Append( Meshes[ app ]?.Count );
+                builder.Append( _meshes[ app ]?.Count );
                 builder.Append( ' ' );
             }
 
@@ -495,7 +495,7 @@ public class Mesh : IDisposable
     /// <param name="vertices"> the array to copy the vertices to  </param>
     public float[] GetVertices( float[] vertices )
     {
-        return GetVertices( 0, NumberUtils.NOT_SET, vertices );
+        return GetVertices( 0, NumberUtils.NotSet, vertices );
     }
 
     /// <summary>
@@ -508,7 +508,7 @@ public class Mesh : IDisposable
     /// <param name="vertices"> the array to copy the vertices to  </param>
     public float[] GetVertices( int srcOffset, float[] vertices )
     {
-        return GetVertices( srcOffset, NumberUtils.NOT_SET, vertices );
+        return GetVertices( srcOffset, NumberUtils.NotSet, vertices );
     }
 
     /// <summary>
@@ -523,7 +523,7 @@ public class Mesh : IDisposable
     {
         int max = NumVertices * VertexSize;
 
-        if ( count == NumberUtils.NOT_SET )
+        if ( count == NumberUtils.NotSet )
         {
             count = Math.Min( max - srcOffset, vertices.Length - destOffset );
         }
@@ -813,7 +813,7 @@ public class Mesh : IDisposable
 
                 fixed ( int* ptr = &buffer.ToArray()[ 0 ] )
                 {
-                    Engine.GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, new IntPtr( ptr + offset ) );
+                    Engine.GL.DrawElements( primitiveType, count, IGL.GLUnsignedInt, new IntPtr( ptr + offset ) );
                 }
 
                 buffer.Position = oldPosition;
@@ -843,13 +843,13 @@ public class Mesh : IDisposable
                 {
                     Engine.GL.DrawElementsInstanced( primitiveType,
                                                      count,
-                                                     IGL.GL_UNSIGNED_INT,
+                                                     IGL.GLUnsignedInt,
                                                      offset * 4,
                                                      numInstances );
                 }
                 else
                 {
-                    Engine.GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_INT, offset * 4 );
+                    Engine.GL.DrawElements( primitiveType, count, IGL.GLUnsignedInt, offset * 4 );
                 }
             }
             else
@@ -1358,7 +1358,7 @@ public class Mesh : IDisposable
     {
         List< Mesh >? managedResources;
 
-        if ( !Meshes.TryGetValue( app, out List< Mesh >? value ) || ( value == null ) )
+        if ( !_meshes.TryGetValue( app, out List< Mesh >? value ) || ( value == null ) )
         {
             managedResources = [ ];
         }
@@ -1369,7 +1369,7 @@ public class Mesh : IDisposable
 
         managedResources.Add( mesh );
 
-        Meshes[ app ] = managedResources;
+        _meshes[ app ] = managedResources;
     }
 
     /// <summary>
@@ -1378,10 +1378,10 @@ public class Mesh : IDisposable
     /// <param name="app">  </param>
     public static void InvalidateAllMeshes( IApplication app )
     {
-        for ( var i = 0; i < Meshes.Count; i++ )
+        for ( var i = 0; i < _meshes.Count; i++ )
         {
-            Meshes[ app ]?[ i ]._vertices.Invalidate();
-            Meshes[ app ]?[ i ].IndexData.Invalidate();
+            _meshes[ app ]?[ i ]._vertices.Invalidate();
+            _meshes[ app ]?[ i ].IndexData.Invalidate();
         }
     }
 
@@ -1390,7 +1390,7 @@ public class Mesh : IDisposable
     /// </summary>
     public static void ClearAllMeshes( IApplication app )
     {
-        Meshes.Remove( app );
+        _meshes.Remove( app );
     }
 
     /// <summary>
@@ -1853,9 +1853,9 @@ public class Mesh : IDisposable
     {
         if ( disposing )
         {
-            if ( Meshes[ Engine.Api.App ] != null )
+            if ( _meshes[ Engine.Api.App ] != null )
             {
-                Meshes[ Engine.Api.App ]?.Remove( this );
+                _meshes[ Engine.Api.App ]?.Remove( this );
             }
 
             _vertices.Dispose();

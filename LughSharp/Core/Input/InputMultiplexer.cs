@@ -58,7 +58,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <inheritdoc />
-    public bool KeyDown( int keycode )
+    public bool OnKeyDown( int keycode )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -66,7 +66,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].KeyDown( keycode ) )
+                if ( items[ i ].OnKeyDown( keycode ) )
                 {
                     return true;
                 }
@@ -81,7 +81,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <inheritdoc />
-    public bool KeyUp( int keycode )
+    public bool OnKeyUp( int keycode )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -89,7 +89,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].KeyUp( keycode ) )
+                if ( items[ i ].OnKeyUp( keycode ) )
                 {
                     return true;
                 }
@@ -104,7 +104,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <inheritdoc />
-    public bool KeyTyped( char character )
+    public bool OnKeyTyped( char character )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -112,7 +112,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].KeyTyped( character ) )
+                if ( items[ i ].OnKeyTyped( character ) )
                 {
                     return true;
                 }
@@ -127,7 +127,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <inheritdoc />
-    public bool TouchDown( int screenX, int screenY, int pointer, int button )
+    public bool OnTouchDown( int screenX, int screenY, int pointer, int button )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -135,7 +135,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].TouchDown( screenX, screenY, pointer, button ) )
+                if ( items[ i ].OnTouchDown( screenX, screenY, pointer, button ) )
                 {
                     return true;
                 }
@@ -150,7 +150,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <inheritdoc />
-    public bool TouchUp( int screenX, int screenY, int pointer, int button )
+    public bool OnTouchUp( int screenX, int screenY, int pointer, int button )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -158,7 +158,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].TouchUp( screenX, screenY, pointer, button ) )
+                if ( items[ i ].OnTouchUp( screenX, screenY, pointer, button ) )
                 {
                     return true;
                 }
@@ -173,7 +173,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <inheritdoc />
-    public bool TouchDragged( int screenX, int screenY, int pointer )
+    public bool OnTouchDragged( int screenX, int screenY, int pointer )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -181,7 +181,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].TouchDragged( screenX, screenY, pointer ) )
+                if ( items[ i ].OnTouchDragged( screenX, screenY, pointer ) )
                 {
                     return true;
                 }
@@ -196,7 +196,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <inheritdoc />
-    public bool MouseMoved( int screenX, int screenY )
+    public bool OnMouseMoved( int screenX, int screenY )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -204,7 +204,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].MouseMoved( screenX, screenY ) )
+                if ( items[ i ].OnMouseMoved( screenX, screenY ) )
                 {
                     return true;
                 }
@@ -219,7 +219,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <inheritdoc />
-    public bool Scrolled( float amountX, float amountY )
+    public bool OnScrolled( float amountX, float amountY )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -227,7 +227,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].Scrolled( amountX, amountY ) )
+                if ( items[ i ].OnScrolled( amountX, amountY ) )
                 {
                     return true;
                 }

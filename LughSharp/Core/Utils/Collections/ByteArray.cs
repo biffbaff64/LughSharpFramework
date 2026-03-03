@@ -46,7 +46,7 @@ public class ByteArray
 
     // ========================================================================
 
-    private const int DEFAULT_CAPACITY = 16;
+    private const int DefaultCapacity = 16;
 
     // ========================================================================
     // ========================================================================
@@ -68,7 +68,7 @@ public class ByteArray
     /// <param name="capacity">
     /// Any elements added beyond this will cause the backing array to be grown.
     /// </param>
-    public ByteArray( bool ordered = true, int capacity = DEFAULT_CAPACITY )
+    public ByteArray( bool ordered = true, int capacity = DefaultCapacity )
     {
         Ordered = ordered;
         Items   = new byte[ capacity ];

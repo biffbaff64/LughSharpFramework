@@ -4,7 +4,8 @@
 Style Guide for contributors
 ----------------------------
 
-This style guide is for C# code developed for the LughSharp Framework, and must be adhered to by contributors.
+This style guide is for C# code developed for the LughSharp Framework, and must be adhered
+to by contributors.
 It is heavily based on the Google C# Style Guide.
 
 Formatting guidelines

@@ -199,12 +199,12 @@ public class GestureDetector : InputAdapter
         }
     }
 
-    public override bool TouchDown( int x, int y, int pointer, int button )
+    public override bool OnTouchDown( int x, int y, int pointer, int button )
     {
-        return TouchDown( x, y, pointer, button );
+        return OnTouchDown( x, y, pointer, button );
     }
 
-    public bool TouchDown( float x, float y, int pointer, int button )
+    public bool OnTouchDown( float x, float y, int pointer, int button )
     {
         if ( pointer > 1 )
         {
@@ -258,12 +258,12 @@ public class GestureDetector : InputAdapter
         return _listener.TouchDown( x, y, pointer, button );
     }
 
-    public override bool TouchDragged( int x, int y, int pointer )
+    public override bool OnTouchDragged( int x, int y, int pointer )
     {
-        return TouchDragged( x, y, pointer );
+        return OnTouchDragged( x, y, pointer );
     }
 
-    public bool TouchDragged( float x, float y, int pointer )
+    public bool OnTouchDragged( float x, float y, int pointer )
     {
         if ( pointer > 1 )
         {
@@ -315,12 +315,12 @@ public class GestureDetector : InputAdapter
         return false;
     }
 
-    public override bool TouchUp( int x, int y, int pointer, int button )
+    public override bool OnTouchUp( int x, int y, int pointer, int button )
     {
-        return TouchUp( x, y, pointer, button );
+        return OnTouchUp( x, y, pointer, button );
     }
 
-    public bool TouchUp( float x, float y, int pointer, int button )
+    public bool OnTouchUp( float x, float y, int pointer, int button )
     {
         if ( pointer > 1 )
         {

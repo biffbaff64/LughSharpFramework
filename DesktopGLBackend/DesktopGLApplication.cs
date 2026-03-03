@@ -81,7 +81,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     // ========================================================================
     // ========================================================================
 
-    private const int UNINITIALISED_FRAMERATE = -2;
+    private const int UninitialisedFramerate = -2;
 
     // ========================================================================
 
@@ -189,7 +189,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         while ( _running && ( Windows.Count > 0 ) )
         {
             var haveWindowsRendered = false;
-            int targetFramerate     = UNINITIALISED_FRAMERATE;
+            int targetFramerate     = UninitialisedFramerate;
 
             closedWindows.Clear();
 
@@ -203,7 +203,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
                     CurrentWindow = window;
 
-                    if ( targetFramerate == UNINITIALISED_FRAMERATE )
+                    if ( targetFramerate == UninitialisedFramerate )
                     {
                         targetFramerate = window.AppConfig.ForegroundFPS;
                     }
@@ -371,21 +371,21 @@ public class DesktopGLApplication : IApplication, IDisposable
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.DepthBits, config.Depth );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Samples, config.Samples );
 
-        OglProfile = GLData.DEFAULT_OPENGL_PROFILE;
+        OglProfile = GLData.DefaultOpenglProfile;
 
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ContextVersionMajor,
                                  config.GLContextMajorVersion > 0
                                      ? config.GLContextMajorVersion
-                                     : GLData.DEFAULT_GL_MAJOR );
+                                     : GLData.DefaultGLMajor );
 
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ContextVersionMinor,
                                  config.GLContextMinorVersion > 0
                                      ? config.GLContextMinorVersion
-                                     : GLData.DEFAULT_GL_MINOR );
+                                     : GLData.DefaultGLMinor );
 
-        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLForwardCompat, GLData.DEFAULT_OPENGL_FORWARDCOMPAT );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLForwardCompat, GLData.DefaultOpenglForwardcompat );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLProfile, OglProfile );
-        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ClientAPI, GLData.DEFAULT_CLIENT_API );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ClientAPI, GLData.DefaultClientApi );
 
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.DoubleBuffer, true );
 
@@ -642,13 +642,13 @@ public class DesktopGLApplication : IApplication, IDisposable
         // Clear the display buffers
         for ( var i = 0; i < 2; i++ )
         {
-            Engine.GL.BindFramebuffer( IGL.GL_FRAMEBUFFER, 0 );
+            Engine.GL.BindFramebuffer( IGL.GLFramebuffer, 0 );
             Engine.GL.ClearColor( config.InitialBackgroundColor.R,
                                   config.InitialBackgroundColor.G,
                                   config.InitialBackgroundColor.B,
                                   config.InitialBackgroundColor.A );
 
-            Engine.GL.Clear( IGL.GL_COLOR_BUFFER_BIT );
+            Engine.GL.Clear( IGL.GLColorBufferBit );
             DotGLFW.Glfw.SwapBuffers( windowHandle );
         }
 

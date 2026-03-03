@@ -63,15 +63,15 @@ public class NewColor
 
     // ========================================================================
 
-    internal const int ARGB_ALPHA_SHIFT = 24;
-    internal const int ARGB_RED_SHIFT   = 16;
-    internal const int ARGB_GREEN_SHIFT = 8;
-    internal const int ARGB_BLUE_SHIFT  = 0;
+    internal const int ARGBAlphaShift = 24;
+    internal const int ARGBRedShift   = 16;
+    internal const int ARGBGreenShift = 8;
+    internal const int ARGBBlueShift  = 0;
 
-    internal const int RGBA_RED_SHIFT   = 24;
-    internal const int RGBA_GREEN_SHIFT = 16;
-    internal const int RGBA_BLUE_SHIFT  = 8;
-    internal const int RGBA_ALPHA_SHIFT = 0;
+    internal const int RGBARedShift   = 24;
+    internal const int RGBAGreenShift = 16;
+    internal const int RGBABlueShift  = 8;
+    internal const int RGBAAlphaShift = 0;
 
     // ========================================================================
 
@@ -116,7 +116,7 @@ public class NewColor
     /// <returns>A uint value representing the color in RGBA8888 format.</returns>
     public uint ToRgba8888( byte r, byte g, byte b, byte a )
     {
-        return ( uint )( ( r << RGBA_RED_SHIFT ) | ( g << RGBA_GREEN_SHIFT ) | ( b << RGBA_BLUE_SHIFT ) | a );
+        return ( uint )( ( r << RGBARedShift ) | ( g << RGBAGreenShift ) | ( b << RGBABlueShift ) | a );
     }
 
     /// <summary>
@@ -130,7 +130,7 @@ public class NewColor
     /// <returns>A uint value representing the color in ABGR8888 format.</returns>
     public uint ToAbgr8888( byte a, byte b, byte g, byte r )
     {
-        return ( uint )( ( a << ARGB_ALPHA_SHIFT ) | ( b << ARGB_BLUE_SHIFT ) | ( g << ARGB_GREEN_SHIFT ) | r );
+        return ( uint )( ( a << ARGBAlphaShift ) | ( b << ARGBBlueShift ) | ( g << ARGBGreenShift ) | r );
     }
 
     // ========================================================================

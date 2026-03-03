@@ -38,18 +38,18 @@ public class ALC
 
     public static readonly int[] AttrList =
     [
-        FREQUENCY,
-        REFRESH,
-        SYNC,
-        MONO_SOURCES,
-        STEREO_SOURCES
+        Frequency,
+        Refresh,
+        Sync,
+        MonoSources,
+        StereoSources
     ];
 
     // ========================================================================
 
     #region Dll Import Handling
 
-    public const string OPEN_AL_DLL = "OpenAL";
+    public const string OpenALDll = "OpenAL";
 
     static ALC()
     {
@@ -60,23 +60,23 @@ public class ALC
     {
         IntPtr libHandle = IntPtr.Zero;
 
-        if ( libraryName == OPEN_AL_DLL )
+        if ( libraryName == OpenALDll )
         {
             if ( Environment.OSVersion.Platform == PlatformID.Unix )
             {
-                const string OSX   = "OpenAL.framework/OpenAL";
-                const string LINUX = "libopenal.so.1";
-                NativeLibrary.TryLoad( OSX, assembly, DllImportSearchPath.System32, out libHandle );
+                const string Osx   = "OpenAL.framework/OpenAL";
+                const string Linux = "libopenal.so.1";
+                NativeLibrary.TryLoad( Osx, assembly, DllImportSearchPath.System32, out libHandle );
 
                 if ( libHandle == IntPtr.Zero ) //If OSX path didn't work
                 {
-                    NativeLibrary.TryLoad( LINUX, assembly, DllImportSearchPath.System32, out libHandle );
+                    NativeLibrary.TryLoad( Linux, assembly, DllImportSearchPath.System32, out libHandle );
                 }
             }
             else
             {
-                const string WINDOWS = "openal32.dll";
-                NativeLibrary.TryLoad( WINDOWS, assembly, DllImportSearchPath.System32, out libHandle );
+                const string Windows = "openal32.dll";
+                NativeLibrary.TryLoad( Windows, assembly, DllImportSearchPath.System32, out libHandle );
             }
         }
 
@@ -89,31 +89,31 @@ public class ALC
 
     #region Constants
 
-    public const int FALSE                            = 0;
-    public const int TRUE                             = 1;
-    public const int FREQUENCY                        = 0x1007;
-    public const int REFRESH                          = 0x1008;
-    public const int SYNC                             = 0x1009;
-    public const int MONO_SOURCES                     = 0x1010;
-    public const int STEREO_SOURCES                   = 0x1011;
-    public const int NO_ERROR                         = FALSE;
-    public const int INVALID_DEVICE                   = 0xA001;
-    public const int INVALID_CONTEXT                  = 0xA002;
-    public const int INVALID_ENUM                     = 0xA003;
-    public const int INVALID_VALUE                    = 0xA004;
-    public const int OUT_OF_MEMORY                    = 0xA005;
-    public const int DEFAULT_DEVICE_SPECIFIER         = 0x1004;
-    public const int DEVICE_SPECIFIER                 = 0x1005;
-    public const int EXTENSIONS                       = 0x1006;
-    public const int MAJOR_VERSION                    = 0x1000;
-    public const int MINOR_VERSION                    = 0x1001;
-    public const int ATTRIBUTES_SIZE                  = 0x1002;
-    public const int ALL_ATTRIBUTES                   = 0x1003;
-    public const int DEFAULT_ALL_DEVICES_SPECIFIER    = 0x1012;
-    public const int ALL_DEVICES_SPECIFIER            = 0x1013;
-    public const int CAPTURE_DEVICE_SPECIFIER         = 0x310;
-    public const int CAPTURE_DEFAULT_DEVICE_SPECIFIER = 0x311;
-    public const int ENUM_CAPTURE_SAMPLES             = 0x312;
+    public const int False                            = 0;
+    public const int True                             = 1;
+    public const int Frequency                        = 0x1007;
+    public const int Refresh                          = 0x1008;
+    public const int Sync                             = 0x1009;
+    public const int MonoSources                     = 0x1010;
+    public const int StereoSources                   = 0x1011;
+    public const int NoError                         = False;
+    public const int InvalidDevice                   = 0xA001;
+    public const int InvalidContext                  = 0xA002;
+    public const int InvalidEnum                     = 0xA003;
+    public const int InvalidValue                    = 0xA004;
+    public const int OutOfMemory                    = 0xA005;
+    public const int DefaultDeviceSpecifier         = 0x1004;
+    public const int DeviceSpecifier                 = 0x1005;
+    public const int Extensions                       = 0x1006;
+    public const int MajorVersion                    = 0x1000;
+    public const int MinorVersion                    = 0x1001;
+    public const int AttributesSize                  = 0x1002;
+    public const int AllAttributes                   = 0x1003;
+    public const int DefaultAllDevicesSpecifier    = 0x1012;
+    public const int AllDevicesSpecifier            = 0x1013;
+    public const int CaptureDeviceSpecifier         = 0x310;
+    public const int CaptureDefaultDeviceSpecifier = 0x311;
+    public const int EnumCaptureSamples             = 0x312;
 
     #endregion Constants
 
@@ -132,7 +132,7 @@ public class ALC
         }
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcCreateContext" )]
+    [DllImport( OpenALDll, EntryPoint = "alcCreateContext" )]
     private static extern IntPtr _createContext( IntPtr device, IntPtr attrlist );
 
     // ========================================================================
@@ -142,7 +142,7 @@ public class ALC
         return _makeContextCurrent( context );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcMakeContextCurrent" )]
+    [DllImport( OpenALDll, EntryPoint = "alcMakeContextCurrent" )]
     private static extern bool _makeContextCurrent( IntPtr context );
 
     // ========================================================================
@@ -152,7 +152,7 @@ public class ALC
         _processContext( context );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcProcessContext" )]
+    [DllImport( OpenALDll, EntryPoint = "alcProcessContext" )]
     private static extern void _processContext( IntPtr context );
 
     // ========================================================================
@@ -162,7 +162,7 @@ public class ALC
         _suspendContext( context );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcSuspendContext" )]
+    [DllImport( OpenALDll, EntryPoint = "alcSuspendContext" )]
     private static extern void _suspendContext( IntPtr context );
 
     // ========================================================================
@@ -172,7 +172,7 @@ public class ALC
         _destroyContext( context );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcDestroyContext" )]
+    [DllImport( OpenALDll, EntryPoint = "alcDestroyContext" )]
     private static extern void _destroyContext( IntPtr context );
 
     // ========================================================================
@@ -182,7 +182,7 @@ public class ALC
         return _getCurrentContext();
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetCurrentContext" )]
+    [DllImport( OpenALDll, EntryPoint = "alcGetCurrentContext" )]
     private static extern IntPtr _getCurrentContext();
 
     // ========================================================================
@@ -192,7 +192,7 @@ public class ALC
         return _getContextsDevice( context );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetContextsDevice" )]
+    [DllImport( OpenALDll, EntryPoint = "alcGetContextsDevice" )]
     private static extern IntPtr _getContextsDevice( IntPtr context );
 
     // ========================================================================
@@ -202,7 +202,7 @@ public class ALC
         return _openDevice( deviceName );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcOpenDevice" )]
+    [DllImport( OpenALDll, EntryPoint = "alcOpenDevice" )]
     private static extern IntPtr _openDevice( string deviceName );
 
     // ========================================================================
@@ -212,7 +212,7 @@ public class ALC
         _closeDevice( context );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcCloseDevice" )]
+    [DllImport( OpenALDll, EntryPoint = "alcCloseDevice" )]
     private static extern bool _closeDevice( IntPtr device );
 
     // ========================================================================
@@ -222,7 +222,7 @@ public class ALC
         return _getError( device );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetError" )]
+    [DllImport( OpenALDll, EntryPoint = "alcGetError" )]
     private static extern int _getError( IntPtr device );
 
     // ========================================================================
@@ -232,7 +232,7 @@ public class ALC
         return _isExtensionPresent( context, extension );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcIsExtensionPresent" )]
+    [DllImport( OpenALDll, EntryPoint = "alcIsExtensionPresent" )]
     private static extern bool _isExtensionPresent( IntPtr device, string extname );
 
     // ========================================================================
@@ -242,7 +242,7 @@ public class ALC
         return _getProcAddress( context, procname );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetProcAddress" )]
+    [DllImport( OpenALDll, EntryPoint = "alcGetProcAddress" )]
     private static extern IntPtr _getProcAddress( IntPtr device, string funcname );
 
     // ========================================================================
@@ -252,7 +252,7 @@ public class ALC
         return _getEnumValue( device, enumname );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetEnumValue" )]
+    [DllImport( OpenALDll, EntryPoint = "alcGetEnumValue" )]
     private static extern int _getEnumValue( IntPtr device, string enumname );
 
     #endregion Context Management Functions
@@ -266,7 +266,7 @@ public class ALC
         return Marshal.PtrToStringAnsi( _getString( device, param ) )!;
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetString" )]
+    [DllImport( OpenALDll, EntryPoint = "alcGetString" )]
     private static extern IntPtr _getString( IntPtr device, int param );
 
     // ========================================================================
@@ -276,7 +276,7 @@ public class ALC
         _getIntegerv( device, param, size, data );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetIntegerv" )]
+    [DllImport( OpenALDll, EntryPoint = "alcGetIntegerv" )]
     private static extern void _getIntegerv( IntPtr device, int param, int size, IntPtr data );
 
     #endregion Query Functions
@@ -290,7 +290,7 @@ public class ALC
         return _captureOpenDevice( deviceName, frequency, format, buffersize );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureOpenDevice" )]
+    [DllImport( OpenALDll, EntryPoint = "alcCaptureOpenDevice" )]
     private static extern IntPtr _captureOpenDevice( string devicename, uint frequency, int format, int buffersize );
 
     // ========================================================================
@@ -300,7 +300,7 @@ public class ALC
         return _captureCloseDevice( device );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureCloseDevice" )]
+    [DllImport( OpenALDll, EntryPoint = "alcCaptureCloseDevice" )]
     private static extern bool _captureCloseDevice( IntPtr device );
 
     // ========================================================================
@@ -310,7 +310,7 @@ public class ALC
         _captureStart( device );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureStart" )]
+    [DllImport( OpenALDll, EntryPoint = "alcCaptureStart" )]
     private static extern void _captureStart( IntPtr device );
 
     // ========================================================================
@@ -320,7 +320,7 @@ public class ALC
         _captureStop( device );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureStop" )]
+    [DllImport( OpenALDll, EntryPoint = "alcCaptureStop" )]
     private static extern void _captureStop( IntPtr device );
 
     // ========================================================================
@@ -330,7 +330,7 @@ public class ALC
         _captureSamples( device, buffer, samples );
     }
 
-    [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureSamples" )]
+    [DllImport( OpenALDll, EntryPoint = "alcCaptureSamples" )]
     private static extern unsafe void _captureSamples( IntPtr device, void* buffer, int samples );
 
     #endregion Capture Functions

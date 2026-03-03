@@ -29,26 +29,26 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum StencilFunction
 {
-    Never    = IGL.GL_NEVER,
-    Less     = IGL.GL_LESS,
-    LEqual   = IGL.GL_LEQUAL,
-    Greater  = IGL.GL_GREATER,
-    GEqual   = IGL.GL_GEQUAL,
-    Equal    = IGL.GL_EQUAL,
-    NotEqual = IGL.GL_NOTEQUAL,
-    Always   = IGL.GL_ALWAYS
+    Never    = IGL.GLNever,
+    Less     = IGL.GLLess,
+    LEqual   = IGL.GLLequal,
+    Greater  = IGL.GLGreater,
+    GEqual   = IGL.GLGequal,
+    Equal    = IGL.GLEqual,
+    NotEqual = IGL.GLNotequal,
+    Always   = IGL.GLAlways
 }
 
 public enum StencilOp
 {
-    Keep          = IGL.GL_KEEP,
-    Zero          = IGL.GL_ZERO,
-    Replace       = IGL.GL_REPLACE,
-    Increment     = IGL.GL_INCR,
-    IncrementWrap = IGL.GL_INCR_WRAP,
-    Decrement     = IGL.GL_DECR,
-    DecrementWrap = IGL.GL_DECR_WRAP,
-    Invert        = IGL.GL_INVERT
+    Keep          = IGL.GLKeep,
+    Zero          = IGL.GLZero,
+    Replace       = IGL.GLReplace,
+    Increment     = IGL.GLIncr,
+    IncrementWrap = IGL.GLIncrWrap,
+    Decrement     = IGL.GLDecr,
+    DecrementWrap = IGL.GLDecrWrap,
+    Invert        = IGL.GLInvert
 }
 
 // ========================================================================

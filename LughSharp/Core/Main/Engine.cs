@@ -139,7 +139,7 @@ public sealed class Engine
 
         // Generate the shader constants header. This is required for any shaders
         // defined in .glsl files to be parsed correctly.
-        ShaderConstants.ParseGLSLHeader();
+        ShaderConstants.ParseGlslHeader();
     }
 
     /// <summary>
@@ -241,7 +241,7 @@ public sealed class Engine
     // ========================================================================
     // ========================================================================
 
-    private const string A_PRAYER_TO_THE_GODDESS =
+    private const string APrayerToTheGoddess =
         "Oh Blessed Goddess, enlighten what is dark in me. "
       + "Strengthen what is weak in me. "
       + "Mend what is broken in me. "

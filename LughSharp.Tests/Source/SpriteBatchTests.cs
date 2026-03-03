@@ -38,8 +38,8 @@ namespace LughSharp.Tests.Source;
 [TestFixture]
 public class SpriteBatchTests
 {
-    private const int TEST_WIDTH  = 64;
-    private const int TEST_HEIGHT = 64;
+    private const int TestWidth  = 64;
+    private const int TestHeight = 64;
 
     private SpriteBatch? _spriteBatch;
     private Texture?     _testTexture;
@@ -54,12 +54,12 @@ public class SpriteBatchTests
         _spriteBatch = new SpriteBatch();
 
         // Create and verify the pixmap
-        var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, LughFormat.RGBA8888 );
+        var pixmap = new Pixmap( TestWidth, TestHeight, LughFormat.RGBA8888 );
 
         Assert.That( pixmap, Is.Not.Null, "Pixmap creation failed" );
         Assert.That( pixmap.Gdx2DPixmap, Is.Not.Null, "pixmap.Gdx2DPixmap is null" );
-        Assert.That( pixmap.Width, Is.EqualTo( TEST_WIDTH ), "Pixmap width incorrect" );
-        Assert.That( pixmap.Height, Is.EqualTo( TEST_HEIGHT ), "Pixmap height incorrect" );
+        Assert.That( pixmap.Width, Is.EqualTo( TestWidth ), "Pixmap width incorrect" );
+        Assert.That( pixmap.Height, Is.EqualTo( TestHeight ), "Pixmap height incorrect" );
 
         pixmap.SetColor( Color.White );
         pixmap.FillWithCurrentColor();
@@ -111,11 +111,11 @@ public class SpriteBatchTests
             Assert.That( _testTexture?.Height, Is.Not.Null );
 
             // Verify texture dimensions before drawing
-            Assert.That( _testTexture?.Width, Is.EqualTo( TEST_WIDTH ) );
-            Assert.That( _testTexture?.Height, Is.EqualTo( TEST_HEIGHT ) );
+            Assert.That( _testTexture?.Width, Is.EqualTo( TestWidth ) );
+            Assert.That( _testTexture?.Height, Is.EqualTo( TestHeight ) );
 
             _spriteBatch?.Begin();
-            Assert.DoesNotThrow( () => _spriteBatch?.Draw( _testTexture!, 0, 0, TEST_WIDTH, TEST_HEIGHT ) );
+            Assert.DoesNotThrow( () => _spriteBatch?.Draw( _testTexture!, 0, 0, TestWidth, TestHeight ) );
             _spriteBatch?.End();
         } );
 

@@ -42,14 +42,14 @@ public class BitReserve
     /// Size of the public buffer to store the reserved bits. Must be a power of 2. And
     /// x8, as each bit is stored as a single entry.
     /// </summary>
-    private const int BUFSIZE = 4096 * 8;
+    private const int Bufsize = 4096 * 8;
 
     /// <summary>
     /// Mask that can be used to quickly implement the modulus operation on BUFSIZE.
     /// </summary>
-    private const int BUFSIZE_MASK = BUFSIZE - 1;
+    private const int BufsizeMask = Bufsize - 1;
 
-    private readonly int[] _buffer = new int[ BUFSIZE ];
+    private readonly int[] _buffer = new int[ Bufsize ];
 
     private int _bufByteIdx;
     private int _offset;
@@ -73,7 +73,7 @@ public class BitReserve
         var val = 0;
         int pos = _bufByteIdx;
 
-        if ( ( pos + n ) < BUFSIZE )
+        if ( ( pos + n ) < Bufsize )
         {
             while ( n-- > 0 )
             {
@@ -87,7 +87,7 @@ public class BitReserve
             {
                 val <<= 1;
                 val |=  _buffer[ pos ] != 0 ? 1 : 0;
-                pos =   ( pos + 1 ) & BUFSIZE_MASK;
+                pos =   ( pos + 1 ) & BufsizeMask;
             }
         }
 
@@ -105,7 +105,7 @@ public class BitReserve
 
         int val = _buffer[ _bufByteIdx ];
 
-        _bufByteIdx = ( _bufByteIdx + 1 ) & BUFSIZE_MASK;
+        _bufByteIdx = ( _bufByteIdx + 1 ) & BufsizeMask;
 
         return val;
     }
@@ -126,7 +126,7 @@ public class BitReserve
         _buffer[ ofs++ ] = val & 0x02;
         _buffer[ ofs++ ] = val & 0x01;
 
-        _offset = ofs == BUFSIZE ? 0 : ofs;
+        _offset = ofs == Bufsize ? 0 : ofs;
     }
 
     /// <summary>
@@ -139,7 +139,7 @@ public class BitReserve
 
         if ( _bufByteIdx < 0 )
         {
-            _bufByteIdx += BUFSIZE;
+            _bufByteIdx += Bufsize;
         }
     }
 
@@ -154,7 +154,7 @@ public class BitReserve
 
         if ( _bufByteIdx < 0 )
         {
-            _bufByteIdx += BUFSIZE;
+            _bufByteIdx += Bufsize;
         }
     }
 }

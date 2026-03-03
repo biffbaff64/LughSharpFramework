@@ -126,7 +126,7 @@ public abstract class Value
             }
 
             if ( value is >= -10 and <= 100
-              && Math.Abs( value - ( int )value ) < NumberUtils.FLOAT_TOLERANCE )
+              && Math.Abs( value - ( int )value ) < NumberUtils.FloatTolerance )
             {
                 int index = ( int )value + 10;
 

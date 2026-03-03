@@ -37,8 +37,8 @@ namespace LughSharp.Core.Utils;
 public class HashHelpers
 {
     // The golden ratio constant used in Fibonacci hashing
-    public const ulong GOLDEN_RATIO_MULTIPLIER_64_BIT = 0x9E3779B97F4A7C15UL; // U for ulong literal
-    public const uint  GOLDEN_RATIO_MULTIPLIER_32_BIT = 0x9E3779B9;           // For 32-bit if needed
+    public const ulong GoldenRatioMultiplier64Bit = 0x9E3779B97F4A7C15UL; // U for ulong literal
+    public const uint  GoldenRatioMultiplier32Bit = 0x9E3779B9;           // For 32-bit if needed
 
     // ========================================================================
 

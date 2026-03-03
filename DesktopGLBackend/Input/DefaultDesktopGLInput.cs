@@ -36,7 +36,7 @@ namespace DesktopGLBackend.Input;
 [PublicAPI]
 public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 {
-    private const int DEFAULT_MAX_POINTERS = 1;
+    private const int DefaultMaxPointers = 1;
 
     private readonly InputEventQueue _eventQueue         = new();
     private readonly bool[]          _justPressedButtons = new bool[ 5 ];
@@ -128,7 +128,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     /// <inheritdoc />
     public override int GetMaxPointers()
     {
-        return DEFAULT_MAX_POINTERS;
+        return DefaultMaxPointers;
     }
 
     /// <inheritdoc />
@@ -287,11 +287,11 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     {
         return key switch
                {
-                   IInput.Keys.BACKSPACE    => ( char )8,
-                   IInput.Keys.TAB          => '\t',
-                   IInput.Keys.FORWARD_DEL  => ( char )127,
-                   IInput.Keys.NUMPAD_ENTER => '\n',
-                   IInput.Keys.ENTER        => '\n',
+                   IInput.Keys.Backspace    => ( char )8,
+                   IInput.Keys.Tab          => '\t',
+                   IInput.Keys.ForwardDel  => ( char )127,
+                   IInput.Keys.NumpadEnter => '\n',
+                   IInput.Keys.Enter        => '\n',
                    var _                    => ( char )0
                };
     }
@@ -300,24 +300,24 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     {
         return glKeycode switch
                {
-                   DotGLFW.Key.Space        => IInput.Keys.SPACE,
-                   DotGLFW.Key.Apostrophe   => IInput.Keys.APOSTROPHE,
-                   DotGLFW.Key.Comma        => IInput.Keys.COMMA,
-                   DotGLFW.Key.Minus        => IInput.Keys.MINUS,
-                   DotGLFW.Key.Period       => IInput.Keys.PERIOD,
-                   DotGLFW.Key.Slash        => IInput.Keys.SLASH,
-                   DotGLFW.Key.D0           => IInput.Keys.NUM_0,
-                   DotGLFW.Key.D1           => IInput.Keys.NUM_1,
-                   DotGLFW.Key.D2           => IInput.Keys.NUM_2,
-                   DotGLFW.Key.D3           => IInput.Keys.NUM_3,
-                   DotGLFW.Key.D4           => IInput.Keys.NUM_4,
-                   DotGLFW.Key.D5           => IInput.Keys.NUM_5,
-                   DotGLFW.Key.D6           => IInput.Keys.NUM_6,
-                   DotGLFW.Key.D7           => IInput.Keys.NUM_7,
-                   DotGLFW.Key.D8           => IInput.Keys.NUM_8,
-                   DotGLFW.Key.D9           => IInput.Keys.NUM_9,
-                   DotGLFW.Key.Semicolon    => IInput.Keys.SEMICOLON,
-                   DotGLFW.Key.Equal        => IInput.Keys.EQUALS_SIGN,
+                   DotGLFW.Key.Space        => IInput.Keys.Space,
+                   DotGLFW.Key.Apostrophe   => IInput.Keys.Apostrophe,
+                   DotGLFW.Key.Comma        => IInput.Keys.Comma,
+                   DotGLFW.Key.Minus        => IInput.Keys.Minus,
+                   DotGLFW.Key.Period       => IInput.Keys.Period,
+                   DotGLFW.Key.Slash        => IInput.Keys.Slash,
+                   DotGLFW.Key.D0           => IInput.Keys.Num0,
+                   DotGLFW.Key.D1           => IInput.Keys.Num1,
+                   DotGLFW.Key.D2           => IInput.Keys.Num2,
+                   DotGLFW.Key.D3           => IInput.Keys.Num3,
+                   DotGLFW.Key.D4           => IInput.Keys.Num4,
+                   DotGLFW.Key.D5           => IInput.Keys.Num5,
+                   DotGLFW.Key.D6           => IInput.Keys.Num6,
+                   DotGLFW.Key.D7           => IInput.Keys.Num7,
+                   DotGLFW.Key.D8           => IInput.Keys.Num8,
+                   DotGLFW.Key.D9           => IInput.Keys.Num9,
+                   DotGLFW.Key.Semicolon    => IInput.Keys.Semicolon,
+                   DotGLFW.Key.Equal        => IInput.Keys.EqualsSign,
                    DotGLFW.Key.A            => IInput.Keys.A,
                    DotGLFW.Key.B            => IInput.Keys.B,
                    DotGLFW.Key.C            => IInput.Keys.C,
@@ -344,30 +344,30 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                    DotGLFW.Key.X            => IInput.Keys.X,
                    DotGLFW.Key.Y            => IInput.Keys.Y,
                    DotGLFW.Key.Z            => IInput.Keys.Z,
-                   DotGLFW.Key.LeftBracket  => IInput.Keys.LEFT_BRACKET,
-                   DotGLFW.Key.Backslash    => IInput.Keys.BACKSLASH,
-                   DotGLFW.Key.RightBracket => IInput.Keys.RIGHT_BRACKET,
-                   DotGLFW.Key.GraveAccent  => IInput.Keys.GRAVE,
+                   DotGLFW.Key.LeftBracket  => IInput.Keys.LeftBracket,
+                   DotGLFW.Key.Backslash    => IInput.Keys.Backslash,
+                   DotGLFW.Key.RightBracket => IInput.Keys.RightBracket,
+                   DotGLFW.Key.GraveAccent  => IInput.Keys.Grave,
 
 //            DotGLFW.Key.Unknown      => IInput.Keys.UNKNOWN,
-                   DotGLFW.Key.Escape       => IInput.Keys.ESCAPE,
-                   DotGLFW.Key.Enter        => IInput.Keys.ENTER,
-                   DotGLFW.Key.Tab          => IInput.Keys.TAB,
-                   DotGLFW.Key.Backspace    => IInput.Keys.BACKSPACE,
-                   DotGLFW.Key.Insert       => IInput.Keys.INSERT,
-                   DotGLFW.Key.Delete       => IInput.Keys.FORWARD_DEL,
-                   DotGLFW.Key.Right        => IInput.Keys.RIGHT,
-                   DotGLFW.Key.Left         => IInput.Keys.LEFT,
-                   DotGLFW.Key.Down         => IInput.Keys.DOWN,
-                   DotGLFW.Key.Up           => IInput.Keys.UP,
-                   DotGLFW.Key.PageUp       => IInput.Keys.PAGE_UP,
-                   DotGLFW.Key.PageDown     => IInput.Keys.PAGE_DOWN,
-                   DotGLFW.Key.Home         => IInput.Keys.HOME,
-                   DotGLFW.Key.End          => IInput.Keys.END,
-                   DotGLFW.Key.CapsLock     => IInput.Keys.CAPS_LOCK,
-                   DotGLFW.Key.ScrollLock   => IInput.Keys.SCROLL_LOCK,
-                   DotGLFW.Key.PrintScreen  => IInput.Keys.PRINT_SCREEN,
-                   DotGLFW.Key.Pause        => IInput.Keys.PAUSE,
+                   DotGLFW.Key.Escape       => IInput.Keys.Escape,
+                   DotGLFW.Key.Enter        => IInput.Keys.Enter,
+                   DotGLFW.Key.Tab          => IInput.Keys.Tab,
+                   DotGLFW.Key.Backspace    => IInput.Keys.Backspace,
+                   DotGLFW.Key.Insert       => IInput.Keys.Insert,
+                   DotGLFW.Key.Delete       => IInput.Keys.ForwardDel,
+                   DotGLFW.Key.Right        => IInput.Keys.Right,
+                   DotGLFW.Key.Left         => IInput.Keys.Left,
+                   DotGLFW.Key.Down         => IInput.Keys.Down,
+                   DotGLFW.Key.Up           => IInput.Keys.Up,
+                   DotGLFW.Key.PageUp       => IInput.Keys.PageUp,
+                   DotGLFW.Key.PageDown     => IInput.Keys.PageDown,
+                   DotGLFW.Key.Home         => IInput.Keys.Home,
+                   DotGLFW.Key.End          => IInput.Keys.End,
+                   DotGLFW.Key.CapsLock     => IInput.Keys.CapsLock,
+                   DotGLFW.Key.ScrollLock   => IInput.Keys.ScrollLock,
+                   DotGLFW.Key.PrintScreen  => IInput.Keys.PrintScreen,
+                   DotGLFW.Key.Pause        => IInput.Keys.Pause,
                    DotGLFW.Key.F1           => IInput.Keys.F1,
                    DotGLFW.Key.F2           => IInput.Keys.F2,
                    DotGLFW.Key.F3           => IInput.Keys.F3,
@@ -392,35 +392,35 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                    DotGLFW.Key.F22          => IInput.Keys.F22,
                    DotGLFW.Key.F23          => IInput.Keys.F23,
                    DotGLFW.Key.F24          => IInput.Keys.F24,
-                   DotGLFW.Key.F25          => IInput.Keys.UNKNOWN,
-                   DotGLFW.Key.NumLock      => IInput.Keys.NUM_LOCK,
-                   DotGLFW.Key.Kp0          => IInput.Keys.NUMPAD_0,
-                   DotGLFW.Key.Kp1          => IInput.Keys.NUMPAD_1,
-                   DotGLFW.Key.Kp2          => IInput.Keys.NUMPAD_2,
-                   DotGLFW.Key.Kp3          => IInput.Keys.NUMPAD_3,
-                   DotGLFW.Key.Kp4          => IInput.Keys.NUMPAD_4,
-                   DotGLFW.Key.Kp5          => IInput.Keys.NUMPAD_5,
-                   DotGLFW.Key.Kp6          => IInput.Keys.NUMPAD_6,
-                   DotGLFW.Key.Kp7          => IInput.Keys.NUMPAD_7,
-                   DotGLFW.Key.Kp8          => IInput.Keys.NUMPAD_8,
-                   DotGLFW.Key.Kp9          => IInput.Keys.NUMPAD_9,
-                   DotGLFW.Key.KpDecimal    => IInput.Keys.NUMPAD_DOT,
-                   DotGLFW.Key.KpDivide     => IInput.Keys.NUMPAD_DIVIDE,
-                   DotGLFW.Key.KpMultiply   => IInput.Keys.NUMPAD_MULTIPLY,
-                   DotGLFW.Key.KpSubtract   => IInput.Keys.NUMPAD_SUBTRACT,
-                   DotGLFW.Key.KpAdd        => IInput.Keys.NUMPAD_ADD,
-                   DotGLFW.Key.KpEnter      => IInput.Keys.NUMPAD_ENTER,
-                   DotGLFW.Key.KpEqual      => IInput.Keys.NUMPAD_EQUALS,
-                   DotGLFW.Key.LeftShift    => IInput.Keys.SHIFT_LEFT,
-                   DotGLFW.Key.LeftControl  => IInput.Keys.CONTROL_LEFT,
-                   DotGLFW.Key.LeftAlt      => IInput.Keys.ALT_LEFT,
-                   DotGLFW.Key.LeftSuper    => IInput.Keys.SYM,
-                   DotGLFW.Key.RightShift   => IInput.Keys.SHIFT_RIGHT,
-                   DotGLFW.Key.RightControl => IInput.Keys.CONTROL_RIGHT,
-                   DotGLFW.Key.RightAlt     => IInput.Keys.ALT_RIGHT,
-                   DotGLFW.Key.RightSuper   => IInput.Keys.SYM,
-                   DotGLFW.Key.Menu         => IInput.Keys.MENU,
-                   var _                    => IInput.Keys.UNKNOWN
+                   DotGLFW.Key.F25          => IInput.Keys.Unknown,
+                   DotGLFW.Key.NumLock      => IInput.Keys.NumLock,
+                   DotGLFW.Key.Kp0          => IInput.Keys.Numpad0,
+                   DotGLFW.Key.Kp1          => IInput.Keys.Numpad1,
+                   DotGLFW.Key.Kp2          => IInput.Keys.Numpad2,
+                   DotGLFW.Key.Kp3          => IInput.Keys.Numpad3,
+                   DotGLFW.Key.Kp4          => IInput.Keys.Numpad4,
+                   DotGLFW.Key.Kp5          => IInput.Keys.Numpad5,
+                   DotGLFW.Key.Kp6          => IInput.Keys.Numpad6,
+                   DotGLFW.Key.Kp7          => IInput.Keys.Numpad7,
+                   DotGLFW.Key.Kp8          => IInput.Keys.Numpad8,
+                   DotGLFW.Key.Kp9          => IInput.Keys.Numpad9,
+                   DotGLFW.Key.KpDecimal    => IInput.Keys.NumpadDot,
+                   DotGLFW.Key.KpDivide     => IInput.Keys.NumpadDivide,
+                   DotGLFW.Key.KpMultiply   => IInput.Keys.NumpadMultiply,
+                   DotGLFW.Key.KpSubtract   => IInput.Keys.NumpadSubtract,
+                   DotGLFW.Key.KpAdd        => IInput.Keys.NumpadAdd,
+                   DotGLFW.Key.KpEnter      => IInput.Keys.NumpadEnter,
+                   DotGLFW.Key.KpEqual      => IInput.Keys.NumpadEquals,
+                   DotGLFW.Key.LeftShift    => IInput.Keys.ShiftLeft,
+                   DotGLFW.Key.LeftControl  => IInput.Keys.ControlLeft,
+                   DotGLFW.Key.LeftAlt      => IInput.Keys.AltLeft,
+                   DotGLFW.Key.LeftSuper    => IInput.Keys.Sym,
+                   DotGLFW.Key.RightShift   => IInput.Keys.ShiftRight,
+                   DotGLFW.Key.RightControl => IInput.Keys.ControlRight,
+                   DotGLFW.Key.RightAlt     => IInput.Keys.AltRight,
+                   DotGLFW.Key.RightSuper   => IInput.Keys.Sym,
+                   DotGLFW.Key.Menu         => IInput.Keys.Menu,
+                   var _                    => IInput.Keys.Unknown
                };
     }
 
@@ -454,7 +454,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
             {
                 gdxKey = GetGdxKeycode( key );
 
-                _eventQueue.KeyDown( gdxKey, TimeUtils.NanoTime() );
+                _eventQueue.OnKeyDown( gdxKey, TimeUtils.NanoTime() );
 
                 PressedKeyCount++;
                 KeyJustPressed            = true;
@@ -483,7 +483,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
                 _window.Graphics.RequestRendering();
 
-                _eventQueue.KeyUp( gdxKey, TimeUtils.NanoTime() );
+                _eventQueue.OnKeyUp( gdxKey, TimeUtils.NanoTime() );
 
                 break;
             }
@@ -494,7 +494,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                 {
                     _window.Graphics.RequestRendering();
 
-                    _eventQueue.KeyTyped( _lastCharacter, TimeUtils.NanoTime() );
+                    _eventQueue.OnKeyTyped( _lastCharacter, TimeUtils.NanoTime() );
                 }
 
                 break;
@@ -516,7 +516,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
         _lastCharacter = ( char )codepoint;
         _window.Graphics.RequestRendering();
-        _eventQueue.KeyTyped( ( char )codepoint, TimeUtils.NanoTime() );
+        _eventQueue.OnKeyTyped( ( char )codepoint, TimeUtils.NanoTime() );
     }
 
     public void MouseCallback( DotGLFW.Window window, DotGLFW.MouseButton button, DotGLFW.InputState state,
@@ -524,11 +524,11 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     {
         int gdxButton = button switch
                         {
-                            DotGLFW.MouseButton.ButtonLeft   => IInput.Buttons.LEFT,
-                            DotGLFW.MouseButton.ButtonRight  => IInput.Buttons.RIGHT,
-                            DotGLFW.MouseButton.ButtonMiddle => IInput.Buttons.MIDDLE,
-                            DotGLFW.MouseButton.Button4      => IInput.Buttons.BACK,
-                            DotGLFW.MouseButton.Button5      => IInput.Buttons.FORWARD,
+                            DotGLFW.MouseButton.ButtonLeft   => IInput.Buttons.Left,
+                            DotGLFW.MouseButton.ButtonRight  => IInput.Buttons.Right,
+                            DotGLFW.MouseButton.ButtonMiddle => IInput.Buttons.Middle,
+                            DotGLFW.MouseButton.Button4      => IInput.Buttons.Back,
+                            DotGLFW.MouseButton.Button5      => IInput.Buttons.Forward,
 
                             // ----------------------------------
 
@@ -549,21 +549,21 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
             _justPressedButtons[ gdxButton ] = true;
 
             _window.Graphics.RequestRendering();
-            _eventQueue.TouchDown( _mouseX, _mouseY, 0, gdxButton, time );
+            _eventQueue.OnTouchDown( _mouseX, _mouseY, 0, gdxButton, time );
         }
         else
         {
             _mousePressed = Math.Max( 0, _mousePressed - 1 );
 
             _window.Graphics.RequestRendering();
-            _eventQueue.TouchUp( _mouseX, _mouseY, 0, gdxButton, time );
+            _eventQueue.OnTouchUp( _mouseX, _mouseY, 0, gdxButton, time );
         }
     }
 
     public void ScrollCallback( DotGLFW.Window window, double x, double y )
     {
         _window.Graphics.RequestRendering();
-        _eventQueue.Scrolled( -( float )x, -( float )y, TimeUtils.NanoTime() );
+        _eventQueue.OnScrolled( -( float )x, -( float )y, TimeUtils.NanoTime() );
     }
 
     public void CursorPosCallback( DotGLFW.Window window, double x, double y )
@@ -589,11 +589,11 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
         if ( _mousePressed > 0 )
         {
-            _eventQueue.TouchDragged( _mouseX, _mouseY, 0, TimeUtils.NanoTime() );
+            _eventQueue.OnTouchDragged( _mouseX, _mouseY, 0, TimeUtils.NanoTime() );
         }
         else
         {
-            _eventQueue.MouseMoved( _mouseX, _mouseY, TimeUtils.NanoTime() );
+            _eventQueue.OnMouseMoved( _mouseX, _mouseY, TimeUtils.NanoTime() );
         }
     }
 

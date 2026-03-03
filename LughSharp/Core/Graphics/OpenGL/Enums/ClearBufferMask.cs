@@ -29,12 +29,12 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum ClearBufferMask
 {
-    None                = IGL.GL_NONE,
-    DepthBufferBit      = IGL.GL_DEPTH_BUFFER_BIT,
-    AccumBufferBit      = IGL.GL_ACCUM_BUFFER_BIT,
-    StencilBufferBit    = IGL.GL_STENCIL_BUFFER_BIT,
-    ColorBufferBit      = IGL.GL_COLOR_BUFFER_BIT,
-    CoverageBufferBitNv = IGL.GL_COVERAGE_BUFFER_BIT_NV
+    None                = IGL.GLNone,
+    DepthBufferBit      = IGL.GLDepthBufferBit,
+    AccumBufferBit      = IGL.GLAccumBufferBit,
+    StencilBufferBit    = IGL.GLStencilBufferBit,
+    ColorBufferBit      = IGL.GLColorBufferBit,
+    CoverageBufferBitNv = IGL.GLCoverageBufferBitNv
 }
 
 // ========================================================================

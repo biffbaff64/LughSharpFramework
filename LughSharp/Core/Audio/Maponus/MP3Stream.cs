@@ -39,7 +39,7 @@ public class Mp3Stream : Stream
 {
     // ========================================================================
 
-    private const int BACK_STREAM_BYTE_COUNT_REP = 0;
+    private const int BackStreamByteCountRep = 0;
 
     private readonly Bitstream         _bitStream;
     private readonly Buffer16BitStereo _buffer;
@@ -99,7 +99,7 @@ public class Mp3Stream : Stream
     /// <summary>
     /// Gets the chunk size.
     /// </summary>
-    public static int ChunkSize => BACK_STREAM_BYTE_COUNT_REP;
+    public static int ChunkSize => BackStreamByteCountRep;
 
     /// <summary>
     /// Gets a value indicating whether the current stream supports reading.
@@ -293,7 +293,7 @@ public class Mp3Stream : Stream
         try
         {
             // Set the channel count and frequency values for the stream.
-            ChannelCount = header.Mode() == Header.SINGLE_CHANNEL ? ( short )1 : ( short )2;
+            ChannelCount = header.Mode() == Header.SingleChannel ? ( short )1 : ( short )2;
             Frequency    = header.Frequency();
 
             // Decode the frame.

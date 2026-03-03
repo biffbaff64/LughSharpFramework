@@ -29,22 +29,22 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum CullFaceMode
 {
-    FrontLeft    = IGL.GL_FRONT_LEFT,
-    FrontRight   = IGL.GL_FRONT_RIGHT,
-    BackLeft     = IGL.GL_BACK_LEFT,
-    BackRight    = IGL.GL_BACK_RIGHT,
-    Front        = IGL.GL_FRONT,
-    Back         = IGL.GL_BACK,
-    Left         = IGL.GL_LEFT,
-    Right        = IGL.GL_RIGHT,
-    FrontAndBack = IGL.GL_FRONT_AND_BACK
+    FrontLeft    = IGL.GLFrontLeft,
+    FrontRight   = IGL.GLFrontRight,
+    BackLeft     = IGL.GLBackLeft,
+    BackRight    = IGL.GLBackRight,
+    Front        = IGL.GLFront,
+    Back         = IGL.GLBack,
+    Left         = IGL.GLLeft,
+    Right        = IGL.GLRight,
+    FrontAndBack = IGL.GLFrontAndBack
 }
 
 [PublicAPI]
 public enum FrontFaceDirection
 {
-    Clockwise        = IGL.GL_CW,
-    CounterClockwise = IGL.GL_CCW
+    Clockwise        = IGL.GLCw,
+    CounterClockwise = IGL.GLCcw
 }
 
 // ========================================================================

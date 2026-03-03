@@ -54,11 +54,11 @@ namespace LughSharp.Core.Maps.Tiled.Loaders;
 public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     where TP : BaseTmxMapLoader< TP >.BaseTmxLoaderParameters
 {
-    protected const uint FLAG_FLIP_HORIZONTALLY     = 0x80000000;
-    protected const uint FLAG_FLIP_VERTICALLY       = 0x40000000;
-    protected const uint FLAG_FLIP_DIAGONALLY       = 0x20000000;
-    protected const uint ROTATED_HEXAGONAL_120_FLAG = 0x10000000;
-    protected const uint MASK_CLEAR                 = 0xF0000000;
+    protected const uint FlagFlipHorizontally     = 0x80000000;
+    protected const uint FlagFlipVertically       = 0x40000000;
+    protected const uint FlagFlipDiagonally       = 0x20000000;
+    protected const uint RotatedHexagonal120Flag = 0x10000000;
+    protected const uint MaskClear                 = 0xF0000000;
 
     // ========================================================================
 
@@ -405,11 +405,11 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 for ( var x = 0; x < width; x++ )
                 {
                     uint id               = ids[ ( y * width ) + x ];
-                    bool flipHorizontally = ( id & FLAG_FLIP_HORIZONTALLY ) != 0;
-                    bool flipVertically   = ( id & FLAG_FLIP_VERTICALLY ) != 0;
-                    bool flipDiagonally   = ( id & FLAG_FLIP_DIAGONALLY ) != 0;
+                    bool flipHorizontally = ( id & FlagFlipHorizontally ) != 0;
+                    bool flipVertically   = ( id & FlagFlipVertically ) != 0;
+                    bool flipDiagonally   = ( id & FlagFlipDiagonally ) != 0;
 
-                    ITiledMapTile? tile = tilesets.GetTile( id & ~MASK_CLEAR );
+                    ITiledMapTile? tile = tilesets.GetTile( id & ~MaskClear );
 
                     if ( tile != null )
                     {
@@ -660,9 +660,9 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 {
                     id = ( uint )long.Parse( gid );
 
-                    bool flipHorizontally = ( id & FLAG_FLIP_HORIZONTALLY ) != 0;
-                    bool flipVertically = ( id & FLAG_FLIP_VERTICALLY ) != 0;
-                    ITiledMapTile? tile = map.Tilesets.GetTile( id & ~MASK_CLEAR );
+                    bool flipHorizontally = ( id & FlagFlipHorizontally ) != 0;
+                    bool flipVertically = ( id & FlagFlipVertically ) != 0;
+                    ITiledMapTile? tile = map.Tilesets.GetTile( id & ~MaskClear );
                     var tiledMapTileMapObject = new TiledMapTileMapObject( tile, flipHorizontally, flipVertically );
                     TextureRegion textureRegion = tiledMapTileMapObject.TextureRegion!;
 
@@ -844,12 +844,12 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             {
                 case true when flipVertically:
                     cell.SetFlipHorizontally( true );
-                    cell.SetRotation( TiledMapTileLayer.Cell.ROTATE270 );
+                    cell.SetRotation( TiledMapTileLayer.Cell.Rotate270 );
 
                     break;
 
                 case true:
-                    cell.SetRotation( TiledMapTileLayer.Cell.ROTATE270 );
+                    cell.SetRotation( TiledMapTileLayer.Cell.Rotate270 );
 
                     break;
 
@@ -857,12 +857,12 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 {
                     if ( flipVertically )
                     {
-                        cell.SetRotation( TiledMapTileLayer.Cell.ROTATE90 );
+                        cell.SetRotation( TiledMapTileLayer.Cell.Rotate90 );
                     }
                     else
                     {
                         cell.SetFlipVertically( true );
-                        cell.SetRotation( TiledMapTileLayer.Cell.ROTATE270 );
+                        cell.SetRotation( TiledMapTileLayer.Cell.Rotate270 );
                     }
 
                     break;

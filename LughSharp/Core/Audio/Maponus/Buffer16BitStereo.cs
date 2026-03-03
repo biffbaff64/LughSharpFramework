@@ -40,11 +40,11 @@ public class Buffer16BitStereo : AudioBase
 {
     // ========================================================================
 
-    private const int OUTPUT_CHANNELS = 2;
+    private const int OutputChannels = 2;
 
     // Write offset used in append_bytes
-    private readonly byte[] _buffer               = new byte[ OBUFFERSIZE * 2 ]; // all channels interleaved
-    private readonly int[]  _bufferChannelOffsets = new int[ MAXCHANNELS ]; // contains write offset for each channel.
+    private readonly byte[] _buffer               = new byte[ Obuffersize * 2 ]; // all channels interleaved
+    private readonly int[]  _bufferChannelOffsets = new int[ Maxchannels ]; // contains write offset for each channel.
 
     // end marker, one past end of array. Same as bufferp[0], but
     // without the array bounds check.
@@ -105,7 +105,7 @@ public class Buffer16BitStereo : AudioBase
         else
         {
             // Copy an even number of sample frames
-            int remainder = count % ( 2 * OUTPUT_CHANNELS );
+            int remainder = count % ( 2 * OutputChannels );
             copySize = count - remainder;
         }
 
@@ -124,7 +124,7 @@ public class Buffer16BitStereo : AudioBase
     {
         _buffer[ _bufferChannelOffsets[ channel ] ]     =  ( byte )( sampleValue & 0xff );
         _buffer[ _bufferChannelOffsets[ channel ] + 1 ] =  ( byte )( sampleValue >> 8 );
-        _bufferChannelOffsets[ channel ]                += OUTPUT_CHANNELS * 2;
+        _bufferChannelOffsets[ channel ]                += OutputChannels * 2;
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public class Buffer16BitStereo : AudioBase
                 _buffer[ pos + 3 ] = ( byte )( sample >> 8 );
             }
 
-            pos += OUTPUT_CHANNELS * 2;
+            pos += OutputChannels * 2;
         }
 
         _bufferChannelOffsets[ channel ] = pos;
@@ -191,7 +191,7 @@ public class Buffer16BitStereo : AudioBase
         _offset = 0;
         _end    = 0;
 
-        for ( var i = 0; i < OUTPUT_CHANNELS; i++ )
+        for ( var i = 0; i < OutputChannels; i++ )
         {
             _bufferChannelOffsets[ i ] = i * 2; // two bytes per channel
         }

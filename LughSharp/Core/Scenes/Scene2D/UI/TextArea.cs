@@ -202,8 +202,8 @@ public class TextArea : TextField
             return false;
         }
 
-        return ( Text.Length != 0 ) && ( ( Text[ Text.Length - 1 ] == NEWLINE )
-                                      || ( Text[ Text.Length - 1 ] == CARRIAGE_RETURN ) );
+        return ( Text.Length != 0 ) && ( ( Text[ Text.Length - 1 ] == Newline )
+                                      || ( Text[ Text.Length - 1 ] == CarriageReturn ) );
     }
 
     /// <summary>
@@ -282,8 +282,8 @@ public class TextArea : TextField
         {
             if ( ( line < ( LinesBreak.Count / 2 ) )
               || ( Text.Length == 0 )
-              || ( Text[ Text.Length - 1 ] == NEWLINE )
-              || ( Text[ Text.Length - 1 ] == CARRIAGE_RETURN ) )
+              || ( Text[ Text.Length - 1 ] == Newline )
+              || ( Text[ Text.Length - 1 ] == CarriageReturn ) )
             {
                 CursorLine = line;
             }
@@ -452,7 +452,7 @@ public class TextArea : TextField
                        LinesBreak[ i ],
                        LinesBreak[ i + 1 ],
                        0,
-                       Align.LEFT,
+                       Align.Left,
                        false );
             offsetY -= font.GetLineHeight();
         }
@@ -491,7 +491,7 @@ public class TextArea : TextField
             {
                 char lastCharacter = Text[ i ];
 
-                if ( lastCharacter is CARRIAGE_RETURN or NEWLINE )
+                if ( lastCharacter is CarriageReturn or Newline )
                 {
                     LinesBreak?.Add( lineStart );
                     LinesBreak?.Add( i );
@@ -662,18 +662,18 @@ public class TextArea : TextField
             _parent.UpdateCurrentLine();
         }
 
-        public override bool KeyDown( InputEvent? ev, int keycode )
+        public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
-            bool result = base.KeyDown( ev, keycode );
+            bool result = base.OnKeyDown( ev, keycode );
 
             if ( _parent.HasKeyboardFocus() )
             {
                 var repeat = false;
 
-                bool shift = Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_LEFT )
-                          || Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT );
+                bool shift = Engine.Api.Input.IsKeyPressed( IInput.Keys.ShiftLeft )
+                          || Engine.Api.Input.IsKeyPressed( IInput.Keys.ShiftRight );
 
-                if ( keycode == IInput.Keys.DOWN )
+                if ( keycode == IInput.Keys.Down )
                 {
                     if ( shift )
                     {
@@ -692,7 +692,7 @@ public class TextArea : TextField
 
                     repeat = true;
                 }
-                else if ( keycode == IInput.Keys.UP )
+                else if ( keycode == IInput.Keys.Up )
                 {
                     if ( shift )
                     {
@@ -730,12 +730,12 @@ public class TextArea : TextField
 
         protected override bool CheckFocusTraversal( char character )
         {
-            return _parent.FocusTraversal && ( character == TAB );
+            return _parent.FocusTraversal && ( character == Tab );
         }
 
-        public override bool KeyTyped( InputEvent? ev, char character )
+        public override bool OnKeyTyped( InputEvent? ev, char character )
         {
-            bool result = base.KeyTyped( ev, character );
+            bool result = base.OnKeyTyped( ev, character );
 
             _parent.ShowCursor();
 

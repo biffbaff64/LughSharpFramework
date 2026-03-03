@@ -457,7 +457,7 @@ public class CpuSpriteBatch : SpriteBatch
     {
         Guard.Against.Null( texture );
 
-        if ( ( count % Sprite.SPRITE_SIZE ) != 0 )
+        if ( ( count % Sprite.SpriteSize ) != 0 )
         {
             throw new RuntimeException( "invalid vertex count" );
         }
@@ -710,7 +710,7 @@ public class CpuSpriteBatch : SpriteBatch
         Vertices[ Idx + 18 ] = u2;
         Vertices[ Idx + 19 ] = v;
 
-        Idx += Sprite.SPRITE_SIZE;
+        Idx += Sprite.SpriteSize;
     }
 
     private void DrawAdjusted( TextureRegion? region,
@@ -868,7 +868,7 @@ public class CpuSpriteBatch : SpriteBatch
         Vertices[ Idx + 18 ] = u4;
         Vertices[ Idx + 19 ] = v4;
 
-        Idx += Sprite.SPRITE_SIZE;
+        Idx += Sprite.SpriteSize;
     }
 
     private void DrawAdjusted( TextureRegion? region, float width, float height, Affine2 transform )
@@ -929,7 +929,7 @@ public class CpuSpriteBatch : SpriteBatch
         Vertices[ Idx + 18 ] = u2;
         Vertices[ Idx + 19 ] = v;
 
-        Idx += Sprite.SPRITE_SIZE;
+        Idx += Sprite.SpriteSize;
     }
 
     private void DrawAdjusted( Texture? texture, float[] spriteVertices, int offset, int count )
@@ -963,9 +963,9 @@ public class CpuSpriteBatch : SpriteBatch
                 Vertices[ Idx + 3 ] = spriteVertices[ offset + 3 ]; // u
                 Vertices[ Idx + 4 ] = spriteVertices[ offset + 4 ]; // v
 
-                Idx       += Sprite.VERTEX_SIZE;
-                offset    += Sprite.VERTEX_SIZE;
-                copyCount -= Sprite.VERTEX_SIZE;
+                Idx       += Sprite.VertexSize;
+                offset    += Sprite.VertexSize;
+                copyCount -= Sprite.VertexSize;
             }
 
             if ( count > 0 )
@@ -985,12 +985,12 @@ public class CpuSpriteBatch : SpriteBatch
         }
 
         // matrices are assumed to be 2D transformations
-        return a.Val[ Matrix4.M00_0 ].Equals( b.Val[ Matrix4.M00_0 ] )
-            && a.Val[ Matrix4.M10_1 ].Equals( b.Val[ Matrix4.M10_1 ] )
-            && a.Val[ Matrix4.M01_4 ].Equals( b.Val[ Matrix4.M01_4 ] )
-            && a.Val[ Matrix4.M11_5 ].Equals( b.Val[ Matrix4.M11_5 ] )
-            && a.Val[ Matrix4.M03_12 ].Equals( b.Val[ Matrix4.M03_12 ] )
-            && a.Val[ Matrix4.M13_13 ].Equals( b.Val[ Matrix4.M13_13 ] );
+        return a.Val[ Matrix4.M000 ].Equals( b.Val[ Matrix4.M000 ] )
+            && a.Val[ Matrix4.M101 ].Equals( b.Val[ Matrix4.M101 ] )
+            && a.Val[ Matrix4.M014 ].Equals( b.Val[ Matrix4.M014 ] )
+            && a.Val[ Matrix4.M115 ].Equals( b.Val[ Matrix4.M115 ] )
+            && a.Val[ Matrix4.M0312 ].Equals( b.Val[ Matrix4.M0312 ] )
+            && a.Val[ Matrix4.M1313 ].Equals( b.Val[ Matrix4.M1313 ] );
     }
 
     private static bool CheckEqual( Matrix4 matrix, Affine2 affine )
@@ -998,12 +998,12 @@ public class CpuSpriteBatch : SpriteBatch
         float[] val = matrix.Values;
 
         // matrix is assumed to be 2D transformation
-        return val[ Matrix4.M00_0 ].Equals( affine.M00 )
-            && val[ Matrix4.M10_1 ].Equals( affine.M10 )
-            && val[ Matrix4.M01_4 ].Equals( affine.M01 )
-            && val[ Matrix4.M11_5 ].Equals( affine.M11 )
-            && val[ Matrix4.M03_12 ].Equals( affine.M02 )
-            && val[ Matrix4.M13_13 ].Equals( affine.M12 );
+        return val[ Matrix4.M000 ].Equals( affine.M00 )
+            && val[ Matrix4.M101 ].Equals( affine.M10 )
+            && val[ Matrix4.M014 ].Equals( affine.M01 )
+            && val[ Matrix4.M115 ].Equals( affine.M11 )
+            && val[ Matrix4.M0312 ].Equals( affine.M02 )
+            && val[ Matrix4.M1313 ].Equals( affine.M12 );
     }
 
     private static bool CheckIdt( Matrix4 matrix )
@@ -1011,11 +1011,11 @@ public class CpuSpriteBatch : SpriteBatch
         float[] val = matrix.Values;
 
         // matrix is assumed to be 2D transformation
-        return val[ Matrix4.M00_0 ] is 1
-            && val[ Matrix4.M10_1 ] is 0
-            && val[ Matrix4.M01_4 ] is 0
-            && val[ Matrix4.M11_5 ] is 1
-            && val[ Matrix4.M03_12 ] is 0
-            && val[ Matrix4.M13_13 ] is 0;
+        return val[ Matrix4.M000 ] is 1
+            && val[ Matrix4.M101 ] is 0
+            && val[ Matrix4.M014 ] is 0
+            && val[ Matrix4.M115 ] is 1
+            && val[ Matrix4.M0312 ] is 0
+            && val[ Matrix4.M1313 ] is 0;
     }
 }

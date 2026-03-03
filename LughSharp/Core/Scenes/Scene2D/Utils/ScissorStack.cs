@@ -62,7 +62,7 @@ public class ScissorStack
     /// between the top of stack rectangle and the provided rectangle is pushed onto
     /// the stack. This will invoke <see cref="GLBindings.Scissor(int, int, int, int)"/>
     /// with the final top of stack rectangle. In case no scissor is yet on the stack
-    /// this will also enable <see cref="IGL.GL_SCISSOR_TEST"/> automatically.
+    /// this will also enable <see cref="IGL.GLScissorTest"/> automatically.
     /// <para>
     /// Any drawing should be flushed before pushing scissors.
     /// </para>
@@ -124,7 +124,7 @@ public class ScissorStack
     /// <summary>
     /// Pops the current scissor rectangle from the stack and sets the new scissor
     /// area to the new top of stack rectangle. In case no more rectangles are on
-    /// the stack, <see cref="IGL.GL_SCISSOR_TEST"/> is disabled.
+    /// the stack, <see cref="IGL.GLScissorTest"/> is disabled.
     /// <para>
     /// Any drawing should be flushed before popping scissors.
     /// </para>

@@ -47,8 +47,8 @@ public class SampleBuffer : AudioBase
     /// <param name="numberOfChannels">The number of channels in the audio samples.</param>
     public SampleBuffer( int sampleFrequency, int numberOfChannels )
     {
-        _buffer   = new short[ OBUFFERSIZE ];
-        _bufferp  = new int[ MAXCHANNELS ];
+        _buffer   = new short[ Obuffersize ];
+        _bufferp  = new int[ Maxchannels ];
         _channels = numberOfChannels;
 
         Init( sampleFrequency );

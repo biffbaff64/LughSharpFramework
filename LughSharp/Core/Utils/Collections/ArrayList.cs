@@ -48,7 +48,7 @@ public class ArrayList< T >
 
     // ========================================================================
 
-    private const int DEFAULT_INITIAL_CAPACITY = 16;
+    private const int DefaultInitialCapacity = 16;
 
     private PredicateIterable< T >? _predicateIEnumerable;
 
@@ -65,7 +65,7 @@ public class ArrayList< T >
     /// The initial capacity.  Any elements added beyond this will cause the backing
     /// array to be grown.
     /// </param>
-    public ArrayList( bool ordered = true, int capacity = DEFAULT_INITIAL_CAPACITY )
+    public ArrayList( bool ordered = true, int capacity = DefaultInitialCapacity )
     {
         Ordered = ordered;
         Items   = new T[ capacity ];

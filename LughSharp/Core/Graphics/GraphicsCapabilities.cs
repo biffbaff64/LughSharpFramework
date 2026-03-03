@@ -54,8 +54,8 @@ public unsafe class GraphicsCapabilities
     /// </returns>
     public static GraphicsCapabilities Detect()
     {
-        Engine.GL.GetIntegerv( GLData.MAJOR_VERSION, out int major );
-        Engine.GL.GetIntegerv( GLData.MINOR_VERSION, out int minor );
+        Engine.GL.GetIntegerv( GLData.MajorVersion, out int major );
+        Engine.GL.GetIntegerv( GLData.MinorVersion, out int minor );
 
         return new GraphicsCapabilities
         {
@@ -77,11 +77,11 @@ public unsafe class GraphicsCapabilities
 
     private static bool HasExtension( string s )
     {
-        Engine.GL.GetIntegerv( GLData.NUM_EXTENSIONS, out int n );
+        Engine.GL.GetIntegerv( GLData.NumExtensions, out int n );
 
         for ( uint i = 0; i < n; i++ )
         {
-            if ( string.Equals( Engine.GL.GetStringi( GLData.EXTENSIONS, i )->ToString(),
+            if ( string.Equals( Engine.GL.GetStringi( GLData.Extensions, i )->ToString(),
                                 s,
                                 StringComparison.Ordinal ) )
             {

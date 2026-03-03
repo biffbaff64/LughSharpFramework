@@ -84,7 +84,7 @@ public class FreeTypeFontGenerator : IDisposable
     }
 
     // A hint to scale the texture as needed, without capping it at any maximum size
-    public const int NO_MAXIMUM = -1;
+    public const int NoMaximum = -1;
 
     /// <summary>Null character (often used as a terminator).</summary>
     public static readonly string NullChar = "\0";
@@ -317,7 +317,7 @@ public class FreeTypeFontGenerator : IDisposable
         {
             bitmap = slot.GetBitmap();
         }
-        else if ( !slot.RenderGlyph( FreeType.FT_RENDER_MODE_NORMAL ) )
+        else if ( !slot.RenderGlyph( FreeType.FtRenderModeNormal ) )
         {
             bitmap = null;
         }
@@ -458,7 +458,7 @@ public class FreeTypeFontGenerator : IDisposable
             break;
         }
 
-        if ( !_bitmapped && ( Math.Abs( data.CapHeight - 1.0f ) < NumberUtils.FLOAT_TOLERANCE ) )
+        if ( !_bitmapped && ( Math.Abs( data.CapHeight - 1.0f ) < NumberUtils.FloatTolerance ) )
         {
             throw new RuntimeException( "No cap character found in font" );
         }
@@ -519,11 +519,11 @@ public class FreeTypeFontGenerator : IDisposable
             stroker = _library.CreateStroker();
             stroker.Set( ( int )( parameter.BorderWidth * 64f ),
                          parameter.BorderStraight
-                             ? FreeType.FT_STROKER_LINECAP_BUTT
-                             : FreeType.FT_STROKER_LINECAP_ROUND,
+                             ? FreeType.FtStrokerLinecapButt
+                             : FreeType.FtStrokerLinecapRound,
                          parameter.BorderStraight
-                             ? FreeType.FT_STROKER_LINEJOIN_MITER_FIXED
-                             : FreeType.FT_STROKER_LINEJOIN_ROUND,
+                             ? FreeType.FtStrokerLinejoinMiterFixed
+                             : FreeType.FtStrokerLinejoinRound,
                          0 );
         }
 
@@ -709,7 +709,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         try
         {
-            mainGlyph.ToBitmap( parameter.Mono ? FreeType.FT_RENDER_MODE_MONO : FreeType.FT_RENDER_MODE_NORMAL );
+            mainGlyph.ToBitmap( parameter.Mono ? FreeType.FtRenderModeMono : FreeType.FtRenderModeNormal );
         }
         catch ( Exception )
         {
@@ -732,7 +732,7 @@ public class FreeTypeFontGenerator : IDisposable
                 FreeType.Glyph borderGlyph = slot.GetGlyph();
 
                 borderGlyph.StrokeBorder( stroker, false );
-                borderGlyph.ToBitmap( parameter.Mono ? FreeType.FT_RENDER_MODE_MONO : FreeType.FT_RENDER_MODE_NORMAL );
+                borderGlyph.ToBitmap( parameter.Mono ? FreeType.FtRenderModeMono : FreeType.FtRenderModeNormal );
                 int offsetX = left - borderGlyph.GetLeft();
                 int offsetY = -( top - borderGlyph.GetTop() );
 
@@ -910,7 +910,7 @@ public class FreeTypeFontGenerator : IDisposable
     /// <summary>
     /// Sets the maximum size that will be used when generating texture atlases for glyphs
     /// with <see cref="GenerateData(int)"/>. The default is 1024.
-    /// By specifying <see cref="NO_MAXIMUM"/>, the texture atlas will scale as needed.
+    /// By specifying <see cref="NoMaximum"/>, the texture atlas will scale as needed.
     /// The power-of-two square texture size will be capped to the given <see cref="texSize"/>.
     /// It is recommended that a power-of-two value be used here.
     /// Multiple pages may be used to fit all the generated glyphs.
@@ -933,17 +933,17 @@ public class FreeTypeFontGenerator : IDisposable
 
     private static int GetLoadingFlags( FreeTypeFontParameter parameter )
     {
-        int loadingFlags = FreeType.FT_LOAD_DEFAULT;
+        int loadingFlags = FreeType.FtLoadDefault;
 
         loadingFlags |= parameter.Hinting switch
                         {
-                            Hinting.None       => FreeType.FT_LOAD_NO_HINTING,
-                            Hinting.Slight     => FreeType.FT_LOAD_TARGET_LIGHT,
-                            Hinting.Medium     => FreeType.FT_LOAD_TARGET_NORMAL,
-                            Hinting.Full       => FreeType.FT_LOAD_TARGET_MONO,
-                            Hinting.AutoSlight => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_LIGHT,
-                            Hinting.AutoMedium => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_NORMAL,
-                            Hinting.AutoFull   => FreeType.FT_LOAD_FORCE_AUTOHINT | FreeType.FT_LOAD_TARGET_MONO,
+                            Hinting.None       => FreeType.FtLoadNoHinting,
+                            Hinting.Slight     => FreeType.FtLoadTargetLight,
+                            Hinting.Medium     => FreeType.FtLoadTargetNormal,
+                            Hinting.Full       => FreeType.FtLoadTargetMono,
+                            Hinting.AutoSlight => FreeType.FtLoadForceAutohint | FreeType.FtLoadTargetLight,
+                            Hinting.AutoMedium => FreeType.FtLoadForceAutohint | FreeType.FtLoadTargetNormal,
+                            Hinting.AutoFull   => FreeType.FtLoadForceAutohint | FreeType.FtLoadTargetMono,
                             var _              => 0
                         };
 
@@ -961,7 +961,7 @@ public class FreeTypeFontGenerator : IDisposable
         }
     }
 
-    private bool LoadChar( int c, int flags = FreeType.FT_LOAD_DEFAULT | FreeType.FT_LOAD_FORCE_AUTOHINT )
+    private bool LoadChar( int c, int flags = FreeType.FtLoadDefault | FreeType.FtLoadForceAutohint )
     {
         return _face.LoadChar( c, flags );
     }
@@ -970,8 +970,8 @@ public class FreeTypeFontGenerator : IDisposable
     {
         int faceFlags = _face.GetFaceFlags();
 
-        if ( ( ( faceFlags & FreeType.FT_FACE_FLAG_FIXED_SIZES ) == FreeType.FT_FACE_FLAG_FIXED_SIZES )
-          && ( ( faceFlags & FreeType.FT_FACE_FLAG_HORIZONTAL ) == FreeType.FT_FACE_FLAG_HORIZONTAL ) )
+        if ( ( ( faceFlags & FreeType.FtFaceFlagFixedSizes ) == FreeType.FtFaceFlagFixedSizes )
+          && ( ( faceFlags & FreeType.FtFaceFlagHorizontal ) == FreeType.FtFaceFlagHorizontal ) )
         {
             if ( LoadChar( 32 ) ) //TODO:
             {

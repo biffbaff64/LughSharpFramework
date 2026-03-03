@@ -53,7 +53,7 @@ namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 [PublicAPI]
 public class DragScrollListener : DragListener
 {
-    private static readonly Vector2             TmpCoords      = new();
+    private static readonly Vector2             _tmpCoords      = new();
     private readonly        Interpolation.ExpIn _interpolation = Interpolation.Exp5In;
     private readonly        ScrollPane          _scrollPane;
 
@@ -99,9 +99,9 @@ public class DragScrollListener : DragListener
     /// <inheritdoc />
     public override void Drag( InputEvent ev, float x, float y, int pointer )
     {
-        ev.ListenerActor?.LocalToActorCoordinates( _scrollPane, TmpCoords.Set( x, y ) );
+        ev.ListenerActor?.LocalToActorCoordinates( _scrollPane, _tmpCoords.Set( x, y ) );
 
-        if ( IsAbove( TmpCoords.Y ) )
+        if ( IsAbove( _tmpCoords.Y ) )
         {
             _scrollDown.Cancel();
 
@@ -114,7 +114,7 @@ public class DragScrollListener : DragListener
             return;
         }
 
-        if ( IsBelow( TmpCoords.Y ) )
+        if ( IsBelow( _tmpCoords.Y ) )
         {
             _scrollUp.Cancel();
 

@@ -36,16 +36,16 @@ namespace LughSharp.Core.Audio.Maponus.Decoding;
 [PublicAPI]
 public class Header
 {
-    public const int MPEG2_LSF            = 0;
-    public const int MPEG25_LSF           = 2;
-    public const int MPEG1                = 1;
-    public const int STEREO               = 0;
-    public const int JOINT_STEREO         = 1;
-    public const int DUAL_CHANNEL         = 2;
-    public const int SINGLE_CHANNEL       = 3;
-    public const int FOURTYFOUR_POINT_ONE = 0;
-    public const int FOURTYEIGHT          = 1;
-    public const int THIRTYTWO            = 2;
+    public const int Mpeg2Lsf            = 0;
+    public const int Mpeg25Lsf           = 2;
+    public const int Mpeg1                = 1;
+    public const int Stereo               = 0;
+    public const int JointStereo         = 1;
+    public const int DualChannel         = 2;
+    public const int SingleChannel       = 3;
+    public const int FourtyfourPointOne = 0;
+    public const int Fourtyeight          = 1;
+    public const int Thirtytwo            = 2;
 
     // ========================================================================
 
@@ -194,7 +194,7 @@ public class Header
     private int    _paddingBit;
     private int    _protectionBit;
     private int    _sampleFrequency;
-    private sbyte  _syncmode = Bitstream.INITIAL_SYNC;
+    private sbyte  _syncmode = Bitstream.InitialSync;
     private int    _version;
 
     // ========================================================================
@@ -219,7 +219,7 @@ public class Header
             headerstring  = stream.SyncHeader( _syncmode );
             _headerstring = headerstring;
 
-            if ( _syncmode == Bitstream.INITIAL_SYNC )
+            if ( _syncmode == Bitstream.InitialSync )
             {
                 _version = SupportClass.URShift( headerstring, 19 ) & 1;
 
@@ -227,19 +227,19 @@ public class Header
 
                     // SZD: MPEG2.5 detection
                 {
-                    if ( _version == MPEG2_LSF )
+                    if ( _version == Mpeg2Lsf )
                     {
-                        _version = MPEG25_LSF;
+                        _version = Mpeg25Lsf;
                     }
                     else
                     {
-                        throw new BitstreamException( BitstreamErrors.UNKNOWN_ERROR );
+                        throw new BitstreamException( BitstreamErrors.UnknownError );
                     }
                 }
 
                 if ( ( _sampleFrequency = SupportClass.URShift( headerstring, 10 ) & 3 ) == 3 )
                 {
-                    throw new BitstreamException( BitstreamErrors.UNKNOWN_ERROR );
+                    throw new BitstreamException( BitstreamErrors.UnknownError );
                 }
             }
 
@@ -250,7 +250,7 @@ public class Header
             _mode          = SupportClass.URShift( headerstring, 6 ) & 3;
             _modeExtension = SupportClass.URShift( headerstring, 4 ) & 3;
 
-            if ( _mode == JOINT_STEREO )
+            if ( _mode == JointStereo )
             {
                 _intensityStereoBound = ( _modeExtension << 2 ) + 4;
             }
@@ -273,7 +273,7 @@ public class Header
                 int channelBitrate = _bitrateIndex;
 
                 // calculate bitrate per channel:
-                if ( _mode != SINGLE_CHANNEL )
+                if ( _mode != SingleChannel )
                 {
                     if ( channelBitrate == 4 )
                     {
@@ -287,9 +287,9 @@ public class Header
 
                 if ( channelBitrate is 1 or 2 )
                 {
-                    _numberOfSubbands = _sampleFrequency == THIRTYTWO ? 12 : 8;
+                    _numberOfSubbands = _sampleFrequency == Thirtytwo ? 12 : 8;
                 }
-                else if ( ( _sampleFrequency == FOURTYEIGHT ) || channelBitrate is >= 3 and <= 5 )
+                else if ( ( _sampleFrequency == Fourtyeight ) || channelBitrate is >= 3 and <= 5 )
                 {
                     _numberOfSubbands = 27;
                 }
@@ -312,9 +312,9 @@ public class Header
 
             if ( stream.IsSyncCurrentPosition( _syncmode ) )
             {
-                if ( _syncmode == Bitstream.INITIAL_SYNC )
+                if ( _syncmode == Bitstream.InitialSync )
                 {
-                    _syncmode = Bitstream.STRICT_SYNC;
+                    _syncmode = Bitstream.StrictSync;
                     stream.SetSyncWord( headerstring & unchecked( ( int )0xFFF80CC0 ) );
                 }
 
@@ -344,7 +344,7 @@ public class Header
             crcp![ 0 ] = null!;
         }
 
-        if ( _sampleFrequency == FOURTYFOUR_POINT_ONE )
+        if ( _sampleFrequency == FourtyfourPointOne )
         {
             /*
             if (offset == null)
@@ -497,7 +497,7 @@ public class Header
             Framesize = 144 * Bitrates[ _version ][ _layer - 1 ][ _bitrateIndex ]
                       / Frequencies[ _version ][ _sampleFrequency ];
 
-            if ( _version is MPEG2_LSF or MPEG25_LSF )
+            if ( _version is Mpeg2Lsf or Mpeg25Lsf )
             {
                 Framesize >>= 1;
             }
@@ -511,15 +511,15 @@ public class Header
             // Layer III slots
             if ( _layer == 3 )
             {
-                if ( _version == MPEG1 )
+                if ( _version == Mpeg1 )
                 {
-                    NSlots = Framesize - ( _mode == SINGLE_CHANNEL ? 17 : 32 ) - ( _protectionBit != 0 ? 0 : 2 )
+                    NSlots = Framesize - ( _mode == SingleChannel ? 17 : 32 ) - ( _protectionBit != 0 ? 0 : 2 )
                            - 4; // header size
                 }
                 else
                 {
                     // MPEG-2 LSF, SZD: MPEG-2.5 LSF
-                    NSlots = Framesize - ( _mode == SINGLE_CHANNEL ? 9 : 17 ) - ( _protectionBit != 0 ? 0 : 2 )
+                    NSlots = Framesize - ( _mode == SingleChannel ? 9 : 17 ) - ( _protectionBit != 0 ? 0 : 2 )
                            - 4; // header size
                 }
             }
@@ -577,7 +577,7 @@ public class Header
     /// <summary>
     /// Returns total ms.
     /// </summary>
-    public float TotalMS( int streamsize )
+    public float TotalMs( int streamsize )
     {
         return MaxNumberOfFrame( streamsize ) * MsPerFrame();
     }
@@ -612,29 +612,29 @@ public class Header
     {
         switch ( _sampleFrequency )
         {
-            case THIRTYTWO:
-                if ( _version == MPEG1 )
+            case Thirtytwo:
+                if ( _version == Mpeg1 )
                 {
                     return "32 kHz";
                 }
 
-                return _version == MPEG2_LSF ? "16 kHz" : "8 kHz";
+                return _version == Mpeg2Lsf ? "16 kHz" : "8 kHz";
 
-            case FOURTYFOUR_POINT_ONE:
-                if ( _version == MPEG1 )
+            case FourtyfourPointOne:
+                if ( _version == Mpeg1 )
                 {
                     return "44.1 kHz";
                 }
 
-                return _version == MPEG2_LSF ? "22.05 kHz" : "11.025 kHz";
+                return _version == Mpeg2Lsf ? "22.05 kHz" : "11.025 kHz";
 
-            case FOURTYEIGHT:
-                if ( _version == MPEG1 )
+            case Fourtyeight:
+                if ( _version == Mpeg1 )
                 {
                     return "48 kHz";
                 }
 
-                return _version == MPEG2_LSF ? "24 kHz" : "12 kHz";
+                return _version == Mpeg2Lsf ? "24 kHz" : "12 kHz";
         }
 
         return null;
@@ -647,16 +647,16 @@ public class Header
     {
         switch ( _mode )
         {
-            case STEREO:
+            case Stereo:
                 return "Stereo";
 
-            case JOINT_STEREO:
+            case JointStereo:
                 return "Joint stereo";
 
-            case DUAL_CHANNEL:
+            case DualChannel:
                 return "Dual channel";
 
-            case SINGLE_CHANNEL:
+            case SingleChannel:
                 return "Single channel";
         }
 
@@ -670,13 +670,13 @@ public class Header
     {
         switch ( _version )
         {
-            case MPEG1:
+            case Mpeg1:
                 return "MPEG-1";
 
-            case MPEG2_LSF:
+            case Mpeg2Lsf:
                 return "MPEG-2 LSF";
 
-            case MPEG25_LSF:
+            case Mpeg25Lsf:
                 return "MPEG-2.5 LSF";
         }
 

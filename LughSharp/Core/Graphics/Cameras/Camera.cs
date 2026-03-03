@@ -72,7 +72,7 @@ public abstract class Camera
 
             field = value;
         }
-    } = CameraData.DEFAULT_NEAR_PLANE;
+    } = CameraData.DefaultNearPlane;
 
     /// <summary>
     /// the far clipping plane distance, has to be positive
@@ -89,7 +89,7 @@ public abstract class Camera
 
             field = value;
         }
-    } = CameraData.DEFAULT_FAR_PLANE;
+    } = CameraData.DefaultFarPlane;
 
     // ========================================================================
     // ========================================================================
@@ -139,12 +139,12 @@ public abstract class Camera
             // up and direction must ALWAYS be orthonormal vectors
             float dot = tmpVec.Dot( Up );
 
-            if ( Math.Abs( dot - 1 ) < NumberUtils.FLOAT_TOLERANCE )
+            if ( Math.Abs( dot - 1 ) < NumberUtils.FloatTolerance )
             {
                 // Collinear
                 Up.Set( Direction ).Scale( -1 );
             }
-            else if ( Math.Abs( dot + 1 ) < NumberUtils.FLOAT_TOLERANCE )
+            else if ( Math.Abs( dot + 1 ) < NumberUtils.FloatTolerance )
             {
                 // Collinear opposite
                 Up.Set( Direction );

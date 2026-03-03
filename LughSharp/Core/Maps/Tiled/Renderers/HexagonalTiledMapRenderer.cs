@@ -319,7 +319,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
                     = ( Vertices[ IBatch.V4 ], Vertices[ IBatch.V2 ] );
             }
 
-            Batch.Draw( region.Texture, Vertices, 0, NUM_VERTICES );
+            Batch.Draw( region.Texture, Vertices, 0, NumVertices );
         }
     }
 }

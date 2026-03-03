@@ -1842,7 +1842,7 @@ public class JsonValue : IDisposable
             double doubleValue = AsDouble();
             long   longValue   = AsLong();
 
-            writer.Write( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
+            writer.Write( Math.Abs( doubleValue - longValue ) < NumberUtils.FloatTolerance
                               ? LongValue.ToString()
                               : DoubleValue.ToString( CultureInfo.InvariantCulture ) );
         }
@@ -2067,7 +2067,7 @@ public class JsonValue : IDisposable
         {
             double doubleValue = obj.AsDouble();
             long   longValue   = obj.AsLong();
-            buffer.Append( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
+            buffer.Append( Math.Abs( doubleValue - longValue ) < NumberUtils.FloatTolerance
                                ? longValue
                                : doubleValue );
         }
@@ -2194,7 +2194,7 @@ public class JsonValue : IDisposable
             double doubleValue = obj.AsDouble();
             long   longValue   = obj.AsLong();
 
-            writer.Write( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
+            writer.Write( Math.Abs( doubleValue - longValue ) < NumberUtils.FloatTolerance
                               ? longValue.ToString()
                               : doubleValue.ToString( CultureInfo.InvariantCulture ) );
         }

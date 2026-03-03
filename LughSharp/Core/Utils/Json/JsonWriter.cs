@@ -34,18 +34,18 @@ public class JsonWriter : IJsonWriter
     public bool           QuoteLongValues { get; set; } = true;
     public JsonOutputType OutputType      { get; set; }
 
-    private readonly StreamWriter _writer;
-    
+    private readonly TextWriter _writer;
+
     // ========================================================================
 
-    public JsonWriter( StreamWriter writer )
+    public JsonWriter( TextWriter writer )
     {
         _writer = writer;
     }
 
     public void Set( string typeName, string className )
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public void Pop()
@@ -60,18 +60,18 @@ public class JsonWriter : IJsonWriter
     {
     }
 
-    public void Name( string? name)
+    public void Name( string? name )
     {
     }
 
     public void Value( string? convertToString )
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public void Value( object convertToString )
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }
 

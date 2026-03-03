@@ -237,8 +237,8 @@ public class Slider : ProgressBar
 
         float oldValue = value;
 
-        if ( !Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_LEFT )
-          && !Engine.Api.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT ) )
+        if ( !Engine.Api.Input.IsKeyPressed( IInput.Keys.ShiftLeft )
+          && !Engine.Api.Input.IsKeyPressed( IInput.Keys.ShiftRight ) )
         {
             value = GetSnapped( value );
         }
@@ -362,7 +362,7 @@ public class Slider : ProgressBar
             _parent = parent;
         }
 
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( _parent.IsDisabled )
             {
@@ -385,7 +385,7 @@ public class Slider : ProgressBar
             return true;
         }
 
-        public override void TouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+        public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( pointer != _parent._draggingPointer )
             {
@@ -406,7 +406,7 @@ public class Slider : ProgressBar
             }
         }
 
-        public override void TouchDragged( InputEvent? ev, float x, float y, int pointer )
+        public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             _parent.CalculatePositionAndValue( x, y );
         }

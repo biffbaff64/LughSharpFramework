@@ -29,12 +29,12 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum TextureFormat
 {
-    Red            = IGL.GL_RED,
-    RG             = IGL.GL_RG,
-    RGB            = IGL.GL_RGB,
-    RGBA           = IGL.GL_RGBA,
-    DepthComponent = IGL.GL_DEPTH_COMPONENT,
-    StencilIndex   = IGL.GL_STENCIL_INDEX
+    Red            = IGL.GLRed,
+    Rg             = IGL.GLRg,
+    RGB            = IGL.GLRGB,
+    RGBA           = IGL.GLRGBA,
+    DepthComponent = IGL.GLDepthComponent,
+    StencilIndex   = IGL.GLStencilIndex
 }
 
 // ========================================================================

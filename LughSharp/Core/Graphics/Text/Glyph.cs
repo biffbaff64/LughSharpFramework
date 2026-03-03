@@ -67,11 +67,11 @@ public class Glyph
     {
         if ( Kerning != null )
         {
-            byte[]? page = Kerning[ ch >>> BitmapFont.LOG2_PAGE_SIZE ];
+            byte[]? page = Kerning[ ch >>> BitmapFont.Log2PageSize ];
 
             if ( page != null )
             {
-                return page[ ch & ( BitmapFont.PAGE_SIZE - 1 ) ];
+                return page[ ch & ( BitmapFont.PageSize - 1 ) ];
             }
 
             // else drop through to return 0
@@ -88,16 +88,16 @@ public class Glyph
     /// <param name="value">The kerning value to be applied, typically in pixel units.</param>
     public void SetKerning( int ch, int value )
     {
-        Kerning ??= new byte[ BitmapFont.PAGES ][];
+        Kerning ??= new byte[ BitmapFont.Pages ][];
 
-        byte[]? page = Kerning[ ch >>> BitmapFont.LOG2_PAGE_SIZE ];
+        byte[]? page = Kerning[ ch >>> BitmapFont.Log2PageSize ];
 
         if ( page == null )
         {
-            Kerning[ ch >>> BitmapFont.LOG2_PAGE_SIZE ] = page = new byte[ BitmapFont.PAGE_SIZE ];
+            Kerning[ ch >>> BitmapFont.Log2PageSize ] = page = new byte[ BitmapFont.PageSize ];
         }
 
-        page[ ch & ( BitmapFont.PAGE_SIZE - 1 ) ] = ( byte )value;
+        page[ ch & ( BitmapFont.PageSize - 1 ) ] = ( byte )value;
     }
 
     /// <inheritdoc />

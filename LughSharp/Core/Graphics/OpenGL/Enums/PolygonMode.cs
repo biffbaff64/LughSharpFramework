@@ -29,9 +29,9 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum PolygonMode
 {
-    Point = IGL.GL_POINT,
-    Line  = IGL.GL_LINE,
-    Fill  = IGL.GL_FILL
+    Point = IGL.GLPoint,
+    Line  = IGL.GLLine,
+    Fill  = IGL.GLFill
 }
 
 // ========================================================================

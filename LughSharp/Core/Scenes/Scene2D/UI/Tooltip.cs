@@ -36,6 +36,14 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Tooltip< T > : InputListener where T : Actor
 {
+    public Container< T >      Container   { get; set; }
+    public TooltipManager< T > Manager     { get; set; }
+    public Actor?              TargetActor { get; set; }
+    public bool                Instant     { get; set; }
+    public bool                Always      { get; set; }
+
+    // ========================================================================
+    
     private readonly Vector2 _tmp = new();
 
     // ========================================================================
@@ -51,19 +59,13 @@ public class Tooltip< T > : InputListener where T : Actor
         Container.Touchable = Touchable.Disabled;
     }
 
-    public Container< T >      Container   { get; set; }
-    public TooltipManager< T > Manager     { get; set; }
-    public Actor?              TargetActor { get; set; }
-    public bool                Instant     { get; set; }
-    public bool                Always      { get; set; }
-
     public Actor? Actor
     {
         get => Container.GetActor();
         set => Container.SetActor( value as T );
     }
 
-    public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+    public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
     {
         if ( Instant )
         {
@@ -77,7 +79,7 @@ public class Tooltip< T > : InputListener where T : Actor
         return false;
     }
 
-    public override bool MouseMoved( InputEvent? ev, float x, float y )
+    public override bool OnMouseMoved( InputEvent? ev, float x, float y )
     {
         if ( Container.HasParent() )
         {

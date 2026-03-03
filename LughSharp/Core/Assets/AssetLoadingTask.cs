@@ -86,7 +86,7 @@ public class AssetLoadingTask : IAssetTask
         Executor  = threadPool;
 
         IsAsyncLoader = Loader is AsynchronousAssetLoader;
-        StartTime     = Logger.TraceLevel.Equals( Logger.LOG_DEBUG ) ? TimeUtils.NanoTime() : 0;
+        StartTime     = Logger.TraceLevel.Equals( Logger.LogDebug ) ? TimeUtils.NanoTime() : 0;
     }
 
     /// <summary>

@@ -41,13 +41,13 @@ namespace LughSharp.Core.Utils;
 [PublicAPI]
 public static class PropertiesUtils
 {
-    private const int    NONE           = 0;
-    private const int    SLASH          = 1;
-    private const int    UNICODE        = 2;
-    private const int    CONTINUE       = 3;
-    private const int    KEY_DONE       = 4;
-    private const int    IGNORE         = 5;
-    private const string LINE_SEPARATOR = "\n";
+    private const int    None           = 0;
+    private const int    Slash          = 1;
+    private const int    Unicode        = 2;
+    private const int    Continue       = 3;
+    private const int    KeyDone       = 4;
+    private const int    Ignore         = 5;
+    private const string LineSeparator = "\n";
 
     // ========================================================================
 
@@ -63,7 +63,7 @@ public static class PropertiesUtils
         ArgumentNullException.ThrowIfNull( properties );
         ArgumentNullException.ThrowIfNull( reader );
 
-        int mode      = NONE;
+        int mode      = None;
         var unicode   = 0;
         var count     = 0;
         var buf       = new char[ 40 ];
@@ -91,7 +91,7 @@ public static class PropertiesUtils
 
             switch ( mode )
             {
-                case UNICODE:
+                case Unicode:
                     double num   = char.GetNumericValue( nextChar.ToString(), 16 );
                     var    digit = ( int )num;
 
@@ -109,7 +109,7 @@ public static class PropertiesUtils
                         throw new ArgumentException( "Invalid Unicode sequence: illegal character" );
                     }
 
-                    mode            = NONE;
+                    mode            = None;
                     buf[ offset++ ] = ( char )unicode;
 
                     if ( nextChar != '\n' )
@@ -122,18 +122,18 @@ public static class PropertiesUtils
 
             switch ( mode )
             {
-                case SLASH:
-                    mode = NONE;
+                case Slash:
+                    mode = None;
 
                     switch ( nextChar )
                     {
                         case '\r':
-                            mode = CONTINUE;
+                            mode = Continue;
 
                             continue;
 
                         case '\n':
-                            mode = IGNORE;
+                            mode = Ignore;
 
                             continue;
 
@@ -163,7 +163,7 @@ public static class PropertiesUtils
                             break;
 
                         case 'u':
-                            mode    = UNICODE;
+                            mode    = Unicode;
                             unicode = count = 0;
 
                             continue;
@@ -202,14 +202,14 @@ public static class PropertiesUtils
 
                         case '\n':
                         case '\r':
-                            if ( ( nextChar == '\n' ) && ( mode == CONTINUE ) )
+                            if ( ( nextChar == '\n' ) && ( mode == Continue ) )
                             {
-                                mode = IGNORE;
+                                mode = Ignore;
 
                                 continue;
                             }
 
-                            mode      = NONE;
+                            mode      = None;
                             firstChar = true;
 
                             if ( ( offset > 0 ) || ( keyLength == 0 ) )
@@ -225,8 +225,8 @@ public static class PropertiesUtils
                             continue;
 
                         case '\\':
-                            keyLength = mode == KEY_DONE ? offset : keyLength;
-                            mode      = SLASH;
+                            keyLength = mode == KeyDone ? offset : keyLength;
+                            mode      = Slash;
 
                             continue;
 
@@ -234,7 +234,7 @@ public static class PropertiesUtils
                         case '=':
                             if ( keyLength == -1 )
                             {
-                                mode      = NONE;
+                                mode      = None;
                                 keyLength = offset;
 
                                 continue;
@@ -245,38 +245,38 @@ public static class PropertiesUtils
 
                     if ( char.IsWhiteSpace( nextChar ) )
                     {
-                        mode = mode == CONTINUE ? IGNORE : mode;
+                        mode = mode == Continue ? Ignore : mode;
 
-                        if ( ( offset == 0 ) || ( offset == keyLength ) || ( mode == IGNORE ) )
+                        if ( ( offset == 0 ) || ( offset == keyLength ) || ( mode == Ignore ) )
                         {
                             continue;
                         }
 
                         if ( keyLength == -1 )
                         {
-                            mode = KEY_DONE;
+                            mode = KeyDone;
 
                             continue;
                         }
                     }
 
-                    mode = mode is IGNORE or CONTINUE ? NONE : mode;
+                    mode = mode is Ignore or Continue ? None : mode;
 
                     break;
             }
 
             firstChar = false;
 
-            if ( mode == KEY_DONE )
+            if ( mode == KeyDone )
             {
                 keyLength = offset;
-                mode      = NONE;
+                mode      = None;
             }
 
             buf[ offset++ ] = nextChar;
         }
 
-        if ( ( mode == UNICODE ) && ( count <= 4 ) )
+        if ( ( mode == Unicode ) && ( count <= 4 ) )
         {
             throw new ArgumentException( "Invalid Unicode sequence: expected format \\uxxxx" );
         }
@@ -289,7 +289,7 @@ public static class PropertiesUtils
             string key   = temp.Substring( 0, keyLength );
             string value = temp.Substring( keyLength );
 
-            if ( mode == SLASH )
+            if ( mode == Slash )
             {
                 value += "\0";
             }
@@ -315,7 +315,7 @@ public static class PropertiesUtils
 
         writer.Write( "#" );
         writer.Write( DateTime.Now.ToString( "ddd MM/dd/yyyy h:mm tt" ) );
-        writer.Write( LINE_SEPARATOR );
+        writer.Write( LineSeparator );
 
         var sb = new StringBuilder( 200 );
 
@@ -324,7 +324,7 @@ public static class PropertiesUtils
             DumpString( sb, entry.Key, true, escapeUnicode );
             sb.Append( '=' );
             DumpString( sb, entry.Value, false, escapeUnicode );
-            writer.Write( LINE_SEPARATOR );
+            writer.Write( LineSeparator );
             writer.Write( sb.ToString() );
             sb.Clear();
         }
@@ -457,7 +457,7 @@ public static class PropertiesUtils
                 }
                 else
                 {
-                    writer.Write( LINE_SEPARATOR );
+                    writer.Write( LineSeparator );
 
                     if ( ( c == '\r' ) && ( curIndex != ( len - 1 ) ) && ( comment[ curIndex + 1 ] == '\n' ) )
                     {
@@ -482,6 +482,6 @@ public static class PropertiesUtils
             writer.Write( comment.Substring( lastIndex, curIndex ) );
         }
 
-        writer.Write( LINE_SEPARATOR );
+        writer.Write( LineSeparator );
     }
 }

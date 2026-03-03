@@ -478,10 +478,10 @@ public class Bits
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        const int PRIME = 73;
+        const int Prime = 73;
 
-        int result = PRIME + 43;
-        result = ( PRIME * result ) + 34;
+        int result = Prime + 43;
+        result = ( Prime * result ) + 34;
 
         return result;
     }

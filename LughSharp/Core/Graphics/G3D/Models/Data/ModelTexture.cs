@@ -31,17 +31,17 @@ namespace LughSharp.Core.Graphics.G3D.Models.Data;
 [PublicAPI]
 public class ModelTexture
 {
-    public const int USAGE_UNKNOWN      = 0;
-    public const int USAGE_NONE         = 1;
-    public const int USAGE_DIFFUSE      = 2;
-    public const int USAGE_EMISSIVE     = 3;
-    public const int USAGE_AMBIENT      = 4;
-    public const int USAGE_SPECULAR     = 5;
-    public const int USAGE_SHININESS    = 6;
-    public const int USAGE_NORMAL       = 7;
-    public const int USAGE_BUMP         = 8;
-    public const int USAGE_TRANSPARENCY = 9;
-    public const int USAGE_REFLECTION   = 10;
+    public const int UsageUnknown      = 0;
+    public const int UsageNone         = 1;
+    public const int UsageDiffuse      = 2;
+    public const int UsageEmissive     = 3;
+    public const int UsageAmbient      = 4;
+    public const int UsageSpecular     = 5;
+    public const int UsageShininess    = 6;
+    public const int UsageNormal       = 7;
+    public const int UsageBump         = 8;
+    public const int UsageTransparency = 9;
+    public const int UsageReflection   = 10;
 
     public string?  ID            { get; set; }
     public string?  FileName      { get; set; }

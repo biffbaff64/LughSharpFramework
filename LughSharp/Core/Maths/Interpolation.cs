@@ -82,7 +82,7 @@ public class Interpolation
     {
         Interp = a =>
         {
-            if ( a < NumberUtils.FLOAT_TOLERANCE )
+            if ( a < NumberUtils.FloatTolerance )
             {
                 return 0;
             }
@@ -103,17 +103,17 @@ public class Interpolation
 
     public static Interpolator Sine = new()
     {
-        Interp = a => ( 1 - MathUtils.Cos( a * MathUtils.PI ) ) / 2
+        Interp = a => ( 1 - MathUtils.Cos( a * MathUtils.Pi ) ) / 2
     };
 
     public static Interpolator SineIn = new()
     {
-        Interp = a => 1 - MathUtils.Cos( a * ( MathUtils.PI / 2 ) )
+        Interp = a => 1 - MathUtils.Cos( a * ( MathUtils.Pi / 2 ) )
     };
 
     public static Interpolator SineOut = new()
     {
-        Interp = a => MathUtils.Sin( a * ( MathUtils.PI / 2 ) )
+        Interp = a => MathUtils.Sin( a * ( MathUtils.Pi / 2 ) )
     };
 
     public static Interpolator Circle = new()
@@ -301,7 +301,7 @@ public class Interpolation
             Value   = value;
             Power   = power;
             Scale   = scale;
-            Bounces = bounces * MathUtils.PI * ( ( bounces % 2 ) == 0 ? 1 : -1 );
+            Bounces = bounces * MathUtils.Pi * ( ( bounces % 2 ) == 0 ? 1 : -1 );
         }
 
         public override float Apply( float a )

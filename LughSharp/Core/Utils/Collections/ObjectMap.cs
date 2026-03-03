@@ -100,8 +100,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
     // ========================================================================
 
-    protected const int   DEFAULT_CAPACITY    = 51;
-    protected const float DEFAULT_LOAD_FACTOR = 0.8f;
+    protected const int   DefaultCapacity    = 51;
+    protected const float DefaultLoadFactor = 0.8f;
 
     protected readonly float LoadFactor;
 
@@ -134,8 +134,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <exception cref="ArgumentException">
     /// Thrown when the load factor is less than or equal to 0, or greater than or equal to 1.
     /// </exception>
-    public ObjectMap( int initialCapacity = DEFAULT_CAPACITY,
-                      float loadFactor = DEFAULT_LOAD_FACTOR,
+    public ObjectMap( int initialCapacity = DefaultCapacity,
+                      float loadFactor = DefaultLoadFactor,
                       bool debug = false )
     {
         if ( debug )
@@ -208,7 +208,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         // Convert to ulong and multiply by the 64-bit golden ratio constant
         // This is where Fibonacci hashing happens, spreading out the bits.
-        ulong fibonacciHashed = ( ulong )hashCode * HashHelpers.GOLDEN_RATIO_MULTIPLIER_64_BIT;
+        ulong fibonacciHashed = ( ulong )hashCode * HashHelpers.GoldenRatioMultiplier64Bit;
 
         // Shift the uppermost bits into the low-order positions to get the final index.
         // The Shift value determines how many of the *most significant* bits of the 64-bit hash
@@ -676,10 +676,10 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        const int PRIME = 28;
+        const int Prime = 28;
 
-        int result = PRIME + 34;
-        result = ( PRIME * result ) + 43;
+        int result = Prime + 34;
+        result = ( Prime * result ) + 43;
 
         return result;
     }

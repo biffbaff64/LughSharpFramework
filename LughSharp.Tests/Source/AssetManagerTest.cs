@@ -84,11 +84,11 @@ public class AssetManagerTest
 
         // ====================================================================
 
-        const string OBJECTS_ATLAS = @"Assets\PackedImages\output\objects.atlas";
+        const string ObjectsAtlas = @"Assets\PackedImages\output\objects.atlas";
 
-        Logger.Debug( $"Loading atlas: {Api.Files.Internal( OBJECTS_ATLAS )}" );
+        Logger.Debug( $"Loading atlas: {Api.Files.Internal( ObjectsAtlas )}" );
 
-        var objectsAtlas = new TextureAtlas( Api.Files.Internal( OBJECTS_ATLAS ) );
+        var objectsAtlas = new TextureAtlas( Api.Files.Internal( ObjectsAtlas ) );
 
         Logger.Debug( "Fetching atlas region..." );
 

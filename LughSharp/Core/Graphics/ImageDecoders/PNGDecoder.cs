@@ -41,15 +41,15 @@ namespace LughSharp.Core.Graphics.ImageDecoders;
 [PublicAPI]
 public class PNGDecoder
 {
-    public const int CHUNK_LENGTH_FIELD_SIZE = 4;
-    public const int SIGNATURE_LENGTH        = 8;
-    public const int IHDR_START              = 8;
-    public const int IHDR_CHUNK_TYPE_OFFSET  = IHDR_START + CHUNK_LENGTH_FIELD_SIZE;
-    public const int IHDR_CHUNK_TYPE_SIZE    = 4;
-    public const int IHDR_DATA_OFFSET        = IHDR_CHUNK_TYPE_OFFSET + IHDR_CHUNK_TYPE_SIZE;
-    public const int IHDR_DATA_SIZE          = 13;
-    public const int IHDR_CRC_START          = IHDR_DATA_OFFSET + IHDR_DATA_SIZE;
-    public const int IHDR_CRC_SIZE           = 4;
+    public const int ChunkLengthFieldSize = 4;
+    public const int SignatureLength        = 8;
+    public const int IHDRStart              = 8;
+    public const int IHDRChunkTypeOffset  = IHDRStart + ChunkLengthFieldSize;
+    public const int IHDRChunkTypeSize    = 4;
+    public const int IHDRDataOffset        = IHDRChunkTypeOffset + IHDRChunkTypeSize;
+    public const int IHDRDataSize          = 13;
+    public const int IHDRCrcStart          = IHDRDataOffset + IHDRDataSize;
+    public const int IHDRCrcSize           = 4;
 
     // ------------------------------------------------------------------------
 
@@ -66,15 +66,15 @@ public class PNGDecoder
     // ------------------------------------------------------------------------
     // Offsets into PNG data starting at IHDR_DATA_OFFSET
 
-    private const int WIDTH_OFFSET       = 0;
-    private const int WIDTH_SIZE         = sizeof( uint );
-    private const int HEIGHT_OFFSET      = WIDTH_OFFSET + WIDTH_SIZE;
-    private const int HEIGHT_SIZE        = sizeof( uint );
-    private const int BITDEPTH_OFFSET    = HEIGHT_OFFSET + HEIGHT_SIZE;
-    private const int COLORTYPE_OFFSET   = BITDEPTH_OFFSET + 1;
-    private const int COMPRESSION_OFFSET = COLORTYPE_OFFSET + 1;
-    private const int FILTER_OFFSET      = COMPRESSION_OFFSET + 1;
-    private const int INTERLACE_OFFSET   = FILTER_OFFSET + 1;
+    private const int WidthOffset       = 0;
+    private const int WidthSize         = sizeof( uint );
+    private const int HeightOffset      = WidthOffset + WidthSize;
+    private const int HeightSize        = sizeof( uint );
+    private const int BitdepthOffset    = HeightOffset + HeightSize;
+    private const int ColortypeOffset   = BitdepthOffset + 1;
+    private const int CompressionOffset = ColortypeOffset + 1;
+    private const int FilterOffset      = CompressionOffset + 1;
+    private const int InterlaceOffset   = FilterOffset + 1;
 
     // ========================================================================
 
@@ -241,7 +241,7 @@ public class PNGDecoder
         BytesPerPixel  = GetBytesPerPixel( colorType, bitDepth );
         PNGPixelFormat = PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
 
-        if ( PNGPixelFormat == LughFormat.INVALID )
+        if ( PNGPixelFormat == LughFormat.Invalid )
         {
             ImageUtils.RejectInvalidImage( ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
                                            $"BitDepth: {bitDepth}, ColorType: {colorType}." );
@@ -303,7 +303,7 @@ public class PNGDecoder
     /// </exception>
     private static void ParseIHDR( byte[] data, bool verbose = false )
     {
-        if ( data.Length != IHDR_DATA_SIZE )
+        if ( data.Length != IHDRDataSize )
         {
             Logger.Error( "IHDR chunk is an unexpected size" );
 
@@ -312,19 +312,19 @@ public class PNGDecoder
 
         if ( verbose )
         {
-            byte   bitDepth    = data[ BITDEPTH_OFFSET ];
-            byte   colorType   = data[ COLORTYPE_OFFSET ];
+            byte   bitDepth    = data[ BitdepthOffset ];
+            byte   colorType   = data[ ColortypeOffset ];
             string colorFormat = DetermineColorFormat( ColorType, bitDepth );
 
             Logger.Debug( "IHDR Data Breakdown:" );
             Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
             Logger.Debug( $"Height: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Skip( 4 ).Take( 4 ).ToArray() ) ) )} pixels" );
-            Logger.Debug( $"Bit Depth: {data[ BITDEPTH_OFFSET ]}" );
+            Logger.Debug( $"Bit Depth: {data[ BitdepthOffset ]}" );
             Logger.Debug( $"Color Type: {colorType}, {ColorTypeName( colorType )}" );
             Logger.Debug( $"Color Format: {colorFormat}" );
-            Logger.Debug( $"Compression Method: {data[ COMPRESSION_OFFSET ]}" );
-            Logger.Debug( $"Filter Method: {data[ FILTER_OFFSET ]}" );
-            Logger.Debug( $"Interlace Method: {data[ INTERLACE_OFFSET ]}" );
+            Logger.Debug( $"Compression Method: {data[ CompressionOffset ]}" );
+            Logger.Debug( $"Filter Method: {data[ FilterOffset ]}" );
+            Logger.Debug( $"Interlace Method: {data[ InterlaceOffset ]}" );
         }
     }
 
@@ -372,7 +372,7 @@ public class PNGDecoder
     private static int FindFirstIDATDataOffset( byte[] data )
     {
         // 1. Initial Position: Skip the PNG Signature (8 bytes)
-        int currentOffset = IHDR_START;
+        int currentOffset = IHDRStart;
 
         // 2. Parse the mandatory IHDR Chunk (25 bytes)
         //    We don't need the data, just skip the chunk.
@@ -545,9 +545,9 @@ public class PNGDecoder
     /// <returns></returns>
     public static bool IsPNG( byte[] data )
     {
-        var signature = new byte[ SIGNATURE_LENGTH ];
+        var signature = new byte[ SignatureLength ];
 
-        Array.Copy( data, 0, signature, 0, SIGNATURE_LENGTH );
+        Array.Copy( data, 0, signature, 0, SignatureLength );
 
         return signature.SequenceEqual( StandardPNGSignature );
     }
@@ -877,9 +877,9 @@ public class PNGDecoder
     /// </returns>
     private static PNGFormatStructs.PNGSignature ExtractSignature( byte[] pngData )
     {
-        var signature = new byte[ SIGNATURE_LENGTH ];
+        var signature = new byte[ SignatureLength ];
 
-        Array.Copy( pngData, 0, signature, 0, SIGNATURE_LENGTH );
+        Array.Copy( pngData, 0, signature, 0, SignatureLength );
 
         var signatureStruct = new PNGFormatStructs.PNGSignature
         {
@@ -895,7 +895,7 @@ public class PNGDecoder
                 StringBuilder sb  = new();
                 StringBuilder sb2 = new();
 
-                for ( var i = 0; i < SIGNATURE_LENGTH; i++ )
+                for ( var i = 0; i < SignatureLength; i++ )
                 {
                     sb.Append( $"[{PngSignature.Signature[ i ]:X2}]" );
                     sb2.Append( $"[{StandardPNGSignature[ i ]:X2}]" );
@@ -930,29 +930,29 @@ public class PNGDecoder
     /// </returns>
     private static PNGFormatStructs.IHDRChunk ExtractIHDR( byte[] pngData )
     {
-        var ihdr         = new byte[ CHUNK_LENGTH_FIELD_SIZE ];
-        var ihdrTypeData = new byte[ IHDR_CHUNK_TYPE_SIZE ];
-        var crc          = new byte[ IHDR_CRC_SIZE ];
-        var widthData    = new byte[ WIDTH_SIZE ];
-        var heightData   = new byte[ HEIGHT_SIZE ];
+        var ihdr         = new byte[ ChunkLengthFieldSize ];
+        var ihdrTypeData = new byte[ IHDRChunkTypeSize ];
+        var crc          = new byte[ IHDRCrcSize ];
+        var widthData    = new byte[ WidthSize ];
+        var heightData   = new byte[ HeightSize ];
 
-        Array.Copy( pngData, IHDR_START, ihdr, 0, CHUNK_LENGTH_FIELD_SIZE );
-        Array.Copy( pngData, IHDR_CHUNK_TYPE_OFFSET, ihdrTypeData, 0, IHDR_CHUNK_TYPE_SIZE );
-        Array.Copy( pngData, IHDR_CRC_START, crc, 0, IHDR_CRC_SIZE );
-        Array.Copy( pngData, IHDR_DATA_OFFSET + WIDTH_OFFSET, widthData, 0, WIDTH_SIZE );
-        Array.Copy( pngData, IHDR_DATA_OFFSET + HEIGHT_OFFSET, heightData, 0, HEIGHT_SIZE );
+        Array.Copy( pngData, IHDRStart, ihdr, 0, ChunkLengthFieldSize );
+        Array.Copy( pngData, IHDRChunkTypeOffset, ihdrTypeData, 0, IHDRChunkTypeSize );
+        Array.Copy( pngData, IHDRCrcStart, crc, 0, IHDRCrcSize );
+        Array.Copy( pngData, IHDRDataOffset + WidthOffset, widthData, 0, WidthSize );
+        Array.Copy( pngData, IHDRDataOffset + HeightOffset, heightData, 0, HeightSize );
 
         return new PNGFormatStructs.IHDRChunk
         {
             Ihdr        = ihdr,
             IhdrType    = ihdrTypeData,
-            Width       = ReadBigEndianUInt32( widthData, WIDTH_SIZE ),
-            Height      = ReadBigEndianUInt32( heightData, HEIGHT_SIZE ),
-            BitDepth    = pngData[ IHDR_DATA_OFFSET + BITDEPTH_OFFSET ],
-            ColorType   = pngData[ IHDR_DATA_OFFSET + COLORTYPE_OFFSET ],
-            Compression = pngData[ IHDR_DATA_OFFSET + COMPRESSION_OFFSET ],
-            Filter      = pngData[ IHDR_DATA_OFFSET + FILTER_OFFSET ],
-            Interlace   = pngData[ IHDR_DATA_OFFSET + INTERLACE_OFFSET ],
+            Width       = ReadBigEndianUInt32( widthData, WidthSize ),
+            Height      = ReadBigEndianUInt32( heightData, HeightSize ),
+            BitDepth    = pngData[ IHDRDataOffset + BitdepthOffset ],
+            ColorType   = pngData[ IHDRDataOffset + ColortypeOffset ],
+            Compression = pngData[ IHDRDataOffset + CompressionOffset ],
+            Filter      = pngData[ IHDRDataOffset + FilterOffset ],
+            Interlace   = pngData[ IHDRDataOffset + InterlaceOffset ],
             Crc         = crc
         };
     }
@@ -968,11 +968,11 @@ public class PNGDecoder
     /// </returns>
     private static PNGFormatStructs.IDATChunk ExtractIDAT( byte[] pngData )
     {
-        var tmp = new byte[ CHUNK_LENGTH_FIELD_SIZE ];
+        var tmp = new byte[ ChunkLengthFieldSize ];
 
-        Array.Copy( pngData, _idatStartPosition, tmp, 0, CHUNK_LENGTH_FIELD_SIZE );
+        Array.Copy( pngData, _idatStartPosition, tmp, 0, ChunkLengthFieldSize );
 
-        uint tmpChunkSize = ReadBigEndianUInt32( tmp, CHUNK_LENGTH_FIELD_SIZE );
+        uint tmpChunkSize = ReadBigEndianUInt32( tmp, ChunkLengthFieldSize );
 
         return new PNGFormatStructs.IDATChunk
         {
@@ -990,9 +990,9 @@ public class PNGDecoder
     /// <param name="pngData">The byte array containing the PNG file data.</param>">
     private static void OutputAnalysis( byte[] pngData )
     {
-        var idatData = new byte[ IHDR_DATA_SIZE ];
+        var idatData = new byte[ IHDRDataSize ];
 
-        Array.Copy( pngData, IHDR_DATA_OFFSET, idatData, 0, IHDR_DATA_SIZE );
+        Array.Copy( pngData, IHDRDataOffset, idatData, 0, IHDRDataSize );
 
         Logger.Debug( $"PNG Signature   : {BitConverter.ToString( PngSignature.Signature ).Replace( "-", " " )}" );
         Logger.Debug( "-----------------------------" );
@@ -1018,15 +1018,15 @@ public class PNGDecoder
 
         Logger.Debug( "-----------------------------" );
         Logger.Debug( "-----------------------------" );
-        Logger.Debug( $"CHUNK_LENGTH_FIELD_SIZE: {CHUNK_LENGTH_FIELD_SIZE}" );
-        Logger.Debug( $"SIGNATURE_LENGTH       : {SIGNATURE_LENGTH}" );
-        Logger.Debug( $"IHDR_START             : {IHDR_START}" );
-        Logger.Debug( $"IHDR_CHUNK_TYPE_OFFSET : {IHDR_CHUNK_TYPE_OFFSET}" );
-        Logger.Debug( $"IHDR_CHUNK_TYPE_SIZE   : {IHDR_CHUNK_TYPE_SIZE}" );
-        Logger.Debug( $"IHDR_DATA_OFFSET       : {IHDR_DATA_OFFSET}" );
-        Logger.Debug( $"IHDR_DATA_SIZE         : {IHDR_DATA_SIZE}" );
-        Logger.Debug( $"IHDR_CRC_START         : {IHDR_CRC_START}" );
-        Logger.Debug( $"IHDR_CRC_SIZE          : {IHDR_CRC_SIZE}" );
+        Logger.Debug( $"CHUNK_LENGTH_FIELD_SIZE: {ChunkLengthFieldSize}" );
+        Logger.Debug( $"SIGNATURE_LENGTH       : {SignatureLength}" );
+        Logger.Debug( $"IHDR_START             : {IHDRStart}" );
+        Logger.Debug( $"IHDR_CHUNK_TYPE_OFFSET : {IHDRChunkTypeOffset}" );
+        Logger.Debug( $"IHDR_CHUNK_TYPE_SIZE   : {IHDRChunkTypeSize}" );
+        Logger.Debug( $"IHDR_DATA_OFFSET       : {IHDRDataOffset}" );
+        Logger.Debug( $"IHDR_DATA_SIZE         : {IHDRDataSize}" );
+        Logger.Debug( $"IHDR_CRC_START         : {IHDRCrcStart}" );
+        Logger.Debug( $"IHDR_CRC_SIZE          : {IHDRCrcSize}" );
         Logger.Debug( $"IDAT_START             : {_idatStartPosition}" );
         Logger.Debug( $"IDAT_CHUNK_TYPE_OFFSET : {_idatChunkTypeOffset}" );
         Logger.Debug( $"IDAT_DATA_OFFSET       : {_idatDataOffset}" );

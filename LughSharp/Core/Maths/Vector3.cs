@@ -116,7 +116,7 @@ public class Vector3 : IVector< Vector3 >
         float u = MathUtils.Random();
         float v = MathUtils.Random();
 
-        float theta = MathUtils.PI2 * u;                     // azimuthal angle
+        float theta = MathUtils.Pi2 * u;                     // azimuthal angle
         var   phi   = ( float )Math.Acos( ( 2f * v ) - 1f ); // polar angle
 
         return SetFromSpherical( theta, phi );
@@ -224,7 +224,7 @@ public class Vector3 : IVector< Vector3 >
     }
 
     /// <inheritdoc />
-    public bool IsUnit( float margin = NumberUtils.FLOAT_TOLERANCE )
+    public bool IsUnit( float margin = NumberUtils.FloatTolerance )
     {
         return Math.Abs( Len2() - 1f ) < margin;
     }
@@ -255,7 +255,7 @@ public class Vector3 : IVector< Vector3 >
         return Len2( ( Y * other.Z ) - ( Z * other.Y ),
                      ( Z * other.X ) - ( X * other.Z ),
                      ( X * other.Y ) - ( Y * other.X ) )
-            <= NumberUtils.FLOAT_TOLERANCE;
+            <= NumberUtils.FloatTolerance;
     }
 
     /// <inheritdoc />
@@ -380,7 +380,7 @@ public class Vector3 : IVector< Vector3 >
     }
 
     /// <inheritdoc />
-    public bool EpsilonEquals( Vector3? other, float epsilon = NumberUtils.FLOAT_TOLERANCE )
+    public bool EpsilonEquals( Vector3? other, float epsilon = NumberUtils.FloatTolerance )
     {
         if ( other is null )
         {
@@ -568,18 +568,18 @@ public class Vector3 : IVector< Vector3 >
         float[] lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M01_4 ] ) + ( Z * lMat[ Matrix4.M02_8 ] )
-                 + lMat[ Matrix4.M03_12 ],
+                   ( X * lMat[ Matrix4.M000 ] ) + ( Y * lMat[ Matrix4.M014 ] ) + ( Z * lMat[ Matrix4.M028 ] )
+                 + lMat[ Matrix4.M0312 ],
                    ( X
-                   * lMat[ Matrix4.M10_1 ] )
-                 + ( Y * lMat[ Matrix4.M11_5 ] )
-                 + ( Z * lMat[ Matrix4.M12_9 ] )
-                 + lMat[ Matrix4.M13_13 ],
-                   ( X * lMat[ Matrix4.M20_2 ] )
+                   * lMat[ Matrix4.M101 ] )
+                 + ( Y * lMat[ Matrix4.M115 ] )
+                 + ( Z * lMat[ Matrix4.M129 ] )
+                 + lMat[ Matrix4.M1313 ],
+                   ( X * lMat[ Matrix4.M202 ] )
                  + ( Y
-                   * lMat[ Matrix4.M21_6 ] )
-                 + ( Z * lMat[ Matrix4.M22_10 ] )
-                 + lMat[ Matrix4.M23_14 ]
+                   * lMat[ Matrix4.M216 ] )
+                 + ( Z * lMat[ Matrix4.M2210 ] )
+                 + lMat[ Matrix4.M2314 ]
                   );
     }
 
@@ -588,18 +588,18 @@ public class Vector3 : IVector< Vector3 >
         float[] lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M10_1 ] ) + ( Z * lMat[ Matrix4.M20_2 ] )
-                 + lMat[ Matrix4.M30_3 ],
+                   ( X * lMat[ Matrix4.M000 ] ) + ( Y * lMat[ Matrix4.M101 ] ) + ( Z * lMat[ Matrix4.M202 ] )
+                 + lMat[ Matrix4.M303 ],
                    ( X
-                   * lMat[ Matrix4.M01_4 ] )
-                 + ( Y * lMat[ Matrix4.M11_5 ] )
-                 + ( Z * lMat[ Matrix4.M21_6 ] )
-                 + lMat[ Matrix4.M31_7 ],
-                   ( X * lMat[ Matrix4.M02_8 ] )
+                   * lMat[ Matrix4.M014 ] )
+                 + ( Y * lMat[ Matrix4.M115 ] )
+                 + ( Z * lMat[ Matrix4.M216 ] )
+                 + lMat[ Matrix4.M317 ],
+                   ( X * lMat[ Matrix4.M028 ] )
                  + ( Y
-                   * lMat[ Matrix4.M12_9 ] )
-                 + ( Z * lMat[ Matrix4.M22_10 ] )
-                 + lMat[ Matrix4.M32_11 ]
+                   * lMat[ Matrix4.M129 ] )
+                 + ( Z * lMat[ Matrix4.M2210 ] )
+                 + lMat[ Matrix4.M3211 ]
                   );
     }
 
@@ -639,21 +639,21 @@ public class Vector3 : IVector< Vector3 >
     public Vector3 Prj( Matrix4 matrix )
     {
         float[] lMat = matrix.Val;
-        float lW = 1f / ( ( X * lMat[ Matrix4.M30_3 ] ) + ( Y * lMat[ Matrix4.M31_7 ] ) + ( Z * lMat[ Matrix4.M32_11 ] )
+        float lW = 1f / ( ( X * lMat[ Matrix4.M303 ] ) + ( Y * lMat[ Matrix4.M317 ] ) + ( Z * lMat[ Matrix4.M3211 ] )
                          +
-                          lMat[ Matrix4.M33_15 ] );
+                          lMat[ Matrix4.M3315 ] );
 
         return Set(
-                   ( ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M01_4 ] ) + ( Z * lMat[ Matrix4.M02_8 ] ) +
-                     lMat[ Matrix4.M03_12 ] ) * lW,
+                   ( ( X * lMat[ Matrix4.M000 ] ) + ( Y * lMat[ Matrix4.M014 ] ) + ( Z * lMat[ Matrix4.M028 ] ) +
+                     lMat[ Matrix4.M0312 ] ) * lW,
                    ( ( X
-                     * lMat[ Matrix4.M10_1 ] )
-                   + ( Y * lMat[ Matrix4.M11_5 ] )
-                   + ( Z * lMat[ Matrix4.M12_9 ] )
-                   + lMat[ Matrix4.M13_13 ] )
+                     * lMat[ Matrix4.M101 ] )
+                   + ( Y * lMat[ Matrix4.M115 ] )
+                   + ( Z * lMat[ Matrix4.M129 ] )
+                   + lMat[ Matrix4.M1313 ] )
                  * lW,
-                   ( ( X * lMat[ Matrix4.M20_2 ] ) + ( Y * lMat[ Matrix4.M21_6 ] ) + ( Z * lMat[ Matrix4.M22_10 ] ) +
-                     lMat[ Matrix4.M23_14 ] ) * lW
+                   ( ( X * lMat[ Matrix4.M202 ] ) + ( Y * lMat[ Matrix4.M216 ] ) + ( Z * lMat[ Matrix4.M2210 ] ) +
+                     lMat[ Matrix4.M2314 ] ) * lW
                   );
     }
 
@@ -662,12 +662,12 @@ public class Vector3 : IVector< Vector3 >
         float[] lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M01_4 ] ) + ( Z * lMat[ Matrix4.M02_8 ] ),
-                   ( X * lMat[ Matrix4.M10_1 ] )
+                   ( X * lMat[ Matrix4.M000 ] ) + ( Y * lMat[ Matrix4.M014 ] ) + ( Z * lMat[ Matrix4.M028 ] ),
+                   ( X * lMat[ Matrix4.M101 ] )
                  + ( Y
-                   * lMat[ Matrix4.M11_5 ] )
-                 + ( Z * lMat[ Matrix4.M12_9 ] ),
-                   ( X * lMat[ Matrix4.M20_2 ] ) + ( Y * lMat[ Matrix4.M21_6 ] ) + ( Z * lMat[ Matrix4.M22_10 ] )
+                   * lMat[ Matrix4.M115 ] )
+                 + ( Z * lMat[ Matrix4.M129 ] ),
+                   ( X * lMat[ Matrix4.M202 ] ) + ( Y * lMat[ Matrix4.M216 ] ) + ( Z * lMat[ Matrix4.M2210 ] )
                   );
     }
 
@@ -676,12 +676,12 @@ public class Vector3 : IVector< Vector3 >
         float[] lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M10_1 ] ) + ( Z * lMat[ Matrix4.M20_2 ] ),
-                   ( X * lMat[ Matrix4.M01_4 ] )
+                   ( X * lMat[ Matrix4.M000 ] ) + ( Y * lMat[ Matrix4.M101 ] ) + ( Z * lMat[ Matrix4.M202 ] ),
+                   ( X * lMat[ Matrix4.M014 ] )
                  + ( Y
-                   * lMat[ Matrix4.M11_5 ] )
-                 + ( Z * lMat[ Matrix4.M21_6 ] ),
-                   ( X * lMat[ Matrix4.M02_8 ] ) + ( Y * lMat[ Matrix4.M12_9 ] ) + ( Z * lMat[ Matrix4.M22_10 ] )
+                   * lMat[ Matrix4.M115 ] )
+                 + ( Z * lMat[ Matrix4.M216 ] ),
+                   ( X * lMat[ Matrix4.M028 ] ) + ( Y * lMat[ Matrix4.M129 ] ) + ( Z * lMat[ Matrix4.M2210 ] )
                   );
     }
 
@@ -689,17 +689,17 @@ public class Vector3 : IVector< Vector3 >
     {
         float[] lMat = matrix.Val;
 
-        X -= lMat[ Matrix4.M03_12 ];
-        Y -= lMat[ Matrix4.M03_12 ];
-        Z -= lMat[ Matrix4.M03_12 ];
+        X -= lMat[ Matrix4.M0312 ];
+        Y -= lMat[ Matrix4.M0312 ];
+        Z -= lMat[ Matrix4.M0312 ];
 
         return Set(
-                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M10_1 ] ) + ( Z * lMat[ Matrix4.M20_2 ] ),
-                   ( X * lMat[ Matrix4.M01_4 ] )
+                   ( X * lMat[ Matrix4.M000 ] ) + ( Y * lMat[ Matrix4.M101 ] ) + ( Z * lMat[ Matrix4.M202 ] ),
+                   ( X * lMat[ Matrix4.M014 ] )
                  + ( Y
-                   * lMat[ Matrix4.M11_5 ] )
-                 + ( Z * lMat[ Matrix4.M21_6 ] ),
-                   ( X * lMat[ Matrix4.M02_8 ] ) + ( Y * lMat[ Matrix4.M12_9 ] ) + ( Z * lMat[ Matrix4.M22_10 ] )
+                   * lMat[ Matrix4.M115 ] )
+                 + ( Z * lMat[ Matrix4.M216 ] ),
+                   ( X * lMat[ Matrix4.M028 ] ) + ( Y * lMat[ Matrix4.M129 ] ) + ( Z * lMat[ Matrix4.M2210 ] )
                   );
     }
 
@@ -758,11 +758,11 @@ public class Vector3 : IVector< Vector3 >
     /// <returns></returns>
     public override int GetHashCode()
     {
-        const int PRIME = 31;
+        const int Prime = 31;
 
-        int result = PRIME + NumberUtils.FloatToIntBits( 10f );
-        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( 15f );
-        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( 20f );
+        int result = Prime + NumberUtils.FloatToIntBits( 10f );
+        result = ( Prime * result ) + NumberUtils.FloatToIntBits( 15f );
+        result = ( Prime * result ) + NumberUtils.FloatToIntBits( 20f );
 
         return result;
     }
@@ -810,7 +810,7 @@ public class Vector3 : IVector< Vector3 >
     /// <param name="z"></param>
     /// <param name="epsilon"></param>
     /// <returns></returns>
-    public bool EpsilonEquals( float x, float y, float z, float epsilon = NumberUtils.FLOAT_TOLERANCE )
+    public bool EpsilonEquals( float x, float y, float z, float epsilon = NumberUtils.FloatTolerance )
     {
         if ( Math.Abs( x - X ) > epsilon )
         {

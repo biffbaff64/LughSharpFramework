@@ -234,7 +234,7 @@ public class ImageProcessor
         }
 
         // Scale image.
-        if ( Math.Abs( Scale - 1f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( Scale - 1f ) > NumberUtils.FloatTolerance )
         {
             width  = ( int )Math.Max( 1, Math.Round( width * Scale ) );
             height = ( int )Math.Max( 1, Math.Round( height * Scale ) );
@@ -556,7 +556,7 @@ public class ImageProcessor
             endY = image.Height - 2;
         }
 
-        if ( Math.Abs( Scale - 1.0f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( Scale - 1.0f ) > NumberUtils.FloatTolerance )
         {
             startX = ( int )Math.Round( startX * Scale );
             endX   = ( int )Math.Round( endX * Scale );
@@ -643,7 +643,7 @@ public class ImageProcessor
                 break;
         }
 
-        if ( Math.Abs( Scale - 1.0f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( Scale - 1.0f ) > NumberUtils.FloatTolerance )
         {
             startX = ( int )Math.Round( startX * Scale );
             endX   = ( int )Math.Round( endX * Scale );
@@ -762,16 +762,16 @@ public class ImageProcessor
 
             try
             {
-                const int BYTES_PER_PIXEL = 4;
+                const int BytesPerPixel = 4;
                 // Buffer sized to hold the largest row, using Stride for safety, but width*4 is often sufficient.
                 // Let's use a standard array based on width for clear intent:
-                var pixels = new byte[ width * BYTES_PER_PIXEL ];
+                var pixels = new byte[ width * BytesPerPixel ];
 
                 for ( var y = 0; y < height; y++ )
                 {
                     IntPtr row = bitmapData.Scan0 + ( y * bitmapData.Stride );
                     // Copy the row data from the unmanaged pointer into the managed byte array
-                    Marshal.Copy( row, pixels, 0, width * BYTES_PER_PIXEL );
+                    Marshal.Copy( row, pixels, 0, width * BytesPerPixel );
 
                     // Hash the entire row block at once, efficiently.
                     sha1.TransformBlock( pixels, 0, pixels.Length, pixels, 0 );

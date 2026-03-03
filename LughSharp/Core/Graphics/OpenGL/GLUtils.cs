@@ -66,18 +66,18 @@ public static class GLUtils
     {
         return errorCode switch
                {
-                   IGL.GL_INVALID_ENUM                  => "Invalid Enum",
-                   IGL.GL_INVALID_OPERATION             => "Invalid Operation",
-                   IGL.GL_INVALID_VALUE                 => "Invalid Value",
-                   IGL.GL_OUT_OF_MEMORY                 => "Out of memory",
-                   IGL.GL_INVALID_FRAMEBUFFER_OPERATION => "Invalid Framebuffer operation",
+                   IGL.GLInvalidEnum                  => "Invalid Enum",
+                   IGL.GLInvalidOperation             => "Invalid Operation",
+                   IGL.GLInvalidValue                 => "Invalid Value",
+                   IGL.GLOutOfMemory                 => "Out of memory",
+                   IGL.GLInvalidFramebufferOperation => "Invalid Framebuffer operation",
                    IGL.GL_STACK_OVERFLOW                => "Stack Overflow",
                    IGL.GL_STACK_UNDERFLOW               => "Stack Underflow",
                    IGL.GL_CONTEXT_LOST                  => "Context Lost",
 
                    // ----------------------------------
 
-                   IGL.GL_NO_ERROR => "No Error",
+                   IGL.GLNoError => "No Error",
 
                    // ----------------------------------
 

@@ -44,7 +44,7 @@ public class ParticleEffect : IDisposable
 
     // ========================================================================
 
-    private const int DEFAULT_EMITTERS_SIZE = 8;
+    private const int DefaultEmittersSize = 8;
 
     private readonly List< ParticleEmitter > _emitters;
     private          BoundingBox?            _bounds;
@@ -54,7 +54,7 @@ public class ParticleEffect : IDisposable
 
     public ParticleEffect()
     {
-        _emitters = new List< ParticleEmitter >( DEFAULT_EMITTERS_SIZE );
+        _emitters = new List< ParticleEmitter >( DefaultEmittersSize );
     }
 
     public ParticleEffect( ParticleEffect effect )

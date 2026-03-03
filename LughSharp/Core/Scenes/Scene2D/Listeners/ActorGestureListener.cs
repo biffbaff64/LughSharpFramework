@@ -36,13 +36,18 @@ namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 [PublicAPI]
 public class ActorGestureListener : IEventListener
 {
-    private const float DEFAULT_HALF_TAP_SQUARE_SIZE = 20;
-    private const float DEFAULT_TAP_COUNT_INTERVAL   = 0.4f;
-    private const float DEFAULT_LONG_PRESS_DURATION  = 1.1f;
-    private const float DEFAULT_MAX_FLING_DELAY      = int.MaxValue;
+    public ActorGestureDetector Detector        { get; set; }
+    public Actor?               TouchDownTarget { get; set; }
 
-    private static readonly Vector2 TmpCoords  = new();
-    private static readonly Vector2 TmpCoords2 = new();
+    // ========================================================================
+    
+    private const float DefaultHalfTapSquareSize = 20;
+    private const float DefaultTapCountInterval   = 0.4f;
+    private const float DefaultLongPressDuration  = 1.1f;
+    private const float DefaultMaxFlingDelay      = int.MaxValue;
+
+    private static readonly Vector2 _tmpCoords  = new();
+    private static readonly Vector2 _tmpCoords2 = new();
 
     private Actor?      _actor;
     private InputEvent? _inputEvent;
@@ -54,7 +59,7 @@ public class ActorGestureListener : IEventListener
     /// </summary>
     /// <param name="halfTapSquareSize">
     /// Half width in pixels of the square around an initial touch event, see
-    /// <see cref="ActorGestureDetector.Tap(float, float, int, int)"/>.
+    /// <see cref="ActorGestureDetector.OnTap(float, float, int, int)"/>.
     /// </param>
     /// <param name="tapCountInterval">
     /// Time in seconds that must pass for two touch down/up sequences to be detected
@@ -62,16 +67,16 @@ public class ActorGestureListener : IEventListener
     /// </param>
     /// <param name="longPressDuration">
     /// Time in seconds that must pass for the detector to fire a
-    /// <see cref="ActorGestureDetector.LongPress(float, float)"/> event.
+    /// <see cref="ActorGestureDetector.OnLongPress(float, float)"/> event.
     /// </param>
     /// <param name="maxFlingDelay">
     /// No fling event is fired when the time in seconds the finger was dragged is larger
-    /// than this, see <see cref="ActorGestureDetector.Fling(float, float, int)"/>.
+    /// than this, see <see cref="ActorGestureDetector.OnFling(float, float, int)"/>.
     /// </param>
-    public ActorGestureListener( float halfTapSquareSize = DEFAULT_HALF_TAP_SQUARE_SIZE,
-                                 float tapCountInterval = DEFAULT_TAP_COUNT_INTERVAL,
-                                 float longPressDuration = DEFAULT_LONG_PRESS_DURATION,
-                                 float maxFlingDelay = DEFAULT_MAX_FLING_DELAY )
+    public ActorGestureListener( float halfTapSquareSize = DefaultHalfTapSquareSize,
+                                 float tapCountInterval = DefaultTapCountInterval,
+                                 float longPressDuration = DefaultLongPressDuration,
+                                 float maxFlingDelay = DefaultMaxFlingDelay )
     {
         Detector = new ActorGestureDetector( halfTapSquareSize,
                                              tapCountInterval,
@@ -79,9 +84,6 @@ public class ActorGestureListener : IEventListener
                                              maxFlingDelay,
                                              this );
     }
-
-    public ActorGestureDetector Detector        { get; set; }
-    public Actor?               TouchDownTarget { get; set; }
 
     /// <summary>
     /// </summary>
@@ -101,10 +103,10 @@ public class ActorGestureListener : IEventListener
                 _actor          = ev.ListenerActor;
                 TouchDownTarget = ev.TargetActor;
 
-                Detector.TouchDown( ev.StageX, ev.StageY, ev.Pointer, ev.Button );
-                _actor?.StageToLocalCoordinates( TmpCoords.Set( ev.StageX, ev.StageY ) );
+                Detector.OnTouchDown( ev.StageX, ev.StageY, ev.Pointer, ev.Button );
+                _actor?.StageToLocalCoordinates( _tmpCoords.Set( ev.StageX, ev.StageY ) );
 
-                TouchDown( ev, TmpCoords.X, TmpCoords.Y, ev.Pointer, ev.Button );
+                OnTouchDown( ev, _tmpCoords.X, _tmpCoords.Y, ev.Pointer, ev.Button );
 
                 if ( ev.TouchFocus )
                 {
@@ -130,9 +132,9 @@ public class ActorGestureListener : IEventListener
                 _inputEvent = ev;
                 _actor      = ev.ListenerActor;
 
-                Detector.TouchUp( ev.StageX, ev.StageY, ev.Pointer, ev.Button );
-                _actor?.StageToLocalCoordinates( TmpCoords.Set( ev.StageX, ev.StageY ) );
-                TouchUp( ev, TmpCoords.X, TmpCoords.Y, ev.Pointer, ev.Button );
+                Detector.OnTouchUp( ev.StageX, ev.StageY, ev.Pointer, ev.Button );
+                _actor?.StageToLocalCoordinates( _tmpCoords.Set( ev.StageX, ev.StageY ) );
+                OnTouchUp( ev, _tmpCoords.X, _tmpCoords.Y, ev.Pointer, ev.Button );
 
                 return true;
             }
@@ -141,7 +143,7 @@ public class ActorGestureListener : IEventListener
             {
                 _inputEvent = ev;
                 _actor      = ev.ListenerActor;
-                Detector.TouchDragged( ev.StageX, ev.StageY, ev.Pointer );
+                Detector.OnTouchDragged( ev.StageX, ev.StageY, ev.Pointer );
 
                 return true;
             }
@@ -150,15 +152,15 @@ public class ActorGestureListener : IEventListener
         return false;
     }
 
-    public virtual void TouchDown( InputEvent ev, float x, float y, int pointer, int button )
+    public virtual void OnTouchDown( InputEvent ev, float x, float y, int pointer, int button )
     {
     }
 
-    public virtual void TouchUp( InputEvent ev, float x, float y, int pointer, int button )
+    public virtual void OnTouchUp( InputEvent ev, float x, float y, int pointer, int button )
     {
     }
 
-    public virtual void Tap( InputEvent ev, float x, float y, int count, int button )
+    public virtual void OnTap( InputEvent ev, float x, float y, int count, int button )
     {
     }
 
@@ -229,59 +231,59 @@ public class ActorGestureListener : IEventListener
             _parent = parent;
         }
 
-        public bool Tap( float stageX, float stageY, int count, int button )
+        public bool OnTap( float stageX, float stageY, int count, int button )
         {
-            _parent._actor?.StageToLocalCoordinates( TmpCoords.Set( stageX, stageY ) );
+            _parent._actor?.StageToLocalCoordinates( _tmpCoords.Set( stageX, stageY ) );
 
-            _parent.Tap( _parent._inputEvent!, TmpCoords.X, TmpCoords.Y, count, button );
+            _parent.OnTap( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, count, button );
 
             return true;
         }
 
-        public bool LongPress( float stageX, float stageY )
+        public bool OnLongPress( float stageX, float stageY )
         {
-            _parent._actor?.StageToLocalCoordinates( TmpCoords.Set( stageX, stageY ) );
+            _parent._actor?.StageToLocalCoordinates( _tmpCoords.Set( stageX, stageY ) );
 
-            return _parent.LongPress( _parent._actor!, TmpCoords.X, TmpCoords.Y );
+            return _parent.LongPress( _parent._actor!, _tmpCoords.X, _tmpCoords.Y );
         }
 
-        public bool Fling( float velocityX, float velocityY, int button )
+        public bool OnFling( float velocityX, float velocityY, int button )
         {
-            StageToLocalAmount( TmpCoords.Set( velocityX, velocityY ) );
-            _parent.Fling( _parent._inputEvent!, TmpCoords.X, TmpCoords.Y, button );
+            StageToLocalAmount( _tmpCoords.Set( velocityX, velocityY ) );
+            _parent.Fling( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, button );
 
             return true;
         }
 
-        public bool Pan( float stageX, float stageY, float deltaX, float deltaY )
+        public bool OnPan( float stageX, float stageY, float deltaX, float deltaY )
         {
-            StageToLocalAmount( TmpCoords.Set( deltaX, deltaY ) );
+            StageToLocalAmount( _tmpCoords.Set( deltaX, deltaY ) );
 
-            deltaX = TmpCoords.X;
-            deltaY = TmpCoords.Y;
+            deltaX = _tmpCoords.X;
+            deltaY = _tmpCoords.Y;
 
-            _parent._actor!.StageToLocalCoordinates( TmpCoords.Set( stageX, stageY ) );
-            _parent.Pan( _parent._inputEvent!, TmpCoords.X, TmpCoords.Y, deltaX, deltaY );
+            _parent._actor!.StageToLocalCoordinates( _tmpCoords.Set( stageX, stageY ) );
+            _parent.Pan( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, deltaX, deltaY );
 
             return true;
         }
 
         public bool PanStop( float stageX, float stageY, int pointer, int button )
         {
-            _parent._actor!.StageToLocalCoordinates( TmpCoords.Set( stageX, stageY ) );
-            _parent.PanStop( _parent._inputEvent!, TmpCoords.X, TmpCoords.Y, pointer, button );
+            _parent._actor!.StageToLocalCoordinates( _tmpCoords.Set( stageX, stageY ) );
+            _parent.PanStop( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, pointer, button );
 
             return true;
         }
 
-        public bool Zoom( float initialDistance, float distance )
+        public bool OnZoom( float initialDistance, float distance )
         {
             _parent.Zoom( _parent._inputEvent!, initialDistance, distance );
 
             return true;
         }
 
-        public bool Pinch( Vector2 stageInitialPointer1,
+        public bool OnPinch( Vector2 stageInitialPointer1,
                            Vector2 stageInitialPointer2,
                            Vector2 stagePointer1,
                            Vector2 stagePointer2 )
@@ -299,7 +301,7 @@ public class ActorGestureListener : IEventListener
         private void StageToLocalAmount( Vector2 amount )
         {
             _parent._actor!.StageToLocalCoordinates( amount );
-            amount.Sub( _parent._actor.StageToLocalCoordinates( TmpCoords2.Set( 0, 0 ) ) );
+            amount.Sub( _parent._actor.StageToLocalCoordinates( _tmpCoords2.Set( 0, 0 ) ) );
         }
     }
 }

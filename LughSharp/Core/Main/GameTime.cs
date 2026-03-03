@@ -26,6 +26,9 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Main;
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public class GameTime
 {
@@ -59,7 +62,8 @@ public class GameTime
 
     /// <summary>
     /// Provides game timing information, including the total elapsed game time,
-    /// time elapsed since the last update, and whether the game performance is slower than expected.
+    /// time elapsed since the last update, and whether the game performance is slower
+    /// than expected.
     /// </summary>
     public GameTime( TimeSpan totalRealTime, TimeSpan elapsedRealTime, bool isRunningSlowly )
     {

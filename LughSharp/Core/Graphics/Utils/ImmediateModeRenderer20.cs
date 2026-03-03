@@ -260,27 +260,27 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     {
         var attribs = new List< VertexAttribute >
         {
-            new( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS, "a_position" )
+            new( ( int )VertexConstants.Usage.Position, VertexConstants.PositionComponents, "a_position" )
         };
 
         if ( hasColor )
         {
             attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
-                                              VertexConstants.COLOR_COMPONENTS,
-                                              ShaderConstants.A_COLOR ) );
+                                              VertexConstants.ColorComponents,
+                                              ShaderConstants.AColor ) );
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
             attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
-                                              VertexConstants.TEXCOORD_COMPONENTS,
+                                              VertexConstants.TexcoordComponents,
                                               "a_texCoord" + $"{i}" ) );
         }
 
         if ( hasNormals )
         {
             attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.Normal,
-                                              VertexConstants.NORMAL_COMPONENTS,
+                                              VertexConstants.NormalComponents,
                                               "a_normal" ) );
         }
 
@@ -303,7 +303,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     private static string CreateVertexShader( bool hasNormals, bool hasColors, int numTexCoords )
     {
         string shader = "in vec4 " + "a_position" + ";\n"
-                      + ( hasColors ? "in vec4 " + ShaderConstants.A_COLOR + ";\n" : "" )
+                      + ( hasColors ? "in vec4 " + ShaderConstants.AColor + ";\n" : "" )
                       + ( hasNormals ? "in vec3 " + "a_normal" + ";\n" : "" );
 
         for ( var i = 0; i < numTexCoords; i++ )
@@ -323,7 +323,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
 
         if ( hasColors )
         {
-            shader += "   v_col = " + ShaderConstants.A_COLOR + ";\n"
+            shader += "   v_col = " + ShaderConstants.AColor + ";\n"
                     + "   v_col.a *= 255.0 / 254.0;\n";
         }
 

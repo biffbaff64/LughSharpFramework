@@ -49,7 +49,7 @@ namespace LughSharp.Core.Maps.Tiled.Renderers;
 [PublicAPI]
 public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 {
-    private const    int       DEFAULT_CACHE_SIZE = 2000;
+    private const    int       DefaultCacheSize = 2000;
     private static   float     _tolerance         = 0.00001f;
     protected static int       NumVertices        = 20;
     protected        bool      Blending;
@@ -78,7 +78,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     /// <param name="cacheSize">
     /// The maximum number of tiles that can be cached. The default size is 2000.
     /// </param>
-    public OrthoCachedTiledMapRenderer( TiledMap map, float unitScale, int cacheSize = DEFAULT_CACHE_SIZE )
+    public OrthoCachedTiledMapRenderer( TiledMap map, float unitScale, int cacheSize = DefaultCacheSize )
     {
         Map         = map;
         UnitScale   = unitScale;
@@ -184,7 +184,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         if ( Blending )
         {
             Engine.GL.Enable( EnableCap.Blend );
-            Engine.GL.BlendFunc( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            Engine.GL.BlendFunc( IGL.GLSrcAlpha, IGL.GLOneMinusSrcAlpha );
         }
 
         SpriteCache.Begin();
@@ -246,7 +246,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         if ( Blending )
         {
             Engine.GL.Enable( EnableCap.Blend );
-            Engine.GL.BlendFunc( IGL.GL_SRC_ALPHA, IGL.GL_ONE_MINUS_SRC_ALPHA );
+            Engine.GL.BlendFunc( IGL.GLSrcAlpha, IGL.GLOneMinusSrcAlpha );
         }
 
         SpriteCache?.Begin();
@@ -403,7 +403,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
                 {
                     switch ( rotations )
                     {
-                        case TiledMapTileLayer.Cell.ROTATE90:
+                        case TiledMapTileLayer.Cell.Rotate90:
                         {
                             float tempV = Vertices[ IBatch.V1 ];
                             Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
@@ -420,7 +420,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
                             break;
                         }
 
-                        case TiledMapTileLayer.Cell.ROTATE180:
+                        case TiledMapTileLayer.Cell.Rotate180:
                         {
                             float tempU = Vertices[ IBatch.U1 ];
                             Vertices[ IBatch.U1 ] = Vertices[ IBatch.U3 ];
@@ -439,7 +439,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
                             break;
                         }
 
-                        case TiledMapTileLayer.Cell.ROTATE270:
+                        case TiledMapTileLayer.Cell.Rotate270:
                         {
                             float tempV = Vertices[ IBatch.V1 ];
                             Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];

@@ -335,7 +335,7 @@ public class Dialog : Window
 
             AddAction( Scene2D.Actions.Actions.Sequence( action,
                                                          Scene2D.Actions.Actions.RemoveListener( _ignoreTouchDown,
-                                                             true ),
+                                                                  true ),
                                                          Scene2D.Actions.Actions.RemoveActor() ) );
         }
         else
@@ -457,7 +457,7 @@ public class Dialog : Window
 
     public class IgnoreTouchDown : InputListener
     {
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             ev?.Cancel();
 

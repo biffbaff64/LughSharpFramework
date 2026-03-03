@@ -37,14 +37,14 @@ public unsafe class OpenGLTest : ILughTest
 {
     private static readonly GLBindings _gl = new();
 
-    private const string FRAGMENT_SHADER_SOURCE =
+    private const string FragmentShaderSource =
         "#version 450 core\n" +
         "out vec4 fragColor;\n" +
         "void main() {\n" +
         "    fragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
         "}\n";
 
-    private const string VERTEX_SHADER_SOURCE =
+    private const string VertexShaderSource =
         "#version 450 core\n" +
         "layout (location = 0) in vec3 aPosition;\n" +
         "void main() {\n" +
@@ -69,7 +69,7 @@ public unsafe class OpenGLTest : ILughTest
     [SetUp]
     public void Setup()
     {
-        _shaderProgram = CreateProgram( VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE );
+        _shaderProgram = CreateProgram( VertexShaderSource, FragmentShaderSource );
 
         _vao = _gl.GenVertexArray();
         _gl.BindVertexArray( _vao );
@@ -85,7 +85,7 @@ public unsafe class OpenGLTest : ILughTest
                             BufferUsageHint.StaticDraw );
         }
 
-        _gl.VertexAttribPointer( 0, 3, IGL.GL_FLOAT, false, 3 * sizeof( float ), 0u );
+        _gl.VertexAttribPointer( 0, 3, IGL.GLFloat, false, 3 * sizeof( float ), 0u );
         _gl.EnableVertexAttribArray( 0 );
 
         _ibo = _gl.GenBuffer();
@@ -121,16 +121,16 @@ public unsafe class OpenGLTest : ILughTest
         _gl.BindBuffer( BufferTarget.ElementArrayBuffer, _ibo );
 
 //        var offsetInBytes = 0; //offset * sizeof( short );
-        _gl.DrawElements( IGL.GL_TRIANGLES, _indices.Length, IGL.GL_UNSIGNED_SHORT, 0 );
+        _gl.DrawElements( IGL.GLTriangles, _indices.Length, IGL.GLUnsignedShort, 0 );
     }
 
     private uint CreateProgram( string vertexShaderSource, string fragmentShaderSource )
     {
-        uint vertexShader = _gl.CreateShader( IGL.GL_VERTEX_SHADER );
+        uint vertexShader = _gl.CreateShader( IGL.GLVertexShader );
         _gl.ShaderSource( ( int )vertexShader, vertexShaderSource );
         _gl.CompileShader( ( int )vertexShader );
 
-        uint fragmentShader = _gl.CreateShader( IGL.GL_FRAGMENT_SHADER );
+        uint fragmentShader = _gl.CreateShader( IGL.GLFragmentShader );
         _gl.ShaderSource( ( int )fragmentShader, fragmentShaderSource );
         _gl.CompileShader( ( int )fragmentShader );
 

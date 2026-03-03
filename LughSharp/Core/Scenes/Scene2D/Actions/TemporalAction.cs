@@ -35,6 +35,18 @@ namespace LughSharp.Core.Scenes.Scene2D.Actions;
 [PublicAPI]
 public abstract class TemporalAction : Action
 {
+    public bool            Reverse       { get; set; }
+    public float           Duration      { get; set; }
+    public float           Time          { get; set; }
+    public IInterpolation? Interpolation { get; set; }
+
+    /// <summary>
+    /// Returns true after <see cref="Act(float)"/> has been called where time >= duration.
+    /// </summary>
+    public bool IsComplete { get; private set; }
+
+    // ========================================================================
+    
     private bool _began;
 
     // ========================================================================
@@ -53,16 +65,6 @@ public abstract class TemporalAction : Action
         Duration      = duration;
         Interpolation = interpolation;
     }
-
-    public bool            Reverse       { get; set; }
-    public float           Duration      { get; set; }
-    public float           Time          { get; set; }
-    public IInterpolation? Interpolation { get; set; }
-
-    /// <summary>
-    /// Returns true after <see cref="Act(float)"/> has been called where time >= duration.
-    /// </summary>
-    public bool IsComplete { get; private set; }
 
     /// <inheritdoc />
     public override bool Act( float delta )

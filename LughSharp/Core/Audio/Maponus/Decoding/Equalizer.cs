@@ -40,13 +40,13 @@ public class Equalizer
     /// Equalizer setting to denote that a given band will not be
     /// present in the output signal.
     /// </summary>
-    public const float BAND_NOT_PRESENT = float.NegativeInfinity;
+    public const float BandNotPresent = float.NegativeInfinity;
 
-    private const int BANDS = 32;
+    private const int Bands = 32;
 
     public static readonly Equalizer PassThruEq = new();
 
-    private readonly float[] _settings = new float[ BANDS ];
+    private readonly float[] _settings = new float[ Bands ];
 
     // ========================================================================
 
@@ -83,7 +83,7 @@ public class Equalizer
         {
             Reset();
 
-            int max = value.Length > BANDS ? BANDS : value.Length;
+            int max = value.Length > Bands ? Bands : value.Length;
 
             for ( var i = 0; i < max; i++ )
             {
@@ -119,7 +119,7 @@ public class Equalizer
         {
             Reset();
 
-            for ( var i = 0; i < BANDS; i++ )
+            for ( var i = 0; i < Bands; i++ )
             {
                 _settings[ i ] = Limit( value.GetBand( i ) );
             }
@@ -141,9 +141,9 @@ public class Equalizer
     {
         get
         {
-            var factors = new float[ BANDS ];
+            var factors = new float[ Bands ];
 
-            for ( var i = 0; i < BANDS; i++ )
+            for ( var i = 0; i < Bands; i++ )
             {
                 factors[ i ] = GetBandFactor( _settings[ i ] );
             }
@@ -157,7 +157,7 @@ public class Equalizer
     /// </summary>
     public void Reset()
     {
-        for ( var i = 0; i < BANDS; i++ )
+        for ( var i = 0; i < Bands; i++ )
         {
             _settings[ i ] = 0.0f;
         }
@@ -173,7 +173,7 @@ public class Equalizer
     {
         var eq = 0.0f;
 
-        if ( band is >= 0 and < BANDS )
+        if ( band is >= 0 and < Bands )
         {
             eq                = _settings[ band ];
             _settings[ band ] = Limit( neweq );
@@ -189,7 +189,7 @@ public class Equalizer
     {
         var eq = 0.0f;
 
-        if ( band is >= 0 and < BANDS )
+        if ( band is >= 0 and < Bands )
         {
             eq = _settings[ band ];
         }
@@ -204,7 +204,7 @@ public class Equalizer
     {
         return eq switch
                {
-                   BAND_NOT_PRESENT => eq,
+                   BandNotPresent => eq,
                    > 1.0f           => 1.0f,
                    < -1.0f          => -1.0f,
                    var _            => eq
@@ -218,7 +218,7 @@ public class Equalizer
     /// </summary>
     public static float GetBandFactor( float eq )
     {
-        if ( eq.Equals( BAND_NOT_PRESENT ) )
+        if ( eq.Equals( BandNotPresent ) )
         {
             return 0.0f;
         }

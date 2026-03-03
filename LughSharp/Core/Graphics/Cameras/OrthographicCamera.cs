@@ -45,9 +45,9 @@ public class OrthographicCamera : Camera
     /// </summary>
     public OrthographicCamera()
     {
-        Near = CameraData.DEFAULT_NEAR_PLANE;
-        Far  = CameraData.DEFAULT_FAR_PLANE;
-        Zoom = CameraData.DEFAULT_ZOOM;
+        Near = CameraData.DefaultNearPlane;
+        Far  = CameraData.DefaultFarPlane;
+        Zoom = CameraData.DefaultZoom;
     }
 
     /// <summary>
@@ -65,9 +65,9 @@ public class OrthographicCamera : Camera
     {
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
-        Near           = CameraData.DEFAULT_NEAR_PLANE;
-        Far            = CameraData.DEFAULT_FAR_PLANE;
-        Zoom           = CameraData.DEFAULT_ZOOM;
+        Near           = CameraData.DefaultNearPlane;
+        Far            = CameraData.DefaultFarPlane;
+        Zoom           = CameraData.DefaultZoom;
     }
 
     // ========================================================================
@@ -98,7 +98,7 @@ public class OrthographicCamera : Camera
 
         Up.Set( 0f, 1f, 0f );
         Direction.Set( 0f, 0f, -1f );
-        Position.Set( Zoom * viewportWidth / 2.0f, Zoom * viewportHeight / 2.0f, CameraData.DEFAULT_Z );
+        Position.Set( Zoom * viewportWidth / 2.0f, Zoom * viewportHeight / 2.0f, CameraData.DefaultZ );
 
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;

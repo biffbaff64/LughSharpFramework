@@ -70,10 +70,10 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
     // ========================================================================
 
-    private const int GL_TEXTURE_1D           = 0x1234;
-    private const int GL_TEXTURE_3D           = 0x1234;
-    private const int GL_TEXTURE_1D_ARRAY_EXT = 0x1234;
-    private const int GL_TEXTURE_2D_ARRAY_EXT = 0x1234;
+    private const int GLTexture1D           = 0x1234;
+    private const int GLTexture3D           = 0x1234;
+    private const int GLTexture1DArrayExt = 0x1234;
+    private const int GLTexture2DArrayExt = 0x1234;
 
     // KTX image data (only available after preparing and before consuming)
     private Buffer< byte >? _compressedData;
@@ -103,7 +103,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// </summary>
     public void ConsumeCubemapData()
     {
-        ConsumeCustomData( IGL.GL_TEXTURE_CUBE_MAP );
+        ConsumeCustomData( IGL.GLTextureCubeMap );
     }
 
     /// <summary>
@@ -317,25 +317,25 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         // find OpenGL texture target and dimensions
         var textureDimensions = 1;
-        int glTarget          = GL_TEXTURE_1D;
+        int glTarget          = GLTexture1D;
 
         if ( _pixelHeight > 0 )
         {
             textureDimensions = 2;
-            glTarget          = IGL.GL_TEXTURE_2D;
+            glTarget          = IGL.GLTexture2D;
         }
 
         if ( _pixelDepth > 0 )
         {
             textureDimensions = 3;
-            glTarget          = GL_TEXTURE_3D;
+            glTarget          = GLTexture3D;
         }
 
         if ( _numberOfFaces == 6 )
         {
             if ( textureDimensions == 2 )
             {
-                glTarget = IGL.GL_TEXTURE_CUBE_MAP;
+                glTarget = IGL.GLTextureCubeMap;
             }
             else
             {
@@ -349,13 +349,13 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( _numberOfArrayElements > 0 )
         {
-            if ( glTarget == GL_TEXTURE_1D )
+            if ( glTarget == GLTexture1D )
             {
-                glTarget = GL_TEXTURE_1D_ARRAY_EXT;
+                glTarget = GLTexture1DArrayExt;
             }
-            else if ( glTarget == IGL.GL_TEXTURE_2D )
+            else if ( glTarget == IGL.GLTexture2D )
             {
-                glTarget = GL_TEXTURE_2D_ARRAY_EXT;
+                glTarget = GLTexture2DArrayExt;
             }
             else
             {
@@ -373,29 +373,29 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         int singleFace = -1;
 
-        if ( ( _numberOfFaces == 6 ) && ( target != IGL.GL_TEXTURE_CUBE_MAP ) )
+        if ( ( _numberOfFaces == 6 ) && ( target != IGL.GLTextureCubeMap ) )
         {
             // Load a single face of the cube (should be avoided since the data is unloaded afterwards)
-            if ( !( target is >= IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X
-                    and <= IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ) )
+            if ( !( target is >= IGL.GLTextureCubeMapPositiveX
+                    and <= IGL.GLTextureCubeMapNegativeZ ) )
             {
                 throw new RuntimeException( "You must specify either GL_TEXTURE_CUBE_MAP to bind all 6 faces of the"
                                           + "cube or the requested face GL_TEXTURE_CUBE_MAP_POSITIVE_X and followings." );
             }
 
-            singleFace = target - IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X;
-            target     = IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+            singleFace = target - IGL.GLTextureCubeMapPositiveX;
+            target     = IGL.GLTextureCubeMapPositiveX;
         }
-        else if ( ( _numberOfFaces == 6 ) && ( target == IGL.GL_TEXTURE_CUBE_MAP ) )
+        else if ( ( _numberOfFaces == 6 ) && ( target == IGL.GLTextureCubeMap ) )
         {
             // Load the 6 faces
-            target = IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+            target = IGL.GLTextureCubeMapPositiveX;
         }
         else
         {
             // Load normal texture
             if ( ( target != glTarget )
-              && !( target is >= IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X and <= IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ) )
+              && !( target is >= IGL.GLTextureCubeMapPositiveX and <= IGL.GLTextureCubeMapNegativeZ ) )
             {
                 throw new RuntimeException( $"Invalid target requested : 0x{target:X}, expecting : 0x{glTarget:X}" );
             }
@@ -406,7 +406,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         {
             fixed ( int* ptr = &buffer.ToArray()[ 0 ] )
             {
-                Engine.GL.GetIntegerv( IGL.GL_UNPACK_ALIGNMENT, ptr );
+                Engine.GL.GetIntegerv( IGL.GLUnpackAlignment, ptr );
             }
         }
 
@@ -414,7 +414,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( previousUnpackAlignment != 4 )
         {
-            Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, 4 );
+            Engine.GL.PixelStorei( IGL.GLUnpackAlignment, 4 );
         }
 
         int glInternalFormat = _glInternalFormat;
@@ -464,7 +464,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
                     if ( compressed )
                     {
-                        if ( glInternalFormat == ETC1.ETC1_RGB8_OES )
+                        if ( glInternalFormat == ETC1.ETC1RGB8Oes )
                         {
                             if ( !Engine.Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
                             {
@@ -565,7 +565,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( previousUnpackAlignment != 4 )
         {
-            Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, previousUnpackAlignment );
+            Engine.GL.PixelStorei( IGL.GLUnpackAlignment, previousUnpackAlignment );
         }
 
         if ( UseMipMaps )

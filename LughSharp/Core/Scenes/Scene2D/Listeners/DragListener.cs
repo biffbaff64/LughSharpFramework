@@ -38,14 +38,10 @@ namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 [PublicAPI]
 public class DragListener : InputListener
 {
-    private float _dragLastX;
-    private float _dragLastY;
-    private int   _pressedPointer = -1;
-
     /// <summary>
     /// Sets the button to listen for, all other buttons are ignored.
     /// </summary>
-    public int Button { get; set; } = IInput.Buttons.LEFT;
+    public int Button { get; set; } = IInput.Buttons.Left;
 
     /// <summary>
     /// Returns true if a touch has been dragged outside the tap square.
@@ -63,10 +59,15 @@ public class DragListener : InputListener
     public float DragY           { get; private set; }
 
     // ========================================================================
+
+    private float _dragLastX;
+    private float _dragLastY;
+    private int   _pressedPointer = -1;
+
     // ========================================================================
 
     /// <inheritdoc />
-    public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+    public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
     {
         if ( ev == null )
         {
@@ -93,7 +94,7 @@ public class DragListener : InputListener
     }
 
     /// <inheritdoc />
-    public override void TouchDragged( InputEvent? ev, float x, float y, int pointer )
+    public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
     {
         if ( ev == null )
         {
@@ -131,7 +132,7 @@ public class DragListener : InputListener
     }
 
     /// <inheritdoc />
-    public override void TouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+    public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
     {
         if ( ev == null )
         {

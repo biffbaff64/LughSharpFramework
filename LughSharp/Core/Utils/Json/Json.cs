@@ -32,6 +32,7 @@ using System.Text.Json;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Files;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -57,8 +58,6 @@ public class Json
     public JsonWriter?            JsonWriter          { get; set; }
 
     // ========================================================================
-
-    private const bool DEBUG = false;
 
     private readonly Dictionary< Type, Dictionary< string, FieldMetadata > > _typeToFields      = [ ];
     private readonly Dictionary< Type, ISerializer< object > >               _classToSerializer = [ ];
@@ -511,7 +510,7 @@ public class Json
         }
 
         // Try to find the type normally
-        return System.Type.GetType( name );
+        return Type.GetType( name );
     }
 
     private object? ConvertPrimitive( Type? type, JsonValue jsonData )
@@ -634,7 +633,7 @@ public class Json
                                                           | BindingFlags.NonPublic
                                                           | BindingFlags.Instance,
                                                             null,
-                                                            System.Type.EmptyTypes,
+                                                            Type.EmptyTypes,
                                                             null );
 
         if ( constructor == null && !type.IsValueType )
@@ -664,7 +663,7 @@ public class Json
     private object ParseEnum( Type enumType, string value )
     {
         // Check the cache
-        if ( !_enumCache.TryGetValue( enumType, out var nameMap ) )
+        if ( !_enumCache.TryGetValue( enumType, out Dictionary< string, object >? nameMap ) )
         {
             nameMap = new Dictionary< string, object >( StringComparer.OrdinalIgnoreCase );
 
@@ -826,6 +825,26 @@ public class Json
     /// <summary>
     /// </summary>
     /// <param name="obj"></param>
+    /// <param name="knownType"></param>
+    /// <param name="elementType"></param>
+    /// <param name="writer"></param>
+    public void ToJson( object? obj, Type? knownType, Type? elementType, StringWriter writer )
+    {
+        SetJsonWriter( writer );
+
+        try
+        {
+            WriteValue( obj, knownType, elementType );
+        }
+        finally
+        {
+            StreamUtils.CloseQuietly( writer );
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="obj"></param>
     /// <param name="file"></param>
     public void ToJson( object? obj, FileInfo file )
     {
@@ -864,7 +883,7 @@ public class Json
         }
         finally
         {
-            writer?.Close();
+            StreamUtils.CloseQuietly( writer );
         }
     }
 
@@ -899,7 +918,7 @@ public class Json
         }
         finally
         {
-            writer.Close();
+            StreamUtils.CloseQuietly( writer );
         }
     }
 
@@ -909,9 +928,9 @@ public class Json
     /// Sets the writer where JSON output will be written. This is only necessary
     /// when not using the ToJson methods.
     /// </summary>
-    public void SetJsonWriter( StreamWriter writer )
+    public void SetJsonWriter( TextWriter writer )
     {
-        this.JsonWriter = new JsonWriter( writer )
+        JsonWriter = new JsonWriter( writer )
         {
             OutputType      = OutputType,
             QuoteLongValues = QuoteLongValues
@@ -975,11 +994,6 @@ public class Json
                             }
                         }
                     }
-                }
-
-                if ( DEBUG )
-                {
-                    Console.WriteLine( $"Writing field: {field.Name} ({type.Name})" );
                 }
 
                 JsonWriter?.Name( field.Name );
@@ -1128,11 +1142,6 @@ public class Json
 
         try
         {
-            if ( DEBUG )
-            {
-                Console.WriteLine( $"Writing {nameof( field )}: {field.Name} ({type.Name})" );
-            }
-
             JsonWriter?.Name( jsonName );
             WriteValue( field.GetValue( obj ), field.GetType(), elementType );
         }
@@ -1149,7 +1158,7 @@ public class Json
         }
         catch ( Exception runtimeEx )
         {
-            SerializationException ex = new SerializationException( runtimeEx );
+            var ex = new SerializationException( runtimeEx );
             ex.AddTrace( field + " (" + type.Name + ")" );
 
             throw ex;
@@ -1172,14 +1181,7 @@ public class Json
             throw new SerializationException( ex );
         }
 
-        if ( value == null )
-        {
-            WriteValue( value, null, null );
-        }
-        else
-        {
-            WriteValue( value, value.GetType(), null );
-        }
+        WriteValue( value, value?.GetType(), null );
     }
 
     /// <summary>
@@ -1253,7 +1255,7 @@ public class Json
     /// <param name="value"> May be null. </param>
     /// <param name="knownType"> May be null if the type is unknown. </param>
     /// <param name="elementType"> May be null if the type is unknown. </param>
-    public void WriteValue( object? value, Type? knownType = null, Type? elementType = null )
+    public void WriteValue( object? value, Type? knownType, Type? elementType )
     {
         try
         {
@@ -1266,9 +1268,9 @@ public class Json
 
             Type actualType = value.GetType();
 
-            // 1. Primitive / Simple types
-            // In C#, actualType.IsPrimitive covers int, float, bool, etc. 
-            // We add decimal and string to round it out.
+            // ----- Primitive / Simple types -----
+            // actualType.IsPrimitive covers int, float, bool, etc. 
+            // Handle decimal and string here too.
             if ( actualType.IsPrimitive || actualType == typeof( string ) || actualType == typeof( decimal ) )
             {
                 if ( knownType != null && knownType != actualType )
@@ -1285,7 +1287,7 @@ public class Json
                 return;
             }
 
-            // 2. Custom Serializable (LibGDX pattern)
+            // ----- Custom Serializable (LibGDX pattern) -----
             if ( value is ISerializable serializable )
             {
                 WriteObjectStart( actualType, knownType );
@@ -1295,16 +1297,15 @@ public class Json
                 return;
             }
 
-            // 3. Custom Registered Serializers
-            if ( _classToSerializer.TryGetValue( actualType, out var serializer ) )
+            // ----- Custom Registered Serializers -----
+            if ( _classToSerializer.TryGetValue( actualType, out ISerializer< object >? serializer ) )
             {
-                serializer.Write( this, value, knownType );
+                serializer.Write( this, value, knownType ?? throw new SerializationException( "Unknown type" ) );
 
                 return;
             }
 
-            // 4. Dictionary / Map special cases
-            // This replaces Map, ObjectMap, ArrayMap, etc.
+            // ----- Dictionary / Map special cases -----
             if ( value is IDictionary dict )
             {
                 knownType ??= typeof( IDictionary );
@@ -1322,10 +1323,9 @@ public class Json
                 return;
             }
 
-            // 5. Enum special case
+            // ----- Enum special case -----
             if ( typeof( Enum ).IsAssignableFrom( actualType ) )
             {
-                // Handle Java-style enum-inner-classes (rare in C#, but good for safety)
                 if ( actualType is { IsEnum: false, BaseType.IsEnum: true } )
                 {
                     actualType = actualType.BaseType;
@@ -1346,17 +1346,19 @@ public class Json
                 return;
             }
 
-            // 6. List / Collection / Array cases
+            // ----- List / Collection / Array cases -----
             // This covers Array, List, Collection, Queue, Set, etc.
             if ( value is IEnumerable enumerable )
             {
                 // If it's a standard array, we need the element type
                 if ( actualType.IsArray && elementType == null )
+                {
                     elementType = actualType.GetElementType();
+                }
 
                 WriteArrayStart();
 
-                foreach ( var item in enumerable )
+                foreach ( object? item in enumerable )
                 {
                     WriteValue( item, elementType, null );
                 }
@@ -1366,7 +1368,7 @@ public class Json
                 return;
             }
 
-            // 7. Default: Write fields via reflection
+            // ----- Default: Write fields via reflection -----
             WriteObjectStart( actualType, knownType );
             WriteFields( value );
             WriteObjectEnd();
@@ -1377,6 +1379,11 @@ public class Json
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <exception cref="SerializationException"></exception>
     public void WriteObjectStart( string name )
     {
         try
@@ -1517,11 +1524,6 @@ public class Json
         {
             throw new SerializationException( ex );
         }
-
-        if ( DEBUG )
-        {
-            Console.WriteLine( $"Writing type: {type.Name}" );
-        }
     }
 
     /// <summary>
@@ -1533,7 +1535,7 @@ public class Json
     /// <returns></returns>
     public T? FromJson< T >( Type type, StreamReader reader )
     {
-        return ReadValue< T >( type, null, this.Reader.Parse( reader ) );
+        return ReadValue< T >( type, null, Reader.Parse( reader ) );
     }
 
     /// <summary>
@@ -1546,7 +1548,7 @@ public class Json
     /// <returns></returns>
     public T? FromJson< T >( Type type, Type elementType, StreamReader reader )
     {
-        return ReadValue< T >( type, elementType, this.Reader.Parse( reader ) );
+        return ReadValue< T >( type, elementType, Reader.Parse( reader ) );
     }
 
     /// <summary>
@@ -1559,7 +1561,7 @@ public class Json
     /// <returns></returns>
     public T? FromJson< T >( Type type, Type elementType, Stream input )
     {
-        return ReadValue< T >( type, elementType, this.Reader.Parse( input ) );
+        return ReadValue< T >( type, elementType, Reader.Parse( input ) );
     }
 
     /// <summary>
@@ -1574,7 +1576,7 @@ public class Json
     {
         try
         {
-            return ReadValue< T >( type, null, this.Reader.Parse( file ) );
+            return ReadValue< T >( type, null, Reader.Parse( file ) );
         }
         catch ( Exception ex )
         {
@@ -1595,7 +1597,7 @@ public class Json
     {
         try
         {
-            return ReadValue< T >( type, elementType, this.Reader.Parse( file ) );
+            return ReadValue< T >( type, elementType, Reader.Parse( file ) );
         }
         catch ( Exception ex )
         {
@@ -1614,7 +1616,7 @@ public class Json
     /// <returns></returns>
     public T? FromJson< T >( Type type, char[] data, int offset, int length )
     {
-        return ReadValue< T >( type, null, this.Reader.Parse( data, offset, length ) );
+        return ReadValue< T >( type, null, Reader.Parse( data, offset, length ) );
     }
 
     /// <summary>
@@ -1629,7 +1631,7 @@ public class Json
     /// <returns></returns>
     public T? FromJson< T >( Type type, Type elementType, char[] data, int offset, int length )
     {
-        return ReadValue< T >( type, elementType, this.Reader.Parse( data, offset, length ) );
+        return ReadValue< T >( type, elementType, Reader.Parse( data, offset, length ) );
     }
 
     /// <summary>
@@ -1641,7 +1643,7 @@ public class Json
     /// <returns></returns>
     public T? FromJson< T >( Type type, string json )
     {
-        return ReadValue< T >( type, null, this.Reader.Parse( json ) );
+        return ReadValue< T >( type, null, Reader.Parse( json ) );
     }
 
     /// <param name="type"> May be null if the type is unknown. </param>
@@ -1650,7 +1652,7 @@ public class Json
     /// <returns> May be null. </returns>
     public T? FromJson< T >( Type type, Type elementType, string json )
     {
-        return ReadValue< T >( type, elementType, this.Reader.Parse( json ) );
+        return ReadValue< T >( type, elementType, Reader.Parse( json ) );
     }
 
     /// <summary>
@@ -1759,12 +1761,12 @@ public class Json
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="jsonData"></param>
-    private void ReadFields( object obj, JsonValue jsonData )
+    public virtual void ReadFields( object obj, JsonValue jsonData )
     {
         Type type = obj.GetType();
 
         // Ensure cache is built
-        if ( !_typeCache.TryGetValue( type, out var cachedFields ) )
+        if ( !_typeCache.TryGetValue( type, out List< CachedField >? cachedFields ) )
         {
             cachedFields       = BuildFieldCache( type );
             _typeCache[ type ] = cachedFields;

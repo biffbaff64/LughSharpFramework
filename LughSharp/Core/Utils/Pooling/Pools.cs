@@ -42,7 +42,7 @@ public static class Pools
 {
     // Use a ConcurrentDictionary for thread-safe access to the pools themselves.
     // Store object as base Pool<object> or dynamic, cast when retrieving.
-    private static readonly ConcurrentDictionary< Type, object > TypePools = new();
+    private static readonly ConcurrentDictionary< Type, object > _typePools = new();
 
     // ========================================================================
 
@@ -87,11 +87,11 @@ public static class Pools
     /// Thrown if newObjectFactory is null when creating a new pool.
     /// </exception>
     public static Pool< T > Get< T >( Pool< T >.PoolObjectFactory newObjectFactory,
-                                      int initialCapacity = Pool< T >.DEFAULT_INITIAL_CAPACITY,
+                                      int initialCapacity = Pool< T >.DefaultInitialCapacity,
                                       int max = int.MaxValue ) where T : class
     {
         // GetOrAdd is thread-safe for creating or retrieving.
-        return ( Pool< T > )TypePools.GetOrAdd( typeof( T ),
+        return ( Pool< T > )_typePools.GetOrAdd( typeof( T ),
                                                 new Pool< T >( initialCapacity, max )
                                                 {
                                                     NewObjectFactory = newObjectFactory
@@ -109,7 +109,7 @@ public static class Pools
     {
         Guard.Against.Null( pool );
 
-        TypePools[ typeof( T ) ] = pool; // Overwrites if exists, adds if not
+        _typePools[ typeof( T ) ] = pool; // Overwrites if exists, adds if not
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public static class Pools
     {
         ArgumentNullException.ThrowIfNull( obj );
 
-        if ( !TypePools.TryGetValue( typeof( T ), out object? poolObject ) )
+        if ( !_typePools.TryGetValue( typeof( T ), out object? poolObject ) )
         {
             // Ignore freeing an object that was never retained.
             return;
@@ -164,7 +164,7 @@ public static class Pools
 
             if ( pool == null )
             {
-                pool = TypePools[ typeof( T ) ] as Pool< T >;
+                pool = _typePools[ typeof( T ) ] as Pool< T >;
 
                 if ( pool == null )
                 {
@@ -187,7 +187,7 @@ public static class Pools
     /// <typeparam name="T">The type of objects in the pool to clear.</typeparam>
     public static void Clear< T >() where T : class
     {
-        if ( TypePools.TryGetValue( typeof( T ), out object? poolObject ) )
+        if ( _typePools.TryGetValue( typeof( T ), out object? poolObject ) )
         {
             ( ( Pool< T > )poolObject ).Clear();
         }
@@ -198,7 +198,7 @@ public static class Pools
     /// </summary>
     public static void ClearAllPools()
     {
-        foreach ( object entry in TypePools.Values )
+        foreach ( object entry in _typePools.Values )
         {
             if ( entry is IClearablePool clearablePool )
             {
@@ -207,7 +207,7 @@ public static class Pools
         }
 
         // Remove all entries from the dictionary
-        TypePools.Clear();
+        _typePools.Clear();
     }
 }
 

@@ -33,7 +33,7 @@ namespace DesktopGLBackend.Audio;
 [PublicAPI]
 public abstract class OpenALMusic : IMusic
 {
-    public const int INVALID_SOURCE_ID = AL.INVALID_VALUE;
+    public const int InvalidSourceID = AL.InvalidValue;
 
     private static readonly int           _bufferSize     = 4096 * 10;
     private static readonly int           _bufferCount    = 3;
@@ -75,11 +75,11 @@ public abstract class OpenALMusic : IMusic
             return;
         }
 
-        if ( SourceId == INVALID_SOURCE_ID )
+        if ( SourceId == InvalidSourceID )
         {
             SourceId = _audio.ObtainSource( true );
 
-            if ( SourceId == INVALID_SOURCE_ID )
+            if ( SourceId == InvalidSourceID )
             {
                 return;
             }
@@ -94,14 +94,14 @@ public abstract class OpenALMusic : IMusic
 
                 int err = AL.GetError();
 
-                if ( err != AL.NO_ERROR )
+                if ( err != AL.NoError )
                 {
                     throw new RuntimeException( $"Unable to allocate audio buffers. AL Error: {err}" );
                 }
             }
 
-            AL.Sourcei( ( uint )SourceId, AL.DIRECT_CHANNELS_SOFT, AL.TRUE );
-            AL.Sourcei( ( uint )SourceId, AL.LOOPING, AL.FALSE );
+            AL.Sourcei( ( uint )SourceId, AL.DirectChannelsSoft, AL.True );
+            AL.Sourcei( ( uint )SourceId, AL.Looping, AL.False );
 
             SetPan( _pan, _volume );
 
@@ -129,7 +129,7 @@ public abstract class OpenALMusic : IMusic
 //                OnCompletionListener.OnCompletion( this );
 //            }
 
-            if ( AL.GetError() != AL.NO_ERROR )
+            if ( AL.GetError() != AL.NoError )
             {
                 Stop();
 
@@ -151,7 +151,7 @@ public abstract class OpenALMusic : IMusic
             return;
         }
 
-        if ( SourceId == INVALID_SOURCE_ID )
+        if ( SourceId == InvalidSourceID )
         {
             return;
         }
@@ -162,7 +162,7 @@ public abstract class OpenALMusic : IMusic
 
         _audio.FreeSource( SourceId );
 
-        SourceId         = INVALID_SOURCE_ID;
+        SourceId         = InvalidSourceID;
         _renderedSeconds = 0;
 
         _renderedSecondsQueue.Clear();
@@ -311,12 +311,12 @@ public abstract class OpenALMusic : IMusic
             return 0;
         }
 
-        if ( SourceId == INVALID_SOURCE_ID )
+        if ( SourceId == InvalidSourceID )
         {
             return 0;
         }
 
-        AL.GetSourcef( ( uint )SourceId, AL.SEC_OFFSET, out float value );
+        AL.GetSourcef( ( uint )SourceId, AL.SecOffset, out float value );
 
         return _renderedSeconds + value;
     }
@@ -338,7 +338,7 @@ public abstract class OpenALMusic : IMusic
 
     protected void Setup( int channels, int sampleRate )
     {
-        _format              = channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;
+        _format              = channels > 1 ? AL.FormatStereo16 : AL.FormatMono16;
         _sampleRate          = sampleRate;
         _maxSecondsPerBuffer = ( float )_bufferSize / ( _bytesPerSample * channels * sampleRate );
     }
@@ -365,7 +365,7 @@ public abstract class OpenALMusic : IMusic
 
     public int GetChannels()
     {
-        return _format == AL.FORMAT_STEREO16 ? 2 : 1;
+        return _format == AL.FormatStereo16 ? 2 : 1;
     }
 
     public int GetRate()
@@ -483,7 +483,7 @@ public abstract class OpenALMusic : IMusic
 
     #region properties
 
-    public int                           SourceId             { get; private set; } = INVALID_SOURCE_ID;
+    public int                           SourceId             { get; private set; } = InvalidSourceID;
     public IMusic.IOnCompletionListener? OnCompletionListener { get; set; }
     public bool                          IsLooping            { get; set; }
 
@@ -496,7 +496,7 @@ public abstract class OpenALMusic : IMusic
                 return false;
             }
 
-            return ( SourceId != INVALID_SOURCE_ID ) && _isPlaying;
+            return ( SourceId != InvalidSourceID ) && _isPlaying;
         }
         set => _isPlaying = value;
     }

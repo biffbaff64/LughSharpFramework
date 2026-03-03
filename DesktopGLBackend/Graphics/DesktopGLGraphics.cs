@@ -196,10 +196,10 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
             _lastFrameTime = time;
         }
 
-        DeltaTime      = ( time - _lastFrameTime ) / ( float )TimeUtils.NANOSECONDS_PER_SECOND;
+        DeltaTime      = ( time - _lastFrameTime ) / ( float )TimeUtils.NanosecondsPerSecond;
         _lastFrameTime = time;
 
-        if ( ( time - _frameCounterStart ) >= TimeUtils.NANOSECONDS_PER_SECOND )
+        if ( ( time - _frameCounterStart ) >= TimeUtils.NanosecondsPerSecond )
         {
             _fps               = _frames;
             _frames            = 0;
@@ -477,7 +477,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
         // Check if viewport was set correctly
         var viewport = new int[ 4 ];
 
-        Engine.GL.GetIntegerv( IGL.GL_VIEWPORT, ref viewport );
+        Engine.GL.GetIntegerv( IGL.GLViewport, ref viewport );
 
         // Verify viewport dimensions match what we set
         if ( ( viewport[ 0 ] != x ) || ( viewport[ 1 ] != y ) ||

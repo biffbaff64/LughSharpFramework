@@ -28,6 +28,9 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Main;
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public interface IApplicationListener : IDisposable
 {

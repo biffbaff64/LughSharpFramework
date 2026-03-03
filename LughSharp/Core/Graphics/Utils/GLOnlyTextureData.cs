@@ -72,19 +72,19 @@ public class GLOnlyTextureData : ITextureData
     /// <param name="mipMapLevel"></param>
     /// <param name="internalFormat">
     /// Specifies the internal format of the texture. Must be one of the following symbolic constants:
-    /// <see cref="IGL.GL_ALPHA"/>, <see cref="IGL.GL_LUMINANCE"/>, <see cref="IGL.GL_LUMINANCE_ALPHA"/>,
-    /// <see cref="IGL.GL_RGB"/>, <see cref="IGL.GL_RGBA"/>.
+    /// <see cref="IGL.GLAlpha"/>, <see cref="IGL.GLLuminance"/>, <see cref="IGL.GLLuminanceAlpha"/>,
+    /// <see cref="IGL.GLRGB"/>, <see cref="IGL.GLRGBA"/>.
     /// </param>
     /// <param name="format">
     /// Specifies the format of the texel data. Must match internalFormat.
     /// The following symbolic values are accepted:
-    /// <see cref="IGL.GL_ALPHA"/>, <see cref="IGL.GL_RGB"/>, <see cref="IGL.GL_RGBA"/>,
-    /// <see cref="IGL.GL_LUMINANCE"/>, and <see cref="IGL.GL_LUMINANCE_ALPHA"/>.
+    /// <see cref="IGL.GLAlpha"/>, <see cref="IGL.GLRGB"/>, <see cref="IGL.GLRGBA"/>,
+    /// <see cref="IGL.GLLuminance"/>, and <see cref="IGL.GLLuminanceAlpha"/>.
     /// </param>
     /// <param name="type">
     /// Specifies the data type of the texel data. The following symbolic values are accepted:
-    /// <see cref="IGL.GL_UNSIGNED_BYTE"/>, <see cref="IGL.GL_UNSIGNED_SHORT_5_6_5"/>,
-    /// <see cref="IGL.GL_UNSIGNED_SHORT_4_4_4_4"/>, and <see cref="IGL.GL_UNSIGNED_SHORT_5_5_5_1"/>.
+    /// <see cref="IGL.GLUnsignedByte"/>, <see cref="IGL.GLUnsignedShort565"/>,
+    /// <see cref="IGL.GLUnsignedShort4444"/>, and <see cref="IGL.GLUnsignedShort5551"/>.
     /// </param>
     public GLOnlyTextureData( int width,
                               int height,

@@ -231,6 +231,7 @@ FILES
 
     CODE   DOCU   FOOTER
     ----   ----   ------
+    -      -      -      - FileHandle
     - DONE - DONE - DONE - Files
     - DONE - DONE - DONE - FileService
     - DONE - DONE - DONE - IFilenameFilter
@@ -238,6 +239,7 @@ FILES
     - DONE - DONE - DONE - IFileService
     - DONE - DONE - DONE - IOUtils
     - DONE - DONE - DONE - PathType
+    -      -      -      - StreamUtils
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -359,7 +361,7 @@ GRAPHICS/IMAGEDECODERS
     -      -      -      - PNGFormatStructs
 
     ------------------------------------
-    ( Possibly future additions )
+    ( Possible future additions )
     -      -      -      - IImageDecoder
     -      -      -      - ImageDecoder
     -      -      -      - ImageFormat
@@ -368,10 +370,6 @@ GRAPHICS/IMAGEDECODERS
 
 GRAPHICS/OPENGL
 ---------------
-
-    Change uint parameters in Bindings methods to int, and do conversion to uint
-    inside those methods when necessary. This will remove the amount of casting to
-    uint in the code.
 
     CODE   DOCU   FOOTER
     ----   ----   ------
@@ -568,18 +566,18 @@ MAIN
 
     CODE   DOCU   FOOTER
     ----   ----   ------
-    -      -      -      - ApplicationAdapter
-    -      -      -      - ApplicationConfiguration
+    - DONE - DONE - DONE - ApplicationAdapter
+    - DONE - DONE - DONE - ApplicationConfiguration
     -      -      -      - Engine
-    -      -      -      - Game
-    -      -      -      - GameTime
-    -      -      -      - IApplication
-    -      -      -      - IApplicationListener
+    - DONE - DONE - DONE - Game
+    - DONE - IP   - DONE - GameTime
+    - DONE - IP   - DONE - IApplication
+    - DONE - IP   - DONE - IApplicationListener
     -      -      -      - ILifecycleListener
     -      -      -      - IScreen
-    -      -      -      - LibraryVersion
-    -      -      -      - Platform
-    -      -      -      - ScreenAdapter
+    - DONE - DONE - DONE - LibraryVersion
+    - DONE - DONE - DONE - Platform
+    - DONE - DONE - DONE - ScreenAdapter
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -992,8 +990,10 @@ UTILS/JSON
 
     CODE   DOCU   FOOTER
     ----   ----   ------
+    -      -      -      - IJsonWriter
     -      -      -      - Json
     -      -      -      - JsonMatcher
+    -      -      -      - JsonOutput
     -      -      -      - JsonReader
     -      -      -      - JsonSkimmer
     -      -      -      - JsonString

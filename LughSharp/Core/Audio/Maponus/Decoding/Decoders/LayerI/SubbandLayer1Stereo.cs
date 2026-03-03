@@ -115,11 +115,11 @@ public class SubbandLayer1Stereo : SubbandLayer1
     {
         base.PutNextSample( channels, filter1, filter2 );
 
-        if ( ( Channel2Allocation != 0 ) && ( channels != OutputChannels.LEFT_CHANNEL ) )
+        if ( ( Channel2Allocation != 0 ) && ( channels != OutputChannels.LeftChannel ) )
         {
             float sample2 = ( ( Channel2Sample * Channel2Factor ) + Channel2Offset ) * Channel2Scalefactor;
 
-            if ( channels == OutputChannels.BOTH_CHANNELS )
+            if ( channels == OutputChannels.BothChannels )
             {
                 filter2?.AddSample( sample2, Subbandnumber );
             }

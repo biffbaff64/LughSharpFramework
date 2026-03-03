@@ -30,17 +30,17 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 public enum TextureLimit
 {
     // The above would return a value such as 16 or 32 or above. That is the number of image samplers that your GPU supports in the fragment shader.
-    MaxTextureImageUnits = IGL.GL_MAX_TEXTURE_IMAGE_UNITS,
+    MaxTextureImageUnits = IGL.GLMaxTextureImageUnits,
 
     // The following is for the vertex shader (available since GL 2.0). This might return 0 for certain GPUs.
-    MaxVertexTextureImageUnits = IGL.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
+    MaxVertexTextureImageUnits = IGL.GLMaxVertexTextureImageUnits,
 
     // The following is for the geometry shader (available since GL 3.2)
     MaxGeometryTextureImageUnits = IGL.GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS,
 
     // The following is VS + GS + FS (available since GL 2.0)
-    MaxCombinedTextureImageUnits = IGL.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
+    MaxCombinedTextureImageUnits = IGL.GLMaxCombinedTextureImageUnits,
 
     // The following is the number of texture coordinates available which usually is 8
-    MaxTextureCoords = IGL.GL_MAX_TEXTURE_COORDS
+    MaxTextureCoords = IGL.GLMaxTextureCoords
 }

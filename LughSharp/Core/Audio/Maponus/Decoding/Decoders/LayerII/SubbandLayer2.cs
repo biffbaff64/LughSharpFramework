@@ -660,12 +660,12 @@ public class SubbandLayer2 : ASubband
     /// </summary>
     protected virtual int GetAllocationLength( Header? header )
     {
-        if ( header?.Version() == Header.MPEG1 )
+        if ( header?.Version() == Header.Mpeg1 )
         {
             int channelBitrate = header.bitrate_index();
 
             // calculate bitrate per channel:
-            if ( header.Mode() != Header.SINGLE_CHANNEL )
+            if ( header.Mode() != Header.SingleChannel )
             {
                 if ( channelBitrate == 4 )
                 {
@@ -711,7 +711,7 @@ public class SubbandLayer2 : ASubband
         int? channelBitrate = header?.bitrate_index();
 
         // calculate bitrate per channel:
-        if ( header?.Mode() != Header.SINGLE_CHANNEL )
+        if ( header?.Mode() != Header.SingleChannel )
         {
             if ( channelBitrate == 4 )
             {
@@ -903,7 +903,7 @@ public class SubbandLayer2 : ASubband
     /// </summary>
     public override bool PutNextSample( int channels, SynthesisFilter? filter1, SynthesisFilter? filter2 )
     {
-        if ( ( Allocation != 0 ) && ( channels != OutputChannels.RIGHT_CHANNEL ) )
+        if ( ( Allocation != 0 ) && ( channels != OutputChannels.RightChannel ) )
         {
             float sample = Samples[ Samplenumber ];
 

@@ -308,7 +308,7 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
             _pad = pad;
         }
 
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( _pad.IsTouched )
             {
@@ -321,12 +321,12 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
             return true;
         }
 
-        public override void TouchDragged( InputEvent? ev, float x, float y, int pointer )
+        public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             _pad.CalculatePositionAndValue( x, y, false );
         }
 
-        public override void TouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+        public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             _pad.IsTouched = false;
             _pad.CalculatePositionAndValue( x, y, _pad.ResetOnTouchUp );
@@ -339,6 +339,13 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
     [PublicAPI]
     public class TouchpadStyle
     {
+        // Stretched in both directions.
+        public ISceneDrawable? Background { get; set; }
+
+        public ISceneDrawable? Knob { get; set; }
+
+        // ====================================================================
+        
         public TouchpadStyle()
         {
         }
@@ -354,11 +361,6 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
             Background = style.Background;
             Knob       = style.Knob;
         }
-
-        // Stretched in both directions.
-        public ISceneDrawable? Background { get; set; }
-
-        public ISceneDrawable? Knob { get; set; }
     }
 }
 

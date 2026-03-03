@@ -34,21 +34,21 @@ public interface IInputProcessor
     /// </summary>
     /// <param name="keycode">One of the constants in <see cref="IInput.Keys"/></param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool KeyDown( int keycode );
+    bool OnKeyDown( int keycode );
 
     /// <summary>
     /// Called when a key is released.
     /// </summary>
     /// <param name="keycode">One of the constants in <see cref="IInput.Keys"/></param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool KeyUp( int keycode );
+    bool OnKeyUp( int keycode );
 
     /// <summary>
     /// Called when a key was typed
     /// </summary>
     /// <param name="character"></param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool KeyTyped( char character );
+    bool OnKeyTyped( char character );
 
     /// <summary>
     /// Called when the screen was touched or a mouse button was pressed.
@@ -58,7 +58,7 @@ public interface IInputProcessor
     /// <param name="pointer"></param>
     /// <param name="button"></param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool TouchDown( int screenX, int screenY, int pointer, int button );
+    bool OnTouchDown( int screenX, int screenY, int pointer, int button );
 
     /// <summary>
     /// Called when a screen touch is lifted or mouse button is released.
@@ -68,7 +68,7 @@ public interface IInputProcessor
     /// <param name="pointer"></param>
     /// <param name="button"></param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool TouchUp( int screenX, int screenY, int pointer, int button );
+    bool OnTouchUp( int screenX, int screenY, int pointer, int button );
 
     /// <summary>
     /// Called when a touch input is dragged across the screen.
@@ -77,7 +77,7 @@ public interface IInputProcessor
     /// <param name="screenY">The current y-coordinate of the touch input on the screen.</param>
     /// <param name="pointer">The index of the touch pointer associated with this event.</param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool TouchDragged( int screenX, int screenY, int pointer );
+    bool OnTouchDragged( int screenX, int screenY, int pointer );
 
     /// <summary>
     /// Called when the mouse pointer is moved.
@@ -85,7 +85,7 @@ public interface IInputProcessor
     /// <param name="screenX">The X-coordinate of the mouse pointer on the screen.</param>
     /// <param name="screenY">The Y-coordinate of the mouse pointer on the screen.</param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool MouseMoved( int screenX, int screenY );
+    bool OnMouseMoved( int screenX, int screenY );
 
     /// <summary>
     /// Called when the mouse wheel is moved.
@@ -93,7 +93,7 @@ public interface IInputProcessor
     /// <param name="amountX"> The amount of horizontal moverment. </param>
     /// <param name="amountY"> The amount of vertical movement. </param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool Scrolled( float amountX, float amountY );
+    bool OnScrolled( float amountX, float amountY );
 }
 
 // ============================================================================

@@ -32,7 +32,7 @@ public partial class GLBindings
     /// <inheritdoc />
     public void SetGLUnpackAlignment( Pixmap pixmap, int alignment )
     {
-        Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
+        Engine.GL.PixelStorei( IGL.GLUnpackAlignment, alignment );
     }
 }
 

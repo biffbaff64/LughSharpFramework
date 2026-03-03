@@ -161,7 +161,7 @@ public class GeometryUtils
         float dy32 = y3 - y2;
         float det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
 
-        return Math.Abs( det ) < NumberUtils.FLOAT_TOLERANCE;
+        return Math.Abs( det ) < NumberUtils.FloatTolerance;
     }
 
     /// <summary>
@@ -208,7 +208,7 @@ public class GeometryUtils
         float dy13 = y1 - y3;
         float det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
 
-        if ( Math.Abs( det ) < NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( det ) < NumberUtils.FloatTolerance )
         {
             throw new ArgumentException( "Triangle points must not be colinear." );
         }
@@ -246,7 +246,7 @@ public class GeometryUtils
         float x;
         float y;
 
-        if ( Math.Abs( y2 - y1 ) < NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( y2 - y1 ) < NumberUtils.FloatTolerance )
         {
             m2  = -( x3 - x2 ) / ( y3 - y2 );
             mx2 = ( x2 + x3 ) / 2;
@@ -254,7 +254,7 @@ public class GeometryUtils
             x   = ( x2 + x1 ) / 2;
             y   = ( m2 * ( x - mx2 ) ) + my2;
         }
-        else if ( Math.Abs( y3 - y2 ) < NumberUtils.FLOAT_TOLERANCE )
+        else if ( Math.Abs( y3 - y2 ) < NumberUtils.FloatTolerance )
         {
             m1  = -( x2 - x1 ) / ( y2 - y1 );
             mx1 = ( x1 + x2 ) / 2;

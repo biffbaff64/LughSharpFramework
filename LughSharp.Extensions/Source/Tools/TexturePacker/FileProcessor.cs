@@ -37,7 +37,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 [PublicAPI]
 public class FileProcessor
 {
-    public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
+    public const string DefaultPackfileName = "pack.atlas";
 
     // Delegate to signal a processed file
     public virtual Action< FileSystemInfo >? FileProcessedDelegate { get; set; }

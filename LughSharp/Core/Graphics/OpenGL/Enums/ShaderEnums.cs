@@ -29,19 +29,19 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum ShaderType
 {
-    VertexShader         = IGL.GL_VERTEX_SHADER,
-    FragmentShader       = IGL.GL_FRAGMENT_SHADER,
+    VertexShader         = IGL.GLVertexShader,
+    FragmentShader       = IGL.GLFragmentShader,
     GeometryShader       = IGL.GL_GEOMETRY_SHADER,
     TessControlShader    = IGL.GL_TESS_CONTROL_SHADER,
     TessEvaluationShader = IGL.GL_TESS_EVALUATION_SHADER,
-    ComputeShader        = IGL.GL_COMPUTE_SHADER
+    ComputeShader        = IGL.GLComputeShader
 }
 
 [PublicAPI]
 public enum ShaderParameterName
 {
-    CompileStatus = IGL.GL_COMPILE_STATUS,
-    InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
-    ShaderType    = IGL.GL_SHADER_TYPE,
-    DeleteStatus  = IGL.GL_DELETE_STATUS
+    CompileStatus = IGL.GLCompileStatus,
+    InfoLogLength = IGL.GLInfoLogLength,
+    ShaderType    = IGL.GLShaderType,
+    DeleteStatus  = IGL.GLDeleteStatus
 }

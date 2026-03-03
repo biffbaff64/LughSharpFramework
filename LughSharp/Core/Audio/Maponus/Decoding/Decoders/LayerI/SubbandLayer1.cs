@@ -130,7 +130,7 @@ public class SubbandLayer1 : ASubband
     /// </summary>
     public override bool PutNextSample( int channels, SynthesisFilter? filter1, SynthesisFilter? filter2 )
     {
-        if ( ( Allocation != 0 ) && ( channels != OutputChannels.RIGHT_CHANNEL ) )
+        if ( ( Allocation != 0 ) && ( channels != OutputChannels.RightChannel ) )
         {
             float scaledSample = ( ( Sample * Factor ) + Offset ) * Scalefactor;
             filter1?.AddSample( scaledSample, Subbandnumber );

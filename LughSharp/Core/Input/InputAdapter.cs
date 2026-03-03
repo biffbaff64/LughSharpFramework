@@ -34,49 +34,49 @@ namespace LughSharp.Core.Input;
 public class InputAdapter : IInputProcessor
 {
     /// <inheritdoc />
-    public virtual bool KeyDown( int keycode )
+    public virtual bool OnKeyDown( int keycode )
     {
         return false;
     }
 
     /// <inheritdoc />
-    public virtual bool KeyUp( int keycode )
+    public virtual bool OnKeyUp( int keycode )
     {
         return false;
     }
 
     /// <inheritdoc />
-    public virtual bool KeyTyped( char character )
+    public virtual bool OnKeyTyped( char character )
     {
         return false;
     }
 
     /// <inheritdoc />
-    public virtual bool TouchDown( int screenX, int screenY, int pointer, int button )
+    public virtual bool OnTouchDown( int screenX, int screenY, int pointer, int button )
     {
         return false;
     }
 
     /// <inheritdoc />
-    public virtual bool TouchUp( int screenX, int screenY, int pointer, int button )
+    public virtual bool OnTouchUp( int screenX, int screenY, int pointer, int button )
     {
         return false;
     }
 
     /// <inheritdoc />
-    public virtual bool TouchDragged( int screenX, int screenY, int pointer )
+    public virtual bool OnTouchDragged( int screenX, int screenY, int pointer )
     {
         return false;
     }
 
     /// <inheritdoc />
-    public virtual bool MouseMoved( int screenX, int screenY )
+    public virtual bool OnMouseMoved( int screenX, int screenY )
     {
         return false;
     }
 
     /// <inheritdoc />
-    public virtual bool Scrolled( float amountX, float amountY )
+    public virtual bool OnScrolled( float amountX, float amountY )
     {
         return false;
     }

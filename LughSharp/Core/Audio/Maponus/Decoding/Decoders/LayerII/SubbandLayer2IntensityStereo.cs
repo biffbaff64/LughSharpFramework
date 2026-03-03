@@ -129,7 +129,7 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
 
             switch ( channels )
             {
-                case OutputChannels.BOTH_CHANNELS:
+                case OutputChannels.BothChannels:
                 {
                     float sample2 = sample;
 
@@ -160,7 +160,7 @@ public class SubbandLayer2IntensityStereo : SubbandLayer2
                     break;
                 }
 
-                case OutputChannels.LEFT_CHANNEL:
+                case OutputChannels.LeftChannel:
                     sample *= Groupnumber switch
                               {
                                   <= 4  => Scalefactor1,

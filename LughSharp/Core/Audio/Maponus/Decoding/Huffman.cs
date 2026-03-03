@@ -34,8 +34,8 @@ namespace LughSharp.Core.Audio.Maponus.Decoding;
 [PublicAPI]
 public class Huffman
 {
-    private const           int     MXOFF    = 250;
-    private const           int     HTN      = 34;
+    private const           int     Mxoff    = 250;
+    private const           int     Htn      = 34;
     private static readonly int[][] _valTab0 = [ [ 0, 0 ] ];
 
     private static readonly int[][] _valTab1 =
@@ -731,11 +731,11 @@ public class Huffman
         // 0..31 Huffman code table 0..31
         // 32,33 count1-tables
 
-        const int DMASK = 1 << ( ( 4 * 8 ) - 1 );
+        const int Dmask = 1 << ( ( 4 * 8 ) - 1 );
 
         var point = 0;
         var error = 1;
-        int level = DMASK;
+        int level = Dmask;
 
         if ( h._val == null )
         {
@@ -781,7 +781,7 @@ public class Huffman
             //if (bits[bitIndex++]!=0)
             if ( br.ReadOneBit() != 0 )
             {
-                while ( h._val[ point ][ 1 ] >= MXOFF )
+                while ( h._val[ point ][ 1 ] >= Mxoff )
                 {
                     point += h._val[ point ][ 1 ];
                 }
@@ -790,7 +790,7 @@ public class Huffman
             }
             else
             {
-                while ( h._val[ point ][ 0 ] >= MXOFF )
+                while ( h._val[ point ][ 0 ] >= Mxoff )
                 {
                     point += h._val[ point ][ 0 ];
                 }
@@ -906,7 +906,7 @@ public class Huffman
             return;
         }
 
-        _huffmanTable       = new Huffman[ HTN ];
+        _huffmanTable       = new Huffman[ Htn ];
         _huffmanTable[ 0 ]  = new Huffman( "0  ", 0, 0, 0, 0, -1, null!, null!, _valTab0, 0 );
         _huffmanTable[ 1 ]  = new Huffman( "1  ", 2, 2, 0, 0, -1, null!, null!, _valTab1, 7 );
         _huffmanTable[ 2 ]  = new Huffman( "2  ", 3, 3, 0, 0, -1, null!, null!, _valTab2, 17 );

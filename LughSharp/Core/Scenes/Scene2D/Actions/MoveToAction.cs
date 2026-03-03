@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
@@ -29,14 +31,17 @@ namespace LughSharp.Core.Scenes.Scene2D.Actions;
 /// <summary>
 /// Moves an actor from its current position to a specific position.
 /// </summary>
-public class MoveToAction : TemporalAction
+[PublicAPI]
+public sealed class MoveToAction : TemporalAction
 {
     public float StartX    { get; set; }
     public float StartY    { get; set; }
     public float EndX      { get; set; }
     public float EndY      { get; set; }
-    public int   Alignment { get; set; } = Align.BOTTOM_LEFT;
+    public Align Alignment { get; set; } = Align.BottomLeft;
 
+    // ========================================================================
+    
     protected override void Begin()
     {
         StartX = Target!.GetX( Alignment );
@@ -74,7 +79,7 @@ public class MoveToAction : TemporalAction
     public override void Reset()
     {
         base.Reset();
-        Alignment = Align.BOTTOM_LEFT;
+        Alignment = Align.BottomLeft;
     }
 
     public void SetStartPosition( float x, float y )
@@ -89,10 +94,14 @@ public class MoveToAction : TemporalAction
         EndY = y;
     }
 
-    public void SetPosition( float x, float y, int alignment )
+    public void SetPosition( float x, float y, Align alignment )
     {
         EndX      = x;
         EndY      = y;
         Alignment = alignment;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

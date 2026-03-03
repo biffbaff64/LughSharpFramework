@@ -276,7 +276,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetQueryObjecti64v( GLuint id, GLenum pname, GLint64* param )
+    public void GetQueryObjecti64V( GLuint id, GLenum pname, GLint64* param )
     {
         GetDelegateForFunction< PFNGLGETQUERYOBJECTI64VPROC >( "glGetQueryObjecti64v", out _glGetQueryObjecti64v );
 
@@ -284,7 +284,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void GetQueryObjecti64v( GLuint id, GLenum pname, ref GLint64[] param )
+    public void GetQueryObjecti64V( GLuint id, GLenum pname, ref GLint64[] param )
     {
         GetDelegateForFunction< PFNGLGETQUERYOBJECTI64VPROC >( "glGetQueryObjecti64v", out _glGetQueryObjecti64v );
 
@@ -297,7 +297,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetQueryObjectui64v( GLuint id, GLenum pname, GLuint64* param )
+    public void GetQueryObjectui64V( GLuint id, GLenum pname, GLuint64* param )
     {
         GetDelegateForFunction< PFNGLGETQUERYOBJECTUI64VPROC >( "glGetQueryObjectui64v", out _glGetQueryObjectui64v );
 
@@ -305,7 +305,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void GetQueryObjectui64v( GLuint id, GLenum pname, ref GLuint64[] param )
+    public void GetQueryObjectui64V( GLuint id, GLenum pname, ref GLuint64[] param )
     {
         GetDelegateForFunction< PFNGLGETQUERYOBJECTUI64VPROC >( "glGetQueryObjectui64v", out _glGetQueryObjectui64v );
 

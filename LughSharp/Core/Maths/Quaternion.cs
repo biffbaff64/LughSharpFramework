@@ -160,9 +160,9 @@ public class Quaternion
     public Quaternion SetEulerAngles( float yaw, float pitch, float roll )
     {
         return SetEulerAnglesRad(
-                                 yaw * MathUtils.DEGREES_TO_RADIANS,
-                                 pitch * MathUtils.DEGREES_TO_RADIANS,
-                                 roll * MathUtils.DEGREES_TO_RADIANS
+                                 yaw * MathUtils.DegreesToRadians,
+                                 pitch * MathUtils.DegreesToRadians,
+                                 roll * MathUtils.DegreesToRadians
                                 );
     }
 
@@ -242,7 +242,7 @@ public class Quaternion
     /// </returns>
     public float GetRoll()
     {
-        return GetRollRad() * MathUtils.RADIANS_TO_DEGREES;
+        return GetRollRad() * MathUtils.RadiansToDegrees;
     }
 
     /// <summary>
@@ -258,7 +258,7 @@ public class Quaternion
 
         return pole == 0
             ? ( float )Math.Asin( MathUtils.Clamp( 2f * ( ( W * X ) - ( Z * Y ) ), -1f, 1f ) )
-            : pole * MathUtils.PI * 0.5f;
+            : pole * MathUtils.Pi * 0.5f;
     }
 
     /// <summary>
@@ -270,7 +270,7 @@ public class Quaternion
     /// </returns>
     public float GetPitch()
     {
-        return GetPitchRad() * MathUtils.RADIANS_TO_DEGREES;
+        return GetPitchRad() * MathUtils.RadiansToDegrees;
     }
 
     /// <summary>
@@ -292,7 +292,7 @@ public class Quaternion
     /// <returns> the rotation around the y axis in degrees (between -180 and +180) </returns>
     public float GetYaw()
     {
-        return GetYawRad() * MathUtils.RADIANS_TO_DEGREES;
+        return GetYawRad() * MathUtils.RadiansToDegrees;
     }
 
     public static float Len2( float x, float y, float z, float w )
@@ -492,22 +492,22 @@ public class Quaternion
         float zw = Z * W;
 
         // Set matrix from quaternion
-        matrix[ Matrix4.M00_0 ]  = 1 - ( 2 * ( yy + zz ) );
-        matrix[ Matrix4.M01_4 ]  = 2 * ( xy - zw );
-        matrix[ Matrix4.M02_8 ]  = 2 * ( xz + yw );
-        matrix[ Matrix4.M03_12 ] = 0;
-        matrix[ Matrix4.M10_1 ]  = 2 * ( xy + zw );
-        matrix[ Matrix4.M11_5 ]  = 1 - ( 2 * ( xx + zz ) );
-        matrix[ Matrix4.M12_9 ]  = 2 * ( yz - xw );
-        matrix[ Matrix4.M13_13 ] = 0;
-        matrix[ Matrix4.M20_2 ]  = 2 * ( xz - yw );
-        matrix[ Matrix4.M21_6 ]  = 2 * ( yz + xw );
-        matrix[ Matrix4.M22_10 ] = 1 - ( 2 * ( xx + yy ) );
-        matrix[ Matrix4.M23_14 ] = 0;
-        matrix[ Matrix4.M30_3 ]  = 0;
-        matrix[ Matrix4.M31_7 ]  = 0;
-        matrix[ Matrix4.M32_11 ] = 0;
-        matrix[ Matrix4.M33_15 ] = 1;
+        matrix[ Matrix4.M000 ]  = 1 - ( 2 * ( yy + zz ) );
+        matrix[ Matrix4.M014 ]  = 2 * ( xy - zw );
+        matrix[ Matrix4.M028 ]  = 2 * ( xz + yw );
+        matrix[ Matrix4.M0312 ] = 0;
+        matrix[ Matrix4.M101 ]  = 2 * ( xy + zw );
+        matrix[ Matrix4.M115 ]  = 1 - ( 2 * ( xx + zz ) );
+        matrix[ Matrix4.M129 ]  = 2 * ( yz - xw );
+        matrix[ Matrix4.M1313 ] = 0;
+        matrix[ Matrix4.M202 ]  = 2 * ( xz - yw );
+        matrix[ Matrix4.M216 ]  = 2 * ( yz + xw );
+        matrix[ Matrix4.M2210 ] = 1 - ( 2 * ( xx + yy ) );
+        matrix[ Matrix4.M2314 ] = 0;
+        matrix[ Matrix4.M303 ]  = 0;
+        matrix[ Matrix4.M317 ]  = 0;
+        matrix[ Matrix4.M3211 ] = 0;
+        matrix[ Matrix4.M3315 ] = 1;
     }
 
     /// <summary>
@@ -574,7 +574,7 @@ public class Quaternion
     /// <returns> This quaternion for chaining. </returns>
     public Quaternion SetFromAxis( float x, float y, float z, float degrees )
     {
-        return SetFromAxisRad( x, y, z, degrees * MathUtils.DEGREES_TO_RADIANS );
+        return SetFromAxisRad( x, y, z, degrees * MathUtils.DegreesToRadians );
     }
 
     /// <summary>
@@ -596,7 +596,7 @@ public class Quaternion
 
         d = 1f / d;
 
-        float lAng = radians < 0 ? MathUtils.PI2 - ( -radians % MathUtils.PI2 ) : radians % MathUtils.PI2;
+        float lAng = radians < 0 ? MathUtils.Pi2 - ( -radians % MathUtils.Pi2 ) : radians % MathUtils.Pi2;
         var   lSin = ( float )Math.Sin( lAng / 2 );
         var   lCos = ( float )Math.Cos( lAng / 2 );
 
@@ -610,15 +610,15 @@ public class Quaternion
     {
         return SetFromAxes(
                            normalizeAxes,
-                           matrix.Val[ Matrix4.M00_0 ],
-                           matrix.Val[ Matrix4.M01_4 ],
-                           matrix.Val[ Matrix4.M02_8 ],
-                           matrix.Val[ Matrix4.M10_1 ],
-                           matrix.Val[ Matrix4.M11_5 ],
-                           matrix.Val[ Matrix4.M12_9 ],
-                           matrix.Val[ Matrix4.M20_2 ],
-                           matrix.Val[ Matrix4.M21_6 ],
-                           matrix.Val[ Matrix4.M22_10 ]
+                           matrix.Val[ Matrix4.M000 ],
+                           matrix.Val[ Matrix4.M014 ],
+                           matrix.Val[ Matrix4.M028 ],
+                           matrix.Val[ Matrix4.M101 ],
+                           matrix.Val[ Matrix4.M115 ],
+                           matrix.Val[ Matrix4.M129 ],
+                           matrix.Val[ Matrix4.M202 ],
+                           matrix.Val[ Matrix4.M216 ],
+                           matrix.Val[ Matrix4.M2210 ]
                           );
     }
 
@@ -1044,7 +1044,7 @@ public class Quaternion
     /// <returns> the angle in degrees </returns>
     public float GetAxisAngle( Vector3 axis )
     {
-        return GetAxisAngleRad( axis ) * MathUtils.RADIANS_TO_DEGREES;
+        return GetAxisAngleRad( axis ) * MathUtils.RadiansToDegrees;
     }
 
     /// <summary>
@@ -1073,7 +1073,7 @@ public class Quaternion
         // assuming quaternion normalised then w is less than 1, so term always positive.
         double s = Math.Sqrt( 1 - ( W * W ) );
 
-        if ( s < NumberUtils.FLOAT_TOLERANCE )
+        if ( s < NumberUtils.FloatTolerance )
         {
             // test to avoid divide by zero, s is always positive due to Sqrt
             // if s close to zero then direction of axis not important
@@ -1121,7 +1121,7 @@ public class Quaternion
     /// <returns> the angle in degrees of the rotation </returns>
     public float GetAngle()
     {
-        return GetAngleRad() * MathUtils.RADIANS_TO_DEGREES;
+        return GetAngleRad() * MathUtils.RadiansToDegrees;
     }
 
     /// <summary>
@@ -1238,7 +1238,7 @@ public class Quaternion
     /// <returns> the angle in degrees of the rotation around the specified axis </returns>
     public float GetAngleAround( float axisX, float axisY, float axisZ )
     {
-        return GetAngleAroundRad( axisX, axisY, axisZ ) * MathUtils.RADIANS_TO_DEGREES;
+        return GetAngleAroundRad( axisX, axisY, axisZ ) * MathUtils.RadiansToDegrees;
     }
 
     /// <summary>
@@ -1254,12 +1254,12 @@ public class Quaternion
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        const int PRIME = 31;
+        const int Prime = 31;
 
-        int result = PRIME + NumberUtils.FloatToRawIntBits( 10f );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 20f );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 30f );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 40f );
+        int result = Prime + NumberUtils.FloatToRawIntBits( 10f );
+        result = ( Prime * result ) + NumberUtils.FloatToRawIntBits( 20f );
+        result = ( Prime * result ) + NumberUtils.FloatToRawIntBits( 30f );
+        result = ( Prime * result ) + NumberUtils.FloatToRawIntBits( 40f );
 
         return result;
     }

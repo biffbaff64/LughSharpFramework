@@ -27,6 +27,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Pooling;
 
 using Color = LughSharp.Core.Graphics.Color;
 
@@ -40,14 +41,17 @@ public class Actions
     /// </summary>
     public static Action Action( Type a )
     {
-        throw new NotImplementedException();
+        Pool< Action > actionPool = new()
+        {
+            NewObjectFactory = ( ) => Activator.CreateInstance( a ) as Action
+                                   ?? throw new ArgumentException( $"Unable to create action type: {a}" ),
+        };
 
-//        var pool   = Pools.Get< Action >( new Pool< Action >.NewObjectHandler());
-//        var action = pool.Obtain();
-//
-//        action!.Pool = pool;
-//
-//        return action;
+        Action action = actionPool.Obtain();
+
+        action!.Pool = actionPool;
+
+        return action;
     }
 
     public static AddAction AddAction( Action action )
@@ -102,7 +106,7 @@ public class Actions
 
     public static MoveToAction MoveToAligned( float x,
                                               float y,
-                                              int alignment,
+                                              Align alignment,
                                               float duration = 0,
                                               IInterpolation? interpolation = null )
     {
@@ -486,7 +490,7 @@ public class Actions
     public static RepeatAction Forever( Action repeatedAction )
     {
         var action = ( RepeatAction )Action( typeof( RepeatAction ) );
-        action.RepeatCount = RepeatAction.FOREVER;
+        action.RepeatCount = RepeatAction.Forever;
         action.Action      = repeatedAction;
 
         return action;

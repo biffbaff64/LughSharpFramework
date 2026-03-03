@@ -36,14 +36,14 @@ namespace LughSharp.Core.Audio.Maponus.Decoding;
 [StructLayout( LayoutKind.Sequential )]
 public struct BitstreamErrors
 {
-    public const int UNKNOWN_ERROR       = BITSTREAM_ERROR + 0;
-    public const int UNKNOWN_SAMPLE_RATE = BITSTREAM_ERROR + 1;
-    public const int STREA_ERROR         = BITSTREAM_ERROR + 2;
-    public const int UNEXPECTED_EOF      = BITSTREAM_ERROR + 3;
-    public const int STREAM_EOF          = BITSTREAM_ERROR + 4;
-    public const int BITSTREAM_LAST      = 0x1ff;
-    public const int BITSTREAM_ERROR     = 0x100;
-    public const int DECODER_ERROR       = 0x200;
+    public const int UnknownError       = BitstreamError + 0;
+    public const int UnknownSampleRate = BitstreamError + 1;
+    public const int StreaError         = BitstreamError + 2;
+    public const int UnexpectedEof      = BitstreamError + 3;
+    public const int StreamEof          = BitstreamError + 4;
+    public const int BitstreamLast      = 0x1ff;
+    public const int BitstreamError     = 0x100;
+    public const int DecoderError       = 0x200;
 }
 
 // ============================================================================

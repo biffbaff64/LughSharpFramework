@@ -48,9 +48,9 @@ namespace LughSharp.Core.Graphics.G2D;
 [PublicAPI]
 public class SpriteBatch : IBatch
 {
-    public const int RENDERING_OPTION_FLIP_X = 1 << 0;
-    public const int RENDERING_OPTION_FLIP_Y = 1 << 1;
-    public const int RENDERING_OPTION_FONT   = 1 << 2;
+    public const int RenderingOptionFlipX = 1 << 0;
+    public const int RenderingOptionFlipY = 1 << 1;
+    public const int RenderingOptionFont   = 1 << 2;
 
     // ========================================================================
 
@@ -81,11 +81,11 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    private const int VERTICES_PER_SPRITE = 4;     // Number of vertices per sprite (quad)
-    private const int INDICES_PER_SPRITE  = 6;     // Number of indices per sprite (two triangles)
-    private const int MAX_VERTEX_INDEX    = 32767; //
-    private const int MAX_SPRITES         = 8191;  //
-    private const int MAX_QUADS           = 100;   //
+    private const int VerticesPerSprite = 4;     // Number of vertices per sprite (quad)
+    private const int IndicesPerSprite  = 6;     // Number of indices per sprite (two triangles)
+    private const int MaxVertexIndex    = 32767; //
+    private const int MaxSprites         = 8191;  //
+    private const int MaxQuads           = 100;   //
 
     // ========================================================================
 
@@ -140,16 +140,16 @@ public class SpriteBatch : IBatch
     /// See <see cref="CreateDefaultShader()"/>.
     /// </summary>
     /// <param name="size">
-    /// The max number of sprites in a single batch. Max of <see cref="MAX_SPRITES"/>.
+    /// The max number of sprites in a single batch. Max of <see cref="MaxSprites"/>.
     /// </param>
     /// <param name="defaultShader">
     /// The default shader to use. This is not owned by the SpriteBatch and must be disposed
     /// separately.
     /// </param>
-    protected SpriteBatch( int size = MAX_QUADS, ShaderProgram? defaultShader = null )
+    protected SpriteBatch( int size = MaxQuads, ShaderProgram? defaultShader = null )
     {
         // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
-        Guard.Against.GreaterThan( size, MAX_SPRITES );
+        Guard.Against.GreaterThan( size, MaxSprites );
         Guard.Against.Negative( size );
 
         CurrentBatchState = BatchState.Ready;
@@ -175,7 +175,7 @@ public class SpriteBatch : IBatch
         _lastSuccessfulTexture = null;
         _nullTextureCount      = 0;
 
-        _maxVertices     = size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
+        _maxVertices     = size * VerticesPerSprite * VertexConstants.VertexSize;
         _maxTextureUnits = QueryMaxSupportedTextureUnits();
 
         CreateWhitePixel();
@@ -206,16 +206,16 @@ public class SpriteBatch : IBatch
         // Usage.COLOR_PACKED: 1 floats for packed RGBA color component.
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
 
-        VertexAttribute va1 = VertexAttribute.Position( VertexConstants.POSITION_COMPONENTS );
-        VertexAttribute va2 = VertexAttribute.ColorPacked( VertexConstants.COLOR_COMPONENTS, IGL.GL_FLOAT, false );
-        VertexAttribute va3 = VertexAttribute.TexCoords( 0, VertexConstants.TEXCOORD_COMPONENTS );
+        VertexAttribute va1 = VertexAttribute.Position( VertexConstants.PositionComponents );
+        VertexAttribute va2 = VertexAttribute.ColorPacked( VertexConstants.ColorComponents, IGL.GLFloat, false );
+        VertexAttribute va3 = VertexAttribute.TexCoords( 0, VertexConstants.TexcoordComponents );
 
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
         _mesh = new Mesh( vertexDataType,
                           false,
-                          size * VERTICES_PER_SPRITE,
-                          size * INDICES_PER_SPRITE,
+                          size * VerticesPerSprite,
+                          size * IndicesPerSprite,
                           va1,
                           va2,
                           va3 );
@@ -409,7 +409,7 @@ public class SpriteBatch : IBatch
             RenderCalls++;
             TotalRenderCalls++;
 
-            var spritesInBatch = ( int )( Idx / ( long )( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) );
+            var spritesInBatch = ( int )( Idx / ( long )( VerticesPerSprite * VertexConstants.VertexSize ) );
             MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
 
             // 2. Texture Management
@@ -429,7 +429,7 @@ public class SpriteBatch : IBatch
 
             if ( _textureLocation != -1 )
             {
-                Engine.GL.Uniform1i( _textureLocation, _currentTextureIndex );
+                Engine.GL.Uniform1I( _textureLocation, _currentTextureIndex );
             }
 
             // 3. Sync CPU Data to GPU (The Missing Link)
@@ -615,8 +615,8 @@ public class SpriteBatch : IBatch
             Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
             // 2. Define constants in BYTES
-            const int F_SIZE = sizeof( float );
-            const int STRIDE = VertexConstants.VERTEX_SIZE * F_SIZE; // 5 * 4 = 20 bytes
+            const int FSize = sizeof( float );
+            const int Stride = VertexConstants.VertexSize * FSize; // 5 * 4 = 20 bytes
 
             // 3. Position: Location 0 (a_position vec2)
             int posLoc = program.GetAttributeLocation( "a_position" );
@@ -626,9 +626,9 @@ public class SpriteBatch : IBatch
                 program.EnableVertexAttribute( posLoc );
                 program.SetVertexAttribute( posLoc,
                                             2, // x, y
-                                            IGL.GL_FLOAT,
+                                            IGL.GLFloat,
                                             false,
-                                            STRIDE,
+                                            Stride,
                                             0 ); // Offset 0
             }
 
@@ -641,10 +641,10 @@ public class SpriteBatch : IBatch
                 // IMPORTANT: The shader expects ONE float (location 1)
                 program.SetVertexAttribute( colLoc,
                                             1, // Only 1 component!
-                                            IGL.GL_FLOAT,
+                                            IGL.GLFloat,
                                             false,
-                                            STRIDE,
-                                            2 * F_SIZE ); // Offset 8 bytes
+                                            Stride,
+                                            2 * FSize ); // Offset 8 bytes
             }
 
             // 5. UVs: Location 2 (a_texCoord0 vec2)
@@ -655,10 +655,10 @@ public class SpriteBatch : IBatch
                 program.EnableVertexAttribute( texLoc );
                 program.SetVertexAttribute( texLoc,
                                             2, // u, v
-                                            IGL.GL_FLOAT,
+                                            IGL.GLFloat,
                                             false,
-                                            STRIDE,
-                                            3 * F_SIZE ); // Offset 12 bytes
+                                            Stride,
+                                            3 * FSize ); // Offset 12 bytes
             }
         }
     }
@@ -697,8 +697,8 @@ public class SpriteBatch : IBatch
 //        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/GdxDefault.glsl.vert" );
 //        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/GdxDefault.glsl.frag" );
 
-        string vertexShader = Shaders.Shaders.DEFAULT_VERTEX_SHADER;
-        string fragShader   = Shaders.Shaders.DEFAULT_FRAGMENT_SHADER;
+        string vertexShader = Shaders.Shaders.DefaultVertexShader;
+        string fragShader   = Shaders.Shaders.DefaultFragmentShader;
 
         return new ShaderProgram( vertexShader, fragShader );
     }
@@ -731,7 +731,7 @@ public class SpriteBatch : IBatch
 
         if ( _textureLocation != -1 )
         {
-            Engine.GL.Uniform1i( _textureLocation, TextureOffset );
+            Engine.GL.Uniform1I( _textureLocation, TextureOffset );
         }
 
         LastTexture            = texture;
@@ -857,10 +857,10 @@ public class SpriteBatch : IBatch
     /// </param>
     private static void PopulateIndexBuffer( int size, out int[] indices )
     {
-        int len = size * INDICES_PER_SPRITE;
+        int len = size * IndicesPerSprite;
         indices = new int[ len ];
 
-        for ( short i = 0, j = 0; i < len; i += INDICES_PER_SPRITE, j += 4 )
+        for ( short i = 0, j = 0; i < len; i += IndicesPerSprite, j += 4 )
         {
             indices[ i ]     = j;
             indices[ i + 1 ] = ( short )( j + 1 );
@@ -929,7 +929,7 @@ public class SpriteBatch : IBatch
         _vbo = Engine.GL.GenBuffer();
         Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
-        Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
+        Vertices = new float[ size * VerticesPerSprite * Sprite.VertexSize ];
 
         Engine.GL.BufferData( BufferTarget.ArrayBuffer,
                               Vertices.Length * sizeof( float ),
@@ -944,9 +944,9 @@ public class SpriteBatch : IBatch
     /// <param name="size">The number of sprites to allocate indices for in the EBO.</param>
     private unsafe void CreateEbo( int size )
     {
-        var indices = new uint[ size * INDICES_PER_SPRITE ];
+        var indices = new uint[ size * IndicesPerSprite ];
 
-        for ( uint i = 0, vertex = 0; i < indices.Length; i += INDICES_PER_SPRITE, vertex += 4 )
+        for ( uint i = 0, vertex = 0; i < indices.Length; i += IndicesPerSprite, vertex += 4 )
         {
             // Triangle 1: Bottom-Left, Top-Left, Top-Right
             indices[ i + 0 ] = vertex + 0;
@@ -994,7 +994,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1064,7 +1064,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1199,7 +1199,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1264,7 +1264,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1321,7 +1321,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1458,7 +1458,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1518,7 +1518,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1650,7 +1650,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1803,7 +1803,7 @@ public class SpriteBatch : IBatch
             {
                 SwitchTexture( region.Texture );
             }
-            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
             {
                 Flush();
             }
@@ -1907,7 +1907,7 @@ public class SpriteBatch : IBatch
         Vertices[ Idx + IBatch.U4 ] = u4; // Texture U
         Vertices[ Idx + IBatch.V4 ] = v4; // Texture V
 
-        Idx += VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
+        Idx += VerticesPerSprite * VertexConstants.VertexSize;
     }
 
     // ========================================================================
@@ -1956,7 +1956,7 @@ public class SpriteBatch : IBatch
 
     public void DebugVertices()
     {
-        for ( var i = 0; i < ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ); i++ )
+        for ( var i = 0; i < ( VerticesPerSprite * VertexConstants.VertexSize ); i++ )
         {
             Logger.Debug( i is 2 or 7 or 12 or 17
                               ? $"Vertices[{i}]: {( uint )Vertices[ i ]:X}"

@@ -45,15 +45,28 @@ public class InputEventQueue
 
     // ========================================================================
 
-    private const int SKIP           = -1;
-    private const int KEY_DOWN       = 0;
-    private const int KEY_UP         = 1;
-    private const int KEY_TYPED      = 2;
-    private const int TOUCH_DOWN     = 3;
-    private const int TOUCH_UP       = 4;
-    private const int TOUCH_DRAGGED  = 5;
-    private const int MOUSE_MOVED    = 6;
-    private const int MOUSE_SCROLLED = 7;
+//    private enum InputAction
+//    {
+//        Skip = -1,
+//        KeyDown = 0,
+//        KeyUp,
+//        KeyTyped,
+//        TouchDown,
+//        TouchUp,
+//        TouchDragged,
+//        MouseMoved,
+//        MouseScrolled,
+//    }
+    
+    private const int Skip           = -1;
+    private const int KeyDown       = 0;
+    private const int KeyUp         = 1;
+    private const int KeyTyped      = 2;
+    private const int TouchDown     = 3;
+    private const int TouchUp       = 4;
+    private const int TouchDragged  = 5;
+    private const int MouseMoved    = 6;
+    private const int MouseScrolled = 7;
 
     // ========================================================================
 
@@ -94,57 +107,57 @@ public class InputEventQueue
 
             switch ( eventType )
             {
-                case SKIP:
+                case Skip:
                     index += processingArray[ index ];
 
                     break;
 
-                case KEY_DOWN:
-                    processor.KeyDown( processingArray[ index++ ] );
+                case KeyDown:
+                    processor.OnKeyDown( processingArray[ index++ ] );
 
                     break;
 
-                case KEY_UP:
-                    processor.KeyUp( processingArray[ index++ ] );
+                case KeyUp:
+                    processor.OnKeyUp( processingArray[ index++ ] );
 
                     break;
 
-                case KEY_TYPED:
-                    processor.KeyTyped( ( char )processingArray[ index++ ] );
+                case KeyTyped:
+                    processor.OnKeyTyped( ( char )processingArray[ index++ ] );
 
                     break;
 
-                case TOUCH_DOWN:
-                    processor.TouchDown( processingArray[ index++ ],
+                case TouchDown:
+                    processor.OnTouchDown( processingArray[ index++ ],
+                                           processingArray[ index++ ],
+                                           processingArray[ index++ ],
+                                           processingArray[ index++ ] );
+
+                    break;
+
+                case TouchUp:
+                    processor.OnTouchUp( processingArray[ index++ ],
                                          processingArray[ index++ ],
                                          processingArray[ index++ ],
                                          processingArray[ index++ ] );
 
                     break;
 
-                case TOUCH_UP:
-                    processor.TouchUp( processingArray[ index++ ],
-                                       processingArray[ index++ ],
-                                       processingArray[ index++ ],
-                                       processingArray[ index++ ] );
+                case TouchDragged:
+                    processor.OnTouchDragged( processingArray[ index++ ],
+                                              processingArray[ index++ ],
+                                              processingArray[ index++ ] );
 
                     break;
 
-                case TOUCH_DRAGGED:
-                    processor.TouchDragged( processingArray[ index++ ],
-                                            processingArray[ index++ ],
-                                            processingArray[ index++ ] );
+                case MouseMoved:
+                    processor.OnMouseMoved( processingArray[ index++ ], processingArray[ index++ ] );
 
                     break;
 
-                case MOUSE_MOVED:
-                    processor.MouseMoved( processingArray[ index++ ], processingArray[ index++ ] );
-
-                    break;
-
-                case MOUSE_SCROLLED:
-                    processor.Scrolled( NumberUtils.IntBitsToFloat( processingArray[ index++ ] ),
-                                        NumberUtils.IntBitsToFloat( processingArray[ index++ ] ) );
+                case MouseScrolled:
+                    processor.OnScrolled( NumberUtils.IntBitsToFloat( processingArray[ index++ ] ),
+                                          NumberUtils.IntBitsToFloat( processingArray[ index++ ] ) );
 
                     break;
 
@@ -184,39 +197,39 @@ public class InputEventQueue
 
                 switch ( type )
                 {
-                    case SKIP:
+                    case Skip:
                     {
                         i += q[ i ];
 
                         break;
                     }
 
-                    case KEY_DOWN:
-                    case KEY_UP:
-                    case KEY_TYPED:
+                    case KeyDown:
+                    case KeyUp:
+                    case KeyTyped:
                     {
                         i++;
 
                         break;
                     }
 
-                    case TOUCH_DOWN:
-                    case TOUCH_UP:
+                    case TouchDown:
+                    case TouchUp:
                     {
                         i += 4;
 
                         break;
                     }
 
-                    case TOUCH_DRAGGED:
+                    case TouchDragged:
                     {
                         i += 3;
 
                         break;
                     }
 
-                    case MOUSE_MOVED:
-                    case MOUSE_SCROLLED:
+                    case MouseMoved:
+                    case MouseScrolled:
                     {
                         i += 2;
 
@@ -250,11 +263,11 @@ public class InputEventQueue
     /// <param name="keycode"> The keycode of the key down event. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool KeyDown( int keycode, long time )
+    public bool OnKeyDown( int keycode, long time )
     {
         lock ( this )
         {
-            _queue.Add( KEY_DOWN );
+            _queue.Add( KeyDown );
             QueueTime( time );
             _queue.Add( keycode );
         }
@@ -268,11 +281,11 @@ public class InputEventQueue
     /// <param name="keycode"> The keycode of the key up event. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool KeyUp( int keycode, long time )
+    public bool OnKeyUp( int keycode, long time )
     {
         lock ( this )
         {
-            _queue.Add( KEY_UP );
+            _queue.Add( KeyUp );
             QueueTime( time );
             _queue.Add( keycode );
         }
@@ -286,11 +299,11 @@ public class InputEventQueue
     /// <param name="character"> The character of the key typed event. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool KeyTyped( char character, long time )
+    public bool OnKeyTyped( char character, long time )
     {
         lock ( this )
         {
-            _queue.Add( KEY_TYPED );
+            _queue.Add( KeyTyped );
             QueueTime( time );
             _queue.Add( character );
         }
@@ -307,11 +320,11 @@ public class InputEventQueue
     /// <param name="button"> The button pressed. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool TouchDown( int screenX, int screenY, int pointer, int button, long time )
+    public bool OnTouchDown( int screenX, int screenY, int pointer, int button, long time )
     {
         lock ( this )
         {
-            _queue.Add( TOUCH_DOWN );
+            _queue.Add( TouchDown );
             QueueTime( time );
             _queue.Add( screenX );
             _queue.Add( screenY );
@@ -331,11 +344,11 @@ public class InputEventQueue
     /// <param name="button"> The button released. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool TouchUp( int screenX, int screenY, int pointer, int button, long time )
+    public bool OnTouchUp( int screenX, int screenY, int pointer, int button, long time )
     {
         lock ( this )
         {
-            _queue.Add( TOUCH_UP );
+            _queue.Add( TouchUp );
 
             QueueTime( time );
 
@@ -357,21 +370,21 @@ public class InputEventQueue
     /// <param name="pointer"> The pointer index. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool TouchDragged( int screenX, int screenY, int pointer, long time )
+    public bool OnTouchDragged( int screenX, int screenY, int pointer, long time )
     {
         lock ( this )
         {
             // Skip any queued touch dragged events for the same pointer.
-            for ( int i = Next( TOUCH_DRAGGED, 0 ); i >= 0; i = Next( TOUCH_DRAGGED, i + 6 ) )
+            for ( int i = Next( TouchDragged, 0 ); i >= 0; i = Next( TouchDragged, i + 6 ) )
             {
                 if ( _queue[ i + 5 ] == pointer )
                 {
-                    _queue[ i ]     = SKIP;
+                    _queue[ i ]     = Skip;
                     _queue[ i + 3 ] = 3;
                 }
             }
 
-            _queue.Add( TOUCH_DRAGGED );
+            _queue.Add( TouchDragged );
 
             QueueTime( time );
 
@@ -391,18 +404,18 @@ public class InputEventQueue
     /// <param name="screenY"> The y-coordinate of the mouse. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool MouseMoved( int screenX, int screenY, long time )
+    public bool OnMouseMoved( int screenX, int screenY, long time )
     {
         lock ( this )
         {
             // Skip any queued mouse moved events.
-            for ( int i = Next( MOUSE_MOVED, 0 ); i >= 0; i = Next( MOUSE_MOVED, i + 5 ) )
+            for ( int i = Next( MouseMoved, 0 ); i >= 0; i = Next( MouseMoved, i + 5 ) )
             {
-                _queue[ i ]     = SKIP;
+                _queue[ i ]     = Skip;
                 _queue[ i + 3 ] = 2;
             }
 
-            _queue.Add( MOUSE_MOVED );
+            _queue.Add( MouseMoved );
 
             QueueTime( time );
 
@@ -420,11 +433,11 @@ public class InputEventQueue
     /// <param name="amountY">The vertical scroll amount.</param>
     /// <param name="time">The time the event occurred.</param>
     /// <returns>Always returns false.</returns>
-    public bool Scrolled( float amountX, float amountY, long time )
+    public bool OnScrolled( float amountX, float amountY, long time )
     {
         lock ( this )
         {
-            _queue.Add( MOUSE_SCROLLED );
+            _queue.Add( MouseScrolled );
 
             QueueTime( time );
 

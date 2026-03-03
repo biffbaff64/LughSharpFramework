@@ -43,7 +43,7 @@ public class LayerIIDecoder : LayerIDecoder
 
         switch ( Mode )
         {
-            case Header.SINGLE_CHANNEL:
+            case Header.SingleChannel:
                 for ( i = 0; i < NuSubbands; ++i )
                 {
                     Subbands[ i ] = new SubbandLayer2( i );
@@ -51,7 +51,7 @@ public class LayerIIDecoder : LayerIDecoder
 
                 break;
 
-            case Header.JOINT_STEREO:
+            case Header.JointStereo:
                 for ( i = 0; i < Header?.IntensityStereoBound(); ++i )
                 {
                     Subbands[ i ] = new SubbandLayer2Stereo( i );

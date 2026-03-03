@@ -29,8 +29,8 @@ namespace LughSharp.Core.Utils;
 [PublicAPI]
 public static class TimeHelpers
 {
-    public const long NANOS_PER_MILLI        = 1_000_000;
-    public const long NANOSECONDS_PER_SECOND = 1_000_000_000;
+    public const long NanosPerMilli        = 1_000_000;
+    public const long NanosecondsPerSecond = 1_000_000_000;
 
     // ========================================================================
 
@@ -57,7 +57,7 @@ public static class TimeHelpers
     /// <returns></returns>
     public static long NanosToMillis( long nanos )
     {
-        return nanos / NANOS_PER_MILLI;
+        return nanos / NanosPerMilli;
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public static class TimeHelpers
     /// <returns></returns>
     public static long NanosToMillis()
     {
-        return NanoTime() / NANOS_PER_MILLI;
+        return NanoTime() / NanosPerMilli;
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public static class TimeHelpers
     /// <returns></returns>
     public static long MillisToNanos( long millis )
     {
-        return millis * NANOS_PER_MILLI;
+        return millis * NanosPerMilli;
     }
 
     /// <summary>

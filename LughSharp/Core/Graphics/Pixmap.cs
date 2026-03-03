@@ -205,13 +205,13 @@ public class Pixmap : IDisposable
         {
             return Gdx2DPixmap.ColorFormat switch
                    {
-                       LughFormat.ALPHA           => IGL.GL_UNSIGNED_BYTE,
-                       LughFormat.LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-                       LughFormat.RGB888          => IGL.GL_UNSIGNED_BYTE,
-                       LughFormat.RGBA8888        => IGL.GL_UNSIGNED_BYTE,
-                       LughFormat.RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
-                       LughFormat.RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
-                       LughFormat.INDEXED_COLOR   => IGL.GL_UNSIGNED_BYTE,
+                       LughFormat.Alpha           => IGL.GLUnsignedByte,
+                       LughFormat.LuminanceAlpha => IGL.GLUnsignedByte,
+                       LughFormat.RGB888          => IGL.GLUnsignedByte,
+                       LughFormat.RGBA8888        => IGL.GLUnsignedByte,
+                       LughFormat.RGB565          => IGL.GLUnsignedShort565,
+                       LughFormat.RGBA4444        => IGL.GLUnsignedShort4444,
+                       LughFormat.IndexedColor   => IGL.GLUnsignedByte,
 
                        var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap.ColorFormat}" )
                    };
@@ -267,8 +267,8 @@ public class Pixmap : IDisposable
             field = value;
 
             Scale = field == Filter.NearestNeighbour
-                ? Gdx2DPixmap.GDX_2D_SCALE_NEAREST
-                : Gdx2DPixmap.GDX_2D_SCALE_LINEAR;
+                ? Gdx2DPixmap.Gdx2DScaleNearest
+                : Gdx2DPixmap.Gdx2DScaleLinear;
         }
     } = Filter.BiLinear;
 
@@ -545,13 +545,13 @@ public class Pixmap : IDisposable
     /// <returns> The new Pixmap. </returns>
     public static unsafe Pixmap CreateFromFrameBuffer( int x, int y, int width, int height )
     {
-        Engine.GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
+        Engine.GL.PixelStorei( IGL.GLPackAlignment, 1 );
 
         Pixmap pixmap = new( width, height, LughFormat.RGBA8888 );
 
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
-            Engine.GL.ReadPixels( x, y, width, height, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
+            Engine.GL.ReadPixels( x, y, width, height, IGL.GLRGBA, IGL.GLUnsignedByte, ( IntPtr )ptr );
         }
 
         return pixmap;

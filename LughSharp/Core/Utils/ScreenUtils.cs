@@ -94,11 +94,11 @@ public static class ScreenUtils
     {
         Engine.GL.ClearColor( r, g, b, a );
 
-        var mask = ( uint )IGL.GL_COLOR_BUFFER_BIT;
+        var mask = ( uint )IGL.GLColorBufferBit;
 
         if ( clearDepth )
         {
-            mask |= IGL.GL_DEPTH_BUFFER_BIT;
+            mask |= IGL.GLDepthBufferBit;
         }
 
         Engine.GL.Clear( mask );
@@ -192,13 +192,13 @@ public static class ScreenUtils
     {
         int numBytes = w * h * 4;
 
-        Engine.GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
+        Engine.GL.PixelStorei( IGL.GLPackAlignment, 1 );
 
         var pixels = new Buffer< byte >( numBytes );
 
         fixed ( void* ptr = &pixels.BackingArray()[ 0 ] )
         {
-            Engine.GL.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
+            Engine.GL.ReadPixels( x, y, w, h, IGL.GLRGBA, IGL.GLUnsignedByte, ( IntPtr )ptr );
         }
 
         var lines = new byte[ numBytes ];

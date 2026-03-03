@@ -51,7 +51,7 @@ public partial class GLBindings
 
         int error = _glGetError();
 
-        while ( error != IGL.GL_NO_ERROR )
+        while ( error != IGL.GLNoError )
         {
 //            ErrorListener.OnError( error );
 

@@ -29,24 +29,24 @@ namespace LughSharp.Core.Graphics.OpenGL;
 [PublicAPI]
 public class GLData
 {
-    public const int                   DEFAULT_GL_MAJOR             = 3;
-    public const int                   DEFAULT_GL_MINOR             = 2;
-    public const DotGLFW.ClientAPI     DEFAULT_CLIENT_API           = DotGLFW.ClientAPI.OpenGLAPI;
-    public const DotGLFW.OpenGLProfile DEFAULT_OPENGL_PROFILE       = DotGLFW.OpenGLProfile.CoreProfile;
-    public const bool                  DEFAULT_OPENGL_FORWARDCOMPAT = true;
+    public const int                   DefaultGLMajor             = 3;
+    public const int                   DefaultGLMinor             = 2;
+    public const DotGLFW.ClientAPI     DefaultClientApi           = DotGLFW.ClientAPI.OpenGLAPI;
+    public const DotGLFW.OpenGLProfile DefaultOpenglProfile       = DotGLFW.OpenGLProfile.CoreProfile;
+    public const bool                  DefaultOpenglForwardcompat = true;
 
-    public const int TEXTURE_2D     = 0x0DE1;
-    public const int EXTENSIONS     = 0x1F03;
-    public const int MAJOR_VERSION  = 0x821B;
-    public const int MINOR_VERSION  = 0x821C;
-    public const int NUM_EXTENSIONS = 0x821D;
+    public const int Texture2D     = 0x0DE1;
+    public const int Extensions     = 0x1F03;
+    public const int MajorVersion  = 0x821B;
+    public const int MinorVersion  = 0x821C;
+    public const int NumExtensions = 0x821D;
 
     // ========================================================================
 
     /// <summary>
     /// As named, this is the currently bound FBO, used to keep track.
     /// </summary>
-    public static uint CurrentBoundFBO { get; set; }
+    public static uint CurrentBoundFbo { get; set; }
 }
 
 // ========================================================================

@@ -45,19 +45,19 @@ public class Bitstream
     /// Synchronization control constant for the initial
     /// synchronization to the start of a frame.
     /// </summary>
-    public const sbyte INITIAL_SYNC = 0;
+    public const sbyte InitialSync = 0;
 
     /// <summary>
     /// Synchronization control constant for non-inital frame
     /// synchronizations.
     /// </summary>
-    public const sbyte STRICT_SYNC = 1;
+    public const sbyte StrictSync = 1;
 
     /// <summary>
     /// Maximum size of the frame buffer:
     /// 1730 bytes per frame: 144 * 384kbit/s / 32000 Hz + 2 Bytes CRC
     /// </summary>
-    private const int BUFFER_INT_SIZE = 433;
+    private const int BufferIntSize = 433;
 
     private readonly int[] _bitmask =
     [
@@ -111,8 +111,8 @@ public class Bitstream
     {
         _crc         = new Crc16[ 1 ];
         _syncBuffer  = new sbyte[ 4 ];
-        _frameBytes  = new sbyte[ BUFFER_INT_SIZE * 4 ];
-        _frameBuffer = new int[ BUFFER_INT_SIZE ];
+        _frameBytes  = new sbyte[ BufferIntSize * 4 ];
+        _frameBuffer = new int[ BufferIntSize ];
         _header      = new Header();
 
         _sourceStream = stream ?? throw new NullReferenceException( "in stream is null" );
@@ -128,7 +128,7 @@ public class Bitstream
         }
         catch ( IOException ex )
         {
-            throw new BitstreamException( BitstreamErrors.STREA_ERROR, ex );
+            throw new BitstreamException( BitstreamErrors.StreaError, ex );
         }
     }
 
@@ -149,7 +149,7 @@ public class Bitstream
         }
         catch ( BitstreamException ex )
         {
-            if ( ex.ErrorCode != BitstreamErrors.STREAM_EOF )
+            if ( ex.ErrorCode != BitstreamErrors.StreamEof )
             {
                 // wrap original exception so stack trace is maintained.
                 throw new BitstreamException( ex.ErrorCode, ex );
@@ -185,7 +185,7 @@ public class Bitstream
             }
             catch
             {
-                throw new BitstreamException( BitstreamErrors.STREA_ERROR );
+                throw new BitstreamException( BitstreamErrors.StreaError );
             }
         }
     }
@@ -254,7 +254,7 @@ public class Bitstream
 
         if ( bytesRead != 3 )
         {
-            throw new BitstreamException( BitstreamErrors.STREAM_EOF );
+            throw new BitstreamException( BitstreamErrors.StreamEof );
         }
 
         int headerstring = ( ( _syncBuffer[ 0 ] << 16 ) & 0x00FF0000 )
@@ -267,7 +267,7 @@ public class Bitstream
 
             if ( ReadBytes( _syncBuffer, 3, 1 ) != 1 )
             {
-                throw new BitstreamException( BitstreamErrors.STREAM_EOF );
+                throw new BitstreamException( BitstreamErrors.StreamEof );
             }
 
             headerstring |= _syncBuffer[ 3 ] & 0x000000FF;
@@ -278,7 +278,7 @@ public class Bitstream
 
                 if ( bytesRead != 3 )
                 {
-                    throw new BitstreamException( BitstreamErrors.STREAM_EOF );
+                    throw new BitstreamException( BitstreamErrors.StreamEof );
                 }
 
                 headerstring = ( ( _syncBuffer[ 0 ] << 16 ) & 0x00FF0000 )
@@ -312,7 +312,7 @@ public class Bitstream
 
             if ( ReadBytes( id3Header, 0, 6 ) != 6 )
             {
-                throw new BitstreamException( BitstreamErrors.STREAM_EOF );
+                throw new BitstreamException( BitstreamErrors.StreamEof );
             }
 
             // id3 header uses 4 bytes to store the size of all tags,
@@ -331,7 +331,7 @@ public class Bitstream
 
             if ( ReadBytes( id3Tag, 0, id3TagSize ) != id3TagSize )
             {
-                throw new BitstreamException( BitstreamErrors.STREAM_EOF );
+                throw new BitstreamException( BitstreamErrors.StreamEof );
             }
         }
 
@@ -342,7 +342,7 @@ public class Bitstream
     {
         bool sync;
 
-        if ( syncmode == INITIAL_SYNC )
+        if ( syncmode == InitialSync )
         {
             //sync =  ((headerstring & 0xFFF00000) == 0xFFF00000);
             sync = ( headerstring & 0xFFE00000 ) == 0xFFE00000; // SZD: MPEG 2.5
@@ -525,7 +525,7 @@ public class Bitstream
         }
         catch ( IOException ex )
         {
-            throw new BitstreamException( BitstreamErrors.STREA_ERROR, ex );
+            throw new BitstreamException( BitstreamErrors.StreaError, ex );
         }
     }
 
@@ -555,7 +555,7 @@ public class Bitstream
         }
         catch ( IOException ex )
         {
-            throw new BitstreamException( BitstreamErrors.STREA_ERROR, ex );
+            throw new BitstreamException( BitstreamErrors.StreaError, ex );
         }
 
         return totalBytesRead;

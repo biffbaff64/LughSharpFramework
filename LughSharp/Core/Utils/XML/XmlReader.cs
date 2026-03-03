@@ -172,7 +172,7 @@ public class XmlReader
         string? attributeName = null;
         var     hasBody       = false;
 
-        cs = XML_START;
+        cs = XmlStart;
 
         //TODO:
         int klen;
@@ -595,7 +595,7 @@ public class XmlReader
         0, 3, 3, 13, 1, 0, 0, 9, 0, 11, 11, 0, 0, 0, 0, 1, 25, 0, 19, 5, 16, 0, 0, 0, 7, 1, 0, 0
     };
 
-    private const int XML_START = 1;
+    private const int XmlStart = 1;
 
     #endregion
 

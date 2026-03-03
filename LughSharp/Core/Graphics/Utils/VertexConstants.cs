@@ -48,19 +48,19 @@ public class VertexConstants
         BiNormal           = 256
     }
 
-    public const int POSITION_COMPONENTS = 2;
-    public const int COLOR_COMPONENTS    = 1;
-    public const int TEXCOORD_COMPONENTS = 2;
-    public const int NORMAL_COMPONENTS   = 3;
+    public const int PositionComponents = 2;
+    public const int ColorComponents    = 1;
+    public const int TexcoordComponents = 2;
+    public const int NormalComponents   = 3;
 
     // Number of floats per vertex (x, y, color, u, v)
-    public const int VERTEX_SIZE = POSITION_COMPONENTS + COLOR_COMPONENTS + TEXCOORD_COMPONENTS;
+    public const int VertexSize = PositionComponents + ColorComponents + TexcoordComponents;
 
     // Vertex Size (in bytes)
-    public const int VERTEX_SIZE_BYTES = VERTEX_SIZE * sizeof( float );
+    public const int VertexSizeBytes = VertexSize * sizeof( float );
 
     // Vertex Offsets (in floats)
-    public const int POSITION_OFFSET = 0;
-    public const int COLOR_OFFSET    = POSITION_OFFSET + POSITION_COMPONENTS;
-    public const int TEXCOORD_OFFSET = COLOR_OFFSET + COLOR_COMPONENTS;
+    public const int PositionOffset = 0;
+    public const int ColorOffset    = PositionOffset + PositionComponents;
+    public const int TexcoordOffset = ColorOffset + ColorComponents;
 }

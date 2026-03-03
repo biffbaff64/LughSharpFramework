@@ -222,17 +222,17 @@ public class MainGame : Game
 
     private void CreateCameras()
     {
-        const float ZOOM = 1f;
+        const float Zoom = 1f;
 
         _tiledCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
                                                 Engine.Api.Graphics.WindowHeight,
                                                 name: "TILEDCamera" );
 
-        _tiledCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
-        _tiledCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
+        _tiledCam.Camera.Near = CameraData.DefaultNearPlane;
+        _tiledCam.Camera.Far  = CameraData.DefaultFarPlane;
         _tiledCam.IsInUse     = true;
-        _tiledCam.SetZoomDefault( ZOOM );
-        _tiledCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
+        _tiledCam.SetZoomDefault( Zoom );
+        _tiledCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
         _tiledCam.Update();
 
         // --------------------------------------
@@ -241,21 +241,21 @@ public class MainGame : Game
                                                Engine.Api.Graphics.WindowHeight,
                                                name: "HUDCamera" );
 
-        _gameCam.Camera.Near = CameraData.DEFAULT_NEAR_PLANE;
-        _gameCam.Camera.Far  = CameraData.DEFAULT_FAR_PLANE;
+        _gameCam.Camera.Near = CameraData.DefaultNearPlane;
+        _gameCam.Camera.Far  = CameraData.DefaultFarPlane;
         _gameCam.IsInUse     = true;
-        _gameCam.SetZoomDefault( ZOOM );
+        _gameCam.SetZoomDefault( Zoom );
 
         // Set initial camera position
-        _gameCam.SetPosition( new Vector3( 0, 0, CameraData.DEFAULT_Z ) );
+        _gameCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
         _gameCam.Update();
     }
 
     private void CreateAssets()
     {
-        _image1 = new Texture( Assets.COMPLETE_STAR );
-        _image2 = new Texture( Assets.COMPLETE_STAR );
-        _star   = new TextureRegion( new Texture( Assets.COMPLETE_STAR ) );
+        _image1 = new Texture( Assets.CompleteStar );
+        _image2 = new Texture( Assets.CompleteStar );
+        _star   = new TextureRegion( new Texture( Assets.CompleteStar ) );
 
         CreateStage();
         CreateFont();
@@ -270,7 +270,7 @@ public class MainGame : Game
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
-        var texture = new Texture( Assets.HUD_PANEL );
+        var texture = new Texture( Assets.HudPanel );
 
         _stage = new Stage( _gameCam.Viewport );
         _hudActor = new Scene2DImage( texture )
@@ -283,8 +283,8 @@ public class MainGame : Game
 
         var style = new ImageButton.ImageButtonStyle
         {
-            ImageUp   = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_UP ) ),
-            ImageDown = new TextureRegionDrawable( new Texture( Assets.BUTTON_B_DOWN ) )
+            ImageUp   = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
+            ImageDown = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) )
         };
         _imageButton = new ImageButton( style )
         {
@@ -298,7 +298,7 @@ public class MainGame : Game
         {
             TitleFont      = _font,
             TitleFontColor = Color.White,
-            Background     = new TextureRegionDrawable( new Texture( Assets.WINDOW_BACKGROUND ) )
+            Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
         };
         _windowActor = new Window( "Window Title", windowStyle )
         {
@@ -308,7 +308,7 @@ public class MainGame : Game
 
         // --------------------------------------
 
-        var skin = new Skin( new FileInfo( Assets.PROGRESS_BAR_SKIN ) );
+        var skin = new Skin( new FileInfo( Assets.ProgressBarSkin ) );
 //        _progressBar = new ProgressBar( 0f, 10f, 1f, false, skin );
 //        _progressBar.SetPosition( 20, 550 );
 
@@ -367,7 +367,7 @@ public class MainGame : Game
 
     private void CreateFreeTypeFont()
     {
-        var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AMBLE_REGULAR_26_FONT ) );
+        var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AmbleRegular26Font ) );
         var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
         {
             Size = 40
@@ -379,12 +379,12 @@ public class MainGame : Game
 
     private void CreateSprites()
     {
-        _sprite = new Sprite( new TextureRegion( new Texture( Assets.KEY_COLLECTED ) ) );
+        _sprite = new Sprite( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
         _sprite.SetBounds();
         _sprite.SetOriginCenter();
         _sprite.SetColor( Color.White );
 
-        _sprite2 = new Sprite( new TextureRegion( new Texture( Assets.PAUSE_EXIT_BUTTON ) ) );
+        _sprite2 = new Sprite( new TextureRegion( new Texture( Assets.PauseExitButton ) ) );
         _sprite2.SetBounds();
         _sprite2.SetOriginCenter();
         _sprite2.SetColor( Color.White );
@@ -393,7 +393,7 @@ public class MainGame : Game
     private void CreateMap()
     {
         _tmxMapLoader = new TmxMapLoader();
-        _tiledMap     = _tmxMapLoader.Load( Assets.ROOM1_MAP );
+        _tiledMap     = _tmxMapLoader.Load( Assets.Room1Map );
         _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
 
         _mapWidth  = _tiledMap.Properties.Get< int >( "width" );

@@ -41,30 +41,6 @@ namespace LughSharp.Core.Scenes.Scene2D.Listeners;
 [PublicAPI]
 public class ClickListener : InputListener
 {
-    /// <summary>
-    /// Time in seconds <see cref="VisualPressed"/> reports true after
-    /// a press resulting in a click is released.
-    /// </summary>
-    public const float VISUAL_PRESSED_DURATION = 0.1f;
-
-    private bool _cancelled;
-    private long _lastTapTime;
-    private bool _over;
-    private long _tapCountInterval = ( long )( 0.4f * 1000000000L );
-    private long _visualPressedTime;
-
-    // ========================================================================
-
-    /// <summary>
-    /// Creates a new ClickListener.
-    /// Sets the button to listen for, all other buttons are ignored.
-    /// Default is <see cref="IInput.Buttons.LEFT"/>. Use -1 for any button.
-    /// </summary>
-    public ClickListener( int button = IInput.Buttons.LEFT )
-    {
-        Button = button;
-    }
-
     public float TouchDownX     { get; set; } = -1;
     public float TouchDownY     { get; set; } = -1;
     public int   PressedPointer { get; set; } = -1;
@@ -73,6 +49,29 @@ public class ClickListener : InputListener
     public bool  Pressed        { get; set; }
     public float TapSquareSize  { get; set; } = 14;
     public int   TapCount       { get; set; }
+
+    /// <summary>
+    /// Time in seconds <see cref="VisualPressed"/> reports true after
+    /// a press resulting in a click is released.
+    /// </summary>
+    public const float VisualPressedDuration = 0.1f;
+
+    private bool _cancelled;
+    private long _lastTapTime;
+    private bool _over;
+    private long _visualPressedTime;
+
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a new ClickListener.
+    /// Sets the button to listen for, all other buttons are ignored.
+    /// Default is <see cref="IInput.Buttons.Left"/>. Use -1 for any button.
+    /// </summary>
+    public ClickListener( int button = IInput.Buttons.Left )
+    {
+        Button = button;
+    }
 
     /// <summary>
     /// Returns true if a touch is over the actor or within the tap square or
@@ -106,7 +105,7 @@ public class ClickListener : InputListener
         {
             if ( value )
             {
-                _visualPressedTime = TimeUtils.Millis() + ( long )( VISUAL_PRESSED_DURATION * 1000 );
+                _visualPressedTime = TimeUtils.Millis() + ( long )( VisualPressedDuration * 1000 );
             }
             else
             {
@@ -123,17 +122,17 @@ public class ClickListener : InputListener
 
     /// <summary>
     /// Sets the button to listen for, all other buttons are ignored.
-    /// Default is <see cref="IInput.Buttons.LEFT"/>.
+    /// Default is <see cref="IInput.Buttons.Left"/>.
     /// Use -1 for any button.
     /// </summary>
     public long TapCountInterval
     {
-        get => _tapCountInterval;
-        set => _tapCountInterval = value * 1000000000L;
-    }
+        get;
+        set => field = value * 1000000000L;
+    } = ( long )( 0.4f * 1000000000L );
 
     /// <inheritdoc />
-    public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+    public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
     {
         if ( Pressed )
         {
@@ -156,7 +155,7 @@ public class ClickListener : InputListener
     }
 
     /// <inheritdoc />
-    public override void TouchDragged( InputEvent? ev, float x, float y, int pointer )
+    public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
     {
         if ( ( pointer != PressedPointer ) || _cancelled )
         {
@@ -173,7 +172,7 @@ public class ClickListener : InputListener
     }
 
     /// <inheritdoc />
-    public override void TouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+    public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
     {
         if ( pointer == PressedPointer )
         {

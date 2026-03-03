@@ -57,7 +57,7 @@ public class DecoderException : Mp3SharpException
     public DecoderException( string message, Exception? inner )
         : base( message, inner )
     {
-        ErrorCode = DecoderErrors.UNKNOWN_ERROR;
+        ErrorCode = DecoderErrors.UnknownError;
     }
 
     /// <summary>

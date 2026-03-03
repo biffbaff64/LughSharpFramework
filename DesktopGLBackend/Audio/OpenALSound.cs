@@ -65,9 +65,9 @@ public class OpenALSound( OpenALAudio audio ) : ISound
 
         long soundId = audio.GetSoundId( sourceID );
 
-        AL.Sourcei( ( uint )sourceID, AL.BUFFER, _bufferID );
-        AL.Sourcei( ( uint )sourceID, AL.LOOPING, AL.FALSE );
-        AL.Sourcef( ( uint )sourceID, AL.GAIN, volume );
+        AL.Sourcei( ( uint )sourceID, AL.Buffer, _bufferID );
+        AL.Sourcei( ( uint )sourceID, AL.Looping, AL.False );
+        AL.Sourcef( ( uint )sourceID, AL.Gain, volume );
         AL.SourcePlay( ( uint )sourceID );
 
         return soundId;
@@ -89,9 +89,9 @@ public class OpenALSound( OpenALAudio audio ) : ISound
 
         long soundId = audio.GetSoundId( sourceID );
 
-        AL.Sourcei( ( uint )sourceID, AL.BUFFER, _bufferID );
-        AL.Sourcei( ( uint )sourceID, AL.LOOPING, AL.TRUE );
-        AL.Sourcef( ( uint )sourceID, AL.GAIN, volume );
+        AL.Sourcei( ( uint )sourceID, AL.Buffer, _bufferID );
+        AL.Sourcei( ( uint )sourceID, AL.Looping, AL.True );
+        AL.Sourcef( ( uint )sourceID, AL.Gain, volume );
         AL.SourcePlay( ( uint )sourceID );
 
         return soundId;

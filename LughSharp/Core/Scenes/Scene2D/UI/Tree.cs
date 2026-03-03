@@ -1476,7 +1476,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValu
             }
         }
 
-        public override bool MouseMoved( InputEvent? ev, float x, float y )
+        public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             _tree.OverNode = _tree.GetNodeAt( y );
 

@@ -29,13 +29,13 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Utils;
 
 [PublicAPI]
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
 public class JsonFieldAttribute : Attribute
 {
     public string? Name     { get; set; }
     public bool    Required { get; set; }
 
-    public JsonFieldAttribute(string? name = null, bool required = false)
+    public JsonFieldAttribute( string? name = null, bool required = false )
     {
         Name     = name;
         Required = required;

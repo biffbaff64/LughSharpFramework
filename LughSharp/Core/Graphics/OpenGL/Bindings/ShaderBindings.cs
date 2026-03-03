@@ -52,12 +52,12 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void AttachShader( GLint program, GLint shader )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
 
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -73,7 +73,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BindAttribLocation( GLint program, GLuint index, byte* name )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -87,7 +87,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BindAttribLocation( int program, GLuint index, string name )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -108,7 +108,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void CompileShader( GLint shader )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -134,13 +134,13 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteProgram( GLint program )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        if ( Engine.GL.IsProgram( program ) && ( program != INVALID_SHADER_PROGRAM ) )
+        if ( Engine.GL.IsProgram( program ) && ( program != InvalidShaderProgram ) )
         {
             GetDelegateForFunction< PFNGLDELETEPROGRAMPROC >( "glDeleteProgram", out _glDeleteProgram );
 
@@ -153,7 +153,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteShader( GLint shader )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -169,12 +169,12 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DetachShader( GLint program, GLint shader )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
 
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -213,7 +213,7 @@ public unsafe partial class GLBindings
     public void GetActiveAttrib( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size,
                                  GLenum* type, GLchar* name )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -227,7 +227,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetActiveAttrib( GLint program, GLuint index, GLsizei bufSize, out GLint size, out GLenum type )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -255,7 +255,7 @@ public unsafe partial class GLBindings
     public void GetActiveUniform( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size,
                                   GLenum* type, GLchar* name )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -269,7 +269,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetActiveUniform( GLint program, GLuint index, GLsizei bufSize, out GLint size, out GLenum type )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -296,7 +296,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetAttachedShaders( int program, int maxCount, int* count, GLuint* shaders )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -310,7 +310,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLuint[] GetAttachedShaders( int program, int maxCount )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -336,7 +336,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint GetAttribLocation( GLint program, GLchar* name )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -350,7 +350,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint GetAttribLocation( GLint program, string name )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -369,7 +369,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetShaderiv( GLint shader, GLenum pname, GLint* parameters )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -383,7 +383,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetShaderiv( GLint shader, GLenum pname, ref GLint[] parameters )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -402,7 +402,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetShaderInfoLog( GLint shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -416,7 +416,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetShaderInfoLog( GLint shader, GLsizei bufSize )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -437,7 +437,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetShaderSource( GLint shader, GLsizei bufSize, GLsizei* length, GLchar* source )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -451,7 +451,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetShaderSource( GLint shader, GLsizei bufSize = 4096 )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -576,7 +576,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void ShaderSource( GLint shader, GLsizei count, GLchar** str, GLint* length )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -590,7 +590,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void ShaderSource( GLint shader, params string[] stringParam )
     {
-        if ( !Engine.GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !Engine.GL.IsShader( shader ) || ( shader == InvalidShader ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -658,7 +658,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib1f( GLuint index, GLfloat x )
+    public void VertexAttrib1F( GLuint index, GLfloat x )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1FPROC >( "glVertexAttrib1f", out _glVertexAttrib1f );
 
@@ -668,7 +668,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib1fv( GLuint index, GLfloat* v )
+    public void VertexAttrib1Fv( GLuint index, GLfloat* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1FVPROC >( "glVertexAttrib1fv", out _glVertexAttrib1fv );
 
@@ -676,7 +676,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib1fv( GLuint index, params GLfloat[] v )
+    public void VertexAttrib1Fv( GLuint index, params GLfloat[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1FVPROC >( "glVertexAttrib1fv", out _glVertexAttrib1fv );
 
@@ -689,7 +689,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib1s( GLuint index, GLshort x )
+    public void VertexAttrib1S( GLuint index, GLshort x )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1SPROC >( "glVertexAttrib1s", out _glVertexAttrib1s );
 
@@ -699,7 +699,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib1sv( GLuint index, GLshort* v )
+    public void VertexAttrib1Sv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1SVPROC >( "glVertexAttrib1sv", out _glVertexAttrib1sv );
 
@@ -707,7 +707,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib1sv( GLuint index, params GLshort[] v )
+    public void VertexAttrib1Sv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1SVPROC >( "glVertexAttrib1sv", out _glVertexAttrib1sv );
 
@@ -751,7 +751,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib2f( GLuint index, GLfloat x, GLfloat y )
+    public void VertexAttrib2F( GLuint index, GLfloat x, GLfloat y )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2FPROC >( "glVertexAttrib2f", out _glVertexAttrib2f );
 
@@ -761,7 +761,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib2fv( GLuint index, GLfloat* v )
+    public void VertexAttrib2Fv( GLuint index, GLfloat* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2FVPROC >( "glVertexAttrib2fv", out _glVertexAttrib2fv );
 
@@ -769,7 +769,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib2fv( GLuint index, params GLfloat[] v )
+    public void VertexAttrib2Fv( GLuint index, params GLfloat[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2FVPROC >( "glVertexAttrib2fv", out _glVertexAttrib2fv );
 
@@ -782,7 +782,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib2s( GLuint index, GLshort x, GLshort y )
+    public void VertexAttrib2S( GLuint index, GLshort x, GLshort y )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2SPROC >( "glVertexAttrib2s", out _glVertexAttrib2s );
 
@@ -792,7 +792,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib2sv( GLuint index, GLshort* v )
+    public void VertexAttrib2Sv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2SVPROC >( "glVertexAttrib2sv", out _glVertexAttrib2sv );
 
@@ -800,7 +800,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib2sv( GLuint index, params GLshort[] v )
+    public void VertexAttrib2Sv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2SVPROC >( "glVertexAttrib2sv", out _glVertexAttrib2sv );
 
@@ -844,7 +844,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib3f( GLuint index, GLfloat x, GLfloat y, GLfloat z )
+    public void VertexAttrib3F( GLuint index, GLfloat x, GLfloat y, GLfloat z )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3FPROC >( "glVertexAttrib3f", out _glVertexAttrib3f );
 
@@ -854,7 +854,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib3fv( GLuint index, GLfloat* v )
+    public void VertexAttrib3Fv( GLuint index, GLfloat* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3FVPROC >( "glVertexAttrib3fv", out _glVertexAttrib3fv );
 
@@ -862,7 +862,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib3fv( GLuint index, params GLfloat[] v )
+    public void VertexAttrib3Fv( GLuint index, params GLfloat[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3FVPROC >( "glVertexAttrib3fv", out _glVertexAttrib3fv );
 
@@ -875,7 +875,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib3s( GLuint index, GLshort x, GLshort y, GLshort z )
+    public void VertexAttrib3S( GLuint index, GLshort x, GLshort y, GLshort z )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3SPROC >( "glVertexAttrib3s", out _glVertexAttrib3s );
 
@@ -885,7 +885,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib3sv( GLuint index, GLshort* v )
+    public void VertexAttrib3Sv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3SVPROC >( "glVertexAttrib3sv", out _glVertexAttrib3sv );
 
@@ -893,7 +893,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib3sv( GLuint index, params GLshort[] v )
+    public void VertexAttrib3Sv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3SVPROC >( "glVertexAttrib3sv", out _glVertexAttrib3sv );
 
@@ -1042,7 +1042,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4bv( GLuint index, GLbyte* v )
+    public void VertexAttrib4Bv( GLuint index, GLbyte* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4BVPROC >( "glVertexAttrib4bv", out _glVertexAttrib4bv );
 
@@ -1050,7 +1050,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib4bv( GLuint index, params GLbyte[] v )
+    public void VertexAttrib4Bv( GLuint index, params GLbyte[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4BVPROC >( "glVertexAttrib4bv", out _glVertexAttrib4bv );
 
@@ -1094,7 +1094,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4f( GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w )
+    public void VertexAttrib4F( GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4FPROC >( "glVertexAttrib4f", out _glVertexAttrib4f );
 
@@ -1104,7 +1104,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4fv( GLuint index, GLfloat* v )
+    public void VertexAttrib4Fv( GLuint index, GLfloat* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4FVPROC >( "glVertexAttrib4fv", out _glVertexAttrib4fv );
 
@@ -1112,7 +1112,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib4fv( GLuint index, params GLfloat[] v )
+    public void VertexAttrib4Fv( GLuint index, params GLfloat[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4FVPROC >( "glVertexAttrib4fv", out _glVertexAttrib4fv );
 
@@ -1125,7 +1125,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4iv( GLuint index, GLint* v )
+    public void VertexAttrib4Iv( GLuint index, GLint* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4IVPROC >( "glVertexAttrib4iv", out _glVertexAttrib4iv );
 
@@ -1133,7 +1133,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib4iv( GLuint index, params GLint[] v )
+    public void VertexAttrib4Iv( GLuint index, params GLint[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4IVPROC >( "glVertexAttrib4iv", out _glVertexAttrib4iv );
 
@@ -1146,7 +1146,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4s( GLuint index, GLshort x, GLshort y, GLshort z, GLshort w )
+    public void VertexAttrib4S( GLuint index, GLshort x, GLshort y, GLshort z, GLshort w )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4SPROC >( "glVertexAttrib4s", out _glVertexAttrib4s );
 
@@ -1156,7 +1156,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4sv( GLuint index, GLshort* v )
+    public void VertexAttrib4Sv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4SVPROC >( "glVertexAttrib4sv", out _glVertexAttrib4sv );
 
@@ -1164,7 +1164,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib4sv( GLuint index, params GLshort[] v )
+    public void VertexAttrib4Sv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4SVPROC >( "glVertexAttrib4sv", out _glVertexAttrib4sv );
 
@@ -1177,7 +1177,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4ubv( GLuint index, GLubyte* v )
+    public void VertexAttrib4Ubv( GLuint index, GLubyte* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4UBVPROC >( "glVertexAttrib4ubv", out _glVertexAttrib4ubv );
 
@@ -1185,7 +1185,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib4ubv( GLuint index, params GLubyte[] v )
+    public void VertexAttrib4Ubv( GLuint index, params GLubyte[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4UBVPROC >( "glVertexAttrib4ubv", out _glVertexAttrib4ubv );
 
@@ -1198,7 +1198,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4uiv( GLuint index, GLuint* v )
+    public void VertexAttrib4Uiv( GLuint index, GLuint* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4UIVPROC >( "glVertexAttrib4uiv", out _glVertexAttrib4uiv );
 
@@ -1206,7 +1206,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib4uiv( GLuint index, params GLuint[] v )
+    public void VertexAttrib4Uiv( GLuint index, params GLuint[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4UIVPROC >( "glVertexAttrib4uiv", out _glVertexAttrib4uiv );
 
@@ -1219,7 +1219,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttrib4usv( GLuint index, GLushort* v )
+    public void VertexAttrib4Usv( GLuint index, GLushort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4USVPROC >( "glVertexAttrib4usv", out _glVertexAttrib4usv );
 
@@ -1227,7 +1227,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttrib4usv( GLuint index, params GLushort[] v )
+    public void VertexAttrib4Usv( GLuint index, params GLushort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4USVPROC >( "glVertexAttrib4usv", out _glVertexAttrib4usv );
 
@@ -1258,7 +1258,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix2x3fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix2X3Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3FVPROC >( "glUniformMatrix2x3fv", out _glUniformMatrix2x3fv );
 
@@ -1266,7 +1266,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix2x3fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix2X3Fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3FVPROC >( "glUniformMatrix2x3fv", out _glUniformMatrix2x3fv );
 
@@ -1279,7 +1279,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix3x2fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix3X2Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2FVPROC >( "glUniformMatrix3x2fv", out _glUniformMatrix3x2fv );
 
@@ -1287,7 +1287,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix3x2fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix3X2Fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2FVPROC >( "glUniformMatrix3x2fv", out _glUniformMatrix3x2fv );
 
@@ -1300,7 +1300,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix2x4fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix2X4Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4FVPROC >( "_glUniformMatrix2x4fv", out _glUniformMatrix2x4fv );
 
@@ -1308,7 +1308,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix2x4fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix2X4Fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4FVPROC >( "_glUniformMatrix2x4fv", out _glUniformMatrix2x4fv );
 
@@ -1321,7 +1321,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix4x2fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix4X2Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2FVPROC >( "glUniformMatrix4x2fv", out _glUniformMatrix4x2fv );
 
@@ -1329,7 +1329,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix4x2fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix4X2Fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2FVPROC >( "glUniformMatrix4x2fv", out _glUniformMatrix4x2fv );
 
@@ -1342,7 +1342,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix3x4fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix3X4Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4FVPROC >( "glUniformMatrix3x4fv", out _glUniformMatrix3x4fv );
 
@@ -1350,7 +1350,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix3x4fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix3X4Fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4FVPROC >( "glUniformMatrix3x4fv", out _glUniformMatrix3x4fv );
 
@@ -1363,7 +1363,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix4x3fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix4X3Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3FVPROC >( "glUniformMatrix4x3fv", out _glUniformMatrix4x3fv );
 
@@ -1371,7 +1371,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix4x3fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix4X3Fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3FVPROC >( "glUniformMatrix4x3fv", out _glUniformMatrix4x3fv );
 

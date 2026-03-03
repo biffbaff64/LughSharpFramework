@@ -33,7 +33,7 @@ namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 
 public partial class GLBindings
 {
-    private static readonly Dictionary< string, Delegate > LoadedFunctions = new();
+    private static readonly Dictionary< string, Delegate > _loadedFunctions = new();
 
     // ========================================================================
     // ========================================================================
@@ -51,7 +51,7 @@ public partial class GLBindings
     /// <returns></returns>
     public static bool GetDelegateForFunction< T >( string functionName, out T functionDelegate ) where T : Delegate
     {
-        if ( LoadedFunctions.TryGetValue( functionName, out Delegate? existingDelegate ) )
+        if ( _loadedFunctions.TryGetValue( functionName, out Delegate? existingDelegate ) )
         {
             functionDelegate = ( T )existingDelegate;
 
@@ -71,7 +71,7 @@ public partial class GLBindings
             {
                 functionDelegate = Marshal.GetDelegateForFunctionPointer< T >( functionPtr );
 
-                LoadedFunctions.Add( functionName, functionDelegate );
+                _loadedFunctions.Add( functionName, functionDelegate );
 
                 return true;
             }
@@ -102,7 +102,7 @@ public partial class GLBindings
             {
                 var functionDelegate = Marshal.GetDelegateForFunctionPointer< T >( functionPtr );
 
-                LoadedFunctions.Add( functionName, functionDelegate );
+                _loadedFunctions.Add( functionName, functionDelegate );
 
                 return functionDelegate;
             }

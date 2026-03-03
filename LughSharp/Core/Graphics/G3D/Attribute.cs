@@ -34,16 +34,16 @@ public abstract class Attribute : IComparable< Attribute >
     /// <summary>
     /// The registered type aliases
     /// </summary>
-    private static readonly List< string > Types = new();
+    private static readonly List< string > _types = new();
 
     private readonly int _typeBit;
 
     // The type of this attribute
-    public readonly long type;
+    public readonly long Type;
 
     protected Attribute( long type )
     {
-        this.type = type;
+        this.Type = type;
         _typeBit  = ( int )long.TrailingZeroCount( type );
     }
 
@@ -68,9 +68,9 @@ public abstract class Attribute : IComparable< Attribute >
     /// </summary>
     public static long GetAttributeType( string alias )
     {
-        for ( var i = 0; i < Types.Count; i++ )
+        for ( var i = 0; i < _types.Count; i++ )
         {
-            if ( string.Compare( Types[ i ], alias, StringComparison.Ordinal ) == 0 )
+            if ( string.Compare( _types[ i ], alias, StringComparison.Ordinal ) == 0 )
             {
                 return 1L << i;
             }
@@ -90,7 +90,7 @@ public abstract class Attribute : IComparable< Attribute >
         {
         }
 
-        return ( idx >= 0 ) && ( idx < Types.Count ) ? Types[ idx ] : null;
+        return ( idx >= 0 ) && ( idx < _types.Count ) ? _types[ idx ] : null;
     }
 
     /// <summary>
@@ -115,9 +115,9 @@ public abstract class Attribute : IComparable< Attribute >
             return result;
         }
 
-        Types.Add( alias );
+        _types.Add( alias );
 
-        return 1L << ( Types.Count - 1 );
+        return 1L << ( _types.Count - 1 );
     }
 
     protected bool Equals( Attribute other )
@@ -143,13 +143,13 @@ public abstract class Attribute : IComparable< Attribute >
             return false;
         }
 
-        return ( type == other.type ) && Equals( other );
+        return ( Type == other.Type ) && Equals( other );
     }
 
     /// <inheritdoc />
     public override string? ToString()
     {
-        return GetAttributeAlias( type );
+        return GetAttributeAlias( Type );
     }
 
     /// <inheritdoc />

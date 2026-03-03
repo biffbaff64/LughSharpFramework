@@ -39,12 +39,12 @@ public abstract class AbstractInput : IInput
     /// <summary>
     /// A List of keys that are currently pressed.
     /// </summary>
-    protected bool[] PressedKeys { get; set; } = new bool[ IInput.Keys.MAX_KEYCODE + 1 ];
+    protected bool[] PressedKeys { get; set; } = new bool[ IInput.Keys.MaxKeycode + 1 ];
 
     /// <summary>
     /// A list of keys that have JUST been pressed.
     /// </summary>
-    protected bool[] JustPressedKeys { get; set; } = new bool[ IInput.Keys.MAX_KEYCODE + 1 ];
+    protected bool[] JustPressedKeys { get; set; } = new bool[ IInput.Keys.MaxKeycode + 1 ];
 
     /// <summary>
     /// True if any key has just been pressed.
@@ -66,12 +66,12 @@ public abstract class AbstractInput : IInput
     /// </summary>
     public virtual bool IsKeyPressed( int key )
     {
-        if ( key == IInput.Keys.ANY_KEY )
+        if ( key == IInput.Keys.AnyKey )
         {
             return PressedKeyCount > 0;
         }
 
-        return key is >= 0 and <= IInput.Keys.MAX_KEYCODE && PressedKeys[ key ];
+        return key is >= 0 and <= IInput.Keys.MaxKeycode && PressedKeys[ key ];
     }
 
     /// <summary>
@@ -80,12 +80,12 @@ public abstract class AbstractInput : IInput
     /// </summary>
     public virtual bool IsKeyJustPressed( int key )
     {
-        if ( key == IInput.Keys.ANY_KEY )
+        if ( key == IInput.Keys.AnyKey )
         {
             return KeyJustPressed;
         }
 
-        return key is >= 0 and <= IInput.Keys.MAX_KEYCODE && JustPressedKeys[ key ];
+        return key is >= 0 and <= IInput.Keys.MaxKeycode && JustPressedKeys[ key ];
     }
 
     // ========================================================================
@@ -110,37 +110,37 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.BACK"/>
+    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.Back"/>
     /// </summary>
     public virtual bool IsOverrideBackKey()
     {
-        return _keysToOverride.Contains( IInput.Keys.BACK );
+        return _keysToOverride.Contains( IInput.Keys.Back );
     }
 
     /// <summary>
-    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.BACK"/> key.
+    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.Back"/> key.
     /// </summary>
     /// <param name="addKey"> True to add, false to remove. </param>
     public virtual void SetOverrideBackKey( bool addKey )
     {
-        SetOverrideKey( IInput.Keys.BACK, addKey );
+        SetOverrideKey( IInput.Keys.Back, addKey );
     }
 
     /// <summary>
-    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.MENU"/>
+    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.Menu"/>
     /// </summary>
     public virtual bool IsOverrideMenuKey()
     {
-        return _keysToOverride.Contains( IInput.Keys.MENU );
+        return _keysToOverride.Contains( IInput.Keys.Menu );
     }
 
     /// <summary>
-    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.MENU"/> key.
+    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.Menu"/> key.
     /// </summary>
     /// <param name="addKey"> True to add, false to remove. </param>
     public virtual void SetOverrideMenuKey( bool addKey )
     {
-        SetOverrideKey( IInput.Keys.MENU, addKey );
+        SetOverrideKey( IInput.Keys.Menu, addKey );
     }
 
     // ========================================================================

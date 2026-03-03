@@ -29,9 +29,9 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum DrawElementsType
 {
-    UnsignedByte  = IGL.GL_UNSIGNED_BYTE,
-    UnsignedShort = IGL.GL_UNSIGNED_SHORT,
-    UnsignedInt   = IGL.GL_UNSIGNED_INT
+    UnsignedByte  = IGL.GLUnsignedByte,
+    UnsignedShort = IGL.GLUnsignedShort,
+    UnsignedInt   = IGL.GLUnsignedInt
 }
 
 // ========================================================================

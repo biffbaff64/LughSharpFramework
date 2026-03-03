@@ -64,13 +64,13 @@ public class InputListener : IEventListener
         switch ( inputEvent.Type )
         {
             case InputEvent.EventType.KeyDown:
-                return KeyDown( inputEvent, inputEvent.KeyCode );
+                return OnKeyDown( inputEvent, inputEvent.KeyCode );
 
             case InputEvent.EventType.KeyUp:
-                return KeyUp( inputEvent, inputEvent.KeyCode );
+                return OnKeyUp( inputEvent, inputEvent.KeyCode );
 
             case InputEvent.EventType.KeyTyped:
-                return KeyTyped( inputEvent, inputEvent.Character );
+                return OnKeyTyped( inputEvent, inputEvent.Character );
         }
 
         inputEvent.ToCoordinates( inputEvent.ListenerActor, _tmpCoords );
@@ -78,7 +78,7 @@ public class InputListener : IEventListener
         switch ( inputEvent.Type )
         {
             case InputEvent.EventType.TouchDown:
-                bool handled = TouchDown( inputEvent,
+                bool handled = OnTouchDown( inputEvent,
                                           _tmpCoords.X,
                                           _tmpCoords.Y,
                                           inputEvent.Pointer,
@@ -96,20 +96,20 @@ public class InputListener : IEventListener
                 return handled;
 
             case InputEvent.EventType.TouchUp:
-                TouchUp( inputEvent, _tmpCoords.X, _tmpCoords.Y, inputEvent.Pointer, inputEvent.Button );
+                OnTouchUp( inputEvent, _tmpCoords.X, _tmpCoords.Y, inputEvent.Pointer, inputEvent.Button );
 
                 return true;
 
             case InputEvent.EventType.TouchDragged:
-                TouchDragged( inputEvent, _tmpCoords.X, _tmpCoords.Y, inputEvent.Pointer );
+                OnTouchDragged( inputEvent, _tmpCoords.X, _tmpCoords.Y, inputEvent.Pointer );
 
                 return true;
 
             case InputEvent.EventType.MouseMoved:
-                return MouseMoved( inputEvent, _tmpCoords.X, _tmpCoords.Y );
+                return OnMouseMoved( inputEvent, _tmpCoords.X, _tmpCoords.Y );
 
             case InputEvent.EventType.Scrolled:
-                return Scrolled( inputEvent,
+                return OnScrolled( inputEvent,
                                  _tmpCoords.X,
                                  _tmpCoords.Y,
                                  inputEvent.ScrollAmountX,
@@ -137,7 +137,7 @@ public class InputListener : IEventListener
     /// over this actor, until touchUp is received. Also when true is returned,
     /// the event is handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual bool TouchDown( InputEvent? ev, float x, float y, int ptr, int button )
+    public virtual bool OnTouchDown( InputEvent? ev, float x, float y, int ptr, int button )
     {
         return false;
     }
@@ -147,7 +147,7 @@ public class InputListener : IEventListener
     /// if touchDown previously returned true for the mouse button or touch.
     /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual void TouchUp( InputEvent? ev, float x, float y, int ptr, int button )
+    public virtual void OnTouchUp( InputEvent? ev, float x, float y, int ptr, int button )
     {
     }
 
@@ -156,7 +156,7 @@ public class InputListener : IEventListener
     /// if touchDown previously returned true for the mouse button or touch.
     /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual void TouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
+    public virtual void OnTouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
     {
     }
 
@@ -165,7 +165,7 @@ public class InputListener : IEventListener
     /// only occurs on the desktop. When true is returned, the event is handled
     /// by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual bool MouseMoved( InputEvent? inputEvent, float x, float y )
+    public virtual bool OnMouseMoved( InputEvent? inputEvent, float x, float y )
     {
         return false;
     }
@@ -203,7 +203,7 @@ public class InputListener : IEventListener
     /// Called when the mouse wheel has been scrolled. When true is returned,
     /// the event is handled in <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual bool Scrolled( InputEvent? inputEvent, float x, float y, float amountX, float amountY )
+    public virtual bool OnScrolled( InputEvent? inputEvent, float x, float y, float amountX, float amountY )
     {
         return false;
     }
@@ -212,7 +212,7 @@ public class InputListener : IEventListener
     /// Called when a key goes down. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual bool KeyDown( InputEvent? inputEvent, int keycode )
+    public virtual bool OnKeyDown( InputEvent? inputEvent, int keycode )
     {
         return false;
     }
@@ -221,7 +221,7 @@ public class InputListener : IEventListener
     /// Called when a key goes up. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual bool KeyUp( InputEvent? inputEvent, int keycode )
+    public virtual bool OnKeyUp( InputEvent? inputEvent, int keycode )
     {
         return false;
     }
@@ -234,7 +234,7 @@ public class InputListener : IEventListener
     /// <param name="character">
     /// May be 0 for key typed events that don't map to a character (ctrl, shift, etc).
     /// </param>
-    public virtual bool KeyTyped( InputEvent? inputEvent, char character )
+    public virtual bool OnKeyTyped( InputEvent? inputEvent, char character )
     {
         return false;
     }

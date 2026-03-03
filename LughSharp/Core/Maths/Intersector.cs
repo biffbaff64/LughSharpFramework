@@ -75,7 +75,7 @@ public class Intersector
     // there is a better solution then I will update.
     private static MinimumTranslationVector? _dummyMinimumTranslationVector = new();
 
-    private static readonly Vector3 Intersection = new();
+    private static readonly Vector3 _intersection = new();
 
     private Intersector()
     {
@@ -762,7 +762,7 @@ public class Intersector
 
         float f = -a.Normal.Dot( _tmp2 );
 
-        if ( Math.Abs( f ) < NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( f ) < NumberUtils.FloatTolerance )
         {
             return false;
         }
@@ -837,7 +837,7 @@ public class Intersector
 
         if ( intersection != null )
         {
-            if ( t <= NumberUtils.FLOAT_TOLERANCE )
+            if ( t <= NumberUtils.FloatTolerance )
             {
                 intersection.Set( ray.Origin );
             }
@@ -1144,12 +1144,12 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's X axis
         Vector3 xaxis = _tmp1;
 
-        _tmp1.Set( matrix.Val[ Matrix4.M00_0 ], matrix.Val[ Matrix4.M10_1 ], matrix.Val[ Matrix4.M20_2 ] );
+        _tmp1.Set( matrix.Val[ Matrix4.M000 ], matrix.Val[ Matrix4.M101 ], matrix.Val[ Matrix4.M202 ] );
 
         float e = xaxis.Dot( delta );
         float f = ray.Direction.Dot( xaxis );
 
-        if ( Math.Abs( f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( f ) > NumberUtils.FloatTolerance )
         {
             // Standard case
             t1 = ( e + bounds.Min.X ) / f; // Intersection with the "left" plane
@@ -1194,12 +1194,12 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's Y axis
         // Exactly the same thing than above.
         Vector3 yaxis = _tmp2;
-        _tmp2.Set( matrix.Val[ Matrix4.M01_4 ], matrix.Val[ Matrix4.M11_5 ], matrix.Val[ Matrix4.M21_6 ] );
+        _tmp2.Set( matrix.Val[ Matrix4.M014 ], matrix.Val[ Matrix4.M115 ], matrix.Val[ Matrix4.M216 ] );
 
         e = yaxis.Dot( delta );
         f = ray.Direction.Dot( yaxis );
 
-        if ( Math.Abs( f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( f ) > NumberUtils.FloatTolerance )
         {
             t1 = ( e + bounds.Min.Y ) / f;
             t2 = ( e + bounds.Max.Y ) / f;
@@ -1232,12 +1232,12 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's Z axis
         // Exactly the same thing than above.
         Vector3 zaxis = _tmp3;
-        _tmp3.Set( matrix.Val[ Matrix4.M02_8 ], matrix.Val[ Matrix4.M12_9 ], matrix.Val[ Matrix4.M22_10 ] );
+        _tmp3.Set( matrix.Val[ Matrix4.M028 ], matrix.Val[ Matrix4.M129 ], matrix.Val[ Matrix4.M2210 ] );
 
         e = zaxis.Dot( delta );
         f = ray.Direction.Dot( zaxis );
 
-        if ( Math.Abs( f ) > NumberUtils.FLOAT_TOLERANCE )
+        if ( Math.Abs( f ) > NumberUtils.FloatTolerance )
         {
             t1 = ( e + bounds.Min.Z ) / f;
             t2 = ( e + bounds.Max.Z ) / f;
@@ -2245,11 +2245,11 @@ public class Intersector
                                       vertices[ e + 1 ],
                                       vertices[ e + 2 ],
                                       plane,
-                                      Intersection );
+                                      _intersection );
 
-        split[ offset + 0 ] = Intersection.X;
-        split[ offset + 1 ] = Intersection.Y;
-        split[ offset + 2 ] = Intersection.Z;
+        split[ offset + 0 ] = _intersection.X;
+        split[ offset + 1 ] = _intersection.Y;
+        split[ offset + 2 ] = _intersection.Z;
 
         for ( var i = 3; i < stride; i++ )
         {

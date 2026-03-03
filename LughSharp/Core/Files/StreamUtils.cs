@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
+// Copyright (c) 2024 Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +24,45 @@
 
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Utils;
+namespace LughSharp.Core.Files;
 
 [PublicAPI]
 public class StreamUtils
 {
     /// <summary>
-    /// Close the provided <see cref="ICloseable"/> and ignore all errors.
+    /// 
     /// </summary>
-    public static void CloseQuietly( ICloseable? closeable )
+    /// <param name="writer"></param>
+    public static void CloseQuietly( TextWriter? writer )
     {
-        if ( closeable != null )
+        if ( writer != null )
         {
             try
             {
-                closeable.Close();
+                writer.Close();
             }
             catch ( Exception )
             {
-                // Ignored
+                // Ignore exceptions
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="stream"></param>
+    public static void CloseQuietly( Stream? stream )
+    {
+        if ( stream != null )
+        {
+            try
+            {
+                stream.Close();
+            }
+            catch ( Exception )
+            {
+                // Ignore exceptions
             }
         }
     }

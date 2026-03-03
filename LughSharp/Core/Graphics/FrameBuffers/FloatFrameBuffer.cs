@@ -69,7 +69,7 @@ public class FloatFrameBuffer : FrameBuffer
     {
         var bufferBuilder = new FrameBufferBuilder( width, height );
 
-        bufferBuilder.AddFloatAttachment( IGL.GL_RGBA32_F, IGL.GL_RGBA, IGL.GL_FLOAT, false );
+        bufferBuilder.AddFloatAttachment( IGL.GLRGBA32F, IGL.GLRGBA, IGL.GLFloat, false );
 
         if ( hasDepth )
         {

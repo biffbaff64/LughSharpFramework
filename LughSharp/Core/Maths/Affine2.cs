@@ -133,12 +133,12 @@ public class Affine2
     {
         float[] other = matrix.Val;
 
-        M00 = other[ Matrix4.M00_0 ];
-        M01 = other[ Matrix4.M01_4 ];
-        M02 = other[ Matrix4.M03_12 ];
-        M10 = other[ Matrix4.M10_1 ];
-        M11 = other[ Matrix4.M11_5 ];
-        M12 = other[ Matrix4.M13_13 ];
+        M00 = other[ Matrix4.M000 ];
+        M01 = other[ Matrix4.M014 ];
+        M02 = other[ Matrix4.M0312 ];
+        M10 = other[ Matrix4.M101 ];
+        M11 = other[ Matrix4.M115 ];
+        M12 = other[ Matrix4.M1313 ];
 
         return this;
     }

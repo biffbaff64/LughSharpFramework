@@ -37,9 +37,9 @@ public class ShapeRenderer : IDisposable
 {
     public enum ShapeRenderType
     {
-        Points = IGL.GL_POINTS,
-        Lines  = IGL.GL_LINES,
-        Filled = IGL.GL_TRIANGLES
+        Points = IGL.GLPoints,
+        Lines  = IGL.GLLines,
+        Filled = IGL.GLTriangles
     }
 
     // ========================================================================
@@ -816,11 +816,11 @@ public class ShapeRenderer : IDisposable
         }
 
         float colorBits = _color.ToFloatBitsAbgr();
-        float theta     = 2 * MathUtils.PI * ( degrees / 360.0f ) / segments;
+        float theta     = 2 * MathUtils.Pi * ( degrees / 360.0f ) / segments;
         float cos       = MathUtils.Cos( theta );
         float sin       = MathUtils.Sin( theta );
-        float cx        = radius * MathUtils.Cos( start * MathUtils.DEGREES_TO_RADIANS );
-        float cy        = radius * MathUtils.Sin( start * MathUtils.DEGREES_TO_RADIANS );
+        float cx        = radius * MathUtils.Cos( start * MathUtils.DegreesToRadians );
+        float cy        = radius * MathUtils.Sin( start * MathUtils.DegreesToRadians );
 
         float temp;
 
@@ -892,7 +892,7 @@ public class ShapeRenderer : IDisposable
         }
 
         float colorBits = _color.ToFloatBitsAbgr();
-        float angle     = 2 * MathUtils.PI / segments;
+        float angle     = 2 * MathUtils.Pi / segments;
         float cos       = MathUtils.Cos( angle );
         float sin       = MathUtils.Sin( angle );
         float cx        = radius;
@@ -970,7 +970,7 @@ public class ShapeRenderer : IDisposable
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, segments * 3 );
 
         float colorBits = _color.ToFloatBitsAbgr();
-        float angle     = 2 * MathUtils.PI / segments;
+        float angle     = 2 * MathUtils.Pi / segments;
 
         float cx = x + ( width / 2 ), cy = y + ( height / 2 );
 
@@ -1028,9 +1028,9 @@ public class ShapeRenderer : IDisposable
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, segments * 3 );
 
         float colorBits = _color.ToFloatBitsAbgr();
-        float angle     = 2 * MathUtils.PI / segments;
+        float angle     = 2 * MathUtils.Pi / segments;
 
-        rotation = MathUtils.PI * rotation / 180f;
+        rotation = MathUtils.Pi * rotation / 180f;
 
         float sin = MathUtils.Sin( rotation );
         float cos = MathUtils.Cos( rotation );
@@ -1086,7 +1086,7 @@ public class ShapeRenderer : IDisposable
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, ( segments * 4 ) + 2 );
 
         float colorBits = _color.ToFloatBitsAbgr();
-        float angle     = 2 * MathUtils.PI / segments;
+        float angle     = 2 * MathUtils.Pi / segments;
         float cos       = MathUtils.Cos( angle );
         float sin       = MathUtils.Sin( angle );
         float cx        = radius, cy = 0;

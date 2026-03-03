@@ -189,7 +189,7 @@ public class GLFormatChooser
     {
         if ( _caps.HasInternalFormatQuery )
         {
-            _gl.GetInternalformativ( GLData.TEXTURE_2D, internalFormat, GLIFQ.INTERNALFORMAT_SUPPORTED, 1, out int v );
+            _gl.GetInternalformativ( GLData.Texture2D, internalFormat, GLIFQ.INTERNALFORMAT_SUPPORTED, 1, out int v );
 
             return v != 0;
         }
@@ -241,7 +241,7 @@ public class GLFormatChooser
                 or GLIF.DEPTH24_STENCIL8;
         }
 
-        _gl.GetInternalformativ( GLData.TEXTURE_2D, internalFormat, GLIFQ.FRAMEBUFFER_RENDERABLE, 1, out int v );
+        _gl.GetInternalformativ( GLData.Texture2D, internalFormat, GLIFQ.FRAMEBUFFER_RENDERABLE, 1, out int v );
 
         return v != 0;
     }

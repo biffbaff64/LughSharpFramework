@@ -74,7 +74,7 @@ public class BitmapFontData
     public float       ScaleX        { get; set; } = 1;
     public float       ScaleY        { get; set; } = 1;
     public bool        MarkupEnabled { get; set; }
-    public Glyph?[]?[] Glyphs        { get; set; } = new Glyph[ BitmapFont.PAGES ][];
+    public Glyph?[]?[] Glyphs        { get; set; } = new Glyph[ BitmapFont.Pages ][];
 
     /// <summary>
     /// The distance from one line of text to the next.
@@ -483,9 +483,9 @@ public class BitmapFontData
                 int      second = int.Parse( parts[ 4 ] );
 
                 if ( ( first < 0 )
-                  || ( first > CharacterUtils.MAX_VALUE )
+                  || ( first > CharacterUtils.MaxValue )
                   || ( second < 0 )
-                  || ( second > CharacterUtils.MAX_VALUE ) )
+                  || ( second > CharacterUtils.MaxValue ) )
                 {
                     continue;
                 }
@@ -751,16 +751,16 @@ public class BitmapFontData
     /// <param name="glyph"></param>
     public void SetGlyph( int ch, Glyph glyph )
     {
-        Glyph?[]? page = Glyphs[ ch / BitmapFont.PAGE_SIZE ];
+        Glyph?[]? page = Glyphs[ ch / BitmapFont.PageSize ];
 
         if ( page == null )
         {
-            page = new Glyph[ BitmapFont.PAGE_SIZE ];
+            page = new Glyph[ BitmapFont.PageSize ];
 
-            Glyphs[ ch / BitmapFont.PAGE_SIZE ] = page;
+            Glyphs[ ch / BitmapFont.PageSize ] = page;
         }
 
-        page[ ch & ( BitmapFont.PAGE_SIZE - 1 ) ] = glyph;
+        page[ ch & ( BitmapFont.PageSize - 1 ) ] = glyph;
     }
 
     /// <summary>
@@ -808,7 +808,7 @@ public class BitmapFontData
     /// </summary>
     public virtual Glyph? GetGlyph( char ch )
     {
-        return Glyphs[ ch / BitmapFont.PAGE_SIZE ]?[ ch & ( BitmapFont.PAGE_SIZE - 1 ) ];
+        return Glyphs[ ch / BitmapFont.PageSize ]?[ ch & ( BitmapFont.PageSize - 1 ) ];
     }
 
     /// <summary>

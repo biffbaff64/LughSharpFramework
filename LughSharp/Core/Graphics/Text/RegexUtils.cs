@@ -31,55 +31,55 @@ namespace LughSharp.Core.Graphics.Text;
 [PublicAPI]
 public partial class RegexUtils
 {
-    public const string MATCH_FINAL_FOLDER_PATTERN         = @"[\\/]([^\\/]+)$";
-    public const string WORD_BOUNDARY_PATTERN              = @"\b\w+\b";
-    public const string MINIMAL_NAME_PATTERN               = "^[^\":,}/ ][^:]*$";
-    public const string FILENAME_WITHOUT_EXTENSION_PATTERN = "(.*)\\..*";
-    public const string NUMBER_SUFFIX_PATTERN              = "(.*?)(\\d+)$";
-    public const string VERSION_NUMBER_PATTERN             = "\\d+";
-    public const string IDENTIFIER_PATTERN                 = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
-    public const string UNQUOTED_VALUE_PATTERN             = "^[^\":,{\\[\\]/ ][^}\\],]*$";
-    public const string UNQUOTED_KEYORVALUE_PATTERN        = "^[^\":,}/ ][^:]*$";
-    public const string MINIMAL_VALUE_PATTER               = "^[^\":,{\\[\\]/ ][^}\\],]*$";
-    public const string ITEM_WITH_UNDERSCORE_PATTERN       = "(.+)_(\\d+)$";
-    public const string JAVASCRIPT_PATTERN                 = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
+    public const string MatchFinalFolderPattern         = @"[\\/]([^\\/]+)$";
+    public const string WordBoundaryPattern              = @"\b\w+\b";
+    public const string MinimalNamePattern               = "^[^\":,}/ ][^:]*$";
+    public const string FilenameWithoutExtensionPattern = "(.*)\\..*";
+    public const string NumberSuffixPattern              = "(.*?)(\\d+)$";
+    public const string VersionNumberPattern             = "\\d+";
+    public const string IdentifierPattern                 = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
+    public const string UnquotedValuePattern             = "^[^\":,{\\[\\]/ ][^}\\],]*$";
+    public const string UnquotedKeyorvaluePattern        = "^[^\":,}/ ][^:]*$";
+    public const string MinimalValuePatter               = "^[^\":,{\\[\\]/ ][^}\\],]*$";
+    public const string ItemWithUnderscorePattern       = "(.+)_(\\d+)$";
+    public const string JavascriptPattern                 = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
 
     // ========================================================================
 
-    [GeneratedRegex( FILENAME_WITHOUT_EXTENSION_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( FilenameWithoutExtensionPattern, RegexOptions.Compiled )]
     public static partial Regex FileNameWithoutExtensionRegex();
 
-    [GeneratedRegex( NUMBER_SUFFIX_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( NumberSuffixPattern, RegexOptions.Compiled )]
     public static partial Regex NumberSuffixRegex();
 
-    [GeneratedRegex( WORD_BOUNDARY_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( WordBoundaryPattern, RegexOptions.Compiled )]
     public static partial Regex WordBoundaryRegex();
 
-    [GeneratedRegex( VERSION_NUMBER_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( VersionNumberPattern, RegexOptions.Compiled )]
     public static partial Regex VersionNumberRegex();
 
-    [GeneratedRegex( IDENTIFIER_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( IdentifierPattern, RegexOptions.Compiled )]
     public static partial Regex IdentifierRegex();
 
-    [GeneratedRegex( UNQUOTED_VALUE_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( UnquotedValuePattern, RegexOptions.Compiled )]
     public static partial Regex UnquotedValueRegex();
 
-    [GeneratedRegex( UNQUOTED_KEYORVALUE_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( UnquotedKeyorvaluePattern, RegexOptions.Compiled )]
     public static partial Regex UnquotedKeyOrValueRegex();
 
-    [GeneratedRegex( ITEM_WITH_UNDERSCORE_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( ItemWithUnderscorePattern, RegexOptions.Compiled )]
     public static partial Regex ItemWithUnderscoreSuffixRegex();
 
-    [GeneratedRegex( JAVASCRIPT_PATTERN )]
+    [GeneratedRegex( JavascriptPattern )]
     public static partial Regex JavascriptPatternRegex();
 
-    [GeneratedRegex( MINIMAL_VALUE_PATTER, RegexOptions.Compiled )]
+    [GeneratedRegex( MinimalValuePatter, RegexOptions.Compiled )]
     public static partial Regex MinimalValuePatternRegex();
 
-    [GeneratedRegex( MINIMAL_NAME_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( MinimalNamePattern, RegexOptions.Compiled )]
     public static partial Regex MinimalNamePatternRegex();
 
-    [GeneratedRegex( MATCH_FINAL_FOLDER_PATTERN, RegexOptions.Compiled )]
+    [GeneratedRegex( MatchFinalFolderPattern, RegexOptions.Compiled )]
     public static partial Regex MatchFinalFolderPatternRegex();
 }
 

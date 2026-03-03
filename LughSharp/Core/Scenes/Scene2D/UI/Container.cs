@@ -46,7 +46,7 @@ public class Container< T > : WidgetGroup where T : Actor
     public          bool    Rounding { get; set; } = true;
 
     private T?              _actor;
-    private int             _align;
+    private Align           _align;
     private ISceneDrawable? _background;
     private bool            _clip;
     private float           _fillX;
@@ -187,22 +187,22 @@ public class Container< T > : WidgetGroup where T : Actor
 
         float x = padLeft;
 
-        if ( ( _align & Align.RIGHT ) != 0 )
+        if ( ( _align & Align.Right ) != 0 )
         {
             x += containerWidth - width;
         }
-        else if ( ( _align & Align.LEFT ) == 0 )
+        else if ( ( _align & Align.Left ) == 0 )
         {
             x += ( containerWidth - width ) / 2;
         }
 
         float y = padBottom;
 
-        if ( ( _align & Align.TOP ) != 0 )
+        if ( ( _align & Align.Top ) != 0 )
         {
             y += containerHeight - height;
         }
-        else if ( ( _align & Align.BOTTOM ) == 0 )
+        else if ( ( _align & Align.Bottom ) == 0 )
         {
             y += ( containerHeight - height ) / 2;
         }
@@ -1057,11 +1057,11 @@ public class Container< T > : WidgetGroup where T : Actor
 
     /// <summary>
     /// Sets the alignment of the actor within the container.
-    /// Set to <see cref="Align.CENTER"/>, <see cref="Align.TOP"/>,
-    /// <see cref="Align.BOTTOM"/>, <see cref="Align.LEFT"/>,
-    /// <see cref="Align.RIGHT"/>, or any combination of those.
+    /// Set to <see cref="Align.Center"/>, <see cref="Align.Top"/>,
+    /// <see cref="Align.Bottom"/>, <see cref="Align.Left"/>,
+    /// <see cref="Align.Right"/>, or any combination of those.
     /// </summary>
-    public Container< T > SetAlignment( int align )
+    public Container< T > SetAlignment( Align align )
     {
         _align = align;
 
@@ -1069,65 +1069,65 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the container to <see cref="Align.CENTER"/>.
+    /// Sets the alignment of the actor within the container to <see cref="Align.Center"/>.
     /// This clears any other alignment.
     /// </summary>
     public Container< T > AlignCenter()
     {
-        _align = Align.CENTER;
+        _align = Align.Center;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for
+    /// Sets <see cref="Align.Top"/> and clears <see cref="Align.Bottom"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignTop()
     {
-        _align |= Align.TOP;
-        _align &= ~Align.BOTTOM;
+        _align |= Align.Top;
+        _align &= ~Align.Bottom;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for
+    /// Sets <see cref="Align.Left"/> and clears <see cref="Align.Right"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignLeft()
     {
-        _align |= Align.LEFT;
-        _align &= ~Align.RIGHT;
+        _align |= Align.Left;
+        _align &= ~Align.Right;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for
+    /// Sets <see cref="Align.Bottom"/> and clears <see cref="Align.Top"/> for
     /// the alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignBottom()
     {
-        _align |= Align.BOTTOM;
-        _align &= ~Align.TOP;
+        _align |= Align.Bottom;
+        _align &= ~Align.Top;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/> for the
+    /// Sets <see cref="Align.Right"/> and clears <see cref="Align.Left"/> for the
     /// alignment of the actor within the container.
     /// </summary>
     public Container< T > AlignRight()
     {
-        _align |= Align.RIGHT;
-        _align &= ~Align.LEFT;
+        _align |= Align.Right;
+        _align &= ~Align.Left;
 
         return this;
     }
 
-    public int GetAlignment()
+    public Align GetAlignment()
     {
         return _align;
     }

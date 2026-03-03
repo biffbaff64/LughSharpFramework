@@ -40,18 +40,18 @@ namespace LughSharp.Core.Input;
 [PublicAPI]
 public class RemoteSender : IInputProcessor
 {
-    public const int KEY_DOWN  = 0;
-    public const int KEY_UP    = 1;
-    public const int KEY_TYPED = 2;
+    public const int KeyDown  = 0;
+    public const int KeyUp    = 1;
+    public const int KeyTyped = 2;
 
-    public const int TOUCH_DOWN    = 3;
-    public const int TOUCH_UP      = 4;
-    public const int TOUCH_DRAGGED = 5;
+    public const int TouchDown    = 3;
+    public const int TouchUp      = 4;
+    public const int TouchDragged = 5;
 
-    public const int ACCEL   = 6;
-    public const int COMPASS = 7;
-    public const int SIZE    = 8;
-    public const int GYRO    = 9;
+    public const int Accel   = 6;
+    public const int Compass = 7;
+    public const int Size    = 8;
+    public const int Gyro    = 9;
 
     // ========================================================================
 
@@ -92,7 +92,7 @@ public class RemoteSender : IInputProcessor
         }
     }
 
-    public bool KeyDown( int keycode )
+    public bool OnKeyDown( int keycode )
     {
         lock ( this )
         {
@@ -106,7 +106,7 @@ public class RemoteSender : IInputProcessor
 
         try
         {
-            _out.Write( KEY_DOWN );
+            _out.Write( KeyDown );
             _out.Write( keycode );
         }
         catch ( Exception )
@@ -120,7 +120,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool KeyUp( int keycode )
+    public bool OnKeyUp( int keycode )
     {
         lock ( this )
         {
@@ -132,7 +132,7 @@ public class RemoteSender : IInputProcessor
 
         try
         {
-            _out?.Write( KEY_UP );
+            _out?.Write( KeyUp );
             _out?.Write( keycode );
         }
         catch ( Exception )
@@ -146,7 +146,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public virtual bool KeyTyped( char character )
+    public virtual bool OnKeyTyped( char character )
     {
         lock ( this )
         {
@@ -158,7 +158,7 @@ public class RemoteSender : IInputProcessor
 
         try
         {
-            _out?.Write( KEY_TYPED );
+            _out?.Write( KeyTyped );
             _out?.Write( character );
         }
         catch ( Exception )
@@ -172,7 +172,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool TouchDown( int x, int y, int pointer, int button )
+    public bool OnTouchDown( int x, int y, int pointer, int button )
     {
         lock ( this )
         {
@@ -186,7 +186,7 @@ public class RemoteSender : IInputProcessor
 
         try
         {
-            _out.Write( TOUCH_DOWN );
+            _out.Write( TouchDown );
             _out.Write( x );
             _out.Write( y );
             _out.Write( pointer );
@@ -202,7 +202,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool TouchUp( int x, int y, int pointer, int button )
+    public bool OnTouchUp( int x, int y, int pointer, int button )
     {
         lock ( this )
         {
@@ -216,7 +216,7 @@ public class RemoteSender : IInputProcessor
 
         try
         {
-            _out.Write( TOUCH_UP );
+            _out.Write( TouchUp );
             _out.Write( x );
             _out.Write( y );
             _out.Write( pointer );
@@ -232,7 +232,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool TouchDragged( int x, int y, int pointer )
+    public bool OnTouchDragged( int x, int y, int pointer )
     {
         lock ( this )
         {
@@ -246,7 +246,7 @@ public class RemoteSender : IInputProcessor
 
         try
         {
-            _out.Write( TOUCH_DRAGGED );
+            _out.Write( TouchDragged );
             _out.Write( x );
             _out.Write( y );
             _out.Write( pointer );
@@ -262,12 +262,12 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool MouseMoved( int x, int y )
+    public bool OnMouseMoved( int x, int y )
     {
         return false;
     }
 
-    public bool Scrolled( float amountX, float amountY )
+    public bool OnScrolled( float amountX, float amountY )
     {
         return false;
     }
@@ -286,18 +286,18 @@ public class RemoteSender : IInputProcessor
 
         try
         {
-            _out.Write( ACCEL );
+            _out.Write( Accel );
             _out.Write( Engine.Api.Input.GetAccelerometerX() );
             _out.Write( Engine.Api.Input.GetAccelerometerY() );
             _out.Write( Engine.Api.Input.GetAccelerometerZ() );
-            _out.Write( COMPASS );
+            _out.Write( Compass );
             _out.Write( Engine.Api.Input.GetAzimuth() );
             _out.Write( Engine.Api.Input.GetPitch() );
             _out.Write( Engine.Api.Input.GetRoll() );
-            _out.Write( SIZE );
+            _out.Write( Size );
             _out.Write( Engine.Api.Graphics.WindowWidth );
             _out.Write( Engine.Api.Graphics.WindowHeight );
-            _out.Write( GYRO );
+            _out.Write( Gyro );
             _out.Write( Engine.Api.Input.GetGyroscopeX() );
             _out.Write( Engine.Api.Input.GetGyroscopeY() );
             _out.Write( Engine.Api.Input.GetGyroscopeZ() );

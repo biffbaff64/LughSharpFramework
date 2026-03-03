@@ -96,8 +96,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     // ========================================================================
 
-    protected const bool IS_READ_ONLY_DEFAULT = false;
-    protected const bool IS_DIRECT_DEFAULT    = false;
+    protected const bool IsReadOnlyDefault = false;
+    protected const bool IsDirectDefault    = false;
 
     // ========================================================================
 
@@ -113,8 +113,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
     public Buffer( int elementCount )
     {
         IsBigEndian = !BitConverter.IsLittleEndian;
-        IsReadOnly  = IS_READ_ONLY_DEFAULT;
-        IsDirect    = IS_DIRECT_DEFAULT;
+        IsReadOnly  = IsReadOnlyDefault;
+        IsDirect    = IsDirectDefault;
 
         _elementSize = Unsafe.SizeOf< T >();
 
@@ -151,21 +151,21 @@ public class Buffer< T > : IDisposable where T : unmanaged
     /// Creates a Buffer that shares the same underlying memory as this buffer.
     /// Changes to one buffer will be reflected in the other.
     /// </summary>
-    /// <typeparam name="Tview">The target element type (must be unmanaged)</typeparam>
+    /// <typeparam name="TView">The target element type (must be unmanaged)</typeparam>
     /// <returns>A new buffer view with the specified element type</returns>
-    public Buffer< Tview > AsBuffer< Tview >() where Tview : unmanaged
+    public Buffer< TView > AsBuffer< TView >() where TView : unmanaged
     {
-        int viewElementSize = Unsafe.SizeOf< Tview >();
+        int viewElementSize = Unsafe.SizeOf< TView >();
 
         // Ensure the conversion makes sense (capacity should be divisible by target element size)
         if ( ( Length % viewElementSize ) != 0 )
         {
-            throw new InvalidOperationException( $"Cannot create Buffer<{typeof( Tview ).Name}> " +
+            throw new InvalidOperationException( $"Cannot create Buffer<{typeof( TView ).Name}> " +
                                                  $"view: current length ({Length} bytes) is not " +
                                                  $"divisible by target element size ({viewElementSize} bytes)" );
         }
 
-        var viewBuffer = new Buffer< Tview >( _memory, IsBigEndian )
+        var viewBuffer = new Buffer< TView >( _memory, IsBigEndian )
         {
             Position   = Position,
             Limit      = Limit,

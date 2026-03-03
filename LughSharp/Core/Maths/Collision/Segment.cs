@@ -105,10 +105,10 @@ public class Segment
     /// <returns></returns>
     public override int GetHashCode()
     {
-        const int PRIME = 71;
+        const int Prime = 71;
 
-        int result = PRIME + _vecA.GetHashCode();
-        result = ( PRIME * result ) + _vecB.GetHashCode();
+        int result = Prime + _vecA.GetHashCode();
+        result = ( Prime * result ) + _vecB.GetHashCode();
 
         return result;
     }

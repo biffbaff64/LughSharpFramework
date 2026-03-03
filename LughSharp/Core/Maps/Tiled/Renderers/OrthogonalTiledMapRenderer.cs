@@ -197,7 +197,7 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
                     {
                         switch ( rotations )
                         {
-                            case TiledMapTileLayer.Cell.ROTATE90:
+                            case TiledMapTileLayer.Cell.Rotate90:
                             {
                                 float tempV = Vertices[ IBatch.V1 ];
                                 Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
@@ -214,7 +214,7 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
                                 break;
                             }
 
-                            case TiledMapTileLayer.Cell.ROTATE180:
+                            case TiledMapTileLayer.Cell.Rotate180:
                             {
                                 ( Vertices[ IBatch.U1 ], Vertices[ IBatch.U3 ] )
                                     = ( Vertices[ IBatch.U3 ], Vertices[ IBatch.U1 ] );
@@ -231,7 +231,7 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
                                 break;
                             }
 
-                            case TiledMapTileLayer.Cell.ROTATE270:
+                            case TiledMapTileLayer.Cell.Rotate270:
                             {
                                 float tempV = Vertices[ IBatch.V1 ];
                                 Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];
@@ -252,7 +252,7 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
 
                     if ( region.Texture != null )
                     {
-                        Batch.Draw( region.Texture, Vertices, 0, NUM_VERTICES );
+                        Batch.Draw( region.Texture, Vertices, 0, NumVertices );
                     }
                 }
 

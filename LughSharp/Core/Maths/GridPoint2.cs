@@ -220,10 +220,10 @@ public class GridPoint2
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        const int PRIME = 53;
+        const int Prime = 53;
 
-        int result = PRIME + 31;
-        result = ( PRIME * result ) + 32;
+        int result = Prime + 31;
+        result = ( Prime * result ) + 32;
 
         return result;
     }

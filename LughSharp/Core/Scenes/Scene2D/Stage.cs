@@ -359,7 +359,7 @@ public class Stage : InputAdapter, IDisposable
     /// Applies a touch down event to the stage and returns true if an actor in
     /// the scene <see cref="Handle"/> the event.
     /// </summary>
-    public override bool TouchDown( int screenX, int screenY, int pointer, int button )
+    public override bool OnTouchDown( int screenX, int screenY, int pointer, int button )
     {
         if ( !IsInsideViewport( screenX, screenY ) )
         {
@@ -412,7 +412,7 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="Event.SetHandled"/> handled the event. Only <see cref="InputListener"/>
     /// listeners that returned true for touchDown will receive this event.
     /// </summary>
-    public override bool TouchDragged( int screenX, int screenY, int pointer )
+    public override bool OnTouchDragged( int screenX, int screenY, int pointer )
     {
         _pointerScreenX[ pointer ] = screenX;
         _pointerScreenY[ pointer ] = screenY;
@@ -480,7 +480,7 @@ public class Stage : InputAdapter, IDisposable
     /// Only <see cref="InputListener"/> listeners that returned true for
     /// touchDown will receive this event.
     /// </summary>
-    public override bool TouchUp( int screenX, int screenY, int pointer, int button )
+    public override bool OnTouchUp( int screenX, int screenY, int pointer, int button )
     {
         _pointerTouched[ pointer ] = false;
         _pointerScreenX[ pointer ] = screenX;
@@ -548,7 +548,7 @@ public class Stage : InputAdapter, IDisposable
     /// in the scene <see cref="Event.SetHandled"/> the event. This event only
     /// occurs on the desktop.
     /// </summary>
-    public override bool MouseMoved( int screenX, int screenY )
+    public override bool OnMouseMoved( int screenX, int screenY )
     {
         _mouseScreenX = screenX;
         _mouseScreenY = screenY;
@@ -592,7 +592,7 @@ public class Stage : InputAdapter, IDisposable
     /// in the scene <see cref="Event.SetHandled"/> the event. This event only
     /// occurs on the desktop.
     /// </summary>
-    public override bool Scrolled( float amountX, float amountY )
+    public override bool OnScrolled( float amountX, float amountY )
     {
         Actor target = ScrollFocus ?? RootGroup;
 
@@ -624,7 +624,7 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="Stage.KeyboardFocus"/>, if any, and returns
     /// true if the event was handled in <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override bool KeyDown( int keyCode )
+    public override bool OnKeyDown( int keyCode )
     {
         Actor target     = KeyboardFocus ?? RootGroup;
         var   inputEvent = Pools.Obtain< InputEvent >();
@@ -649,7 +649,7 @@ public class Stage : InputAdapter, IDisposable
     /// Applies a key up event to the actor that has <see cref="Stage.KeyboardFocus"/>,
     /// if any, and returns true if the event was <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override bool KeyUp( int keyCode )
+    public override bool OnKeyUp( int keyCode )
     {
         Actor target     = KeyboardFocus ?? RootGroup;
         var   inputEvent = Pools.Obtain< InputEvent >();
@@ -674,7 +674,7 @@ public class Stage : InputAdapter, IDisposable
     /// Applies a key typed event to the actor that has <see cref="Stage.KeyboardFocus"/>,
     /// if any, and returns true if the event was <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override bool KeyTyped( char character )
+    public override bool OnKeyTyped( char character )
     {
         Actor target     = KeyboardFocus ?? RootGroup;
         var   inputEvent = Pools.Obtain< InputEvent >();

@@ -60,7 +60,7 @@ public class SubbandLayer1IntensityStereo : SubbandLayer1
 
             switch ( channels )
             {
-                case OutputChannels.BOTH_CHANNELS:
+                case OutputChannels.BothChannels:
                 {
                     float sample1 = Sample * Scalefactor, sample2 = Sample * Channel2Scalefactor;
                     filter1?.AddSample( sample1, Subbandnumber );
@@ -69,7 +69,7 @@ public class SubbandLayer1IntensityStereo : SubbandLayer1
                     break;
                 }
 
-                case OutputChannels.LEFT_CHANNEL:
+                case OutputChannels.LeftChannel:
                 {
                     float sample1 = Sample * Scalefactor;
                     filter1?.AddSample( sample1, Subbandnumber );

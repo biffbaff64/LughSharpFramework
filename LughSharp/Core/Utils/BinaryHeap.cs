@@ -57,7 +57,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
 {
     // ========================================================================
 
-    private const int DEFAULT_HEAP_CAPACITY = 16;
+    private const int DefaultHeapCapacity = 16;
 
     // ========================================================================
 
@@ -72,7 +72,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// </summary>
     /// <param name="capacity"> The capacity to use. Default is 16. </param>
     /// <param name="isMaxHeap"></param>
-    public BinaryHeap( int capacity = DEFAULT_HEAP_CAPACITY, bool isMaxHeap = false )
+    public BinaryHeap( int capacity = DefaultHeapCapacity, bool isMaxHeap = false )
     {
         _isMaxHeap = isMaxHeap;
         _nodes     = new BinaryHeapNode[ capacity ];
@@ -225,13 +225,13 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// Reset all elements in the heap to null.
     /// <para>
     /// If the heap does not exist, it will be created first with
-    /// capacity set to <see cref="DEFAULT_HEAP_CAPACITY" />
+    /// capacity set to <see cref="DefaultHeapCapacity" />
     /// </para>
     /// </summary>
     public void Clear()
     {
         // If _nodes hasn't been created, fix that problem...
-        _nodes ??= new BinaryHeapNode[ DEFAULT_HEAP_CAPACITY ];
+        _nodes ??= new BinaryHeapNode[ DefaultHeapCapacity ];
 
         Array.Fill( _nodes, null, 0, Size );
         Size = 0;

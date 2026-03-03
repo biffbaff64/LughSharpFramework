@@ -35,7 +35,7 @@ namespace DesktopGLBackend;
 [PublicAPI]
 public class Sync
 {
-    private const long NANOS_IN_SECOND = 1000L * 1000L * 1000L;
+    private const long NanosInSecond = 1000L * 1000L * 1000L;
 
     private readonly Stopwatch _stopwatch = new();
 
@@ -48,7 +48,7 @@ public class Sync
     {
         _initialised = true;
         _stopwatch.Start();
-        _nextFrame = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );
+        _nextFrame = _stopwatch.ElapsedTicks * ( NanosInSecond / Stopwatch.Frequency );
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public class Sync
         }
 
         long targetTime  = _nextFrame;
-        long currentTime = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );
+        long currentTime = _stopwatch.ElapsedTicks * ( NanosInSecond / Stopwatch.Frequency );
 
         long sleepTime = targetTime - currentTime;
 
@@ -87,8 +87,8 @@ public class Sync
                 break;
         }
 
-        currentTime = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );
-        _nextFrame  = Math.Max( targetTime + ( NANOS_IN_SECOND / fps ), currentTime );
+        currentTime = _stopwatch.ElapsedTicks * ( NanosInSecond / Stopwatch.Frequency );
+        _nextFrame  = Math.Max( targetTime + ( NanosInSecond / fps ), currentTime );
     }
 }
 

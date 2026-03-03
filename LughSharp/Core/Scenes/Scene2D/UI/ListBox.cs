@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
@@ -62,12 +58,18 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
     public ArraySelection< T > Selection    { get; set; } = null!;
     public List< T >           Items        { get; set; } = [ ];
     public float               ItemHeight   { get; set; }
-    public int                 Alignment    { get; set; } = Align.LEFT;
+    public Align               Alignment    { get; set; } = Align.Left;
     public bool                TypeToSelect { get; set; }
+
+    /// <summary>
+    /// Returns the list's style. Modifying the returned style may not have an
+    /// effect until <see cref="SetStyle(ListBoxStyle)"/> is called.
+    /// </summary>
+    public ListBoxStyle Style { get; set; } = null!;
 
     // ========================================================================
 
-    public override string? Name => "ListBox";
+    public override string Name => "ListBox";
 
     // ========================================================================
 
@@ -133,12 +135,6 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         _prefHeight = value;
     }
 
-    /// <summary>
-    /// Returns the list's style. Modifying the returned style may not have an
-    /// effect until <see cref="SetStyle(ListBoxStyle)"/> is called.
-    /// </summary>
-    public ListBoxStyle? Style { get; set; }
-
     private void Create( ListBoxStyle boxStyle )
     {
         Selection = new ArraySelection< T >( Items )
@@ -165,8 +161,8 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
     public override void SetLayout()
     {
-        BitmapFont?     font             = Style?.Font;
-        ISceneDrawable? selectedDrawable = Style?.Selection;
+        BitmapFont?     font             = Style.Font;
+        ISceneDrawable? selectedDrawable = Style.Selection;
 
         if ( font == null )
         {
@@ -196,7 +192,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         _prefWidth  += selectedDrawable.LeftWidth + selectedDrawable.RightWidth;
         _prefHeight =  Items.Count * ItemHeight;
 
-        ISceneDrawable? background = Style?.Background;
+        ISceneDrawable? background = Style.Background;
 
         if ( background != null )
         {
@@ -212,10 +208,10 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
         DrawBackground( batch, parentAlpha );
 
-        BitmapFont?     font                = Style?.Font;
-        ISceneDrawable? selectedDrawable    = Style?.Selection;
-        Color?          fontColorSelected   = Style?.FontColorSelected;
-        Color?          fontColorUnselected = Style?.FontColorUnselected;
+        BitmapFont      font                = Style.Font;
+        ISceneDrawable? selectedDrawable    = Style.Selection;
+        Color           fontColorSelected   = Style.FontColorSelected;
+        Color           fontColorUnselected = Style.FontColorUnselected;
 
         batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
@@ -225,7 +221,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         float height = Height;
         float itemY  = height;
 
-        ISceneDrawable? background = Style?.Background;
+        ISceneDrawable? background = Style.Background;
 
         if ( background != null )
         {
@@ -238,9 +234,9 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
         float? textOffsetX = selectedDrawable?.LeftWidth;
         float? textWidth   = width - textOffsetX - selectedDrawable?.RightWidth;
-        float  textOffsetY = selectedDrawable!.TopHeight - font!.GetDescent();
+        float  textOffsetY = selectedDrawable!.TopHeight - font.GetDescent();
 
-        font.SetColor( fontColorUnselected!.R,
+        font.SetColor( fontColorUnselected.R,
                        fontColorUnselected.G,
                        fontColorUnselected.B,
                        fontColorUnselected.A * parentAlpha );
@@ -262,7 +258,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
                 else if ( selected )
                 {
                     drawable = selectedDrawable;
-                    font.SetColor( fontColorSelected!.R,
+                    font.SetColor( fontColorSelected.R,
                                    fontColorSelected.G,
                                    fontColorSelected.B,
                                    fontColorSelected.A * parentAlpha );
@@ -304,7 +300,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
     /// </summary>
     protected void DrawBackground( IBatch batch, float parentAlpha )
     {
-        if ( Style?.Background != null )
+        if ( Style.Background != null )
         {
             batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
 
@@ -402,7 +398,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
     public int GetItemIndexAt( float y )
     {
         float           height     = Height;
-        ISceneDrawable? background = Style?.Background;
+        ISceneDrawable? background = Style.Background;
 
         if ( background != null )
         {
@@ -510,7 +506,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
             _parent = lb;
         }
 
-        public override bool KeyDown( InputEvent? ev, int keycode )
+        public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             if ( _parent.Items.Count == 0 )
             {
@@ -532,17 +528,17 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
                     break;
 
-                case IInput.Keys.HOME:
+                case IInput.Keys.Home:
                     _parent.SetSelectedIndex( 0 );
 
                     return true;
 
-                case IInput.Keys.END:
+                case IInput.Keys.End:
                     _parent.SetSelectedIndex( _parent.Items.Count - 1 );
 
                     return true;
 
-                case IInput.Keys.DOWN:
+                case IInput.Keys.Down:
                     index = _parent.Items.IndexOf( _parent.GetSelected()! ) + 1;
 
                     if ( index >= _parent.Items.Count )
@@ -554,7 +550,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
                     return true;
 
-                case IInput.Keys.UP:
+                case IInput.Keys.Up:
                     index = _parent.Items.IndexOf( _parent.GetSelected()! ) - 1;
 
                     if ( index < 0 )
@@ -566,7 +562,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
                     return true;
 
-                case IInput.Keys.ESCAPE:
+                case IInput.Keys.Escape:
                     if ( _parent.Stage != null )
                     {
                         _parent.Stage.KeyboardFocus = null;
@@ -578,7 +574,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
             return false;
         }
 
-        public override bool KeyTyped( InputEvent? ev, char character )
+        public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             if ( !_parent.TypeToSelect )
             {
@@ -621,7 +617,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
             _parent = lb;
         }
 
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( ( pointer != 0 ) || ( button != 0 ) )
             {
@@ -656,7 +652,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
             return true;
         }
 
-        public override void TouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+        public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( ( pointer != 0 ) || ( button != 0 ) )
             {
@@ -666,12 +662,12 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
             _parent._pressedIndex = -1;
         }
 
-        public override void TouchDragged( InputEvent? ev, float x, float y, int pointer )
+        public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             _parent._overIndex = _parent.GetItemIndexAt( y );
         }
 
-        public override bool MouseMoved( InputEvent? ev, float x, float y )
+        public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             _parent._overIndex = _parent.GetItemIndexAt( y );
 

@@ -37,12 +37,12 @@ namespace LughSharp.Core.Graphics.G2D;
 [PublicAPI]
 public class Sprite : TextureRegion
 {
-    public const int VERTEX_SIZE = 2 + 1 + 2;
-    public const int SPRITE_SIZE = 4 * VERTEX_SIZE;
+    public const int VertexSize = 2 + 1 + 2;
+    public const int SpriteSize = 4 * VertexSize;
 
     // ========================================================================
 
-    public float[] Vertices { get; set; } = new float[ SPRITE_SIZE ];
+    public float[] Vertices { get; set; } = new float[ SpriteSize ];
 
     /// <returns> the width of the sprite, not accounting for scale. </returns>
     public float Width { get; set; }
@@ -225,7 +225,7 @@ public class Sprite : TextureRegion
         try
         {
             // Copy vertices array
-            Array.Copy( sprite.Vertices, 0, Vertices, 0, SPRITE_SIZE );
+            Array.Copy( sprite.Vertices, 0, Vertices, 0, SpriteSize );
         }
         catch ( ArgumentException ex )
         {
@@ -786,7 +786,7 @@ public class Sprite : TextureRegion
     {
         if ( Texture != null )
         {
-            batch.Draw( Texture, GetVertices(), 0, SPRITE_SIZE );
+            batch.Draw( Texture, GetVertices(), 0, SpriteSize );
         }
     }
 

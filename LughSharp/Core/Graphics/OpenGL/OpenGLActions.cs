@@ -37,6 +37,7 @@ namespace LughSharp.Core.Graphics.OpenGL;
 [PublicAPI]
 public class OpenGL
 {
+    [PublicAPI]
     public class Initialisation
     {
         public static Capabilities Capabilities { get; } = new();
@@ -55,14 +56,14 @@ public class OpenGL
             var minorVersion    = 0;
             var revisionVersion = 0;
 
-            string version = Engine.GL.GetString( IGL.GL_VERSION )->ToString();
+            string version = Engine.GL.GetString( IGL.GLVersion )->ToString();
 
             Capabilities.IsGLES     = version.StartsWith( "OpenGL ES" );
             Capabilities.IsEmulated = false;
 
-            Engine.GL.GetIntegerv( IGL.GL_MAJOR_VERSION, &majorVersion );
+            Engine.GL.GetIntegerv( IGL.GLMajorVersion, &majorVersion );
 
-            if ( Engine.GL.GetError() == IGL.GL_INVALID_ENUM )
+            if ( Engine.GL.GetError() == IGL.GLInvalidEnum )
             {
                 if ( !TryParseOpenGLVersionFromString( version,
                                                        out majorVersion,
@@ -77,7 +78,7 @@ public class OpenGL
             }
             else
             {
-                Engine.GL.GetIntegerv( IGL.GL_MINOR_VERSION, &minorVersion );
+                Engine.GL.GetIntegerv( IGL.GLMinorVersion, &minorVersion );
 
                 Capabilities.MajorVersion    = majorVersion;
                 Capabilities.MinorVersion    = minorVersion;
@@ -89,7 +90,7 @@ public class OpenGL
             // with native GPU enabled - so try to account for that case.
             if ( Capabilities.IsGLES )
             {
-                if ( TryParseOpenGLVersionFromString( Engine.GL.GetString( IGL.GL_VERSION )->ToString(),
+                if ( TryParseOpenGLVersionFromString( Engine.GL.GetString( IGL.GLVersion )->ToString(),
                                                       out int glesMajorVersion,
                                                       out int glesMinorVersion,
                                                       out int glesRevisionVersion ) )
@@ -109,7 +110,7 @@ public class OpenGL
 
     /// <summary>
     /// Attempts to parse the version of the loaded OpenGL implementation from the string
-    /// returned by Api.Engine.GL.GetString( IGL.GL_VERSION ).
+    /// returned by <c>Engine.GL.GetString( IGL.GLVersion )</c>.
     /// </summary>
     private static bool TryParseOpenGLVersionFromString( string str, out int major, out int minor, out int revision )
     {
@@ -154,7 +155,21 @@ public class OpenGL
 
         // --------------------------------------
 
-        public static OpenGLProfile OpenGLProfile { get; set; } = OpenGLProfile.CoreProfile;
+        /// <summary>
+        /// Indicates the OpenGL context. Can be one of <see cref="OpenGLProfile.AnyProfile"/>,
+        /// <see cref="OpenGLProfile.CoreProfile"/>or <see cref="OpenGLProfile.CompatProfile"/>.
+        /// </summary>
+        public static OpenGLProfile OpenGLProfile
+        {
+            get;
+            set
+            {
+                field = value;
+
+                IsForwardCompatible = ( value == OpenGLProfile.CompatProfile );
+                IsCoreProfile       = ( value == OpenGLProfile.CoreProfile );
+            }
+        } = OpenGLProfile.CoreProfile;
 
         // ====================================================================
 

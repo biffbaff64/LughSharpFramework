@@ -103,7 +103,7 @@ public class GlyphLayout : IResetable, IPoolable
 
     // ========================================================================
 
-    private const float EPSILON = 0.0001f;
+    private const float Epsilon = 0.0001f;
 
     private readonly Pool< GlyphRun > _glyphRunPool = Pools.Get< GlyphRun >( () => new GlyphRun() );
     private readonly List< int >      _colorStack   = new( 4 );
@@ -141,7 +141,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="targetWidth"></param>
     /// <param name="halign"></param>
     /// <param name="wrap"></param>
-    public GlyphLayout( BitmapFont font, string str, Color color, float targetWidth, int halign, bool wrap )
+    public GlyphLayout( BitmapFont font, string str, Color color, float targetWidth, Align halign, bool wrap )
     {
         SetText( font, str, color, targetWidth, halign, wrap );
     }
@@ -167,7 +167,7 @@ public class GlyphLayout : IResetable, IPoolable
                         int end,
                         Color color,
                         float targetWidth,
-                        int halign,
+                        Align halign,
                         bool wrap,
                         string truncate )
     {
@@ -182,7 +182,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="str"> A string holding the text. </param>
     public void SetText( BitmapFont font, string str )
     {
-        SetText( font, str, 0, str.Length, font.GetColor(), 0, Align.LEFT, false, null );
+        SetText( font, str, 0, str.Length, font.GetColor(), 0, Align.Left, false, null );
     }
 
     /// <summary>
@@ -199,7 +199,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="targetWidth"></param>
     /// <param name="halign"></param>
     /// <param name="wrap"></param>
-    public void SetText( BitmapFont font, string str, Color color, float targetWidth, int halign, bool wrap )
+    public void SetText( BitmapFont font, string str, Color color, float targetWidth, Align halign, bool wrap )
     {
         SetText( font, str, 0, str.Length, color, targetWidth, halign, wrap, null );
     }
@@ -231,7 +231,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// not null.
     /// </param>
     public void SetText( BitmapFont font, string str, int start, int end, Color color,
-                         float targetWidth, int halign, bool wrap, string? truncate )
+                         float targetWidth, Align halign, bool wrap, string? truncate )
     {
         Reset();
 
@@ -392,7 +392,7 @@ public class GlyphLayout : IResetable, IPoolable
                             Glyph glyph      = lineRun.Glyphs[ i - 1 ];
                             float glyphWidth = GetGlyphWidth( glyph, fontData );
 
-                            if ( runWidth + glyphWidth - EPSILON <= targetWidth )
+                            if ( runWidth + glyphWidth - Epsilon <= targetWidth )
                             {
                                 // Glyph fits.
                                 runWidth += lineRun.XAdvances[ i ];
@@ -545,7 +545,7 @@ public class GlyphLayout : IResetable, IPoolable
     private void FinalizeRun( BitmapFontData fontData,
                               float y,
                               float targetWidth,
-                              int halign,
+                              Align halign,
                               bool markupEnabled )
     {
         Height = fontData.CapHeight + Math.Abs( y );
@@ -603,12 +603,12 @@ public class GlyphLayout : IResetable, IPoolable
     /// Align runs to center or right of targetWidth. Requires run.width of runs
     /// to be already set
     /// </summary>
-    private void AlignRuns( float targetWidth, int halign )
+    private void AlignRuns( float targetWidth, Align halign )
     {
-        if ( ( halign & Align.LEFT ) == 0 )
+        if ( ( halign & Align.Left ) == 0 )
         {
             // Not left aligned, so must be center or right aligned.
-            bool       center    = ( halign & Align.CENTER ) != 0;
+            bool       center    = ( halign & Align.Center ) != 0;
             GlyphRun[] runsItems = Runs.ToArray();
 
             for ( int i = 0, n = Runs.Count; i < n; i++ )

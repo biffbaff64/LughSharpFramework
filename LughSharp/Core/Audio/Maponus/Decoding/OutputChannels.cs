@@ -48,27 +48,27 @@ public class OutputChannels
     /// <summary>
     /// Flag to indicate output should include both channels.
     /// </summary>
-    public const int BOTH_CHANNELS = 0;
+    public const int BothChannels = 0;
 
     /// <summary>
     /// Flag to indicate output should include the left channel only.
     /// </summary>
-    public const int LEFT_CHANNEL = 1;
+    public const int LeftChannel = 1;
 
     /// <summary>
     /// Flag to indicate output should include the right channel only.
     /// </summary>
-    public const int RIGHT_CHANNEL = 2;
+    public const int RightChannel = 2;
 
     /// <summary>
     /// Flag to indicate output is mono.
     /// </summary>
-    public const int DOWNMIX_CHANNELS = 3;
+    public const int DownmixChannels = 3;
 
-    public static readonly OutputChannels Left    = new( LEFT_CHANNEL );
-    public static readonly OutputChannels Right   = new( RIGHT_CHANNEL );
-    public static readonly OutputChannels Both    = new( BOTH_CHANNELS );
-    public static readonly OutputChannels DownMix = new( DOWNMIX_CHANNELS );
+    public static readonly OutputChannels Left    = new( LeftChannel );
+    public static readonly OutputChannels Right   = new( RightChannel );
+    public static readonly OutputChannels Both    = new( BothChannels );
+    public static readonly OutputChannels DownMix = new( DownmixChannels );
 
     private readonly int _outputChannels;
 
@@ -102,7 +102,7 @@ public class OutputChannels
     {
         get
         {
-            int count = _outputChannels == BOTH_CHANNELS ? 2 : 1;
+            int count = _outputChannels == BothChannels ? 2 : 1;
 
             return count;
         }

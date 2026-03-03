@@ -72,7 +72,7 @@ public class ParticleEmitter
         Animated
     }
 
-    private const int DEFAULT_MAX_PARTICLE_COUNT = 4;
+    private const int DefaultMaxParticleCount = 4;
 
     private static readonly int _updateScale    = 1 << 0;
     private static readonly int _updateAngle    = 1 << 1;
@@ -1981,13 +1981,13 @@ public class ParticleEmitter
             {
                 // BufferedReader.MarkSupported may return false in some platforms,
                 // in which case backwards commpatibility is not possible.
-                const string ERROR_MESSAGE = "The loaded particle effect descriptor file uses an old invalid format. "
+                const string ErrorMessage = "The loaded particle effect descriptor file uses an old invalid format. "
                                            + "Please download the latest version of the Particle Editor tool and "
                                            + "recreate the file by loading and saving it again.";
 
-                Logger.Error( ERROR_MESSAGE );
+                Logger.Error( ErrorMessage );
 
-                throw new IOException( ERROR_MESSAGE );
+                throw new IOException( ErrorMessage );
             }
         }
 
@@ -2234,7 +2234,7 @@ public class ParticleEmitter
     public float  Y                  { get; set; }
     public int    ActiveCount        { get; set; }
     public int    MinParticleCount   { get; set; }
-    public int    MaxParticleCount   { get; set; } = DEFAULT_MAX_PARTICLE_COUNT;
+    public int    MaxParticleCount   { get; set; } = DefaultMaxParticleCount;
 
     #endregion properties
 }

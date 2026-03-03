@@ -70,15 +70,15 @@ namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 [PublicAPI]
 public unsafe partial class GLBindings : IGLBindings
 {
-    public const int INVALID_SHADER_PROGRAM = -1;
-    public const int INVALID_SHADER         = -1;
+    public const int InvalidShaderProgram = -1;
+    public const int InvalidShader         = -1;
 
     // ========================================================================
 
     /// <summary>
     /// The null pointer, just like in C/C++.
     /// </summary>
-    public const IntPtr NULL = 0;
+    public const IntPtr Null = 0;
 
     // ========================================================================
     // ========================================================================
@@ -138,7 +138,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public (int major, int minor) GetOpenGLVersion()
     {
-        GLubyte* version = GetString( IGL.GL_VERSION );
+        GLubyte* version = GetString( IGL.GLVersion );
 
         if ( version == null )
         {
@@ -958,7 +958,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetInteger64v( GLenum pname, GLint64* data )
+    public void GetInteger64V( GLenum pname, GLint64* data )
     {
         GetDelegateForFunction< PFNGLGETINTEGER64VPROC >( "glGetInteger64v", out _glGetInteger64v );
 
@@ -966,7 +966,7 @@ public unsafe partial class GLBindings : IGLBindings
     }
 
     /// <inheritdoc />
-    public void GetInteger64v( GLenum pname, ref GLint64[] data )
+    public void GetInteger64V( GLenum pname, ref GLint64[] data )
     {
         GetDelegateForFunction< PFNGLGETINTEGER64VPROC >( "glGetInteger64v", out _glGetInteger64v );
 
@@ -2507,7 +2507,7 @@ public unsafe partial class GLBindings : IGLBindings
         GetDelegateForFunction< PFNGLGETNAMEDBUFFERPARAMETERIVPROC >( "glGetNamedBufferParameteriv",
                                                                       out _glGetNamedBufferParameteriv );
 
-        _glGetNamedBufferParameteriv( buffer, IGL.GL_BUFFER_SIZE, size );
+        _glGetNamedBufferParameteriv( buffer, IGL.GLBufferSize, size );
 
         GetDelegateForFunction< PFNGLMAPNAMEDBUFFERPROC >( "glMapNamedBuffer", out _glMapNamedBuffer );
 
@@ -4028,7 +4028,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform1ui( GLint location, GLuint v0 )
+    public void Uniform1UI( GLint location, GLuint v0 )
     {
         GetDelegateForFunction< PFNGLUNIFORM1UIPROC >( "glUniform1ui", out _glUniform1ui );
 
@@ -4037,7 +4037,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform2ui( GLint location, GLuint v0, GLuint v1 )
+    public void Uniform2UI( GLint location, GLuint v0, GLuint v1 )
     {
         GetDelegateForFunction< PFNGLUNIFORM2UIPROC >( "glUniform2ui", out _glUniform2ui );
 
@@ -4046,7 +4046,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform3ui( GLint location, GLuint v0, GLuint v1, GLuint v2 )
+    public void Uniform3UI( GLint location, GLuint v0, GLuint v1, GLuint v2 )
     {
         GetDelegateForFunction< PFNGLUNIFORM3UIPROC >( "glUniform3ui", out _glUniform3ui );
 
@@ -4055,7 +4055,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform4ui( GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3 )
+    public void Uniform4UI( GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3 )
     {
         GetDelegateForFunction< PFNGLUNIFORM4UIPROC >( "glUniform4ui", out _glUniform4ui );
 
@@ -4064,14 +4064,14 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform1uiv( GLint location, GLsizei count, GLuint* value )
+    public void Uniform1Uiv( GLint location, GLsizei count, GLuint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1UIVPROC >( "glUniform1uiv", out _glUniform1uiv );
 
         _glUniform1uiv( location, count, value );
     }
 
-    public void Uniform1uiv( GLint location, GLuint[] value )
+    public void Uniform1Uiv( GLint location, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1UIVPROC >( "glUniform1uiv", out _glUniform1uiv );
 
@@ -4083,14 +4083,14 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform2uiv( GLint location, GLsizei count, GLuint* value )
+    public void Uniform2Uiv( GLint location, GLsizei count, GLuint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2UIVPROC >( "glUniform2uiv", out _glUniform2uiv );
 
         _glUniform2uiv( location, count, value );
     }
 
-    public void Uniform2uiv( GLint location, GLuint[] value )
+    public void Uniform2Uiv( GLint location, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2UIVPROC >( "glUniform2uiv", out _glUniform2uiv );
 
@@ -4102,14 +4102,14 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform3uiv( GLint location, GLsizei count, GLuint* value )
+    public void Uniform3Uiv( GLint location, GLsizei count, GLuint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3UIVPROC >( "glUniform3uiv", out _glUniform3uiv );
 
         _glUniform3uiv( location, count, value );
     }
 
-    public void Uniform3uiv( GLint location, GLuint[] value )
+    public void Uniform3Uiv( GLint location, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3UIVPROC >( "glUniform3uiv", out _glUniform3uiv );
 
@@ -4121,14 +4121,14 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform4uiv( GLint location, GLsizei count, GLuint* value )
+    public void Uniform4Uiv( GLint location, GLsizei count, GLuint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4UIVPROC >( "glUniform4uiv", out _glUniform4uiv );
 
         _glUniform4uiv( location, count, value );
     }
 
-    public void Uniform4uiv( GLint location, GLuint[] value )
+    public void Uniform4Uiv( GLint location, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4UIVPROC >( "glUniform4uiv", out _glUniform4uiv );
 
@@ -4352,7 +4352,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void BindFramebuffer( GLenum target, GLuint framebuffer )
     {
-        if ( framebuffer == GLData.CurrentBoundFBO )
+        if ( framebuffer == GLData.CurrentBoundFbo )
         {
             Stats.IncMeter( "BindFramebuffer" );
 
@@ -4364,7 +4364,7 @@ public unsafe partial class GLBindings : IGLBindings
         _glBindFramebuffer( target, framebuffer );
 
         Engine.GL.GetIntegerv( ( int )BufferBinding.FramebufferBinding, out int binding );
-        GLData.CurrentBoundFBO = ( uint )binding;
+        GLData.CurrentBoundFbo = ( uint )binding;
     }
 
     // ========================================================================

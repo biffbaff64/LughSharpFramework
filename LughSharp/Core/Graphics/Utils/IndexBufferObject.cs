@@ -65,7 +65,7 @@ public class IndexBufferObject : IIndexData
 
     /// <summary>
     /// Constructs a new IndexBufferObject, setting <see cref="_usage"/> to
-    /// <see cref="IGL.GL_STATIC_DRAW"/> and <see cref="maxIndices"/> to the
+    /// <see cref="IGL.GLStaticDraw"/> and <see cref="maxIndices"/> to the
     /// given value.
     /// </summary>
     public IndexBufferObject( int maxIndices )

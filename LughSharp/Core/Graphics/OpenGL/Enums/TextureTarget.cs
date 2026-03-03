@@ -29,18 +29,18 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum TextureTarget
 {
-    Texture1D               = IGL.GL_TEXTURE_1D,
-    Texture2D               = IGL.GL_TEXTURE_2D,
-    Texture3D               = IGL.GL_TEXTURE_3D,
-    Texture1DArray          = IGL.GL_TEXTURE_1D_ARRAY,
-    Texture2DArray          = IGL.GL_TEXTURE_2D_ARRAY,
-    Texture2DMultisample    = IGL.GL_TEXTURE_2D_MULTISAMPLE,
-    TextureCubeMapPositiveX = IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-    TextureCubeMapNegativeX = IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-    TextureCubeMapPositiveY = IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-    TextureCubeMapNegativeY = IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-    TextureCubeMapPositiveZ = IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-    TextureCubeMapNegativeZ = IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+    Texture1D               = IGL.GLTexture1D,
+    Texture2D               = IGL.GLTexture2D,
+    Texture3D               = IGL.GLTexture3D,
+    Texture1DArray          = IGL.GLTexture1DArray,
+    Texture2DArray          = IGL.GLTexture2DArray,
+    Texture2DMultisample    = IGL.GLTexture2DMultisample,
+    TextureCubeMapPositiveX = IGL.GLTextureCubeMapPositiveX,
+    TextureCubeMapNegativeX = IGL.GLTextureCubeMapNegativeX,
+    TextureCubeMapPositiveY = IGL.GLTextureCubeMapPositiveY,
+    TextureCubeMapNegativeY = IGL.GLTextureCubeMapNegativeY,
+    TextureCubeMapPositiveZ = IGL.GLTextureCubeMapPositiveZ,
+    TextureCubeMapNegativeZ = IGL.GLTextureCubeMapNegativeZ
 }
 
 [PublicAPI]

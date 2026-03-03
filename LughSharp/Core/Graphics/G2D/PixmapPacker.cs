@@ -988,8 +988,8 @@ public class PixmapPacker : IDisposable
                 return null;
             }
 
-            if ( ( Math.Abs( node.Rect.Width - rect.Width ) < NumberUtils.FLOAT_TOLERANCE )
-              && ( Math.Abs( node.Rect.Height - rect.Height ) < NumberUtils.FLOAT_TOLERANCE ) )
+            if ( ( Math.Abs( node.Rect.Width - rect.Width ) < NumberUtils.FloatTolerance )
+              && ( Math.Abs( node.Rect.Height - rect.Height ) < NumberUtils.FloatTolerance ) )
             {
                 return node;
             }

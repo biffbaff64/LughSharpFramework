@@ -26,26 +26,26 @@ namespace Template.Source;
 
 public static class Assets
 {
-    public const string BACKGROUND_IMAGE  = @"Assets\title_background.png";
-    public const string HUD_PANEL         = @"Assets\hud_panel.png";
-    public const string COMPLETE_STAR     = @"Assets\complete_star.png";
-    public const string KEY_COLLECTED     = @"Assets\key_collected.png";
-    public const string WINDOW_BACKGROUND = @"Assets\title_background.png";
-    public const string PAUSE_EXIT_BUTTON = @"Assets\pause_exit_button.png";
-    public const string BUTTON_B_UP       = @"Assets\packedimages\input\button_b.png";
-    public const string BUTTON_B_DOWN     = @"Assets\packedimages\input\button_b_pressed.png";
-    public const string PROGRESS_BAR_SKIN = @"Assets\Skins\uiskin.json";
+    public const string BackgroundImage  = @"Assets\title_background.png";
+    public const string HudPanel         = @"Assets\hud_panel.png";
+    public const string CompleteStar     = @"Assets\complete_star.png";
+    public const string KeyCollected     = @"Assets\key_collected.png";
+    public const string WindowBackground = @"Assets\title_background.png";
+    public const string PauseExitButton = @"Assets\pause_exit_button.png";
+    public const string ButtonBUp       = @"Assets\packedimages\input\button_b.png";
+    public const string ButtonBDown     = @"Assets\packedimages\input\button_b_pressed.png";
+    public const string ProgressBarSkin = @"Assets\Skins\uiskin.json";
 
     // ========================================================================
     // TMX Maps
-    public const string ROOM1_MAP = @"Assets\Maps\room1.tmx";
+    public const string Room1Map = @"Assets\Maps\room1.tmx";
 
     // ========================================================================
     // Fonts
-    public const string ARIAL_FONT            = @"Assets\Fonts\arial-15.fnt";
-    public const string ARIAL_LATIN_FONT      = @"Assets\Fonts\arial-latin.fnt";
-    public const string ARIAL_15_FONT         = @"Assets\Fonts\arial-15.fnt";
-    public const string AMBLE_REGULAR_26_FONT = @"Assets\Fonts\Amble-Regular-26.fnt";
+    public const string ArialFont            = @"Assets\Fonts\arial-15.fnt";
+    public const string ArialLatinFont      = @"Assets\Fonts\arial-latin.fnt";
+    public const string Arial15Font         = @"Assets\Fonts\arial-15.fnt";
+    public const string AmbleRegular26Font = @"Assets\Fonts\Amble-Regular-26.fnt";
 }
 
 // ============================================================================

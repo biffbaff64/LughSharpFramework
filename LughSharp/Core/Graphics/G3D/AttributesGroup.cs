@@ -41,7 +41,7 @@ public class AttributesGroup : IComparer< Attribute >
         Guard.Against.Null( arg0 );
         Guard.Against.Null( arg1 );
 
-        return ( int )( arg0.type - arg1.type );
+        return ( int )( arg0.Type - arg1.Type );
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class AttributesGroup : IComparer< Attribute >
         {
             foreach ( Attribute att in _attributes )
             {
-                if ( att.type == type )
+                if ( att.Type == type )
                 {
                     return att;
                 }
@@ -89,7 +89,7 @@ public class AttributesGroup : IComparer< Attribute >
     {
         foreach ( Attribute att in _attributes )
         {
-            if ( ( att.type & type ) != 0 )
+            if ( ( att.Type & type ) != 0 )
             {
                 output.Add( att );
             }
@@ -125,11 +125,11 @@ public class AttributesGroup : IComparer< Attribute >
     /// </summary>
     public void Set( Attribute attribute )
     {
-        int idx = IndexOf( attribute.type );
+        int idx = IndexOf( attribute.Type );
 
         if ( idx < 0 )
         {
-            Enable( attribute.type );
+            Enable( attribute.Type );
 
             _attributes.Add( attribute );
             _sorted = false;
@@ -213,7 +213,7 @@ public class AttributesGroup : IComparer< Attribute >
     {
         for ( int i = _attributes.Count - 1; i >= 0; i-- )
         {
-            long type = _attributes[ i ].type;
+            long type = _attributes[ i ].Type;
 
             if ( ( mask & type ) == type )
             {
@@ -248,7 +248,7 @@ public class AttributesGroup : IComparer< Attribute >
         {
             for ( var i = 0; i < _attributes.Count; i++ )
             {
-                if ( _attributes[ i ].type == type )
+                if ( _attributes[ i ].Type == type )
                 {
                     return i;
                 }

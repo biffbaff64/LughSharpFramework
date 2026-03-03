@@ -29,47 +29,47 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum PixelType
 {
-    UnsignedShort4444 = IGL.GL_UNSIGNED_SHORT_4_4_4_4,
-    UnsignedShort5551 = IGL.GL_UNSIGNED_SHORT_5_5_5_1,
-    UnsignedShort565  = IGL.GL_UNSIGNED_SHORT_5_6_5,
-    UnsignedByte      = IGL.GL_UNSIGNED_BYTE
+    UnsignedShort4444 = IGL.GLUnsignedShort4444,
+    UnsignedShort5551 = IGL.GLUnsignedShort5551,
+    UnsignedShort565  = IGL.GLUnsignedShort565,
+    UnsignedByte      = IGL.GLUnsignedByte
 }
 
 [PublicAPI]
 public enum GLPixelFormat
 {
-    Alpha          = IGL.GL_ALPHA,
-    Luminance      = IGL.GL_LUMINANCE,
-    LuminanceAlpha = IGL.GL_LUMINANCE_ALPHA,
-    Rgb565         = IGL.GL_RGB565,
-    Rgba4444       = IGL.GL_RGBA4,
-    Rgb            = IGL.GL_RGB,
-    Rgba           = IGL.GL_RGBA,
-    Red            = IGL.GL_RED,
-    Green          = IGL.GL_GREEN,
-    Blue           = IGL.GL_BLUE
+    Alpha          = IGL.GLAlpha,
+    Luminance      = IGL.GLLuminance,
+    LuminanceAlpha = IGL.GLLuminanceAlpha,
+    Rgb565         = IGL.GLRGB565,
+    Rgba4444       = IGL.GLRGBA4,
+    Rgb            = IGL.GLRGB,
+    Rgba           = IGL.GLRGBA,
+    Red            = IGL.GLRed,
+    Green          = IGL.GLGreen,
+    Blue           = IGL.GLBlue
 }
 
 [PublicAPI]
 public enum PixelInternalFormat
 {
-    Alpha          = IGL.GL_ALPHA,
-    Rgb            = IGL.GL_RGB,
-    Rgba           = IGL.GL_RGBA,
-    Rgba8          = IGL.GL_RGBA8,
-    Luminance      = IGL.GL_LUMINANCE,
-    LuminanceAlpha = IGL.GL_LUMINANCE_ALPHA
+    Alpha          = IGL.GLAlpha,
+    Rgb            = IGL.GLRGB,
+    Rgba           = IGL.GLRGBA,
+    Rgba8          = IGL.GLRGBA8,
+    Luminance      = IGL.GLLuminance,
+    LuminanceAlpha = IGL.GLLuminanceAlpha
 }
 
 [PublicAPI]
 public enum PixelStoreParameter
 {
-    UnpackAlignment  = IGL.GL_UNPACK_ALIGNMENT,
-    PackAlignment    = IGL.GL_PACK_ALIGNMENT,
-    UnpackRowLength  = IGL.GL_UNPACK_ROW_LENGTH,
-    PackRowLength    = IGL.GL_PACK_ROW_LENGTH,
-    UnpackSkipPixels = IGL.GL_UNPACK_SKIP_PIXELS,
-    PackSkipPixels   = IGL.GL_PACK_SKIP_PIXELS
+    UnpackAlignment  = IGL.GLUnpackAlignment,
+    PackAlignment    = IGL.GLPackAlignment,
+    UnpackRowLength  = IGL.GLUnpackRowLength,
+    PackRowLength    = IGL.GLPackRowLength,
+    UnpackSkipPixels = IGL.GLUnpackSkipPixels,
+    PackSkipPixels   = IGL.GLPackSkipPixels
 }
 
 // ========================================================================

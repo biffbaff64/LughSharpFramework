@@ -35,22 +35,22 @@ namespace Extensions.Source.Box2D;
 public class Body
 {
     /** the address of the body **/
-    protected long addr;
+    protected long Addr;
 
     /** temporary float array **/
-    private readonly float[] tmp = new float[ 4 ];
+    private readonly float[] _tmp = new float[ 4 ];
 
     /** World **/
-    private readonly World world;
+    private readonly World _world;
 
     /** Fixtures of this body **/
-    private List< Fixture > fixtures = new( 2 );
+    private List< Fixture > _fixtures = new( 2 );
 
     /** Joints of this body **/
-    protected List< JointEdge > joints = new( 2 );
+    protected List< JointEdge > Joints = new( 2 );
 
     /** user data **/
-    private object? userData;
+    private object? _userData;
 
     // ========================================================================
 
@@ -61,8 +61,8 @@ public class Body
     /// <param name="addr"></param>
     protected Body( World world, long addr )
     {
-        this.world = world;
-        this.addr  = addr;
+        this._world = world;
+        this.Addr  = addr;
     }
 
 //	/** Resets this body after fetching it from the {@link World#freeBodies} Pool. */

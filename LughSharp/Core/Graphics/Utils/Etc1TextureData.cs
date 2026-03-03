@@ -177,7 +177,7 @@ public class Etc1TextureData : ITextureData
             {
                 Engine.GL.CompressedTexImage2D( target,
                                                 0,
-                                                ETC1.ETC1_RGB8_OES,
+                                                ETC1.ETC1RGB8Oes,
                                                 Width,
                                                 Height,
                                                 0,
@@ -187,7 +187,7 @@ public class Etc1TextureData : ITextureData
 
             if ( UseMipMaps )
             {
-                Engine.GL.GenerateMipmap( IGL.GL_TEXTURE_2D );
+                Engine.GL.GenerateMipmap( IGL.GLTexture2D );
             }
         }
 

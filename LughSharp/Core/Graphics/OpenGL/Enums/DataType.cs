@@ -29,22 +29,22 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum DataType
 {
-    Byte          = IGL.GL_BYTE,
-    UnsignedByte  = IGL.GL_UNSIGNED_BYTE,
-    Short         = IGL.GL_SHORT,
-    UnsignedShort = IGL.GL_UNSIGNED_SHORT,
-    Int           = IGL.GL_INT,
-    UnsignedInt   = IGL.GL_UNSIGNED_INT,
-    Float         = IGL.GL_FLOAT,
-    Double        = IGL.GL_DOUBLE
+    Byte          = IGL.GLByte,
+    UnsignedByte  = IGL.GLUnsignedByte,
+    Short         = IGL.GLShort,
+    UnsignedShort = IGL.GLUnsignedShort,
+    Int           = IGL.GLInt,
+    UnsignedInt   = IGL.GLUnsignedInt,
+    Float         = IGL.GLFloat,
+    Double        = IGL.GLDouble
 }
 
 [PublicAPI]
 public enum IndexType
 {
-    UnsignedByte  = IGL.GL_UNSIGNED_BYTE,
-    UnsignedShort = IGL.GL_UNSIGNED_SHORT,
-    UnsignedInt   = IGL.GL_UNSIGNED_INT
+    UnsignedByte  = IGL.GLUnsignedByte,
+    UnsignedShort = IGL.GLUnsignedShort,
+    UnsignedInt   = IGL.GLUnsignedInt
 }
 
 // ========================================================================

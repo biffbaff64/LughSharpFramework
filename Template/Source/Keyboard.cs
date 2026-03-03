@@ -29,12 +29,12 @@ namespace Template.Source;
 public class Keyboard : InputAdapter
 {
     /// <inheritdoc />
-    public override bool KeyDown( int keycode )
+    public override bool OnKeyDown( int keycode )
     {
         bool flag = keycode switch
                     {
-                        IInput.Keys.UP   => true,
-                        IInput.Keys.DOWN => true,
+                        IInput.Keys.Up   => true,
+                        IInput.Keys.Down => true,
                         var _            => false
                     };
 
@@ -42,12 +42,12 @@ public class Keyboard : InputAdapter
     }
 
     /// <inheritdoc />
-    public override bool KeyUp( int keycode )
+    public override bool OnKeyUp( int keycode )
     {
         bool flag = keycode switch
                     {
-                        IInput.Keys.UP or IInput.Keys.RIGHT  => true,
-                        IInput.Keys.DOWN or IInput.Keys.LEFT => true,
+                        IInput.Keys.Up or IInput.Keys.Right  => true,
+                        IInput.Keys.Down or IInput.Keys.Left => true,
                         var _                                => false
                     };
 

@@ -109,11 +109,11 @@ public class LayerIDecoder : IFrameDecoder
 
         for ( var i = 0; i < NuSubbands; ++i )
         {
-            if ( ( Mode == Header.JOINT_STEREO ) && ( i >= intensityStereoBound ) )
+            if ( ( Mode == Header.JointStereo ) && ( i >= intensityStereoBound ) )
             {
                 Subbands[ i ] = new SubbandLayer1IntensityStereo( i );
             }
-            else if ( ( Mode == Header.SINGLE_CHANNEL ) || ( Mode == Header.JOINT_STEREO ) )
+            else if ( ( Mode == Header.SingleChannel ) || ( Mode == Header.JointStereo ) )
             {
                 Subbands[ i ] = new SubbandLayer1Stereo( i );
             }
@@ -173,7 +173,7 @@ public class LayerIDecoder : IFrameDecoder
                 writeReady = WriteSubbandSamples();
                 Filter1?.CalculatePcSamples( Buffer );
 
-                if ( ( WhichChannels == OutputChannels.BOTH_CHANNELS ) && ( hdrMode != Header.SINGLE_CHANNEL ) )
+                if ( ( WhichChannels == OutputChannels.BothChannels ) && ( hdrMode != Header.SingleChannel ) )
                 {
                     Filter2?.CalculatePcSamples( Buffer );
                 }

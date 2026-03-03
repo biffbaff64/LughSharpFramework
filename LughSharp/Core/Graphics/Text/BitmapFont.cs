@@ -32,6 +32,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Text;
@@ -88,12 +89,12 @@ public class BitmapFont
 
     // ========================================================================
 
-    public const string REGEX_PATTERN      = ".*id=(\\d+)";
-    public const string DEFAULT_FONT       = "Assets/Fonts/arial-15.fnt";
-    public const string DEFAULT_FONT_IMAGE = "Assets/Fonts/arial-15.png";
-    public const int    LOG2_PAGE_SIZE     = 9;
-    public const int    PAGE_SIZE          = 1 << LOG2_PAGE_SIZE;
-    public const int    PAGES              = 0x10000 / PAGE_SIZE;
+    public const string RegexPattern      = ".*id=(\\d+)";
+    public const string DefaultFont       = "Assets/Fonts/arial-15.fnt";
+    public const string DefaultFontImage = "Assets/Fonts/arial-15.png";
+    public const int    Log2PageSize     = 9;
+    public const int    PageSize          = 1 << Log2PageSize;
+    public const int    Pages              = 0x10000 / PageSize;
 
     // ========================================================================
 
@@ -108,8 +109,8 @@ public class BitmapFont
     /// by the Scene2D Skin Loader.
     /// </summary>
     internal BitmapFont()
-        : this( Engine.Api.Files.Internal( DEFAULT_FONT ),
-                Engine.Api.Files.Internal( DEFAULT_FONT_IMAGE ),
+        : this( Engine.Api.Files.Internal( DefaultFont ),
+                Engine.Api.Files.Internal( DefaultFontImage ),
                 false )
     {
     }
@@ -124,8 +125,8 @@ public class BitmapFont
     /// where 0,0 is the upper left corner.
     /// </param>
     public BitmapFont( bool flip = false )
-        : this( Engine.Api.Files.Internal( DEFAULT_FONT ),
-                Engine.Api.Files.Internal( DEFAULT_FONT_IMAGE ),
+        : this( Engine.Api.Files.Internal( DefaultFont ),
+                Engine.Api.Files.Internal( DefaultFontImage ),
                 flip )
     {
     }
@@ -541,7 +542,7 @@ public class BitmapFont
     /// <summary>
     /// Draws text at the specified position.
     /// </summary>
-    public GlyphLayout Draw( IBatch batch, string str, float x, float y, int targetWidth, int halign, bool wrap )
+    public GlyphLayout Draw( IBatch batch, string str, float x, float y, int targetWidth, Align halign, bool wrap )
     {
         Guard.Against.Null( Cache );
 
@@ -564,7 +565,7 @@ public class BitmapFont
                              int start,
                              int end,
                              float targetWidth,
-                             int halign,
+                             Align halign,
                              bool wrap )
     {
         Guard.Against.Null( Cache );
@@ -588,7 +589,7 @@ public class BitmapFont
                              int start,
                              int end,
                              float targetWidth,
-                             int halign,
+                             Align halign,
                              bool wrap,
                              string truncate )
     {

@@ -48,38 +48,38 @@ public enum TextureFilterMode
     /// <summary>
     /// Fetch the nearest texel that best maps to the pixel on screen.
     /// </summary>
-    Nearest = IGL.GL_NEAREST,
+    Nearest = IGL.GLNearest,
 
     /// <summary>
     /// Fetch four nearest texels that best map to the pixel on screen.
     /// </summary>
-    Linear = IGL.GL_LINEAR,
+    Linear = IGL.GLLinear,
 
     /// <summary>
     /// Applies a linear texture filtering technique where texels are chosen based
     /// on the nearest or interpolated mipmap level, providing a smoother appearance
     /// for textures with varying distances.
     /// </summary>
-    MipMap = IGL.GL_LINEAR_MIPMAP_LINEAR,
+    MipMap = IGL.GLLinearMipmapLinear,
 
     /// <summary>
     /// Fetch the best fitting image from the mip map chain based on the pixel/texel
     /// ratio and then sample the texels with a nearest filter.
     /// </summary>
-    MipMapNearestNearest = IGL.GL_NEAREST_MIPMAP_NEAREST,
+    MipMapNearestNearest = IGL.GLNearestMipmapNearest,
 
     /// <summary>
     /// Fetch the best fitting image from the mip map chain based on the pixel/texel
     /// ratio and then sample the texels with a linear filter.
     /// </summary>
-    MipMapLinearNearest = IGL.GL_LINEAR_MIPMAP_NEAREST,
+    MipMapLinearNearest = IGL.GLLinearMipmapNearest,
 
     /// <summary>
     /// Fetch the two best fitting images from the mip map chain and then sample
     /// the nearest texel from each of the two images, combining them to the final
     /// output pixel.
     /// </summary>
-    MipMapNearestLinear = IGL.GL_NEAREST_MIPMAP_LINEAR,
+    MipMapNearestLinear = IGL.GLNearestMipmapLinear,
 
     /// <summary>
     /// Fetch the two best fitting images from the mip map chain and then sample

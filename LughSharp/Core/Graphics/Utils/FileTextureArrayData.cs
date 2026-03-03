@@ -157,7 +157,7 @@ public class FileTextureArrayData : ITextureArrayData
         {
             if ( _textureData[ i ]?.TextureDataType == ITextureData.TextureType.Custom )
             {
-                _textureData[ i ]?.ConsumeCustomData( IGL.GL_TEXTURE_2D_ARRAY );
+                _textureData[ i ]?.ConsumeCustomData( IGL.GLTexture2DArray );
             }
             else
             {
@@ -188,7 +188,7 @@ public class FileTextureArrayData : ITextureArrayData
                 {
                     fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
                     {
-                        Engine.GL.TexSubImage3D( IGL.GL_TEXTURE_2D_ARRAY,
+                        Engine.GL.TexSubImage3D( IGL.GLTexture2DArray,
                                                  0,
                                                  0,
                                                  0,
@@ -204,7 +204,7 @@ public class FileTextureArrayData : ITextureArrayData
 
                 if ( _useMipMaps )
                 {
-                    Engine.GL.GenerateMipmap( IGL.GL_TEXTURE_2D_ARRAY );
+                    Engine.GL.GenerateMipmap( IGL.GLTexture2DArray );
                 }
 
                 if ( disposePixmap )

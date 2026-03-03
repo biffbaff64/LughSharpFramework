@@ -131,7 +131,7 @@ public class FacedCubemapData : ICubemapData
         {
             if ( _data[ i ]!.TextureDataType == ITextureData.TextureType.Custom )
             {
-                _data[ i ]!.ConsumeCustomData( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+                _data[ i ]!.ConsumeCustomData( IGL.GLTextureCubeMapPositiveX + i );
             }
             else
             {
@@ -156,13 +156,13 @@ public class FacedCubemapData : ICubemapData
 
                 int alignment = pixmap.GLPixelFormat switch
                                 {
-                                    IGL.GL_RGB or IGL.GL_RGBA or IGL.GL_RGBA4 or IGL.GL_RGB565 => 4,
-                                    IGL.GL_ALPHA or IGL.GL_LUMINANCE                           => 1,
+                                    IGL.GLRGB or IGL.GLRGBA or IGL.GLRGBA4 or IGL.GLRGB565 => 4,
+                                    IGL.GLAlpha or IGL.GLLuminance                           => 1,
                                     var _                                                      => 1
                                 };
 
-                Engine.GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
-                Engine.GL.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, 0, pixmap );
+                Engine.GL.PixelStorei( IGL.GLUnpackAlignment, alignment );
+                Engine.GL.TexImage2D( IGL.GLTextureCubeMapPositiveX + 1, 0, 0, pixmap );
 
                 if ( disposePixmap )
                 {

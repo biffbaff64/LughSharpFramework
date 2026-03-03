@@ -130,7 +130,7 @@ public class Scene2DUtils
 
         var label = new Label( labelText, label1Style )
         {
-            LabelAlign = Align.CENTER,
+            LabelAlign = Align.Center,
             Style      = label1Style
         };
         label.SetPosition( pos.X, pos.Y );
@@ -233,7 +233,7 @@ public class Scene2DUtils
         style.FontColor = color;
 
         label.Style = style;
-        label.SetAlignment( Align.CENTER );
+        label.SetAlignment( Align.Center );
         label.SetPosition( x, y );
 
         return label;

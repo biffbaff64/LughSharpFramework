@@ -36,40 +36,40 @@ namespace LughSharp.Core.Audio.Maponus.Decoding;
 [PublicAPI]
 public class SynthesisFilter
 {
-    private const double MY_PI = 3.14159265358979323846;
+    private const double MyPi = 3.14159265358979323846;
 
     // Note: These values are not in the same order as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
-    private static readonly float _cos164  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 64.0 ) ) );
-    private static readonly float _cos364  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 3.0 / 64.0 ) ) );
-    private static readonly float _cos564  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 5.0 / 64.0 ) ) );
-    private static readonly float _cos764  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 7.0 / 64.0 ) ) );
-    private static readonly float _cos964  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 9.0 / 64.0 ) ) );
-    private static readonly float _cos1164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 11.0 / 64.0 ) ) );
-    private static readonly float _cos1364 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 13.0 / 64.0 ) ) );
-    private static readonly float _cos1564 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 15.0 / 64.0 ) ) );
-    private static readonly float _cos1764 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 17.0 / 64.0 ) ) );
-    private static readonly float _cos1964 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 19.0 / 64.0 ) ) );
-    private static readonly float _cos2164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 21.0 / 64.0 ) ) );
-    private static readonly float _cos2364 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 23.0 / 64.0 ) ) );
-    private static readonly float _cos2564 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 25.0 / 64.0 ) ) );
-    private static readonly float _cos2764 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 27.0 / 64.0 ) ) );
-    private static readonly float _cos2964 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 29.0 / 64.0 ) ) );
-    private static readonly float _cos3164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 31.0 / 64.0 ) ) );
-    private static readonly float _cos132  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 32.0 ) ) );
-    private static readonly float _cos332  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 3.0 / 32.0 ) ) );
-    private static readonly float _cos532  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 5.0 / 32.0 ) ) );
-    private static readonly float _cos732  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 7.0 / 32.0 ) ) );
-    private static readonly float _cos932  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 9.0 / 32.0 ) ) );
-    private static readonly float _cos1132 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 11.0 / 32.0 ) ) );
-    private static readonly float _cos1332 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 13.0 / 32.0 ) ) );
-    private static readonly float _cos1532 = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 15.0 / 32.0 ) ) );
-    private static readonly float _cos116  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 16.0 ) ) );
-    private static readonly float _cos316  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 3.0 / 16.0 ) ) );
-    private static readonly float _cos516  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 5.0 / 16.0 ) ) );
-    private static readonly float _cos716  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 7.0 / 16.0 ) ) );
-    private static readonly float _cos18   = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 8.0 ) ) );
-    private static readonly float _cos38   = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI * 3.0 / 8.0 ) ) );
-    private static readonly float _cos14   = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 4.0 ) ) );
+    private static readonly float _cos164  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi / 64.0 ) ) );
+    private static readonly float _cos364  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 3.0 / 64.0 ) ) );
+    private static readonly float _cos564  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 5.0 / 64.0 ) ) );
+    private static readonly float _cos764  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 7.0 / 64.0 ) ) );
+    private static readonly float _cos964  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 9.0 / 64.0 ) ) );
+    private static readonly float _cos1164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 11.0 / 64.0 ) ) );
+    private static readonly float _cos1364 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 13.0 / 64.0 ) ) );
+    private static readonly float _cos1564 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 15.0 / 64.0 ) ) );
+    private static readonly float _cos1764 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 17.0 / 64.0 ) ) );
+    private static readonly float _cos1964 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 19.0 / 64.0 ) ) );
+    private static readonly float _cos2164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 21.0 / 64.0 ) ) );
+    private static readonly float _cos2364 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 23.0 / 64.0 ) ) );
+    private static readonly float _cos2564 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 25.0 / 64.0 ) ) );
+    private static readonly float _cos2764 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 27.0 / 64.0 ) ) );
+    private static readonly float _cos2964 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 29.0 / 64.0 ) ) );
+    private static readonly float _cos3164 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 31.0 / 64.0 ) ) );
+    private static readonly float _cos132  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi / 32.0 ) ) );
+    private static readonly float _cos332  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 3.0 / 32.0 ) ) );
+    private static readonly float _cos532  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 5.0 / 32.0 ) ) );
+    private static readonly float _cos732  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 7.0 / 32.0 ) ) );
+    private static readonly float _cos932  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 9.0 / 32.0 ) ) );
+    private static readonly float _cos1132 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 11.0 / 32.0 ) ) );
+    private static readonly float _cos1332 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 13.0 / 32.0 ) ) );
+    private static readonly float _cos1532 = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 15.0 / 32.0 ) ) );
+    private static readonly float _cos116  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi / 16.0 ) ) );
+    private static readonly float _cos316  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 3.0 / 16.0 ) ) );
+    private static readonly float _cos516  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 5.0 / 16.0 ) ) );
+    private static readonly float _cos716  = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 7.0 / 16.0 ) ) );
+    private static readonly float _cos18   = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi / 8.0 ) ) );
+    private static readonly float _cos38   = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi * 3.0 / 8.0 ) ) );
+    private static readonly float _cos14   = ( float )( 1.0 / ( 2.0 * Math.Cos( MyPi / 4.0 ) ) );
 
     private static float[]? _d;
 

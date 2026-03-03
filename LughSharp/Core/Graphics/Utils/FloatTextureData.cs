@@ -90,22 +90,22 @@ public class FloatTextureData : ITextureData
 
             if ( Engine.Api.Graphics.GLVersion!.BackendType.Equals( GraphicsBackend.BackendType.OpenGL ) )
             {
-                if ( _internalFormat is IGL.GL_RGBA16_F or IGL.GL_RGBA32_F )
+                if ( _internalFormat is IGL.GLRGBA16F or IGL.GLRGBA32F )
                 {
                     amountOfFloats = 4;
                 }
 
-                if ( _internalFormat is IGL.GL_RGB16_F or IGL.GL_RGB32_F )
+                if ( _internalFormat is IGL.GLRGB16F or IGL.GLRGB32F )
                 {
                     amountOfFloats = 3;
                 }
 
-                if ( _internalFormat is IGL.GL_RG16_F or IGL.GL_RG32_F )
+                if ( _internalFormat is IGL.GLRg16F or IGL.GLRg32F )
                 {
                     amountOfFloats = 2;
                 }
 
-                if ( _internalFormat is IGL.GL_R16_F or IGL.GL_R32_F )
+                if ( _internalFormat is IGL.GLR16F or IGL.GLR32F )
                 {
                     amountOfFloats = 1;
                 }
@@ -132,12 +132,12 @@ public class FloatTextureData : ITextureData
             // so to get a float texture one needs to supply GL_RGBA and GL_FLOAT there.
             Engine.GL.TexImage2D( target,
                                   0,
-                                  IGL.GL_RGBA,
+                                  IGL.GLRGBA,
                                   Width,
                                   Height,
                                   0,
-                                  IGL.GL_RGBA,
-                                  IGL.GL_FLOAT,
+                                  IGL.GLRGBA,
+                                  IGL.GLFloat,
                                   Buffer.ToArray() );
         }
         else
@@ -156,7 +156,7 @@ public class FloatTextureData : ITextureData
                                   Height,
                                   0,
                                   _format,
-                                  IGL.GL_FLOAT,
+                                  IGL.GLFloat,
                                   Buffer.ToArray() );
         }
     }

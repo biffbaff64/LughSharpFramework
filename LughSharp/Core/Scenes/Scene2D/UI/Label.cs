@@ -53,8 +53,8 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
     public override string?          Name        => "Label";
     public          BitmapFontCache? FontCache   { get; set; }
     public          StringBuilder    Text        { get; }      = new();
-    public          int              LabelAlign  { get; set; } = Align.LEFT;
-    public          int              LineAlign   { get; set; } = Align.LEFT;
+    public          Align            LabelAlign  { get; set; } = Align.Left;
+    public          Align            LineAlign   { get; set; } = Align.Left;
     public          GlyphLayout      GlyphLayout { get; set; } = new();
 
     // ========================================================================
@@ -289,7 +289,7 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
                       - Style.Background.RightWidth;
             }
 
-            _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color.White, width, Align.LEFT, true );
+            _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color.White, width, Align.Left, true );
         }
         else
         {
@@ -350,9 +350,9 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
             textWidth  = layout.Width;
             textHeight = layout.Height;
 
-            if ( ( LabelAlign & Align.LEFT ) == 0 )
+            if ( ( LabelAlign & Align.Left ) == 0 )
             {
-                if ( ( LabelAlign & Align.RIGHT ) != 0 )
+                if ( ( LabelAlign & Align.Right ) != 0 )
                 {
                     x += width - textWidth;
                 }
@@ -370,12 +370,12 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
 
         Debug.Assert( Style.Font != null, "Style.Font != null" );
 
-        if ( ( LabelAlign & Align.TOP ) != 0 )
+        if ( ( LabelAlign & Align.Top ) != 0 )
         {
             y += FontCache.Font.Flipped ? 0 : height - textHeight;
             y += Style.Font.GetDescent();
         }
-        else if ( ( LabelAlign & Align.BOTTOM ) != 0 )
+        else if ( ( LabelAlign & Align.Bottom ) != 0 )
         {
             y += FontCache.Font.Flipped ? height - textHeight : 0;
             y -= Style.Font.GetDescent();
@@ -493,7 +493,7 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
     /// of text horizontally (default is left).
     /// </param>
     /// <see cref="Align"/>
-    public void SetAlignment( int alignment )
+    public void SetAlignment( Align alignment )
     {
         SetAlignment( alignment, alignment );
     }
@@ -503,21 +503,21 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
     /// <param name="lineAlign"> Aligns each line of text horizontally (default left). </param>
     /// See also <see cref="Align "/>
     /// </summary>
-    public void SetAlignment( int labelAlign, int lineAlign )
+    public void SetAlignment( Align labelAlign, Align lineAlign )
     {
         LabelAlign = labelAlign;
 
-        if ( ( lineAlign & Align.LEFT ) != 0 )
+        if ( ( lineAlign & Align.Left ) != 0 )
         {
-            LineAlign = Align.LEFT;
+            LineAlign = Align.Left;
         }
-        else if ( ( lineAlign & Align.RIGHT ) != 0 )
+        else if ( ( lineAlign & Align.Right ) != 0 )
         {
-            LineAlign = Align.RIGHT;
+            LineAlign = Align.Right;
         }
         else
         {
-            LineAlign = Align.CENTER;
+            LineAlign = Align.Center;
         }
 
         Invalidate();

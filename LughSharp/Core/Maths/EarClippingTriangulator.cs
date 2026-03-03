@@ -29,8 +29,8 @@ namespace LughSharp.Core.Maths;
 [PublicAPI]
 public class EarClippingTriangulator
 {
-    private const int CONCAVE = -1;
-    private const int CONVEX  = 1;
+    private const int Concave = -1;
+    private const int Convex  = 1;
 
     private readonly List< short > _indicesArray = [ ];
     private readonly List< short > _triangles    = [ ];
@@ -135,7 +135,7 @@ public class EarClippingTriangulator
     }
 
     /// <summary>
-    /// Returns <see cref="CONCAVE"/> or <see cref="CONVEX"/>.
+    /// Returns <see cref="Concave"/> or <see cref="Convex"/>.
     /// </summary>
     private int ClassifyVertex( int index )
     {
@@ -173,7 +173,7 @@ public class EarClippingTriangulator
         // Return a convex or tangential vertex if one exists.
         for ( var i = 0; i < _vertexCount; i++ )
         {
-            if ( _vertexTypes[ i ] != CONCAVE )
+            if ( _vertexTypes[ i ] != Concave )
             {
                 return i;
             }
@@ -184,7 +184,7 @@ public class EarClippingTriangulator
 
     private bool IsEarTip( int earTipIndex )
     {
-        if ( _vertexTypes[ earTipIndex ] == CONCAVE )
+        if ( _vertexTypes[ earTipIndex ] == Concave )
         {
             return false;
         }
@@ -208,7 +208,7 @@ public class EarClippingTriangulator
         {
             // Concave vertices can obviously be inside the candidate ear, but so can
             // tangential vertices if they coincide with one of the triangle's vertices.
-            if ( _vertexTypes[ i ] != CONVEX )
+            if ( _vertexTypes[ i ] != Convex )
             {
                 int   v  = _indices[ i ] * 2;
                 float vx = _vertices[ v ];

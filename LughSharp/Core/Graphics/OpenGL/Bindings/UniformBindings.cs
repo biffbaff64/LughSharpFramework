@@ -148,7 +148,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform1f( GLint location, GLfloat v0 )
+    public void Uniform1F( GLint location, GLfloat v0 )
     {
         GetDelegateForFunction< PFNGLUNIFORM1FPROC >( "glUniform1f", out _glUniform1f );
 
@@ -158,7 +158,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform2f( GLint location, GLfloat v0, GLfloat v1 )
+    public void Uniform2F( GLint location, GLfloat v0, GLfloat v1 )
     {
         GetDelegateForFunction< PFNGLUNIFORM2FPROC >( "glUniform2f", out _glUniform2f );
 
@@ -168,7 +168,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform3f( GLint location, GLfloat v0, GLfloat v1, GLfloat v2 )
+    public void Uniform3F( GLint location, GLfloat v0, GLfloat v1, GLfloat v2 )
     {
         GetDelegateForFunction< PFNGLUNIFORM3FPROC >( "glUniform3f", out _glUniform3f );
 
@@ -178,7 +178,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform4f( GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3 )
+    public void Uniform4F( GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3 )
     {
         GetDelegateForFunction< PFNGLUNIFORM4FPROC >( "glUniform4f", out _glUniform4f );
 
@@ -188,7 +188,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform1i( GLint location, GLint v0 )
+    public void Uniform1I( GLint location, GLint v0 )
     {
         GetDelegateForFunction< PFNGLUNIFORM1IPROC >( "glUniform1i", out _glUniform1i );
 
@@ -198,7 +198,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform2i( GLint location, GLint v0, GLint v1 )
+    public void Uniform2I( GLint location, GLint v0, GLint v1 )
     {
         GetDelegateForFunction< PFNGLUNIFORM2IPROC >( "glUniform2i", out _glUniform2i );
 
@@ -208,7 +208,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform3i( GLint location, GLint v0, GLint v1, GLint v2 )
+    public void Uniform3I( GLint location, GLint v0, GLint v1, GLint v2 )
     {
         GetDelegateForFunction< PFNGLUNIFORM3IPROC >( "glUniform23", out _glUniform3i );
 
@@ -218,7 +218,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform4i( GLint location, GLint v0, GLint v1, GLint v2, GLint v3 )
+    public void Uniform4I( GLint location, GLint v0, GLint v1, GLint v2, GLint v3 )
     {
         GetDelegateForFunction< PFNGLUNIFORM4IPROC >( "glUniform4i", out _glUniform4i );
 
@@ -228,7 +228,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform1fv( GLint location, GLsizei count, GLfloat* value )
+    public void Uniform1Fv( GLint location, GLsizei count, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1FVPROC >( "glUniform1fv", out _glUniform1fv );
 
@@ -236,7 +236,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void Uniform1fv( GLint location, params GLfloat[] value )
+    public void Uniform1Fv( GLint location, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1FVPROC >( "glUniform1fv", out _glUniform1fv );
 
@@ -249,7 +249,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform2fv( GLint location, GLsizei count, GLfloat* value )
+    public void Uniform2Fv( GLint location, GLsizei count, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2FVPROC >( "glUniform2fv", out _glUniform2fv );
 
@@ -257,7 +257,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void Uniform2fv( GLint location, params GLfloat[] value )
+    public void Uniform2Fv( GLint location, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2FVPROC >( "glUniform2fv", out _glUniform2fv );
 
@@ -270,7 +270,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform3fv( GLint location, GLsizei count, GLfloat* value )
+    public void Uniform3Fv( GLint location, GLsizei count, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3FVPROC >( "glUniform3fv", out _glUniform3fv );
 
@@ -278,7 +278,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void Uniform3fv( GLint location, params GLfloat[] value )
+    public void Uniform3Fv( GLint location, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3FVPROC >( "glUniform3fv", out _glUniform3fv );
 
@@ -291,7 +291,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform4fv( GLint location, GLsizei count, GLfloat* value )
+    public void Uniform4Fv( GLint location, GLsizei count, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4FVPROC >( "glUniform4fv", out _glUniform4fv );
 
@@ -299,7 +299,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void Uniform4fv( GLint location, params GLfloat[] value )
+    public void Uniform4Fv( GLint location, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4FVPROC >( "glUniform4fv", out _glUniform4fv );
 
@@ -320,7 +320,7 @@ public unsafe partial class GLBindings
     /// Specifies a pointer to an array of <paramref name="count"/> values that will be used to update the
     /// specified uniform variable.
     /// </param>
-    public void Uniform1iv( GLint location, GLsizei count, GLint* value )
+    public void Uniform1Iv( GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1IVPROC >( "glUniform1iv", out _glUniform1iv );
 
@@ -334,7 +334,7 @@ public unsafe partial class GLBindings
     /// <param name="value">
     /// Specifies an array of values that will be used to update the specified uniform variable.
     /// </param>
-    public void Uniform1iv( GLint location, params GLint[] value )
+    public void Uniform1Iv( GLint location, params GLint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1IVPROC >( "glUniform1iv", out _glUniform1iv );
 
@@ -347,7 +347,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform2iv( GLint location, GLsizei count, GLint* value )
+    public void Uniform2Iv( GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2IVPROC >( "glUniform2iv", out _glUniform2iv );
 
@@ -355,7 +355,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void Uniform2iv( GLint location, params GLint[] value )
+    public void Uniform2Iv( GLint location, params GLint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2IVPROC >( "glUniform2iv", out _glUniform2iv );
 
@@ -368,7 +368,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform3iv( GLint location, GLsizei count, GLint* value )
+    public void Uniform3Iv( GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3IVPROC >( "glUniform3iv", out _glUniform3iv );
 
@@ -376,7 +376,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void Uniform3iv( GLint location, params GLint[] value )
+    public void Uniform3Iv( GLint location, params GLint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3IVPROC >( "glUniform3iv", out _glUniform3iv );
 
@@ -389,7 +389,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void Uniform4iv( GLint location, GLsizei count, GLint* value )
+    public void Uniform4Iv( GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4IVPROC >( "glUniform4iv", out _glUniform4iv );
 
@@ -397,7 +397,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void Uniform4iv( GLint location, params GLint[] value )
+    public void Uniform4Iv( GLint location, params GLint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4IVPROC >( "glUniform4iv", out _glUniform4iv );
 
@@ -410,7 +410,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix2fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix2Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2FVPROC >( "glUniformMatrix2fv", out _glUniformMatrix2fv );
 
@@ -418,7 +418,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix2fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix2Fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2FVPROC >( "glUniformMatrix2fv", out _glUniformMatrix2fv );
 
@@ -431,7 +431,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix3fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix3Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3FVPROC >( "glUniformMatrix3fv", out _glUniformMatrix3fv );
 
@@ -439,7 +439,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix3fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix3Fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3FVPROC >( "glUniformMatrix3fv", out _glUniformMatrix3fv );
 
@@ -452,7 +452,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix4fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix4Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4FVPROC >( "glUniformMatrix4fv", out _glUniformMatrix4fv );
 
@@ -470,7 +470,7 @@ public unsafe partial class GLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. Needs 16
     /// values per matrix.
     /// </param>
-    public void UniformMatrix4fv( int location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix4Fv( int location, GLboolean transpose, params GLfloat[] value )
     {
         Guard.Against.Null( value );
 
@@ -492,7 +492,7 @@ public unsafe partial class GLBindings
 
             int error = _glGetError();
 
-            if ( error != IGL.GL_NO_ERROR )
+            if ( error != IGL.GLNoError )
             {
                 throw new RuntimeException( $"OpenGL Error: {error} after glUniformMatrix4fv. Location: {location}, " +
                                             $"Matrix Count: {matrixCount}, Transpose: {transpose}" );

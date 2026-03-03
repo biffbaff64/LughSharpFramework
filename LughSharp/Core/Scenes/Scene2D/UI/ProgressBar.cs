@@ -75,8 +75,8 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
 
     // ========================================================================
 
-    private const float DEFAULT_PREF_WIDTH  = 140f;
-    private const float DEFAULT_PREF_HEIGHT = 140f;
+    private const float DefaultPrefWidth  = 140f;
+    private const float DefaultPrefHeight = 140f;
 
     private readonly bool _programmaticChangeEvents = true;
 
@@ -530,7 +530,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
             return Math.Max( knob?.MinWidth ?? 0, bg?.MinWidth ?? 0 );
         }
 
-        return DEFAULT_PREF_WIDTH;
+        return DefaultPrefWidth;
     }
 
     /// <inheritdoc />
@@ -547,7 +547,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
     {
         if ( IsVertical )
         {
-            return DEFAULT_PREF_HEIGHT;
+            return DefaultPrefHeight;
         }
 
         ISceneDrawable? knob = Style.Knob;

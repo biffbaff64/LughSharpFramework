@@ -226,7 +226,7 @@ public unsafe partial class GLBindings
         GetDelegateForFunction< PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv",
                                                                  out _glGetBufferParameteriv );
 
-        _glGetBufferParameteriv( target, IGL.GL_BUFFER_SIZE, &size );
+        _glGetBufferParameteriv( target, IGL.GLBufferSize, &size );
 
         GetDelegateForFunction< PFNGLMAPBUFFERPROC >( "glMapBuffer", out _glMapBuffer );
 
@@ -333,7 +333,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetBufferParameteri64v( GLenum target, GLenum pname, GLint64* parameters )
+    public void GetBufferParameteri64V( GLenum target, GLenum pname, GLint64* parameters )
     {
         GetDelegateForFunction< PFNGLGETBUFFERPARAMETERI64VPROC >( "glGetBufferParameteri64v",
                                                                    out _glGetBufferParameteri64v );
@@ -342,7 +342,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void GetBufferParameteri64v( GLenum target, GLenum pname, ref GLint64[] parameters )
+    public void GetBufferParameteri64V( GLenum target, GLenum pname, ref GLint64[] parameters )
     {
         GetDelegateForFunction< PFNGLGETBUFFERPARAMETERI64VPROC >( "glGetBufferParameteri64v",
                                                                    out _glGetBufferParameteri64v );

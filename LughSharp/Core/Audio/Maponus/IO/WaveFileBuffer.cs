@@ -44,8 +44,8 @@ public class WaveFileBuffer : AudioBase
     {
         Guard.Against.Null( filename );
 
-        _buffer   = new short[ OBUFFERSIZE ];
-        _bufferp  = new short[ MAXCHANNELS ];
+        _buffer   = new short[ Obuffersize ];
+        _bufferp  = new short[ Maxchannels ];
         _channels = numberOfChannels;
 
         for ( var i = 0; i < numberOfChannels; ++i )
@@ -59,8 +59,8 @@ public class WaveFileBuffer : AudioBase
 
     public WaveFileBuffer( int numberOfChannels, int freq, Stream stream )
     {
-        _buffer   = new short[ OBUFFERSIZE ];
-        _bufferp  = new short[ MAXCHANNELS ];
+        _buffer   = new short[ Obuffersize ];
+        _bufferp  = new short[ Maxchannels ];
         _channels = numberOfChannels;
 
         for ( var i = 0; i < numberOfChannels; ++i )

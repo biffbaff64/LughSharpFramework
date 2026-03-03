@@ -48,11 +48,11 @@ public class TextureUnpacker
 
     // ========================================================================
 
-    private const string DEFAULT_OUTPUT_PATH  = "output";
-    private const string DEFAULT_OUTPUT_TYPE  = "png";
-    private const string HELP                 = "Usage: atlasFile [imageDir] [outputDir]";
-    private const string ATLAS_FILE_EXTENSION = ".atlas";
-    private const int    NINEPATCH_PADDING    = 1;
+    private const string DefaultOutputPath  = "output";
+    private const string DefaultOutputType  = "png";
+    private const string Help                 = "Usage: atlasFile [imageDir] [outputDir]";
+    private const string AtlasFileExtension = ".atlas";
+    private const int    NinepatchPadding    = 1;
 
     // ========================================================================
 
@@ -131,12 +131,12 @@ public class TextureUnpacker
                             splitImage = originalImg;
                         }
 
-                        extension = DEFAULT_OUTPUT_TYPE;
+                        extension = DefaultOutputType;
                     }
                     else
                     {
                         splitImage = ExtractNinePatch( img, region, outputDirInfo );
-                        extension  = $"9.{DEFAULT_OUTPUT_TYPE}";
+                        extension  = $"9.{DefaultOutputType}";
                     }
 
                     // check if the parent directories of this image file exist and create them if not
@@ -159,7 +159,7 @@ public class TextureUnpacker
                     // save the image
                     try
                     {
-                        splitImage.Save( imgOutputFilePath, GetImageFormat( DEFAULT_OUTPUT_TYPE ) );
+                        splitImage.Save( imgOutputFilePath, GetImageFormat( DefaultOutputType ) );
                     }
                     catch ( Exception e )
                     {
@@ -191,7 +191,7 @@ public class TextureUnpacker
         // is a problem with the command line arguments
         if ( unpacker.ParseArguments( args ) == 0 )
         {
-            Logger.Debug( HELP );
+            Logger.Debug( Help );
 
             return;
         }
@@ -233,7 +233,7 @@ public class TextureUnpacker
 
         // Set the directory variables to a default when they weren't given in the variables
         imageDir  ??= atlasParentPath;
-        outputDir ??= string.Join( atlasParentPath, DEFAULT_OUTPUT_PATH );
+        outputDir ??= string.Join( atlasParentPath, DefaultOutputPath );
 
         // Opens the atlas file from the specified filename
         var atlas = new TextureAtlasData( new FileInfo( atlasFile ), new DirectoryInfo( imageDir ) );
@@ -300,7 +300,7 @@ public class TextureUnpacker
     /// <param name="outputDir"></param>
     public static Bitmap ExtractNinePatch( Bitmap page, TextureAtlasData.Region region, DirectoryInfo outputDir )
     {
-        Bitmap splitImage = ExtractImage( page, region, outputDir, NINEPATCH_PADDING );
+        Bitmap splitImage = ExtractImage( page, region, outputDir, NinepatchPadding );
 
         using Graphics g        = Graphics.FromImage( splitImage );
         using var      blackPen = new Pen( Color.Black );
@@ -310,10 +310,10 @@ public class TextureUnpacker
 
         if ( splits is { Length: 4 } )
         {
-            int startX = splits[ 0 ] + NINEPATCH_PADDING;
-            int endX   = region.Width - splits[ 1 ] + NINEPATCH_PADDING - 1;
-            int startY = splits[ 2 ] + NINEPATCH_PADDING;
-            int endY   = region.Height - splits[ 3 ] + NINEPATCH_PADDING - 1;
+            int startX = splits[ 0 ] + NinepatchPadding;
+            int endX   = region.Width - splits[ 1 ] + NinepatchPadding - 1;
+            int startY = splits[ 2 ] + NinepatchPadding;
+            int endY   = region.Height - splits[ 3 ] + NinepatchPadding - 1;
 
             if ( endX >= startX )
             {
@@ -330,10 +330,10 @@ public class TextureUnpacker
 
         if ( pads is { Length: 4 } )
         {
-            int padStartX = pads[ 0 ] + NINEPATCH_PADDING;
-            int padEndX   = region.Width - pads[ 1 ] + NINEPATCH_PADDING - 1;
-            int padStartY = pads[ 2 ] + NINEPATCH_PADDING;
-            int padEndY   = region.Height - pads[ 3 ] + NINEPATCH_PADDING - 1;
+            int padStartX = pads[ 0 ] + NinepatchPadding;
+            int padEndX   = region.Width - pads[ 1 ] + NinepatchPadding - 1;
+            int padStartY = pads[ 2 ] + NinepatchPadding;
+            int padEndY   = region.Height - pads[ 3 ] + NinepatchPadding - 1;
 
             g.DrawLine( blackPen, padStartX, splitImage.Height - 1, padEndX, splitImage.Height - 1 );
             g.DrawLine( blackPen, splitImage.Width - 1, padStartY, splitImage.Width - 1, padEndY );
@@ -357,8 +357,8 @@ public class TextureUnpacker
         }
 
         // check if the input file's extension is right
-        bool extension = args[ 0 ].Substring( args[ 0 ].Length - ATLAS_FILE_EXTENSION.Length )
-                                  .Equals( ATLAS_FILE_EXTENSION );
+        bool extension = args[ 0 ].Substring( args[ 0 ].Length - AtlasFileExtension.Length )
+                                  .Equals( AtlasFileExtension );
 
         // check if the directory names are valid
         var directory = true;

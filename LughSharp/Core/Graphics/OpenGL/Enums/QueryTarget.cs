@@ -29,18 +29,18 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum QueryTarget
 {
-    SamplesPassed                      = IGL.GL_SAMPLES_PASSED,
-    AnySamplesPassed                   = IGL.GL_ANY_SAMPLES_PASSED,
+    SamplesPassed                      = IGL.GLSamplesPassed,
+    AnySamplesPassed                   = IGL.GLAnySamplesPassed,
     PrimitivesGenerated                = IGL.GL_PRIMITIVES_GENERATED,
-    TimeElapsed                        = IGL.GL_TIME_ELAPSED,
-    TransformFeedbackPrimitivesWritten = IGL.GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN
+    TimeElapsed                        = IGL.GLTimeElapsed,
+    TransformFeedbackPrimitivesWritten = IGL.GLTransformFeedbackPrimitivesWritten
 }
 
 [PublicAPI]
 public enum QueryParameter
 {
-    QueryResult          = IGL.GL_QUERY_RESULT,
-    QueryResultAvailable = IGL.GL_QUERY_RESULT_AVAILABLE
+    QueryResult          = IGL.GLQueryResult,
+    QueryResultAvailable = IGL.GLQueryResultAvailable
 }
 
 // ========================================================================

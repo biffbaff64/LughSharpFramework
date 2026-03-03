@@ -29,40 +29,40 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum FramebufferTarget
 {
-    Framebuffer     = IGL.GL_FRAMEBUFFER,
-    ReadFramebuffer = IGL.GL_READ_FRAMEBUFFER,
-    DrawFramebuffer = IGL.GL_DRAW_FRAMEBUFFER
+    Framebuffer     = IGL.GLFramebuffer,
+    ReadFramebuffer = IGL.GLReadFramebuffer,
+    DrawFramebuffer = IGL.GLDrawFramebuffer
 }
 
 [PublicAPI]
 public enum FramebufferAttachment
 {
-    ColorAttachment0       = IGL.GL_COLOR_ATTACHMENT0,
-    DepthAttachment        = IGL.GL_DEPTH_ATTACHMENT,
-    StencilAttachment      = IGL.GL_STENCIL_ATTACHMENT,
-    DepthStencilAttachment = IGL.GL_DEPTH_STENCIL_ATTACHMENT
+    ColorAttachment0       = IGL.GLColorAttachment0,
+    DepthAttachment        = IGL.GLDepthAttachment,
+    StencilAttachment      = IGL.GLStencilAttachment,
+    DepthStencilAttachment = IGL.GLDepthStencilAttachment
 }
 
 [PublicAPI]
 public enum FramebufferStatus
 {
-    Complete                    = IGL.GL_FRAMEBUFFER_COMPLETE,
-    Undefined                   = IGL.GL_FRAMEBUFFER_UNDEFINED,
-    IncompleteAttachment        = IGL.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
-    IncompleteMissingAttachment = IGL.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT,
-    IncompleteDrawBuffer        = IGL.GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER,
-    IncompleteReadBuffer        = IGL.GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER,
-    Unsupported                 = IGL.GL_FRAMEBUFFER_UNSUPPORTED
+    Complete                    = IGL.GLFramebufferComplete,
+    Undefined                   = IGL.GLFramebufferUndefined,
+    IncompleteAttachment        = IGL.GLFramebufferIncompleteAttachment,
+    IncompleteMissingAttachment = IGL.GLFramebufferIncompleteMissingAttachment,
+    IncompleteDrawBuffer        = IGL.GLFramebufferIncompleteDrawBuffer,
+    IncompleteReadBuffer        = IGL.GLFramebufferIncompleteReadBuffer,
+    Unsupported                 = IGL.GLFramebufferUnsupported
 }
 
 [PublicAPI]
 public enum FramebufferAttachmentPoint
 {
-    ColorAttachment0  = IGL.GL_COLOR_ATTACHMENT0,
-    ColorAttachment1  = IGL.GL_COLOR_ATTACHMENT1,
-    ColorAttachment2  = IGL.GL_COLOR_ATTACHMENT2,
-    DepthAttachment   = IGL.GL_DEPTH_ATTACHMENT,
-    StencilAttachment = IGL.GL_STENCIL_ATTACHMENT
+    ColorAttachment0  = IGL.GLColorAttachment0,
+    ColorAttachment1  = IGL.GLColorAttachment1,
+    ColorAttachment2  = IGL.GLColorAttachment2,
+    DepthAttachment   = IGL.GLDepthAttachment,
+    StencilAttachment = IGL.GLStencilAttachment
 }
 
 // ========================================================================

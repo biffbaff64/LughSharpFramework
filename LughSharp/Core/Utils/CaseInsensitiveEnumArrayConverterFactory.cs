@@ -78,11 +78,11 @@ public class CaseInsensitiveEnumArrayConverterFactory : JsonConverterFactory
 /// A <see cref="JsonConverter{T}"/> for arrays of enum types that enables
 /// case-insensitive deserialization from JSON string arrays.
 /// </summary>
-/// <typeparam name="Tenum">
+/// <typeparam name="TEnum">
 /// The enum type to convert. Must be a struct and an <see cref="Enum"/>.
 /// </typeparam>
 [PublicAPI]
-public class CaseInsensitiveEnumArrayConverter< Tenum > : JsonConverter< Tenum[] > where Tenum : struct, Enum
+public class CaseInsensitiveEnumArrayConverter< TEnum > : JsonConverter< TEnum[] > where TEnum : struct, Enum
 {
     /// <summary>
     /// Reads and converts a JSON array of strings to an array of enum values,
@@ -92,19 +92,19 @@ public class CaseInsensitiveEnumArrayConverter< Tenum > : JsonConverter< Tenum[]
     /// <param name="typeToConvert">The type to convert.</param>
     /// <param name="options">The serializer options to use.</param>
     /// <returns>
-    /// An array of <typeparamref name="Tenum"/> values parsed from the JSON array.
+    /// An array of <typeparamref name="TEnum"/> values parsed from the JSON array.
     /// </returns>
     /// <exception cref="JsonException">
     /// Thrown if the JSON is not an array of strings or if a value cannot be parsed.
     /// </exception>
-    public override Tenum[] Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+    public override TEnum[] Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
     {
         if ( reader.TokenType != JsonTokenType.StartArray )
         {
             throw new JsonException( "Expected start of array." );
         }
 
-        var list = new List< Tenum >();
+        var list = new List< TEnum >();
 
         while ( reader.Read() )
         {
@@ -117,13 +117,13 @@ public class CaseInsensitiveEnumArrayConverter< Tenum > : JsonConverter< Tenum[]
             {
                 string? stringValue = reader.GetString();
 
-                if ( Enum.TryParse< Tenum >( stringValue, true, out Tenum enumValue ) ) // Case-insensitive parse
+                if ( Enum.TryParse< TEnum >( stringValue, true, out TEnum enumValue ) ) // Case-insensitive parse
                 {
                     list.Add( enumValue );
                 }
                 else
                 {
-                    throw new JsonException( $"Unable to convert '{stringValue}' to enum '{typeof( Tenum ).Name}'." );
+                    throw new JsonException( $"Unable to convert '{stringValue}' to enum '{typeof( TEnum ).Name}'." );
                 }
             }
             else
@@ -141,11 +141,11 @@ public class CaseInsensitiveEnumArrayConverter< Tenum > : JsonConverter< Tenum[]
     /// <param name="writer">The writer to write to.</param>
     /// <param name="value">The array of enum values to write.</param>
     /// <param name="options">The serializer options to use.</param>
-    public override void Write( Utf8JsonWriter writer, Tenum[] value, JsonSerializerOptions options )
+    public override void Write( Utf8JsonWriter writer, TEnum[] value, JsonSerializerOptions options )
     {
         writer.WriteStartArray();
 
-        foreach ( Tenum enumValue in value )
+        foreach ( TEnum enumValue in value )
         {
             writer.WriteStringValue( enumValue.ToString() );
         }

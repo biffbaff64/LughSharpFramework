@@ -97,7 +97,7 @@ public class DistanceFieldFont : BitmapFont
     /// </summary>
     public ShaderProgram CreateDistanceFieldShader()
     {
-        const string VERTEX_SHADER = "in vec4 "
+        const string VertexShader = "in vec4 "
                                    + "a_position"
                                    + ";\n" //
                                    + "in vec4 "
@@ -122,7 +122,7 @@ public class DistanceFieldFont : BitmapFont
                                    + ";\n" //
                                    + "}\n";
 
-        const string FRAGMENT_SHADER = "#ifdef GL_ES\n"
+        const string FragmentShader = "#ifdef GL_ES\n"
                                      + "#define LOWP lowp\n"
                                      + "precision mediump float;\n"
                                      + "#endif\n"
@@ -144,7 +144,7 @@ public class DistanceFieldFont : BitmapFont
                                      + "	}\n"
                                      + "}\n";
 
-        var shader = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
+        var shader = new ShaderProgram( VertexShader, FragmentShader );
 
         if ( !shader.IsCompiled )
         {

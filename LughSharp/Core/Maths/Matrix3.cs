@@ -174,7 +174,7 @@ public class Matrix3
     /// <returns> This matrix for the purpose of chaining operations. </returns>
     public Matrix3 SetToRotation( float degrees )
     {
-        return SetToRotationRad( MathUtils.DEGREES_TO_RADIANS * degrees );
+        return SetToRotationRad( MathUtils.DegreesToRadians * degrees );
     }
 
     /// <summary>
@@ -400,15 +400,15 @@ public class Matrix3
     /// <returns> This matrix for the purpose of chaining operations. </returns>
     public Matrix3 Set( Matrix4 mat )
     {
-        Val[ M00 ] = mat.Val[ Matrix4.M00_0 ];
-        Val[ M10 ] = mat.Val[ Matrix4.M10_1 ];
-        Val[ M20 ] = mat.Val[ Matrix4.M20_2 ];
-        Val[ M01 ] = mat.Val[ Matrix4.M01_4 ];
-        Val[ M11 ] = mat.Val[ Matrix4.M11_5 ];
-        Val[ M21 ] = mat.Val[ Matrix4.M21_6 ];
-        Val[ M02 ] = mat.Val[ Matrix4.M02_8 ];
-        Val[ M12 ] = mat.Val[ Matrix4.M12_9 ];
-        Val[ M22 ] = mat.Val[ Matrix4.M22_10 ];
+        Val[ M00 ] = mat.Val[ Matrix4.M000 ];
+        Val[ M10 ] = mat.Val[ Matrix4.M101 ];
+        Val[ M20 ] = mat.Val[ Matrix4.M202 ];
+        Val[ M01 ] = mat.Val[ Matrix4.M014 ];
+        Val[ M11 ] = mat.Val[ Matrix4.M115 ];
+        Val[ M21 ] = mat.Val[ Matrix4.M216 ];
+        Val[ M02 ] = mat.Val[ Matrix4.M028 ];
+        Val[ M12 ] = mat.Val[ Matrix4.M129 ];
+        Val[ M22 ] = mat.Val[ Matrix4.M2210 ];
 
         return this;
     }
@@ -563,7 +563,7 @@ public class Matrix3
     /// <returns> This matrix for the purpose of chaining. </returns>
     public Matrix3 Rotate( float degrees )
     {
-        return RotateRad( MathUtils.DEGREES_TO_RADIANS * degrees );
+        return RotateRad( MathUtils.DegreesToRadians * degrees );
     }
 
     /// <summary>
@@ -677,7 +677,7 @@ public class Matrix3
 
     public float GetRotation()
     {
-        return MathUtils.RADIANS_TO_DEGREES * ( float )Math.Atan2( Val[ M10 ], Val[ M00 ] );
+        return MathUtils.RadiansToDegrees * ( float )Math.Atan2( Val[ M10 ], Val[ M00 ] );
     }
 
     public float GetRotationRad()

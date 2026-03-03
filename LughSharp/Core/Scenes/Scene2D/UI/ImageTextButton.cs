@@ -68,7 +68,7 @@ public class ImageTextButton : Button
         _image.SetScaling( Scaling.Fit );
 
         _label = new Label( text, new Label.LabelStyle( style.Font!, style.FontColor! ) );
-        _label.SetAlignment( Align.CENTER );
+        _label.SetAlignment( Align.Center );
 
         Add( _image );
         Add( _label );

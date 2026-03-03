@@ -52,10 +52,10 @@ public class PNG : IDisposable
     private const int  IHDR                = 0x49484452;
     private const int  IDAT                = 0x49444154;
     private const int  IEND                = 0x49454E44;
-    private const byte COLOR_ARGB          = 6;
-    private const byte COMPRESSION_DEFLATE = 0;
-    private const byte FILTER_NONE         = 0;
-    private const byte INTERLACE_NONE      = 0;
+    private const byte ColorARGB          = 6;
+    private const byte CompressionDeflate = 0;
+    private const byte FilterNone         = 0;
+    private const byte InterlaceNone      = 0;
 
     /// <summary>
     /// The Paeth filter computes a simple linear function of the three neighboring pixels
@@ -72,7 +72,7 @@ public class PNG : IDisposable
     /// modulo 256 is used, so that both the inputs and outputs fit into bytes. The sequence of
     /// Paeth values is transmitted as the filtered scanline.
     /// </summary>
-    private const byte PAETH_FILTER = 4;
+    private const byte PaethFilter = 4;
 
     private readonly ChunkBuffer _buffer;
     private readonly Deflater    _deflater;
@@ -134,10 +134,10 @@ public class PNG : IDisposable
         _buffer.Write( pixmap.Width );         //
         _buffer.Write( pixmap.Height );        // 
         _buffer.Write( pixmap.GetBitDepth() ); // 
-        _buffer.Write( COLOR_ARGB );           // 
-        _buffer.Write( COMPRESSION_DEFLATE );  // 
-        _buffer.Write( FILTER_NONE );          //
-        _buffer.Write( INTERLACE_NONE );       //
+        _buffer.Write( ColorARGB );           // 
+        _buffer.Write( CompressionDeflate );  // 
+        _buffer.Write( FilterNone );          //
+        _buffer.Write( InterlaceNone );       //
         _buffer.EndChunk( dataOutput );        //
         _buffer.Write( IDAT );                 //
 
@@ -243,7 +243,7 @@ public class PNG : IDisposable
                 lineOut[ x ] = ( byte )( curLine[ x ] - c );
             }
 
-            deflaterOutput.WriteByte( PAETH_FILTER );
+            deflaterOutput.WriteByte( PaethFilter );
             deflaterOutput.Write( lineOut, 0, lineLen );
 
             ( curLine, prevLine ) = ( prevLine, curLine );

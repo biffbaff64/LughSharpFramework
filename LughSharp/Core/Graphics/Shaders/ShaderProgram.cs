@@ -102,9 +102,9 @@ public class ShaderProgram : IDisposable
 
     // ========================================================================
 
-    internal const int CACHED_NOT_FOUND = -1;
-    internal const int NOT_CACHED       = -2;
-    internal const int INVALID          = -1;
+    internal const int CachedNotFound = -1;
+    internal const int NotCached       = -2;
+    internal const int Invalid          = -1;
 
     // ========================================================================
     // ========================================================================
@@ -176,7 +176,7 @@ public class ShaderProgram : IDisposable
         Engine.GL.DeleteShader( _fragmentShaderHandle );
 
         CacheAttribute( "a_position" );
-        CacheAttribute( ShaderConstants.A_COLOR );
+        CacheAttribute( ShaderConstants.AColor );
         CacheAttribute( "a_texCoord0" );
 
         CacheUniform( "u_combinedMatrix" );
@@ -192,19 +192,19 @@ public class ShaderProgram : IDisposable
     {
         int* status = stackalloc int[ 1 ];
 
-        Engine.GL.GetShaderiv( shader, IGL.GL_COMPILE_STATUS, status );
+        Engine.GL.GetShaderiv( shader, IGL.GLCompileStatus, status );
 
-        if ( *status == IGL.GL_FALSE )
+        if ( *status == IGL.GLFalse )
         {
             int* length = stackalloc int[ 1 ];
 
-            Engine.GL.GetShaderiv( shader, IGL.GL_INFO_LOG_LENGTH, length );
+            Engine.GL.GetShaderiv( shader, IGL.GLInfoLogLength, length );
 
             string infoLog = Engine.GL.GetShaderInfoLog( shader, *length );
 
             Engine.GL.DeleteShader( shader );
 
-            _shaderLog += shaderType == IGL.GL_VERTEX_SHADER ? "Vertex shader\n" : "Fragment shader:\n";
+            _shaderLog += shaderType == IGL.GLVertexShader ? "Vertex shader\n" : "Fragment shader:\n";
             _shaderLog += infoLog;
 
             throw new Exception( $"Failed to loader shader {shader}: {infoLog}" );
@@ -244,9 +244,9 @@ public class ShaderProgram : IDisposable
     public virtual unsafe void SetUniformMatrix< T >( int name, ref T matrix, bool transpose = false )
         where T : unmanaged
     {
-        const int MAT44 = 16;
-        const int MAT33 = 9;
-        const int MAT22 = 4;
+        const int Mat44 = 16;
+        const int Mat33 = 9;
+        const int Mat22 = 4;
 
         if ( !_uniformLocations.ContainsValue( name ) )
         {
@@ -259,18 +259,18 @@ public class ShaderProgram : IDisposable
         {
             switch ( matrixSize )
             {
-                case MAT44:
-                    Engine.GL.UniformMatrix4fv( name, 1, transpose, ( float* )ptr );
+                case Mat44:
+                    Engine.GL.UniformMatrix4Fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
-                case MAT33:
-                    Engine.GL.UniformMatrix3fv( name, 1, transpose, ( float* )ptr );
+                case Mat33:
+                    Engine.GL.UniformMatrix3Fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
-                case MAT22:
-                    Engine.GL.UniformMatrix2fv( name, 1, transpose, ( float* )ptr );
+                case Mat22:
+                    Engine.GL.UniformMatrix2Fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
@@ -313,12 +313,12 @@ public class ShaderProgram : IDisposable
     {
         int location = GetUniformLocation( name );
 
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
 
-        Engine.GL.Uniform1i( location, value );
+        Engine.GL.Uniform1I( location, value );
     }
 
     /// <summary>
@@ -330,12 +330,12 @@ public class ShaderProgram : IDisposable
     {
         int location = GetUniformLocation( name );
 
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
 
-        Engine.GL.Uniform1f( location, value );
+        Engine.GL.Uniform1F( location, value );
     }
 
     /// <summary>
@@ -362,7 +362,7 @@ public class ShaderProgram : IDisposable
 
         int location = GetUniformLocation( name );
 
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
@@ -379,7 +379,7 @@ public class ShaderProgram : IDisposable
     {
         LogInvalidMatrix( matrix.Values );
 
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
@@ -397,12 +397,12 @@ public class ShaderProgram : IDisposable
     {
         LogInvalidMatrix( matrix.Values );
 
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
 
-        Engine.GL.UniformMatrix4fv( location, transpose, matrix.Val );
+        Engine.GL.UniformMatrix4Fv( location, transpose, matrix.Val );
     }
 
     /// <summary>
@@ -411,7 +411,7 @@ public class ShaderProgram : IDisposable
     /// <param name="location"></param>
     public virtual void EnableVertexAttribute( int location )
     {
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
@@ -430,7 +430,7 @@ public class ShaderProgram : IDisposable
     /// <param name="offset">The offset of the first element within the vertex data structure.</param>
     public virtual void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, int offset )
     {
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
@@ -452,7 +452,7 @@ public class ShaderProgram : IDisposable
     {
         int location = GetUniformLocation( name );
 
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
@@ -467,12 +467,12 @@ public class ShaderProgram : IDisposable
     /// <param name="values"></param>
     public virtual void SetUniformMatrix4Fv( int location, params float[] values )
     {
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
 
-        Engine.GL.UniformMatrix4fv( location, false, values );
+        Engine.GL.UniformMatrix4Fv( location, false, values );
     }
 
     /// <summary>
@@ -481,7 +481,7 @@ public class ShaderProgram : IDisposable
     /// <param name="location"></param>
     public virtual void DisableVertexAttribute( int location )
     {
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
@@ -497,7 +497,7 @@ public class ShaderProgram : IDisposable
     {
         int location = GetAttributeLocation( name );
 
-        if ( location == INVALID )
+        if ( location == Invalid )
         {
             return;
         }
@@ -631,7 +631,7 @@ public class ShaderProgram : IDisposable
             {
                 int* length = stackalloc int[ 1 ];
 
-                Engine.GL.GetProgramiv( ShaderProgramHandle, IGL.GL_INFO_LOG_LENGTH, length );
+                Engine.GL.GetProgramiv( ShaderProgramHandle, IGL.GLInfoLogLength, length );
 
                 _shaderLog = Engine.GL.GetProgramInfoLog( ShaderProgramHandle, *length );
             }

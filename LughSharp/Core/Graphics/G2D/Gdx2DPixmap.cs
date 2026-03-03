@@ -67,18 +67,18 @@ public class Gdx2DPixmap : IDisposable
 
     // ========================================================================
 
-    public const int GDX_2D_IGNORE = 0;
+    public const int Gdx2DIgnore = 0;
 
     // ========================================================================
 
-    public const int GDX_2D_SCALE_NEAREST  = 0;
-    public const int GDX_2D_SCALE_LINEAR   = 1;
-    public const int GDX_2D_SCALE_BILINEAR = 1;
+    public const int Gdx2DScaleNearest  = 0;
+    public const int Gdx2DScaleLinear   = 1;
+    public const int Gdx2DScaleBilinear = 1;
 
     // ========================================================================
 
-    public const int GDX_2D_BLEND_NONE     = 0;
-    public const int GDX_2D_BLEND_SRC_OVER = 1;
+    public const int Gdx2DBlendNone     = 0;
+    public const int Gdx2DBlendSrcOver = 1;
 
     // ========================================================================
 
@@ -244,7 +244,7 @@ public class Gdx2DPixmap : IDisposable
             // Create an empty pixmap of the requested format and size
             var pixmap = new Gdx2DPixmap( Width, Height, requestedFormat );
 
-            pixmap.Blend = GDX_2D_BLEND_NONE;
+            pixmap.Blend = Gdx2DBlendNone;
             pixmap.DrawPixmap( this, 0, 0, 0, 0, Width, Height );
 
             Width        = pixmap.Width;
@@ -358,12 +358,12 @@ public class Gdx2DPixmap : IDisposable
 
         switch ( ColorFormat )
         {
-            case LughFormat.ALPHA:
+            case LughFormat.Alpha:
                 ClearAlpha( color, size );
 
                 break;
 
-            case LughFormat.LUMINANCE_ALPHA:
+            case LughFormat.LuminanceAlpha:
                 ClearLuminanceAlpha( color, size );
 
                 break;
@@ -388,12 +388,12 @@ public class Gdx2DPixmap : IDisposable
 
                 break;
 
-            case LughFormat.INDEXED_COLOR:
+            case LughFormat.IndexedColor:
                 ClearIndexedColor( color, size );
 
                 break;
 
-            case LughFormat.INVALID:
+            case LughFormat.Invalid:
             default:
                 throw new RuntimeException( "Unknown color type" );
         }
@@ -538,10 +538,10 @@ public class Gdx2DPixmap : IDisposable
 
         switch ( format )
         {
-            case LughFormat.ALPHA:
+            case LughFormat.Alpha:
                 return color & 0xff;
 
-            case LughFormat.LUMINANCE_ALPHA:
+            case LughFormat.LuminanceAlpha:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
@@ -568,7 +568,7 @@ public class Gdx2DPixmap : IDisposable
 
                 return r | g | b | a;
 
-            case LughFormat.INDEXED_COLOR:
+            case LughFormat.IndexedColor:
             case LughFormat.RGBA8888:
                 return color;
 
@@ -724,45 +724,45 @@ public class Gdx2DPixmap : IDisposable
     // ========================================================================
     // ========================================================================
 
-    private const string DLL_PATH = "lib/net8.0/gdx2d.dll";
+    private const string DllPath = "lib/net8.0/gdx2d.dll";
 
     // ------------------------------------------
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_load", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_load", CallingConvention = CallingConvention.Cdecl )]
     private static extern IntPtr gdx2d_load( IntPtr nativeData, int len );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_new", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_new", CallingConvention = CallingConvention.Cdecl )]
     private static extern IntPtr gdx2d_new( [In] [Out] long[] nativeData, int width, int height, int format );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_get_pixel", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_get_pixel", CallingConvention = CallingConvention.Cdecl )]
     private static extern int gdx2d_get_pixel( int x, int y );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_set_pixel", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_set_pixel", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_set_pixel( int x, int y, uint color );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_draw_line", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_draw_line", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_draw_line( int x1, int y1, int x2, int y2, uint color );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_draw_rect", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_draw_rect", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_draw_rect( int x, int y, uint width, uint height, uint color );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_draw_circle", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_draw_circle", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_draw_circle( int x, int y, uint radius, uint color );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_fill_rect", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_fill_rect", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_fill_rect( int x, int y, uint width, uint height, uint color );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_fill_circle", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_fill_circle", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_fill_circle( int x, int y, uint radius, uint color );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_fill_triangle", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_fill_triangle", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_fill_triangle( NativePixmapStruct pd,
                                                     int x1, int y1,
                                                     int x2, int y2,
                                                     int x3, int y3,
                                                     uint color );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_draw_pixmap", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_draw_pixmap", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_draw_pixmap( NativePixmapStruct pd,
                                                   NativePixmapStruct dpd,
                                                   int srcX,
@@ -774,7 +774,7 @@ public class Gdx2DPixmap : IDisposable
                                                   int dstWidth,
                                                   int dstHeight );
 
-    [DllImport( DLL_PATH, EntryPoint = "gdx2d_clear", CallingConvention = CallingConvention.Cdecl )]
+    [DllImport( DllPath, EntryPoint = "gdx2d_clear", CallingConvention = CallingConvention.Cdecl )]
     private static extern void gdx2d_clear( uint color );
 }
 

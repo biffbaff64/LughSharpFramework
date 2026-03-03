@@ -61,8 +61,6 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle >, IDisableable
     where T : notnull
 {
-    public override string? Name => "SelectBox";
-
     public ClickListener  ClickListener { get; set; }
     public SelectBoxStyle Style         { get; set; } = null!;
     public List< T >      Items         { get; }      = [ ];
@@ -72,12 +70,16 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
     // ========================================================================
 
+    public override string? Name => "SelectBox";
+
+    // ========================================================================
+    
     private readonly SelectBoxScrollPane? _scrollPane;
     private readonly ArraySelection< T >  _selection;
     private readonly Vector2              _temp = new();
 
-    private int  _alignment = Align.LEFT;
-    private bool _selectedPrefWidth;
+    private Align _alignment = Align.Left;
+    private bool  _selectedPrefWidth;
 
     // ========================================================================
 
@@ -399,11 +401,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
     /// <summary>
     /// Sets the alignment of the selected item in the select box. See <see cref="GetList()"/>
-    /// and <see cref="SetAlignment(int)"/> to set the alignment in the list shown when the
+    /// and <see cref="SetAlignment(Align)"/> to set the alignment in the list shown when the
     /// select box is open.
     /// </summary>
     /// <param name="alignment"> See <see cref="Align"/>. </param>
-    public void SetAlignment( int alignment )
+    public void SetAlignment( Align alignment )
     {
         //TODO: Property?
         _alignment = alignment;
@@ -678,7 +680,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
                 height += scrollPaneBackground.TopHeight + scrollPaneBackground.BottomHeight;
             }
 
-            ISceneDrawable? listBackground = ListBox.Style?.Background;
+            ISceneDrawable? listBackground = ListBox.Style.Background;
 
             if ( listBackground != null )
             {
@@ -876,7 +878,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
             _parent = parent;
         }
 
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( ( pointer == 0 ) && ( button != 0 ) )
             {
@@ -941,7 +943,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
             _parent.Hide();
         }
 
-        public override bool MouseMoved( InputEvent? ev, float x, float y )
+        public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             int index = _parent.ListBox.GetItemIndexAt( y );
 
@@ -1015,7 +1017,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
             _parent = parent;
         }
 
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             Actor? target = ev?.TargetActor;
 
@@ -1030,12 +1032,12 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
             return false;
         }
 
-        public override bool KeyDown( InputEvent? ev, int keycode )
+        public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             switch ( keycode )
             {
-                case IInput.Keys.NUMPAD_ENTER:
-                case IInput.Keys.ENTER:
+                case IInput.Keys.NumpadEnter:
+                case IInput.Keys.Enter:
                 {
                     _parent.SelectBox._selection.Choose( _parent.ListBox.GetSelected()! );
                     _parent.Hide();
@@ -1045,7 +1047,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
                 }
 
                 // Fall thru.
-                case IInput.Keys.ESCAPE:
+                case IInput.Keys.Escape:
                 {
                     _parent.Hide();
                     ev?.Stop();

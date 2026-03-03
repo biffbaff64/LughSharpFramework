@@ -32,8 +32,8 @@ namespace LughSharp.Core.Audio.Maponus.Decoding;
 [PublicAPI]
 public abstract class AudioBase
 {
-    public const int OBUFFERSIZE = 2 * 1152; // max. 2 * 1152 samples per frame
-    public const int MAXCHANNELS = 2;        // max. number of channels
+    public const int Obuffersize = 2 * 1152; // max. 2 * 1152 samples per frame
+    public const int Maxchannels = 2;        // max. number of channels
 
     /// <summary>
     /// Takes a 16 Bit PCM sample.

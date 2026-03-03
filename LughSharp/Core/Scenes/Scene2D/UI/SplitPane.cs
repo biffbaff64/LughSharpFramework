@@ -562,7 +562,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
             _parent = parent;
         }
 
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( _draggingPointer != -1 )
             {
@@ -587,7 +587,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
             return false;
         }
 
-        public override void TouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+        public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( pointer == _draggingPointer )
             {
@@ -595,7 +595,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
             }
         }
 
-        public override void TouchDragged( InputEvent? ev, float x, float y, int pointer )
+        public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             if ( pointer != _draggingPointer )
             {
@@ -636,7 +636,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
             _parent.Invalidate();
         }
 
-        public override bool MouseMoved( InputEvent? ev, float x, float y )
+        public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             _parent.CursorOverHandle = _parent.HandleBounds.Contains( x, y );
 

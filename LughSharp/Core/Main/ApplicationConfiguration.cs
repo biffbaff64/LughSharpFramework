@@ -35,6 +35,9 @@ using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Main;
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public class ApplicationConfiguration
 {
@@ -79,25 +82,14 @@ public class ApplicationConfiguration
     // Window Specific Configuration
     // ========================================================================
 
-    protected const int DEFAULT_WINDOW_WIDTH      = 640;
-    protected const int DEFAULT_WINDOW_HEIGHT     = 480;
-    protected const int DEFAULT_WINDOW_X          = 80;
-    protected const int DEFAULT_WINDOW_Y          = 80;
-    protected const int DEFAULT_WINDOW_MIN_WIDTH  = 320;
-    protected const int DEFAULT_WINDOW_MIN_HEIGHT = 240;
-    protected const int DEFAULT_WINDOW_MAX_WIDTH  = 1280;
-    protected const int DEFAULT_WINDOW_MAX_HEIGHT = 960;
-
-    // ========================================================================
-
-    public int       WindowX            { get; set; } = DEFAULT_WINDOW_X;
-    public int       WindowY            { get; set; } = DEFAULT_WINDOW_Y;
-    public int       WindowWidth        { get; set; } = DEFAULT_WINDOW_WIDTH;
-    public int       WindowHeight       { get; set; } = DEFAULT_WINDOW_HEIGHT;
-    public int       WindowMinWidth     { get; set; } = DEFAULT_WINDOW_MIN_WIDTH;
-    public int       WindowMinHeight    { get; set; } = DEFAULT_WINDOW_MIN_HEIGHT;
-    public int       WindowMaxWidth     { get; set; } = DEFAULT_WINDOW_MAX_WIDTH;
-    public int       WindowMaxHeight    { get; set; } = DEFAULT_WINDOW_MAX_HEIGHT;
+    public int       WindowX            { get; set; } = DefaultWindowX;
+    public int       WindowY            { get; set; } = DefaultWindowY;
+    public int       WindowWidth        { get; set; } = DefaultWindowWidth;
+    public int       WindowHeight       { get; set; } = DefaultWindowHeight;
+    public int       WindowMinWidth     { get; set; } = DefaultWindowMinWidth;
+    public int       WindowMinHeight    { get; set; } = DefaultWindowMinHeight;
+    public int       WindowMaxWidth     { get; set; } = DefaultWindowMaxWidth;
+    public int       WindowMaxHeight    { get; set; } = DefaultWindowMaxHeight;
     public PathType  WindowIconFileType { get; set; }
     public string[]? WindowIconPaths    { get; set; }
 
@@ -152,6 +144,17 @@ public class ApplicationConfiguration
     /// Sets the window title. Defaults to empty string.
     /// </summary>
     public string? Title { get; set; } = "";
+
+    // ========================================================================
+
+    protected const int DefaultWindowWidth      = 640;
+    protected const int DefaultWindowHeight     = 480;
+    protected const int DefaultWindowX          = 80;
+    protected const int DefaultWindowY          = 80;
+    protected const int DefaultWindowMinWidth  = 320;
+    protected const int DefaultWindowMinHeight = 240;
+    protected const int DefaultWindowMaxWidth  = 1280;
+    protected const int DefaultWindowMaxHeight = 960;
 
     // ========================================================================
 
@@ -254,8 +257,8 @@ public class ApplicationConfiguration
     /// 3.0 features are supported. Note however that Mac OS X does only support 3.2.
     /// </summary>
     /// <param name="glVersion"> which OpenGL ES emulation version to use </param>
-    /// <param name="glesMajorVersion"> OpenGL ES major version, use 3 as default </param>
-    /// <param name="glesMinorVersion"> OpenGL ES minor version, use 2 as default </param>
+    /// <param name="glesMajorVersion"> OpenGL ES major version. </param>
+    /// <param name="glesMinorVersion"> OpenGL ES minor version. </param>
     public void SetOpenGLEmulation( GLEmulationType glVersion, int glesMajorVersion, int glesMinorVersion )
     {
         GLEmulation           = glVersion;

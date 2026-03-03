@@ -46,17 +46,17 @@ public class PixelFormat
         return format switch
                {
                    // Color data should use SRGB for automatic gamma correction
-                   LughFormat.RGB888   => IGL.GL_SRGB8,
-                   LughFormat.RGBA8888 => IGL.GL_SRGB8_ALPHA8,
+                   LughFormat.RGB888   => IGL.GLSrgb8,
+                   LughFormat.RGBA8888 => IGL.GLSrgb8Alpha8,
 
                    // Modern GL Core uses R8 for single channel. 
                    // We use Swizzle on the texture unit to treat Red as Alpha.
-                   LughFormat.ALPHA           => IGL.GL_R8,
-                   LughFormat.LUMINANCE_ALPHA => IGL.GL_RG8, // R=Luminance, G=Alpha
+                   LughFormat.Alpha           => IGL.GLR8,
+                   LughFormat.LuminanceAlpha => IGL.GLRg8, // R=Luminance, G=Alpha
 
                    // Legacy packed formats (Optional, but better as RGBA8)
-                   LughFormat.RGB565   => IGL.GL_RGB565,
-                   LughFormat.RGBA4444 => IGL.GL_RGBA4,
+                   LughFormat.RGB565   => IGL.GLRGB565,
+                   LughFormat.RGBA4444 => IGL.GLRGBA4,
 
                    // ---------------------------
 
@@ -71,12 +71,12 @@ public class PixelFormat
     {
         return format switch
                {
-                   LughFormat.RGB888          => IGL.GL_RGB,
-                   LughFormat.RGBA8888        => IGL.GL_RGBA,
-                   LughFormat.ALPHA           => IGL.GL_RED, // Data comes in as 1 channel
-                   LughFormat.LUMINANCE_ALPHA => IGL.GL_RG,  // Data comes in as 2 channels
-                   LughFormat.RGB565          => IGL.GL_RGB,
-                   LughFormat.RGBA4444        => IGL.GL_RGBA,
+                   LughFormat.RGB888          => IGL.GLRGB,
+                   LughFormat.RGBA8888        => IGL.GLRGBA,
+                   LughFormat.Alpha           => IGL.GLRed, // Data comes in as 1 channel
+                   LughFormat.LuminanceAlpha => IGL.GLRg,  // Data comes in as 2 channels
+                   LughFormat.RGB565          => IGL.GLRGB,
+                   LughFormat.RGBA4444        => IGL.GLRGBA,
 
                    // ---------------------------
 
@@ -91,13 +91,13 @@ public class PixelFormat
     {
         return format switch
                {
-                   LughFormat.RGB565   => IGL.GL_UNSIGNED_SHORT_5_6_5,
-                   LughFormat.RGBA4444 => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+                   LughFormat.RGB565   => IGL.GLUnsignedShort565,
+                   LughFormat.RGBA4444 => IGL.GLUnsignedShort4444,
 
                    // ---------------------------
 
                    // Standard 8-bit per channel
-                   var _ => IGL.GL_UNSIGNED_BYTE
+                   var _ => IGL.GLUnsignedByte
                };
     }
 
@@ -109,8 +109,8 @@ public class PixelFormat
     {
         return format switch
                {
-                   LughFormat.ALPHA           => 1,
-                   LughFormat.LUMINANCE_ALPHA => 2,
+                   LughFormat.Alpha           => 1,
+                   LughFormat.LuminanceAlpha => 2,
                    LughFormat.RGB565          => 2,
                    LughFormat.RGBA4444        => 2,
                    LughFormat.RGB888          => 3,
@@ -159,9 +159,9 @@ public class PixelFormat
     {
         return format switch
                {
-                   IGL.GL_UNSIGNED_BYTE          => "IGL.GL_UNSIGNED_BYTE",
-                   IGL.GL_UNSIGNED_SHORT_5_6_5   => "IGL.GL_UNSIGNED_SHORT_5_6_5",
-                   IGL.GL_UNSIGNED_SHORT_4_4_4_4 => "IGL.GL_UNSIGNED_SHORT_4_4_4_4",
+                   IGL.GLUnsignedByte          => "IGL.GL_UNSIGNED_BYTE",
+                   IGL.GLUnsignedShort565   => "IGL.GL_UNSIGNED_SHORT_5_6_5",
+                   IGL.GLUnsignedShort4444 => "IGL.GL_UNSIGNED_SHORT_4_4_4_4",
 
                    // ----------------------------------
 
@@ -180,15 +180,15 @@ public class PixelFormat
     {
         return target switch
                {
-                   IGL.GL_TEXTURE_1D                   => "GL_TEXTURE_1D",
-                   IGL.GL_TEXTURE_2D                   => "GL_TEXTURE_2D",
-                   IGL.GL_TEXTURE_3D                   => "GL_TEXTURE_3D",
-                   IGL.GL_TEXTURE_CUBE_MAP             => "GL_TEXTURE_CUBE_MAP",
-                   IGL.GL_TEXTURE_RECTANGLE            => "GL_TEXTURE_RECTANGLE",
+                   IGL.GLTexture1D                   => "GL_TEXTURE_1D",
+                   IGL.GLTexture2D                   => "GL_TEXTURE_2D",
+                   IGL.GLTexture3D                   => "GL_TEXTURE_3D",
+                   IGL.GLTextureCubeMap             => "GL_TEXTURE_CUBE_MAP",
+                   IGL.GLTextureRectangle            => "GL_TEXTURE_RECTANGLE",
                    IGL.GL_TEXTURE_BUFFER               => "GL_TEXTURE_BUFFER",
-                   IGL.GL_TEXTURE_2D_ARRAY             => "GL_TEXTURE_2D_ARRAY",
+                   IGL.GLTexture2DArray             => "GL_TEXTURE_2D_ARRAY",
                    IGL.GL_TEXTURE_CUBE_MAP_ARRAY       => "GL_TEXTURE_CUBE_MAP_ARRAY",
-                   IGL.GL_TEXTURE_2D_MULTISAMPLE       => "GL_TEXTURE_2D_MULTISAMPLE",
+                   IGL.GLTexture2DMultisample       => "GL_TEXTURE_2D_MULTISAMPLE",
                    IGL.GL_TEXTURE_2D_MULTISAMPLE_ARRAY => "GL_TEXTURE_2D_MULTISAMPLE_ARRAY",
 
                    // ----------------------------------
@@ -204,18 +204,18 @@ public class PixelFormat
     {
         return format switch
                {
-                   LughFormat.ALPHA           => "Alpha",
-                   LughFormat.LUMINANCE_ALPHA => "LuminanceAlpha",
+                   LughFormat.Alpha           => "Alpha",
+                   LughFormat.LuminanceAlpha => "LuminanceAlpha",
                    LughFormat.RGB565          => "RGB565",
                    LughFormat.RGBA4444        => "RGBA4444",
                    LughFormat.RGB888          => "RGB888",
                    LughFormat.RGBA8888        => "RGBA8888 ( DEFAULT )",
-                   LughFormat.INDEXED_COLOR   => "IndexedColor",
+                   LughFormat.IndexedColor   => "IndexedColor",
 
                    // ----------------------------------
 
-                   LughFormat.INVALID   => "Invalid",
-                   LughFormat.UNDEFINED => "Undefined",
+                   LughFormat.Invalid   => "Invalid",
+                   LughFormat.Undefined => "Undefined",
 
                    // ----------------------------------
 
@@ -233,55 +233,55 @@ public class PixelFormat
         return format switch
                {
                    // Unsigned normalized ( filterable, colour )
-                   IGL.GL_R8           => "IGL.GL_R8",
-                   IGL.GL_RG8          => "IGL.GL_RG8",
-                   IGL.GL_RGB8         => "IGL.GL_RGB8",
-                   IGL.GL_RGBA8        => "IGL.GL_RGBA8",
-                   IGL.GL_SRGB8        => "IGL.GL_SRGB8",
-                   IGL.GL_SRGB8_ALPHA8 => "IGL.GL_SRGB8_ALPHA8",
+                   IGL.GLR8           => "IGL.GL_R8",
+                   IGL.GLRg8          => "IGL.GL_RG8",
+                   IGL.GLRGB8         => "IGL.GL_RGB8",
+                   IGL.GLRGBA8        => "IGL.GL_RGBA8",
+                   IGL.GLSrgb8        => "IGL.GL_SRGB8",
+                   IGL.GLSrgb8Alpha8 => "IGL.GL_SRGB8_ALPHA8",
 
                    // Signed normalized
-                   IGL.GL_R8_SNORM     => "IGL.GL_R8_SNORM",
-                   IGL.GL_RG8_SNORM    => "IGL.GL_RG8_SNORM",
-                   IGL.GL_RGB8_SNORM   => "IGL.GL_RGB8_SNORM",
-                   IGL.GL_RGBA8_SNORM  => "GL_RGBA8_SNORM",
-                   IGL.GL_R16_SNORM    => "IGL.GL_R16_SNORM",
-                   IGL.GL_RG16_SNORM   => "IGL.GL_RG16_SNORM",
-                   IGL.GL_RGB16_SNORM  => "IGL.GL_RGB16_SNORM",
-                   IGL.GL_RGBA16_SNORM => "GL_RGBA16_SNORM",
+                   IGL.GLR8Snorm     => "IGL.GL_R8_SNORM",
+                   IGL.GLRg8Snorm    => "IGL.GL_RG8_SNORM",
+                   IGL.GLRGB8Snorm   => "IGL.GL_RGB8_SNORM",
+                   IGL.GLRGBA8Snorm  => "GL_RGBA8_SNORM",
+                   IGL.GLR16Snorm    => "IGL.GL_R16_SNORM",
+                   IGL.GLRg16Snorm   => "IGL.GL_RG16_SNORM",
+                   IGL.GLRGB16Snorm  => "IGL.GL_RGB16_SNORM",
+                   IGL.GLRGBA16Snorm => "GL_RGBA16_SNORM",
 
-                   IGL.GL_R16_F               => "IGL.GL_R16F",
-                   IGL.GL_RG16_F              => "IGL.GL_RG16F",
-                   IGL.GL_RGBA16_F            => "IGL.GL_RGBA16F",
-                   IGL.GL_R32_F               => "IGL.GL_R32F",
-                   IGL.GL_RG32_F              => "IGL.GL_RG32F",
-                   IGL.GL_RGBA32_F            => "IGL.GL_RGBA32F",
-                   IGL.GL_R11_F_G11_F_B10_F   => "IGL.GL_R11F_G11F_B10F",
-                   IGL.GL_RGB9_E5             => "IGL.GL_RGB9_E5 ",
-                   IGL.GL_R8_I                => "IGL.GL_R8I",
-                   IGL.GL_R8_UI               => "IGL.GL_R8UI",
-                   IGL.GL_RG8_I               => "IGL.GL_RG8I",
-                   IGL.GL_RG8_UI              => "IGL.GL_RG8UI",
-                   IGL.GL_RGBA8_I             => "IGL.GL_RGBA8I",
-                   IGL.GL_RGBA8_UI            => "IGL.GL_RGBA8UI",
-                   IGL.GL_R16_I               => "IGL.GL_R16I",
-                   IGL.GL_R16_UI              => "IGL.GL_R16UI",
-                   IGL.GL_RG16_I              => "IGL.GL_RG16I",
-                   IGL.GL_RG16_UI             => "IGL.GL_RG16UI",
-                   IGL.GL_RGBA16_I            => "IGL.GL_RGBA16I",
-                   IGL.GL_RGBA16_UI           => "IGL.GL_RGBA16UI",
-                   IGL.GL_R32_I               => "IGL.GL_R32I",
-                   IGL.GL_R32_UI              => "IGL.GL_R32UI",
-                   IGL.GL_RG32_I              => "IGL.GL_RG32I",
-                   IGL.GL_RG32_UI             => "IGL.GL_RG32UI",
-                   IGL.GL_RGBA32_I            => "IGL.GL_RGBA32I",
-                   IGL.GL_RGBA32_UI           => "IGL.GL_RGBA32UI",
-                   IGL.GL_DEPTH_COMPONENT24   => "IGL.GL_DEPTH_COMPONENT24 ",
-                   IGL.GL_DEPTH_COMPONENT32_F => "IGL.GL_DEPTH_COMPONENT32F",
-                   IGL.GL_STENCIL_INDEX8      => "IGL.GL_STENCIL_INDEX8",
-                   IGL.GL_DEPTH24_STENCIL8    => "IGL.GL_DEPTH24_STENCIL8",
-                   IGL.GL_DEPTH32_F_STENCIL8  => "IGL.GL_DEPTH32F_STENCIL8",
-                   IGL.GL_COLOR_INDEX         => "IGL.GL_COLOR_INDEX",
+                   IGL.GLR16F               => "IGL.GL_R16F",
+                   IGL.GLRg16F              => "IGL.GL_RG16F",
+                   IGL.GLRGBA16F            => "IGL.GL_RGBA16F",
+                   IGL.GLR32F               => "IGL.GL_R32F",
+                   IGL.GLRg32F              => "IGL.GL_RG32F",
+                   IGL.GLRGBA32F            => "IGL.GL_RGBA32F",
+                   IGL.GLR11FG11FB10F   => "IGL.GL_R11F_G11F_B10F",
+                   IGL.GLRGB9E5             => "IGL.GL_RGB9_E5 ",
+                   IGL.GLR8I                => "IGL.GL_R8I",
+                   IGL.GLR8UI               => "IGL.GL_R8UI",
+                   IGL.GLRg8I               => "IGL.GL_RG8I",
+                   IGL.GLRg8UI              => "IGL.GL_RG8UI",
+                   IGL.GLRGBA8I             => "IGL.GL_RGBA8I",
+                   IGL.GLRGBA8UI            => "IGL.GL_RGBA8UI",
+                   IGL.GLR16I               => "IGL.GL_R16I",
+                   IGL.GLR16UI              => "IGL.GL_R16UI",
+                   IGL.GLRg16I              => "IGL.GL_RG16I",
+                   IGL.GLRg16UI             => "IGL.GL_RG16UI",
+                   IGL.GLRGBA16I            => "IGL.GL_RGBA16I",
+                   IGL.GLRGBA16UI           => "IGL.GL_RGBA16UI",
+                   IGL.GLR32I               => "IGL.GL_R32I",
+                   IGL.GLR32UI              => "IGL.GL_R32UI",
+                   IGL.GLRg32I              => "IGL.GL_RG32I",
+                   IGL.GLRg32UI             => "IGL.GL_RG32UI",
+                   IGL.GLRGBA32I            => "IGL.GL_RGBA32I",
+                   IGL.GLRGBA32UI           => "IGL.GL_RGBA32UI",
+                   IGL.GLDepthComponent24   => "IGL.GL_DEPTH_COMPONENT24 ",
+                   IGL.GLDepthComponent32F => "IGL.GL_DEPTH_COMPONENT32F",
+                   IGL.GLStencilIndex8      => "IGL.GL_STENCIL_INDEX8",
+                   IGL.GLDepth24Stencil8    => "IGL.GL_DEPTH24_STENCIL8",
+                   IGL.GLDepth32FStencil8  => "IGL.GL_DEPTH32F_STENCIL8",
+                   IGL.GLColorIndex         => "IGL.GL_COLOR_INDEX",
 
                    // ----------------------------------
 
@@ -296,8 +296,8 @@ public class PixelFormat
     {
         return colorType switch
                {
-                   1 => LughFormat.ALPHA,
-                   2 => LughFormat.LUMINANCE_ALPHA,
+                   1 => LughFormat.Alpha,
+                   2 => LughFormat.LuminanceAlpha,
                    3 => LughFormat.RGB888,
                    4 => LughFormat.RGBA8888,
                    5 => LughFormat.RGB565,
@@ -323,8 +323,8 @@ public class PixelFormat
     {
         return format switch
                {
-                   LughFormat.ALPHA           => System.Drawing.Imaging.PixelFormat.Alpha,
-                   LughFormat.LUMINANCE_ALPHA => System.Drawing.Imaging.PixelFormat.Alpha,
+                   LughFormat.Alpha           => System.Drawing.Imaging.PixelFormat.Alpha,
+                   LughFormat.LuminanceAlpha => System.Drawing.Imaging.PixelFormat.Alpha,
                    LughFormat.RGB565          => System.Drawing.Imaging.PixelFormat.Format16bppRgb565,
                    LughFormat.RGB888          => System.Drawing.Imaging.PixelFormat.Format32bppRgb,
                    LughFormat.RGBA8888        => System.Drawing.Imaging.PixelFormat.Format32bppArgb,
@@ -338,7 +338,7 @@ public class PixelFormat
 
     /// <summary>
     /// Converts a PNG color type and bit depth to a PixelFormat value. If invalid
-    /// color type or bit depth is provided, the function returns <see cref="LughFormat.INVALID"/>,
+    /// color type or bit depth is provided, the function returns <see cref="LughFormat.Invalid"/>,
     /// and this must be handled by the caller.
     /// </summary>
     public static int FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
@@ -349,14 +349,14 @@ public class PixelFormat
                          (6, 8) => LughFormat.RGBA8888,        // Truecolor with alpha, 8 bits
                          (6, 4) => LughFormat.RGBA4444,        // Truecolor with alpha, 4 bits
                          (2, 8) => LughFormat.RGB888,          // Truecolor, 8 bits
-                         (0, 8) => LughFormat.ALPHA,           // Grayscale, 8 bits
-                         (4, 8) => LughFormat.LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
+                         (0, 8) => LughFormat.Alpha,           // Grayscale, 8 bits
+                         (4, 8) => LughFormat.LuminanceAlpha, // Grayscale with alpha, 8 bits
                          (2, 5) => LughFormat.RGB565,          // Truecolor, 5 bits
-                         (3, 8) => LughFormat.INDEXED_COLOR,   // Indexed color, 8 bits
+                         (3, 8) => LughFormat.IndexedColor,   // Indexed color, 8 bits
 
                          // ----------------------------------
 
-                         var _ => LughFormat.INVALID // Invalid format, handled by caller
+                         var _ => LughFormat.Invalid // Invalid format, handled by caller
                      };
 
         return format;

@@ -68,8 +68,8 @@ public class VertexAttribute
     public readonly int NumComponents;
 
     /// <summary>
-    /// the OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT"/>
-    /// or <see cref="IGL.GL_UNSIGNED_BYTE"/>
+    /// the OpenGL type of each component, e.g. <see cref="IGL.GLFloat"/>
+    /// or <see cref="IGL.GLUnsignedByte"/>
     /// </summary>
     public readonly int ComponentType;
 
@@ -100,7 +100,7 @@ public class VertexAttribute
     public VertexAttribute( int usage, int numComponents, string alias, int unit = 0 )
         : this( usage,
                 numComponents,
-                usage == ( int )VertexConstants.Usage.ColorPacked ? IGL.GL_UNSIGNED_BYTE : IGL.GL_FLOAT,
+                usage == ( int )VertexConstants.Usage.ColorPacked ? IGL.GLUnsignedByte : IGL.GLFloat,
                 usage == ( int )VertexConstants.Usage.ColorPacked,
                 alias,
                 unit )
@@ -117,7 +117,7 @@ public class VertexAttribute
     /// The number of components of this attribute, must be between 1 and 4.
     /// </param>
     /// <param name="type">
-    /// The OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT"/> or <see cref="IGL.GL_UNSIGNED_BYTE"/>.
+    /// The OpenGL type of each component, e.g. <see cref="IGL.GLFloat"/> or <see cref="IGL.GLUnsignedByte"/>.
     /// Since <see cref="Mesh"/> stores vertex data in 32bit floats, the total size of this attribute
     /// (type size times number of components) must be a multiple of four bytes.
     /// </param>
@@ -162,12 +162,12 @@ public class VertexAttribute
     public static VertexAttribute Position()
     {
         return new VertexAttribute( ( int )VertexConstants.Usage.Position,
-                                    VertexConstants.POSITION_COMPONENTS,
+                                    VertexConstants.PositionComponents,
                                     "a_position" );
     }
 
     public static VertexAttribute Position( int numComponents,
-                                            int type = IGL.GL_FLOAT,
+                                            int type = IGL.GLFloat,
                                             bool normalized = false,
                                             string alias = "a_position" )
     {
@@ -186,9 +186,9 @@ public class VertexAttribute
     /// using the unsigned byte OpenGL data type and normalized.
     /// </returns>
     public static VertexAttribute ColorPacked( int components,
-                                               int type = IGL.GL_UNSIGNED_BYTE,
+                                               int type = IGL.GLUnsignedByte,
                                                bool normalized = true,
-                                               string alias = ShaderConstants.A_COLOR )
+                                               string alias = ShaderConstants.AColor )
     {
         return new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
                                     components,
@@ -209,9 +209,9 @@ public class VertexAttribute
     {
         return new VertexAttribute( ( int )VertexConstants.Usage.ColorUnpacked,
                                     4,
-                                    IGL.GL_FLOAT,
+                                    IGL.GLFloat,
                                     false,
-                                    ShaderConstants.A_COLOR );
+                                    ShaderConstants.AColor );
     }
 
     /// <summary>
@@ -244,7 +244,7 @@ public class VertexAttribute
     /// <returns></returns>
     public static VertexAttribute TexCoords( int unit,
                                              int numComponents,
-                                             int type = IGL.GL_FLOAT,
+                                             int type = IGL.GLFloat,
                                              bool normalized = false,
                                              string alias = "a_texCoord" )
     {
@@ -332,12 +332,12 @@ public class VertexAttribute
     {
         return ComponentType switch
                {
-                   IGL.GL_FLOAT          => 4 * NumComponents,
-                   IGL.GL_FIXED          => 4 * NumComponents,
-                   IGL.GL_UNSIGNED_SHORT => 2 * NumComponents,
-                   IGL.GL_SHORT          => 2 * NumComponents,
-                   IGL.GL_UNSIGNED_BYTE  => NumComponents,
-                   IGL.GL_BYTE           => NumComponents,
+                   IGL.GLFloat          => 4 * NumComponents,
+                   IGL.GLFixed          => 4 * NumComponents,
+                   IGL.GLUnsignedShort => 2 * NumComponents,
+                   IGL.GLShort          => 2 * NumComponents,
+                   IGL.GLUnsignedByte  => NumComponents,
+                   IGL.GLByte           => NumComponents,
                    var _                 => 0
                };
     }

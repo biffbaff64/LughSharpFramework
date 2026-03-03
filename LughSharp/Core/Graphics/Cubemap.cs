@@ -49,14 +49,14 @@ public class Cubemap : GLTexture, IManaged
 
     // ========================================================================
 
-    private static readonly Dictionary< IApplication, List< Cubemap >? > ManagedCubemaps = new();
+    private static readonly Dictionary< IApplication, List< Cubemap >? > _managedCubemaps = new();
 
     // ========================================================================
 
     /// <summary>
     /// Construct a Cubemap based on the given CubemapData.
     /// </summary>
-    public Cubemap( ICubemapData? data ) : base( IGL.GL_TEXTURE_CUBE_MAP )
+    public Cubemap( ICubemapData? data ) : base( IGL.GLTextureCubeMap )
     {
         Guard.Against.Null( data );
 
@@ -145,7 +145,7 @@ public class Cubemap : GLTexture, IManaged
     /// <summary>
     /// return the number of managed cubemaps currently loaded
     /// </summary>
-    public static int NumManagedCubemaps => ManagedCubemaps[ Engine.Api.App ]?.Count ?? 0;
+    public static int NumManagedCubemaps => _managedCubemaps[ Engine.Api.App ]?.Count ?? 0;
 
     public bool IsManaged => Data.IsManaged;
 
@@ -195,10 +195,10 @@ public class Cubemap : GLTexture, IManaged
     /// <param name="cubemap"></param>
     private static void AddManagedCubemap( IApplication app, Cubemap cubemap )
     {
-        List< Cubemap > managedCubemapArray = ManagedCubemaps[ app ] ?? new List< Cubemap >();
+        List< Cubemap > managedCubemapArray = _managedCubemaps[ app ] ?? new List< Cubemap >();
 
         managedCubemapArray.Add( cubemap );
-        ManagedCubemaps.Put( app, managedCubemapArray );
+        _managedCubemaps.Put( app, managedCubemapArray );
     }
 
     /// <summary>
@@ -206,7 +206,7 @@ public class Cubemap : GLTexture, IManaged
     /// </summary>
     public static void ClearAllCubemaps( IApplication app )
     {
-        ManagedCubemaps.Remove( app );
+        _managedCubemaps.Remove( app );
     }
 
     /// <summary>
@@ -214,7 +214,7 @@ public class Cubemap : GLTexture, IManaged
     /// </summary>
     public static void InvalidateAllCubemaps( IApplication app )
     {
-        List< Cubemap >? managedCubemapArray = ManagedCubemaps[ app ];
+        List< Cubemap >? managedCubemapArray = _managedCubemaps[ app ];
 
         if ( managedCubemapArray == null )
         {
@@ -294,9 +294,9 @@ public class Cubemap : GLTexture, IManaged
     {
         var builder = new StringBuilder( "Managed cubemap/app: { " );
 
-        foreach ( IApplication app in ManagedCubemaps.Keys )
+        foreach ( IApplication app in _managedCubemaps.Keys )
         {
-            builder.Append( ManagedCubemaps[ app ]!.Count );
+            builder.Append( _managedCubemaps[ app ]!.Count );
             builder.Append( ' ' );
         }
 
@@ -348,9 +348,9 @@ public class Cubemap : GLTexture, IManaged
 
             if ( Data.IsManaged )
             {
-                if ( ManagedCubemaps[ Engine.Api.App ] != null )
+                if ( _managedCubemaps[ Engine.Api.App ] != null )
                 {
-                    ManagedCubemaps[ Engine.Api.App ]?.Remove( this );
+                    _managedCubemaps[ Engine.Api.App ]?.Remove( this );
                 }
             }
         }
@@ -489,37 +489,37 @@ public class Cubemap : GLTexture, IManaged
         /// The positive X and first side of the cubemap
         /// </summary>
         public static readonly CubemapSide PositiveX =
-            new( "PositiveX", InnerEnum.PositiveX, 0, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, -1, 0, 1, 0, 0 );
+            new( "PositiveX", InnerEnum.PositiveX, 0, IGL.GLTextureCubeMapPositiveX, 0, -1, 0, 1, 0, 0 );
 
         /// <summary>
         /// The negative X and second side of the cubemap
         /// </summary>
         public static readonly CubemapSide NegativeX =
-            new( "NegativeX", InnerEnum.NegativeX, 1, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, -1, 0, -1, 0, 0 );
+            new( "NegativeX", InnerEnum.NegativeX, 1, IGL.GLTextureCubeMapNegativeX, 0, -1, 0, -1, 0, 0 );
 
         /// <summary>
         /// The positive Y and third side of the cubemap
         /// </summary>
         public static readonly CubemapSide PositiveY =
-            new( "PositiveY", InnerEnum.PositiveY, 2, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 1, 0, 1, 0 );
+            new( "PositiveY", InnerEnum.PositiveY, 2, IGL.GLTextureCubeMapPositiveY, 0, 0, 1, 0, 1, 0 );
 
         /// <summary>
         /// The negative Y and fourth side of the cubemap
         /// </summary>
         public static readonly CubemapSide NegativeY =
-            new( "NegativeY", InnerEnum.NegativeY, 3, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, -1, 0, -1, 0 );
+            new( "NegativeY", InnerEnum.NegativeY, 3, IGL.GLTextureCubeMapNegativeY, 0, 0, -1, 0, -1, 0 );
 
         /// <summary>
         /// The positive Z and fifth side of the cubemap
         /// </summary>
         public static readonly CubemapSide PositiveZ =
-            new( "PositiveZ", InnerEnum.PositiveZ, 4, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, -1, 0, 0, 0, 1 );
+            new( "PositiveZ", InnerEnum.PositiveZ, 4, IGL.GLTextureCubeMapPositiveZ, 0, -1, 0, 0, 0, 1 );
 
         /// <summary>
         /// The negative Z and sixth side of the cubemap
         /// </summary>
         public static readonly CubemapSide NegativeZ =
-            new( "NegativeZ", InnerEnum.NegativeZ, 5, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, -1, 0, 0, 0, -1 );
+            new( "NegativeZ", InnerEnum.NegativeZ, 5, IGL.GLTextureCubeMapNegativeZ, 0, -1, 0, 0, 0, -1 );
 
         /// <inheritdoc />
         public override string ToString()

@@ -770,20 +770,20 @@ public class BitmapFontCache
 
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)"/>
+    /// <see cref="AddText(string, float, float, int, int, float, Align, bool, string)"/>
     /// </summary>
     public GlyphLayout SetText( string str, float x, float y )
     {
         Clear();
 
-        return AddText( str, x, y, 0, str.Length, 0, Align.LEFT, false );
+        return AddText( str, x, y, 0, str.Length, 0, Align.Left, false );
     }
 
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)"/>
+    /// <see cref="AddText(string, float, float, int, int, float, Align, bool, string)"/>
     /// </summary>
-    public GlyphLayout SetText( string str, float x, float y, float targetWidth, int halign, bool wrap )
+    public GlyphLayout SetText( string str, float x, float y, float targetWidth, Align halign, bool wrap )
     {
         Clear();
 
@@ -792,7 +792,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)"/>
+    /// <see cref="AddText(string, float, float, int, int, float, Align, bool, string)"/>
     /// </summary>
     public GlyphLayout SetText( string str,
                                 float x,
@@ -800,7 +800,7 @@ public class BitmapFontCache
                                 int start,
                                 int end,
                                 float targetWidth,
-                                int halign,
+                                Align halign,
                                 bool wrap,
                                 string? truncate = null )
     {
@@ -811,7 +811,7 @@ public class BitmapFontCache
 
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)"/>
+    /// <see cref="AddText(string, float, float, int, int, float, Align, bool, string)"/>
     /// </summary>
     public void SetText( GlyphLayout layout, float x, float y )
     {
@@ -824,13 +824,13 @@ public class BitmapFontCache
     /// </summary>
     public GlyphLayout AddText( string str, float x, float y )
     {
-        return AddText( str, x, y, 0, str.Length, 0, Align.LEFT, false );
+        return AddText( str, x, y, 0, str.Length, 0, Align.Left, false );
     }
 
     /// <summary>
     /// Adds glyphs for the specified text.
     /// </summary>
-    public GlyphLayout AddText( string str, float x, float y, float targetWidth, int halign, bool wrap )
+    public GlyphLayout AddText( string str, float x, float y, float targetWidth, Align halign, bool wrap )
     {
         return AddText( str, x, y, 0, str.Length, targetWidth, halign, wrap );
     }
@@ -862,7 +862,7 @@ public class BitmapFontCache
                                 int start,
                                 int end,
                                 float targetWidth,
-                                int halign,
+                                Align halign,
                                 bool wrap,
                                 string? truncate = null )
     {

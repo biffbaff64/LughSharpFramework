@@ -35,10 +35,10 @@ namespace LughSharp.Core.Maths;
 [PublicAPI]
 public class DelaunayTriangulator
 {
-    private const float EPSILON    = 0.000001f;
-    private const int   INSIDE     = 0;
-    private const int   COMPLETE   = 1;
-    private const int   INCOMPLETE = 2;
+    private const float Epsilon    = 0.000001f;
+    private const int   Inside     = 0;
+    private const int   Complete   = 1;
+    private const int   Incomplete = 2;
 
     // ========================================================================
 
@@ -246,12 +246,12 @@ public class DelaunayTriangulator
 
                 switch ( CircumCircle( x, y, x1, y1, x2, y2, x3, y3 ) )
                 {
-                    case COMPLETE:
+                    case Complete:
                         completeArray[ completeIndex ] = true;
 
                         break;
 
-                    case INSIDE:
+                    case Inside:
                         _edges.AddAll( p1, p2, p2, p3 );
                         _edges.AddAll( p3, p1 );
 
@@ -372,11 +372,11 @@ public class DelaunayTriangulator
         float y1Y2 = Math.Abs( y1 - y2 );
         float y2Y3 = Math.Abs( y2 - y3 );
 
-        if ( y1Y2 < EPSILON )
+        if ( y1Y2 < Epsilon )
         {
-            if ( y2Y3 < EPSILON )
+            if ( y2Y3 < Epsilon )
             {
-                return INCOMPLETE;
+                return Incomplete;
             }
 
             float m2  = -( x3 - x2 ) / ( y3 - y2 );
@@ -392,7 +392,7 @@ public class DelaunayTriangulator
             float mx1 = ( x1 + x2 ) / 2f;
             float my1 = ( y1 + y2 ) / 2f;
 
-            if ( y2Y3 < EPSILON )
+            if ( y2Y3 < Epsilon )
             {
                 xc = ( x3 + x2 ) / 2f;
             }
@@ -416,12 +416,12 @@ public class DelaunayTriangulator
         dx *= dx;
         dy =  yp - yc;
 
-        if ( ( dx + ( dy * dy ) - rsqr ) <= EPSILON )
+        if ( ( dx + ( dy * dy ) - rsqr ) <= Epsilon )
         {
-            return INSIDE;
+            return Inside;
         }
 
-        return ( xp > xc ) && ( dx > rsqr ) ? COMPLETE : INCOMPLETE;
+        return ( xp > xc ) && ( dx > rsqr ) ? Complete : Incomplete;
     }
 
     /// <summary>

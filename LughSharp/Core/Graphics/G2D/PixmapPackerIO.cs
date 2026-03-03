@@ -81,14 +81,14 @@ public class PixmapPackerIO
 
                 switch ( parameters.Format.FType )
                 {
-                    case ImageFormat.FCIM:
+                    case ImageFormat.Fcim:
                     {
                         PixmapIO.WriteCIM( pageFile, page.Image );
 
                         break;
                     }
 
-                    case ImageFormat.FPNG:
+                    case ImageFormat.Fpng:
                     {
                         PixmapIO.WritePNG( pageFile, page.Image );
 
@@ -169,11 +169,11 @@ public class PixmapPackerIO
     [PublicAPI]
     public class ImageFormat
     {
-        public const int FCIM = 0;
-        public const int FPNG = 1;
+        public const int Fcim = 0;
+        public const int Fpng = 1;
 
-        public static readonly ImageFormat CIM = new( ".cim", FCIM );
-        public static readonly ImageFormat PNG = new( ".png", FPNG );
+        public static readonly ImageFormat CIM = new( ".cim", Fcim );
+        public static readonly ImageFormat PNG = new( ".png", Fpng );
 
         private ImageFormat( string extension, int ftype )
         {

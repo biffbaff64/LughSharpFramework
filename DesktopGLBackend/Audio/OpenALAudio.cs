@@ -117,9 +117,9 @@ public class OpenALAudio : IAudio
         _soundIdToSource = new Dictionary< long, int >();
         _sourceToSoundId = new Dictionary< int, long >();
 
-        AL.Listenerfv( AL.ORIENTATION, [ 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f ] );
-        AL.Listenerfv( AL.VELOCITY, [ 0.0f, 0.0f, 0.0f ] );
-        AL.Listenerfv( AL.POSITION, [ 0.0f, 0.0f, 0.0f ] );
+        AL.Listenerfv( AL.Orientation, [ 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f ] );
+        AL.Listenerfv( AL.Velocity, [ 0.0f, 0.0f, 0.0f ] );
+        AL.Listenerfv( AL.Position, [ 0.0f, 0.0f, 0.0f ] );
 
         _recentSounds = new OpenALSound[ simultaneousSources ];
     }
@@ -292,9 +292,9 @@ public class OpenALAudio : IAudio
         {
             uint sourceId = _idleSources[ i ];
 
-            AL.GetSourcei( sourceId, AL.SOURCE_STATE, out int state );
+            AL.GetSourcei( sourceId, AL.SourceState, out int state );
 
-            if ( ( state != AL.PLAYING ) && ( state != AL.PAUSED ) )
+            if ( ( state != AL.Playing ) && ( state != AL.Paused ) )
             {
                 if ( isMusic )
                 {
@@ -316,10 +316,10 @@ public class OpenALAudio : IAudio
                 }
 
                 AL.SourceStop( sourceId );
-                AL.Sourcei( sourceId, AL.BUFFER, 0 );
-                AL.Sourcef( sourceId, AL.GAIN, 1 );
-                AL.Sourcef( sourceId, AL.PITCH, 1 );
-                AL.Source3F( sourceId, AL.POSITION, 0, 0, 1f );
+                AL.Sourcei( sourceId, AL.Buffer, 0 );
+                AL.Sourcef( sourceId, AL.Gain, 1 );
+                AL.Sourcef( sourceId, AL.Pitch, 1 );
+                AL.Source3F( sourceId, AL.Position, 0, 0, 1f );
 
                 return ( int )sourceId;
             }
@@ -339,7 +339,7 @@ public class OpenALAudio : IAudio
         }
 
         AL.SourceStop( ( uint )sourceID );
-        AL.Sourcei( ( uint )sourceID, AL.BUFFER, 0 );
+        AL.Sourcei( ( uint )sourceID, AL.Buffer, 0 );
 
         long? soundId = _sourceToSoundId?[ sourceID ];
 
@@ -372,7 +372,7 @@ public class OpenALAudio : IAudio
                 continue;
             }
 
-            AL.GetSourcei( ( uint )sourceID, AL.BUFFER, out int outval );
+            AL.GetSourcei( ( uint )sourceID, AL.Buffer, out int outval );
 
             if ( outval == bufferID )
             {
@@ -386,7 +386,7 @@ public class OpenALAudio : IAudio
                 }
 
                 AL.SourceStop( ( uint )sourceID );
-                AL.Sourcei( ( uint )sourceID, AL.BUFFER, 0 );
+                AL.Sourcei( ( uint )sourceID, AL.Buffer, 0 );
             }
         }
     }
@@ -405,7 +405,7 @@ public class OpenALAudio : IAudio
         {
             uint sourceID = _idleSources[ i ];
 
-            AL.GetSourcei( sourceID, AL.BUFFER, out int outval );
+            AL.GetSourcei( sourceID, AL.Buffer, out int outval );
 
             if ( outval == bufferID )
             {
@@ -437,7 +437,7 @@ public class OpenALAudio : IAudio
         {
             uint sourceID = _idleSources[ i ];
 
-            AL.GetSourcei( sourceID, AL.BUFFER, out int outval );
+            AL.GetSourcei( sourceID, AL.Buffer, out int outval );
 
             if ( outval == bufferID )
             {
@@ -460,13 +460,13 @@ public class OpenALAudio : IAudio
         {
             uint sourceID = _idleSources[ i ];
 
-            AL.GetSourcei( sourceID, AL.BUFFER, out int outval );
+            AL.GetSourcei( sourceID, AL.Buffer, out int outval );
 
             if ( outval == bufferID )
             {
-                AL.GetSourcei( sourceID, AL.SOURCE_STATE, out int state );
+                AL.GetSourcei( sourceID, AL.SourceState, out int state );
 
-                if ( state == AL.PAUSED )
+                if ( state == AL.Paused )
                 {
                     AL.SourcePlay( sourceID );
                 }
@@ -528,9 +528,9 @@ public class OpenALAudio : IAudio
 
         if ( ( sourceId != null ) && ( sourceId != -1 ) )
         {
-            AL.GetSourcei( ( uint )sourceId, AL.SOURCE_STATE, out int outval );
+            AL.GetSourcei( ( uint )sourceId, AL.SourceState, out int outval );
 
-            if ( outval == AL.PAUSED )
+            if ( outval == AL.Paused )
             {
                 AL.SourcePlay( ( uint )sourceId );
             }
@@ -543,7 +543,7 @@ public class OpenALAudio : IAudio
 
         if ( sourceId != null )
         {
-            AL.Sourcef( ( uint )sourceId, AL.GAIN, volume );
+            AL.Sourcef( ( uint )sourceId, AL.Gain, volume );
         }
     }
 
@@ -553,7 +553,7 @@ public class OpenALAudio : IAudio
 
         if ( sourceId != null )
         {
-            AL.Sourcei( ( uint )sourceId, AL.LOOPING, looping ? AL.TRUE : AL.FALSE );
+            AL.Sourcei( ( uint )sourceId, AL.Looping, looping ? AL.True : AL.False );
         }
     }
 
@@ -563,7 +563,7 @@ public class OpenALAudio : IAudio
 
         if ( sourceId != null )
         {
-            AL.Sourcef( ( uint )sourceId, AL.PITCH, pitch );
+            AL.Sourcef( ( uint )sourceId, AL.Pitch, pitch );
         }
     }
 
@@ -574,12 +574,12 @@ public class OpenALAudio : IAudio
         if ( ( sourceId != null ) && ( sourceId != -1 ) )
         {
             AL.Source3F( ( uint )sourceId,
-                         AL.POSITION,
-                         MathUtils.Cos( ( pan - 1 ) * MathUtils.HALF_PI ),
+                         AL.Position,
+                         MathUtils.Cos( ( pan - 1 ) * MathUtils.HalfPi ),
                          0,
-                         MathUtils.Sin( ( pan + 1 ) * MathUtils.HALF_PI ) );
+                         MathUtils.Sin( ( pan + 1 ) * MathUtils.HalfPi ) );
 
-            AL.Sourcef( ( uint )sourceId, AL.GAIN, volume );
+            AL.Sourcef( ( uint )sourceId, AL.Gain, volume );
         }
     }
 
@@ -646,9 +646,9 @@ public class OpenALAudio : IAudio
                 {
                     uint sourceID = _allSources[ i ];
 
-                    AL.GetSourcei( sourceID, AL.SOURCE_STATE, out int state );
+                    AL.GetSourcei( sourceID, AL.SourceState, out int state );
 
-                    if ( state != AL.STOPPED )
+                    if ( state != AL.Stopped )
                     {
                         AL.SourceStop( sourceID );
                     }

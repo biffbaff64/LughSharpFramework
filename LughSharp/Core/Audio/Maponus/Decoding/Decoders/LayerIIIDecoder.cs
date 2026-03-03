@@ -39,8 +39,8 @@ namespace LughSharp.Core.Audio.Maponus.Decoding.Decoders;
 [PublicAPI]
 public class LayerIIIDecoder : IFrameDecoder
 {
-    private const int SSLIMIT = 18;
-    private const int SBLIMIT = 32;
+    private const int Sslimit = 18;
+    private const int Sblimit = 32;
 
     private static readonly int[][] _slen =
     [
@@ -236,16 +236,16 @@ public class LayerIIIDecoder : IFrameDecoder
 
         InitBlock();
 
-        _is1D = new int[ ( SBLIMIT * SSLIMIT ) + 4 ];
+        _is1D = new int[ ( Sblimit * Sslimit ) + 4 ];
         _ro   = new float[ 2 ][][];
 
         for ( var i = 0; i < 2; i++ )
         {
-            _ro[ i ] = new float[ SBLIMIT ][];
+            _ro[ i ] = new float[ Sblimit ][];
 
-            for ( var i2 = 0; i2 < SBLIMIT; i2++ )
+            for ( var i2 = 0; i2 < Sblimit; i2++ )
             {
-                _ro[ i ][ i2 ] = new float[ SSLIMIT ];
+                _ro[ i ][ i2 ] = new float[ Sslimit ];
             }
         }
 
@@ -253,27 +253,27 @@ public class LayerIIIDecoder : IFrameDecoder
 
         for ( var i3 = 0; i3 < 2; i3++ )
         {
-            _lr[ i3 ] = new float[ SBLIMIT ][];
+            _lr[ i3 ] = new float[ Sblimit ][];
 
-            for ( var i4 = 0; i4 < SBLIMIT; i4++ )
+            for ( var i4 = 0; i4 < Sblimit; i4++ )
             {
-                _lr[ i3 ][ i4 ] = new float[ SSLIMIT ];
+                _lr[ i3 ][ i4 ] = new float[ Sslimit ];
             }
         }
 
-        _out1D    = new float[ SBLIMIT * SSLIMIT ];
+        _out1D    = new float[ Sblimit * Sslimit ];
         _prevblck = new float[ 2 ][];
 
         for ( var i5 = 0; i5 < 2; i5++ )
         {
-            _prevblck[ i5 ] = new float[ SBLIMIT * SSLIMIT ];
+            _prevblck[ i5 ] = new float[ Sblimit * Sslimit ];
         }
 
         _k = new float[ 2 ][];
 
         for ( var i6 = 0; i6 < 2; i6++ )
         {
-            _k[ i6 ] = new float[ SBLIMIT * SSLIMIT ];
+            _k[ i6 ] = new float[ Sblimit * Sslimit ];
         }
 
         _nonzero = new int[ 2 ];
@@ -402,11 +402,11 @@ public class LayerIIIDecoder : IFrameDecoder
         _whichChannels = whichCh;
 
         _frameStart = 0;
-        _channels   = _header.Mode() == Header.SINGLE_CHANNEL ? 1 : 2;
-        _maxGr      = _header.Version() == Header.MPEG1 ? 2 : 1;
+        _channels   = _header.Mode() == Header.SingleChannel ? 1 : 2;
+        _maxGr      = _header.Version() == Header.Mpeg1 ? 2 : 1;
 
         _sfreq = _header.GetSampleFrequency() +
-                 ( _header.Version() == Header.MPEG1 ? 3 : _header.Version() == Header.MPEG25_LSF ? 6 : 0 ); // SZD
+                 ( _header.Version() == Header.Mpeg1 ? 3 : _header.Version() == Header.Mpeg25Lsf ? 6 : 0 ); // SZD
 
         if ( _channels == 2 )
         {
@@ -541,7 +541,7 @@ public class LayerIIIDecoder : IFrameDecoder
             {
                 _part2Start = _bitReserve.HssTell();
 
-                if ( _header.Version() == Header.MPEG1 )
+                if ( _header.Version() == Header.Mpeg1 )
                 {
                     ReadScaleFactors( ch, gr );
                 }
@@ -560,7 +560,7 @@ public class LayerIIIDecoder : IFrameDecoder
 
             Stereo( gr );
 
-            if ( ( _whichChannels == OutputChannels.DOWNMIX_CHANNELS ) && ( _channels > 1 ) )
+            if ( ( _whichChannels == OutputChannels.DownmixChannels ) && ( _channels > 1 ) )
             {
                 DoDownMix();
             }
@@ -586,15 +586,15 @@ public class LayerIIIDecoder : IFrameDecoder
 
                     // Frequency inversion
                 {
-                    for ( var ss = 1; ss < SSLIMIT; ss += 2 )
+                    for ( var ss = 1; ss < Sslimit; ss += 2 )
                     {
                         _out1D[ sb18 + ss ] = -_out1D[ sb18 + ss ];
                     }
                 }
 
-                if ( ( ch == 0 ) || ( _whichChannels == OutputChannels.RIGHT_CHANNEL ) )
+                if ( ( ch == 0 ) || ( _whichChannels == OutputChannels.RightChannel ) )
                 {
-                    for ( var ss = 0; ss < SSLIMIT; ss++ )
+                    for ( var ss = 0; ss < Sslimit; ss++ )
                     {
                         // Polyphase synthesis
                         var sb = 0;
@@ -615,7 +615,7 @@ public class LayerIIIDecoder : IFrameDecoder
                 }
                 else
                 {
-                    for ( var ss = 0; ss < SSLIMIT; ss++ )
+                    for ( var ss = 0; ss < Sslimit; ss++ )
                     {
                         // Polyphase synthesis
                         var sb = 0;
@@ -653,7 +653,7 @@ public class LayerIIIDecoder : IFrameDecoder
     {
         int ch;
 
-        if ( _header.Version() == Header.MPEG1 )
+        if ( _header.Version() == Header.Mpeg1 )
         {
             _sideInfo.MainDataBegin = _stream.GetBitsFromBuffer( 9 );
             _sideInfo.PrivateBits   = _stream.GetBitsFromBuffer( _channels == 1 ? 5 : 3 );
@@ -1295,8 +1295,8 @@ public class LayerIIIDecoder : IFrameDecoder
 
         for ( j = 0; j < _nonzero[ ch ]; j++ )
         {
-            int reste   = j % SSLIMIT;
-            int quotien = ( j - reste ) / SSLIMIT;
+            int reste   = j % Sslimit;
+            int quotien = ( j - reste ) / Sslimit;
 
             if ( _is1D[ j ] == 0 )
             {
@@ -1346,8 +1346,8 @@ public class LayerIIIDecoder : IFrameDecoder
         // apply formula per block type
         for ( j = 0; j < _nonzero[ ch ]; j++ )
         {
-            int reste   = j % SSLIMIT;
-            int quotien = ( j - reste ) / SSLIMIT;
+            int reste   = j % Sslimit;
+            int quotien = ( j - reste ) / Sslimit;
 
             if ( index == nextCbBoundary )
             {
@@ -1437,8 +1437,8 @@ public class LayerIIIDecoder : IFrameDecoder
 
         for ( j = _nonzero[ ch ]; j < 576; j++ )
         {
-            int reste   = j % SSLIMIT;
-            int quotien = ( j - reste ) / SSLIMIT;
+            int reste   = j % Sslimit;
+            int quotien = ( j - reste ) / Sslimit;
 
             if ( reste < 0 )
             {
@@ -1472,8 +1472,8 @@ public class LayerIIIDecoder : IFrameDecoder
                 // NO REORDER FOR LOW 2 SUBBANDS
                 for ( var index = 0; index < 36; index++ )
                 {
-                    int reste   = index % SSLIMIT;
-                    int quotien = ( index - reste ) / SSLIMIT;
+                    int reste   = index % Sslimit;
+                    int quotien = ( index - reste ) / Sslimit;
 
                     _out1D[ index ] = xr[ quotien ][ reste ];
                 }
@@ -1492,22 +1492,22 @@ public class LayerIIIDecoder : IFrameDecoder
                     {
                         int srcLine = sfbStart3 + freq;
                         int desLine = sfbStart3 + freq3;
-                        int reste   = srcLine % SSLIMIT;
-                        int quotien = ( srcLine - reste ) / SSLIMIT;
+                        int reste   = srcLine % Sslimit;
+                        int quotien = ( srcLine - reste ) / Sslimit;
 
                         _out1D[ desLine ] =  xr[ quotien ][ reste ];
                         srcLine           += sfbLines;
                         desLine++;
 
-                        reste   = srcLine % SSLIMIT;
-                        quotien = ( srcLine - reste ) / SSLIMIT;
+                        reste   = srcLine % Sslimit;
+                        quotien = ( srcLine - reste ) / Sslimit;
 
                         _out1D[ desLine ] =  xr[ quotien ][ reste ];
                         srcLine           += sfbLines;
                         desLine++;
 
-                        reste   = srcLine % SSLIMIT;
-                        quotien = ( srcLine - reste ) / SSLIMIT;
+                        reste   = srcLine % Sslimit;
+                        quotien = ( srcLine - reste ) / Sslimit;
 
                         _out1D[ desLine ] = xr[ quotien ][ reste ];
                     }
@@ -1519,8 +1519,8 @@ public class LayerIIIDecoder : IFrameDecoder
                 for ( var index = 0; index < 576; index++ )
                 {
                     int j       = _reorderTable![ _sfreq ][ index ];
-                    int reste   = j % SSLIMIT;
-                    int quotien = ( j - reste ) / SSLIMIT;
+                    int reste   = j % Sslimit;
+                    int quotien = ( j - reste ) / Sslimit;
 
                     _out1D[ index ] = xr[ quotien ][ reste ];
                 }
@@ -1531,8 +1531,8 @@ public class LayerIIIDecoder : IFrameDecoder
             // long blocks
             for ( var index = 0; index < 576; index++ )
             {
-                int reste   = index % SSLIMIT;
-                int quotien = ( index - reste ) / SSLIMIT;
+                int reste   = index % Sslimit;
+                int quotien = ( index - reste ) / Sslimit;
 
                 _out1D[ index ] = xr[ quotien ][ reste ];
             }
@@ -1547,9 +1547,9 @@ public class LayerIIIDecoder : IFrameDecoder
         {
             // mono , bypass xr[0][][] to lr[0][][]
 
-            for ( sb = 0; sb < SBLIMIT; sb++ )
+            for ( sb = 0; sb < Sblimit; sb++ )
             {
-                for ( ss = 0; ss < SSLIMIT; ss += 3 )
+                for ( ss = 0; ss < Sslimit; ss += 3 )
                 {
                     _lr[ 0 ][ sb ][ ss ]     = _ro[ 0 ][ sb ][ ss ];
                     _lr[ 0 ][ sb ][ ss + 1 ] = _ro[ 0 ][ sb ][ ss + 1 ];
@@ -1563,9 +1563,9 @@ public class LayerIIIDecoder : IFrameDecoder
             int         modeExt = _header.ModeExtension();
             int         i;
 
-            bool msStereo = ( _header.Mode() == Header.JOINT_STEREO ) && ( ( modeExt & 0x2 ) != 0 );
-            bool iStereo = ( _header.Mode() == Header.JOINT_STEREO ) && ( ( modeExt & 0x1 ) != 0 );
-            bool lsf = ( _header.Version() == Header.MPEG2_LSF ) || ( _header.Version() == Header.MPEG25_LSF ); // SZD
+            bool msStereo = ( _header.Mode() == Header.JointStereo ) && ( ( modeExt & 0x2 ) != 0 );
+            bool iStereo = ( _header.Mode() == Header.JointStereo ) && ( ( modeExt & 0x1 ) != 0 );
+            bool lsf = ( _header.Version() == Header.Mpeg2Lsf ) || ( _header.Version() == Header.Mpeg25Lsf ); // SZD
 
             int ioType = grInfo.ScaleFacCompress & 1;
 
@@ -1936,9 +1936,9 @@ public class LayerIIIDecoder : IFrameDecoder
 
             i = 0;
 
-            for ( sb = 0; sb < SBLIMIT; sb++ )
+            for ( sb = 0; sb < Sblimit; sb++ )
             {
-                for ( ss = 0; ss < SSLIMIT; ss++ )
+                for ( ss = 0; ss < Sslimit; ss++ )
                 {
                     if ( IsPos[ i ] == 7 )
                     {
@@ -2090,9 +2090,9 @@ public class LayerIIIDecoder : IFrameDecoder
     /// </summary>
     private void DoDownMix()
     {
-        for ( var sb = 0; sb < SSLIMIT; sb++ )
+        for ( var sb = 0; sb < Sslimit; sb++ )
         {
-            for ( var ss = 0; ss < SSLIMIT; ss += 3 )
+            for ( var ss = 0; ss < Sslimit; ss += 3 )
             {
                 _lr[ 0 ][ sb ][ ss ]     = ( _lr[ 0 ][ sb ][ ss ] + _lr[ 1 ][ sb ][ ss ] ) * 0.5f;
                 _lr[ 0 ][ sb ][ ss + 1 ] = ( _lr[ 0 ][ sb ][ ss + 1 ] + _lr[ 1 ][ sb ][ ss + 1 ] ) * 0.5f;

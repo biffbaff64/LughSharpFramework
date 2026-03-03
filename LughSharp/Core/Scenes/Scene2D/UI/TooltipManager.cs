@@ -163,9 +163,9 @@ public class TooltipManager< T > where T : Actor
                                       Actions.Actions.Parallel(
                                                                Actions.Actions.Alpha( 0.2f, 0.2f, Interpolation.Fade ),
                                                                Actions.Actions.ScaleTo( 0.05f,
-                                                                   0.05f,
-                                                                   0.2f,
-                                                                   Interpolation.Fade )
+                                                                        0.05f,
+                                                                        0.2f,
+                                                                        Interpolation.Fade )
                                                               ),
                                       Actions.Actions.RemoveActor()
                                      )

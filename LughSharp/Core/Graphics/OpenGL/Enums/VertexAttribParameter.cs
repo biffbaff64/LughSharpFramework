@@ -29,11 +29,11 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum VertexAttribParameter
 {
-    ArrayEnabled    = IGL.GL_VERTEX_ATTRIB_ARRAY_ENABLED,
-    ArraySize       = IGL.GL_VERTEX_ATTRIB_ARRAY_SIZE,
-    ArrayStride     = IGL.GL_VERTEX_ATTRIB_ARRAY_STRIDE,
-    ArrayType       = IGL.GL_VERTEX_ATTRIB_ARRAY_TYPE,
-    ArrayNormalized = IGL.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED
+    ArrayEnabled    = IGL.GLVertexAttribArrayEnabled,
+    ArraySize       = IGL.GLVertexAttribArraySize,
+    ArrayStride     = IGL.GLVertexAttribArrayStride,
+    ArrayType       = IGL.GLVertexAttribArrayType,
+    ArrayNormalized = IGL.GLVertexAttribArrayNormalized
 }
 
 // ========================================================================

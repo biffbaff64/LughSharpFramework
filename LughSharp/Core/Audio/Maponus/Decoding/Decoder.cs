@@ -39,7 +39,7 @@ namespace LughSharp.Core.Audio.Maponus.Decoding;
 [PublicAPI]
 public class Decoder
 {
-    private const float DEFAULT_SCALE_FACTOR = 32700.0f;
+    private const float DefaultScaleFactor = 32700.0f;
 
     private static readonly Parameters _decoderDefaultParams = new();
 
@@ -130,9 +130,9 @@ public class Decoder
     /// <summary>
     /// Gets or sets the scale factor. This property determines the scaling applied
     /// to a particular element or calculation.
-    /// By default, it is set to <see cref="DEFAULT_SCALE_FACTOR"/>.
+    /// By default, it is set to <see cref="DefaultScaleFactor"/>.
     /// </summary>
-    public float ScaleFactor { get; set; } = DEFAULT_SCALE_FACTOR;
+    public float ScaleFactor { get; set; } = DefaultScaleFactor;
 
     /// <summary>
     /// Retrieves the sample frequency of the PCM samples output
@@ -155,7 +155,7 @@ public class Decoder
     /// an upper bound and fewer samples may actually be written, depending
     /// upon the sample rate and number of channels.
     /// </summary>
-    public virtual int OutputBlockSize => AudioBase.OBUFFERSIZE;
+    public virtual int OutputBlockSize => AudioBase.Obuffersize;
 
     /// <summary>
     /// Gets the default parameters for the decoder. This property returns a clone
@@ -318,11 +318,11 @@ public class Decoder
 
             default:
             {
-                throw NewDecoderException( DecoderErrors.UNSUPPORTED_LAYER, null );
+                throw NewDecoderException( DecoderErrors.UnsupportedLayer, null );
             }
         }
 
-        return decoder ?? throw NewDecoderException( DecoderErrors.UNSUPPORTED_LAYER, null );
+        return decoder ?? throw NewDecoderException( DecoderErrors.UnsupportedLayer, null );
     }
 
     /// <summary>
@@ -335,7 +335,7 @@ public class Decoder
     /// </remarks>
     private void Initialise( Header header )
     {
-        int channels = header.Mode() == Header.SINGLE_CHANNEL ? 1 : 2;
+        int channels = header.Mode() == Header.SingleChannel ? 1 : 2;
 
         // Set up output buffer if not set up by client.
         _output ??= new SampleBuffer( header.Frequency(), channels );

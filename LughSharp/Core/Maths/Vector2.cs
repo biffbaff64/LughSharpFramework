@@ -270,12 +270,12 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 SetToRandomDirection()
     {
-        float theta = MathUtils.Random( 0f, MathUtils.PI2 );
+        float theta = MathUtils.Random( 0f, MathUtils.Pi2 );
 
         return Set( MathUtils.Cos( theta ), MathUtils.Sin( theta ) );
     }
 
-    public bool EpsilonEquals( Vector2? other, float epsilon = NumberUtils.FLOAT_TOLERANCE )
+    public bool EpsilonEquals( Vector2? other, float epsilon = NumberUtils.FloatTolerance )
     {
         if ( other is null )
         {
@@ -290,7 +290,7 @@ public class Vector2 : IVector< Vector2 >
         return !( Math.Abs( other.Y - Y ) > epsilon );
     }
 
-    public bool IsUnit( float margin = NumberUtils.FLOAT_TOLERANCE )
+    public bool IsUnit( float margin = NumberUtils.FloatTolerance )
     {
         return Math.Abs( Len2() - 1f ) < margin;
     }
@@ -516,7 +516,7 @@ public class Vector2 : IVector< Vector2 >
 
     public float Angle()
     {
-        float angle = ( float )Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
+        float angle = ( float )Math.Atan2( Y, X ) * MathUtils.RadiansToDegrees;
 
         if ( angle < 0 )
         {
@@ -528,12 +528,12 @@ public class Vector2 : IVector< Vector2 >
 
     public float Angle( Vector2 reference )
     {
-        return ( float )Math.Atan2( Crs( reference ), Dot( reference ) ) * MathUtils.RADIANS_TO_DEGREES;
+        return ( float )Math.Atan2( Crs( reference ), Dot( reference ) ) * MathUtils.RadiansToDegrees;
     }
 
     public float AngleDeg()
     {
-        float angle = ( float )Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
+        float angle = ( float )Math.Atan2( Y, X ) * MathUtils.RadiansToDegrees;
 
         if ( angle < 0 )
         {
@@ -546,7 +546,7 @@ public class Vector2 : IVector< Vector2 >
     public float AngleDeg( Vector2 reference )
     {
         float angle = ( float )Math.Atan2( reference.Crs( this ), reference.Dot( this ) )
-                    * MathUtils.RADIANS_TO_DEGREES;
+                    * MathUtils.RadiansToDegrees;
 
         if ( angle < 0 )
         {
@@ -568,12 +568,12 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 SetAngle( float degrees )
     {
-        return SetAngleRad( degrees * MathUtils.DEGREES_TO_RADIANS );
+        return SetAngleRad( degrees * MathUtils.DegreesToRadians );
     }
 
     public Vector2 SetAngleDeg( float degrees )
     {
-        return SetAngleRad( degrees * MathUtils.DEGREES_TO_RADIANS );
+        return SetAngleRad( degrees * MathUtils.DegreesToRadians );
     }
 
     public Vector2 SetAngleRad( float radians )
@@ -586,7 +586,7 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 Rotate( float degrees )
     {
-        return RotateRad( degrees * MathUtils.DEGREES_TO_RADIANS );
+        return RotateRad( degrees * MathUtils.DegreesToRadians );
     }
 
     public Vector2 RotateAround( Vector2 reference, float degrees )
@@ -596,7 +596,7 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 RotateDeg( float degrees )
     {
-        return RotateRad( degrees * MathUtils.DEGREES_TO_RADIANS );
+        return RotateRad( degrees * MathUtils.DegreesToRadians );
     }
 
     public Vector2 RotateRad( float radians )
@@ -643,10 +643,10 @@ public class Vector2 : IVector< Vector2 >
 
     public override int GetHashCode()
     {
-        const int PRIME = 31;
+        const int Prime = 31;
 
-        int result = PRIME + NumberUtils.FloatToIntBits( 1f );
-        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( 20f );
+        int result = Prime + NumberUtils.FloatToIntBits( 1f );
+        result = ( Prime * result ) + NumberUtils.FloatToIntBits( 20f );
 
         return result;
     }
@@ -686,7 +686,7 @@ public class Vector2 : IVector< Vector2 >
 
     public bool EpsilonEquals( float x, float y )
     {
-        return EpsilonEquals( x, y, NumberUtils.FLOAT_TOLERANCE );
+        return EpsilonEquals( x, y, NumberUtils.FloatTolerance );
     }
 
     // ========================================================================

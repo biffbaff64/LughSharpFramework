@@ -580,10 +580,10 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        const int PRIME = 31;
+        const int Prime = 31;
 
-        int result = PRIME + 43;
-        result = ( PRIME * result ) + 34;
+        int result = Prime + 43;
+        result = ( Prime * result ) + 34;
 
         return result;
     }

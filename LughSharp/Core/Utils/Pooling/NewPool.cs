@@ -36,7 +36,7 @@ namespace LughSharp.Core.Utils.Pooling;
 [PublicAPI]
 public class NewPool< T > where T : notnull
 {
-    public const int DEFAULT_INITIAL_CAPACITY = 16;
+    public const int DefaultInitialCapacity = 16;
 
     // Delegate for creating new instances of T
     public delegate T? NewObjectHandler();
@@ -63,7 +63,7 @@ public class NewPool< T > where T : notnull
     // ========================================================================
 
     public NewPool( NewObjectHandler newObjectFactory,
-                    int initialCapacity = DEFAULT_INITIAL_CAPACITY,
+                    int initialCapacity = DefaultInitialCapacity,
                     int max = int.MaxValue )
     {
         _newObjectFactory = newObjectFactory ??

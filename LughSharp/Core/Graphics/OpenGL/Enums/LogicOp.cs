@@ -29,22 +29,22 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum LogicOp
 {
-    And          = IGL.GL_AND,
-    AndInverted  = IGL.GL_AND_INVERTED,
-    AndReverse   = IGL.GL_AND_REVERSE,
-    Clear        = IGL.GL_CLEAR,
-    Copy         = IGL.GL_COPY,
-    CopyInverted = IGL.GL_COPY_INVERTED,
-    Equiv        = IGL.GL_EQUIV,
-    Invert       = IGL.GL_INVERT,
-    Nand         = IGL.GL_NAND,
-    Noop         = IGL.GL_NOOP,
-    Nor          = IGL.GL_NOR,
-    Or           = IGL.GL_OR,
-    OrInverted   = IGL.GL_OR_INVERTED,
-    OrReversed   = IGL.GL_OR_REVERSE,
-    Set          = IGL.GL_SET,
-    Xor          = IGL.GL_XOR
+    And          = IGL.GLAnd,
+    AndInverted  = IGL.GLAndInverted,
+    AndReverse   = IGL.GLAndReverse,
+    Clear        = IGL.GLClear,
+    Copy         = IGL.GLCopy,
+    CopyInverted = IGL.GLCopyInverted,
+    Equiv        = IGL.GLEquiv,
+    Invert       = IGL.GLInvert,
+    Nand         = IGL.GLNand,
+    Noop         = IGL.GLNoop,
+    Nor          = IGL.GLNor,
+    Or           = IGL.GLOr,
+    OrInverted   = IGL.GLOrInverted,
+    OrReversed   = IGL.GLOrReverse,
+    Set          = IGL.GLSet,
+    Xor          = IGL.GLXor
 }
 
 // ========================================================================

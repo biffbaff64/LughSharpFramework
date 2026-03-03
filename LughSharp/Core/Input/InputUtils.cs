@@ -38,7 +38,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseLeft()
     {
-        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.LEFT );
+        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.Left );
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseLeft( int button )
     {
-        return button == IInput.Buttons.LEFT;
+        return button == IInput.Buttons.Left;
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseRight()
     {
-        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.RIGHT );
+        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.Right );
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseRight( int button )
     {
-        return button == IInput.Buttons.RIGHT;
+        return button == IInput.Buttons.Right;
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseMiddle()
     {
-        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.MIDDLE );
+        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.Middle );
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseMiddle( int button )
     {
-        return button == IInput.Buttons.MIDDLE;
+        return button == IInput.Buttons.Middle;
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public static class InputUtils
     /// </summary>
     public static bool ShiftKey()
     {
-        return Engine.Api.Input.IsKeyPressed( Keys.SHIFT_LEFT ) || Engine.Api.Input.IsKeyPressed( Keys.SHIFT_RIGHT );
+        return Engine.Api.Input.IsKeyPressed( Keys.ShiftLeft ) || Engine.Api.Input.IsKeyPressed( Keys.ShiftRight );
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public static class InputUtils
     /// </summary>
     public static bool ShiftKey( int keycode )
     {
-        return keycode is Keys.SHIFT_LEFT or Keys.SHIFT_RIGHT;
+        return keycode is Keys.ShiftLeft or Keys.ShiftRight;
     }
 
     /// <summary>
@@ -105,8 +105,8 @@ public static class InputUtils
         #if MACOS
         return Api.Input.isKeyPressed( Keys.SYM );
         #else
-        return Engine.Api.Input.IsKeyPressed( Keys.CONTROL_LEFT )
-            || Engine.Api.Input.IsKeyPressed( Keys.CONTROL_RIGHT );
+        return Engine.Api.Input.IsKeyPressed( Keys.ControlLeft )
+            || Engine.Api.Input.IsKeyPressed( Keys.ControlRight );
         #endif
     }
 
@@ -118,7 +118,7 @@ public static class InputUtils
         #if MACOS
         return keycode == Keys.SYM;
         #else
-        return keycode is Keys.CONTROL_LEFT or Keys.CONTROL_RIGHT;
+        return keycode is Keys.ControlLeft or Keys.ControlRight;
         #endif
     }
 
@@ -127,7 +127,7 @@ public static class InputUtils
     /// </summary>
     public static bool AltKey()
     {
-        return Engine.Api.Input.IsKeyPressed( Keys.ALT_LEFT ) || Engine.Api.Input.IsKeyPressed( Keys.ALT_RIGHT );
+        return Engine.Api.Input.IsKeyPressed( Keys.AltLeft ) || Engine.Api.Input.IsKeyPressed( Keys.AltRight );
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public static class InputUtils
     /// </summary>
     public static bool AltKey( int keycode )
     {
-        return keycode is Keys.ALT_LEFT or Keys.ALT_RIGHT;
+        return keycode is Keys.AltLeft or Keys.AltRight;
     }
 }
 

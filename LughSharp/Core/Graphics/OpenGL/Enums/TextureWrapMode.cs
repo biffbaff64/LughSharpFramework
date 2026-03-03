@@ -35,18 +35,18 @@ public enum TextureWrapMode
     /// Repeats the texture, mirroring it at every integer boundary. This
     /// creates a seamless mirrored effect at the edges.
     /// </summary>
-    MirroredRepeat = IGL.GL_MIRRORED_REPEAT,
+    MirroredRepeat = IGL.GLMirroredRepeat,
 
     /// <summary>
     /// Clamps texture coordinates to the edges of the texture, ensuring
     /// that texture sampling outside the bounds of the texture fetches
     /// the color from the nearest edge texel.
     /// </summary>
-    ClampToEdge = IGL.GL_CLAMP_TO_EDGE,
+    ClampToEdge = IGL.GLClampToEdge,
 
     /// <summary>
     /// Wraps texture coordinates, causing the texture to repeat when
     /// coordinates exceed the range [0.0, 1.0].
     /// </summary>
-    Repeat = IGL.GL_REPEAT
+    Repeat = IGL.GLRepeat
 }

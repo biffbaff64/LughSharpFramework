@@ -33,18 +33,18 @@ namespace LughSharp.Core.Graphics.Utils;
 [PublicAPI]
 public class ShaderConstants
 {
-    public const string A_COLOR      = "a_color";
-    public const string A_POSITION   = "a_position";
-    public const string A_TEX_COORD0 = "a_texCoord0";
+    public const string AColor      = "a_color";
+    public const string APosition   = "a_position";
+    public const string ATexCoord0 = "a_texCoord0";
 
-    public const string U_PROJECTION_MATRIX = "u_projectionMatrix";
-    public const string U_VIEW_MATRIX       = "u_viewMatrix";
-    public const string U_MODEL_MATRIX      = "u_modelMatrix";
-    public const string U_TEXTURE           = "u_texture";
+    public const string UProjectionMatrix = "u_projectionMatrix";
+    public const string UViewMatrix       = "u_viewMatrix";
+    public const string UModelMatrix      = "u_modelMatrix";
+    public const string UTexture           = "u_texture";
 
-    public const string V_TEXTURE_COORDINATES = "v_texCoords";
-    public const string V_VCOLOR              = "v_color";
-    public const string V_FRAG_COLOR          = "fragColor";
+    public const string VTextureCoordinates = "v_texCoords";
+    public const string VVcolor              = "v_color";
+    public const string VFragColor          = "fragColor";
 
     // ========================================================================
 
@@ -58,7 +58,7 @@ public class ShaderConstants
     /// The filename to use for the header file. This must not include any path information.
     /// The default value is "shader_constants.h".
     /// </param>
-    public static void ParseGLSLHeader( string filename = "shader_constants.h" )
+    public static void ParseGlslHeader( string filename = "shader_constants.h" )
     {
         var lines = new List< string >
         {

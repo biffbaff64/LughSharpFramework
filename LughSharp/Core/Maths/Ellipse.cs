@@ -237,12 +237,12 @@ public class Ellipse : IShape2D
     }
 
     /// <returns>
-    /// The area of this <see cref="Ellipse"/> as <see cref="MathUtils.PI"/>
+    /// The area of this <see cref="Ellipse"/> as <see cref="MathUtils.Pi"/>
     /// <see cref="Ellipse.Width"/> * <see cref="Ellipse.Height"/>
     /// </returns>
     public float Area()
     {
-        return MathUtils.PI * ( Width * Height ) / 4;
+        return MathUtils.Pi * ( Width * Height ) / 4;
     }
 
     /// <summary>
@@ -262,13 +262,13 @@ public class Ellipse : IShape2D
         if ( ( ( a * 3 ) > b ) || ( ( b * 3 ) > a ) )
         {
             // If one dimension is three times as long as the other...
-            return ( float )( MathUtils.PI
+            return ( float )( MathUtils.Pi
                             * ( ( 3 * ( a + b ) )
                               - Math.Sqrt( ( ( 3 * a ) + b ) * ( a + ( 3 * b ) ) ) ) );
         }
 
         // We can use the simpler approximation, then
-        return ( float )( MathUtils.PI2 * Math.Sqrt( ( ( a * a ) + ( b * b ) ) / 2 ) );
+        return ( float )( MathUtils.Pi2 * Math.Sqrt( ( ( a * a ) + ( b * b ) ) / 2 ) );
     }
 
     /// <inheritdoc />
@@ -295,12 +295,12 @@ public class Ellipse : IShape2D
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        const int PRIME = 53;
+        const int Prime = 53;
 
-        int result = PRIME + 31;
-        result = ( PRIME * result ) + 33;
-        result = ( PRIME * result ) + 35;
-        result = ( PRIME * result ) + 37;
+        int result = Prime + 31;
+        result = ( Prime * result ) + 33;
+        result = ( Prime * result ) + 35;
+        result = ( Prime * result ) + 37;
 
         return result;
     }

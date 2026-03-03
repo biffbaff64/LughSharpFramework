@@ -22,12 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
@@ -95,17 +90,17 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
     // ========================================================================
 
-    protected const char CARRIAGE_RETURN = '\r';
-    protected const char NEWLINE         = '\n';
-    protected const char TAB             = '\t';
-    protected const char BACKSPACE       = '\u0008';
-    protected const char DELETE          = '\u007f';
-    protected const char BULLET          = '\u0095';
+    protected const char CarriageReturn = '\r';
+    protected const char Newline         = '\n';
+    protected const char Tab             = '\t';
+    protected const char Backspace       = '\u0008';
+    protected const char DeleteKey       = '\u007f';
+    protected const char Bullet          = '\u0095';
 
     // ========================================================================
 
     private readonly bool                 _onlyFontChars = true;
-    private readonly int                  _textAlign     = Align.LEFT;
+    private readonly Align                _textAlign     = Align.Left;
     private readonly Vector2              _tmp1          = new();
     private readonly Vector2              _tmp2          = new();
     private readonly Vector2              _tmp3          = new();
@@ -125,7 +120,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
     private CancellationTokenSource? _keyRepeatTokenSource;
     private long                     _lastChangeTime;
     private StringBuilder?           _passwordBuffer;
-    private char                     _passwordCharacter = BULLET;
+    private char                     _passwordCharacter = Bullet;
     private bool                     _passwordMode;
     private float                    _renderOffset;
     private float                    _selectionWidth;
@@ -349,11 +344,11 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
         _visibleTextEnd = Math.Max( 0, end - 1 );
 
-        if ( ( _textAlign & Align.LEFT ) == 0 )
+        if ( ( _textAlign & Align.Left ) == 0 )
         {
             TextOffset = visibleWidth - glyphPositions[ _visibleTextEnd ] - FontOffset + startX;
 
-            if ( ( _textAlign & Align.CENTER ) != 0 )
+            if ( ( _textAlign & Align.Center ) != 0 )
             {
                 TextOffset = ( float )Math.Round( TextOffset * 0.5f );
             }
@@ -634,7 +629,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                        _visibleTextStart,
                        _visibleTextEnd,
                        0,
-                       Align.LEFT,
+                       Align.Left,
                        false );
         }
     }
@@ -816,7 +811,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
             char c = content[ i ];
 
-            if ( !( WriteEnters && c is NEWLINE or CARRIAGE_RETURN ) )
+            if ( !( WriteEnters && c is Newline or CarriageReturn ) )
             {
                 if ( c is '\r' or '\n' )
                 {
@@ -1215,7 +1210,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             //@formatter:off
             _tf._keyRepeatTask = new Task( () =>
             {
-                _tf._inputListener?.KeyDown( null, KeyCode );
+                _tf._inputListener?.OnKeyDown( null, KeyCode );
                 
                 if ( _tf._keyRepeatTokenSource.IsCancellationRequested )
                 {
@@ -1360,9 +1355,9 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         }
 
         /// <inheritdoc />
-        public override bool TouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+        public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
-            if ( !base.TouchDown( ev, x, y, pointer, button ) )
+            if ( !base.OnTouchDown( ev, x, y, pointer, button ) )
             {
                 return false;
             }
@@ -1392,21 +1387,21 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         }
 
         /// <inheritdoc />
-        public override void TouchDragged( InputEvent? ev, float x, float y, int pointer )
+        public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
-            base.TouchDragged( ev, x, y, pointer );
+            base.OnTouchDragged( ev, x, y, pointer );
             SetCursorPosition( x, y );
         }
 
         /// <inheritdoc />
-        public override void TouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+        public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( _tf.SelectionStart == _tf.Cursor )
             {
                 _tf.HasSelection = false;
             }
 
-            base.TouchUp( ev, x, y, pointer, button );
+            base.OnTouchUp( ev, x, y, pointer, button );
         }
 
         protected virtual void GoHome( bool jump )
@@ -1420,7 +1415,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         }
 
         /// <inheritdoc />
-        public override bool KeyDown( InputEvent? ev, int keycode )
+        public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             if ( _tf.Disabled )
             {
@@ -1456,7 +1451,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                         break;
 
                     case IInput.Keys.C:
-                    case IInput.Keys.INSERT:
+                    case IInput.Keys.Insert:
                         _tf.Copy();
 
                         return true;
@@ -1491,12 +1486,12 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             {
                 switch ( keycode )
                 {
-                    case IInput.Keys.INSERT:
+                    case IInput.Keys.Insert:
                         _tf.Paste( _tf._clipboard.Contents, true );
 
                         break;
 
-                    case IInput.Keys.FORWARD_DEL:
+                    case IInput.Keys.ForwardDel:
                         _tf.Cut( true );
 
                         break;
@@ -1506,27 +1501,27 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
                 switch ( keycode )
                 {
-                    case IInput.Keys.LEFT:
+                    case IInput.Keys.Left:
                         _tf.MoveCursor( false, jump );
                         repeat  = true;
                         handled = true;
 
                         break;
 
-                    case IInput.Keys.RIGHT:
+                    case IInput.Keys.Right:
                         _tf.MoveCursor( true, jump );
                         repeat  = true;
                         handled = true;
 
                         break;
 
-                    case IInput.Keys.HOME:
+                    case IInput.Keys.Home:
                         GoHome( jump );
                         handled = true;
 
                         break;
 
-                    case IInput.Keys.END:
+                    case IInput.Keys.End:
                         GoEnd( jump );
                         handled = true;
 
@@ -1544,7 +1539,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                 // Cursor movement or other keys (kills selection).
                 switch ( keycode )
                 {
-                    case IInput.Keys.LEFT:
+                    case IInput.Keys.Left:
                         _tf.MoveCursor( false, jump );
                         _tf.ClearSelection();
                         repeat  = true;
@@ -1552,7 +1547,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
                         break;
 
-                    case IInput.Keys.RIGHT:
+                    case IInput.Keys.Right:
                         _tf.MoveCursor( true, jump );
                         _tf.ClearSelection();
                         repeat  = true;
@@ -1560,14 +1555,14 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
                         break;
 
-                    case IInput.Keys.HOME:
+                    case IInput.Keys.Home:
                         GoHome( jump );
                         _tf.ClearSelection();
                         handled = true;
 
                         break;
 
-                    case IInput.Keys.END:
+                    case IInput.Keys.End:
                         GoEnd( jump );
                         _tf.ClearSelection();
                         handled = true;
@@ -1586,7 +1581,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             return handled;
         }
 
-        public override bool KeyUp( InputEvent? ev, int keycode )
+        public override bool OnKeyUp( InputEvent? ev, int keycode )
         {
             if ( _tf.Disabled )
             {
@@ -1610,11 +1605,11 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
         protected virtual bool CheckFocusTraversal( char character )
         {
             return _tf.FocusTraversal
-                && ( ( character == TAB )
-                  || ( character is CARRIAGE_RETURN or NEWLINE && ( Platform.IsAndroid || Platform.IsIos ) ) );
+                && ( ( character == Tab )
+                  || ( character is CarriageReturn or Newline && ( Platform.IsAndroid || Platform.IsIos ) ) );
         }
 
-        public override bool KeyTyped( InputEvent? ev, char character )
+        public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             if ( _tf.Disabled )
             {
@@ -1625,10 +1620,10 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             // show up as a space when onlyFontChars is true.
             switch ( character )
             {
-                case BACKSPACE:
-                case TAB:
-                case NEWLINE:
-                case CARRIAGE_RETURN:
+                case Backspace:
+                case Tab:
+                case Newline:
+                case CarriageReturn:
                     break;
 
                 default:
@@ -1645,7 +1640,7 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
                 return false;
             }
 
-            if ( Platform.IsMac && Engine.Api.Input.IsKeyPressed( IInput.Keys.SYM ) )
+            if ( Platform.IsMac && Engine.Api.Input.IsKeyPressed( IInput.Keys.Sym ) )
             {
                 return true;
             }
@@ -1656,9 +1651,9 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
             }
             else
             {
-                bool enter     = character is CARRIAGE_RETURN or NEWLINE;
-                bool delete    = character == DELETE;
-                bool backspace = character == BACKSPACE;
+                bool enter     = character is CarriageReturn or Newline;
+                bool delete    = character == DeleteKey;
+                bool backspace = character == Backspace;
 
                 bool add = enter
                     ? _tf.WriteEnters

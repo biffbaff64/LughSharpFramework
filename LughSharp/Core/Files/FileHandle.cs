@@ -33,12 +33,12 @@ namespace LughSharp.Core.Files;
 [PublicAPI]
 public class FileHandle
 {
-    public PathType Type     { get; }
+    public PathType Type { get; }
 
     // ========================================================================
-    
+
     private readonly string _rawPath;
-    
+
     // ========================================================================
 
     public FileHandle( string? path, PathType type = PathType.Internal )
@@ -83,7 +83,7 @@ public class FileHandle
             case PathType.Local:
                 // Private app storage (Data/Data or AppData) - Persistence
                 return Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ),
-                                         path );
+                                     path );
 
             case PathType.External:
                 // User's documents or shared storage
@@ -104,12 +104,12 @@ public class FileHandle
 
     public FileHandle Child( string name )
     {
-        return new FileHandle( System.IO.Path.Combine( FullPath(), name ), Type );
+        return new FileHandle( Path.Combine( FullPath(), name ), Type );
     }
 
     public FileHandle Parent()
     {
-        return new FileHandle( System.IO.Path.GetDirectoryName( FullPath() ), Type );
+        return new FileHandle( Path.GetDirectoryName( FullPath() ), Type );
     }
 
     public string NameWithoutExtension()
@@ -119,7 +119,7 @@ public class FileHandle
 
     public string NameWithoutExtension( string path )
     {
-        return System.IO.Path.GetFileNameWithoutExtension( path );
+        return Path.GetFileNameWithoutExtension( path );
     }
 }
 

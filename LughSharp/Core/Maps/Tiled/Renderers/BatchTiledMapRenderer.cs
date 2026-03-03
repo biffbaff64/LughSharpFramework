@@ -49,10 +49,10 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     protected IBatch    Batch      { get; set; }
     protected Rectangle ViewBounds { get; set; }
     protected float     UnitScale  { get; set; }
-    protected float[]   Vertices   { get; set; } = new float[ NUM_VERTICES ];
+    protected float[]   Vertices   { get; set; } = new float[ NumVertices ];
 
-    protected const int   NUM_VERTICES       = 20;
-    protected const float DEFAULT_UNIT_SCALE = 1.0f;
+    protected const int   NumVertices       = 20;
+    protected const float DefaultUnitScale = 1.0f;
 
     // ========================================================================
 
@@ -66,7 +66,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// and <see cref="IBatch"/>
     /// </summary>
     protected BatchTileMapRenderer( TiledMap map, IBatch batch )
-        : this( map, DEFAULT_UNIT_SCALE, batch )
+        : this( map, DefaultUnitScale, batch )
     {
     }
 
@@ -74,7 +74,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// </summary>
     /// <param name="map"></param>
     /// <param name="unitScale"></param>
-    protected BatchTileMapRenderer( TiledMap map, float unitScale = DEFAULT_UNIT_SCALE )
+    protected BatchTileMapRenderer( TiledMap map, float unitScale = DefaultUnitScale )
         : this( map, unitScale, new SpriteBatch(), true )
     {
     }
@@ -289,7 +289,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
 
             if ( region.Texture != null )
             {
-                Batch.Draw( region.Texture, Vertices, 0, NUM_VERTICES );
+                Batch.Draw( region.Texture, Vertices, 0, NumVertices );
             }
         }
     }

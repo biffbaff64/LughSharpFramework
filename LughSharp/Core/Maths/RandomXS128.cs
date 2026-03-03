@@ -27,17 +27,17 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Maths;
 
 [PublicAPI]
-public class RandomXS128 : Random
+public class RandomXs128 : Random
 {
     /// <summary>
     /// Normalization constant for double.
     /// </summary>
-    private const double NORM_DOUBLE = 1.0 / ( 1L << 53 );
+    private const double NormDouble = 1.0 / ( 1L << 53 );
 
     /// <summary>
     /// Normalization constant for float.
     /// </summary>
-    private const double NORM_FLOAT = 1.0 / ( 1L << 24 );
+    private const double NormFloat = 1.0 / ( 1L << 24 );
 
     /// <summary>
     /// The first half of the internal state of this pseudo-random number generator.
@@ -57,7 +57,7 @@ public class RandomXS128 : Random
     /// This implementation creates a <see cref="System.Random"/> instance to generate the initial seed.
     /// </para>
     /// </summary>
-    public RandomXS128() : base( new Random().Next() )
+    public RandomXs128() : base( new Random().Next() )
     {
     }
 
@@ -65,7 +65,7 @@ public class RandomXS128 : Random
     /// Creates a new random number generator using a single long seed.
     /// </summary>
     /// <param name="seed"> the initial seed  </param>
-    public RandomXS128( int seed ) : base( seed )
+    public RandomXs128( int seed ) : base( seed )
     {
     }
 
@@ -74,7 +74,7 @@ public class RandomXS128 : Random
     /// </summary>
     /// <param name="seed0"> the first part of the initial seed </param>
     /// <param name="seed1"> the second part of the initial seed  </param>
-    public RandomXS128( long seed0, long seed1 )
+    public RandomXs128( long seed0, long seed1 )
     {
         SetState( seed0, seed1 );
     }
@@ -199,7 +199,7 @@ public class RandomXS128 : Random
     /// </summary>
     public override double NextDouble()
     {
-        return ( NextLong() >>> 11 ) * NORM_DOUBLE;
+        return ( NextLong() >>> 11 ) * NormDouble;
     }
 
     /// <summary>
@@ -211,7 +211,7 @@ public class RandomXS128 : Random
     /// </summary>
     public float NextFloat()
     {
-        return ( float )( ( NextLong() >> 40 ) * NORM_FLOAT );
+        return ( float )( ( NextLong() >> 40 ) * NormFloat );
     }
 
     /// <summary>

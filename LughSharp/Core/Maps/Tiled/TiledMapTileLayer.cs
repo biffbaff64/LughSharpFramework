@@ -104,10 +104,10 @@ public class TiledMapTileLayer : MapLayer
     [PublicAPI]
     public class Cell
     {
-        public const int ROTATE0   = 0;
-        public const int ROTATE90  = 1;
-        public const int ROTATE180 = 2;
-        public const int ROTATE270 = 3;
+        public const int Rotate0   = 0;
+        public const int Rotate90  = 1;
+        public const int Rotate180 = 2;
+        public const int Rotate270 = 3;
 
         private bool           _flipHorizontally;
         private bool           _flipVertically;

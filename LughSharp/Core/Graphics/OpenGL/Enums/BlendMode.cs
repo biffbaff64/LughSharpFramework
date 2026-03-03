@@ -29,21 +29,21 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum BlendMode
 {
-    Zero                  = IGL.GL_ZERO,
-    One                   = IGL.GL_ONE,
-    SrcColor              = IGL.GL_SRC_COLOR,
-    OneMinusSrcColor      = IGL.GL_ONE_MINUS_SRC_COLOR,
-    DstColor              = IGL.GL_DST_COLOR,
-    OneMinusDstColor      = IGL.GL_ONE_MINUS_DST_COLOR,
-    SrcAlpha              = IGL.GL_SRC_ALPHA,
-    OneMinusSrcAlpha      = IGL.GL_ONE_MINUS_SRC_ALPHA,
-    DstAlpha              = IGL.GL_DST_ALPHA,
-    OneMinusDstAlpha      = IGL.GL_ONE_MINUS_DST_ALPHA,
-    ConstantColor         = IGL.GL_CONSTANT_COLOR,
-    OneMinusConstantColor = IGL.GL_ONE_MINUS_CONSTANT_COLOR,
-    ConstantAlpha         = IGL.GL_CONSTANT_ALPHA,
-    OneMinusConstantAlpha = IGL.GL_ONE_MINUS_CONSTANT_ALPHA,
-    SrcAlphaSaturate      = IGL.GL_SRC_ALPHA_SATURATE
+    Zero                  = IGL.GLZero,
+    One                   = IGL.GLOne,
+    SrcColor              = IGL.GLSrcColor,
+    OneMinusSrcColor      = IGL.GLOneMinusSrcColor,
+    DstColor              = IGL.GLDstColor,
+    OneMinusDstColor      = IGL.GLOneMinusDstColor,
+    SrcAlpha              = IGL.GLSrcAlpha,
+    OneMinusSrcAlpha      = IGL.GLOneMinusSrcAlpha,
+    DstAlpha              = IGL.GLDstAlpha,
+    OneMinusDstAlpha      = IGL.GLOneMinusDstAlpha,
+    ConstantColor         = IGL.GLConstantColor,
+    OneMinusConstantColor = IGL.GLOneMinusConstantColor,
+    ConstantAlpha         = IGL.GLConstantAlpha,
+    OneMinusConstantAlpha = IGL.GLOneMinusConstantAlpha,
+    SrcAlphaSaturate      = IGL.GLSrcAlphaSaturate
 }
 
 // ========================================================================

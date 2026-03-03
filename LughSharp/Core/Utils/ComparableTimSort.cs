@@ -59,21 +59,21 @@ public class ComparableTimSort< T >
     /// of the array being sorted and the minimum merge sequence length.
     /// </para>
     /// </summary>
-    private const int MIN_MERGE = 32;
+    private const int MinMerge = 32;
 
     // When we get into galloping mode, we stay there until both runs
     // win less often than MIN_GALLOP consecutive times.
-    private const int MIN_GALLOP = 7;
+    private const int MinGallop = 7;
 
     // Maximum initial size of tmp array, which is used for merging. The array can grow
     // to accommodate demand. Unlike Tim's original C version, we do not allocate this
     // much storage when sorting smaller arrays. This change was required for performance.
-    private const int INITIAL_TMP_STORAGE_LENGTH = 256;
+    private const int InitialTmpStorageLength = 256;
 
     // Asserts have been placed in if-statements for performace.
     // To enable them, set this field to true.
     // If you modify this class, please do test the asserts!
-    private const bool ALLOW_ASSERTS = false; // true;
+    private const bool AllowAsserts = false; // true;
 
     private readonly int[] _runBase;
     private readonly int[] _runLen;
@@ -84,7 +84,7 @@ public class ComparableTimSort< T >
     // This controls when we get *into* galloping mode. It is initialized to Min_Gallop.
     // The mergeLo and mergeHi methods nudge it higher for random data, and lower for
     // highly structured data.
-    private int _minGallop = MIN_GALLOP;
+    private int _minGallop = MinGallop;
 
     // A stack of pending runs yet to be merged. Run i starts at address base[i] and
     // extends for len[i] elements. It's always true (so long as the indices are in
@@ -104,7 +104,7 @@ public class ComparableTimSort< T >
 
     public ComparableTimSort()
     {
-        _tmp     = new T[ INITIAL_TMP_STORAGE_LENGTH ];
+        _tmp     = new T[ InitialTmpStorageLength ];
         _runBase = new int[ 40 ];
         _runLen  = new int[ 40 ];
     }
@@ -120,9 +120,9 @@ public class ComparableTimSort< T >
         // Allocate temp storage (which may be increased later if necessary)
         int len = a.Length;
 
-        var newArray = new T[ len < ( 2 * INITIAL_TMP_STORAGE_LENGTH )
+        var newArray = new T[ len < ( 2 * InitialTmpStorageLength )
             ? len >>> 1
-            : INITIAL_TMP_STORAGE_LENGTH ];
+            : InitialTmpStorageLength ];
 
         _tmp = newArray;
 
@@ -155,7 +155,7 @@ public class ComparableTimSort< T >
         }
 
         // If array is small, do a "mini-TimSort" with no merges
-        if ( nRemaining < MIN_MERGE )
+        if ( nRemaining < MinMerge )
         {
             int initRunLen = CountRunAndMakeAscending( a, lo, hi );
 
@@ -238,7 +238,7 @@ public class ComparableTimSort< T >
         }
 
         // If array is small, do a "mini-TimSort" with no merges
-        if ( nRemaining < MIN_MERGE )
+        if ( nRemaining < MinMerge )
         {
             int initRunLen = CountRunAndMakeAscending( a, lo, hi );
             BinarySort( a, lo, hi, lo + initRunLen );
@@ -483,7 +483,7 @@ public class ComparableTimSort< T >
 
         var r = 0; // Becomes 1 if any 1 bits are shifted off
 
-        while ( n >= MIN_MERGE )
+        while ( n >= MinMerge )
         {
             r |=  n & 1;
             n >>= 1;
@@ -1006,7 +1006,7 @@ public class ComparableTimSort< T >
 
                 minGallop--;
             }
-            while ( ( count1 >= MIN_GALLOP ) || ( count2 >= MIN_GALLOP ) );
+            while ( ( count1 >= MinGallop ) || ( count2 >= MinGallop ) );
 
             if ( minGallop < 0 )
             {
@@ -1195,7 +1195,7 @@ public class ComparableTimSort< T >
 
                 minGallop--;
             }
-            while ( ( count1 >= MIN_GALLOP ) || ( count2 >= MIN_GALLOP ) );
+            while ( ( count1 >= MinGallop ) || ( count2 >= MinGallop ) );
 
             if ( minGallop < 0 )
             {

@@ -76,7 +76,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void LinkProgram( GLint program )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -92,7 +92,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void UseProgram( GLint program )
     {
-        if ( program == INVALID_SHADER_PROGRAM )
+        if ( program == InvalidShaderProgram )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -108,7 +108,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void GetProgramiv( GLint program, GLenum pname, GLint* parameters )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -122,7 +122,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void GetProgramiv( GLint program, GLenum pname, ref GLint[] parameters )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -141,7 +141,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public void GetProgramInfoLog( GLint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -155,7 +155,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public string GetProgramInfoLog( GLint program, GLsizei bufSize )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -176,7 +176,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc />
     public bool ValidateProgram( int program )
     {
-        if ( !Engine.GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !Engine.GL.IsProgram( program ) || ( program == InvalidShaderProgram ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }

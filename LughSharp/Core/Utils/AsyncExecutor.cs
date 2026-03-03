@@ -80,7 +80,7 @@ public class AsyncExecutor : IDisposable
                                                                                    // Wrap and rethrow as RuntimeException if needed, or just let it bubble up
                                                                                    throw new
                                                                                        RuntimeException( "Asynchronous task failed.",
-                                                                                           e );
+                                                                                                e );
                                                                                }
                                                                                finally
                                                                                {

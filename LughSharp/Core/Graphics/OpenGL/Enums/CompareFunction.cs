@@ -29,14 +29,14 @@ namespace LughSharp.Core.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum CompareFunction
 {
-    Never        = IGL.GL_NEVER,
-    Less         = IGL.GL_LESS,
-    Equal        = IGL.GL_EQUAL,
-    LessEqual    = IGL.GL_LEQUAL,
-    Greater      = IGL.GL_GREATER,
-    NotEqual     = IGL.GL_NOTEQUAL,
-    GreaterEqual = IGL.GL_GEQUAL,
-    Always       = IGL.GL_ALWAYS
+    Never        = IGL.GLNever,
+    Less         = IGL.GLLess,
+    Equal        = IGL.GLEqual,
+    LessEqual    = IGL.GLLequal,
+    Greater      = IGL.GLGreater,
+    NotEqual     = IGL.GLNotequal,
+    GreaterEqual = IGL.GLGequal,
+    Always       = IGL.GLAlways
 }
 
 // ========================================================================

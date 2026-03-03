@@ -38,7 +38,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// <summary>
     /// cubemap sides cache
     /// </summary>
-    private static readonly Cubemap.CubemapSide[] CubemapSides = Cubemap.CubemapSide.Values();
+    private static readonly Cubemap.CubemapSide[] _cubemapSides = Cubemap.CubemapSide.Values();
 
     /// <summary>
     /// the zero-based index of the active side
@@ -131,8 +131,8 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 
         foreach ( Cubemap.CubemapSide side in sides )
         {
-            Engine.GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
-                                            IGL.GL_COLOR_ATTACHMENT0,
+            Engine.GL.FramebufferTexture2D( IGL.GLFramebuffer,
+                                            IGL.GLColorAttachment0,
                                             side.GLTarget,
                                             glHandle,
                                             0 );
@@ -188,8 +188,8 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     {
         Guard.Against.Null( side );
 
-        Engine.GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
-                                        IGL.GL_COLOR_ATTACHMENT0,
+        Engine.GL.FramebufferTexture2D( IGL.GLFramebuffer,
+                                        IGL.GLColorAttachment0,
                                         side.GLTarget,
                                         ( uint )GetColorBufferTexture().GLTextureHandle,
                                         0 );
@@ -200,7 +200,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// </summary>
     public Cubemap.CubemapSide? GetSide()
     {
-        return _currentSide < 0 ? null : CubemapSides[ _currentSide ];
+        return _currentSide < 0 ? null : _cubemapSides[ _currentSide ];
     }
 }
 

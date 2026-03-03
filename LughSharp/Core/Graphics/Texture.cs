@@ -171,7 +171,7 @@ public class Texture : GLTexture, IManaged
     /// Creates a new Texture using the supplied <see cref="ITextureData"/>.
     /// </summary>
     public Texture( ITextureData data )
-        : this( IGL.GL_TEXTURE_2D, Engine.GL.CreateTexture( TextureTarget.Texture2D ), data )
+        : this( IGL.GLTexture2D, Engine.GL.CreateTexture( TextureTarget.Texture2D ), data )
     {
     }
 
@@ -225,18 +225,18 @@ public class Texture : GLTexture, IManaged
 
         Engine.GL.BindTexture( GLTarget, 0 );
 
-        if ( ColorFormat == LughFormat.ALPHA )
+        if ( ColorFormat == LughFormat.Alpha )
         {
             // Map Red -> Alpha, and force RGB to 1.0 (White)
-            int[] swizzle = { IGL.GL_ONE, IGL.GL_ONE, IGL.GL_ONE, IGL.GL_RED };
+            int[] swizzle = { IGL.GLOne, IGL.GLOne, IGL.GLOne, IGL.GLRed };
             Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D,
                                       ( int )TextureParameter.TextureSwizzleRgba,
                                       swizzle );
         }
-        else if ( ColorFormat == LughFormat.LUMINANCE_ALPHA )
+        else if ( ColorFormat == LughFormat.LuminanceAlpha )
         {
             // Map Red -> RGB (Luminance), Green -> Alpha
-            int[] swizzle = { IGL.GL_RED, IGL.GL_RED, IGL.GL_RED, IGL.GL_GREEN };
+            int[] swizzle = { IGL.GLRed, IGL.GLRed, IGL.GLRed, IGL.GLGreen };
             Engine.GL.TexParameteriv( ( int )TextureTarget.Texture2D,
                                       ( int )TextureParameter.TextureSwizzleRgba,
                                       swizzle );
