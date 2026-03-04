@@ -663,7 +663,7 @@ public class Skin : IDisposable
         }
         catch ( RuntimeException )
         {
-            // TODO:
+            // Ignored
         }
 
         // Check for explicit registration of ninepatch, sprite, or tiled drawable.
@@ -761,8 +761,8 @@ public class Skin : IDisposable
 
                    // ---------------------------
 
-                   var _ =>
-                       throw new RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" )
+                   var _ => throw new RuntimeException( $"Unable to copy, unknown "
+                                                      + $"drawable type: {drawable.GetType()}" )
                };
     }
 
@@ -779,17 +779,18 @@ public class Skin : IDisposable
     /// </summary>
     public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color tint )
     {
+        //@formatter:off
         ISceneDrawable newDrawable = drawable switch
-                                     {
-                                         TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
-                                         NinePatchDrawable patchDrawable      => patchDrawable.Tint( tint ),
-                                         SpriteDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
+         {
+             TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
+             NinePatchDrawable patchDrawable      => patchDrawable.Tint( tint ),
+             SpriteDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
 
-                                         // ----------------
+             // ----------------
 
-                                         var _ => throw new
-                                             RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" )
-                                     };
+             _ => throw new RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" )
+         };
+        //@formatter:on
 
         if ( newDrawable is BaseDrawable named )
         {
@@ -925,6 +926,8 @@ public class Skin : IDisposable
                 }
             }
         }
+        
+        GC.SuppressFinalize( this );
     }
 
     // ========================================================================

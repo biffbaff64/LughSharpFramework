@@ -125,6 +125,29 @@ public static class ListExtensions
         }
     }
 
+    extension< T >( List< T >? list )
+    {
+        public T? SafePop()
+        {
+            // 1. Check if we have anything to pop
+            if ( list == null || list.Count == 0 )
+            {
+                return default;
+            }
+
+            // 2. Grab the last index
+            int lastIndex = list.Count - 1;
+
+            // 3. Store the item to return it
+            T item = list[ lastIndex ];
+
+            // 4. Correctly reduce the size by 1
+            list.RemoveAt( lastIndex );
+
+            return item;
+        }
+    }
+
     /// <param name="target"></param>
     /// <typeparam name="T"></typeparam>
     extension< T >( List< T > target )
@@ -171,7 +194,7 @@ public static class ListExtensions
                 throw new RuntimeException( "List is empty." );
             }
 
-            T item = target[ ^1 ];
+            T item = target[ target.Count - 1 ];
 
             target.RemoveAt( target.Count - 1 );
 

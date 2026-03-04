@@ -22,10 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices.JavaScript;
+using System.Globalization;
+using System.Numerics;
 using System.Text;
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Utils.Json;
 
@@ -35,13 +39,17 @@ namespace LughSharp.Core.Utils.Json;
 [PublicAPI]
 public class JsonString
 {
-    private const int None        = 0;
-    private const int NeedsComma  = 1;
-    private const int CloseObject = '}' << 1;
-    private const int CloseArray  = ']' << 1;
-    private const int IsObject    = 0b1000000;
+    public StringBuilder Buffer { get; private set; }
 
-    private readonly StringBuilder  _buffer;
+    // ========================================================================
+
+    private const int DefaultBufferSize = 64;
+    private const int None              = 0;
+    private const int NeedsComma        = 1;
+    private const int CloseObject       = '}' << 1;
+    private const int CloseArray        = ']' << 1;
+    private const int IsObject          = 0b1000000;
+
     private readonly List< int >    _stack = [ ];
     private          int            _current;
     private          bool           _named;
@@ -50,18 +58,13 @@ public class JsonString
 
     // ========================================================================
 
-    public JsonString() : this( 64 )
+    /// <summary>
+    /// Default constructor. Creates a new JsonString with a default initial buffer size.
+    /// </summary>
+    /// <param name="initialBufferSize"></param>
+    public JsonString( int initialBufferSize = DefaultBufferSize )
     {
-    }
-
-    public JsonString( int initialBufferSize )
-    {
-        _buffer = new StringBuilder( initialBufferSize );
-    }
-
-    public StringBuilder GetBuffer()
-    {
-        return _buffer;
+        Buffer = new StringBuilder( initialBufferSize );
     }
 
     /// <summary>
@@ -91,7 +94,7 @@ public class JsonString
     {
         RequireCommaOrName();
 
-        _buffer.Append( '{' );
+        Buffer.Append( '{' );
         _stack.Add( _current );
         _current = CloseObject;
 
@@ -106,7 +109,7 @@ public class JsonString
     {
         RequireCommaOrName();
 
-        _buffer.Append( '[' );
+        Buffer.Append( '[' );
         _stack.Add( _current );
         _current = CloseArray;
 
@@ -118,103 +121,144 @@ public class JsonString
     /// </summary>
     public JsonString Value( object? value )
     {
-        if ( _quoteLongValues
-          && ( value instanceof Long || value instanceof double || value instanceof BigDecimal || value instanceof
-            bigInteger)) {
-            value = value.toString();
-        } else if ( value instanceof number) {
-            var  number    = ( JSType.Number )value;
-            long longValue = number.longValue();
+        if ( _quoteLongValues && ( value is long or double or decimal or BigInteger ) )
+        {
+            value = value.ToString();
+        }
+        else if ( value is ValueType && NumberUtils.IsNumeric( value ) )
+        {
+            // Convert to double to check if it's effectively a whole number
+            var dblValue  = Convert.ToDouble( value );
+            var longValue = ( long )dblValue;
 
-            if ( number.doubleValue() == longValue )
+            // If the double value is exactly the same as the long (e.g., 10.0 == 10)
+            // we strip the decimal for cleaner JSON.
+            if ( Math.Abs( dblValue - longValue ) < double.Epsilon )
             {
                 value = longValue;
             }
         }
+
         RequireCommaOrName();
-        _buffer.append( _outputType.quoteValue( value ) );
+        Buffer.Append( JsonOutput.QuoteValue( value, _outputType ) );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Value( string value )
     {
         RequireCommaOrName();
-        _buffer.append( _outputType.quoteValue( value ) );
+        Buffer.Append( JsonOutput.QuoteValue( value, _outputType ) );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Value( bool value )
     {
         RequireCommaOrName();
-        _buffer.append( value );
+        Buffer.Append( value );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Value( int value )
     {
         RequireCommaOrName();
-        _buffer.append( value );
+        Buffer.Append( value );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Value( long value )
     {
         if ( _quoteLongValues )
         {
-            value( Long.toString( value ) );
+            Value( value.ToString() );
         }
         else
         {
             RequireCommaOrName();
-            _buffer.append( value );
+            Buffer.Append( value );
         }
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Value( float value )
     {
         RequireCommaOrName();
-        _buffer.append( value );
+        Buffer.Append( value );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Value( double value )
     {
         if ( _quoteLongValues )
         {
-            value( double.toString( value ) );
+            Value( value.ToString( CultureInfo.InvariantCulture ) );
         }
         else
         {
             RequireCommaOrName();
-            _buffer.append( value );
+            Buffer.Append( value );
         }
 
         return this;
     }
 
-    /** Writes the specified JSON string, without quoting or escaping. */
+    /// <summary>
+    /// Writes the specified JSON string, without quoting or escaping.
+    /// </summary>
     public JsonString Json( string json )
     {
         RequireCommaOrName();
-        _buffer.append( json );
+        Buffer.Append( json );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
     private void RequireCommaOrName()
     {
         if ( ( _current & IsObject ) != 0 )
         {
             if ( !_named )
             {
-                throw new IllegalStateException( "Name must be set." );
+                throw new InvalidOperationException( "Name must be set." );
             }
 
             _named = false;
@@ -223,7 +267,7 @@ public class JsonString
         {
             if ( ( _current & NeedsComma ) != 0 )
             {
-                _buffer.append( ',' );
+                Buffer.Append( ',' );
             }
             else if ( _current != None ) //
             {
@@ -232,6 +276,11 @@ public class JsonString
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public JsonString Name( string name )
     {
         NameValue( name );
@@ -240,141 +289,212 @@ public class JsonString
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <exception cref="InvalidOperationException"></exception>
     private void NameValue( string name )
     {
         if ( ( _current & IsObject ) == 0 )
         {
-            throw new IllegalStateException( "Current item must be an object." );
+            throw new InvalidOperationException( "Current item must be an object." );
         }
 
         if ( ( _current & NeedsComma ) != 0 )
         {
-            _buffer.append( ',' );
+            Buffer.Append( ',' );
         }
         else
         {
             _current |= NeedsComma;
         }
 
-        _buffer.append( _outputType.quoteName( name ) );
-        _buffer.append( ':' );
+        Buffer.Append( JsonOutput.QuoteName( name, _outputType ) );
+        Buffer.Append( ':' );
     }
 
-    public JsonString object (string name) {
-        NameValue( Name );
-        _buffer.append( '{' );
-        _stack.add( _current );
-        _current = object;
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public JsonString Object( string name )
+    {
+        NameValue( name );
+        Buffer.Append( '{' );
+
+        _stack.Add( _current );
+        _current = CloseObject;
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public JsonString Array( string name )
     {
         NameValue( name );
-        _buffer.append( '[' );
-        _stack.add( _current );
-        _current = array;
+        Buffer.Append( '[' );
+
+        _stack.Add( _current );
+        _current = CloseArray;
 
         return this;
     }
 
-    /** Prefer calling the more specific set() methods. */
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Set( string name, object value )
     {
-        name( name );
-        value( value );
+        Name( name );
+        Value( value );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Set( string name, string value )
     {
         NameValue( name );
-        _buffer.append( _outputType.quoteValue( value ) );
+        Buffer.Append( JsonOutput.QuoteValue( value, _outputType ) );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Set( string name, bool value )
     {
         NameValue( name );
-        _buffer.append( value );
+        Buffer.Append( value );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Set( string name, int value )
     {
         NameValue( name );
-        _buffer.append( value );
+        Buffer.Append( value );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Set( string name, long value )
     {
         if ( _quoteLongValues )
         {
-            set( name, Long.toString( value ) );
+            Set( name, value.ToString() );
         }
         else
         {
             NameValue( name );
-            _buffer.append( value );
+            Buffer.Append( value );
         }
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Set( string name, float value )
     {
         NameValue( name );
-        _buffer.append( value );
+        Buffer.Append( value );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public JsonString Set( string name, double value )
     {
         if ( _quoteLongValues )
         {
-            set( name, double.toString( value ) );
+            Set( name, value.ToString( CultureInfo.InvariantCulture ) );
         }
         else
         {
             NameValue( name );
-            _buffer.append( value );
+            Buffer.Append( value );
         }
 
         return this;
     }
 
-    /** Writes the specified JSON string, without quoting or escaping. */
+    /// <summary>
+    /// Writes the specified JSON string, without quoting or escaping.
+    /// </summary>
     public JsonString Json( string name, string json )
     {
         NameValue( name );
-        _buffer.append( json );
+        Buffer.Append( json );
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public JsonString Pop()
     {
         if ( _named )
         {
-            throw new IllegalStateException( "Expected an object, array, or value since a name was set." );
+            throw new InvalidOperationException( "Expected an object, array, or value since a name was set." );
         }
 
-        _buffer.append( ( char )( _current >> 1 ) );
-        _current = _stack.size == 0 ? None : _stack.items[ --_stack.size ];
+        Buffer.Append( ( char )( _current >> 1 ) );
+
+        _current = _stack.Count == 0 ? None : _stack.SafePop();
 
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public JsonString Close()
     {
-        while ( _stack.size > 0 )
+        while ( _stack.Count > 0 )
         {
             Pop();
         }
@@ -382,17 +502,25 @@ public class JsonString
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void Reset()
     {
-        _buffer.setLength( 0 );
-        _stack.size = 0;
-        _current    = None;
-        _named      = false;
+        Buffer.Clear();
+        _stack.Clear();
+
+        _current = None;
+        _named   = false;
     }
 
-    public string ToString()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
     {
-        return _buffer.toString();
+        return Buffer.ToString();
     }
 }
 

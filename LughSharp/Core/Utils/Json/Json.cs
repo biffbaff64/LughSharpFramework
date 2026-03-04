@@ -114,8 +114,35 @@ public class Json
         return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <exception cref="SerializationException"></exception>
     public void CopyFields( object from, object to )
     {
+        Dictionary< string, FieldMetadata > toFields = GetFields( to.GetType() );
+
+        foreach ( KeyValuePair< string, FieldMetadata > entry in GetFields( from.GetType() ) )
+        {
+            FieldMetadata toField   = toFields[ entry.Key ];
+            FieldInfo     fromField = entry.Value.Field;
+
+            if ( toField == null )
+            {
+                throw new SerializationException( $"To object is missing field: {entry.Key}" );
+            }
+
+            try
+            {
+                toField.Field.SetValue( to, fromField.GetValue( from ) );
+            }
+            catch ( FieldAccessException ex )
+            {
+                throw new SerializationException( $"Error copying field: {fromField.Name}", ex );
+            }
+        }
     }
 
     /// <summary>
@@ -513,6 +540,12 @@ public class Json
         return Type.GetType( name );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="jsonData"></param>
+    /// <returns></returns>
     private object? ConvertPrimitive( Type? type, JsonValue jsonData )
     {
         if ( jsonData.IsNumber() )
@@ -582,12 +615,9 @@ public class Json
 
         Type enumType = value.GetType();
 
-        if ( Attribute.IsDefined( enumType, typeof( FlagsAttribute ) ) )
-        {
-            return value.ToString();
-        }
-
-        return Enum.GetName( enumType, value );
+        return Attribute.IsDefined( enumType, typeof( FlagsAttribute ) )
+            ? value.ToString()
+            : Enum.GetName( enumType, value );
     }
 
     /// <summary>

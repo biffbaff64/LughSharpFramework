@@ -73,6 +73,12 @@ public enum JsonOutputType
 [PublicAPI]
 public static class JsonOutput
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="outputType"></param>
+    /// <returns></returns>
     public static string? QuoteValue( object? value, JsonOutputType outputType )
     {
         if ( value == null )
@@ -135,21 +141,27 @@ public static class JsonOutput
         return quote ? EscapeQuote( stringValue ) : '"' + stringValue + '"';
     }
 
-    public static string QuoteName( string? value, JsonOutputType outputType )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="outputType"></param>
+    /// <returns></returns>
+    public static string QuoteName( string name, JsonOutputType outputType )
     {
         var quote = false;
 
-        for ( var i = 0; i < value.Length; i++ )
+        for ( var i = 0; i < name.Length; i++ )
         {
-            switch ( value[ i ] )
+            switch ( name[ i ] )
             {
                 case '\\':
                 case '\r':
                 case '\n':
                 case '\t':
-                    value = Escape( value, i );
+                    name = Escape( name, i );
                     quote = true;
-                    i     = value.Length;
+                    i     = name.Length;
 
                     break;
 
@@ -163,27 +175,40 @@ public static class JsonOutput
         switch ( outputType )
         {
             case JsonOutputType.Minimal:
-                if ( !value.Contains( "//" )
-                  && !value.Contains( "/*" )
-                  && RegexUtils.MinimalNamePatternRegex().Matches( value ).Count > 0 )
+                if ( !name.Contains( "//" )
+                  && !name.Contains( "/*" )
+                  && RegexUtils.MinimalNamePatternRegex().Matches( name ).Count > 0 )
                 {
-                    return value;
+                    return name;
                 }
 
                 break;
 
             case JsonOutputType.Javascript:
-                if ( RegexUtils.JavascriptPatternRegex().Matches( value ).Count > 0 )
+                if ( RegexUtils.JavascriptPatternRegex().Matches( name ).Count > 0 )
                 {
-                    return value;
+                    return name;
                 }
 
                 break;
+            
+            case JsonOutputType.Json:
+            default:
+                break;
         }
 
-        return quote ? EscapeQuote( value ) : '"' + value + '"';
+        return quote ? EscapeQuote( name ) : $"\"{name}\"";
     }
 
+    /// <summary>
+    /// Escapes the specified string value by replacing special characters with
+    /// their escape sequences.
+    /// </summary>
+    /// <param name="value">The string to be escaped.</param>
+    /// <param name="i">The index from which escaping begins in the string.</param>
+    /// <returns>
+    /// A new string with special characters replaced by their escape sequences.
+    /// </returns>
     private static string Escape( string value, int i )
     {
         var buffer = new StringBuilder( value.Length + 6 );

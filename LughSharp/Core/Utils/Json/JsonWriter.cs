@@ -22,9 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Globalization;
 using System.IO;
+using System.Numerics;
+using System.Runtime.InteropServices.JavaScript;
 
 using JetBrains.Annotations;
+
+using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Utils.Json;
 
@@ -32,46 +37,220 @@ namespace LughSharp.Core.Utils.Json;
 public class JsonWriter : IJsonWriter
 {
     public bool           QuoteLongValues { get; set; } = true;
-    public JsonOutputType OutputType      { get; set; }
-
-    private readonly TextWriter _writer;
+    public JsonOutputType OutputType      { get; set; } = JsonOutputType.Json;
+    public TextWriter?    Writer          { get; set; }
 
     // ========================================================================
 
-    public JsonWriter( TextWriter writer )
-    {
-        _writer = writer;
-    }
+    private readonly Stack< int > _stack = [ ];
 
-    public void Set( string typeName, string className )
-    {
-        throw new NotImplementedException();
-    }
+    private int  _current;
+    private bool _named;
 
-    public void Pop()
-    {
-    }
+    // ========================================================================
 
-    public void Array()
-    {
-    }
+    private const int None        = 0;
+    private const int NeedsComma  = 1;
+    private const int CloseObject = '}' << 1;
+    private const int CloseArray  = ']' << 1;
+    private const int IsObject    = 0b1000000;
 
-    public void Object()
-    {
-    }
+    // ========================================================================
 
-    public void Name( string? name )
+    /// <summary>
+    /// Default constructor. A Writer must be set before use.
+    /// </summary>
+    protected JsonWriter()
     {
     }
 
-    public void Value( string? convertToString )
+    public JsonWriter( TextWriter Writer )
     {
-        throw new NotImplementedException();
+        Writer = Writer;
     }
 
-    public void Value( object convertToString )
+    public void SetWriter( TextWriter Writer )
     {
-        throw new NotImplementedException();
+        Writer = Writer;
+    }
+
+    public JsonWriter Array()
+    {
+        RequireCommaOrName();
+
+        Writer?.Write( '[' );
+
+        _stack.Push( _current );
+        _current = CloseArray;
+
+        return this;
+    }
+
+    public JsonWriter Array( string? name )
+    {
+        NameValue( name );
+
+        return Array();
+    }
+
+    public JsonWriter Object()
+    {
+        RequireCommaOrName();
+
+        Writer?.Write( '{' );
+
+        _stack.Push( _current );
+        _current = CloseObject;
+
+        return this;
+    }
+
+    public JsonWriter Object( string? name )
+    {
+        NameValue( name );
+
+        return Object();
+    }
+
+    public JsonWriter Name( string? name )
+    {
+        NameValue( name );
+        _named = true;
+
+        return this;
+    }
+
+    /** Prefer calling the more specific value() methods. */
+    public JsonWriter Value( object? value )
+    {
+        if ( QuoteLongValues && ( value is long or double or decimal or BigInteger ) )
+        {
+            value = value.ToString();
+        }
+        else if ( value is ValueType && NumberUtils.IsNumeric( value ) )
+        {
+            // Convert to double to check if it's effectively a whole number
+            var dblValue  = Convert.ToDouble( value );
+            var longValue = ( long )dblValue;
+
+            // If the double value is exactly the same as the long (e.g., 10.0 == 10)
+            // we strip the decimal for cleaner JSON.
+            if ( Math.Abs( dblValue - longValue ) < double.Epsilon )
+            {
+                value = longValue;
+            }
+        }
+
+        RequireCommaOrName();
+        Writer?.Write( JsonOutput.QuoteValue( value, OutputType ) );
+
+        return this;
+    }
+
+    public JsonWriter Value( String value )
+    {
+        RequireCommaOrName();
+        Writer?.Write( JsonOutput.QuoteValue( value, OutputType ) );
+
+        return this;
+    }
+
+    public JsonWriter Value( bool value )
+    {
+        RequireCommaOrName();
+        Writer?.Write( value ? "true" : "false" );
+
+        return this;
+    }
+
+    public JsonWriter Value( int value )
+    {
+        RequireCommaOrName();
+        Writer?.Write( value.ToString() );
+
+        return this;
+    }
+
+    public JsonWriter Value( long value )
+    {
+        if ( QuoteLongValues )
+        {
+            Value( value.ToString() );
+        }
+        else
+        {
+            RequireCommaOrName();
+            Writer?.Write( value.ToString() );
+        }
+
+        return this;
+    }
+
+    public JsonWriter Value( float value )
+    {
+        RequireCommaOrName();
+        Writer?.Write( value.ToString( CultureInfo.InvariantCulture ) );
+
+        return this;
+    }
+
+    public JsonWriter Value( double value )
+    {
+        if ( QuoteLongValues )
+        {
+            Value( value.ToString( CultureInfo.InvariantCulture ) );
+        }
+        else
+        {
+            RequireCommaOrName();
+            Writer?.Write( value.ToString( CultureInfo.InvariantCulture ) );
+        }
+
+        return this;
+    }
+
+    private void RequireCommaOrName()
+    {
+        if ( ( _current & IsObject ) != 0 )
+        {
+            if ( !_named )
+            {
+                throw new InvalidOperationException( "Name must be set." );
+            }
+
+            _named = false;
+        }
+        else
+        {
+            if ( ( _current & NeedsComma ) != 0 )
+            {
+                Writer?.Write( ',' );
+            }
+            else if ( _current != None )
+            {
+                _current |= NeedsComma;
+            }
+        }
+    }
+
+    private void NameValue( string? name )
+    {
+        if ( ( _current & IsObject ) == 0 )
+        {
+            throw new InvalidOperationException( "Current item must be an object." );
+        }
+
+        if ( ( _current & NeedsComma ) != 0 )
+        {
+            Writer?.Write( ',' );
+        }
+        else
+        {
+            _current |= NeedsComma;
+        }
+
+        Writer?.Write( JsonOutput.QuoteName( name ?? "Not Set", OutputType ) );
+        Writer?.Write( ':' );
     }
 }
 

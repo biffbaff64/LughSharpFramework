@@ -301,7 +301,7 @@ public abstract class NumberUtils
         return ( ( value + 63 ) & -64 ) >> 6;
     }
 
-    public static bool IsNumeric( object value )
+    public static bool IsNumeric( object? value )
     {
         return value is sbyte
             or byte
