@@ -29,43 +29,65 @@ namespace LughSharp.Core.Files;
 [PublicAPI]
 public class StreamUtils
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="writer"></param>
-    public static void CloseQuietly( TextWriter? writer )
+    public static void CloseQuietly( object? resource )
     {
-        if ( writer != null )
+        if ( resource is IDisposable disposable )
         {
             try
             {
-                writer.Close();
+                disposable.Dispose();
             }
             catch ( Exception )
             {
-                // Ignore exceptions
+                // Ignore exceptions, but add logging here.
             }
         }
     }
+    
+//    public static void CloseQuietly( TextReader? reader )
+//    {
+//        if ( reader != null )
+//        {
+//            try
+//            {
+//                reader.Close();
+//            }
+//            catch ( Exception )
+//            {
+//                // Ignore exceptions
+//            }
+//        }
+//    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="stream"></param>
-    public static void CloseQuietly( Stream? stream )
-    {
-        if ( stream != null )
-        {
-            try
-            {
-                stream.Close();
-            }
-            catch ( Exception )
-            {
-                // Ignore exceptions
-            }
-        }
-    }
+//    public static void CloseQuietly( TextWriter? writer )
+//    {
+//        if ( writer != null )
+//        {
+//            try
+//            {
+//                writer.Close();
+//            }
+//            catch ( Exception )
+//            {
+//                // Ignore exceptions
+//            }
+//        }
+//    }
+
+//    public static void CloseQuietly( Stream? stream )
+//    {
+//        if ( stream != null )
+//        {
+//            try
+//            {
+//                stream.Close();
+//            }
+//            catch ( Exception )
+//            {
+//                // Ignore exceptions
+//            }
+//        }
+//    }
 }
 
 // ============================================================================

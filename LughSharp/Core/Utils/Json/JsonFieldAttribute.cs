@@ -27,8 +27,17 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Utils.Json;
 
 [PublicAPI]
-public interface IJsonWriter
+[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
+public class JsonFieldAttribute : Attribute
 {
+    public string? Name     { get; set; }
+    public bool    Required { get; set; }
+
+    public JsonFieldAttribute( string? name = null, bool required = false )
+    {
+        Name     = name;
+        Required = required;
+    }
 }
 
 // ============================================================================

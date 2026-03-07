@@ -23,9 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Globalization;
-using System.IO;
 using System.Numerics;
-using System.Runtime.InteropServices.JavaScript;
 
 using JetBrains.Annotations;
 
@@ -34,7 +32,7 @@ using LughSharp.Core.Maths;
 namespace LughSharp.Core.Utils.Json;
 
 [PublicAPI]
-public class JsonWriter : IJsonWriter
+public class JsonWriter : IDisposable
 {
     public bool           QuoteLongValues { get; set; } = true;
     public JsonOutputType OutputType      { get; set; } = JsonOutputType.Json;
@@ -64,14 +62,9 @@ public class JsonWriter : IJsonWriter
     {
     }
 
-    public JsonWriter( TextWriter Writer )
+    public JsonWriter( TextWriter writer )
     {
-        Writer = Writer;
-    }
-
-    public void SetWriter( TextWriter Writer )
-    {
-        Writer = Writer;
+        Writer = writer;
     }
 
     public JsonWriter Array()
@@ -120,7 +113,28 @@ public class JsonWriter : IJsonWriter
         return this;
     }
 
-    /** Prefer calling the more specific value() methods. */
+    /// <summary>
+    /// Writes the specified JSON string, without quoting or escaping.
+    /// </summary>
+    public JsonWriter Json( string json )
+    {
+        RequireCommaOrName();
+        Writer?.Write( json );
+
+        return this;
+    }
+
+    /// <summary>
+    /// Writes the specified JSON string, without quoting or escaping.
+    /// </summary>
+    public JsonWriter Json( string name, string json )
+    {
+        NameValue( name );
+        Writer?.Write( json );
+
+        return this;
+    }
+
     public JsonWriter Value( object? value )
     {
         if ( QuoteLongValues && ( value is long or double or decimal or BigInteger ) )
@@ -142,12 +156,13 @@ public class JsonWriter : IJsonWriter
         }
 
         RequireCommaOrName();
+        
         Writer?.Write( JsonOutput.QuoteValue( value, OutputType ) );
 
         return this;
     }
 
-    public JsonWriter Value( String value )
+    public JsonWriter Value( string value )
     {
         RequireCommaOrName();
         Writer?.Write( JsonOutput.QuoteValue( value, OutputType ) );
@@ -209,6 +224,110 @@ public class JsonWriter : IJsonWriter
         return this;
     }
 
+    public JsonWriter Set( string name, object value )
+    {
+        Name( name );
+        Value( value );
+
+        return this;
+    }
+
+    public JsonWriter Set( string name, string value )
+    {
+        NameValue( name );
+        Writer?.Write( JsonOutput.QuoteValue( value, OutputType ) );
+
+        return this;
+    }
+
+    public JsonWriter Set( string name, bool value )
+    {
+        NameValue( name );
+        Writer?.Write( value ? "true" : "false" );
+
+        return this;
+    }
+
+    public JsonWriter Set( string name, int value )
+    {
+        NameValue( name );
+        Writer?.Write( value.ToString() );
+
+        return this;
+    }
+
+    public JsonWriter Set( string name, long value )
+    {
+        if ( QuoteLongValues )
+        {
+            Set( name, value.ToString() );
+        }
+        else
+        {
+            NameValue( name );
+            Writer?.Write( value.ToString() );
+        }
+
+        return this;
+    }
+
+    public JsonWriter Set( string name, float value )
+    {
+        NameValue( name );
+        Writer?.Write( value.ToString( CultureInfo.InvariantCulture ) );
+
+        return this;
+    }
+
+    public JsonWriter Set( string name, double value )
+    {
+        if ( QuoteLongValues )
+        {
+            Set( name, value.ToString( CultureInfo.InvariantCulture ) );
+        }
+        else
+        {
+            NameValue( name );
+            Writer?.Write( value.ToString( CultureInfo.InvariantCulture ) );
+        }
+
+        return this;
+    }
+
+    public JsonWriter Pop()
+    {
+        if ( _named )
+        {
+            throw new InvalidOperationException( "Expected an object, array, or value since a name was set." );
+        }
+
+        Writer?.Write( ( char )( _current >> 1 ) );
+
+        _current = _stack.Count == 0 ? None : _stack.Pop();
+
+        return this;
+    }
+
+    public void Write( char[] cbuf, int off, int len )
+    {
+        Writer?.Write( cbuf, off, len );
+    }
+
+    public void Flush()
+    {
+        Writer?.Flush();
+    }
+
+    /// <summary>
+    /// Closes the writer, after clearing all objects from the stack.
+    /// </summary>
+    public void Close()
+    {
+        _stack.Clear();
+
+        Writer?.Close();
+    }
+
     private void RequireCommaOrName()
     {
         if ( ( _current & IsObject ) != 0 )
@@ -251,6 +370,24 @@ public class JsonWriter : IJsonWriter
 
         Writer?.Write( JsonOutput.QuoteName( name ?? "Not Set", OutputType ) );
         Writer?.Write( ':' );
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            Close();
+        }
     }
 }
 

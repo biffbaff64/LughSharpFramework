@@ -29,12 +29,12 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public class LughFormat
 {
-    public const int Alpha           = 1; // Was GDX_2D_FORMAT_ALPHA
+    public const int Alpha          = 1; // Was GDX_2D_FORMAT_ALPHA
     public const int LuminanceAlpha = 2; // Was GDX_2D_FORMAT_LUMINANCE_ALPHA
-    public const int RGB888          = 3; // Was GDX_2D_FORMAT_RGB888
-    public const int RGBA8888        = 4; // Was GDX_2D_FORMAT_RGBA8888
-    public const int RGB565          = 5; // Was GDX_2D_FORMAT_RGB565
-    public const int RGBA4444        = 6; // Was GDX_2D_FORMAT_RGBA4444
+    public const int RGB888         = 3; // Was GDX_2D_FORMAT_RGB888
+    public const int RGBA8888       = 4; // Was GDX_2D_FORMAT_RGBA8888
+    public const int RGB565         = 5; // Was GDX_2D_FORMAT_RGB565
+    public const int RGBA4444       = 6; // Was GDX_2D_FORMAT_RGBA4444
     public const int IndexedColor   = 7; // Was GDX_2D_FORMAT_COLOR_INDEX
 
     // ------------------------------------------

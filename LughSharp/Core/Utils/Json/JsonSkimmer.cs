@@ -22,13 +22,155 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Json;
 
+/// <summary>
+/// Lightweight event-based JSON parser. All values are provided as strings to reduce work
+/// when many values are ignored.
+/// </summary>
 [PublicAPI]
 public class JsonSkimmer
 {
+    public bool IsStopped { get; set; }
+    
+    // ========================================================================
+
+    protected readonly List< char > Buffer = [ ];
+
+    // ========================================================================
+
+    private JsonSkimmer.JsonToken _nameString;
+    private JsonSkimmer.JsonToken _value;
+
+    private int[] _stack = new int[ 8 ];
+
+    // ========================================================================
+
+    public JsonSkimmer()
+    {
+        _nameString = new JsonSkimmer.JsonToken( Buffer );
+        _value      = new JsonSkimmer.JsonToken( Buffer );
+    }
+
+    public void Parse( string json )
+    {
+        char[] data = json.ToCharArray();
+        
+        Parse( data, 0, data.Length );
+    }
+
+    public void Parse( TextReader reader )
+    {
+    }
+
+    public void Parse( StreamReader input )
+    {
+    }
+
+    public void Parse( FileInfo file )
+    {
+    }
+
+    public void Parse( char[] data, int offset, int length )
+    {
+    }
+
+    /// <summary>
+    /// Called when the start of an object or array is encountered in the JSON.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="isObject"> True: an <c>object</c> was encountered, False: an <c>array</c> was encountered. </param>
+    protected virtual void Push( JsonToken? name, bool isObject )
+    {
+    }
+
+    /// <summary>
+    /// Called when the end of an object or array is encountered in the JSON.
+    /// </summary>
+    protected virtual void Pop()
+    {
+    }
+
+    /// <summary>
+    /// Called when a value is encountered in the JSON.
+    /// </summary>
+    protected virtual void Value( JsonToken? name, JsonToken value )
+    {
+    }
+    
+    // ========================================================================
+    // ========================================================================
+
+    [PublicAPI]
+    public class JsonToken
+    {
+        [PublicAPI]
+        public enum TokenType
+        {
+            NullValue,
+            TrueValue,
+            FalseValue,
+            Other,
+        }
+
+        // ========================================================================
+
+        public char[]    Chars       { get; set; }
+        public int       Start       { get; set; }
+        public int       Length      { get; set; }
+        public TokenType Type        { get; set; } = TokenType.Other;
+        public bool      IsUnEscaped { get; set; }
+
+        // ========================================================================
+
+        private readonly List< char > _buffer;
+
+        // ========================================================================
+
+        public JsonToken( List< char > buffer )
+        {
+            _buffer = buffer;
+        }
+
+        public JsonValue Value()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals( string str )
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// If <see cref="UnEscape"/> is true, an unescaped string is allocated for
+        /// the comparison.
+        /// </summary>
+        public bool EqualsString( string str )
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Allocates an unescaped string.
+        /// </summary>
+        /// <returns> <c>null</c> if this token represents null. </returns>
+        public override string ToString()
+        {
+            throw new NotImplementedException();
+        }
+
+        private string UnEscape()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 
 // ============================================================================

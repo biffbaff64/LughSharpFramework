@@ -71,7 +71,7 @@ namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 public unsafe partial class GLBindings : IGLBindings
 {
     public const int InvalidShaderProgram = -1;
-    public const int InvalidShader         = -1;
+    public const int InvalidShader        = -1;
 
     // ========================================================================
 
@@ -135,6 +135,40 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
+    /// <inheritdoc />
+    public void GetIntegerv( GLenum pname, GLint* data )
+    {
+        GetDelegateForFunction< PFNGLGETINTEGERVPROC >( "glGetIntegerv", out _glGetIntegerv );
+
+        _glGetIntegerv( pname, data );
+    }
+
+    /// <inheritdoc />
+    public void GetIntegerv( GLenum pname, ref GLint[] data )
+    {
+        GetDelegateForFunction< PFNGLGETINTEGERVPROC >( "glGetIntegerv", out _glGetIntegerv );
+
+        fixed ( GLint* p = &data[ 0 ] )
+        {
+            _glGetIntegerv( pname, p );
+        }
+    }
+
+    /// <inheritdoc />
+    public void GetIntegerv( GLenum pname, out int data )
+    {
+        // Create a temporary array to hold the result from the underlying OpenGL method.
+        var tempArray = new int[ 1 ];
+
+        // Call the original method with the temporary array.
+        GetIntegerv( pname, ref tempArray );
+
+        // Assign the value from the temporary array to the out parameter.
+        data = tempArray[ 0 ];
+    }
+
+    // ========================================================================
+    
     /// <inheritdoc />
     public (int major, int minor) GetOpenGLVersion()
     {
@@ -580,40 +614,6 @@ public unsafe partial class GLBindings : IGLBindings
         {
             _glGetFloatv( pname, p );
         }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetIntegerv( GLenum pname, GLint* data )
-    {
-        GetDelegateForFunction< PFNGLGETINTEGERVPROC >( "glGetIntegerv", out _glGetIntegerv );
-
-        _glGetIntegerv( pname, data );
-    }
-
-    /// <inheritdoc />
-    public void GetIntegerv( GLenum pname, ref GLint[] data )
-    {
-        GetDelegateForFunction< PFNGLGETINTEGERVPROC >( "glGetIntegerv", out _glGetIntegerv );
-
-        fixed ( GLint* p = &data[ 0 ] )
-        {
-            _glGetIntegerv( pname, p );
-        }
-    }
-
-    /// <inheritdoc />
-    public void GetIntegerv( GLenum pname, out int data )
-    {
-        // Create a temporary array to hold the result from the underlying OpenGL method.
-        var tempArray = new int[ 1 ];
-
-        // Call the original method with the temporary array.
-        GetIntegerv( pname, ref tempArray );
-
-        // Assign the value from the temporary array to the out parameter.
-        data = tempArray[ 0 ];
     }
 
     // ========================================================================

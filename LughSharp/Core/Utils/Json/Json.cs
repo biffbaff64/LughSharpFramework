@@ -22,13 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 
 using JetBrains.Annotations;
 
@@ -864,11 +859,14 @@ public class Json
 
         try
         {
-            WriteValue( obj, knownType, elementType );
+            using ( JsonWriter )
+            {
+                WriteValue( obj, knownType, elementType );
+            }
         }
-        finally
+        catch ( IOException ex )
         {
-            StreamUtils.CloseQuietly( writer );
+            throw new SerializationException( "Error writing object.", ex );
         }
     }
 
@@ -1076,7 +1074,7 @@ public class Json
         }
         catch ( Exception ex )
         {
-            _classToDefaultValues[ type ] = null!; //TODO: Or remove?
+            _classToDefaultValues[ type ] = null!;
 
             return null;
         }

@@ -41,7 +41,7 @@ public class SerializationException : System.Runtime.Serialization.Serialization
     {
     }
 
-    public SerializationException( string message, Exception inner )
+    public SerializationException( string message, Exception? inner )
         : base( message, inner )
     {
     }

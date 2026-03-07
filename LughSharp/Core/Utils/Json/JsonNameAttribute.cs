@@ -22,23 +22,19 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Utils;
+namespace LughSharp.Core.Utils.Json;
 
 [PublicAPI]
-[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
-public class JsonFieldAttribute : Attribute
+[AttributeUsage( AttributeTargets.Field )]
+public class JsonNameAttribute : Attribute
 {
-    public string? Name     { get; set; }
-    public bool    Required { get; set; }
+    public string Name { get; }
 
-    public JsonFieldAttribute( string? name = null, bool required = false )
+    public JsonNameAttribute( string name )
     {
-        Name     = name;
-        Required = required;
+        Name = name;
     }
 }
 

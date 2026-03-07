@@ -50,7 +50,7 @@ public class SpriteBatch : IBatch
 {
     public const int RenderingOptionFlipX = 1 << 0;
     public const int RenderingOptionFlipY = 1 << 1;
-    public const int RenderingOptionFont   = 1 << 2;
+    public const int RenderingOptionFont  = 1 << 2;
 
     // ========================================================================
 
@@ -84,8 +84,8 @@ public class SpriteBatch : IBatch
     private const int VerticesPerSprite = 4;     // Number of vertices per sprite (quad)
     private const int IndicesPerSprite  = 6;     // Number of indices per sprite (two triangles)
     private const int MaxVertexIndex    = 32767; //
-    private const int MaxSprites         = 8191;  //
-    private const int MaxQuads           = 100;   //
+    private const int MaxSprites        = 8191;  //
+    private const int MaxQuads          = 100;   //
 
     // ========================================================================
 
@@ -178,19 +178,13 @@ public class SpriteBatch : IBatch
         _maxVertices     = size * VerticesPerSprite * VertexConstants.VertexSize;
         _maxTextureUnits = QueryMaxSupportedTextureUnits();
 
-        CreateWhitePixel();
-
-        // 1. Create the "Container"
+        // Create and link the Vertex Data, linking _vbo to _vao.
+        // Then Create and Link the Index Data, linking _ebo to _vao.
         CreateVao();
-
-        // 2. Create and Link the Vertex Data
         CreateVbo( size );
         SetupVertexAttributes( _shader ); // This links _vbo to _vao
-
-        // 3. Create and Link the Index Data
         CreateEbo( size ); // This links _ebo to _vao
 
-        // 4. Close the "Container"
         Engine.GL.BindVertexArray( 0 );
 
         // Determine the vertex data type based on OpenGL version.
@@ -311,7 +305,6 @@ public class SpriteBatch : IBatch
             Engine.GL.Enable( EnableCap.Blend );
             Engine.GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
 
-            // Use your actual window width and height
             Engine.GL.Viewport( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
 
             // Shader and Pipeline setup
@@ -350,10 +343,12 @@ public class SpriteBatch : IBatch
             LastTexture       = null;
 
             // Restore the original color mask state
-            Engine.GL.ColorMask( _originalColorMaskR, _originalColorMaskG, _originalColorMaskB, _originalColorMaskA );
+            Engine.GL.ColorMask( _originalColorMaskR,
+                                 _originalColorMaskG,
+                                 _originalColorMaskB,
+                                 _originalColorMaskA );
 
-            // Instead of a mysterious variable, restore to the "Standard" 
-            // engine default (usually true for 3D, false for 2D).
+            // Restore to the "Standard" engine default (usually true for 3D, false for 2D).
             Engine.GL.DepthMask( true );
 
             // Restore the EnableCap.DepthTest state we saved in Begin()
@@ -405,22 +400,17 @@ public class SpriteBatch : IBatch
                 return;
             }
 
-            // 1. Prepare State & Stats
             RenderCalls++;
             TotalRenderCalls++;
 
             var spritesInBatch = ( int )( Idx / ( long )( VerticesPerSprite * VertexConstants.VertexSize ) );
             MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
 
-            // 2. Texture Management
             if ( LastTexture == null )
             {
-                #if DEBUG
-                LastTexture = _whitePixel;
-                #else
                 Idx = 0;
+
                 return;
-                #endif
             }
 
             // Bind Texture to specific unit and update shader uniform
@@ -432,7 +422,7 @@ public class SpriteBatch : IBatch
                 Engine.GL.Uniform1I( _textureLocation, _currentTextureIndex );
             }
 
-            // 3. Sync CPU Data to GPU (The Missing Link)
+            // Sync CPU Data to GPU
             // We use the raw VBO handle directly to ensure it works regardless of Mesh state
             Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
@@ -444,13 +434,12 @@ public class SpriteBatch : IBatch
                 }
             }
 
-            // 4. Final State Assertions (Critical for Core Profile)
+            // Final State Assertions (Critical for Core Profile)
             _shader?.Bind();
 
             Engine.GL.BindVertexArray( _vao );
             Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, _ebo ); // Links indices to VAO
 
-            // 5. Blending
             if ( BlendingEnabled )
             {
                 Engine.GL.Enable( EnableCap.Blend );
@@ -464,14 +453,11 @@ public class SpriteBatch : IBatch
                 Engine.GL.Disable( EnableCap.Blend );
             }
 
-            // 6. Draw
-            // 4 = Triangles, 5125 = Unsigned Int
             Engine.GL.DrawElements( ( int )PrimitiveType.Triangles,
                                     spritesInBatch * 6,
                                     ( int )DrawElementsType.UnsignedInt,
                                     IntPtr.Zero );
 
-            // 7. Reset
             Idx = 0;
         }
     }
@@ -615,7 +601,7 @@ public class SpriteBatch : IBatch
             Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
             // 2. Define constants in BYTES
-            const int FSize = sizeof( float );
+            const int FSize  = sizeof( float );
             const int Stride = VertexConstants.VertexSize * FSize; // 5 * 4 = 20 bytes
 
             // 3. Position: Location 0 (a_position vec2)
@@ -2052,22 +2038,6 @@ public class SpriteBatch : IBatch
     ~SpriteBatch()
     {
         Dispose( false );
-    }
-
-    // ========================================================================
-
-    private Texture? _whitePixel;
-
-    private void CreateWhitePixel()
-    {
-        // Create a 1x1 array with a single white pixel (RGBA: 255, 255, 255, 255)
-        var pixmap = new Pixmap( 1, 1, LughFormat.RGBA8888 );
-        pixmap.SetColor( Color.White );
-        pixmap.FillWithCurrentColor();
-
-        var textureData = new PixmapTextureData( pixmap, LughFormat.RGBA8888, false, false );
-
-        _whitePixel = new Texture( textureData );
     }
 
     // ========================================================================

@@ -7,7 +7,7 @@
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <Title>LughSharp</Title>
         <Authors>Richard Ikin</Authors>
-        <Version>0.0.1-beta3.3</Version>
+        <Version>0.0.1-beta3.4</Version>
         <Description>C# 2D/3D Game Framework.</Description>
         <RepositoryUrl>https://github.com/biffbaff64/LughSharp</RepositoryUrl>
         <LangVersion>preview</LangVersion>
@@ -20,7 +20,7 @@
         <PackageTags>CSharp;2D;Framework;OpenGL;</PackageTags>
         <Copyright>Copyright 2024 Richard Ikin</Copyright>
         <Company>Richard Ikin</Company>
-        <PackageReleaseNotes>SpriteBatch/Mesh rendering issues fixed. TexturePacker up and running.</PackageReleaseNotes>
+        <PackageReleaseNotes>TiledMap support. Basic Scene2D support, the rest is to follow. </PackageReleaseNotes>
         <UserSecretsId>15077a63-55d3-46e9-b882-0b5cf985e7cc</UserSecretsId>
         <AssemblyName>LughSharp</AssemblyName>
         <RootNamespace>LughSharp</RootNamespace>

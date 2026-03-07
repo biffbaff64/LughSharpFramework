@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -17,6 +18,7 @@ using LughSharp.Core.Maps.Tiled.Loaders;
 using LughSharp.Core.Maps.Tiled.Renderers;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
@@ -59,8 +61,8 @@ public class MainGame : Game
 
     private SpriteBatch?                _spriteBatch;
     private AssetManager?               _assetManager;
-    private OrthographicGameCamera?     _tiledCam;
-    private OrthographicGameCamera?     _gameCam;
+    private OrthographicGameCamera?     _tiledMapCam;
+    private OrthographicGameCamera?     _spriteCam;
     private Texture?                    _image1;
     private Texture?                    _image2;
     private TextureRegion?              _star;
@@ -94,11 +96,16 @@ public class MainGame : Game
     [SupportedOSPlatform( "windows" )]
     public override void Create()
     {
+        // Do not create a new SpriteBatch before this point, as OpenGL will not be ready.
         _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
 
         CreateCameras();
         CreateAssets();
+        CreateStage();
+        CreateFont();
+        CreateFreeTypeFont();
+        CreateSprites();
         CreateMap();
 
         Logger.Debug( "Done" );
@@ -121,11 +128,11 @@ public class MainGame : Game
 
         // --------------------------------------
 
-        if ( _tiledCam is { IsInUse: true } )
+        if ( _tiledMapCam is { IsInUse: true } )
         {
-            _tiledCam.Update();
+            _tiledMapCam.Update();
 
-            _mapRenderer?.SetView( _tiledCam.Camera );
+            _mapRenderer?.SetView( _tiledMapCam.Camera );
             _mapRenderer?.Render();
         }
 
@@ -135,16 +142,16 @@ public class MainGame : Game
         {
             _spriteBatch.EnableBlending();
 
-            if ( _gameCam is { IsInUse: true } )
+            if ( _spriteCam is { IsInUse: true } )
             {
-                _gameCam.Viewport?.Apply( true );
-                _spriteBatch.SetProjectionMatrix( _gameCam.Camera.Combined );
+                _spriteCam.Viewport?.Apply( true );
+                _spriteBatch.SetProjectionMatrix( _spriteCam.Camera.Combined );
                 _spriteBatch.Begin();
 
-                _gameCam.Position.X = 0;
-                _gameCam.Position.Y = 0;
-                _gameCam.Position.Z = 0;
-                _gameCam.Update();
+                _spriteCam.Position.X = 0;
+                _spriteCam.Position.Y = 0;
+                _spriteCam.Position.Z = 0;
+                _spriteCam.Update();
 
                 _spriteBatch.End();
             }
@@ -167,8 +174,8 @@ public class MainGame : Game
     /// <param name="height">The new height in pixels.</param>
     public override void Resize( int width, int height )
     {
-        _tiledCam?.ResizeViewport( width, height );
-        _gameCam?.ResizeViewport( width, height );
+        _tiledMapCam?.ResizeViewport( width, height );
+        _spriteCam?.ResizeViewport( width, height );
 
         _stage?.Viewport.Update( width, height );
     }
@@ -181,8 +188,6 @@ public class MainGame : Game
     /// </summary>
     public override void Dispose()
     {
-        Logger.Checkpoint();
-
         Dispose( true );
         GC.SuppressFinalize( this );
     }
@@ -195,8 +200,8 @@ public class MainGame : Game
             {
                 _assetManager?.Dispose();
                 _spriteBatch?.Dispose();
-                _tiledCam?.Dispose();
-                _gameCam?.Dispose();
+                _tiledMapCam?.Dispose();
+                _spriteCam?.Dispose();
                 _image1?.Dispose();
                 _image2?.Dispose();
                 _stage?.Dispose();
@@ -204,7 +209,7 @@ public class MainGame : Game
 
                 // TODO:
                 // Should Sprite() implement IDisposable, or should I leave that up to
-                // any extending classes? Maybe imlplement IDisposable in Sprite() and
+                // any extending classes? Maybe implement IDisposable in Sprite() and
                 // allow ( and encourage ) extending classes to override it?
                 _sprite  = null;
                 _sprite2 = null;
@@ -224,31 +229,31 @@ public class MainGame : Game
     {
         const float Zoom = 1f;
 
-        _tiledCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
-                                                Engine.Api.Graphics.WindowHeight,
-                                                name: "TILEDCamera" );
+        _tiledMapCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
+                                                   Engine.Api.Graphics.WindowHeight,
+                                                   name: "TILEDCamera" );
 
-        _tiledCam.Camera.Near = CameraData.DefaultNearPlane;
-        _tiledCam.Camera.Far  = CameraData.DefaultFarPlane;
-        _tiledCam.IsInUse     = true;
-        _tiledCam.SetZoomDefault( Zoom );
-        _tiledCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
-        _tiledCam.Update();
+        _tiledMapCam.Camera.Near = CameraData.DefaultNearPlane;
+        _tiledMapCam.Camera.Far  = CameraData.DefaultFarPlane;
+        _tiledMapCam.IsInUse     = true;
+        _tiledMapCam.SetZoomDefault( Zoom );
+        _tiledMapCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
+        _tiledMapCam.Update();
 
         // --------------------------------------
 
-        _gameCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
-                                               Engine.Api.Graphics.WindowHeight,
-                                               name: "HUDCamera" );
+        _spriteCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
+                                                 Engine.Api.Graphics.WindowHeight,
+                                                 name: "HUDCamera" );
 
-        _gameCam.Camera.Near = CameraData.DefaultNearPlane;
-        _gameCam.Camera.Far  = CameraData.DefaultFarPlane;
-        _gameCam.IsInUse     = true;
-        _gameCam.SetZoomDefault( Zoom );
+        _spriteCam.Camera.Near = CameraData.DefaultNearPlane;
+        _spriteCam.Camera.Far  = CameraData.DefaultFarPlane;
+        _spriteCam.IsInUse     = true;
+        _spriteCam.SetZoomDefault( Zoom );
 
         // Set initial camera position
-        _gameCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
-        _gameCam.Update();
+        _spriteCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
+        _spriteCam.Update();
     }
 
     private void CreateAssets()
@@ -256,23 +261,18 @@ public class MainGame : Game
         _image1 = new Texture( Assets.CompleteStar );
         _image2 = new Texture( Assets.CompleteStar );
         _star   = new TextureRegion( new Texture( Assets.CompleteStar ) );
-
-        CreateStage();
-        CreateFont();
-//        CreateFreeTypeFont(); // Not working yet
-        CreateSprites();
     }
 
     private void CreateStage()
     {
-        if ( _gameCam == null )
+        if ( _spriteCam == null )
         {
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
         var texture = new Texture( Assets.HudPanel );
 
-        _stage = new Stage( _gameCam.Viewport );
+        _stage = new Stage( _spriteCam.Viewport );
         _hudActor = new Scene2DImage( texture )
         {
             IsVisible = true
@@ -281,49 +281,62 @@ public class MainGame : Game
 
         // --------------------------------------
 
-        var style = new ImageButton.ImageButtonStyle
-        {
-            ImageUp   = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
-            ImageDown = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) )
-        };
-        _imageButton = new ImageButton( style )
-        {
-            IsVisible = true
-        };
-        _imageButton.SetPosition( 0, 0 );
+        var skin = new Skin( new FileInfo( @"Assets\\Skins\\uiskin.json" ) );
+        
+        // --------------------------------------
+
+//        var style = new ImageButton.ImageButtonStyle
+//        {
+//            ImageUp   = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
+//            ImageDown = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) )
+//        };
+//        _imageButton = new ImageButton( style )
+//        {
+//            IsVisible = true
+//        };
+//        _imageButton.SetPosition( 0, 0 );
 
         // --------------------------------------
 
-        var windowStyle = new Window.WindowStyle
-        {
-            TitleFont      = _font,
-            TitleFontColor = Color.White,
-            Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
-        };
-        _windowActor = new Window( "Window Title", windowStyle )
-        {
-            IsVisible = true
-        };
-        _windowActor.SetPosition( 200, 180 );
+//        var windowStyle = new Window.WindowStyle
+//        {
+//            TitleFont      = _font,
+//            TitleFontColor = Color.White,
+//            Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
+//        };
+//        _windowActor = new Window( "Window Title", windowStyle )
+//        {
+//            IsVisible = true
+//        };
+//        _windowActor.SetPosition( 200, 180 );
 
         // --------------------------------------
 
-        var skin = new Skin( new FileInfo( Assets.ProgressBarSkin ) );
+//        var atlas         = new TextureAtlas( new FileInfo( Assets.ProgressBarSkinAtlas ) );
+//        var styleRegistry = new StyleRegistry();
+//        styleRegistry.CreateStyleDefaults( atlas );
+//        var style = styleRegistry.Get< ProgressBar.ProgressBarStyle >( "ProgressBarStyle" );
+//        _progressBar = new ProgressBar( 0f, 10f, 1f, false, style );
+//        _stage?.AddActor( _progressBar );
+
+        // --------------------------------------
+
+//        var skin = new Skin( new FileInfo( Assets.ProgressBarSkin ) );
 //        _progressBar = new ProgressBar( 0f, 10f, 1f, false, skin );
 //        _progressBar.SetPosition( 20, 550 );
 
-        foreach ( KeyValuePair< Type, Dictionary< string, object >? > resource in skin.Resources )
-        {
-            if ( resource.Value != null )
-            {
-                Console.WriteLine( $"{resource.Key.Name}" );
-
-                foreach ( KeyValuePair< string, object > value in resource.Value )
-                {
-                    Console.WriteLine( $"  {value.Key}: {value.Value.GetType().Name}" );
-                }
-            }
-        }
+//        foreach ( KeyValuePair< Type, Dictionary< string, object >? > resource in skin.Resources )
+//        {
+//            if ( resource.Value != null )
+//            {
+//                Console.WriteLine( $"{resource.Key.Name}" );
+//
+//                foreach ( KeyValuePair< string, object > value in resource.Value )
+//                {
+//                    Console.WriteLine( $"  {value.Key}: {value.Value.GetType().Name}" );
+//                }
+//            }
+//        }
 
 //        foreach ( var resource in skin.Resources )
 //        {
@@ -351,9 +364,8 @@ public class MainGame : Game
         // --------------------------------------
 
         _stage?.AddActor( _hudActor );
-        _stage?.AddActor( _imageButton );
-        _stage?.AddActor( _windowActor );
-//        _stage?.AddActor( _progressBar );
+//        _stage?.AddActor( _imageButton );
+//        _stage?.AddActor( _windowActor );
         _stage?.DebugAll = true;
     }
 
@@ -367,14 +379,14 @@ public class MainGame : Game
 
     private void CreateFreeTypeFont()
     {
-        var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AmbleRegular26Font ) );
-        var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
-        {
-            Size = 40
-        };
-
-        _font = generator.GenerateFont( parameter );
-        _font.SetColor( Color.White );
+//        var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AmbleRegular26Font ) );
+//        var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
+//        {
+//            Size = 40
+//        };
+//
+//        _font = generator.GenerateFont( parameter );
+//        _font.SetColor( Color.White );
     }
 
     private void CreateSprites()
@@ -439,7 +451,7 @@ public class MainGame : Game
 
     private void ScrollMap()
     {
-        if ( _tiledCam != null && _tiledMap != null )
+        if ( _tiledMapCam != null && _tiledMap != null )
         {
             _mapPosX += _mapDirX;
 
@@ -463,7 +475,7 @@ public class MainGame : Game
                 _mapDirY = 1;
             }
 
-            _tiledCam.Camera.Translate( _mapDirX, _mapDirY );
+            _tiledMapCam.Camera.Translate( _mapDirX, _mapDirY );
         }
     }
 }

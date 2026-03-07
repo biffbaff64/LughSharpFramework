@@ -117,7 +117,7 @@ public class JsonString
     }
 
     /// <summary>
-    /// Prefer calling the more specific value() methods.
+    /// 
     /// </summary>
     public JsonString Value( object? value )
     {

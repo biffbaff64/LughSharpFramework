@@ -146,10 +146,10 @@ public class JsonValue : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Returns <c>true</c> of this JsonValue contains a child with the specified name. 
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="name"> The requested child name. </param>
+    /// <returns> <c>true</c> if the named child exists, else <c>false</c>. </returns>
     public bool Has( string name )
     {
         return Get( name ) != null;
@@ -206,7 +206,8 @@ public class JsonValue : IDisposable
         JsonValue? current = Child;
 
         while ( current != null
-             && ( current.Name == null || !current.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) ) )
+             && ( current.Name == null
+               || !current.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) ) )
         {
             current = current.Next;
         }

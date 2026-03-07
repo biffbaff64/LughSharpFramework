@@ -30,6 +30,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 using Exception = System.Exception;
 
@@ -65,8 +66,6 @@ public class TextureAtlasData
         }
     }
 
-    // ========================================================================
-
     /// <summary>
     /// 
     /// </summary>
@@ -86,7 +85,7 @@ public class TextureAtlasData
                 page.Width  = int.Parse( entry[ 1 ] );
                 page.Height = int.Parse( entry[ 2 ] );
             },
-            [ "format" ] = page => { page.Format = int.Parse( entry[ 1 ] ); },
+            [ "format" ] = page => { page.Format = ParseFormat( entry[ 1 ] ); },
             [ "filter" ] = page =>
             {
                 page.MinFilter = Enum.Parse< TextureFilterMode >( entry[ 1 ] );
@@ -376,6 +375,24 @@ public class TextureAtlasData
                 return 4;
             }
         }
+    }
+
+    private static int ParseFormat( string format )
+    {
+        return format switch
+               {
+                   "Alpha"          => LughFormat.Alpha,
+                   "LuminanceAlpha" => LughFormat.LuminanceAlpha,
+                   "RGB888"         => LughFormat.RGB888,
+                   "RGBA8888"       => LughFormat.RGBA8888,
+                   "RGB565"         => LughFormat.RGB565,
+                   "RGBA4444"       => LughFormat.RGBA4444,
+                   "IndexedColor"   => LughFormat.IndexedColor,
+
+                   // ---------------------------
+
+                   _ => throw new RuntimeException( $"Unknown format: {format}" )
+               };
     }
 
     // ========================================================================
