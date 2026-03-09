@@ -35,18 +35,18 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The Style for a <see cref="SelectBox{T}"/>.
 /// </summary>
 [PublicAPI]
-public class SelectBoxStyle< T > where T : notnull
+public class SelectBoxStyle
 {
-    public BitmapFont        Font               { get; } = null!;
-    public ScrollPaneStyle   ScrollStyle        { get; } = null!;
-    public ListBoxStyle< T > ListBoxStyle       { get; } = null!;
-    public Color             FontColor          { get; } = new( 1, 1, 1, 1 );
-    public Color?            OverFontColor      { get; }
-    public Color?            DisabledFontColor  { get; }
-    public ISceneDrawable?   Background         { get; }
-    public ISceneDrawable?   BackgroundOver     { get; }
-    public ISceneDrawable?   BackgroundOpen     { get; }
-    public ISceneDrawable?   BackgroundDisabled { get; }
+    public BitmapFont      Font               { get; } = null!;
+    public ScrollPaneStyle ScrollStyle        { get; } = null!;
+    public ListBoxStyle    ListBoxStyle       { get; } = null!;
+    public Color           FontColor          { get; } = new( 1, 1, 1, 1 );
+    public Color?          OverFontColor      { get; }
+    public Color?          DisabledFontColor  { get; }
+    public ISceneDrawable? Background         { get; }
+    public ISceneDrawable? BackgroundOver     { get; }
+    public ISceneDrawable? BackgroundOpen     { get; }
+    public ISceneDrawable? BackgroundDisabled { get; }
 
     // ====================================================================
 
@@ -58,7 +58,7 @@ public class SelectBoxStyle< T > where T : notnull
                            Color fontColor,
                            ISceneDrawable background,
                            ScrollPaneStyle scrollStyle,
-                           ListBoxStyle< T > listBoxStyle )
+                           ListBoxStyle listBoxStyle )
     {
         Font         = font;
         Background   = background;
@@ -68,7 +68,7 @@ public class SelectBoxStyle< T > where T : notnull
         FontColor.Set( fontColor );
     }
 
-    public SelectBoxStyle( SelectBoxStyle< T >? style )
+    public SelectBoxStyle( SelectBoxStyle? style )
     {
         Guard.Against.Null( style );
 
@@ -87,7 +87,7 @@ public class SelectBoxStyle< T > where T : notnull
 
         Background   = style.Background;
         ScrollStyle  = new ScrollPaneStyle( style.ScrollStyle );
-        ListBoxStyle = new ListBoxStyle< T >( style.ListBoxStyle );
+        ListBoxStyle = new ListBoxStyle( style.ListBoxStyle );
 
         BackgroundOver     = style.BackgroundOver;
         BackgroundOpen     = style.BackgroundOpen;
@@ -97,4 +97,3 @@ public class SelectBoxStyle< T > where T : notnull
 
 // ============================================================================
 // ============================================================================
-

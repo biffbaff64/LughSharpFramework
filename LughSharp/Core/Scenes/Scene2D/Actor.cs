@@ -192,7 +192,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// This actors Color.
     /// </summary>
-    public Color Color
+    public Color ActorColor
     {
         get;
         set => field.Set( value );
@@ -1165,7 +1165,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <param name="a"></param>
     public void SetColor( float r, float g, float b, float a )
     {
-        Color.Set( r, g, b, a );
+        ActorColor.Set( r, g, b, a );
     }
 
     /// <summary>

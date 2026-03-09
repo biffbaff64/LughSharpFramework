@@ -808,8 +808,15 @@ public class Color : ICloneable, IEquatable< Color >
     /// Sets this colors components using the components from the supplied color.
     /// </summary>
     /// <returns> This Color for chaining. </returns>
-    public Color Set( Color color )
+    public Color Set( Color? color )
     {
+        if ( color == null )
+        {
+            Logger.Error( "Provided color is null, defaulting to White." );
+            
+            color = White;
+        }
+
         R = color.R;
         G = color.G;
         B = color.B;

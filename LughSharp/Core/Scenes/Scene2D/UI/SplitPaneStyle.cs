@@ -28,11 +28,16 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
+/// <summary>
+/// The style for a split pane, see <see cref="SplitPane"/>.
+/// </summary>
 [PublicAPI]
 public class SplitPaneStyle
 {
     public ISceneDrawable Handle { get; set; }
 
+    // ========================================================================
+    
     public SplitPaneStyle()
     {
         Handle = null!;

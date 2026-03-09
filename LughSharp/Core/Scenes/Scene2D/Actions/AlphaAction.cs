@@ -49,7 +49,7 @@ public class AlphaAction : TemporalAction
             throw new RuntimeException( "Cannot begin with a null Target!" );
         }
 
-        _start = Target.Color.A;
+        _start = Target.ActorColor.A;
     }
 
     /// <inheritdoc />
@@ -62,15 +62,15 @@ public class AlphaAction : TemporalAction
 
         if ( percent == 0 )
         {
-            Target.Color.A = _start;
+            Target.ActorColor.A = _start;
         }
         else if ( percent is 1.0f )
         {
-            Target.Color.A = Alpha;
+            Target.ActorColor.A = Alpha;
         }
         else
         {
-            Target.Color.A = _start + ( ( Alpha - _start ) * percent );
+            Target.ActorColor.A = _start + ( ( Alpha - _start ) * percent );
         }
     }
 }

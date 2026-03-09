@@ -28,6 +28,9 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
+/// <summary>
+/// The style for a <see cref="ScrollPane"/>.
+/// </summary>
 [PublicAPI]
 public class ScrollPaneStyle
 {

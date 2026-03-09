@@ -745,7 +745,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
         UpdateWidgetPosition();
 
         // Draw the background ninepatch.
-        Color color = Color;
+        Color color = ActorColor;
         float alpha = color.A * parentAlpha;
 
         if ( Style.Background != null )

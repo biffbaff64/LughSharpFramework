@@ -53,10 +53,21 @@ public class ButtonStyle
 
     // ====================================================================
 
+    /// <summary>
+    /// Creates a new empty ButtonStyle instance. Before using this style it will
+    /// be necessary to set the <see cref="Up"/>, <see cref="Down"/> ISceneDrawable
+    /// properties.
+    /// </summary>
     public ButtonStyle()
     {
     }
 
+    /// <summary>
+    /// Creates a new ButtonStyle instance with the given ISceneDrawables.
+    /// </summary>
+    /// <param name="up"> The ISceneDrawable image for button UP. </param>
+    /// <param name="down"> The ISceneDrawable image for button DOWN. </param>
+    /// <param name="ischecked"></param>
     public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? ischecked )
     {
         Up      = up;
@@ -64,6 +75,9 @@ public class ButtonStyle
         Checked = ischecked;
     }
 
+    /// <summary>
+    /// Creates a new ButtonStyle as a copy of the given ButtonStyle.
+    /// </summary>
     public ButtonStyle( ButtonStyle style )
     {
         Up               = style.Up;

@@ -248,7 +248,7 @@ public class Scene2DImage : Widget
     {
         Validate();
 
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+        batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
         float x      = X;
         float y      = Y;

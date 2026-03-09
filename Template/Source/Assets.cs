@@ -34,6 +34,9 @@ public static class Assets
     public const string PauseExitButton      = @"Assets\pause_exit_button.png";
     public const string ButtonBUp            = @"Assets\packedimages\input\button_b.png";
     public const string ButtonBDown          = @"Assets\packedimages\input\button_b_pressed.png";
+    
+    // ========================================================================
+    // UI Skins
     public const string ProgressBarSkin      = @"Assets\Skins\uiskin.json";
     public const string ProgressBarSkinAtlas = @"Assets\Skins\uiskin.atlas";
 

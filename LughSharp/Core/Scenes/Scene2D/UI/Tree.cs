@@ -48,12 +48,12 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// <typeparam name="TNode"> The type of nodes in the tree. </typeparam>
 /// <typeparam name="TValue"> The type of values for each node. </typeparam>
 [PublicAPI]
-public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, TValue > >
+public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
     where TNode : Tree< TNode, TValue >.Node
 {
     public TNode?                      RangeStart    { get; set; }
     public ClickListener?              ClickListener { get; set; }
-    public TreeStyle< TNode, TValue >? Style         { get; set; }
+    public TreeStyle? Style         { get; set; }
     public List< TNode >               RootNodes     { get; set; } = [ ];
     public float                       YSpacing      { get; set; } = 4;
     public float                       IndentSpacing { get; set; }
@@ -76,9 +76,9 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, 
 
     /// <summary>
     /// Construct a new Tree using the supplied <see cref="Skin"/>
-    /// and a default <see cref="TreeStyle{TNode,TValue}"/> from that skin.
+    /// and a default <see cref="TreeStyle"/> from that skin.
     /// </summary>
-    public Tree( Skin skin ) : this( skin.Get< TreeStyle< TNode, TValue > >() )
+    public Tree( Skin skin ) : this( skin.Get< TreeStyle >() )
     {
     }
 
@@ -94,7 +94,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, 
     /// The type of the value that each node in the tree represents.
     /// </typeparam>
     public Tree( Skin skin, string styleName )
-        : this( skin.Get< TreeStyle< TNode, TValue > >( styleName ) )
+        : this( skin.Get< TreeStyle >( styleName ) )
     {
     }
 
@@ -107,7 +107,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, 
     /// <typeparam name="TValue">
     /// The type of the value stored in each tree node.
     /// </typeparam>
-    public Tree( TreeStyle< TNode, TValue > style )
+    public Tree( TreeStyle style )
     {
         _selection = new TreeSelection( this )
         {
@@ -126,7 +126,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, 
     /// Sets the style to use for this tree.
     /// </summary>
     /// <param name="style"></param>
-    public void SetStyle( TreeStyle< TNode, TValue > style )
+    public void SetStyle( TreeStyle style )
     {
         Style = style;
 
@@ -385,7 +385,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, 
     {
         DrawBackground( batch, parentAlpha );
 
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+        batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
         Draw( batch, RootNodes, _paddingLeft, PlusMinusWidth() );
 
@@ -401,7 +401,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, 
     {
         if ( Style?.Background != null )
         {
-            batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+            batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
             Style.Background.Draw( batch, X, Y, Width, Height );
         }
@@ -419,7 +419,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, 
             cullTop    = cullBottom + cullingArea.Height;
         }
 
-        TreeStyle< TNode, TValue >? style = Style;
+        TreeStyle? style = Style;
 
         float x       = X;
         float y       = Y;
@@ -454,7 +454,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, 
                 {
                     double iconY = y + actorY + Math.Round( ( height - node.Icon.MinHeight ) / 2 );
 
-                    batch.Color = actor.Color;
+                    batch.Color = actor.ActorColor;
                     DrawIcon( node, node.Icon, batch, iconX, ( float )iconY );
                     batch.SetColor( 1, 1, 1, 1 );
                 }

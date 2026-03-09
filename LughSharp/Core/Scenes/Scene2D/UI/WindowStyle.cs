@@ -28,6 +28,8 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
+using Newtonsoft.Json;
+
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// <summary>
@@ -59,6 +61,7 @@ public class WindowStyle
     /// <param name="titleFont"></param>
     /// <param name="titleFontColor"></param>
     /// <param name="background"></param>
+    [JsonConstructor]
     public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable? background )
     {
         TitleFont  = titleFont;

@@ -528,7 +528,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         var   bgLeftWidth  = 0f;
         var   bgRightWidth = 0f;
 
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+        batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
         if ( background != null )
         {
@@ -559,11 +559,11 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                     messageFont.SetColor( Style.MessageFontColor.R,
                                           Style.MessageFontColor.G,
                                           Style.MessageFontColor.B,
-                                          Style.MessageFontColor.A * Color.A * parentAlpha );
+                                          Style.MessageFontColor.A * ActorColor.A * parentAlpha );
                 }
                 else
                 {
-                    messageFont.SetColor( 0.7f, 0.7f, 0.7f, Color.A * parentAlpha );
+                    messageFont.SetColor( 0.7f, 0.7f, 0.7f, ActorColor.A * parentAlpha );
                 }
 
                 DrawMessageText( batch,
@@ -575,7 +575,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
         else
         {
-            font.SetColor( fontColor!.R, fontColor.G, fontColor.B, fontColor.A * Color.A * parentAlpha );
+            font.SetColor( fontColor!.R, fontColor.G, fontColor.B, fontColor.A * ActorColor.A * parentAlpha );
             DrawText( batch, font, x + bgLeftWidth, y + textY + yOffset );
         }
 

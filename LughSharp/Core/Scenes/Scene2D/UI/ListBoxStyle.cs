@@ -34,7 +34,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a list, see <see cref="ListBox{T}"/>.
 /// </summary>
 [PublicAPI]
-public class ListBoxStyle< T > where T : notnull
+public class ListBoxStyle
 {
     public BitmapFont      Font                { get; set; }
     public Color           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
@@ -43,6 +43,8 @@ public class ListBoxStyle< T > where T : notnull
     public ISceneDrawable? Down                { get; set; }
     public ISceneDrawable? Over                { get; set; }
     public ISceneDrawable? Background          { get; set; }
+    
+    // ========================================================================
 
     public ListBoxStyle()
     {
@@ -58,7 +60,7 @@ public class ListBoxStyle< T > where T : notnull
         Selection = selection;
     }
 
-    public ListBoxStyle( ListBoxStyle< T > boxStyle )
+    public ListBoxStyle( ListBoxStyle boxStyle )
     {
         Font = boxStyle.Font;
         FontColorSelected.Set( boxStyle.FontColorSelected );

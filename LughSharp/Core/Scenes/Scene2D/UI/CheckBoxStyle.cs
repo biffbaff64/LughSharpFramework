@@ -42,7 +42,9 @@ public class CheckBoxStyle : TextButtonStyle
     public ISceneDrawable? CheckboxOver        { get; set; }
     public ISceneDrawable? CheckboxOnDisabled  { get; set; }
     public ISceneDrawable? CheckboxOffDisabled { get; set; }
-
+ 
+    // ========================================================================
+    
     public CheckBoxStyle()
     {
     }

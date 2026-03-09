@@ -209,7 +209,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
         float knobWidth  = knob?.MinWidth ?? 0;
         float percent    = GetVisualPercent();
 
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+        batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
         if ( IsVertical )
         {

@@ -28,12 +28,17 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
+/// <summary>
+/// The style for a <see cref="TextTooltip"/>.
+/// </summary>
 [PublicAPI]
 public class TextTooltipStyle
 {
     public LabelStyle     Label      { get; set; } = null!;
     public ISceneDrawable Background { get; set; } = null!;
     public float          WrapWidth  { get; set; }
+
+    // ========================================================================
 
     public TextTooltipStyle()
     {
@@ -55,4 +60,3 @@ public class TextTooltipStyle
 
 // ============================================================================
 // ============================================================================
-

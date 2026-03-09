@@ -138,7 +138,7 @@ public class TooltipManager< T > where T : Actor
         float actionTime = Animations ? _time > 0 ? 0.5f : 0.15f : 0.1f;
 
         tooltip.Container.Transform = true;
-        tooltip.Container.Color.A   = 0.2f;
+        tooltip.Container.ActorColor.A   = 0.2f;
         tooltip.Container.SetScale( 0.05f );
 
         tooltip.Container.AddAction

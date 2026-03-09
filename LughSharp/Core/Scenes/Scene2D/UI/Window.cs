@@ -26,8 +26,10 @@ using System;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Styles;
@@ -48,14 +50,14 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Window : Table, IStyleable< WindowStyle >
 {
+    public int    ResizeBorder    { get; set; } = 8;
+    public bool   KeepWithinStage { get; set; } = true;
+    public bool   IsMovable       { get; set; } = true;
     public bool   DrawTitleTable  { get; set; }
     public Label? TitleLabel      { get; set; }
-    public bool   IsMovable       { get; set; } = true;
     public bool   IsModal         { get; set; }
     public bool   IsResizable     { get; set; }
     public bool   Dragging        { get; set; }
-    public int    ResizeBorder    { get; set; } = 8;
-    public bool   KeepWithinStage { get; set; } = true;
 
     // ========================================================================
 
@@ -114,7 +116,10 @@ public class Window : Table, IStyleable< WindowStyle >
         Touchable = Touchable.Enabled;
         Clip      = true;
 
-        TitleLabel = new Label( title, new LabelStyle( style.TitleFont!, style.TitleFontColor! ) );
+        style.TitleFont      ??= new BitmapFont();
+        style.TitleFontColor ??= Color.White;
+        
+        TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
 
         _titleTable = new TitleTable( this );
@@ -237,7 +242,7 @@ public class Window : Table, IStyleable< WindowStyle >
 
     protected void DrawStageBackground( IBatch batch, float parentAlpha, float x, float y, float width, float height )
     {
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+        batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
         Style.StageBackground?.Draw( batch, x, y, width, height );
     }
@@ -248,9 +253,9 @@ public class Window : Table, IStyleable< WindowStyle >
 
         // Manually draw the title table before clipping is done.
 
-        if ( _titleTable?.Color != null )
+        if ( _titleTable?.ActorColor != null )
         {
-            _titleTable.Color.A = Color.A;
+            _titleTable.ActorColor.A = ActorColor.A;
         }
 
         float padTop  = GetPadTop();

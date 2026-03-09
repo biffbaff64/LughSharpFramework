@@ -131,7 +131,7 @@ public class Group : Actor, ICullable
     /// </summary>
     protected void DrawChildren( IBatch batch, float parentAlpha )
     {
-        parentAlpha *= Color.A;
+        parentAlpha *= ActorColor.A;
 
         Actor?[] actors = Children.Begin();
 

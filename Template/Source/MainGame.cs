@@ -270,46 +270,42 @@ public class MainGame : Game
             throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
         }
 
-        var texture = new Texture( Assets.HudPanel );
+        var skin = new Skin( new FileInfo( Assets.ProgressBarSkin ) );
 
+        // --------------------------------------
+        
         _stage = new Stage( _spriteCam.Viewport );
-        _hudActor = new Scene2DImage( texture )
+        _hudActor = new Scene2DImage( new Texture( Assets.HudPanel ) )
         {
             IsVisible = true
         };
         _hudActor.SetPosition( 0, 0 );
+        _stage?.AddActor( _hudActor );
 
         // --------------------------------------
 
-        var skin = new Skin( new FileInfo( @"Assets\Skins\uiskin.json" ) );
-        
+        var windowStyle = new WindowStyle
+        {
+            TitleFont      = _font,
+            TitleFontColor = Color.White,
+            Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
+        };
+        _windowActor = new Window( "Window Title", windowStyle )
+        {
+            IsVisible = true,
+        };
+        _windowActor.SetPosition( 200, 180 );
+        _stage?.AddActor( _windowActor );
+
         // --------------------------------------
 
-//        var style = new ImageButton.ImageButtonStyle
-//        {
-//            ImageUp   = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
-//            ImageDown = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) )
-//        };
-//        _imageButton = new ImageButton( style )
+//        _imageButton = new ImageButton( new ImageButtonStyle() )
 //        {
 //            IsVisible = true
 //        };
 //        _imageButton.SetPosition( 0, 0 );
-
-        // --------------------------------------
-
-//        var windowStyle = new Window.WindowStyle
-//        {
-//            TitleFont      = _font,
-//            TitleFontColor = Color.White,
-//            Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
-//        };
-//        _windowActor = new Window( "Window Title", windowStyle )
-//        {
-//            IsVisible = true
-//        };
-//        _windowActor.SetPosition( 200, 180 );
-
+//        _stage?.AddActor( _imageButton );
+        
         // --------------------------------------
 
 //        var atlas         = new TextureAtlas( new FileInfo( Assets.ProgressBarSkinAtlas ) );
@@ -321,52 +317,9 @@ public class MainGame : Game
 
         // --------------------------------------
 
-//        var skin = new Skin( new FileInfo( Assets.ProgressBarSkin ) );
 //        _progressBar = new ProgressBar( 0f, 10f, 1f, false, skin );
 //        _progressBar.SetPosition( 20, 550 );
-
-//        foreach ( KeyValuePair< Type, Dictionary< string, object >? > resource in skin.Resources )
-//        {
-//            if ( resource.Value != null )
-//            {
-//                Console.WriteLine( $"{resource.Key.Name}" );
-//
-//                foreach ( KeyValuePair< string, object > value in resource.Value )
-//                {
-//                    Console.WriteLine( $"  {value.Key}: {value.Value.GetType().Name}" );
-//                }
-//            }
-//        }
-
-//        foreach ( var resource in skin.Resources )
-//        {
-//            // The Key.Name is likely "Skin$TintedDrawable"
-//            Console.WriteLine( $"Type Key: {resource.Key.Name}" );
-//
-//            foreach ( var value in resource.Value! )
-//            {
-//                var actualType = value.Value.GetType();
-//                Console.WriteLine( $"  Entry Name: {value.Key}" );
-//                Console.WriteLine( $"  Actual C# Type: {actualType.FullName}" );
-//
-//                if ( value.Value is JObject jobj )
-//                {
-//                    Console.WriteLine( "  WARNING: This is still raw JSON (JObject), not a class!" );
-//                }
-//            }
-//        }
-
-//        if ( skin.Has( "ProgressBarStyle", typeof( ProgressBar.ProgressBarStyle ) ) )
-//        {
-//            Logger.Debug( "Skin contains ProgressBar.ProgressBarStyle" );
-//        }
-
-        // --------------------------------------
-
-        _stage?.AddActor( _hudActor );
-//        _stage?.AddActor( _imageButton );
-//        _stage?.AddActor( _windowActor );
-        _stage?.DebugAll = true;
+//        _stage?.AddActor( _progressBar );
     }
 
     private void CreateFont()

@@ -27,6 +27,7 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
@@ -34,6 +35,7 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.UI;
+using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -748,11 +750,15 @@ public class SpriteBatch : IBatch
         {
             typeof( Texture ),
             typeof( TextureRegion ),
-            typeof( Scene2DImage )
+            typeof( ISceneDrawable ),
+            typeof( Scene2DImage ),
+            typeof( AtlasRegion ),
         };
 
         if ( !textureList.Contains( texture.GetType() ) )
         {
+            Logger.Debug( $"Invalid Texture: {texture.GetType().Name}" );
+            
             throw new RuntimeException( "Invalid image type" );
         }
     }

@@ -402,7 +402,7 @@ public class Label : Widget, IStyleable< LabelStyle >
     {
         Validate();
 
-        Color color = _tempColor.Set( Color );
+        Color color = _tempColor.Set( ActorColor );
         color.A *= parentAlpha;
 
         if ( Style.Background != null )

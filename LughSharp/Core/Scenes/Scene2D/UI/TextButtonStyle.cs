@@ -47,7 +47,9 @@ public class TextButtonStyle : ButtonStyle
     public Color?      CheckedOverFontColor    { get; set; }
     public Color?      CheckedFocusedFontColor { get; set; }
 
-    protected TextButtonStyle()
+    // ========================================================================
+    
+    public TextButtonStyle()
     {
     }
 

@@ -41,6 +41,8 @@ public class ImageButtonStyle : ButtonStyle
     public ISceneDrawable? ImageDown;
     public ISceneDrawable? ImageOver;
     public ISceneDrawable? ImageUp;
+    
+    // ========================================================================
 
     /// <summary>
     /// Creates a new, unitialised, ImageButtonStyle instance.

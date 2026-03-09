@@ -108,7 +108,7 @@
     },
     "dialog": {
       "parent": "default",
-      "stageBackground": "dialogDim"
+      "stageBackground": "default-window"
     }
   },
   "ProgressBarStyle": {
@@ -152,7 +152,7 @@
       "fontColor": "white"
     }
   },
-  "ListStyle": {
+  "ListBoxStyle": {
     "default": {
       "fontColorUnselected": "white",
       "selection": "selection",

@@ -1192,7 +1192,7 @@ public class Container< T > : WidgetGroup where T : Actor
             return;
         }
 
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+        batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
         _background.Draw( batch, x, y, Width, Height );
     }
 

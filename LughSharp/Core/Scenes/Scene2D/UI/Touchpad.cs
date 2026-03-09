@@ -260,7 +260,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     {
         Validate();
 
-        Color c = Color;
+        Color c = ActorColor;
         batch.SetColor( c.R, c.G, c.B, c.A * parentAlpha );
 
         float x = X;

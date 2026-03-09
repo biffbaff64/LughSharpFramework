@@ -58,11 +58,11 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisableable
+public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     where T : notnull
 {
     public ClickListener       ClickListener { get; set; }
-    public SelectBoxStyle< T > Style         { get; set; } = null!;
+    public SelectBoxStyle Style         { get; set; } = null!;
     public List< T >           Items         { get; }      = [ ];
     public bool                IsDisabled    { get; set; }
     public float               PrefWidth     { get; private set; }
@@ -73,7 +73,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisabl
     public override string? Name => "SelectBox";
 
     // ========================================================================
-    
+
     private readonly SelectBoxScrollPane? _scrollPane;
     private readonly ArraySelection< T >  _selection;
     private readonly Vector2              _temp = new();
@@ -84,20 +84,20 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisabl
     // ========================================================================
 
     /// <summary>
-    /// Creates a select box with a <see cref="SelectBoxStyle{T}"/> from the provided skin,
+    /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin,
     /// </summary>
     /// <param name="skin"></param>
-    public SelectBox( Skin skin ) : this( skin.Get< SelectBoxStyle< T > >() )
+    public SelectBox( Skin skin ) : this( skin.Get< SelectBoxStyle >() )
     {
     }
 
     /// <summary>
-    /// Creates a select box with a <see cref="SelectBoxStyle{T}"/> from the provided skin and style name,
+    /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin and style name,
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="styleName"></param>
     public SelectBox( Skin skin, string styleName )
-        : this( skin.Get< SelectBoxStyle< T > >( styleName ) )
+        : this( skin.Get< SelectBoxStyle >( styleName ) )
     {
     }
 
@@ -105,7 +105,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisabl
     /// Creates a select box with the provided style.
     /// </summary>
     /// <param name="style"></param>
-    public SelectBox( SelectBoxStyle< T > style )
+    public SelectBox( SelectBoxStyle style )
     {
         SetStyle( style );
         SetSize( PrefWidth, PrefHeight );
@@ -146,10 +146,10 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisabl
     }
 
     /// <summary>
-    /// Sets the <see cref="SelectBoxStyle{T}"/> to use for this select box.
+    /// Sets the <see cref="SelectBoxStyle"/> to use for this select box.
     /// </summary>
     /// <param name="style"></param>
-    public void SetStyle( SelectBoxStyle< T > style )
+    public void SetStyle( SelectBoxStyle style )
     {
         Guard.Against.Null( style );
 
@@ -285,8 +285,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisabl
                 PrefWidth = Math.Max( PrefWidth + bg.LeftWidth + bg.RightWidth, bg.MinWidth );
             }
 
-            ListBoxStyle< T > listStyle   = Style.ListBoxStyle;
-            ScrollPaneStyle             scrollStyle = Style.ScrollStyle;
+            ListBoxStyle    listStyle   = Style.ListBoxStyle;
+            ScrollPaneStyle scrollStyle = Style.ScrollStyle;
 
             float? listWidth = maxItemWidth + listStyle.Selection?.LeftWidth + listStyle.Selection?.RightWidth;
 
@@ -366,7 +366,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisabl
         float width  = Width;
         float height = Height;
 
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+        batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
         background?.Draw( batch, x, y, width, height );
 
@@ -580,7 +580,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisabl
     /// <param name="selectBox"></param>
     protected void OnShow( Actor selectBox )
     {
-        selectBox.Color.A = 0;
+        selectBox.ActorColor.A = 0;
         selectBox.AddAction( Scene2D.Actions.Actions.FadeIn( 0.3f, Interpolation.Fade ) );
     }
 
@@ -590,7 +590,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisabl
     /// <param name="selectBox"></param>
     protected void OnHide( Actor selectBox )
     {
-        selectBox.Color.A = 1f;
+        selectBox.ActorColor.A = 1f;
 
         AlphaAction       action1  = Scene2D.Actions.Actions.FadeOut( 0.15f, Interpolation.Fade );
         RemoveActorAction action2  = Scene2D.Actions.Actions.RemoveActor();

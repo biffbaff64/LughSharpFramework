@@ -300,7 +300,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
 
         Validate();
 
-        Color color = Color;
+        Color color = ActorColor;
         float alpha = color.A * parentAlpha;
 
         ApplyTransform( batch, ComputeTransform() );

@@ -51,7 +51,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : notnull
+public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
 {
     public Rectangle?          CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
@@ -63,9 +63,9 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : no
 
     /// <summary>
     /// Returns the list's style. Modifying the returned style may not have an
-    /// effect until <see cref="SetStyle(ListBoxStyle{T})"/> is called.
+    /// effect until <see cref="SetStyle(ListBoxStyle)"/> is called.
     /// </summary>
-    public ListBoxStyle< T > Style { get; set; } = null!;
+    public ListBoxStyle Style { get; set; } = null!;
 
     // ========================================================================
 
@@ -82,11 +82,11 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : no
 
     /// <summary>
     /// Creates a new ListBox, using the supplied <see cref="Skin"/>.
-    /// The <see cref="ListBoxStyle{T}"/> embedded in the Skin will be used.
+    /// The <see cref="ListBoxStyle"/> embedded in the Skin will be used.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
     public ListBox( Skin skin )
-        : this( skin.Get< ListBoxStyle< T > >() )
+        : this( skin.Get< ListBoxStyle >() )
     {
     }
 
@@ -98,15 +98,15 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : no
     /// <param name="skin"> The Skin to use. </param>
     /// <param name="styleName"> The name of the ListStyle to extract from the Skin. </param>
     public ListBox( Skin skin, string styleName )
-        : this( skin.Get< ListBoxStyle< T > >( styleName ) )
+        : this( skin.Get< ListBoxStyle >( styleName ) )
     {
     }
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="ListBoxStyle{T}"/>
+    /// Creates a new ListBox, using the supplied <see cref="ListBoxStyle"/>
     /// </summary>
     /// <param name="boxStyle"> The ListStyle to use. </param>
-    public ListBox( ListBoxStyle< T > boxStyle )
+    public ListBox( ListBoxStyle boxStyle )
     {
         Create( boxStyle );
     }
@@ -135,7 +135,7 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : no
         _prefHeight = value;
     }
 
-    private void Create( ListBoxStyle< T > boxStyle )
+    private void Create( ListBoxStyle boxStyle )
     {
         Selection = new ArraySelection< T >( Items )
         {
@@ -152,7 +152,7 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : no
         AddListener( new ListInputListener( this ) );
     }
 
-    public void SetStyle( ListBoxStyle< T > boxStyle )
+    public void SetStyle( ListBoxStyle boxStyle )
     {
         Style = boxStyle ?? throw new ArgumentException( "style cannot be null." );
 
@@ -213,7 +213,7 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : no
         Color           fontColorSelected   = Style.FontColorSelected;
         Color           fontColorUnselected = Style.FontColorUnselected;
 
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+        batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
         float x      = X;
         float y      = Y;
@@ -302,7 +302,7 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : no
     {
         if ( Style.Background != null )
         {
-            batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+            batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
             Style.Background.Draw( batch, X, Y, Width, Height );
         }

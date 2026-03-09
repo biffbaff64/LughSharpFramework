@@ -57,21 +57,21 @@ public class ColorAction : TemporalAction
             throw new RuntimeException( "Cannot begin with a null Target!" );
         }
 
-        _startR = Target.Color.R;
-        _startG = Target.Color.G;
-        _startB = Target.Color.B;
-        _startA = Target.Color.A;
+        _startR = Target.ActorColor.R;
+        _startG = Target.ActorColor.G;
+        _startB = Target.ActorColor.B;
+        _startA = Target.ActorColor.A;
     }
 
     protected override void Update( float percent )
     {
         if ( percent == 0 )
         {
-            Target?.Color.Set( _startR, _startG, _startB, _startA );
+            Target?.ActorColor.Set( _startR, _startG, _startB, _startA );
         }
         else if ( percent is 1.0f )
         {
-            Target?.Color.Set( _endColor );
+            Target?.ActorColor.Set( _endColor );
         }
         else
         {
@@ -80,7 +80,7 @@ public class ColorAction : TemporalAction
             float b = _startB + ( ( _endColor.B - _startB ) * percent );
             float a = _startA + ( ( _endColor.A - _startA ) * percent );
 
-            Target?.Color.Set( r, g, b, a );
+            Target?.ActorColor.Set( r, g, b, a );
         }
     }
 }

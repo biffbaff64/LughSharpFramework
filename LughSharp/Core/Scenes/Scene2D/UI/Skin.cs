@@ -125,14 +125,14 @@ public class Skin : IDisposable
         new( "TextFieldStyle",          typeof( TextFieldStyle ) ),
         new( "ImageButtonStyle",        typeof( ImageButtonStyle ) ),
         new( "ImageTextButtonStyle",    typeof( ImageTextButtonStyle ) ),
-        new( "ListBoxStyle",            typeof( ListBoxStyle<> ) ),
+        new( "ListBoxStyle",            typeof( ListBoxStyle ) ),
         new( "ScrollPaneStyle",         typeof( ScrollPaneStyle ) ),
-        new( "SelectBoxStyle",          typeof( SelectBoxStyle<> ) ),
+        new( "SelectBoxStyle",          typeof( SelectBoxStyle ) ),
         new( "SliderStyle",             typeof( SliderStyle ) ),
         new( "SplitPaneStyle",          typeof( SplitPaneStyle ) ),
         new( "TextTooltipStyle",        typeof( TextTooltipStyle ) ),
         new( "TouchpadStyle",           typeof( TouchpadStyle ) ),
-        new( "TreeStyle",               typeof( TreeStyle< , > ) ),
+        new( "TreeStyle",               typeof( TreeStyle ) ),
         new( "WindowStyle",             typeof( WindowStyle ) )
         // --------------------------------------
     ];
@@ -141,8 +141,7 @@ public class Skin : IDisposable
     // ========================================================================
 
     private readonly string _skinHome;
-
-    private bool _disposed;
+    private          bool   _disposed;
 
     // ========================================================================
     // ========================================================================
@@ -235,14 +234,15 @@ public class Skin : IDisposable
         try
         {
             string jsonText = File.ReadAllText( skinFile.FullName );
-
-            var settings = new JsonSerializerSettings();
+            var    settings = new JsonSerializerSettings();
 
             // SkinConverter handles the root { "Type": { "Name": { ... } } }
             settings.Converters.Add( new SkinConverter( this, skinFile ) );
 
-            // SkinReferenceConverter handles the "string-to-resource" lookup
-            // for all fields inside the Styles.
+            // Handles explicit Color object definitions/hex strings.
+            settings.Converters.Add( new ColorConverter( this ) );
+            
+            // SkinReferenceConverter resolves string names back to skin resources.
             settings.Converters.Add( new SkinReferenceConverter( this ) );
 
             JsonConvert.DeserializeObject< Skin >( jsonText, settings );
@@ -315,8 +315,6 @@ public class Skin : IDisposable
                || ( type == typeof( Sprite ) )
                       ? 256
                       : 64 );
-
-            Logger.Debug( $"Adding new Dictionary for type: {type.Name}" );
 
             Resources.Put( type, typeResources );
         }
@@ -405,8 +403,6 @@ public class Skin : IDisposable
     {
         if ( !Resources.TryGetValue( type, out Dictionary< string, object >? resource ) )
         {
-            Logger.Error( $"Resources Dictionary does not contain key: {type.Name}" );
-
             return false;
         }
 
@@ -631,14 +627,10 @@ public class Skin : IDisposable
     /// </summary>
     public ISceneDrawable GetDrawable( string name )
     {
-        Logger.Debug( $"Fetching ISceneDrawable with name: {name}" );
-
         var drawable = Optional< ISceneDrawable >( name );
 
         if ( drawable != null )
         {
-            Logger.Debug( $"Found ISceneDrawable with name: {name}" );
-
             return drawable;
         }
 
@@ -750,12 +742,9 @@ public class Skin : IDisposable
     /// </summary>
     public ISceneDrawable NewDrawable( string? name, Color tint )
     {
-        if ( string.IsNullOrEmpty( name ) )
-        {
-            throw new ArgumentException( "name cannot be null or empty." );
-        }
-
-        return NewDrawable( GetDrawable( name ), tint );
+        return string.IsNullOrEmpty( name )
+            ? throw new ArgumentException( "name cannot be null or empty." )
+            : NewDrawable( GetDrawable( name ), tint );
     }
 
     /// <summary>
@@ -1050,9 +1039,6 @@ public class Skin : IDisposable
             {
                 Type targetType = ResolveType( typeProperty.Name );
 
-                Logger.Divider();
-                Logger.Debug( $"targetType: {targetType.Name}" );
-
                 if ( typeProperty.Value is not JObject resources )
                 {
                     continue;
@@ -1060,22 +1046,9 @@ public class Skin : IDisposable
 
                 foreach ( JProperty resProperty in resources.Properties() )
                 {
-                    object? finalObject;
-
-                    if ( targetType == typeof( BitmapFont ) )
-                    {
-                        finalObject = ReadBitmapFont( resProperty.Value, _skinFile );
-
-                        Logger.Debug( $"Deserialized {resProperty.Name} to BitmapFont" );
-                    }
-                    else
-                    {
-                        finalObject = ( targetType == typeof( TintedDrawable ) )
-                            ? ReadTintedDrawable( resProperty.Value, serializer )
-                            : SerializeToObject( targetType, serializer, resProperty.Value );
-
-                        Logger.Debug( $"Deserialized {resProperty.Name} to {finalObject?.GetType()}" );
-                    }
+                    object? finalObject = targetType == typeof( BitmapFont )
+                        ? ReadBitmapFont( resProperty.Value, _skinFile )
+                        : SerializeToObject( targetType, serializer, resProperty.Value );
 
                     if ( finalObject != null )
                     {
@@ -1096,13 +1069,32 @@ public class Skin : IDisposable
         /// <returns></returns>
         private object? SerializeToObject( Type targetType, JsonSerializer serializer, JToken token )
         {
-            var obj = token.ToObject( targetType, serializer );
+            // If it's a string, we know it's a reference lookup
+            if ( token.Type == JTokenType.String )
+            {
+                return _skin.Get( token.ToString(), targetType );
+            }
 
-            Logger.Debug( $"SerializeToObject: {targetType.Name} {obj}" );
-
-            return obj;
+            try
+            {
+                // BYPASS DynamicMethod: Manually create the instance
+                // This is the only way to stop Newtonsoft from trying to 'be smart' 
+                // with nested or generic types.
+                object? instance = Activator.CreateInstance( targetType );
+        
+                using JsonReader reader = token.CreateReader();
+                serializer.Populate( reader, instance! );
+        
+                return instance;
+            }
+            catch ( Exception ex )
+            {
+                // Fallback for types that might not have parameterless constructors
+                // (though Styles definitely should)
+                return token.ToObject( targetType, serializer );
+            }
         }
-
+        
         /// <summary>
         /// Resolves the type associated with the specified name from the skin's JSON
         /// class tags or default tag classes.
@@ -1117,8 +1109,6 @@ public class Skin : IDisposable
             Type type = _skin.JsonClassTags.GetValueOrDefault( name ) ??
                         DefaultTagClasses.FirstOrDefault( t => name.Contains( t.Name ) ).Type ??
                         typeof( object );
-
-            Logger.Debug( $"Resolved type: {type.Name}" );
 
             return type;
         }
@@ -1185,9 +1175,9 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    [PublicAPI]
     public class SkinReferenceConverter( Skin skin ) : JsonConverter
     {
-        // These are the types that can be referenced by name (string) in the JSON
         public override bool CanConvert( Type objectType )
         {
             return objectType == typeof( Color ) ||
@@ -1198,7 +1188,8 @@ public class Skin : IDisposable
         public override object? ReadJson( JsonReader reader, Type objectType, object? existingValue,
                                           JsonSerializer serializer )
         {
-            // If the JSON contains a string, resolve it from the Skin's resources
+            // Handle string name (e.g., "white" or "default-font")
+            // This is where we perform the lookup in the skin.
             if ( reader.TokenType == JsonToken.String )
             {
                 var name = ( string )reader.Value!;
@@ -1206,53 +1197,40 @@ public class Skin : IDisposable
                 return skin.Get( name, objectType );
             }
 
-            // If it's not a string (e.g. it's an inline object), let the default logic handle it
-            return serializer.Deserialize( reader, objectType );
+            // Handle object definition (e.g., { "r": 1, "g": 1 ... })
+            // Calling serializer.Deserialize() here will cause a StackOverflow.
+            // Instead, load it into a JToken and use a "clean" call or manual population.
+            if ( reader.TokenType == JsonToken.StartObject )
+            {
+                JToken token = JToken.Load( reader );
+
+                // Special case for Color hex strings inside an object: { "hex": "..." }
+                if ( objectType == typeof( Color ) && token[ "hex" ] != null )
+                {
+                    return Color.FromHexString( token[ "hex" ]!.ToString() );
+                }
+
+                // Create the instance manually and populate it.
+                // This bypasses the Converter lookup for the fields inside the object.
+                JsonContract contract = serializer.ContractResolver.ResolveContract( objectType );
+                object?      result   = contract.DefaultCreator?.Invoke();
+
+                if ( result != null )
+                {
+                    using JsonReader subReader = token.CreateReader();
+                    serializer.Populate( subReader, result );
+                }
+
+                return result;
+            }
+
+            return null;
         }
 
         public override void WriteJson( JsonWriter writer, object? value, JsonSerializer serializer )
         {
         }
     }
-
-//    /// <summary>
-//    /// A JSON converter for ISceneDrawable that resolves string names 
-//    /// to drawable instances from the skin.
-//    /// </summary>
-//    [PublicAPI]
-//    public class DrawableConverter( Skin skin ) : JsonConverter< ISceneDrawable >
-//    {
-//        public override ISceneDrawable? ReadJson( JsonReader reader, Type type, ISceneDrawable? existing, 
-//                                                  bool hasExt, JsonSerializer serializer )
-//        {
-//            // If the value in JSON is a string, look it up in the skin
-//            return reader.TokenType == JsonToken.String
-//                ? skin.GetDrawable( ( string )reader.Value! )
-//                // If it's an object, it might be a TintedDrawable or something Newtonsoft can handle
-//                : serializer.Deserialize< ISceneDrawable >( reader );
-//        }
-//
-//        public override void WriteJson( JsonWriter writer, ISceneDrawable? value, JsonSerializer serializer )
-//        {
-//        }
-//    }
-
-    // ========================================================================
-    // ========================================================================
-
-//    [PublicAPI]
-//    public class FontConverter( Skin skin ) : JsonConverter< BitmapFont >
-//    {
-//        public override BitmapFont? ReadJson( JsonReader reader, Type type, BitmapFont? existing, 
-//                                              bool hasExt, JsonSerializer serializer )
-//        {
-//            return reader.TokenType == JsonToken.String
-//                ? skin.GetFont( ( string )reader.Value! )
-//                : serializer.Deserialize< BitmapFont >( reader );
-//        }
-//
-//        public override void WriteJson( JsonWriter writer, BitmapFont? value, JsonSerializer serializer ) { }
-//    }
 
     // ========================================================================
     // ========================================================================

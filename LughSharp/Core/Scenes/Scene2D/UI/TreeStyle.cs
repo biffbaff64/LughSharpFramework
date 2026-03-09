@@ -32,10 +32,10 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a <see cref="Tree{TN,TV}"/>.
 /// </summary>
 [PublicAPI]
-public class TreeStyle< TNode, TValue > where TNode : Tree< TNode, TValue >.Node
+public class TreeStyle
 {
-    public ISceneDrawable  Plus       { get; set; }
-    public ISceneDrawable  Minus      { get; set; }
+    public ISceneDrawable? Plus       { get; set; }
+    public ISceneDrawable? Minus      { get; set; }
     public ISceneDrawable? PlusOver   { get; set; }
     public ISceneDrawable? MinusOver  { get; set; }
     public ISceneDrawable? Over       { get; set; }
@@ -44,6 +44,10 @@ public class TreeStyle< TNode, TValue > where TNode : Tree< TNode, TValue >.Node
 
     // ====================================================================
 
+    public TreeStyle()
+    {
+    }
+    
     public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
     {
         Plus      = plus;
@@ -51,7 +55,7 @@ public class TreeStyle< TNode, TValue > where TNode : Tree< TNode, TValue >.Node
         Selection = selection;
     }
 
-    public TreeStyle( TreeStyle< TNode, TValue > style )
+    public TreeStyle( TreeStyle style )
     {
         Plus  = style.Plus;
         Minus = style.Minus;

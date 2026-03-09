@@ -857,7 +857,7 @@ SCENES/SCENE2D/UI
     -      -      -      - Scene2DImage
     -      -      -      - ScrollPane
     -      -      -      - SelectBox
-    -      -      -      - Skin                    Needs Json updates
+    -      -      -      - Skin
     -      -      -      - Slider
     -      -      -      - SplitPane
     -      -      -      - Stack

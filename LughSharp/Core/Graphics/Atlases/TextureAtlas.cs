@@ -68,7 +68,6 @@ public class TextureAtlas : IDisposable
     public TextureAtlas( FileInfo packFile )
         : this( packFile, packFile.Directory )
     {
-        Logger.Debug( $"Loading texture atlas: {packFile.FullName}" );
     }
 
     /// <summary>

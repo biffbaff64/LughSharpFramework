@@ -28,16 +28,18 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
+/// <summary>
+/// The style for a touchpad, see <see cref="Touchpad"/>.
+/// </summary>
 [PublicAPI]
 public class TouchpadStyle
 {
     // Stretched in both directions.
     public ISceneDrawable? Background { get; set; }
-
-    public ISceneDrawable? Knob { get; set; }
+    public ISceneDrawable? Knob       { get; set; }
 
     // ====================================================================
-        
+
     public TouchpadStyle()
     {
     }
@@ -57,4 +59,3 @@ public class TouchpadStyle
 
 // ============================================================================
 // ============================================================================
-

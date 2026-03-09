@@ -124,14 +124,14 @@ public class SkinBackup : IDisposable
         new( "TextFieldStyle",          typeof( TextFieldStyle ) ),
         new( "ImageButtonStyle",        typeof( ImageButtonStyle ) ),
         new( "ImageTextButtonStyle",    typeof( ImageTextButtonStyle ) ),
-        new( "ListBoxStyle",            typeof( ListBoxStyle<> ) ),
+        new( "ListBoxStyle",            typeof( ListBoxStyle ) ),
         new( "ScrollPaneStyle",         typeof( ScrollPaneStyle ) ),
-        new( "SelectBoxStyle",          typeof( SelectBoxStyle<> ) ),
+        new( "SelectBoxStyle",          typeof( SelectBoxStyle ) ),
         new( "SliderStyle",             typeof( SliderStyle ) ),
         new( "SplitPaneStyle",          typeof( SplitPaneStyle ) ),
         new( "TextTooltipStyle",        typeof( TextTooltipStyle ) ),
         new( "TouchpadStyle",           typeof( TouchpadStyle ) ),
-        new( "TreeStyle",               typeof( TreeStyle< , > ) ),
+        new( "TreeStyle",               typeof( TreeStyle ) ),
         new( "WindowStyle",             typeof( WindowStyle ) )
         // --------------------------------------
     ];
