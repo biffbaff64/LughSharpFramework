@@ -48,16 +48,16 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// <typeparam name="TNode"> The type of nodes in the tree. </typeparam>
 /// <typeparam name="TValue"> The type of values for each node. </typeparam>
 [PublicAPI]
-public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValue >.TreeStyle >
+public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle< TNode, TValue > >
     where TNode : Tree< TNode, TValue >.Node
 {
-    public TNode?         RangeStart    { get; set; }
-    public ClickListener? ClickListener { get; set; }
-    public TreeStyle?     Style         { get; set; }
-    public List< TNode >  RootNodes     { get; set; } = [ ];
-    public float          YSpacing      { get; set; } = 4;
-    public float          IndentSpacing { get; set; }
-    public TNode?         OverNode      { get; set; }
+    public TNode?                      RangeStart    { get; set; }
+    public ClickListener?              ClickListener { get; set; }
+    public TreeStyle< TNode, TValue >? Style         { get; set; }
+    public List< TNode >               RootNodes     { get; set; } = [ ];
+    public float                       YSpacing      { get; set; } = 4;
+    public float                       IndentSpacing { get; set; }
+    public TNode?                      OverNode      { get; set; }
 
     // ========================================================================
 
@@ -76,9 +76,9 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValu
 
     /// <summary>
     /// Construct a new Tree using the supplied <see cref="Skin"/>
-    /// and a default <see cref="TreeStyle"/> from that skin.
+    /// and a default <see cref="TreeStyle{TNode,TValue}"/> from that skin.
     /// </summary>
-    public Tree( Skin skin ) : this( skin.Get< TreeStyle >() )
+    public Tree( Skin skin ) : this( skin.Get< TreeStyle< TNode, TValue > >() )
     {
     }
 
@@ -94,7 +94,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValu
     /// The type of the value that each node in the tree represents.
     /// </typeparam>
     public Tree( Skin skin, string styleName )
-        : this( skin.Get< TreeStyle >( styleName ) )
+        : this( skin.Get< TreeStyle< TNode, TValue > >( styleName ) )
     {
     }
 
@@ -107,7 +107,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValu
     /// <typeparam name="TValue">
     /// The type of the value stored in each tree node.
     /// </typeparam>
-    public Tree( TreeStyle style )
+    public Tree( TreeStyle< TNode, TValue > style )
     {
         _selection = new TreeSelection( this )
         {
@@ -126,7 +126,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValu
     /// Sets the style to use for this tree.
     /// </summary>
     /// <param name="style"></param>
-    public void SetStyle( TreeStyle style )
+    public void SetStyle( TreeStyle< TNode, TValue > style )
     {
         Style = style;
 
@@ -419,7 +419,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValu
             cullTop    = cullBottom + cullingArea.Height;
         }
 
-        TreeStyle? style = Style;
+        TreeStyle< TNode, TValue >? style = Style;
 
         float x       = X;
         float y       = Y;
@@ -504,7 +504,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValu
 
     /// <summary>
     /// Returns the drawable for the expand icon. The default implementation returns
-    /// <see cref="Tree{T,V}.TreeStyle.PlusOver"/> or <see cref="Tree{T,V}.TreeStyle.MinusOver"/>
+    /// <see cref="TreeStyle{T,V}.PlusOver"/> or <see cref="TreeStyle{T,V}.MinusOver"/>
     /// on the desktop if the node is the over node, the mouse is left of iconX, and
     /// clicking would expand the node.
     /// </summary>
@@ -841,43 +841,6 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< Tree< TNode, TValu
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// The style for a <see cref="Tree{TN,TV}"/>.
-    /// </summary>
-    [PublicAPI]
-    public class TreeStyle
-    {
-        public ISceneDrawable  Plus       { get; set; }
-        public ISceneDrawable  Minus      { get; set; }
-        public ISceneDrawable? PlusOver   { get; set; }
-        public ISceneDrawable? MinusOver  { get; set; }
-        public ISceneDrawable? Over       { get; set; }
-        public ISceneDrawable? Selection  { get; set; }
-        public ISceneDrawable? Background { get; set; }
-
-        // ====================================================================
-
-        public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
-        {
-            Plus      = plus;
-            Minus     = minus;
-            Selection = selection;
-        }
-
-        public TreeStyle( TreeStyle style )
-        {
-            Plus  = style.Plus;
-            Minus = style.Minus;
-
-            PlusOver  = style.PlusOver;
-            MinusOver = style.MinusOver;
-
-            Over       = style.Over;
-            Selection  = style.Selection;
-            Background = style.Background;
-        }
-    }
 
     // ========================================================================
     // ========================================================================

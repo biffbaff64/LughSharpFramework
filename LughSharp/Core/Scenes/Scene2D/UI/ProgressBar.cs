@@ -56,7 +56,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.ProgressBarStyle >
+public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
 {
     public float KnobPosition { get; set; }
     public float MinValue     { get; set; }
@@ -675,47 +675,6 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBar.Progres
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// The style for a progress bar, see <see cref="ProgressBar"/>.
-    /// </summary>
-    [PublicAPI]
-    public class ProgressBarStyle
-    {
-        // The progress bar background, stretched only in one direction.
-        public ISceneDrawable? Background         { get; set; }
-        public ISceneDrawable? DisabledBackground { get; set; }
-        public ISceneDrawable? Knob               { get; set; }
-        public ISceneDrawable? DisabledKnob       { get; set; }
-        public ISceneDrawable? KnobBefore         { get; set; }
-        public ISceneDrawable? DisabledKnobBefore { get; set; }
-        public ISceneDrawable? KnobAfter          { get; set; }
-        public ISceneDrawable? DisabledKnobAfter  { get; set; }
-
-        // ====================================================================
-
-        public ProgressBarStyle()
-        {
-        }
-
-        public ProgressBarStyle( ISceneDrawable background, ISceneDrawable knob )
-        {
-            Background = background;
-            Knob       = knob;
-        }
-
-        public ProgressBarStyle( ProgressBarStyle style )
-        {
-            Background         = style.Background;
-            DisabledBackground = style.DisabledBackground;
-            Knob               = style.Knob;
-            DisabledKnob       = style.DisabledKnob;
-            KnobBefore         = style.KnobBefore;
-            DisabledKnobBefore = style.DisabledKnobBefore;
-            KnobAfter          = style.KnobAfter;
-            DisabledKnobAfter  = style.DisabledKnobAfter;
-        }
-    }
 }
 
 // ============================================================================

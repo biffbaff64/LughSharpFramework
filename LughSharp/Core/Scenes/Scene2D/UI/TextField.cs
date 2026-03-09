@@ -63,7 +63,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// Android <see cref="IOnScreenKeyboard"/> implementation will bring up the default IME.
 /// </para>
 [PublicAPI]
-public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
+public class TextField : Widget, IStyleable< TextFieldStyle >
 {
     public TextFieldStyle?     Style                    { get; set; }
     public string?             Text                     { get; set; }
@@ -1242,77 +1242,6 @@ public class TextField : Widget, IStyleable< TextField.TextFieldStyle >
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// The style for a <see cref="TextField"/>.
-    /// </summary>
-    [PublicAPI]
-    public class TextFieldStyle
-    {
-        public BitmapFont?     Font               { get; set; }
-        public Color?          FontColor          { get; set; }
-        public Color?          FocusedFontColor   { get; set; }
-        public Color?          DisabledFontColor  { get; set; }
-        public ISceneDrawable? Background         { get; set; }
-        public ISceneDrawable? FocusedBackground  { get; set; }
-        public ISceneDrawable? DisabledBackground { get; set; }
-        public ISceneDrawable? Cursor             { get; set; }
-        public ISceneDrawable? Selection          { get; set; }
-        public BitmapFont?     MessageFont        { get; set; }
-        public Color?          MessageFontColor   { get; set; }
-
-        // ====================================================================
-
-        public TextFieldStyle()
-        {
-        }
-
-        public TextFieldStyle( BitmapFont font,
-                               Color fontColor,
-                               ISceneDrawable? cursor,
-                               ISceneDrawable? selection,
-                               ISceneDrawable? background )
-        {
-            Font       = font;
-            FontColor  = fontColor;
-            Cursor     = cursor;
-            Selection  = selection;
-            Background = background;
-        }
-
-        public TextFieldStyle( TextFieldStyle style )
-        {
-            Font = style.Font;
-
-            if ( style.FontColor != null )
-            {
-                FontColor = new Color( style.FontColor );
-            }
-
-            if ( style.FocusedFontColor != null )
-            {
-                FocusedFontColor = new Color( style.FocusedFontColor );
-            }
-
-            if ( style.DisabledFontColor != null )
-            {
-                DisabledFontColor = new Color( style.DisabledFontColor );
-            }
-
-            Background         = style.Background;
-            FocusedBackground  = style.FocusedBackground;
-            DisabledBackground = style.DisabledBackground;
-            Cursor             = style.Cursor;
-            Selection          = style.Selection;
-
-            MessageFont = style.MessageFont;
-
-            if ( style.MessageFontColor != null )
-            {
-                MessageFontColor = new Color( style.MessageFontColor );
-            }
-        }
-    }
 
     // ========================================================================
     // ========================================================================

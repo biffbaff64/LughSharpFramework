@@ -281,7 +281,7 @@ public class MainGame : Game
 
         // --------------------------------------
 
-        var skin = new Skin( new FileInfo( @"Assets\\Skins\\uiskin.json" ) );
+        var skin = new Skin( new FileInfo( @"Assets\Skins\uiskin.json" ) );
         
         // --------------------------------------
 

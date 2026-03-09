@@ -122,7 +122,7 @@ public class Scene2DUtils
     {
         var fontUtils = new FontUtils();
 
-        var label1Style = new Label.LabelStyle
+        var label1Style = new LabelStyle
         {
             Font      = fontUtils.CreateFont( fontName, size, Color.White ),
             FontColor = color
@@ -228,7 +228,7 @@ public class Scene2DUtils
     public Label MakeLabel( string str, int x, int y, Color color, Skin skin )
     {
         var              label = new Label( str, skin );
-        Label.LabelStyle style = label.Style;
+        LabelStyle style = label.Style;
 
         style.FontColor = color;
 
@@ -269,7 +269,7 @@ public class Scene2DUtils
     public CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
     {
         var                     checkBox = new CheckBox( "", skin );
-        CheckBox.CheckBoxStyle? style    = checkBox.Style;
+        CheckBoxStyle? style    = checkBox.Style;
 
         style?.FontColor   = color;
         style?.CheckboxOn  = new TextureRegionDrawable( imageOn );

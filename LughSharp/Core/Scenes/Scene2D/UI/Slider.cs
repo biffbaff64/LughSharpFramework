@@ -310,45 +310,6 @@ public class Slider : ProgressBar
     // ========================================================================
     // ========================================================================
 
-    [PublicAPI]
-    public class SliderStyle : ProgressBarStyle
-    {
-        public ISceneDrawable? BackgroundOver { get; set; }
-        public ISceneDrawable? BackgroundDown { get; set; }
-        public ISceneDrawable? KnobBeforeOver { get; set; }
-        public ISceneDrawable? KnobOver       { get; set; }
-        public ISceneDrawable? KnobAfterOver  { get; set; }
-        public ISceneDrawable? KnobBeforeDown { get; set; }
-        public ISceneDrawable? KnobDown       { get; set; }
-        public ISceneDrawable? KnobAfterDown  { get; set; }
-
-        // ====================================================================
-
-        public SliderStyle()
-        {
-        }
-
-        public SliderStyle( ISceneDrawable background, ISceneDrawable knob )
-            : base( background, knob )
-        {
-        }
-
-        public SliderStyle( SliderStyle style ) : base( style )
-        {
-            BackgroundOver = style.BackgroundOver;
-            BackgroundDown = style.BackgroundDown;
-
-            KnobOver = style.KnobOver;
-            KnobDown = style.KnobDown;
-
-            KnobBeforeOver = style.KnobBeforeOver;
-            KnobBeforeDown = style.KnobBeforeDown;
-
-            KnobAfterOver = style.KnobAfterOver;
-            KnobAfterDown = style.KnobAfterDown;
-        }
-    }
-
     // ========================================================================
     // ========================================================================
 

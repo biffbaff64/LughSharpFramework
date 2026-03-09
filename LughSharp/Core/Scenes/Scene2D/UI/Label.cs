@@ -32,7 +32,6 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Styles;
-using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -48,7 +47,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Label : Widget, IStyleable< Label.LabelStyle >
+public class Label : Widget, IStyleable< LabelStyle >
 {
     public override string?          Name        => "Label";
     public          BitmapFontCache? FontCache   { get; set; }
@@ -581,41 +580,8 @@ public class Label : Widget, IStyleable< Label.LabelStyle >
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// The style for a label, see <see cref="Label"/>.
-    /// </summary>
-    [PublicAPI]
-    public class LabelStyle
-    {
-        public BitmapFont      Font       { get; set; }
-        public Color           FontColor  { get; set; }
-        public ISceneDrawable? Background { get; set; }
-
-        // ====================================================================
-
-        public LabelStyle()
-        {
-            Font       = new BitmapFont();
-            FontColor  = Color.White;
-            Background = null;
-        }
-
-        public LabelStyle( BitmapFont font, Color fontColor )
-        {
-            Font      = font;
-            FontColor = fontColor;
-        }
-
-        public LabelStyle( LabelStyle style )
-        {
-            Font      = style.Font;
-            FontColor = new Color( style.FontColor );
-
-            Background = style.Background;
-        }
-    }
 }
 
 // ============================================================================
 // ============================================================================
+

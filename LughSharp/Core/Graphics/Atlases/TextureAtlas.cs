@@ -31,6 +31,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.Atlases;
 
@@ -67,6 +68,7 @@ public class TextureAtlas : IDisposable
     public TextureAtlas( FileInfo packFile )
         : this( packFile, packFile.Directory )
     {
+        Logger.Debug( $"Loading texture atlas: {packFile.FullName}" );
     }
 
     /// <summary>

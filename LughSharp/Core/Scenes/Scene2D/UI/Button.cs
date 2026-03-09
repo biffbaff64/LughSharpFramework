@@ -57,7 +57,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Button : Table, IDisableable, IStyleable< Button.ButtonStyle >
+public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 {
     public override string? Name => "Button";
 
@@ -428,65 +428,6 @@ public class Button : Table, IDisableable, IStyleable< Button.ButtonStyle >
             }
 
             _button.SetChecked( !_button.IsChecked, true );
-        }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// The style for a button, see <see cref="Button"/>.
-    /// </summary>
-    [PublicAPI]
-    public class ButtonStyle
-    {
-        public ISceneDrawable? Up             { get; set; }
-        public ISceneDrawable? Down           { get; set; }
-        public ISceneDrawable? Over           { get; set; }
-        public ISceneDrawable? Focused        { get; set; }
-        public ISceneDrawable? Disabled       { get; set; }
-        public ISceneDrawable? Checked        { get; set; }
-        public ISceneDrawable? CheckedOver    { get; set; }
-        public ISceneDrawable? CheckedDown    { get; set; }
-        public ISceneDrawable? CheckedFocused { get; set; }
-
-        public float PressedOffsetX   { get; set; }
-        public float PressedOffsetY   { get; set; }
-        public float UnpressedOffsetX { get; set; }
-        public float UnpressedOffsetY { get; set; }
-        public float CheckedOffsetX   { get; set; }
-        public float CheckedOffsetY   { get; set; }
-
-        // ====================================================================
-
-        public ButtonStyle()
-        {
-        }
-
-        public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? ischecked )
-        {
-            Up      = up;
-            Down    = down;
-            Checked = ischecked;
-        }
-
-        public ButtonStyle( ButtonStyle style )
-        {
-            Up               = style.Up;
-            Down             = style.Down;
-            Over             = style.Over;
-            Focused          = style.Focused;
-            Disabled         = style.Disabled;
-            Checked          = style.Checked;
-            CheckedOver      = style.CheckedOver;
-            CheckedDown      = style.CheckedDown;
-            CheckedFocused   = style.CheckedFocused;
-            PressedOffsetX   = style.PressedOffsetX;
-            PressedOffsetY   = style.PressedOffsetY;
-            UnpressedOffsetX = style.UnpressedOffsetX;
-            UnpressedOffsetY = style.UnpressedOffsetY;
-            CheckedOffsetX   = style.CheckedOffsetX;
-            CheckedOffsetY   = style.CheckedOffsetY;
         }
     }
 }

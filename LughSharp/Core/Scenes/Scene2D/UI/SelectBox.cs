@@ -58,15 +58,15 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle >, IDisableable
+public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle< T > >, IDisableable
     where T : notnull
 {
-    public ClickListener  ClickListener { get; set; }
-    public SelectBoxStyle Style         { get; set; } = null!;
-    public List< T >      Items         { get; }      = [ ];
-    public bool           IsDisabled    { get; set; }
-    public float          PrefWidth     { get; private set; }
-    public float          PrefHeight    { get; private set; }
+    public ClickListener       ClickListener { get; set; }
+    public SelectBoxStyle< T > Style         { get; set; } = null!;
+    public List< T >           Items         { get; }      = [ ];
+    public bool                IsDisabled    { get; set; }
+    public float               PrefWidth     { get; private set; }
+    public float               PrefHeight    { get; private set; }
 
     // ========================================================================
 
@@ -84,20 +84,20 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     // ========================================================================
 
     /// <summary>
-    /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin,
+    /// Creates a select box with a <see cref="SelectBoxStyle{T}"/> from the provided skin,
     /// </summary>
     /// <param name="skin"></param>
-    public SelectBox( Skin skin ) : this( skin.Get< SelectBoxStyle >() )
+    public SelectBox( Skin skin ) : this( skin.Get< SelectBoxStyle< T > >() )
     {
     }
 
     /// <summary>
-    /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin and style name,
+    /// Creates a select box with a <see cref="SelectBoxStyle{T}"/> from the provided skin and style name,
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="styleName"></param>
     public SelectBox( Skin skin, string styleName )
-        : this( skin.Get< SelectBoxStyle >( styleName ) )
+        : this( skin.Get< SelectBoxStyle< T > >( styleName ) )
     {
     }
 
@@ -105,7 +105,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     /// Creates a select box with the provided style.
     /// </summary>
     /// <param name="style"></param>
-    public SelectBox( SelectBoxStyle style )
+    public SelectBox( SelectBoxStyle< T > style )
     {
         SetStyle( style );
         SetSize( PrefWidth, PrefHeight );
@@ -146,10 +146,10 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
     }
 
     /// <summary>
-    /// Sets the <see cref="SelectBoxStyle"/> to use for this select box.
+    /// Sets the <see cref="SelectBoxStyle{T}"/> to use for this select box.
     /// </summary>
     /// <param name="style"></param>
-    public void SetStyle( SelectBoxStyle style )
+    public void SetStyle( SelectBoxStyle< T > style )
     {
         Guard.Against.Null( style );
 
@@ -285,8 +285,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
                 PrefWidth = Math.Max( PrefWidth + bg.LeftWidth + bg.RightWidth, bg.MinWidth );
             }
 
-            ListBox< T >.ListBoxStyle  listStyle   = Style.ListBoxStyle;
-            ScrollPane.ScrollPaneStyle scrollStyle = Style.ScrollStyle;
+            ListBoxStyle< T > listStyle   = Style.ListBoxStyle;
+            ScrollPaneStyle             scrollStyle = Style.ScrollStyle;
 
             float? listWidth = maxItemWidth + listStyle.Selection?.LeftWidth + listStyle.Selection?.RightWidth;
 
@@ -1062,68 +1062,4 @@ public class SelectBox< T > : Widget, IStyleable< SelectBox< T >.SelectBoxStyle 
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// The Style for a <see cref="SelectBox{T}"/>.
-    /// </summary>
-    [PublicAPI]
-    public class SelectBoxStyle
-    {
-        public BitmapFont                 Font               { get; } = null!;
-        public ScrollPane.ScrollPaneStyle ScrollStyle        { get; } = null!;
-        public ListBox< T >.ListBoxStyle  ListBoxStyle       { get; } = null!;
-        public Color                      FontColor          { get; } = new( 1, 1, 1, 1 );
-        public Color?                     OverFontColor      { get; }
-        public Color?                     DisabledFontColor  { get; }
-        public ISceneDrawable?            Background         { get; }
-        public ISceneDrawable?            BackgroundOver     { get; }
-        public ISceneDrawable?            BackgroundOpen     { get; }
-        public ISceneDrawable?            BackgroundDisabled { get; }
-
-        // ====================================================================
-
-        public SelectBoxStyle()
-        {
-        }
-
-        public SelectBoxStyle( BitmapFont font,
-                               Color fontColor,
-                               ISceneDrawable background,
-                               ScrollPane.ScrollPaneStyle scrollStyle,
-                               ListBox< T >.ListBoxStyle listBoxStyle )
-        {
-            Font         = font;
-            Background   = background;
-            ScrollStyle  = scrollStyle;
-            ListBoxStyle = listBoxStyle;
-
-            FontColor.Set( fontColor );
-        }
-
-        public SelectBoxStyle( SelectBoxStyle? style )
-        {
-            Guard.Against.Null( style );
-
-            Font = style.Font;
-            FontColor.Set( style.FontColor );
-
-            if ( style.OverFontColor != null )
-            {
-                OverFontColor = new Color( style.OverFontColor );
-            }
-
-            if ( style.DisabledFontColor != null )
-            {
-                DisabledFontColor = new Color( style.DisabledFontColor );
-            }
-
-            Background   = style.Background;
-            ScrollStyle  = new ScrollPane.ScrollPaneStyle( style.ScrollStyle );
-            ListBoxStyle = new ListBox< T >.ListBoxStyle( style.ListBoxStyle );
-
-            BackgroundOver     = style.BackgroundOver;
-            BackgroundOpen     = style.BackgroundOpen;
-            BackgroundDisabled = style.BackgroundDisabled;
-        }
-    }
 }

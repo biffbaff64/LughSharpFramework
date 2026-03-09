@@ -37,7 +37,7 @@ using Rectangle = LughSharp.Core.Maths.Rectangle;
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
-public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
+public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
 {
     public override string? Name => "SplitPane";
 
@@ -646,27 +646,6 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPane.SplitPaneStyle >
 
     // ========================================================================
     // ========================================================================
-
-    [PublicAPI]
-    public class SplitPaneStyle
-    {
-        public ISceneDrawable Handle { get; set; }
-
-        public SplitPaneStyle()
-        {
-            Handle = null!;
-        }
-
-        public SplitPaneStyle( ISceneDrawable handle )
-        {
-            Handle = handle;
-        }
-
-        public SplitPaneStyle( SplitPaneStyle style )
-        {
-            Handle = style.Handle;
-        }
-    }
 }
 
 // ============================================================================

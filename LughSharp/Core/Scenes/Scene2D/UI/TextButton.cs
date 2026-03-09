@@ -28,7 +28,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -73,7 +72,7 @@ public class TextButton : Button
     {
         Style = style;
 
-        _label = new Label( text, new Label.LabelStyle( style.Font!, style.FontColor! ) );
+        _label = new Label( text, new LabelStyle( style.Font!, style.FontColor! ) );
         _label.SetAlignment( Align.Center );
 
         Add( _label ).Expand().SetFill();
@@ -105,7 +104,7 @@ public class TextButton : Button
 
             if ( Label != null )
             {
-                Label.LabelStyle labelStyle = Label.Style;
+                LabelStyle labelStyle = Label.Style;
 
                 labelStyle.Font      = value.Font ?? new BitmapFont();
                 labelStyle.FontColor = value.FontColor ?? Color.White;
@@ -258,83 +257,8 @@ public class TextButton : Button
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// The style for a text button, see <see cref="TextButton"/>.
-    /// </summary>
-    [PublicAPI]
-    public class TextButtonStyle : ButtonStyle
-    {
-        public BitmapFont? Font                    { get; set; }
-        public Color?      FontColor               { get; set; }
-        public Color?      DownFontColor           { get; set; }
-        public Color?      OverFontColor           { get; set; }
-        public Color?      FocusedFontColor        { get; set; }
-        public Color?      DisabledFontColor       { get; set; }
-        public Color?      CheckedFontColor        { get; set; }
-        public Color?      CheckedDownFontColor    { get; set; }
-        public Color?      CheckedOverFontColor    { get; set; }
-        public Color?      CheckedFocusedFontColor { get; set; }
-
-        protected TextButtonStyle()
-        {
-        }
-
-        public TextButtonStyle( ISceneDrawable upImage, ISceneDrawable downImage, ISceneDrawable checkedImage,
-                                BitmapFont font )
-            : base( upImage, downImage, checkedImage )
-        {
-            Font = font;
-        }
-
-        protected TextButtonStyle( TextButtonStyle style ) : base( style )
-        {
-            Font = style.Font;
-
-            if ( style.FontColor != null )
-            {
-                FontColor = new Color( style.FontColor );
-            }
-
-            if ( style.DownFontColor != null )
-            {
-                DownFontColor = new Color( style.DownFontColor );
-            }
-
-            if ( style.OverFontColor != null )
-            {
-                OverFontColor = new Color( style.OverFontColor );
-            }
-
-            if ( style.FocusedFontColor != null )
-            {
-                FocusedFontColor = new Color( style.FocusedFontColor );
-            }
-
-            if ( style.DisabledFontColor != null )
-            {
-                DisabledFontColor = new Color( style.DisabledFontColor );
-            }
-
-            if ( style.CheckedFontColor != null )
-            {
-                CheckedFontColor = new Color( style.CheckedFontColor );
-            }
-
-            if ( style.CheckedDownFontColor != null )
-            {
-                CheckedDownFontColor = new Color( style.CheckedDownFontColor );
-            }
-
-            if ( style.CheckedOverFontColor != null )
-            {
-                CheckedOverFontColor = new Color( style.CheckedOverFontColor );
-            }
-
-            if ( style.CheckedFocusedFontColor != null )
-            {
-                CheckedFocusedFontColor = new Color( style.CheckedFocusedFontColor );
-            }
-        }
-    }
 }
+
+// ============================================================================
+// ============================================================================
+

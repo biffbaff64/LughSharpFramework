@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Scenes.Scene2D.Styles;
-using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -34,7 +33,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// A tooltip that shows a label.
 /// </summary>
 [PublicAPI]
-public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltip.TextTooltipStyle >
+public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltipStyle >
 {
     public TextTooltip( string text, Skin skin )
         : this( text, new TooltipManager< Label >(), skin.Get< TextTooltipStyle >() )
@@ -94,31 +93,6 @@ public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltip.TextTooltip
     }
 
     // ========================================================================
-
-    [PublicAPI]
-    public class TextTooltipStyle
-    {
-        public Label.LabelStyle Label      { get; set; } = null!;
-        public ISceneDrawable   Background { get; set; } = null!;
-        public float            WrapWidth  { get; set; }
-
-        public TextTooltipStyle()
-        {
-        }
-
-        public TextTooltipStyle( Label.LabelStyle label, ISceneDrawable background )
-        {
-            Label      = label;
-            Background = background;
-        }
-
-        public TextTooltipStyle( TextTooltipStyle style )
-        {
-            Label      = new Label.LabelStyle( style.Label );
-            Background = style.Background;
-            WrapWidth  = style.WrapWidth;
-        }
-    }
 }
 
 // ============================================================================

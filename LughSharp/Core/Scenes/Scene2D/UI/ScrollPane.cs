@@ -39,7 +39,7 @@ using Rectangle = LughSharp.Core.Maths.Rectangle;
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
-public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
+public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
 {
     public readonly Rectangle HKnobBounds   = new();
     public readonly Rectangle HScrollBounds = new();
@@ -1469,48 +1469,6 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPane.ScrollPaneStyle >
 
     // ========================================================================
     // ========================================================================
-
-    [PublicAPI]
-    public class ScrollPaneStyle
-    {
-        public ISceneDrawable? Background  { get; set; }
-        public ISceneDrawable? Corner      { get; set; }
-        public ISceneDrawable? HScroll     { get; set; }
-        public ISceneDrawable? HScrollKnob { get; set; }
-        public ISceneDrawable? VScroll     { get; set; }
-        public ISceneDrawable? VScrollKnob { get; set; }
-
-        // ====================================================================
-
-        public ScrollPaneStyle()
-        {
-        }
-
-        public ScrollPaneStyle( ISceneDrawable background,
-                                ISceneDrawable hScroll,
-                                ISceneDrawable hScrollKnob,
-                                ISceneDrawable vScroll,
-                                ISceneDrawable vScrollKnob )
-        {
-            Background  = background;
-            HScroll     = hScroll;
-            HScrollKnob = hScrollKnob;
-            VScroll     = vScroll;
-            VScrollKnob = vScrollKnob;
-        }
-
-        public ScrollPaneStyle( ScrollPaneStyle style )
-        {
-            Background = style.Background;
-            Corner     = style.Corner;
-
-            HScroll     = style.HScroll;
-            HScrollKnob = style.HScrollKnob;
-
-            VScroll     = style.VScroll;
-            VScrollKnob = style.VScrollKnob;
-        }
-    }
 }
 
 // ============================================================================

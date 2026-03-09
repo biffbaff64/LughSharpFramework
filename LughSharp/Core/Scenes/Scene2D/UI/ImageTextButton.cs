@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 
@@ -67,7 +66,7 @@ public class ImageTextButton : Button
         _image = new Scene2DImage();
         _image.SetScaling( Scaling.Fit );
 
-        _label = new Label( text, new Label.LabelStyle( style.Font!, style.FontColor! ) );
+        _label = new Label( text, new LabelStyle( style.Font!, style.FontColor! ) );
         _label.SetAlignment( Align.Center );
 
         Add( _image );
@@ -99,7 +98,7 @@ public class ImageTextButton : Button
 
         if ( _label != null )
         {
-            Label.LabelStyle labelStyle = _label.Style;
+            LabelStyle labelStyle = _label.Style;
 
             labelStyle.Font      = textButtonStyle.Font!;
             labelStyle.FontColor = GetFontColor();
@@ -316,46 +315,8 @@ public class ImageTextButton : Button
              + className
              + $":  {_image?.Drawable}  {_label?.Text}";
     }
-
-    /// <summary>
-    /// The style for an image text button, see <see cref="ImageTextButton"/>.
-    /// </summary>
-    [PublicAPI]
-    public class ImageTextButtonStyle : TextButton.TextButtonStyle
-    {
-        public ImageTextButtonStyle()
-        {
-        }
-
-        public ImageTextButtonStyle( ISceneDrawable up, ISceneDrawable down, ISceneDrawable chcked, BitmapFont font )
-            : base( up, down, chcked, font )
-        {
-        }
-
-        public ImageTextButtonStyle( ImageTextButtonStyle style )
-            : base( style )
-
-        {
-            ImageUp          = style.ImageUp;
-            ImageDown        = style.ImageDown;
-            ImageOver        = style.ImageOver;
-            ImageDisabled    = style.ImageDisabled;
-            ImageChecked     = style.ImageChecked;
-            ImageCheckedDown = style.ImageCheckedDown;
-            ImageCheckedOver = style.ImageCheckedOver;
-        }
-
-        public ImageTextButtonStyle( TextButton.TextButtonStyle style )
-            : base( style )
-        {
-        }
-
-        public ISceneDrawable? ImageUp          { get; set; }
-        public ISceneDrawable? ImageDown        { get; set; }
-        public ISceneDrawable? ImageOver        { get; set; }
-        public ISceneDrawable? ImageDisabled    { get; set; }
-        public ISceneDrawable? ImageChecked     { get; set; }
-        public ISceneDrawable? ImageCheckedDown { get; set; }
-        public ISceneDrawable? ImageCheckedOver { get; set; }
-    }
 }
+
+// ============================================================================
+// ============================================================================
+

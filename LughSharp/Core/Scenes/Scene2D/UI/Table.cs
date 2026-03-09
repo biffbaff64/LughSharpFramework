@@ -457,7 +457,7 @@ public class Table : WidgetGroup
             throw new RuntimeException( "Table must have a skin set to use this method." );
         }
 
-        return Add( new Label( text, Skin.Get< Label.LabelStyle >( labelStyleName ) ) );
+        return Add( new Label( text, Skin.Get< LabelStyle >( labelStyleName ) ) );
     }
 
     /// <summary>
@@ -471,7 +471,7 @@ public class Table : WidgetGroup
             throw new RuntimeException( "Table must have a skin set to use this method." );
         }
 
-        return Add( new Label( text, new Label.LabelStyle( Skin.GetFont( fontName ), color ) ) );
+        return Add( new Label( text, new LabelStyle( Skin.GetFont( fontName ), color ) ) );
     }
 
     /// <summary>
@@ -485,7 +485,7 @@ public class Table : WidgetGroup
             throw new RuntimeException( "Table must have a skin set to use this method." );
         }
 
-        return Add( new Label( text, new Label.LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
+        return Add( new Label( text, new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
     }
 
     /// <summary>

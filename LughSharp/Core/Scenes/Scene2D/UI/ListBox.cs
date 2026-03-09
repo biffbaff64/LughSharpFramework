@@ -51,7 +51,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > where T : notnull
+public class ListBox< T > : Widget, IStyleable< ListBoxStyle< T > > where T : notnull
 {
     public Rectangle?          CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
@@ -63,9 +63,9 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
     /// <summary>
     /// Returns the list's style. Modifying the returned style may not have an
-    /// effect until <see cref="SetStyle(ListBoxStyle)"/> is called.
+    /// effect until <see cref="SetStyle(ListBoxStyle{T})"/> is called.
     /// </summary>
-    public ListBoxStyle Style { get; set; } = null!;
+    public ListBoxStyle< T > Style { get; set; } = null!;
 
     // ========================================================================
 
@@ -82,31 +82,31 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
     /// <summary>
     /// Creates a new ListBox, using the supplied <see cref="Skin"/>.
-    /// The <see cref="ListBoxStyle"/> embedded in the Skin will be used.
+    /// The <see cref="ListBoxStyle{T}"/> embedded in the Skin will be used.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
     public ListBox( Skin skin )
-        : this( skin.Get< ListBoxStyle >() )
+        : this( skin.Get< ListBoxStyle< T > >() )
     {
     }
 
     /// <summary>
     /// Creates a new ListBox, using the supplied <see cref="Skin"/>. The
-    /// <see cref="ListBoxStyle"/> to use will be extracted from the supplied
+    /// <see cref="ListBoxStyle{T}"/> to use will be extracted from the supplied
     /// skin using the name provided.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
     /// <param name="styleName"> The name of the ListStyle to extract from the Skin. </param>
     public ListBox( Skin skin, string styleName )
-        : this( skin.Get< ListBoxStyle >( styleName ) )
+        : this( skin.Get< ListBoxStyle< T > >( styleName ) )
     {
     }
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="ListBoxStyle"/>
+    /// Creates a new ListBox, using the supplied <see cref="ListBoxStyle{T}"/>
     /// </summary>
     /// <param name="boxStyle"> The ListStyle to use. </param>
-    public ListBox( ListBoxStyle boxStyle )
+    public ListBox( ListBoxStyle< T > boxStyle )
     {
         Create( boxStyle );
     }
@@ -135,7 +135,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         _prefHeight = value;
     }
 
-    private void Create( ListBoxStyle boxStyle )
+    private void Create( ListBoxStyle< T > boxStyle )
     {
         Selection = new ArraySelection< T >( Items )
         {
@@ -152,7 +152,7 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
         AddListener( new ListInputListener( this ) );
     }
 
-    public void SetStyle( ListBoxStyle boxStyle )
+    public void SetStyle( ListBoxStyle< T > boxStyle )
     {
         Style = boxStyle ?? throw new ArgumentException( "style cannot be null." );
 
@@ -690,45 +690,8 @@ public class ListBox< T > : Widget, IStyleable< ListBox< T >.ListBoxStyle > wher
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// The style for a list, see <see cref="ListBox{T}"/>.
-    /// </summary>
-    [PublicAPI]
-    public class ListBoxStyle
-    {
-        public ListBoxStyle()
-        {
-            Font = new BitmapFont();
-        }
-
-        public ListBoxStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected,
-                             ISceneDrawable selection )
-        {
-            Font = font;
-            FontColorSelected.Set( fontColorSelected );
-            FontColorUnselected.Set( fontColorUnselected );
-            Selection = selection;
-        }
-
-        public ListBoxStyle( ListBoxStyle boxStyle )
-        {
-            Font = boxStyle.Font;
-            FontColorSelected.Set( boxStyle.FontColorSelected );
-            FontColorUnselected.Set( boxStyle.FontColorUnselected );
-            Selection = boxStyle.Selection;
-
-            Down       = boxStyle.Down;
-            Over       = boxStyle.Over;
-            Background = boxStyle.Background;
-        }
-
-        public BitmapFont      Font                { get; set; }
-        public Color           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
-        public Color           FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
-        public ISceneDrawable? Selection           { get; set; }
-        public ISceneDrawable? Down                { get; set; }
-        public ISceneDrawable? Over                { get; set; }
-        public ISceneDrawable? Background          { get; set; }
-    }
 }
+
+// ============================================================================
+// ============================================================================
+

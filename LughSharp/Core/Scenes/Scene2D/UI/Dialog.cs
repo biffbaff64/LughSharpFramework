@@ -71,7 +71,7 @@ public class Dialog : Window
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="skin"></param>
-    /// <param name="windowStyle"> The <see cref="Window.WindowStyle"/> to use. </param>
+    /// <param name="windowStyle"> The <see cref="WindowStyle"/> to use. </param>
     public Dialog( string title, Skin skin, string windowStyle )
         : base( title, skin.Get< WindowStyle >( windowStyle ) )
     {
@@ -82,10 +82,10 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Creates a new Dialog window, using the supplied name and <see cref="Window.WindowStyle"/>.
+    /// Creates a new Dialog window, using the supplied name and <see cref="WindowStyle"/>.
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="windowStyle"> The <see cref="Window.WindowStyle"/> to use. </param>
+    /// <param name="windowStyle"> The <see cref="WindowStyle"/> to use. </param>
     public Dialog( string title, WindowStyle windowStyle )
         : base( title, windowStyle )
     {
@@ -162,13 +162,13 @@ public class Dialog : Window
             DefaultSkinProvided();
         }
 
-        return Text( text, _skin.Get< Label.LabelStyle >() );
+        return Text( text, _skin.Get< LabelStyle >() );
     }
 
     /// <summary>
     /// Adds a label to the content table.
     /// </summary>
-    public Dialog Text( string? text, Label.LabelStyle labelStyle )
+    public Dialog Text( string? text, LabelStyle labelStyle )
     {
         return Text( new Label( text, labelStyle ) );
     }
@@ -197,7 +197,7 @@ public class Dialog : Window
             DefaultSkinProvided();
         }
 
-        return Button( text, obj, _skin.Get< TextButton.TextButtonStyle >() );
+        return Button( text, obj, _skin.Get< TextButtonStyle >() );
     }
 
     /// <summary>
@@ -209,7 +209,7 @@ public class Dialog : Window
     /// if this button is clicked. May be null.
     /// </param>
     /// <param name="buttonStyle"></param>
-    public Dialog Button( string text, object? obj, TextButton.TextButtonStyle buttonStyle )
+    public Dialog Button( string text, object? obj, TextButtonStyle buttonStyle )
     {
         return Button( new TextButton( text, buttonStyle ), obj );
     }

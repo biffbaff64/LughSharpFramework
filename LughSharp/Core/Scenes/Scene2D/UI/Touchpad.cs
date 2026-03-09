@@ -47,7 +47,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
+public class Touchpad : Widget, IStyleable< TouchpadStyle >
 {
     public bool IsTouched { get; set; }
 
@@ -335,33 +335,6 @@ public class Touchpad : Widget, IStyleable< Touchpad.TouchpadStyle >
 
     // ========================================================================
     // ========================================================================
-
-    [PublicAPI]
-    public class TouchpadStyle
-    {
-        // Stretched in both directions.
-        public ISceneDrawable? Background { get; set; }
-
-        public ISceneDrawable? Knob { get; set; }
-
-        // ====================================================================
-        
-        public TouchpadStyle()
-        {
-        }
-
-        public TouchpadStyle( ISceneDrawable? background, ISceneDrawable? knob )
-        {
-            Background = background;
-            Knob       = knob;
-        }
-
-        public TouchpadStyle( TouchpadStyle style )
-        {
-            Background = style.Background;
-            Knob       = style.Knob;
-        }
-    }
 }
 
 // ============================================================================

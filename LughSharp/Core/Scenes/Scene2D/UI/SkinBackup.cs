@@ -38,7 +38,6 @@ using LughSharp.Core.Utils.Logging;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 
 using Color = LughSharp.Core.Graphics.Color;
 using Exception = System.Exception;
@@ -54,7 +53,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// Resources can be described in JSON.
 /// </para>
 /// <para>
-/// Skin provides useful conversions, such as allowing access to regions in the
+/// SkinBackup provides useful conversions, such as allowing access to regions in the
 /// atlas as ninepatches, sprites, drawables, etc. The get* methods return an
 /// instance of the object in the skin.
 /// </para>
@@ -63,7 +62,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Skin : IDisposable
+public class SkinBackup : IDisposable
 {
     public Dictionary< Type, Dictionary< string, object >? > Resources     { get; set; } = [ ];
     public Dictionary< string, Type >                        JsonClassTags { get; set; } = [ ];
@@ -148,9 +147,9 @@ public class Skin : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Creates an empty Skin.
+    /// Creates an empty SkinBackup.
     /// </summary>
-    public Skin()
+    public SkinBackup()
     {
         Setup();
 
@@ -164,7 +163,7 @@ public class Skin : IDisposable
     /// added to the skin. The atlas is automatically disposed when the skin is
     /// disposed.
     /// </summary>
-    public Skin( FileInfo skinFile )
+    public SkinBackup( FileInfo skinFile )
     {
         Setup();
 
@@ -190,7 +189,7 @@ public class Skin : IDisposable
     /// The atlas is automatically disposed when the skin is disposed.
     /// </para>
     /// </summary>
-    public Skin( FileInfo skinFile, TextureAtlas atlas )
+    public SkinBackup( FileInfo skinFile, TextureAtlas atlas )
     {
         Setup();
 
@@ -205,7 +204,7 @@ public class Skin : IDisposable
     /// Creates a skin containing the texture regions from the specified
     /// atlas. The atlas is automatically disposed when the skin is disposed.
     /// </summary>
-    public Skin( TextureAtlas atlas )
+    public SkinBackup( TextureAtlas atlas )
     {
         Setup();
 
@@ -235,21 +234,16 @@ public class Skin : IDisposable
         try
         {
             string jsonText = File.ReadAllText( skinFile.FullName );
+            var    settings = new JsonSerializerSettings();
 
-            var settings = new JsonSerializerSettings();
-
-            // SkinConverter handles the root { "Type": { "Name": { ... } } }
             settings.Converters.Add( new SkinConverter( this, skinFile ) );
+            settings.Converters.Add( new ColorConverter( this ) );
 
-            // SkinReferenceConverter handles the "string-to-resource" lookup
-            // for all fields inside the Styles.
-            settings.Converters.Add( new SkinReferenceConverter( this ) );
-
-            JsonConvert.DeserializeObject< Skin >( jsonText, settings );
+            _ = JsonConvert.DeserializeObject< SkinBackup >( jsonText, settings );
         }
-        catch ( Exception ex )
+        catch ( JsonException ex )
         {
-            throw new Exception( $"Error reading skin file: {skinFile.FullName}", ex );
+            throw new Exception( $"Error reading file: {skinFile}", ex );
         }
     }
 
@@ -317,7 +311,7 @@ public class Skin : IDisposable
                       : 64 );
 
             Logger.Debug( $"Adding new Dictionary for type: {type.Name}" );
-
+            
             Resources.Put( type, typeResources );
         }
 
@@ -638,7 +632,7 @@ public class Skin : IDisposable
         if ( drawable != null )
         {
             Logger.Debug( $"Found ISceneDrawable with name: {name}" );
-
+            
             return drawable;
         }
 
@@ -790,6 +784,8 @@ public class Skin : IDisposable
     /// </summary>
     public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color tint )
     {
+        Logger.Debug( $"ISceneDrawable: {typeof( ISceneDrawable )} {drawable.GetType()}" );
+        
         //@formatter:off
         ISceneDrawable newDrawable = drawable switch
          {
@@ -921,7 +917,7 @@ public class Skin : IDisposable
     }
 
     // ========================================================================
-
+    
     /// <summary>
     /// Disposes the <see cref="TextureAtlas"/> and all <see cref="IDisposable"/>
     /// resources in the skin.
@@ -958,7 +954,7 @@ public class Skin : IDisposable
                     }
                 }
             }
-
+            
             _disposed = true;
         }
     }
@@ -968,21 +964,21 @@ public class Skin : IDisposable
 
     /// <summary>
     /// A JSON converter responsible for serializing and deserializing instances of the
-    /// <see cref="Color"/> class within the context of a <see cref="Skin"/>.
+    /// <see cref="Color"/> class within the context of a <see cref="SkinBackup"/>.
     /// <para>
     /// This converter handles the translation of colors represented in various formats,
     /// such as hexadecimal strings or component-wise values, into <see cref="Color"/> instances.
     /// </para>
     /// <para>
     /// When reading JSON, it determines the appropriate color representation based on the
-    /// provided structure and resolves named colors via the associated <see cref="Skin"/>.
+    /// provided structure and resolves named colors via the associated <see cref="SkinBackup"/>.
     /// </para>
     /// <para>
     /// When writing JSON, it provides a serialized representation of the <see cref="Color"/> object.
     /// </para>
     /// </summary>
     [PublicAPI]
-    public class ColorConverter( Skin skin ) : JsonConverter< Color >
+    public class ColorConverter( SkinBackup skin ) : JsonConverter< Color >
     {
         public override Color ReadJson( JsonReader reader, Type type, Color? existing, bool hasExt,
                                         JsonSerializer serializer )
@@ -1014,15 +1010,17 @@ public class Skin : IDisposable
     // ========================================================================
 
     [PublicAPI]
-    public class SkinConverter : JsonConverter< Skin >
+    public class SkinConverter : JsonConverter< SkinBackup >
     {
-        private readonly Skin     _skin;
+        private readonly SkinBackup     _skin;
         private readonly FileInfo _skinFile;
 
-        public SkinConverter( Skin skin, FileInfo skinFile )
+        public SkinConverter( SkinBackup skin, FileInfo skinFile )
         {
             _skin     = skin;
             _skinFile = skinFile;
+
+            Logger.Debug( $"skinFile: {skinFile.FullName}" );
         }
 
         /// <summary>
@@ -1038,9 +1036,9 @@ public class Skin : IDisposable
         /// <param name="hasExistingValue">The existing value has a value.</param>
         /// <param name="serializer">The calling serializer.</param>
         /// <returns>The object value.</returns>
-        public override Skin ReadJson( JsonReader reader,
+        public override SkinBackup ReadJson( JsonReader reader,
                                        Type objectType,
-                                       Skin? existingValue,
+                                       SkinBackup? existingValue,
                                        bool hasExistingValue,
                                        JsonSerializer serializer )
         {
@@ -1048,10 +1046,9 @@ public class Skin : IDisposable
 
             foreach ( JProperty typeProperty in root.Properties() )
             {
+                Logger.Debug( $"typeProperty: {typeProperty.Name}" );
+                
                 Type targetType = ResolveType( typeProperty.Name );
-
-                Logger.Divider();
-                Logger.Debug( $"targetType: {targetType.Name}" );
 
                 if ( typeProperty.Value is not JObject resources )
                 {
@@ -1062,19 +1059,17 @@ public class Skin : IDisposable
                 {
                     object? finalObject;
 
+                    Logger.Debug( $"targetType: {targetType.Name}" );
+                    
                     if ( targetType == typeof( BitmapFont ) )
                     {
                         finalObject = ReadBitmapFont( resProperty.Value, _skinFile );
-
-                        Logger.Debug( $"Deserialized {resProperty.Name} to BitmapFont" );
                     }
                     else
                     {
                         finalObject = ( targetType == typeof( TintedDrawable ) )
                             ? ReadTintedDrawable( resProperty.Value, serializer )
-                            : SerializeToObject( targetType, serializer, resProperty.Value );
-
-                        Logger.Debug( $"Deserialized {resProperty.Name} to {finalObject?.GetType()}" );
+                            : resProperty.Value.ToObject( targetType, serializer );
                     }
 
                     if ( finalObject != null )
@@ -1088,22 +1083,6 @@ public class Skin : IDisposable
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="targetType"></param>
-        /// <param name="serializer"></param>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        private object? SerializeToObject( Type targetType, JsonSerializer serializer, JToken token )
-        {
-            var obj = token.ToObject( targetType, serializer );
-
-            Logger.Debug( $"SerializeToObject: {targetType.Name} {obj}" );
-
-            return obj;
-        }
-
-        /// <summary>
         /// Resolves the type associated with the specified name from the skin's JSON
         /// class tags or default tag classes.
         /// </summary>
@@ -1114,12 +1093,14 @@ public class Skin : IDisposable
         /// </returns>
         private Type ResolveType( string name )
         {
+            Logger.Debug( $"Resolving type for name: {name}" );
+            
             Type type = _skin.JsonClassTags.GetValueOrDefault( name ) ??
-                        DefaultTagClasses.FirstOrDefault( t => name.Contains( t.Name ) ).Type ??
-                        typeof( object );
-
+                   DefaultTagClasses.FirstOrDefault( t => name.Contains( t.Name ) ).Type ??
+                   typeof( object );
+            
             Logger.Debug( $"Resolved type: {type.Name}" );
-
+            
             return type;
         }
 
@@ -1157,12 +1138,6 @@ public class Skin : IDisposable
             return font;
         }
 
-        /// <summary>
-        /// Extracts a <see cref="TintedDrawable"/> from the specified JSON token.
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="serializer"></param>
-        /// <returns></returns>
         private ISceneDrawable ReadTintedDrawable( JToken token, JsonSerializer serializer )
         {
             var   name  = token[ "name" ]?.ToString();
@@ -1177,82 +1152,10 @@ public class Skin : IDisposable
         /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter" /> to write to.</param>
         /// <param name="value">The value.</param>
         /// <param name="serializer">The calling serializer.</param>
-        public override void WriteJson( JsonWriter writer, Skin? value, JsonSerializer serializer )
+        public override void WriteJson( JsonWriter writer, SkinBackup? value, JsonSerializer serializer )
         {
         }
     }
-
-    // ========================================================================
-    // ========================================================================
-
-    public class SkinReferenceConverter( Skin skin ) : JsonConverter
-    {
-        // These are the types that can be referenced by name (string) in the JSON
-        public override bool CanConvert( Type objectType )
-        {
-            return objectType == typeof( Color ) ||
-                   objectType == typeof( BitmapFont ) ||
-                   typeof( ISceneDrawable ).IsAssignableFrom( objectType );
-        }
-
-        public override object? ReadJson( JsonReader reader, Type objectType, object? existingValue,
-                                          JsonSerializer serializer )
-        {
-            // If the JSON contains a string, resolve it from the Skin's resources
-            if ( reader.TokenType == JsonToken.String )
-            {
-                var name = ( string )reader.Value!;
-
-                return skin.Get( name, objectType );
-            }
-
-            // If it's not a string (e.g. it's an inline object), let the default logic handle it
-            return serializer.Deserialize( reader, objectType );
-        }
-
-        public override void WriteJson( JsonWriter writer, object? value, JsonSerializer serializer )
-        {
-        }
-    }
-
-//    /// <summary>
-//    /// A JSON converter for ISceneDrawable that resolves string names 
-//    /// to drawable instances from the skin.
-//    /// </summary>
-//    [PublicAPI]
-//    public class DrawableConverter( Skin skin ) : JsonConverter< ISceneDrawable >
-//    {
-//        public override ISceneDrawable? ReadJson( JsonReader reader, Type type, ISceneDrawable? existing, 
-//                                                  bool hasExt, JsonSerializer serializer )
-//        {
-//            // If the value in JSON is a string, look it up in the skin
-//            return reader.TokenType == JsonToken.String
-//                ? skin.GetDrawable( ( string )reader.Value! )
-//                // If it's an object, it might be a TintedDrawable or something Newtonsoft can handle
-//                : serializer.Deserialize< ISceneDrawable >( reader );
-//        }
-//
-//        public override void WriteJson( JsonWriter writer, ISceneDrawable? value, JsonSerializer serializer )
-//        {
-//        }
-//    }
-
-    // ========================================================================
-    // ========================================================================
-
-//    [PublicAPI]
-//    public class FontConverter( Skin skin ) : JsonConverter< BitmapFont >
-//    {
-//        public override BitmapFont? ReadJson( JsonReader reader, Type type, BitmapFont? existing, 
-//                                              bool hasExt, JsonSerializer serializer )
-//        {
-//            return reader.TokenType == JsonToken.String
-//                ? skin.GetFont( ( string )reader.Value! )
-//                : serializer.Deserialize< BitmapFont >( reader );
-//        }
-//
-//        public override void WriteJson( JsonWriter writer, BitmapFont? value, JsonSerializer serializer ) { }
-//    }
 
     // ========================================================================
     // ========================================================================

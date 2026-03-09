@@ -28,14 +28,10 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Scenes.Scene2D.Styles;
-using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -50,7 +46,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Window : Table, IStyleable< Window.WindowStyle >
+public class Window : Table, IStyleable< WindowStyle >
 {
     public bool   DrawTitleTable  { get; set; }
     public Label? TitleLabel      { get; set; }
@@ -118,7 +114,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
         Touchable = Touchable.Enabled;
         Clip      = true;
 
-        TitleLabel = new Label( title, new Label.LabelStyle( style.TitleFont!, style.TitleFontColor! ) );
+        TitleLabel = new Label( title, new LabelStyle( style.TitleFont!, style.TitleFontColor! ) );
         TitleLabel.SetEllipsis( true );
 
         _titleTable = new TitleTable( this );
@@ -332,7 +328,7 @@ public class Window : Table, IStyleable< Window.WindowStyle >
             {
                 if ( field.TitleFont != null && field.TitleFontColor != null )
                 {
-                    TitleLabel.Style = new Label.LabelStyle( field.TitleFont, field.TitleFontColor );
+                    TitleLabel.Style = new LabelStyle( field.TitleFont, field.TitleFontColor );
                 }
             }
 
@@ -634,61 +630,6 @@ public class Window : Table, IStyleable< Window.WindowStyle >
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// The style for a window, see <see cref="Window"/>.
-    /// </summary>
-    [PublicAPI]
-    public class WindowStyle
-    {
-        public ISceneDrawable? Background      { get; set; }
-        public BitmapFont?     TitleFont       { get; set; }
-        public Color?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
-        public ISceneDrawable? StageBackground { get; set; }
-
-        // ====================================================================
-
-        /// <summary>
-        /// Creates a new empty WindowStyle instance. Before using this style it will be
-        /// necessary to set the <see cref="Background"/>, <see cref="TitleFont"/> properties.
-        /// The <see cref="TitleFontColor"/>defaults to white, but can be changed to any color.
-        /// </summary>
-        public WindowStyle()
-        {
-        }
-
-        /// <summary>
-        /// Creates a new WindowStyle instance with the specified parameters for
-        /// <see cref="TitleFont"/>, <see cref="TitleFontColor"/>, and <see cref="Background"/>.
-        /// </summary>
-        /// <param name="titleFont"></param>
-        /// <param name="titleFontColor"></param>
-        /// <param name="background"></param>
-        public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable? background )
-        {
-            TitleFont  = titleFont;
-            Background = background;
-
-            TitleFontColor?.Set( titleFontColor );
-        }
-
-        /// <summary>
-        /// Copies the specified style into this style.
-        /// </summary>
-        /// <param name="style"> The style to copy from. </param>
-        public WindowStyle( WindowStyle style )
-        {
-            Background = style.Background;
-            TitleFont  = style.TitleFont;
-
-            if ( style.TitleFontColor != null )
-            {
-                TitleFontColor = new Color( style.TitleFontColor );
-            }
-
-            Background = style.Background;
-        }
-    }
 }
 
 // ========================================================================

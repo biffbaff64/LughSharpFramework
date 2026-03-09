@@ -25,11 +25,8 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -129,44 +126,8 @@ public class CheckBox : TextButton
 
         base.Draw( batch, parentAlpha );
     }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// The style for a select box, see <see cref="CheckBox"/>.
-    /// </summary>
-    [PublicAPI]
-    public class CheckBoxStyle : TextButtonStyle
-    {
-        public ISceneDrawable? CheckboxOn          { get; set; }
-        public ISceneDrawable? CheckboxOff         { get; set; }
-        public ISceneDrawable? CheckboxOnOver      { get; set; }
-        public ISceneDrawable? CheckboxOver        { get; set; }
-        public ISceneDrawable? CheckboxOnDisabled  { get; set; }
-        public ISceneDrawable? CheckboxOffDisabled { get; set; }
-
-        public CheckBoxStyle()
-        {
-        }
-
-        public CheckBoxStyle( ISceneDrawable checkboxOff, ISceneDrawable checkboxOn, BitmapFont font, Color fontColor )
-        {
-            CheckboxOff = checkboxOff;
-            CheckboxOn  = checkboxOn;
-            Font        = font;
-            FontColor   = fontColor;
-        }
-
-        public CheckBoxStyle( CheckBoxStyle style ) : base( style )
-        {
-            CheckboxOff = style.CheckboxOff;
-            CheckboxOn  = style.CheckboxOn;
-
-            CheckboxOnOver      = style.CheckboxOnOver;
-            CheckboxOver        = style.CheckboxOver;
-            CheckboxOnDisabled  = style.CheckboxOnDisabled;
-            CheckboxOffDisabled = style.CheckboxOffDisabled;
-        }
-    }
 }
+
+// ============================================================================
+// ============================================================================
+
