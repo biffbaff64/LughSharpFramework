@@ -87,15 +87,32 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="min"></param>
+    /// <param name="max"></param>
+    /// <param name="stepSize"></param>
+    /// <param name="vertical"></param>
+    /// <param name="skin"></param>
     public ProgressBar( float min, float max, float stepSize, bool vertical, Skin skin )
         : this( min,
                 max,
                 stepSize,
                 vertical,
-                skin.Get< ProgressBarStyle >( $"default-{( vertical ? "vertical" : "horizontal" )}" ) )
+                skin.Get< ProgressBarStyle >( $"default{( vertical ? "-vertical" : "" )}" ) )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="min"></param>
+    /// <param name="max"></param>
+    /// <param name="stepSize"></param>
+    /// <param name="vertical"></param>
+    /// <param name="skin"></param>
+    /// <param name="styleName"></param>
     public ProgressBar( float min, float max, float stepSize, bool vertical, Skin skin, string styleName )
         : this( min, max, stepSize, vertical, skin.Get< ProgressBarStyle >( styleName ) )
     {

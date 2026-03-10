@@ -58,6 +58,17 @@
       "checked": "default-round-down"
     }
   },
+  "ImageButtonStyle": {
+    "default": {
+      "down": "default-round-down",
+      "up": "default-round",
+      "disabled": "default-round"
+    },
+    "toggle": {
+      "parent": "default",
+      "checked": "default-round-down"
+    }
+  },
   "TextButtonStyle": {
     "default": {
       "parent": "default",
@@ -112,7 +123,7 @@
     }
   },
   "ProgressBarStyle": {
-    "default-horizontal": {
+    "default": {
       "background": "default-slider",
       "knob": "default-slider-knob"
     },
@@ -122,7 +133,7 @@
     }
   },
   "SliderStyle": {
-    "default-horizontal": {
+    "default": {
       "parent": "default-horizontal"
     },
     "default-vertical": {

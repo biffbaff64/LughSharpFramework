@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
@@ -35,6 +37,8 @@ public class CheckBox : TextButton
 {
     public override string? Name => "CheckBox";
 
+    // ========================================================================
+    
     public Scene2DImage? Image     { get; set; }
     public Cell?         ImageCell { get; set; }
 
@@ -55,7 +59,7 @@ public class CheckBox : TextButton
         Setup( style );
     }
 
-    public new CheckBoxStyle? Style
+    public new ButtonStyle? Style
     {
         get;
         set
@@ -63,6 +67,11 @@ public class CheckBox : TextButton
             field      = value ?? throw new ArgumentException( "style must be a CheckBoxStyle." );
             base.Style = value;
         }
+    }
+
+    public override CheckBoxStyle? GetStyle()
+    {
+        return ( CheckBoxStyle? )Style;
     }
 
     /// <summary>
@@ -92,13 +101,13 @@ public class CheckBox : TextButton
 
         if ( IsDisabled )
         {
-            if ( IsChecked && ( Style?.CheckboxOnDisabled != null ) )
+            if ( IsChecked && ( GetStyle()?.CheckboxOnDisabled != null ) )
             {
-                checkbox = Style.CheckboxOnDisabled;
+                checkbox = GetStyle()?.CheckboxOnDisabled;
             }
             else
             {
-                checkbox = Style?.CheckboxOffDisabled;
+                checkbox = GetStyle()?.CheckboxOffDisabled;
             }
         }
 
@@ -106,19 +115,19 @@ public class CheckBox : TextButton
         {
             bool over = IsOver() && !IsDisabled;
 
-            if ( IsChecked && ( Style?.CheckboxOn != null ) )
+            if ( IsChecked && ( GetStyle()?.CheckboxOn != null ) )
             {
-                checkbox = over && ( Style.CheckboxOnOver != null )
-                    ? Style.CheckboxOnOver
-                    : Style.CheckboxOn;
+                checkbox = over && ( GetStyle()?.CheckboxOnOver != null )
+                    ? GetStyle()?.CheckboxOnOver
+                    : GetStyle()?.CheckboxOn;
             }
-            else if ( over && ( Style?.CheckboxOver != null ) )
+            else if ( over && ( GetStyle()?.CheckboxOver != null ) )
             {
-                checkbox = Style.CheckboxOver;
+                checkbox = GetStyle()?.CheckboxOver;
             }
             else
             {
-                checkbox = Style?.CheckboxOff;
+                checkbox = GetStyle()?.CheckboxOff;
             }
         }
 

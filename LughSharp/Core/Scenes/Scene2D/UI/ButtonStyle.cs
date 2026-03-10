@@ -32,7 +32,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a button, see <see cref="Button"/>.
 /// </summary>
 [PublicAPI]
-public class ButtonStyle
+public class ButtonStyle : ISceneStyle
 {
     public ISceneDrawable? Up             { get; set; }
     public ISceneDrawable? Down           { get; set; }
@@ -67,12 +67,12 @@ public class ButtonStyle
     /// </summary>
     /// <param name="up"> The ISceneDrawable image for button UP. </param>
     /// <param name="down"> The ISceneDrawable image for button DOWN. </param>
-    /// <param name="ischecked"></param>
-    public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? ischecked )
+    /// <param name="chcked"></param>
+    public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? chcked )
     {
         Up      = up;
         Down    = down;
-        Checked = ischecked;
+        Checked = chcked;
     }
 
     /// <summary>

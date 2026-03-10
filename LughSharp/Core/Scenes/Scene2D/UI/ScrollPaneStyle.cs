@@ -32,7 +32,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a <see cref="ScrollPane"/>.
 /// </summary>
 [PublicAPI]
-public class ScrollPaneStyle
+public class ScrollPaneStyle : ISceneStyle
 {
     public ISceneDrawable? Background  { get; set; }
     public ISceneDrawable? Corner      { get; set; }

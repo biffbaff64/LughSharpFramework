@@ -32,7 +32,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for an image button.
 /// </summary>
 [PublicAPI]
-public class ImageButtonStyle : ButtonStyle
+public class ImageButtonStyle : ButtonStyle, ISceneStyle
 {
     public ISceneDrawable? ImageChecked;
     public ISceneDrawable? ImageCheckedDown;
@@ -41,7 +41,7 @@ public class ImageButtonStyle : ButtonStyle
     public ISceneDrawable? ImageDown;
     public ISceneDrawable? ImageOver;
     public ISceneDrawable? ImageUp;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -49,6 +49,18 @@ public class ImageButtonStyle : ButtonStyle
     /// </summary>
     public ImageButtonStyle()
     {
+    }
+
+    /// <summary>
+    /// Creates a new ImageButtonStyle instance, using the supplied <see cref="ISceneDrawable"/>
+    /// images for <see cref="ImageUp"/>, <see cref="ImageDown"/> and <see cref="ImageChecked"/>.
+    /// </summary>
+    public ImageButtonStyle( ISceneDrawable? imageUp, ISceneDrawable? imageDown, ISceneDrawable? imageChecked )
+        : base( imageUp, imageDown, imageChecked )
+    {
+        ImageUp      = imageUp;
+        ImageDown    = imageDown;
+        ImageChecked = imageChecked;
     }
 
     /// <summary>
@@ -74,11 +86,10 @@ public class ImageButtonStyle : ButtonStyle
     public ImageButtonStyle( ImageButtonStyle style )
         : base( style )
     {
-        ImageUp       = style.ImageUp;
-        ImageDown     = style.ImageDown;
-        ImageOver     = style.ImageOver;
-        ImageDisabled = style.ImageDisabled;
-
+        ImageUp          = style.ImageUp;
+        ImageDown        = style.ImageDown;
+        ImageOver        = style.ImageOver;
+        ImageDisabled    = style.ImageDisabled;
         ImageChecked     = style.ImageChecked;
         ImageCheckedDown = style.ImageCheckedDown;
         ImageCheckedOver = style.ImageCheckedOver;
@@ -96,4 +107,3 @@ public class ImageButtonStyle : ButtonStyle
 
 // ============================================================================
 // ============================================================================
-

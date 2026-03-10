@@ -24,48 +24,30 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Scenes.Scene2D.Listeners;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
-/// <summary>
-/// The style for a <see cref="Tree{TN,TV}"/>.
-/// </summary>
 [PublicAPI]
-public class TreeStyle : ISceneStyle
+public class ButtonClickListener : ClickListener
 {
-    public ISceneDrawable? Plus       { get; set; }
-    public ISceneDrawable? Minus      { get; set; }
-    public ISceneDrawable? PlusOver   { get; set; }
-    public ISceneDrawable? MinusOver  { get; set; }
-    public ISceneDrawable? Over       { get; set; }
-    public ISceneDrawable? Selection  { get; set; }
-    public ISceneDrawable? Background { get; set; }
-
-    // ====================================================================
-
-    public TreeStyle()
-    {
-    }
+    private readonly Button _button;
     
-    public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
+    // ========================================================================
+
+    public ButtonClickListener( Button button )
     {
-        Plus      = plus;
-        Minus     = minus;
-        Selection = selection;
+        _button = button;
     }
 
-    public TreeStyle( TreeStyle style )
+    public override void OnClicked( InputEvent inputEvent, float x, float y )
     {
-        Plus  = style.Plus;
-        Minus = style.Minus;
+        if ( _button.IsDisabled )
+        {
+            return;
+        }
 
-        PlusOver  = style.PlusOver;
-        MinusOver = style.MinusOver;
-
-        Over       = style.Over;
-        Selection  = style.Selection;
-        Background = style.Background;
+        _button.SetChecked( !_button.IsChecked, true );
     }
 }
 

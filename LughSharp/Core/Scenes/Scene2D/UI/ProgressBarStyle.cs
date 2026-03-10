@@ -32,7 +32,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a progress bar, see <see cref="ProgressBar"/>.
 /// </summary>
 [PublicAPI]
-public class ProgressBarStyle
+public class ProgressBarStyle : ISceneStyle
 {
     // The progress bar background, stretched only in one direction.
     public ISceneDrawable? Background         { get; set; }

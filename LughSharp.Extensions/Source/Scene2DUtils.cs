@@ -160,12 +160,17 @@ public class Scene2DUtils
     /// </summary>
     /// <param name="upButton"> The <see cref="Scene2DImage"/> to display when NOT pressed. </param>
     /// <param name="downButton"> The <see cref="Scene2DImage"/> to display when pressed. </param>
+    /// <param name="checkedButton"> The <see cref="Scene2DImage"/> to display when checked. </param>
     /// <param name="x"> X Display coordinate. </param>
     /// <param name="y"> Y Display coordinate. </param>
     /// <returns> The ImageButton. </returns>
-    public ImageButton AddButton( Scene2DImage upButton, Scene2DImage downButton, int x, int y )
+    public ImageButton AddButton( Scene2DImage upButton,
+                                  Scene2DImage downButton,
+                                  Scene2DImage checkedButton,
+                                  int x,
+                                  int y )
     {
-        var imageButton = new ImageButton( upButton.Drawable, downButton.Drawable );
+        var imageButton = new ImageButton( upButton.Drawable, downButton.Drawable, checkedButton.Drawable );
 
         imageButton.SetPosition( x, y );
         imageButton.IsVisible = true;
@@ -269,11 +274,11 @@ public class Scene2DUtils
     public CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
     {
         var                     checkBox = new CheckBox( "", skin );
-        CheckBoxStyle? style    = checkBox.Style;
+        ButtonStyle? style    = checkBox.Style;
 
-        style?.FontColor   = color;
-        style?.CheckboxOn  = new TextureRegionDrawable( imageOn );
-        style?.CheckboxOff = new TextureRegionDrawable( imageOff );
+        ( ( CheckBoxStyle? )style )?.FontColor   = color;
+        ( ( CheckBoxStyle? )style )?.CheckboxOn  = new TextureRegionDrawable( imageOn );
+        ( ( CheckBoxStyle? )style )?.CheckboxOff = new TextureRegionDrawable( imageOff );
 
         checkBox.SetSize( imageOn.GetRegionWidth(), imageOn.GetRegionHeight() );
         checkBox.Style = style;

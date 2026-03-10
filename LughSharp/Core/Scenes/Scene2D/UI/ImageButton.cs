@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
@@ -36,16 +34,20 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// <summary>
 /// A button with a child <see cref="Scene2DImage"/> to display an image. This is useful when
 /// the button must be larger than the image and the image centered on the button. If
-/// the image is the size of the button, a Button without any children can be used,
+/// the image is the size of the button, a <see cref="Button"/> without any children can be used,
 /// where the <see cref="ButtonStyle.Up"/>, <see cref="ButtonStyle.Down"/>,
 /// and <see cref="ButtonStyle.Checked"/> nine patches define the image.
 /// </summary>
 [PublicAPI]
 public class ImageButton : Button
 {
-    public override string? Name => "ImageButton";
+    public override string Name => "ImageButton";
 
     // ========================================================================
+
+    public     Scene2DImage     Scene2DImage { get; }
+    public new ImageButtonStyle Style        { get; set; } = null!;
+
     // ========================================================================
 
     /// <summary>
@@ -72,33 +74,15 @@ public class ImageButton : Button
     /// <summary>
     /// </summary>
     /// <param name="style"></param>
-    public ImageButton( ImageButtonStyle style )
-        : base( style )
+    public ImageButton( ImageButtonStyle style ) : base( style )
     {
         Scene2DImage = new Scene2DImage();
         Scene2DImage.SetScaling( Scaling.Fit );
 
         Add( Scene2DImage );
+
         SetStyle( style );
-
-        ConstructorHelper();
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="imageUp"></param>
-    public ImageButton( ISceneDrawable? imageUp )
-        : this( new ImageButtonStyle( null, null, null, imageUp, null, null ) )
-    {
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="imageUp"></param>
-    /// <param name="imageDown"></param>
-    public ImageButton( ISceneDrawable? imageUp, ISceneDrawable? imageDown )
-        : this( new ImageButtonStyle( null, null, null, imageUp, imageDown, null ) )
-    {
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
     /// <summary>
@@ -107,16 +91,8 @@ public class ImageButton : Button
     /// <param name="imageDown"></param>
     /// <param name="imageChecked"></param>
     public ImageButton( ISceneDrawable? imageUp, ISceneDrawable? imageDown, ISceneDrawable? imageChecked )
-        : this( new ImageButtonStyle( null, null, null, imageUp, imageDown, imageChecked ) )
+        : this( new ImageButtonStyle( imageUp, imageDown, imageChecked ) )
     {
-    }
-
-    public     Scene2DImage     Scene2DImage { get; }
-    public new ImageButtonStyle Style        { get; private set; } = null!;
-
-    private void ConstructorHelper()
-    {
-        SetSize( GetPrefWidth(), GetPrefHeight() );
     }
 
     /// <summary>
@@ -125,7 +101,7 @@ public class ImageButton : Button
     /// <exception cref="ArgumentException"></exception>
     public void SetStyle( ButtonStyle style )
     {
-        Style      = style as ImageButtonStyle ?? throw new ArgumentException( "style must be an ImageButtonStyle." );
+        Style      = new ImageButtonStyle( style );
         base.Style = style;
 
         UpdateImage();
@@ -188,6 +164,11 @@ public class ImageButton : Button
         return Style.ImageUp;
     }
 
+    protected Scene2DImage? NewImage()
+    {
+        return new Scene2DImage( null, Scaling.Fit );
+    }
+
     /// <summary>
     /// Sets the image drawable based on the current button state. The default implementation
     /// sets the image drawable using <see cref="GetImageDrawable()"/>.
@@ -219,24 +200,18 @@ public class ImageButton : Button
     /// <inheritdoc />
     public override string ToString()
     {
-        if ( Name != null )
-        {
-            return Name;
-        }
+        return Name;
 
-        string className = GetType().Name;
-        int    dotIndex  = className.LastIndexOf( '.' );
-
-        if ( dotIndex != -1 )
-        {
-            className = className.Substring( dotIndex + 1 );
-        }
-
-        return ( className.IndexOf( '$' ) != -1 ? "ImageButton " : "" ) + className + ": " + Scene2DImage.Drawable;
+//        string className = GetType().Name;
+//        int    dotIndex  = className.LastIndexOf( '.' );
+//
+//        if ( dotIndex != -1 )
+//        {
+//            className = className.Substring( dotIndex + 1 );
+//        }
+//
+//        return ( className.Contains('$') ? "ImageButton " : "" ) + className + ": " + Scene2DImage.Drawable;
     }
-
-    // ========================================================================
-    // ========================================================================
 }
 
 // ============================================================================

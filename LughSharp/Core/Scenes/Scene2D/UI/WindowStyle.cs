@@ -36,7 +36,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a window, see <see cref="Window"/>.
 /// </summary>
 [PublicAPI]
-public class WindowStyle
+public class WindowStyle : ISceneStyle
 {
     public ISceneDrawable? Background      { get; set; }
     public BitmapFont?     TitleFont       { get; set; }

@@ -32,7 +32,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a <see cref="TextTooltip"/>.
 /// </summary>
 [PublicAPI]
-public class TextTooltipStyle
+public class TextTooltipStyle : ISceneStyle
 {
     public LabelStyle     Label      { get; set; } = null!;
     public ISceneDrawable Background { get; set; } = null!;

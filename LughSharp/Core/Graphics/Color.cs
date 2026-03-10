@@ -812,8 +812,6 @@ public class Color : ICloneable, IEquatable< Color >
     {
         if ( color == null )
         {
-            Logger.Error( "Provided color is null, defaulting to White." );
-            
             color = White;
         }
 

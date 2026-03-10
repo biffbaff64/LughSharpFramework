@@ -34,7 +34,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a label, see <see cref="Label"/>.
 /// </summary>
 [PublicAPI]
-public class LabelStyle
+public class LabelStyle : ISceneStyle
 {
     public BitmapFont      Font       { get; set; }
     public Color           FontColor  { get; set; }

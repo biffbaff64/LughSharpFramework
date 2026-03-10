@@ -34,7 +34,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a <see cref="TextField"/>.
 /// </summary>
 [PublicAPI]
-public class TextFieldStyle
+public class TextFieldStyle : ISceneStyle
 {
     public BitmapFont?     Font               { get; set; }
     public Color?          FontColor          { get; set; }

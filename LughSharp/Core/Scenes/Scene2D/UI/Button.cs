@@ -406,30 +406,6 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     {
         return ClickListener!.Over;
     }
-
-    // ========================================================================
-    // ========================================================================
-
-    [PublicAPI]
-    public class ButtonClickListener : ClickListener
-    {
-        private readonly Button _button;
-
-        public ButtonClickListener( Button button )
-        {
-            _button = button;
-        }
-
-        public override void OnClicked( InputEvent inputEvent, float x, float y )
-        {
-            if ( _button.IsDisabled )
-            {
-                return;
-            }
-
-            _button.SetChecked( !_button.IsChecked, true );
-        }
-    }
 }
 
 // ============================================================================

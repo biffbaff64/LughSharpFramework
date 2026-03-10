@@ -32,7 +32,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a split pane, see <see cref="SplitPane"/>.
 /// </summary>
 [PublicAPI]
-public class SplitPaneStyle
+public class SplitPaneStyle : ISceneStyle
 {
     public ISceneDrawable Handle { get; set; }
 

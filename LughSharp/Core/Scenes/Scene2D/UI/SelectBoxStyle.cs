@@ -35,7 +35,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The Style for a <see cref="SelectBox{T}"/>.
 /// </summary>
 [PublicAPI]
-public class SelectBoxStyle
+public class SelectBoxStyle : ISceneStyle
 {
     public BitmapFont      Font               { get; } = null!;
     public ScrollPaneStyle ScrollStyle        { get; } = null!;

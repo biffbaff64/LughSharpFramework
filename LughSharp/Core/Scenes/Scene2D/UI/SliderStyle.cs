@@ -29,7 +29,7 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 [PublicAPI]
-public class SliderStyle : ProgressBarStyle
+public class SliderStyle : ProgressBarStyle, ISceneStyle
 {
     public ISceneDrawable? BackgroundOver { get; set; }
     public ISceneDrawable? BackgroundDown { get; set; }

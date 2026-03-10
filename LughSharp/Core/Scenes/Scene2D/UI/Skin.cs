@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 
 using JetBrains.Annotations;
@@ -34,11 +38,9 @@ using LughSharp.Core.Main;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 
 using Color = LughSharp.Core.Graphics.Color;
 using Exception = System.Exception;
@@ -241,7 +243,7 @@ public class Skin : IDisposable
 
             // Handles explicit Color object definitions/hex strings.
             settings.Converters.Add( new ColorConverter( this ) );
-            
+
             // SkinReferenceConverter resolves string names back to skin resources.
             settings.Converters.Add( new SkinReferenceConverter( this ) );
 
@@ -361,20 +363,23 @@ public class Skin : IDisposable
         Guard.Against.Null( name );
         Guard.Against.Null( type );
 
+        // Redirect specialized types to their specific getter methods
+        // This bypasses the Resources[type] dictionary for interfaces/complex types
         if ( type == typeof( ISceneDrawable ) ) return GetDrawable( name );
         if ( type == typeof( TextureRegion ) ) return GetRegion( name );
         if ( type == typeof( NinePatch ) ) return GetPatch( name );
         if ( type == typeof( Sprite ) ) return GetSprite( name );
 
-        Dictionary< string, object >? typeResources = Resources[ type ];
-
-        if ( typeResources == null )
+        // Use TryGetValue to avoid KeyNotFoundException
+        if ( !Resources.TryGetValue( type, out Dictionary< string, object >? typeResources )
+          || typeResources == null )
         {
             throw new RuntimeException( $"No {type.FullName} registered with name: {name}" );
         }
 
-        return typeResources[ name ] ?? throw new RuntimeException( $"No {type.FullName} registered"
-                                                                  + $"with name: {name}" );
+        return !typeResources.TryGetValue( name, out object? resource )
+            ? throw new RuntimeException( $"No {type.FullName} registered with name: {name}" )
+            : resource;
     }
 
     /// <summary>
@@ -383,11 +388,9 @@ public class Skin : IDisposable
     /// <returns> null if not found. </returns>
     public T? Optional< T >( string name )
     {
-        Guard.Against.Null( typeof( T ) );
-
-        if ( Resources.ContainsKey( typeof( T ) ) )
+        if ( Resources.TryGetValue( typeof( T ), out var typeResources ) )
         {
-            return ( T? )Resources[ typeof( T ) ]?.Get( name );
+            return ( T? )typeResources?.Get( name );
         }
 
         return default;
@@ -415,7 +418,7 @@ public class Skin : IDisposable
     /// </summary>
     public Dictionary< string, object >? GetAll( Type type )
     {
-        return Resources[ type ];
+        return Resources.GetValueOrDefault( type );
     }
 
     /// <summary>
@@ -885,6 +888,20 @@ public class Skin : IDisposable
         }
     }
 
+    public void Debug( Type style )
+    {
+        // Debug: List all loaded TextButtonStyles
+        Dictionary< string, object >? styles = GetAll( style );
+
+        if ( styles?.Keys != null )
+        {
+            foreach ( string name in styles.Keys )
+            {
+                Console.WriteLine( $"Loaded Style: {name}" );
+            }
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -1069,32 +1086,23 @@ public class Skin : IDisposable
         /// <returns></returns>
         private object? SerializeToObject( Type targetType, JsonSerializer serializer, JToken token )
         {
-            // If it's a string, we know it's a reference lookup
             if ( token.Type == JTokenType.String )
             {
                 return _skin.Get( token.ToString(), targetType );
             }
 
-            try
+            // Create a local serializer without the SkinConverter to avoid loops
+            var localSettings = new JsonSerializerSettings
             {
-                // BYPASS DynamicMethod: Manually create the instance
-                // This is the only way to stop Newtonsoft from trying to 'be smart' 
-                // with nested or generic types.
-                object? instance = Activator.CreateInstance( targetType );
-        
-                using JsonReader reader = token.CreateReader();
-                serializer.Populate( reader, instance! );
-        
-                return instance;
-            }
-            catch ( Exception ex )
-            {
-                // Fallback for types that might not have parameterless constructors
-                // (though Styles definitely should)
-                return token.ToObject( targetType, serializer );
-            }
+                Converters = serializer.Converters.Where( c => c is not SkinConverter ).ToList()
+            };
+            var localSerializer = JsonSerializer.Create( localSettings );
+
+            using JsonReader reader = token.CreateReader();
+
+            return localSerializer.Deserialize( reader, targetType );
         }
-        
+
         /// <summary>
         /// Resolves the type associated with the specified name from the skin's JSON
         /// class tags or default tag classes.
@@ -1188,8 +1196,7 @@ public class Skin : IDisposable
         public override object? ReadJson( JsonReader reader, Type objectType, object? existingValue,
                                           JsonSerializer serializer )
         {
-            // Handle string name (e.g., "white" or "default-font")
-            // This is where we perform the lookup in the skin.
+            // 1. Handle string name lookup (e.g., "white")
             if ( reader.TokenType == JsonToken.String )
             {
                 var name = ( string )reader.Value!;
@@ -1197,31 +1204,22 @@ public class Skin : IDisposable
                 return skin.Get( name, objectType );
             }
 
-            // Handle object definition (e.g., { "r": 1, "g": 1 ... })
-            // Calling serializer.Deserialize() here will cause a StackOverflow.
-            // Instead, load it into a JToken and use a "clean" call or manual population.
+            // 2. Handle object definition (e.g., { "r": 1, ... })
             if ( reader.TokenType == JsonToken.StartObject )
             {
-                JToken token = JToken.Load( reader );
-
-                // Special case for Color hex strings inside an object: { "hex": "..." }
-                if ( objectType == typeof( Color ) && token[ "hex" ] != null )
+                // To avoid StackOverflow/Error Context issues, create a clean serializer
+                // that DOES NOT have this SkinReferenceConverter in its list.
+                var localSettings = new JsonSerializerSettings
                 {
-                    return Color.FromHexString( token[ "hex" ]!.ToString() );
-                }
+                    ContractResolver = serializer.ContractResolver,
+                    // Keep the ColorConverter if we are dealing with a Color
+                    Converters = serializer.Converters.Where( c => c is not SkinReferenceConverter ).ToList()
+                };
 
-                // Create the instance manually and populate it.
-                // This bypasses the Converter lookup for the fields inside the object.
-                JsonContract contract = serializer.ContractResolver.ResolveContract( objectType );
-                object?      result   = contract.DefaultCreator?.Invoke();
+                var localSerializer = JsonSerializer.Create( localSettings );
 
-                if ( result != null )
-                {
-                    using JsonReader subReader = token.CreateReader();
-                    serializer.Populate( subReader, result );
-                }
-
-                return result;
+                // Deserialize using the clean serializer
+                return localSerializer.Deserialize( reader, objectType );
             }
 
             return null;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.Versioning;
 
 using Extensions.Source.Freetype;
@@ -27,6 +28,7 @@ using LughSharp.Tests.Source;
 
 using Newtonsoft.Json.Linq;
 
+using ButtonStyle = LughSharp.Core.Scenes.Scene2D.UI.ButtonStyle;
 using Color = LughSharp.Core.Graphics.Color;
 
 namespace Template.Source;
@@ -70,6 +72,7 @@ public class MainGame : Game
     private Scene2DImage?               _hudActor;
     private Window?                     _windowActor;
     private ImageButton?                _imageButton;
+    private Button?                     _button;
     private ProgressBar?                _progressBar;
     private BitmapFont?                 _font;
     private Sprite?                     _sprite;
@@ -128,12 +131,12 @@ public class MainGame : Game
 
         // --------------------------------------
 
-        if ( _tiledMapCam is { IsInUse: true } )
+        if ( _mapRenderer != null && _tiledMapCam is { IsInUse: true } )
         {
             _tiledMapCam.Update();
-
-            _mapRenderer?.SetView( _tiledMapCam.Camera );
-            _mapRenderer?.Render();
+            
+            _mapRenderer.SetView( _tiledMapCam.Camera );
+            _mapRenderer.Render();
         }
 
         // --------------------------------------
@@ -271,40 +274,46 @@ public class MainGame : Game
         }
 
         var skin = new Skin( new FileInfo( Assets.ProgressBarSkin ) );
+        _stage = new Stage( _spriteCam.Viewport );
 
         // --------------------------------------
         
-        _stage = new Stage( _spriteCam.Viewport );
-        _hudActor = new Scene2DImage( new Texture( Assets.HudPanel ) )
-        {
-            IsVisible = true
-        };
-        _hudActor.SetPosition( 0, 0 );
-        _stage?.AddActor( _hudActor );
-
-        // --------------------------------------
-
-        var windowStyle = new WindowStyle
-        {
-            TitleFont      = _font,
-            TitleFontColor = Color.White,
-            Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
-        };
-        _windowActor = new Window( "Window Title", windowStyle )
-        {
-            IsVisible = true,
-        };
-        _windowActor.SetPosition( 200, 180 );
-        _stage?.AddActor( _windowActor );
-
-        // --------------------------------------
-
-//        _imageButton = new ImageButton( new ImageButtonStyle() )
+//        _hudActor = new Scene2DImage( new Texture( Assets.HudPanel ) )
 //        {
 //            IsVisible = true
 //        };
-//        _imageButton.SetPosition( 0, 0 );
-//        _stage?.AddActor( _imageButton );
+//        _hudActor.SetPosition( 0, 0 );
+//        _stage?.AddActor( _hudActor );
+
+        // --------------------------------------
+
+//        var windowStyle = new WindowStyle
+//        {
+//            TitleFont      = _font,
+//            TitleFontColor = Color.White,
+//            Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
+//        };
+//        _windowActor = new Window( "Window Title", windowStyle )
+//        {
+//            IsVisible = true,
+//        };
+//        _windowActor.SetPosition( 200, 180 );
+//        _stage?.AddActor( _windowActor );
+
+        // --------------------------------------
+        
+        var button = new Button( skin, "default" );
+        button.SetPosition( 20, 200 );
+        _stage?.AddActor( button );
+        
+        // --------------------------------------
+
+        var imageButton = new ImageButton( skin, "default" )
+        {
+            IsVisible = true
+        };
+        imageButton.SetPosition( 0, 0 );
+        _stage?.AddActor( imageButton );
         
         // --------------------------------------
 
@@ -317,9 +326,15 @@ public class MainGame : Game
 
         // --------------------------------------
 
-//        _progressBar = new ProgressBar( 0f, 10f, 1f, false, skin );
-//        _progressBar.SetPosition( 20, 550 );
-//        _stage?.AddActor( _progressBar );
+        var progressBar = new ProgressBar( 0f, 10f, 1f, false, skin );
+        progressBar.SetPosition( 20, 550 );
+        _stage?.AddActor( progressBar );
+        
+        // --------------------------------------
+
+        var checkBox = new CheckBox( "default", skin );
+        checkBox.SetPosition( 400, 400 );
+        _stage?.AddActor( checkBox );
     }
 
     private void CreateFont()
@@ -357,17 +372,15 @@ public class MainGame : Game
 
     private void CreateMap()
     {
-        _tmxMapLoader = new TmxMapLoader();
-        _tiledMap     = _tmxMapLoader.Load( Assets.Room1Map );
-        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
+//        _tmxMapLoader = new TmxMapLoader();
+//        _tiledMap     = _tmxMapLoader.Load( Assets.Room1Map );
+//        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
 
-        _mapWidth  = _tiledMap.Properties.Get< int >( "width" );
-        _mapHeight = _tiledMap.Properties.Get< int >( "height" );
+//        _mapWidth  = _tiledMap.Properties.Get< int >( "width" );
+//        _mapWidth  *= _tiledMap.Properties.Get< int >( "tilewidth" );
 
-        _mapWidth  *= _tiledMap.Properties.Get< int >( "tilewidth" );
-        _mapHeight *= _tiledMap.Properties.Get< int >( "tileheight" );
-
-        Logger.Debug( $"Map width: {_mapWidth}, height: {_mapHeight}" );
+//        _mapHeight = _tiledMap.Properties.Get< int >( "height" );
+//        _mapHeight *= _tiledMap.Properties.Get< int >( "tileheight" );
     }
 
     private void ScaleSprite()

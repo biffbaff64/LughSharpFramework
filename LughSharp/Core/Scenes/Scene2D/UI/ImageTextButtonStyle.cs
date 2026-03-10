@@ -33,7 +33,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for an image text button, see <see cref="ImageTextButton"/>.
 /// </summary>
 [PublicAPI]
-public class ImageTextButtonStyle : TextButtonStyle
+public class ImageTextButtonStyle : TextButtonStyle, ISceneStyle
 {
     public ISceneDrawable? ImageUp          { get; set; }
     public ISceneDrawable? ImageDown        { get; set; }

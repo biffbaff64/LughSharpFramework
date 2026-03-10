@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
@@ -77,10 +79,8 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Creates a new, unitialised, Image instance.
     /// </summary>
-    public Scene2DImage()
+    public Scene2DImage() : this( (ISceneDrawable?)null )
     {
-        Drawable = null;
-        _scaling = Scaling.None;
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public class Scene2DImage : Widget
     /// Creates a new Image instance with the specified <see cref="ISceneDrawable"/>.
     /// </summary>
     /// <param name="drawable"></param>
-    public Scene2DImage( ISceneDrawable drawable )
+    public Scene2DImage( ISceneDrawable? drawable )
         : this( drawable, Scaling.None )
     {
     }
@@ -137,7 +137,7 @@ public class Scene2DImage : Widget
     /// <param name="drawable"></param>
     /// <param name="scaling"></param>
     /// <param name="align"></param>
-    public Scene2DImage( ISceneDrawable drawable, Scaling scaling, Align align = Align.Center )
+    public Scene2DImage( ISceneDrawable? drawable, Scaling scaling, Align align = Align.Center )
     {
         SetDrawable( drawable );
 
@@ -179,9 +179,12 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor has
     /// children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
-    /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
-    /// on each child. This method should almost never be called directly, instead
-    /// <see cref="ILayout.Validate"/> should be used.
+    /// on any child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
+    /// on each child.
+    /// <para>
+    /// This method should almost never be called directly, instead <see cref="ILayout.Validate"/>
+    /// should be used.
+    /// </para>
     /// </summary>
     public override void SetLayout()
     {
@@ -246,6 +249,11 @@ public class Scene2DImage : Widget
     /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
+        if ( Drawable is null )
+        {
+            return;
+        }
+        
         Validate();
 
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
@@ -306,14 +314,21 @@ public class Scene2DImage : Widget
     /// can be used to size the image to its pref size.
     /// </summary>
     /// <param name="drawable"> May be null. </param>
-    public void SetDrawable( ISceneDrawable drawable )
+    public void SetDrawable( ISceneDrawable? drawable )
     {
         if ( Drawable == drawable )
         {
             return;
         }
 
-        if ( !GetPrefWidth().Equals( drawable.MinWidth ) || !GetPrefHeight().Equals( drawable.MinHeight ) )
+        if ( drawable != null )
+        {
+            if ( !GetPrefWidth().Equals( drawable.MinWidth ) || !GetPrefHeight().Equals( drawable.MinHeight ) )
+            {
+                InvalidateHierarchy();
+            }
+        }
+        else
         {
             InvalidateHierarchy();
         }

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Diagnostics;
 
 using JetBrains.Annotations;
@@ -72,7 +73,8 @@ public class TextButton : Button
     {
         Style = style;
 
-        _label = new Label( text, new LabelStyle( style.Font!, style.FontColor! ) );
+        _label = new Label( text, new LabelStyle( style.Font ?? new BitmapFont(),
+                                                  style.FontColor ?? Color.White ) );
         _label.SetAlignment( Align.Center );
 
         Add( _label ).Expand().SetFill();
@@ -80,34 +82,38 @@ public class TextButton : Button
         NonVirtualSetup();
     }
 
+    public virtual TextButtonStyle? GetStyle()
+    {
+        return ( TextButtonStyle? )Style;
+    }
+    
     /// <summary>
     /// Property: The <see cref="TextButtonStyle"/> for this TextButton.
     /// </summary>
     /// <exception cref="ArgumentException">
     /// Thrown if an attempt to set Style to null is made.
     /// </exception>
-    public new TextButtonStyle? Style
+    public new ButtonStyle? Style
     {
         get;
         set
         {
-            //TODO: Too much is going on in this setter. Refactor it.
             Guard.Against.Null( value );
 
-            if ( value.GetType() != typeof( TextButtonStyle ) )
+            if ( value is not TextButtonStyle textButtonStyle )
             {
                 throw new ArgumentException( "style must be a TextButtonStyle." );
             }
 
-            field      = value;
-            base.Style = value;
+            field      = textButtonStyle;
+            base.Style = textButtonStyle;
 
             if ( Label != null )
             {
                 LabelStyle labelStyle = Label.Style;
 
-                labelStyle.Font      = value.Font ?? new BitmapFont();
-                labelStyle.FontColor = value.FontColor ?? Color.White;
+                labelStyle.Font      = textButtonStyle.Font ?? new BitmapFont();
+                labelStyle.FontColor = textButtonStyle.FontColor ?? Color.White;
                 Label.Style          = labelStyle;
             }
         }
@@ -136,21 +142,21 @@ public class TextButton : Button
     {
         Debug.Assert( Style != null, "Style is null" );
 
-        if ( IsDisabled && ( Style.DisabledFontColor != null ) )
+        if ( IsDisabled && ( GetStyle()?.DisabledFontColor != null ) )
         {
-            return Style.DisabledFontColor;
+            return GetStyle()?.DisabledFontColor;
         }
 
         if ( IsPressed() )
         {
-            if ( IsChecked && ( Style.CheckedDownFontColor != null ) )
+            if ( IsChecked && ( GetStyle()?.CheckedDownFontColor != null ) )
             {
-                return Style.CheckedDownFontColor;
+                return GetStyle()?.CheckedDownFontColor;
             }
 
-            if ( Style.DownFontColor != null )
+            if ( GetStyle()?.DownFontColor != null )
             {
-                return Style.DownFontColor;
+                return GetStyle()?.DownFontColor;
             }
         }
 
@@ -158,16 +164,16 @@ public class TextButton : Button
         {
             if ( IsChecked )
             {
-                if ( Style.CheckedOverFontColor != null )
+                if ( GetStyle()?.CheckedOverFontColor != null )
                 {
-                    return Style.CheckedOverFontColor;
+                    return GetStyle()?.CheckedOverFontColor;
                 }
             }
             else
             {
-                if ( Style.OverFontColor != null )
+                if ( GetStyle()?.OverFontColor != null )
                 {
-                    return Style.OverFontColor;
+                    return GetStyle()?.OverFontColor;
                 }
             }
         }
@@ -176,28 +182,28 @@ public class TextButton : Button
 
         if ( IsChecked )
         {
-            if ( focused && ( Style.CheckedFocusedFontColor != null ) )
+            if ( focused && ( GetStyle()?.CheckedFocusedFontColor != null ) )
             {
-                return Style.CheckedFocusedFontColor;
+                return GetStyle()?.CheckedFocusedFontColor;
             }
 
-            if ( Style.CheckedFontColor != null )
+            if ( GetStyle()?.CheckedFontColor != null )
             {
-                return Style.CheckedFontColor;
+                return GetStyle()?.CheckedFontColor;
             }
 
-            if ( IsOver() && ( Style.OverFontColor != null ) )
+            if ( IsOver() && ( GetStyle()?.OverFontColor != null ) )
             {
-                return Style.OverFontColor;
+                return GetStyle()?.OverFontColor;
             }
         }
 
-        if ( focused && ( Style?.FocusedFontColor != null ) )
+        if ( focused && ( GetStyle()?.FocusedFontColor != null ) )
         {
-            return Style.FocusedFontColor;
+            return GetStyle()?.FocusedFontColor;
         }
 
-        return Style?.FontColor;
+        return GetStyle()?.FontColor;
     }
 
     /// <inheritdoc />

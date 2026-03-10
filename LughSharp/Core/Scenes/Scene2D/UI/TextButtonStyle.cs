@@ -34,7 +34,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 /// The style for a text button, see <see cref="TextButton"/>.
 /// </summary>
 [PublicAPI]
-public class TextButtonStyle : ButtonStyle
+public class TextButtonStyle : ButtonStyle, ISceneStyle
 {
     public BitmapFont? Font                    { get; set; }
     public Color?      FontColor               { get; set; }
