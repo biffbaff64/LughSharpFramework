@@ -22,22 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Utils.Json;
+using LughSharp.Core.Scenes.Scene2D.Utils;
+
+namespace LughSharp.Core.Scenes.Scene2D.Styles;
 
 [PublicAPI]
-[AttributeUsage( AttributeTargets.Field )]
-public class JsonNameAttribute : Attribute
+public record ImageTextButtonStyleRecord
 {
-    public string Name { get; }
-
-    public JsonNameAttribute( string name )
-    {
-        Name = name;
-    }
+    public required ISceneDrawable? ImageUp          { get; set; }
+    public required ISceneDrawable? ImageDown        { get; set; }
+    public required ISceneDrawable? ImageDisabled    { get; set; }
+    public          ISceneDrawable? ImageChecked     { get; set; }
+    public          ISceneDrawable? ImageOver        { get; set; }
+    public          ISceneDrawable? ImageCheckedDown { get; set; }
+    public          ISceneDrawable? ImageCheckedOver { get; set; }
 }
 
 // ============================================================================

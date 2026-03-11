@@ -601,15 +601,17 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     /// Sets the visual value equal to the actual value. This can be used
     /// to set the value without animating.
     /// </summary>
-    public void UpdateVisualValue()
+    public virtual void UpdateVisualValue()
     {
         _animateTime = 0;
     }
 
     /// <summary>
-    /// 
+    /// Calculates the progress of the <see cref="ProgressBar"/> as a percentage.
+    /// The percentage is determined by the current value relative to the minimum
+    /// and maximum values of the progress bar.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The progress represented as a float value between 0 and 1.</returns>
     public float GetPercent()
     {
         if ( MinValue.Equals( MaxValue ) )
@@ -621,9 +623,15 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     }
 
     /// <summary>
-    /// 
+    /// Calculates the visual percentage position of the progress bar's value
+    /// relative to its minimum and maximum values, using the configured
+    /// interpolation method.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A value between 0 and 1 representing the visual position of the progress
+    /// bar's value as a percentage. Returns 0 if the minimum and maximum
+    /// values are the same.
+    /// </returns>
     public float GetVisualPercent()
     {
         if ( MinValue.Equals( MaxValue ) )

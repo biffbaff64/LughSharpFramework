@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 
 using JetBrains.Annotations;
 
@@ -33,6 +34,7 @@ using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Scenes.Scene2D.Styles;
 
@@ -45,75 +47,62 @@ namespace LughSharp.Core.Scenes.Scene2D.Styles;
 [PublicAPI]
 public class StyleRegistry
 {
-    private Dictionary< Type, Dictionary< string, object > > _data = new();
+    private Dictionary< string, Dictionary< string, object > > _data = new();
 
     // ========================================================================
 
     /// <summary>
-    /// Registers a new section for styles of type <typeparamref name="T"/>.
+    /// Adds a style to the registry. If the section for type <typeparamref name="T"/> 
+    /// does not exist, it is created automatically.
     /// </summary>
-    /// <returns> This StyleRegistry instance for chaining. </returns>
-    public StyleRegistry RegisterSection< T >() where T : class
+    public StyleRegistry Add< T >( string name, T style ) where T : class
     {
-        Type type = typeof( T );
+        // Use AssemblyQualifiedName or FullName for a unique string key
+        string typeKey = typeof( T ).FullName ?? typeof( T ).Name;
 
-        if ( !_data.ContainsKey( type ) )
+        // Ensure the dictionary for this type exists
+        if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
         {
-            _data[ type ] = new Dictionary< string, object >();
+            section          = new Dictionary< string, object >();
+            _data[ typeKey ] = section;
         }
+
+        section[ name ] = style;
 
         return this;
     }
 
     /// <summary>
-    /// Adds a style to the registry.
-    /// The code:-
-    /// <code>
-    /// var style = new ButtonStyle()
-    /// {
-    ///     Up       = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
-    ///     Down     = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) ),
-    ///     Disabled = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) )
-    /// };
-    ///
-    /// registry.Add( "default", style );
-    /// </code>
-    /// is equivalent to the 'default' element in the Json:<br/>
-    /// "ButtonStyle": {<br/>
-    ///     "default": {<br/>
-    ///         "down": "default-round-down",<br/>
-    ///         "up": "default-round",<br/>
-    ///         "disabled": "default-round"<br/>
-    ///     },<br/>
-    ///     "toggle": {<br/>
-    ///         "parent": "default",<br/>
-    ///         "checked": "default-round-down"<br/>
-    ///     }<br/>
-    /// },<br/>
+    /// Gets a style from the registry.
     /// </summary>
-    /// <param name="name"> The style name. </param>
-    /// <param name="style"> The style properties. </param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public StyleRegistry Add< T >( string name, T style ) where T : class
-    {
-        RegisterSection< T >();
-
-        _data[ typeof( T ) ][ name ] = style;
-
-        return this;
-    }
-
     public T Get< T >( string name ) where T : class
     {
-        if ( _data.TryGetValue( typeof( T ), out Dictionary< string, object >? map )
-          && map.TryGetValue( name, out object? style ) )
+        string typeKey = typeof( T ).FullName ?? typeof( T ).Name;
+
+        // Check if the Type is registered at all
+        if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
+        {
+            // This error will now tell you EXACTLY what string key it was looking for
+            throw new Exception( $"StyleRegistry: No styles registered for type key '{typeKey}'." );
+        }
+
+        // Check if the specific name exists in that Type's dictionary
+        if ( section.TryGetValue( name, out object? style ) )
         {
             return ( T )style;
         }
 
-        // Fallback or detailed error
-        throw new Exception( $"Missing {typeof( T ).Name}: {name}" );
+        // Specific error for missing name
+        throw new Exception( $"StyleRegistry: Section '{typeKey}' exists, but style '{name}' is missing." );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary< string, Dictionary< string, object > > GetRegistry()
+    {
+        return _data;
     }
 
     /// <summary>
@@ -126,18 +115,25 @@ public class StyleRegistry
         var btnDown     = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) );
         var btnDisabled = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) );
         var btnChecked  = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) );
-
         var defaultFont = new BitmapFont();
 
         // ----- ButtonStyle -----
-        var btnStyle = new ButtonStyle
+        var btnStyleDefault = new ButtonStyle
         {
             Up       = btnUp,
             Down     = btnDown,
             Disabled = btnDisabled
         };
 
-        Add( "default", btnStyle ).Add( "toggle", btnStyle with { Checked = btnStyle.Down } );
+        var btnStyleToggle = new ButtonStyle
+        {
+            Up       = btnUp,
+            Down     = btnDown,
+            Disabled = btnDisabled,
+            Checked  = btnStyleDefault.Down
+        };
+
+        Add( "default", btnStyleDefault ).Add( "toggle", btnStyleToggle );
 
         // ----- TextButtonStyle -----
         var tbStyle = new TextButtonStyle( btnUp, btnDown, btnChecked, defaultFont );
@@ -227,7 +223,7 @@ public class StyleRegistry
         Add( "default", cbStyle );
 
         // ----- ListStyle -----
-//        var listStyle = new ListBox<>.ListBoxStyle();
+//        var listStyle = new ListBoxStyle();
 
         // ----- TouchpadStyle -----
         var tpStyle = new TouchpadStyle
@@ -239,27 +235,123 @@ public class StyleRegistry
         Add( "default", tpStyle );
 
         // ----- TreeStyle -----
-//        var treeStyle = new Tree< , >.TreeStyle();
+//        var treeStyle = new TreeStyle();
 
         // ----- TextTooltipStyle -----
-        var ttStyle = new TextTooltipStyle();
+//        var ttStyle = new TextTooltipStyle();
 
         // ----- ImageTextButtonStyle -----
-        var itbStyle = new ImageTextButtonStyle();
+        var itbStyle = new ImageTextButtonStyleRecord
+        {
+            ImageUp       = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
+            ImageDown     = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) ),
+            ImageDisabled = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
+        };
+
+        Add( "default", itbStyle ).Add( "toggle", itbStyle with { ImageChecked = itbStyle.ImageDown } );
 
         // ----- ImageButtonStyle -----
-        var ibStyle = new ImageButtonStyle();
+        var ibStyle = new ImageButtonStyleRecord
+        {
+            ImageUp       = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
+            ImageDown     = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) ),
+            ImageDisabled = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
+        };
+
+        Add( "default", ibStyle ).Add( "toggle", ibStyle with { ImageChecked = ibStyle.ImageDown } );
 
         // ----- SelectBoxStyle -----
-//        var sbStyle = new SelectBox<>.SelectBoxStyle();
+//        var sbStyle = new SelectBoxStyle();
     }
 
-    public void LoadFromJson( FileInfo jsonFile )
+    public void LoadFromJson( FileInfo jsonFile, TextureAtlas atlas )
     {
+        if ( !jsonFile.Exists )
+        {
+            throw new FileNotFoundException( jsonFile.FullName );
+        }
+
+        string      jsonString = File.ReadAllText( jsonFile.FullName );
+        using JsonDocument   document   = JsonDocument.Parse( jsonString );
+        JsonElement root       = document.RootElement;
+
+        // Load Colors first so they are available for fonts and styles
+        if ( root.TryGetProperty( "Color", out JsonElement colors ) )
+        {
+            foreach ( JsonProperty col in colors.EnumerateObject() )
+            {
+                // Assuming a helper to parse JSON to Color object
+                Add( col.Name, Color.ParseColor( col.Value.GetString()!, this ) );
+            }
+        }
+
+        // Load Fonts next
+        if ( root.TryGetProperty( "BitmapFont", out JsonElement fonts ) )
+        {
+            foreach ( JsonProperty font in fonts.EnumerateObject() )
+            {
+                // Typically fonts need a .fnt file path from the JSON
+                string? fontPath = font.Value.GetProperty( "file" ).GetString();
+                Add( font.Name, new BitmapFont( new FileInfo( fontPath! ) ) );
+            }
+        }
+
+        // 3. Finally, load all other Styles (LabelStyle, ButtonStyle, etc.)
+        // Use the StyleFactory logic here...
+        foreach ( JsonProperty property in document.RootElement.EnumerateObject() )
+        {
+            string      styleTypeName = property.Name;  // e.g., "ButtonStyle"
+            JsonElement styles        = property.Value; // The object containing "default", "toggle", etc.
+
+            foreach ( JsonProperty styleEntry in styles.EnumerateObject() )
+            {
+                string styleName = styleEntry.Name;
+
+                // Delegate creation to the Factory
+                object? style = StyleFactory.CreateStyle( styleTypeName, styleEntry.Value, atlas, this );
+
+                if ( style != null )
+                {
+                    // Internal method to add by type name string
+                    AddByTypeName( styleTypeName, styleName, style );
+                }
+            }
+        }
+    }
+
+    private void AddByTypeName( string typeName, string styleName, object style )
+    {
+        // Implementation using the string-key logic we discussed previously
+        string typeKey = style.GetType().FullName ?? style.GetType().Name;
+
+        if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
+        {
+            section          = new Dictionary< string, object >();
+            _data[ typeKey ] = section;
+        }
+
+        section[ styleName ] = style;
     }
 
     public void SaveToJson( FileInfo jsonFile )
     {
+    }
+
+    /// <summary>
+    /// Output debug information about the registry, specifically the sections and
+    /// members within each section.
+    /// </summary>
+    public void DebugRegistry()
+    {
+        foreach ( KeyValuePair< string, Dictionary< string, object > > entry in _data )
+        {
+            Logger.Debug( $"Registered Key: {entry.Key} | Count: {entry.Value.Count}" );
+
+            foreach ( KeyValuePair< string, object > style in entry.Value )
+            {
+                Logger.Debug( $"    - {style.Key}" );
+            }
+        }
     }
 }
 

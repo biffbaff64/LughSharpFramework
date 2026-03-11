@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
@@ -41,10 +43,6 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class ImageButton : Button
 {
-    public override string Name => "ImageButton";
-
-    // ========================================================================
-
     public     Scene2DImage     Scene2DImage { get; }
     public new ImageButtonStyle Style        { get; set; } = null!;
 
@@ -197,20 +195,12 @@ public class ImageButton : Button
         base.Draw( batch, parentAlpha );
     }
 
+    public override string Name => GetType().Name;
+
     /// <inheritdoc />
     public override string ToString()
     {
         return Name;
-
-//        string className = GetType().Name;
-//        int    dotIndex  = className.LastIndexOf( '.' );
-//
-//        if ( dotIndex != -1 )
-//        {
-//            className = className.Substring( dotIndex + 1 );
-//        }
-//
-//        return ( className.Contains('$') ? "ImageButton " : "" ) + className + ": " + Scene2DImage.Drawable;
     }
 }
 

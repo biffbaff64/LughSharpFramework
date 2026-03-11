@@ -273,12 +273,12 @@ public class Scene2DUtils
     /// <returns> The Checkbox. </returns>
     public CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
     {
-        var                     checkBox = new CheckBox( "", skin );
-        ButtonStyle? style    = checkBox.Style;
+        var            checkBox = new CheckBox( "", skin );
+        CheckBoxStyle? style    = checkBox.Style;
 
-        ( ( CheckBoxStyle? )style )?.FontColor   = color;
-        ( ( CheckBoxStyle? )style )?.CheckboxOn  = new TextureRegionDrawable( imageOn );
-        ( ( CheckBoxStyle? )style )?.CheckboxOff = new TextureRegionDrawable( imageOff );
+        style?.FontColor   = color;
+        style?.CheckboxOn  = new TextureRegionDrawable( imageOn );
+        style?.CheckboxOff = new TextureRegionDrawable( imageOff );
 
         checkBox.SetSize( imageOn.GetRegionWidth(), imageOn.GetRegionHeight() );
         checkBox.Style = style;

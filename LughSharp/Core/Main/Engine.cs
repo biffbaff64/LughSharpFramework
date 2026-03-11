@@ -83,7 +83,7 @@ public sealed class Engine
     /// </para>
     /// </summary>
     public bool GodMode { get; set; }
-
+    
     // ========================================================================
 
     public static Engine      Api => Nested.Instance;

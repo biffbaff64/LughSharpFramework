@@ -59,8 +59,6 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 {
-    public override string? Name => "Button";
-
     public ButtonClickListener?   ClickListener { get; set; }
     public bool                   IsChecked     { get; private set; }
     public bool                   IsDisabled    { get; set; }
@@ -78,8 +76,6 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     public Button()
     {
         Initialise();
-
-        Style = null!;
     }
 
     public Button( Skin skin ) : base( skin )
@@ -142,6 +138,15 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     {
     }
 
+    private void Initialise()
+    {
+        Touchable = Touchable.Enabled;
+
+        ClickListener = new ButtonClickListener( this );
+
+        AddListener( ClickListener! );
+    }
+
     /// <summary>
     /// Returns the button's style. Modifying the returned style may not have an
     /// effect until <see cref="Style"/> set() is called.
@@ -155,19 +160,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 
             SetBackground( GetBackgroundDrawable() );
         }
-    }
-
-    public float MinWidth  => GetPrefWidth();
-    public float MinHeight => GetPrefHeight();
-
-    private void Initialise()
-    {
-        Touchable = Touchable.Enabled;
-
-        ClickListener = new ButtonClickListener( this );
-
-        AddListener( ClickListener! );
-    }
+    } = null!;
 
     public void SetChecked( bool isChecked )
     {
@@ -213,17 +206,17 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     {
         float width = base.GetPrefWidth();
 
-        if ( Style?.Up != null )
+        if ( Style.Up != null )
         {
             width = Math.Max( width, Style.Up.MinWidth );
         }
 
-        if ( Style?.Down != null )
+        if ( Style.Down != null )
         {
             width = Math.Max( width, Style.Down.MinWidth );
         }
 
-        if ( Style?.Checked != null )
+        if ( Style.Checked != null )
         {
             width = Math.Max( width, Style.Checked.MinWidth );
         }
@@ -240,17 +233,17 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     {
         float height = base.GetPrefHeight();
 
-        if ( Style?.Up != null )
+        if ( Style.Up != null )
         {
             height = Math.Max( height, Style.Up.MinHeight );
         }
 
-        if ( Style?.Down != null )
+        if ( Style.Down != null )
         {
             height = Math.Max( height, Style.Down.MinHeight );
         }
 
-        if ( Style?.Checked != null )
+        if ( Style.Checked != null )
         {
             height = Math.Max( height, Style.Checked!.MinHeight );
         }
@@ -259,9 +252,9 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     }
 
     /// <summary>
-    /// If false, <see cref="SetChecked(bool)"/> and <see cref="ToggleChecked"/> will not
-    /// fire <see cref="ChangeListener.ChangeEvent()"/>.
-    /// The event will only be fired when the user clicks the button
+    /// If false, <see cref="SetChecked(bool)"/> and <see cref="ToggleChecked"/> will
+    /// not fire <see cref="ChangeListener.ChangeEvent()"/>. The event will only be
+    /// fired when the user clicks the button
     /// </summary>
     public void SetProgrammaticChangeEvents( bool programmaticChangeEvents )
     {
@@ -402,6 +395,8 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
         return ClickListener!.VisualPressed;
     }
 
+    public override string? Name => GetType().Name;
+    
     public bool IsOver()
     {
         return ClickListener!.Over;

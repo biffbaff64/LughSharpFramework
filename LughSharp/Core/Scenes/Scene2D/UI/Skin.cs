@@ -38,6 +38,7 @@ using LughSharp.Core.Main;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -121,12 +122,13 @@ public class Skin : IDisposable
         // --------------------------------------
         new( "ButtonStyle",             typeof( ButtonStyle ) ),
         new( "TextButtonStyle",         typeof( TextButtonStyle ) ),
+        new( "ImageButtonStyle",        typeof( ImageButtonStyle ) ),
+        new( "ImageTextButtonStyle",    typeof( ImageTextButtonStyle ) ),
         new( "CheckBoxStyle",           typeof( CheckBoxStyle ) ),
+        // --------------------------------------
         new( "LabelStyle",              typeof( LabelStyle ) ),
         new( "ProgressBarStyle",        typeof( ProgressBarStyle ) ),
         new( "TextFieldStyle",          typeof( TextFieldStyle ) ),
-        new( "ImageButtonStyle",        typeof( ImageButtonStyle ) ),
-        new( "ImageTextButtonStyle",    typeof( ImageTextButtonStyle ) ),
         new( "ListBoxStyle",            typeof( ListBoxStyle ) ),
         new( "ScrollPaneStyle",         typeof( ScrollPaneStyle ) ),
         new( "SelectBoxStyle",          typeof( SelectBoxStyle ) ),

@@ -79,12 +79,7 @@ public class TextButton : Button
 
         Add( _label ).Expand().SetFill();
 
-        NonVirtualSetup();
-    }
-
-    public virtual TextButtonStyle? GetStyle()
-    {
-        return ( TextButtonStyle? )Style;
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
     
     /// <summary>
@@ -93,14 +88,14 @@ public class TextButton : Button
     /// <exception cref="ArgumentException">
     /// Thrown if an attempt to set Style to null is made.
     /// </exception>
-    public new ButtonStyle? Style
+    public new TextButtonStyle? Style
     {
         get;
         set
         {
             Guard.Against.Null( value );
 
-            if ( value is not TextButtonStyle textButtonStyle )
+            if ( value is not { } textButtonStyle )
             {
                 throw new ArgumentException( "style must be a TextButtonStyle." );
             }
@@ -142,21 +137,21 @@ public class TextButton : Button
     {
         Debug.Assert( Style != null, "Style is null" );
 
-        if ( IsDisabled && ( GetStyle()?.DisabledFontColor != null ) )
+        if ( IsDisabled && ( Style?.DisabledFontColor != null ) )
         {
-            return GetStyle()?.DisabledFontColor;
+            return Style?.DisabledFontColor;
         }
 
         if ( IsPressed() )
         {
-            if ( IsChecked && ( GetStyle()?.CheckedDownFontColor != null ) )
+            if ( IsChecked && ( Style?.CheckedDownFontColor != null ) )
             {
-                return GetStyle()?.CheckedDownFontColor;
+                return Style?.CheckedDownFontColor;
             }
 
-            if ( GetStyle()?.DownFontColor != null )
+            if ( Style?.DownFontColor != null )
             {
-                return GetStyle()?.DownFontColor;
+                return Style?.DownFontColor;
             }
         }
 
@@ -164,16 +159,16 @@ public class TextButton : Button
         {
             if ( IsChecked )
             {
-                if ( GetStyle()?.CheckedOverFontColor != null )
+                if ( Style?.CheckedOverFontColor != null )
                 {
-                    return GetStyle()?.CheckedOverFontColor;
+                    return Style?.CheckedOverFontColor;
                 }
             }
             else
             {
-                if ( GetStyle()?.OverFontColor != null )
+                if ( Style?.OverFontColor != null )
                 {
-                    return GetStyle()?.OverFontColor;
+                    return Style?.OverFontColor;
                 }
             }
         }
@@ -182,28 +177,28 @@ public class TextButton : Button
 
         if ( IsChecked )
         {
-            if ( focused && ( GetStyle()?.CheckedFocusedFontColor != null ) )
+            if ( focused && ( Style?.CheckedFocusedFontColor != null ) )
             {
-                return GetStyle()?.CheckedFocusedFontColor;
+                return Style?.CheckedFocusedFontColor;
             }
 
-            if ( GetStyle()?.CheckedFontColor != null )
+            if ( Style?.CheckedFontColor != null )
             {
-                return GetStyle()?.CheckedFontColor;
+                return Style?.CheckedFontColor;
             }
 
-            if ( IsOver() && ( GetStyle()?.OverFontColor != null ) )
+            if ( IsOver() && ( Style?.OverFontColor != null ) )
             {
-                return GetStyle()?.OverFontColor;
+                return Style?.OverFontColor;
             }
         }
 
-        if ( focused && ( GetStyle()?.FocusedFontColor != null ) )
+        if ( focused && ( Style?.FocusedFontColor != null ) )
         {
-            return GetStyle()?.FocusedFontColor;
+            return Style?.FocusedFontColor;
         }
 
-        return GetStyle()?.FontColor;
+        return Style?.FontColor;
     }
 
     /// <inheritdoc />
@@ -229,15 +224,6 @@ public class TextButton : Button
     public string? GetText()
     {
         return _label?.Text.ToString();
-    }
-
-    /// <summary>
-    /// Private setup method to allow calls to virtual methods that can't
-    /// be called from constructors.
-    /// </summary>
-    private void NonVirtualSetup()
-    {
-        SetSize( GetPrefWidth(), GetPrefHeight() );
     }
 
     // ========================================================================

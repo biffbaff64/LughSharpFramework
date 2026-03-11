@@ -22,34 +22,36 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Files;
+
 namespace Template.Source;
 
 public static class Assets
 {
-    public const string BackgroundImage      = @"Assets\title_background.png";
-    public const string HudPanel             = @"Assets\hud_panel.png";
-    public const string CompleteStar         = @"Assets\complete_star.png";
-    public const string KeyCollected         = @"Assets\key_collected.png";
-    public const string WindowBackground     = @"Assets\title_background.png";
-    public const string PauseExitButton      = @"Assets\pause_exit_button.png";
-    public const string ButtonBUp            = @"Assets\packedimages\input\button_b.png";
-    public const string ButtonBDown          = @"Assets\packedimages\input\button_b_pressed.png";
-    
+    public static string BackgroundImage  => @$"{IOConfig.AssetsRoot}\title_background.png";
+    public static string HudPanel         => @$"{IOConfig.AssetsRoot}\hud_panel.png";
+    public static string CompleteStar     => @$"{IOConfig.AssetsRoot}\complete_star.png";
+    public static string KeyCollected     => @$"{IOConfig.AssetsRoot}\key_collected.png";
+    public static string WindowBackground => @$"{IOConfig.AssetsRoot}\title_background.png";
+    public static string PauseExitButton  => @$"{IOConfig.AssetsRoot}\pause_exit_button.png";
+    public static string ButtonBUp        => @$"{IOConfig.AssetsRoot}\packedimages\input\button_b.png";
+    public static string ButtonBDown      => @$"{IOConfig.AssetsRoot}\packedimages\input\button_b_pressed.png";
+
     // ========================================================================
     // UI Skins
-    public const string ProgressBarSkin      = @"Assets\Skins\uiskin.json";
-    public const string ProgressBarSkinAtlas = @"Assets\Skins\uiskin.atlas";
+    public static string UiSkin      => @$"{IOConfig.AssetsRoot}\Skins\uiskin.json";
+    public static string UiskinAtlas => @$"{IOConfig.AssetsRoot}\Skins\uiskin.atlas";
 
     // ========================================================================
     // TMX Maps
-    public const string Room1Map = @"Assets\Maps\room1.tmx";
+    public static string Room1Map => @$"{IOConfig.AssetsRoot}\Maps\room1.tmx";
 
     // ========================================================================
     // Fonts
-    public const string ArialFont          = @"Assets\Fonts\arial-15.fnt";
-    public const string ArialLatinFont     = @"Assets\Fonts\arial-latin.fnt";
-    public const string Arial15Font        = @"Assets\Fonts\arial-15.fnt";
-    public const string AmbleRegular26Font = @"Assets\Fonts\Amble-Regular-26.fnt";
+    public static string ArialFont          => @$"{IOConfig.AssetsRoot}\Fonts\arial-15.fnt";
+    public static string ArialLatinFont     => @$"{IOConfig.AssetsRoot}\Fonts\arial-latin.fnt";
+    public static string Arial15Font        => @$"{IOConfig.AssetsRoot}\Fonts\arial-15.fnt";
+    public static string AmbleRegular26Font => @$"{IOConfig.AssetsRoot}\Fonts\Amble-Regular-26.fnt";
 }
 
 // ============================================================================

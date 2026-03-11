@@ -82,6 +82,21 @@
       "downFontColor": "red"
     }
   },
+  "ImageTextButtonStyle": {
+    "default": {
+      "parent": "default",
+      "font": "default-font",
+      "fontColor": "white",
+      "down": "default-round-down",
+      "up": "default-round",
+      "disabled": "default-round"
+    },
+    "toggle": {
+      "parent": "toggle",
+      "checked": "default-round-down",
+      "downFontColor": "red"
+    }
+  },
   "ScrollPaneStyle": {
     "default": {
       "vScroll": "default-scroll",

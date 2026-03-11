@@ -29,6 +29,9 @@ using System.Reflection;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Assets;
+using LughSharp.Core.Graphics;
+using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 
@@ -101,7 +104,7 @@ public class IOUtils
     /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\Assets\
     /// </code>
     /// </summary>
-    public static string AssetsRoot => $"{AssemblyDirectory}Assets\\";
+    public static string AssetsRoot => $"{AssemblyDirectory}{IOConfig.AssetsRoot}\\";
 
     // ========================================================================
 

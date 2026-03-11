@@ -89,12 +89,12 @@ public class BitmapFont
 
     // ========================================================================
 
-    public const string RegexPattern      = ".*id=(\\d+)";
-    public const string DefaultFont       = "Assets/Fonts/arial-15.fnt";
-    public const string DefaultFontImage = "Assets/Fonts/arial-15.png";
+    public const string RegexPattern     = ".*id=(\\d+)";
+    public const string DefaultFont      = $"{IOConfig.AssetsRoot}/Fonts/arial-15.fnt";
+    public const string DefaultFontImage = $"{IOConfig.AssetsRoot}/Fonts/arial-15.png";
     public const int    Log2PageSize     = 9;
-    public const int    PageSize          = 1 << Log2PageSize;
-    public const int    Pages              = 0x10000 / PageSize;
+    public const int    PageSize         = 1 << Log2PageSize;
+    public const int    Pages            = 0x10000 / PageSize;
 
     // ========================================================================
 

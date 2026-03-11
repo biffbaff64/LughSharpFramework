@@ -22,13 +22,19 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Buffers;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 
 using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
+
+using FormatException = System.FormatException;
 
 namespace LughSharp.Core.Utils.Json;
 

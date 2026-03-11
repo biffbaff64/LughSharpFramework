@@ -24,10 +24,13 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 
 using JetBrains.Annotations;
 
 using LughSharp.Core.Maths;
+using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -1116,6 +1119,65 @@ public class Color : ICloneable, IEquatable< Color >
         A += interpolationCoefficient * ( a - A );
 
         return Clamp();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="registry"></param>
+    /// <returns></returns>
+    public static Color ParseColor( string value, StyleRegistry registry )
+    {
+        if ( string.IsNullOrWhiteSpace( value ) )
+        {
+            return White;
+        }
+
+        // 1. Handle Hex Strings (e.g., "#FF0000" or "#FF0000FF")
+        if ( value.StartsWith( '#' ) )
+        {
+            return FromHexString( value );
+        }
+
+        // 2. Handle RGBA/RGB component strings (e.g., "255, 0, 0, 255")
+        if ( value.Contains( ',' ) )
+        {
+            string[] parts = value.Split( ',' ).Select( p => p.Trim() ).ToArray();
+
+            if ( parts.Length >= 3 )
+            {
+                float r = float.Parse( parts[ 0 ] ) / 255f;
+                float g = float.Parse( parts[ 1 ] ) / 255f;
+                float b = float.Parse( parts[ 2 ] ) / 255f;
+                float a = parts.Length == 4 ? float.Parse( parts[ 3 ] ) / 255f : 1.0f;
+
+                return new Color( r, g, b, a );
+            }
+        }
+
+        // 3. Handle Named Colors from the Registry
+        try
+        {
+            return registry.Get< Color >( value );
+        }
+        catch
+        {
+            // 4. Final Fallback: Standard .NET/LughSharp named colors
+            // You could use reflection here to look up static properties of Color
+            PropertyInfo? prop = typeof( Color ).GetProperty( value,
+                                                              BindingFlags.Public | BindingFlags.Static
+                                                            | BindingFlags.IgnoreCase );
+
+            if ( prop != null )
+            {
+                return ( Color )prop.GetValue( null )!;
+            }
+        }
+
+        Logger.Error( $"Could not parse color: {value}. Defaulting to White." );
+
+        return Color.White;
     }
 
     /// <summary>

@@ -22,22 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Utils.Json;
+namespace LughSharp.Core.Files;
 
 [PublicAPI]
-[AttributeUsage( AttributeTargets.Field )]
-public class JsonNameAttribute : Attribute
+public sealed class IOConfig
 {
-    public string Name { get; }
-
-    public JsonNameAttribute( string name )
-    {
-        Name = name;
-    }
+    public static string AssetsRoot { get; set; } = "Assets";
 }
 
 // ============================================================================

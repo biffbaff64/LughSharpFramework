@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -29,24 +30,15 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 namespace LughSharp.Core.Scenes.Scene2D.Styles;
 
 [PublicAPI]
-public record ButtonStyle
+public record ImageButtonStyleRecord
 {
-    public ISceneDrawable? Up             { get; set; }
-    public ISceneDrawable? Down           { get; set; }
-    public ISceneDrawable? Over           { get; set; }
-    public ISceneDrawable? Focused        { get; set; }
-    public ISceneDrawable? Disabled       { get; set; }
-    public ISceneDrawable? Checked        { get; set; }
-    public ISceneDrawable? CheckedOver    { get; set; }
-    public ISceneDrawable? CheckedDown    { get; set; }
-    public ISceneDrawable? CheckedFocused { get; set; }
-
-    public float PressedOffsetX   { get; set; }
-    public float PressedOffsetY   { get; set; }
-    public float UnpressedOffsetX { get; set; }
-    public float UnpressedOffsetY { get; set; }
-    public float CheckedOffsetX   { get; set; }
-    public float CheckedOffsetY   { get; set; }
+    public ISceneDrawable? ImageChecked;
+    public ISceneDrawable? ImageCheckedDown;
+    public ISceneDrawable? ImageCheckedOver;
+    public ISceneDrawable? ImageDisabled;
+    public ISceneDrawable? ImageDown;
+    public ISceneDrawable? ImageOver;
+    public ISceneDrawable? ImageUp;
 }
 
 // ============================================================================

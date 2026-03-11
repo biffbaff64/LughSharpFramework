@@ -22,23 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Utils.Json;
+namespace LughSharp.Core.Scenes.Scene2D.Styles;
 
 [PublicAPI]
-[AttributeUsage( AttributeTargets.Field )]
-public class JsonNameAttribute : Attribute
-{
-    public string Name { get; }
-
-    public JsonNameAttribute( string name )
-    {
-        Name = name;
-    }
-}
+public record TextButtonStyleRecord(  );
 
 // ============================================================================
 // ============================================================================

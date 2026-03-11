@@ -22,17 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
-namespace LughSharp.Core.Scenes.Scene2D.UI;
+namespace LughSharp.Core.Scenes.Scene2D.Styles;
 
-/// <summary>
-/// The style for a progress bar, see <see cref="ProgressBar"/>.
-/// </summary>
 [PublicAPI]
-public class ProgressBarStyle : ISceneStyle
+public record ProgressBarStyleRecord
 {
     /// <summary>
     /// The progress bar background, stretched only in one direction.
@@ -62,32 +60,7 @@ public class ProgressBarStyle : ISceneStyle
     /// </summary>
     public ISceneDrawable? KnobAfter          { get; set; }
     public ISceneDrawable? DisabledKnobAfter  { get; set; }
-
-    // ====================================================================
-
-    public ProgressBarStyle()
-    {
-    }
-
-    public ProgressBarStyle( ISceneDrawable background, ISceneDrawable knob )
-    {
-        Background = background;
-        Knob       = knob;
-    }
-
-    public ProgressBarStyle( ProgressBarStyle style )
-    {
-        Background         = style.Background;
-        DisabledBackground = style.DisabledBackground;
-        Knob               = style.Knob;
-        DisabledKnob       = style.DisabledKnob;
-        KnobBefore         = style.KnobBefore;
-        DisabledKnobBefore = style.DisabledKnobBefore;
-        KnobAfter          = style.KnobAfter;
-        DisabledKnobAfter  = style.DisabledKnobAfter;
-    }
 }
 
 // ============================================================================
 // ============================================================================
-

@@ -22,21 +22,35 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Utils.Json;
+using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Scenes.Scene2D.Utils;
+
+namespace LughSharp.Core.Graphics.Utils;
 
 [PublicAPI]
-[AttributeUsage( AttributeTargets.Field )]
-public class JsonNameAttribute : Attribute
+public class DrawableUtils
 {
-    public string Name { get; }
-
-    public JsonNameAttribute( string name )
+    /// <summary>
+    /// Creates an image of determined size filled with determined color.
+    /// </summary>
+    /// <param name="width"> The width of an image in pixels. </param>
+    /// <param name="height"> The height of an image in pixels. </param>
+    /// <param name="color"> The color of the new drawable. </param>
+    /// <returns>
+    /// A <see cref="ISceneDrawable"/> of determined size filled with determined color.
+    /// </returns>
+    public static ISceneDrawable GetColoredSceneDrawable( int width, int height, Color color )
     {
-        Name = name;
+        var pixmap = new Pixmap( width, height, LughFormat.RGBA8888 );
+        pixmap.FillWithColor( color );
+
+        var drawable = new TextureRegionDrawable( new TextureRegion( new Texture( pixmap ) ) );
+
+        pixmap.Dispose();
+
+        return drawable;
     }
 }
 
