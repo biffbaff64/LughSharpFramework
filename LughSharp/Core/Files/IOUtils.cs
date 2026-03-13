@@ -22,17 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-
 using JetBrains.Annotations;
 
-using LughSharp.Core.Assets;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Main;
-using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Files;
@@ -45,70 +36,6 @@ namespace LughSharp.Core.Files;
 public class IOUtils
 {
     /// <summary>
-    /// Path relative to the root of the app external storage on Android and
-    /// to the home directory of the current user on the desktop.
-    /// <para>
-    /// An example External path would be:-
-    /// <code>
-    /// C:\Users\joe_blogs\
-    /// </code>
-    /// </para>
-    /// </summary>
-    public static string ExternalPath => $"{Environment.GetFolderPath( Environment.SpecialFolder.UserProfile )}\\";
-
-    /// <summary>
-    /// Path relative to the asset directory on Android and to the application's root
-    /// directory on the desktop. On the desktop, if the file is not found, then the
-    /// classpath is checked.
-    /// <para>
-    /// This is not the root folder of this framework, it is the root folder of the
-    /// application that is using this framework. An example Internal path would be:-
-    /// <code>
-    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\
-    /// </code>
-    /// </para>
-    /// <para>
-    /// <b>Internal files are always readonly.</b>
-    /// </para>
-    /// </summary>
-    public static string InternalPath => $"{Directory.GetCurrentDirectory()}\\";
-
-    /// <summary>
-    /// Path relative to the private files directory on Android and to the
-    /// application's root directory on the desktop.
-    /// </summary>
-    public static string LocalPath => Path.DirectorySeparatorChar.ToString();
-
-    // ========================================================================
-
-    /// <summary>
-    /// Gets the full path of the currently executing assembly. This value is derived
-    /// from the location of the assembly file on disk, provided as a normalized path
-    /// with consistent separators.
-    /// </summary>
-    public static string AssemblyPath => Assembly.GetExecutingAssembly().Location;
-
-    /// <summary>
-    /// Gets the directory path of the executing assembly, normalized to include a
-    /// trailing directory separator. This value is derived from the location of the
-    /// assembly currently executing.
-    /// </summary>
-    public static string AssemblyDirectory => Path.GetDirectoryName( AssemblyPath ) + "\\";
-
-    // ========================================================================
-
-    /// <summary>
-    /// The full path to the applicationsbase assets folder.
-    /// a valid example path is:-
-    /// <code>
-    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\Assets\
-    /// </code>
-    /// </summary>
-    public static string AssetsRoot => $"{AssemblyDirectory}{IOConfig.AssetsRoot}\\";
-
-    // ========================================================================
-
-    /// <summary>
     /// Validates the provided asset path by ensuring it is relative to the assets
     /// directory and normalizing it to use consistent directory separators.
     /// </summary>
@@ -116,9 +43,9 @@ public class IOUtils
     /// <returns>The validated asset path.</returns>
     public static string AssetPath( string path )
     {
-        if ( !path.Contains( AssemblyDirectory ) )
+        if ( !path.Contains( Files.AssemblyDirectory ) )
         {
-            return AssemblyDirectory + path;
+            return Files.AssemblyDirectory + path;
         }
 
         return path;
@@ -267,7 +194,7 @@ public class IOUtils
     /// </returns>
     public static string StripAssetsPath( string path )
     {
-        int position = path.IndexOf( "Assets", StringComparison.Ordinal );
+        int position = path.IndexOf( Files.ContentRoot, StringComparison.Ordinal );
 
         return path.Substring( position, path.Length - position );
     }
@@ -293,14 +220,15 @@ public class IOUtils
     /// </summary>
     public static void DebugPaths()
     {
-        Logger.Debug( $"ExternalPath        : {ExternalPath}" );
-        Logger.Debug( $"InternalPath        : {InternalPath}" );
-        Logger.Debug( $"LocalPath           : {LocalPath}" );
-
+        Logger.Debug( $"ExternalPath        : {Files.ExternalPath}" );
+        Logger.Debug( $"InternalPath        : {Files.InternalPath}" );
+        Logger.Debug( $"LocalPath           : {Files.LocalPath}" );
         // --------------------------------------------------------------------
-        Logger.Debug( $"AssemblyPath        : {AssemblyPath}" );
-        Logger.Debug( $"AssemblyDirectory   : {AssemblyDirectory}" );
-        Logger.Debug( $"AssetsPath          : {AssetsRoot}" );
+        Logger.Debug( $"ContentRoot         : {Files.ContentRoot}" );
+        // --------------------------------------------------------------------
+        Logger.Debug( $"AssemblyPath        : {Files.AssemblyPath}" );
+        Logger.Debug( $"AssemblyDirectory   : {Files.AssemblyDirectory}" );
+        Logger.Debug( $"AssetsPath          : {Files.AssetsRoot}" );
     }
     #endif
 }

@@ -30,7 +30,7 @@ using LughSharp.Core.Utils.Collections;
 namespace LughSharp.Core.Graphics.G3D.Attributes;
 
 [PublicAPI]
-public class SpotLightsAttribute : Attribute
+public class SpotLightsAttribute : G3DAttribute
 {
     public readonly List< SpotLight > Lights;
 
@@ -50,7 +50,7 @@ public class SpotLightsAttribute : Attribute
     public static long   Type  => Register( Alias );
 
     /// <inheritdoc />
-    public override Attribute Copy()
+    public override G3DAttribute Copy()
     {
         return this;
     }

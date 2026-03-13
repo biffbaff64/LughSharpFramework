@@ -37,7 +37,6 @@ namespace Template.Source;
 //  - 3D Graphics
 //  - Network / HTTP etc.
 //  - Json handling to support Scene2D Skins
-//  - Maybe add a "Content" folder to the project and copy assets there on build, then load from there instead of the "Assets" folder?
 //  - 2D Particle System
 //  - Ninepatch support for UI
 // ============================================================================
@@ -102,8 +101,6 @@ public class MainGame : Game
 
         Logger.Debug( "Done" );
     }
-
-    // ========================================================================
 
     /// <inheritdoc />
     public override void Update()
@@ -171,8 +168,6 @@ public class MainGame : Game
 
         _stage?.Viewport.Update( width, height );
     }
-
-    // ========================================================================
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or

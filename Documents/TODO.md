@@ -231,7 +231,7 @@ FILES
 
     CODE   DOCU   FOOTER
     ----   ----   ------
-    -      -      -      - FileHandle
+    - IP   - IP   - DONE - FileHandle
     - DONE - DONE - DONE - Files
     - DONE - DONE - DONE - FileService
     - DONE - DONE - DONE - IFilenameFilter
@@ -239,7 +239,7 @@ FILES
     - DONE - DONE - DONE - IFileService
     - DONE - DONE - DONE - IOUtils
     - DONE - DONE - DONE - PathType
-    -      -      -      - StreamUtils
+    - IP   - IP   - DONE - StreamUtils
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -256,7 +256,6 @@ GRAPHICS
     -      -      -      - Cubemap
     -      -      -      - GLTexture
     -      -      -      - GLTextureArray
-    -      -      -      - GraphicsBackend
     -      -      -      - GraphicsCapabilities
     -      -      -      - GraphicsDevice
     - DONE - IP   - DONE - GStructs

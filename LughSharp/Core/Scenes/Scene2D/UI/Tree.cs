@@ -51,13 +51,13 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
     where TNode : Tree< TNode, TValue >.Node
 {
-    public TNode?                      RangeStart    { get; set; }
-    public ClickListener?              ClickListener { get; set; }
-    public TreeStyle? Style         { get; set; }
-    public List< TNode >               RootNodes     { get; set; } = [ ];
-    public float                       YSpacing      { get; set; } = 4;
-    public float                       IndentSpacing { get; set; }
-    public TNode?                      OverNode      { get; set; }
+    public TNode?         RangeStart    { get; set; }
+    public ClickListener? ClickListener { get; set; }
+    public TreeStyle?     Style         { get; set; }
+    public List< TNode >  RootNodes     { get; set; } = [ ];
+    public float          YSpacing      { get; set; } = 4;
+    public float          IndentSpacing { get; set; }
+    public TNode?         OverNode      { get; set; }
 
     // ========================================================================
 
@@ -255,13 +255,22 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
         _sizeInvalid = true;
     }
 
+    /// <summary>
+    /// Calculates the maximum width among the components representing
+    /// the expansion and collapse icons (plus and minus) in the tree structure.
+    /// It takes into account the default, hovered states, and ensures the calculated width
+    /// accommodates all potential visual states.
+    /// </summary>
+    /// <returns>
+    /// The maximum width of the plus and minus icons, considering their default and
+    /// hovered states defined in the <see cref="TreeStyle"/>.
+    /// </returns>
     private float PlusMinusWidth()
     {
-        if ( Style == null )
-        {
-            throw new RuntimeException( "Style should not be null!" );
-        }
-
+        Guard.Against.Null( Style );
+        Guard.Against.Null( Style.Plus );
+        Guard.Against.Null( Style.Minus );
+        
         float width = Math.Max( Style.Plus.MinWidth, Style.Minus.MinWidth );
 
         if ( Style.PlusOver != null )
@@ -277,6 +286,9 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
         return width;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void ComputeSize()
     {
         _sizeInvalid = false;
@@ -288,6 +300,12 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
         _prefWidth += _paddingLeft + _paddingRight;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="nodes"></param>
+    /// <param name="indent"></param>
+    /// <param name="plusMinusWidth"></param>
     private void ComputeSize( List< TNode > nodes, float indent, float plusMinusWidth )
     {
         float ySpacing = YSpacing;
@@ -330,6 +348,9 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override void SetLayout()
     {
         if ( _sizeInvalid )
@@ -340,6 +361,14 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
         Layout( RootNodes, _paddingLeft, Height - ( YSpacing / 2 ), PlusMinusWidth() );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="nodes"></param>
+    /// <param name="indent"></param>
+    /// <param name="y"></param>
+    /// <param name="plusMinusWidth"></param>
+    /// <returns></returns>
     private float Layout( List< TNode > nodes, float indent, float y, float plusMinusWidth )
     {
         float ySpacing        = YSpacing;
@@ -381,6 +410,7 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
         return y;
     }
 
+    /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         DrawBackground( batch, parentAlpha );
@@ -407,6 +437,14 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="batch"></param>
+    /// <param name="nodes"></param>
+    /// <param name="indent"></param>
+    /// <param name="plusMinusWidth"></param>
+    /// <exception cref="RuntimeException"></exception>
     private void Draw( IBatch batch, List< TNode > nodes, float indent, float plusMinusWidth )
     {
         Rectangle? cullingArea = CullingArea;
@@ -480,6 +518,16 @@ public class Tree< TNode, TValue > : WidgetGroup, IStyleable< TreeStyle >
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="node"></param>
+    /// <param name="selection"></param>
+    /// <param name="batch"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     protected void DrawSelection( TNode node, ISceneDrawable selection, IBatch batch, float x, float y, float width,
                                   float height )
     {

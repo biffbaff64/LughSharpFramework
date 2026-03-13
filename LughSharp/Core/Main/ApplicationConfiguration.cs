@@ -22,16 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Utils.Logging;
-
-using static LughSharp.Core.Graphics.GraphicsBackend;
 
 using Color = LughSharp.Core.Graphics.Color;
 
@@ -47,17 +43,13 @@ public class ApplicationConfiguration
     // General Application Configuration
     // ========================================================================
 
-    public BackendType     GraphicsBackend                { get; set; } = BackendType.OpenGL;
     public HdpiMode        HdpiMode                       { get; set; } = HdpiMode.Logical;
     public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
     public string          PreferencesDirectory           { get; set; } = ".prefs/";
     public PathType        PreferencesFileType            { get; set; } = PathType.External;
-    public bool            DisableAudio                   { get; set; }
     public int             AudioDeviceSimultaneousSources { get; set; } = 16;
     public int             AudioDeviceBufferSize          { get; set; } = 512;
     public int             AudioDeviceBufferCount         { get; set; } = 9;
-    public bool            Debug                          { get; set; }
-    public bool            TransparentFramebuffer         { get; set; }
     public int             Depth                          { get; set; } = 16;
     public int             Stencil                        { get; set; }
     public int             Samples                        { get; set; }
@@ -70,6 +62,9 @@ public class ApplicationConfiguration
     public int             Green                          { get; set; } = 8;
     public int             Blue                           { get; set; } = 8;
     public int             Alpha                          { get; set; } = 8;
+    public bool            DisableAudio                   { get; set; }
+    public bool            Debug                          { get; set; }
+    public bool            TransparentFramebuffer         { get; set; }
     public bool            PauseWhenLostFocus             { get; set; } = true;
     public bool            PauseWhenMinimized             { get; set; } = true;
     public bool            GLProfilingEnabled             { get; set; } = true;

@@ -36,8 +36,8 @@ using Platform = LughSharp.Core.Main.Platform;
 namespace LughSharp.Core.Graphics.Utils;
 
 /// <summary>
-/// A <see cref="ITextureData"/> implementation which should be used
-/// to create float textures.
+/// Represents a float-based texture data implementation of <see cref="ITextureData"/>.
+/// This class is used to create textures with floating-point precision.
 /// </summary>
 [PublicAPI]
 public class FloatTextureData : ITextureData
@@ -88,7 +88,7 @@ public class FloatTextureData : ITextureData
         {
             var amountOfFloats = 4;
 
-            if ( Engine.Api.Graphics.GLVersion!.BackendType.Equals( GraphicsBackend.BackendType.OpenGL ) )
+            if ( Engine.Api.Graphics.BackendInfo.Type.Equals( GraphicsDevice.BackendType.OpenGL ) )
             {
                 if ( _internalFormat is IGL.GLRGBA16F or IGL.GLRGBA32F )
                 {

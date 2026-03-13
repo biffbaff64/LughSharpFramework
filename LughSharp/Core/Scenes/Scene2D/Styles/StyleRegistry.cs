@@ -240,16 +240,6 @@ public class StyleRegistry
         // ----- TextTooltipStyle -----
 //        var ttStyle = new TextTooltipStyle();
 
-        // ----- ImageTextButtonStyle -----
-        var itbStyle = new ImageTextButtonStyleRecord
-        {
-            ImageUp       = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
-            ImageDown     = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) ),
-            ImageDisabled = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
-        };
-
-        Add( "default", itbStyle ).Add( "toggle", itbStyle with { ImageChecked = itbStyle.ImageDown } );
-
         // ----- ImageButtonStyle -----
         var ibStyle = new ImageButtonStyleRecord
         {
@@ -259,6 +249,16 @@ public class StyleRegistry
         };
 
         Add( "default", ibStyle ).Add( "toggle", ibStyle with { ImageChecked = ibStyle.ImageDown } );
+
+        // ----- ImageTextButtonStyle -----
+        var itbStyle = new ImageTextButtonStyleRecord
+        {
+            ImageUp       = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
+            ImageDown     = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) ),
+            ImageDisabled = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
+        };
+
+        Add( "default", itbStyle ).Add( "toggle", itbStyle with { ImageChecked = itbStyle.ImageDown } );
 
         // ----- SelectBoxStyle -----
 //        var sbStyle = new SelectBoxStyle();
@@ -271,9 +271,11 @@ public class StyleRegistry
             throw new FileNotFoundException( jsonFile.FullName );
         }
 
-        string      jsonString = File.ReadAllText( jsonFile.FullName );
-        using JsonDocument   document   = JsonDocument.Parse( jsonString );
-        JsonElement root       = document.RootElement;
+        string jsonString = File.ReadAllText( jsonFile.FullName );
+
+        using JsonDocument document = JsonDocument.Parse( jsonString );
+
+        JsonElement root = document.RootElement;
 
         // Load Colors first so they are available for fonts and styles
         if ( root.TryGetProperty( "Color", out JsonElement colors ) )

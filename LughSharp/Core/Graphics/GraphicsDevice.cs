@@ -22,40 +22,70 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
+using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics;
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public abstract class GraphicsDevice : IGraphicsDevice
 {
-    public FramebufferConfig BufferConfig { get; set; } = null!;
+    public FramebufferConfig BufferConfig          { get; set; } = null!;
+    public BackendData       BackendInfo           { get; set; }
+    public int               LogicalWidth          { get; set; }
+    public int               LogicalHeight         { get; set; }
+    public int               BackBufferWidth       { get; set; }
+    public int               BackBufferHeight      { get; set; }
+    public Color             WindowBackgroundColor { get; set; } = Color.Blue;
 
-    public int   LogicalWidth          { get; set; }
-    public int   LogicalHeight         { get; set; }
-    public int   BackBufferWidth       { get; set; }
-    public int   BackBufferHeight      { get; set; }
-    public Color WindowBackgroundColor { get; set; } = Color.Blue;
+    // ========================================================================
+
+    public virtual int                  WindowWidth         { get; }
+    public virtual int                  WindowHeight        { get; }
+    public virtual float                DeltaTime           { get; set; }
+    public virtual bool                 ContinuousRendering { get; set; } = true;
+    public virtual bool                 IsFullscreen        { get; }
+    public virtual GraphicsCapabilities Capabilities        { get; set; } = null!;
+    public virtual GLFormatChooser      FormatChooser       { get; set; } = null!;
+    public virtual DotGLFW.Window       CurrentContext      { get; set; } = null!;
 
     // ========================================================================
 
-    public virtual int   WindowWidth         { get; }
-    public virtual int   WindowHeight        { get; }
-    public virtual float DeltaTime           { get; set; }
-    public virtual bool  ContinuousRendering { get; set; } = true;
-    public virtual bool  IsFullscreen        { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="appType"></param>
+    /// <param name="profile"></param>
+    /// <exception cref="RuntimeException"></exception>
+    public void SetBackend( Platform.ApplicationType appType, DotGLFW.OpenGLProfile profile )
+    {
+        BackendInfo = new GraphicsDevice.BackendData
+        {
+            Type = appType switch
+                   {
+                       Platform.ApplicationType.Android     => GraphicsDevice.BackendType.AndroidGLES,
+                       Platform.ApplicationType.WindowsGles => GraphicsDevice.BackendType.OpenGLES,
+                       Platform.ApplicationType.WindowsGL   => GraphicsDevice.BackendType.OpenGL,
+                       Platform.ApplicationType.WebGL       => GraphicsDevice.BackendType.WebGL,
+                       Platform.ApplicationType.IOS         => GraphicsDevice.BackendType.IOSGLES,
 
-    public virtual AppVersion?                 GLVersion      { get; set; }
-    public virtual GraphicsBackend.BackendType GraphicsType   { get; set; }
-    public virtual GraphicsCapabilities        Capabilities   { get; set; } = null!;
-    public virtual GLFormatChooser             FormatChooser  { get; set; } = null!;
-    public virtual DotGLFW.Window              CurrentContext { get; set; } = null!;
+                       var _ => throw new RuntimeException( $"Unknown Platform ApplicationType: {appType}" )
+                   },
+        };
 
-    // ========================================================================
+        Graphics.OpenGL.OpenGL.Initialisation.LoadVersion();
+        OpenGL.OpenGL.Capabilities.OpenGLProfile = profile;
+    }
 
     /// <summary>
     /// Returns the time span between the current frame and the last frame
@@ -343,6 +373,74 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// </summary>
     /// <param name="systemCursor"> The system cursor to use. </param>
     public abstract void SetSystemCursor( ICursor.SystemCursor systemCursor );
+
+    /// <summary>
+    /// The supported underlying graphics backends.
+    /// </summary>
+    [PublicAPI]
+    public enum BackendType
+    {
+        /// <summary>
+        /// OpenGL graphics backend.
+        /// </summary>
+        OpenGL,
+        OpenGLCore,
+        OpenGLES,
+        OpenGLES3,
+        OpenGLES31,
+        OpenGLES32,
+        WebGL,
+
+        /// <summary>
+        /// Vulkan graphics backend.
+        /// </summary>
+        Vulkan,
+
+        /// <summary>
+        /// Microsoft DirectX graphics backend.
+        /// </summary>
+        DirectX11,
+        DirectX12,
+
+        /// <summary>
+        /// Android backends
+        /// </summary>
+        AndroidGL,
+        AndroidGLES,
+        AndroidVulkan,
+
+        /// <summary>
+        /// iOS backends
+        /// </summary>
+        IOSGL,
+        IOSGLES,
+        IOSMetal,
+        IOSVulkan
+    }
+
+    /// <summary>
+    /// Sub-categories for OpenGL
+    /// </summary>
+    [PublicAPI]
+    public enum OpenGLSubCategory
+    {
+        GL10,
+        GL20,
+        GL30,
+        GL40
+    }
+
+    /// <summary>
+    /// Represents detailed information about a graphics backend, including the backend type
+    /// and any subcategories associated with it.
+    /// </summary>
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential )]
+    public struct BackendData
+    {
+        public BackendType       Type        { get; set; }
+        public OpenGLSubCategory SubCategory { get; set; }
+    }
 }
 
 // ========================================================================

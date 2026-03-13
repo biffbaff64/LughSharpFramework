@@ -39,6 +39,96 @@ namespace LughSharp.Core.Files;
 public class Files : IFiles
 {
     /// <summary>
+    /// The root directory for all assets.
+    /// Defaults to "Assets", but can be changed to suit your project's needs.
+    /// All Asset Management classes will use this path as the root for all assets.
+    /// </summary>
+    /// <remarks>
+    /// The ContentRoot property does not include a trailing slash. If one is included
+    /// when setting the property, it will be removed.
+    /// <para>
+    /// Correct usage:
+    /// <code>
+    /// Files.ContentRoot = "Content";
+    /// const string AssetPath = $"{Files.ContentRoot}/Textures/sprite.png";  
+    /// </code>
+    /// </para>
+    /// </remarks>
+    public static string ContentRoot
+    {
+        get;
+        set
+        {
+            if ( value.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
+            {
+                value = value.TrimEnd( Path.DirectorySeparatorChar );
+            }
+            
+            field = value;
+        }
+    } = "Assets";
+
+    /// <summary>
+    /// Path relative to the root of the app external storage on Android and
+    /// to the home directory of the current user on the desktop.
+    /// <para>
+    /// An example External path would be:-
+    /// <code>
+    /// C:\Users\joe_blogs\
+    /// </code>
+    /// </para>
+    /// </summary>
+    public static string ExternalPath => $"{Environment.GetFolderPath( Environment.SpecialFolder.UserProfile )}\\";
+
+    /// <summary>
+    /// Path relative to the asset directory on Android and to the application's root
+    /// directory on the desktop. On the desktop, if the file is not found, then the
+    /// classpath is checked.
+    /// <para>
+    /// This is not the root folder of this framework, it is the root folder of the
+    /// application that is using this framework. An example Internal path would be:-
+    /// <code>
+    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\
+    /// </code>
+    /// </para>
+    /// <para>
+    /// <b>Internal files are always readonly.</b>
+    /// </para>
+    /// </summary>
+    public static string InternalPath => $"{Directory.GetCurrentDirectory()}\\";
+
+    /// <summary>
+    /// Path relative to the private files directory on Android and to the
+    /// application's root directory on the desktop.
+    /// </summary>
+    public static string LocalPath => Path.DirectorySeparatorChar.ToString();
+
+    /// <summary>
+    /// Gets the full path of the currently executing assembly. This value is derived
+    /// from the location of the assembly file on disk, provided as a normalized path
+    /// with consistent separators.
+    /// </summary>
+    public static string AssemblyPath => System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+    /// <summary>
+    /// Gets the directory path of the executing assembly, normalized to include a
+    /// trailing directory separator. This value is derived from the location of the
+    /// assembly currently executing.
+    /// </summary>
+    public static string AssemblyDirectory => Path.GetDirectoryName( AssemblyPath ) + "\\";
+
+    /// <summary>
+    /// The full path to the applicationsbase assets folder.
+    /// a valid example path is:-
+    /// <code>
+    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\Assets\
+    /// </code>
+    /// </summary>
+    public static string AssetsRoot => $"{AssemblyDirectory}{ContentRoot}\\";
+
+    // ========================================================================
+
+    /// <summary>
     /// Retrieves a file handle based on the specified path and path type.
     /// </summary>
     /// <param name="path">The file path to be used for creating the file handle.</param>
@@ -188,7 +278,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetInternalStoragePath()
     {
-        string path = IOUtils.InternalPath;
+        string path = InternalPath;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine internal storage path" )
@@ -284,7 +374,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetExternalStoragePath()
     {
-        string path = IOUtils.ExternalPath;
+        string path = ExternalPath;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine external storage path" )
@@ -316,7 +406,21 @@ public class Files : IFiles
 
     /// <summary>
     /// Convenience method that returns a <see cref="PathType.Assets"/> file handle.
+    /// Example:-
+    /// <code>
+    ///      Assets( "Textures/sprite.png" );
+    /// </code>
+    /// will return a <see cref="FileInfo"/> pointing to the file "Textures/sprite.png"
+    /// at:-
+    /// <code>
+    ///      {AssemblyDirectory}{ContentRoot}Textures/sprite.png
+    /// </code>
     /// </summary>
+    /// <param name="path">The path to the file relative to the Assets directory.</param>
+    /// <returns>A <see cref="FileInfo"/> pointing to the specified file.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="path"/> is null or empty.</exception>
+    /// <seealso cref="AssemblyDirectory"/>
+    /// <seealso cref="ContentRoot"/>
     public virtual FileInfo Assets( string path )
     {
         if ( string.IsNullOrEmpty( path ) )
@@ -344,7 +448,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetAssetsStoragePath()
     {
-        string path = IOUtils.AssetsRoot;
+        string path = AssetsRoot;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine default assets storage path" )
@@ -386,7 +490,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetAssemblyStoragePath()
     {
-        string path = IOUtils.AssemblyDirectory;
+        string path = AssemblyDirectory;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine assembly storage path" )
@@ -454,7 +558,7 @@ public class Files : IFiles
     /// </summary>
     public virtual string GetLocalStoragePath()
     {
-        string path = IOUtils.LocalPath;
+        string path = LocalPath;
 
         return string.IsNullOrEmpty( path )
             ? throw new RuntimeException( "Could not determine local storage path" )

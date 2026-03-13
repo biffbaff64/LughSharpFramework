@@ -36,7 +36,7 @@ public interface IStyleable< T >
     /// <summary>
     /// The current style of the actor.
     /// </summary>
-    T Style { get; set; }
+    T? Style { get; set; }
 }
 
 // ============================================================================

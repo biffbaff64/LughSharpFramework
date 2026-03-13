@@ -26,6 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics;
 
@@ -43,15 +44,7 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public interface IGraphicsDevice
 {
-    /// <summary>
-    /// Gets or sets the OpenGL version information.
-    /// </summary>
-    AppVersion? GLVersion { get; set; }
-
-    /// <summary>
-    /// Gets the type of graphics backend being used.
-    /// </summary>
-    GraphicsBackend.BackendType GraphicsType { get; }
+    GraphicsDevice.BackendData BackendInfo  { get; set; }
 
     /// <summary>
     /// Gets or sets the buffer config data (bits per pixel, depth, stencil, samples).
@@ -121,6 +114,8 @@ public interface IGraphicsDevice
     // ========================================================================
     // ========================================================================
 
+    void SetBackend( Platform.ApplicationType appType, DotGLFW.OpenGLProfile profile );
+    
     /// <summary>
     /// Updates the current graphics state by calculating the frame delta time,
     /// updating frames per second (FPS), and incrementing the frame identifier.

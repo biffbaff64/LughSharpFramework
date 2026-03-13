@@ -26,9 +26,9 @@ using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.G3D;
 
-public class AttributesGroup : IComparer< Attribute >
+public class AttributesGroup : IComparer< G3DAttribute >
 {
-    private readonly List< Attribute > _attributes = new();
+    private readonly List< G3DAttribute > _attributes = new();
 
     private long _mask;
     private bool _sorted = true;
@@ -36,7 +36,7 @@ public class AttributesGroup : IComparer< Attribute >
     /// <summary>
     /// Used for sorting attributes by type (not by value)
     /// </summary>
-    public int Compare( Attribute? arg0, Attribute? arg1 )
+    public int Compare( G3DAttribute? arg0, G3DAttribute? arg1 )
     {
         Guard.Against.Null( arg0 );
         Guard.Against.Null( arg1 );
@@ -64,11 +64,11 @@ public class AttributesGroup : IComparer< Attribute >
         return _mask;
     }
 
-    public Attribute? Get( long type )
+    public G3DAttribute? Get( long type )
     {
         if ( Has( type ) )
         {
-            foreach ( Attribute att in _attributes )
+            foreach ( G3DAttribute att in _attributes )
             {
                 if ( att.Type == type )
                 {
@@ -80,14 +80,14 @@ public class AttributesGroup : IComparer< Attribute >
         return null;
     }
 
-    public T? Get< T >( long type ) where T : Attribute
+    public T? Get< T >( long type ) where T : G3DAttribute
     {
         return ( T? )Get( type );
     }
 
-    public List< Attribute > Get( List< Attribute > output, long type )
+    public List< G3DAttribute > Get( List< G3DAttribute > output, long type )
     {
-        foreach ( Attribute att in _attributes )
+        foreach ( G3DAttribute att in _attributes )
         {
             if ( ( att.Type & type ) != 0 )
             {
@@ -123,7 +123,7 @@ public class AttributesGroup : IComparer< Attribute >
     /// Add a attribute to this material. If the material already contains an attribute
     /// of the same type it is overwritten.
     /// </summary>
-    public void Set( Attribute attribute )
+    public void Set( G3DAttribute attribute )
     {
         int idx = IndexOf( attribute.Type );
 
@@ -147,7 +147,7 @@ public class AttributesGroup : IComparer< Attribute >
     /// an attribute of the same type it is overwritten.
     /// </summary>
     [Obsolete( "Use Set( params Attribute[] attribs ) instead." )]
-    public void Set( Attribute attribute1, Attribute attribute2 )
+    public void Set( G3DAttribute attribute1, G3DAttribute attribute2 )
     {
         Set( attribute1 );
         Set( attribute2 );
@@ -158,7 +158,7 @@ public class AttributesGroup : IComparer< Attribute >
     /// an attribute of the same type it is overwritten.
     /// </summary>
     [Obsolete( "Use Set( params Attribute[] attribs ) instead." )]
-    public void Set( Attribute attribute1, Attribute attribute2, Attribute attribute3 )
+    public void Set( G3DAttribute attribute1, G3DAttribute attribute2, G3DAttribute attribute3 )
     {
         Set( attribute1 );
         Set( attribute2 );
@@ -170,10 +170,10 @@ public class AttributesGroup : IComparer< Attribute >
     /// an attribute of the same type it is overwritten.
     /// </summary>
     [Obsolete( "Use Set( params Attribute[] attribs ) instead." )]
-    public void Set( Attribute attribute1,
-                     Attribute attribute2,
-                     Attribute attribute3,
-                     Attribute attribute4 )
+    public void Set( G3DAttribute attribute1,
+                     G3DAttribute attribute2,
+                     G3DAttribute attribute3,
+                     G3DAttribute attribute4 )
     {
         Set( attribute1 );
         Set( attribute2 );
@@ -185,9 +185,9 @@ public class AttributesGroup : IComparer< Attribute >
     /// Add multiple attributes to this material. If the material already contains
     /// an attribute of the same type it is overwritten.
     /// </summary>
-    public void Set( params Attribute[] attribs )
+    public void Set( params G3DAttribute[] attribs )
     {
-        foreach ( Attribute attr in attribs )
+        foreach ( G3DAttribute attr in attribs )
         {
             Set( attr );
         }
@@ -197,9 +197,9 @@ public class AttributesGroup : IComparer< Attribute >
     /// Add an array of attributes to this material. If the material already contains
     /// an attribute of the same type it is overwritten.
     /// </summary>
-    public void Set( IEnumerable< Attribute > attribs )
+    public void Set( IEnumerable< G3DAttribute > attribs )
     {
-        foreach ( Attribute attr in attribs )
+        foreach ( G3DAttribute attr in attribs )
         {
             Set( attr );
         }

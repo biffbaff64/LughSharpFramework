@@ -51,13 +51,7 @@ public class FileHandle
     {
         encoding ??= Encoding.UTF8;
 
-        //TODO: resolve the Path based on PathType (Internal vs External)
         return new StreamWriter( FullPath(), append, encoding );
-    }
-
-    public StreamReader Reader()
-    {
-        return new StreamReader( FullPath(), Encoding.UTF8 );
     }
 
     public StreamReader Reader( Encoding? encoding = null )

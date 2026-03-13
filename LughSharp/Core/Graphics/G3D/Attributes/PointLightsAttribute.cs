@@ -30,7 +30,7 @@ using LughSharp.Core.Utils.Collections;
 namespace LughSharp.Core.Graphics.G3D.Attributes;
 
 [PublicAPI]
-public class PointLightsAttribute : Attribute
+public class PointLightsAttribute : G3DAttribute
 {
     public readonly List< PointLight > Lights;
 
@@ -50,7 +50,7 @@ public class PointLightsAttribute : Attribute
     public static long   Type  => Register( Alias );
 
     /// <inheritdoc />
-    public override Attribute Copy()
+    public override G3DAttribute Copy()
     {
         return this;
     }

@@ -48,7 +48,7 @@ public class TextureAtlasTest : ILughTest
     public void Run()
     {
         var atlasData = new TextureAtlasData( Api.Files.Internal( @"Assets\PackedImages\Output\input.atlas" ),
-                                              new DirectoryInfo( IOUtils.InternalPath +
+                                              new DirectoryInfo( Files.InternalPath +
                                                                  @"\Assets\PackedImages\Output" ) );
 
         var atlas = new TextureAtlas( atlasData );

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Files;
@@ -29,6 +31,10 @@ namespace LughSharp.Core.Files;
 [PublicAPI]
 public class StreamUtils
 {
+    /// <summary>
+    /// Attempts to close a resource, ignoring any exceptions that may occur.
+    /// The resource must implement <see cref="IDisposable"/> to be closed.
+    /// </summary>
     public static void CloseQuietly( object? resource )
     {
         if ( resource is IDisposable disposable )
@@ -39,55 +45,10 @@ public class StreamUtils
             }
             catch ( Exception )
             {
-                // Ignore exceptions, but add logging here.
+                // Ignore exceptions.
             }
         }
     }
-    
-//    public static void CloseQuietly( TextReader? reader )
-//    {
-//        if ( reader != null )
-//        {
-//            try
-//            {
-//                reader.Close();
-//            }
-//            catch ( Exception )
-//            {
-//                // Ignore exceptions
-//            }
-//        }
-//    }
-
-//    public static void CloseQuietly( TextWriter? writer )
-//    {
-//        if ( writer != null )
-//        {
-//            try
-//            {
-//                writer.Close();
-//            }
-//            catch ( Exception )
-//            {
-//                // Ignore exceptions
-//            }
-//        }
-//    }
-
-//    public static void CloseQuietly( Stream? stream )
-//    {
-//        if ( stream != null )
-//        {
-//            try
-//            {
-//                stream.Close();
-//            }
-//            catch ( Exception )
-//            {
-//                // Ignore exceptions
-//            }
-//        }
-//    }
 }
 
 // ============================================================================

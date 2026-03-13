@@ -31,7 +31,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.OpenGL;
-using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -70,13 +69,11 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// </summary>
     public DesktopGLApplicationConfiguration? AppConfig { get; set; }
 
-    public List< Action > Runnables         { get; set; } = [ ];
-    public List< Action > ExecutedRunnables { get; set; } = [ ];
-
-    public IClipboard?           Clipboard     { get; set; }
-    public AppVersion?           GLVersion     { get; set; }
-    public DotGLFW.OpenGLProfile OglProfile    { get; set; }
-    public DesktopGLWindow?      CurrentWindow { get; set; }
+    public List< Action >        Runnables         { get; set; } = [ ];
+    public List< Action >        ExecutedRunnables { get; set; } = [ ];
+    public IClipboard?           Clipboard         { get; set; }
+    public DotGLFW.OpenGLProfile OglProfile        { get; set; }
+    public DesktopGLWindow?      CurrentWindow     { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -145,6 +142,8 @@ public class DesktopGLApplication : IApplication, IDisposable
         InitialiseGlfw();
 
         Windows.Add( CreateWindow( AppConfig, listener, 0 ) );
+        
+        Engine.Api.Graphics.SetBackend( Platform.ApplicationType.WindowsGL, OglProfile );
     }
 
     // ========================================================================
@@ -757,8 +756,6 @@ public class DesktopGLApplication : IApplication, IDisposable
         DotGLFW.Glfw.MakeContextCurrent( windowHandle );
         DotGLFW.Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
         GLUtils.CreateCapabilities();
-
-        GLVersion = new AppVersion( Platform.ApplicationType.WindowsGL, OglProfile );
 
         if ( config.Debug )
         {

@@ -308,7 +308,7 @@ public class TexturePackerFileProcessor : FileProcessor
             return num1 - num2;
         } );
 
-        string? sourceString = inputDir.InputFile?.FullName.Substring( IOUtils.AssetsRoot.Length );
+        string? sourceString = inputDir.InputFile?.FullName.Substring( Files.AssetsRoot.Length );
 
         // ---------- Pack ----------
 

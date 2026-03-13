@@ -29,6 +29,9 @@ using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics;
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public unsafe class GraphicsCapabilities
 {
@@ -39,7 +42,7 @@ public unsafe class GraphicsCapabilities
     public bool HasBPTC                { get; init; } // BC6H–BC7
     public bool HasETC2                { get; init; }
     public bool HasInternalFormatQuery { get; init; }
-
+    
     // ========================================================================
 
     /// <summary>

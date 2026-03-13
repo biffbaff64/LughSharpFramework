@@ -41,99 +41,6 @@ namespace LughSharp.Core.Main;
 [PublicAPI]
 public static class Platform
 {
-    /// <summary>
-    /// Target application backends.
-    /// </summary>
-    [PublicAPI]
-    public enum ApplicationType
-    {
-        /// <summary>
-        /// Windows32 Platform
-        /// </summary>
-        Windows,
-
-        /// <summary>
-        /// Windows Cross Platform Opengl Platform
-        /// </summary>
-        WindowsGL,
-
-        /// <summary>
-        /// Windows Cross Platform Opengles Platform
-        /// </summary>
-        WindowsGles,
-
-        /// <summary>
-        /// Windows Vulkan Platform
-        /// </summary>
-        WindowsVk,
-
-        /// <summary>
-        /// Windows Game Development Kit Platform
-        /// </summary>
-        WindowsGdk,
-
-        /// <summary>
-        /// Web-based Graphics Library platform.
-        /// </summary>
-        WebGL,
-
-        /// <summary>
-        /// XBox One Platform
-        /// </summary>
-        XBoxOne,
-
-        /// <summary>
-        /// XBox Series Platform
-        /// </summary>
-        XBoxSeries,
-
-        /// <summary>
-        /// Nintendo Switch Platform
-        /// </summary>
-        NintendoSwitch,
-
-        /// <summary>
-        /// PlayStation 4 Platform
-        /// </summary>
-        PlayStation4,
-
-        /// <summary>
-        /// PlayStation 5 Platform
-        /// </summary>
-        PlayStation5,
-
-        /// <summary>
-        /// Android Platform
-        /// </summary>
-        Android,
-
-        /// <summary>
-        /// Apple iOS Platform
-        /// </summary>
-        IOS,
-
-        /// <summary>
-        /// Mac OS Platform
-        /// </summary>
-        MacOs,
-
-        Default = WindowsGL
-    }
-
-    /// <summary>
-    /// Application type family groups
-    /// </summary>
-    [PublicAPI]
-    public enum PlatformFamily
-    {
-        Unknown,
-        Mobile,  // Android, IOS
-        Desktop, // WindowsGL, UWP, WebGL, Linux, MacOS
-        Console  // XBox, Playstation, Nintendo
-    }
-
-    // ========================================================================
-
     public static bool IsWindows { get; private set; } = RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
     public static bool Is64Bit   { get; private set; } = Environment.Is64BitOperatingSystem;
     public static bool IsLinux   { get; private set; } = RuntimeInformation.IsOSPlatform( OSPlatform.Linux );
@@ -227,6 +134,99 @@ public static class Platform
     public static string RandomUUID()
     {
         return Guid.NewGuid().ToString();
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Target application backends.
+    /// </summary>
+    [PublicAPI]
+    public enum ApplicationType
+    {
+        /// <summary>
+        /// Windows32 Platform
+        /// </summary>
+        Windows,
+
+        /// <summary>
+        /// Windows Cross Platform Opengl Platform
+        /// </summary>
+        WindowsGL,
+
+        /// <summary>
+        /// Windows Cross Platform Opengles Platform
+        /// </summary>
+        WindowsGles,
+
+        /// <summary>
+        /// Windows Vulkan Platform
+        /// </summary>
+        WindowsVk,
+
+        /// <summary>
+        /// Windows Game Development Kit Platform
+        /// </summary>
+        WindowsGdk,
+
+        /// <summary>
+        /// Web-based Graphics Library platform.
+        /// </summary>
+        WebGL,
+
+        /// <summary>
+        /// XBox One Platform
+        /// </summary>
+        XBoxOne,
+
+        /// <summary>
+        /// XBox Series Platform
+        /// </summary>
+        XBoxSeries,
+
+        /// <summary>
+        /// Nintendo Switch Platform
+        /// </summary>
+        NintendoSwitch,
+
+        /// <summary>
+        /// PlayStation 4 Platform
+        /// </summary>
+        PlayStation4,
+
+        /// <summary>
+        /// PlayStation 5 Platform
+        /// </summary>
+        PlayStation5,
+
+        /// <summary>
+        /// Android Platform
+        /// </summary>
+        Android,
+
+        /// <summary>
+        /// Apple iOS Platform
+        /// </summary>
+        IOS,
+
+        /// <summary>
+        /// Mac OS Platform
+        /// </summary>
+        MacOs,
+
+        Default = WindowsGL
+    }
+
+    /// <summary>
+    /// Application type family groups
+    /// </summary>
+    [PublicAPI]
+    public enum PlatformFamily
+    {
+        Unknown,
+        Mobile,  // Android, IOS
+        Desktop, // WindowsGL, UWP, WebGL, Linux, MacOS
+        Console  // XBox, Playstation, Nintendo
     }
 }
 

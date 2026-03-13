@@ -67,7 +67,7 @@ public class ShaderConstants
             ""
         };
 
-        filename = Path.Combine( IOUtils.AssetsRoot, $"Shaders/{filename}" );
+        filename = Path.Combine( Files.Files.AssetsRoot, $"Shaders/{filename}" );
 
         IEnumerable< FieldInfo > fields = typeof( ShaderConstants ).GetFields( BindingFlags.Public
                                                                              | BindingFlags.Static

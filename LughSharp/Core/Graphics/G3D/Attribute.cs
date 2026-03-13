@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 namespace LughSharp.Core.Graphics.G3D;
 
 /// <summary>
@@ -29,8 +32,13 @@ namespace LughSharp.Core.Graphics.G3D;
 /// statically calling the <see cref="Register(string)"/> method, whose return value should
 /// be used to instantiate the attribute. A class can implement multiple types
 /// </summary>
-public abstract class Attribute : IComparable< Attribute >
+public abstract class G3DAttribute : IComparable< G3DAttribute >
 {
+    // The type of this attribute
+    public long Type;
+
+    // ========================================================================
+    
     /// <summary>
     /// The registered type aliases
     /// </summary>
@@ -38,17 +46,16 @@ public abstract class Attribute : IComparable< Attribute >
 
     private readonly int _typeBit;
 
-    // The type of this attribute
-    public readonly long Type;
-
-    protected Attribute( long type )
+    // ========================================================================
+    
+    protected G3DAttribute( long type )
     {
         this.Type = type;
         _typeBit  = ( int )long.TrailingZeroCount( type );
     }
 
     /// <inheritdoc />
-    public int CompareTo( Attribute? other )
+    public int CompareTo( G3DAttribute? other )
     {
         if ( other == null )
         {
@@ -61,7 +68,7 @@ public abstract class Attribute : IComparable< Attribute >
     /// <summary>
     /// Returns An exact copy of this attribute.
     /// </summary>
-    public abstract Attribute Copy();
+    public abstract G3DAttribute Copy();
 
     /// <summary>
     /// Returns the ID of the specified attribute type, or zero if not available
@@ -120,7 +127,7 @@ public abstract class Attribute : IComparable< Attribute >
         return 1L << ( _types.Count - 1 );
     }
 
-    protected bool Equals( Attribute other )
+    protected bool Equals( G3DAttribute other )
     {
         return other.GetHashCode() == GetHashCode();
     }
@@ -138,7 +145,7 @@ public abstract class Attribute : IComparable< Attribute >
             return true;
         }
 
-        if ( obj is not Attribute other )
+        if ( obj is not G3DAttribute other )
         {
             return false;
         }

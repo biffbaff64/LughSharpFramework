@@ -102,11 +102,6 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
         ? BackBufferHeight
         : LogicalHeight;
 
-    /// <summary>
-    /// Gets the type of graphics backend being used.
-    /// </summary>
-    public override GraphicsBackend.BackendType GraphicsType => GraphicsBackend.BackendType.OpenGLES;
-
     // ========================================================================
 
     /// <summary>

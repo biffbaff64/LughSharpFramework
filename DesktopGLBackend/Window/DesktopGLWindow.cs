@@ -146,11 +146,9 @@ public class DesktopGLWindow : IDisposable
     /// </param>
     public void Create( DotGLFW.Window window )
     {
-        GlfwWindow         = window;
-        Input              = Application.CreateInput( this );
-        Graphics           = new DesktopGLGraphics( this );
-        Graphics.GLVersion = Application.GLVersion;
-
+        GlfwWindow          = window;
+        Input               = Application.CreateInput( this );
+        Graphics            = new DesktopGLGraphics( this );
         Engine.Api.Input    = Input;
         Engine.Api.Graphics = Graphics;
 

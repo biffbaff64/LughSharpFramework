@@ -22,7 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
@@ -46,7 +51,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 
 /// A single-line text input field.
 /// <para>
-/// The preferred height of a text field is the height of the <see cref="Font"/>
+/// The preferred height of a text field is the height of the <see cref="BitmapFont"/>
 /// and <see cref="TextFieldStyle.Background"/>. The preferred width of a text field is 150,
 /// a relatively arbitrary size.
 /// </para>
@@ -153,7 +158,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
-    public void Initialise()
+    private void Initialise()
     {
         _inputListener = CreateInputListener();
 
@@ -206,9 +211,10 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
     protected float GetPrefHeightSafe()
     {
-        float topAndBottom = 0, minHeight = 0;
+        float topAndBottom = 0;
+        float minHeight = 0;
 
-        if ( Style?.Background != null )
+        if ( Style.Background != null )
         {
             topAndBottom = Math.Max( topAndBottom, Style.Background.BottomHeight + Style.Background.TopHeight );
             minHeight    = Math.Max( minHeight, Style.Background.MinHeight );

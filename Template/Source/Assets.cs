@@ -28,30 +28,30 @@ namespace Template.Source;
 
 public static class Assets
 {
-    public static string BackgroundImage  => @$"{IOConfig.AssetsRoot}\title_background.png";
-    public static string HudPanel         => @$"{IOConfig.AssetsRoot}\hud_panel.png";
-    public static string CompleteStar     => @$"{IOConfig.AssetsRoot}\complete_star.png";
-    public static string KeyCollected     => @$"{IOConfig.AssetsRoot}\key_collected.png";
-    public static string WindowBackground => @$"{IOConfig.AssetsRoot}\title_background.png";
-    public static string PauseExitButton  => @$"{IOConfig.AssetsRoot}\pause_exit_button.png";
-    public static string ButtonBUp        => @$"{IOConfig.AssetsRoot}\packedimages\input\button_b.png";
-    public static string ButtonBDown      => @$"{IOConfig.AssetsRoot}\packedimages\input\button_b_pressed.png";
+    public static string BackgroundImage  => @$"{Files.ContentRoot}\title_background.png";
+    public static string HudPanel         => @$"{Files.ContentRoot}\hud_panel.png";
+    public static string CompleteStar     => @$"{Files.ContentRoot}\complete_star.png";
+    public static string KeyCollected     => @$"{Files.ContentRoot}\key_collected.png";
+    public static string WindowBackground => @$"{Files.ContentRoot}\title_background.png";
+    public static string PauseExitButton  => @$"{Files.ContentRoot}\pause_exit_button.png";
+    public static string ButtonBUp        => @$"{Files.ContentRoot}\packedimages\input\button_b.png";
+    public static string ButtonBDown      => @$"{Files.ContentRoot}\packedimages\input\button_b_pressed.png";
 
     // ========================================================================
     // UI Skins
-    public static string UiSkin      => @$"{IOConfig.AssetsRoot}\Skins\uiskin.json";
-    public static string UiskinAtlas => @$"{IOConfig.AssetsRoot}\Skins\uiskin.atlas";
+    public static string UiSkin      => @$"{Files.ContentRoot}\Skins\uiskin.json";
+    public static string UiskinAtlas => @$"{Files.ContentRoot}\Skins\uiskin.atlas";
 
     // ========================================================================
     // TMX Maps
-    public static string Room1Map => @$"{IOConfig.AssetsRoot}\Maps\room1.tmx";
+    public static string Room1Map => @$"{Files.ContentRoot}\Maps\room1.tmx";
 
     // ========================================================================
     // Fonts
-    public static string ArialFont          => @$"{IOConfig.AssetsRoot}\Fonts\arial-15.fnt";
-    public static string ArialLatinFont     => @$"{IOConfig.AssetsRoot}\Fonts\arial-latin.fnt";
-    public static string Arial15Font        => @$"{IOConfig.AssetsRoot}\Fonts\arial-15.fnt";
-    public static string AmbleRegular26Font => @$"{IOConfig.AssetsRoot}\Fonts\Amble-Regular-26.fnt";
+    public static string ArialFont          => @$"{Files.ContentRoot}\Fonts\arial-15.fnt";
+    public static string ArialLatinFont     => @$"{Files.ContentRoot}\Fonts\arial-latin.fnt";
+    public static string Arial15Font        => @$"{Files.ContentRoot}\Fonts\arial-15.fnt";
+    public static string AmbleRegular26Font => @$"{Files.ContentRoot}\Fonts\Amble-Regular-26.fnt";
 }
 
 // ============================================================================

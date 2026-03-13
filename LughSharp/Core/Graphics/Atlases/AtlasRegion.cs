@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics.Atlases;
@@ -91,10 +89,10 @@ public class AtlasRegion : TextureRegion, IDisposable
     public bool Rotate { get; set; }
 
     /// <summary>
-    /// The degrees the region has been rotated, counter clockwise between 0
-    /// and 359. Most atlas region handling deals only with 0 or 90 degree
-    /// rotation (enough to handle rectangles). More advanced texture packing
-    /// may support other rotations (eg, for tightly packing polygons).
+    /// The degrees the region has been rotated, counter clockwise between 0 and 359.
+    /// Most atlas region handling deals only with 0 or 90 degree rotation (enough to
+    /// handle rectangles). More advanced texture packing may support other rotations
+    /// (eg, for tightly packing polygons).
     /// </summary>
     public int Degrees { get; set; }
 
@@ -164,16 +162,14 @@ public class AtlasRegion : TextureRegion, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Returns the packed width considering the <see cref="Rotate"/> value,
-    /// if it is true then it returns the packedHeight, otherwise it returns
-    /// the packedWidth.
+    /// Returns the packed width considering the <see cref="Rotate"/> value, if it is
+    /// true then it returns the packedHeight, otherwise it returns the packedWidth.
     /// </summary>
     public float RotatedPackedWidth => Rotate ? PackedHeight : PackedWidth;
 
     /// <summary>
-    /// Returns the packed height considering the <see cref="Rotate"/> value,
-    /// if it is true then it returns the packedWidth, otherwise it returns the
-    /// packedHeight.
+    /// Returns the packed height considering the <see cref="Rotate"/> value, if it is
+    /// true then it returns the packedWidth, otherwise it returns the packedHeight.
     /// </summary>
     public float RotatedPackedHeight => Rotate ? PackedWidth : PackedHeight;
 

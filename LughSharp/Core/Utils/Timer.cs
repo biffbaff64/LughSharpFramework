@@ -463,11 +463,6 @@ public class Timer
             }
         }
 
-        public void Dispose()
-        {
-            Dispose( true );
-        }
-
         public void Run()
         {
             lock ( _threadLock )
@@ -519,6 +514,12 @@ public class Timer
             }
 
             Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose( true );
+            GC.SuppressFinalize( this );
         }
 
         protected void Dispose( bool disposing )
