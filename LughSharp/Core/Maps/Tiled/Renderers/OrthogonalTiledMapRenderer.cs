@@ -27,7 +27,6 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 
@@ -88,8 +87,8 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
     /// <param name="layer"></param>
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
-        Color4 batchColor = Batch.Color;
-        float color = Color4.ToFloatBitsAbgr( batchColor.R, batchColor.G, batchColor.B, batchColor.A * layer.Opacity );
+        Color batchColor = Batch.Color;
+        float color = Color.ToFloatBitsAbgr( batchColor.R, batchColor.G, batchColor.B, batchColor.A * layer.Opacity );
 
         int layerWidth  = layer.Width;
         int layerHeight = layer.Height;

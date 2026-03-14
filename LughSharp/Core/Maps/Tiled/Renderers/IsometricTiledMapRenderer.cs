@@ -27,7 +27,6 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
@@ -110,9 +109,9 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
 
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
-        Color4 batchColor = Batch.Color;
+        Color batchColor = Batch.Color;
 
-        float color = Color4.ToFloatBitsAbgr( batchColor.R,
+        float color = Color.ToFloatBitsAbgr( batchColor.R,
                                              batchColor.G,
                                              batchColor.B,
                                              batchColor.A * layer.Opacity );

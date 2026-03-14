@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 
 namespace LughSharp.Core.Maps;
 
@@ -38,7 +38,7 @@ public class MapObject
     public string        Name       { get; set; }         = "";
     public float         Opacity    { get; set; }         = 1.0f;
     public bool          IsVisible  { get; set; }         = true;
-    public Color4         Color      { get; set; }         = Color4.White;
+    public Color         Color      { get; set; }         = Color.White;
     public MapProperties Properties { get; private set; } = new();
 }
 

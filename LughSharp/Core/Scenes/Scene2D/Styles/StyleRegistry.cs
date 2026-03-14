@@ -31,7 +31,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -165,7 +164,7 @@ public class StyleRegistry
         {
             Background      = new TextureRegionDrawable( atlas.FindRegion( "default-window" ) ),
             TitleFont       = defaultFont,
-            TitleFontColor  = Color4.White,
+            TitleFontColor  = Color.White,
             StageBackground = new TextureRegionDrawable( atlas.FindRegion( "dialogDim" ) )
         };
 
@@ -194,7 +193,7 @@ public class StyleRegistry
         var labelStyle = new LabelStyle
         {
             Font      = defaultFont,
-            FontColor = Color4.White
+            FontColor = Color.White
         };
 
         Add( "default", labelStyle );
@@ -205,7 +204,7 @@ public class StyleRegistry
             Selection  = new TextureRegionDrawable( atlas.FindRegion( "selection" ) ),
             Background = new TextureRegionDrawable( atlas.FindRegion( "textfield" ) ),
             Font       = defaultFont,
-            FontColor  = Color4.White,
+            FontColor  = Color.White,
             Cursor     = new TextureRegionDrawable( atlas.FindRegion( "cursor" ) )
         };
 
@@ -217,7 +216,7 @@ public class StyleRegistry
             CheckboxOn  = new TextureRegionDrawable( atlas.FindRegion( "check-on" ) ),
             CheckboxOff = new TextureRegionDrawable( atlas.FindRegion( "check-off" ) ),
             Font        = defaultFont,
-            FontColor   = Color4.White
+            FontColor   = Color.White
         };
 
         Add( "default", cbStyle );
@@ -283,7 +282,7 @@ public class StyleRegistry
             foreach ( JsonProperty col in colors.EnumerateObject() )
             {
                 // Assuming a helper to parse JSON to Color object
-                Add( col.Name, Color4.ParseColor( col.Value.GetString()!, this ) );
+                Add( col.Name, Color.ParseColor( col.Value.GetString()!, this ) );
             }
         }
 

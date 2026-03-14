@@ -28,7 +28,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Utils.Logging;
 
@@ -136,7 +135,7 @@ public class ApplicationConfiguration
     /// <summary>
     /// The initial window background color. Defaults to blue.
     /// </summary>
-    public Color4 InitialBackgroundColor { get; set; } = Color4.Blue;
+    public Color InitialBackgroundColor { get; set; } = Color.Blue;
 
     /// <summary>
     /// Sets the window title. Defaults to empty string.

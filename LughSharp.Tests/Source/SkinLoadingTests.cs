@@ -37,6 +37,8 @@ using LughSharp.Core.Utils.Logging;
 
 using NUnit.Framework;
 
+using Color = LughSharp.Core.Graphics.Color;
+
 namespace LughSharp.Tests.Source;
 
 [TestFixture]
@@ -79,7 +81,7 @@ public class SkinLoadingTests
         // Verify Colors
         try
         {
-            _ = skin.Get< LughSharp.Core.Graphics.Colors.Color4 >( "green" );
+            _ = skin.Get< Color >( "green" );
             
             Logger.Debug( "green found." );
         }

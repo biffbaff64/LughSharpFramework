@@ -37,7 +37,6 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Maps.Objects;
@@ -816,7 +815,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 string? opaqueColor = value?.Substring( 3 );
                 string? alpha       = value?.Substring( 1, 3 );
 
-                return Color4.FromHexString( opaqueColor + alpha );
+                return Color.FromHexString( opaqueColor + alpha );
             }
 
             default:

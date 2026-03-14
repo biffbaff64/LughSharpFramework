@@ -27,7 +27,6 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
@@ -263,7 +262,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     {
         Validate();
 
-        Color4 c = ActorColor;
+        Color c = ActorColor;
         batch.SetColor( c.R, c.G, c.B, c.A * parentAlpha );
 
         float x = X;

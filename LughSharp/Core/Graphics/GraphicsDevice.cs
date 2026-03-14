@@ -26,7 +26,6 @@ using System.Runtime.InteropServices;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
@@ -47,7 +46,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public int               LogicalHeight         { get; set; }
     public int               BackBufferWidth       { get; set; }
     public int               BackBufferHeight      { get; set; }
-    public Color4             WindowBackgroundColor { get; set; } = Color4.Blue;
+    public Color             WindowBackgroundColor { get; set; } = Color.Blue;
 
     // ========================================================================
 

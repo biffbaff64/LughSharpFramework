@@ -26,7 +26,7 @@ using System;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
@@ -176,7 +176,7 @@ public class ImageTextButton : Button
     /// <summary>
     /// Returns the appropriate label font color from the style based on the current button state.
     /// </summary>
-    protected Color4 GetFontColor()
+    protected Color GetFontColor()
     {
         if ( IsDisabled && ( _style?.DisabledFontColor != null ) )
         {

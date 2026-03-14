@@ -28,15 +28,12 @@ using LughSharp.Core.Graphics.Images;
 
 namespace LughSharp.Core.Graphics.Atlases;
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public class AtlasRegion : TextureRegion, IDisposable
 {
-    /// <summary>
-    /// Values for name/value pairs other than the fields provided on this class,
-    /// each entry corresponding to <see cref="Names"/>.
-    /// </summary>
-    public int[]?[]? Values { get; set; }
-
     /// <summary>
     /// The number at the end of the original image file name, or -1 if none.
     /// When sprites are packed, if the original file name ends with a number,
@@ -46,7 +43,7 @@ public class AtlasRegion : TextureRegion, IDisposable
     public int Index { get; set; } = -1;
 
     /// <summary>
-    /// The name of the original image file, without the file's extension.
+    /// The name of the original image file, without the files extension.
     /// If the name ends with an underscore followed by only numbers, that part
     /// is excluded: underscores denote special instructions to the texture packer.
     /// </summary>
@@ -99,10 +96,10 @@ public class AtlasRegion : TextureRegion, IDisposable
     public int Degrees { get; set; }
 
     /// <summary>
-    /// Names for name/value pairs other than the fields provided on this class,
-    /// each entry corresponding to <see cref="Values"/>.
+    /// Custom name/value pairs for this region. Using a Dictionary for 
+    /// O(1) lookup and cleaner syntax than parallel arrays.
     /// </summary>
-    public string?[]? Names { get; set; }
+    public Dictionary< string, int[]? > NameValuePairs { get; set; } = [ ];
 
     // ========================================================================
 
@@ -111,12 +108,13 @@ public class AtlasRegion : TextureRegion, IDisposable
     // ========================================================================
 
     /// <summary>
+    /// Creates a new AtlasRegion using the specified texture, coordinates, and dimensions.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="texture"> The texture from which to extract the region. </param>
+    /// <param name="x"> The X coord of the region. </param>
+    /// <param name="y"> The Y coord of the region. </param>
+    /// <param name="width"> The region width. </param>
+    /// <param name="height"> The region height. </param>
     public AtlasRegion( Texture? texture, int x, int y, int width, int height )
         : base( texture!, x, y, width, height )
     {
@@ -127,8 +125,9 @@ public class AtlasRegion : TextureRegion, IDisposable
     }
 
     /// <summary>
+    /// Creates a new AtlasRegion with the same values as the specified region.
+    /// Performs a shallow copy of the Properties dictionary.
     /// </summary>
-    /// <param name="region"></param>
     public AtlasRegion( AtlasRegion region )
     {
         SetRegion( region );
@@ -143,14 +142,14 @@ public class AtlasRegion : TextureRegion, IDisposable
         OriginalHeight = region.OriginalHeight;
         Rotate         = region.Rotate;
         Degrees        = region.Degrees;
-        Names          = region.Names;
-        Values         = region.Values;
+
+        // Create a new dictionary instance so clones don't interfere with each other
+        NameValuePairs = new Dictionary< string, int[]? >( region.NameValuePairs );
     }
 
     /// <summary>
-    /// Creates a new AtlasRegion using the supplied TextureRegion.
+    /// Creates a new AtlasRegion using the supplied <see cref="TextureRegion"/>.
     /// </summary>
-    /// <param name="region"> The texture region to use for initialization. </param>
     public AtlasRegion( TextureRegion region )
     {
         SetRegion( region );
@@ -176,9 +175,10 @@ public class AtlasRegion : TextureRegion, IDisposable
     public float RotatedPackedHeight => Rotate ? PackedWidth : PackedHeight;
 
     /// <summary>
+    /// Flips the region horizontally and/or vertically.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="x"> True to flip horizontally. </param>
+    /// <param name="y"> False to flip vertically. </param>
     public override void Flip( bool x, bool y )
     {
         base.Flip( x, y );
@@ -195,23 +195,11 @@ public class AtlasRegion : TextureRegion, IDisposable
     }
 
     /// <summary>
+    /// Returns the value associated with the specified name, or null if not found.
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
     public int[]? FindValue( string name )
     {
-        if ( Names != null )
-        {
-            for ( int i = 0, n = Names.Length; i < n; i++ )
-            {
-                if ( name.Equals( Names[ i ] ) )
-                {
-                    return Values?[ i ];
-                }
-            }
-        }
-
-        return null;
+        return NameValuePairs.GetValueOrDefault( name );
     }
 
     /// <inheritdoc />

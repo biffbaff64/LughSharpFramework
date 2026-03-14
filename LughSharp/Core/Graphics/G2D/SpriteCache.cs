@@ -27,7 +27,6 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Shaders;
@@ -92,7 +91,7 @@ public class SpriteCache
 {
     public int     RenderCallsSinceBegin { get; set; }
     public int     TotalRenderCalls      { get; set; }
-    public Color4   Color                 { get; set; } = new( 1, 1, 1, 1 );
+    public Color   Color                 { get; set; } = new( 1, 1, 1, 1 );
     public Matrix4 ProjectionMatrix      { get; set; } = new();
     public Matrix4 TransformMatrix       { get; set; } = new();
     public bool    IsDrawing             { get; private set; }
@@ -197,20 +196,20 @@ public class SpriteCache
         get;
         set
         {
-            Color4 color = Color;
-            Color4.Abgr8888ToColor( ref color, value );
+            Color color = Color;
+            Color.Abgr8888ToColor( ref color, value );
 
             field = value;
 
             Color = color;
         }
-    } = Color4.WhiteFloatBits;
+    } = Color.WhiteFloatBits;
 
     /// <summary>
     /// Sets the color used to tint images when they are added to the
     /// SpriteCache. Default is <see cref="Colors.Color.White"/>
     /// </summary>
-    public void SetColor( Color4 tint )
+    public void SetColor( Color tint )
     {
         Color.Set( tint );
         PackedColor = tint.ToFloatBitsAbgr();

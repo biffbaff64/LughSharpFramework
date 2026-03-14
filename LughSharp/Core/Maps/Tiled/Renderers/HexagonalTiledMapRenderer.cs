@@ -27,7 +27,6 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maps.Tiled.Tiles;
@@ -144,7 +143,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
         float color =
-            Color4.ToFloatBitsAbgr( Batch.Color.R, Batch.Color.G, Batch.Color.B, Batch.Color.A * layer.Opacity );
+            Color.ToFloatBitsAbgr( Batch.Color.R, Batch.Color.G, Batch.Color.B, Batch.Color.A * layer.Opacity );
 
         int   layerWidth      = layer.Width;
         int   layerHeight     = layer.Height;

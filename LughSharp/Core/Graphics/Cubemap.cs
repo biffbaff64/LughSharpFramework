@@ -31,7 +31,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Graphics.OpenGL;
@@ -313,7 +312,7 @@ public class Cubemap : GLTexture, IManaged
 
     // ========================================================================
 
-    public void ClearWithColor( Color4 color )
+    public void ClearWithColor( Color color )
     {
         //TODO:
     }
@@ -324,7 +323,7 @@ public class Cubemap : GLTexture, IManaged
         return 0;
     }
 
-    public void SetPixel( int x, int y, Color4 color )
+    public void SetPixel( int x, int y, Color color )
     {
         //TODO:
     }

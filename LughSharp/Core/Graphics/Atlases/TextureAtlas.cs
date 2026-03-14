@@ -145,8 +145,7 @@ public class TextureAtlas : IDisposable
                 OriginalWidth  = region.OriginalWidth,
                 Rotate         = region.Rotate,
                 Degrees        = region.Degrees,
-                Names          = region.Names,
-                Values         = region.Values
+                NameValuePairs = new Dictionary< string, int[]? >(),
             };
 
             if ( region.Flip )
@@ -345,9 +344,13 @@ public class TextureAtlas : IDisposable
     }
 
     /// <summary>
+    /// Creates a new sprite based on the specified atlas region.
     /// </summary>
-    /// <param name="region"></param>
-    /// <returns></returns>
+    /// <param name="region">The atlas region used to construct the sprite. Must not be null.</param>
+    /// <returns>
+    /// A new <see cref="Sprite"/> instance if the atlas region has the same packed and
+    /// original dimensions; otherwise, an <see cref="AtlasSprite"/> is returned.
+    /// </returns>
     private static Sprite NewSprite( AtlasRegion? region )
     {
         Guard.Against.Null( region );

@@ -27,8 +27,21 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Graphics.Shaders;
 
 [PublicAPI]
-public class Shaders
+public class ShaderStrings
 {
+    /// <summary>
+    /// A string constant that contains the GLSL source code for the default vertex shader
+    /// used in rendering processes. This shader is designed to handle basic 2D rendering
+    /// tasks, including vertex position transformations, color unpacking, and texture
+    /// coordinate interpolation.
+    /// <para>
+    /// Features:
+    /// <li>Defines input attributes for position, color, and texture coordinates.</li>
+    /// <li>Uniform matrix `u_combinedMatrix` is used for transforming vertex positions.</li>
+    /// <li>Supports color unpacking from a packed float format to the RGBA format using bitwise operations.</li>
+    /// <li>Outputs interpolated texture coordinates and unpacked RGBA color to the fragment shader.</li>
+    /// </para>
+    /// </summary>
     public const string DefaultVertexShader =
         "#version 450 core\n" +
         "layout (location = 0) in vec2 a_position;\n" +
@@ -53,6 +66,17 @@ public class Shaders
         "    gl_Position = u_combinedMatrix * vec4(a_position, 0.0, 1.0);\n" +
         "}\n";
 
+    /// <summary>
+    /// A string constant that contains the GLSL source code for the default fragment shader
+    /// used in rendering processes. This shader is designed to handle basic 2D rendering
+    /// tasks, including texture sampling and output.
+    /// <para>
+    /// Features:
+    /// <li>Defines input attributes for interpolated texture coordinates and unpacked RGBA color.</li>
+    /// <li>Uniform sampler2D `u_texture` is used for accessing the texture.</li>
+    /// <li>Outputs the sampled RGBA color to the output color buffer.</li>
+    /// </para>
+    /// </summary>
     public const string DefaultFragmentShader =
         "#version 450 core\n" +
         "in vec4 v_color;     // Unpacked RGBA from Vertex Shader\n" +
@@ -63,19 +87,6 @@ public class Shaders
         "{\n" +
         "    // Sample the texture at the current UV coordinate\n" +
         "    fragColor = texture(u_texture, v_texCoords);\n" +
-        "}\n";
-
-    public const string OldDefaultFragmentShader =
-        "#version 450 core\n" +
-        "in vec4 v_color;     // Unpacked RGBA from Vertex Shader\n" +
-        "in vec2 v_texCoords; // Interpolated UVs\n" +
-        "layout (binding = 0) uniform sampler2D u_texture;\n" +
-        "layout (location = 0) out vec4 fragColor;\n" +
-        "void main()\n" +
-        "{\n" +
-        "    // Sample the texture at the current UV coordinate\n" +
-        "    vec4 texColor = texture(u_texture, v_texCoords);\n" +
-        "    fragColor = texColor * v_color;\n" +
         "}\n";
 }
 

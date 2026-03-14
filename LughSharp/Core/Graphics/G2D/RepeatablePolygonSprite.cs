@@ -27,7 +27,6 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
@@ -46,7 +45,7 @@ public class RepeatablePolygonSprite
     private readonly List< float[]? > _parts    = new();
     private readonly List< float[] >  _vertices = new();
 
-    private Color4          _color = Color4.White;
+    private Color          _color = Color.White;
     private int            _cols;
     private bool           _dirty = true;
     private float          _gridHeight;
@@ -286,7 +285,7 @@ public class RepeatablePolygonSprite
     /// <summary>
     /// </summary>
     /// <param name="color"> Tint color to be applied to entire polygon </param>
-    public void SetColor( Color4 color )
+    public void SetColor( Color color )
     {
         _color = color;
         _dirty = true;

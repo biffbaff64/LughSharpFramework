@@ -23,7 +23,6 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
@@ -31,6 +30,8 @@ using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
 using NUnit.Framework;
+
+using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Tests.Source;
 
@@ -60,7 +61,7 @@ public class SpriteBatchTests
         Assert.That( pixmap.Width, Is.EqualTo( TestWidth ), "Pixmap width incorrect" );
         Assert.That( pixmap.Height, Is.EqualTo( TestHeight ), "Pixmap height incorrect" );
 
-        pixmap.SetColor( Color4.White );
+        pixmap.SetColor( Color.White );
         pixmap.FillWithCurrentColor();
 
         var textureData = new PixmapTextureData( pixmap, LughFormat.RGBA8888, false, false );
@@ -192,7 +193,7 @@ public class SpriteBatchTests
         {
             Assert.That( _spriteBatch, Is.Not.Null );
 
-            var testColor = new Color4( 1f, 0f, 0f, 1f ); // Red
+            var testColor = new Color( 1f, 0f, 0f, 1f ); // Red
             _spriteBatch?.SetColor( testColor );
 
             Assert.That( _spriteBatch?.Color.R, Is.EqualTo( testColor.R ) );

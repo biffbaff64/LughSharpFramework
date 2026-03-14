@@ -31,7 +31,7 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
@@ -516,7 +516,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         BitmapFont font = Style.Font!;
 
         //@formatter:off
-        Color4? fontColor = Disabled && ( Style.DisabledFontColor != null )
+        Color? fontColor = Disabled && ( Style.DisabledFontColor != null )
                             ? Style.DisabledFontColor
                             : focused && ( Style.FocusedFontColor != null )
                                 ? Style.FocusedFontColor

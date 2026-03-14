@@ -93,6 +93,14 @@ public class AtlasSprite : Sprite
         SetColor( 1, 1, 1, 1 );
     }
 
+    /// <summary>
+    /// Sets the position where the sprite will be drawn. If origin, rotation,
+    /// or scale are changed, it is slightly more efficient to set the position
+    /// after those operations. If both position and size are to be changed, it
+    /// is better to use <see cref="Sprite.SetBounds(float,float,float,float)"/>.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     public override void SetPosition( float x, float y )
     {
         base.SetPosition( x + Region.OffsetX, y + Region.OffsetY );

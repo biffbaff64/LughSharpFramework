@@ -26,7 +26,6 @@ using System;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -50,7 +49,7 @@ public interface IImmediateModeRenderer : IDisposable
 
     void Vertex( float x, float y, float z );
 
-    void SetColor( Color4 color );
+    void SetColor( Color color );
 
     void SetColor( float r, float g, float b, float a );
 

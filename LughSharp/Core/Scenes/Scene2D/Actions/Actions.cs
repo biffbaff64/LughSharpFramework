@@ -26,7 +26,7 @@ using System;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
 using LughSharp.Core.Utils;
@@ -211,7 +211,7 @@ public class Actions
     /// <summary>
     /// Transitions from the color at the time this action starts to the specified color.
     /// </summary>
-    public static ColorAction Color( Color4 color, float duration = 0, IInterpolation? interpolation = null )
+    public static ColorAction Color( Color color, float duration = 0, IInterpolation? interpolation = null )
     {
         var action = ( ColorAction )Action( typeof( ColorAction ) );
         action.EndColor      = color;

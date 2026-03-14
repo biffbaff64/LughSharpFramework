@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -50,7 +49,7 @@ public class CheckBoxStyle : TextButtonStyle
     {
     }
 
-    public CheckBoxStyle( ISceneDrawable checkboxOff, ISceneDrawable checkboxOn, BitmapFont font, Color4 fontColor )
+    public CheckBoxStyle( ISceneDrawable checkboxOff, ISceneDrawable checkboxOn, BitmapFont font, Color fontColor )
     {
         CheckboxOff = checkboxOff;
         CheckboxOn  = checkboxOn;

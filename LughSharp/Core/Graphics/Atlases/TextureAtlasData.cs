@@ -50,10 +50,10 @@ public class TextureAtlasData
     // ========================================================================
 
     /// <summary>
+    /// Represents the data structure for a texture atlas, which is used to map
+    /// and manage multiple textures within a single image. Handles loading of
+    /// the atlas metadata and associated images.
     /// </summary>
-    /// <param name="packFile"></param>
-    /// <param name="imagesDir"></param>
-    /// <param name="flip"></param>
     public TextureAtlasData( FileInfo packFile, DirectoryInfo imagesDir, bool flip = false )
     {
         try
@@ -67,12 +67,22 @@ public class TextureAtlasData
     }
 
     /// <summary>
-    /// 
+    /// Loads the texture atlas data from the specified pack file and associated images
+    /// directory. Parses metadata to construct texture regions and assigns relevant
+    /// properties to manage the atlas.
     /// </summary>
-    /// <param name="packFile"></param>
-    /// <param name="imagesDir"></param>
-    /// <param name="flip"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <param name="packFile">
+    /// The file containing texture atlas metadata, including the definition of regions and pages.
+    /// </param>
+    /// <param name="imagesDir">
+    /// The directory containing the image files referenced by the texture atlas metadata.
+    /// </param>
+    /// <param name="flip">
+    /// Indicates whether the textures should be flipped during the loading process.
+    /// </param>
+    /// <exception cref="RuntimeException">
+    /// Thrown if there is an error during the loading or parsing process.
+    /// </exception>
     public void Load( FileInfo packFile, DirectoryInfo imagesDir, bool flip )
     {
         var entry = new string[ 5 ];
@@ -327,11 +337,24 @@ public class TextureAtlasData
     }
 
     /// <summary>
-    /// 
+    /// Parses a given line of text and extracts key-value pairs separated by a colon into
+    /// the provided entry array. The method trims whitespace and handles up to four values
+    /// separated by commas after the colon.
     /// </summary>
-    /// <param name="entry"></param>
-    /// <param name="line"></param>
-    /// <returns></returns>
+    /// <param name="entry">
+    /// An array to store the resulting parsed elements. The first element will hold the key,
+    /// and subsequent elements will hold the extracted values (if present). The array must
+    /// have at least 5 elements.
+    /// </param>
+    /// <param name="line">
+    /// The string to be parsed. It represents a line of text expected to follow the
+    /// "key: value[, value, ...]" format. A null or empty string will result in no parsing.
+    /// </param>
+    /// <returns>
+    /// The total number of values successfully extracted from the line (up to 4). Returns
+    /// 0 if the line is null, empty, does not contain a colon, or fails to contain parseable
+    /// values.
+    /// </returns>
     private int ReadEntry( string[] entry, string? line )
     {
         if ( line == null )
@@ -377,6 +400,12 @@ public class TextureAtlasData
         }
     }
 
+    /// <summary>
+    /// Parses the specified format string into its equivalent LughFormat value.
+    /// </summary>
+    /// <param name="format"> The LughFormat name in string format. </param>
+    /// <returns> The requested LughFormat value. </returns>
+    /// <exception cref="RuntimeException"> Thrown if an unknown format was passed. </exception>
     private static int ParseFormat( string format )
     {
         return format switch
@@ -421,14 +450,14 @@ public class TextureAtlasData
         /// </summary>
         public FileInfo? TextureFile { get; set; }
 
-        public bool              UseMipMaps { get; set; }
-        public int               Format { get; set; } = LughFormat.RGBA8888; // Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
-        public TextureFilterMode MinFilter { get; set; } = TextureFilterMode.Nearest;
-        public TextureFilterMode MagFilter { get; set; } = TextureFilterMode.Nearest;
-        public TextureWrapMode   UWrap { get; set; } = TextureWrapMode.ClampToEdge;
-        public TextureWrapMode   VWrap { get; set; } = TextureWrapMode.ClampToEdge;
-        public float             Width { get; set; }
-        public float             Height { get; set; }
+        public bool              UseMipMaps         { get; set; }
+        public int               Format             { get; set; } = LughFormat.RGBA8888;
+        public TextureFilterMode MinFilter          { get; set; } = TextureFilterMode.Nearest;
+        public TextureFilterMode MagFilter          { get; set; } = TextureFilterMode.Nearest;
+        public TextureWrapMode   UWrap              { get; set; } = TextureWrapMode.ClampToEdge;
+        public TextureWrapMode   VWrap              { get; set; } = TextureWrapMode.ClampToEdge;
+        public float             Width              { get; set; }
+        public float             Height             { get; set; }
         public bool              PreMultipliedAlpha { get; set; }
     }
 

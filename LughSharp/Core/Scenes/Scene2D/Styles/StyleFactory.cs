@@ -31,7 +31,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -107,7 +106,7 @@ public class StyleFactory
     private static void ApplyPropertyValue( StyleRegistry registry, object target, PropertyInfo prop, JsonElement value, TextureAtlas atlas )
     {
         // --- Handle Color ---
-        if ( prop.PropertyType == typeof( Color4 ) )
+        if ( prop.PropertyType == typeof( Color ) )
         {
             if ( value.ValueKind == JsonValueKind.String )
             {
@@ -116,13 +115,13 @@ public class StyleFactory
                 // Try to find the named color in the registry first
                 try
                 {
-                    var namedColor = registry.Get< Color4 >( colorName! );
+                    var namedColor = registry.Get< Color >( colorName! );
                     prop.SetValue( target, namedColor );
                 }
                 catch
                 {
                     // Fallback: If not in registry, try to parse as Hex (e.g., "#FF0000")
-                    prop.SetValue( target, Color4.ParseColor( colorName!, registry ) );
+                    prop.SetValue( target, Color.ParseColor( colorName!, registry ) );
                 }
             }
         }
@@ -164,7 +163,7 @@ public class StyleFactory
             // Implementation depends on how fonts are stored (Registry or File)
         }
         // Handle Color
-        else if ( prop.PropertyType == typeof( Color4 ) )
+        else if ( prop.PropertyType == typeof( Color ) )
         {
             //TODO: Add hex string parsing logic here
         }

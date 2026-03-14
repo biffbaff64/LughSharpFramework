@@ -103,8 +103,8 @@ public class ShaderProgram : IDisposable
     // ========================================================================
 
     internal const int CachedNotFound = -1;
-    internal const int NotCached       = -2;
-    internal const int Invalid          = -1;
+    internal const int NotCached      = -2;
+    internal const int Invalid        = -1;
 
     // ========================================================================
     // ========================================================================

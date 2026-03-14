@@ -29,7 +29,6 @@ using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
@@ -110,7 +109,7 @@ public class PixmapPacker : IDisposable
     public int          PageHeight       { get; set; }
     public int          PageFormat       { get; set; }
     public List< Page > Pages            { get; set; } = [ ];
-    public Color4        TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
+    public Color        TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
     public bool         PackToTexture    { get; set; }
     public bool         DuplicateBorder  { get; set; }
     public int          Padding          { get; set; }
@@ -582,60 +581,62 @@ public class PixmapPacker : IDisposable
 
         foreach ( Page page in Pages )
         {
-            if ( page.AddedRects.Count > 0 )
+            if ( page.AddedRects.Count <= 0 ) continue;
+
+            foreach ( string name in page.AddedRects )
             {
-                foreach ( string name in page.AddedRects )
+                if ( !page.Rects.TryGetValue( name, out var rect ) || rect == null )
                 {
-                    PixmapPackerRectangle? rect = page.Rects[ name ];
-
-                    if ( rect == null )
-                    {
-                        continue;
-                    }
-
-                    var region = new AtlasRegion( page.Texture,
-                                                  ( int )rect.X,
-                                                  ( int )rect.Y,
-                                                  ( int )rect.Width,
-                                                  ( int )rect.Height );
-
-                    if ( rect.Splits != null )
-                    {
-                        region.Names  = [ "split", "pad" ];
-                        region.Values = [ rect.Splits, rect.Pads ];
-                    }
-
-                    int    imageIndex = -1;
-                    string imageName  = name;
-
-                    if ( useIndexes )
-                    {
-                        var rx = new Regex( "(.+)_(\\d+)$" );
-
-                        MatchCollection matches = rx.Matches( imageName );
-
-                        if ( matches.Count > 0 )
-                        {
-                            // The image filename
-                            imageName = matches[ 1 ].Name;
-
-                            // The number at the end of the image filename, or -1 if none.
-                            imageIndex = int.Parse( matches[ 2 ].Name );
-                        }
-                    }
-
-                    region.Name           = imageName;
-                    region.Index          = imageIndex;
-                    region.OffsetX        = rect.OffsetX;
-                    region.OffsetY        = ( int )( rect.OriginalHeight - rect.Height - rect.OffsetY );
-                    region.OriginalWidth  = rect.OriginalWidth;
-                    region.OriginalHeight = rect.OriginalHeight;
-
-                    atlas.Regions.Add( region );
+                    continue;
                 }
 
-                page.AddedRects.Clear();
-                atlas.Textures.Add( page.Texture! );
+                var region = new AtlasRegion( page.Texture,
+                                              ( int )rect.X,
+                                              ( int )rect.Y,
+                                              ( int )rect.Width,
+                                              ( int )rect.Height );
+
+                // Using the new Dictionary-based properties
+                if ( rect.Splits != null )
+                {
+                    region.NameValuePairs[ "split" ] = rect.Splits;
+                }
+
+                if ( rect.Pads != null )
+                {
+                    region.NameValuePairs[ "pad" ] = rect.Pads;
+                }
+
+                int    imageIndex = -1;
+                string imageName  = name;
+
+                if ( useIndexes )
+                {
+                    // Regex: Capture the name and the trailing number index
+                    Match match = Regex.Match( imageName, @"(.+)_(\d+)$" );
+
+                    if ( match.Success )
+                    {
+                        imageName  = match.Groups[ 1 ].Value;
+                        imageIndex = int.Parse( match.Groups[ 2 ].Value );
+                    }
+                }
+
+                region.Name           = imageName;
+                region.Index          = imageIndex;
+                region.OffsetX        = rect.OffsetX;
+                region.OffsetY        = ( int )( rect.OriginalHeight - rect.Height - rect.OffsetY );
+                region.OriginalWidth  = rect.OriginalWidth;
+                region.OriginalHeight = rect.OriginalHeight;
+
+                atlas.Regions.Add( region );
+            }
+
+            page.AddedRects.Clear();
+
+            if ( page.Texture != null )
+            {
+                atlas.Textures.Add( page.Texture );
             }
         }
     }
@@ -825,7 +826,7 @@ public class PixmapPacker : IDisposable
                 y = next;
             }
 
-            Color4 c = new();
+            Color c = new();
 
             c.Set( ( uint )raster.GetPixel( x, y ) );
 

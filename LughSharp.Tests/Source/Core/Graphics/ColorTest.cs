@@ -22,20 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 
 using NUnit.Framework;
+
+using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Tests.Source.Core.Graphics;
 
 [TestFixture]
-[TestOf( typeof( Color4 ) )]
+[TestOf( typeof( Color ) )]
 public class ColorTest
 {
     [Test]
     public void Constructor_Default_SetsComponentsToZero()
     {
-        var color = new Color4();
+        var color = new Color();
 
         Assert.That( color.R == 0 );
         Assert.That( color.G == 0 );
@@ -50,7 +52,7 @@ public class ColorTest
     public void Constructor_FromUint_SetsComponentsCorrectly( uint rgba, float expectedR, float expectedG,
                                                               float expectedB, float expectedA )
     {
-        var color = new Color4( rgba );
+        var color = new Color( rgba );
 
         Assert.That( color.R == expectedR );
         Assert.That( color.G == expectedG );
@@ -61,8 +63,8 @@ public class ColorTest
     [Test]
     public void Constructor_FromColor_CopiesComponents()
     {
-        var original = new Color4( 0.5f, 0.4f, 0.3f, 0.2f );
-        var color    = new Color4( original );
+        var original = new Color( 0.5f, 0.4f, 0.3f, 0.2f );
+        var color    = new Color( original );
 
 //        Assert.AreEqual( original.R, color.R );
 //        Assert.AreEqual( original.G, color.G );
@@ -74,7 +76,7 @@ public class ColorTest
     public void Constructor_SetsComponentsAndClamps( float r, float g, float b, float a, float expectedR,
                                                      float expectedG, float expectedB, float expectedA )
     {
-        var color = new Color4( r, g, b, a );
+        var color = new Color( r, g, b, a );
 
 //        Assert.AreEqual( expectedR, color.R );
 //        Assert.AreEqual( expectedG, color.G );
@@ -85,7 +87,7 @@ public class ColorTest
     [Test]
     public void ToFloatBitsRgba_ReturnsCorrectValue()
     {
-        var   color     = new Color4( 1f, 0.5f, 0f, 0.5f );
+        var   color     = new Color( 1f, 0.5f, 0f, 0.5f );
         float floatBits = color.ToFloatBitsRgba();
 
 //        Assert.AreEqual( NumberUtils.UIntToFloatColor( 0xff7f007f ), floatBits );
@@ -94,7 +96,7 @@ public class ColorTest
     [Test]
     public void ToFloatBitsAbgr_ReturnsCorrectValue()
     {
-        var   color     = new Color4( 1f, 0.5f, 0f, 0.5f );
+        var   color     = new Color( 1f, 0.5f, 0f, 0.5f );
         float floatBits = color.ToFloatBitsAbgr();
 
 //        Assert.AreEqual( NumberUtils.UIntToFloatColor( 0x7f007fff ), floatBits );
@@ -103,7 +105,7 @@ public class ColorTest
     [Test]
     public void Set_WithComponents_SetsCorrectly()
     {
-        var color = new Color4();
+        var color = new Color();
         color.Set( 0.1f, 0.2f, 0.4f, 0.6f );
 
 //        Assert.AreEqual( 0.1f, color.R );
@@ -115,7 +117,7 @@ public class ColorTest
     [Test]
     public void Mul_WithValue_MultipliesComponents()
     {
-        var color = new Color4( 0.5f, 0.5f, 0.5f, 0.5f );
+        var color = new Color( 0.5f, 0.5f, 0.5f, 0.5f );
 
         color.Mul( 0.5f );
 
@@ -128,7 +130,7 @@ public class ColorTest
     [Test]
     public void Add_WithComponents_AddsCorrectly()
     {
-        var color = new Color4( 0.1f, 0.2f, 0.3f, 0.4f );
+        var color = new Color( 0.1f, 0.2f, 0.3f, 0.4f );
 
         color.Add( 0.5f, 0.5f, 0.5f, 0.5f );
 
@@ -141,7 +143,7 @@ public class ColorTest
     [Test]
     public void Sub_WithComponents_SubtractsCorrectly()
     {
-        var color = new Color4( 0.5f, 0.5f, 0.5f, 0.5f );
+        var color = new Color( 0.5f, 0.5f, 0.5f, 0.5f );
 
         color.Sub( 0.1f, 0.1f, 0.1f, 0.1f );
 
@@ -154,7 +156,7 @@ public class ColorTest
     [Test]
     public void Clamp_ClampsValues()
     {
-        var color = new Color4( 1.5f, -0.2f, 0.8f, 1.2f );
+        var color = new Color( 1.5f, -0.2f, 0.8f, 1.2f );
 
         color.PremultiplyAlpha();
 
@@ -167,8 +169,8 @@ public class ColorTest
     [Test]
     public void Equals_TrueForEqualColors()
     {
-        var c1 = new Color4( 0.1f, 0.2f, 0.3f, 0.4f );
-        var c2 = new Color4( 0.1f, 0.2f, 0.3f, 0.4f );
+        var c1 = new Color( 0.1f, 0.2f, 0.3f, 0.4f );
+        var c2 = new Color( 0.1f, 0.2f, 0.3f, 0.4f );
 
 //        Assert.IsTrue( c1.Equals( c2 ) );
     }
@@ -176,8 +178,8 @@ public class ColorTest
     [Test]
     public void EqualsOperator_TrueForEqualColors()
     {
-        var c1 = new Color4( 0.1f, 0.2f, 0.3f, 0.4f );
-        var c2 = new Color4( 0.1f, 0.2f, 0.3f, 0.4f );
+        var c1 = new Color( 0.1f, 0.2f, 0.3f, 0.4f );
+        var c2 = new Color( 0.1f, 0.2f, 0.3f, 0.4f );
 
 //        Assert.IsTrue( c1 == c2 );
     }
@@ -185,8 +187,8 @@ public class ColorTest
     [Test]
     public void Lerp_InterpolatesCorrectly()
     {
-        var c1 = new Color4( 0f, 0f, 0f, 1f );
-        var c2 = new Color4( 1f, 1f, 1f, 1f );
+        var c1 = new Color( 0f, 0f, 0f, 1f );
+        var c2 = new Color( 1f, 1f, 1f, 1f );
 
         c1.Lerp( c2, 0.5f );
 
@@ -199,7 +201,7 @@ public class ColorTest
     [Test]
     public void PackedColorRgba_ReturnsCorrectValue()
     {
-        var color = new Color4( 1f, 0.5f, 0f, 1f );
+        var color = new Color( 1f, 0.5f, 0f, 1f );
 
         uint packed = color.PackedColorRgba();
 
@@ -209,7 +211,7 @@ public class ColorTest
     [Test]
     public void FromHexString_ParsesCorrectly()
     {
-        Color4 color = Color4.FromHexString( "#ff00ff" );
+        Color color = Color.FromHexString( "#ff00ff" );
 
         Assert.That( color.R, Is.EqualTo( 0xff ) );
         Assert.That( color.G, Is.EqualTo( 0f ).Within( 0.0001f ) );
@@ -220,7 +222,7 @@ public class ColorTest
     [Test]
     public void FromHsv_SetsCorrectly()
     {
-        var color = new Color4();
+        var color = new Color();
         color.FromHsv( 0f, 1f, 1f );
 
         Assert.That( color.R, Is.EqualTo( 0f ).Within( 0.0001f ) );

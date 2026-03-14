@@ -32,7 +32,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
@@ -113,7 +112,7 @@ public class Skin : IDisposable
     [
         // --------------------------------------
         new( "BitmapFont",              typeof( BitmapFont ) ),
-        new( "Color",                   typeof( Color4 ) ),
+        new( "Color",                   typeof( Color ) ),
         // --------------------------------------
         new( "TintedDrawable",          typeof( TintedDrawable ) ),
         new( "NinePatchDrawable",       typeof( NinePatchDrawable ) ),
@@ -429,9 +428,9 @@ public class Skin : IDisposable
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public Color4 GetColor( string name )
+    public Color GetColor( string name )
     {
-        return Get< Color4 >( name );
+        return Get< Color >( name );
     }
 
     /// <summary>
@@ -740,13 +739,13 @@ public class Skin : IDisposable
     /// </summary>
     public ISceneDrawable NewDrawable( string name, float r, float g, float b, float a )
     {
-        return NewDrawable( GetDrawable( name ), new Color4( r, g, b, a ) );
+        return NewDrawable( GetDrawable( name ), new Color( r, g, b, a ) );
     }
 
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(string)"/>.
     /// </summary>
-    public ISceneDrawable NewDrawable( string? name, Color4 tint )
+    public ISceneDrawable NewDrawable( string? name, Color tint )
     {
         return string.IsNullOrEmpty( name )
             ? throw new ArgumentException( "name cannot be null or empty." )
@@ -777,13 +776,13 @@ public class Skin : IDisposable
     /// </summary>
     public ISceneDrawable NewDrawable( ISceneDrawable drawable, float r, float g, float b, float a )
     {
-        return NewDrawable( drawable, new Color4( r, g, b, a ) );
+        return NewDrawable( drawable, new Color( r, g, b, a ) );
     }
 
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(string)"/>.
     /// </summary>
-    public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color4 tint )
+    public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color tint )
     {
         //@formatter:off
         ISceneDrawable newDrawable = drawable switch
@@ -991,30 +990,30 @@ public class Skin : IDisposable
     /// </para>
     /// </summary>
     [PublicAPI]
-    public class ColorConverter( Skin skin ) : JsonConverter< Color4 >
+    public class ColorConverter( Skin skin ) : JsonConverter< Color >
     {
-        public override Color4 ReadJson( JsonReader reader, Type type, Color4? existing, bool hasExt,
+        public override Color ReadJson( JsonReader reader, Type type, Color? existing, bool hasExt,
                                         JsonSerializer serializer )
         {
             JToken token = JToken.Load( reader );
 
             if ( token.Type == JTokenType.String )
             {
-                return skin.Get< Color4 >( token.ToString() );
+                return skin.Get< Color >( token.ToString() );
             }
 
             if ( token[ "hex" ] != null )
             {
-                return Color4.FromHexString( token[ "hex" ]!.ToString() );
+                return Color.FromHexString( token[ "hex" ]!.ToString() );
             }
 
-            return new Color4( token[ "r" ]?.Value< float >() ?? 0,
+            return new Color( token[ "r" ]?.Value< float >() ?? 0,
                               token[ "g" ]?.Value< float >() ?? 0,
                               token[ "b" ]?.Value< float >() ?? 0,
                               token[ "a" ]?.Value< float >() ?? 1 );
         }
 
-        public override void WriteJson( JsonWriter writer, Color4? value, JsonSerializer serializer )
+        public override void WriteJson( JsonWriter writer, Color? value, JsonSerializer serializer )
         {
         }
     }
@@ -1167,7 +1166,7 @@ public class Skin : IDisposable
         private ISceneDrawable ReadTintedDrawable( JToken token, JsonSerializer serializer )
         {
             var   name  = token[ "name" ]?.ToString();
-            Color4 color = token[ "color" ]?.ToObject< Color4 >( serializer ) ?? Color4.White;
+            Color color = token[ "color" ]?.ToObject< Color >( serializer ) ?? Color.White;
 
             return _skin.NewDrawable( name, color );
         }
@@ -1191,7 +1190,7 @@ public class Skin : IDisposable
     {
         public override bool CanConvert( Type objectType )
         {
-            return objectType == typeof( Color4 ) ||
+            return objectType == typeof( Color ) ||
                    objectType == typeof( BitmapFont ) ||
                    typeof( ISceneDrawable ).IsAssignableFrom( objectType );
         }
@@ -1240,7 +1239,7 @@ public class Skin : IDisposable
     public record TintedDrawable
     {
         public string Name  { get; set; } = "white";
-        public Color4  Color { get; set; } = Color4.White;
+        public Color  Color { get; set; } = Color.White;
     }
 }
 

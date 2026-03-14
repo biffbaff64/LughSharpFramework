@@ -26,7 +26,7 @@ using Extensions.Source.Freetype;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
@@ -47,7 +47,7 @@ public class FontUtils
     /// <param name="size"> The requested font size. </param>
     /// <param name="color"> The requested font colour. </param>
     /// <returns> The newly created BitmapFont. </returns>
-    public BitmapFont CreateFont( string fontFile, int size, Color4 color )
+    public BitmapFont CreateFont( string fontFile, int size, Color color )
     {
         BitmapFont font;
 
@@ -89,7 +89,7 @@ public class FontUtils
             };
 
             font = generator.GenerateFont( parameter );
-            font.SetColor( Color4.White );
+            font.SetColor( Color.White );
         }
         catch ( Exception e )
         {

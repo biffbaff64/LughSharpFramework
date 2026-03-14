@@ -30,7 +30,6 @@ using System.Text;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
@@ -249,9 +248,9 @@ public class GLTextureArray : GLTexture, IManaged
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
 
-    public void ClearWithColor( Color4 color ) => throw new NotImplementedException();
+    public void ClearWithColor( Color color ) => throw new NotImplementedException();
     public int GetPixel( int x, int y ) => throw new NotImplementedException();
-    public void SetPixel( int x, int y, Color4 color ) => throw new NotImplementedException();
+    public void SetPixel( int x, int y, Color color ) => throw new NotImplementedException();
     public void SetPixel( int x, int y, int color ) => throw new NotImplementedException();
 }
 

@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -764,7 +763,7 @@ public class FreeTypeFontGenerator : IDisposable
                 int shadowH       = mainH + Math.Abs( parameter.ShadowOffsetY );
                 var shadowPixmap  = new Pixmap( shadowW, shadowH, mainPixmap.GetColorFormat() );
 
-                Color4 shadowColor = parameter.ShadowColor;
+                Color shadowColor = parameter.ShadowColor;
                 float a           = shadowColor.A;
 
                 if ( a != 0 )
@@ -858,7 +857,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( _bitmapped )
         {
-            mainPixmap.SetColor( Color4.Clear );
+            mainPixmap.SetColor( Color.Clear );
             mainPixmap.FillWithCurrentColor();
 
             byte[] buf = mainBitmap.GetBuffer();
@@ -1170,7 +1169,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// Foreground color (required for non-black borders)
         /// </summary>
-        public Color4 Color { get; set; } = Color4.White;
+        public Color Color { get; set; } = Color.White;
 
         /// <summary>
         /// Glyph gamma. Values &gt; 1 reduce antialiasing.
@@ -1191,7 +1190,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// Border color; only used if borderWidth &gt; 0
         /// </summary>
-        public Color4 BorderColor { get; set; } = Color4.Black;
+        public Color BorderColor { get; set; } = Color.Black;
 
         /// <summary>
         /// true for straight (mitered), false for rounded borders
@@ -1217,7 +1216,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// Shadow color; only used if shadowOffset > 0. If alpha component is 0, no shadow
         /// is drawn but characters are still offset by shadowOffset.
         /// </summary>
-        public Color4 ShadowColor { get; set; } = new( 0, 0, 0, 0.75f );
+        public Color ShadowColor { get; set; } = new( 0, 0, 0, 0.75f );
 
         /// <summary>
         /// Pixels to add to glyph spacing when text is rendered. Can be negative.

@@ -27,7 +27,6 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
@@ -56,7 +55,7 @@ namespace LughSharp.Core.Graphics.G2D;
 public class NinePatch
 {
     public float[]  Vertices     { get; set; } = new float[ 9 * 4 * 5 ];
-    public Color4    Color        { get; set; } = new( ( Color4 )Color4.White );
+    public Color    Color        { get; set; } = new( ( Color )Color.White );
     public Texture? Texture      { get; set; }
     public int      Idx          { get; set; }
     public int      BottomLeft   { get; set; }
@@ -117,7 +116,7 @@ public class NinePatch
 
     private const float Tolerance = 0.1f;
 
-    private static readonly Color4 _tmpDrawColor = new();
+    private static readonly Color _tmpDrawColor = new();
 
     private float _padBottom = -1;
     private float _padLeft   = -1;
@@ -245,7 +244,7 @@ public class NinePatch
     /// <summary>
     /// Construct a degenerate "nine" patch with only a center component.
     /// </summary>
-    public NinePatch( Texture texture, Color4 color )
+    public NinePatch( Texture texture, Color color )
         : this( texture )
     {
         Color = color;
@@ -260,7 +259,7 @@ public class NinePatch
     /// <summary>
     /// Construct a degenerate "nine" patch with only a center component.
     /// </summary>
-    public NinePatch( TextureRegion region, Color4 color )
+    public NinePatch( TextureRegion region, Color color )
         : this( region )
     {
         Color = color;
@@ -350,7 +349,7 @@ public class NinePatch
     /// </summary>
     /// <param name="ninePatch"></param>
     /// <param name="color"></param>
-    public NinePatch( NinePatch ninePatch, Color4 color )
+    public NinePatch( NinePatch ninePatch, Color color )
     {
         Texture = ninePatch.Texture;
 

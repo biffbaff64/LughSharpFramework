@@ -27,7 +27,6 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
@@ -77,7 +76,7 @@ public static class ScreenUtils
     /// </summary>
     /// <param name="color">Color to clear the color buffers with.</param>
     /// <param name="clearDepth">Clears the depth buffer if true.</param>
-    public static void Clear( Color4 color, bool clearDepth = false )
+    public static void Clear( Color color, bool clearDepth = false )
     {
         Clear( color.R, color.G, color.B, color.A, clearDepth );
     }

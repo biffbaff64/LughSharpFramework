@@ -30,7 +30,6 @@ using System.Linq;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Main;
@@ -318,15 +317,15 @@ public class BitmapFont
     /// <summary>
     /// Returns the color of text drawn with this font.
     /// </summary>
-    public Color4 GetColor()
+    public Color GetColor()
     {
-        return Cache?.GetColor() ?? Color4.White;
+        return Cache?.GetColor() ?? Color.White;
     }
 
     /// <summary>
     /// A convenience method for setting the font color.
     /// </summary>
-    public void SetColor( Color4 color )
+    public void SetColor( Color color )
     {
         Cache?.GetColor().Set( color );
     }

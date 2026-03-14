@@ -28,7 +28,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maps.Tiled.Tiles;
@@ -236,7 +235,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// <param name="layer"></param>
     public void RenderImageLayer( TiledMapImageLayer layer )
     {
-        float color = Color4.ToFloatBitsAbgr( Batch.Color.R,
+        float color = Color.ToFloatBitsAbgr( Batch.Color.R,
                                              Batch.Color.G,
                                              Batch.Color.B,
                                              Batch.Color.A * layer.Opacity );

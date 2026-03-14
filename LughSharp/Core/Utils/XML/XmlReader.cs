@@ -58,10 +58,11 @@ public class XmlReader
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Parses the specified XML string and returns the root element of the parsed document.
     /// </summary>
-    /// <param name="xml"></param>
-    /// <returns></returns>
+    /// <param name="xml">A string containing the XML to parse. Cannot be null.</param>
+    /// <returns>The root <see cref="Element"/> of the parsed XML document, or <see langword="null"/> if the input is empty or
+    /// invalid.</returns>
     public Element? Parse( string xml )
     {
         char[] data = xml.ToCharArray();
@@ -70,11 +71,14 @@ public class XmlReader
     }
 
     /// <summary>
-    /// 
+    /// Parses an element from the specified text reader.
     /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
-    /// <exception cref="SerializationException"></exception>
+    /// <para>The method disposes the provided <paramref name="reader"/> after parsing is complete. The
+    /// caller should not use the reader after calling this method.</para>
+    /// <param name="reader">The text reader that provides the input data to parse. Cannot be null and must be positioned at the start of the
+    /// element to parse.</param>
+    /// <returns>An <see cref="Element"/> representing the parsed data, or <see langword="null"/> if no element could be parsed.</returns>
+    /// <exception cref="SerializationException">Thrown when an I/O error occurs while reading from the text reader.</exception>
     public Element? Parse( TextReader reader )
     {
         try
@@ -118,10 +122,11 @@ public class XmlReader
     }
 
     /// <summary>
-    /// 
+    /// Parses the specified file and returns the corresponding element, or null if the file is null.
     /// </summary>
-    /// <param name="file"></param>
-    /// <returns></returns>
+    /// <param name="file">The file to parse. If null, the method returns null.</param>
+    /// <returns>An <see cref="Element"/> representing the parsed contents of the file, or null if <paramref name="file"/> is
+    /// null.</returns>
     public Element? Parse( FileInfo? file )
     {
         if ( file == null )
@@ -135,11 +140,13 @@ public class XmlReader
     }
 
     /// <summary>
-    /// 
+    /// Parses the input stream and returns the corresponding element, or null if parsing fails.
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    /// <exception cref="SerializationException"></exception>
+    /// <param name="input">The input stream containing the data to parse. The stream must be readable and positioned at the start of the
+    /// data to be parsed.</param>
+    /// <returns>An <see cref="Element"/> representing the parsed data, or <see langword="null"/> if the input does not contain a
+    /// valid element.</returns>
+    /// <exception cref="SerializationException">Thrown when an I/O error occurs while reading from the input stream.</exception>
     public Element? Parse( Stream input )
     {
         try
@@ -156,13 +163,14 @@ public class XmlReader
     }
 
     /// <summary>
-    /// 
+    /// Parses a segment of a character array as XML and returns the root element of the parsed structure.
     /// </summary>
-    /// <param name="data"></param>
-    /// <param name="offset"></param>
-    /// <param name="length"></param>
-    /// <returns></returns>
-    /// <exception cref="SerializationException"></exception>
+    /// <param name="data">The character array containing the XML data to parse.</param>
+    /// <param name="offset">The zero-based index in the array at which to begin parsing.</param>
+    /// <param name="length">The number of characters to parse from the array, starting at the specified offset.</param>
+    /// <returns>The root <see cref="Element"/> of the parsed XML structure, or <see langword="null"/> if the input does not
+    /// contain a valid root element.</returns>
+    /// <exception cref="SerializationException">Thrown if the XML data is malformed, contains unclosed elements, or cannot be parsed successfully.</exception>
     public Element? Parse( char[] data, int offset, int length )
     {
         int     cs;
@@ -601,6 +609,10 @@ public class XmlReader
 
     // ========================================================================
 
+    /// <summary>
+    /// Opens a new element with the specified name and adds it as a child of the current element.
+    /// </summary>
+    /// <param name="name">The name of the element to open. Cannot be null or empty.</param>
     protected virtual void Open( string name )
     {
         var child = new Element( name, _current );
@@ -611,6 +623,12 @@ public class XmlReader
         _current = child;
     }
 
+    /// <summary>
+    /// Sets an attribute with the specified name and value on the current element.
+    /// </summary>
+    /// <param name="name">The name of the attribute to set. Cannot be null.</param>
+    /// <param name="value">The value to assign to the attribute. Cannot be null.</param>
+    /// <exception cref="RuntimeException">Thrown if either the attribute name or value is null.</exception>
     protected virtual void Attribute( string? name, string? value )
     {
         if ( name == null || value == null )
@@ -621,6 +639,15 @@ public class XmlReader
         _current?.SetAttribute( name, value );
     }
 
+    /// <summary>
+    /// Resolves a named or numeric XML entity to its corresponding character representation.
+    /// </summary>
+    /// <para>Supports standard XML entities as well as hexadecimal numeric character references. Returns
+    /// null for unrecognized entity names.</para>
+    /// <param name="name">The name of the XML entity to resolve. This can be a standard entity name such as "lt", "gt", "amp", "apos", or
+    /// "quot", or a numeric character reference in the form "#xNNNN" (hexadecimal).</param>
+    /// <returns>A string containing the character represented by the specified entity name, or null if the entity name is not
+    /// recognized.</returns>
     protected virtual string? Entity( string name )
     {
         if ( name == "lt" )
@@ -653,12 +680,22 @@ public class XmlReader
             : null;
     }
 
+    /// <summary>
+    /// Appends the specified text to the current element's text content.
+    /// </summary>
+    /// <param name="text">The text to append to the current element. Can be null, in which case no text is added.</param>
     protected virtual void Text( string? text )
     {
         string? existing = _current?.Text;
         _current?.Text = existing != null ? existing + text : text;
     }
 
+    /// <summary>
+    /// Closes the current element and updates the internal state to reflect the parent element.
+    /// </summary>
+    /// <para>This method is intended to be overridden in derived classes to provide custom behavior when
+    /// closing an element. After calling this method, the current element is set to the previous element in the stack,
+    /// or null if no elements remain.</para>
     protected virtual void Close()
     {
         _root = _elements[ _elements.Count - 1 ];
@@ -669,6 +706,13 @@ public class XmlReader
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Represents a hierarchical element with a name, optional text content, attributes, and child elements.
+    /// </summary>
+    /// <para>The Element class provides methods for managing attributes and child elements, supporting
+    /// hierarchical data structures similar to XML or HTML. Elements can be nested, queried by name, and traversed
+    /// recursively. This class is not thread-safe; concurrent access should be synchronized externally if
+    /// needed.</para>
     [PublicAPI]
     public class Element : IEnumerable
     {
@@ -683,6 +727,11 @@ public class XmlReader
 
         // ====================================================================
 
+        /// <summary>
+        /// Initializes a new instance of the Element class with the specified name and optional parent element.
+        /// </summary>
+        /// <param name="name">The name of the element. Cannot be null.</param>
+        /// <param name="parent">The parent element of this element, or null if the element has no parent.</param>
         public Element( string name, Element? parent )
         {
             Name    = name;
@@ -740,6 +789,12 @@ public class XmlReader
             _attributes[ name ] = value;
         }
 
+        /// <summary>
+        /// Retrieves the child element at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the child element to retrieve.</param>
+        /// <returns>The child element at the specified index, or null if the element at that index is null.</returns>
+        /// <exception cref="Exception">Thrown if this element has no children.</exception>
         public Element? GetChild( int index )
         {
             return _children == null
@@ -747,6 +802,11 @@ public class XmlReader
                 : _children[ index ];
         }
 
+        /// <summary>
+        /// Retrieves the first child element with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the child element to locate. The comparison is case-sensitive.</param>
+        /// <returns>The first child element whose name matches the specified value, or null if no such child exists.</returns>
         public Element? GetChildByName( string name )
         {
             if ( _children == null )
@@ -765,6 +825,14 @@ public class XmlReader
             return null;
         }
 
+        /// <summary>
+        /// Searches for a child element with the specified name, recursively traversing all descendant elements.
+        /// </summary>
+        /// <para>The search includes all direct and indirect children of the current element. If
+        /// multiple elements share the same name, the first one encountered in a depth-first traversal is
+        /// returned.</para>
+        /// <param name="name">The name of the child element to search for. The comparison is case-sensitive.</param>
+        /// <returns>The first child element with the specified name, or null if no such element is found.</returns>
         public Element? GetChildByNameRecursive( string name )
         {
             if ( _children == null )
@@ -795,6 +863,11 @@ public class XmlReader
             return null;
         }
 
+        /// <summary>
+        /// Determines whether a child element with the specified name exists.
+        /// </summary>
+        /// <param name="name">The name of the child element to locate. Cannot be null.</param>
+        /// <returns>true if a child element with the specified name exists; otherwise, false.</returns>
         public bool HasChild( string name )
         {
             if ( _children == null )
@@ -805,6 +878,18 @@ public class XmlReader
             return GetChildByName( name ) != null;
         }
 
+        /// <summary>
+        /// Determines whether a child with the specified name exists in the current node or
+        /// any of its descendants.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the child to search for. The comparison may be case-sensitive depending
+        /// on implementation.
+        /// </param>
+        /// <returns>
+        /// true if a child with the specified name exists in the current node or any descendant;
+        /// otherwise, false.
+        /// </returns>
         public bool HasChildRecursive( string name )
         {
             if ( _children == null )
@@ -815,6 +900,16 @@ public class XmlReader
             return GetChildByNameRecursive( name ) != null;
         }
 
+        /// <summary>
+        /// Retrieves a list of child elements whose names match the specified value.
+        /// </summary>
+        /// <param name="name">
+        /// The name to match against the child elements' names. The comparison is case-sensitive.
+        /// </param>
+        /// <returns>
+        /// A list of child elements with names equal to the specified value. The list is empty
+        /// if no matching children are found.
+        /// </returns>
         public List< Element? > GetChildrenByName( string name )
         {
             var result = new List< Element? >();
@@ -838,6 +933,18 @@ public class XmlReader
             return result;
         }
 
+        /// <summary>
+        /// Retrieves all descendant elements with the specified name, searching recursively
+        /// through the element hierarchy.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the elements to search for. The comparison may be case-sensitive
+        /// depending on implementation.
+        /// </param>
+        /// <returns>
+        /// A list of elements that match the specified name. The list is empty if no matching
+        /// elements are found.
+        /// </returns>
         public List< Element? > GetChildrenByNameRecursive( string name )
         {
             var result = new List< Element? >();
@@ -847,6 +954,21 @@ public class XmlReader
             return result;
         }
 
+        /// <summary>
+        /// Recursively searches for all child elements with the specified name and adds
+        /// them to the provided result list.
+        /// <para>
+        /// This method traverses the entire hierarchy of child elements, adding each element
+        /// whose name matches the specified value to the result list. The search includes all
+        /// descendants, not just immediate children.
+        /// </para>
+        /// </summary>
+        /// <param name="name">
+        /// The name of the child elements to search for. Comparison is case-sensitive.
+        /// </param>
+        /// <param name="result">
+        /// A list to which matching child elements will be added. <b>Must not be null.</b>
+        /// </param>
         private void GetChildrenByNameRecursive( string name, List< Element? > result )
         {
             if ( _children == null )
@@ -868,6 +990,12 @@ public class XmlReader
             }
         }
 
+        /// <summary>
+        /// Adds the specified child element to the current element's collection of children.
+        /// </summary>
+        /// <param name="element">
+        /// The child <see cref="Element"/> to add. <b>Cannot be null.</b>
+        /// </param>
         public void AddChild( Element element )
         {
             _children ??= new List< Element? >( 8 );
@@ -875,7 +1003,19 @@ public class XmlReader
             _children.Add( element );
         }
 
-        // Helper for parsing numeric attributes
+        /// <summary>
+        /// Retrieves the value of the specified attribute as a floating-point number.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the attribute to retrieve. <b>Cannot be null.</b>
+        /// </param>
+        /// <param name="defaultValue">
+        /// The value to return if the attribute is not found or cannot be parsed as a float.
+        /// </param>
+        /// <returns>
+        /// The floating-point value of the specified attribute, or the specified default
+        /// value if the attribute is missing or not a valid float.
+        /// </returns>
         public float GetFloatAttribute( string name, float defaultValue = 0 )
         {
             return float.TryParse( GetAttribute( name, "" ), out float res )
@@ -883,6 +1023,19 @@ public class XmlReader
                 : defaultValue;
         }
 
+        /// <summary>
+        /// Gets the value of the specified attribute as an integer, or returns a default
+        /// value if the attribute is missing or cannot be parsed.
+        /// </summary>
+        /// <param name="name">The name of the attribute to retrieve.</param>
+        /// <param name="defaultValue">
+        /// The value to return if the attribute is not found or cannot be converted to an
+        /// integer. The default is 0.
+        /// </param>
+        /// <returns>
+        /// The integer value of the specified attribute, or the specified default value if
+        /// the attribute is missing or not a valid integer.
+        /// </returns>
         public int GetIntAttribute( string name, int defaultValue = 0 )
         {
             return int.TryParse( GetAttribute( name, "" ), out int res )
@@ -890,6 +1043,18 @@ public class XmlReader
                 : defaultValue;
         }
 
+        /// <summary>
+        /// Retrieves the value of the specified attribute as an unsigned integer.
+        /// </summary>
+        /// <param name="name">The name of the attribute to retrieve. Cannot be null or empty.</param>
+        /// <param name="defaultValue">
+        /// The value to return if the attribute is not found or cannot be parsed as an
+        /// unsigned integer. The default is 0.
+        /// </param>
+        /// <returns>
+        /// The value of the attribute converted to an unsigned integer, or the specified
+        /// default value if the attribute is missing or not a valid unsigned integer.
+        /// </returns>
         public uint GetUIntAttribute( string name, uint defaultValue = 0 )
         {
             return uint.TryParse( GetAttribute( name, "" ), out uint res )
@@ -897,6 +1062,28 @@ public class XmlReader
                 : defaultValue;
         }
 
+        /// <summary>
+        /// Retrieves the value of the specified attribute or child element by name, returning
+        /// a default value if not found.
+        /// <para>
+        /// If an attribute with the specified name exists, its value is returned. If not, the
+        /// method searches for a child element with the given name and returns its text content.
+        /// If neither is found, the specified default value is returned. Attribute values take
+        /// precedence over child element values.
+        /// </para>
+        /// </summary>
+        /// <param name="name">
+        /// The name of the attribute or child element to retrieve the value for.
+        /// <b>Cannot be null.</b>
+        /// </param>
+        /// <param name="defaultValue">
+        /// The value to return if the specified attribute or child element is not found.
+        /// <b>Can be null.</b>
+        /// </param>
+        /// <returns>
+        /// The value of the specified attribute or child element if found; otherwise, the value
+        /// of <paramref name="defaultValue"/>.
+        /// </returns>
         public string? Get( string name, string? defaultValue = "" )
         {
             string? value;
@@ -933,21 +1120,43 @@ public class XmlReader
             return _attributes?.ContainsKey( name ) ?? false;
         }
 
+        /// <summary>
+        /// Removes the child element at the specified index from the collection of children.
+        /// </summary>
+        /// <param name="index">
+        /// The zero-based index of the child element to remove. Must be within the valid
+        /// range of the collection.
+        /// </param>
         public void RemoveChild( int index )
         {
             _children?.RemoveAt( index );
         }
 
+        /// <summary>
+        /// Removes the specified child element from the collection of children.
+        /// </summary>
+        /// <param name="element">
+        /// The child element to remove. If the element is not present in the collection,
+        /// no action is taken. Can be null.
+        /// </param>
         public void RemoveChild( Element? element )
         {
             _children?.Remove( element );
         }
 
+        /// <summary>
+        /// Removes this element from its parent collection or container.
+        /// </summary>
+        /// <para>If the element does not have a parent, this method has no effect.</para>
         public void Remove()
         {
             _parent?.RemoveChild( this );
         }
 
+        /// <summary>
+        /// Gets the number of child elements contained in this instance.
+        /// </summary>
+        /// <returns>The number of child elements. Returns 0 if there are no children.</returns>
         public int GetChildCount()
         {
             return _children?.Count ?? 0;
@@ -967,11 +1176,32 @@ public class XmlReader
             return _children?.GetEnumerator() ?? Enumerable.Empty< Element? >().GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             return ToString( "" );
         }
 
+        /// <summary>
+        /// Returns a string that represents the current element and its children in XML format,
+        /// using the specified indentation for formatting.
+        /// <para>
+        /// The output includes all attributes and child elements recursively, with each level
+        /// indented according to the provided string. If the element has no children or text
+        /// 0content, a self-closing tag is used.
+        /// </para>
+        /// </summary>
+        /// <param name="indent">
+        /// The string to use for indenting each level of the XML output. Typically consists
+        /// of whitespace characters such as spaces or tabs.
+        /// </param>
+        /// <returns>
+        /// A string containing the XML representation of the element, including its attributes,
+        /// text content, and child elements, formatted with the specified indentation.
+        /// </returns>
         public string ToString( string indent )
         {
             var sb = new StringBuilder();

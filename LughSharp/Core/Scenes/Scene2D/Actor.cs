@@ -27,7 +27,7 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -192,7 +192,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// This actors Color.
     /// </summary>
-    public Color4 ActorColor
+    public Color ActorColor
     {
         get;
         set => field.Set( value );

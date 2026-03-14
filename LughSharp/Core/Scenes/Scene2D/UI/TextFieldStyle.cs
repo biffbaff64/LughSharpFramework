@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -38,16 +37,16 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class TextFieldStyle : ISceneStyle
 {
     public BitmapFont?     Font               { get; set; }
-    public Color4?          FontColor          { get; set; }
-    public Color4?          FocusedFontColor   { get; set; }
-    public Color4?          DisabledFontColor  { get; set; }
+    public Color?          FontColor          { get; set; }
+    public Color?          FocusedFontColor   { get; set; }
+    public Color?          DisabledFontColor  { get; set; }
     public ISceneDrawable? Background         { get; set; }
     public ISceneDrawable? FocusedBackground  { get; set; }
     public ISceneDrawable? DisabledBackground { get; set; }
     public ISceneDrawable? Cursor             { get; set; }
     public ISceneDrawable? Selection          { get; set; }
     public BitmapFont?     MessageFont        { get; set; }
-    public Color4?          MessageFontColor   { get; set; }
+    public Color?          MessageFontColor   { get; set; }
 
     // ====================================================================
 
@@ -56,7 +55,7 @@ public class TextFieldStyle : ISceneStyle
     }
 
     public TextFieldStyle( BitmapFont font,
-                           Color4 fontColor,
+                           Color fontColor,
                            ISceneDrawable? cursor,
                            ISceneDrawable? selection,
                            ISceneDrawable? background )
@@ -74,17 +73,17 @@ public class TextFieldStyle : ISceneStyle
 
         if ( style.FontColor != null )
         {
-            FontColor = new Color4( style.FontColor );
+            FontColor = new Color( style.FontColor );
         }
 
         if ( style.FocusedFontColor != null )
         {
-            FocusedFontColor = new Color4( style.FocusedFontColor );
+            FocusedFontColor = new Color( style.FocusedFontColor );
         }
 
         if ( style.DisabledFontColor != null )
         {
-            DisabledFontColor = new Color4( style.DisabledFontColor );
+            DisabledFontColor = new Color( style.DisabledFontColor );
         }
 
         Background         = style.Background;
@@ -97,7 +96,7 @@ public class TextFieldStyle : ISceneStyle
 
         if ( style.MessageFontColor != null )
         {
-            MessageFontColor = new Color4( style.MessageFontColor );
+            MessageFontColor = new Color( style.MessageFontColor );
         }
     }
 }

@@ -22,16 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Logging;
 
-namespace LughSharp.Core.Graphics.Colors;
+namespace LughSharp.Core.Graphics;
 
 [PublicAPI]
-public class NewColor4
+public class NewColor
 {
     /// <summary>
     /// Red NewColor Component
@@ -82,15 +80,15 @@ public class NewColor4
 
     // ========================================================================
 
-    public NewColor4() : this( 0u )
+    public NewColor() : this( 0u )
     {
     }
 
-    public NewColor4( ValidColor color )
+    public NewColor( ValidColor color )
     {
     }
 
-    public NewColor4( uint rgba8888 )
+    public NewColor( uint rgba8888 )
     {
         R = ( byte )( ( rgba8888 & RGBARedMask ) >> RGBARedShift );
         G = ( byte )( ( rgba8888 & RGBAGreenMask ) >> RGBAGreenShift );
@@ -100,7 +98,7 @@ public class NewColor4
         Clamp();
     }
 
-    public NewColor4( byte r, byte g, byte b, byte a )
+    public NewColor( byte r, byte g, byte b, byte a )
     {
         R = r;
         G = g;
@@ -110,7 +108,7 @@ public class NewColor4
         Clamp();
     }
 
-    public NewColor4( NewColor4 color )
+    public NewColor( NewColor color )
         : this( color.R, color.G, color.B, color.A )
     {
     }
@@ -121,7 +119,7 @@ public class NewColor4
     /// 
     /// </summary>
     /// <returns> This NewColor for chaining. </returns>
-    private NewColor4 Clamp( bool showDebug = false )
+    private NewColor Clamp( bool showDebug = false )
     {
         RGBAPackedColor = ToRgba8888( R, G, B, A );
         ABGRPackedColor = ToAbgr8888( A, B, G, R );
@@ -185,7 +183,7 @@ public class NewColor4
     }
 
     /// <summary>
-    /// Returns the given <see cref="NewColor4"/> as a 32-bit uint in the following format:-
+    /// Returns the given <see cref="NewColor"/> as a 32-bit uint in the following format:-
     /// <li>Bits  0 - 4  : Blue component</li>
     /// <li>Bits  5 - 10 : Green component</li>
     /// <li>Bits 11 - 15 : Red component</li>
@@ -221,7 +219,7 @@ public class NewColor4
     /// </summary>
     /// <param name="color"> The NewColor to set. This cannot be null. </param>
     /// <returns> This NewColor for chaining. </returns>
-    public NewColor4 Set( NewColor4 color )
+    public NewColor Set( NewColor color )
     {
         R = color.R;
         G = color.G;
@@ -236,7 +234,7 @@ public class NewColor4
     /// </summary>
     /// <param name="rgba"> The integer representation. </param>
     /// <returns> This color for chaining. </returns>
-    public NewColor4 Set( uint rgba )
+    public NewColor Set( uint rgba )
     {
         R = ( byte )( ( rgba & RGBARedMask ) >> RGBARedShift );
         G = ( byte )( ( rgba & RGBAGreenMask ) >> RGBAGreenShift );
@@ -254,7 +252,7 @@ public class NewColor4
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <returns> This NewColor for chaining. </returns>
-    public NewColor4 Set( byte r, byte g, byte b, byte a )
+    public NewColor Set( byte r, byte g, byte b, byte a )
     {
         R = r;
         G = g;
@@ -270,7 +268,7 @@ public class NewColor4
     /// </summary>
     /// <param name="color"> The NewColor to add. </param>
     /// <returns> This NewColor for chaining. </returns>
-    public NewColor4 Add( NewColor4 color )
+    public NewColor Add( NewColor color )
     {
         R += color.R;
         G += color.G;

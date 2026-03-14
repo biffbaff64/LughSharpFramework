@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 
@@ -128,7 +127,7 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new drawable that renders the same as this drawable tinted
     /// the specified color.
     /// </summary>
-    public NinePatchDrawable Tint( Color4 tint )
+    public NinePatchDrawable Tint( Color tint )
     {
         var drawable = new NinePatchDrawable( this );
 

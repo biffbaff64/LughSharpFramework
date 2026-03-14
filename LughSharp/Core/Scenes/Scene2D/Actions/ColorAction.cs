@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Scenes.Scene2D.Actions;
@@ -37,13 +37,13 @@ namespace LughSharp.Core.Scenes.Scene2D.Actions;
 [PublicAPI]
 public class ColorAction : TemporalAction
 {
-    private readonly Color4 _endColor = new();
+    private readonly Color _endColor = new();
     private          float _startA;
     private          float _startB;
     private          float _startG;
     private          float _startR;
 
-    public virtual Color4 EndColor
+    public virtual Color EndColor
     {
         get => _endColor;
         set => _endColor.Set( value );

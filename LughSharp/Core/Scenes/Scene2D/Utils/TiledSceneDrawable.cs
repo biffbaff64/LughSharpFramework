@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
@@ -57,7 +56,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
     {
     }
 
-    public Color4 Color { get; set; } = new( 1, 1, 1, 1 );
+    public Color Color { get; set; } = new( 1, 1, 1, 1 );
     public float Scale { set; get; } = 1;
 
     /// <inheritdoc />
@@ -179,7 +178,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
     }
 
     /// <inheritdoc />
-    public override TiledSceneDrawable Tint( Color4 tint )
+    public override TiledSceneDrawable Tint( Color tint )
     {
         var drawable = new TiledSceneDrawable( this );
 

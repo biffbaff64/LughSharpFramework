@@ -28,7 +28,7 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
@@ -335,7 +335,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Returns the appropriate label font color from the style based on the current button state.
     /// </summary>
-    protected Color4 GetFontColor()
+    protected Color GetFontColor()
     {
         if ( IsDisabled && ( Style.DisabledFontColor != null ) )
         {
@@ -355,7 +355,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         Validate();
 
         ISceneDrawable? background = GetBackgroundIDrawable();
-        Color4           fontColor  = GetFontColor();
+        Color           fontColor  = GetFontColor();
         BitmapFont      font       = Style.Font;
 
         // Make copies of x,y,width and height for local modification

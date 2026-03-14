@@ -26,7 +26,6 @@ using System;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -102,7 +101,7 @@ public class PolygonSprite
     /// <see cref="SetColor(float, float, float, float)"/> is subsequently
     /// called before drawing this sprite.
     /// </summary>
-    public Color4 Color { get; } = new( 1f, 1f, 1f, 1f );
+    public Color Color { get; } = new( 1f, 1f, 1f, 1f );
 
     public void Set( PolygonSprite sprite )
     {
@@ -226,7 +225,7 @@ public class PolygonSprite
         }
     }
 
-    public void SetColor( Color4 tint )
+    public void SetColor( Color tint )
     {
         Color.Set( tint );
 
@@ -395,7 +394,7 @@ public class PolygonSprite
 
     public void Draw( PolygonSpriteBatch spriteBatch, float alphaModulation )
     {
-        Color4 color    = Color;
+        Color color    = Color;
         float oldAlpha = color.A;
 
         color.A *= alphaModulation;
@@ -413,13 +412,13 @@ public class PolygonSprite
     /// or <see cref="SetColor(float, float, float, float)"/> is subsequently called
     /// before drawing this sprite.
     /// </summary>
-    public Color4 GetPackedColor()
+    public Color GetPackedColor()
     {
-        Color4 color = Color;
+        Color color = Color;
 
         if ( _vertices != null )
         {
-            Color4.Abgr8888ToColor( ref color, _vertices[ 2 ] );
+            Color.Abgr8888ToColor( ref color, _vertices[ 2 ] );
         }
 
         return color;
