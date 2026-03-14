@@ -26,7 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Utils;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Loaders;
 
 /// <summary>
 /// Used by a Texture to load the pixel data. A TextureData can either return a Pixmap or

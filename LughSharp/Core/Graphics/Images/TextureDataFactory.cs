@@ -27,6 +27,7 @@ using System.IO;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Graphics.Utils;
 
 namespace LughSharp.Core.Graphics;

@@ -29,7 +29,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Images;
 
 /// <summary>
 /// Defines a rectangular area of a texture. The coordinate system used has

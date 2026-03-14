@@ -22,10 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -35,7 +39,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Images;
 
 /// <summary>
 /// Class representing an OpenGL texture by its target and handle. Keeps track of

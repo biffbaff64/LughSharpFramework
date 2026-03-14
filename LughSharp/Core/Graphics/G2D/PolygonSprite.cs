@@ -22,8 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
@@ -95,11 +98,11 @@ public class PolygonSprite
 
     /// <summary>
     /// Returns the color of this sprite. Modifying the returned color
-    /// will have unexpected effects unless <see cref="SetColor(LughSharp.Core.Graphics.Color)"/> or
+    /// will have unexpected effects unless <see cref="SetColor(Colors.Color)"/> or
     /// <see cref="SetColor(float, float, float, float)"/> is subsequently
     /// called before drawing this sprite.
     /// </summary>
-    public Color Color { get; } = new( 1f, 1f, 1f, 1f );
+    public Color4 Color { get; } = new( 1f, 1f, 1f, 1f );
 
     public void Set( PolygonSprite sprite )
     {
@@ -223,7 +226,7 @@ public class PolygonSprite
         }
     }
 
-    public void SetColor( Color tint )
+    public void SetColor( Color4 tint )
     {
         Color.Set( tint );
 
@@ -392,7 +395,7 @@ public class PolygonSprite
 
     public void Draw( PolygonSpriteBatch spriteBatch, float alphaModulation )
     {
-        Color color    = Color;
+        Color4 color    = Color;
         float oldAlpha = color.A;
 
         color.A *= alphaModulation;
@@ -406,17 +409,17 @@ public class PolygonSprite
 
     /// <summary>
     /// Returns the actual color used in the vertices of this sprite. Modifying the
-    /// returned color will have unexpected effects unless <see cref="SetColor(LughSharp.Core.Graphics.Color)"/>
+    /// returned color will have unexpected effects unless <see cref="SetColor(Colors.Color)"/>
     /// or <see cref="SetColor(float, float, float, float)"/> is subsequently called
     /// before drawing this sprite.
     /// </summary>
-    public Color GetPackedColor()
+    public Color4 GetPackedColor()
     {
-        Color color = Color;
+        Color4 color = Color;
 
         if ( _vertices != null )
         {
-            Color.Abgr8888ToColor( ref color, _vertices[ 2 ] );
+            Color4.Abgr8888ToColor( ref color, _vertices[ 2 ] );
         }
 
         return color;

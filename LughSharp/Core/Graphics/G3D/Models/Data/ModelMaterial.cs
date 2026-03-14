@@ -26,6 +26,8 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
+
 namespace LughSharp.Core.Graphics.G3D.Models.Data;
 
 [PublicAPI]
@@ -41,11 +43,11 @@ public class ModelMaterial
 
     public MaterialType Type { get; set; }
 
-    public Color? Ambient    { get; set; }
-    public Color? Diffuse    { get; set; }
-    public Color? Specular   { get; set; }
-    public Color? Emissive   { get; set; }
-    public Color? Reflection { get; set; }
+    public Color4? Ambient    { get; set; }
+    public Color4? Diffuse    { get; set; }
+    public Color4? Specular   { get; set; }
+    public Color4? Emissive   { get; set; }
+    public Color4? Reflection { get; set; }
 
     public float Shininess { get; set; }
     public float Opacity   { get; set; } = 1.0f;

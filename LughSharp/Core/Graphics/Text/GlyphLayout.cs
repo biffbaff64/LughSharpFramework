@@ -30,6 +30,7 @@ using System.Text;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -72,7 +73,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// Each run has the glyphs for a line of text.
     /// <para>
     /// Runs are pooled, so references should not be kept past the next call to
-    /// <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)"/>
+    /// <see cref="SetText(BitmapFont, string, int, int, Graphics.Colors.Colors.Color, float, int, bool, string)"/>
     /// or <see cref="Reset()"/>.
     /// </para>
     /// </summary>
@@ -129,7 +130,7 @@ public class GlyphLayout : IResetable, IPoolable
 
     /// <summary>
     /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont"/>, text message,
-    /// <see cref="Color"/>, target width, horizontal alignment, and wrap.
+    /// <see cref="Graphics.Colors.Colors.Color"/>, target width, horizontal alignment, and wrap.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
@@ -141,7 +142,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="targetWidth"></param>
     /// <param name="halign"></param>
     /// <param name="wrap"></param>
-    public GlyphLayout( BitmapFont font, string str, Color color, float targetWidth, Align halign, bool wrap )
+    public GlyphLayout( BitmapFont font, string str, Color4 color, float targetWidth, Align halign, bool wrap )
     {
         SetText( font, str, color, targetWidth, halign, wrap );
     }
@@ -165,7 +166,7 @@ public class GlyphLayout : IResetable, IPoolable
                         string str,
                         int start,
                         int end,
-                        Color color,
+                        Color4 color,
                         float targetWidth,
                         Align halign,
                         bool wrap,
@@ -175,7 +176,7 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(BitmapFont,string,int,int,Color,float,int,bool,string?)"/>
+    /// Calls <see cref="SetText(BitmapFont,string,int,int,Graphics.Colors.Colors.Color,float,int,bool,string?)"/>
     /// with the whole string, the font's current color, and with no alignment or wrapping.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -186,7 +187,7 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(BitmapFont,string,int,int,Color,float,int,bool,string?)"/>
+    /// Calls <see cref="SetText(BitmapFont,string,int,int,Graphics.Colors.Colors.Color,float,int,bool,string?)"/>
     /// with the whole string and no truncation.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -199,7 +200,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="targetWidth"></param>
     /// <param name="halign"></param>
     /// <param name="wrap"></param>
-    public void SetText( BitmapFont font, string str, Color color, float targetWidth, Align halign, bool wrap )
+    public void SetText( BitmapFont font, string str, Color4 color, float targetWidth, Align halign, bool wrap )
     {
         SetText( font, str, 0, str.Length, color, targetWidth, halign, wrap, null );
     }
@@ -230,7 +231,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// be used with text that contains multiple lines. Wrap is ignored if truncate is
     /// not null.
     /// </param>
-    public void SetText( BitmapFont font, string str, int start, int end, Color color,
+    public void SetText( BitmapFont font, string str, int start, int end, Color4 color,
                          float targetWidth, Align halign, bool wrap, string? truncate )
     {
         Reset();
@@ -993,14 +994,14 @@ public class GlyphLayout : IResetable, IPoolable
                 continue;
             }
 
-            Color? color = Graphics.Colors.Get( str.Substring( start, i - start ) );
+            Color4? color = Graphics.Colors.Colors.Get( str.Substring( start, i - start ) );
 
             if ( color == null )
             {
                 return -1; // Unknown color name.
             }
 
-            _colorStack.Add( ( int )Color.ToAbgr8888( color ) );
+            _colorStack.Add( ( int )Color4.ToAbgr8888( color ) );
 
             return i - start;
         }
@@ -1047,7 +1048,7 @@ public class GlyphLayout : IResetable, IPoolable
         public float         X      { get; set; }
         public float         Y      { get; set; }
         public float         Width  { get; set; }
-        public Color         Color  { get; set; } = new();
+        public Color4         Color  { get; set; } = new();
 
         // ====================================================================
 

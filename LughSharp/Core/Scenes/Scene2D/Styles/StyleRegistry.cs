@@ -31,6 +31,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -38,16 +39,13 @@ using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Scenes.Scene2D.Styles;
 
-// W.I.P class intended, eventually, to be used for loading and saving styles.
-// Ultimately this will replace the use of Skins.
-
 /// <summary>
 /// 
 /// </summary>
 [PublicAPI]
 public class StyleRegistry
 {
-    private Dictionary< string, Dictionary< string, object > > _data = new();
+    private Dictionary< string, Dictionary< string, object > > _data = [ ];
 
     // ========================================================================
 
@@ -73,8 +71,10 @@ public class StyleRegistry
     }
 
     /// <summary>
-    /// Gets a style from the registry.
+    /// Gets a named style from the registry.
     /// </summary>
+    /// <param name="name"> The name of the style to retrieve (e.g., "default", "toggle").</param>
+    /// <typeparam name="T"> The type of style to retrieve (e.g., ButtonStyle).</typeparam>
     public T Get< T >( string name ) where T : class
     {
         string typeKey = typeof( T ).FullName ?? typeof( T ).Name;
@@ -165,7 +165,7 @@ public class StyleRegistry
         {
             Background      = new TextureRegionDrawable( atlas.FindRegion( "default-window" ) ),
             TitleFont       = defaultFont,
-            TitleFontColor  = Color.White,
+            TitleFontColor  = Color4.White,
             StageBackground = new TextureRegionDrawable( atlas.FindRegion( "dialogDim" ) )
         };
 
@@ -194,7 +194,7 @@ public class StyleRegistry
         var labelStyle = new LabelStyle
         {
             Font      = defaultFont,
-            FontColor = Color.White
+            FontColor = Color4.White
         };
 
         Add( "default", labelStyle );
@@ -205,7 +205,7 @@ public class StyleRegistry
             Selection  = new TextureRegionDrawable( atlas.FindRegion( "selection" ) ),
             Background = new TextureRegionDrawable( atlas.FindRegion( "textfield" ) ),
             Font       = defaultFont,
-            FontColor  = Color.White,
+            FontColor  = Color4.White,
             Cursor     = new TextureRegionDrawable( atlas.FindRegion( "cursor" ) )
         };
 
@@ -217,7 +217,7 @@ public class StyleRegistry
             CheckboxOn  = new TextureRegionDrawable( atlas.FindRegion( "check-on" ) ),
             CheckboxOff = new TextureRegionDrawable( atlas.FindRegion( "check-off" ) ),
             Font        = defaultFont,
-            FontColor   = Color.White
+            FontColor   = Color4.White
         };
 
         Add( "default", cbStyle );
@@ -283,7 +283,7 @@ public class StyleRegistry
             foreach ( JsonProperty col in colors.EnumerateObject() )
             {
                 // Assuming a helper to parse JSON to Color object
-                Add( col.Name, Color.ParseColor( col.Value.GetString()!, this ) );
+                Add( col.Name, Color4.ParseColor( col.Value.GetString()!, this ) );
             }
         }
 

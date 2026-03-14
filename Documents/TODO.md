@@ -27,6 +27,8 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - Rename class Graphics.OpenGL.OpenGL
+- Sort out the mess that is GraphicsCapabilities and GraphicsDevice. Maybe merge
+  them into one class? Maybe rename GraphicsDevice to something like GLContext or GLInfo?
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -36,7 +38,8 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-- There seems to be different namings for width/height etc. properties and methods. Make it more uniform
+- There seems to be different namings for width/height etc. properties and methods.
+  Make it more uniform
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -62,12 +65,12 @@ ASSETS
     ----   ----   ------
     - DONE - DONE - DONE - AssetDescriptor
     - DONE - DONE - DONE - AssetHelper
-    - DONE - IP   - DONE - AssetLoaderParameters
-    - DONE - IP   - DONE - AssetLoadingTask
-    - DONE - IP   - DONE - AssetManager
+    - DONE - DONE - DONE - AssetLoaderParameters
+    - DONE - DONE - DONE - AssetLoadingTask
+    - DONE - DONE - DONE - AssetManager
     - DONE - DONE - DONE - IAssetErrorListener
-    - DONE - IP   - DONE - IAssetTask
-    - DONE - IP   - DONE - RefCountedContainer
+    - DONE - DONE - DONE - IAssetTask
+    - DONE - DONE - DONE - RefCountedContainer
 
 ASSETS/LOADERS
 --------------
@@ -81,25 +84,25 @@ ASSETS/LOADERS
     - DONE - DONE - DONE - ModelLoader
     - DONE - DONE - DONE - MusicLoader
     - DONE - DONE - DONE - ParticleEffectLoader
-    -      -      -      - PixmapLoader
-    -      -      -      - ShaderProgramLoader
-    -      -      -      - SkinLoader
-    -      -      -      - SoundLoader
-    -      -      -      - SynchronousAssetLoader
-    -      -      -      - TextureAtlasLoader
-    -      -      -      - TextureLoader
+    - DONE - DONE - DONE - PixmapLoader
+    - DONE - DONE - DONE - ShaderProgramLoader
+    - DONE - DONE - DONE - SkinLoader
+    - DONE - DONE - DONE - SoundLoader
+    - DONE - DONE - DONE - SynchronousAssetLoader
+    - DONE - DONE - DONE - TextureAtlasLoader
+    - DONE - DONE - DONE - TextureLoader
 
 ASSETS/LOADERS/RESOLVERS
 ------------------------
 
     CODE   DOCU   FOOTER
     ----   ----   ------
-    -      -      -      - AbsoluteFileHandleResolver
-    -      -      -      - ClasspathFileHandleResolver
-    -      -      -      - ExternalFileHandleResolver
-    -      -      -      - IFileHandleResolver
-    -      -      -      - InternalFileHandleResolver
-    -      -      -      - LocalFileHandleResolver
+    - DONE - DONE - DONE - AbsoluteFileHandleResolver
+    - DONE - DONE - DONE - ClasspathFileHandleResolver
+    - DONE - DONE - DONE - ExternalFileHandleResolver
+    - DONE - DONE - DONE - IFileHandleResolver
+    - DONE - DONE - DONE - InternalFileHandleResolver
+    - DONE - DONE - DONE - LocalFileHandleResolver
     - DONE - DONE - DONE - PrefixFileHandleResolver
     - DONE - DONE - DONE - ResolutionFileResolver
 
@@ -231,7 +234,7 @@ FILES
 
     CODE   DOCU   FOOTER
     ----   ----   ------
-    - IP   - IP   - DONE - FileHandle
+    - DONE - DONE - DONE - FileHandle
     - DONE - DONE - DONE - Files
     - DONE - DONE - DONE - FileService
     - DONE - DONE - DONE - IFilenameFilter
@@ -239,7 +242,7 @@ FILES
     - DONE - DONE - DONE - IFileService
     - DONE - DONE - DONE - IOUtils
     - DONE - DONE - DONE - PathType
-    - IP   - IP   - DONE - StreamUtils
+    - DONE - DONE - DONE - StreamUtils
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -248,16 +251,112 @@ FILES
 GRAPHICS
 --------
 
+    Task: Streamline the image heirarchy and classes. Currently, we have:-
+            - GLTexture
+            - GLTextureArray
+            - Pixmap
+            - PixmapIO
+            - PixmapData
+            - Gdx2DPixmap
+            - Texture
+            - TextureDataFactory
+            - TextureRegion
+            - ETC1
+            - Etc1TextureData
+            - FacedCubemapData
+            - FileTextureData
+            - FileTextureArrayData
+            - FloatTextureData
+            - GLOnlyTextureData
+            - ITextureData
+            - ITextureArrayData
+            - KTXTTextureData
+            - MipMapTextureData
+            - PixmapTextureData
+
+    - Move from a "Format-First" approach to a "Role-First" approach using Abstraction and Factories.
+
+    1. The Core Abstraction (The "Big Three")
+       Instead of 20+ classes, the user should primarily interact with only three concepts:
+
+        1. ImageSource (or Pixmap): Raw pixel data in CPU memory. This is for loading, editing, 
+           and saving (e.g., Pixmap, PixmapIO, Gdx2DPixmap).
+        2. Texture: Data that has been uploaded to the GPU. This is what is actually "rendered"
+        3. TextureRegion: A "view" or a "crop" of a Texture. This is essential for texture
+           packing and animations.
+
+    2. Use the "Factory" Pattern for Loading
+       Instead of forcing the user to know if they need a FileTextureData, KTXTTextureData, or
+       ETC1, hide that logic inside a Factory.
+
+        Before: new Texture(new FileTextureData(file)) or new Texture(new ETC1TextureData(file))
+        
+        After: Texture.load("image.png") or Texture.load("compressed.etc1")
+        
+        The factory identifies the file extension/header and internally handles the KTX, ETC1, or
+        Pixmap logic without the user ever seeing those classes.
+
+    3. Consolidate "Data" classes into an Internal Hierarchy
+       There are many classes ending in TextureData. These should be internal implementation details,
+       so use an Interface to collapse them:
+
+        Interface: ITextureData
+
+        Hidden Implementations: FileTextureData, FloatTextureData, MipMapTextureData, etc.
+        Put these in an .internal or .loaders sub-folder so they don't clutter the primary API.
+
+    4. Proposed Folder Structure
+       A tidier framework would look like this:
+
+        /graphics
+            /images
+                Pixmap.cs          (CPU-side pixels)
+                PixmapIO.cs        (Loading/Saving Pixmaps)
+                Texture.cs         (GPU-side handle)
+                TextureArray.cs    (GPU-side array)
+                TextureRegion.cs   (Sub-rectangles of textures)
+            /loaders (Internal)
+                ITextureData.cs    (The interface)
+                FileLoader.cs      (Handles PNG, JPG)
+                Etc1Loader.cs      (Handles ETC1)
+                KtxLoader.cs       (Handles KTX)
+            /gl (Low-level)
+                GLTexture.cs       (Base OpenGL wrapper)
+    
+        Merge GLTexture and Texture: Texture can just hold the OpenGL logic directly.
+        
+        Hide ETC1 and KTX: These are specific compression formats. Unless you are manually building
+        buffers byte-by-byte, these should be handled automatically by your Texture.load() function.
+        
+        Combine TextureArray logic: currently there is GLTextureArray, FileTextureArrayData, and
+        ITextureArrayData. Try to unify these into a single TextureArray class that functions
+        similarly to the standard Texture class.
+
+        Summary of the "Tidy" API:
+        
+        - To load a sprite: Texture tex = Texture.load("player.png");
+        - To get a frame: TextureRegion frame = new TextureRegion(tex, 0, 0, 32, 32);
+        - To manipulate pixels: Pixmap p = new Pixmap("raw.png"); p.drawPixel(...);
+
+        - Encapsulation: Keep the complex TextureData logic (like ETC1, KTX, or Float formats)
+          behind a common interface.
+        - Entry Points: Make Texture and Pixmap the primary entry points. The user shouldn't
+          have to care how a file is loaded, just that they want a Texture object at the end.
+        - Composition: Use TextureRegion to handle sub-images rather than creating new texture
+          objects for every frame of an animation. This keeps GPU memory usage (and class list)
+          much leaner.
+
+
     CODE   DOCU   FOOTER
     ----   ----   ------
     - DONE - DONE - DONE - CIM
-    -      -      -      - Color
+    -      -      -      - Color                    - Reworked class in development 
     -      -      -      - Colors
     -      -      -      - Cubemap
     -      -      -      - GLTexture
     -      -      -      - GLTextureArray
-    -      -      -      - GraphicsCapabilities
-    -      -      -      - GraphicsDevice
+    -      -      -      - GraphicsCapabilities     - Combine with GraphicsDevice to make
+    -      -      -      - GraphicsDevice             GLContext or GLInfo??
     - DONE - IP   - DONE - GStructs
     - DONE - DONE - DONE - ICubemapData
     - DONE - DONE - DONE - ICursor

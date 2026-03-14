@@ -26,6 +26,8 @@ using System;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -78,7 +80,7 @@ public class Sprite : TextureRegion
 
     // ========================================================================
 
-    private readonly Color _color = new( 1, 1, 1, 1 );
+    private readonly Color4 _color = new( 1, 1, 1, 1 );
 
     private bool       _isDirty = true;
     private bool       _flipX;
@@ -512,9 +514,9 @@ public class Sprite : TextureRegion
 
     /// <summary>
     /// Sets the color used to tint this sprite.
-    /// Default is <see cref="Color.White"/>.
+    /// Default is <see cref="Colors.Color.White"/>.
     /// </summary>
-    public void SetColor( Color tint )
+    public void SetColor( Color4 tint )
     {
         Color.Set( tint );
 
@@ -954,9 +956,9 @@ public class Sprite : TextureRegion
     {
         set
         {
-            Color color = Color;
+            Color4 color = Color;
 
-            Color.Abgr8888ToColor( ref color, value );
+            Color4.Abgr8888ToColor( ref color, value );
 
             Vertices[ IBatch.C1 ] = value;
             Vertices[ IBatch.C2 ] = value;
@@ -1045,13 +1047,13 @@ public class Sprite : TextureRegion
     /// manipulated, <see cref="SetColor(float,float,float,float)"/> must be
     /// called afterward.
     /// </summary>
-    public Color Color
+    public Color4 Color
     {
         get
         {
             int intBits = NumberUtils.FloatToIntColor( Vertices[ IBatch.C1 ] );
 
-            Color color = _color;
+            Color4 color = _color;
 
             color.R = ( intBits & 0xff ) / 255f;
             color.G = ( ( intBits >>> 8 ) & 0xff ) / 255f;

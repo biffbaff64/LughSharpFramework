@@ -71,7 +71,8 @@ public class AssetLoadingTask : IAssetTask
     // ========================================================================
 
     /// <summary>
-    /// Represents a task for loading an asset, including managing dependencies and handling cancellation.
+    /// Represents a task for loading an asset, including managing dependencies
+    /// and handling cancellation.
     /// </summary>
     public AssetLoadingTask( AssetManager manager,
                              AssetDescriptor assetDesc,
@@ -165,7 +166,9 @@ public class AssetLoadingTask : IAssetTask
     }
 
     /// <summary>
-    /// 
+    /// Handles the loading of an asset asynchronously, including managing dependency
+    /// resolution, task execution for both dependency loading and asset loading, and
+    /// synchronizing the final state.
     /// </summary>
     private void HandleAsyncLoader()
     {
@@ -231,8 +234,20 @@ public class AssetLoadingTask : IAssetTask
     }
 
     /// <summary>
-    /// 
+    /// Handles the loading process of an asset using a synchronous asset loader.
+    /// Ensures that dependencies for the asset are resolved and loaded before
+    /// the asset itself. If no dependencies are present, the asset is loaded
+    /// immediately.
     /// </summary>
+    /// <remarks>
+    /// This method performs the following actions:
+    /// - Checks whether dependencies for the asset are already resolved.
+    /// - If not resolved, retrieves the dependencies using the synchronous loader
+    /// and marks them as loaded.
+    /// - If dependencies are resolved, loads the asset using the synchronous loader.
+    /// - Removes duplicate dependencies and injects them into the AssetManager if
+    /// any are found.
+    /// </remarks>
     private void HandleSyncLoader()
     {
         var syncLoader = Loader as SynchronousAssetLoader< Type >;

@@ -29,7 +29,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Logging;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Colors;
 
 /// <summary>
 /// A general purpose class containing named colors that can be changed at will.
@@ -39,43 +39,43 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public static class Colors
 {
-    public static readonly Dictionary< string, Color > Map = new()
+    public static readonly Dictionary< string, Color4 > Map = new()
     {
         //@formatter:off
-        { "CLEAR",          Color.Clear         }, // 
-        { "BLACK",          Color.Black         }, // 
-        { "WHITE",          Color.White         }, // 
-        { "LIGHT_GRAY",     Color.LightGray     }, // 
-        { "GRAY",           Color.Gray          }, // 
-        { "DARK_GRAY",      Color.DarkGray      }, // 
-        { "BLUE",           Color.Blue          }, // 
-        { "NAVY",           Color.Navy          }, // 
-        { "ROYAL",          Color.Royal         }, // 
-        { "SLATE",          Color.Slate         }, // 
-        { "SKY",            Color.Sky           }, // 
-        { "CYAN",           Color.Cyan          }, // 
-        { "TEAL",           Color.Teal          }, // 
-        { "GREEN",          Color.Green         }, // 
-        { "CHARTREUSE",     Color.Chartreuse    }, // 
-        { "LIME",           Color.Lime          }, // 
-        { "FOREST",         Color.Forest        }, // 
-        { "OLIVE",          Color.Olive         }, // 
-        { "YELLOW",         Color.Yellow        }, // 
-        { "GOLD",           Color.Gold          }, // 
-        { "GOLDENROD",      Color.Goldenrod     }, // 
-        { "ORANGE",         Color.Orange        }, // 
-        { "BROWN",          Color.Brown         }, // 
-        { "TAN",            Color.Tan           }, // 
-        { "FIREBRICK",      Color.Firebrick     }, // 
-        { "RED",            Color.Red           }, // 
-        { "SCARLET",        Color.Scarlet       }, // 
-        { "CORAL",          Color.Coral         }, // 
-        { "SALMON",         Color.Salmon        }, // 
-        { "PINK",           Color.Pink          }, // 
-        { "MAGENTA",        Color.Magenta       }, // 
-        { "PURPLE",         Color.Purple        }, // 
-        { "VIOLET",         Color.Violet        }, // 
-        { "MAROON",         Color.Maroon        }  // 
+        { "CLEAR",          Color4.Clear         }, // 
+        { "BLACK",          Color4.Black         }, // 
+        { "WHITE",          Color4.White         }, // 
+        { "LIGHT_GRAY",     Color4.LightGray     }, // 
+        { "GRAY",           Color4.Gray          }, // 
+        { "DARK_GRAY",      Color4.DarkGray      }, // 
+        { "BLUE",           Color4.Blue          }, // 
+        { "NAVY",           Color4.Navy          }, // 
+        { "ROYAL",          Color4.Royal         }, // 
+        { "SLATE",          Color4.Slate         }, // 
+        { "SKY",            Color4.Sky           }, // 
+        { "CYAN",           Color4.Cyan          }, // 
+        { "TEAL",           Color4.Teal          }, // 
+        { "GREEN",          Color4.Green         }, // 
+        { "CHARTREUSE",     Color4.Chartreuse    }, // 
+        { "LIME",           Color4.Lime          }, // 
+        { "FOREST",         Color4.Forest        }, // 
+        { "OLIVE",          Color4.Olive         }, // 
+        { "YELLOW",         Color4.Yellow        }, // 
+        { "GOLD",           Color4.Gold          }, // 
+        { "GOLDENROD",      Color4.Goldenrod     }, // 
+        { "ORANGE",         Color4.Orange        }, // 
+        { "BROWN",          Color4.Brown         }, // 
+        { "TAN",            Color4.Tan           }, // 
+        { "FIREBRICK",      Color4.Firebrick     }, // 
+        { "RED",            Color4.Red           }, // 
+        { "SCARLET",        Color4.Scarlet       }, // 
+        { "CORAL",          Color4.Coral         }, // 
+        { "SALMON",         Color4.Salmon        }, // 
+        { "PINK",           Color4.Pink          }, // 
+        { "MAGENTA",        Color4.Magenta       }, // 
+        { "PURPLE",         Color4.Purple        }, // 
+        { "VIOLET",         Color4.Violet        }, // 
+        { "MAROON",         Color4.Maroon        }  // 
         //@formatter:on
     };
 
@@ -86,10 +86,10 @@ public static class Colors
     /// </summary>
     /// <param name="name">The name of the color.</param>
     /// <returns>
-    /// The <see cref="Color"/> associated with the specified <paramref name="name"/>,
+    /// The <see cref="Color4"/> associated with the specified <paramref name="name"/>,
     /// or <c>null</c> if no mapping was found.
     /// </returns>
-    public static Color? Get( string name )
+    public static Color4? Get( string name )
     {
         return Map.GetValueOrDefault( name );
     }
@@ -99,9 +99,9 @@ public static class Colors
     /// </summary>
     public static void PrintAll()
     {
-        foreach ( ( string name, Color color ) in Map )
+        foreach ( ( string name, Color4 color ) in Map )
         {
-            Logger.Debug( $"{name,-12} = {color.RgbaToString()}" );
+            Logger.Debug( $"{name,-12} = {color.AsRgbaString()}" );
         }
     }
 }

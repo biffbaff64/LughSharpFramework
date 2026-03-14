@@ -27,14 +27,14 @@ using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source;
 
@@ -45,7 +45,7 @@ namespace Extensions.Source;
 public class Scene2DUtils
 {
     public required AssetManager AssetManager { get; set; }
-    public required AssetHelper  AssetHelper  { get; set; }
+    public required AssetUtils  AssetUtils  { get; set; }
     public required Stage        Stage        { get; set; }
 
     // ========================================================================
@@ -118,13 +118,13 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="fontName"> The <see cref="BitmapFont"/> to use. </param>
     /// <returns> The label. </returns>
-    public Label AddLabel( string labelText, Vector2 pos, int size, Color color, string fontName )
+    public Label AddLabel( string labelText, Vector2 pos, int size, Color4 color, string fontName )
     {
         var fontUtils = new FontUtils();
 
         var label1Style = new LabelStyle
         {
-            Font      = fontUtils.CreateFont( fontName, size, Color.White ),
+            Font      = fontUtils.CreateFont( fontName, size, Color4.White ),
             FontColor = color
         };
 
@@ -146,7 +146,7 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
     /// <returns> The label. </returns>
-    public Label AddLabel( string labelText, Vector2 pos, Color color, Skin skin )
+    public Label AddLabel( string labelText, Vector2 pos, Color4 color, Skin skin )
     {
         Label label = MakeLabel( labelText, ( int )pos.X, ( int )pos.Y, color, skin );
 
@@ -212,7 +212,7 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
     /// <returns> The Checkbox. </returns>
-    public CheckBox AddCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
+    public CheckBox AddCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color4 color, Skin skin )
     {
         CheckBox checkBox = MakeCheckBox( imageOn, imageOff, x, y, color, skin );
 
@@ -230,7 +230,7 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
     /// <returns> The label. </returns>
-    public Label MakeLabel( string str, int x, int y, Color color, Skin skin )
+    public Label MakeLabel( string str, int x, int y, Color4 color, Skin skin )
     {
         var              label = new Label( str, skin );
         LabelStyle style = label.Style;
@@ -271,7 +271,7 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
     /// <returns> The Checkbox. </returns>
-    public CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
+    public CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color4 color, Skin skin )
     {
         var            checkBox = new CheckBox( "", skin );
         CheckBoxStyle? style    = checkBox.Style;

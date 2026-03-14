@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Assets;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -36,7 +37,6 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
-using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -94,9 +94,9 @@ public class Table : WidgetGroup
 
     // ========================================================================
 
-    public static readonly Color DebugTableColor = new( 0, 0, 1, 1 );
-    public static readonly Color DebugCellColor  = new( 1, 0, 0, 1 );
-    public static readonly Color DebugActorColor = new( 0, 1, 0, 1 );
+    public static readonly Color4 DebugTableColor = new( 0, 0, 1, 1 );
+    public static readonly Color4 DebugCellColor  = new( 1, 0, 0, 1 );
+    public static readonly Color4 DebugActorColor = new( 0, 1, 0, 1 );
 
     // ========================================================================
 
@@ -464,7 +464,7 @@ public class Table : WidgetGroup
     /// Adds a new cell with a label. This may only be called if a skin
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
-    public Cell Add( string? text, string fontName, Color color )
+    public Cell Add( string? text, string fontName, Color4 color )
     {
         if ( Skin == null )
         {
@@ -1884,11 +1884,11 @@ public class Table : WidgetGroup
     public class DebugRect : Rectangle
     {
         public Pool< DebugRect > Pool  { get; }
-        public Color             Color { get; set; }
+        public Color4             Color { get; set; }
 
         public DebugRect()
         {
-            Color = Color.Red;
+            Color = Color4.Red;
 
             Pool = new Pool< DebugRect >
             {
@@ -2006,7 +2006,7 @@ public class Table : WidgetGroup
         _debugRects?.Clear();
     }
 
-    private void AddDebugRect( float x, float y, float w, float h, Color color )
+    private void AddDebugRect( float x, float y, float w, float h, Color4 color )
     {
         var rect = new DebugRect
         {

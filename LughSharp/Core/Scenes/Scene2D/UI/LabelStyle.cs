@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -37,7 +38,7 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class LabelStyle : ISceneStyle
 {
     public BitmapFont      Font       { get; set; }
-    public Color           FontColor  { get; set; }
+    public Color4           FontColor  { get; set; }
     public ISceneDrawable? Background { get; set; }
 
     // ====================================================================
@@ -45,11 +46,11 @@ public class LabelStyle : ISceneStyle
     public LabelStyle()
     {
         Font       = new BitmapFont();
-        FontColor  = Color.White;
+        FontColor  = Color4.White;
         Background = null;
     }
 
-    public LabelStyle( BitmapFont font, Color fontColor )
+    public LabelStyle( BitmapFont font, Color4 fontColor )
     {
         Font      = font;
         FontColor = fontColor;
@@ -58,7 +59,7 @@ public class LabelStyle : ISceneStyle
     public LabelStyle( LabelStyle style )
     {
         Font      = style.Font;
-        FontColor = new Color( style.FontColor );
+        FontColor = new Color4( style.FontColor );
 
         Background = style.Background;
     }

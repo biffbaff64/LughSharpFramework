@@ -26,10 +26,9 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -81,7 +80,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
             return;
         }
 
-        Color spriteColor = Sprite.Color;
+        Color4 spriteColor = Sprite.Color;
         float oldColor    = spriteColor.ToFloatBitsAbgr();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
@@ -108,7 +107,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
             return;
         }
 
-        Color spriteColor = Sprite.Color;
+        Color4 spriteColor = Sprite.Color;
         float oldColor    = spriteColor.ToFloatBitsAbgr();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
@@ -125,7 +124,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new drawable that renders the same as this drawable,
     /// tinted with the specified color.
     /// </summary>
-    public SpriteDrawable Tint( Color tint )
+    public SpriteDrawable Tint( Color4 tint )
     {
         Sprite newSprite;
 

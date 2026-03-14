@@ -27,6 +27,7 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -39,7 +40,6 @@ using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
 
-using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D;
@@ -192,7 +192,7 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// This actors Color.
     /// </summary>
-    public Color ActorColor
+    public Color4 ActorColor
     {
         get;
         set => field.Set( value );

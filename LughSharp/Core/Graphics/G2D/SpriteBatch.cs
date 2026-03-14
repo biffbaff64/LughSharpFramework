@@ -28,6 +28,8 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
@@ -91,7 +93,7 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    private readonly Color  _color      = Color.Red;
+    private readonly Color4  _color      = Color4.Red;
     private readonly object _lockObject = new();
 
     // Prevent reallocation of common vectors
@@ -1910,7 +1912,7 @@ public class SpriteBatch : IBatch
     /// Represents the current drawing color for the SpriteBatch.
     /// This property is used to tint textures and shapes drawn by the SpriteBatch.
     /// </summary>
-    public Color Color
+    public Color4 Color
     {
         get => _color;
         set => SetColor( value.R, value.G, value.B, value.A );
@@ -1919,7 +1921,7 @@ public class SpriteBatch : IBatch
     /// <summary>
     /// Sets the Color for this SpriteBatch to the supplied Color.
     /// </summary>
-    public void SetColor( Color tint )
+    public void SetColor( Color4 tint )
     {
         SetColor( tint.R, tint.G, tint.B, tint.A );
     }
@@ -1939,12 +1941,12 @@ public class SpriteBatch : IBatch
     /// <summary>
     /// This batch's Color packed into a float ABGR format.
     /// </summary>
-    public float ColorPackedABGR => Color.ToFloatBitsAbgr( Color.A, Color.B, Color.G, Color.R );
+    public float ColorPackedABGR => Color4.ToFloatBitsAbgr( Color.A, Color.B, Color.G, Color.R );
 
     /// <summary>
     /// This batch's Color packed into a float RGBA format.
     /// </summary>
-    public float ColorPackedRGBA => Color.ToFloatBitsRgba( Color.R, Color.G, Color.B, Color.A );
+    public float ColorPackedRGBA => Color4.ToFloatBitsRgba( Color.R, Color.G, Color.B, Color.A );
 
     public void DebugVertices()
     {
@@ -2103,9 +2105,9 @@ public class SpriteBatch : IBatch
     {
         public Vector2 Position          { get; init; }
         public Vector2 TextureCoordinate { get; init; }
-        public Color   Color             { get; init; }
+        public Color4   Color             { get; init; }
 
-        public Vertex( Vector2 position, Vector2 textureCoordinate, Color color )
+        public Vertex( Vector2 position, Vector2 textureCoordinate, Color4 color )
         {
             Position          = position;
             TextureCoordinate = textureCoordinate;

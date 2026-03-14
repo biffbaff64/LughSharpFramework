@@ -8,31 +8,36 @@ C# 2D Game Framework project heavily inspired by the Java LibGDX Game Framework.
 
 ( Heavily Work In Progress )
 
-PROGRESS:
+WORKING:
 
 - Asset Management works.
 - TexturePacker support works.
-- Bitmap Font generation works, although Markdown colour support is not working yet.
 - OpenGL 2D Graphics works.
 - TiledMap support works.
+
+IN PROGRESS:
+
 - TiledMap Animated Tiles needs testing and/or finishing
+- Bitmap Font generation works, although Markdown colour support is not working yet.
 - Scene2D UI is not yet complete.
+		- I'm currently working on adding StyleRegistry and StyleFactory classes to enable
+		- creation and use of Scene2D UI Actors without the need for Json Skin files,
+		- although support for Json Skins will still be included.
 - Input System needs testing and/or finishing.
 - Freetype Font generation needs testing and/or finishing
-- 3D Graphics needs testing and/or finishing
 - Audio needs testing and/or finishing
-- 2D Particle System needs testing and/or finishing
 - Ninepatch support for UI needs testing and/or finishing
 - ImagePacker class needs testing and/or finishing
+- Json handling to support Scene2D Skins
+- 
 
 TODO:
 
 - Sprite Scrolling
-- GameSprite helper class
+- GameSprite helpers
 - Network / HTTP etc.
-- Json handling to replace System Json
-- Maybe add a "Content" folder to the project and copy assets there on build, then load from there instead of the "
-  Assets" folder?
 - TiledMapPacker support
 - Box2D Physics support
+- 3D Graphics needs testing and/or finishing
+- 2D Particle System needs testing and/or finishing
 - 

@@ -135,9 +135,7 @@ public class PixmapLoader : AsynchronousAssetLoader, IDisposable
     /// parameters and acts as a placeholder for possible future extensions.
     /// </summary>
     [PublicAPI]
-    public class PixmapLoaderParameter : AssetLoaderParameters
-    {
-    }
+    public class PixmapLoaderParameter : AssetLoaderParameters;
 }
 
 // ============================================================================

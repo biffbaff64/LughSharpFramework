@@ -28,14 +28,15 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 
-using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;
@@ -284,7 +285,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
     public void RenderTileLayer( TiledMapTileLayer layer )
     {
-        float color = Color.ToFloatBitsAbgr( 1, 1, 1, layer.Opacity );
+        float color = Color4.ToFloatBitsAbgr( 1, 1, 1, layer.Opacity );
 
         int layerWidth  = layer.Width;
         int layerHeight = layer.Height;
@@ -465,7 +466,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
     public void RenderImageLayer( TiledMapImageLayer layer )
     {
-        float color = Color.ToFloatBitsAbgr( 1.0f, 1.0f, 1.0f, layer.Opacity );
+        float color = Color4.ToFloatBitsAbgr( 1.0f, 1.0f, 1.0f, layer.Opacity );
 
         TextureRegion? region = layer.Region;
 

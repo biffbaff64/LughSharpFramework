@@ -22,12 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 using JetBrains.Annotations;
 
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
+using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -307,7 +313,7 @@ public class Cubemap : GLTexture, IManaged
 
     // ========================================================================
 
-    public void ClearWithColor( Color color )
+    public void ClearWithColor( Color4 color )
     {
         //TODO:
     }
@@ -318,7 +324,7 @@ public class Cubemap : GLTexture, IManaged
         return 0;
     }
 
-    public void SetPixel( int x, int y, Color color )
+    public void SetPixel( int x, int y, Color4 color )
     {
         //TODO:
     }

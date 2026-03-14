@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
@@ -63,7 +60,7 @@ public class AssetDescriptor
 
     /// <summary>
     /// Creates an empty AssetDescriptor object.
-    /// Information will need providing before this object can be used.
+    /// The following information will need providing before this object can be used.
     /// <li> AssetType - The Type of asset ( Texture, TextureAtlas, Sound, Pixmap etc. ) </li>
     /// <li> Filepath - The full path, including filename, of the asset. </li>
     /// <li> Parameters - The <see cref="AssetLoaderParameters"/> to use. </li>

@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -34,51 +33,51 @@ using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Colors;
 
 /// <summary>
 /// A color class, holding the r, g, b and alpha component as floats in the range [0,1].
 /// All methods perform clamping on the internal values after execution.
 /// </summary>
 [PublicAPI]
-public class Color : ICloneable, IEquatable< Color >
+public class Color4 : ICloneable, IEquatable< Color4 >
 {
     #region color definitions
 
-    public static readonly Color Red        = new( 0xff, 0x00, 0x00, 0xff, "RED" );
-    public static readonly Color Green      = new( 0x00, 0xff, 0x00, 0xff, "GREEN" );
-    public static readonly Color Blue       = new( 0x00, 0x00, 0xff, 0x00, "BLUE" );
-    public static readonly Color Clear      = new( 0x00, 0x00, 0x00, 0x00, "CLEAR" );
-    public static readonly Color White      = new( 0xff, 0xff, 0xff, 0xff, "WHITE" );
-    public static readonly Color Black      = new( 0x00, 0x00, 0x00, 0xff, "BLACK" );
-    public static readonly Color Gray       = new( 0x7f, 0x7f, 0x7f, 0xff, "GRAY" );
-    public static readonly Color LightGray  = new( 0xbf, 0xbf, 0xbf, 0xff, "LIGHTGRAY" );
-    public static readonly Color DarkGray   = new( 0x3f, 0x3f, 0x3f, 0xff, "DARKGRAY" );
-    public static readonly Color Slate      = new( 0x70, 0x80, 0x90, 0xff, "SLATE" );
-    public static readonly Color Navy       = new( 0x00, 0x00, 0x80, 0xff, "NAVY" );
-    public static readonly Color Royal      = new( 0x41, 0x69, 0xe1, 0xff, "ROYAL" );
-    public static readonly Color Sky        = new( 0x87, 0xce, 0xeb, 0xff, "SKY" );
-    public static readonly Color Cyan       = new( 0x00, 0xff, 0xff, 0xff, "CYAN" );
-    public static readonly Color Teal       = new( 0x00, 0x7f, 0x7f, 0xff, "TEAL" );
-    public static readonly Color Chartreuse = new( 0x7f, 0xff, 0x00, 0xff, "CHARTREUSE" );
-    public static readonly Color Lime       = new( 0x32, 0xcd, 0x32, 0xff, "LIME" );
-    public static readonly Color Forest     = new( 0x22, 0x8b, 0x22, 0xff, "FOREST" );
-    public static readonly Color Olive      = new( 0x6b, 0x8e, 0x23, 0xff, "OLIVE" );
-    public static readonly Color Yellow     = new( 0xff, 0xff, 0x00, 0xff, "YELLOW" );
-    public static readonly Color Gold       = new( 0xff, 0xd7, 0x00, 0xff, "GOLD" );
-    public static readonly Color Goldenrod  = new( 0xda, 0xa5, 0x20, 0xff, "GOLDENROD" );
-    public static readonly Color Orange     = new( 0xff, 0xa5, 0x00, 0xff, "ORANGE" );
-    public static readonly Color Brown      = new( 0x8b, 0x45, 0x13, 0xff, "BROWN" );
-    public static readonly Color Tan        = new( 0xd2, 0xb4, 0x8c, 0xff, "TAN" );
-    public static readonly Color Firebrick  = new( 0xb2, 0x22, 0x22, 0xff, "FIREBRICK" );
-    public static readonly Color Scarlet    = new( 0xff, 0x34, 0x1c, 0xff, "SCARLET" );
-    public static readonly Color Coral      = new( 0xff, 0x7f, 0x50, 0xff, "CORAL" );
-    public static readonly Color Salmon     = new( 0xfa, 0x80, 0x72, 0xff, "SALMON" );
-    public static readonly Color Pink       = new( 0xff, 0x69, 0xb4, 0xff, "PINK" );
-    public static readonly Color Magenta    = new( 0xff, 0x00, 0xff, 0xff, "MAGENTA" );
-    public static readonly Color Purple     = new( 0xa0, 0x20, 0xf0, 0xff, "PURPLE" );
-    public static readonly Color Violet     = new( 0xee, 0x82, 0xee, 0xff, "VIOLET" );
-    public static readonly Color Maroon     = new( 0xb0, 0x30, 0x60, 0xff, "MAROON" );
+    public static readonly Color4 Red        = new( 0xff, 0x00, 0x00, 0xff, "RED" );
+    public static readonly Color4 Green      = new( 0x00, 0xff, 0x00, 0xff, "GREEN" );
+    public static readonly Color4 Blue       = new( 0x00, 0x00, 0xff, 0x00, "BLUE" );
+    public static readonly Color4 Clear      = new( 0x00, 0x00, 0x00, 0x00, "CLEAR" );
+    public static readonly Color4 White      = new( 0xff, 0xff, 0xff, 0xff, "WHITE" );
+    public static readonly Color4 Black      = new( 0x00, 0x00, 0x00, 0xff, "BLACK" );
+    public static readonly Color4 Gray       = new( 0x7f, 0x7f, 0x7f, 0xff, "GRAY" );
+    public static readonly Color4 LightGray  = new( 0xbf, 0xbf, 0xbf, 0xff, "LIGHTGRAY" );
+    public static readonly Color4 DarkGray   = new( 0x3f, 0x3f, 0x3f, 0xff, "DARKGRAY" );
+    public static readonly Color4 Slate      = new( 0x70, 0x80, 0x90, 0xff, "SLATE" );
+    public static readonly Color4 Navy       = new( 0x00, 0x00, 0x80, 0xff, "NAVY" );
+    public static readonly Color4 Royal      = new( 0x41, 0x69, 0xe1, 0xff, "ROYAL" );
+    public static readonly Color4 Sky        = new( 0x87, 0xce, 0xeb, 0xff, "SKY" );
+    public static readonly Color4 Cyan       = new( 0x00, 0xff, 0xff, 0xff, "CYAN" );
+    public static readonly Color4 Teal       = new( 0x00, 0x7f, 0x7f, 0xff, "TEAL" );
+    public static readonly Color4 Chartreuse = new( 0x7f, 0xff, 0x00, 0xff, "CHARTREUSE" );
+    public static readonly Color4 Lime       = new( 0x32, 0xcd, 0x32, 0xff, "LIME" );
+    public static readonly Color4 Forest     = new( 0x22, 0x8b, 0x22, 0xff, "FOREST" );
+    public static readonly Color4 Olive      = new( 0x6b, 0x8e, 0x23, 0xff, "OLIVE" );
+    public static readonly Color4 Yellow     = new( 0xff, 0xff, 0x00, 0xff, "YELLOW" );
+    public static readonly Color4 Gold       = new( 0xff, 0xd7, 0x00, 0xff, "GOLD" );
+    public static readonly Color4 Goldenrod  = new( 0xda, 0xa5, 0x20, 0xff, "GOLDENROD" );
+    public static readonly Color4 Orange     = new( 0xff, 0xa5, 0x00, 0xff, "ORANGE" );
+    public static readonly Color4 Brown      = new( 0x8b, 0x45, 0x13, 0xff, "BROWN" );
+    public static readonly Color4 Tan        = new( 0xd2, 0xb4, 0x8c, 0xff, "TAN" );
+    public static readonly Color4 Firebrick  = new( 0xb2, 0x22, 0x22, 0xff, "FIREBRICK" );
+    public static readonly Color4 Scarlet    = new( 0xff, 0x34, 0x1c, 0xff, "SCARLET" );
+    public static readonly Color4 Coral      = new( 0xff, 0x7f, 0x50, 0xff, "CORAL" );
+    public static readonly Color4 Salmon     = new( 0xfa, 0x80, 0x72, 0xff, "SALMON" );
+    public static readonly Color4 Pink       = new( 0xff, 0x69, 0xb4, 0xff, "PINK" );
+    public static readonly Color4 Magenta    = new( 0xff, 0x00, 0xff, 0xff, "MAGENTA" );
+    public static readonly Color4 Purple     = new( 0xa0, 0x20, 0xf0, 0xff, "PURPLE" );
+    public static readonly Color4 Violet     = new( 0xee, 0x82, 0xee, 0xff, "VIOLET" );
+    public static readonly Color4 Maroon     = new( 0xb0, 0x30, 0x60, 0xff, "MAROON" );
 
     /// <summary>
     /// Convenience for frequently used <tt>White.ToFloatBits()</tt>
@@ -92,7 +91,7 @@ public class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
-    private static Color _color = new();
+    private static Color4 _color = new();
 
     // ========================================================================
     // ========================================================================
@@ -140,14 +139,14 @@ public class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
-    public Color() : this( 0, 0, 0, 0 )
+    public Color4() : this( 0, 0, 0, 0 )
     {
     }
 
     /// <summary>
     /// Constructor, sets all the components to 0.
     /// </summary>
-    public Color( string name = "" ) : this( 0, 0, 0, 0, name )
+    public Color4( string name = "" ) : this( 0, 0, 0, 0, name )
     {
     }
 
@@ -157,7 +156,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="rgba8888"> A uint color value in RGBA8888 format. </param>
     /// <param name="name"></param>
-    public Color( uint rgba8888, string name = "" )
+    public Color4( uint rgba8888, string name = "" )
     {
         R = ( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
         G = ( ( rgba8888 & 0x00ff0000 ) >> 16 ) / 255.0f;
@@ -177,7 +176,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <param name="name"></param>
-    public Color( float r, float g, float b, float a, string name = "" )
+    public Color4( float r, float g, float b, float a, string name = "" )
     {
         R = r;
         G = g;
@@ -197,7 +196,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <param name="name"></param>
-    public Color( int r, int g, int b, int a, string name = "" )
+    public Color4( int r, int g, int b, int a, string name = "" )
     {
         R = r / 255.0f;
         G = g / 255.0f;
@@ -212,7 +211,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <summary>
     /// Constructs a new color using the components from the supplied color.
     /// </summary>
-    public Color( Color color )
+    public Color4( Color4 color )
         : this( color.R, color.G, color.B, color.A )
     {
     }
@@ -373,7 +372,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the following format:-
+    /// Returns the given <see cref="Color4"/> as a 32-bit uint in the following format:-
     /// <li>Bits  0 - 4  : Blue component</li>
     /// <li>Bits  5 - 10 : Green component</li>
     /// <li>Bits 11 - 15 : Red component</li>
@@ -423,7 +422,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// Returns the given <see cref="Color4"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 4  : Blue component</li>
     /// <li>Bits  5 - 10 : Green component</li>
@@ -431,7 +430,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 16 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint Rgb565( Color color )
+    public static uint Rgb565( Color4 color )
     {
         return ( ( uint )( color.R * 31 ) << 11 )
              | ( ( uint )( color.G * 63 ) << 5 )
@@ -439,7 +438,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 16-bit uint in the
+    /// Returns the given <see cref="Color4"/> as a 16-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 3  : Alpha component</li>
     /// <li>Bits  4 - 7  : Blue component</li>
@@ -448,7 +447,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 16 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint Rgba4444( Color color )
+    public static uint Rgba4444( Color4 color )
     {
         return ( ( uint )( color.R * 15 ) << 12 )
              | ( ( uint )( color.G * 15 ) << 8 )
@@ -457,7 +456,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// Returns the given <see cref="Color4"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 7  : Blue component</li>
     /// <li>Bits  8 - 15 : Green component</li>
@@ -465,7 +464,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 24 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint Rgb888( Color color )
+    public static uint Rgb888( Color4 color )
     {
         return ( ( uint )( color.R * 255 ) << 16 )
              | ( ( uint )( color.G * 255 ) << 8 )
@@ -477,7 +476,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 32-bit ARGB8888 integer value. </param>
-    public static void Argb8888ToColor( ref Color color, uint value )
+    public static void Argb8888ToColor( ref Color4 color, uint value )
     {
         color.A = ( ( value & 0xff000000 ) >>> 24 ) / 255f;
         color.R = ( ( value & 0x00ff0000 ) >>> 16 ) / 255f;
@@ -485,19 +484,19 @@ public class Color : ICloneable, IEquatable< Color >
         color.B = ( value & 0x000000ff ) / 255f;
     }
 
-    public static Color FromArgb( float a, float r, float g, float b )
+    public static Color4 FromArgb( float a, float r, float g, float b )
     {
-        return new Color( r, g, b, a );
+        return new Color4( r, g, b, a );
     }
 
-    public static Color FromRgba( float r, float g, float b, float a )
+    public static Color4 FromRgba( float r, float g, float b, float a )
     {
-        return new Color( r, g, b, a );
+        return new Color4( r, g, b, a );
     }
 
-    public static Color FromRgb( float r, float g, float b )
+    public static Color4 FromRgb( float r, float g, float b )
     {
-        return new Color( r, g, b, 1.0f );
+        return new Color4( r, g, b, 1.0f );
     }
 
     /// <summary>
@@ -505,7 +504,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 32-bit RGBA8888 integer value. </param>
-    public static void Rgba8888ToColor( ref Color color, uint value )
+    public static void Rgba8888ToColor( ref Color4 color, uint value )
     {
         color.R = ( ( value & 0xff000000 ) >>> 24 ) / 255f;
         color.G = ( ( value & 0x00ff0000 ) >>> 16 ) / 255f;
@@ -518,7 +517,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 16-bit RGB565 integer value. </param>
-    public static void Rgb565ToColor( ref Color color, uint value )
+    public static void Rgb565ToColor( ref Color4 color, uint value )
     {
         // Ensure the value is within the valid range for 16-bit RGB565
         if ( value > 0xFFFF )
@@ -537,7 +536,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 16-bit RGBA4444 integer value. </param>
-    public static void Rgba4444ToColor( ref Color color, uint value )
+    public static void Rgba4444ToColor( ref Color4 color, uint value )
     {
         color.R = ( ( value & 0xF000 ) >> 12 ) / 15f;
         color.G = ( ( value & 0x0F00 ) >> 8 ) / 15f;
@@ -550,7 +549,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color">The Color object to assign the converted values to.</param>
     /// <param name="value">The float value representing the color in ABGR8888 format.</param>
-    public static void Abgr8888ToColor( ref Color color, float value )
+    public static void Abgr8888ToColor( ref Color4 color, float value )
     {
         // Convert the float value to an integer representing the color
         int c = NumberUtils.FloatToIntColor( value );
@@ -572,7 +571,7 @@ public class Color : ICloneable, IEquatable< Color >
     #region To format methods
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// Returns the given <see cref="Color4"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 7  : Alpha component</li>
     /// <li>Bits  8 - 15 : Blue component</li>
@@ -580,7 +579,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 24 - 31 : Red component</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint ToRgba8888( Color color )
+    public static uint ToRgba8888( Color4 color )
     {
         return ( ( uint )( color.R * 255 ) << 24 )
              | ( ( uint )( color.G * 255 ) << 16 )
@@ -661,7 +660,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// Returns the given <see cref="Color4"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 7  : Blue component</li>
     /// <li>Bits  8 - 15 : Green component</li>
@@ -669,7 +668,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 24 - 31 : Alpha component</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint ToArgb8888( Color color )
+    public static uint ToArgb8888( Color4 color )
     {
         return ( ( uint )( color.A * 255 ) << 24 )
              | ( ( uint )( color.R * 255 ) << 16 )
@@ -678,7 +677,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
+    /// Returns the given <see cref="Color4"/> as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 7  : Red component</li>
     /// <li>Bits  8 - 15 : Green component</li>
@@ -686,7 +685,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 24 - 31 : Alpha component</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint ToAbgr8888( Color color )
+    public static uint ToAbgr8888( Color4 color )
     {
         return ( ( uint )( color.A * 255f ) << 24 )
              | ( ( uint )( color.B * 255f ) << 16 )
@@ -712,7 +711,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="s">The Saturation from 0 to 1</param>
     /// <param name="v">The Value (brightness) from 0 to 1</param>
     /// <returns>The modified Color for chaining.</returns>
-    public Color FromHsv( float h, float s, float v )
+    public Color4 FromHsv( float h, float s, float v )
     {
         h %= 360; // Ensure hue is in the range [0, 360]
 
@@ -747,7 +746,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="hsv"> The Hue-Saturation-Value. </param>
     /// <returns> The modified color for chaining. </returns>
-    public Color FromHsv( float[] hsv )
+    public Color4 FromHsv( float[] hsv )
     {
         return FromHsv( hsv[ 0 ], hsv[ 1 ], hsv[ 2 ] );
     }
@@ -811,7 +810,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// Sets this colors components using the components from the supplied color.
     /// </summary>
     /// <returns> This Color for chaining. </returns>
-    public Color Set( Color? color )
+    public Color4 Set( Color4? color )
     {
         if ( color == null )
         {
@@ -831,9 +830,9 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="rgba"> The integer representation. </param>
     /// <returns> This color for chaining. </returns>
-    public Color Set( uint rgba )
+    public Color4 Set( uint rgba )
     {
-        Color color = this;
+        Color4 color = this;
 
         Rgba8888ToColor( ref color, rgba );
 
@@ -853,7 +852,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <returns> This Color for chaining. </returns>
-    public Color Set( float r, float g, float b, float a )
+    public Color4 Set( float r, float g, float b, float a )
     {
         R = r;
         G = g;
@@ -869,7 +868,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The supplied color. </param>
     /// <returns> This Color for chaining. </returns>
-    public Color Mul( Color color )
+    public Color4 Mul( Color4 color )
     {
         R *= color.R;
         G *= color.G;
@@ -884,9 +883,9 @@ public class Color : ICloneable, IEquatable< Color >
     /// of the supplied Color object and returns the result as a NEW Color
     /// object.
     /// </summary>
-    public Color MulNew( Color color )
+    public Color4 MulNew( Color4 color )
     {
-        return new Color( R * color.R,
+        return new Color4( R * color.R,
                           G * color.G,
                           B * color.B,
                           A * color.A ).Clamp();
@@ -896,7 +895,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// Multiplies the colour components by the supplied value.
     /// </summary>
     /// <returns> This Color for chaining. </returns>
-    public Color Mul( float value )
+    public Color4 Mul( float value )
     {
         R *= value;
         G *= value;
@@ -914,7 +913,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <returns>This Color for chaining.</returns>
-    public Color Mul( float r, float g, float b, float a )
+    public Color4 Mul( float r, float g, float b, float a )
     {
         R *= r;
         G *= g;
@@ -930,7 +929,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color to add. </param>
     /// <returns> This Color for chaining. </returns>
-    public Color Add( Color color )
+    public Color4 Add( Color4 color )
     {
         R += color.R;
         G += color.G;
@@ -944,9 +943,9 @@ public class Color : ICloneable, IEquatable< Color >
     /// Adds the components of the supplied Color object to the components
     /// of this Color object and returns the result as a NEW Color object.
     /// </summary>
-    public Color AddNew( Color color )
+    public Color4 AddNew( Color4 color )
     {
-        return new Color( R + color.R,
+        return new Color4( R + color.R,
                           G + color.G,
                           B + color.B,
                           A + color.A ).Clamp();
@@ -960,7 +959,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
     /// <returns> This Color for chaining. </returns>
-    public Color Add( float r, float g, float b, float a )
+    public Color4 Add( float r, float g, float b, float a )
     {
         R += r;
         G += g;
@@ -976,7 +975,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The color to subtract. </param>
     /// <returns> This Color for chaining. </returns>
-    public Color Sub( Color color )
+    public Color4 Sub( Color4 color )
     {
         R -= color.R;
         G -= color.G;
@@ -991,9 +990,9 @@ public class Color : ICloneable, IEquatable< Color >
     /// components of this Color object and returns the result as a NEW
     /// Color object.
     /// </summary>
-    public Color SubNew( Color color )
+    public Color4 SubNew( Color4 color )
     {
-        return new Color( R - color.R,
+        return new Color4( R - color.R,
                           G - color.G,
                           B - color.B,
                           A - color.A ).Clamp();
@@ -1007,7 +1006,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component. </param>
     /// <param name="a"> Alpha component. </param>
     /// <returns> This Color for chaining. </returns>
-    public Color Sub( float r, float g, float b, float a )
+    public Color4 Sub( float r, float g, float b, float a )
     {
         R -= r;
         G -= g;
@@ -1030,7 +1029,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// Multiplies the RGB values by the alpha.
     /// </summary>
     /// <returns>This color for chaining.</returns>
-    public Color PremultiplyAlpha()
+    public Color4 PremultiplyAlpha()
     {
         R *= A;
         G *= A;
@@ -1043,7 +1042,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// Clamps this Colors RGBA components to a valid range [0 - 1]
     /// </summary>
     /// <returns> This Color for chaining. </returns>
-    private Color Clamp( bool showDebug = false )
+    private Color4 Clamp( bool showDebug = false )
     {
         R = R < 0f ? 0f : R > 1f ? 1f : R;
         G = G < 0f ? 0f : G > 1f ? 1f : G;
@@ -1076,7 +1075,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="target"> The target color. </param>
     /// <param name="interpolationCoefficient"> This value must be in the range [0, 1] </param>
     /// <returns>This Color for chaining.</returns>
-    public Color Lerp( Color target, float interpolationCoefficient )
+    public Color4 Lerp( Color4 target, float interpolationCoefficient )
     {
         Guard.Against.Null( target );
 
@@ -1105,7 +1104,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="a"> Alpha component. </param>
     /// <param name="interpolationCoefficient"> This value must be in the range [0, 1] </param>
     /// <returns> This Color for chaining. </returns>
-    public Color Lerp( float r, float g, float b, float a, float interpolationCoefficient )
+    public Color4 Lerp( float r, float g, float b, float a, float interpolationCoefficient )
     {
         if ( interpolationCoefficient is < 0.0f or > 1.0f )
         {
@@ -1127,7 +1126,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="value"></param>
     /// <param name="registry"></param>
     /// <returns></returns>
-    public static Color ParseColor( string value, StyleRegistry registry )
+    public static Color4 ParseColor( string value, StyleRegistry registry )
     {
         if ( string.IsNullOrWhiteSpace( value ) )
         {
@@ -1152,32 +1151,32 @@ public class Color : ICloneable, IEquatable< Color >
                 float b = float.Parse( parts[ 2 ] ) / 255f;
                 float a = parts.Length == 4 ? float.Parse( parts[ 3 ] ) / 255f : 1.0f;
 
-                return new Color( r, g, b, a );
+                return new Color4( r, g, b, a );
             }
         }
 
         // 3. Handle Named Colors from the Registry
         try
         {
-            return registry.Get< Color >( value );
+            return registry.Get< Color4 >( value );
         }
         catch
         {
             // 4. Final Fallback: Standard .NET/LughSharp named colors
             // You could use reflection here to look up static properties of Color
-            PropertyInfo? prop = typeof( Color ).GetProperty( value,
+            PropertyInfo? prop = typeof( Color4 ).GetProperty( value,
                                                               BindingFlags.Public | BindingFlags.Static
                                                             | BindingFlags.IgnoreCase );
 
             if ( prop != null )
             {
-                return ( Color )prop.GetValue( null )!;
+                return ( Color4 )prop.GetValue( null )!;
             }
         }
 
         Logger.Error( $"Could not parse color: {value}. Defaulting to White." );
 
-        return Color.White;
+        return Color4.White;
     }
 
     /// <summary>
@@ -1187,7 +1186,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="color">The Color object to assign the parsed values to.</param>
     /// <returns>The Color object with the parsed color values.</returns>
     /// <exception cref="ArgumentException">Thrown if the hex string is not valid.</exception>
-    public static Color FromHexString( string hex, ref Color color )
+    public static Color4 FromHexString( string hex, ref Color4 color )
     {
         if ( string.IsNullOrEmpty( hex ) )
         {
@@ -1225,9 +1224,9 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="hex"></param>
     /// <returns></returns>
-    public static Color FromHexString( string hex )
+    public static Color4 FromHexString( string hex )
     {
-        var color = new Color();
+        var color = new Color4();
 
         return FromHexString( hex, ref color );
     }
@@ -1264,22 +1263,15 @@ public class Color : ICloneable, IEquatable< Color >
         return ( ( uint )( luminance * 255.0f ) << 8 ) | ( uint )( alpha * 255 );
     }
 
-    public static Color FromHex( uint hex )
+    public static Color4 FromHex( uint hex )
     {
-        return new Color( hex );
+        return new Color4( hex );
     }
-
-    #endregion Utility methods
-
-    // ========================================================================
-    // ========================================================================
-    // ========================================================================
-    // ========================================================================
 
     /// <summary>
     /// Returns a string representation of the Color components RGBA.
     /// </summary>
-    public string RgbaToString()
+    public string AsRgbaString()
     {
         return $"R:{R},G:{G},B:{B},A:{A}";
     }
@@ -1287,10 +1279,12 @@ public class Color : ICloneable, IEquatable< Color >
     /// <summary>
     /// Returns a string representation of the Color components ABGR.
     /// </summary>
-    public string AbgrToString()
+    public string AsAbgrString()
     {
         return $"A:{A},B:{B},G:{G},R:{R}";
     }
+
+    #endregion Utility methods
 
     // ========================================================================
     // ========================================================================
@@ -1303,7 +1297,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <returns>A new object that is a copy of this instance.</returns>
     public object Clone()
     {
-        return new Color( this );
+        return new Color4( this );
     }
 
     #endregion From ICloneable Interface
@@ -1320,7 +1314,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <returns>
     /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise false .
     /// </returns>
-    public bool Equals( Color? other )
+    public bool Equals( Color4? other )
     {
         if ( other is null )
         {
@@ -1347,7 +1341,7 @@ public class Color : ICloneable, IEquatable< Color >
             return true;
         }
 
-        var color = ( Color )obj;
+        var color = ( Color4 )obj;
 
         return PackedColorAbgr() == color.PackedColorAbgr();
     }
@@ -1367,12 +1361,12 @@ public class Color : ICloneable, IEquatable< Color >
     #region operator overloads
 
     /// <summary>
-    /// Determines whether two <see cref="Color"/> objects are equal.
+    /// Determines whether two <see cref="Color4"/> objects are equal.
     /// </summary>
-    /// <param name="c1"> The first <see cref="Color"/> object to compare, or <b>null</b>. </param>
+    /// <param name="c1"> The first <see cref="Color4"/> object to compare, or <b>null</b>. </param>
     /// <param name="c2"> The second object to compare, or <b>null</b>. </param>
     /// <returns> <b>true</b> if the two objects are equal; otherwise, <b>false</b>. </returns>
-    public static bool operator ==( Color? c1, object? c2 )
+    public static bool operator ==( Color4? c1, object? c2 )
     {
         if ( c1 is null )
         {
@@ -1383,12 +1377,12 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Determines whether two <see cref="Color"/> objects are not equal.
+    /// Determines whether two <see cref="Color4"/> objects are not equal.
     /// </summary>
-    /// <param name="c1"> The first <see cref="Color"/> object to compare, or null. </param>
+    /// <param name="c1"> The first <see cref="Color4"/> object to compare, or null. </param>
     /// <param name="c2"> The second object to compare, or null. </param>
     /// <returns><b>true</b> if the two objects are not equal; otherwise, <b>false</b>.</returns>
-    public static bool operator !=( Color? c1, object? c2 )
+    public static bool operator !=( Color4? c1, object? c2 )
     {
         return !( c1 == c2 );
     }
@@ -1399,7 +1393,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="c1"> Color 1, which will be returned. </param>
     /// <param name="c2"> Color 2. </param>
-    public static Color operator *( Color? c1, Color? c2 )
+    public static Color4 operator *( Color4? c1, Color4? c2 )
     {
         Guard.Against.Null( c1 );
         Guard.Against.Null( c2 );

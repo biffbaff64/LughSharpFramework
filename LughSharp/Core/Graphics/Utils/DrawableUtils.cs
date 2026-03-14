@@ -24,6 +24,8 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -41,7 +43,7 @@ public class DrawableUtils
     /// <returns>
     /// A <see cref="ISceneDrawable"/> of determined size filled with determined color.
     /// </returns>
-    public static ISceneDrawable GetColoredSceneDrawable( int width, int height, Color color )
+    public static ISceneDrawable GetColoredSceneDrawable( int width, int height, Color4 color )
     {
         var pixmap = new Pixmap( width, height, LughFormat.RGBA8888 );
         pixmap.FillWithColor( color );

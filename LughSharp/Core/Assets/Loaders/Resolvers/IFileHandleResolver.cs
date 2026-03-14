@@ -36,6 +36,9 @@ namespace LughSharp.Core.Assets.Loaders.Resolvers;
 [PublicAPI]
 public interface IFileHandleResolver
 {
+    /// <summary>
+    /// Resolves a file name to a FileInfo.
+    /// </summary>
     FileInfo Resolve( string filename );
 }
 

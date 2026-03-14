@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+//  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,15 @@ namespace LughSharp.Core.Assets;
 public interface IAssetTask
 {
     /// <summary>
-    /// 
+    /// Executes the asset loading task, handling dependencies and managing the
+    /// asynchronous loading process.
+    /// <para>
+    /// If the task is marked for cancellation, it exits early. If dependencies are
+    /// not yet loaded, it calculates the dependencies for the asset and initiates
+    /// dependency injection. If no dependencies are found, the asynchronous loading
+    /// of the asset begins. If dependencies have already been loaded, the asynchronous
+    /// loading process proceeds.
+    /// </para>
     /// </summary>
     void Call();
 }

@@ -22,8 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
@@ -183,7 +187,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <summary>
     /// </summary>
     /// <param name="color"></param>
-    public void SetColor( Color color )
+    public void SetColor( Color4 color )
     {
         _vertices[ _vertexIdx + _colorOffset ] = color.ToFloatBitsAbgr();
     }
@@ -196,7 +200,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <param name="a"></param>
     public void SetColor( float r, float g, float b, float a )
     {
-        _vertices[ _vertexIdx + _colorOffset ] = Color.ToFloatBitsAbgr( r, g, b, a );
+        _vertices[ _vertexIdx + _colorOffset ] = Color4.ToFloatBitsAbgr( r, g, b, a );
     }
 
     /// <summary>

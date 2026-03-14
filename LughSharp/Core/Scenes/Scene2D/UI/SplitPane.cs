@@ -22,9 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Listeners;
@@ -300,7 +303,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
 
         Validate();
 
-        Color color = ActorColor;
+        Color4 color = ActorColor;
         float alpha = color.A * parentAlpha;
 
         ApplyTransform( batch, ComputeTransform() );

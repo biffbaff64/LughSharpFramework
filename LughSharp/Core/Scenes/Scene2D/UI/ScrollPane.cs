@@ -22,9 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -745,7 +748,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
         UpdateWidgetPosition();
 
         // Draw the background ninepatch.
-        Color color = ActorColor;
+        Color4 color = ActorColor;
         float alpha = color.A * parentAlpha;
 
         if ( Style.Background != null )

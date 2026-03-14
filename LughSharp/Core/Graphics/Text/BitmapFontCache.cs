@@ -27,7 +27,9 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
@@ -81,8 +83,8 @@ public class BitmapFontCache
 
     private readonly List< GlyphLayout > _pooledLayouts = new();
 
-    private readonly Color _color     = new( 1, 1, 1, 1 );
-    private readonly Color _tempColor = new( 1, 1, 1, 1 );
+    private readonly Color4 _color     = new( 1, 1, 1, 1 );
+    private readonly Color4 _tempColor = new( 1, 1, 1, 1 );
 
     private float _currentTint;
     private int   _glyphCount;
@@ -203,7 +205,7 @@ public class BitmapFontCache
     /// <summary>
     /// Tints all text currently in the cache. Does not affect subsequently added text.
     /// </summary>
-    public void Tint( Color tint )
+    public void Tint( Color4 tint )
     {
         float newTint = tint.ToFloatBitsAbgr();
 
@@ -298,7 +300,7 @@ public class BitmapFontCache
     /// Sets the color of all text currently in the cache.
     /// Does not affect subsequently added text.
     /// </summary>
-    public void SetColors( Color tint )
+    public void SetColors( Color4 tint )
     {
         SetColors( tint.ToFloatBitsAbgr() );
     }
@@ -326,7 +328,7 @@ public class BitmapFontCache
     /// after <see cref="SetText(string, float, float)"/> and is reset every
     /// time setText is called.
     /// </summary>
-    public void SetColors( Color tint, int start, int end )
+    public void SetColors( Color4 tint, int start, int end )
     {
         SetColors( tint.ToFloatBitsAbgr(), start, end );
     }
@@ -384,7 +386,7 @@ public class BitmapFontCache
     /// affects text subsequently added to the cache, but does not affect existing
     /// text currently in the cache.
     /// </summary>
-    public Color GetColor()
+    public Color4 GetColor()
     {
         return _color;
     }
@@ -393,7 +395,7 @@ public class BitmapFontCache
     /// A convenience method for setting the cache color. The color can also
     /// be set by modifying <see cref="GetColor()"/>.
     /// </summary>
-    public void SetColor( Color col )
+    public void SetColor( Color4 col )
     {
         _color.Set( col );
     }
@@ -509,7 +511,7 @@ public class BitmapFontCache
             return;
         }
 
-        Color color    = GetColor();
+        Color4 color    = GetColor();
         float oldAlpha = color.A;
 
         color.A *= alphaModulation;
@@ -705,7 +707,7 @@ public class BitmapFontCache
         }
 
         // Cached glyphs have changed, reset the current tint.
-        _currentTint = Color.WhiteFloatBits;
+        _currentTint = Color4.WhiteFloatBits;
     }
 
     /// <summary>

@@ -22,42 +22,44 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Logging;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Colors;
 
 [PublicAPI]
-public class NewColor
+public class NewColor4
 {
     /// <summary>
-    /// Red Color Component
+    /// Red NewColor Component
     /// </summary>
     public byte R { get; set; }
 
     /// <summary>
-    /// Green Color Component
+    /// Green NewColor Component
     /// </summary>
     public byte G { get; set; }
 
     /// <summary>
-    /// Blue Color Component
+    /// Blue NewColor Component
     /// </summary>
     public byte B { get; set; }
 
     /// <summary>
-    /// Alpha Color Component
+    /// Alpha NewColor Component
     /// </summary>
     public byte A { get; set; }
 
     /// <summary>
-    /// Color Components packed into a <b>uint</b>, stored in RGBA format.
+    /// NewColor Components packed into a <b>uint</b>, stored in <b>RGBA</b> format.
     /// </summary>
     public uint RGBAPackedColor { get; private set; }
 
     /// <summary>
-    /// Color Components packed into a <b>uint</b>, stored in ABGR format.
+    /// NewColor Components packed into a <b>uint</b>, stored in <b>ABGR</b> format.
     /// </summary>
     public uint ABGRPackedColor { get; private set; }
 
@@ -73,24 +75,53 @@ public class NewColor
     internal const int RGBABlueShift  = 8;
     internal const int RGBAAlphaShift = 0;
 
+    internal const uint RGBARedMask   = 0xff000000;
+    internal const uint RGBAGreenMask = 0x00ff0000;
+    internal const uint RGBABlueMask  = 0x0000ff00;
+    internal const uint RGBAAlphaMask = 0x000000ff;
+
     // ========================================================================
 
-    internal NewColor()
+    public NewColor4() : this( 0u )
     {
     }
 
-    private NewColor( ValidColor color )
+    public NewColor4( ValidColor color )
     {
     }
 
-    public uint ARGB8888 => ( uint )( ( A << 24 ) | ( R << 16 ) | ( G << 8 ) | B );
-    public uint RGBA8888 => ( uint )( ( R << 24 ) | ( G << 16 ) | ( B << 8 ) | A );
+    public NewColor4( uint rgba8888 )
+    {
+        R = ( byte )( ( rgba8888 & RGBARedMask ) >> RGBARedShift );
+        G = ( byte )( ( rgba8888 & RGBAGreenMask ) >> RGBAGreenShift );
+        B = ( byte )( ( rgba8888 & RGBABlueMask ) >> RGBABlueShift );
+        A = ( byte )( ( rgba8888 & RGBAAlphaMask ) >> RGBAAlphaShift );
+
+        Clamp();
+    }
+
+    public NewColor4( byte r, byte g, byte b, byte a )
+    {
+        R = r;
+        G = g;
+        B = b;
+        A = a;
+
+        Clamp();
+    }
+
+    public NewColor4( NewColor4 color )
+        : this( color.R, color.G, color.B, color.A )
+    {
+    }
+
+    // ========================================================================
 
     /// <summary>
-    /// Clamps this Colors RGBA components to a valid range [0 - 1]
+    /// 
     /// </summary>
-    /// <returns> This Color for chaining. </returns>
-    private NewColor Clamp( bool showDebug = false )
+    /// <returns> This NewColor for chaining. </returns>
+    private NewColor4 Clamp( bool showDebug = false )
     {
         RGBAPackedColor = ToRgba8888( R, G, B, A );
         ABGRPackedColor = ToAbgr8888( A, B, G, R );
@@ -116,7 +147,9 @@ public class NewColor
     /// <returns>A uint value representing the color in RGBA8888 format.</returns>
     public uint ToRgba8888( byte r, byte g, byte b, byte a )
     {
-        return ( uint )( ( r << RGBARedShift ) | ( g << RGBAGreenShift ) | ( b << RGBABlueShift ) | a );
+        return ( uint )( ( r << RGBARedShift )
+                       | ( g << RGBAGreenShift )
+                       | ( b << RGBABlueShift ) | a );
     }
 
     /// <summary>
@@ -130,7 +163,121 @@ public class NewColor
     /// <returns>A uint value representing the color in ABGR8888 format.</returns>
     public uint ToAbgr8888( byte a, byte b, byte g, byte r )
     {
-        return ( uint )( ( a << ARGBAlphaShift ) | ( b << ARGBBlueShift ) | ( g << ARGBGreenShift ) | r );
+        return ( uint )( ( a << ARGBAlphaShift )
+                       | ( b << ARGBBlueShift )
+                       | ( g << ARGBGreenShift )
+                       | r );
+    }
+
+    /// <summary>
+    /// Returns the given R.G.B colour components as a 32-bit uint in the following format:-
+    /// <li>Bits  0 - 7  : Blue component</li>
+    /// <li>Bits  8 - 15 : Green component</li>
+    /// <li>Bits 16 - 23 : Red component</li>
+    /// <li>Bits 24 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    public static uint Rgb888( byte r, byte g, byte b )
+    {
+        return ( uint )( ( r << 16 ) | ( g << 8 ) | b );
+    }
+
+    /// <summary>
+    /// Returns the given <see cref="NewColor4"/> as a 32-bit uint in the following format:-
+    /// <li>Bits  0 - 4  : Blue component</li>
+    /// <li>Bits  5 - 10 : Green component</li>
+    /// <li>Bits 11 - 15 : Red component</li>
+    /// <li>Bits 16 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    public static uint ToRgb565( byte r, byte g, byte b )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Returns the given R.G.B colour components as a 32-bit uint in the following format:-
+    /// <li>Bits  0 - 3  : Alpha component</li>
+    /// <li>Bits  4 - 7  : Blue component</li>
+    /// <li>Bits  8 - 11 : Green component</li>
+    /// <li>Bits 12 - 15 : Red component</li>
+    /// <li>Bits 16 - 31 : Undefined</li>
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    public static uint ToRgba4444( byte r, byte g, byte b, byte a )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Sets this colors components using the components from the supplied color.
+    /// </summary>
+    /// <param name="color"> The NewColor to set. This cannot be null. </param>
+    /// <returns> This NewColor for chaining. </returns>
+    public NewColor4 Set( NewColor4 color )
+    {
+        R = color.R;
+        G = color.G;
+        B = color.B;
+        A = color.A;
+
+        return Clamp();
+    }
+
+    /// <summary>
+    /// Sets this color's component values through an integer representation.
+    /// </summary>
+    /// <param name="rgba"> The integer representation. </param>
+    /// <returns> This color for chaining. </returns>
+    public NewColor4 Set( uint rgba )
+    {
+        R = ( byte )( ( rgba & RGBARedMask ) >> RGBARedShift );
+        G = ( byte )( ( rgba & RGBAGreenMask ) >> RGBAGreenShift );
+        B = ( byte )( ( rgba & RGBABlueMask ) >> RGBABlueShift );
+        A = ( byte )( ( rgba & RGBAAlphaMask ) >> RGBAAlphaShift );
+
+        return Clamp();
+    }
+
+    /// <summary>
+    /// Sets this colors components using the supplied r,g,b,a components.
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    /// <returns> This NewColor for chaining. </returns>
+    public NewColor4 Set( byte r, byte g, byte b, byte a )
+    {
+        R = r;
+        G = g;
+        B = b;
+        A = a;
+
+        return Clamp();
+    }
+
+    /// <summary>
+    /// Adds the components from the supplied NewColor to the corresponding
+    /// components of this color.
+    /// </summary>
+    /// <param name="color"> The NewColor to add. </param>
+    /// <returns> This NewColor for chaining. </returns>
+    public NewColor4 Add( NewColor4 color )
+    {
+        R += color.R;
+        G += color.G;
+        B += color.B;
+        A += color.A;
+
+        return Clamp();
     }
 
     // ========================================================================

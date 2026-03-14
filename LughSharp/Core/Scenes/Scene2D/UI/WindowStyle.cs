@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -40,7 +41,7 @@ public class WindowStyle : ISceneStyle
 {
     public ISceneDrawable? Background      { get; set; }
     public BitmapFont?     TitleFont       { get; set; }
-    public Color?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
+    public Color4?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
     public ISceneDrawable? StageBackground { get; set; }
 
     // ====================================================================
@@ -62,7 +63,7 @@ public class WindowStyle : ISceneStyle
     /// <param name="titleFontColor"></param>
     /// <param name="background"></param>
     [JsonConstructor]
-    public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable? background )
+    public WindowStyle( BitmapFont titleFont, Color4 titleFontColor, ISceneDrawable? background )
     {
         TitleFont  = titleFont;
         Background = background;
@@ -81,7 +82,7 @@ public class WindowStyle : ISceneStyle
 
         if ( style.TitleFontColor != null )
         {
-            TitleFontColor = new Color( style.TitleFontColor );
+            TitleFontColor = new Color4( style.TitleFontColor );
         }
 
         Background = style.Background;

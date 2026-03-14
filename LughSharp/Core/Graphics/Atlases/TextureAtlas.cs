@@ -30,6 +30,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 

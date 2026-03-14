@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+//  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,10 @@ using Extensions.Source.Freetype;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source;
 
@@ -48,7 +47,7 @@ public class FontUtils
     /// <param name="size"> The requested font size. </param>
     /// <param name="color"> The requested font colour. </param>
     /// <returns> The newly created BitmapFont. </returns>
-    public BitmapFont CreateFont( string fontFile, int size, Color color )
+    public BitmapFont CreateFont( string fontFile, int size, Color4 color )
     {
         BitmapFont font;
 
@@ -90,7 +89,7 @@ public class FontUtils
             };
 
             font = generator.GenerateFont( parameter );
-            font.SetColor( Color.White );
+            font.SetColor( Color4.White );
         }
         catch ( Exception e )
         {

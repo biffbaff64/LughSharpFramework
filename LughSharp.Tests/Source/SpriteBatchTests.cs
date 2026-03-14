@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+//  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
@@ -30,8 +31,6 @@ using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
 using NUnit.Framework;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Tests.Source;
 
@@ -61,7 +60,7 @@ public class SpriteBatchTests
         Assert.That( pixmap.Width, Is.EqualTo( TestWidth ), "Pixmap width incorrect" );
         Assert.That( pixmap.Height, Is.EqualTo( TestHeight ), "Pixmap height incorrect" );
 
-        pixmap.SetColor( Color.White );
+        pixmap.SetColor( Color4.White );
         pixmap.FillWithCurrentColor();
 
         var textureData = new PixmapTextureData( pixmap, LughFormat.RGBA8888, false, false );
@@ -193,7 +192,7 @@ public class SpriteBatchTests
         {
             Assert.That( _spriteBatch, Is.Not.Null );
 
-            var testColor = new Color( 1f, 0f, 0f, 1f ); // Red
+            var testColor = new Color4( 1f, 0f, 0f, 1f ); // Red
             _spriteBatch?.SetColor( testColor );
 
             Assert.That( _spriteBatch?.Color.R, Is.EqualTo( testColor.R ) );

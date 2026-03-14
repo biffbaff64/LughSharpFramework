@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
@@ -40,9 +41,9 @@ public class SelectBoxStyle : ISceneStyle
     public BitmapFont      Font               { get; } = null!;
     public ScrollPaneStyle ScrollStyle        { get; } = null!;
     public ListBoxStyle    ListBoxStyle       { get; } = null!;
-    public Color           FontColor          { get; } = new( 1, 1, 1, 1 );
-    public Color?          OverFontColor      { get; }
-    public Color?          DisabledFontColor  { get; }
+    public Color4           FontColor          { get; } = new( 1, 1, 1, 1 );
+    public Color4?          OverFontColor      { get; }
+    public Color4?          DisabledFontColor  { get; }
     public ISceneDrawable? Background         { get; }
     public ISceneDrawable? BackgroundOver     { get; }
     public ISceneDrawable? BackgroundOpen     { get; }
@@ -55,7 +56,7 @@ public class SelectBoxStyle : ISceneStyle
     }
 
     public SelectBoxStyle( BitmapFont font,
-                           Color fontColor,
+                           Color4 fontColor,
                            ISceneDrawable background,
                            ScrollPaneStyle scrollStyle,
                            ListBoxStyle listBoxStyle )
@@ -77,12 +78,12 @@ public class SelectBoxStyle : ISceneStyle
 
         if ( style.OverFontColor != null )
         {
-            OverFontColor = new Color( style.OverFontColor );
+            OverFontColor = new Color4( style.OverFontColor );
         }
 
         if ( style.DisabledFontColor != null )
         {
-            DisabledFontColor = new Color( style.DisabledFontColor );
+            DisabledFontColor = new Color4( style.DisabledFontColor );
         }
 
         Background   = style.Background;

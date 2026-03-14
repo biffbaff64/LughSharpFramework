@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+//  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Utils.Logging;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Main;
 
@@ -135,7 +136,7 @@ public class ApplicationConfiguration
     /// <summary>
     /// The initial window background color. Defaults to blue.
     /// </summary>
-    public Color InitialBackgroundColor { get; set; } = Color.Blue;
+    public Color4 InitialBackgroundColor { get; set; } = Color4.Blue;
 
     /// <summary>
     /// Sets the window title. Defaults to empty string.

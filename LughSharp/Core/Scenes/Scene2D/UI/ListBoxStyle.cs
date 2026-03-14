@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -37,8 +38,8 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class ListBoxStyle : ISceneStyle
 {
     public BitmapFont      Font                { get; set; }
-    public Color           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
-    public Color           FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
+    public Color4           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
+    public Color4           FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
     public ISceneDrawable? Selection           { get; set; }
     public ISceneDrawable? Down                { get; set; }
     public ISceneDrawable? Over                { get; set; }
@@ -51,7 +52,7 @@ public class ListBoxStyle : ISceneStyle
         Font = new BitmapFont();
     }
 
-    public ListBoxStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected,
+    public ListBoxStyle( BitmapFont font, Color4 fontColorSelected, Color4 fontColorUnselected,
                          ISceneDrawable selection )
     {
         Font = font;

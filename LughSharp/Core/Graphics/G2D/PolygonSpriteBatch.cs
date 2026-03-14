@@ -26,6 +26,8 @@ using System;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
@@ -95,7 +97,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     // ========================================================================
     // ========================================================================
 
-    private readonly Color          _color          = new( 1, 1, 1, 1 );
+    private readonly Color4          _color          = new( 1, 1, 1, 1 );
     private readonly Matrix4        _combinedMatrix = new();
     private readonly Mesh           _mesh;
     private readonly bool           _ownsShader;
@@ -104,7 +106,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     private readonly float[]        _vertices;
 
     private bool           _blendingDisabled;
-    private float          _colorPacked = Color.WhiteFloatBits;
+    private float          _colorPacked = Color4.WhiteFloatBits;
     private ShaderProgram? _customShader;
     private float          _invTexHeight;
     private float          _invTexWidth;
@@ -241,7 +243,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
-    public Color Color
+    public Color4 Color
     {
         get => _color;
         set
@@ -262,9 +264,9 @@ public class PolygonSpriteBatch : IPolygonBatch
         get => _colorPacked;
         set
         {
-            Color color = Color;
+            Color4 color = Color;
 
-            Color.Abgr8888ToColor( ref color, value );
+            Color4.Abgr8888ToColor( ref color, value );
             _colorPacked = value;
         }
     }
@@ -274,9 +276,9 @@ public class PolygonSpriteBatch : IPolygonBatch
         get => _colorPacked;
         set
         {
-            Color color = Color;
+            Color4 color = Color;
 
-            Color.Rgba8888ToColor( ref color, ( uint )value );
+            Color4.Rgba8888ToColor( ref color, ( uint )value );
             _colorPacked = value;
         }
     }

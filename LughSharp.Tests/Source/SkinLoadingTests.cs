@@ -29,6 +29,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.UI;
 using LughSharp.Core.Scenes.Scene2D.Utils;
@@ -78,7 +79,7 @@ public class SkinLoadingTests
         // Verify Colors
         try
         {
-            _ = skin.Get< LughSharp.Core.Graphics.Color >( "green" );
+            _ = skin.Get< LughSharp.Core.Graphics.Colors.Color4 >( "green" );
             
             Logger.Debug( "green found." );
         }

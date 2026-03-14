@@ -27,12 +27,11 @@ using System.Diagnostics;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -74,7 +73,7 @@ public class TextButton : Button
         Style = style;
 
         _label = new Label( text, new LabelStyle( style.Font ?? new BitmapFont(),
-                                                  style.FontColor ?? Color.White ) );
+                                                  style.FontColor ?? Color4.White ) );
         _label.SetAlignment( Align.Center );
 
         Add( _label ).Expand().SetFill();
@@ -108,7 +107,7 @@ public class TextButton : Button
                 LabelStyle labelStyle = Label.Style;
 
                 labelStyle.Font      = textButtonStyle.Font ?? new BitmapFont();
-                labelStyle.FontColor = textButtonStyle.FontColor ?? Color.White;
+                labelStyle.FontColor = textButtonStyle.FontColor ?? Color4.White;
                 Label.Style          = labelStyle;
             }
         }
@@ -133,7 +132,7 @@ public class TextButton : Button
     /// Returns the appropriate label font color from the style based on
     /// the current button state.
     /// </summary>
-    public Color? GetFontColor()
+    public Color4? GetFontColor()
     {
         Debug.Assert( Style != null, "Style is null" );
 
@@ -206,7 +205,7 @@ public class TextButton : Button
     {
         if ( Label != null )
         {
-            Label.Style.FontColor = GetFontColor() ?? Color.White;
+            Label.Style.FontColor = GetFontColor() ?? Color4.White;
             base.Draw( batch, parentAlpha );
         }
     }

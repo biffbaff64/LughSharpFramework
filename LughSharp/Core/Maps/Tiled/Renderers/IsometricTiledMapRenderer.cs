@@ -22,15 +22,17 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Maps.Tiled.Renderers;
 
@@ -108,9 +110,9 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
 
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
-        Color batchColor = Batch.Color;
+        Color4 batchColor = Batch.Color;
 
-        float color = Color.ToFloatBitsAbgr( batchColor.R,
+        float color = Color4.ToFloatBitsAbgr( batchColor.R,
                                              batchColor.G,
                                              batchColor.B,
                                              batchColor.A * layer.Opacity );

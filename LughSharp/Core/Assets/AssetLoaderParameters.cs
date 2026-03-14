@@ -22,11 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Assets;
+
+/// <summary>
+/// Base class for parameters used by asset loaders to define specific
+/// settings or configurations needed for loading an asset.
+/// </summary>
+[PublicAPI]
+public class AssetLoaderParameters : ILoaderParameters
+{
+    public ILoadedCallback? LoadedCallback { get; set; }
+}
+
+// ====================================================================--------
+// ====================================================================--------
 
 /// <summary>
 /// Interface representing the parameters required for loading assets.
@@ -50,20 +61,13 @@ public interface ILoaderParameters
 [PublicAPI]
 public interface ILoadedCallback
 {
+    /// <summary>
+    /// Callback that will be invoked when the asset has been loaded.
+    /// </summary>
+    /// <param name="assetManager"> The AssetManager used for loading. </param>
+    /// <param name="filename"> The filename of the asset. </param>
+    /// <param name="type"> The asset type. </param>
     void FinishedLoading( AssetManager assetManager, string filename, Type? type );
-}
-
-// ====================================================================--------
-// ====================================================================--------
-
-/// <summary>
-/// Base class for parameters used by asset loaders to define specific
-/// settings or configurations needed for loading an asset.
-/// </summary>
-[PublicAPI]
-public class AssetLoaderParameters : ILoaderParameters
-{
-    public ILoadedCallback? LoadedCallback { get; set; }
 }
 
 // ====================================================================--------
@@ -75,6 +79,7 @@ public class AssetLoaderParameters : ILoaderParameters
 [PublicAPI]
 public class DefaultLoadedCallback( int refCount ) : ILoadedCallback
 {
+    /// <inheritdoc />
     public void FinishedLoading( AssetManager assetManager, string filename, Type? type )
     {
         assetManager.SetReferenceCount( filename, refCount );

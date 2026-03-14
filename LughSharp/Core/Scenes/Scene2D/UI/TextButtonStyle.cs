@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -37,15 +38,15 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class TextButtonStyle : ButtonStyle, ISceneStyle
 {
     public BitmapFont? Font                    { get; set; }
-    public Color?      FontColor               { get; set; }
-    public Color?      DownFontColor           { get; set; }
-    public Color?      OverFontColor           { get; set; }
-    public Color?      FocusedFontColor        { get; set; }
-    public Color?      DisabledFontColor       { get; set; }
-    public Color?      CheckedFontColor        { get; set; }
-    public Color?      CheckedDownFontColor    { get; set; }
-    public Color?      CheckedOverFontColor    { get; set; }
-    public Color?      CheckedFocusedFontColor { get; set; }
+    public Color4?      FontColor               { get; set; }
+    public Color4?      DownFontColor           { get; set; }
+    public Color4?      OverFontColor           { get; set; }
+    public Color4?      FocusedFontColor        { get; set; }
+    public Color4?      DisabledFontColor       { get; set; }
+    public Color4?      CheckedFontColor        { get; set; }
+    public Color4?      CheckedDownFontColor    { get; set; }
+    public Color4?      CheckedOverFontColor    { get; set; }
+    public Color4?      CheckedFocusedFontColor { get; set; }
 
     // ========================================================================
     
@@ -66,47 +67,47 @@ public class TextButtonStyle : ButtonStyle, ISceneStyle
 
         if ( style.FontColor != null )
         {
-            FontColor = new Color( style.FontColor );
+            FontColor = new Color4( style.FontColor );
         }
 
         if ( style.DownFontColor != null )
         {
-            DownFontColor = new Color( style.DownFontColor );
+            DownFontColor = new Color4( style.DownFontColor );
         }
 
         if ( style.OverFontColor != null )
         {
-            OverFontColor = new Color( style.OverFontColor );
+            OverFontColor = new Color4( style.OverFontColor );
         }
 
         if ( style.FocusedFontColor != null )
         {
-            FocusedFontColor = new Color( style.FocusedFontColor );
+            FocusedFontColor = new Color4( style.FocusedFontColor );
         }
 
         if ( style.DisabledFontColor != null )
         {
-            DisabledFontColor = new Color( style.DisabledFontColor );
+            DisabledFontColor = new Color4( style.DisabledFontColor );
         }
 
         if ( style.CheckedFontColor != null )
         {
-            CheckedFontColor = new Color( style.CheckedFontColor );
+            CheckedFontColor = new Color4( style.CheckedFontColor );
         }
 
         if ( style.CheckedDownFontColor != null )
         {
-            CheckedDownFontColor = new Color( style.CheckedDownFontColor );
+            CheckedDownFontColor = new Color4( style.CheckedDownFontColor );
         }
 
         if ( style.CheckedOverFontColor != null )
         {
-            CheckedOverFontColor = new Color( style.CheckedOverFontColor );
+            CheckedOverFontColor = new Color4( style.CheckedOverFontColor );
         }
 
         if ( style.CheckedFocusedFontColor != null )
         {
-            CheckedFocusedFontColor = new Color( style.CheckedFocusedFontColor );
+            CheckedFocusedFontColor = new Color4( style.CheckedFocusedFontColor );
         }
     }
 }

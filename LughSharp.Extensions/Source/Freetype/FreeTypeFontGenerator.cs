@@ -25,15 +25,15 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Freetype;
 
@@ -764,7 +764,7 @@ public class FreeTypeFontGenerator : IDisposable
                 int shadowH       = mainH + Math.Abs( parameter.ShadowOffsetY );
                 var shadowPixmap  = new Pixmap( shadowW, shadowH, mainPixmap.GetColorFormat() );
 
-                Color shadowColor = parameter.ShadowColor;
+                Color4 shadowColor = parameter.ShadowColor;
                 float a           = shadowColor.A;
 
                 if ( a != 0 )
@@ -858,7 +858,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( _bitmapped )
         {
-            mainPixmap.SetColor( Color.Clear );
+            mainPixmap.SetColor( Color4.Clear );
             mainPixmap.FillWithCurrentColor();
 
             byte[] buf = mainBitmap.GetBuffer();
@@ -1170,7 +1170,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// Foreground color (required for non-black borders)
         /// </summary>
-        public Color Color { get; set; } = Color.White;
+        public Color4 Color { get; set; } = Color4.White;
 
         /// <summary>
         /// Glyph gamma. Values &gt; 1 reduce antialiasing.
@@ -1191,7 +1191,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// Border color; only used if borderWidth &gt; 0
         /// </summary>
-        public Color BorderColor { get; set; } = Color.Black;
+        public Color4 BorderColor { get; set; } = Color4.Black;
 
         /// <summary>
         /// true for straight (mitered), false for rounded borders
@@ -1217,7 +1217,7 @@ public class FreeTypeFontGenerator : IDisposable
         /// Shadow color; only used if shadowOffset > 0. If alpha component is 0, no shadow
         /// is drawn but characters are still offset by shadowOffset.
         /// </summary>
-        public Color ShadowColor { get; set; } = new( 0, 0, 0, 0.75f );
+        public Color4 ShadowColor { get; set; } = new( 0, 0, 0, 0.75f );
 
         /// <summary>
         /// Pixels to add to glyph spacing when text is rendered. Can be negative.

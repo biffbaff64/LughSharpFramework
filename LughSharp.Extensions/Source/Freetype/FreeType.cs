@@ -27,10 +27,9 @@ using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace Extensions.Source.Freetype;
 
@@ -936,7 +935,7 @@ public class FreeType
         [DllImport( NativeLib, EntryPoint = "getBuffer", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetBufferNative( IntPtr bitmap ); // Returns a pointer to the native buffer
 
-        public Pixmap GetPixmap( int format, Color color, float gamma )
+        public Pixmap GetPixmap( int format, Color4 color, float gamma )
         {
             int    width     = GetWidth();
             int    rows      = GetRows();
@@ -945,7 +944,7 @@ public class FreeType
             int    rowBytes  = Math.Abs( GetPitch() );
             Pixmap pixmap;
 
-            if ( ( color == Color.White )
+            if ( ( color == Color4.White )
               && ( pixelMode == FtPixelModeGray )
               && ( rowBytes == width )
               && ( Math.Abs( gamma - 1f ) < NumberUtils.FloatTolerance ) )
@@ -960,7 +959,7 @@ public class FreeType
             {
                 pixmap = new Pixmap( width, rows, LughFormat.RGBA8888 );
 
-                uint rgba   = Color.ToRgba8888( color ); // Assuming Color has a ToRGBA8888 method
+                uint rgba   = Color4.ToRgba8888( color ); // Assuming Color has a ToRGBA8888 method
                 var  srcRow = new byte[ rowBytes ];
                 var  dstRow = new int[ width ];
 

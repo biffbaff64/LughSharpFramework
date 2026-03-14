@@ -26,6 +26,8 @@ using System;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
@@ -94,7 +96,7 @@ public interface IBatch : IDisposable
     /// <returns>
     /// The rendering color of this Batch.
     /// </returns>
-    Color Color { get; set; }
+    Color4 Color { get; set; }
 
     /// <returns>
     /// the rendering color of this Batch in vertex format (alpha compressed to 0-254)

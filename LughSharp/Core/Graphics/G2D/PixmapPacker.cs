@@ -29,6 +29,8 @@ using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
@@ -108,7 +110,7 @@ public class PixmapPacker : IDisposable
     public int          PageHeight       { get; set; }
     public int          PageFormat       { get; set; }
     public List< Page > Pages            { get; set; } = [ ];
-    public Color        TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
+    public Color4        TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
     public bool         PackToTexture    { get; set; }
     public bool         DuplicateBorder  { get; set; }
     public int          Padding          { get; set; }
@@ -823,7 +825,7 @@ public class PixmapPacker : IDisposable
                 y = next;
             }
 
-            Color c = new();
+            Color4 c = new();
 
             c.Set( ( uint )raster.GetPixel( x, y ) );
 

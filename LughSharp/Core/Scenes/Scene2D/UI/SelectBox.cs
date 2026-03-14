@@ -28,6 +28,7 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
@@ -40,8 +41,6 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -61,12 +60,12 @@ namespace LughSharp.Core.Scenes.Scene2D.UI;
 public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     where T : notnull
 {
-    public ClickListener       ClickListener { get; set; }
+    public ClickListener  ClickListener { get; set; }
     public SelectBoxStyle Style         { get; set; } = null!;
-    public List< T >           Items         { get; }      = [ ];
-    public bool                IsDisabled    { get; set; }
-    public float               PrefWidth     { get; private set; }
-    public float               PrefHeight    { get; private set; }
+    public List< T >      Items         { get; }      = [ ];
+    public bool           IsDisabled    { get; set; }
+    public float          PrefWidth     { get; private set; }
+    public float          PrefHeight    { get; private set; }
 
     // ========================================================================
 
@@ -336,7 +335,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Returns the appropriate label font color from the style based on the current button state.
     /// </summary>
-    protected Color GetFontColor()
+    protected Color4 GetFontColor()
     {
         if ( IsDisabled && ( Style.DisabledFontColor != null ) )
         {
@@ -356,7 +355,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         Validate();
 
         ISceneDrawable? background = GetBackgroundIDrawable();
-        Color           fontColor  = GetFontColor();
+        Color4           fontColor  = GetFontColor();
         BitmapFont      font       = Style.Font;
 
         // Make copies of x,y,width and height for local modification

@@ -27,6 +27,7 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maps.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Utils.Exceptions;

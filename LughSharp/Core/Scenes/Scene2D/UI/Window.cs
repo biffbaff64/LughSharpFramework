@@ -28,6 +28,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
@@ -117,7 +118,7 @@ public class Window : Table, IStyleable< WindowStyle >
         Clip      = true;
 
         style.TitleFont      ??= new BitmapFont();
-        style.TitleFontColor ??= Color.White;
+        style.TitleFontColor ??= Color4.White;
         
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );

@@ -28,14 +28,13 @@ using System.Text;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Scenes.Scene2D.Styles;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
 
@@ -58,7 +57,7 @@ public class Label : Widget, IStyleable< LabelStyle >
 
     // ========================================================================
 
-    private static readonly Color       _tempColor      = new();
+    private static readonly Color4       _tempColor      = new();
     private static readonly GlyphLayout _prefSizeLayout = new();
     private readonly        Vector2     _prefSize       = new();
 
@@ -86,7 +85,7 @@ public class Label : Widget, IStyleable< LabelStyle >
     /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont with
     /// the specified name from the skin and the specified color.
     /// </summary>
-    public Label( string text, Skin skin, string fontName, Color color )
+    public Label( string text, Skin skin, string fontName, Color4 color )
         : this( text, new LabelStyle( skin.GetFont( fontName ), color ) )
     {
     }
@@ -288,7 +287,7 @@ public class Label : Widget, IStyleable< LabelStyle >
                       - Style.Background.RightWidth;
             }
 
-            _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color.White, width, Align.Left, true );
+            _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color4.White, width, Align.Left, true );
         }
         else
         {
@@ -344,7 +343,7 @@ public class Label : Widget, IStyleable< LabelStyle >
         {
             // If the text can span multiple lines, determine the text's actual
             // size so it can be aligned within the label.
-            layout.SetText( font, Text.ToString(), 0, Text.Length, Color.White, width, LineAlign, wrap, _ellipsis );
+            layout.SetText( font, Text.ToString(), 0, Text.Length, Color4.White, width, LineAlign, wrap, _ellipsis );
 
             textWidth  = layout.Width;
             textHeight = layout.Height;
@@ -389,7 +388,7 @@ public class Label : Widget, IStyleable< LabelStyle >
             y += textHeight;
         }
 
-        layout.SetText( font, Text.ToString(), 0, Text.Length, Color.White, textWidth, LineAlign, wrap, _ellipsis );
+        layout.SetText( font, Text.ToString(), 0, Text.Length, Color4.White, textWidth, LineAlign, wrap, _ellipsis );
         FontCache.SetText( layout, x, y );
 
         if ( _fontScaleChanged )
@@ -402,7 +401,7 @@ public class Label : Widget, IStyleable< LabelStyle >
     {
         Validate();
 
-        Color color = _tempColor.Set( ActorColor );
+        Color4 color = _tempColor.Set( ActorColor );
         color.A *= parentAlpha;
 
         if ( Style.Background != null )

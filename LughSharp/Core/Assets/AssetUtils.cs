@@ -22,13 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.Images;
 
 namespace LughSharp.Core.Assets;
 
@@ -36,17 +35,17 @@ namespace LughSharp.Core.Assets;
 /// Helper class for loading assets.
 /// </summary>
 [PublicAPI]
-public class AssetHelper
+public class AssetUtils
 {
     private AssetManager _assetManager;
 
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Creates a new AssetHelper object, using the specified <see cref="AssetManager"/> 
     /// </summary>
-    /// <param name="assetManager"></param>
-    public AssetHelper( AssetManager? assetManager )
+    /// <param name="assetManager"> The AssetManager to use. </param>
+    public AssetUtils( AssetManager? assetManager )
     {
         _assetManager = assetManager ?? throw new ArgumentNullException( nameof( assetManager ) );
     }
@@ -72,7 +71,7 @@ public class AssetHelper
     }
 
     /// <summary>
-    /// Unload the specified object
+    /// Unload the specified asset
     /// </summary>
     /// <param name="asset"> the filename of the object to unload. </param>
     public void UnloadAsset< T >( string asset ) where T : class

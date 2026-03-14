@@ -22,8 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
+using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Utils;
@@ -130,7 +135,7 @@ public class MipMapTextureData : ITextureData
         {
         }
 
-        public void ClearWithColor( Color color )
+        public void ClearWithColor( Color4 color )
         {
         }
 
@@ -139,7 +144,7 @@ public class MipMapTextureData : ITextureData
             return 0;
         }
 
-        public void SetPixel( int x, int y, Color color )
+        public void SetPixel( int x, int y, Color4 color )
         {
         }
 

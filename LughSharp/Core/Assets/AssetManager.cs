@@ -78,10 +78,8 @@ public class AssetManager : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Returns the <see cref="IFileHandleResolver"/> which this
-    /// AssetManager was loaded with.
+    /// Returns the <see cref="IFileHandleResolver"/> which this AssetManager was loaded with.
     /// </summary>
-    /// <returns>the file handle resolver which this AssetManager uses.</returns>
     public IFileHandleResolver FileHandleResolver { get; set; }
 
     // ========================================================================
@@ -163,7 +161,6 @@ public class AssetManager : IDisposable
             SetLoader( typeof( PolygonRegion ),     new PolygonRegionLoader( resolver ) );
             SetLoader( typeof( ShaderProgram ),     new ShaderProgramLoader( resolver ) );
             SetLoader( typeof( Cubemap ),           new CubemapLoader( resolver ) );
-            //@formatter:on
 
             //TODO:
             // 3D Particle effect loader here...
@@ -171,6 +168,7 @@ public class AssetManager : IDisposable
             // .g3db loader here...
             // .obj loader here...
             // I18NBundle loader here...
+            //@formatter:on
         }
 
         _executor          = new AsyncExecutor( 1, "AssetManager" );
@@ -701,10 +699,10 @@ public class AssetManager : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Loads the specified assets into the AssetManager.
     /// </summary>
-    /// <param name="files"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <param name="files"> A List{} holding the filenames of assets to load. </param>
+    /// <typeparam name="T"> The Type of the assets to load. </typeparam>
     public void Load< T >( List< string > files )
     {
         foreach ( string asset in files )

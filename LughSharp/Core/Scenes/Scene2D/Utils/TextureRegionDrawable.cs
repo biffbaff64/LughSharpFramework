@@ -28,11 +28,11 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Logging;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace LughSharp.Core.Scenes.Scene2D.Utils;
 
@@ -124,7 +124,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new drawable that renders the same as this drawable
     /// but tinted with the specified color.
     /// </summary>
-    public virtual ISceneDrawable Tint( Color tint )
+    public virtual ISceneDrawable Tint( Color4 tint )
     {
         if ( Region == null )
         {

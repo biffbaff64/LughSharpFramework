@@ -6,7 +6,9 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Main;
@@ -21,8 +23,6 @@ using LughSharp.Core.Scenes.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
-
-using Color = LughSharp.Core.Graphics.Color;
 
 namespace Template.Source;
 
@@ -113,7 +113,7 @@ public class MainGame : Game
     public override void Render()
     {
         // Clear and set viewport
-        ScreenUtils.Clear( Color.Blue, true );
+        ScreenUtils.Clear( Color4.Blue, true );
 
         // --------------------------------------
 
@@ -293,7 +293,7 @@ public class MainGame : Game
             var windowStyle = new WindowStyle
             {
                 TitleFont      = _font,
-                TitleFontColor = Color.White,
+                TitleFontColor = Color4.White,
                 Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
             };
             var windowActor = new Window( "Window Title", windowStyle )
@@ -465,7 +465,7 @@ public class MainGame : Game
     private void CreateFont()
     {
         _font = new BitmapFont();
-        _font.SetColor( Color.White );
+        _font.SetColor( Color4.White );
         _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
         _font.FontData.MarkupEnabled = true;
     }
@@ -487,12 +487,12 @@ public class MainGame : Game
         _sprite = new Sprite( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
         _sprite.SetBounds();
         _sprite.SetOriginCenter();
-        _sprite.SetColor( Color.White );
+        _sprite.SetColor( Color4.White );
 
         _sprite2 = new Sprite( new TextureRegion( new Texture( Assets.PauseExitButton ) ) );
         _sprite2.SetBounds();
         _sprite2.SetOriginCenter();
-        _sprite2.SetColor( Color.White );
+        _sprite2.SetColor( Color4.White );
     }
 
     private void CreateMap()

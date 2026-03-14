@@ -22,8 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
@@ -51,7 +56,7 @@ namespace LughSharp.Core.Graphics.G2D;
 public class NinePatch
 {
     public float[]  Vertices     { get; set; } = new float[ 9 * 4 * 5 ];
-    public Color    Color        { get; set; } = new( Color.White );
+    public Color4    Color        { get; set; } = new( ( Color4 )Color4.White );
     public Texture? Texture      { get; set; }
     public int      Idx          { get; set; }
     public int      BottomLeft   { get; set; }
@@ -112,7 +117,7 @@ public class NinePatch
 
     private const float Tolerance = 0.1f;
 
-    private static readonly Color _tmpDrawColor = new();
+    private static readonly Color4 _tmpDrawColor = new();
 
     private float _padBottom = -1;
     private float _padLeft   = -1;
@@ -240,7 +245,7 @@ public class NinePatch
     /// <summary>
     /// Construct a degenerate "nine" patch with only a center component.
     /// </summary>
-    public NinePatch( Texture texture, Color color )
+    public NinePatch( Texture texture, Color4 color )
         : this( texture )
     {
         Color = color;
@@ -255,7 +260,7 @@ public class NinePatch
     /// <summary>
     /// Construct a degenerate "nine" patch with only a center component.
     /// </summary>
-    public NinePatch( TextureRegion region, Color color )
+    public NinePatch( TextureRegion region, Color4 color )
         : this( region )
     {
         Color = color;
@@ -345,7 +350,7 @@ public class NinePatch
     /// </summary>
     /// <param name="ninePatch"></param>
     /// <param name="color"></param>
-    public NinePatch( NinePatch ninePatch, Color color )
+    public NinePatch( NinePatch ninePatch, Color4 color )
     {
         Texture = ninePatch.Texture;
 

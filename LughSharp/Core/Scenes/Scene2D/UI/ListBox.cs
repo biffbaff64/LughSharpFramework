@@ -22,8 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
@@ -35,7 +40,6 @@ using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
-using Color = LughSharp.Core.Graphics.Color;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
 namespace LughSharp.Core.Scenes.Scene2D.UI;
@@ -210,8 +214,8 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
 
         BitmapFont      font                = Style.Font;
         ISceneDrawable? selectedDrawable    = Style.Selection;
-        Color           fontColorSelected   = Style.FontColorSelected;
-        Color           fontColorUnselected = Style.FontColorUnselected;
+        Color4           fontColorSelected   = Style.FontColorSelected;
+        Color4           fontColorUnselected = Style.FontColorUnselected;
 
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 

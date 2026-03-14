@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Utils.Exceptions;
 
 using Blendmode = LughSharp.Core.Maps.Tiled.ITiledMapTile.Blendmode;

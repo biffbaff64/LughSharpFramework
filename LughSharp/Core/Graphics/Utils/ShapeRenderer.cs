@@ -22,8 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Main;
@@ -50,7 +53,7 @@ public class ShapeRenderer : IDisposable
 
     // ========================================================================
 
-    private readonly Color   _color                = new( 1, 1, 1, 1 );
+    private readonly Color4   _color                = new( 1, 1, 1, 1 );
     private readonly Matrix4 _combinedMatrix       = new();
     private readonly float   _defaultRectLineWidth = 0.75f;
     private readonly Vector2 _tmp                  = new();
@@ -71,7 +74,7 @@ public class ShapeRenderer : IDisposable
         _matrixDirty = true;
     }
 
-    public Color Color
+    public Color4 Color
     {
         get => _color;
         set => _color.Set( value );
@@ -261,12 +264,12 @@ public class ShapeRenderer : IDisposable
         Line( v0.X, v0.Y, 0.0f, v1.X, v1.Y, 0.0f, _color, _color );
     }
 
-    public void Line( float x, float y, float x2, float y2, Color c1, Color c2 )
+    public void Line( float x, float y, float x2, float y2, Color4 c1, Color4 c2 )
     {
         Line( x, y, 0.0f, x2, y2, 0.0f, c1, c2 );
     }
 
-    public void Line( float x, float y, float z, float x2, float y2, float z2, Color c1, Color c2 )
+    public void Line( float x, float y, float z, float x2, float y2, float z2, Color4 c1, Color4 c2 )
     {
         if ( ShapeType == ShapeRenderType.Filled )
         {
@@ -363,8 +366,8 @@ public class ShapeRenderer : IDisposable
         }
     }
 
-    public void Triangle( float x1, float y1, float x2, float y2, float x3, float y3, Color col1, Color col2,
-                          Color col3 )
+    public void Triangle( float x1, float y1, float x2, float y2, float x3, float y3, Color4 col1, Color4 col2,
+                          Color4 col3 )
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 6 );
 
@@ -432,7 +435,7 @@ public class ShapeRenderer : IDisposable
         Renderer.Vertex( x, y, 0 );
     }
 
-    public void Rect( float x, float y, float width, float height, Color col1, Color col2, Color col3, Color col4 )
+    public void Rect( float x, float y, float width, float height, Color4 col1, Color4 col2, Color4 col3, Color4 col4 )
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
@@ -477,7 +480,7 @@ public class ShapeRenderer : IDisposable
 
     public void Rect( float x, float y, float originX, float originY,
                       float width, float height, float scaleX, float scaleY, float degrees,
-                      Color col1, Color col2, Color col3, Color col4 )
+                      Color4 col1, Color4 col2, Color4 col3, Color4 col4 )
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
@@ -587,7 +590,7 @@ public class ShapeRenderer : IDisposable
         Renderer.Vertex( x1 - tx, y1 - ty, 0 );
     }
 
-    public void RectLine( float x1, float y1, float x2, float y2, float width, Color c1, Color c2 )
+    public void RectLine( float x1, float y1, float x2, float y2, float width, Color4 c1, Color4 c2 )
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 

@@ -29,6 +29,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
@@ -44,7 +45,6 @@ using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
 
-using Color = LughSharp.Core.Graphics.Color;
 using Platform = LughSharp.Core.Main.Platform;
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
@@ -88,7 +88,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// The default color that can be used by actors to draw debug lines.
     /// </summary>
-    public Color DebugColor { get; } = new( 1, 0, 0, 0.85f );
+    public Color4 DebugColor { get; } = new( 1, 0, 0, 0.85f );
 
     /// <summary>
     /// If true, debug lines are shown for actors even when

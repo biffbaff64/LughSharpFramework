@@ -62,8 +62,6 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
     /// <exception cref="RuntimeException">Thrown if the texture atlas data is null.</exception>
     public override TextureAtlas Load( AssetManager assetManager, FileInfo? file, AssetLoaderParameters? parameter )
     {
-        Logger.Checkpoint();
-
         if ( _data == null )
         {
             throw new RuntimeException( "TextureAtlasData cannot be null!" );

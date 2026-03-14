@@ -23,11 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL;
 
@@ -63,7 +65,7 @@ public class Pixmap : IDisposable
 {
     public bool        IsDisposed  { get; set; }                // 
     public int         Scale       { get; set; } = 1;           // 
-    public Color       Color       { get; set; } = Color.Clear; // 
+    public Color4       Color       { get; set; } = Color4.Clear; // 
     public Gdx2DPixmap Gdx2DPixmap { get; set; }                // 
     public int         Stride      { get; set; }
 
@@ -87,7 +89,7 @@ public class Pixmap : IDisposable
         {
             Gdx2DPixmap = new Gdx2DPixmap( width, height, format );
 
-            SetColor( Color.White );
+            SetColor( Color4.White );
             FillWithCurrentColor();
         }
         catch ( Exception e )
@@ -111,7 +113,7 @@ public class Pixmap : IDisposable
         {
             Gdx2DPixmap = new Gdx2DPixmap( encodedData, offset, length, 0 );
 
-            SetColor( Color.White );
+            SetColor( Color4.White );
         }
         catch ( IOException e )
         {
@@ -141,7 +143,7 @@ public class Pixmap : IDisposable
             // and uncompressed by Gdx2DPixmap.
             Gdx2DPixmap = new Gdx2DPixmap( data, 0, data.Length, 0 );
 
-            SetColor( Color.White );
+            SetColor( Color4.White );
         }
         catch ( Exception e )
         {
@@ -278,7 +280,7 @@ public class Pixmap : IDisposable
     /// Sets the color for drawing operations.
     /// </summary>
     /// <param name="color"> The color, encoded as RGBA8888. </param>
-    public void SetColor( Color color )
+    public void SetColor( Color4 color )
     {
         Color = color;
     }
@@ -292,7 +294,7 @@ public class Pixmap : IDisposable
     /// <param name="a"> The alpha component.  </param>
     public void SetColor( float r, float g, float b, float a )
     {
-        Color = new Color( r, g, b, a );
+        Color = new Color4( r, g, b, a );
     }
 
     /// <summary>
@@ -303,7 +305,7 @@ public class Pixmap : IDisposable
     /// </param>
     public void SetAlpha( float alpha )
     {
-        Color = new Color( Color.R, Color.G, Color.B, alpha );
+        Color = new Color4( Color.R, Color.G, Color.B, alpha );
     }
 
     /// <summary>
@@ -317,7 +319,7 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Fills the complete bitmap with the currently set color.
     /// </summary>
-    public void FillWithColor( Color color )
+    public void FillWithColor( Color4 color )
     {
         Gdx2DPixmap.ClearWithColor( color );
     }
@@ -519,7 +521,7 @@ public class Pixmap : IDisposable
     /// <param name="x"> The x-coordinate </param>
     /// <param name="y"> The y-coordinate </param>
     /// <param name="color"> The color in RGBA8888 format. </param>
-    public void SetPixel( int x, int y, Color color )
+    public void SetPixel( int x, int y, Color4 color )
     {
         Gdx2DPixmap.SetPixel( x, y, ( int )color.PackedColorRgba() );
     }
@@ -602,12 +604,11 @@ public class Pixmap : IDisposable
 
         byte[] a = Gdx2DPixmap.PixmapBuffer.BackingArray();
 
-        Guard.Against.Null( a );
-
         Logger.Debug( $"Buffer Length : {a.Length}" );
 
         IEnumerable< string > strings      = PNGDecoder.StandardPNGSignature.Select( b => b.ToString( "X2" ) );
         string                finalStrings = string.Join( ", ", strings );
+        
         Logger.Debug( $"({finalStrings})" );
 
         for ( var i = 0; i < ( 2 * 8 ); i += 8 )
@@ -652,9 +653,9 @@ public class Pixmap : IDisposable
     {
         if ( disposing )
         {
-            //TODO:
             Gdx2DPixmap.Dispose();
 
+            //TODO:
             // Do not set Gdx2DPixmap to null because Texture may reference
             // PixmapTextureData.Width/Height which references Pixmap.Width/Height
             // which then references Gdx2DPixmap.Width.

@@ -37,6 +37,9 @@ namespace LughSharp.Core.Assets.Loaders;
 [PublicAPI]
 public class SkinLoader : AsynchronousAssetLoader
 {
+    /// <summary>
+    /// Creates a new SkinLoader using the specified <see cref="IFileHandleResolver"/>
+    /// </summary>
     public SkinLoader( IFileHandleResolver resolver ) : base( resolver )
     {
     }

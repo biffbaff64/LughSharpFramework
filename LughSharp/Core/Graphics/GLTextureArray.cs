@@ -22,11 +22,16 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Text;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Colors;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
@@ -43,48 +48,6 @@ public class GLTextureArray : GLTexture, IManaged
     private static readonly Dictionary< IApplication, List< GLTextureArray > > _managedTextureArrays = new();
 
     private ITextureArrayData _data;
-
-    // ========================================================================
-
-    /// <summary>
-    /// Returns a string representation of the managed status of all
-    /// textures in the managed textures array.
-    /// </summary>
-    public string ManagedStatus
-    {
-        get
-        {
-            var builder = new StringBuilder( "Managed TextureArrays/app: { " );
-
-            foreach ( IApplication app in _managedTextureArrays.Keys )
-            {
-                builder.Append( _managedTextureArrays[ app ].Count );
-                builder.Append( ' ' );
-            }
-
-            builder.Append( '}' );
-
-            return builder.ToString();
-        }
-    }
-
-    /// <summary>
-    /// Gets the number of managed TextureArrays currently loaded.
-    /// </summary>
-    public int NumManagedTextureArrays => _managedTextureArrays[ Engine.Api.App ].Count;
-
-    // ========================================================================
-
-    public          int Width  => _data.Width;
-    public          int Height => _data.Height;
-    public override int Depth  => _data.Depth;
-
-    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
-    public bool IsManaged
-    {
-        get => _data.Managed;
-        set { }
-    }
 
     // ========================================================================
 
@@ -139,6 +102,42 @@ public class GLTextureArray : GLTexture, IManaged
             AddManagedTexture( Engine.Api.App, this );
         }
     }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Returns a string representation of the managed status of all
+    /// textures in the managed textures array.
+    /// </summary>
+    public string ManagedStatus
+    {
+        get
+        {
+            var builder = new StringBuilder( "Managed TextureArrays/app: { " );
+
+            foreach ( IApplication app in _managedTextureArrays.Keys )
+            {
+                builder.Append( _managedTextureArrays[ app ].Count );
+                builder.Append( ' ' );
+            }
+
+            builder.Append( '}' );
+
+            return builder.ToString();
+        }
+    }
+
+    /// <summary>
+    /// Gets the number of managed TextureArrays currently loaded.
+    /// </summary>
+    public int NumManagedTextureArrays => _managedTextureArrays[ Engine.Api.App ].Count;
+
+    // ========================================================================
+
+    public          int  Width     => _data.Width;
+    public          int  Height    => _data.Height;
+    public override int  Depth     => _data.Depth;
+    public          bool IsManaged => _data.Managed;
 
     // ========================================================================
 
@@ -250,25 +249,10 @@ public class GLTextureArray : GLTexture, IManaged
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
 
-    public void ClearWithColor( Color color )
-    {
-        throw new NotImplementedException();
-    }
-
-    public int GetPixel( int x, int y )
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SetPixel( int x, int y, Color color )
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SetPixel( int x, int y, int color )
-    {
-        throw new NotImplementedException();
-    }
+    public void ClearWithColor( Color4 color ) => throw new NotImplementedException();
+    public int GetPixel( int x, int y ) => throw new NotImplementedException();
+    public void SetPixel( int x, int y, Color4 color ) => throw new NotImplementedException();
+    public void SetPixel( int x, int y, int color ) => throw new NotImplementedException();
 }
 
 // ============================================================================
