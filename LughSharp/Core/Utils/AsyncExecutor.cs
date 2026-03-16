@@ -61,57 +61,54 @@ public class AsyncExecutor : IDisposable
             throw new RuntimeException( "Cannot run tasks on an executor that has been shut down (disposed)" );
         }
 
-        // 1. Wait for a concurrency slot. Use WaitAsync() to avoid blocking the calling thread.
-        // We use ConfigureAwait(false) for library code to avoid context switching issues.
+        // Wait for a concurrency slot. Use WaitAsync() to avoid blocking the calling thread.
+        // Use ConfigureAwait(false) to avoid context switching issues.
+        //@formatter:off
         Task submissionTask = _semaphore.WaitAsync().ContinueWith( waitTask =>
-                                                                   {
-                                                                       // If the wait was successful, execute the task.
-                                                                       if ( waitTask.IsCompletedSuccessfully )
-                                                                       {
-                                                                           // 2. Task.Run executes the work on the standard .NET ThreadPool.
-                                                                           return Task.Run( () =>
-                                                                           {
-                                                                               try
-                                                                               {
-                                                                                   task.Call();
-                                                                               }
-                                                                               catch ( Exception e )
-                                                                               {
-                                                                                   // Wrap and rethrow as RuntimeException if needed, or just let it bubble up
-                                                                                   throw new
-                                                                                       RuntimeException( "Asynchronous task failed.",
-                                                                                                e );
-                                                                               }
-                                                                               finally
-                                                                               {
-                                                                                   // 3. Release the semaphore slot when the work is finished (SUCCESS or FAILURE)
-                                                                                   _semaphore.Release();
-                                                                               }
-                                                                           } );
-                                                                       }
+        {
+           // If the wait was successful, execute the task.
+           if ( waitTask.IsCompletedSuccessfully )
+           {
+               // Task.Run executes the work on the standard .NET ThreadPool.
+               return Task.Run( () =>
+               {
+                   try
+                   {
+                       task.Call();
+                   }
+                   catch ( Exception e )
+                   {
+                       // Wrap and rethrow as RuntimeException if needed, or just let it bubble up
+                       throw new RuntimeException( "Asynchronous task failed.", e );
+                   }
+                   finally
+                   {
+                       // Release the semaphore slot when the work is finished (SUCCESS or FAILURE)
+                       _semaphore.Release();
+                   }
+               } );
+           }
 
-                                                                       return Task.CompletedTask;
-                                                                   },
-                                                                   TaskContinuationOptions.ExecuteSynchronously )
-                                        .Unwrap(); // Unwrap the Task<Task> to return just the inner Task
-
+           return Task.CompletedTask;
+        },
+        // Unwrap the Task<Task> to return just the inner Task
+        TaskContinuationOptions.ExecuteSynchronously ).Unwrap();
+        //@formatter:on
+        
         return submissionTask;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing,
+    /// or resetting unmanaged resources.
+    /// </summary>
     public void Dispose()
     {
-        if ( _isDisposed )
-        {
-            return;
-        }
-
         Dispose( true );
         GC.SuppressFinalize( this );
     }
 
-    /// <inheritdoc cref="Dispose"/>
-    protected void Dispose( bool disposing )
+    private void Dispose( bool disposing )
     {
         if ( !_isDisposed )
         {

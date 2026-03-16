@@ -31,57 +31,80 @@ using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Collections;
 
+/// <summary>
+/// A stack that can be reset to its initial state.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 [PublicAPI]
 public class ResettableStack< T > : IDisposable
 {
-    private       T[]? _buffer;
-    private       int  _count;
-    private const int  DefaultCapacity = 16;
+    public int Count { get; private set; }
 
-    public int Count => _count;
+    // ========================================================================
 
+    private const int DefaultCapacity = 16;
+
+    private T[]? _buffer;
+
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a new ResettableStack object with the specified initial capacity.
+    /// </summary>
+    /// <param name="initialCapacity"> The capacity to set. Defaults to 16. </param>
     public ResettableStack( int initialCapacity = DefaultCapacity )
     {
         // Rent the initial buffer
         _buffer = ArrayPool< T >.Shared.Rent( initialCapacity );
-        _count  = 0;
+        Count   = 0;
     }
 
+    /// <summary>
+    /// Pushes an item onto the stack.
+    /// </summary>
+    /// <param name="item"></param>
     public void Push( T item )
     {
         Guard.Against.Null( _buffer );
-        
-        if ( _count == _buffer.Length )
+
+        if ( Count == _buffer.Length )
         {
             // Grow the array
             int newSize   = _buffer.Length * 2;
             T[] newBuffer = ArrayPool< T >.Shared.Rent( newSize );
 
-            Array.Copy( _buffer, 0, newBuffer, 0, _count );
+            Array.Copy( _buffer, 0, newBuffer, 0, Count );
 
             // Return old, rent new
             ArrayPool< T >.Shared.Return( _buffer );
             _buffer = newBuffer;
         }
 
-        _buffer[ _count++ ] = item;
+        _buffer[ Count++ ] = item;
     }
 
+    /// <summary>
+    /// Pops an item off the stack.
+    /// </summary>
+    /// <returns></returns>
     public T? Pop()
     {
         Guard.Against.Null( _buffer );
 
-        if ( _count == 0 )
+        if ( Count == 0 )
         {
             return default;
         }
 
-        T item = _buffer[ --_count ];
-        _buffer[ _count ] = default!; // Clear the slot to avoid memory leaks
+        T item = _buffer[ --Count ];
+        _buffer[ Count ] = default!; // Clear the slot to avoid memory leaks
 
         return item;
     }
 
+    /// <summary>
+    /// Clears the stack.
+    /// </summary>
     public void Clear()
     {
         // Reset count without returning the buffer, allowing reuse
@@ -89,13 +112,17 @@ public class ResettableStack< T > : IDisposable
         {
             if ( _buffer != null )
             {
-                Array.Clear( _buffer, 0, _count );
+                Array.Clear( _buffer, 0, Count );
             }
         }
 
-        _count = 0;
+        Count = 0;
     }
 
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing,
+    /// or resetting unmanaged resources.
+    /// </summary>
     public void Dispose()
     {
         if ( _buffer != null )
@@ -103,7 +130,7 @@ public class ResettableStack< T > : IDisposable
             ArrayPool< T >.Shared.Return( _buffer );
             _buffer = null;
         }
-        
+
         GC.SuppressFinalize( this );
     }
 }

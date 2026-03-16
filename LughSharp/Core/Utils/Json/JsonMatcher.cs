@@ -181,11 +181,6 @@ namespace LughSharp.Core.Utils.Json;
 [PublicAPI]
 public class JsonMatcher : JsonSkimmer
 {
-    private interface IProcessor
-    {
-        void Process( JsonValue value );
-    }
-
     private const int None    = 0;
     private const int Match   = 0b00000001;
     private const int Process = 0b00000010;
@@ -193,14 +188,21 @@ public class JsonMatcher : JsonSkimmer
     private const int Array   = 0b00001000;
     private const int Keys    = 0b00010000;
     private const int Single  = 0b00100000;
-    
+
     private JsonMatcher.IProcessor? _processor;
-    private Regex[]               _patterns;
-    private Regex[]               _original;
-    private Regex[]               _all;
+    private Regex[]?                _patterns;
+    private Regex[]?                _original;
+    private Regex[]?                _all;
 
     private int _total;
     private int _endCaptures;
+
+    // ========================================================================
+    
+    private interface IProcessor
+    {
+        void Process( JsonValue value );
+    }
 }
 
 // ============================================================================

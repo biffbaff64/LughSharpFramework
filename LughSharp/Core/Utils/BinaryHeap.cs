@@ -34,18 +34,6 @@ using LughSharp.Core.Utils.Exceptions;
 namespace LughSharp.Core.Utils;
 
 /// <summary>
-/// Node record holding a value and its index.
-/// To change the contents of <see cref="Value" /> use <see cref="BinaryHeap{T}.Add(T, float)" />
-/// if the node is NOT in the heap, otherwise use <see cref="BinaryHeap{T}.SetValue(T, float)" />.
-/// </summary>
-[PublicAPI]
-public record BinaryHeapNode
-{
-    public float Value { get; set; }
-    public int   Index { get; set; }
-}
-
-/// <summary>
 /// A binary heap that stores nodes which each have a float value and are sorted either
 /// lowest first or highest first.
 /// <para>
@@ -55,8 +43,10 @@ public record BinaryHeapNode
 [PublicAPI]
 public class BinaryHeap< T > where T : BinaryHeapNode
 {
-    // ========================================================================
+    public int Size { get; set; }
 
+    // ========================================================================
+    
     private const int DefaultHeapCapacity = 16;
 
     // ========================================================================
@@ -85,7 +75,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// <returns>The specified node.</returns>
     public virtual T Add( T node )
     {
-        RuntimeException.ThrowIfNull( _nodes );
+        Guard.Against.Null( _nodes );
 
         // Expand if necessary.
         if ( Size == _nodes.Length )
@@ -153,7 +143,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// </summary>
     public virtual T Peek()
     {
-        RuntimeException.ThrowIfNull( _nodes );
+        Guard.Against.Null( _nodes );
 
         if ( Size == 0 )
         {
@@ -170,7 +160,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// </summary>
     public virtual T Pop()
     {
-        RuntimeException.ThrowIfNull( _nodes );
+        Guard.Against.Null( _nodes );
 
         BinaryHeapNode removed = _nodes[ 0 ];
 
@@ -196,7 +186,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// <exception cref="RuntimeException"> If the heap is null. </exception>
     public virtual T Remove( T node )
     {
-        RuntimeException.ThrowIfNull( _nodes );
+        Guard.Against.Null( _nodes );
 
         if ( --Size > 0 )
         {
@@ -257,12 +247,22 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     }
 
     /// <summary>
+    /// Returns true if the heap has one or more items.
+    /// </summary>
+    public virtual bool NotEmpty => Size > 0;
+
+    /// <summary>
+    /// Returns true if the heap is empty.
+    /// </summary>
+    public virtual bool IsEmpty => Size == 0;
+
+    /// <summary>
     /// Moves the element at position 'index' up
     /// </summary>
     /// <param name="index"></param>
     private void Up( int index )
     {
-        RuntimeException.ThrowIfNull( _nodes );
+        Guard.Against.Null( _nodes );
 
         int ix = index;
 
@@ -294,7 +294,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// <param name="index"></param>
     private void Down( int index )
     {
-        RuntimeException.ThrowIfNull( _nodes );
+        Guard.Against.Null( _nodes );
 
         BinaryHeapNode node = _nodes[ index ];
 
@@ -425,22 +425,22 @@ public class BinaryHeap< T > where T : BinaryHeapNode
 
         return buffer.ToString();
     }
-
-    // ========================================================================
-
-    #region properties
-
-    public int Size { get; set; }
-
-    /// <summary>
-    /// Returns true if the heap has one or more items.
-    /// </summary>
-    public virtual bool NotEmpty => Size > 0;
-
-    /// <summary>
-    /// Returns true if the heap is empty.
-    /// </summary>
-    public virtual bool IsEmpty => Size == 0;
-
-    #endregion properties
 }
+
+// ============================================================================
+// ============================================================================
+
+/// <summary>
+/// Node record holding a value and its index.
+/// To change the contents of <see cref="Value" /> use <see cref="BinaryHeap{T}.Add(T, float)" />
+/// if the node is NOT in the heap, otherwise use <see cref="BinaryHeap{T}.SetValue(T, float)" />.
+/// </summary>
+[PublicAPI]
+public record BinaryHeapNode
+{
+    public float Value { get; set; }
+    public int   Index { get; set; }
+}
+
+// ============================================================================
+// ============================================================================

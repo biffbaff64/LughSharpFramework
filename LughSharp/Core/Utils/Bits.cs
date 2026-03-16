@@ -29,14 +29,40 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Utils;
 
 /// <summary>
-/// A bitset, without size limitation, allows comparison via
-/// bitwise operators to other bitfields.
+/// A bitset, without size limitation, allows comparison via bitwise operators
+/// to other bitfields.
 /// </summary>
+/// <remarks>
+/// The <c>&gt;&gt;&gt; 6</c> operation, used in several places within this class, is an
+/// unsigned right shift by 6 positions, equivalent to dividing by 64 while treating the
+/// value as unsigned. and is used to divide by 64 ( 2 ^ 6 ) because each long in the
+/// _bits array holds 64 bits.
+/// <code>
+/// - Bits 0-63 - word 0
+/// - Bits 64-127 - word 1
+/// - Bits 128-191 - word 2
+/// - etc.
+/// </code>
+/// <para>
+/// For instance; In the call:-
+/// <code>EnsureCapacity(nbits &gt;&gt;&gt; 6)</code>
+/// The operation converts bit count to word count.
+/// <code>int word = index &gt;&gt;&gt; 6</code>
+/// The operation calculates which long in the array contains the bit at index.
+/// </para>
+/// <para>
+/// The complementary operation <c>index &amp; 0x3F</c> (used throughout) gets the bit
+/// position within that word (0-63).
+/// </para>
+/// <br/>
+/// </remarks>
 [PublicAPI]
 public class Bits
 {
     private long[] _bits = [ 0 ];
 
+    // ========================================================================
+    
     /// <summary>
     /// Creates a bit set whose initial size is large enough to explicitly
     /// represent bits with indices in the range 0 through nbits-1.
@@ -321,12 +347,12 @@ public class Bits
     }
 
     /// <summary>
-    /// Performs a logical <b>AND</b> of this target bit set with the argument
-    /// bit set. This bit set is modified so that each bit in it has the value
-    /// true if and only if it both initially had the value true and the
-    /// corresponding bit in the bit set argument also had the value true.
+    /// Performs a logical <b>AND</b> of this target bit set with the argument bit set.
+    /// This bit set is modified so that each bit in it has the value true if and only
+    /// if it both initially had the value true and the corresponding bit in the bit set
+    /// argument also had the value true.
     /// </summary>
-    /// <param name="other"> a bit set  </param>
+    /// <param name="other"> a Bit set </param>
     public void And( Bits other )
     {
         int commonWords = Math.Min( _bits.Length, other._bits.Length );
@@ -524,7 +550,9 @@ public class Bits
 
         return Length() == other.Length();
     }
-
-    // ========================================================================
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================
+
+

@@ -237,7 +237,7 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
         Logger.Debug( $"Height: {Height}: " );
         Logger.Debug( $"Rotated: {Rotated}" );
         Logger.Debug( $"IsPadded: {IsPadded}: " );
-        Logger.EndBlock();
+        Logger.Block();
     }
 
     /// <inheritdoc />

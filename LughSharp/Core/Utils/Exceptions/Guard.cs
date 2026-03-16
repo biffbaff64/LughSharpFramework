@@ -32,79 +32,13 @@ namespace LughSharp.Core.Utils.Exceptions;
 [PublicAPI]
 public class Guard
 {
-    #region Collection checks
-
-    // ========================================================================
-
-    /// <summary>
-    /// Throws ArgumentException if array is null or empty.
-    /// Provides a clear error message with the argumentName.
-    /// </summary>
-    /// <param name="argument"></param>
-    /// <param name="argumentName"></param>
-    public static void ThrowIfNullOrEmpty( string[]? argument,
-                                           [CallerArgumentExpression( nameof( argument ) )]
-                                           string argumentName = "" )
-    {
-        if ( ( argument == null ) || ( argument.Length == 0 ) )
-        {
-            throw new ArgumentNullException( argumentName );
-        }
-    }
-
-    /// <summary>
-    /// Throws ArgumentException if collection is null or empty.
-    /// Provides a clear error message with the argumentName.
-    /// </summary>
-    /// <param name="collection"></param>
-    /// <param name="argumentName"></param>
-    public static void ThrowIfNullOrEmpty( ICollection collection,
-                                           [CallerArgumentExpression( nameof( collection ) )]
-                                           string argumentName = "" )
-    {
-        if ( ( collection == null ) || ( collection.Count == 0 ) )
-        {
-            throw new ArgumentNullException( argumentName );
-        }
-    }
-
-    /// <summary>
-    /// Throws ArgumentNullException if argumentValue is null.
-    /// Throws ArgumentException if argumentValue is empty.
-    /// </summary>
-    public static void ThrowIfNullOrEmpty< T >( IEnumerable< T >? enumerable,
-                                                [CallerArgumentExpression( nameof( enumerable ) )]
-                                                string argumentName = "" )
-    {
-        if ( enumerable == null )
-        {
-            throw new ArgumentNullException( argumentName );
-        }
-
-        T[] enumerable1 = enumerable as T[] ?? enumerable.ToArray();
-
-        if ( enumerable1.Length == 0 )
-        {
-            throw new ArgumentException( $"The Enumerable {enumerable1} should not be empty." );
-        }
-    }
-
-    #endregion
-
-    // ========================================================================
-
-    #region File Validation checks
-
-    // ========================================================================
-
     /// <summary>
     /// Throws an ArgumentNullException if the specified FileInfo object is null.
     /// Throws an ArgumentException if the file specified by the provided FileInfo object
     /// does not exist.
     /// </summary>
     public static void ThrowIfFileNullOrNotExist(
-        [System.Diagnostics.CodeAnalysis.NotNull]
-        FileSystemInfo? argumentValue,
+        [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
         [CallerArgumentExpression( nameof( argumentValue ) )]
         string argumentName = "" )
     {
@@ -153,8 +87,6 @@ public class Guard
         }
     }
 
-    #endregion
-
     // ========================================================================
     // ========================================================================
 
@@ -165,7 +97,6 @@ public class Guard
         /// Throws ArgumentNullException if obj is null.
         /// Provides a clear error message with the argumentName.
         /// </summary>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void Null( [System.Diagnostics.CodeAnalysis.NotNull] object? obj,
                                  [CallerArgumentExpression( nameof( obj ) )]
                                  string argumentName = "" )
@@ -178,7 +109,6 @@ public class Guard
         /// Throws ArgumentException if argumentValue is string.Empty.
         /// Provides a clear error message with the argumentName.
         /// </summary>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void NullOrEmpty( [System.Diagnostics.CodeAnalysis.NotNull] string? argumentValue,
                                         [CallerArgumentExpression( nameof( argumentValue ) )]
                                         string argumentName = "" )
@@ -197,7 +127,6 @@ public class Guard
         /// </summary>
         /// <param name="collection"></param>
         /// <param name="argumentName"></param>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void NullOrEmpty( ICollection collection,
                                         [CallerArgumentExpression( nameof( collection ) )]
                                         string argumentName = "" )
@@ -214,7 +143,6 @@ public class Guard
         /// </summary>
         /// <param name="value"></param>
         /// <param name="argumentName"></param>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void Negative( int value,
                                      [CallerArgumentExpression( nameof( value ) )]
                                      string argumentName = "" )
@@ -233,7 +161,6 @@ public class Guard
         /// <param name="minimum"> The minimum allowed value. </param>
         /// <param name="maximum"> The maximim allowed value. </param>
         /// <param name="argumentName"> The name of the passed argument ( optional ).</param>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void OutOfRange( int value, int minimum, int maximum,
                                        [CallerArgumentExpression( nameof( value ) )]
                                        string argumentName = "" )
@@ -248,7 +175,6 @@ public class Guard
         /// Throws ArgumentOutOfRangeException if argumentValue is greater than or equal to maximum.
         /// Provides a clear error message with the argumentName.
         /// </summary>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void GreaterThan( int argumentValue, int maximum,
                                         [CallerArgumentExpression( nameof( argumentValue ) )]
                                         string argumentName = "" )
@@ -278,7 +204,6 @@ public class Guard
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="value"/> is greater than, or equal to, the maximum value.
         /// </exception>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void LessThan< T >( T value, T limit, string argumentName = "" )
             where T : IComparable< T >
         {
@@ -301,7 +226,6 @@ public class Guard
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="value"/> is greater than the maximum value.
         /// </exception>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void LessThanOrEqualTo< T >( T value, T limit, string argumentName = "" )
             where T : IComparable< T >
         {
@@ -325,7 +249,6 @@ public class Guard
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="value"/> is less than, or equal to, the minimum value.
         /// </exception>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void GreaterThan< T >( T value, T minimum, string argumentName = "" )
             where T : IComparable< T >
         {
@@ -348,7 +271,6 @@ public class Guard
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="value"/> is less than the minimum value.
         /// </exception>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void GreaterThanOrEqualTo< T >( T value, T minimum, string argumentName = "" )
             where T : IComparable< T >
         {
@@ -373,7 +295,6 @@ public class Guard
         /// <exception cref="ArgumentException">
         /// <paramref name="value"/> is less than the minimum value or greater than the maximum value.
         /// </exception>
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static void BetweenOrEqualTo< T >( T value, T min, T max, string argumentName )
             where T : IComparable< T >
         {
@@ -391,6 +312,9 @@ public class Guard
         /// Throws ArgumentException if argumentValue is not of type T.
         /// Provides a clear error message with the argumentName and the expected type.
         /// </summary>
+        /// <param name="argumentValue"> The object to check. </param>
+        /// <param name="argumentName"> The name of the argument. </param>
+        /// <typeparam name="T"> The type to check against. </typeparam>
         public static void IsOfType< T >( object argumentValue,
                                           [CallerArgumentExpression( nameof( argumentValue ) )]
                                           string argumentName = "" )
@@ -404,8 +328,12 @@ public class Guard
         }
 
         /// <summary>
-        /// Throws ArgumentException if argumentValue is not assignable to type T.
+        /// Throws <see cref="ArgumentException"/> if argumentValue is not assignable to type T,
+        /// otherwise returns.
         /// </summary>
+        /// <param name="argumentValue"> The object to check. </param>
+        /// <param name="argumentName"> The name of the argument. </param>
+        /// <typeparam name="T"> The type to check against. </typeparam>
         public static void IsAssignableTo< T >( object argumentValue,
                                                 [CallerArgumentExpression( nameof( argumentValue ) )]
                                                 string argumentName = "" )

@@ -1043,9 +1043,9 @@ public class FreeTypeFontGenerator : IDisposable
 
             if ( ( glyph == null ) && ( Generator != null ) )
             {
-                RuntimeException.ThrowIfNull( Stroker );
-                RuntimeException.ThrowIfNull( Packer );
-                RuntimeException.ThrowIfNull( Regions );
+                Guard.Against.Null( Stroker );
+                Guard.Against.Null( Packer );
+                Guard.Against.Null( Regions );
 
                 Generator.SetPixelSizes( 0, Parameter.Size );
                 float baseline = ( ( Flipped ? -Ascent : Ascent ) + CapHeight ) / ScaleY;

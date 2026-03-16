@@ -52,7 +52,7 @@ public class ByteArray
     // ========================================================================
 
     /// <summary>
-    /// Creates an ordered array with a capacity of 16.
+    /// Creates an ordered array with a capacity set to the provided value.
     /// </summary>
     public ByteArray( int capacity )
         : this( true, capacity )
@@ -60,6 +60,7 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Creates an ordered array with a capacity set to the default value of 16.
     /// </summary>
     /// <param name="ordered">
     /// If false, methods that remove elements may change the order of other
@@ -136,26 +137,31 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Adds all elements from the specified array to this array.
     /// </summary>
-    /// <param name="array"></param>
-    public void AddAll( params byte[] array )
+    /// <param name="array">The array containing the values to add.</param>
+    public void AddAll( byte[] array )
     {
         Add( array );
     }
 
     /// <summary>
+    /// Adds all elements of the specified array to this byte array.
     /// </summary>
-    /// <param name="array"></param>
+    /// <param name="array">The byte array containing elements to add.</param>
     public void AddAll( ByteArray array )
     {
         Add( array.Items );
     }
 
     /// <summary>
+    /// Retrieves the byte at the specified index in the array.
     /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="index">The zero-based index of the byte to retrieve.</param>
+    /// <returns>The byte at the specified index.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the index is less than 0 or greater than or equal to the size of the array.
+    /// </exception>
     public byte Get( int index )
     {
         if ( index < 0 )
@@ -163,12 +169,9 @@ public class ByteArray
             throw new IndexOutOfRangeException( "index cannot be < 0." );
         }
 
-        if ( index >= Size )
-        {
-            throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
-        }
-
-        return Items[ index ];
+        return index >= Size
+            ? throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" )
+            : Items[ index ];
     }
 
     /// <summary>

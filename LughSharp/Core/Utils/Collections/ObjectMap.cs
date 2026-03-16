@@ -37,8 +37,8 @@ using LughSharp.Core.Utils.Logging;
 namespace LughSharp.Core.Utils.Collections;
 
 /// <summary>
-/// <para>An unordered map where the keys and values are objects.</para>
-/// <para>Null keys are not allowed.</para>
+/// An unordered map where the keys and values are objects.
+/// <para><b>Null keys are not allowed.</b></para>
 /// <para>No allocation is done except when growing the table size.</para>
 /// <para>
 /// This class performs fast contains and remove (typically O(1), worst case O(n) but
@@ -55,7 +55,7 @@ namespace LughSharp.Core.Utils.Collections;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
+public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where TK : notnull
 {
     /// <summary>
     /// Returns the number of key-value pairs in the map.
@@ -70,7 +70,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <summary>
     /// Returns the Keys table for this ObjectMap.
     /// </summary>
-    public TK?[] Keys => KeyTable;
+    public TK[] Keys => KeyTable;
 
     // ========================================================================
 
@@ -100,13 +100,13 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
     // ========================================================================
 
-    protected const int   DefaultCapacity    = 51;
+    protected const int   DefaultCapacity   = 51;
     protected const float DefaultLoadFactor = 0.8f;
 
     protected readonly float LoadFactor;
 
     protected int   Threshold;
-    protected TK?[] KeyTable;
+    protected TK[]  KeyTable;
     protected TV?[] ValueTable;
 
     protected EntriesIterator? Entries1;
@@ -236,11 +236,11 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     {
         ArgumentNullException.ThrowIfNull( key );
 
-        TK?[] keyTable = KeyTable;
+        TK[] keyTable = KeyTable;
 
         for ( int i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
         {
-            TK? other = keyTable[ i ];
+            TK other = keyTable[ i ];
 
             if ( other == null )
             {
@@ -369,12 +369,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         for ( int i = 0, n = KeyTable.Length; i < n; i++ )
         {
-            TK? key = KeyTable[ i ];
-
-            if ( key != null )
-            {
-                Put( key, map.ValueTable[ i ] );
-            }
+            Put( KeyTable[ i ], map.ValueTable[ i ] );
         }
     }
 
@@ -632,7 +627,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// Note this traverses the entire map and compares every value, which may be
     /// an expensive operation.
     /// </summary>
-    public TK? FindKey( object? value )
+    public TK FindKey( object? value )
     {
         if ( value == null )
         {
@@ -733,7 +728,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         for ( int i = 0, n = KeyTable.Length; i < n; i++ )
         {
-            TK? key = KeyTable[ i ];
+            TK key = KeyTable[ i ];
 
             if ( key != null )
             {
@@ -773,7 +768,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         Shift     = int.LeadingZeroCount( Mask );
 
         // Store the old tables
-        TK?[] oldKeyTable   = KeyTable;
+        TK[] oldKeyTable   = KeyTable;
         TV?[] oldValueTable = ValueTable;
 
         // Initialize the new tables with the new size
@@ -785,7 +780,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         {
             for ( var i = 0; i < oldCapacity; i++ )
             {
-                TK? key = oldKeyTable[ i ];
+                TK key = oldKeyTable[ i ];
 
                 if ( key != null )
                 {
@@ -1035,7 +1030,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         while ( i-- > 0 )
         {
-            TK? key = KeyTable[ i ];
+            TK key = KeyTable[ i ];
 
             if ( key == null )
             {
@@ -1054,7 +1049,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         while ( i-- > 0 )
         {
-            TK? key = KeyTable[ i ];
+            TK key = KeyTable[ i ];
 
             if ( key == null )
             {
@@ -1168,7 +1163,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     [PublicAPI]
     public class Entry
     {
-        public TK? Key   { get; set; }
+        public TK Key   { get; set; }
         public TV? Value { get; set; }
     }
 
@@ -1280,7 +1275,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
                 next = ( next + 1 ) & mask;
             }
 
-            Map.KeyTable[ i ]   = default( TK );
+            Map.KeyTable[ i ]   = default( TK )!;
             Map.ValueTable[ i ] = default( TV );
 
             Map.Size--;
@@ -1463,7 +1458,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
                 throw new RuntimeException( "#iterator() cannot be used nested." );
             }
 
-            TK key = Map.KeyTable[ NextIndex ]!;
+            TK key = Map.KeyTable[ NextIndex ];
 
             CurrentIndex = NextIndex;
 

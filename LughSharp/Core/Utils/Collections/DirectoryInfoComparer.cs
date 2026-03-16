@@ -34,10 +34,10 @@ namespace LughSharp.Core.Utils.Collections;
 public class DirectoryInfoComparer : IEqualityComparer< DirectoryInfo >
 {
     /// <summary>
-    /// Determines whether the specified objects are equal.
+    /// Determines whether the specified <see cref="DirectoryInfo"/> objects are equal.
     /// </summary>
-    /// <param name="x">The first object of type <paramref name="T" /> to compare.</param>
-    /// <param name="y">The second object of type <paramref name="T" /> to compare.</param>
+    /// <param name="x">The first object to compare.</param>
+    /// <param name="y">The second object to compare.</param>
     /// <returns> true if the specified objects are equal; otherwise false. </returns>
     public bool Equals( DirectoryInfo? x, DirectoryInfo? y )
     {
@@ -53,23 +53,23 @@ public class DirectoryInfoComparer : IEqualityComparer< DirectoryInfo >
     }
 
     /// <summary>
-    /// Returns a hash code for the specified object.
-    /// The GetHashCode method must return the same hash code for objects 
-    /// that are considered equal by the Equals method.
+    /// Returns a hash code for the specified <see cref="DirectoryInfo"/> object.
+    /// The GetHashCode method must return the same hash code for objects  that are
+    /// considered equal by the Equals method.
     /// </summary>
-    /// <param name="obj">The <see cref="T:System.Object" /> for which a hash code is to be returned.</param>
+    /// <param name="obj">
+    /// The <see cref="DirectoryInfo"/> object for which a hash code is to be returned.
+    /// </param>
     /// <exception cref="T:System.ArgumentNullException">
-    /// The type of <paramref name="obj" /> is a reference type and <paramref name="obj" /> is null. </exception>
+    /// The type of <paramref name="obj" /> is a reference type and <paramref name="obj" /> is null.
+    /// </exception>
     /// <returns> A hash code for the specified object. </returns>
     public int GetHashCode( DirectoryInfo? obj )
     {
-        if ( obj is null )
-        {
-            return 0;
-        }
-
-        // Return the hash code of the path string
-        return StringComparer.OrdinalIgnoreCase.GetHashCode( obj.FullName );
+        return obj is null
+            ? 0
+            // Return the hash code of the path string
+            : StringComparer.OrdinalIgnoreCase.GetHashCode( obj.FullName );
     }
 }
 

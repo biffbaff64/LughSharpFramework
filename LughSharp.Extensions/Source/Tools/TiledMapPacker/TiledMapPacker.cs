@@ -69,11 +69,11 @@ public class TiledMapPacker
     private static readonly string _tilesetsOutputDir = "tileset";
     private static readonly string _atlasOutputName   = "packed";
 
-    private TmxMapLoader                         _mapLoader      = new( new AbsoluteFileHandleResolver() );
-    private Dictionary< string, List< int > >    _tilesetUsedIds = [ ];
-    private ObjectMap< string, TiledMapTileSet > _tilesetsToPack = [ ];
-    private TiledMap                             _map;
-    private TiledMapPackerSettings               _settings;
+    private TmxMapLoader                          _mapLoader      = new( new AbsoluteFileHandleResolver() );
+    private Dictionary< string, List< int > >     _tilesetUsedIds = [ ];
+    private Dictionary< string, TiledMapTileSet > _tilesetsToPack = [ ];
+    private TiledMap                              _map            = null!;
+    private TiledMapPackerSettings                _settings;
 
     public required DirectoryInfo? InputDir;
     public required DirectoryInfo? OutputDir;
@@ -111,7 +111,7 @@ public class TiledMapPacker
         var        inputDirHandle       = new DirectoryInfo( InputDir.FullName );
         FileInfo[] mapFilesInCurrentDir = InputDir.GetFiles( "*.tmx" );
 
-        _tilesetsToPack = new ObjectMap< string, TiledMapTileSet >();
+        _tilesetsToPack = new Dictionary< string, TiledMapTileSet >();
 
         // Processes the maps inside inputDir
         foreach ( FileInfo mapFile in mapFilesInCurrentDir )
@@ -188,7 +188,7 @@ public class TiledMapPacker
         if ( !combineTilesets )
         {
             _tilesetUsedIds = new Dictionary< string, List< int > >();
-            _tilesetsToPack = new ObjectMap< string, TiledMapTileSet >();
+            _tilesetsToPack = new Dictionary< string, TiledMapTileSet >();
         }
 
         _map = _mapLoader.Load( mapFile.FullName );
@@ -237,7 +237,7 @@ public class TiledMapPacker
         int numlayers  = _map.Layers.LayersCount;
         int bucketSize = mapWidth * mapHeight * numlayers;
 
-        foreach ( MapLayer layer in _map!.Layers )
+        foreach ( MapLayer layer in _map.Layers )
         {
             // some layers can be plain MapLayer instances (ie. object groups),
             // just ignore them
@@ -294,7 +294,12 @@ public class TiledMapPacker
         // track this tileset to be packed if not already tracked
         if ( !_tilesetsToPack.ContainsKey( tilesetName ) )
         {
-            _tilesetsToPack[ tilesetName ] = _map.Tilesets.GetTileSet( tilesetName );
+            TiledMapTileSet? tileset = _map.Tilesets.GetTileSet( tilesetName );
+
+            if ( tileset != null )
+            {
+                _tilesetsToPack[ tilesetName ] = tileset;
+            }
         }
     }
 

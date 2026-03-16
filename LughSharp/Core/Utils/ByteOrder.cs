@@ -51,11 +51,18 @@ public class ByteOrder
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
     private ByteOrder( string name )
     {
         _name = name;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static ByteOrder NativeOrder => BigEndian;
 
     /// <summary>
@@ -71,3 +78,7 @@ public class ByteOrder
         return _name;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

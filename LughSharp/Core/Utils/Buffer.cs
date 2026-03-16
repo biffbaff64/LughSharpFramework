@@ -145,6 +145,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
         Length        = 0;             // Initially Length is 0 for a new view
         Position      = 0;             // Initially Position is 0 for a new view
     }
+    
     // ========================================================================
 
     /// <summary>
@@ -177,22 +178,41 @@ public class Buffer< T > : IDisposable where T : unmanaged
         return viewBuffer;
     }
 
+    // ========================================================================
     // Convenience methods for common conversions
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a Buffer&lt; float &gt; that shares the same underlying memory
+    /// as this buffer. Changes to one buffer will be reflected in the other.
+    /// </summary>
     public Buffer< float > AsFloatBuffer()
     {
         return AsBuffer< float >();
     }
 
+    /// <summary>
+    /// Creates a Buffer&lt; int &gt; that shares the same underlying memory
+    /// as this buffer. Changes to one buffer will be reflected in the other.
+    /// </summary>
     public Buffer< int > AsIntBuffer()
     {
         return AsBuffer< int >();
     }
 
+    /// <summary>
+    /// Creates a Buffer&lt; short &gt; that shares the same underlying memory
+    /// as this buffer. Changes to one buffer will be reflected in the other.
+    /// </summary>
     public Buffer< short > AsShortBuffer()
     {
         return AsBuffer< short >();
     }
 
+    /// <summary>
+    /// Creates a Buffer&lt; byte &gt; that shares the same underlying memory
+    /// as this buffer. Changes to one buffer will be reflected in the other.
+    /// </summary>
     public Buffer< byte > AsByteBuffer()
     {
         return AsBuffer< byte >();
@@ -200,11 +220,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     // ========================================================================
 
-    #region Get Methods
-
-    // ========================================================================
-
-    // Generic Get/Put methods
     public T Get()
     {
         if ( ( Position + _elementSize ) > Limit )
@@ -251,12 +266,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
         Position += bytesToRead;
     }
-
-    #endregion Get Methods
-
-    // ========================================================================
-
-    #region Put Methods
 
     // ========================================================================
 
@@ -328,12 +337,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
             Length = dstByteOffset + bytesToWrite;
         }
     }
-
-    #endregion Put Methods
-
-    // ========================================================================
-
-    #region Typed Get Methods
 
     // ========================================================================
 
@@ -443,12 +446,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
             ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( byteIndex ) )
             : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( byteIndex ) );
     }
-
-    #endregion Typed Get Methods
-
-    // ========================================================================
-
-    #region Typed Put Methods
 
     // ========================================================================
 
@@ -600,12 +597,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
-    #endregion Typed Put Methods
-
-    // ========================================================================
-
-    #region Bulk Get Methods
-
     // ========================================================================
 
     public void GetBytes( byte[] dst )
@@ -676,12 +667,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
     {
         //TODO:
     }
-
-    #endregion Bulk Get Methods
-
-    // ========================================================================
-
-    #region Bulk Put Methods
 
     // ========================================================================
 
@@ -788,8 +773,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
     {
         //TODO:
     }
-
-    #endregion Bulk Put Methods
 
     // ========================================================================
 
@@ -901,16 +884,28 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public byte[] BackingArray()
     {
         return _backingArray;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public Memory< byte > Memory()
     {
         return _memory;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public T[] ToArray()
     {
         int elementCount = Length / _elementSize;
@@ -920,6 +915,10 @@ public class Buffer< T > : IDisposable where T : unmanaged
         return result;
     }
 
+    /// <summary>
+    /// Clears the buffer by resetting the position and length to zero, and clearing the
+    /// underlying byte array.
+    /// </summary>
     public void Clear()
     {
         Array.Clear( _backingArray, 0, Capacity );
@@ -928,17 +927,42 @@ public class Buffer< T > : IDisposable where T : unmanaged
         Length   = 0;
     }
 
+    /// <summary>
+    /// Prepares the buffer for reading by setting the limit to the current position and
+    /// resetting the position to zero.
+    /// <para>
+    /// After calling this method, the buffer is ready to be read from the beginning up to the
+    /// previous position. This is typically used after writing data to the buffer and before
+    /// reading it.
+    /// </para>
+    /// </summary>
     public void Flip()
     {
         Limit    = Position;
         Position = 0;
     }
 
+    /// <summary>
+    /// Sets the current position to the specified value, effectively rewinding to an
+    /// earlier point.
+    /// </summary>
+    /// <param name="toPosition">
+    /// The position to rewind to. Must be greater than or equal to 0. Defaults to 0.
+    /// </param>
     public void Rewind( int toPosition = 0 )
     {
         Position = toPosition;
     }
 
+    /// <summary>
+    /// Reduces the capacity of the underlying storage to match the current length,
+    /// releasing any unused memory.
+    /// <para>
+    /// Use this method to minimize memory usage after removing items or shrinking the
+    /// collection. After calling this method, the capacity will be equal to the number
+    /// of elements currently stored.
+    /// </para>
+    /// </summary>
     public void Compact()
     {
         int newCapacity = Length;
@@ -974,7 +998,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
         var slicedBuffer = new Buffer< T >( remainingElements );
         slicedBuffer._memory       = sliceMemory;
-        slicedBuffer._backingArray = sliceMemory.ToArray();            // Only if you need direct array access
+        slicedBuffer._backingArray = sliceMemory.ToArray();            // For direct array access
         slicedBuffer.Limit         = remainingElements * _elementSize; // In bytes for the slice
         slicedBuffer.IsBigEndian   = IsBigEndian;
         slicedBuffer.IsReadOnly    = IsReadOnly;
@@ -1112,8 +1136,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
         {
             if ( ( index < 0 ) || ( index >= Capacity ) )
             {
-                throw new
-                    IndexOutOfRangeException( $"Index '{index}' is out of range. Valid range is 0 to {Capacity - 1}." );
+                throw new IndexOutOfRangeException( $"Index '{index}' is out of range. "
+                                                  + $"Valid range is 0 to {Capacity - 1}." );
             }
 
             Guard.Against.Null( _backingArray );
@@ -1124,8 +1148,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
         {
             if ( ( index < 0 ) || ( index >= Capacity ) )
             {
-                throw new
-                    IndexOutOfRangeException( $"Index '{index}' is out of range. Valid range is 0 to {Capacity - 1}." );
+                throw new IndexOutOfRangeException( $"Index '{index}' is out of range. "
+                                                  + $"Valid range is 0 to {Capacity - 1}." );
             }
 
             Guard.Against.Null( _backingArray );

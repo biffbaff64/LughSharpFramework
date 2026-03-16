@@ -61,8 +61,10 @@ public class XmlReader
     /// Parses the specified XML string and returns the root element of the parsed document.
     /// </summary>
     /// <param name="xml">A string containing the XML to parse. Cannot be null.</param>
-    /// <returns>The root <see cref="Element"/> of the parsed XML document, or <see langword="null"/> if the input is empty or
-    /// invalid.</returns>
+    /// <returns>
+    /// The root <see cref="Element"/> of the parsed XML document, or <c>null</c>
+    /// if the input is empty or invalid.
+    /// </returns>
     public Element? Parse( string xml )
     {
         char[] data = xml.ToCharArray();
@@ -72,13 +74,22 @@ public class XmlReader
 
     /// <summary>
     /// Parses an element from the specified text reader.
+    /// <para>
+    /// The method disposes the provided <paramref name="reader"/> after parsing
+    /// is complete. The caller should not use the reader after calling this method.
+    /// </para>
     /// </summary>
-    /// <para>The method disposes the provided <paramref name="reader"/> after parsing is complete. The
-    /// caller should not use the reader after calling this method.</para>
-    /// <param name="reader">The text reader that provides the input data to parse. Cannot be null and must be positioned at the start of the
-    /// element to parse.</param>
-    /// <returns>An <see cref="Element"/> representing the parsed data, or <see langword="null"/> if no element could be parsed.</returns>
-    /// <exception cref="SerializationException">Thrown when an I/O error occurs while reading from the text reader.</exception>
+    /// <param name="reader">
+    /// The text reader that provides the input data to parse. Cannot be null and must
+    /// be positioned at the start of the element to parse.
+    /// </param>
+    /// <returns>
+    /// An <see cref="Element"/> representing the parsed data, or <c>null</c> if no
+    /// element could be parsed.
+    /// </returns>
+    /// <exception cref="SerializationException">
+    /// Thrown when an I/O error occurs while reading from the text reader.
+    /// </exception>
     public Element? Parse( TextReader reader )
     {
         try
@@ -122,11 +133,14 @@ public class XmlReader
     }
 
     /// <summary>
-    /// Parses the specified file and returns the corresponding element, or null if the file is null.
+    /// Parses the specified file and returns the corresponding element, or null
+    /// if the file is null.
     /// </summary>
     /// <param name="file">The file to parse. If null, the method returns null.</param>
-    /// <returns>An <see cref="Element"/> representing the parsed contents of the file, or null if <paramref name="file"/> is
-    /// null.</returns>
+    /// <returns>
+    /// An <see cref="Element"/> representing the parsed contents of the file, or
+    /// null if <paramref name="file"/> is null.
+    /// </returns>
     public Element? Parse( FileInfo? file )
     {
         if ( file == null )
@@ -140,13 +154,20 @@ public class XmlReader
     }
 
     /// <summary>
-    /// Parses the input stream and returns the corresponding element, or null if parsing fails.
+    /// Parses the input stream and returns the corresponding element, or null
+    /// if parsing fails.
     /// </summary>
-    /// <param name="input">The input stream containing the data to parse. The stream must be readable and positioned at the start of the
-    /// data to be parsed.</param>
-    /// <returns>An <see cref="Element"/> representing the parsed data, or <see langword="null"/> if the input does not contain a
-    /// valid element.</returns>
-    /// <exception cref="SerializationException">Thrown when an I/O error occurs while reading from the input stream.</exception>
+    /// <param name="input">
+    /// The input stream containing the data to parse. The stream must be readable
+    /// and positioned at the start of the data to be parsed.
+    /// </param>
+    /// <returns>
+    /// An <see cref="Element"/> representing the parsed data, or <c>null</c> if
+    /// the input does not contain a valid element.
+    /// </returns>
+    /// <exception cref="SerializationException">
+    /// Thrown when an I/O error occurs while reading from the input stream.
+    /// </exception>
     public Element? Parse( Stream input )
     {
         try
@@ -163,14 +184,28 @@ public class XmlReader
     }
 
     /// <summary>
-    /// Parses a segment of a character array as XML and returns the root element of the parsed structure.
+    /// Parses a segment of a character array as XML and returns the root element of
+    /// the parsed structure.
     /// </summary>
     /// <param name="data">The character array containing the XML data to parse.</param>
     /// <param name="offset">The zero-based index in the array at which to begin parsing.</param>
-    /// <param name="length">The number of characters to parse from the array, starting at the specified offset.</param>
-    /// <returns>The root <see cref="Element"/> of the parsed XML structure, or <see langword="null"/> if the input does not
-    /// contain a valid root element.</returns>
-    /// <exception cref="SerializationException">Thrown if the XML data is malformed, contains unclosed elements, or cannot be parsed successfully.</exception>
+    /// <param name="length">
+    /// The number of characters to parse from the array, starting at the specified offset.
+    /// </param>
+    /// <returns>
+    /// The root <see cref="Element"/> of the parsed XML structure, or <c>null</c> if the
+    /// input does not contain a valid root element.
+    /// </returns>
+    /// <exception cref="SerializationException">
+    /// Thrown if the XML data is malformed, contains unclosed elements, or cannot be parsed
+    /// successfully.
+    /// </exception>
+    /// <remarks>
+    /// 15.03.2026<br/>
+    /// This method is not particularly pretty, I'm happy to admit that. I'm loath to touch
+    /// it because it works. I WILL get around to addressing it one day but, until then,
+    /// there are more important things to do in this framework!
+    /// </remarks>
     public Element? Parse( char[] data, int offset, int length )
     {
         int     cs;
@@ -641,13 +676,20 @@ public class XmlReader
 
     /// <summary>
     /// Resolves a named or numeric XML entity to its corresponding character representation.
+    /// <para>
+    /// Supports standard XML entities as well as hexadecimal numeric character references.
+    /// Returns null for unrecognized entity names.
+    /// </para>
     /// </summary>
-    /// <para>Supports standard XML entities as well as hexadecimal numeric character references. Returns
-    /// null for unrecognized entity names.</para>
-    /// <param name="name">The name of the XML entity to resolve. This can be a standard entity name such as "lt", "gt", "amp", "apos", or
-    /// "quot", or a numeric character reference in the form "#xNNNN" (hexadecimal).</param>
-    /// <returns>A string containing the character represented by the specified entity name, or null if the entity name is not
-    /// recognized.</returns>
+    /// <param name="name">
+    /// The name of the XML entity to resolve. This can be a standard entity name such as
+    /// "lt", "gt", "amp", "apos", or "quot", or a numeric character reference in the form
+    /// "#xNNNN" (hexadecimal).
+    /// </param>
+    /// <returns>
+    /// A string containing the character represented by the specified entity name, or null
+    /// if the entity name is not recognized.
+    /// </returns>
     protected virtual string? Entity( string name )
     {
         if ( name == "lt" )
@@ -683,7 +725,10 @@ public class XmlReader
     /// <summary>
     /// Appends the specified text to the current element's text content.
     /// </summary>
-    /// <param name="text">The text to append to the current element. Can be null, in which case no text is added.</param>
+    /// <param name="text">
+    /// The text to append to the current element. Can be null, in which case no text
+    /// is added.
+    /// </param>
     protected virtual void Text( string? text )
     {
         string? existing = _current?.Text;
@@ -691,11 +736,14 @@ public class XmlReader
     }
 
     /// <summary>
-    /// Closes the current element and updates the internal state to reflect the parent element.
+    /// Closes the current element and updates the internal state to reflect the
+    /// parent element.
+    /// <para>
+    /// This method is intended to be overridden in derived classes to provide custom
+    /// behavior when closing an element. After calling this method, the current element
+    /// is set to the previous element in the stack, or null if no elements remain.
+    /// </para>
     /// </summary>
-    /// <para>This method is intended to be overridden in derived classes to provide custom behavior when
-    /// closing an element. After calling this method, the current element is set to the previous element in the stack,
-    /// or null if no elements remain.</para>
     protected virtual void Close()
     {
         _root = _elements[ _elements.Count - 1 ];
@@ -707,12 +755,20 @@ public class XmlReader
     // ========================================================================
 
     /// <summary>
-    /// Represents a hierarchical element with a name, optional text content, attributes, and child elements.
+    /// Represents a hierarchical element with a name, optional text content, attributes,
+    /// and child elements.
+    /// <para>
+    /// The Element class provides methods for managing attributes and child elements,
+    /// supporting hierarchical data structures similar to XML or HTML. Elements can be
+    /// nested, queried by name, and traversed recursively.
+    /// <para>
+    /// <b>
+    /// This class is not thread-safe; concurrent access should be synchronized externally
+    /// if needed.
+    /// </b>
+    /// </para>
+    /// </para>
     /// </summary>
-    /// <para>The Element class provides methods for managing attributes and child elements, supporting
-    /// hierarchical data structures similar to XML or HTML. Elements can be nested, queried by name, and traversed
-    /// recursively. This class is not thread-safe; concurrent access should be synchronized externally if
-    /// needed.</para>
     [PublicAPI]
     public class Element : IEnumerable
     {
@@ -728,10 +784,13 @@ public class XmlReader
         // ====================================================================
 
         /// <summary>
-        /// Initializes a new instance of the Element class with the specified name and optional parent element.
+        /// Initializes a new instance of the Element class with the specified name and
+        /// optional parent element.
         /// </summary>
-        /// <param name="name">The name of the element. Cannot be null.</param>
-        /// <param name="parent">The parent element of this element, or null if the element has no parent.</param>
+        /// <param name="name">The name of the element. <b>Cannot be null.</b></param>
+        /// <param name="parent">
+        /// The parent element of this element, or null if the element has no parent.
+        /// </param>
         public Element( string name, Element? parent )
         {
             Name    = name;
@@ -739,8 +798,8 @@ public class XmlReader
         }
 
         /// <summary>
-        /// Returns the attribute with the given name, or null if it doesn't exist. An exception is
-        /// thrown if the attribute doesn't exist.
+        /// Returns the attribute with the given name, or null if it doesn't exist.
+        /// An exception is thrown if the attribute doesn't exist.
         /// </summary>
         /// <param name="name"> The name of the requested attribute. </param>
         /// <exception cref="Exception"> If the attribute doesn't exist. </exception>
@@ -755,11 +814,16 @@ public class XmlReader
         }
 
         /// <summary>
-        /// Returns the attribute with the given name, or the given default value if it doesn't exist.'
+        /// Returns the attribute with the given name, or the given default value if
+        /// it doesn't exist.'
         /// </summary>
         /// <param name="name"> The name of the requested attribute. </param>
-        /// <param name="defaultValue"> The default value to return if the attribute doesn't exist. </param>
-        /// <returns></returns>
+        /// <param name="defaultValue">
+        /// The default value to return if the attribute doesn't exist.
+        /// </param>
+        /// <returns>
+        /// A string representation of the attribute, or the provided default value.
+        /// </returns>
         public string? GetAttribute( string name, string? defaultValue )
         {
             if ( _attributes == null )
@@ -793,7 +857,10 @@ public class XmlReader
         /// Retrieves the child element at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the child element to retrieve.</param>
-        /// <returns>The child element at the specified index, or null if the element at that index is null.</returns>
+        /// <returns>
+        /// The child element at the specified index, or null if the element at that
+        /// index is null.
+        /// </returns>
         /// <exception cref="Exception">Thrown if this element has no children.</exception>
         public Element? GetChild( int index )
         {
@@ -805,8 +872,13 @@ public class XmlReader
         /// <summary>
         /// Retrieves the first child element with the specified name.
         /// </summary>
-        /// <param name="name">The name of the child element to locate. The comparison is case-sensitive.</param>
-        /// <returns>The first child element whose name matches the specified value, or null if no such child exists.</returns>
+        /// <param name="name">
+        /// The name of the child element to locate. The comparison is case-sensitive.
+        /// </param>
+        /// <returns>
+        /// The first child element whose name matches the specified value, or null if
+        /// no such child exists.
+        /// </returns>
         public Element? GetChildByName( string name )
         {
             if ( _children == null )
@@ -826,13 +898,20 @@ public class XmlReader
         }
 
         /// <summary>
-        /// Searches for a child element with the specified name, recursively traversing all descendant elements.
+        /// Searches for a child element with the specified name, recursively traversing
+        /// all descendant elements.
+        /// <para>
+        /// The search includes all direct and indirect children of the current element. If
+        /// multiple elements share the same name, the first one encountered in a depth-first
+        /// traversal is returned.
+        /// </para>
         /// </summary>
-        /// <para>The search includes all direct and indirect children of the current element. If
-        /// multiple elements share the same name, the first one encountered in a depth-first traversal is
-        /// returned.</para>
-        /// <param name="name">The name of the child element to search for. The comparison is case-sensitive.</param>
-        /// <returns>The first child element with the specified name, or null if no such element is found.</returns>
+        /// <param name="name">
+        /// The name of the child element to search for. The comparison is case-sensitive.
+        /// </param>
+        /// <returns>
+        /// The first child element with the specified name, or null if no such element is found.
+        /// </returns>
         public Element? GetChildByNameRecursive( string name )
         {
             if ( _children == null )
@@ -866,8 +945,12 @@ public class XmlReader
         /// <summary>
         /// Determines whether a child element with the specified name exists.
         /// </summary>
-        /// <param name="name">The name of the child element to locate. Cannot be null.</param>
-        /// <returns>true if a child element with the specified name exists; otherwise, false.</returns>
+        /// <param name="name">
+        /// The name of the child element to locate. <b>Cannot be null.</b>
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if a child element with the specified name exists; otherwise <c>false.</c>
+        /// </returns>
         public bool HasChild( string name )
         {
             if ( _children == null )
@@ -1046,7 +1129,9 @@ public class XmlReader
         /// <summary>
         /// Retrieves the value of the specified attribute as an unsigned integer.
         /// </summary>
-        /// <param name="name">The name of the attribute to retrieve. Cannot be null or empty.</param>
+        /// <param name="name">
+        /// The name of the attribute to retrieve. <b>Cannot be null or empty.</b>
+        /// </param>
         /// <param name="defaultValue">
         /// The value to return if the attribute is not found or cannot be parsed as an
         /// unsigned integer. The default is 0.
@@ -1109,8 +1194,6 @@ public class XmlReader
 
             return value ?? defaultValue;
         }
-
-        // ====================================================================
 
         /// <summary>
         /// Returns true if the element has an attribute with the given name.
@@ -1176,6 +1259,8 @@ public class XmlReader
             return _children?.GetEnumerator() ?? Enumerable.Empty< Element? >().GetEnumerator();
         }
 
+        // ====================================================================
+        
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>

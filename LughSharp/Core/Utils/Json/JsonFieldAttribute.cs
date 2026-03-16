@@ -35,6 +35,8 @@ public class JsonFieldAttribute : Attribute
     public string? Name     { get; set; }
     public bool    Required { get; set; }
 
+    // ========================================================================
+    
     public JsonFieldAttribute( string? name = null, bool required = false )
     {
         Name     = name;

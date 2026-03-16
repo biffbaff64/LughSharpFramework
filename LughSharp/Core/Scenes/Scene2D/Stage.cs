@@ -1435,7 +1435,7 @@ public class Stage : InputAdapter, IDisposable
         Viewport.Camera?.Debug();
         Logger.Debug( $"Width: {Width}, Height: {Height}" );
         Logger.Debug( $"Num Actors: {Actors.Size}" );
-        Logger.EndBlock();
+        Logger.Block();
     }
 
     // ========================================================================

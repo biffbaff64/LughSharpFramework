@@ -26,69 +26,128 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Logging;
 
+/// <summary>
+/// A Utility class for storing and retrieving statistical meters.
+/// <para>
+/// Meters are held in a "%USERPROFILE%/.statsmeters.stats" file, and managed by
+/// an instance of <see cref="Preferences" />.
+/// </para>
+/// </summary>
 [PublicAPI]
 public class Stats
 {
-    private static IPreferences? _prefs;
-
+    private static Preferences _prefs;
+    private static object      _lock = new();
+    
+    // ========================================================================
+    
     static Stats()
     {
         _prefs = new Preferences( "statsmeters.stats" );
     }
 
+    /// <summary>
+    /// Retrieve the specified meter from the meter storage.
+    /// </summary>
+    /// <param name="meter"> The meter name. </param>
+    /// <returns> The value stored in the meter. </returns>
     public static int GetMeter( string meter )
     {
-        return _prefs?.GetInteger( meter, 0 ) ?? 0;
+        lock ( _lock )
+        {
+            return _prefs?.GetInteger( meter, 0 ) ?? 0;
+        }
     }
 
+    /// <summary>
+    /// Sets the specified meter to the specified value.
+    /// </summary>
+    /// <param name="meter"> The meter name. </param>
+    /// <param name="amount"> The new value. </param>
     public static void SetMeter( string meter, int amount )
     {
-        if ( _prefs != null )
+        lock ( _lock )
         {
             _prefs.PutInteger( meter, amount );
             _prefs.Flush();
         }
     }
 
+    /// <summary>
+    /// Adds the specified amount to the specified meter.
+    /// </summary>
+    /// <param name="meter"> The meter. </param>
+    /// <param name="amount"> The amount to add. </param>
     public static void AddToMeter( string meter, int amount )
     {
-        if ( _prefs != null )
+        lock ( _lock )
         {
             _prefs.PutInteger( meter, _prefs.GetInteger( meter, 0 ) + amount );
             _prefs.Flush();
         }
     }
 
+    /// <summary>
+    /// Subtracts the specified amount from the specified meter.
+    /// </summary>
+    /// <param name="meter"> The meter. </param>
+    /// <param name="amount"> The amount to subtract. </param>
+    public static void SubMeter( string meter, int amount )
+    {
+        lock ( _lock )
+        {
+            _prefs.PutInteger( meter, _prefs.GetInteger( meter, 0 ) - amount );
+            _prefs.Flush();
+        }
+    }
+
+    /// <summary>
+    /// Decrements the specified meter by 1.
+    /// Use <see cref="AddToMeter(string, int)"/> to decrement by a specific amount.
+    /// </summary>
+    /// <param name="meter"></param>
     public static void DecMeter( string meter )
     {
-        if ( _prefs != null )
+        lock ( _lock )
         {
             _prefs.PutInteger( meter, _prefs.GetInteger( meter, 0 ) - 1 );
             _prefs.Flush();
         }
     }
 
+    /// <summary>
+    /// Increments the specified meter by 1.
+    /// Use <see cref="AddToMeter(string, int)"/> to increment by a specific amount.
+    /// </summary>
+    /// <param name="meter"></param>
     public static void IncMeter( string meter )
     {
-        if ( _prefs != null )
+        lock ( _lock )
         {
             _prefs.PutInteger( meter, _prefs.GetInteger( meter, 0 ) + 1 );
             _prefs.Flush();
         }
     }
 
+    /// <summary>
+    /// Clears the specified meter.
+    /// </summary>
+    /// <param name="meter"> The meter to clear. </param>
     public static void ClearMeter( string meter )
     {
-        if ( _prefs != null )
+        lock ( _lock )
         {
             _prefs.PutInteger( meter, 0 );
             _prefs.Flush();
         }
     }
 
+    /// <summary>
+    /// Clears all meters.
+    /// </summary>
     public static void ClearMeters()
     {
-        if ( _prefs != null )
+        lock ( _lock )
         {
             Dictionary< string, object > pd = _prefs.ToDictionary();
 

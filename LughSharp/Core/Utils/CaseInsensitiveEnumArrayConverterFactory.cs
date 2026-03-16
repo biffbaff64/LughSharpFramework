@@ -153,3 +153,7 @@ public class CaseInsensitiveEnumArrayConverter< TEnum > : JsonConverter< TEnum[]
         writer.WriteEndArray();
     }
 }
+
+// ============================================================================
+// ============================================================================
+

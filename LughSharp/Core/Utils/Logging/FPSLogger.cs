@@ -50,7 +50,7 @@ public class FPSLogger
     }
 
     /// <summary>
-    /// 
+    /// Updates the FPSLogger with the specified frames per second.
     /// </summary>
     /// <param name="frames"></param>
     public void Update( int frames )
@@ -61,7 +61,7 @@ public class FPSLogger
     /// <summary>
     /// Logs the current frames per second to the console.
     /// </summary>
-    public void LogFPS()
+    public void Log()
     {
         long     currentTime = TimeHelpers.NanoTime();
         TimeSpan elapsedTime = TimeSpan.FromTicks( currentTime - _lastLogTime );
@@ -78,3 +78,7 @@ public class FPSLogger
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

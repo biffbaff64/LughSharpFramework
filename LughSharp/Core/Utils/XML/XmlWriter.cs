@@ -32,19 +32,19 @@ namespace LughSharp.Core.Utils.XML;
 /// <summary>
 /// Builder style API for emitting XML.
 /// <code>
-/// StringWriter writer = new StringWriter();
-/// XmlWriter xml = new XmlWriter(writer);
-/// xml.element("meow")
-///	.attribute("moo", "cow")
-///	.element("child")
-///		.attribute("moo", "cow")
-///		.element("child")
-///			.attribute("moo", "cow")
-///			.text("XML is like pizza. If it doesn't solve your problem, you're not eating enough of it.")
-///		.pop()
-///	.pop()
-/// .pop();
-/// System.out.println(writer);
+///     StringWriter writer = new();
+///     XmlWriter xml = new XmlWriter( writer );
+///     xml.Element( "meow" )
+///	       .Attribute( "moo", "cow" )
+///	       .Element( "child" )
+///	       .Attribute( "moo", "cow" )
+///	       .Element( "child" )
+///	       .Attribute( "moo", "cow" )
+///	       .Text( "Pineapple DOES belong on Pizza!." )
+///	       .Pop()
+///	       .Pop()
+///        .Pop();
+///     Console.WriteLine( writer.ToString() );
 /// </code>
 /// </summary>
 [PublicAPI]
@@ -59,9 +59,12 @@ public class XmlWriter : StringWriter
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the XmlWriter class that writes XML data to the specified StringWriter.
+    /// Initializes a new instance of the XmlWriter class that writes XML data to
+    /// the specified StringWriter.
     /// </summary>
-    /// <param name="writer">The StringWriter to which the XML content will be written. Cannot be null.</param>
+    /// <param name="writer">
+    /// The StringWriter to which the XML content will be written. Cannot be null.
+    /// </param>
     public XmlWriter( StringWriter writer )
     {
         _writer = writer;
@@ -69,11 +72,16 @@ public class XmlWriter : StringWriter
     }
 
     /// <summary>
-    /// Writes a start tag with the specified element name and prepares the writer for nested content.
+    /// Writes a start tag with the specified element name and prepares the writer
+    /// for nested content.
+    /// <para>
+    /// If called within another element, this method writes the appropriate indentation
+    /// and line breaks to maintain readable XML formatting. The method does not write
+    /// any attributes or content for the element; use additional methods to add attributes
+    /// or nested elements as needed.
+    /// </para>
     /// </summary>
-    /// <remarks>If called within another element, this method writes the appropriate indentation and line
-    /// breaks to maintain readable XML formatting. The method does not write any attributes or content for the element;
-    /// use additional methods to add attributes or nested elements as needed.</remarks>
+  
     /// <param name="name">The name of the element to write. Cannot be null or empty.</param>
     /// <returns>The current instance of the XmlWriter, allowing for method chaining.</returns>
     public XmlWriter Element( string name )
@@ -94,12 +102,18 @@ public class XmlWriter : StringWriter
     }
 
     /// <summary>
-    /// Writes an XML element with the specified name and text content, and returns the parent writer for further
-    /// operations.
+    /// Writes an XML element with the specified name and text content, and returns the
+    /// parent writer for further operations.
     /// </summary>
     /// <param name="name">The name of the XML element to write. Cannot be null or empty.</param>
-    /// <param name="text">The text content to include within the XML element. If null, an empty element is written.</param>
-    /// <returns>The parent XmlWriter instance, allowing for method chaining or additional element writing.</returns>
+    /// <param name="text">
+    /// The text content to include within the XML element. If null, an empty element
+    /// is written.
+    /// </param>
+    /// <returns>
+    /// The parent XmlWriter instance, allowing for method chaining or additional element
+    /// writing.
+    /// </returns>
     public XmlWriter Element( string name, object text )
     {
         return Element( name ).Text( text ).Pop();
@@ -109,7 +123,10 @@ public class XmlWriter : StringWriter
     /// Writes an attribute with the specified name and value to the current XML element.
     /// </summary>
     /// <param name="name">The name of the attribute to write. Cannot be null.</param>
-    /// <param name="value">The value to assign to the attribute. If null, the string "null" is written as the attribute value.</param>
+    /// <param name="value">
+    /// The value to assign to the attribute. If null, the string "null" is written as
+    /// the attribute value.
+    /// </param>
     /// <returns>The current instance of the writer, enabling method chaining.</returns>
     public XmlWriter Attribute( string name, object? value )
     {
@@ -125,11 +142,14 @@ public class XmlWriter : StringWriter
     }
 
     /// <summary>
-    /// Writes the string representation of the specified object as text content to the current XML element.
+    /// Writes the string representation of the specified object as text content to
+    /// the current XML element. If the resulting text exceeds 64 characters in length,
+    /// the output is indented for readability.
     /// </summary>
-    /// <remarks>If the resulting text exceeds 64 characters in length, the output is indented for
-    /// readability.</remarks>
-    /// <param name="text">The object whose string representation is written as text. If null, the string "null" is written.</param>
+    /// <param name="text">
+    /// The object whose string representation is written as text. If null, the string
+    /// "null" is written.
+    /// </param>
     /// <returns>The current instance of the XmlWriter, enabling method chaining.</returns>
     public XmlWriter Text( object? text )
     {
@@ -156,13 +176,17 @@ public class XmlWriter : StringWriter
     }
 
     /// <summary>
-    /// Closes the current XML element or ends the most recently opened element, and returns the underlying XmlWriter
-    /// for further writing.
+    /// Closes the current XML element or ends the most recently opened element, and returns
+    /// the underlying XmlWriter for further writing.
+    /// <para>
+    /// If an element is currently open, this method writes a self-closing tag. Otherwise,
+    /// it writes a closing tag for the most recently opened element. This method maintains
+    /// proper indentation and element nesting for the generated XML.
+    /// </para>
     /// </summary>
-    /// <remarks>If an element is currently open, this method writes a self-closing tag. Otherwise, it writes
-    /// a closing tag for the most recently opened element. This method maintains proper indentation and element nesting
-    /// for the generated XML.</remarks>
-    /// <returns>The underlying XmlWriter instance, allowing for additional XML content to be written.</returns>
+    /// <returns>
+    /// The underlying XmlWriter instance, allowing for additional XML content to be written.
+    /// </returns>
     public XmlWriter Pop()
     {
         if ( _currentElement != null )
@@ -217,21 +241,28 @@ public class XmlWriter : StringWriter
     }
 
     /// <summary>
-    /// Clears all buffers for the current writer and causes any buffered data to be written to the underlying device.
+    /// Clears all buffers for the current writer and causes any buffered data to be
+    /// written to the underlying device.
+    /// <para>
+    /// Call this method to ensure that all buffered data is written to the underlying
+    /// storage or stream. This is especially important before closing the writer or
+    /// when immediate data persistence is required.
+    /// </para>
     /// </summary>
-    /// <remarks>Call this method to ensure that all buffered data is written to the underlying storage or
-    /// stream. This is especially important before closing the writer or when immediate data persistence is
-    /// required.</remarks>
     public override void Flush()
     {
         _writer?.Flush();
     }
 
     /// <summary>
-    /// Begins writing the content section of the current XML element, finalizing the element's start tag if applicable.
+    /// Begins writing the content section of the current XML element, finalizing the
+    /// element's start tag if applicable.
+    /// <para>
+    /// Call this method after writing an element's start tag to transition to writing
+    /// its content. If there is no current element to start, the method returns false
+    /// and no changes are made.
+    /// </para>
     /// </summary>
-    /// <remarks>Call this method after writing an element's start tag to transition to writing its content.
-    /// If there is no current element to start, the method returns false and no changes are made.</remarks>
     /// <returns>true if the content section was successfully started; otherwise, false.</returns>
     private bool StartElementContent()
     {
@@ -251,11 +282,14 @@ public class XmlWriter : StringWriter
     }
 
     /// <summary>
-    /// Writes indentation to the underlying writer based on the current indentation level and element context.
+    /// Writes indentation to the underlying writer based on the current indentation level
+    /// and element context.
+    /// <para>
+    /// Increases the indentation by one level if an element is currently open. Indentation
+    /// is written using tab characters. This method is intended for internal formatting
+    /// and is not meant to be called directly by consumers.
+    /// </para>
     /// </summary>
-    /// <remarks>Increases the indentation by one level if an element is currently open. Indentation is
-    /// written using tab characters. This method is intended for internal formatting and is not meant to be called
-    /// directly by consumers.</remarks>
     private void Indent()
     {
         int count = _indent;

@@ -54,6 +54,8 @@ public static class Logger
     public const int LogDebug = 1;
     public const int LogError = 2;
 
+    // ========================================================================
+    
     private const string DebugTag              = "[DEBUG.....]";
     private const string ErrorTag              = "[WARNING...]";
     private const string CheckpointTag         = "[CHECKPOINT]";
@@ -434,7 +436,7 @@ public static class Logger
     }
 
     /// <summary>
-    /// Utility helper method which just outputs 'Done', which is done quite
+    /// Utility helper method which just outputs 'Done', which is used quite
     /// frequently by me so why not have an unnecessary method for it...
     /// </summary>
     [Conditional( "DEBUG" )]
@@ -443,15 +445,12 @@ public static class Logger
         Debug( "Done" );
     }
 
+    /// <summary>
+    /// Outputs two divider lines. Intended as a utility method to mark the
+    /// start and end of a block of Logger debug messages.
+    /// </summary>
     [Conditional( "DEBUG" )]
     public static void Block()
-    {
-        Divider();
-        Divider();
-    }
-
-    [Conditional( "DEBUG" )]
-    public static void EndBlock()
     {
         Divider();
         Divider();
@@ -549,8 +548,8 @@ public static class Logger
     #endregion private methods
 }
 
-// ====================================================================--------
-// ====================================================================--------
+// ============================================================================
+// ============================================================================
 
 /// <summary>
 /// Object used for creating debug messages which include
@@ -563,3 +562,8 @@ internal struct CallerID
     public string MethodName;
     public int    LineNumber;
 }
+
+// ============================================================================
+// ============================================================================
+
+

@@ -59,18 +59,18 @@ public static class Pools
     /// </exception>
     public static T? Obtain< T >() where T : class, new()
     {
-        return Get< T >( () => new T() ).Obtain();
+//        return Get< T >( () => new T() ).Obtain();
 
-//        if ( !TypePools.TryGetValue( typeof( T ), out var poolObject ) )
-//        {
-//            throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. " +
-//                                                 $"Call Pools.Get<{typeof( T ).Name}>() first " +
-//                                                 $"with a NewObjectHandler." );
-//        }
-//
-//        var pool = ( Pool< T > )poolObject;
-//
-//        return pool.Obtain();
+        if ( !_typePools.TryGetValue( typeof( T ), out object? poolObject ) )
+        {
+            throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. " +
+                                                 $"Call Pools.Get<{typeof( T ).Name}>() first " +
+                                                 $"with a NewObjectHandler." );
+        }
+
+        var pool = ( Pool< T > )poolObject;
+
+        return pool.Obtain();
     }
 
     /// <summary>

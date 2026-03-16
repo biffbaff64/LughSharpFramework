@@ -37,7 +37,7 @@ namespace LughSharp.Core.Utils.Logging;
 public interface IPreferences
 {
     /// <summary>
-    /// 
+    /// The number of preferences in this preferences list.
     /// </summary>
     int Count { get; }
 
@@ -197,3 +197,7 @@ public interface IPreferences
     /// </summary>
     void Flush();
 }
+
+// ============================================================================
+// ============================================================================
+

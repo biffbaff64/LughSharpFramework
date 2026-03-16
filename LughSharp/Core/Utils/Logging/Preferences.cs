@@ -98,36 +98,6 @@ public class Preferences : IPreferences
 
     // ========================================================================
 
-    /// <inheritdoc />
-    public IPreferences PutBool( string key, bool val )
-    {
-        return Put( key, val.ToString() );
-    }
-
-    /// <inheritdoc />
-    public IPreferences PutInteger( string key, int val )
-    {
-        return Put( key, val.ToString() );
-    }
-
-    /// <inheritdoc />
-    public IPreferences PutLong( string key, long val )
-    {
-        return Put( key, val.ToString() );
-    }
-
-    /// <inheritdoc />
-    public IPreferences PutFloat( string key, float val )
-    {
-        return Put( key, val.ToString( CultureInfo.InvariantCulture ) );
-    }
-
-    /// <inheritdoc />
-    public IPreferences PutString( string key, string val )
-    {
-        return Put( key, val );
-    }
-
     /// <summary>
     /// Adds or updates multiple entries in the preferences.
     /// </summary>
@@ -165,6 +135,49 @@ public class Preferences : IPreferences
                     break;
             }
         }
+
+        return this;
+    }
+
+    /// <inheritdoc />
+    public IPreferences PutBool( string key, bool val )
+    {
+        return Put( key, val.ToString() );
+    }
+
+    /// <inheritdoc />
+    public IPreferences PutInteger( string key, int val )
+    {
+        return Put( key, val.ToString() );
+    }
+
+    /// <inheritdoc />
+    public IPreferences PutLong( string key, long val )
+    {
+        return Put( key, val.ToString() );
+    }
+
+    /// <inheritdoc />
+    public IPreferences PutFloat( string key, float val )
+    {
+        return Put( key, val.ToString( CultureInfo.InvariantCulture ) );
+    }
+
+    /// <inheritdoc />
+    public IPreferences PutString( string key, string val )
+    {
+        return Put( key, val );
+    }
+
+    /// <summary>
+    /// Updates the value of a preference entry.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private Preferences Put( string key, string value )
+    {
+        _properties[ key ] = value.ToLower();
 
         return this;
     }
@@ -359,15 +372,6 @@ public class Preferences : IPreferences
     /// Returns the number of entries in the preferences.
     /// </summary>
     public int Count => _properties.Count;
-
-    // ========================================================================
-
-    private Preferences Put( string key, string value )
-    {
-        _properties[ key ] = value.ToLower();
-
-        return this;
-    }
 }
 
 // ========================================================================

@@ -94,7 +94,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     }
 
     /// <summary>
-    /// 
+    /// Adds a key-value pair to the LinkedHashMap.
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
@@ -113,7 +113,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     }
 
     /// <summary>
-    /// 
+    /// Removes the specified key-value pair from the LinkedHashMap.
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
@@ -123,10 +123,13 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     }
 
     /// <summary>
-    /// 
+    /// Removes the element with the specified key from the LinkedHashMap.
     /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /// <param name="key">The key of the element to remove. The key must be non-null.</param>
+    /// <returns>
+    /// True if the element is successfully removed; otherwise, false.
+    /// This method also returns false if the key was not found in the LinkedHashMap.
+    /// </returns>
     public bool Remove( TK key )
     {
         Guard.Against.Null( key );
@@ -215,7 +218,8 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
 
     /// <summary>
     /// Represents a reference to the current instance of the class or struct.
-    /// Used to access members of the current object or to pass the current object as a parameter.
+    /// Used to access members of the current object or to pass the current
+    /// object as a parameter.
     /// </summary>
     public TV this[ TK key ]
     {

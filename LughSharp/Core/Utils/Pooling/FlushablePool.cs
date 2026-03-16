@@ -38,6 +38,8 @@ public class FlushablePool< T > : Pool< T > where T : class
 {
     protected List< T > Obtained = new();
 
+    // ========================================================================
+    
     private readonly Func< T >? _factory;
 
     // ========================================================================

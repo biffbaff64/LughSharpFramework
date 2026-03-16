@@ -166,7 +166,9 @@ public class PooledLinkedList< T >
     /// <summary>
     /// Gets the previous item in the list
     /// </summary>
-    /// <returns> the previous item in the list or null if there are no more items </returns>
+    /// <returns>
+    /// The previous item in the list or null if there are no more items.
+    /// </returns>
     public T? Previous()
     {
         if ( _iterator == null )
@@ -289,3 +291,7 @@ public class PooledLinkedList< T >
         internal Item< TT >? Prev    { get; set; }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

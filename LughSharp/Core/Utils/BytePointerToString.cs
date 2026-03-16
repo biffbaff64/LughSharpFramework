@@ -33,6 +33,11 @@ namespace LughSharp.Core.Utils;
 [PublicAPI]
 public static class BytePointerToString
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bytePointer"></param>
+    /// <returns></returns>
     public static unsafe string Convert( byte* bytePointer )
     {
         // Find the length of the byte array by searching for the null terminator

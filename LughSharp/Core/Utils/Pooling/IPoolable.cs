@@ -29,5 +29,12 @@ namespace LughSharp.Core.Utils.Pooling;
 [PublicAPI]
 public interface IPoolable
 {
+    /// <summary>
+    /// Resets the object to its initial state.
+    /// </summary>
     void Reset();
 }
+
+// ============================================================================
+// ============================================================================
+

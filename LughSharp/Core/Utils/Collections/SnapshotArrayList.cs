@@ -71,7 +71,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     }
 
     /// <summary>
-    /// Creates a new SnapshotArray from the supplied <see cref="ArrayList{T}" />
+    /// Creates a new SnapshotArray from the supplied array.
     /// </summary>
     public SnapshotArrayList( T[] array, bool ordered = true )
         : this( ordered, array, 0, array.Length )

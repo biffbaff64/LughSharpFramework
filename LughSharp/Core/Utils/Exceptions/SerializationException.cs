@@ -28,29 +28,61 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils.Exceptions;
 
+/// <summary>
+/// Represents an exception that occurs during the serialization or deserialization process.
+/// </summary>
+/// <remarks>
+/// This exception provides additional methods for adding and retrieving trace information
+/// during the serialization or deserialization of objects. It extends the standard
+/// <see cref="System.Runtime.Serialization.SerializationException"/> class.
+/// </remarks>
 [PublicAPI]
 [Serializable]
 public class SerializationException : System.Runtime.Serialization.SerializationException
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SerializationException"/> class.
+    /// </summary>
     public SerializationException()
     {
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SerializationException"/> class with
+    /// a specified error message.
+    /// </summary>
+    /// <param name="message"></param>
     public SerializationException( string message )
         : base( message )
     {
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SerializationException"/> class with
+    /// a specified error message and a reference to the inner exception that is the cause
+    /// of this exception.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="inner"></param>
     public SerializationException( string message, Exception? inner )
         : base( message, inner )
     {
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SerializationException"/> class with
+    /// a reference to the inner exception that is the cause of this exception.
+    /// </summary>
+    /// <param name="inner"></param>
     public SerializationException( Exception inner )
         : base( "", inner )
     {
     }
 
+    /// <summary>
+    /// Adds a trace message to the exception's trace information.
+    /// </summary>
+    /// <param name="traceMessage"></param>
     public void AddTrace( string traceMessage )
     {
         if ( Data.Contains( "Trace" ) )
@@ -63,6 +95,10 @@ public class SerializationException : System.Runtime.Serialization.Serialization
         }
     }
 
+    /// <summary>
+    /// Gets the trace information associated with the exception.
+    /// </summary>
+    /// <returns></returns>
     public string? GetTrace()
     {
         return Data.Contains( "Trace" ) ? Data[ "Trace" ]!.ToString() : null;

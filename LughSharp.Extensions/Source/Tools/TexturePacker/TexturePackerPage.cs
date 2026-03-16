@@ -58,7 +58,7 @@ public class TexturePackerPage
         Logger.Debug( $"Height: {Height}" );
         Logger.Debug( $"ImageWidth: {ImageWidth}" );
         Logger.Debug( $"ImageHeight: {ImageHeight}" );
-        Logger.EndBlock();
+        Logger.Block();
     }
 }
 

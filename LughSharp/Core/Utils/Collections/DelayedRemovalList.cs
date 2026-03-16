@@ -89,9 +89,9 @@ public class DelayedRemovalList< T > : List< T >
     /// <paramref name="count" /> elements from the source list will be copied, starting
     /// at <paramref name="startIndex" />.
     /// </summary>
-    /// <param name="list"></param>
-    /// <param name="startIndex"></param>
-    /// <param name="count"></param>
+    /// <param name="list"> The source list. </param>
+    /// <param name="startIndex"> The zero-based index from which to start copying. </param>
+    /// <param name="count"> The number of items to copy. </param>
     public DelayedRemovalList( IReadOnlyList< T > list, int startIndex, int count )
     {
         for ( var i = 0; i < count; i++ )
@@ -103,12 +103,8 @@ public class DelayedRemovalList< T > : List< T >
     }
 
     /// <summary>
-    /// Begins the iteration process which delays removal until iteration
-    /// has finished.
-    /// <para>
-    /// See the <see cref="DelayedRemovalList{T}" /> class description for
-    /// a fuller description.
-    /// </para>
+    /// Begins the iteration process which delays removal until iteration has finished.
+    /// See the <see cref="DelayedRemovalList{T}" /> class description for a fuller description.
     /// </summary>
     public void Begin()
     {
@@ -116,11 +112,8 @@ public class DelayedRemovalList< T > : List< T >
     }
 
     /// <summary>
-    /// Ends the iteration process to allow element removal.
-    /// <para>
-    /// See the <see cref="DelayedRemovalList{T}" /> class description for
-    /// a fuller description.
-    /// </para>
+    /// Ends the iteration process to allow element removal. See the <see cref="DelayedRemovalList{T}" />
+    /// class description for a fuller description.
     /// </summary>
     /// <exception cref="RuntimeException">
     /// Thrown if this method is called before calling <see cref="Begin()" />.
@@ -501,12 +494,9 @@ public class DelayedRemovalList< T > : List< T >
             throw new RuntimeException( "Invalid between begin/end." );
         }
 
-        if ( Count >= newSize )
-        {
-            throw new RuntimeException( $"Invalid new size: {newSize} (current: {Count} )" );
-        }
-
-        return EnsureCapacity( newSize );
+        return Count >= newSize
+            ? throw new RuntimeException( $"Invalid new size: {newSize} (current: {Count} )" )
+            : EnsureCapacity( newSize );
     }
 
     /// <summary>

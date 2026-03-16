@@ -51,13 +51,14 @@ public class Pool< T > where T : class
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Represents a pool of reusable objects to optimize performance by reducing garbage
+    /// collection and object allocation overhead.
     /// </summary>
-    /// <param name="initialCapacity">
-    /// The initial size of the array supporting the pool. No objects are created/pre-allocated.
-    /// Use <see cref="Fill(int)"/> after instantiation if needed.
+    /// <param name="initialCapacity">The initial capacity of the pool. Default is 16.</param>
+    /// <param name="max">
+    /// The maximum number of objects that can be pooled. Default is <see cref="int.MaxValue"/>.
     /// </param>
-    /// <param name="max">The maximum number of free objects to store in this pool.</param>
+    /// <typeparam name="T">The type of objects to be pooled. Must be a reference type.</typeparam>
     public Pool( int initialCapacity = DefaultInitialCapacity, int max = int.MaxValue )
     {
         _freeObjects   = new Stack< T >( initialCapacity );
@@ -66,7 +67,7 @@ public class Pool< T > where T : class
 
     /// <summary>
     /// Returns an object from this pool. The object may be new (from <see cref="NewObjectFactory"/>)
-    /// or reused (previously
+    /// or reused from a previous call to <see cref="Free(T)"/>.
     /// </summary>
     public virtual T Obtain()
     {
