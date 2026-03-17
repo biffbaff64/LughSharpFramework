@@ -32,6 +32,10 @@ namespace LughSharp.Core.Utils;
 [PublicAPI]
 public static class GCSuppressor
 {
+    /// <summary>
+    /// Suppresses garbage collection activity for the duration of the scope.
+    /// </summary>
+    /// <returns></returns>
     public static IDisposable Suppress()
     {
         // Forces a garbage collection before suppressing GC activity. This ensures
@@ -47,6 +51,9 @@ public static class GCSuppressor
         return new Suppressor();
     }
 
+    // ========================================================================
+    // ========================================================================
+    
     private class Suppressor : IDisposable
     {
         public void Dispose()
@@ -57,3 +64,8 @@ public static class GCSuppressor
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+
+

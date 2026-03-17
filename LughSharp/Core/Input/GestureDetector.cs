@@ -214,10 +214,10 @@ public class GestureDetector : InputAdapter
         if ( pointer == 0 )
         {
             _pointer1.Set( x, y );
-            _touchDownTime = Engine.Api.Input.GetCurrentEventTime();
+            _touchDownTime = Engine.Input.GetCurrentEventTime();
             _tracker.Start( x, y, _touchDownTime );
 
-            if ( Engine.Api.Input.IsTouched( 1 ) )
+            if ( Engine.Input.IsTouched( 1 ) )
             {
                 // Start pinch.
                 _inTapRectangle = false;
@@ -295,7 +295,7 @@ public class GestureDetector : InputAdapter
         }
 
         // update tracker
-        _tracker.Update( x, y, Engine.Api.Input.GetCurrentEventTime() );
+        _tracker.Update( x, y, Engine.Input.GetCurrentEventTime() );
 
         // check if we are still tapping.
         if ( _inTapRectangle && !IsWithinTapRectangle( x, y, _tapRectangleCenterX, _tapRectangleCenterY ) )
@@ -376,12 +376,12 @@ public class GestureDetector : InputAdapter
             if ( pointer == 0 )
             {
                 // first pointer has lifted off, set up panning to use the second pointer...
-                _tracker.Start( _pointer2.X, _pointer2.Y, Engine.Api.Input.GetCurrentEventTime() );
+                _tracker.Start( _pointer2.X, _pointer2.Y, Engine.Input.GetCurrentEventTime() );
             }
             else
             {
                 // second pointer has lifted off, set up panning to use the first pointer...
-                _tracker.Start( _pointer1.X, _pointer1.Y, Engine.Api.Input.GetCurrentEventTime() );
+                _tracker.Start( _pointer1.X, _pointer1.Y, Engine.Input.GetCurrentEventTime() );
             }
 
             return false;
@@ -396,7 +396,7 @@ public class GestureDetector : InputAdapter
         }
 
         // handle fling
-        long time = Engine.Api.Input.GetCurrentEventTime();
+        long time = Engine.Input.GetCurrentEventTime();
 
         if ( ( time - _touchDownTime ) <= _maxFlingDelay )
         {

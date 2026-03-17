@@ -36,7 +36,7 @@ public class ExternalFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string filename )
     {
-        return Engine.Api.Files.External( filename );
+        return Engine.Files.External( filename );
     }
 }
 

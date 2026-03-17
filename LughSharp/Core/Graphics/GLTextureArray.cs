@@ -98,7 +98,7 @@ public class GLTextureArray : GLTexture, IManaged
 
         if ( data.Managed )
         {
-            AddManagedTexture( Engine.Api.App, this );
+            AddManagedTexture( Engine.App, this );
         }
     }
 
@@ -129,7 +129,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// Gets the number of managed TextureArrays currently loaded.
     /// </summary>
-    public int NumManagedTextureArrays => _managedTextureArrays[ Engine.Api.App ].Count;
+    public int NumManagedTextureArrays => _managedTextureArrays[ Engine.App ].Count;
 
     // ========================================================================
 
@@ -150,7 +150,7 @@ public class GLTextureArray : GLTexture, IManaged
 
         for ( var i = 0; i < internalPaths.Length; i++ )
         {
-            handles[ i ] = Engine.Api.Files.Internal( internalPaths[ i ] );
+            handles[ i ] = Engine.Files.Internal( internalPaths[ i ] );
         }
 
         return handles;

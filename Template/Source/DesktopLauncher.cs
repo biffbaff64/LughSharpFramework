@@ -36,7 +36,8 @@ public static class DesktopLauncher
             GLProfilingEnabled = true
         };
 
-        Engine.Api.CheckEnableDevMode().CheckEnableGodMode();
+        Engine.CheckEnableDevMode();
+        Engine.CheckEnableGodMode();
 
         BuildTextureAtlases();
 

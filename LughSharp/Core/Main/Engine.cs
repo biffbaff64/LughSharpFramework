@@ -49,14 +49,18 @@ namespace LughSharp.Core.Main;
 /// </para>
 /// </summary>
 [PublicAPI]
-public sealed class Engine
+public static class Engine
 {
-    public IApplication    App      { get; set; } = null!;
-    public IAudio          Audio    { get; set; } = null!;
-    public IInput          Input    { get; set; } = null!;
-    public IFiles          Files    { get; set; } = null!;
-    public IGraphicsDevice Graphics { get; set; } = null!;
-    public INet            Net      { get; set; } = null!;
+    public static IApplication    App      { get; set; } = null!;
+    public static IAudio          Audio    { get; set; } = null!;
+    public static IInput          Input    { get; set; } = null!;
+    public static IFiles          Files    { get; set; } = null!;
+    public static IGraphicsDevice Graphics { get; set; } = null!;
+    public static INet            Net      { get; set; } = null!;
+
+    // ========================================================================
+
+    public static IGLBindings GL => Bindings;
 
     // ========================================================================
 
@@ -64,7 +68,18 @@ public sealed class Engine
     /// Test mode flag which, when TRUE, means that all developer options are enabled.
     /// This must, however, mean that software with this enabled cannot be published.
     /// </summary>
-    public bool DevMode { get; set; }
+    public static bool DevMode
+    {
+        get
+        {
+            #if DEBUG
+            return field;
+            #else
+            return false;
+            #endif
+        }
+        set;
+    }
 
     /// <summary>
     /// From Wiktionary...
@@ -82,17 +97,17 @@ public sealed class Engine
     /// local game code.
     /// </para>
     /// </summary>
-    public bool GodMode { get; set; }
-    
-    // ========================================================================
-
-    public static Engine      Api => Nested.Instance;
-    public static IGLBindings GL  => Nested.Instance.Bindings;
-
-    // ========================================================================
-
-    private Engine()
+    public static bool GodMode
     {
+        get
+        {
+            #if DEBUG
+            return field;
+            #else
+            return false;
+            #endif
+        }
+        set;
     }
 
     // ========================================================================
@@ -108,7 +123,7 @@ public sealed class Engine
     /// The underlying value is retrieved from the associated <see cref="Graphics"/> instance.
     /// </para>
     /// </summary>
-    public float DeltaTime => Graphics.DeltaTime;
+    public static float DeltaTime => Graphics.DeltaTime;
 
     /// <summary>
     /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings"/>
@@ -117,7 +132,7 @@ public sealed class Engine
     /// The property will check internally for null, and initialise itself to reference
     /// GLBindings by default if that is the case.
     /// </summary>
-    public IGLBindings Bindings
+    public static IGLBindings Bindings
     {
         get => field ??= new GLBindings();
         set;
@@ -127,7 +142,7 @@ public sealed class Engine
     /// Performs essential tasks, which MUST be performed to allow the
     /// framework to work correctly.
     /// </summary>
-    public void Initialise( IApplication app )
+    public static void Initialise( IApplication app, string assetsRoot = "Assets" )
     {
         App = app;
 
@@ -147,8 +162,7 @@ public sealed class Engine
     /// available and is set to "TRUE" or "true". This environment variable must
     /// be named DEVMODE or DEV_MODE.
     /// </summary>
-    /// <returns> This class for chaining. </returns>
-    public Engine CheckEnableDevMode()
+    public static void CheckEnableDevMode()
     {
         DevMode = CheckEnvironmentVar( "DEV_MODE", "TRUE" );
 
@@ -158,8 +172,6 @@ public sealed class Engine
         }
 
         Logger.Debug( $"DevMode: {( DevMode ? "Enabled" : "Disabled" )}" );
-
-        return this;
     }
 
     /// <summary>
@@ -167,8 +179,7 @@ public sealed class Engine
     /// available and is set to "TRUE" or "true". This environment variable must
     /// be named GODMODE or GOD_MODE.
     /// </summary>
-    /// <returns> This class for chaining. </returns>
-    public Engine CheckEnableGodMode()
+    public static void CheckEnableGodMode()
     {
         GodMode = false;
 
@@ -183,8 +194,6 @@ public sealed class Engine
         }
 
         Logger.Debug( $"GodMode: {( GodMode ? "Enabled" : "Disabled" )}" );
-
-        return this;
     }
 
     // ========================================================================
@@ -213,29 +222,6 @@ public sealed class Engine
     public static void Shutdown()
     {
         //TODO: Add shutdown operations here.
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// The Nested class is a private utility class that encapsulates the singleton instance
-    /// of the Engine. It ensures a consistent, thread-safe mechanism for accessing the Engine
-    /// instance throughout the application.
-    /// <para>
-    /// By isolating the singleton instance management into this class, it provides a clear
-    /// separation of concerns and simplifies access control.
-    /// </para>
-    /// </summary>
-    private class Nested
-    {
-        internal static readonly Engine Instance = new();
-
-        // Explicit static constructor to tell C# compiler
-        // not to mark type as beforefieldinit
-        static Nested()
-        {
-        }
     }
 
     // ========================================================================

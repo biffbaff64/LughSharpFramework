@@ -185,7 +185,7 @@ public class SpriteCache
             _mesh.SetIndices( indices );
         }
 
-        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Graphics.WindowWidth, Engine.Graphics.WindowHeight );
     }
 
     /// <summary>

@@ -34,6 +34,8 @@ public class MapGroupLayer : MapLayer
 {
     public MapLayers Layers { get; set; } = new();
 
+    // ========================================================================
+    
     /// <summary>
     /// For each layer in this group, flag that its Render Offets need
     /// to be recalculated.

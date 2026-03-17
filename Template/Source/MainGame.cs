@@ -15,10 +15,10 @@ using LughSharp.Core.Maps.Tiled;
 using LughSharp.Core.Maps.Tiled.Loaders;
 using LughSharp.Core.Maps.Tiled.Renderers;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Scenes.Scene2D;
-using LughSharp.Core.Scenes.Scene2D.Styles;
-using LughSharp.Core.Scenes.Scene2D.UI;
-using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.SceneGraph2D;
+using LughSharp.Core.SceneGraph2D.Styles;
+using LughSharp.Core.SceneGraph2D.UI;
+using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
@@ -97,7 +97,7 @@ public class MainGame : Game
         CreateFreeTypeFont();
         CreateSprites();
         CreateMap();
-
+        
         Logger.Debug( "Done" );
     }
 
@@ -105,7 +105,7 @@ public class MainGame : Game
     public override void Update()
     {
 //        ScaleSprite();
-        ScrollMap();
+//        ScrollMap();
     }
 
     /// <inheritdoc />
@@ -148,7 +148,7 @@ public class MainGame : Game
         // ----- Draw the Stage, if enabled -----
         if ( _stage != null && IsDrawingStage )
         {
-            _stage.Act( Math.Min( Engine.Api.DeltaTime, 1.0f / 60.0f ) );
+            _stage.Act( Math.Min( Engine.DeltaTime, 1.0f / 60.0f ) );
             _stage.Draw();
         }
     }
@@ -215,8 +215,8 @@ public class MainGame : Game
     {
         const float Zoom = 1f;
 
-        _tiledMapCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
-                                                   Engine.Api.Graphics.WindowHeight,
+        _tiledMapCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
+                                                   Engine.Graphics.WindowHeight,
                                                    name: "TILEDCamera" );
 
         _tiledMapCam.Camera.Near = CameraData.DefaultNearPlane;
@@ -228,8 +228,8 @@ public class MainGame : Game
 
         // --------------------------------------
 
-        _spriteCam = new OrthographicGameCamera( Engine.Api.Graphics.WindowWidth,
-                                                 Engine.Api.Graphics.WindowHeight,
+        _spriteCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
+                                                 Engine.Graphics.WindowHeight,
                                                  name: "HUDCamera" );
 
         _spriteCam.Camera.Near = CameraData.DefaultNearPlane;
@@ -268,7 +268,7 @@ public class MainGame : Game
         const bool WindowActor          = false;
         const bool ButtonActor          = false;
         const bool TextButtonActor      = false;
-        const bool ImageButtonActor     = false;
+        const bool ImageButtonActor     = true;
         const bool ImageTextButtonActor = false;
         const bool CheckBoxActor        = false;
         const bool ProgressBarActor     = false;
@@ -409,7 +409,7 @@ public class MainGame : Game
         
         if ( ButtonActor )
         {
-            var buttonStyle = styleRegistry.Get< LughSharp.Core.Scenes.Scene2D.UI.ButtonStyle >( "default" );
+            var buttonStyle = styleRegistry.Get< LughSharp.Core.SceneGraph2D.UI.ButtonStyle >( "default" );
             var button = new Button( buttonStyle )
             {
                 IsVisible = true,
@@ -471,7 +471,7 @@ public class MainGame : Game
 
     private void CreateFreeTypeFont()
     {
-//        var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( Assets.AmbleRegular26Font ) );
+//        var generator = new FreeTypeFontGenerator( Engine.Files.Internal( Assets.AmbleRegular26Font ) );
 //        var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
 //        {
 //            Size = 40
@@ -496,15 +496,17 @@ public class MainGame : Game
 
     private void CreateMap()
     {
-//        _tmxMapLoader = new TmxMapLoader();
-//        _tiledMap     = _tmxMapLoader.Load( Assets.Room1Map );
-//        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
+        #if CREATE_MAP
+        _tmxMapLoader = new TmxMapLoader();
+        _tiledMap     = _tmxMapLoader.Load( Assets.Room1Map );
+        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
 
-//        _mapWidth  = _tiledMap.Properties.Get< int >( "width" );
-//        _mapWidth  *= _tiledMap.Properties.Get< int >( "tilewidth" );
+        _mapWidth  = _tiledMap.Properties.Get< int >( "width" );
+        _mapWidth  *= _tiledMap.Properties.Get< int >( "tilewidth" );
 
-//        _mapHeight = _tiledMap.Properties.Get< int >( "height" );
-//        _mapHeight *= _tiledMap.Properties.Get< int >( "tileheight" );
+        _mapHeight = _tiledMap.Properties.Get< int >( "height" );
+        _mapHeight *= _tiledMap.Properties.Get< int >( "tileheight" );
+        #endif
     }
 
     private void ScaleSprite()

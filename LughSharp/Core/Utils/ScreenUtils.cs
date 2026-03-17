@@ -59,13 +59,13 @@ public static class ScreenUtils
     {
         get
         {
-            if ( Engine.Api.Graphics == null )
+            if ( Engine.Graphics == null )
             {
                 throw new NullReferenceException();
             }
 
-            int w = Engine.Api.Graphics.BackBufferWidth;
-            int h = Engine.Api.Graphics.BackBufferHeight;
+            int w = Engine.Graphics.BackBufferWidth;
+            int h = Engine.Graphics.BackBufferHeight;
 
             return GetFrameBufferTexture( 0, 0, w, h );
         }
@@ -159,13 +159,13 @@ public static class ScreenUtils
     /// <param name="flipY"> whether to flip pixels along Y axis</param>
     public static byte[] GetFrameBufferPixels( bool flipY )
     {
-        if ( Engine.Api.Graphics == null )
+        if ( Engine.Graphics == null )
         {
             throw new NullReferenceException();
         }
 
-        int w = Engine.Api.Graphics.BackBufferWidth;
-        int h = Engine.Api.Graphics.BackBufferHeight;
+        int w = Engine.Graphics.BackBufferWidth;
+        int h = Engine.Graphics.BackBufferHeight;
 
         return GetFrameBufferPixels( 0, 0, w, h, flipY );
     }

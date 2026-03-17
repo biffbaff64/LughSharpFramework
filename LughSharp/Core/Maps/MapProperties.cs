@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Maps;
@@ -69,15 +71,16 @@ public class MapProperties
     /// <param name="key"> The key. </param>
     /// <param name="value"> The value. </param>
     /// <typeparam name="T"> The Type of the property. </typeparam>
-    public void Put< T >( string key, T? value )
+    public virtual void Put< T >( string key, T? value )
     {
         _properties[ key ] = value;
     }
 
     /// <summary>
+    /// Puts all properties from the provided <paramref name="properties"/> into this set.
     /// </summary>
-    /// <param name="properties"></param>
-    public void PutAll( MapProperties properties )
+    /// <param name="properties"> The reference properties. </param>
+    public virtual void PutAll( MapProperties properties )
     {
         _properties = new Dictionary< string, object? >( properties._properties );
     }
@@ -86,7 +89,7 @@ public class MapProperties
     /// Removes the property matching the specified key.
     /// </summary>
     /// <param name="key"> The key. </param>
-    public void Remove( string key )
+    public virtual void Remove( string key )
     {
         _properties.Remove( key );
     }
@@ -95,7 +98,7 @@ public class MapProperties
     /// Returns true if the properties map contains the specified key.
     /// </summary>
     /// <param name="key"> The Key. </param>
-    public bool ContainsKey( string key )
+    public virtual bool ContainsKey( string key )
     {
         return _properties.ContainsKey( key );
     }
@@ -103,7 +106,7 @@ public class MapProperties
     /// <summary>
     /// Clears the properties map.
     /// </summary>
-    public void Clear()
+    public virtual void Clear()
     {
         _properties.Clear();
     }

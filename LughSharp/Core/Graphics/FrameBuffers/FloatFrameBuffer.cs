@@ -99,7 +99,7 @@ public class FloatFrameBuffer : FrameBuffer
 
         var result = new Texture( data );
 
-        if ( Engine.Api.App.AppType == Platform.ApplicationType.WindowsGL )
+        if ( Engine.App.AppType == Platform.ApplicationType.WindowsGL )
         {
             result.SetFilter( TextureFilterMode.Linear, TextureFilterMode.Linear );
         }

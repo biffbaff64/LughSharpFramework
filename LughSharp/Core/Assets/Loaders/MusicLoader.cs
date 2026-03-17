@@ -91,7 +91,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     /// <param name="parameter"></param>
     public override object LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
-        LoadedMusic = Engine.Api.Audio.NewMusic( file );
+        LoadedMusic = Engine.Audio.NewMusic( file );
 
         return LoadedMusic;
     }

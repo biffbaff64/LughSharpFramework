@@ -36,6 +36,8 @@ namespace LughSharp.Core.Maps;
 public class MapObjects : IEnumerable< MapObject >
 {
     private readonly List< MapObject > _objects;
+    
+    // ========================================================================
 
     /// <summary>
     /// Creates an empty set of MapObjects

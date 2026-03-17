@@ -30,9 +30,9 @@ using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Scenes.Scene2D;
-using LughSharp.Core.Scenes.Scene2D.UI;
-using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.SceneGraph2D;
+using LughSharp.Core.SceneGraph2D.UI;
+using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 
 namespace Extensions.Source;

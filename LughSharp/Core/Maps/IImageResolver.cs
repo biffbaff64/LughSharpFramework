@@ -87,14 +87,17 @@ public interface IImageResolver
 
             if ( !_images.TryGetValue( name, out Texture? texture ) )
             {
-                throw new
-                    KeyNotFoundException( $"The image with name '{name}' was not found in the images dictionary." );
+                throw new KeyNotFoundException( $"The image with name '{name}' was "
+                                              + $"not found in the images dictionary." );
             }
 
             return new TextureRegion( texture );
         }
     }
 
+    // ========================================================================
+    // ========================================================================
+    
     /// <summary>
     /// Image Resolver for TextureRegions fetched via an <see cref="AssetManager"/>
     /// </summary>
@@ -144,6 +147,9 @@ public interface IImageResolver
         }
     }
 
+    // ========================================================================
+    // ========================================================================
+    
     /// <summary>
     /// Resolver for TextureAtlas regions.
     /// Provides a means of accessing TextureRegions in the atlas.

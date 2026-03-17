@@ -27,13 +27,15 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Main;
 
 /// <summary>
-/// An ILifecycleListener can be added to an Application via
-/// Application.AddLifecycleListener(ILifecycleListener). It will receive
+/// An ILifecycleListener can be added to an <see cref="IApplication"/> instance via
+/// <see cref="IApplication.AddLifecycleListener(ILifecycleListener)"/>. It will receive
 /// notification of Pause, Resume and Dispose events. This is mainly meant
 /// to be used by extensions that need to manage resources based on the life-cycle.
-/// Normally, application level development should rely on the ApplicationListener
+/// <para>
+/// Normally, application level development should rely on the <see cref="IApplicationListener"/>
 /// interface. The methods will be invoked on the rendering thread. The methods
-/// will be executed before the ApplicationListener methods are executed.
+/// will be executed before the IApplicationListener methods are executed.
+/// </para>
 /// </summary>
 [PublicAPI]
 public interface ILifecycleListener : IDisposable

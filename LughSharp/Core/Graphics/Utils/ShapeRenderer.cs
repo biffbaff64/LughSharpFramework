@@ -69,7 +69,7 @@ public class ShapeRenderer : IDisposable
             ? new ImmediateModeRenderer20( maxVertices, false, true, 0 )
             : new ImmediateModeRenderer20( maxVertices, false, true, 0, defaultShader );
 
-        _projectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
+        _projectionMatrix.SetToOrtho2D( 0, 0, Engine.Graphics.WindowWidth, Engine.Graphics.WindowHeight );
         _matrixDirty = true;
     }
 

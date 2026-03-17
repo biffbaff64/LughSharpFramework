@@ -82,7 +82,7 @@ public class FontUtils
 
         try
         {
-            var generator = new FreeTypeFontGenerator( Engine.Api.Files.Internal( fontFile ) );
+            var generator = new FreeTypeFontGenerator( Engine.Files.Internal( fontFile ) );
             var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
             {
                 Size = size

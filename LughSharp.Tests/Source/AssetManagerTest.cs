@@ -63,11 +63,11 @@ public class AssetManagerTest
 
         var files = new List< FileInfo >
         {
-            Api.Files.Assets( "PackedImages/input/button_a.png" ),
-            Api.Files.Assets( "PackedImages/input/button_b.png" ),
-            Api.Files.Assets( "PackedImages/input/button_x.png" ),
-            Api.Files.Assets( "PackedImages/input/button_y.png" ),
-            Api.Files.Assets( "title_background.png" )
+            Engine.Files.Assets( "PackedImages/input/button_a.png" ),
+            Engine.Files.Assets( "PackedImages/input/button_b.png" ),
+            Engine.Files.Assets( "PackedImages/input/button_x.png" ),
+            Engine.Files.Assets( "PackedImages/input/button_y.png" ),
+            Engine.Files.Assets( "title_background.png" )
         };
 
         _assetManager.Load< Texture >( files );
@@ -86,9 +86,9 @@ public class AssetManagerTest
 
         const string ObjectsAtlas = @"Assets\PackedImages\output\objects.atlas";
 
-        Logger.Debug( $"Loading atlas: {Api.Files.Internal( ObjectsAtlas )}" );
+        Logger.Debug( $"Loading atlas: {Engine.Files.Internal( ObjectsAtlas )}" );
 
-        var objectsAtlas = new TextureAtlas( Api.Files.Internal( ObjectsAtlas ) );
+        var objectsAtlas = new TextureAtlas( Engine.Files.Internal( ObjectsAtlas ) );
 
         Logger.Debug( "Fetching atlas region..." );
 

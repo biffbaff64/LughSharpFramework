@@ -81,7 +81,7 @@ public class OrthographicCamera : Camera
     /// <param name="yDown">whether y should be pointing down.</param>
     public void SetToOrtho( bool yDown )
     {
-        SetToOrtho( Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight, yDown );
+        SetToOrtho( Engine.Graphics.WindowWidth, Engine.Graphics.WindowHeight, yDown );
     }
 
     /// <summary>

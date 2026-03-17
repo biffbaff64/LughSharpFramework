@@ -41,7 +41,7 @@ namespace LughSharp.Core.Graphics.G2D;
 /// through longer batches, for example when drawing Groups with transform enabled.
 /// </summary>
 /// <see cref="SpriteBatch.RenderCalls"/>
-/// <see cref="Scenes.Scene2D.Group.Transform"/>
+/// <see cref="SceneGraph2D.Group.Transform"/>
 [PublicAPI]
 public class CpuSpriteBatch : SpriteBatch
 {

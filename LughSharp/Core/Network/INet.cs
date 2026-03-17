@@ -250,7 +250,7 @@ public interface INet
             get => _followRedirects;
             set
             {
-                if ( value || ( Engine.Api.App.AppType != Platform.ApplicationType.WebGL ) )
+                if ( value || ( Engine.App.AppType != Platform.ApplicationType.WebGL ) )
                 {
                     _followRedirects = value;
                 }

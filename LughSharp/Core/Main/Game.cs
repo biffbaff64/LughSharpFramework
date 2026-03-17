@@ -52,7 +52,7 @@ public abstract class Game : IApplicationListener
             if ( field != null )
             {
                 field.Show();
-                field.Resize( Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
+                field.Resize( Engine.Graphics.WindowWidth, Engine.Graphics.WindowHeight );
             }
         }
     }
@@ -69,7 +69,7 @@ public abstract class Game : IApplicationListener
     /// </summary>
     public virtual void Update()
     {
-        Screen?.Update( Engine.Api.DeltaTime );
+        Screen?.Update( Engine.DeltaTime );
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ public abstract class Game : IApplicationListener
     /// </summary>
     public virtual void Render()
     {
-        Screen?.Render( Engine.Api.DeltaTime );
+        Screen?.Render( Engine.DeltaTime );
     }
 
     /// <summary>

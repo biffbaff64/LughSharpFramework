@@ -75,7 +75,7 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
                                           FileInfo? file,
                                           TP? parameter ) where TP : class
     {
-        LoadedSound = Engine.Api.Audio.NewSound( file );
+        LoadedSound = Engine.Audio.NewSound( file );
     }
 
     /// <summary>

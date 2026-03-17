@@ -32,6 +32,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Logging;
 
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
@@ -217,13 +218,17 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
+    /// Render the specified <see cref="MapObject"/>. This base method
+    /// does nothing, and should be overridden by any extending classes.
     /// </summary>
     /// <param name="obj"></param>
-    public void RenderObject( MapObject obj )
+    public virtual void RenderObject( MapObject obj )
     {
     }
 
     /// <summary>
+    /// Render the specified <see cref="TiledMapTileLayer"/>. This base method
+    /// does nothing, and should be overridden by any extending classes.
     /// </summary>
     /// <param name="layer"></param>
     public virtual void RenderTileLayer( TiledMapTileLayer layer )

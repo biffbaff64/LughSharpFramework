@@ -108,7 +108,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         //
         // This MUST be the first call, so that the Logger and Engine.App global are
         // initialised correctly.
-        Engine.Api.Initialise( this );
+        Engine.Initialise( this );
 
         // ====================================================================
         // ====================================================================
@@ -132,9 +132,9 @@ public class DesktopGLApplication : IApplication, IDisposable
         // and are used in backend code only.
         // Note: Engine.Graphics is set later, during window creation as each window that
         // is created will have its own IGraphics instance.
-        Engine.Api.Audio = AudioManager.CreateAudio( AppConfig );
-        Engine.Api.Files = new Files();
-        Engine.Api.Net   = new DesktopGLNet( AppConfig );
+        Engine.Audio = AudioManager.CreateAudio( AppConfig );
+        Engine.Files = new Files();
+        Engine.Net   = new DesktopGLNet( AppConfig );
 
         Clipboard = new DesktopGLClipboard();
         _sync     = new Sync();
@@ -143,7 +143,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
         Windows.Add( CreateWindow( AppConfig, listener, 0 ) );
         
-        Engine.Api.Graphics.SetBackend( Platform.ApplicationType.WindowsGL, OglProfile );
+        Engine.Graphics.SetBackend( Platform.ApplicationType.WindowsGL, OglProfile );
     }
 
     // ========================================================================
@@ -292,7 +292,7 @@ public class DesktopGLApplication : IApplication, IDisposable
                 _sync?.SyncFrameRate( targetFramerate );
             }
 
-            Engine.Api.Audio?.Update();
+            Engine.Audio?.Update();
 
             // Glfw.SwapBuffers is called in window.Update().
             DotGLFW.Glfw.PollEvents();
@@ -511,7 +511,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     public void Cleanup()
     {
         DesktopGLCursor.DisposeSystemCursors();
-        Engine.Api.Audio.Dispose();
+        Engine.Audio.Dispose();
         _errorCallback = null;
 
         DotGLFW.Glfw.Terminate();

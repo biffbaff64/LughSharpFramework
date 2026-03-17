@@ -29,14 +29,13 @@ namespace LughSharp.Core.Main;
 /// <summary>
 /// Represents one of many application screens, such as a main menu,
 /// a settings menu, the game screen and so on.
-/// Note that Dispose() is not called automatically.
+/// <para> Note that Dispose() is not called automatically. </para>
 /// </summary>
 [PublicAPI]
 public interface IScreen
 {
     /// <summary>
-    /// Called when this screen becomes the current screen for
-    /// a <see cref="Game"/>.
+    /// Called when this screen becomes the current screen for a <see cref="Game"/>.
     /// </summary>
     void Show();
 

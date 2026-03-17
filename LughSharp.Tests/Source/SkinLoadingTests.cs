@@ -31,8 +31,8 @@ using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Scenes.Scene2D.UI;
-using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.SceneGraph2D.UI;
+using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils.Logging;
 
 using NUnit.Framework;

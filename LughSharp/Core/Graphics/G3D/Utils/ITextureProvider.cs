@@ -70,7 +70,7 @@ public interface ITextureProvider
 
         public Texture Load( string filename )
         {
-            var result = new Texture( Engine.Api.Files.Internal( filename ), _useMipMaps );
+            var result = new Texture( Engine.Files.Internal( filename ), _useMipMaps );
             result.SetFilter( _minFilter, _magFilter );
             result.SetWrap( _uWrap, _vWrap );
 

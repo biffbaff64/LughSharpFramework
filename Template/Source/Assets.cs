@@ -44,7 +44,7 @@ public static class Assets
 
     // ========================================================================
     // TMX Maps
-    public static string Room1Map => @$"{Files.ContentRoot}\Maps\room1.tmx";
+    public static string Room1Map => @$"{Files.ContentRoot}\Maps\map1.tmx";
 
     // ========================================================================
     // Fonts

@@ -70,9 +70,9 @@ public class MipMapGenerator
             return;
         }
 
-        if ( ( Engine.Api.App.AppType == Platform.ApplicationType.Android )
-          || ( Engine.Api.App.AppType == Platform.ApplicationType.WebGL )
-          || ( Engine.Api.App.AppType == Platform.ApplicationType.IOS ) )
+        if ( ( Engine.App.AppType == Platform.ApplicationType.Android )
+          || ( Engine.App.AppType == Platform.ApplicationType.WebGL )
+          || ( Engine.App.AppType == Platform.ApplicationType.IOS ) )
         {
             GenerateMipMapGLES20( target, pixmap );
         }
@@ -105,8 +105,8 @@ public class MipMapGenerator
 
     private static unsafe void GenerateMipMapDesktop( int target, Pixmap pixmap, int textureWidth, int textureHeight )
     {
-        if ( Engine.Api.Graphics.SupportsExtension( "GL_ARB_framebuffer_object" )
-          || Engine.Api.Graphics.SupportsExtension( "GL_EXT_framebuffer_object" ) )
+        if ( Engine.Graphics.SupportsExtension( "GL_ARB_framebuffer_object" )
+          || Engine.Graphics.SupportsExtension( "GL_EXT_framebuffer_object" ) )
         {
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {

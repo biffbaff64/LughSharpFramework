@@ -71,7 +71,7 @@ public class Cubemap : GLTexture, IManaged
 
         if ( data.IsManaged )
         {
-            AddManagedCubemap( Engine.Api.App, this );
+            AddManagedCubemap( Engine.App, this );
         }
     }
 
@@ -150,7 +150,7 @@ public class Cubemap : GLTexture, IManaged
     /// <summary>
     /// return the number of managed cubemaps currently loaded
     /// </summary>
-    public static int NumManagedCubemaps => _managedCubemaps[ Engine.Api.App ]?.Count ?? 0;
+    public static int NumManagedCubemaps => _managedCubemaps[ Engine.App ]?.Count ?? 0;
 
     public bool IsManaged => Data.IsManaged;
 
@@ -353,9 +353,9 @@ public class Cubemap : GLTexture, IManaged
 
             if ( Data.IsManaged )
             {
-                if ( _managedCubemaps[ Engine.Api.App ] != null )
+                if ( _managedCubemaps[ Engine.App ] != null )
                 {
-                    _managedCubemaps[ Engine.Api.App ]?.Remove( this );
+                    _managedCubemaps[ Engine.App ]?.Remove( this );
                 }
             }
         }

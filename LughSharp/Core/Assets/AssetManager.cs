@@ -42,7 +42,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Scenes.Scene2D.UI;
+using LughSharp.Core.SceneGraph2D.UI;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;

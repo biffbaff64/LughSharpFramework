@@ -36,7 +36,7 @@ public class AbsoluteFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string filename )
     {
-        return Engine.Api.Files.Absolute( filename );
+        return Engine.Files.Absolute( filename );
     }
 }
 

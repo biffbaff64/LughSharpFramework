@@ -43,10 +43,10 @@ public class GraphicsTest
     {
         var files = new List< FileInfo >
         {
-            Api.Files.Assets( "PackedImages/Objects/red7logo.png" ),
-            Api.Files.Assets( "PackedImages/Objects/rover_wheel.png" ),
-            Api.Files.Assets( "PackedImages/Objects/libgdx.png" ),
-            Api.Files.Assets( "title_background.png" )
+            Engine.Files.Assets( "PackedImages/Objects/red7logo.png" ),
+            Engine.Files.Assets( "PackedImages/Objects/rover_wheel.png" ),
+            Engine.Files.Assets( "PackedImages/Objects/libgdx.png" ),
+            Engine.Files.Assets( "title_background.png" )
         };
 
 //        Pixmap pixmap;

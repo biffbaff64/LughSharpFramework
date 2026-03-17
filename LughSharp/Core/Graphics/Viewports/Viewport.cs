@@ -29,7 +29,7 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Maths.Collision;
-using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils.Logging;
 
 using Rectangle = LughSharp.Core.Maths.Rectangle;
@@ -257,7 +257,7 @@ public abstract class Viewport
 
         Camera.Project( _tmp, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
 
-        _tmp.Y = Engine.Api.Graphics.WindowHeight - _tmp.Y;
+        _tmp.Y = Engine.Graphics.WindowHeight - _tmp.Y;
 
         worldCoords.X = _tmp.X;
         worldCoords.Y = _tmp.Y;
@@ -318,7 +318,7 @@ public abstract class Viewport
     /// <summary>
     /// Returns the right gutter (black bar) width in screen coordinates.
     /// </summary>
-    public virtual int RightGutterWidth => Engine.Api.Graphics.WindowWidth - ( ScreenX + ScreenWidth );
+    public virtual int RightGutterWidth => Engine.Graphics.WindowWidth - ( ScreenX + ScreenWidth );
 
     /// <summary>
     /// Returns the right gutter (black bar) x in screen coordinates.
@@ -338,7 +338,7 @@ public abstract class Viewport
     /// <summary>
     /// Returns the top gutter (black bar) height in screen coordinates.
     /// </summary>
-    public virtual int TopGutterHeight => Engine.Api.Graphics.WindowHeight - ( ScreenY + ScreenHeight );
+    public virtual int TopGutterHeight => Engine.Graphics.WindowHeight - ( ScreenY + ScreenHeight );
 
     // ========================================================================
 

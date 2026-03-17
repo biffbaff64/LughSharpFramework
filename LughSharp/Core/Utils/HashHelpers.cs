@@ -58,10 +58,17 @@ public class HashHelpers
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Configures internal state based on the provided table size, ensuring proper
+    /// mask and shift values for efficient hash calculations.
     /// </summary>
-    /// <param name="tableSize"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="tableSize">
+    /// The size of the hash table. Must be a power of two. This parameter is used
+    /// to calculate the mask and shift values required for hash indexing.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the provided <paramref name="tableSize"/> is not a power of two
+    /// or is less than or equal to zero.
+    /// </exception>
     public void Setup( int tableSize ) // Or you can set Mask directly
     {
         // Ensure tableSize is a power of 2

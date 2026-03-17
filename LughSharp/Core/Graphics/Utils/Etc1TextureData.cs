@@ -150,7 +150,7 @@ public class Etc1TextureData : ITextureData
             throw new RuntimeException( "No data to consume!" );
         }
 
-        if ( !Engine.Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
+        if ( !Engine.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
             Pixmap pixmap = _etc1.DecodeImage( _data, LughFormat.RGB565 );
 

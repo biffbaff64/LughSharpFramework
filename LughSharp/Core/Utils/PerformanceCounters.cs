@@ -79,7 +79,7 @@ public class PerformanceCounters
     /// </summary>
     public void Tick()
     {
-        long t = TimeHelpers.NanoTime();
+        long t = TimeUtils.NanoTime();
 
         if ( _lastTick > 0L )
         {

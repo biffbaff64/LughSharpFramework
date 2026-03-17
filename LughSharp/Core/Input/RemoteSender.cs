@@ -287,20 +287,20 @@ public class RemoteSender : IInputProcessor
         try
         {
             _out.Write( Accel );
-            _out.Write( Engine.Api.Input.GetAccelerometerX() );
-            _out.Write( Engine.Api.Input.GetAccelerometerY() );
-            _out.Write( Engine.Api.Input.GetAccelerometerZ() );
+            _out.Write( Engine.Input.GetAccelerometerX() );
+            _out.Write( Engine.Input.GetAccelerometerY() );
+            _out.Write( Engine.Input.GetAccelerometerZ() );
             _out.Write( Compass );
-            _out.Write( Engine.Api.Input.GetAzimuth() );
-            _out.Write( Engine.Api.Input.GetPitch() );
-            _out.Write( Engine.Api.Input.GetRoll() );
+            _out.Write( Engine.Input.GetAzimuth() );
+            _out.Write( Engine.Input.GetPitch() );
+            _out.Write( Engine.Input.GetRoll() );
             _out.Write( Size );
-            _out.Write( Engine.Api.Graphics.WindowWidth );
-            _out.Write( Engine.Api.Graphics.WindowHeight );
+            _out.Write( Engine.Graphics.WindowWidth );
+            _out.Write( Engine.Graphics.WindowHeight );
             _out.Write( Gyro );
-            _out.Write( Engine.Api.Input.GetGyroscopeX() );
-            _out.Write( Engine.Api.Input.GetGyroscopeY() );
-            _out.Write( Engine.Api.Input.GetGyroscopeZ() );
+            _out.Write( Engine.Input.GetGyroscopeX() );
+            _out.Write( Engine.Input.GetGyroscopeY() );
+            _out.Write( Engine.Input.GetGyroscopeZ() );
         }
         catch ( Exception )
         {

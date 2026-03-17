@@ -133,9 +133,9 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 
         Engine.GL.DeleteFramebuffers( ( uint )FramebufferHandle );
 
-        if ( Buffers?[ Engine.Api.App ] != null )
+        if ( Buffers?[ Engine.App ] != null )
         {
-            Buffers[ Engine.Api.App ]?.Remove( this );
+            Buffers[ Engine.App ]?.Remove( this );
         }
 
         GC.SuppressFinalize( this );
@@ -241,7 +241,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 
         HandleIncompleteFrameBuffer( result );
 
-        AddManagedFrameBuffer( Engine.Api.App, this );
+        AddManagedFrameBuffer( Engine.App, this );
     }
 
     /// <summary>
@@ -390,8 +390,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     {
         if ( ( result == IGL.GLFramebufferUnsupported )
           && BufferBuilder is { HasDepthRenderBuffer: true, HasStencilRenderBuffer: true }
-          && ( Engine.Api.Graphics.SupportsExtension( "GL_OES_packed_depth_stencil" )
-            || Engine.Api.Graphics.SupportsExtension( "GL_EXT_packed_depth_stencil" ) ) )
+          && ( Engine.Graphics.SupportsExtension( "GL_OES_packed_depth_stencil" )
+            || Engine.Graphics.SupportsExtension( "GL_EXT_packed_depth_stencil" ) ) )
         {
             // Delete existing render buffers
             if ( BufferBuilder.HasDepthRenderBuffer )
@@ -508,7 +508,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
             DefaultFramebufferHandleInitialized = true;
 
             //TODO: Add Allocate to Buffer<> for this
-//            if ( Api.App.AppType == Platform.ApplicationType.IOS )
+//            if ( Engine.App.AppType == Platform.ApplicationType.IOS )
 //            {
 //                var intbuf = Buffer< byte >.Allocate
 //                    ( ( 16 * sizeof( int ) ) / 8 ).Order( ByteOrder.NativeOrder ).AsIntBuffer();
@@ -573,7 +573,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     /// </summary>
     public virtual void End()
     {
-        End( 0, 0, Engine.Api.Graphics.BackBufferWidth, Engine.Api.Graphics.BackBufferHeight );
+        End( 0, 0, Engine.Graphics.BackBufferWidth, Engine.Graphics.BackBufferHeight );
     }
 
     /// <summary>

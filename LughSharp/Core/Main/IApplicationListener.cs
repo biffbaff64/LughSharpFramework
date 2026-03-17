@@ -29,7 +29,8 @@ using JetBrains.Annotations;
 namespace LughSharp.Core.Main;
 
 /// <summary>
-/// 
+/// Defines the interface for an application listener, used to manage
+/// the lifecycle events and operations of an application.
 /// </summary>
 [PublicAPI]
 public interface IApplicationListener : IDisposable

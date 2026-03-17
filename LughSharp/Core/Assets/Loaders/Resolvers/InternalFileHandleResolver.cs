@@ -36,7 +36,7 @@ public class InternalFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string filename )
     {
-        return Engine.Api.Files.Internal( filename );
+        return Engine.Files.Internal( filename );
     }
 }
 

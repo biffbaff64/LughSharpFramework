@@ -90,8 +90,8 @@ public class HdpiUtils
     public static void GLScissor( int x, int y, int width, int height )
     {
         if ( ( _mode == HdpiMode.Logical )
-          && ( ( Engine.Api.Graphics.WindowWidth != Engine.Api.Graphics.BackBufferWidth )
-            || ( Engine.Api.Graphics.WindowHeight != Engine.Api.Graphics.BackBufferHeight ) ) )
+          && ( ( Engine.Graphics.WindowWidth != Engine.Graphics.BackBufferWidth )
+            || ( Engine.Graphics.WindowHeight != Engine.Graphics.BackBufferHeight ) ) )
         {
             Engine.GL.Scissor( ToBackBufferX( x ),
                                ToBackBufferY( y ),
@@ -112,10 +112,10 @@ public class HdpiUtils
     public static void GLViewport( int x, int y, int width, int height )
     {
         if ( ( _mode == HdpiMode.Logical )
-          && ( ( Engine.Api.Graphics.WindowWidth != Engine.Api.Graphics.BackBufferWidth )
-            || ( Engine.Api.Graphics.WindowHeight != Engine.Api.Graphics.BackBufferHeight ) ) )
+          && ( ( Engine.Graphics.WindowWidth != Engine.Graphics.BackBufferWidth )
+            || ( Engine.Graphics.WindowHeight != Engine.Graphics.BackBufferHeight ) ) )
         {
-            Engine.Api.Graphics.UpdateViewport( ToBackBufferX( x ),
+            Engine.Graphics.UpdateViewport( ToBackBufferX( x ),
                                                 ToBackBufferY( y ),
                                                 ToBackBufferX( width ),
                                                 ToBackBufferY( height ),
@@ -123,7 +123,7 @@ public class HdpiUtils
         }
         else
         {
-            Engine.Api.Graphics.UpdateViewport( x, y, width, height, 4 );
+            Engine.Graphics.UpdateViewport( x, y, width, height, 4 );
         }
     }
 
@@ -133,7 +133,7 @@ public class HdpiUtils
     /// </summary>
     public static int ToLogicalX( int backBufferX )
     {
-        return ( int )( backBufferX * Engine.Api.Graphics.WindowWidth / ( float )Engine.Api.Graphics.BackBufferWidth );
+        return ( int )( backBufferX * Engine.Graphics.WindowWidth / ( float )Engine.Graphics.BackBufferWidth );
     }
 
     /// <summary>
@@ -142,8 +142,8 @@ public class HdpiUtils
     /// </summary>
     public static int ToLogicalY( int backBufferY )
     {
-        return ( int )( backBufferY * Engine.Api.Graphics.WindowHeight
-                      / ( float )Engine.Api.Graphics.BackBufferHeight );
+        return ( int )( backBufferY * Engine.Graphics.WindowHeight
+                      / ( float )Engine.Graphics.BackBufferHeight );
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ public class HdpiUtils
     /// </summary>
     public static int ToBackBufferX( int logicalX )
     {
-        return ( int )( logicalX * Engine.Api.Graphics.BackBufferWidth / ( float )Engine.Api.Graphics.WindowWidth );
+        return ( int )( logicalX * Engine.Graphics.BackBufferWidth / ( float )Engine.Graphics.WindowWidth );
     }
 
     /// <summary>
@@ -161,6 +161,6 @@ public class HdpiUtils
     /// </summary>
     public static int ToBackBufferY( int logicalY )
     {
-        return ( int )( logicalY * Engine.Api.Graphics.BackBufferHeight / ( float )Engine.Api.Graphics.WindowHeight );
+        return ( int )( logicalY * Engine.Graphics.BackBufferHeight / ( float )Engine.Graphics.WindowHeight );
     }
 }

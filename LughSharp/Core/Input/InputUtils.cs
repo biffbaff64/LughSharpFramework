@@ -38,7 +38,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseLeft()
     {
-        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.Left );
+        return Engine.Input.IsButtonPressed( IInput.Buttons.Left );
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseRight()
     {
-        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.Right );
+        return Engine.Input.IsButtonPressed( IInput.Buttons.Right );
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseMiddle()
     {
-        return Engine.Api.Input.IsButtonPressed( IInput.Buttons.Middle );
+        return Engine.Input.IsButtonPressed( IInput.Buttons.Middle );
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public static class InputUtils
     /// </summary>
     public static bool ShiftKey()
     {
-        return Engine.Api.Input.IsKeyPressed( Keys.ShiftLeft ) || Engine.Api.Input.IsKeyPressed( Keys.ShiftRight );
+        return Engine.Input.IsKeyPressed( Keys.ShiftLeft ) || Engine.Input.IsKeyPressed( Keys.ShiftRight );
     }
 
     /// <summary>
@@ -103,10 +103,10 @@ public static class InputUtils
     public static bool CtrlKey()
     {
         #if MACOS
-        return Api.Input.isKeyPressed( Keys.SYM );
+        return Engine.Input.isKeyPressed( Keys.SYM );
         #else
-        return Engine.Api.Input.IsKeyPressed( Keys.ControlLeft )
-            || Engine.Api.Input.IsKeyPressed( Keys.ControlRight );
+        return Engine.Input.IsKeyPressed( Keys.ControlLeft )
+            || Engine.Input.IsKeyPressed( Keys.ControlRight );
         #endif
     }
 
@@ -127,7 +127,7 @@ public static class InputUtils
     /// </summary>
     public static bool AltKey()
     {
-        return Engine.Api.Input.IsKeyPressed( Keys.AltLeft ) || Engine.Api.Input.IsKeyPressed( Keys.AltRight );
+        return Engine.Input.IsKeyPressed( Keys.AltLeft ) || Engine.Input.IsKeyPressed( Keys.AltRight );
     }
 
     /// <summary>

@@ -102,7 +102,7 @@ public class PerformanceCounter
     /// </summary>
     public void Tick()
     {
-        long t = TimeHelpers.NanoTime();
+        long t = TimeUtils.NanoTime();
 
         if ( _lastTick > 0L )
         {
@@ -142,7 +142,7 @@ public class PerformanceCounter
     /// </summary>
     public void Start()
     {
-        _startTime = TimeHelpers.NanoTime();
+        _startTime = TimeUtils.NanoTime();
         Valid      = false;
     }
 
@@ -155,7 +155,7 @@ public class PerformanceCounter
     {
         if ( _startTime > 0L )
         {
-            Current    += ( TimeHelpers.NanoTime() - _startTime ) * Nano2Seconds;
+            Current    += ( TimeUtils.NanoTime() - _startTime ) * Nano2Seconds;
             _startTime =  0L;
             Valid      =  true;
         }

@@ -27,7 +27,7 @@ using System.Reflection;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Maths;
-using LughSharp.Core.Scenes.Scene2D.Styles;
+using LughSharp.Core.SceneGraph2D.Styles;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 

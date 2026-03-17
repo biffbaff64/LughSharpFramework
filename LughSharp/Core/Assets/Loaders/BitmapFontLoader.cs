@@ -34,7 +34,7 @@ using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Scenes.Scene2D.UI;
+using LughSharp.Core.SceneGraph2D.UI;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Assets.Loaders;

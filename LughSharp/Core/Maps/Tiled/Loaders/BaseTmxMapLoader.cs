@@ -44,20 +44,30 @@ using LughSharp.Core.Maps.Tiled.Objects;
 using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 using XmlReader = LughSharp.Core.Utils.XML.XmlReader;
 
 namespace LughSharp.Core.Maps.Tiled.Loaders;
 
+/// <summary>
+/// Base class for loading Tiled TMX maps into a usable internal representation.
+/// This abstract class provides a framework for handling various components of a TMX map,
+/// such as tilesets, layers, and objects, in a structured and asynchronous manner.
+/// </summary>
+/// <typeparam name="TP">
+/// The parameter type used for map-loading configurations. The type must inherit from
+/// <see cref="BaseTmxMapLoader{TP}.BaseTmxLoaderParameters" />.
+/// </typeparam>
 [PublicAPI]
 public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     where TP : BaseTmxMapLoader< TP >.BaseTmxLoaderParameters
 {
-    protected const uint FlagFlipHorizontally     = 0x80000000;
-    protected const uint FlagFlipVertically       = 0x40000000;
-    protected const uint FlagFlipDiagonally       = 0x20000000;
+    protected const uint FlagFlipHorizontally    = 0x80000000;
+    protected const uint FlagFlipVertically      = 0x40000000;
+    protected const uint FlagFlipDiagonally      = 0x20000000;
     protected const uint RotatedHexagonal120Flag = 0x10000000;
-    protected const uint MaskClear                 = 0xF0000000;
+    protected const uint MaskClear               = 0xF0000000;
 
     // ========================================================================
 
@@ -321,6 +331,21 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
                 break;
 
+            case "editorsettings":
+                //@formatter:off
+                #if DEBUG
+                Logger.Error( "This TiledMap contains an <editorsettings/> element. "
+                            + "This is not currently supported. This support is "
+                            + "planned for a future release. The element will be ignored." );
+
+                break;
+                #else
+                        throw new NotSupportedException( "TiledMap editorsettings element is not "
+                                                       + "currently supported. This support is "
+                                                       + "planned for a future release." );
+                #endif
+                //@formatter:on
+            
             default:
                 throw new RuntimeException( $"Unknown layer type: {element?.Name}" );
         }
@@ -1241,21 +1266,21 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
         string? terrain;
 
-        if ( ( terrain = element.GetAttribute( "terrain" ) ) != null )
+        if ( ( terrain = element.GetAttribute( "terrain", null ) ) != null )
         {
             tile.Properties?.Put( "terrain", terrain );
         }
 
         string? probability;
 
-        if ( ( probability = element.GetAttribute( "probability" ) ) != null )
+        if ( ( probability = element.GetAttribute( "probability", null ) ) != null )
         {
             tile.Properties?.Put( "probability", probability );
         }
 
         string? type;
 
-        if ( ( type = element.GetAttribute( "type" ) ) != null )
+        if ( ( type = element.GetAttribute( "type", null ) ) != null )
         {
             tile.Properties?.Put( "type", type );
         }

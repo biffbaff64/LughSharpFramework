@@ -46,7 +46,7 @@ public class FPSLogger
     public FPSLogger( int bound = int.MaxValue )
     {
         _bound       = bound;
-        _lastLogTime = TimeHelpers.NanoTime();
+        _lastLogTime = TimeUtils.NanoTime();
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class FPSLogger
     /// </summary>
     public void Log()
     {
-        long     currentTime = TimeHelpers.NanoTime();
+        long     currentTime = TimeUtils.NanoTime();
         TimeSpan elapsedTime = TimeSpan.FromTicks( currentTime - _lastLogTime );
 
         // Log FPS if at least one second has passed

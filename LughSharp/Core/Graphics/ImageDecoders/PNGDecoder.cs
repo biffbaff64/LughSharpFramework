@@ -890,7 +890,7 @@ public class PNGDecoder
         {
             Logger.Error( "Invalid PNG Signature" );
 
-            if ( Engine.Api.DevMode )
+            if ( Engine.DevMode )
             {
                 StringBuilder sb  = new();
                 StringBuilder sb2 = new();

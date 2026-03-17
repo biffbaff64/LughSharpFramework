@@ -213,7 +213,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
             if ( shake )
             {
-                _shake.Update( Engine.Api.DeltaTime, Camera );
+                _shake.Update( Engine.DeltaTime, Camera );
             }
         }
     }
@@ -304,7 +304,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
             if ( shake )
             {
-                _shake.Update( Engine.Api.DeltaTime, Camera );
+                _shake.Update( Engine.DeltaTime, Camera );
             }
 
             Camera.Update();

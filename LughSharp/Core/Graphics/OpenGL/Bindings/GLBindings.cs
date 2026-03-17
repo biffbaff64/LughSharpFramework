@@ -2071,7 +2071,7 @@ public unsafe partial class GLBindings : IGLBindings
     private static GLboolean ObjectLabelAvailable()
     {
         if ( ( ( Engine.GL.GetOpenGLVersion().major >= 4 ) && ( Engine.GL.GetOpenGLVersion().minor >= 3 ) )
-          || Engine.Api.Graphics.SupportsExtension( "GL_ARB_debug_output" ) )
+          || Engine.Graphics.SupportsExtension( "GL_ARB_debug_output" ) )
         {
             // glObjectLabel is available through OpenGL or the extension
             Logger.Debug( "glObjectLabel IS available" );

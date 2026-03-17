@@ -78,7 +78,7 @@ public class Mesh : IDisposable
         IndexData      = indices;
         _isVertexArray = isVertexArray;
 
-        AddManagedMesh( Engine.Api.App, this );
+        AddManagedMesh( Engine.App, this );
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( Engine.Api.App, this );
+        AddManagedMesh( Engine.App, this );
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( Engine.Api.App, this );
+        AddManagedMesh( Engine.App, this );
     }
 
     /// <summary>
@@ -145,7 +145,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( staticIndices, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( Engine.Api.App, this );
+        AddManagedMesh( Engine.App, this );
     }
 
     /// <summary>
@@ -212,7 +212,7 @@ public class Mesh : IDisposable
                 break;
         }
 
-        AddManagedMesh( Engine.Api.App, this );
+        AddManagedMesh( Engine.App, this );
     }
 
     // ========================================================================
@@ -1853,9 +1853,9 @@ public class Mesh : IDisposable
     {
         if ( disposing )
         {
-            if ( _meshes[ Engine.Api.App ] != null )
+            if ( _meshes[ Engine.App ] != null )
             {
-                _meshes[ Engine.Api.App ]?.Remove( this );
+                _meshes[ Engine.App ]?.Remove( this );
             }
 
             _vertices.Dispose();

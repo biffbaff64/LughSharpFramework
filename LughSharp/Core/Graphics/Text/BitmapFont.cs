@@ -111,8 +111,8 @@ public class BitmapFont
     /// by the Scene2D Skin Loader.
     /// </summary>
     internal BitmapFont()
-        : this( Engine.Api.Files.Internal( DefaultFont ),
-                Engine.Api.Files.Internal( DefaultFontImage ),
+        : this( Engine.Files.Internal( DefaultFont ),
+                Engine.Files.Internal( DefaultFontImage ),
                 false )
     {
     }
@@ -127,8 +127,8 @@ public class BitmapFont
     /// where 0,0 is the upper left corner.
     /// </param>
     public BitmapFont( bool flip = false )
-        : this( Engine.Api.Files.Internal( DefaultFont ),
-                Engine.Api.Files.Internal( DefaultFontImage ),
+        : this( Engine.Files.Internal( DefaultFont ),
+                Engine.Files.Internal( DefaultFontImage ),
                 flip )
     {
     }
@@ -247,8 +247,8 @@ public class BitmapFont
             for ( var i = 0; i < n; i++ )
             {
                 FileInfo file = data.FontFile == null
-                    ? Engine.Api.Files.Internal( data.ImagePaths[ i ] )
-                    : Engine.Api.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
+                    ? Engine.Files.Internal( data.ImagePaths[ i ] )
+                    : Engine.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
 
                 _regions.Add( new TextureRegion( new Texture( file, false ) ) );
             }

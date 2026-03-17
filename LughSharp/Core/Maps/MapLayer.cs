@@ -41,11 +41,21 @@ public class MapLayer
     public bool          Visible    { get; set; }  = true;
     public float         ParallaxX  { get; set; }  = 1.0f;
     public float         ParallaxY  { get; set; }  = 1.0f;
+    
+    // ========================================================================
+
+    private float     _offsetX;
+    private float     _offsetY;
+    private MapLayer? _parent;
+    private bool      _renderOffsetDirty = true;
+    private float     _renderOffsetX;
+    private float     _renderOffsetY;
 
     // ========================================================================
 
+
     /// <summary>
-    /// The laye s X offset.
+    /// The layers X offset.
     /// </summary>
     public float OffsetX
     {
@@ -121,17 +131,6 @@ public class MapLayer
         }
     }
 
-    // ========================================================================
-
-    private float     _offsetX;
-    private float     _offsetY;
-    private MapLayer? _parent;
-    private bool      _renderOffsetDirty = true;
-    private float     _renderOffsetX;
-    private float     _renderOffsetY;
-
-    // ========================================================================
-
     /// <summary>
     /// Flags that Render Offsets need to be recalculated.
     /// </summary>
@@ -141,7 +140,9 @@ public class MapLayer
     }
 
     /// <summary>
-    /// 
+    /// Recalculates the render offsets for the current map layer based on its
+    /// parent layer (if any) and its own offset values. Ensures that the calculated
+    /// values for render offsets are up-to-date.
     /// </summary>
     protected void CalculateRenderOffsets()
     {

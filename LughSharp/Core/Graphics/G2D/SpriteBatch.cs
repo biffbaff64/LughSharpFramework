@@ -35,8 +35,8 @@ using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Scenes.Scene2D.UI;
-using LughSharp.Core.Scenes.Scene2D.Utils;
+using LughSharp.Core.SceneGraph2D.UI;
+using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -220,7 +220,7 @@ public class SpriteBatch : IBatch
         // Set up an orthographic projection matrix for 2D rendering.
         // This matrix transforms 2D coordinates into normalized device coordinates (NDC).
         // The origin (0, 0) is at the bottom-left corner of the screen.
-        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Graphics.WindowWidth, Engine.Graphics.WindowHeight );
 
         // Generate the index buffer data for the mesh.
         // This buffer specifies the order in which vertices are used to form triangles.
@@ -308,7 +308,7 @@ public class SpriteBatch : IBatch
             Engine.GL.Enable( EnableCap.Blend );
             Engine.GL.BlendFunc( ( int )BlendMode.SrcAlpha, ( int )BlendMode.OneMinusSrcAlpha );
 
-            Engine.GL.Viewport( 0, 0, Engine.Api.Graphics.WindowWidth, Engine.Api.Graphics.WindowHeight );
+            Engine.GL.Viewport( 0, 0, Engine.Graphics.WindowWidth, Engine.Graphics.WindowHeight );
 
             // Shader and Pipeline setup
             if ( _shader != null )

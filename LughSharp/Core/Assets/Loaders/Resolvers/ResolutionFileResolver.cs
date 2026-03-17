@@ -132,8 +132,8 @@ public class ResolutionFileResolver : IFileHandleResolver
     /// <returns>The best resolution.</returns>
     public static Resolution Choose( params Resolution[] descs )
     {
-        int w = Engine.Api.Graphics.BackBufferWidth;
-        int h = Engine.Api.Graphics.BackBufferHeight;
+        int w = Engine.Graphics.BackBufferWidth;
+        int h = Engine.Graphics.BackBufferHeight;
 
         // Prefer the shortest side.
         Resolution best = descs[ 0 ];

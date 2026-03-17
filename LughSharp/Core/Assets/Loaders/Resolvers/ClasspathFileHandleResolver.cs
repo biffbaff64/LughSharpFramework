@@ -34,7 +34,7 @@ public class ClasspathFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string filename )
     {
-        return Engine.Api.Files.Classpath( filename );
+        return Engine.Files.Classpath( filename );
     }
 }
 

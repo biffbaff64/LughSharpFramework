@@ -103,7 +103,7 @@ public class Texture : GLTexture, IManaged
     /// <see cref="PathType.Internal"/>.
     /// </param>
     public Texture( string internalPath )
-        : this( Engine.Api.Files.Internal( internalPath ), false )
+        : this( Engine.Files.Internal( internalPath ), false )
     {
     }
 
@@ -195,7 +195,7 @@ public class Texture : GLTexture, IManaged
 
         if ( data.IsManaged )
         {
-            AddManagedTexture( Engine.Api.App, this );
+            AddManagedTexture( Engine.App, this );
         }
     }
 
@@ -500,7 +500,7 @@ public class Texture : GLTexture, IManaged
 
             if ( TextureData is { IsManaged: true } )
             {
-                _managedTextures[ Engine.Api.App ].Remove( this );
+                _managedTextures[ Engine.App ].Remove( this );
             }
         }
 

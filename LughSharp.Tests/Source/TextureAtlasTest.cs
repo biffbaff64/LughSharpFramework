@@ -27,6 +27,7 @@ using System.Runtime.Versioning;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Main;
 
 using NUnit.Framework;
 
@@ -47,8 +48,8 @@ public class TextureAtlasTest : ILughTest
     [Test]
     public void Run()
     {
-        var atlasData = new TextureAtlasData( Api.Files.Internal( @"Assets\PackedImages\Output\input.atlas" ),
-                                              new DirectoryInfo( Files.InternalPath +
+        var atlasData = new TextureAtlasData( Engine.Files.Internal( @"Assets\PackedImages\Output\input.atlas" ),
+                                              new DirectoryInfo( Engine.Files.GetInternalStoragePath() +
                                                                  @"\Assets\PackedImages\Output" ) );
 
         var atlas = new TextureAtlas( atlasData );
