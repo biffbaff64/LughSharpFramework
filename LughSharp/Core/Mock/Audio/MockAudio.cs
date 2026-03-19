@@ -22,20 +22,51 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-global using System;
-global using System.Collections.Generic;
-global using System.Drawing;
-global using System.IO;
+using JetBrains.Annotations;
+
+using LughSharp.Core.Audio;
+
+namespace LughSharp.Core.Mock.Audio;
+
+/// <summary>
+/// Audio stubs for use when Audio is disabled, or when Audio failed to initialise.
+/// </summary>
+[PublicAPI]
+public class MockAudio : IAudio
+{
+    /// <inheritdoc />
+    public IAudioDevice NewAudioDevice( int samplingRate, bool isMono )
+    {
+        return new MockAudioDevice();
+    }
+
+    /// <inheritdoc />
+    public IAudioRecorder NewAudioRecorder( int samplingRate, bool isMono )
+    {
+        return new MockAudioRecorder();
+    }
+
+    /// <inheritdoc />
+    public ISound NewSound( FileInfo? fileHandle )
+    {
+        return new MockSound();
+    }
+
+    /// <inheritdoc />
+    public IMusic NewMusic( FileInfo? file )
+    {
+        return new MockMusic();
+    }
+
+    public void Update()
+    {
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+    }
+}
 
 // ============================================================================
-global using JetBrains.Annotations;
-
-// ============================================================================
-global using static LughSharp.Core.Main.Engine;
-
-// ============================================================================
-global using Vector3 = LughSharp.Core.Maths.Vector3;
-
-// ============================================================================
-
 // ============================================================================

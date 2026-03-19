@@ -87,7 +87,7 @@ public class TextButton : Button
     /// <exception cref="ArgumentException">
     /// Thrown if an attempt to set Style to null is made.
     /// </exception>
-    public new TextButtonStyle? Style
+    public TextButtonStyle? Style
     {
         get;
         set

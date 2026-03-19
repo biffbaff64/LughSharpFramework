@@ -32,24 +32,24 @@ using LughSharp.Core.SceneGraph2D.Listeners;
 using LughSharp.Core.SceneGraph2D.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
 /// <summary>
 /// A button is a <see cref="Table"/> with a checked state and additional
-/// <see cref="ButtonStyle"/> style fields for pressed, unpressed, and
-/// checked. Each time a button is clicked, the checked state is toggled.
-/// Being a table, a button can contain any other actors.
+/// <see cref="ButtonStyle"/> style fields for pressed, unpressed, and checked.
+/// Each time a button is clicked, the checked state is toggled. Being a table,
+/// a button can contain any other actors.
 /// <para>
-/// The button's padding is set to the background drawable's padding when
-/// the background changes, overwriting any padding set manually. Padding
-/// can still be set on the button's table cells.
+/// The button's padding is set to the background drawable's padding when the
+/// 0background changes, overwriting any padding set manually. Padding can still
+/// be set on the button's table cells.
 /// </para>
 /// <para>
-/// A <see cref="ChangeListener.ChangeEvent"/> is fired when the button is
-/// clicked. Cancelling the event will restore the checked button state to
-/// what it was previously.
+/// A <see cref="ChangeListener.ChangeEvent"/> is fired when the button is clicked.
+/// Cancelling the event will restore the checked button state to what it was previously.
 /// </para>
 /// <para>
 /// The preferred size of the button is determined by the background and the
@@ -64,8 +64,10 @@ public class Button : Table, IDisableable
     public bool                   IsDisabled    { get; set; }
     public ButtonGroup< Button >? ButtonGroup   { get; set; }
 
+    // ========================================================================
+    
     private bool        _programmaticChangeEvents = true;
-    private ButtonStyle _style                     = null!;
+    private ButtonStyle _style                    = new();
 
     // ========================================================================
     // ========================================================================
@@ -76,70 +78,124 @@ public class Button : Table, IDisableable
     /// </summary>
     public Button()
     {
-        Initialise();
+        SetClickListener();
     }
 
+    /// <summary>
+    /// Creates a button with using the <see cref="ButtonStyle"/> from the
+    /// supplied <see cref="Skin"/>.
+    /// </summary>
     public Button( Skin skin ) : base( skin )
     {
-        Initialise();
-
         SetStyle( skin.Get< ButtonStyle >() );
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+        
+        SetClickListener();
     }
 
-    public Button( Skin skin, string styleName )
-        : base( skin )
+    /// <summary>
+    /// Creates a button with using the named <see cref="ButtonStyle"/> from the
+    /// supplied <see cref="Skin"/>.
+    /// </summary>
+    public Button( Skin skin, string styleName ) : base( skin )
     {
-        Initialise();
-
-        SetStyle( skin.Get< ButtonStyle >( styleName ) );
+        var style = skin.Get< ButtonStyle >( styleName );
+        
+        Guard.Against.Null( style, $"Skin does not contain a ButtonStyle named {styleName}" );
+        
+        SetStyle( style );
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+        
+        SetClickListener();
     }
 
+    /// <summary>
+    /// Creates a button with using the named <see cref="ButtonStyle"/> from the
+    /// supplied <see cref="Skin"/>, and also adding the supplied child.
+    /// </summary>
+    /// <param name="child"></param>
+    /// <param name="skin"></param>
+    /// <param name="styleName"></param>
     public Button( Actor child, Skin skin, string styleName )
         : this( child, skin.Get< ButtonStyle >( styleName ) )
     {
         Skin = skin;
     }
 
+    /// <summary>
+    /// Creates a button with using the supplied <see cref="ButtonStyle"/>, and
+    /// also adding the supplied child.
+    /// </summary>
     public Button( Actor child, ButtonStyle style )
     {
-        Initialise();
-        Add( child );
-
         SetStyle( style );
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+        
+        SetClickListener();
+        Add( child );
     }
 
+    /// <summary>
+    /// Creates a button with using the supplied <see cref="ButtonStyle"/>.
+    /// </summary>
+    /// <param name="style"></param>
     public Button( ButtonStyle style )
     {
-        Initialise();
-
         _style = style;
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+        
+        SetClickListener();
     }
 
+    /// <summary>
+    /// Creates a button with using the supplied <see cref="ISceneDrawable"/>
+    /// images for the button's up state. The down and checked states will be
+    /// set to <c>null</c>, and can be updated later. These images will be used
+    /// to create a new <see cref="ButtonStyle"/> instance, and the button will
+    /// be created from that.
+    /// </summary>
     public Button( ISceneDrawable? up )
         : this( new ButtonStyle( up, null, null ) )
     {
     }
 
+    /// <summary>
+    /// Creates a button with using the supplied <see cref="ISceneDrawable"/>
+    /// images for the button's up and down states. The checked state will be
+    /// set to <c>null</c>, and can be updated later. These images will be used
+    /// to create a new <see cref="ButtonStyle"/> instance, and the button will
+    /// be created from that.
+    /// </summary>
     public Button( ISceneDrawable? up, ISceneDrawable? down )
         : this( new ButtonStyle( up, down, null ) )
     {
     }
 
+    /// <summary>
+    /// Creates a button with using the supplied <see cref="ISceneDrawable"/>
+    /// images for the button's up, down, and checked states. These images will
+    /// be used to create a new <see cref="ButtonStyle"/> instance, and the
+    /// button will be created from that.
+    /// </summary>
     public Button( ISceneDrawable? upImage, ISceneDrawable? downImage, ISceneDrawable? checkedImage )
         : this( new ButtonStyle( upImage, downImage, checkedImage ) )
     {
     }
 
+    /// <summary>
+    /// Creates a button with using the <see cref="ButtonStyle"/> from the
+    /// supplied <see cref="Skin"/>, and also adding the supplied child.
+    /// </summary>
     public Button( Actor child, Skin skin )
         : this( child, skin.Get< ButtonStyle >() )
     {
     }
 
-    private void Initialise()
+    /// <summary>
+    /// Enables the button to be clicked, setting the touchable to <see cref="Touchable.Enabled"/>,
+    /// and adding a <see cref="ButtonClickListener"/> to the button.
+    /// </summary>
+    private void SetClickListener()
     {
         Touchable = Touchable.Enabled;
 
@@ -148,43 +204,53 @@ public class Button : Table, IDisableable
         AddListener( ClickListener! );
     }
 
-    public void SetStyle< TStyle >( TStyle? style )
+    /// <summary>
+    /// Sets the button's style.
+    /// </summary>
+    /// <param name="style">
+    /// The style, which could be <see cref="ButtonStyle"/>, or any style that
+    /// inherits from ButtonStyle.
+    /// </param>
+    /// <typeparam name="TStyle"></typeparam>
+    public void SetStyle< TStyle >( TStyle? style ) where TStyle : ButtonStyle
     {
         if ( style == null )
         {
             return;
         }
-
-        _style = ( style as ButtonStyle )!;
+        
+        _style.Set< TStyle >( style );
         
         SetBackground( GetBackgroundDrawable() );
     }
 
+    /// <summary>
+    /// Returns the button's style.
+    /// </summary>
+    /// <remarks>
+    /// This MAY become a property at some point, after I've finished the
+    /// restructuring i'm currently doing. 
+    /// </remarks>
     public ButtonStyle GetStyle()
     {
         return _style;
     }
-    
-//    /// <summary>
-//    /// Returns the button's style. Modifying the returned style may not have an
-//    /// effect until <see cref="Style"/> set() is called.
-//    /// </summary>
-//    public ButtonStyle Style
-//    {
-//        get => _style;
-//        set
-//        {
-//            _style = value ?? throw new ArgumentException( "style cannot be null." );
-//
-//            SetBackground( GetBackgroundDrawable() );
-//        }
-//    }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="isChecked"></param>
     public void SetChecked( bool isChecked )
     {
         SetChecked( isChecked, _programmaticChangeEvents );
     }
 
+    /// <summary>
+    /// Sets the button's checked state, and optionally fires a
+    /// <see cref="ChangeListener.ChangeEvent"/> if the checked state changes.
+    /// </summary>
+    /// <param name="isChecked"></param>
+    /// <param name="fireEvent"></param>
     public void SetChecked( bool isChecked, bool fireEvent )
     {
         if ( IsChecked == isChecked )
@@ -203,15 +269,12 @@ public class Button : Table, IDisableable
         {
             var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
-            if ( changeEvent is not null )
+            if ( Fire( changeEvent ) )
             {
-                if ( Fire( changeEvent ) )
-                {
-                    IsChecked = !isChecked;
-                }
-
-                Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
+                IsChecked = !isChecked;
             }
+
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
         }
     }
 
@@ -284,19 +347,19 @@ public class Button : Table, IDisableable
     /// </summary>
     public virtual ISceneDrawable? GetBackgroundDrawable()
     {
-        if ( IsDisabled && ( _style?.Disabled != null ) )
+        if ( IsDisabled && ( _style.Disabled != null ) )
         {
             return _style.Disabled;
         }
 
         if ( IsPressed() )
         {
-            if ( IsChecked && ( _style?.CheckedDown != null ) )
+            if ( IsChecked && ( _style.CheckedDown != null ) )
             {
                 return _style.CheckedDown;
             }
 
-            if ( _style?.Down != null )
+            if ( _style.Down != null )
             {
                 return _style.Down;
             }
@@ -306,14 +369,14 @@ public class Button : Table, IDisableable
         {
             if ( IsChecked )
             {
-                if ( _style?.CheckedOver != null )
+                if ( _style.CheckedOver != null )
                 {
                     return _style.CheckedOver;
                 }
             }
             else
             {
-                if ( _style?.Over != null )
+                if ( _style.Over != null )
                 {
                     return _style.Over;
                 }
@@ -324,28 +387,28 @@ public class Button : Table, IDisableable
 
         if ( IsChecked )
         {
-            if ( focused && ( _style?.CheckedFocused != null ) )
+            if ( focused && ( _style.CheckedFocused != null ) )
             {
                 return _style.CheckedFocused;
             }
 
-            if ( _style?.Checked != null )
+            if ( _style.Checked != null )
             {
                 return _style.Checked;
             }
 
-            if ( IsOver() && ( _style?.Over != null ) )
+            if ( IsOver() && ( _style.Over != null ) )
             {
                 return _style.Over;
             }
         }
 
-        if ( focused && ( _style?.Focused != null ) )
+        if ( focused && ( _style.Focused != null ) )
         {
             return _style.Focused;
         }
 
-        return _style?.Up;
+        return _style.Up;
     }
 
     /// <inheritdoc />
@@ -403,22 +466,34 @@ public class Button : Table, IDisableable
         }
     }
 
+    /// <summary>
+    /// Convenience method which toggles the button's checked state.
+    /// </summary>
     public void ToggleChecked()
     {
         SetChecked( !IsChecked );
     }
 
+    /// <summary>
+    /// Convenience method which returns <c>true</c> if the button is pressed.
+    /// </summary>
+    /// <returns></returns>
     public bool IsPressed()
     {
-        return ClickListener!.VisualPressed;
+        return ClickListener?.VisualPressed ?? false;
+    }
+
+    /// <summary>
+    /// Convenience method which returns <c>true</c> if the mouse or touch is
+    /// over the button or pressed and within the tap square.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsOver()
+    {
+        return ClickListener?.Over ?? false;
     }
 
     public override string? Name => GetType().Name;
-    
-    public bool IsOver()
-    {
-        return ClickListener!.Over;
-    }
 }
 
 // ============================================================================

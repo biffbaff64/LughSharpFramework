@@ -31,6 +31,7 @@ using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Utils;
+using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Collections;
@@ -263,15 +264,15 @@ public class Table : WidgetGroup
         float padBottomNew = GetPadBottom();
         float padRightNew  = GetPadRight();
 
-        if ( !( padTopOld + padBottomOld ).Equals( padTopNew + padBottomNew )
-          || !( padLeftOld + padRightOld ).Equals( padLeftNew + padRightNew ) )
+        if ( Math.Abs( ( padTopOld + padBottomOld ) - ( padTopNew + padBottomNew ) ) > NumberUtils.FloatTolerance
+            || Math.Abs( ( padLeftOld + padRightOld ) - ( padLeftNew + padRightNew ) ) > NumberUtils.FloatTolerance )
         {
             InvalidateHierarchy();
         }
-        else if ( !padTopOld.Equals( padTopNew )
-               || !padLeftOld.Equals( padLeftNew )
-               || !padBottomOld.Equals( padBottomNew )
-               || !padRightOld.Equals( padRightNew ) )
+        else if ( Math.Abs( padTopOld - padTopNew ) > NumberUtils.FloatTolerance
+               || Math.Abs( padLeftOld - padLeftNew ) > NumberUtils.FloatTolerance
+               || Math.Abs( padBottomOld - padBottomNew ) > NumberUtils.FloatTolerance
+               || Math.Abs( padRightOld - padRightNew ) > NumberUtils.FloatTolerance )
         {
             Invalidate();
         }

@@ -248,9 +248,9 @@ public class Dialog : Window
 
         PreviousKeyboardFocus = null;
 
-        if ( ( stage.KeyboardFocus != null ) && !stage.KeyboardFocus.IsDescendantOf( this ) )
+        if ( ( stage.GetKeyboardFocus() != null ) && !stage.GetKeyboardFocus().IsDescendantOf( this ) )
         {
-            PreviousKeyboardFocus = stage.KeyboardFocus;
+            PreviousKeyboardFocus = stage.GetKeyboardFocus();
         }
 
         PreviousScrollFocus = null;
@@ -265,7 +265,7 @@ public class Dialog : Window
         Pack();
 
         stage.CancelTouchFocus();
-        stage.KeyboardFocus = this;
+        stage.SetKeyboardFocus( this );
         stage.ScrollFocus   = this;
 
         if ( action != null )
@@ -313,9 +313,9 @@ public class Dialog : Window
                 PreviousKeyboardFocus = null;
             }
 
-            if ( ( stage.KeyboardFocus == null ) || stage.KeyboardFocus.IsDescendantOf( this ) )
+            if ( ( stage.GetKeyboardFocus() == null ) || stage.GetKeyboardFocus().IsDescendantOf( this ) )
             {
-                stage.KeyboardFocus = PreviousKeyboardFocus;
+                stage.SetKeyboardFocus( PreviousKeyboardFocus );
             }
 
             if ( PreviousScrollFocus is { Stage: null } )

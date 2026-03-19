@@ -29,6 +29,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
@@ -66,159 +67,30 @@ public class Actor : IActor, IComparable< Actor >
     protected float OriginY { get; set; }
 
     // ========================================================================
-
-    /// <summary>
-    /// The X coordinate of the actor's left edge.
-    /// </summary>
-    public float X
-    {
-        get;
-        set
-        {
-            if ( MathUtils.IsNotEqual( field, value ) )
-            {
-                field = value;
-                OnPositionChanged();
-            }
-        }
-    }
-
-    /// <summary>
-    /// The Y coordinate of the actor's bottom edge.
-    /// </summary>
-    public float Y
-    {
-        get;
-        set
-        {
-            if ( MathUtils.IsNotEqual( field, value ) )
-            {
-                field = value;
-                OnPositionChanged();
-            }
-        }
-    }
-
-    /// <summary>
-    /// The actors width.
-    /// </summary>
-    public float Width
-    {
-        get;
-        set
-        {
-            if ( MathUtils.IsNotEqual( field, value ) )
-            {
-                field = value;
-                OnSizeChanged();
-            }
-        }
-    }
-
-    /// <summary>
-    /// The actors height.
-    /// </summary>
-    public float Height
-    {
-        get;
-        set
-        {
-            if ( MathUtils.IsNotEqual( field, value ) )
-            {
-                field = value;
-                OnSizeChanged();
-            }
-        }
-    }
-
-    /// <summary>
-    /// Top edge of this actor.
-    /// </summary>
-    public float TopEdge => Y + Height;
-
-    /// <summary>
-    /// Right side edge of this actor.
-    /// </summary>
-    public float RightEdge => X + Width;
-
-    /// <summary>
-    /// The X Scaling factor
-    /// </summary>
-    public float ScaleX
-    {
-        get;
-        set
-        {
-            if ( !field.Equals( value ) )
-            {
-                field = value;
-                OnScaleChanged();
-            }
-        }
-    } = 1.0f;
-
-    /// <summary>
-    /// The Y Scaling factor
-    /// </summary>
-    public float ScaleY
-    {
-        get;
-        set
-        {
-            if ( !field.Equals( value ) )
-            {
-                field = value;
-                OnScaleChanged();
-            }
-        }
-    } = 1.0f;
-
-    /// <summary>
-    /// This actors rotation.
-    /// </summary>
-    public float Rotation
-    {
-        get;
-        set
-        {
-            if ( !field.Equals( value ) )
-            {
-                field = value;
-                OnRotationChanged();
-            }
-        }
-    } = 0.0f;
-
-    /// <summary>
-    /// This actors Color.
-    /// </summary>
-    public Color ActorColor
-    {
-        get;
-        set => field.Set( value );
-    } = new( 1, 1, 1, 1 );
-
-    /// <summary>
-    /// If true, <see cref="DrawDebug(ShapeRenderer)"/> will be called for this actor.
-    /// </summary>
-    public bool DebugActive
-    {
-        get;
-        set
-        {
-            if ( Stage != null )
-            {
-                field = value;
-
-                if ( value )
-                {
-                    Stage.Debug = true;
-                }
-            }
-        }
-    } = false;
-
     // ========================================================================
+
+    static Actor()
+    {
+        Pools.AddPool< Rectangle >( new Pool< Rectangle >
+        {
+            NewObjectFactory = () => new Rectangle()
+        } );
+
+        Pools.AddPool< List< Group > >( new Pool< List< Group > >
+        {
+            NewObjectFactory = () => new List< Group >()
+        } );
+
+        Pools.AddPool< GlyphLayout >( new Pool< GlyphLayout >
+        {
+            NewObjectFactory = () => new GlyphLayout()
+        } );
+
+        Pools.AddPool< ChangeListener.ChangeEvent >( new Pool< ChangeListener.ChangeEvent >
+        {
+            NewObjectFactory = () => new ChangeListener.ChangeEvent()
+        } );
+    }
 
     /// <summary>
     /// Default Constructor.
@@ -760,11 +632,162 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Returns true if this actor is the <see cref="Stage.KeyboardFocus"/> keyboard focus actor.
+    /// The X coordinate of the actor's left edge.
+    /// </summary>
+    public float X
+    {
+        get;
+        set
+        {
+            if ( MathUtils.IsNotEqual( field, value ) )
+            {
+                field = value;
+                OnPositionChanged();
+            }
+        }
+    }
+
+    /// <summary>
+    /// The Y coordinate of the actor's bottom edge.
+    /// </summary>
+    public float Y
+    {
+        get;
+        set
+        {
+            if ( MathUtils.IsNotEqual( field, value ) )
+            {
+                field = value;
+                OnPositionChanged();
+            }
+        }
+    }
+
+    /// <summary>
+    /// The actors width.
+    /// </summary>
+    public float Width
+    {
+        get;
+        set
+        {
+            if ( MathUtils.IsNotEqual( field, value ) )
+            {
+                field = value;
+                OnSizeChanged();
+            }
+        }
+    }
+
+    /// <summary>
+    /// The actors height.
+    /// </summary>
+    public float Height
+    {
+        get;
+        set
+        {
+            if ( MathUtils.IsNotEqual( field, value ) )
+            {
+                field = value;
+                OnSizeChanged();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Top edge of this actor.
+    /// </summary>
+    public float TopEdge => Y + Height;
+
+    /// <summary>
+    /// Right side edge of this actor.
+    /// </summary>
+    public float RightEdge => X + Width;
+
+    /// <summary>
+    /// The X Scaling factor
+    /// </summary>
+    public float ScaleX
+    {
+        get;
+        set
+        {
+            if ( Math.Abs( field - value ) > NumberUtils.FloatTolerance )
+            {
+                field = value;
+                OnScaleChanged();
+            }
+        }
+    } = 1.0f;
+
+    /// <summary>
+    /// The Y Scaling factor
+    /// </summary>
+    public float ScaleY
+    {
+        get;
+        set
+        {
+            if ( Math.Abs( field - value ) > NumberUtils.FloatTolerance )
+            {
+                field = value;
+                OnScaleChanged();
+            }
+        }
+    } = 1.0f;
+
+    /// <summary>
+    /// This actors rotation.
+    /// </summary>
+    public float Rotation
+    {
+        get;
+        set
+        {
+            if ( Math.Abs( field - value ) > NumberUtils.FloatTolerance )
+            {
+                field = value;
+                OnRotationChanged();
+            }
+        }
+    } = 0.0f;
+
+    /// <summary>
+    /// This actors Color.
+    /// </summary>
+    public Color ActorColor
+    {
+        get;
+        set => field.Set( value );
+    } = new( 1, 1, 1, 1 );
+
+    /// <summary>
+    /// If true, <see cref="DrawDebug(ShapeRenderer)"/> will be called for this actor.
+    /// </summary>
+    public bool DebugActive
+    {
+        get;
+        set
+        {
+            if ( Stage != null )
+            {
+                field = value;
+
+                if ( value )
+                {
+                    Stage.Debug = true;
+                }
+            }
+        }
+    } = false;
+
+    /// <summary>
+    /// Returns true if this actor is the <see cref="Stage.GetKeyboardFocus()"/> keyboard focus actor.
     /// </summary>
     public bool HasKeyboardFocus()
     {
-        return ( Stage != null ) && ( Stage.KeyboardFocus == this );
+        return ( Stage != null ) && ( Stage.GetKeyboardFocus() == this );
     }
 
     /// <summary>
@@ -907,7 +930,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public void SetPosition( float x, float y )
     {
-        if ( !X.Equals( x ) || !X.Equals( y ) )
+        if ( MathUtils.IsNotEqual( X, x ) || MathUtils.IsNotEqual( Y, y ) )
         {
             X = x;
             Y = y;
@@ -939,7 +962,7 @@ public class Actor : IActor, IComparable< Actor >
             y -= Height / 2;
         }
 
-        if ( !X.Equals( x ) || !Y.Equals( y ) )
+        if ( MathUtils.IsNotEqual( X, x ) || MathUtils.IsNotEqual( Y, y ) )
         {
             X = x;
             Y = y;
@@ -952,7 +975,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public void MoveBy( float x, float y )
     {
-        if ( ( x != 0 ) || ( y != 0 ) )
+        if ( ( x != 0f ) || ( y != 0f ) )
         {
             X += x;
             Y += y;
@@ -1096,7 +1119,8 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public void SetScale( float scaleXY )
     {
-        if ( !ScaleX.Equals( scaleXY ) || !ScaleY.Equals( scaleXY ) )
+        if ( MathUtils.IsNotEqual( ScaleX, scaleXY )
+            || MathUtils.IsNotEqual( ScaleY, scaleXY ) )
         {
             ScaleX = scaleXY;
             ScaleY = scaleXY;
@@ -1111,7 +1135,8 @@ public class Actor : IActor, IComparable< Actor >
     /// <param name="scaleY"> The new Y sc ale value. </param>
     public void SetScale( float scaleX, float scaleY )
     {
-        if ( !ScaleX.Equals( scaleX ) || !ScaleY.Equals( scaleY ) )
+        if ( Math.Abs( ScaleX - scaleX ) > NumberUtils.FloatTolerance
+            || Math.Abs( ScaleY - scaleY ) > NumberUtils.FloatTolerance )
         {
             ScaleX = scaleX;
             ScaleY = scaleY;
@@ -1270,7 +1295,7 @@ public class Actor : IActor, IComparable< Actor >
         tableBounds.Width  = width;
         tableBounds.Height = height;
 
-        Rectangle scissorBounds = Pools.Obtain< Rectangle >() ?? new Rectangle();
+        Rectangle scissorBounds = Pools.Obtain< Rectangle >();
 
         Stage.CalculateScissors( tableBounds, scissorBounds );
 
@@ -1289,7 +1314,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public void ClipEnd()
     {
-        Pools.Free< object >( ScissorStack.PopScissors() );
+        Pools.Free< Rectangle >( ScissorStack.PopScissors() );
     }
 
     /// <summary>
@@ -1515,5 +1540,3 @@ public class Actor : IActor, IComparable< Actor >
 
 // ============================================================================
 // ============================================================================
-
-

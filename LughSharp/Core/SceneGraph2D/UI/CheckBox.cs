@@ -40,36 +40,40 @@ public class CheckBox : TextButton
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new CheckBox using the supplied <see cref="Skin"/>, and text for the
+    /// associated <see cref="Label"/>.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="skin"></param>
     public CheckBox( string text, Skin skin )
         : this( text, skin.Get< CheckBoxStyle >() )
     {
     }
 
+    /// <summary>
+    /// Creates a new CheckBox using the supplied <see cref="Skin"/>, text for the
+    /// associated <see cref="Label"/>, and <see cref="CheckBoxStyle"/>.
+    /// </summary>
     public CheckBox( string text, Skin skin, string styleName )
         : this( text, skin.Get< CheckBoxStyle >( styleName ) )
     {
     }
 
+    /// <summary>
+    /// Creates a new CheckBox using the supplied <see cref="CheckBoxStyle"/>, and
+    /// text for the associated <see cref="Label"/>.
+    /// </summary>
     public CheckBox( string text, CheckBoxStyle style ) : base( text, style )
     {
-        Setup( style );
-    }
-
-    public new CheckBoxStyle? Style
-    {
-        get;
-        set
-        {
-            field      = value ?? throw new ArgumentException( "style must be a CheckBoxStyle." );
-            base.Style = value;
-        }
+        SafeSetup( style );
     }
 
     /// <summary>
     /// Private setup method to allow calls to virtual methods that can't
     /// be called from constructors.
     /// </summary>
-    private void Setup( CheckBoxStyle style )
+    private void SafeSetup( CheckBoxStyle style )
     {
         ClearChildren();
 
@@ -86,6 +90,11 @@ public class CheckBox : TextButton
         SetSize( GetPrefWidth(), GetPrefHeight() );
     }
 
+    /// <summary>
+    /// Draws the CheckBox.
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="parentAlpha"></param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         ISceneDrawable? checkbox = null;
@@ -125,6 +134,16 @@ public class CheckBox : TextButton
         Image?.SetDrawable( checkbox );
 
         base.Draw( batch, parentAlpha );
+    }
+
+    public new CheckBoxStyle? Style
+    {
+        get;
+        set
+        {
+            field      = value ?? throw new ArgumentException( "style must be a CheckBoxStyle." );
+            base.Style = value;
+        }
     }
     
     public override string? Name => GetType().Name;

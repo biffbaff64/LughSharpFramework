@@ -46,11 +46,11 @@ public class FocusListener : IEventListener
             return false;
         }
 
-        if ( focusEvent.Type == FocusEvent.FeType.Keyboard )
+        if ( focusEvent.Type == FocusEvent.FocusEventType.Keyboard )
         {
             KeyboardFocusChanged( focusEvent, e.TargetActor, focusEvent.Focused );
         }
-        else if ( focusEvent.Type == FocusEvent.FeType.Scroll )
+        else if ( focusEvent.Type == FocusEvent.FocusEventType.Scroll )
         {
             ScrollFocusChanged( focusEvent, e.TargetActor, focusEvent.Focused );
         }
@@ -84,14 +84,14 @@ public class FocusListener : IEventListener
     [PublicAPI]
     public class FocusEvent : Event
     {
-        public enum FeType
+        public enum FocusEventType
         {
             Keyboard,
             Scroll
         }
 
         public bool    Focused { get; set; }
-        public FeType? Type    { get; set; }
+        public FocusEventType? Type    { get; set; }
 
         // ====================================================================
 

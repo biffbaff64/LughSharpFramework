@@ -40,6 +40,8 @@ public class ImageTextButton : Button
     private          Label?                _label;
     private          ImageTextButtonStyle? _style;
 
+    // ========================================================================
+    
     public ImageTextButton( string text, Skin skin )
         : this( text, skin.Get< ImageTextButtonStyle >() )
     {
@@ -65,11 +67,10 @@ public class ImageTextButton : Button
 
         _image = new Scene2DImage();
         _image.SetScaling( Scaling.Fit );
+        Add( _image );
 
         _label = new Label( text, new LabelStyle( style.Font!, style.FontColor! ) );
         _label.SetAlignment( Align.Center );
-
-        Add( _image );
         Add( _label );
 
         SetStyleAndSize( style );
@@ -239,7 +240,7 @@ public class ImageTextButton : Button
             return _style.FocusedFontColor;
         }
 
-        return _style?.FontColor;
+        return _style?.FontColor ?? Color.White;
     }
 
     /// <inheritdoc />

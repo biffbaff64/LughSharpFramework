@@ -22,10 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
 using Extensions.Source.Tools.ImagePacker;
+
+using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 

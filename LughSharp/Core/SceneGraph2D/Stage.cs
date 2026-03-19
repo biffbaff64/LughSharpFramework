@@ -109,6 +109,7 @@ public class Stage : InputAdapter, IDisposable
     private Actor?          _mouseOverActor;
     private int             _mouseScreenX;
     private int             _mouseScreenY;
+    private Actor?          _keyboardFocus;
 
     // ========================================================================
     // ========================================================================
@@ -161,6 +162,13 @@ public class Stage : InputAdapter, IDisposable
     {
         Viewport = viewport ?? throw new ArgumentException( "viewport cannot be null." );
         Batch    = batch ?? throw new ArgumentException( "batch cannot be null." );
+
+        Pools.AddPool< InputEvent >( new Pool< InputEvent > { NewObjectFactory = () => new InputEvent() } );
+        Pools.AddPool< TouchFocus >( new Pool< TouchFocus > { NewObjectFactory = () => new TouchFocus() } );
+        Pools.AddPool< FocusListener.FocusEvent >( new Pool< FocusListener.FocusEvent >
+        {
+            NewObjectFactory = () => new FocusListener.FocusEvent()
+        } );
 
         RootGroup = new Group();
         RootGroup.SetStage( this );
@@ -625,7 +633,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool OnKeyDown( int keyCode )
     {
-        Actor target     = KeyboardFocus ?? RootGroup;
+        Actor target     = GetKeyboardFocus() ?? RootGroup;
         var   inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
@@ -650,7 +658,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool OnKeyUp( int keyCode )
     {
-        Actor target     = KeyboardFocus ?? RootGroup;
+        Actor target     = GetKeyboardFocus() ?? RootGroup;
         var   inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
@@ -675,7 +683,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool OnKeyTyped( char character )
     {
-        Actor target     = KeyboardFocus ?? RootGroup;
+        Actor target     = GetKeyboardFocus() ?? RootGroup;
         var   inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
@@ -918,8 +926,8 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public virtual void UnfocusAll()
     {
-        ScrollFocus   = null;
-        KeyboardFocus = null;
+        ScrollFocus = null;
+        SetKeyboardFocus( null );
         CancelTouchFocus();
     }
 
@@ -936,9 +944,9 @@ public class Stage : InputAdapter, IDisposable
             ScrollFocus = null;
         }
 
-        if ( ( KeyboardFocus != null ) && KeyboardFocus.IsDescendantOf( actor ) )
+        if ( ( GetKeyboardFocus() != null ) && GetKeyboardFocus().IsDescendantOf( actor ) )
         {
-            KeyboardFocus = null;
+            SetKeyboardFocus( null );
         }
     }
 
@@ -1052,60 +1060,61 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
+    /// Gets the actor that receives key events.
+    /// </summary>
+    public Actor? GetKeyboardFocus() => _keyboardFocus;
+
+    /// <summary>
     /// Sets the actor that will receive key events.
     /// </summary>
-    /// <param name="value"> May be null. </param>
+    /// <param name="actor"> May be null. </param>
     /// <returns>
     /// true if the unfocus and focus events were not cancelled by a <see cref="FocusListener"/>.
     /// </returns>
-    public Actor? KeyboardFocus
+    public void SetKeyboardFocus( Actor? actor )
     {
-        get;
-        set
+        if ( _keyboardFocus == actor )
         {
-            if ( field == value )
+            return;
+        }
+
+        var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
+
+        focusEvent.Stage = this;
+        focusEvent.Type  = FocusListener.FocusEvent.FocusEventType.Keyboard;
+
+        Actor? oldKeyboardFocus = _keyboardFocus;
+
+        if ( oldKeyboardFocus != null )
+        {
+            focusEvent.Focused      = false;
+            focusEvent.RelatedActor = actor;
+
+            oldKeyboardFocus.Fire( focusEvent );
+        }
+
+        bool success = !focusEvent.IsCancelled;
+
+        if ( success )
+        {
+            _keyboardFocus = actor;
+
+            if ( actor != null )
             {
-                return;
-            }
+                focusEvent.Focused      = true;
+                focusEvent.RelatedActor = oldKeyboardFocus;
 
-            var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
+                actor.Fire( focusEvent );
+                success = !focusEvent.IsCancelled;
 
-            focusEvent.Stage = this;
-            focusEvent.Type  = FocusListener.FocusEvent.FeType.Keyboard;
-
-            Actor? oldKeyboardFocus = field;
-
-            if ( oldKeyboardFocus != null )
-            {
-                focusEvent.Focused      = false;
-                focusEvent.RelatedActor = value;
-
-                oldKeyboardFocus.Fire( focusEvent );
-            }
-
-            bool success = !focusEvent.IsCancelled;
-
-            if ( success )
-            {
-                field = value;
-
-                if ( value != null )
+                if ( !success )
                 {
-                    focusEvent.Focused      = true;
-                    focusEvent.RelatedActor = oldKeyboardFocus;
-
-                    value.Fire( focusEvent );
-                    success = !focusEvent.IsCancelled;
-
-                    if ( !success )
-                    {
-                        field = oldKeyboardFocus;
-                    }
+                    _keyboardFocus = oldKeyboardFocus;
                 }
             }
-
-            Pools.Free< FocusListener.FocusEvent >( focusEvent );
         }
+
+        Pools.Free< FocusListener.FocusEvent >( focusEvent );
     }
 
     /// <summary>
@@ -1129,7 +1138,7 @@ public class Stage : InputAdapter, IDisposable
             var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
 
             focusEvent.Stage = this;
-            focusEvent.Type  = FocusListener.FocusEvent.FeType.Scroll;
+            focusEvent.Type  = FocusListener.FocusEvent.FocusEventType.Scroll;
 
             Actor? oldScrollFocus = ScrollFocus;
 

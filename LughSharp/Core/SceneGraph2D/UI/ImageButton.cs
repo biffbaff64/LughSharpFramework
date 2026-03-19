@@ -30,36 +30,42 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
 /// <summary>
-/// A button with a child <see cref="Scene2DImage"/> to display an image. This is useful when
-/// the button must be larger than the image and the image centered on the button. If
-/// the image is the size of the button, a <see cref="Button"/> without any children can be used,
-/// where the <see cref="ButtonStyle.Up"/>, <see cref="ButtonStyle.Down"/>,
-/// and <see cref="ButtonStyle.Checked"/> nine patches define the image.
+/// A button with a child <see cref="Scene2DImage"/> to display an image. This is
+/// useful when the button must be larger than the image and the image centered on
+/// the button. If the image is the size of the button, a <see cref="Button"/>
+/// without any children can be used, where the <see cref="ButtonStyle.Up"/>,
+/// <see cref="ButtonStyle.Down"/>, and <see cref="ButtonStyle.Checked"/> nine
+/// patches define the image.
 /// </summary>
 [PublicAPI]
 public class ImageButton : Button
 {
-    public     Scene2DImage     Scene2DImage { get; }
-    public new ImageButtonStyle Style        { get; set; } = null!;
+    public Scene2DImage Scene2DImage { get; }
+
+    // ========================================================================
+
+    private ImageButtonStyle _style = null!;
 
     // ========================================================================
 
     /// <summary>
-    /// Creates a new ImageButton using the supplied <see cref="Skin"/>. The
-    /// skin should contain an <see cref="ImageButtonStyle"/>.
+    /// Creates a new ImageButton using the supplied <see cref="Skin"/>. The skin
+    /// should contain an <see cref="ImageButtonStyle"/>.
     /// </summary>
     /// <param name="skin"></param>
-    public ImageButton( Skin skin )
-        : this( skin.Get< ImageButtonStyle >() )
+    public ImageButton( Skin skin ) : this( skin.Get< ImageButtonStyle >() )
     {
         Skin = skin;
     }
 
     /// <summary>
+    /// Creates a new ImageButton using the supplied <see cref="Skin"/>. The skin
+    /// should contain an <see cref="ImageButtonStyle"/> with the specified name.
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="styleName"></param>
@@ -70,13 +76,17 @@ public class ImageButton : Button
     }
 
     /// <summary>
+    /// Creates a new ImageButton using the supplied <see cref="ImageButtonStyle"/>.
+    /// It does so by creating a new <see cref="Scene2DImage"/> drawable instance, and
+    /// adding that to this button. This drawable will be updated, according to
+    /// the button's state, with the correct image.
     /// </summary>
     /// <param name="style"></param>
     public ImageButton( ImageButtonStyle style ) : base( style )
     {
+        // Create and store the image drawable which will be updated by the style.
         Scene2DImage = new Scene2DImage();
         Scene2DImage.SetScaling( Scaling.Fit );
-
         Add( Scene2DImage );
 
         SetStyle( style );
@@ -84,11 +94,14 @@ public class ImageButton : Button
     }
 
     /// <summary>
+    /// Creates a new ImageButton using the supplied <see cref="ISceneDrawable"/>
+    /// instances for the image up, down, and checked states. These images will
+    /// be used to create a new <see cref="ImageButtonStyle"/> instance, and the
+    /// button will be created from that.
     /// </summary>
-    /// <param name="imageUp"></param>
-    /// <param name="imageDown"></param>
-    /// <param name="imageChecked"></param>
-    public ImageButton( ISceneDrawable? imageUp, ISceneDrawable? imageDown, ISceneDrawable? imageChecked )
+    public ImageButton( ISceneDrawable? imageUp,
+                        ISceneDrawable? imageDown,
+                        ISceneDrawable? imageChecked )
         : this( new ImageButtonStyle( imageUp, imageDown, imageChecked ) )
     {
     }
@@ -97,74 +110,13 @@ public class ImageButton : Button
     /// </summary>
     /// <param name="style"></param>
     /// <exception cref="ArgumentException"></exception>
-    public void SetStyle( ButtonStyle style )
+    public void SetStyle( ImageButtonStyle style )
     {
-        Style      = new ImageButtonStyle( style );
+        _style = style;
+        
         base.SetStyle< ButtonStyle >( style );
 
         UpdateImage();
-    }
-
-    /// <summary>
-    /// Returns the appropriate image drawable from the style based on the current button state.
-    /// </summary>
-    protected ISceneDrawable? GetImageDrawable()
-    {
-        if ( IsDisabled && ( Style.ImageDisabled != null ) )
-        {
-            return Style.ImageDisabled;
-        }
-
-        if ( IsPressed() )
-        {
-            if ( IsChecked && ( Style.ImageCheckedDown != null ) )
-            {
-                return Style.ImageCheckedDown;
-            }
-
-            if ( Style.ImageDown != null )
-            {
-                return Style.ImageDown;
-            }
-        }
-
-        if ( IsOver() )
-        {
-            if ( IsChecked )
-            {
-                if ( Style.ImageCheckedOver != null )
-                {
-                    return Style.ImageCheckedOver;
-                }
-            }
-            else
-            {
-                if ( Style.ImageOver != null )
-                {
-                    return Style.ImageOver;
-                }
-            }
-        }
-
-        if ( IsChecked )
-        {
-            if ( Style.ImageChecked != null )
-            {
-                return Style.ImageChecked;
-            }
-
-            if ( IsOver() && ( Style.ImageOver != null ) )
-            {
-                return Style.ImageOver;
-            }
-        }
-
-        return Style.ImageUp;
-    }
-
-    protected Scene2DImage? NewImage()
-    {
-        return new Scene2DImage( null, Scaling.Fit );
     }
 
     /// <summary>
@@ -179,6 +131,73 @@ public class ImageButton : Button
         {
             Scene2DImage.SetDrawable( drawable );
         }
+    }
+
+    /// <summary>
+    /// Returns the appropriate image drawable from the style based on the current button state.
+    /// </summary>
+    protected ISceneDrawable? GetImageDrawable()
+    {
+        if ( IsDisabled && ( _style.ImageDisabled != null ) )
+        {
+            return _style.ImageDisabled;
+        }
+
+        if ( IsPressed() )
+        {
+            if ( IsChecked && ( _style.ImageCheckedDown != null ) )
+            {
+                return _style.ImageCheckedDown;
+            }
+
+            if ( _style.ImageDown != null )
+            {
+                return _style.ImageDown;
+            }
+        }
+
+        if ( IsOver() )
+        {
+            if ( IsChecked )
+            {
+                if ( _style.ImageCheckedOver != null )
+                {
+                    return _style.ImageCheckedOver;
+                }
+            }
+            else
+            {
+                if ( _style.ImageOver != null )
+                {
+                    return _style.ImageOver;
+                }
+            }
+        }
+
+        if ( IsChecked )
+        {
+            if ( _style.ImageChecked != null )
+            {
+                return _style.ImageChecked;
+            }
+
+            if ( IsOver() && ( _style.ImageOver != null ) )
+            {
+                return _style.ImageOver;
+            }
+        }
+
+        return _style.ImageUp;
+    }
+
+    /// <summary>
+    /// Creates a new, empty, <see cref="Scene2DImage"/> drawable instance, with
+    /// scaling set to <see cref="Scaling.Fit"/>.
+    /// </summary>
+    /// <returns></returns>
+    protected Scene2DImage? NewImage()
+    {
+        return new Scene2DImage( null, Scaling.Fit );
     }
 
     /// <summary>

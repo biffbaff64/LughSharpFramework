@@ -98,6 +98,12 @@ public class ButtonStyle : ISceneStyle
         CheckedOffsetY   = style.CheckedOffsetY;
     }
 
+    /// <summary>
+    /// Sets the properties of this ButtonStyle to the properties from the given
+    /// style, which must be a subclass of ButtonStyle.
+    /// </summary>
+    /// <param name="style"></param>
+    /// <typeparam name="T"></typeparam>
     public void Set< T >( T style ) where T : ButtonStyle
     {
         Guard.Against.Null( style );

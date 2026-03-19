@@ -219,7 +219,7 @@ public class Window : Table
     {
         if ( Stage != null )
         {
-            Stage.KeyboardFocus ??= this;
+            Stage.SetKeyboardFocus( Stage.GetKeyboardFocus() ?? this );
 
             EnsureWithinStage();
 

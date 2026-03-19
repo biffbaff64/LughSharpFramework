@@ -97,7 +97,7 @@ public class MainGame : Game
         CreateFreeTypeFont();
         CreateSprites();
         CreateMap();
-        
+
         Logger.Debug( "Done" );
     }
 
@@ -258,7 +258,7 @@ public class MainGame : Game
 
         _stage = new Stage( _spriteCam.Viewport );
 
-//        CreateSkinActors();
+        CreateSkinActors();
 //        CreateStyleRegistryActors();
     }
 
@@ -266,9 +266,9 @@ public class MainGame : Game
     {
         const bool HudActor             = false;
         const bool WindowActor          = false;
-        const bool ButtonActor          = false;
+        const bool ButtonActor          = true;
         const bool TextButtonActor      = false;
-        const bool ImageButtonActor     = true;
+        const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
         const bool CheckBoxActor        = false;
         const bool ProgressBarActor     = false;
@@ -307,11 +307,19 @@ public class MainGame : Game
 
         if ( ButtonActor )
         {
-            var button = new Button( skin, "default" )
+            var btStyle = new ButtonStyle
+            {
+                Up       = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
+                Down     = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
+                Disabled = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
+            };
+
+            var button = new Button( btStyle )
             {
                 IsVisible = true,
             };
-            button.SetPosition( 20, 20 );
+
+            button.SetPosition( 200, 200 );
             _stage?.AddActor( button );
         }
 
@@ -337,11 +345,15 @@ public class MainGame : Game
                 ImageDown     = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
                 ImageDisabled = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
             };
+
             var imageButton = new ImageButton( imageButtonStyle )
             {
-                IsVisible = true,
+                IsVisible  = true,
+                IsDisabled = false,
             };
-            imageButton.SetPosition( 20, 100 );
+
+            imageButton.SetPosition( 200, 200 );
+            imageButton.SetSize( 100, 100 );
             _stage?.AddActor( imageButton );
         }
 
@@ -388,7 +400,7 @@ public class MainGame : Game
     {
         const bool HudActor             = false;
         const bool WindowActor          = false;
-        const bool ButtonActor          = false;
+        const bool ButtonActor          = true;
         const bool TextButtonActor      = false;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
@@ -406,14 +418,15 @@ public class MainGame : Game
         if ( WindowActor )
         {
         }
-        
+
         if ( ButtonActor )
         {
-            var buttonStyle = styleRegistry.Get< LughSharp.Core.SceneGraph2D.UI.ButtonStyle >( "default" );
+            var buttonStyle = styleRegistry.Get< ButtonStyle >( "default" );
             var button = new Button( buttonStyle )
             {
                 IsVisible = true,
             };
+            button.SetPosition( 300, 300 );
             _stage?.AddActor( button );
         }
 
@@ -430,11 +443,11 @@ public class MainGame : Game
         if ( ImageButtonActor )
         {
             var imageButtonStyle = styleRegistry.Get< ImageButtonStyle >( "default" );
-            
+
             imageButtonStyle.ImageUp       = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) );
             imageButtonStyle.ImageDown     = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) );
             imageButtonStyle.ImageDisabled = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) );
-            
+
             var imageButton = new ImageButton( imageButtonStyle )
             {
                 IsVisible = true,
@@ -449,7 +462,7 @@ public class MainGame : Game
         if ( CheckBoxActor )
         {
         }
-        
+
         if ( ProgressBarActor )
         {
             ProgressBarStyle progressBarStyle = styleRegistry.Get< ProgressBarStyle >( "default" );
@@ -498,11 +511,11 @@ public class MainGame : Game
     {
         #if CREATE_MAP
         _tmxMapLoader = new TmxMapLoader();
-        _tiledMap     = _tmxMapLoader.Load( Assets.Room1Map );
-        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
+        _tiledMap = _tmxMapLoader.Load( Assets.Room1Map );
+        _mapRenderer = new OrthogonalTiledMapRenderer( _tiledMap );
 
-        _mapWidth  = _tiledMap.Properties.Get< int >( "width" );
-        _mapWidth  *= _tiledMap.Properties.Get< int >( "tilewidth" );
+        _mapWidth = _tiledMap.Properties.Get< int >( "width" );
+        _mapWidth *= _tiledMap.Properties.Get< int >( "tilewidth" );
 
         _mapHeight = _tiledMap.Properties.Get< int >( "height" );
         _mapHeight *= _tiledMap.Properties.Get< int >( "tileheight" );

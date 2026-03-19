@@ -54,8 +54,7 @@ public class StyleRegistry
     /// </summary>
     public StyleRegistry Add< T >( string name, T style ) where T : class
     {
-        // Use AssemblyQualifiedName or FullName for a unique string key
-        string typeKey = typeof( T ).FullName ?? typeof( T ).Name;
+        string typeKey = typeof( T ).Name;
 
         // Ensure the dictionary for this type exists
         if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
@@ -76,7 +75,7 @@ public class StyleRegistry
     /// <typeparam name="T"> The type of style to retrieve (e.g., ButtonStyle).</typeparam>
     public T Get< T >( string name ) where T : class
     {
-        string typeKey = typeof( T ).FullName ?? typeof( T ).Name;
+        string typeKey = typeof( T ).Name;
 
         // Check if the Type is registered at all
         if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
@@ -240,29 +239,43 @@ public class StyleRegistry
 //        var ttStyle = new TextTooltipStyle();
 
         // ----- ImageButtonStyle -----
-        var ibStyle = new ImageButtonStyleRecord
+        var ibStyle = new ImageButtonStyle
         {
             ImageUp       = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
             ImageDown     = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) ),
             ImageDisabled = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
         };
 
-        Add( "default", ibStyle ).Add( "toggle", ibStyle with { ImageChecked = ibStyle.ImageDown } );
+//        Add( "default", ibStyle ).Add( "toggle", ibStyle with { ImageChecked = ibStyle.ImageDown } );
+
+        Add( "default", ibStyle );
+        ibStyle.ImageChecked = ibStyle.ImageDown;
+        Add( "toggle", ibStyle );
 
         // ----- ImageTextButtonStyle -----
-        var itbStyle = new ImageTextButtonStyleRecord
+        var itbStyle = new ImageTextButtonStyle
         {
             ImageUp       = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
             ImageDown     = new TextureRegionDrawable( atlas.FindRegion( "default-round-down" ) ),
             ImageDisabled = new TextureRegionDrawable( atlas.FindRegion( "default-round" ) ),
         };
 
-        Add( "default", itbStyle ).Add( "toggle", itbStyle with { ImageChecked = itbStyle.ImageDown } );
+//        Add( "default", itbStyle ).Add( "toggle", itbStyle with { ImageChecked = itbStyle.ImageDown } );
+
+        Add( "default", itbStyle );
+        itbStyle.ImageChecked = itbStyle.ImageDown;
+        Add( "toggle", itbStyle );
 
         // ----- SelectBoxStyle -----
 //        var sbStyle = new SelectBoxStyle();
     }
 
+    /// <summary>
+    /// Loads styles from a JSON file.
+    /// </summary>
+    /// <param name="jsonFile"></param>
+    /// <param name="atlas"></param>
+    /// <exception cref="FileNotFoundException"></exception>
     public void LoadFromJson( FileInfo jsonFile, TextureAtlas atlas )
     {
         if ( !jsonFile.Exists )
@@ -320,9 +333,14 @@ public class StyleRegistry
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="typeName"></param>
+    /// <param name="styleName"></param>
+    /// <param name="style"></param>
     private void AddByTypeName( string typeName, string styleName, object style )
     {
-        // Implementation using the string-key logic we discussed previously
         string typeKey = style.GetType().FullName ?? style.GetType().Name;
 
         if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
@@ -334,6 +352,10 @@ public class StyleRegistry
         section[ styleName ] = style;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="jsonFile"></param>
     public void SaveToJson( FileInfo jsonFile )
     {
     }

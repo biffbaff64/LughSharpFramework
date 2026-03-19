@@ -22,11 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Audio.Mock;
-
 using JetBrains.Annotations;
 
 using LughSharp.Core.Audio;
+using LughSharp.Core.Mock.Audio;
 using LughSharp.Core.Utils.Logging;
 
 namespace DesktopGLBackend.Audio;

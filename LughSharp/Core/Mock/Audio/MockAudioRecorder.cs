@@ -26,43 +26,19 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Audio;
 
-namespace DesktopGLBackend.Audio.Mock;
+namespace LughSharp.Core.Mock.Audio;
 
 /// <summary>
 /// Audio stubs for use when Audio is disabled, or when Audio failed to initialise.
 /// </summary>
 [PublicAPI]
-public class MockAudio : IAudio
+public class MockAudioRecorder : IAudioRecorder
 {
     /// <inheritdoc />
-    public IAudioDevice NewAudioDevice( int samplingRate, bool isMono )
-    {
-        return new MockAudioDevice();
-    }
-
-    /// <inheritdoc />
-    public IAudioRecorder NewAudioRecorder( int samplingRate, bool isMono )
-    {
-        return new MockAudioRecorder();
-    }
-
-    /// <inheritdoc />
-    public ISound NewSound( FileInfo? fileHandle )
-    {
-        return new MockSound();
-    }
-
-    /// <inheritdoc />
-    public IMusic NewMusic( FileInfo? file )
-    {
-        return new MockMusic();
-    }
-
-    public void Update()
+    public void Read( short[] samples, int offset, int numSamples )
     {
     }
 
-    /// <inheritdoc />
     public void Dispose()
     {
     }

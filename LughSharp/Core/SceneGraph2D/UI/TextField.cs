@@ -942,7 +942,7 @@ public class TextField : Widget
                 break;
             }
 
-            if ( Stage.KeyboardFocus == textField )
+            if ( Stage.GetKeyboardFocus() == textField )
             {
                 textField.SelectAll();
 
@@ -1312,7 +1312,7 @@ public class TextField : Widget
 
             if ( _tf.Stage != null )
             {
-                _tf.Stage.KeyboardFocus = _tf;
+                _tf.Stage.SetKeyboardFocus( _tf );
             }
 
             _tf._keyboard.Show( true );

@@ -47,8 +47,51 @@ public static class Pools
     // ========================================================================
 
     /// <summary>
+    /// Registers a new <see cref="Pool{T}"/>. Will throw an exception, if a pool
+    /// for the same Type is already registered
+    /// </summary>
+    /// <param name="pool"> The pool to register. </param>
+    /// <typeparam name="T"> The Type of the pool. </typeparam>
+    public static void AddPool< T >( Pool< T > pool ) where T : class
+    {
+        if ( !_typePools.TryAdd( typeof( T ), pool ) )
+        {
+            throw new InvalidOperationException( $"Pool for type {typeof( T ).Name} already exists." );
+        }
+    }
+
+    /// <summary>
+    /// Removes a registered <see cref="Pool{T}"/>
+    /// </summary>
+    /// <param name="pool"></param>
+    /// <typeparam name="T"></typeparam>
+    public static void RemovePool< T >( Pool< T > pool ) where T : class
+    {
+        if ( !_typePools.TryRemove( typeof( T ), out _ ) )
+        {
+            throw new InvalidOperationException( $"Unable to remove pool of type {typeof( T ).Name}." );
+        }
+    }
+
+    /// <summary>
     /// Obtains an object of the specified type from its corresponding pool.
-    /// The pool must have been registered via Get or Set methods.
+    /// The pool must have been registered via Add, Get or Set methods.
+    /// </summary>
+    /// <typeparam name="T">The type of object to obtain.</typeparam>
+    /// <returns> An object from the pool. </returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if no pool is registered for the specified type.
+    /// </exception>
+    public static T Obtain< T >() where T : class, new()
+    {
+        Pool< T > pool = GetRegisteredPool< T >();
+
+        return pool.Obtain();
+    }
+
+    /// <summary>
+    /// Obtains an object of the specified type from its corresponding pool.
+    /// The pool must have been registered via Add, Get or Set methods.
     /// </summary>
     /// <typeparam name="T">The type of object to obtain.</typeparam>
     /// <returns>
@@ -57,45 +100,47 @@ public static class Pools
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static T? Obtain< T >() where T : class, new()
+    public static T? ObtainOrNull< T >() where T : class, new()
     {
-//        return Get< T >( () => new T() ).Obtain();
-
-        if ( !_typePools.TryGetValue( typeof( T ), out object? poolObject ) )
-        {
-            throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. " +
-                                                 $"Call Pools.Get<{typeof( T ).Name}>() first " +
-                                                 $"with a NewObjectHandler." );
-        }
-
-        var pool = ( Pool< T > )poolObject;
-
-        return pool.Obtain();
+        return TryGetRegisteredPool< T >( out Pool< T > pool ) ? pool.Obtain() : null;
     }
 
     /// <summary>
     /// Returns a new or existing pool for the specified type. If a pool for the type
-    /// already exists, its existing instance is returned, and 'max' and 'initialCapacity'
-    /// parameters are ignored.
+    /// already exists, its existing instance is returned, and 'newObject', 'max' and
+    /// 'initialCapacity' parameters are ignored.
     /// </summary>
+    /// <remarks>
+    /// Thread-safety note: If multiple threads call this method concurrently for the same type
+    /// with different parameters, only one pool will be created and stored. The factory and
+    /// parameters used for that stored pool are non-deterministic in such scenarios.
+    /// To ensure specific pool configuration, pre-register the pool using <see cref="AddPool{T}"/>
+    /// or <see cref="Set{T}"/> before concurrent access.
+    /// </remarks>
     /// <typeparam name="T">The type of object to pool.</typeparam>
     /// <param name="newObjectFactory">A function to create new objects when the pool needs them.</param>
     /// <param name="initialCapacity">Initial capacity of the pool if a new one is created.</param>
     /// <param name="max">Maximum number of objects to store in the pool if a new one is created.</param>
     /// <returns>The Pool instance for the specified type.</returns>
-    /// <exception cref="ArgumentNullException">
-    /// Thrown if newObjectFactory is null when creating a new pool.
-    /// </exception>
     public static Pool< T > Get< T >( Pool< T >.PoolObjectFactory newObjectFactory,
                                       int initialCapacity = Pool< T >.DefaultInitialCapacity,
                                       int max = int.MaxValue ) where T : class
     {
-        // GetOrAdd is thread-safe for creating or retrieving.
-        return ( Pool< T > )_typePools.GetOrAdd( typeof( T ),
-                                                new Pool< T >( initialCapacity, max )
-                                                {
-                                                    NewObjectFactory = newObjectFactory
-                                                } );
+        Guard.Against.Null( newObjectFactory );
+        
+        // If pool exists, return it; otherwise create new one
+        if ( _typePools.TryGetValue( typeof( T ), out object? existingPool ) )
+        {
+            return ( Pool< T > )existingPool;
+        }
+    
+        // Create and add new pool
+        var newPool = new Pool< T >( initialCapacity, max )
+        {
+            NewObjectFactory = newObjectFactory
+        };
+    
+        return ( Pool< T > )_typePools.GetOrAdd( typeof( T ), newPool );
     }
 
     /// <summary>
@@ -123,15 +168,9 @@ public static class Pools
     /// </exception>
     public static void Free< T >( T obj ) where T : class
     {
-        ArgumentNullException.ThrowIfNull( obj );
+        Guard.Against.Null( obj );
 
-        if ( !_typePools.TryGetValue( typeof( T ), out object? poolObject ) )
-        {
-            // Ignore freeing an object that was never retained.
-            return;
-        }
-
-        var pool = ( Pool< T > )poolObject;
+        Pool< T > pool = GetRegisteredPool< T >();
         pool.Free( obj );
     }
 
@@ -139,45 +178,37 @@ public static class Pools
     /// Frees a collection of objects of the specified type back to their corresponding pool.
     /// The pool must have been registered. Null objects in the list are ignored.
     /// </summary>
+    /// <remarks>
+    /// If an exception occurs while freeing objects (e.g., pool not registered), the method
+    /// will stop processing and throw immediately. Objects processed before the exception
+    /// will have been freed successfully, but remaining objects will not be freed.
+    /// Consider calling <see cref="TryGetRegisteredPool{T}"/> before calling this method
+    /// if you need to verify pool existence without throwing.
+    /// </remarks>
     /// <typeparam name="T">The type of the objects to free.</typeparam>
     /// <param name="objects">The collection of objects to free.</param>
-    /// <param name="samePool"></param>
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static void FreeAll< T >( IEnumerable< T > objects, bool samePool = true ) where T : class
+    public static void FreeAll< T >( IEnumerable< T? > objects ) where T : class
     {
         Guard.Against.Null( objects );
 
-        Pool< T >? pool = null;
-
-        T?[] enumerable = objects as T?[] ?? objects.ToArray();
-
-        for ( int i = 0, n = enumerable.Length; i < n; i++ )
+        // Materialize the enumerable to get accurate count
+        // and avoid multiple enumeration issues
+        List< T? > objectsList = objects.Where( obj => obj != null ).ToList();
+    
+        if ( objectsList.Count == 0 )
         {
-            T? obj = enumerable.ElementAt( i );
+            return;
+        }
 
-            if ( obj == null )
-            {
-                continue;
-            }
+        // Validate pool exists before processing any objects
+        Pool< T > pool = GetRegisteredPool< T >();
 
-            if ( pool == null )
-            {
-                pool = _typePools[ typeof( T ) ] as Pool< T >;
-
-                if ( pool == null )
-                {
-                    continue;
-                }
-            }
-
+        foreach ( T? obj in objectsList )
+        {
             pool.Free( obj );
-
-            if ( !samePool )
-            {
-                pool = null;
-            }
         }
     }
 
@@ -187,9 +218,9 @@ public static class Pools
     /// <typeparam name="T">The type of objects in the pool to clear.</typeparam>
     public static void Clear< T >() where T : class
     {
-        if ( _typePools.TryGetValue( typeof( T ), out object? poolObject ) )
+        if ( TryGetRegisteredPool< T >( out Pool< T > pool ) )
         {
-            ( ( Pool< T > )poolObject ).Clear();
+            pool.Clear();
         }
     }
 
@@ -205,10 +236,37 @@ public static class Pools
                 clearablePool.Clear();
             }
         }
-
-        // Remove all entries from the dictionary
-        _typePools.Clear();
     }
+
+    private static Pool< T > GetRegisteredPool< T >() where T : class
+    {
+        return !TryGetRegisteredPool< T >( out Pool< T > pool )
+            ? throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}." )
+            : pool;
+    }
+
+    private static bool TryGetRegisteredPool< T >( out Pool< T > pool ) where T : class
+    {
+        if ( _typePools.TryGetValue( typeof( T ), out object? poolObject ) )
+        {
+            pool = ( Pool< T > )poolObject;
+
+            return true;
+        }
+
+        pool = null!;
+
+        return false;
+    }
+}
+
+// ============================================================================
+// ============================================================================
+
+[PublicAPI]
+public interface IClearablePool
+{
+    void Clear();
 }
 
 // ============================================================================

@@ -84,8 +84,10 @@ public class Pool< T > where T : class
     /// must not be freed multiple times.
     /// </para>
     /// </summary>
-    public virtual void Free( T obj )
+    public virtual void Free( T? obj )
     {
+        if ( obj == null ) return;
+        
         if ( _freeObjects.Count < MaxFreeObjects )
         {
             _freeObjects.Push( obj );

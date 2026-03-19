@@ -569,7 +569,7 @@ public class ListBox< T > : Widget where T : notnull
                 case IInput.Keys.Escape:
                     if ( _parent.Stage != null )
                     {
-                        _parent.Stage.KeyboardFocus = null;
+                        _parent.Stage.SetKeyboardFocus( null );
                     }
 
                     return true;
@@ -635,7 +635,7 @@ public class ListBox< T > : Widget where T : notnull
 
             if ( _parent.Stage != null )
             {
-                _parent.Stage.KeyboardFocus = _parent;
+                _parent.Stage.SetKeyboardFocus( _parent );
             }
 
             if ( _parent.Items.Count == 0 )
