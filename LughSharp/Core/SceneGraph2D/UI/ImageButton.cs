@@ -213,14 +213,6 @@ public class ImageButton : Button
         UpdateImage();
         base.Draw( batch, parentAlpha );
     }
-
-    public override string Name => GetType().Name;
-
-    /// <inheritdoc />
-    public override string ToString()
-    {
-        return Name;
-    }
 }
 
 // ============================================================================

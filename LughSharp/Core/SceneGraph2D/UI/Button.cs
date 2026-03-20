@@ -73,8 +73,9 @@ public class Button : Table, IDisableable
     // ========================================================================
 
     /// <summary>
-    /// Creates a button without setting the style or size.
-    /// At least a style must be set before using this button.
+    /// Creates a button without setting the style or size. Before this button can
+    /// be used, it is important that at least a <see cref="ButtonStyle"/> is created
+    /// and set.
     /// </summary>
     public Button()
     {
@@ -492,8 +493,6 @@ public class Button : Table, IDisableable
     {
         return ClickListener?.Over ?? false;
     }
-
-    public override string? Name => GetType().Name;
 }
 
 // ============================================================================

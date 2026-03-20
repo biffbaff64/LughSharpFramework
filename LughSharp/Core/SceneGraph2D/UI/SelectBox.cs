@@ -69,10 +69,6 @@ public class SelectBox< T > : Widget, IDisableable
 
     // ========================================================================
 
-    public override string? Name => "SelectBox";
-
-    // ========================================================================
-
     private readonly SelectBoxScrollPane? _scrollPane;
     private readonly ArraySelection< T >  _selection;
     private readonly Vector2              _temp = new();
@@ -612,8 +608,6 @@ public class SelectBox< T > : Widget, IDisableable
     [PublicAPI]
     public class SelectBoxScrollPane : ScrollPane
     {
-        public override string? Name => "SelectBoxScrollPane";
-
         public int            MaxListCount { get; set; }
         public ListBox< T >   ListBox      { get; set; }
         public SelectBox< T > SelectBox    { get; set; }

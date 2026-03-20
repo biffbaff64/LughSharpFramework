@@ -37,7 +37,6 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class ParticleEffectActor : Actor, IDisposable
 {
-    public override string?        Name           => "ParticleEffectActor";
     public          bool           IsRunning      { get; set; }
     public          bool           AutoRemove     { get; set; }
     public          ParticleEffect ParticleEffect { get; }

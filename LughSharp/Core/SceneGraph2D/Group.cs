@@ -64,8 +64,6 @@ public class Group : Actor, ICullable
 
     public Rectangle? CullingArea { get; set; }
 
-    public override string? Name => "Group";
-
     // ========================================================================
 
     private readonly Matrix4 _computedTransform = new();
@@ -709,7 +707,7 @@ public class Group : Actor, ICullable
         {
             Actor? child = Children.GetAt( i );
 
-            if ( name.Equals( child?.Name ) )
+            if ( name.Equals( child?.GetType().Name ) )
             {
                 return ( T )child;
             }

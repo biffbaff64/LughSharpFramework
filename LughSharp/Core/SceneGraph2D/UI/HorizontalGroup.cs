@@ -59,7 +59,6 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class HorizontalGroup : WidgetGroup
 {
-    public override string? Name      => "HorizontalGroup";
     public          bool    Wrap      { get; set; }
     public          float   Fill      { get; set; }
     public          bool    Expand    { get; set; }

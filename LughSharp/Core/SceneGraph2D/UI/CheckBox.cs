@@ -145,8 +145,6 @@ public class CheckBox : TextButton
             base.Style = value;
         }
     }
-    
-    public override string? Name => GetType().Name;
 }
 
 // ============================================================================

@@ -53,8 +53,6 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class Slider : ProgressBar
 {
-    public override string? Name => "Slider";
-
     private int      _draggingPointer = -1;
     private float[]? _snapValues;
     private float    _threshold;

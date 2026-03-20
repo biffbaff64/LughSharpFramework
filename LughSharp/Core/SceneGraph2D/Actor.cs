@@ -59,8 +59,6 @@ public class Actor : IActor, IComparable< Actor >
     public bool      IsVisible  { get; set; } = true;
     public object?   UserObject { get; set; }
 
-    public virtual string? Name => "Actor";
-
     // ========================================================================
 
     protected float OriginX { get; set; }
@@ -1529,12 +1527,6 @@ public class Actor : IActor, IComparable< Actor >
         DebugActive = true;
 
         return this;
-    }
-
-    /// <inheritdoc />
-    public override string? ToString()
-    {
-        return Name;
     }
 }
 

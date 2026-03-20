@@ -72,10 +72,6 @@ public class ProgressBar : Widget, IDisableable
 
     // ========================================================================
 
-    public override string? Name => "ProgressBar";
-
-    // ========================================================================
-
     private const float DefaultPrefWidth  = 140f;
     private const float DefaultPrefHeight = 140f;
 

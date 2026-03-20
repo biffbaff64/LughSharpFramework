@@ -42,8 +42,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class Container< T > : WidgetGroup where T : Actor
 {
-    public override string? Name     => "Container";
-    public          bool    Rounding { get; set; } = true;
+    public bool Rounding { get; set; } = true;
 
     private T?              _actor;
     private Align           _align;

@@ -45,8 +45,6 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class Widget : Actor, ILayout
 {
-    public override string? Name => "Widget";
-
     /// <summary>
     /// </summary>
     public bool NeedsLayout { get; set; } = true;

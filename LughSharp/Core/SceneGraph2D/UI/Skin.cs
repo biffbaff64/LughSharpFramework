@@ -30,6 +30,7 @@ using System.Reflection;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
@@ -68,8 +69,8 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class Skin : IDisposable
 {
-    public Dictionary< Type, Dictionary< string, object >? > Resources     { get; set; } = [ ];
-    public Dictionary< string, Type >                        JsonClassTags { get; set; } = [ ];
+    public Dictionary< Type, Dictionary< string, object > > Resources     { get; set; } = [ ];
+    public Dictionary< string, Type >                       JsonClassTags { get; set; } = [ ];
 
     /// <summary>
     /// Returns the <see cref="TextureAtlas"/> passed to this skin constructor, or null.
@@ -153,11 +154,8 @@ public class Skin : IDisposable
     /// <summary>
     /// Creates an empty Skin.
     /// </summary>
-    public Skin()
+    public Skin() : this( null, null )
     {
-        Setup();
-
-        _skinHome = "";
     }
 
     /// <summary>
@@ -167,23 +165,16 @@ public class Skin : IDisposable
     /// added to the skin. The atlas is automatically disposed when the skin is
     /// disposed.
     /// </summary>
-    public Skin( FileInfo skinFile )
+    public Skin( FileInfo skinFile ) : this( skinFile, LoadAtlasIfExists( skinFile ) )
     {
-        Setup();
+    }
 
-        // Record the parent folder of the skin .json, .atlas, .png files
-        _skinHome = skinFile.DirectoryName ?? "";
-
-        string name      = Path.GetFileNameWithoutExtension( skinFile.Name );
-        var    atlasFile = new FileInfo( $"{Path.Combine( _skinHome, name )}.atlas" );
-
-        if ( atlasFile.Exists )
-        {
-            Atlas = new TextureAtlas( atlasFile );
-            AddRegions( Atlas );
-        }
-
-        Load( skinFile );
+    /// <summary>
+    /// Creates a skin containing the texture regions from the specified
+    /// atlas. The atlas is automatically disposed when the skin is disposed.
+    /// </summary>
+    public Skin( TextureAtlas atlas ) : this( null, atlas )
+    {
     }
 
     /// <summary>
@@ -193,41 +184,48 @@ public class Skin : IDisposable
     /// The atlas is automatically disposed when the skin is disposed.
     /// </para>
     /// </summary>
-    public Skin( FileInfo skinFile, TextureAtlas atlas )
+    public Skin( FileInfo? skinFile, TextureAtlas? atlas )
     {
-        Setup();
+        InitialiseJsonClassTags();
 
-        _skinHome = skinFile.DirectoryName ?? "";
+        _skinHome = skinFile?.DirectoryName ?? Files.Files.ContentRoot;
 
-        Atlas = atlas;
-        AddRegions( atlas );
-        Load( skinFile );
-    }
+        if ( atlas != null )
+        {
+            Atlas = atlas;
+            AddRegions( atlas );
+        }
 
-    /// <summary>
-    /// Creates a skin containing the texture regions from the specified
-    /// atlas. The atlas is automatically disposed when the skin is disposed.
-    /// </summary>
-    public Skin( TextureAtlas atlas )
-    {
-        Setup();
-
-        _skinHome = "";
-
-        Atlas = atlas;
-        AddRegions( atlas );
+        if ( skinFile != null )
+        {
+            Load( skinFile );
+        }
     }
 
     /// <summary>
     /// Helper method for constructors.
     /// Copies the table of default tag classes into the working dictionary.
     /// </summary>
-    private void Setup()
+    private void InitialiseJsonClassTags()
     {
-        foreach ( Tag c in DefaultTagClasses )
+        foreach ( Tag tag in DefaultTagClasses )
         {
-            JsonClassTags.Add( c.Type.Name, c.Type );
+            JsonClassTags.Add( tag.Name, tag.Type );
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="skinFile"></param>
+    /// <returns></returns>
+    private static TextureAtlas? LoadAtlasIfExists( FileInfo skinFile )
+    {
+        string skinHome  = skinFile.DirectoryName ?? "";
+        string name      = Path.GetFileNameWithoutExtension( skinFile.Name );
+        var    atlasFile = new FileInfo( Path.Combine( skinHome, $"{name}.atlas" ) );
+
+        return atlasFile.Exists ? new TextureAtlas( atlasFile ) : null;
     }
 
     /// <summary>
@@ -266,14 +264,18 @@ public class Skin : IDisposable
         for ( int i = 0, n = atlas.Regions.Count; i < n; i++ )
         {
             AtlasRegion? region = atlas.Regions[ i ];
-            string?      name   = region?.Name;
 
-            if ( region?.Index != -1 )
+            if ( region != null )
             {
-                name += $"_{region?.Index}";
-            }
+                string? name = region.Name;
 
-            Add< TextureRegion >( name, region );
+                if ( region.Index != -1 )
+                {
+                    name += $"_{region.Index}";
+                }
+
+                Add< TextureRegion >( name, region );
+            }
         }
     }
 
@@ -373,8 +375,7 @@ public class Skin : IDisposable
         if ( type == typeof( Sprite ) ) return GetSprite( name );
 
         // Use TryGetValue to avoid KeyNotFoundException
-        if ( !Resources.TryGetValue( type, out Dictionary< string, object >? typeResources )
-          || typeResources == null )
+        if ( !Resources.TryGetValue( type, out Dictionary< string, object >? typeResources ) )
         {
             throw new RuntimeException( $"No {type.FullName} registered with name: {name}" );
         }
@@ -390,9 +391,9 @@ public class Skin : IDisposable
     /// <returns> null if not found. </returns>
     public T? Optional< T >( string name )
     {
-        if ( Resources.TryGetValue( typeof( T ), out var typeResources ) )
+        if ( Resources.TryGetValue( typeof( T ), out Dictionary< string, object >? typeResources ) )
         {
-            return ( T? )typeResources?.Get( name );
+            return ( T? )typeResources.Get( name );
         }
 
         return default;
@@ -411,7 +412,7 @@ public class Skin : IDisposable
             return false;
         }
 
-        return resource != null && resource.ContainsKey( name );
+        return resource.ContainsKey( name );
     }
 
     /// <summary>
@@ -529,7 +530,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a registered ninepatch. If no ninepatch is found but a region exists with
     /// the name, a ninepatch is created from the region and stored in the skin. If the
-    /// region is an <see cref="AtlasRegion"/> then its split <see cref="AtlasRegion.Values"/>
+    /// region is an <see cref="AtlasRegion"/> then its split AtlasRegion Values
     /// are used, otherwise the ninepatch will have the region as the center patch.
     /// </summary>
     public NinePatch GetPatch( string name )
@@ -721,9 +722,9 @@ public class Skin : IDisposable
             throw new ArgumentException( "style cannot be null." );
         }
 
-        Dictionary< string, object >? typeResources = Resources[ resource.GetType() ];
+        Dictionary< string, object > typeResources = Resources[ resource.GetType() ];
 
-        return typeResources?.FindKey( resource );
+        return typeResources.FindKey( resource );
     }
 
     /// <summary>
@@ -955,9 +956,9 @@ public class Skin : IDisposable
             {
                 Atlas?.Dispose();
 
-                foreach ( Dictionary< string, object >? entry in Resources.Values )
+                foreach ( Dictionary< string, object > entry in Resources.Values )
                 {
-                    foreach ( object resource in entry!.Values )
+                    foreach ( object resource in entry.Values )
                     {
                         if ( resource is IDisposable disposable )
                         {
@@ -976,7 +977,7 @@ public class Skin : IDisposable
 
     /// <summary>
     /// A JSON converter responsible for serializing and deserializing instances of the
-    /// <see cref="Colors.Color"/> class within the context of a <see cref="Skin"/>.
+    /// <see cref="Color"/> class within the context of a <see cref="Skin"/>.
     /// <para>
     /// This converter handles the translation of colors represented in various formats,
     /// such as hexadecimal strings or component-wise values, into Color instances.
@@ -1027,6 +1028,13 @@ public class Skin : IDisposable
         private readonly Skin     _skin;
         private readonly FileInfo _skinFile;
 
+        // ====================================================================
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="SkinConverter"/> class.
+        /// </summary>
+        /// <param name="skin"></param>
+        /// <param name="skinFile"></param>
         public SkinConverter( Skin skin, FileInfo skinFile )
         {
             _skin     = skin;

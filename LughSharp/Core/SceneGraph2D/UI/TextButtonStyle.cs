@@ -34,26 +34,29 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// The style for a text button, see <see cref="TextButton"/>.
 /// </summary>
 [PublicAPI]
-public class TextButtonStyle : ButtonStyle, ISceneStyle
+public class TextButtonStyle : ButtonStyle
 {
-    public BitmapFont? Font                    { get; set; }
-    public Color?      FontColor               { get; set; }
-    public Color?      DownFontColor           { get; set; }
-    public Color?      OverFontColor           { get; set; }
-    public Color?      FocusedFontColor        { get; set; }
-    public Color?      DisabledFontColor       { get; set; }
-    public Color?      CheckedFontColor        { get; set; }
-    public Color?      CheckedDownFontColor    { get; set; }
-    public Color?      CheckedOverFontColor    { get; set; }
-    public Color?      CheckedFocusedFontColor { get; set; }
+    public BitmapFont Font                    { get; set; }
+    public Color?     FontColor               { get; set; }
+    public Color?     DownFontColor           { get; set; }
+    public Color?     OverFontColor           { get; set; }
+    public Color?     FocusedFontColor        { get; set; }
+    public Color?     DisabledFontColor       { get; set; }
+    public Color?     CheckedFontColor        { get; set; }
+    public Color?     CheckedDownFontColor    { get; set; }
+    public Color?     CheckedOverFontColor    { get; set; }
+    public Color?     CheckedFocusedFontColor { get; set; }
 
     // ========================================================================
-    
+
     public TextButtonStyle()
     {
+        Font = new BitmapFont();
     }
 
-    public TextButtonStyle( ISceneDrawable upImage, ISceneDrawable downImage, ISceneDrawable checkedImage,
+    public TextButtonStyle( ISceneDrawable upImage,
+                            ISceneDrawable downImage,
+                            ISceneDrawable checkedImage,
                             BitmapFont font )
         : base( upImage, downImage, checkedImage )
     {
@@ -113,4 +116,3 @@ public class TextButtonStyle : ButtonStyle, ISceneStyle
 
 // ============================================================================
 // ============================================================================
-

@@ -53,10 +53,6 @@ public class Scene2DImage : Widget
 
     // ========================================================================
 
-    public override string? Name => "Scene2DImage";
-
-    // ========================================================================
-
     /// <summary>
     /// The alignment of the image within the widget.
     /// </summary>
@@ -351,13 +347,6 @@ public class Scene2DImage : Widget
     /// <inheritdoc />
     public override string ToString()
     {
-        string? name = Name;
-
-        if ( name != null )
-        {
-            return name;
-        }
-
         string className = GetType().Name;
         int    dotIndex  = className.LastIndexOf( '.' );
 

@@ -75,11 +75,6 @@ public class BitmapFontCache
 
     // ========================================================================
 
-//    private readonly FlushablePool< GlyphLayout > _pooledLayouts = new( Pool< GlyphLayout >.DEFAULT_INITIAL_CAPACITY )
-//    {
-//        NewObjectFactory = () => new GlyphLayout()
-//    };
-
     private readonly List< GlyphLayout > _pooledLayouts = new();
 
     private readonly Color _color     = new( 1, 1, 1, 1 );

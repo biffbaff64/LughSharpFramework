@@ -266,8 +266,8 @@ public class MainGame : Game
     {
         const bool HudActor             = false;
         const bool WindowActor          = false;
-        const bool ButtonActor          = true;
-        const bool TextButtonActor      = false;
+        const bool ButtonActor          = false;
+        const bool TextButtonActor      = true;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
         const bool CheckBoxActor        = false;
@@ -321,17 +321,37 @@ public class MainGame : Game
 
             button.SetPosition( 200, 200 );
             _stage?.AddActor( button );
+
+            var button2 = new Button( skin, "default" )
+            {
+                IsVisible = true,
+            };
+            button2.SetPosition( 300, 20 );
+            button2.SetSize( 100, 100 );
+            _stage?.AddActor( button2 );
         }
 
         // --------------------------------------
 
         if ( TextButtonActor )
         {
+            var tbStyle = new TextButtonStyle
+            {
+                Up                = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
+                Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down") ),
+                Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round") ),
+                Font              = _font ?? new BitmapFont(),
+                FontColor         = Color.White,
+                DisabledFontColor = Color.Gray,
+            };
+
             var textButton = new TextButton( "Text Button", skin )
+//            var textButton = new TextButton( "Text Button", tbStyle )
             {
                 IsVisible = true,
             };
-            textButton.SetPosition( 20, 60 );
+            textButton.SetPosition( 200, 160 );
+            textButton.SetSize( 100, 100 );
             _stage?.AddActor( textButton );
         }
 
@@ -355,6 +375,11 @@ public class MainGame : Game
             imageButton.SetPosition( 200, 200 );
             imageButton.SetSize( 100, 100 );
             _stage?.AddActor( imageButton );
+
+            var imageButton2 = new ImageButton( skin, "default" );
+            imageButton2.SetSize( 100, 100 );
+            imageButton2.SetPosition( 600, 200 );
+            _stage.AddActor( imageButton2 );
         }
 
         // --------------------------------------

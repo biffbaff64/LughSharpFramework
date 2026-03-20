@@ -48,12 +48,11 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class Label : Widget
 {
-    public override string?          Name        => "Label";
-    public          BitmapFontCache? FontCache   { get; set; }
-    public          StringBuilder    Text        { get; }      = new();
-    public          Align            LabelAlign  { get; set; } = Align.Left;
-    public          Align            LineAlign   { get; set; } = Align.Left;
-    public          GlyphLayout      GlyphLayout { get; set; } = new();
+    public BitmapFontCache? FontCache   { get; set; }
+    public StringBuilder    Text        { get; }      = new();
+    public Align            LabelAlign  { get; set; } = Align.Left;
+    public Align            LineAlign   { get; set; } = Align.Left;
+    public GlyphLayout      GlyphLayout { get; set; } = new();
 
     // ========================================================================
 
@@ -71,11 +70,23 @@ public class Label : Widget
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a label using the supplied <see cref="Skin"/>, and with the specified text.
+    /// </summary>
+    /// <param name="text"> The label text. </param>
+    /// <param name="skin"> The Skin, which should hold a <see cref="TextButtonStyle"/> </param>
     public Label( string text, Skin skin )
         : this( text, skin.Get< LabelStyle >() )
     {
     }
 
+    /// <summary>
+    /// Creates a label using the supplied <see cref="Skin"/>, identified by the
+    /// supplied 'styleName', and with the specified text.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="skin"></param>
+    /// <param name="styleName"></param>
     public Label( string text, Skin skin, string styleName )
         : this( text, skin.Get< LabelStyle >( styleName ) )
     {
@@ -149,18 +160,27 @@ public class Label : Widget
         }
     }
 
+    /// <summary>
+    /// The font X scale of the label.
+    /// </summary>
     public float FontScaleX
     {
         get => _fontScaleX;
         set => SetFontScale( value, FontScaleY );
     }
 
+    /// <summary>
+    /// The font Y scale of the label.
+    /// </summary>
     public float FontScaleY
     {
         get => _fontScaleY;
         set => SetFontScale( FontScaleX, value );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public LabelStyle Style
     {
         get;
@@ -194,6 +214,10 @@ public class Label : Widget
         return true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newText"></param>
     public void SetText( string? newText )
     {
         if ( newText == null )
@@ -221,6 +245,11 @@ public class Label : Widget
         InvalidateHierarchy();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public bool TextEquals( string other )
     {
         if ( Text.Length != other.Length )
@@ -239,6 +268,9 @@ public class Label : Widget
         return true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override void Invalidate()
     {
         base.Invalidate();
@@ -270,6 +302,9 @@ public class Label : Widget
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void ComputePrefSize()
     {
         Guard.Against.Null( FontCache );
@@ -297,6 +332,9 @@ public class Label : Widget
         _prefSize.Set( _prefSizeLayout.Width, _prefSizeLayout.Height );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void Layout()
     {
         Guard.Against.Null( FontCache );
@@ -339,11 +377,19 @@ public class Label : Widget
         GlyphLayout layout = GlyphLayout;
         float       textWidth, textHeight;
 
-        if ( wrap || ( Text.ToString().IndexOf( "\n", StringComparison.Ordinal ) != -1 ) )
+        if ( wrap || ( Text.ToString().Contains( '\n' ) ) )
         {
             // If the text can span multiple lines, determine the text's actual
             // size so it can be aligned within the label.
-            layout.SetText( font, Text.ToString(), 0, Text.Length, Color.White, width, LineAlign, wrap, _ellipsis );
+            layout.SetText( font,
+                            Text.ToString(),
+                            0,
+                            Text.Length,
+                            Color.White,
+                            width,
+                            LineAlign,
+                            wrap,
+                            _ellipsis );
 
             textWidth  = layout.Width;
             textHeight = layout.Height;
@@ -397,6 +443,11 @@ public class Label : Widget
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="batch"></param>
+    /// <param name="parentAlpha"></param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -410,7 +461,10 @@ public class Label : Widget
             Style.Background?.Draw( batch, X, Y, Width, Height );
         }
 
-        color.Mul( Style.FontColor );
+        if ( Style.FontColor != null )
+        {
+            color.Mul( Style.FontColor );
+        }
 
         if ( FontCache != null )
         {
@@ -420,13 +474,19 @@ public class Label : Widget
         }
     }
 
-    // ========================================================================
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override float GetPrefWidth()
     {
         return GetPrefWidthSafe();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public float GetPrefWidthSafe()
     {
         if ( Wrap )
@@ -450,13 +510,19 @@ public class Label : Widget
         return width;
     }
 
-    // ========================================================================
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override float GetPrefHeight()
     {
         return GetPrefHeightSafe();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public float GetPrefHeightSafe()
     {
         if ( _prefSizeInvalid )
@@ -482,9 +548,8 @@ public class Label : Widget
         return height;
     }
 
-    // ========================================================================
-
     /// <summary>
+    /// Sets the alignmant of the label's text.
     /// </summary>
     /// <param name="alignment">
     /// Aligns all the text within the label (default left center) and each line
@@ -497,10 +562,11 @@ public class Label : Widget
     }
 
     /// <summary>
+    /// Sets the alignment of the label's text.
+    /// </summary>
     /// <param name="labelAlign"> Aligns all the text within the label (default left center). </param>
     /// <param name="lineAlign"> Aligns each line of text horizontally (default left). </param>
     /// See also <see cref="Align "/>
-    /// </summary>
     public void SetAlignment( Align labelAlign, Align lineAlign )
     {
         LabelAlign = labelAlign;
@@ -521,11 +587,20 @@ public class Label : Widget
         Invalidate();
     }
 
+    /// <summary>
+    /// Sets the scale of the label's font. The scale is applied to both the X and Y.
+    /// </summary>
+    /// <param name="fontScale"> The SCale. </param>
     public void SetFontScale( float fontScale )
     {
         SetFontScale( fontScale, fontScale );
     }
 
+    /// <summary>
+    /// Sets the X and Y scale of the label's font.
+    /// </summary>
+    /// <param name="fontScaleX"> The X Scale. </param>
+    /// <param name="fontScaleY"> The Y Scale. </param>
     public void SetFontScale( float fontScaleX, float fontScaleY )
     {
         _fontScaleChanged = true;
@@ -559,13 +634,6 @@ public class Label : Widget
     /// <inheritdoc />
     public override string ToString()
     {
-        string? name = Name;
-
-        if ( name != null )
-        {
-            return name;
-        }
-
         string className = GetType().Name;
         int    dotIndex  = className.LastIndexOf( '.' );
 
@@ -576,11 +644,7 @@ public class Label : Widget
 
         return ( className.IndexOf( '$' ) != -1 ? "Label " : "" ) + className + ": " + Text;
     }
-
-    // ========================================================================
-    // ========================================================================
 }
 
 // ============================================================================
 // ============================================================================
-

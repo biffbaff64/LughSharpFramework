@@ -71,7 +71,9 @@
   },
   "TextButtonStyle": {
     "default": {
-      "parent": "default",
+      "down": "default-round-down",
+      "up": "default-round",
+      "disabled": "default-round",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "gray"

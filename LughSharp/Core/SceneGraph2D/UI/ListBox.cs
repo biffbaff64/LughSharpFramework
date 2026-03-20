@@ -73,10 +73,6 @@ public class ListBox< T > : Widget where T : notnull
 
     // ========================================================================
 
-    public override string Name => "ListBox";
-
-    // ========================================================================
-
     private int   _overIndex = -1;
     private float _prefHeight;
     private float _prefWidth;
