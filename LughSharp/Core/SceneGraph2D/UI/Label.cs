@@ -35,6 +35,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Styles;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
@@ -46,27 +47,26 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Label : Widget
+public class Label : Widget, IDisposable
 {
-    public BitmapFontCache? FontCache   { get; set; }
-    public StringBuilder    Text        { get; }      = new();
     public Align            LabelAlign  { get; set; } = Align.Left;
     public Align            LineAlign   { get; set; } = Align.Left;
     public GlyphLayout      GlyphLayout { get; set; } = new();
 
     // ========================================================================
 
-    private static readonly Color       _tempColor      = new();
-    private static readonly GlyphLayout _prefSizeLayout = new();
-    private readonly        Vector2     _prefSize       = new();
+    private readonly Color       _tempColor      = new();
+    private readonly GlyphLayout _prefSizeLayout = new();
+    private readonly Vector2     _prefSize       = new();
 
-    private string? _ellipsis;
-    private bool    _fontScaleChanged;
-    private float   _fontScaleX = 1;
-    private float   _fontScaleY = 1;
-    private int     _intValue   = int.MinValue;
-    private float   _lastPrefHeight;
-    private bool    _prefSizeInvalid = true;
+    private StringBuilder _text = new();
+    private string?       _ellipsis;
+    private bool          _fontScaleChanged;
+    private float         _fontScaleX = 1;
+    private float         _fontScaleY = 1;
+    private int           _intValue   = int.MinValue;
+    private float         _lastPrefHeight;
+    private bool          _prefSizeInvalid = true;
 
     // ========================================================================
 
@@ -120,11 +120,15 @@ public class Label : Widget
     {
         if ( text != null )
         {
-            Text.Append( text );
+            _text.Append( text );
         }
 
+        // FontCache is initialised in Style setter. It is important
+        // that this is done before any calls to SetSize.
         Style = style;
 
+        Logger.Debug( $"Label created with text: {text}, Font color: {Style.FontColor.Name}" );
+        
         if ( text is { Length: > 0 } )
         {
             SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
@@ -161,12 +165,33 @@ public class Label : Widget
     }
 
     /// <summary>
+    /// The <see cref="BitmapFontCache"/> used with this label.
+    /// Calling the setter with null will create a new <see cref="BitmapFontCache"/>
+    /// </summary>
+    public BitmapFontCache? FontCache
+    {
+        get;
+        set
+        {
+            value ??= Style.Font.NewFontCache();
+
+            field = value;
+        }
+    }
+
+    /// <summary>
     /// The font X scale of the label.
     /// </summary>
     public float FontScaleX
     {
         get => _fontScaleX;
-        set => SetFontScale( value, FontScaleY );
+        set
+        {
+            _fontScaleChanged = true;
+            _fontScaleX       = value;
+
+            InvalidateHierarchy();
+        }
     }
 
     /// <summary>
@@ -175,17 +200,27 @@ public class Label : Widget
     public float FontScaleY
     {
         get => _fontScaleY;
-        set => SetFontScale( FontScaleX, value );
+        set
+        {
+            _fontScaleChanged = true;
+            _fontScaleY       = value;
+
+            InvalidateHierarchy();
+        }
     }
 
     /// <summary>
-    /// 
+    /// The <see cref="LabelStyle"/> used with this label. It is used to
+    /// specify the Font, FontColor, and Background
     /// </summary>
     public LabelStyle Style
     {
         get;
         set
         {
+            if ( value == null ) throw new ArgumentException( "style cannot be null." );
+            if ( value.Font == null ) throw new ArgumentException( "Missing LabelStyle font." );
+
             field     = value;
             FontCache = value.Font.NewFontCache();
 
@@ -193,6 +228,11 @@ public class Label : Widget
         }
     }
 
+    /// <summary>
+    /// Returns the text of the label.
+    /// </summary>
+    public StringBuilder GetText() => _text;
+    
     /// <summary>
     /// Sets the text to the specified integer value. If the text is already equivalent
     /// to the specified value, a string is not allocated.
@@ -205,8 +245,8 @@ public class Label : Widget
             return false;
         }
 
-        Text.Clear();
-        Text.Append( value );
+        _text.Clear();
+        _text.Append( value );
         _intValue = value;
 
         InvalidateHierarchy();
@@ -215,19 +255,23 @@ public class Label : Widget
     }
 
     /// <summary>
-    /// 
+    /// Sets the Label's text to the specified float value. If the text is already
+    /// equivalent to the specified value, a string is not allocated. If <c>null</c>
+    /// is passed, the label's text will be cleared.'
     /// </summary>
-    /// <param name="newText"></param>
+    /// <param name="newText">
+    /// A string holding the text to set, or null to clear the label.
+    /// </param>
     public void SetText( string? newText )
     {
         if ( newText == null )
         {
-            if ( Text.Length == 0 )
+            if ( _text.Length == 0 )
             {
                 return;
             }
 
-            Text.Clear();
+            _text.Clear();
         }
         else
         {
@@ -236,8 +280,8 @@ public class Label : Widget
                 return;
             }
 
-            Text.Clear();
-            Text.Append( newText );
+            _text.Clear();
+            _text.Append( newText );
         }
 
         _intValue = int.MinValue;
@@ -250,16 +294,18 @@ public class Label : Widget
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool TextEquals( string other )
+    public bool TextEquals( string? other )
     {
-        if ( Text.Length != other.Length )
+        if ( other == null ) return false;
+        
+        if ( _text.Length != other.Length )
         {
             return false;
         }
 
-        for ( var i = 0; i < Text.Length; i++ )
+        for ( var i = 0; i < _text.Length; i++ )
         {
-            if ( Text[ i ] != other[ i ] )
+            if ( _text[ i ] != other[ i ] )
             {
                 return false;
             }
@@ -269,7 +315,8 @@ public class Label : Widget
     }
 
     /// <summary>
-    /// 
+    /// Marks the Label as invalid, triggering a recalculation of its preferred
+    /// size or layout during the next rendering pass.
     /// </summary>
     public override void Invalidate()
     {
@@ -322,11 +369,11 @@ public class Label : Widget
                       - Style.Background.RightWidth;
             }
 
-            _prefSizeLayout.SetText( FontCache.Font, Text.ToString(), Color.White, width, Align.Left, true );
+            _prefSizeLayout.SetText( FontCache.Font, _text.ToString(), Color.White, width, Align.Left, true );
         }
         else
         {
-            _prefSizeLayout.SetText( FontCache.Font, Text.ToString() );
+            _prefSizeLayout.SetText( FontCache.Font, _text.ToString() );
         }
 
         _prefSize.Set( _prefSizeLayout.Width, _prefSizeLayout.Height );
@@ -377,14 +424,14 @@ public class Label : Widget
         GlyphLayout layout = GlyphLayout;
         float       textWidth, textHeight;
 
-        if ( wrap || ( Text.ToString().Contains( '\n' ) ) )
+        if ( wrap || ( _text.ToString().Contains( '\n' ) ) )
         {
             // If the text can span multiple lines, determine the text's actual
             // size so it can be aligned within the label.
             layout.SetText( font,
-                            Text.ToString(),
+                            _text.ToString(),
                             0,
-                            Text.Length,
+                            _text.Length,
                             Color.White,
                             width,
                             LineAlign,
@@ -434,7 +481,7 @@ public class Label : Widget
             y += textHeight;
         }
 
-        layout.SetText( font, Text.ToString(), 0, Text.Length, Color.White, textWidth, LineAlign, wrap, _ellipsis );
+        layout.SetText( font, _text.ToString(), 0, _text.Length, Color.White, textWidth, LineAlign, wrap, _ellipsis );
         FontCache.SetText( layout, x, y );
 
         if ( _fontScaleChanged )
@@ -461,10 +508,7 @@ public class Label : Widget
             Style.Background?.Draw( batch, X, Y, Width, Height );
         }
 
-        if ( Style.FontColor != null )
-        {
-            color.Mul( Style.FontColor );
-        }
+        color.Mul( Style.FontColor );
 
         if ( FontCache != null )
         {
@@ -642,7 +686,24 @@ public class Label : Widget
             className = className.Substring( dotIndex + 1 );
         }
 
-        return ( className.IndexOf( '$' ) != -1 ? "Label " : "" ) + className + ": " + Text;
+        return ( className.IndexOf( '$' ) != -1 ? "Label " : "" ) + className + ": " + _text;
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+        }
     }
 }
 

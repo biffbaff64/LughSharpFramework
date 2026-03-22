@@ -338,12 +338,17 @@ public class MainGame : Game
             var tbStyle = new TextButtonStyle
             {
                 Up                = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
-                Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down") ),
-                Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round") ),
+                Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down" ) ),
+                Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
                 Font              = _font ?? new BitmapFont(),
                 FontColor         = Color.White,
                 DisabledFontColor = Color.Gray,
             };
+
+            var    labelStyle = skin.Get< LabelStyle >( "default" );
+            string fontColor  = ( labelStyle.FontColor == null ) ? "null" : labelStyle.FontColor.Name;
+
+            Logger.Debug( $"Font Name: {labelStyle.Font.FontData.Name}, Font Color: {fontColor}" );
 
             var textButton = new TextButton( "Text Button", skin )
 //            var textButton = new TextButton( "Text Button", tbStyle )

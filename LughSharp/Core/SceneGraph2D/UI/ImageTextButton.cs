@@ -284,15 +284,15 @@ public class ImageTextButton : Button
 
     public string GetText()
     {
-        return _label?.Text.ToString() ?? "";
+        return _label?.GetText().ToString() ?? "";
     }
 
     public void SetText( string text )
     {
         if ( _label != null )
         {
-            _label.Text.Clear();
-            _label.Text.Append( text );
+            _label.GetText().Clear();
+            _label.GetText().Append( text );
         }
     }
 }

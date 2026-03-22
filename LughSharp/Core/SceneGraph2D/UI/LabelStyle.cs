@@ -37,7 +37,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 public class LabelStyle : ISceneStyle
 {
     public BitmapFont      Font       { get; set; }
-    public Color?          FontColor  { get; set; }
+    public Color?          FontColor  { get; set; } = Color.White;
     public ISceneDrawable? Background { get; set; }
 
     // ====================================================================
@@ -45,14 +45,13 @@ public class LabelStyle : ISceneStyle
     public LabelStyle()
     {
         Font       = new BitmapFont();
-        FontColor  = Color.White;
         Background = null;
     }
 
     public LabelStyle( BitmapFont font, Color? fontColor )
     {
         Font      = font;
-        FontColor = fontColor;
+        FontColor = fontColor ?? Color.White;
     }
 
     public LabelStyle( LabelStyle style )
@@ -60,6 +59,11 @@ public class LabelStyle : ISceneStyle
         Font       = style.Font;
         FontColor  = new Color( style.FontColor ?? Color.White );
         Background = style.Background;
+    }
+
+    public override string ToString()
+    {
+        return $"[Font: {Font}], [FontColor: {FontColor?.Name}], [Background: {Background?.GetType().Name}]";
     }
 }
 

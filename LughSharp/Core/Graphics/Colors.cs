@@ -93,6 +93,24 @@ public static class Colors
     }
 
     /// <summary>
+    /// Returns the name of the color.
+    /// </summary>
+    /// <param name="color"></param>
+    /// <returns></returns>
+    public static string GetColorName( Color color )
+    {
+        foreach ( ( string name, Color c ) in ColorMap )
+        {
+            if ( c == color )
+            {
+                return name;
+            }
+        }
+        
+        return "UNKNOWN";
+    }
+    
+    /// <summary>
     /// Prints all the colors in the <see cref="ColorMap"/> to the log.
     /// </summary>
     public static void PrintAll()

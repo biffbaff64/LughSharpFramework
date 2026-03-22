@@ -203,8 +203,8 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Helper method for constructors.
-    /// Copies the table of default tag classes into the working dictionary.
+    /// Initialises the table of default tag classes into the working dictionary.
+    /// Further tag classes can be added to the working dictionary if required.
     /// </summary>
     private void InitialiseJsonClassTags()
     {

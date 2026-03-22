@@ -79,21 +79,6 @@ public class TextButton : Button
         Add( _label ).Expand().SetFill();
 
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
-
-        #if DEBUG
-        foreach ( Actor? child in Children )
-        {
-            if ( child == null ) continue;
-
-            Logger.Debug( $"{child.GetType().Name} added to TextButton." );
-
-            if ( child is Label label )
-            {
-                Logger.Debug( $"Label Text: {label.Text}" );
-                Logger.Debug( $"Label Color: {label.FontCache?.Font.GetColor().Name}" );
-            }
-        }
-        #endif
     }
 
     /// <summary>
@@ -256,7 +241,7 @@ public class TextButton : Button
     /// <summary>
     /// Returns this buttons <see cref="Label"/> text.
     /// </summary>
-    public string? GetText() => _label?.Text.ToString();
+    public string? GetText() => _label?.GetText().ToString();
 
     // ========================================================================
 
@@ -271,7 +256,7 @@ public class TextButton : Button
             className = className.Substring( dotIndex + 1 );
         }
 
-        return $"{( className.IndexOf( '$' ) != -1 ? "TextButton " : "" )}{className}: {_label?.Text}";
+        return $"{( className.IndexOf( '$' ) != -1 ? "TextButton " : "" )}{className}: {_label?.GetText()}";
     }
 }
 
