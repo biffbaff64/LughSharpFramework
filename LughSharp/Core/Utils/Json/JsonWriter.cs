@@ -301,7 +301,8 @@ public class JsonWriter : IDisposable
     {
         if ( _named )
         {
-            throw new InvalidOperationException( "Expected an object, array, or value since a name was set." );
+            throw new InvalidOperationException( "Expected an object, array, or "
+                                               + "value since a name was set." );
         }
 
         Writer?.Write( ( char )( _current >> 1 ) );

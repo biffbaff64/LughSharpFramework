@@ -266,8 +266,8 @@ public class MainGame : Game
     {
         const bool HudActor             = false;
         const bool WindowActor          = false;
-        const bool ButtonActor          = false;
-        const bool TextButtonActor      = true;
+        const bool ButtonActor          = true;
+        const bool TextButtonActor      = false;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
         const bool CheckBoxActor        = false;
@@ -345,10 +345,12 @@ public class MainGame : Game
                 DisabledFontColor = Color.Gray,
             };
 
-            var    labelStyle = skin.Get< LabelStyle >( "default" );
-            string fontColor  = ( labelStyle.FontColor == null ) ? "null" : labelStyle.FontColor.Name;
-
-            Logger.Debug( $"Font Name: {labelStyle.Font.FontData.Name}, Font Color: {fontColor}" );
+//            var labelStyle = skin.Get< LabelStyle >( "default" );
+//            string fontColor = ( labelStyle.FontColor == null )
+//                ? "null"
+//                : Colors.GetColorName( labelStyle.FontColor );
+//            Logger.Debug( $"Font Name: {labelStyle.Font.FontData.Name}, "
+//                        + $"Font Color: {fontColor} {labelStyle.FontColor?.AsRgbaString()}" );
 
             var textButton = new TextButton( "Text Button", skin )
 //            var textButton = new TextButton( "Text Button", tbStyle )

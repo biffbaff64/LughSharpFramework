@@ -207,7 +207,7 @@ public class SpriteCache
 
     /// <summary>
     /// Sets the color used to tint images when they are added to the
-    /// SpriteCache. Default is <see cref="Colors.Color.White"/>
+    /// SpriteCache. Default is <see cref="Color.White"/>
     /// </summary>
     public void SetColor( Color tint )
     {

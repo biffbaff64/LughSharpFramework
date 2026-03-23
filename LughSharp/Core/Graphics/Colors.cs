@@ -22,58 +22,61 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics;
 
 /// <summary>
 /// A general purpose class containing named colors that can be changed at will.
-/// For example, the markup language defined by the <see cref="BitmapFontCache"/> class
-/// uses this class to retrieve colors and the user can define his own colors.
+/// For example, the markup language defined by the <see cref="BitmapFontCache"/>
+/// class uses this class to retrieve colors and the user can define his own colors.
 /// </summary>
 [PublicAPI]
 public static class Colors
 {
-    public static readonly Dictionary< string, Color > ColorMap = new()
+    public static readonly Dictionary< string, uint > ColorMap = new()
     {
         //@formatter:off
-        { "CLEAR",          Color.Clear         }, // 
-        { "BLACK",          Color.Black         }, // 
-        { "WHITE",          Color.White         }, // 
-        { "LIGHT_GRAY",     Color.LightGray     }, // 
-        { "GRAY",           Color.Gray          }, // 
-        { "DARK_GRAY",      Color.DarkGray      }, // 
-        { "BLUE",           Color.Blue          }, // 
-        { "NAVY",           Color.Navy          }, // 
-        { "ROYAL",          Color.Royal         }, // 
-        { "SLATE",          Color.Slate         }, // 
-        { "SKY",            Color.Sky           }, // 
-        { "CYAN",           Color.Cyan          }, // 
-        { "TEAL",           Color.Teal          }, // 
-        { "GREEN",          Color.Green         }, // 
-        { "CHARTREUSE",     Color.Chartreuse    }, // 
-        { "LIME",           Color.Lime          }, // 
-        { "FOREST",         Color.Forest        }, // 
-        { "OLIVE",          Color.Olive         }, // 
-        { "YELLOW",         Color.Yellow        }, // 
-        { "GOLD",           Color.Gold          }, // 
-        { "GOLDENROD",      Color.Goldenrod     }, // 
-        { "ORANGE",         Color.Orange        }, // 
-        { "BROWN",          Color.Brown         }, // 
-        { "TAN",            Color.Tan           }, // 
-        { "FIREBRICK",      Color.Firebrick     }, // 
-        { "RED",            Color.Red           }, // 
-        { "SCARLET",        Color.Scarlet       }, // 
-        { "CORAL",          Color.Coral         }, // 
-        { "SALMON",         Color.Salmon        }, // 
-        { "PINK",           Color.Pink          }, // 
-        { "MAGENTA",        Color.Magenta       }, // 
-        { "PURPLE",         Color.Purple        }, // 
-        { "VIOLET",         Color.Violet        }, // 
-        { "MAROON",         Color.Maroon        }  // 
+        { "CLEAR",          Color.Clear.RGBAPackedColor      },     //
+        { "BLACK",          Color.Black.RGBAPackedColor      },     //
+        { "WHITE",          Color.White.RGBAPackedColor      },     //
+        { "LIGHT_GRAY",     Color.LightGray.RGBAPackedColor  },     //
+        { "GRAY",           Color.Gray.RGBAPackedColor       },     //
+        { "DARK_GRAY",      Color.DarkGray.RGBAPackedColor   },     //
+        { "BLUE",           Color.Blue.RGBAPackedColor       },     //
+        { "NAVY",           Color.Navy.RGBAPackedColor       },     //
+        { "ROYAL",          Color.Royal.RGBAPackedColor      },     //
+        { "SLATE",          Color.Slate.RGBAPackedColor      },     //
+        { "SKY",            Color.Sky.RGBAPackedColor        },     //
+        { "CYAN",           Color.Cyan.RGBAPackedColor       },     //
+        { "TEAL",           Color.Teal.RGBAPackedColor       },     //
+        { "GREEN",          Color.Green.RGBAPackedColor      },     //
+        { "CHARTREUSE",     Color.Chartreuse.RGBAPackedColor },     //
+        { "LIME",           Color.Lime.RGBAPackedColor       },     //
+        { "FOREST",         Color.Forest.RGBAPackedColor     },     //
+        { "OLIVE",          Color.Olive.RGBAPackedColor      },     //
+        { "YELLOW",         Color.Yellow.RGBAPackedColor     },     //
+        { "GOLD",           Color.Gold.RGBAPackedColor       },     //
+        { "GOLDENROD",      Color.Goldenrod.RGBAPackedColor  },     //
+        { "ORANGE",         Color.Orange.RGBAPackedColor     },     //
+        { "BROWN",          Color.Brown.RGBAPackedColor      },     //
+        { "TAN",            Color.Tan.RGBAPackedColor        },     //
+        { "FIREBRICK",      Color.Firebrick.RGBAPackedColor  },     //
+        { "RED",            Color.Red.RGBAPackedColor        },     //
+        { "SCARLET",        Color.Scarlet.RGBAPackedColor    },     //
+        { "CORAL",          Color.Coral.RGBAPackedColor      },     //
+        { "SALMON",         Color.Salmon.RGBAPackedColor     },     //
+        { "PINK",           Color.Pink.RGBAPackedColor       },     //
+        { "MAGENTA",        Color.Magenta.RGBAPackedColor    },     //
+        { "PURPLE",         Color.Purple.RGBAPackedColor     },     //
+        { "VIOLET",         Color.Violet.RGBAPackedColor     },     //
+        { "MAROON",         Color.Maroon.RGBAPackedColor     }      //
         //@formatter:on
     };
 
@@ -84,41 +87,32 @@ public static class Colors
     /// </summary>
     /// <param name="name">The name of the color.</param>
     /// <returns>
-    /// The <see cref="Color"/> associated with the specified <paramref name="name"/>,
-    /// or <c>null</c> if no mapping was found.
+    /// The <see cref="Color"/> associated with the specified <paramref name="name"/>.
     /// </returns>
-    public static Color? Get( string name )
+    public static Color Get( string name )
     {
-        return ColorMap.GetValueOrDefault( name );
+        return new Color( ColorMap.GetValueOrDefault( name ) );
     }
 
     /// <summary>
-    /// Returns the name of the color.
+    /// Returns the name of the color. This method compares the packed RGBA value
+    /// of the color to the values in the <see cref="ColorMap"/> dictionary to find
+    /// a match, and returns the name of the color if a match is found.
     /// </summary>
-    /// <param name="color"></param>
-    /// <returns></returns>
     public static string GetColorName( Color color )
     {
-        foreach ( ( string name, Color c ) in ColorMap )
+        uint colorU = color.RGBAPackedColor;
+
+        foreach ( ( string name, uint col ) in ColorMap )
         {
-            if ( c == color )
+            if ( col == colorU )
             {
                 return name;
             }
         }
-        
-        return "UNKNOWN";
-    }
-    
-    /// <summary>
-    /// Prints all the colors in the <see cref="ColorMap"/> to the log.
-    /// </summary>
-    public static void PrintAll()
-    {
-        foreach ( ( string name, Color color ) in ColorMap )
-        {
-            Logger.Debug( $"{name,-12} = {color.AsRgbaString()}" );
-        }
+
+        // Should never get here so, hopefully, this is never called.
+        throw new RuntimeException( $"Color not found in ColorMap: {color}" );
     }
 }
 

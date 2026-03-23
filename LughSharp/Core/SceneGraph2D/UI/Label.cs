@@ -49,9 +49,9 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class Label : Widget, IDisposable
 {
-    public Align            LabelAlign  { get; set; } = Align.Left;
-    public Align            LineAlign   { get; set; } = Align.Left;
-    public GlyphLayout      GlyphLayout { get; set; } = new();
+    public Align       LabelAlign  { get; set; } = Align.Left;
+    public Align       LineAlign   { get; set; } = Align.Left;
+    public GlyphLayout GlyphLayout { get; set; } = new();
 
     // ========================================================================
 
@@ -59,14 +59,14 @@ public class Label : Widget, IDisposable
     private readonly GlyphLayout _prefSizeLayout = new();
     private readonly Vector2     _prefSize       = new();
 
-    private StringBuilder _text = new();
+    private StringBuilder _text            = new();
+    private float         _fontScaleX      = 1;
+    private float         _fontScaleY      = 1;
+    private int           _intValue        = int.MinValue;
+    private bool          _prefSizeInvalid = true;
+    private float         _lastPrefHeight;
     private string?       _ellipsis;
     private bool          _fontScaleChanged;
-    private float         _fontScaleX = 1;
-    private float         _fontScaleY = 1;
-    private int           _intValue   = int.MinValue;
-    private float         _lastPrefHeight;
-    private bool          _prefSizeInvalid = true;
 
     // ========================================================================
 
@@ -127,8 +127,6 @@ public class Label : Widget, IDisposable
         // that this is done before any calls to SetSize.
         Style = style;
 
-        Logger.Debug( $"Label created with text: {text}, Font color: {Style.FontColor.Name}" );
-        
         if ( text is { Length: > 0 } )
         {
             SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
@@ -232,7 +230,7 @@ public class Label : Widget, IDisposable
     /// Returns the text of the label.
     /// </summary>
     public StringBuilder GetText() => _text;
-    
+
     /// <summary>
     /// Sets the text to the specified integer value. If the text is already equivalent
     /// to the specified value, a string is not allocated.
@@ -297,7 +295,7 @@ public class Label : Widget, IDisposable
     public bool TextEquals( string? other )
     {
         if ( other == null ) return false;
-        
+
         if ( _text.Length != other.Length )
         {
             return false;
@@ -508,7 +506,10 @@ public class Label : Widget, IDisposable
             Style.Background?.Draw( batch, X, Y, Width, Height );
         }
 
-        color.Mul( Style.FontColor );
+        if ( Style.FontColor != null )
+        {
+            color.Mul( Style.FontColor );
+        }
 
         if ( FontCache != null )
         {

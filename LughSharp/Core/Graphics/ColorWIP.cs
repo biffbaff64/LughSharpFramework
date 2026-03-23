@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Logging;
@@ -29,38 +31,43 @@ using LughSharp.Core.Utils.Logging;
 namespace LughSharp.Core.Graphics;
 
 [PublicAPI]
-public class NewColor
+public class ColorWIP
 {
     /// <summary>
-    /// Red NewColor Component
+    /// Red ColorWIP Component
     /// </summary>
     public byte R { get; set; }
 
     /// <summary>
-    /// Green NewColor Component
+    /// Green ColorWIP Component
     /// </summary>
     public byte G { get; set; }
 
     /// <summary>
-    /// Blue NewColor Component
+    /// Blue ColorWIP Component
     /// </summary>
     public byte B { get; set; }
 
     /// <summary>
-    /// Alpha NewColor Component
+    /// Alpha ColorWIP Component
     /// </summary>
     public byte A { get; set; }
 
     /// <summary>
-    /// NewColor Components packed into a <b>uint</b>, stored in <b>RGBA</b> format.
+    /// ColorWIP Components packed into a <b>uint</b>, stored in <b>RGBA</b> format.
     /// </summary>
     public uint RGBAPackedColor { get; private set; }
 
     /// <summary>
-    /// NewColor Components packed into a <b>uint</b>, stored in <b>ABGR</b> format.
+    /// ColorWIP Components packed into a <b>uint</b>, stored in <b>ABGR</b> format.
     /// </summary>
     public uint ABGRPackedColor { get; private set; }
 
+    /// <summary>
+    /// The color's name.
+    /// </summary>
+    public string Name { get; set; } = "ColorWIP";
+    
     // ========================================================================
 
     private const int ARGBAlphaShift = 24;
@@ -83,17 +90,17 @@ public class NewColor
     /// <summary>
     /// Default constructor. Sets all components to 0.
     /// </summary>
-    public NewColor() : this( 0u )
+    public ColorWIP() : this( 0u )
     {
     }
 
     /// <summary>
-    /// Creates a new NewColor from the specified <see cref="ValidColor"/> enum value.
+    /// Creates a new ColorWIP from the specified <see cref="ValidColor"/> enum value.
     /// </summary>
-    public NewColor( ValidColor color )
+    public ColorWIP( ValidColor color )
     {
-        var colorData = ValidColors[ ( int )color ];
-        var rgba      = colorData.RGBA8888;
+        ValidColorData colorData = ValidColors[ ( int )color ];
+        uint           rgba      = colorData.RGBA8888;
 
         R = ( byte )( ( rgba & RGBARedMask ) >> RGBARedShift );
         G = ( byte )( ( rgba & RGBAGreenMask ) >> RGBAGreenShift );
@@ -104,10 +111,10 @@ public class NewColor
     }
 
     /// <summary>
-    /// Creates a new NewColor from the suppied RGBA8888 integer value.
+    /// Creates a new ColorWIP from the suppied RGBA8888 integer value.
     /// </summary>
     /// <param name="rgba8888"></param>
-    public NewColor( uint rgba8888 )
+    public ColorWIP( uint rgba8888 )
         : this( ( byte )( ( rgba8888 & RGBARedMask ) >> RGBARedShift ),
                 ( byte )( ( rgba8888 & RGBAGreenMask ) >> RGBAGreenShift ),
                 ( byte )( ( rgba8888 & RGBABlueMask ) >> RGBABlueShift ),
@@ -117,23 +124,23 @@ public class NewColor
     }
 
     /// <summary>
-    /// Creates a new NewColor from the components of the supplied NewColor object.
+    /// Creates a new ColorWIP from the components of the supplied ColorWIP object.
     /// </summary>
     /// <param name="color"></param>
-    public NewColor( NewColor color )
+    public ColorWIP( ColorWIP color )
         : this( color.R, color.G, color.B, color.A )
     {
     }
 
     /// <summary>
-    /// Creates a new NewColor from the supplied float r,g,b and a components.
+    /// Creates a new ColorWIP from the supplied float r,g,b and a components.
     /// The values must be in the range 0f - 1f.
     /// </summary>
     /// <param name="r"> The Red component value. </param>
     /// <param name="g"> The Green component value. </param>
     /// <param name="b"> The Blue component value. </param>
     /// <param name="a"> The ALpha component value. </param>
-    public NewColor( float r, float g, float b, float a )
+    public ColorWIP( float r, float g, float b, float a )
         : this( ( byte )( r * 255f ),
                 ( byte )( g * 255f ),
                 ( byte )( b * 255f ),
@@ -142,13 +149,13 @@ public class NewColor
     }
 
     /// <summary>
-    /// Creates a new NewColor from the supplied r,g,b and a components.
+    /// Creates a new ColorWIP from the supplied r,g,b and a components.
     /// </summary>
     /// <param name="r"> The Red component value. </param>
     /// <param name="g"> The Green component value. </param>
     /// <param name="b"> The Blue component value. </param>
     /// <param name="a"> The ALpha component value. </param>
-    public NewColor( byte r, byte g, byte b, byte a )
+    public ColorWIP( byte r, byte g, byte b, byte a )
     {
         R = r;
         G = g;
@@ -164,13 +171,23 @@ public class NewColor
     /// Updates the packed color representations (RGBA8888 and ABGR8888) based on
     /// the current component values.
     /// </summary>
-    /// <param name="showDebug">If true, outputs debug information to the logger.</param>
-    /// <returns> This NewColor for chaining. </returns>
-    private NewColor UpdatePackedColors( bool showDebug = false )
+    /// <param name="showDebug"> If true, outputs debug information to the logger. </param>
+    /// <returns> This ColorWIP for chaining. </returns>
+    private ColorWIP UpdatePackedColors( bool showDebug = false )
     {
         RGBAPackedColor = ToRgba8888( R, G, B, A );
         ABGRPackedColor = ToAbgr8888( A, B, G, R );
 
+        foreach ( ValidColorData entry in ValidColors )
+        {
+            if ( entry.RGBA8888 == RGBAPackedColor )
+            {
+                Name = entry.Name;
+
+                break;
+            }
+        }
+        
         if ( showDebug )
         {
             Logger.Debug( $"R: {R}, G: {G}, B: {B}, A: {A}" );
@@ -238,7 +255,7 @@ public class NewColor
     }
 
     /// <summary>
-    /// Returns the given <see cref="NewColor"/> as a 32-bit uint in the following format:-
+    /// Returns the given <see cref="ColorWIP"/> as a 32-bit uint in the following format:-
     /// <li>Bits  0 - 4  : Blue component</li>
     /// <li>Bits  5 - 10 : Green component</li>
     /// <li>Bits 11 - 15 : Red component</li>
@@ -272,9 +289,9 @@ public class NewColor
     /// <summary>
     /// Sets this colors components using the components from the supplied color.
     /// </summary>
-    /// <param name="color"> The NewColor to set. This cannot be null. </param>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Set( NewColor color )
+    /// <param name="color"> The ColorWIP to set. This cannot be null. </param>
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Set( ColorWIP color )
     {
         R = color.R;
         G = color.G;
@@ -289,7 +306,7 @@ public class NewColor
     /// </summary>
     /// <param name="rgba"> The integer representation. </param>
     /// <returns> This color for chaining. </returns>
-    public NewColor Set( uint rgba )
+    public ColorWIP Set( uint rgba )
     {
         R = ( byte )( ( rgba & RGBARedMask ) >> RGBARedShift );
         G = ( byte )( ( rgba & RGBAGreenMask ) >> RGBAGreenShift );
@@ -306,8 +323,8 @@ public class NewColor
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Set( byte r, byte g, byte b, byte a )
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Set( byte r, byte g, byte b, byte a )
     {
         R = r;
         G = g;
@@ -324,8 +341,8 @@ public class NewColor
     /// <param name="g"> Green component (0-1) </param>
     /// <param name="b"> Blue component (0-1) </param>
     /// <param name="a"> Alpha component (0-1) </param>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Set( float r, float g, float b, float a )
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Set( float r, float g, float b, float a )
     {
         R = ( byte )( r * 255f );
         G = ( byte )( g * 255f );
@@ -336,12 +353,12 @@ public class NewColor
     }
 
     /// <summary>
-    /// Adds the components from the supplied NewColor to the corresponding
+    /// Adds the components from the supplied ColorWIP to the corresponding
     /// components of this color, with clamping to prevent overflow.
     /// </summary>
-    /// <param name="color"> The NewColor to add. </param>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Add( NewColor color )
+    /// <param name="color"> The ColorWIP to add. </param>
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Add( ColorWIP color )
     {
         R = ClampByte( R + color.R );
         G = ClampByte( G + color.G );
@@ -352,12 +369,12 @@ public class NewColor
     }
 
     /// <summary>
-    /// Subtracts the components of the supplied NewColor from the corresponding
+    /// Subtracts the components of the supplied ColorWIP from the corresponding
     /// components of this color, with clamping to prevent underflow.
     /// </summary>
-    /// <param name="color"> The NewColor to subtract. </param>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Subtract( NewColor color )
+    /// <param name="color"> The ColorWIP to subtract. </param>
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Subtract( ColorWIP color )
     {
         R = ClampByte( R - color.R );
         G = ClampByte( G - color.G );
@@ -371,9 +388,9 @@ public class NewColor
     /// Multiplies the components of this color by the corresponding components
     /// of the supplied color. Useful for color modulation.
     /// </summary>
-    /// <param name="color"> The NewColor to multiply by. </param>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Multiply( NewColor color )
+    /// <param name="color"> The ColorWIP to multiply by. </param>
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Multiply( ColorWIP color )
     {
         R = ( byte )( ( R * color.R ) / 255 );
         G = ( byte )( ( G * color.G ) / 255 );
@@ -387,8 +404,8 @@ public class NewColor
     /// Multiplies all color components by a scalar value.
     /// </summary>
     /// <param name="scalar"> The value to multiply by. </param>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Multiply( float scalar )
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Multiply( float scalar )
     {
         R = ClampByte( ( int )( R * scalar ) );
         G = ClampByte( ( int )( G * scalar ) );
@@ -403,8 +420,8 @@ public class NewColor
     /// </summary>
     /// <param name="target"> The target color. </param>
     /// <param name="t"> The interpolation coefficient (0-1). </param>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Lerp( NewColor target, float t )
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Lerp( ColorWIP target, float t )
     {
         t = Math.Clamp( t, 0f, 1f );
 
@@ -419,27 +436,27 @@ public class NewColor
     /// <summary>
     /// Creates a copy of this color.
     /// </summary>
-    /// <returns> A new NewColor instance with the same component values. </returns>
-    public NewColor Copy()
+    /// <returns> A new ColorWIP instance with the same component values. </returns>
+    public ColorWIP Copy()
     {
-        return new NewColor( R, G, B, A );
+        return new ColorWIP( R, G, B, A );
     }
 
     /// <summary>
     /// Returns a new color with the specified alpha value.
     /// </summary>
     /// <param name="alpha"> The new alpha value. </param>
-    /// <returns> A new NewColor with the updated alpha. </returns>
-    public NewColor WithAlpha( byte alpha )
+    /// <returns> A new ColorWIP with the updated alpha. </returns>
+    public ColorWIP WithAlpha( byte alpha )
     {
-        return new NewColor( R, G, B, alpha );
+        return new ColorWIP( R, G, B, alpha );
     }
 
     /// <summary>
     /// Converts this color to grayscale using the standard luminosity method.
     /// </summary>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor ToGrayscale()
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP ToGrayscale()
     {
         var gray = ( byte )( ( 0.299f * R ) + ( 0.587f * G ) + ( 0.114f * B ) );
         R = G    = B = gray;
@@ -450,8 +467,8 @@ public class NewColor
     /// <summary>
     /// Inverts the RGB components of this color (alpha remains unchanged).
     /// </summary>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Invert()
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Invert()
     {
         R = ( byte )( 255 - R );
         G = ( byte )( 255 - G );
@@ -463,10 +480,10 @@ public class NewColor
     /// <summary>
     /// Premultiplies the RGB components by the alpha value.
     /// </summary>
-    /// <returns> This NewColor for chaining. </returns>
-    public NewColor Premultiply()
+    /// <returns> This ColorWIP for chaining. </returns>
+    public ColorWIP Premultiply()
     {
-        var alphaNormalized = A / 255f;
+        float alphaNormalized = A / 255f;
 
         R = ( byte )( R * alphaNormalized );
         G = ( byte )( G * alphaNormalized );
@@ -505,12 +522,12 @@ public class NewColor
     }
 
     /// <summary>
-    /// Creates a NewColor from a hexadecimal string.
+    /// Creates a ColorWIP from a hexadecimal string.
     /// Supports formats: RGB, RGBA, RRGGBB, RRGGBBAA, #RGB, #RGBA, #RRGGBB, #RRGGBBAA
     /// </summary>
     /// <param name="hex"> The hexadecimal string. </param>
-    /// <returns> A new NewColor instance. </returns>
-    public static NewColor FromHex( string hex )
+    /// <returns> A new ColorWIP instance. </returns>
+    public static ColorWIP FromHexString( string hex )
     {
         if ( string.IsNullOrEmpty( hex ) )
         {
@@ -521,26 +538,26 @@ public class NewColor
 
         return hex.Length switch
                {
-                   3 => new NewColor( // RGB
-                                     Convert.ToByte( new string( hex[ 0 ], 2 ), 16 ),
-                                     Convert.ToByte( new string( hex[ 1 ], 2 ), 16 ),
-                                     Convert.ToByte( new string( hex[ 2 ], 2 ), 16 ),
-                                     255 ),
-                   4 => new NewColor( // RGBA
-                                     Convert.ToByte( new string( hex[ 0 ], 2 ), 16 ),
-                                     Convert.ToByte( new string( hex[ 1 ], 2 ), 16 ),
-                                     Convert.ToByte( new string( hex[ 2 ], 2 ), 16 ),
-                                     Convert.ToByte( new string( hex[ 3 ], 2 ), 16 ) ),
-                   6 => new NewColor( // RRGGBB
-                                     Convert.ToByte( hex.Substring( 0, 2 ), 16 ),
-                                     Convert.ToByte( hex.Substring( 2, 2 ), 16 ),
-                                     Convert.ToByte( hex.Substring( 4, 2 ), 16 ),
-                                     255 ),
-                   8 => new NewColor( // RRGGBBAA
-                                     Convert.ToByte( hex.Substring( 0, 2 ), 16 ),
-                                     Convert.ToByte( hex.Substring( 2, 2 ), 16 ),
-                                     Convert.ToByte( hex.Substring( 4, 2 ), 16 ),
-                                     Convert.ToByte( hex.Substring( 6, 2 ), 16 ) ),
+                   3 => new ColorWIP( // RGB
+                                  Convert.ToByte( new string( hex[ 0 ], 2 ), 16 ),
+                                  Convert.ToByte( new string( hex[ 1 ], 2 ), 16 ),
+                                  Convert.ToByte( new string( hex[ 2 ], 2 ), 16 ),
+                                  255 ),
+                   4 => new ColorWIP( // RGBA
+                                  Convert.ToByte( new string( hex[ 0 ], 2 ), 16 ),
+                                  Convert.ToByte( new string( hex[ 1 ], 2 ), 16 ),
+                                  Convert.ToByte( new string( hex[ 2 ], 2 ), 16 ),
+                                  Convert.ToByte( new string( hex[ 3 ], 2 ), 16 ) ),
+                   6 => new ColorWIP( // RRGGBB
+                                  Convert.ToByte( hex.Substring( 0, 2 ), 16 ),
+                                  Convert.ToByte( hex.Substring( 2, 2 ), 16 ),
+                                  Convert.ToByte( hex.Substring( 4, 2 ), 16 ),
+                                  255 ),
+                   8 => new ColorWIP( // RRGGBBAA
+                                  Convert.ToByte( hex.Substring( 0, 2 ), 16 ),
+                                  Convert.ToByte( hex.Substring( 2, 2 ), 16 ),
+                                  Convert.ToByte( hex.Substring( 4, 2 ), 16 ),
+                                  Convert.ToByte( hex.Substring( 6, 2 ), 16 ) ),
                    var _ => throw new ArgumentException( $"Invalid hex color format: {hex}", nameof( hex ) )
                };
     }
@@ -548,36 +565,36 @@ public class NewColor
     /// <summary>
     /// Static factory method to create a color from RGB components.
     /// </summary>
-    public static NewColor FromRgb( byte r, byte g, byte b )
+    public static ColorWIP FromRgb( byte r, byte g, byte b )
     {
-        return new NewColor( r, g, b, 255 );
+        return new ColorWIP( r, g, b, 255 );
     }
 
     /// <summary>
     /// Static factory method to create a color from RGBA components.
     /// </summary>
-    public static NewColor FromRgba( byte r, byte g, byte b, byte a )
+    public static ColorWIP FromRgba( byte r, byte g, byte b, byte a )
     {
-        return new NewColor( r, g, b, a );
+        return new ColorWIP( r, g, b, a );
     }
 
     /// <summary>
     /// Static factory method to create a color from float components (0-1).
     /// </summary>
-    public static NewColor FromFloats( float r, float g, float b, float a = 1f )
+    public static ColorWIP FromFloats( float r, float g, float b, float a = 1f )
     {
-        return new NewColor( r, g, b, a );
+        return new ColorWIP( r, g, b, a );
     }
 
     /// <summary>
-    /// Converts an ARGB8888 packed value to a NewColor.
+    /// Converts an ARGB8888 packed value to a ColorWIP.
     /// </summary>
-    public static NewColor FromArgb8888( uint argb )
+    public static ColorWIP FromArgb8888( uint argb )
     {
-        return new NewColor( ( byte )( ( argb >> ARGBRedShift ) & 0xFF ),
-                             ( byte )( ( argb >> ARGBGreenShift ) & 0xFF ),
-                             ( byte )( ( argb >> ARGBBlueShift ) & 0xFF ),
-                             ( byte )( ( argb >> ARGBAlphaShift ) & 0xFF ) );
+        return new ColorWIP( ( byte )( ( argb >> ARGBRedShift ) & 0xFF ),
+                          ( byte )( ( argb >> ARGBGreenShift ) & 0xFF ),
+                          ( byte )( ( argb >> ARGBBlueShift ) & 0xFF ),
+                          ( byte )( ( argb >> ARGBAlphaShift ) & 0xFF ) );
     }
 
     // ========================================================================
@@ -587,51 +604,51 @@ public class NewColor
     /// <summary>
     /// Adds two colors component-wise with clamping.
     /// </summary>
-    public static NewColor operator +( NewColor a, NewColor b )
+    public static ColorWIP operator +( ColorWIP a, ColorWIP b )
     {
-        return new NewColor( ClampByte( a.R + b.R ),
-                             ClampByte( a.G + b.G ),
-                             ClampByte( a.B + b.B ),
-                             ClampByte( a.A + b.A ) );
+        return new ColorWIP( ClampByte( a.R + b.R ),
+                          ClampByte( a.G + b.G ),
+                          ClampByte( a.B + b.B ),
+                          ClampByte( a.A + b.A ) );
     }
 
     /// <summary>
     /// Subtracts two colors component-wise with clamping.
     /// </summary>
-    public static NewColor operator -( NewColor a, NewColor b )
+    public static ColorWIP operator -( ColorWIP a, ColorWIP b )
     {
-        return new NewColor( ClampByte( a.R - b.R ),
-                             ClampByte( a.G - b.G ),
-                             ClampByte( a.B - b.B ),
-                             ClampByte( a.A - b.A ) );
+        return new ColorWIP( ClampByte( a.R - b.R ),
+                          ClampByte( a.G - b.G ),
+                          ClampByte( a.B - b.B ),
+                          ClampByte( a.A - b.A ) );
     }
 
     /// <summary>
     /// Multiplies two colors component-wise.
     /// </summary>
-    public static NewColor operator *( NewColor a, NewColor b )
+    public static ColorWIP operator *( ColorWIP a, ColorWIP b )
     {
-        return new NewColor( ( byte )( ( a.R * b.R ) / 255 ),
-                             ( byte )( ( a.G * b.G ) / 255 ),
-                             ( byte )( ( a.B * b.B ) / 255 ),
-                             ( byte )( ( a.A * b.A ) / 255 ) );
+        return new ColorWIP( ( byte )( ( a.R * b.R ) / 255 ),
+                          ( byte )( ( a.G * b.G ) / 255 ),
+                          ( byte )( ( a.B * b.B ) / 255 ),
+                          ( byte )( ( a.A * b.A ) / 255 ) );
     }
 
     /// <summary>
     /// Multiplies a color by a scalar value.
     /// </summary>
-    public static NewColor operator *( NewColor color, float scalar )
+    public static ColorWIP operator *( ColorWIP color, float scalar )
     {
-        return new NewColor( ClampByte( ( int )( color.R * scalar ) ),
-                             ClampByte( ( int )( color.G * scalar ) ),
-                             ClampByte( ( int )( color.B * scalar ) ),
-                             ClampByte( ( int )( color.A * scalar ) ) );
+        return new ColorWIP( ClampByte( ( int )( color.R * scalar ) ),
+                          ClampByte( ( int )( color.G * scalar ) ),
+                          ClampByte( ( int )( color.B * scalar ) ),
+                          ClampByte( ( int )( color.A * scalar ) ) );
     }
 
     /// <summary>
     /// Multiplies a color by a scalar value.
     /// </summary>
-    public static NewColor operator *( float scalar, NewColor color )
+    public static ColorWIP operator *( float scalar, ColorWIP color )
     {
         return color * scalar;
     }
@@ -639,7 +656,7 @@ public class NewColor
     /// <summary>
     /// Divides a color by a scalar value.
     /// </summary>
-    public static NewColor operator /( NewColor color, float scalar )
+    public static ColorWIP operator /( ColorWIP color, float scalar )
     {
         if ( Math.Abs( scalar ) < 0.0001f )
         {
@@ -652,7 +669,7 @@ public class NewColor
     /// <summary>
     /// Compares two colors for equality.
     /// </summary>
-    public static bool operator ==( NewColor? a, NewColor? b )
+    public static bool operator ==( ColorWIP? a, ColorWIP? b )
     {
         if ( ReferenceEquals( a, b ) )
         {
@@ -670,7 +687,7 @@ public class NewColor
     /// <summary>
     /// Compares two colors for inequality.
     /// </summary>
-    public static bool operator !=( NewColor? a, NewColor? b )
+    public static bool operator !=( ColorWIP? a, ColorWIP? b )
     {
         return !( a == b );
     }
@@ -684,7 +701,7 @@ public class NewColor
     /// </summary>
     public override string ToString()
     {
-        return $"NewColor(R={R}, G={G}, B={B}, A={A}) [#{ToHex()}]";
+        return $"ColorWIP(R={R}, G={G}, B={B}, A={A}) [#{ToHex()}]";
     }
 
     /// <summary>
@@ -692,13 +709,18 @@ public class NewColor
     /// </summary>
     public override bool Equals( object? obj )
     {
-        return obj is NewColor other && this == other;
+        return obj is ColorWIP other && this == other;
     }
 
     /// <summary>
     /// Returns a hash code for this color.
     /// </summary>
     public override int GetHashCode()
+    {
+        return HashCodeValue();
+    }
+
+    private int HashCodeValue()
     {
         return HashCode.Combine( R, G, B, A );
     }
@@ -708,12 +730,61 @@ public class NewColor
     // ========================================================================
     // ========================================================================
 
+    public static readonly ColorWIP Red        = new( 0xff0000ff );
+    public static readonly ColorWIP Green      = new( 0x00ff00ff );
+    public static readonly ColorWIP Blue       = new( 0x0000ffff );
+    public static readonly ColorWIP Clear      = new( 0x00000000u );
+    public static readonly ColorWIP White      = new( 0xffffffff );
+    public static readonly ColorWIP Black      = new( 0x000000ff );
+    public static readonly ColorWIP Gray       = new( 0x7f7f7fff );
+    public static readonly ColorWIP LightGray  = new( 0xbfbfbfff );
+    public static readonly ColorWIP DarkGray   = new( 0x3f3f3fff );
+    public static readonly ColorWIP Slate      = new( 0x708090ff );
+    public static readonly ColorWIP Navy       = new( 0x000080ff );
+    public static readonly ColorWIP Royal      = new( 0x4169e1ff );
+    public static readonly ColorWIP Sky        = new( 0x87ceebff );
+    public static readonly ColorWIP Cyan       = new( 0x00ffffff );
+    public static readonly ColorWIP Teal       = new( 0x007f7fff );
+    public static readonly ColorWIP Chartreuse = new( 0x7fff00ff );
+    public static readonly ColorWIP Lime       = new( 0x32cd32ff );
+    public static readonly ColorWIP Forest     = new( 0x228b22ff );
+    public static readonly ColorWIP Olive      = new( 0x6b8e23ff );
+    public static readonly ColorWIP Yellow     = new( 0xffff00ff );
+    public static readonly ColorWIP Gold       = new( 0xffd700ff );
+    public static readonly ColorWIP Goldenrod  = new( 0xdaa520ff );
+    public static readonly ColorWIP Orange     = new( 0xffa500ff );
+    public static readonly ColorWIP Brown      = new( 0x8b4513ff );
+    public static readonly ColorWIP Tan        = new( 0xd2b48cff );
+    public static readonly ColorWIP Firebrick  = new( 0xb22222ff );
+    public static readonly ColorWIP Scarlet    = new( 0xff341cff );
+    public static readonly ColorWIP Coral      = new( 0xff7f50ff );
+    public static readonly ColorWIP Salmon     = new( 0xfa8072ff );
+    public static readonly ColorWIP Pink       = new( 0xff69b4ff );
+    public static readonly ColorWIP Magenta    = new( 0xff00ffff );
+    public static readonly ColorWIP Purple     = new( 0xa020f0ff );
+    public static readonly ColorWIP Violet     = new( 0xee82eeff );
+    public static readonly ColorWIP Maroon     = new( 0xb03060ff );
+
+    /// <summary>
+    /// Convenience for frequently used <c>White.ToFloatBits()</c>
+    /// </summary>
+    public static float WhiteAbgr => White.ToAbgr8888( White.A, White.B, White.G, White.R );
+
+    // ========================================================================
+
     [PublicAPI]
-    public struct ValidColorData( ValidColor color, uint rgba, string name )
+    public struct ValidColorData
     {
-        public ValidColor Color;
+        public ValidColor ColorWIP;
         public uint       RGBA8888;
         public string     Name;
+
+        public ValidColorData( ValidColor color, uint rgba, string name )
+        {
+            ColorWIP    = color;
+            RGBA8888 = rgba;
+            Name     = name;
+        }
     }
 
     /// <summary>
@@ -722,47 +793,45 @@ public class NewColor
     public static readonly ValidColorData[] ValidColors =
     {
         //@formatter:off
-        new( ValidColor.Red,        0xff0000ff, "Red"        ),
-        new( ValidColor.Green,      0x00ff00ff, "Green"      ),
-        new( ValidColor.Blue,       0x0000ffff, "Blue"       ),
+        new( ValidColor.Red,        0xFF0000FF, "Red"        ),
+        new( ValidColor.Green,      0x00FF00FF, "Green"      ),
+        new( ValidColor.Blue,       0x0000FFFF, "Blue"       ),
         new( ValidColor.Clear,      0x00000000, "Clear"      ),
-        new( ValidColor.White,      0xffffffff, "White"      ),
-        new( ValidColor.Black,      0x000000ff, "Black"      ),
-        new( ValidColor.Gray,       0x7f7f7fff, "Gray"       ),
-        new( ValidColor.Lightgray,  0xbfbfbfff, "Lightgray"  ),
-        new( ValidColor.Darkgray,   0x3f3f3fff, "Darkgray"   ),
-        new( ValidColor.Slate,      0x708090ff, "Slate"      ),
-        new( ValidColor.Navy,       0x000080ff, "Navy"       ),
-        new( ValidColor.Royal,      0x4169e1ff, "Royal"      ),
-        new( ValidColor.Sky,        0x87ceebff, "Sky"        ),
-        new( ValidColor.Cyan,       0x00ffffff, "Cyan"       ),
-        new( ValidColor.Teal,       0x007f7fff, "Teal"       ),
-        new( ValidColor.Chartreuse, 0x7fff00ff, "Chartreuse" ),
-        new( ValidColor.Lime,       0x32cd32ff, "Lime"       ),
-        new( ValidColor.Forest,     0x228b22ff, "Forest"     ),
-        new( ValidColor.Olive,      0x6b8e23ff, "Olive"      ),
-        new( ValidColor.Yellow,     0xffff00ff, "Yellow"     ),
-        new( ValidColor.Gold,       0xffd700ff, "Gold"       ),
-        new( ValidColor.Goldenrod,  0xdaa520ff, "Goldenrod"  ),
-        new( ValidColor.Orange,     0xffa500ff, "Orange"     ),
-        new( ValidColor.Brown,      0x8b4513ff, "Brown"      ),
-        new( ValidColor.Tan,        0xd2b48cff, "Tan"        ),
-        new( ValidColor.Firebrick,  0xb22222ff, "Firebrick"  ),
-        new( ValidColor.Scarlet,    0xff341cff, "Scarlet"    ),
-        new( ValidColor.Coral,      0xff7f50ff, "Coral"      ),
-        new( ValidColor.Salmon,     0xfa8072ff, "Salmon"     ),
-        new( ValidColor.Pink,       0xff69b4ff, "Pink"       ),
-        new( ValidColor.Magenta,    0xff00ffff, "Magenta"    ),
-        new( ValidColor.Purple,     0xa020f0ff, "Purple"     ),
-        new( ValidColor.Violet,     0xee82eeff, "Violet"     ),
-        new( ValidColor.Maroon,     0xb03060ff, "Maroon"     ),
+        new( ValidColor.White,      0xFFFFFFFF, "White"      ),
+        new( ValidColor.Black,      0x000000FF, "Black"      ),
+        new( ValidColor.Gray,       0x7F7F7FFF, "Gray"       ),
+        new( ValidColor.Lightgray,  0xBFBFBFFF, "Lightgray"  ),
+        new( ValidColor.Darkgray,   0x3F3F3FFF, "Darkgray"   ),
+        new( ValidColor.Slate,      0x708090FF, "Slate"      ),
+        new( ValidColor.Navy,       0x000080FF, "Navy"       ),
+        new( ValidColor.Royal,      0x4169E1FF, "Royal"      ),
+        new( ValidColor.Sky,        0x87CEEBFF, "Sky"        ),
+        new( ValidColor.Cyan,       0x00FFFFFF, "Cyan"       ),
+        new( ValidColor.Teal,       0x007F7FFF, "Teal"       ),
+        new( ValidColor.Chartreuse, 0x7FFF00FF, "Chartreuse" ),
+        new( ValidColor.Lime,       0x32CD32FF, "Lime"       ),
+        new( ValidColor.Forest,     0x228B22FF, "Forest"     ),
+        new( ValidColor.Olive,      0x6B8E23FF, "Olive"      ),
+        new( ValidColor.Yellow,     0xFFFF00FF, "Yellow"     ),
+        new( ValidColor.Gold,       0xFFD700FF, "Gold"       ),
+        new( ValidColor.Goldenrod,  0xDAA520FF, "Goldenrod"  ),
+        new( ValidColor.Orange,     0xFFA500FF, "Orange"     ),
+        new( ValidColor.Brown,      0x8B4513FF, "Brown"      ),
+        new( ValidColor.Tan,        0xD2B48CFF, "Tan"        ),
+        new( ValidColor.Firebrick,  0xB22222FF, "Firebrick"  ),
+        new( ValidColor.Scarlet,    0xFF341CFF, "Scarlet"    ),
+        new( ValidColor.Coral,      0xFF7F50FF, "Coral"      ),
+        new( ValidColor.Salmon,     0xFA8072FF, "Salmon"     ),
+        new( ValidColor.Pink,       0xFF69B4FF, "Pink"       ),
+        new( ValidColor.Magenta,    0xFF00FFFF, "Magenta"    ),
+        new( ValidColor.Purple,     0xA020F0FF, "Purple"     ),
+        new( ValidColor.Violet,     0xEE82EEFF, "Violet"     ),
+        new( ValidColor.Maroon,     0xB03060FF, "Maroon"     ),
         //@formatter:on 
     };
 
     /// <summary>
-    /// Public Enum holding the valid colors. The order of the enum is important,
-    /// if it is changed then the arrays <see cref="ValidColorNames"/> and
-    /// <see cref="_validColorTable"/> must be updated.
+    /// Public Enum holding the valid colors.
     /// </summary>
     [PublicAPI]
     public enum ValidColor

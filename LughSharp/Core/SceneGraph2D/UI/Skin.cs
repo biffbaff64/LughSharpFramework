@@ -63,7 +63,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// instance of the object in the skin.
 /// </para>
 /// <para>
-/// The new* methods return a copy of an instance in the skin.
+/// The new methods return a copy of an instance in the skin.
 /// </para>
 /// </summary>
 [PublicAPI]

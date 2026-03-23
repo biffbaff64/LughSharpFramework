@@ -38,12 +38,14 @@ public class InputListener : IEventListener
 {
     private static readonly Vector2 _tmpCoords = new();
 
+    // ========================================================================
+    
     /// <summary>
     /// Try to handle the given event, if it is an <see cref="InputEvent"/>.
     /// <para>
     /// If the input event is of type <see cref="InputEvent.EventType.TouchDown"/>,
     /// <see cref="InputEvent.TouchFocus"/> is true and
-    /// <see cref="TouchDown(InputEvent, float, float, int, int)"/> returns true
+    /// <see cref="OnTouchDown(InputEvent, float, float, int, int)"/> returns true
     /// ( indicating the event was handled ) then this listener is added to the
     /// stage's touch focus via:-
     /// <para>
@@ -71,6 +73,9 @@ public class InputListener : IEventListener
 
             case InputEvent.EventType.KeyTyped:
                 return OnKeyTyped( inputEvent, inputEvent.Character );
+            
+            default:
+                break;
         }
 
         inputEvent.ToCoordinates( inputEvent.ListenerActor, _tmpCoords );

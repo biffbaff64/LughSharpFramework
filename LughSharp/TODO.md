@@ -405,7 +405,8 @@ GRAPHICS
     CODE   DOCU   FOOTER
     ----   ----   ------
     - DONE - DONE - DONE - CIM
-    -      -      -      - Color                    - Reworked class in development 
+    -      -      -      - Color 
+    -      -      -      - Color4                   - WIP to replace Color when finished 
     -      -      -      - Colors
     -      -      -      - Cubemap
     -      -      -      - GLTextureArray
@@ -1085,42 +1086,41 @@ SCENEGRAPH2D/UI
 
     CODE   DOCU   FOOTER
     ----   ----   ------
-    - DONE - DONE - DONE - Button
-    -      -      -      - ButtonGroup
-    -      -      -      - Cell
-    - IP   - IP   - DONE - CheckBox
-    -      -      -      - Container
-    -      -      -      - Dialog
-    -      -      -      - HorizontalGroup
-    - IP   - IP   - DONE - ImageButton
-    - IP   - IP   - DONE - ImageTextButton
-    -      -      -      - IOnScreenKeyboard
-    -      -      -      - Label
-    -      -      -      - ListBox
-    -      -      -      - ParticleEffectActor
-    -      -      -      - ProgressBar
-    -      -      -      - Scene2DImage
-    -      -      -      - ScrollPane
-    -      -      -      - SelectBox
-    -      -      -      - Skin
-    -      -      -      - Slider
-    -      -      -      - SplitPane
-    -      -      -      - Stack
-    -      -      -      - Table
-    -      -      -      - TextArea
-    - IP   - IP   - DONE - TextButton
-    -      -      -      - TextField
-    -      -      -      - TextTooltip
-    -      -      -      - Tooltip
-    -      -      -      - TooltipManager
-    -      -      -      - Touchpad
-    -      -      -      - Tree
-    -      -      -      - UISkin
-    -      -      -      - Value
-    -      -      -      - VerticalGroup
-    -      -      -      - Widget
-    -      -      -      - WidgetGroup
-    -      -      -      - Window
+    - DONE - DONE - DONE - Button                   - Draws, but not clickable yet.
+    -      -      -      - ButtonGroup              - 
+    -      -      -      - Cell                     - 
+    - IP   - IP   - DONE - CheckBox                 - 
+    -      -      -      - Container                - 
+    -      -      -      - Dialog                   - 
+    -      -      -      - HorizontalGroup          - 
+    - IP   - IP   - DONE - ImageButton              - 
+    - IP   - IP   - DONE - ImageTextButton          - 
+    -      -      -      - IOnScreenKeyboard        - 
+    -      -      -      - Label                    - 
+    -      -      -      - ListBox                  - 
+    -      -      -      - ParticleEffectActor      - 
+    -      -      -      - ProgressBar              - 
+    -      -      -      - Scene2DImage             - 
+    -      -      -      - ScrollPane               - 
+    -      -      -      - SelectBox                - 
+    -      -      -      - Skin                     - 
+    -      -      -      - Slider                   - 
+    -      -      -      - SplitPane                - 
+    -      -      -      - Stack                    - 
+    -      -      -      - Table                    - 
+    -      -      -      - TextArea                 - 
+    - IP   - IP   - DONE - TextButton               - Currently draws button but not text
+    -      -      -      - TextField                - 
+    -      -      -      - TextTooltip              - 
+    -      -      -      - Tooltip                  - 
+    -      -      -      - TooltipManager           - 
+    -      -      -      - Touchpad                 - 
+    -      -      -      - Tree                     - 
+    -      -      -      - Value                    - 
+    -      -      -      - VerticalGroup            - 
+    -      -      -      - Widget                   - 
+    -      -      -      - WidgetGroup              - 
+    -      -      -      - Window                   - 
 
 SCENEGRAPH2D/UTILS
 ------------------
