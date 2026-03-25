@@ -25,18 +25,19 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.Listeners;
 
 /// <summary>
 /// EventListener for low-level input events. Unpacks <see cref="InputEvent"/>s
 /// and calls the appropriate method. By default the methods here do nothing with
-/// the event. Users are expected to override the methods they are interested in.
+/// the event, Users are expected to override the methods they are interested in.
 /// </summary>
 [PublicAPI]
 public class InputListener : IEventListener
 {
-    private static readonly Vector2 _tmpCoords = new();
+    private readonly Vector2 _tmpCoords = new();
 
     // ========================================================================
     
@@ -58,6 +59,8 @@ public class InputListener : IEventListener
     /// </summary>
     public virtual bool Handle( Event e )
     {
+        Logger.Checkpoint();
+        
         if ( e is not InputEvent inputEvent )
         {
             return false;

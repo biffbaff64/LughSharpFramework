@@ -27,6 +27,7 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Input;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.SceneGraph2D.Listeners;
@@ -130,7 +131,7 @@ public class ClickListener : InputListener
     public long TapCountInterval
     {
         get;
-        set => field = value * 1000000000L;
+        set;
     } = ( long )( 0.4f * 1000000000L );
 
     /// <inheritdoc />
@@ -178,6 +179,9 @@ public class ClickListener : InputListener
     {
         if ( pointer == PressedPointer )
         {
+            // If the stage cancels the touch focus (e.g. scrolling started), flag it!
+            if ( ev is { TouchFocusCancel: true } ) _cancelled = true;
+            
             if ( !_cancelled )
             {
                 bool touchUpOver = IsOver( ev?.ListenerActor, x, y );
@@ -274,7 +278,8 @@ public class ClickListener : InputListener
     /// </summary>
     public bool InTapSquare( float x, float y )
     {
-        if ( TouchDownX.Equals( -1 ) && TouchDownY.Equals( -1 ) )
+        if ( Math.Abs( TouchDownX - ( -1f ) ) < NumberUtils.FloatTolerance
+          && Math.Abs( TouchDownY - ( -1f ) ) < NumberUtils.FloatTolerance )
         {
             return false;
         }
@@ -300,3 +305,7 @@ public class ClickListener : InputListener
         TouchDownY = -1;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

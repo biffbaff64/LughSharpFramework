@@ -478,7 +478,6 @@ public class Button : Table, IDisableable
     /// <summary>
     /// Convenience method which returns <c>true</c> if the button is pressed.
     /// </summary>
-    /// <returns></returns>
     public bool IsPressed()
     {
         return ClickListener?.VisualPressed ?? false;
@@ -488,7 +487,6 @@ public class Button : Table, IDisableable
     /// Convenience method which returns <c>true</c> if the mouse or touch is
     /// over the button or pressed and within the tap square.
     /// </summary>
-    /// <returns></returns>
     public bool IsOver()
     {
         return ClickListener?.Over ?? false;

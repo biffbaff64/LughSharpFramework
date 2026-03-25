@@ -211,6 +211,7 @@ public class Stage : InputAdapter, IDisposable
             {
                 // The pointer is gone, exit the over actor for the pointer, if any.
                 _pointerOverActors[ pointer ] = null;
+                
                 FireExit( overLast, _pointerScreenX[ pointer ], _pointerScreenY[ pointer ], pointer );
             }
         }

@@ -58,17 +58,27 @@ namespace LughSharp.Core.Graphics.Text;
 [PublicAPI]
 public class BitmapFont
 {
+    public const string RegexPattern = ".*id=(\\d+)";
+    public const int    Log2PageSize = 9;
+    public const int    PageSize     = 1 << Log2PageSize;
+    public const int    Pages        = 0x10000 / PageSize;
+
+    public static readonly string DefaultFont      = $"{Files.Files.ContentRoot}/Fonts/arial-15.fnt";
+    public static readonly string DefaultFontImage = $"{Files.Files.ContentRoot}/Fonts/arial-15.png";
+
+    // ========================================================================
+
     /// <summary>
     /// The BitmapFontCache used by this font, for rendering to a sprite batch.
     /// This can be used, for example, to manipulate glyph colors within a
     /// specific index.
     /// </summary>
-    public BitmapFontCache? Cache { get; set; }
+    public BitmapFontCache? Cache { get; private set; }
 
     /// <summary>
     /// The underlying <see cref="BitmapFontData"/> for this BitmapFont.
     /// </summary>
-    public BitmapFontData FontData { get; set; }
+    public BitmapFontData FontData { get; private set; }
 
     /// <summary>
     /// Specifies whether to use integer positions.
@@ -77,7 +87,7 @@ public class BitmapFont
     public bool UseIntegerPositions
     {
         get;
-        set
+        private set
         {
             field = value;
 
@@ -85,18 +95,8 @@ public class BitmapFont
         }
     }
 
-    public bool Flipped     { get; set; }
-    public bool OwnsTexture { get; set; }
-
-    // ========================================================================
-
-    public const string RegexPattern = ".*id=(\\d+)";
-    public const int    Log2PageSize = 9;
-    public const int    PageSize     = 1 << Log2PageSize;
-    public const int    Pages        = 0x10000 / PageSize;
-
-    public static readonly string DefaultFont      = $"{Files.Files.ContentRoot}/Fonts/arial-15.fnt";
-    public static readonly string DefaultFontImage = $"{Files.Files.ContentRoot}/Fonts/arial-15.png";
+    public bool   Flipped     { get; private set; }
+    public bool   OwnsTexture { get; set; }
 
     // ========================================================================
 
@@ -108,12 +108,11 @@ public class BitmapFont
     /// <summary>
     /// Creates a BitmapFont using the default 15pt Arial font included in the Library.
     /// This constructor is provided for convenience, and is primarily intended for use
-    /// by the Scene2D Skin Loader.
+    /// by the SceneGraph Skin Loader.
     /// </summary>
-    internal BitmapFont()
-        : this( Engine.Files.Internal( DefaultFont ),
-                Engine.Files.Internal( DefaultFontImage ),
-                false )
+    public BitmapFont() : this( Engine.Files.Internal( DefaultFont ),
+                                Engine.Files.Internal( DefaultFontImage ),
+                                false )
     {
     }
 
@@ -126,10 +125,9 @@ public class BitmapFont
     /// False by default. If true, the glyphs will be flipped for use with a perspective
     /// where 0,0 is the upper left corner.
     /// </param>
-    public BitmapFont( bool flip = false )
-        : this( Engine.Files.Internal( DefaultFont ),
-                Engine.Files.Internal( DefaultFontImage ),
-                flip )
+    public BitmapFont( bool flip = false ) : this( Engine.Files.Internal( DefaultFont ),
+                                                   Engine.Files.Internal( DefaultFontImage ),
+                                                   flip )
     {
     }
 
@@ -319,7 +317,12 @@ public class BitmapFont
     /// </summary>
     public Color GetColor()
     {
-        return Cache?.GetColor() ?? Color.White;
+        if ( Cache == null )
+        {
+            throw new InvalidOperationException( "Font cache is not initialized" );
+        }
+
+        return Cache.GetColor();
     }
 
     /// <summary>
@@ -327,7 +330,12 @@ public class BitmapFont
     /// </summary>
     public void SetColor( Color color )
     {
-        Cache?.GetColor().Set( color );
+        if ( Cache == null )
+        {
+            throw new InvalidOperationException( "Font cache is not initialized" );
+        }
+        
+        Cache.GetColor().Set( color );
     }
 
     /// <summary>
@@ -335,7 +343,12 @@ public class BitmapFont
     /// </summary>
     public void SetColor( float r, float g, float b, float a )
     {
-        Cache?.GetColor().Set( r, g, b, a );
+        if ( Cache == null )
+        {
+            throw new InvalidOperationException( "Font cache is not initialized" );
+        }
+        
+        Cache.GetColor().Set( r, g, b, a );
     }
 
     /// <summary>
@@ -343,7 +356,12 @@ public class BitmapFont
     /// </summary>
     public float GetAlpha()
     {
-        return Cache?.GetColor().A ?? 1f;
+        if ( Cache == null )
+        {
+            throw new InvalidOperationException( "Font cache is not initialized" );
+        }
+        
+        return Cache.GetColor().A;
     }
 
     /// <summary>
@@ -633,6 +651,11 @@ public class BitmapFont
         }
     }
 
+    /// <summary>
+    /// Returns the name of the font used to construct this BitmapFont.
+    /// </summary>
+    public string Name => FontData.Name ?? "Unnamed";
+    
     /// <inheritdoc />
     public override string? ToString()
     {

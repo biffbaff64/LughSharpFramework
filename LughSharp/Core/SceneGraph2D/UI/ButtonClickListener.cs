@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.SceneGraph2D.Listeners;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
@@ -32,7 +33,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 public class ButtonClickListener : ClickListener
 {
     private readonly Button _button;
-    
+
     // ========================================================================
 
     public ButtonClickListener( Button button )
@@ -42,6 +43,8 @@ public class ButtonClickListener : ClickListener
 
     public override void OnClicked( InputEvent inputEvent, float x, float y )
     {
+        Logger.Checkpoint();
+
         if ( _button.IsDisabled )
         {
             return;
@@ -53,4 +56,3 @@ public class ButtonClickListener : ClickListener
 
 // ============================================================================
 // ============================================================================
-

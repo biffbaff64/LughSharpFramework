@@ -60,13 +60,14 @@ public class Label : Widget, IDisposable
     private readonly Vector2     _prefSize       = new();
 
     private StringBuilder _text            = new();
-    private float         _fontScaleX      = 1;
-    private float         _fontScaleY      = 1;
     private int           _intValue        = int.MinValue;
     private bool          _prefSizeInvalid = true;
-    private float         _lastPrefHeight;
-    private string?       _ellipsis;
-    private bool          _fontScaleChanged;
+
+    private BitmapFont      _bitmapFont;
+    private BitmapFontCache _fontCache;
+    private float           _lastPrefHeight;
+    private string?         _ellipsis;
+    private bool            _fontScaleChanged;
 
     // ========================================================================
 
@@ -123,8 +124,8 @@ public class Label : Widget, IDisposable
             _text.Append( text );
         }
 
-        // FontCache is initialised in Style setter. It is important
-        // that this is done before any calls to SetSize.
+        _fontCache = style.Font.NewFontCache();
+
         Style = style;
 
         if ( text is { Length: > 0 } )
@@ -163,30 +164,15 @@ public class Label : Widget, IDisposable
     }
 
     /// <summary>
-    /// The <see cref="BitmapFontCache"/> used with this label.
-    /// Calling the setter with null will create a new <see cref="BitmapFontCache"/>
-    /// </summary>
-    public BitmapFontCache? FontCache
-    {
-        get;
-        set
-        {
-            value ??= Style.Font.NewFontCache();
-
-            field = value;
-        }
-    }
-
-    /// <summary>
     /// The font X scale of the label.
     /// </summary>
     public float FontScaleX
     {
-        get => _fontScaleX;
+        get;
         set
         {
             _fontScaleChanged = true;
-            _fontScaleX       = value;
+            field             = value;
 
             InvalidateHierarchy();
         }
@@ -197,11 +183,11 @@ public class Label : Widget, IDisposable
     /// </summary>
     public float FontScaleY
     {
-        get => _fontScaleY;
+        get;
         set
         {
             _fontScaleChanged = true;
-            _fontScaleY       = value;
+            field             = value;
 
             InvalidateHierarchy();
         }
@@ -219,8 +205,8 @@ public class Label : Widget, IDisposable
             if ( value == null ) throw new ArgumentException( "style cannot be null." );
             if ( value.Font == null ) throw new ArgumentException( "Missing LabelStyle font." );
 
-            field     = value;
-            FontCache = value.Font.NewFontCache();
+            field      = value;
+            _fontCache = value.Font.NewFontCache();
 
             InvalidateHierarchy();
         }
@@ -327,16 +313,16 @@ public class Label : Widget, IDisposable
     /// </summary>
     private void ScaleAndComputePrefSize()
     {
-        Guard.Against.Null( FontCache );
+        Guard.Against.Null( _fontCache );
 
-        BitmapFont font = FontCache.Font;
+        BitmapFont font = _fontCache.Font;
 
         float oldScaleX = font.GetScaleX();
         float oldScaleY = font.GetScaleY();
 
         if ( _fontScaleChanged )
         {
-            font.FontData.SetScale( _fontScaleX, _fontScaleY );
+            font.FontData.SetScale( FontScaleX, FontScaleY );
         }
 
         ComputePrefSize();
@@ -352,7 +338,7 @@ public class Label : Widget, IDisposable
     /// </summary>
     private void ComputePrefSize()
     {
-        Guard.Against.Null( FontCache );
+        Guard.Against.Null( _fontCache );
 
         _prefSizeInvalid = false;
 
@@ -367,11 +353,11 @@ public class Label : Widget, IDisposable
                       - Style.Background.RightWidth;
             }
 
-            _prefSizeLayout.SetText( FontCache.Font, _text.ToString(), Color.White, width, Align.Left, true );
+            _prefSizeLayout.SetText( _fontCache.Font, _text.ToString(), Color.White, width, Align.Left, true );
         }
         else
         {
-            _prefSizeLayout.SetText( FontCache.Font, _text.ToString() );
+            _prefSizeLayout.SetText( _fontCache.Font, _text.ToString() );
         }
 
         _prefSize.Set( _prefSizeLayout.Width, _prefSizeLayout.Height );
@@ -382,15 +368,16 @@ public class Label : Widget, IDisposable
     /// </summary>
     public void Layout()
     {
-        Guard.Against.Null( FontCache );
+        Guard.Against.Null( _fontCache );
 
-        BitmapFont font      = FontCache.Font;
+        BitmapFont font      = _fontCache.Font;
         float      oldScaleX = font.GetScaleX();
         float      oldScaleY = font.GetScaleY();
 
         if ( _fontScaleChanged )
         {
-            font.FontData.SetScale( _fontScaleX, _fontScaleY );
+            // Update the font scale if the properties have changed.
+            font.FontData.SetScale( FontScaleX, FontScaleY );
         }
 
         bool wrap = Wrap && ( _ellipsis == null );
@@ -457,16 +444,16 @@ public class Label : Widget, IDisposable
             textHeight = font.FontData.CapHeight;
         }
 
-        Debug.Assert( Style.Font != null, "Style.Font != null" );
+        Guard.Against.Null( Style.Font );
 
         if ( ( LabelAlign & Align.Top ) != 0 )
         {
-            y += FontCache.Font.Flipped ? 0 : height - textHeight;
+            y += _fontCache.Font.Flipped ? 0 : height - textHeight;
             y += Style.Font.GetDescent();
         }
         else if ( ( LabelAlign & Align.Bottom ) != 0 )
         {
-            y += FontCache.Font.Flipped ? height - textHeight : 0;
+            y += _fontCache.Font.Flipped ? height - textHeight : 0;
             y -= Style.Font.GetDescent();
         }
         else
@@ -474,13 +461,22 @@ public class Label : Widget, IDisposable
             y += ( height - textHeight ) / 2;
         }
 
-        if ( !FontCache.Font.Flipped )
+        if ( !_fontCache.Font.Flipped )
         {
             y += textHeight;
         }
 
-        layout.SetText( font, _text.ToString(), 0, _text.Length, Color.White, textWidth, LineAlign, wrap, _ellipsis );
-        FontCache.SetText( layout, x, y );
+        layout.SetText( font,
+                        _text.ToString(),
+                        0,
+                        _text.Length,
+                        Color.White,
+                        textWidth,
+                        LineAlign,
+                        wrap,
+                        _ellipsis );
+
+        _fontCache.SetText( layout, x, y );
 
         if ( _fontScaleChanged )
         {
@@ -502,6 +498,8 @@ public class Label : Widget, IDisposable
 
         if ( Style.Background != null )
         {
+            Logger.Checkpoint();
+
             batch.SetColor( color.R, color.G, color.B, color.A );
             Style.Background?.Draw( batch, X, Y, Width, Height );
         }
@@ -511,12 +509,9 @@ public class Label : Widget, IDisposable
             color.Mul( Style.FontColor );
         }
 
-        if ( FontCache != null )
-        {
-            FontCache.Tint( color );
-            FontCache.SetPosition( X, Y );
-            FontCache.Draw( batch );
-        }
+        _fontCache.SetText( _text.ToString(), X, Y );
+        _fontCache.Tint( color );
+        _fontCache.Draw( batch );
     }
 
     /// <summary>
@@ -579,7 +574,7 @@ public class Label : Widget, IDisposable
 
         if ( _fontScaleChanged )
         {
-            descentScaleCorrection = _fontScaleY / Style.Font.GetScaleY();
+            descentScaleCorrection = FontScaleY / Style.Font.GetScaleY();
         }
 
         float height = _prefSize.Y - ( Style.Font.GetDescent() * descentScaleCorrection * 2 );
@@ -650,8 +645,8 @@ public class Label : Widget, IDisposable
     {
         _fontScaleChanged = true;
 
-        _fontScaleX = fontScaleX;
-        _fontScaleY = fontScaleY;
+        FontScaleX = fontScaleX;
+        FontScaleY = fontScaleY;
 
         InvalidateHierarchy();
     }

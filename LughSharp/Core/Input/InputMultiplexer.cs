@@ -57,7 +57,11 @@ public class InputMultiplexer : IInputProcessor
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when a key is pressed.
+    /// </summary>
+    /// <param name="keycode">One of the constants in <see cref="IInput.Keys"/></param>
+    /// <returns>TRUE if the input was processed.</returns>
     public bool OnKeyDown( int keycode )
     {
         IInputProcessor[] items = Processors.Begin();
@@ -80,7 +84,11 @@ public class InputMultiplexer : IInputProcessor
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when a key is released.
+    /// </summary>
+    /// <param name="keycode">One of the constants in <see cref="IInput.Keys"/></param>
+    /// <returns>TRUE if the input was processed.</returns>
     public bool OnKeyUp( int keycode )
     {
         IInputProcessor[] items = Processors.Begin();
@@ -103,7 +111,11 @@ public class InputMultiplexer : IInputProcessor
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when a key was typed
+    /// </summary>
+    /// <param name="character"></param>
+    /// <returns>TRUE if the input was processed.</returns>
     public bool OnKeyTyped( char character )
     {
         IInputProcessor[] items = Processors.Begin();
@@ -126,7 +138,14 @@ public class InputMultiplexer : IInputProcessor
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when the screen was touched or a mouse button was pressed.
+    /// </summary>
+    /// <param name="screenX"> Screen touch X coordinate. </param>
+    /// <param name="screenY"> Screen touch Y coordinate. </param>
+    /// <param name="pointer"></param>
+    /// <param name="button"></param>
+    /// <returns>TRUE if the input was processed.</returns>
     public bool OnTouchDown( int screenX, int screenY, int pointer, int button )
     {
         IInputProcessor[] items = Processors.Begin();
@@ -149,7 +168,14 @@ public class InputMultiplexer : IInputProcessor
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when a screen touch is lifted or mouse button is released.
+    /// </summary>
+    /// <param name="screenX"></param>
+    /// <param name="screenY"></param>
+    /// <param name="pointer"></param>
+    /// <param name="button"></param>
+    /// <returns>TRUE if the input was processed.</returns>
     public bool OnTouchUp( int screenX, int screenY, int pointer, int button )
     {
         IInputProcessor[] items = Processors.Begin();
@@ -172,7 +198,13 @@ public class InputMultiplexer : IInputProcessor
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when a touch input is dragged across the screen.
+    /// </summary>
+    /// <param name="screenX">The current x-coordinate of the touch input on the screen.</param>
+    /// <param name="screenY">The current y-coordinate of the touch input on the screen.</param>
+    /// <param name="pointer">The index of the touch pointer associated with this event.</param>
+    /// <returns>TRUE if the input was processed.</returns>
     public bool OnTouchDragged( int screenX, int screenY, int pointer )
     {
         IInputProcessor[] items = Processors.Begin();
@@ -195,7 +227,12 @@ public class InputMultiplexer : IInputProcessor
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when the mouse pointer is moved.
+    /// </summary>
+    /// <param name="screenX">The X-coordinate of the mouse pointer on the screen.</param>
+    /// <param name="screenY">The Y-coordinate of the mouse pointer on the screen.</param>
+    /// <returns>TRUE if the input was processed.</returns>
     public bool OnMouseMoved( int screenX, int screenY )
     {
         IInputProcessor[] items = Processors.Begin();
@@ -218,7 +255,12 @@ public class InputMultiplexer : IInputProcessor
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when the mouse wheel is moved.
+    /// </summary>
+    /// <param name="amountX"> The amount of horizontal moverment. </param>
+    /// <param name="amountY"> The amount of vertical movement. </param>
+    /// <returns>TRUE if the input was processed.</returns>
     public bool OnScrolled( float amountX, float amountY )
     {
         IInputProcessor[] items = Processors.Begin();

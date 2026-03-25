@@ -10,6 +10,7 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.Input;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maps.Tiled;
 using LughSharp.Core.Maps.Tiled.Loaders;
@@ -22,6 +23,8 @@ using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
+
+using NSubstitute;
 
 namespace Template.Source;
 
@@ -78,6 +81,7 @@ public class MainGame : Game
     private int                         _mapDirY = 1;
     private int                         _mapWidth;
     private int                         _mapHeight;
+    private InputMultiplexer            _inputMultiplexer = new();
 
     // ========================================================================
     // ========================================================================
@@ -86,7 +90,8 @@ public class MainGame : Game
     [SupportedOSPlatform( "windows" )]
     public override void Create()
     {
-        // Do not create a new SpriteBatch before this point, as OpenGL will not be ready.
+        // Do not create a new SpriteBatch before this point,
+        // as OpenGL will not be ready.
         _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
 
@@ -97,6 +102,11 @@ public class MainGame : Game
         CreateFreeTypeFont();
         CreateSprites();
         CreateMap();
+
+        if ( _inputMultiplexer.Processors.Size > 0 )
+        {
+            Engine.Input.InputProcessor = _inputMultiplexer;
+        }
 
         Logger.Debug( "Done" );
     }
@@ -141,6 +151,13 @@ public class MainGame : Game
                 _spriteCam.Position.Z = 0;
                 _spriteCam.Update();
 
+                if ( _font != null )
+                {
+                    _font.SetColor( Color.Yellow );
+                    _font.Draw( _spriteBatch, "THIS TEXT SHOULD BE YELLOW!", 100, 100 );
+                }
+                
+                
                 _spriteBatch.End();
             }
         }
@@ -260,13 +277,15 @@ public class MainGame : Game
 
         CreateSkinActors();
 //        CreateStyleRegistryActors();
+
+        _inputMultiplexer.AddProcessor( _stage );
     }
 
     private void CreateSkinActors()
     {
         const bool HudActor             = false;
         const bool WindowActor          = false;
-        const bool ButtonActor          = true;
+        const bool ButtonActor          = false;
         const bool TextButtonActor      = false;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
@@ -313,47 +332,30 @@ public class MainGame : Game
                 Down     = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
                 Disabled = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
             };
-
             var button = new Button( btStyle )
             {
                 IsVisible = true,
             };
-
             button.SetPosition( 200, 200 );
             _stage?.AddActor( button );
-
-            var button2 = new Button( skin, "default" )
-            {
-                IsVisible = true,
-            };
-            button2.SetPosition( 300, 20 );
-            button2.SetSize( 100, 100 );
-            _stage?.AddActor( button2 );
         }
 
         // --------------------------------------
 
         if ( TextButtonActor )
         {
-            var tbStyle = new TextButtonStyle
-            {
-                Up                = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
-                Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down" ) ),
-                Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
-                Font              = _font ?? new BitmapFont(),
-                FontColor         = Color.White,
-                DisabledFontColor = Color.Gray,
-            };
+//            var tbStyle = new TextButtonStyle
+//            {
+//                Up                = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
+//                Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down" ) ),
+//                Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
+//                Font              = _font ?? new BitmapFont(),
+//                FontColor         = Color.White,
+//                DisabledFontColor = Color.Gray,
+//            };
 
-//            var labelStyle = skin.Get< LabelStyle >( "default" );
-//            string fontColor = ( labelStyle.FontColor == null )
-//                ? "null"
-//                : Colors.GetColorName( labelStyle.FontColor );
-//            Logger.Debug( $"Font Name: {labelStyle.Font.FontData.Name}, "
-//                        + $"Font Color: {fontColor} {labelStyle.FontColor?.AsRgbaString()}" );
-
-            var textButton = new TextButton( "Text Button", skin )
 //            var textButton = new TextButton( "Text Button", tbStyle )
+            var textButton = new TextButton( "Text Button", skin )
             {
                 IsVisible = true,
             };
@@ -432,7 +434,7 @@ public class MainGame : Game
     {
         const bool HudActor             = false;
         const bool WindowActor          = false;
-        const bool ButtonActor          = true;
+        const bool ButtonActor          = false;
         const bool TextButtonActor      = false;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
@@ -508,7 +510,7 @@ public class MainGame : Game
 
     private void CreateFont()
     {
-        _font = new BitmapFont();
+        _font = new BitmapFont( new FileInfo( Assets.ArialFont ));
         _font.SetColor( Color.White );
         _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
         _font.FontData.MarkupEnabled = true;
