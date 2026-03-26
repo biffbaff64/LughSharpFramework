@@ -270,10 +270,12 @@ public interface IBatch : IDisposable
     void Draw( Texture texture, float posX, float posY, float width, float height );
 
     /// <summary>
-    /// Draws a rectangle using the given vertices. There must be 4 vertices, each made
-    /// up of 5 elements in this order: x, y, color, u, v. The <see cref="Color"/>
-    /// from the Batch is not applied.
+    /// Renders a set of sprite vertices using the specified texture.
     /// </summary>
+    /// <param name="texture">The texture to be used for rendering. Can be null if not needed.</param>
+    /// <param name="spriteVertices">An array of vertex data describing the sprites to be rendered.</param>
+    /// <param name="offset">The starting index in the vertex array from which to begin processing.</param>
+    /// <param name="count">The number of vertices to process starting from the specified offset.</param>
     void Draw( Texture texture, float[] spriteVertices, int offset, int count );
 
     /// <summary>

@@ -607,7 +607,7 @@ public class TextField : Widget
             textY += height / 2;
         }
 
-        if ( font.UseIntegerPositions )
+        if ( font.GetUseIntegerPositions() )
         {
             textY = ( int )textY;
         }

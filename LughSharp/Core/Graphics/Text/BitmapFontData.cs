@@ -43,8 +43,6 @@ namespace LughSharp.Core.Graphics.Text;
 [PublicAPI]
 public class BitmapFontData
 {
-    // ====================================================================
-
     /// <summary>
     /// Additional characters besides whitespace where text is wrapped.
     /// Eg, a hypen (-).

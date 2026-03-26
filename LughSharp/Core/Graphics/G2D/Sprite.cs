@@ -519,7 +519,7 @@ public class Sprite : TextureRegion
     {
         Color.Set( tint );
 
-        float color = tint.ToFloatBitsAbgr();
+        float color = tint.ToFloatBitsRgba();
 
         Vertices[ IBatch.C1 ] = color;
         Vertices[ IBatch.C2 ] = color;
@@ -534,7 +534,7 @@ public class Sprite : TextureRegion
     {
         Color.Set( r, g, b, a );
 
-        float color = Color.ToFloatBitsAbgr();
+        float color = Color.ToFloatBitsRgba();
 
         Vertices[ IBatch.C1 ] = color;
         Vertices[ IBatch.C2 ] = color;
@@ -1018,7 +1018,7 @@ public class Sprite : TextureRegion
         {
             _color.A = value;
 
-            float color = Color.ToFloatBitsAbgr();
+            float color = Color.ToFloatBitsRgba();
 
             Vertices[ IBatch.C1 ] = color;
             Vertices[ IBatch.C2 ] = color;

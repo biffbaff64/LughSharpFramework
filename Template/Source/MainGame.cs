@@ -72,17 +72,18 @@ public class MainGame : Game
     private TmxMapLoader?               _tmxMapLoader;
     private OrthogonalTiledMapRenderer? _mapRenderer;
     private TiledMap?                   _tiledMap;
-    private Vector2                     _spritePosition = Vector2.Zero;
-    private float                       _scale          = 1.0f;
-    private int                         _direction      = -1;
-    private int                         _mapPosX;
-    private int                         _mapPosY;
-    private int                         _mapDirX = 1;
-    private int                         _mapDirY = 1;
     private int                         _mapWidth;
     private int                         _mapHeight;
+    private int                         _mapPosX;
+    private int                         _mapPosY;
+    private int                         _mapDirX          = 1;
+    private int                         _mapDirY          = 1;
+    private Vector2                     _spritePosition   = Vector2.Zero;
+    private float                       _scale            = 1.0f;
+    private int                         _direction        = -1;
     private InputMultiplexer            _inputMultiplexer = new();
-
+    private GlyphLayout                 _layout           = new();
+    
     // ========================================================================
     // ========================================================================
 
@@ -153,10 +154,12 @@ public class MainGame : Game
 
                 if ( _font != null )
                 {
-                    _font.SetColor( Color.Yellow );
-                    _font.Draw( _spriteBatch, "THIS TEXT SHOULD BE YELLOW!", 100, 100 );
+                    _layout.SetText( _font, "THIS TEXT SHOULD BE YELLOW!", Color.Yellow, 0, Align.Left, false );
+                    _font.Draw( _spriteBatch, _layout, 100, 100 );
+                    
+                    _font.SetColor( Color.Red );
+                    _font.Draw( _spriteBatch, "THIS TEXT SHOULD BE RED!", 100, 200 );
                 }
-                
                 
                 _spriteBatch.End();
             }

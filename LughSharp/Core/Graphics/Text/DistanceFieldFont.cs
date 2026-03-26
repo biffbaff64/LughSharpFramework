@@ -71,7 +71,7 @@ public class DistanceFieldFont : BitmapFont
     /// <returns></returns>
     public override BitmapFontCache NewFontCache()
     {
-        return new DistanceFieldFontCache( this, UseIntegerPositions );
+        return new DistanceFieldFontCache( this, GetUseIntegerPositions() );
     }
 
     /// <summary>
@@ -163,7 +163,7 @@ public class DistanceFieldFont : BitmapFont
     private class DistanceFieldFontCache : BitmapFontCache
     {
         public DistanceFieldFontCache( DistanceFieldFont font )
-            : base( font, font.UseIntegerPositions )
+            : base( font, font.GetUseIntegerPositions() )
         {
         }
 

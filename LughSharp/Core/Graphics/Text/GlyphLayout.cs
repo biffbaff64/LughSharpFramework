@@ -129,7 +129,7 @@ public class GlyphLayout : IResetable, IPoolable
 
     /// <summary>
     /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont"/>, text message,
-    /// <see cref="Graphics.Colors.Color"/>, target width, horizontal alignment, and wrap.
+    /// <see cref="Color"/>, target width, horizontal alignment, and wrap.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
@@ -175,7 +175,7 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(BitmapFont,string,int,int,Graphics.Colors.Color,float,int,bool,string?)"/>
+    /// Calls <see cref="SetText(BitmapFont,string,int,int,Color,float,Align,bool,string?)"/>
     /// with the whole string, the font's current color, and with no alignment or wrapping.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -186,7 +186,7 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// Calls <see cref="SetText(BitmapFont,string,int,int,Graphics.Colors.Color,float,int,bool,string?)"/>
+    /// Calls <see cref="SetText(BitmapFont,string,int,int,Color,float,Align,bool,string?)"/>
     /// with the whole string and no truncation.
     /// </summary>
     /// <param name="font"> The font to use. </param>
@@ -253,7 +253,7 @@ public class GlyphLayout : IResetable, IPoolable
         }
 
         bool wrapOrTruncate = wrap || ( truncate != null );
-        var  currentColor   = ( int )color.PackedColorRgba();
+        var  currentColor   = ( int )Color.ToRgba8888( color );
         int  nextColor      = currentColor;
 
         Colors.Add( new GlyphColor( 0, currentColor ) );
@@ -941,7 +941,7 @@ public class GlyphLayout : IResetable, IPoolable
                             color = ( color << ( ( 9 - ( i - start ) ) << 2 ) ) | 0xff; // RRGGBB or fewer chars.
                         }
 
-                        _colorStack.Add( NumberUtils.ReverseBytes( color ) );
+                        _colorStack.Add( color );
 
                         return i - start;
                     }
@@ -1000,7 +1000,7 @@ public class GlyphLayout : IResetable, IPoolable
                 return -1; // Unknown color name.
             }
 
-            _colorStack.Add( ( int )Color.ToAbgr8888( color ) );
+            _colorStack.Add( ( int )Color.ToRgba8888( color ) );
 
             return i - start;
         }

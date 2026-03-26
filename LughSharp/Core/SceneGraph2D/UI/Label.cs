@@ -63,7 +63,6 @@ public class Label : Widget, IDisposable
     private int           _intValue        = int.MinValue;
     private bool          _prefSizeInvalid = true;
 
-    private BitmapFont      _bitmapFont;
     private BitmapFontCache _fontCache;
     private float           _lastPrefHeight;
     private string?         _ellipsis;
@@ -85,9 +84,11 @@ public class Label : Widget, IDisposable
     /// Creates a label using the supplied <see cref="Skin"/>, identified by the
     /// supplied 'styleName', and with the specified text.
     /// </summary>
-    /// <param name="text"></param>
-    /// <param name="skin"></param>
-    /// <param name="styleName"></param>
+    /// <param name="text"> The label text. </param>
+    /// <param name="skin"> The Skin, which should hold a <see cref="TextButtonStyle"/> </param>
+    /// <param name="styleName">
+    /// The name of the section within the style, i.e. "default" or "toggle".
+    /// </param>
     public Label( string text, Skin skin, string styleName )
         : this( text, skin.Get< LabelStyle >( styleName ) )
     {

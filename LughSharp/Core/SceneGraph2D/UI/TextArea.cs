@@ -357,7 +357,7 @@ public class TextArea : TextField
             textY -= background.TopHeight;
         }
 
-        if ( font.UseIntegerPositions )
+        if ( font.GetUseIntegerPositions() )
         {
             textY = ( int )textY;
         }

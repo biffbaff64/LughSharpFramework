@@ -229,7 +229,7 @@ public class PolygonSprite
     {
         Color.Set( tint );
 
-        float color = tint.ToFloatBitsAbgr();
+        float color = tint.ToFloatBitsRgba();
 
         for ( var i = 2; i < _vertices?.Length; i += Sprite.VertexSize )
         {
@@ -243,7 +243,7 @@ public class PolygonSprite
 
         for ( var i = 2; i < _vertices?.Length; i += Sprite.VertexSize )
         {
-            _vertices[ i ] = Color.ToFloatBitsAbgr();
+            _vertices[ i ] = Color.ToFloatBitsRgba();
         }
     }
 

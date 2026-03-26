@@ -74,11 +74,12 @@ public class BitmapFontCache
     /// </summary>
     public BitmapFont Font { get; }
 
+    public Color Color { get; set; } = new( 1, 1, 1, 1 );
+
     // ========================================================================
 
     private readonly List< GlyphLayout > _pooledLayouts = new();
 
-    private readonly Color _color     = new( 1, 1, 1, 1 );
     private readonly Color _tempColor = new( 1, 1, 1, 1 );
 
     private float _currentTint;
@@ -111,7 +112,7 @@ public class BitmapFontCache
     /// 
     /// </summary>
     /// <param name="font"></param>
-    public BitmapFontCache( BitmapFont font ) : this( font, font.UseIntegerPositions )
+    public BitmapFontCache( BitmapFont font ) : this( font, font.GetUseIntegerPositions() )
     {
     }
 
@@ -253,7 +254,7 @@ public class BitmapFontCache
     /// </summary>
     public void SetAlphas( float alpha )
     {
-        int   alphaBits = ( int )( 254 * alpha ) << 24;
+        uint  alphaBits = ( uint )( 254 * alpha ) << 24;
         float prev      = 0;
         float newColor  = 0;
 
@@ -268,10 +269,10 @@ public class BitmapFontCache
                 {
                     prev = c;
 
-                    int rgba = NumberUtils.FloatToIntColor( c );
+                    uint rgba = ( uint )NumberUtils.FloatToIntColor( c );
 
                     rgba     = ( rgba & 0x00FFFFFF ) | alphaBits;
-                    newColor = NumberUtils.IntToFloatColor( rgba );
+                    newColor = NumberUtils.UIntToFloatColor( rgba );
                 }
 
                 _pageVertices[ j ][ i ] = newColor;
@@ -279,9 +280,29 @@ public class BitmapFontCache
         }
     }
 
+    // ========================================================================
+    
+    /// <summary>
+    /// Sets the color of all text currently in the cache. Does not affect
+    /// subsequently added text, only text already present.
+    /// </summary>
+    /// <param name="r"> Red component. </param>
+    /// <param name="g"> Green component. </param>
+    /// <param name="b"> Blue component. </param>
+    /// <param name="a"> Alpha component. </param>
+    public void SetColors( float r, float g, float b, float a )
+    {
+        uint intBits = ( ( uint )( 255 * a ) << 24 )
+                     | ( ( uint )( 255 * b ) << 16 )
+                     | ( ( uint )( 255 * g ) << 8 )
+                     | ( uint )( 255 * r );
+
+        SetColors( NumberUtils.UIntToFloatColor( intBits ) );
+    }
+
     /// <summary>
     /// Sets the color of all text currently in the cache.
-    /// Does not affect subsequently added text.
+    /// Does not affect subsequently added text, only text already present.
     /// </summary>
     public void SetColors( float color )
     {
@@ -295,46 +316,9 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    /// Sets the color of all text currently in the cache.
-    /// Does not affect subsequently added text.
-    /// </summary>
-    public void SetColors( Color tint )
-    {
-        SetColors( tint.ToFloatBitsAbgr() );
-    }
-
-    /// <summary>
-    /// Sets the color of all text currently in the cache. Does not affect
-    /// subsequently added text.
-    /// </summary>
-    /// <param name="r"></param>
-    /// <param name="g"></param>
-    /// <param name="b"></param>
-    /// <param name="a"></param>
-    public void SetColors( float r, float g, float b, float a )
-    {
-        int intBits = ( ( int )( 255 * a ) << 24 )
-                    | ( ( int )( 255 * b ) << 16 )
-                    | ( ( int )( 255 * g ) << 8 )
-                    | ( int )( 255 * r );
-
-        SetColors( NumberUtils.IntToFloatColor( intBits ) );
-    }
-
-    /// <summary>
     /// Sets the color of the specified characters. This may only be called
-    /// after <see cref="SetText(string, float, float)"/> and is reset every
-    /// time setText is called.
-    /// </summary>
-    public void SetColors( Color tint, int start, int end )
-    {
-        SetColors( tint.ToFloatBitsAbgr(), start, end );
-    }
-
-    /// <summary>
-    /// Sets the color of the specified characters. This may only be called
-    /// after <see cref="SetText(string, float, float)"/> and is reset every
-    /// time setText is called.
+    /// after calling any of the <c>SetText()</c> methods and is reset every
+    /// time SetText is called.
     /// </summary>
     public void SetColors( float color, int start, int end )
     {
@@ -379,34 +363,8 @@ public class BitmapFontCache
         }
     }
 
-    /// <summary>
-    /// Returns the color used for subsequently added text. Modifying the color
-    /// affects text subsequently added to the cache, but does not affect existing
-    /// text currently in the cache.
-    /// </summary>
-    public Color GetColor()
-    {
-        return _color;
-    }
-
-    /// <summary>
-    /// A convenience method for setting the cache color. The color can also
-    /// be set by modifying <see cref="GetColor()"/>.
-    /// </summary>
-    public void SetColor( Color col )
-    {
-        _color.Set( col );
-    }
-
-    /// <summary>
-    /// A convenience method for setting the cache color. The color can
-    /// also be set by modifying {@link #getColor()}.
-    /// </summary>
-    public void SetColor( float r, float g, float b, float a )
-    {
-        _color.Set( r, g, b, a );
-    }
-
+    // ========================================================================
+    
     /// <summary>
     /// Renders the cached text using the provided sprite batch instance.
     /// </summary>
@@ -510,16 +468,18 @@ public class BitmapFontCache
             return;
         }
 
-        Color color    = GetColor();
+        Color color    = Color;
         float oldAlpha = color.A;
 
         color.A *= alphaModulation;
-        SetColors( color );
+        SetColors( color.ToFloatBitsAbgr() );
         Draw( spriteBatch );
         color.A = oldAlpha;
-        SetColors( color );
+        SetColors( color.ToFloatBitsAbgr() );
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Removes all glyphs in the cache.
     /// </summary>
@@ -680,7 +640,7 @@ public class BitmapFontCache
             {
                 if ( glyphIndex++ == nextColorGlyphIndex )
                 {
-                    lastColorFloatBits = NumberUtils.IntToFloatColor( colors[ colorsIndex ].Argb8888 );
+                    lastColorFloatBits = NumberUtils.UIntToFloatColor( ( uint )colors[ colorsIndex ].Argb8888 );
                     nextColorGlyphIndex = ( colorsIndex + 1 ) < colors.Count
                         ? colors[ colorsIndex ].GlyphIndex
                         : -1;
@@ -698,6 +658,8 @@ public class BitmapFontCache
         _currentTint = Color.WhiteFloatBits;
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// </summary>
     /// <param name="glyph"></param>
@@ -758,22 +720,18 @@ public class BitmapFontCache
         _pageVertices[ page ][ _idx[ page ]++ ] = v;
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Clears any cached glyphs and adds glyphs for the specified text.
     /// <see cref="AddText(string, float, float, int, int, float, Align, bool, string)"/>
     /// </summary>
-    public GlyphLayout SetText( string str, float x, float y )
-    {
-        Clear();
-
-        return AddText( str, x, y, 0, str.Length, 0, Align.Left, false );
-    }
-
-    /// <summary>
-    /// Clears any cached glyphs and adds glyphs for the specified text.
-    /// <see cref="AddText(string, float, float, int, int, float, Align, bool, string)"/>
-    /// </summary>
-    public GlyphLayout SetText( string str, float x, float y, float targetWidth, Align halign, bool wrap )
+    public GlyphLayout SetText( string str,
+                                float x,
+                                float y,
+                                float targetWidth = 0,
+                                Align halign = Align.Left,
+                                bool wrap = false )
     {
         Clear();
 
@@ -789,9 +747,9 @@ public class BitmapFontCache
                                 float y,
                                 int start,
                                 int end,
-                                float targetWidth,
-                                Align halign,
-                                bool wrap,
+                                float targetWidth = 0,
+                                Align halign = Align.Left,
+                                bool wrap = false,
                                 string? truncate = null )
     {
         Clear();
@@ -809,18 +767,17 @@ public class BitmapFontCache
         AddText( layout, x, y );
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Adds glyphs for the specified text.
     /// </summary>
-    public GlyphLayout AddText( string str, float x, float y )
-    {
-        return AddText( str, x, y, 0, str.Length, 0, Align.Left, false );
-    }
-
-    /// <summary>
-    /// Adds glyphs for the specified text.
-    /// </summary>
-    public GlyphLayout AddText( string str, float x, float y, float targetWidth, Align halign, bool wrap )
+    public GlyphLayout AddText( string str,
+                                float x,
+                                float y,
+                                float targetWidth = 0,
+                                Align halign = Align.Left,
+                                bool wrap = false )
     {
         return AddText( str, x, y, 0, str.Length, targetWidth, halign, wrap );
     }
@@ -851,16 +808,16 @@ public class BitmapFontCache
                                 float y,
                                 int start,
                                 int end,
-                                float targetWidth,
-                                Align halign,
-                                bool wrap,
+                                float targetWidth = 0,
+                                Align halign = Align.Left,
+                                bool wrap = false,
                                 string? truncate = null )
     {
         GlyphLayout layout = Pools.Obtain< GlyphLayout >();
 
         _pooledLayouts.Add( layout );
 
-        layout.SetText( Font, str, start, end, _color, targetWidth, halign, wrap, truncate );
+        layout.SetText( Font, str, start, end, Color, targetWidth, halign, wrap, truncate );
 
         AddText( layout, x, y );
 
@@ -878,6 +835,8 @@ public class BitmapFontCache
         }
     }
 
+    // ========================================================================
+    
     #if DEBUG
     public float[][] GetPageVertices() => _pageVertices;
 

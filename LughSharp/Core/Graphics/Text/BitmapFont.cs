@@ -80,28 +80,14 @@ public class BitmapFont
     /// </summary>
     public BitmapFontData FontData { get; private set; }
 
-    /// <summary>
-    /// Specifies whether to use integer positions.
-    /// Default is to use them so filtering doesn't kick in as badly.
-    /// </summary>
-    public bool UseIntegerPositions
-    {
-        get;
-        private set
-        {
-            field = value;
-
-            Cache?.UseIntegerPositions = value;
-        }
-    }
-
-    public bool   Flipped     { get; private set; }
-    public bool   OwnsTexture { get; set; }
+    public bool Flipped     { get; private set; }
+    public bool OwnsTexture { get; set; }
 
     // ========================================================================
 
     private readonly PathType              _pathType;
     private readonly List< TextureRegion > _regions;
+    private          bool                  _useIntegerPositions;
 
     // ========================================================================
 
@@ -224,10 +210,10 @@ public class BitmapFont
     {
         Guard.Against.Null( data );
 
-        UseIntegerPositions = integer;
-        Flipped             = data.Flipped;
-        FontData            = data;
-        _pathType           = PathType.Local;
+        _useIntegerPositions = integer;
+        Flipped              = data.Flipped;
+        FontData             = data;
+        _pathType            = PathType.Local;
 
         if ( ( pageRegions == null ) || ( pageRegions.Count == 0 ) )
         {
@@ -259,7 +245,7 @@ public class BitmapFont
             OwnsTexture = false;
         }
 
-        Cache = new BitmapFontCache( this, UseIntegerPositions );
+        Cache = new BitmapFontCache( this, GetUseIntegerPositions() );
 
         SafeLoad( data );
     }
@@ -322,7 +308,7 @@ public class BitmapFont
             throw new InvalidOperationException( "Font cache is not initialized" );
         }
 
-        return Cache.GetColor();
+        return Cache.Color;
     }
 
     /// <summary>
@@ -334,8 +320,8 @@ public class BitmapFont
         {
             throw new InvalidOperationException( "Font cache is not initialized" );
         }
-        
-        Cache.GetColor().Set( color );
+
+        Cache.Color.Set( color );
     }
 
     /// <summary>
@@ -347,8 +333,8 @@ public class BitmapFont
         {
             throw new InvalidOperationException( "Font cache is not initialized" );
         }
-        
-        Cache.GetColor().Set( r, g, b, a );
+
+        Cache.Color.Set( r, g, b, a );
     }
 
     /// <summary>
@@ -360,8 +346,8 @@ public class BitmapFont
         {
             throw new InvalidOperationException( "Font cache is not initialized" );
         }
-        
-        return Cache.GetColor().A;
+
+        return Cache.Color.A;
     }
 
     /// <summary>
@@ -369,7 +355,7 @@ public class BitmapFont
     /// </summary>
     public void SetAlpha( float a )
     {
-        Cache?.GetColor().A = a;
+        Cache?.Color.A = a;
     }
 
     /// <summary>
@@ -508,6 +494,23 @@ public class BitmapFont
     }
 
     /// <summary>
+    /// Specifies whether to use integer positions.
+    /// Default is to use them so filtering doesn't kick in as badly.
+    /// </summary>
+    public bool GetUseIntegerPositions() => _useIntegerPositions;
+
+    /// <summary>
+    /// Specifies whether to use integer positions.
+    /// Default is to use them so filtering doesn't kick in as badly.
+    /// </summary>
+    private void SetUseIntegerPositions( bool value )
+    {
+        _useIntegerPositions = value;
+
+        Cache?.UseIntegerPositions = value;
+    }
+
+    /// <summary>
     /// Creates a new BitmapFontCache for this font. Using this method allows the
     /// font to provide the BitmapFontCache implementation to customize rendering.
     /// </summary>
@@ -517,7 +520,7 @@ public class BitmapFont
     /// </para>
     public virtual BitmapFontCache NewFontCache()
     {
-        return new BitmapFontCache( this, UseIntegerPositions );
+        return new BitmapFontCache( this, GetUseIntegerPositions() );
     }
 
     /// <summary>
@@ -655,7 +658,7 @@ public class BitmapFont
     /// Returns the name of the font used to construct this BitmapFont.
     /// </summary>
     public string Name => FontData.Name ?? "Unnamed";
-    
+
     /// <inheritdoc />
     public override string? ToString()
     {
