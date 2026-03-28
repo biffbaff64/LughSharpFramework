@@ -74,7 +74,7 @@ public class BitmapFontCache
     /// </summary>
     public BitmapFont Font { get; }
 
-    public Color Color { get; set; } = new( 1, 1, 1, 1 );
+    public Color Color { get; set; } = new( 1f, 1f, 1f, 1f );
 
     // ========================================================================
 
@@ -90,7 +90,7 @@ public class BitmapFontCache
         NewObjectFactory = () => new GlyphLayout()
     };
 
-    private Color _tempColor = new( 1, 1, 1, 1 );
+    private Color _tempColor = new( 1f, 1f, 1f, 1f );
     private uint  _currentTint;
     private int   _glyphCount;
 
@@ -250,15 +250,27 @@ public class BitmapFontCache
                     {
                         Logger.Checkpoint();
 
-                        Color.Abgr8888ToColor( ref _tempColor, layout.Colors[ colorsIndex ].Color );
+                        // Convert RGBA8888 to Color, multiply by tint, convert to ABGR float
+                        int layoutColorInt = layout.Colors[ colorsIndex ].Color;
+                        Color.Rgba8888ToColor( ref _tempColor, ( uint )layoutColorInt );
 
-                        lastColorFloatBits = _tempColor.Mul( tint ).ToFloatBitsAbgr();
+                        Logger.Debug( $"Layout color RGBA8888: 0x{layoutColorInt:X8}" );
+                        Logger.Debug( $"Before tint: R={_tempColor.R:F3}, G={_tempColor.G:F3}, B={_tempColor.B:F3}, A={_tempColor.A:F3}" );
+                        Logger.Debug( $"Tint color: R={tint.R:F3}, G={tint.G:F3}, B={tint.B:F3}, A={tint.A:F3}" );
+
+                        _tempColor.Mul( tint );
+
+                        Logger.Debug( $"After tint: R={_tempColor.R:F3}, G={_tempColor.G:F3}, B={_tempColor.B:F3}, A={_tempColor.A:F3}" );
+
+                        lastColorFloatBits = _tempColor.ToFloatBitsAbgr();
+
+                        Logger.Debug( $"lastColorFloatBits as float: {lastColorFloatBits}" );
+                        Logger.Debug( $"lastColorFloatBits as int: 0x{BitConverter.SingleToInt32Bits( lastColorFloatBits ):X8}" );
+
                         nextColorGlyphIndex = ++colorsIndex < layout.Colors.Count
                             ? layout.Colors[ colorsIndex ].GlyphIndex
                             : -1;
                     }
-
-                    Logger.Debug( $"lastColorFloatBits: {lastColorFloatBits}" );
 
                     int page   = glyphs[ iii ].Page;
                     int offset = ( _tempGlyphCount[ page ] * VerticesPerGlyph ) + ColorOffset;
@@ -419,6 +431,10 @@ public class BitmapFontCache
     {
         List< TextureRegion > regions = Font.GetRegions();
 
+        // Save the batch's current color and set it to white so vertex colors are used as-is
+        Color originalColor = spriteBatch.Color;
+        spriteBatch.Color = Color.White;
+
         for ( int j = 0, n = _pageVertices.Length; j < n; j++ )
         {
             if ( _idx[ j ] > 0 )
@@ -430,6 +446,9 @@ public class BitmapFontCache
                 }
             }
         }
+
+        // Restore the batch's original color
+        spriteBatch.Color = originalColor;
     }
 
     /// <summary>
@@ -620,14 +639,22 @@ public class BitmapFontCache
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pageCount"></param>
     private void SetPageCount( int pageCount )
     {
         var newPageVertices = new float[ pageCount ][];
+        
         Array.Copy( _pageVertices, 0, newPageVertices, 0, _pageVertices.Length );
+        
         _pageVertices = newPageVertices;
 
         var newIdx = new int[ pageCount ];
+        
         Array.Copy( _idx, 0, newIdx, 0, _idx.Length );
+        
         _idx = newIdx;
 
         var newPageGlyphIndices    = new List< int >[ pageCount ];
@@ -688,7 +715,7 @@ public class BitmapFontCache
             {
                 if ( glyphIndex++ == nextColorGlyphIndex )
                 {
-                    Color.Rgba8888ToColor( ref _tempColor, colors[ colorsIndex ].Color );
+                    Color.Rgba8888ToColor( ref _tempColor, ( uint )colors[ colorsIndex ].Color );
                     lastColorFloatBits = _tempColor.ToFloatBitsAbgr();
 
                     nextColorGlyphIndex = ++colorsIndex < colors.Count
@@ -867,6 +894,9 @@ public class BitmapFontCache
         GlyphLayout? layout = _pooledLayouts.Obtain();
 
         Guard.Against.Null( layout );
+
+        Logger.Debug( $"BitmapFontCache.Color before SetText: R={Color.R:F3}, G={Color.G:F3}, B={Color.B:F3}, A={Color.A:F3}" );
+        Logger.Debug( $"Color.ToRgba8888: 0x{Color.ToRgba8888(Color):X8}" );
 
         layout.SetText( Font, str, start, end, Color, targetWidth, halign, wrap, truncate );
 

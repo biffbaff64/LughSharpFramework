@@ -256,7 +256,7 @@ public class Color : ICloneable, IEquatable< Color >
                        | ( ( uint )( 255f * b ) << 8 )
                        | ( uint )( 255f * a );
 
-        return floatBits;
+        return NumberUtils.UIntToFloatColor( floatBits );
     }
 
     /// <summary>
@@ -294,7 +294,7 @@ public class Color : ICloneable, IEquatable< Color >
                        | ( ( uint )( g * 255f ) << 8 )
                        | ( uint )( r * 255f );
 
-        return floatBits;
+        return NumberUtils.UIntToFloatColor( floatBits );
     }
 
     // ========================================================================

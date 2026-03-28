@@ -123,7 +123,7 @@ public class MainGame : Game
     public override void Render()
     {
         // Clear and set viewport
-        ScreenUtils.Clear( Color.Blue, true );
+        ScreenUtils.Clear( Color.White, true );
 
         // --------------------------------------
 
@@ -504,6 +504,19 @@ public class MainGame : Game
         }
     }
 
+    private void CreateFont()
+    {
+        _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
+        _font.Cache?.Clear();
+        _font.Cache?.AddText( "THIS TEXT SHOULD BE RED!", 100, 100 );
+
+        FontDebug();
+
+        _font.Cache?.Tint( Color.Red );
+        
+        FontDebug();
+    }
+
     private void FontDebug()
     {
         if ( _font?.Cache != null )
@@ -515,7 +528,7 @@ public class MainGame : Game
             Logger.Debug( $"pageVertices.Length: {pageVertices.Length}" );
             Logger.Debug( $"pageVertices[ 0 ].Length: {pageVertices[ 0 ].Length}" );
 
-//            for ( var i = 0; i < pageVertices[ 0 ].Length; ++i )
+            // Just show the first 20 entries in the first page.
             for ( var i = 0; i < 20; ++i )
             {
                 Logger.Debug( $"pageVertices[ 0 ][ {i} ]: {pageVertices[ 0 ][ i ]}" );
@@ -526,22 +539,6 @@ public class MainGame : Game
         }
     }
     
-    private void CreateFont()
-    {
-        _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
-//        _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
-//        _font.FontData.MarkupEnabled = true;
-
-        _font.Cache?.Clear();
-        _font.Cache?.AddText( "THIS TEXT SHOULD BE RED!", 100, 100 );
-
-        FontDebug();
-
-        _font.Cache?.Tint( Color.Red );
-        
-        FontDebug();
-    }
-
     private void CreateFreeTypeFont()
     {
 //        var generator = new FreeTypeFontGenerator( Engine.Files.Internal( Assets.AmbleRegular26Font ) );
