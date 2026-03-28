@@ -174,12 +174,9 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GLubyte* version = GetString( IGL.GLVersion );
 
-        if ( version == null )
-        {
-            throw new RuntimeException( "NULL GL Version returned!" );
-        }
-
-        return ( version[ 0 ], version[ 2 ] );
+        return version == null
+            ? throw new RuntimeException( "NULL GL Version returned!" )
+            : ( version[ 0 ], version[ 2 ] );
     }
 
     // ========================================================================
@@ -562,10 +559,10 @@ public unsafe partial class GLBindings : IGLBindings
     }
 
     /// <inheritdoc />
-    public void GetBooleanv( GLenum pname, out bool data )
+    public void GetBooleanv( GLenum pname, out GLboolean data )
     {
         // Create a temporary array to hold the result from the underlying OpenGL method.
-        var tempArray = new bool[ 1 ];
+        var tempArray = new GLboolean[ 1 ];
 
         // Call the original method with the temporary array.
         GetBooleanv( pname, ref tempArray );

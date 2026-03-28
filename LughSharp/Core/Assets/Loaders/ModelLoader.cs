@@ -32,6 +32,7 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G3D;
 using LughSharp.Core.Graphics.G3D.Models.Data;
 using LughSharp.Core.Graphics.G3D.Utils;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;

@@ -28,7 +28,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Logging;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Images;
 
 /// <summary>
 /// Simple pixmap struct holding the pixel data, the dimensions and the

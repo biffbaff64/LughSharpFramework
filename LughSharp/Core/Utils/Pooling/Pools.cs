@@ -82,7 +82,7 @@ public static class Pools
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static T Obtain< T >() where T : class, new()
+    public static T? Obtain< T >() where T : class, new()
     {
         Pool< T > pool = GetRegisteredPool< T >();
 

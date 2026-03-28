@@ -62,17 +62,17 @@ namespace LughSharp.Core.Graphics.Text;
 [PublicAPI]
 public class GlyphLayout : IResetable, IPoolable
 {
-    public struct GlyphColor( int index, int argb8888 )
+    public struct GlyphColor( int index, int color )
     {
         public int GlyphIndex { get; } = index;
-        public int Argb8888   { get; } = argb8888;
+        public int Color      { get; } = color;
     }
 
     /// <summary>
     /// Each run has the glyphs for a line of text.
     /// <para>
     /// Runs are pooled, so references should not be kept past the next call to
-    /// <see cref="SetText(BitmapFont, string, int, int, Graphics.Colors.Color, float, int, bool, string)"/>
+    /// <see cref="SetText(BitmapFont, string, int, int, Color, float, Align, bool, string)"/>
     /// or <see cref="Reset()"/>.
     /// </para>
     /// </summary>
@@ -81,7 +81,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <summary>
     /// Determines the colors of the glpyhs in the <see cref="Runs"/>. Entries are
     /// instances of the <see cref="GlyphColor"/> struct, which holds the glyph index
-    /// (across all runs) where the color starts, and the color encoded as ABGR8888.
+    /// (across all runs) where the color starts, and the color encoded as RGBA8888.
     /// <para>
     /// For example: <code>[0, WHITE, 4, GREEN, 5, WHITE]</code>
     /// Glpyhs 0 to 3 are WHITE, 4 is GREEN and 5 to the end are WHITE.
@@ -699,7 +699,9 @@ public class GlyphLayout : IResetable, IPoolable
 
             if ( truncateRun.XAdvances.Count > 0 )
             {
-                run.XAdvances.AddAll( truncateRun.XAdvances, 1, truncateRun.XAdvances.Count - 1 );
+                run.XAdvances.AddAll( truncateRun.XAdvances,
+                                      1,
+                                      truncateRun.XAdvances.Count - 1 );
             }
         }
         else
@@ -725,7 +727,6 @@ public class GlyphLayout : IResetable, IPoolable
             }
         }
 
-
         // Add the truncate glyphs to the run.
         run.Glyphs.AddAll( truncateRun.Glyphs );
 
@@ -747,9 +748,9 @@ public class GlyphLayout : IResetable, IPoolable
         Guard.Against.Null( fontData );
         Guard.Against.Null( first );
 
-        List< Glyph > glyphs2    = first.Glyphs; // Starts with all the glyphs.
-        int           glyphCount = first.Glyphs.Count;
+        List< Glyph > glyphs2    = first.Glyphs;    // Starts with all the glyphs.
         List< float > xAdvances2 = first.XAdvances; // Starts with all the xAdvances.
+        int           glyphCount = first.Glyphs.Count;
 
         // Skip whitespace before the wrap index.
         int firstEnd = wrapIndex;
@@ -817,7 +818,7 @@ public class GlyphLayout : IResetable, IPoolable
                     }
 
                     Colors[ i ] = new GlyphColor( colorChangeIndex - droppedGlyphCount,
-                                                  Colors[ i ].Argb8888 );
+                                                  Colors[ i ].Color );
                 }
             }
         }
@@ -835,8 +836,9 @@ public class GlyphLayout : IResetable, IPoolable
 
                 if ( fontData.MarkupEnabled && Colors[ Colors.Count - 1 ].GlyphIndex > GlyphCount )
                 {
-                    // Many color changes can be hidden in the dropped whitespace, so keep only the very last color entry.
-                    int lastColor = Colors.Peek().Argb8888;
+                    // Many color changes can be hidden in the dropped whitespace,
+                    // so keep only the very last color entry.
+                    int lastColor = Colors.Peek().Color;
 
                     while ( Colors[ Colors.Count - 1 ].GlyphIndex > GlyphCount )
                     {
@@ -993,12 +995,7 @@ public class GlyphLayout : IResetable, IPoolable
                 continue;
             }
 
-            Color? color = Graphics.Colors.Get( str.Substring( start, i - start ) );
-
-            if ( color == null )
-            {
-                return -1; // Unknown color name.
-            }
+            Color color = Graphics.Colors.Get( str.Substring( start, i - start ) );
 
             _colorStack.Add( ( int )Color.ToRgba8888( color ) );
 

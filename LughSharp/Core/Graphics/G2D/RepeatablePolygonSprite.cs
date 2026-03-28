@@ -223,7 +223,7 @@ public class RepeatablePolygonSprite
                 fullVerts[ idx++ ] = verts[ j ] + _offset.X + X;
                 fullVerts[ idx++ ] = verts[ j + 1 ] + _offset.Y + Y;
 
-                fullVerts[ idx++ ] = _color.ToFloatBitsAbgr();
+                fullVerts[ idx++ ] = _color.ToFloatBitsRgba();
 
                 float u = verts[ j ] % _gridWidth / _gridWidth;
                 float v = verts[ j + 1 ] % _gridHeight / _gridHeight;

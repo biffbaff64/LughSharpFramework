@@ -303,12 +303,9 @@ public class BitmapFont
     /// </summary>
     public Color GetColor()
     {
-        if ( Cache == null )
-        {
-            throw new InvalidOperationException( "Font cache is not initialized" );
-        }
-
-        return Cache.Color;
+        return Cache == null
+            ? throw new InvalidOperationException( "Font cache is not initialized" )
+            : Cache.Color;
     }
 
     /// <summary>
@@ -342,12 +339,9 @@ public class BitmapFont
     /// </summary>
     public float GetAlpha()
     {
-        if ( Cache == null )
-        {
-            throw new InvalidOperationException( "Font cache is not initialized" );
-        }
-
-        return Cache.Color.A;
+        return Cache == null
+            ? throw new InvalidOperationException( "Font cache is not initialized" )
+            : Cache.Color.A;
     }
 
     /// <summary>
@@ -639,6 +633,17 @@ public class BitmapFont
         Cache.Draw( batch );
     }
 
+    /// <summary>
+    /// Simple draw method that requires the vertex buffers and float arrays
+    /// to be pre-built, and the text to be already cached.
+    /// </summary>
+    public void Draw( IBatch batch )
+    {
+        Guard.Against.Null( Cache );
+
+        Cache.Draw( batch );
+    }
+    
     /// <summary>
     /// Disposes the texture used by this BitmapFont's region IF this BitmapFont
     /// created the texture.

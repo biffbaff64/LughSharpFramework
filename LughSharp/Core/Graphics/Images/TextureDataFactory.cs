@@ -30,7 +30,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Images;
 
 /// <summary>
 /// Factory class for creating instances of ITextureData based on file types.

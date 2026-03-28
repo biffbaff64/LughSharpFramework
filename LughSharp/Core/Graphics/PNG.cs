@@ -32,6 +32,7 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.ImageDecoders;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Graphics;

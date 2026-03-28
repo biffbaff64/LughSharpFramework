@@ -30,6 +30,7 @@ using System.Linq;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.Utils.Exceptions;
 

@@ -46,7 +46,7 @@ public class Pool< T > where T : class
 
     // ========================================================================
 
-    private readonly Stack< T > _freeObjects;
+    private readonly Stack< T? > _freeObjects;
 
     // ========================================================================
 
@@ -61,7 +61,7 @@ public class Pool< T > where T : class
     /// <typeparam name="T">The type of objects to be pooled. Must be a reference type.</typeparam>
     public Pool( int initialCapacity = DefaultInitialCapacity, int max = int.MaxValue )
     {
-        _freeObjects   = new Stack< T >( initialCapacity );
+        _freeObjects   = new Stack< T? >( initialCapacity );
         MaxFreeObjects = max;
     }
 
@@ -69,7 +69,7 @@ public class Pool< T > where T : class
     /// Returns an object from this pool. The object may be new (from <see cref="NewObjectFactory"/>)
     /// or reused from a previous call to <see cref="Free(T)"/>.
     /// </summary>
-    public virtual T Obtain()
+    public virtual T? Obtain()
     {
         return _freeObjects.Count == 0 ? NewObjectFactory() : _freeObjects.Pop();
     }
@@ -124,7 +124,7 @@ public class Pool< T > where T : class
     /// later reuse. The default implementation calls <see cref="IPoolable.Reset()"/>
     /// if the object is Poolable.
     /// </summary>
-    protected virtual void Reset( T obj )
+    protected virtual void Reset( T? obj )
     {
         if ( obj is IPoolable poolable )
         {
@@ -136,7 +136,7 @@ public class Pool< T > where T : class
     /// Called when an object is discarded. This is the case when an object is freed,
     /// but the maximum capacity of the pool is reached, and when the pool is cleared.
     /// </summary>
-    protected void Discard( T obj )
+    protected void Discard( T? obj )
     {
         Reset( obj );
     }
@@ -146,11 +146,11 @@ public class Pool< T > where T : class
     /// silently ignored. The pool does not check if an object is already freed, so
     /// the same object must not be freed multiple times.
     /// </summary>
-    public virtual void FreeAll( List< T > objects )
+    public virtual void FreeAll( List< T? > objects )
     {
         for ( int i = 0, n = objects.Count; i < n; i++ )
         {
-            T obj = objects[ i ];
+            T? obj = objects[ i ];
 
             if ( _freeObjects.Count < MaxFreeObjects )
             {
@@ -171,7 +171,7 @@ public class Pool< T > where T : class
     /// </summary>
     public void Clear()
     {
-        foreach ( T obj in _freeObjects )
+        foreach ( T? obj in _freeObjects )
         {
             Discard( obj );
         }

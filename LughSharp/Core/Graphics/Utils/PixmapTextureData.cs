@@ -24,6 +24,7 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;

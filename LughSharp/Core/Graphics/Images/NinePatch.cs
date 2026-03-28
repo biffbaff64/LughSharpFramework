@@ -22,19 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Images;
+using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.OpenGL.Enums;
-using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
-namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.Images;
 
 /// <summary>
 /// A 3x3 grid of texture regions. Any of the regions may be omitted.

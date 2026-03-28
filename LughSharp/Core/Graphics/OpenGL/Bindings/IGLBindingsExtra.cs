@@ -26,6 +26,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
+using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Core.Graphics.OpenGL.Bindings;

@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Images;
 
 [PublicAPI]
 public class PixmapDownloader

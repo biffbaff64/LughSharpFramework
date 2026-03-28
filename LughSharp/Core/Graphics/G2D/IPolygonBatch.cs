@@ -24,6 +24,8 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Images;
+
 namespace LughSharp.Core.Graphics.G2D;
 
 /// <summary>

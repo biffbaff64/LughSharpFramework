@@ -248,26 +248,20 @@ public class PolygonSpriteBatch : IPolygonBatch
         set
         {
             _color.Set( value );
-            _colorPacked = value.ToFloatBitsAbgr();
+            _colorPacked = value.ToFloatBitsRgba();
         }
     }
 
     public void SetColor( float r, float g, float b, float a )
     {
         _color.Set( r, g, b, a );
-        _colorPacked = _color.ToFloatBitsAbgr();
+        _colorPacked = _color.ToFloatBitsRgba();
     }
 
     public float ColorPackedABGR
     {
-        get => _colorPacked;
-        set
-        {
-            Color color = Color;
-
-            Color.Abgr8888ToColor( ref color, value );
-            _colorPacked = value;
-        }
+        get => throw new NotImplementedException();
+        set => throw new NotImplementedException();
     }
 
     public float ColorPackedRGBA

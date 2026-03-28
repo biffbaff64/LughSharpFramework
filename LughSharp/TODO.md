@@ -105,31 +105,6 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-Files That Need ABGR → RGBA Conversion:
----------------------------------------
-
-- Graphics/G2D (Core rendering classes)
-  - SpriteCache.cs – Lines 215, 224 (DONE)
-  - Sprite.cs – Lines 522, 537, 1021 (DONE)
-  - PolygonSprite.cs – Lines 232, 246 (DONE)
-  - PolygonSprite.cs – Line 449 (still needs fixing)
-  - RepeatablePolygonSprite.cs - Line 226
-  - PolygonSpriteBatch.cs – Lines 251, 258
-  - NinePatch.cs – Line 615
-
-- Graphics/Text (Font rendering)
-  - BitmapFontCache.cs - Lines 208, 232, 475, 478
-
-- Graphics/Utils (Shape rendering)
-  - ShapeRenderer.cs - Lines 293, 340, 402, 549, 596, 597, 648, 820, 896, 974, 1032, 1090, 1184, 1227
-  - ImmediateModeRenderer20.cs - Line 191
-
-- SceneGraph2D/Utils
-  - SpriteDrawable.cs – Lines 83, 110
-   
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -498,10 +473,8 @@ GRAPHICS/G2D
     ----   ----   ------
     -      -      -      - Animation
     -      -      -      - CpuSpriteBatch                  Some methods have too many parameters
-    -      -      -      - Gdx2DPixmap
     -      -      -      - IBatch
     -      -      -      - IPolygonBatch                   Some methods have too many parameters
-    -      -      -      - NinePatch
     -      -      -      - ParticleEffect
     -      -      -      - ParticleEffectPool
     -      -      -      - ParticleEmitter
@@ -544,7 +517,9 @@ GRAPHICS/IMAGES
 
     CODE   DOCU   FOOTER
     ----   ----   ------
+    -      -      -      - Gdx2DPixmap
     -      -      -      - GLTexture
+    -      -      -      - NinePatch
     - DONE - IP   - DONE - Pixmap                   y=down, x=right
     -      -      -      - PixmapData
     -      -      -      - PixmapDownloader

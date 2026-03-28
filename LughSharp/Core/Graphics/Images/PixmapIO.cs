@@ -30,7 +30,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Utils.Exceptions;
 
-namespace LughSharp.Core.Graphics;
+namespace LughSharp.Core.Graphics.Images;
 
 /// <summary>
 /// Write Pixmaps to various formats.

@@ -376,6 +376,10 @@ public class PolygonSprite
         return _bounds;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="spriteBatch"></param>
     public void Draw( PolygonSpriteBatch spriteBatch )
     {
         if ( Region?.Region.Texture == null )
@@ -392,6 +396,11 @@ public class PolygonSprite
                           Region.Triangles.Length );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="spriteBatch"></param>
+    /// <param name="alphaModulation"></param>
     public void Draw( PolygonSpriteBatch spriteBatch, float alphaModulation )
     {
         Color color    = Color;
@@ -408,8 +417,8 @@ public class PolygonSprite
 
     /// <summary>
     /// Returns the actual color used in the vertices of this sprite. Modifying the
-    /// returned color will have unexpected effects unless <see cref="SetColor(Colors.Color)"/>
-    /// or <see cref="SetColor(float, float, float, float)"/> is subsequently called
+    /// returned color will have unexpected effects unless <c>SetColor(Color)</c>
+    /// or <c>SetColor(float, float, float, float)</c> is subsequently called
     /// before drawing this sprite.
     /// </summary>
     public Color GetPackedColor()
@@ -418,12 +427,16 @@ public class PolygonSprite
 
         if ( _vertices != null )
         {
-            Color.Abgr8888ToColor( ref color, _vertices[ 2 ] );
+            Color.Rgba8888ToColor( ref color, _vertices[ 2 ] );
         }
 
         return color;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="region"></param>
     public void SetRegion( PolygonRegion? region )
     {
         if ( region == null )
@@ -446,7 +459,7 @@ public class PolygonSprite
         // Set the color and UVs in this sprite's vertices.
         for ( int i = 0, v = 2; v < verticesLength; i += 2, v += 5 )
         {
-            _vertices[ v ]     = Color.ToFloatBitsAbgr();
+            _vertices[ v ]     = Color.ToFloatBitsRgba();
             _vertices[ v + 1 ] = textureCoords[ i ];
             _vertices[ v + 2 ] = textureCoords[ i + 1 ];
         }
@@ -457,3 +470,4 @@ public class PolygonSprite
 
 // ============================================================================
 // ============================================================================
+

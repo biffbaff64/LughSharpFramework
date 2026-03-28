@@ -212,16 +212,15 @@ public class SpriteCache
     public void SetColor( Color tint )
     {
         Color.Set( tint );
-        PackedColor = tint.ToFloatBitsRgba();
+        PackedColor = tint.ToFloatBitsAbgr();
     }
 
     /// <summary>
     /// </summary>
-    /// <see cref="SetColor(Colors.Color)"/>
     public void SetColor( float r, float g, float b, float a )
     {
         Color.Set( r, g, b, a );
-        PackedColor = Color.ToFloatBitsRgba();
+        PackedColor = Color.ToFloatBitsAbgr();
     }
 
     /// <summary>

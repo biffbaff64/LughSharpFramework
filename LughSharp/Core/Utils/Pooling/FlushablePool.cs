@@ -36,7 +36,7 @@ namespace LughSharp.Core.Utils.Pooling;
 [PublicAPI]
 public class FlushablePool< T > : Pool< T > where T : class
 {
-    protected List< T > Obtained = new();
+    protected List< T? > Obtained = new();
 
     // ========================================================================
     
@@ -44,6 +44,13 @@ public class FlushablePool< T > : Pool< T > where T : class
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new FlushablePool with the default initial capacity.
+    /// </summary>
+    public FlushablePool()
+    {
+    }
+    
     /// <summary>
     /// Creates a new pool with the specified maximum pool size and initial capacity.
     /// </summary>
@@ -67,9 +74,9 @@ public class FlushablePool< T > : Pool< T > where T : class
     /// Obtains an instance from the pool.
     /// </summary>
     /// <returns> The instance, or null if it was not possible to obtain one. </returns>
-    public override T Obtain()
+    public override T? Obtain()
     {
-        T result = base.Obtain();
+        T? result = base.Obtain();
 
         Obtained.Add( result );
 
@@ -81,7 +88,7 @@ public class FlushablePool< T > : Pool< T > where T : class
     /// </summary>
     public void Flush()
     {
-        base.FreeAll( Obtained! );
+        base.FreeAll( Obtained );
 
         Obtained.Clear();
     }
@@ -91,7 +98,7 @@ public class FlushablePool< T > : Pool< T > where T : class
     /// object from the list of currently obtained items.
     /// </summary>
     /// <param name="obj"></param>
-    public override void Free( T obj )
+    public override void Free( T? obj )
     {
         Obtained.Remove( obj );
         base.Free( obj );
@@ -103,7 +110,7 @@ public class FlushablePool< T > : Pool< T > where T : class
     /// objects from the list of currently obtained items.
     /// </summary>
     /// <param name="objects">The list of objects to be freed.</param>
-    public override void FreeAll( List< T > objects )
+    public override void FreeAll( List< T? > objects )
     {
         // If we are freeing everything, just clear the list!
         if ( objects.Count == Obtained.Count )
@@ -112,7 +119,7 @@ public class FlushablePool< T > : Pool< T > where T : class
         }
         else
         {
-            var hashSet = new HashSet< T >( objects );
+            var hashSet = new HashSet< T? >( objects );
 
             // Iterate backwards when removing to keep indices stable
             for ( int i = Obtained.Count - 1; i >= 0; i-- )

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
 using JetBrains.Annotations;
@@ -31,7 +29,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
-namespace LughSharp.Core.Graphics.G2D;
+namespace LughSharp.Core.Graphics.Images;
 
 /// <summary>
 /// Provides functionality for managing and manipulating 2D pixel maps with various
@@ -370,34 +368,18 @@ public class Gdx2DPixmap : IDisposable
 
                 break;
 
-            case LughFormat.RGB888:
-                ClearRGB888( color, size );
-
-                break;
-
             case LughFormat.RGBA8888:
                 ClearRGBA8888( color, size );
 
                 break;
 
+            case LughFormat.RGB888:
             case LughFormat.RGB565:
-                ClearRGB565( color, size );
-
-                break;
-
             case LughFormat.RGBA4444:
-                ClearRGBA4444( color, size );
-
-                break;
-
             case LughFormat.IndexedColor:
-                ClearIndexedColor( color, size );
-
-                break;
-
             case LughFormat.Invalid:
             default:
-                throw new RuntimeException( "Unknown color type" );
+                throw new RuntimeException( "Unknown / Unsupported color type" );
         }
 
         Array.Copy( Pixels, PixmapBuffer.BackingArray(), Pixels.Length );
@@ -433,30 +415,14 @@ public class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
-    /// Clears the pixmap data in the GDX_2D_FORMAT_RGB888 format with the specified color.
-    /// </summary>
-    /// <param name="color">The color used to clear the pixmap, specified in the ARGB color format.</param>
-    /// <param name="size">The size of the pixmap data in bytes.</param>
-    private void ClearRGB888( Color color, uint size )
-    {
-        uint col = Color.Rgb888( color );
-        var  b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
-        var  g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
-        var  r   = ( byte )( ( col & 0xff000000 ) >> 24 );
-
-        for ( var pixel = 0; pixel < size; )
-        {
-            Pixels[ pixel++ ] = b;
-            Pixels[ pixel++ ] = g;
-            Pixels[ pixel++ ] = r;
-        }
-    }
-
-    /// <summary>
     /// Clears the pixmap data using the RGBA8888 format with the specified color.
     /// </summary>
-    /// <param name="color">The color to clear the pixmap with as an instance of the <see cref="Colors.Color"/> class.</param>
-    /// <param name="size">The size of the pixmap data in bytes, representing the total pixel data.</param>
+    /// <param name="color">
+    /// The color to clear the pixmap with as an instance of the <see cref="Color"/> class.
+    /// </param>
+    /// <param name="size">
+    /// The size of the pixmap data in bytes, representing the total pixel data.
+    /// </param>
     private void ClearRGBA8888( Color color, uint size )
     {
         if ( ( size % 4 ) != 0 )
@@ -480,19 +446,23 @@ public class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
+    /// Clears the pixmap data in the GDX_2D_FORMAT_RGB888 format with the specified color.
+    /// </summary>
+    /// <param name="color">The color used to clear the pixmap, specified in the ARGB color format.</param>
+    /// <param name="size">The size of the pixmap data in bytes.</param>
+    private void ClearRGB888( Color color, uint size )
+    {
+        //TODO:
+    }
+
+    /// <summary>
     /// Clears the pixmap data of RGB565 format with the specified color.
     /// </summary>
     /// <param name="color">The color used to clear the </param>
     /// <param name="size">The total size of the pixmap data to be cleared.</param>
     private void ClearRGB565( Color color, uint size )
     {
-        uint col = Color.Rgb565( color );
-
-        for ( var i = 0; i < size; i += 2 )
-        {
-            Pixels[ i ]     = ( byte )( col & 0xFF );
-            Pixels[ i + 1 ] = ( byte )( ( col >> 8 ) & 0xFF );
-        }
+        //TODO:
     }
 
     /// <summary>
@@ -502,13 +472,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="size">The size of the pixmap data in bytes.</param>
     private void ClearRGBA4444( Color color, uint size )
     {
-        uint col = Color.Rgba4444( color );
-
-        for ( var i = 0; i < size; i += 2 )
-        {
-            Pixels[ i ]     = ( byte )( col & 0xFF );
-            Pixels[ i + 1 ] = ( byte )( ( col >> 8 ) & 0xFF );
-        }
+        //TODO:
     }
 
     /// <summary>

@@ -83,7 +83,7 @@ public class MainGame : Game
     private int                         _direction        = -1;
     private InputMultiplexer            _inputMultiplexer = new();
     private GlyphLayout                 _layout           = new();
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -152,15 +152,8 @@ public class MainGame : Game
                 _spriteCam.Position.Z = 0;
                 _spriteCam.Update();
 
-                if ( _font != null )
-                {
-                    _layout.SetText( _font, "THIS TEXT SHOULD BE YELLOW!", Color.Yellow, 0, Align.Left, false );
-                    _font.Draw( _spriteBatch, _layout, 100, 100 );
-                    
-                    _font.SetColor( Color.Red );
-                    _font.Draw( _spriteBatch, "THIS TEXT SHOULD BE RED!", 100, 200 );
-                }
-                
+                _font?.Draw( _spriteBatch );
+
                 _spriteBatch.End();
             }
         }
@@ -511,12 +504,42 @@ public class MainGame : Game
         }
     }
 
+    private void FontDebug()
+    {
+        if ( _font?.Cache != null )
+        {
+            float[][] pageVertices = _font.Cache.GetPageVertices();
+
+            var csum = 0f;
+
+            Logger.Debug( $"pageVertices.Length: {pageVertices.Length}" );
+            Logger.Debug( $"pageVertices[ 0 ].Length: {pageVertices[ 0 ].Length}" );
+
+//            for ( var i = 0; i < pageVertices[ 0 ].Length; ++i )
+            for ( var i = 0; i < 20; ++i )
+            {
+                Logger.Debug( $"pageVertices[ 0 ][ {i} ]: {pageVertices[ 0 ][ i ]}" );
+                csum += pageVertices[ 0 ][ i ];
+            }
+
+            Logger.Debug( $"csum: {csum}" );
+        }
+    }
+    
     private void CreateFont()
     {
-        _font = new BitmapFont( new FileInfo( Assets.ArialFont ));
-        _font.SetColor( Color.White );
-        _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
-        _font.FontData.MarkupEnabled = true;
+        _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
+//        _font.GetRegion().Texture?.SetFilter( TextureFilterMode.Nearest, TextureFilterMode.Nearest );
+//        _font.FontData.MarkupEnabled = true;
+
+        _font.Cache?.Clear();
+        _font.Cache?.AddText( "THIS TEXT SHOULD BE RED!", 100, 100 );
+
+        FontDebug();
+
+        _font.Cache?.Tint( Color.Red );
+        
+        FontDebug();
     }
 
     private void CreateFreeTypeFont()

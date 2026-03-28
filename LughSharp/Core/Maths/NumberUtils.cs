@@ -32,18 +32,18 @@ namespace LughSharp.Core.Maths;
 public abstract class NumberUtils
 {
     public const int   NotSet           = -1;
-    public const float Pi                = 3.14159265358979323846f;
+    public const float Pi               = 3.14159265358979323846f;
     public const float MinNormal        = 1.17549435E-38f;
     public const int   SignificandWidth = 24;
     public const int   MaxExponent      = 127;
     public const int   MinExponent      = -126;
-    public const int   MinSubExponent  = -149;
+    public const int   MinSubExponent   = -149;
     public const int   ExpBias          = 127;
-    public const int   SignBitMask     = int.MinValue;
-    public const int   ExpBitMask      = 2139095040;
-    public const int   SignifBitMask   = 8388607;
-    public const float FloatTolerance   = 0.000000000000001f; // 32 bits
-    public const float FloatEpsilon     = 1e-6f;              // 32 bits
+    public const int   SignBitMask      = int.MinValue;
+    public const int   ExpBitMask       = 2139095040;
+    public const int   SignifBitMask    = 8388607;
+    public const float FloatTolerance   = 0.000001f; // 32 bits
+    public const float FloatEpsilon     = 1e-6f;     // 32 bits
 
     // ========================================================================
 
@@ -301,6 +301,11 @@ public abstract class NumberUtils
         return ( ( value + 63 ) & -64 ) >> 6;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public static bool IsNumeric( object? value )
     {
         return value is sbyte
