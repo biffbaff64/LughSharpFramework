@@ -1199,7 +1199,7 @@ public class ParticleEmitter
         {
             if ( IsActive[ i ] )
             {
-                Rectangle r = _particles[ i ]!.BoundingRectangle;
+                Rectangle r = _particles[ i ]!.GetBoundingRectangle();
 
                 bounds.Extend( r.X, r.Y, 0 );
                 bounds.Extend( r.X + r.Width, r.Y + r.Height, 0 );

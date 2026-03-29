@@ -123,7 +123,10 @@ public class Window : Table
         TitleLabel.SetEllipsis( true );
 
         _titleTable = new TitleTable( this );
-        _titleTable.Add( TitleLabel ).SetExpandX().SetFillX().SetMinWidth( 0 );
+        _titleTable.Add( TitleLabel )
+                   .SetExpandX()
+                   .SetFillX()
+                   .SetMinWidth( 0 );
 
         AddActor( _titleTable );
 

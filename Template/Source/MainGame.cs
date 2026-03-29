@@ -1,4 +1,6 @@
-﻿using System.Runtime.Versioning;
+﻿using System;
+using System.IO;
+using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
 
@@ -28,24 +30,6 @@ using NSubstitute;
 
 namespace Template.Source;
 
-// ============================================================================
-// TODO:
-//  - Freetype Font generation
-//  - Sprite Scrolling
-//  - GameSprite helper class
-//  - UI System ( Scene2D )
-//  - TiledMap Animated Tiles
-//  - Audio
-//  - 3D Graphics
-//  - Network / HTTP etc.
-//  - Json handling to support Scene2D Skins
-//  - 2D Particle System
-//  - Ninepatch support for UI
-// ============================================================================
-
-/// <summary>
-/// TEST class, used for testing the framework.
-/// </summary>
 [PublicAPI]
 public class MainGame : Game
 {
@@ -59,6 +43,7 @@ public class MainGame : Game
     private AssetManager?               _assetManager;
     private OrthographicGameCamera?     _tiledMapCam;
     private OrthographicGameCamera?     _spriteCam;
+    private OrthographicGameCamera?     _hudCam;
     private Texture?                    _image1;
     private Texture?                    _image2;
     private TextureRegion?              _star;
@@ -123,7 +108,7 @@ public class MainGame : Game
     public override void Render()
     {
         // Clear and set viewport
-        ScreenUtils.Clear( Color.White, true );
+        ScreenUtils.Clear( Color.Blue, true );
 
         // --------------------------------------
 
@@ -152,10 +137,45 @@ public class MainGame : Game
                 _spriteCam.Position.Z = 0;
                 _spriteCam.Update();
 
-                _font?.Draw( _spriteBatch );
+                if ( _image1 != null )
+                {
+                    _spriteBatch.Draw( _image1, 300, 300 );
+                }
+
+                if ( _star != null )
+                {
+                    _spriteBatch.Draw( _star, 400, 100 );
+                }
+
+                if ( _sprite != null )
+                {
+                    _sprite.SetPosition( 100, 100 );
+                    _sprite.Draw( _spriteBatch );
+                }
 
                 _spriteBatch.End();
             }
+
+            // The Camera used for the Stage doesn't actually need updating
+            // here, as the Stage will update it internally before drawing,
+            // but we'll update it here anyway to show that it can be updated
+            // here if needed.
+
+//            if ( _hudCam is { IsInUse: true } )
+//            {
+//                _hudCam.Viewport?.Apply( true );
+//                _spriteBatch.SetProjectionMatrix( _hudCam.Camera.Combined );
+//                _spriteBatch.Begin();
+//
+//                _hudCam.Position.X = 0;
+//                _hudCam.Position.Y = 0;
+//                _hudCam.Position.Z = 0;
+//                _hudCam.Update();
+//
+//                _font?.Draw( _spriteBatch );
+//
+//                _spriteBatch.End();
+//            }
         }
 
         // ----- Draw the Stage, if enabled -----
@@ -243,7 +263,7 @@ public class MainGame : Game
 
         _spriteCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
                                                  Engine.Graphics.WindowHeight,
-                                                 name: "HUDCamera" );
+                                                 name: "SPRITECamera" );
 
         _spriteCam.Camera.Near = CameraData.DefaultNearPlane;
         _spriteCam.Camera.Far  = CameraData.DefaultFarPlane;
@@ -253,6 +273,21 @@ public class MainGame : Game
         // Set initial camera position
         _spriteCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
         _spriteCam.Update();
+
+        // --------------------------------------
+
+        _hudCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
+                                              Engine.Graphics.WindowHeight,
+                                              name: "HUDCamera" );
+
+        _hudCam.Camera.Near = CameraData.DefaultNearPlane;
+        _hudCam.Camera.Far  = CameraData.DefaultFarPlane;
+        _hudCam.IsInUse     = true;
+        _hudCam.SetZoomDefault( Zoom );
+
+        // Set initial camera position
+        _hudCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
+        _hudCam.Update();
     }
 
     private void CreateAssets()
@@ -264,12 +299,12 @@ public class MainGame : Game
 
     private void CreateStage()
     {
-        if ( _spriteCam == null )
+        if ( _hudCam == null )
         {
-            throw new InvalidOperationException( "HUD camera must be created before creating the stage!" );
+            throw new InvalidOperationException( "STAGE camera must be created before creating the stage!" );
         }
 
-        _stage = new Stage( _spriteCam.Viewport );
+        _stage = new Stage( _hudCam.Viewport );
 
         CreateSkinActors();
 //        CreateStyleRegistryActors();
@@ -279,7 +314,7 @@ public class MainGame : Game
 
     private void CreateSkinActors()
     {
-        const bool HudActor             = false;
+        const bool HudActor             = true;
         const bool WindowActor          = false;
         const bool ButtonActor          = false;
         const bool TextButtonActor      = false;
@@ -304,13 +339,14 @@ public class MainGame : Game
 
         if ( WindowActor )
         {
-            var windowStyle = new WindowStyle
-            {
-                TitleFont      = _font,
-                TitleFontColor = Color.White,
-                Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
-            };
-            var windowActor = new Window( "Window Title", windowStyle )
+//            var windowStyle = new WindowStyle
+//            {
+//                TitleFont      = _font,
+//                TitleFontColor = Color.White,
+//                Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
+//            };
+//            var windowActor = new Window( "Window Title", windowStyle )
+            var windowActor = new Window( "Window Title", skin, "default" )
             {
                 IsVisible = true,
             };
@@ -507,14 +543,14 @@ public class MainGame : Game
     private void CreateFont()
     {
         _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
-        _font.Cache?.Clear();
-        _font.Cache?.AddText( "THIS TEXT SHOULD BE RED!", 100, 100 );
+//        _font.Cache?.Clear();
+//        _font.Cache?.AddText( "THIS TEXT SHOULD BE RED!", 100, 100 );
 
-        FontDebug();
+//        FontDebug();
 
-        _font.Cache?.Tint( Color.Red );
-        
-        FontDebug();
+//        _font.Cache?.Tint( Color.Red );
+
+//        FontDebug();
     }
 
     private void FontDebug()
@@ -538,7 +574,7 @@ public class MainGame : Game
             Logger.Debug( $"csum: {csum}" );
         }
     }
-    
+
     private void CreateFreeTypeFont()
     {
 //        var generator = new FreeTypeFontGenerator( Engine.Files.Internal( Assets.AmbleRegular26Font ) );
@@ -554,29 +590,23 @@ public class MainGame : Game
     private void CreateSprites()
     {
         _sprite = new Sprite( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
+        _sprite.SetPosition( 100, 100 );
         _sprite.SetBounds();
         _sprite.SetOriginCenter();
-        _sprite.SetColor( Color.White );
-
-        _sprite2 = new Sprite( new TextureRegion( new Texture( Assets.PauseExitButton ) ) );
-        _sprite2.SetBounds();
-        _sprite2.SetOriginCenter();
-        _sprite2.SetColor( Color.White );
+        _sprite.DebugVertices();
     }
 
     private void CreateMap()
     {
-        #if CREATE_MAP
         _tmxMapLoader = new TmxMapLoader();
-        _tiledMap = _tmxMapLoader.Load( Assets.Room1Map );
-        _mapRenderer = new OrthogonalTiledMapRenderer( _tiledMap );
+        _tiledMap     = _tmxMapLoader.Load( Assets.Room1Map );
+        _mapRenderer  = new OrthogonalTiledMapRenderer( _tiledMap );
 
-        _mapWidth = _tiledMap.Properties.Get< int >( "width" );
+        _mapWidth =  _tiledMap.Properties.Get< int >( "width" );
         _mapWidth *= _tiledMap.Properties.Get< int >( "tilewidth" );
 
-        _mapHeight = _tiledMap.Properties.Get< int >( "height" );
+        _mapHeight =  _tiledMap.Properties.Get< int >( "height" );
         _mapHeight *= _tiledMap.Properties.Get< int >( "tileheight" );
-        #endif
     }
 
     private void ScaleSprite()

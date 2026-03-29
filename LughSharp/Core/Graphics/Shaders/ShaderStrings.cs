@@ -85,8 +85,10 @@ public class ShaderStrings
         "layout (location = 0) out vec4 fragColor;\n" +
         "void main()\n" +
         "{\n" +
-        "    // Sample the texture and multiply by vertex color\n" +
-        "    fragColor = texture(u_texture, v_texCoords) * v_color;\n" +
+        "    // Sample the texture at the current UV coordinate\n" +
+        "    fragColor = texture(u_texture, v_texCoords);\n" +
+//        "    // Sample the texture and multiply by vertex color\n" +
+//        "    fragColor = texture(u_texture, v_texCoords) * v_color;\n" +
         "}\n";
 }
 

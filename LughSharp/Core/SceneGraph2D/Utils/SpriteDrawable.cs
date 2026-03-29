@@ -79,7 +79,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
             return;
         }
 
-        Color spriteColor = Sprite.Color;
+        Color spriteColor = Sprite.GetColor();
         float oldColor    = spriteColor.ToFloatBitsAbgr();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
@@ -89,7 +89,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
         Sprite.SetBounds( x, y, width, height );
         Sprite.Draw( batch );
 
-        Sprite.PackedColor = oldColor;
+        Sprite.SetPackedColor( oldColor );
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
             return;
         }
 
-        Color spriteColor = Sprite.Color;
+        Color spriteColor = Sprite.GetColor();
         float oldColor    = spriteColor.ToFloatBitsAbgr();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
@@ -116,7 +116,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
         Sprite.SetScale( scale.X, scale.Y );
         Sprite.SetBounds( region.X, region.Y, region.Width, region.Height );
         Sprite.Draw( batch );
-        Sprite.PackedColor = oldColor;
+        Sprite.SetPackedColor( oldColor );
     }
 
     /// <summary>

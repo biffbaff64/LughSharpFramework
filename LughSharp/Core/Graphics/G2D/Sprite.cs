@@ -38,48 +38,53 @@ namespace LughSharp.Core.Graphics.G2D;
 [PublicAPI]
 public class Sprite : TextureRegion
 {
-    public const int VertexSize = 2 + 1 + 2;
-    public const int SpriteSize = 4 * VertexSize;
+    public const int VertexSize = ( 2 + 1 + 2 );
+    public const int SpriteSize = ( 4 * VertexSize );
 
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     public float[] Vertices { get; set; } = new float[ SpriteSize ];
 
-    /// <returns> the width of the sprite, not accounting for scale. </returns>
-    public float Width { get; set; }
+    /// <summary>
+    /// The width of the sprite, in pixels, not accounting for scale.
+    /// </summary>
+    public virtual float Width { get; set; }
 
-    /// <returns> the height of the sprite, not accounting for scale. </returns>
-    public float Height { get; set; }
+    /// <summary>
+    /// The height of the sprite, in pixels, not accounting for scale.
+    /// </summary>
+    public virtual float Height { get; set; }
 
     /// <summary>
     /// The origin influences <see cref="SetPosition(float, float)"/>,
     /// <see cref="Rotation"/> and the expansion direction of scaling
     /// <see cref="SetScale(float, float)"/>
     /// </summary>
-    public float OriginX { get; set; }
+    public virtual float OriginX { get; set; }
 
     /// <summary>
     /// The origin influences <see cref="SetPosition(float, float)"/>,
     /// <see cref="Rotation"/> and the expansion direction of scaling
     /// <see cref="SetScale(float, float)"/>
     /// </summary>
-    public float OriginY { get; private set; }
+    public virtual float OriginY { get; set; }
 
     /// <summary>
     /// X scale of the sprite, independent of size set
     /// by <see cref="SetSize(float, float)"/>
     /// </summary>
-    public float ScaleX { get; private set; } = 1;
+    public virtual float ScaleX { get; set; } = 1f;
 
     /// <summary>
     /// Y scale of the sprite, independent of size set
     /// by <see cref="SetSize(float, float)"/>
     /// </summary>
-    public float ScaleY { get; private set; } = 1;
+    public virtual float ScaleY { get; set; } = 1f;
 
     // ========================================================================
-
-    private readonly Color _color = new( 1, 1, 1, 1 );
 
     private bool       _isDirty = true;
     private bool       _flipX;
@@ -89,6 +94,8 @@ public class Sprite : TextureRegion
     private Rectangle? _bounds;
     private float      _x;
     private float      _y;
+    private Color      _color       = Color.White;
+    private float      _packedColor = Color.WhiteFloatBits;
 
     // ========================================================================
 
@@ -100,7 +107,7 @@ public class Sprite : TextureRegion
     /// </summary>
     public Sprite()
     {
-        SetColor( 1, 1, 1, 1 );
+        SetColor( Color.White );
     }
 
     /// <summary>
@@ -131,26 +138,24 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Creates a sprite with width, height, and texture region equal
-    /// to the specified size.
+    /// Creates a sprite with width, height, and texture region equal to the
+    /// specified size.
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="srcX"></param>
     /// <param name="srcY"></param>
     /// <param name="srcWidth">
-    /// The width of the texture region.
-    /// May be negative to flip the sprite when drawn.
+    /// The width of the texture region, may be negative to flip the sprite when drawn.
     /// </param>
     /// <param name="srcHeight">
-    /// The height of the texture region.
-    /// May be negative to flip the sprite when drawn.
+    /// The height of the texture region, may be negative to flip the sprite when drawn.
     /// </param>
     public Sprite( Texture? texture, int srcX, int srcY, int srcWidth, int srcHeight )
     {
         Texture = texture ?? throw new ArgumentException( "texture cannot be null." );
 
         SetRegion( srcX, srcY, srcWidth, srcHeight );
-        SetColor( 1, 1, 1, 1 );
+        SetColor( Color.White );
 
         SetSizeAndOrigin( Math.Abs( srcWidth ), Math.Abs( srcHeight ) );
     }
@@ -163,7 +168,7 @@ public class Sprite : TextureRegion
     public Sprite( TextureRegion region )
     {
         SetRegion( region );
-        SetColor( 1, 1, 1, 1 );
+        SetColor( Color.White );
 
         SetSizeAndOrigin( region.GetRegionWidth(), region.GetRegionHeight() );
     }
@@ -186,7 +191,7 @@ public class Sprite : TextureRegion
     public Sprite( TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight )
     {
         SetRegion( region, srcX, srcY, srcWidth, srcHeight );
-        SetColor( 1, 1, 1, 1 );
+        SetColor( Color.White );
 
         SetSizeAndOrigin( Math.Abs( srcWidth ), Math.Abs( srcHeight ) );
     }
@@ -200,15 +205,13 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Helper method for constructors which allows calls to virtual
-    /// methods which cannot be called from constructors.
     /// </summary>
     /// <param name="srcWidth"></param>
     /// <param name="srcHeight"></param>
     private void SetSizeAndOrigin( int srcWidth, int srcHeight )
     {
         SetSize( srcWidth, srcHeight );
-        SetOrigin( Width / 2, Height / 2 );
+        SetOrigin( srcWidth / 2f, srcHeight / 2f );
     }
 
     /// <summary>
@@ -225,7 +228,6 @@ public class Sprite : TextureRegion
 
         try
         {
-            // Copy vertices array
             Array.Copy( sprite.Vertices, 0, Vertices, 0, SpriteSize );
         }
         catch ( ArgumentException ex )
@@ -233,7 +235,6 @@ public class Sprite : TextureRegion
             throw new InvalidOperationException( "Failed to copy vertices array.", ex );
         }
 
-        // Assign properties
         Texture  = sprite.Texture;
         U        = sprite.U;
         V        = sprite.V;
@@ -250,8 +251,7 @@ public class Sprite : TextureRegion
         ScaleY   = sprite.ScaleY;
         _isDirty = sprite._isDirty;
 
-        // Copy color
-        _color.Set( sprite._color );
+        _color.Set( sprite.GetColor() );
 
         SetRegionWidth( sprite.GetRegionWidth() );
         SetRegionHeight( sprite.GetRegionHeight() );
@@ -352,10 +352,10 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Sets the position where the sprite will be drawn. If origin, rotation, or scale are changed, it is slightly more
-    /// efficient
-    /// to set the position after those operations. If both position and size are to be changed, it is better to use
-    /// <see cref="SetBounds(float, float, float, float)"/>.
+    /// Sets the position where the sprite will be drawn. If origin, rotation,
+    /// or scale are changed, it is slightly more efficient to set the position
+    /// after those operations. If both position and size are to be changed,
+    /// it is better to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
     public virtual void SetPosition( float x, float y )
     {
@@ -424,8 +424,8 @@ public class Sprite : TextureRegion
 
     /// <summary>
     /// Sets the x position relative to the current position where the sprite will
-    /// be drawn. If origin, rotation, or scale are
-    /// changed, it is slightly more efficient to translate after those operations.
+    /// be drawn. If origin, rotation, or scale are changed, it is slightly more
+    /// efficient to translate after those operations.
     /// </summary>
     public void TranslateX( float xAmount )
     {
@@ -439,7 +439,7 @@ public class Sprite : TextureRegion
         if ( ( Rotation != 0 ) || ScaleX is not 1 || ScaleY is not 1 )
         {
             _isDirty = true;
-
+            
             return;
         }
 
@@ -509,37 +509,6 @@ public class Sprite : TextureRegion
 
         Vertices[ IBatch.X4 ] += xAmount; // Bottom right
         Vertices[ IBatch.Y4 ] += yAmount;
-    }
-
-    /// <summary>
-    /// Sets the color used to tint this sprite.
-    /// Default is <see cref="Colors.Color.White"/>.
-    /// </summary>
-    public void SetColor( Color tint )
-    {
-        Color.Set( tint );
-
-        float color = tint.ToFloatBitsAbgr();
-
-        Vertices[ IBatch.C1 ] = color;
-        Vertices[ IBatch.C2 ] = color;
-        Vertices[ IBatch.C3 ] = color;
-        Vertices[ IBatch.C4 ] = color;
-    }
-
-    /// <summary>
-    /// Sets the color used to tint this sprite.
-    /// </summary>
-    public void SetColor( float r, float g, float b, float a )
-    {
-        Color.Set( r, g, b, a );
-
-        float color = Color.ToFloatBitsAbgr();
-
-        Vertices[ IBatch.C1 ] = color;
-        Vertices[ IBatch.C2 ] = color;
-        Vertices[ IBatch.C3 ] = color;
-        Vertices[ IBatch.C4 ] = color;
     }
 
     /// <summary>
@@ -619,9 +588,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Sets the sprite's scale for both X and Y uniformly. The sprite
-    /// scales out from the origin. This will not affect the values
-    /// returned by <see cref="Width"/> and <see cref="Height"/>
+    /// Sets the sprite's scale for both X and Y uniformly. The sprite scales
+    /// out from the origin. This will not affect the values returned by
+    /// <see cref="Width"/> and <see cref="Height"/>
     /// </summary>
     public void SetScale( float scaleXY )
     {
@@ -644,7 +613,7 @@ public class Sprite : TextureRegion
 
     /// <summary>
     /// Sets the sprite's scale relative to the current scale. for example:
-    /// original scale 2 -> sprite.scale(4) -> final scale 6.
+    /// <c>original scale 2 -> sprite.scale(4) -> final scale 6.</c>
     /// <para>
     /// The sprite scales out from the origin. This will not affect the values
     /// returned by <see cref="Width"/> and <see cref="Height"/>
@@ -739,48 +708,6 @@ public class Sprite : TextureRegion
         }
 
         return Vertices;
-    }
-
-    /// <summary>
-    /// Returns the bounding axis aligned <see cref="Rectangle"/> that bounds this
-    /// sprite. The rectangles x and y coordinates describe its bottom left corner.
-    /// If you change the position or size of the sprite, you have to fetch the
-    /// triangle again for it to be recomputed.
-    /// </summary>
-    /// <returns> the bounding Rectangle </returns>
-    public Rectangle GetBoundingRectangle()
-    {
-        float[] vertices = GetVertices();
-
-        float minx = vertices[ IBatch.X1 ];
-        float miny = vertices[ IBatch.Y1 ];
-        float maxx = vertices[ IBatch.X1 ];
-        float maxy = vertices[ IBatch.Y1 ];
-
-        minx = minx > vertices[ IBatch.X2 ] ? vertices[ IBatch.X2 ] : minx;
-        minx = minx > vertices[ IBatch.X3 ] ? vertices[ IBatch.X3 ] : minx;
-        minx = minx > vertices[ IBatch.X4 ] ? vertices[ IBatch.X4 ] : minx;
-
-        maxx = maxx < vertices[ IBatch.X2 ] ? vertices[ IBatch.X2 ] : maxx;
-        maxx = maxx < vertices[ IBatch.X3 ] ? vertices[ IBatch.X3 ] : maxx;
-        maxx = maxx < vertices[ IBatch.X4 ] ? vertices[ IBatch.X4 ] : maxx;
-
-        miny = miny > vertices[ IBatch.Y2 ] ? vertices[ IBatch.Y2 ] : miny;
-        miny = miny > vertices[ IBatch.Y3 ] ? vertices[ IBatch.Y3 ] : miny;
-        miny = miny > vertices[ IBatch.Y4 ] ? vertices[ IBatch.Y4 ] : miny;
-
-        maxy = maxy < vertices[ IBatch.Y2 ] ? vertices[ IBatch.Y2 ] : maxy;
-        maxy = maxy < vertices[ IBatch.Y3 ] ? vertices[ IBatch.Y3 ] : maxy;
-        maxy = maxy < vertices[ IBatch.Y4 ] ? vertices[ IBatch.Y4 ] : maxy;
-
-        _bounds ??= new Rectangle();
-
-        _bounds.X      = minx;
-        _bounds.Y      = miny;
-        _bounds.Width  = maxx - minx;
-        _bounds.Height = maxy - miny;
-
-        return _bounds;
     }
 
     public void Draw( IBatch batch )
@@ -897,25 +824,6 @@ public class Sprite : TextureRegion
 
     // ========================================================================
 
-    public void DebugVertices()
-    {
-        Logger.Debug( "Sprite Vertices:" );
-
-        for ( var i = 0; i < 20; i++ )
-        {
-            if ( i is 2 or 7 or 12 or 17 )
-            {
-                Logger.Debug( $"Vertices[{i}]: {( uint )Vertices[ i ]:X}" );
-            }
-            else
-            {
-                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
-            }
-        }
-    }
-
-    // ========================================================================
-
     public override void SetU( float u )
     {
         base.SetU( u );
@@ -949,63 +857,45 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Sets the color of this sprite, expanding the alpha from 0-254 to 0-255.
+    /// Returns the bounding axis aligned <see cref="Rectangle"/> that bounds this
+    /// sprite. The rectangles x and y coordinates describe its bottom left corner.
+    /// If you change the position or size of the sprite, you have to fetch the
+    /// triangle again for it to be recomputed.
     /// </summary>
-    public float PackedColor
+    /// <returns> the bounding Rectangle </returns>
+    public Rectangle GetBoundingRectangle()
     {
-        set
-        {
-            Color color = Color;
+        float[] vertices = GetVertices();
 
-            Graphics.Color.Abgr8888ToColor( ref color, value );
+        float minx = vertices[ IBatch.X1 ];
+        float miny = vertices[ IBatch.Y1 ];
+        float maxx = vertices[ IBatch.X1 ];
+        float maxy = vertices[ IBatch.Y1 ];
 
-            Vertices[ IBatch.C1 ] = value;
-            Vertices[ IBatch.C2 ] = value;
-            Vertices[ IBatch.C3 ] = value;
-            Vertices[ IBatch.C4 ] = value;
-        }
-    }
+        minx = minx > vertices[ IBatch.X2 ] ? vertices[ IBatch.X2 ] : minx;
+        minx = minx > vertices[ IBatch.X3 ] ? vertices[ IBatch.X3 ] : minx;
+        minx = minx > vertices[ IBatch.X4 ] ? vertices[ IBatch.X4 ] : minx;
 
-    /// <summary>
-    /// Returns the bounding axis aligned <see cref="Rectangle"/> that
-    /// bounds this sprite. The rectangles x and y coordinates describe its
-    /// bottom left corner. If you change the position or size of the sprite,
-    /// you must fetch the triangle again for it to be recomputed.
-    /// </summary>
-    public Rectangle BoundingRectangle
-    {
-        get
-        {
-            float minx = Vertices[ IBatch.X1 ];
-            float miny = Vertices[ IBatch.Y1 ];
-            float maxx = Vertices[ IBatch.X1 ];
-            float maxy = Vertices[ IBatch.Y1 ];
+        maxx = maxx < vertices[ IBatch.X2 ] ? vertices[ IBatch.X2 ] : maxx;
+        maxx = maxx < vertices[ IBatch.X3 ] ? vertices[ IBatch.X3 ] : maxx;
+        maxx = maxx < vertices[ IBatch.X4 ] ? vertices[ IBatch.X4 ] : maxx;
 
-            minx = minx > Vertices[ IBatch.X2 ] ? Vertices[ IBatch.X2 ] : minx;
-            minx = minx > Vertices[ IBatch.X3 ] ? Vertices[ IBatch.X3 ] : minx;
-            minx = minx > Vertices[ IBatch.X4 ] ? Vertices[ IBatch.X4 ] : minx;
+        miny = miny > vertices[ IBatch.Y2 ] ? vertices[ IBatch.Y2 ] : miny;
+        miny = miny > vertices[ IBatch.Y3 ] ? vertices[ IBatch.Y3 ] : miny;
+        miny = miny > vertices[ IBatch.Y4 ] ? vertices[ IBatch.Y4 ] : miny;
 
-            maxx = maxx < Vertices[ IBatch.X2 ] ? Vertices[ IBatch.X2 ] : maxx;
-            maxx = maxx < Vertices[ IBatch.X3 ] ? Vertices[ IBatch.X3 ] : maxx;
-            maxx = maxx < Vertices[ IBatch.X4 ] ? Vertices[ IBatch.X4 ] : maxx;
+        maxy = maxy < vertices[ IBatch.Y2 ] ? vertices[ IBatch.Y2 ] : maxy;
+        maxy = maxy < vertices[ IBatch.Y3 ] ? vertices[ IBatch.Y3 ] : maxy;
+        maxy = maxy < vertices[ IBatch.Y4 ] ? vertices[ IBatch.Y4 ] : maxy;
 
-            miny = miny > Vertices[ IBatch.Y2 ] ? Vertices[ IBatch.Y2 ] : miny;
-            miny = miny > Vertices[ IBatch.Y3 ] ? Vertices[ IBatch.Y3 ] : miny;
-            miny = miny > Vertices[ IBatch.Y4 ] ? Vertices[ IBatch.Y4 ] : miny;
+        _bounds ??= new Rectangle();
 
-            maxy = maxy < Vertices[ IBatch.Y2 ] ? Vertices[ IBatch.Y2 ] : maxy;
-            maxy = maxy < Vertices[ IBatch.Y3 ] ? Vertices[ IBatch.Y3 ] : maxy;
-            maxy = maxy < Vertices[ IBatch.Y4 ] ? Vertices[ IBatch.Y4 ] : maxy;
+        _bounds.X      = minx;
+        _bounds.Y      = miny;
+        _bounds.Width  = maxx - minx;
+        _bounds.Height = maxy - miny;
 
-            field ??= new Rectangle();
-
-            field.X      = minx;
-            field.Y      = miny;
-            field.Width  = maxx - minx;
-            field.Height = maxy - miny;
-
-            return field;
-        }
+        return _bounds;
     }
 
     /// <summary>
@@ -1018,7 +908,7 @@ public class Sprite : TextureRegion
         {
             _color.A = value;
 
-            float color = Color.ToFloatBitsAbgr();
+            float color = _color.ToFloatBitsAbgr();
 
             Vertices[ IBatch.C1 ] = color;
             Vertices[ IBatch.C2 ] = color;
@@ -1042,32 +932,77 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Returns the color of this sprite. If the returned instance is
-    /// manipulated, <see cref="SetColor(float,float,float,float)"/> must be
-    /// called afterward.
+    /// Returns the color of this sprite. If the returned instance is manipulated,
+    /// <see cref="SetColor(Color)"/> must be called afterward.
     /// </summary>
-    public Color Color
+    public Color GetColor()
     {
-        get
+        return _color;
+    }
+
+    /// <summary>
+    /// Sets the color used to tint this sprite.
+    /// Default is <see cref="Color.White"/>.
+    /// </summary>
+    public void SetColor( Color tint )
+    {
+        _color.Set( tint );
+
+        float color = tint.ToFloatBitsAbgr();
+
+        Vertices[ IBatch.C1 ] = color;
+        Vertices[ IBatch.C2 ] = color;
+        Vertices[ IBatch.C3 ] = color;
+        Vertices[ IBatch.C4 ] = color;
+    }
+
+    /// <summary>
+    /// Sets the color used to tint this sprite.
+    /// </summary>
+    public void SetColor( float r, float g, float b, float a )
+    {
+        _color.Set( r, g, b, a );
+
+        float color = _color.ToFloatBitsAbgr();
+
+        Vertices[ IBatch.C1 ] = color;
+        Vertices[ IBatch.C2 ] = color;
+        Vertices[ IBatch.C3 ] = color;
+        Vertices[ IBatch.C4 ] = color;
+    }
+
+    /// <summary>
+    /// Sets the color of this sprite, expanding the alpha from 0-254 to 0-255.
+    /// </summary>
+    public void SetPackedColor( float packedColor )
+    {
+        if ( Math.Abs( packedColor - this._packedColor ) > NumberUtils.FloatTolerance
+          || ( ( packedColor == 0f ) && ( this._packedColor == 0f )
+                                     && ( NumberUtils.FloatToIntBits( packedColor )
+                                       != NumberUtils.FloatToIntBits( this._packedColor ) ) ) )
         {
-            int intBits = NumberUtils.FloatToIntColor( Vertices[ IBatch.C1 ] );
-
-            Color color = _color;
-
-            color.R = ( intBits & 0xff ) / 255f;
-            color.G = ( ( intBits >>> 8 ) & 0xff ) / 255f;
-            color.B = ( ( intBits >>> 16 ) & 0xff ) / 255f;
-            color.A = ( ( intBits >>> 24 ) & 0xff ) / 255f;
-
-            return color;
+            this._packedColor = packedColor;
+            
+            Color.Abgr8888ToColor( ref _color, packedColor );
+            
+            Vertices[ IBatch.C1 ] = packedColor;
+            Vertices[ IBatch.C2 ] = packedColor;
+            Vertices[ IBatch.C3 ] = packedColor;
+            Vertices[ IBatch.C4 ] = packedColor;
         }
     }
 
+    /// <summary>
+    /// The X co-ordinate of the bottom left corner of the sprite.
+    /// </summary>
     public virtual float GetX()
     {
         return _x;
     }
 
+    /// <summary>
+    /// The Y co-ordinate of the bottom left corner of the sprite.
+    /// </summary>
     public virtual float GetY()
     {
         return _y;
@@ -1083,15 +1018,13 @@ public class Sprite : TextureRegion
     {
         _x = x;
 
-        if ( _isDirty )
-        {
-            return;
-        }
-
         if ( ( Rotation != 0 ) || ScaleX is not 1 || ScaleY is not 1 )
         {
             _isDirty = true;
+        }
 
+        if ( _isDirty )
+        {
             return;
         }
 
@@ -1127,6 +1060,38 @@ public class Sprite : TextureRegion
         Vertices[ IBatch.Y2 ] = y + Height;
         Vertices[ IBatch.Y3 ] = y + Height;
         Vertices[ IBatch.Y4 ] = y;
+    }
+
+    // ========================================================================
+
+    public void DebugVertices()
+    {
+        Logger.Divider();
+        Logger.Debug( "Sprite Vertices:" );
+
+        Logger.Debug( $"Vertices[  0 ]: {Vertices[ IBatch.X1 ]} : X1" );
+        Logger.Debug( $"Vertices[  1 ]: {Vertices[ IBatch.Y1 ]} : Y1" );
+        Logger.Debug( $"Vertices[  2 ]: {Vertices[ IBatch.C1 ]} : C1" );
+        Logger.Debug( $"Vertices[  3 ]: {Vertices[ IBatch.U1 ]} : U1" );
+        Logger.Debug( $"Vertices[  4 ]: {Vertices[ IBatch.V1 ]} : V1" );
+
+        Logger.Debug( $"Vertices[  5 ]: {Vertices[ IBatch.X2 ]} : X2" );
+        Logger.Debug( $"Vertices[  6 ]: {Vertices[ IBatch.Y2 ]} : Y2" );
+        Logger.Debug( $"Vertices[  7 ]: {Vertices[ IBatch.C2 ]} : C2" );
+        Logger.Debug( $"Vertices[  8 ]: {Vertices[ IBatch.U2 ]} : U2" );
+        Logger.Debug( $"Vertices[  9 ]: {Vertices[ IBatch.V2 ]} : V2" );
+
+        Logger.Debug( $"Vertices[ 10 ]: {Vertices[ IBatch.X3 ]} : X3" );
+        Logger.Debug( $"Vertices[ 11 ]: {Vertices[ IBatch.Y3 ]} : Y3" );
+        Logger.Debug( $"Vertices[ 12 ]: {Vertices[ IBatch.C3 ]} : C3" );
+        Logger.Debug( $"Vertices[ 13 ]: {Vertices[ IBatch.U3 ]} : U3" );
+        Logger.Debug( $"Vertices[ 14 ]: {Vertices[ IBatch.V3 ]} : V3" );
+
+        Logger.Debug( $"Vertices[ 15 ]: {Vertices[ IBatch.X4 ]} : X4" );
+        Logger.Debug( $"Vertices[ 16 ]: {Vertices[ IBatch.Y4 ]} : Y4" );
+        Logger.Debug( $"Vertices[ 17 ]: {Vertices[ IBatch.C4 ]} : C4" );
+        Logger.Debug( $"Vertices[ 18 ]: {Vertices[ IBatch.U4 ]} : U4" );
+        Logger.Debug( $"Vertices[ 19 ]: {Vertices[ IBatch.V4 ]} : V4" );
     }
 }
 
