@@ -68,6 +68,29 @@ public abstract class NumberUtils
     }
 
     /// <summary>
+    /// Converts the given floating-point value to its unsigned integer bit
+    /// representation.
+    /// </summary>
+    /// <param name="value"> The floating-point value to convert. </param>
+    /// <returns>
+    /// The unsigned integer bit representation of the floating-point value.
+    /// </returns>
+    public static uint FloatToUintBits( float value )
+    {
+        uint result = BitConverter.SingleToUInt32Bits( value );
+
+        // Check for NaN based on values of bit fields, maximum
+        // exponent and nonzero significand.
+        if ( ( ( result & ExpBitMask ) == ExpBitMask )
+          && ( ( result & SignifBitMask ) != 0 ) )
+        {
+            result = 0x7fc00000;
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Converts the given floating-point value to its raw integer bit representation.
     /// </summary>
     /// <param name="value"> The floating-point value to convert. </param>

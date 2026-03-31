@@ -154,12 +154,40 @@ public class TextureRegion
     #region SetRegion methods
 
     /// <summary>
+    /// Sets texture region coordinates and calculates region dimensions,
+    /// ensuring the texture is not null and applying modifications to UVs
+    /// to avoid filtering artifacts for 1x1 regions.
+    /// </summary>
+    /// <param name="u">The u-coordinate of the region's bottom-left corner in texture space.</param>
+    /// <param name="v">The v-coordinate of the region's bottom-left corner in texture space.</param>
+    /// <param name="u2">The u-coordinate of the region's top-right corner in texture space.</param>
+    /// <param name="v2">The v-coordinate of the region's top-right corner in texture space.</param>
+    /// <exception cref="RuntimeException">Thrown if the texture is null.</exception>
+    protected void SetRegionSafe( float u, float v, float u2, float v2 )
+    {
+        SetRegion( u, v, u2, v2 );
+    }
+
+    /// <summary>
     /// </summary>
     /// <param name="texture"></param>
     public void SetRegion( Texture texture )
     {
         Texture = texture;
         SetRegion( 0, 0, texture.Width, texture.Height );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="region"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    public void SetRegion( TextureRegion region, int x, int y, int width, int height )
+    {
+        Texture = region.Texture;
+        SetRegion( region.RegionX + x, region.RegionY + y, width, height );
     }
 
     /// <summary>
@@ -187,7 +215,7 @@ public class TextureRegion
         float invTexWidth  = 1f / Texture.Width;
         float invTexHeight = 1f / Texture.Height;
 
-        SetRegionSafe( x * invTexWidth,
+        SetRegion( x * invTexWidth,
                        y * invTexHeight,
                        ( x + width ) * invTexWidth,
                        ( y + height ) * invTexHeight );
@@ -197,25 +225,20 @@ public class TextureRegion
     }
 
     /// <summary>
-    /// Non-Virtual version of <see cref="SetRegion( float, float, float, float )"/>,
-    /// enabling this to be called from constructors.
     /// </summary>
-    public virtual void SetRegion( float u, float v, float u2, float v2 )
+    /// <param name="region"></param>
+    public void SetRegion( TextureRegion region )
     {
-        SetRegionSafe( u, v, u2, v2 );
+        Texture = region.Texture;
+        SetRegion( region.U, region.V, region.U2, region.V2 );
     }
 
     /// <summary>
-    /// Sets texture region coordinates and calculates region dimensions,
-    /// ensuring the texture is not null and applying modifications to UVs
-    /// to avoid filtering artifacts for 1x1 regions.
+    /// Sets the texture region using normalized texture coordinates. Note that the V coordinates
+    /// are inverted to match OpenGL's texture coordinate system where V=0 is at the
+    /// bottom and V=1 is at the top. This ensures textures are not rendered upside down.'
     /// </summary>
-    /// <param name="u">The u-coordinate of the region's bottom-left corner in texture space.</param>
-    /// <param name="v">The v-coordinate of the region's bottom-left corner in texture space.</param>
-    /// <param name="u2">The u-coordinate of the region's top-right corner in texture space.</param>
-    /// <param name="v2">The v-coordinate of the region's top-right corner in texture space.</param>
-    /// <exception cref="RuntimeException">Thrown if the texture is null.</exception>
-    protected void SetRegionSafe( float u, float v, float u2, float v2 )
+    public virtual void SetRegion( float u, float v, float u2, float v2 )
     {
         if ( Texture == null )
         {
@@ -243,37 +266,15 @@ public class TextureRegion
             v2 -= yAdjustment;
         }
 
-        U  = u;
-        V  = v;
-        U2 = u2;
-        V2 = v2;
+        this.U  = u;
+        this.V  = v;
+        this.U2 = u2;
+        this.V2 = v2;
 
         if ( V > V2 )
         {
             Logger.Debug( $"V: {V} > V2: {V2}, this region will be Y flipped" );
         }
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="region"></param>
-    public void SetRegion( TextureRegion region )
-    {
-        Texture = region.Texture;
-        SetRegionSafe( region.U, region.V, region.U2, region.V2 );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="region"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    public void SetRegion( TextureRegion region, int x, int y, int width, int height )
-    {
-        Texture = region.Texture;
-        SetRegion( region.RegionX + x, region.RegionY + y, width, height );
     }
 
     #endregion SetRegion methods
@@ -625,6 +626,15 @@ public class TextureRegion
 
         // The property setters for V/V2 will then implicitly update RegionHeight
         // when its getter is called.
+    }
+
+    /// <summary>
+    /// Returns a string that represents the current object.
+    /// </summary>
+    /// <returns>A string that represents the current object.</returns>
+    public override string ToString()
+    {
+        return $"Width: {_regionWidth}, Height: {_regionHeight}, U: {U}, V: {V}, U2: {U2}, V2: {V2}";
     }
 }
 

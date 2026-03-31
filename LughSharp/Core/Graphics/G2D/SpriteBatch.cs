@@ -92,7 +92,7 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    private readonly Color  _color      = Graphics.Color.Red;
+    private readonly Color  _color      = new( 1f, 1f, 1f, 1f );
     private readonly object _lockObject = new();
 
     // Prevent reallocation of common vectors
@@ -103,16 +103,16 @@ public class SpriteBatch : IBatch
     private ShaderProgram? _shader;
     private Mesh?          _mesh;
 
-    private uint _vao;
-    private uint _vbo;
-    private uint _ebo;
-    private int  _nullTextureCount;
-    private int  _currentTextureIndex;
-    private int  _maxTextureUnits;
-    private int  _maxVertices;
-    private int  _combinedMatrixLocation;
-    private int  _textureLocation;
-    private bool _ownsShader;
+    private uint _vao;                    // Vertex Array Object
+    private uint _vbo;                    // Vertex Buffer Object
+    private uint _ebo;                    // Element Buffer Object
+    private int  _nullTextureCount;       // Count of null textures in the batch.
+    private int  _currentTextureIndex;    //
+    private int  _maxTextureUnits;        //
+    private int  _maxVertices;            //
+    private int  _combinedMatrixLocation; //
+    private int  _textureLocation;        //
+    private bool _ownsShader;             // Whether the shader was created here, or passed in.
     private bool _originalDepthMask;
     private bool _disposed;
     private bool _initialBlendingState;
@@ -186,7 +186,7 @@ public class SpriteBatch : IBatch
         CreateVao();
         CreateVbo( size );
         SetupVertexAttributes( _shader ); // This links _vbo to _vao
-        CreateEbo( size ); // This links _ebo to _vao
+        CreateEbo( size );                // This links _ebo to _vao
 
         Engine.GL.BindVertexArray( 0 );
 
@@ -351,7 +351,8 @@ public class SpriteBatch : IBatch
                                  _originalColorMaskB,
                                  _originalColorMaskA );
 
-            // Restore to the "Standard" engine default (usually true for 3D, false for 2D).
+            // Restore to the "Standard" engine default
+            // (usually true for 3D, false for 2D).
             Engine.GL.DepthMask( true );
 
             // Restore the EnableCap.DepthTest state we saved in Begin()
@@ -683,6 +684,7 @@ public class SpriteBatch : IBatch
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
+//TODO:
 //        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/GdxDefault.glsl.vert" );
 //        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/GdxDefault.glsl.frag" );
 
@@ -759,7 +761,7 @@ public class SpriteBatch : IBatch
         if ( !textureList.Contains( texture.GetType() ) )
         {
             Logger.Debug( $"Invalid Texture: {texture.GetType().Name}" );
-            
+
             throw new RuntimeException( "Invalid image type" );
         }
     }
@@ -1914,7 +1916,7 @@ public class SpriteBatch : IBatch
     public Color Color
     {
         get => _color;
-        set => SetColor( value.R, value.G, value.B, value.A );
+        set => _color.Set( value.R, value.G, value.B, value.A );
     }
 
     /// <summary>

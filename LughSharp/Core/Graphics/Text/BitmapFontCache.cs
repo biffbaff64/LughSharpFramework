@@ -411,10 +411,6 @@ public class BitmapFontCache
     {
         List< TextureRegion > regions = Font.GetRegions();
 
-        // Save the batch's current color and set it to white so vertex colors are used as-is
-        Color originalColor = spriteBatch.Color;
-        spriteBatch.Color = Color.White;
-
         for ( int j = 0, n = _pageVertices.Length; j < n; j++ )
         {
             if ( _idx[ j ] > 0 )
@@ -426,9 +422,6 @@ public class BitmapFontCache
                 }
             }
         }
-
-        // Restore the batch's original color
-        spriteBatch.Color = originalColor;
     }
 
     /// <summary>

@@ -27,6 +27,7 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Images;
+using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -167,7 +168,7 @@ public class Sprite : TextureRegion
     /// </summary>
     public Sprite( TextureRegion region )
     {
-        SetRegion( region );
+        SetRegion( region, 0, 0, region.GetRegionWidth(), region.GetRegionHeight() );
         SetColor( Color.White );
 
         SetSizeAndOrigin( region.GetRegionWidth(), region.GetRegionHeight() );
@@ -212,6 +213,29 @@ public class Sprite : TextureRegion
     {
         SetSize( srcWidth, srcHeight );
         SetOrigin( srcWidth / 2f, srcHeight / 2f );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="u"></param>
+    /// <param name="v"></param>
+    /// <param name="u2"></param>
+    /// <param name="v2"></param>
+    public override void SetRegion( float u, float v, float u2, float v2 )
+    {
+        base.SetRegion( u, v, u2, v2 );
+
+        Vertices[ IBatch.U1 ] = u;
+        Vertices[ IBatch.V1 ] = v2;
+
+        Vertices[ IBatch.U2 ] = u;
+        Vertices[ IBatch.V2 ] = v;
+
+        Vertices[ IBatch.U3 ] = u2;
+        Vertices[ IBatch.V3 ] = v;
+
+        Vertices[ IBatch.U4 ] = u2;
+        Vertices[ IBatch.V4 ] = v2;
     }
 
     /// <summary>
@@ -439,7 +463,7 @@ public class Sprite : TextureRegion
         if ( ( Rotation != 0 ) || ScaleX is not 1 || ScaleY is not 1 )
         {
             _isDirty = true;
-            
+
             return;
         }
 
@@ -730,29 +754,6 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// </summary>
-    /// <param name="u"></param>
-    /// <param name="v"></param>
-    /// <param name="u2"></param>
-    /// <param name="v2"></param>
-    public override void SetRegion( float u, float v, float u2, float v2 )
-    {
-        base.SetRegion( u, v, u2, v2 );
-
-        Vertices[ IBatch.U1 ] = u;
-        Vertices[ IBatch.V1 ] = v2;
-
-        Vertices[ IBatch.U2 ] = u;
-        Vertices[ IBatch.V2 ] = v;
-
-        Vertices[ IBatch.U3 ] = u2;
-        Vertices[ IBatch.V3 ] = v;
-
-        Vertices[ IBatch.U4 ] = u2;
-        Vertices[ IBatch.V4 ] = v2;
-    }
-
-    /// <summary>
     /// Set the sprite's flip state regardless of current condition.
     /// </summary>
     /// <param name="flipx"> the desired horizontal flip state </param>
@@ -908,7 +909,7 @@ public class Sprite : TextureRegion
         {
             _color.A = value;
 
-            float color = _color.ToFloatBitsAbgr();
+            float color = _color.ToFloatBitsRgba();
 
             Vertices[ IBatch.C1 ] = color;
             Vertices[ IBatch.C2 ] = color;
@@ -948,7 +949,7 @@ public class Sprite : TextureRegion
     {
         _color.Set( tint );
 
-        float color = tint.ToFloatBitsAbgr();
+        float color = tint.ToFloatBitsRgba();
 
         Vertices[ IBatch.C1 ] = color;
         Vertices[ IBatch.C2 ] = color;
@@ -963,7 +964,7 @@ public class Sprite : TextureRegion
     {
         _color.Set( r, g, b, a );
 
-        float color = _color.ToFloatBitsAbgr();
+        float color = _color.ToFloatBitsRgba();
 
         Vertices[ IBatch.C1 ] = color;
         Vertices[ IBatch.C2 ] = color;
@@ -982,9 +983,9 @@ public class Sprite : TextureRegion
                                        != NumberUtils.FloatToIntBits( this._packedColor ) ) ) )
         {
             this._packedColor = packedColor;
-            
-            Color.Abgr8888ToColor( ref _color, packedColor );
-            
+
+            Color.Rgba8888ToColor( ref _color, packedColor );
+
             Vertices[ IBatch.C1 ] = packedColor;
             Vertices[ IBatch.C2 ] = packedColor;
             Vertices[ IBatch.C3 ] = packedColor;
@@ -1018,13 +1019,15 @@ public class Sprite : TextureRegion
     {
         _x = x;
 
+        if ( _isDirty )
+        {
+            return;
+        }
+
         if ( ( Rotation != 0 ) || ScaleX is not 1 || ScaleY is not 1 )
         {
             _isDirty = true;
-        }
 
-        if ( _isDirty )
-        {
             return;
         }
 
@@ -1064,6 +1067,41 @@ public class Sprite : TextureRegion
 
     // ========================================================================
 
+    public void PrintVertices( BitmapFont font, int x, int y, IBatch batch )
+    {
+        string[] verticesMsgs =
+        {
+            $"vertices[  0 ]: {Vertices[ IBatch.X1 ]} : X1",
+            $"vertices[  1 ]: {Vertices[ IBatch.Y1 ]} : Y1",
+            $"vertices[  2 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C1 ] ):X} : C1",
+            $"vertices[  3 ]: {Vertices[ IBatch.U1 ]} : U1",
+            $"vertices[  4 ]: {Vertices[ IBatch.V1 ]} : V1",
+            $"vertices[  5 ]: {Vertices[ IBatch.X2 ]} : X2",
+            $"vertices[  6 ]: {Vertices[ IBatch.Y2 ]} : Y2",
+            $"vertices[  7 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C2 ] ):X} : C2",
+            $"vertices[  8 ]: {Vertices[ IBatch.U2 ]} : U2",
+            $"vertices[  9 ]: {Vertices[ IBatch.V2 ]} : V2",
+            $"vertices[ 10 ]: {Vertices[ IBatch.X3 ]} : X3",
+            $"vertices[ 11 ]: {Vertices[ IBatch.Y3 ]} : Y3",
+            $"vertices[ 12 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C3 ] ):X} : C3",
+            $"vertices[ 13 ]: {Vertices[ IBatch.U3 ]} : U3",
+            $"vertices[ 14 ]: {Vertices[ IBatch.V3 ]} : V3",
+            $"vertices[ 15 ]: {Vertices[ IBatch.X4 ]} : X4",
+            $"vertices[ 16 ]: {Vertices[ IBatch.Y4 ]} : Y4",
+            $"vertices[ 17 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C4 ] ):X} : C4",
+            $"vertices[ 18 ]: {Vertices[ IBatch.U4 ]} : U4",
+            $"vertices[ 19 ]: {Vertices[ IBatch.V4 ]} : V4",
+        };
+
+        foreach ( string verticesMsg in verticesMsgs )
+        {
+            font.Draw( batch, new GlyphLayout( font, verticesMsg ), x, y );
+            
+            // move down the screen 1 line
+            y -= 20;
+        }
+    }
+
     public void DebugVertices()
     {
         Logger.Divider();
@@ -1071,25 +1109,25 @@ public class Sprite : TextureRegion
 
         Logger.Debug( $"Vertices[  0 ]: {Vertices[ IBatch.X1 ]} : X1" );
         Logger.Debug( $"Vertices[  1 ]: {Vertices[ IBatch.Y1 ]} : Y1" );
-        Logger.Debug( $"Vertices[  2 ]: {Vertices[ IBatch.C1 ]} : C1" );
+        Logger.Debug( $"Vertices[  2 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C1 ] ):X} : C1" );
         Logger.Debug( $"Vertices[  3 ]: {Vertices[ IBatch.U1 ]} : U1" );
         Logger.Debug( $"Vertices[  4 ]: {Vertices[ IBatch.V1 ]} : V1" );
 
         Logger.Debug( $"Vertices[  5 ]: {Vertices[ IBatch.X2 ]} : X2" );
         Logger.Debug( $"Vertices[  6 ]: {Vertices[ IBatch.Y2 ]} : Y2" );
-        Logger.Debug( $"Vertices[  7 ]: {Vertices[ IBatch.C2 ]} : C2" );
+        Logger.Debug( $"Vertices[  7 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C2 ] ):X} : C2" );
         Logger.Debug( $"Vertices[  8 ]: {Vertices[ IBatch.U2 ]} : U2" );
         Logger.Debug( $"Vertices[  9 ]: {Vertices[ IBatch.V2 ]} : V2" );
 
         Logger.Debug( $"Vertices[ 10 ]: {Vertices[ IBatch.X3 ]} : X3" );
         Logger.Debug( $"Vertices[ 11 ]: {Vertices[ IBatch.Y3 ]} : Y3" );
-        Logger.Debug( $"Vertices[ 12 ]: {Vertices[ IBatch.C3 ]} : C3" );
+        Logger.Debug( $"Vertices[ 12 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C3 ] ):X} : C3" );
         Logger.Debug( $"Vertices[ 13 ]: {Vertices[ IBatch.U3 ]} : U3" );
         Logger.Debug( $"Vertices[ 14 ]: {Vertices[ IBatch.V3 ]} : V3" );
 
         Logger.Debug( $"Vertices[ 15 ]: {Vertices[ IBatch.X4 ]} : X4" );
         Logger.Debug( $"Vertices[ 16 ]: {Vertices[ IBatch.Y4 ]} : Y4" );
-        Logger.Debug( $"Vertices[ 17 ]: {Vertices[ IBatch.C4 ]} : C4" );
+        Logger.Debug( $"Vertices[ 17 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C4 ] ):X} : C4" );
         Logger.Debug( $"Vertices[ 18 ]: {Vertices[ IBatch.U4 ]} : U4" );
         Logger.Debug( $"Vertices[ 19 ]: {Vertices[ IBatch.V4 ]} : V4" );
     }

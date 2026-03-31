@@ -39,6 +39,8 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
 {
     private Sprite? _sprite;
 
+    // ========================================================================
+    
     /// <summary>
     /// Creates an uninitialized SpriteDrawable. The sprite must be set before use.
     /// </summary>
@@ -80,7 +82,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
         }
 
         Color spriteColor = Sprite.GetColor();
-        float oldColor    = spriteColor.ToFloatBitsAbgr();
+        float oldColor    = spriteColor.ToFloatBitsRgba();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
 
@@ -107,7 +109,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
         }
 
         Color spriteColor = Sprite.GetColor();
-        float oldColor    = spriteColor.ToFloatBitsAbgr();
+        float oldColor    = spriteColor.ToFloatBitsRgba();
 
         Sprite.SetColor( spriteColor.Mul( batch.Color ) );
 
@@ -150,3 +152,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
         return drawable;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

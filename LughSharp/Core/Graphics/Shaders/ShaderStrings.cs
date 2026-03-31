@@ -55,7 +55,6 @@ public class ShaderStrings
         "    v_texCoords = a_texCoord0;\n" +
         "    // --- COLOR UNPACKING ---\n" +
         "    // We treat the float bits as an integer, then extract the 4 bytes.\n" +
-        "    // This matches the LibGDX / SpriteBatch 'ColorPacked' format.\n" +
         "    uint rgba = floatBitsToUint(a_color);\n" +
         "    v_color = vec4(\n" +
         "        float((rgba & uint(0x000000FF))) / 255.0,         // Red\n" +
@@ -85,10 +84,8 @@ public class ShaderStrings
         "layout (location = 0) out vec4 fragColor;\n" +
         "void main()\n" +
         "{\n" +
-        "    // Sample the texture at the current UV coordinate\n" +
-        "    fragColor = texture(u_texture, v_texCoords);\n" +
-//        "    // Sample the texture and multiply by vertex color\n" +
-//        "    fragColor = texture(u_texture, v_texCoords) * v_color;\n" +
+        "    // Sample the texture and multiply by vertex color\n" +
+        "    fragColor = texture(u_texture, v_texCoords) * v_color;\n" +
         "}\n";
 }
 

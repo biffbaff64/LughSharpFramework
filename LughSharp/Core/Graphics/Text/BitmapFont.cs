@@ -559,7 +559,13 @@ public class BitmapFont
     /// <summary>
     /// Draws text at the specified position.
     /// </summary>
-    public GlyphLayout Draw( IBatch batch, string str, float x, float y, int targetWidth, Align halign, bool wrap )
+    public GlyphLayout Draw( IBatch batch,
+                             string str,
+                             float x,
+                             float y,
+                             int targetWidth,
+                             Align halign = Align.Left ,
+                             bool wrap = false )
     {
         Guard.Against.Null( Cache );
 

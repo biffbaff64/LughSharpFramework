@@ -26,8 +26,6 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Tests.Source;
 
-using NSubstitute;
-
 namespace Template.Source;
 
 [PublicAPI]
@@ -83,11 +81,11 @@ public class MainGame : Game
 
         CreateCameras();
         CreateAssets();
-        CreateStage();
-        CreateFont();
-        CreateFreeTypeFont();
-        CreateSprites();
-        CreateMap();
+        CreateStage();          // 
+        CreateFont();           // Done
+        CreateFreeTypeFont();   // 
+        CreateSprites();        // Done
+        CreateMap();            // 
 
         if ( _inputMultiplexer.Processors.Size > 0 )
         {
@@ -137,11 +135,13 @@ public class MainGame : Game
                 _spriteCam.Position.Z = 0;
                 _spriteCam.Update();
 
+                // Texture
                 if ( _image1 != null )
                 {
                     _spriteBatch.Draw( _image1, 300, 300 );
                 }
 
+                // TextureRegion
                 if ( _star != null )
                 {
                     _spriteBatch.Draw( _star, 400, 100 );
@@ -158,24 +158,23 @@ public class MainGame : Game
 
             // The Camera used for the Stage doesn't actually need updating
             // here, as the Stage will update it internally before drawing,
-            // but we'll update it here anyway to show that it can be updated
-            // here if needed.
+            // but we'll update it here anyway to test printing of BitmapFonts.
 
-//            if ( _hudCam is { IsInUse: true } )
-//            {
-//                _hudCam.Viewport?.Apply( true );
-//                _spriteBatch.SetProjectionMatrix( _hudCam.Camera.Combined );
-//                _spriteBatch.Begin();
-//
-//                _hudCam.Position.X = 0;
-//                _hudCam.Position.Y = 0;
-//                _hudCam.Position.Z = 0;
-//                _hudCam.Update();
-//
-//                _font?.Draw( _spriteBatch );
-//
-//                _spriteBatch.End();
-//            }
+            if ( _hudCam is { IsInUse: true } )
+            {
+                _hudCam.Viewport?.Apply( true );
+                _spriteBatch.SetProjectionMatrix( _hudCam.Camera.Combined );
+                _spriteBatch.Begin();
+
+                _hudCam.Position.X = 0;
+                _hudCam.Position.Y = 0;
+                _hudCam.Position.Z = 0;
+                _hudCam.Update();
+
+                _font?.Draw( _spriteBatch );
+
+                _spriteBatch.End();
+            }
         }
 
         // ----- Draw the Stage, if enabled -----
@@ -543,36 +542,9 @@ public class MainGame : Game
     private void CreateFont()
     {
         _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
-//        _font.Cache?.Clear();
-//        _font.Cache?.AddText( "THIS TEXT SHOULD BE RED!", 100, 100 );
-
-//        FontDebug();
-
-//        _font.Cache?.Tint( Color.Red );
-
-//        FontDebug();
-    }
-
-    private void FontDebug()
-    {
-        if ( _font?.Cache != null )
-        {
-            float[][] pageVertices = _font.Cache.GetPageVertices();
-
-            var csum = 0f;
-
-            Logger.Debug( $"pageVertices.Length: {pageVertices.Length}" );
-            Logger.Debug( $"pageVertices[ 0 ].Length: {pageVertices[ 0 ].Length}" );
-
-            // Just show the first 20 entries in the first page.
-            for ( var i = 0; i < 20; ++i )
-            {
-                Logger.Debug( $"pageVertices[ 0 ][ {i} ]: {pageVertices[ 0 ][ i ]}" );
-                csum += pageVertices[ 0 ][ i ];
-            }
-
-            Logger.Debug( $"csum: {csum}" );
-        }
+        _font.Cache?.Clear();
+        _font.Cache?.AddText( "THIS TEXT SHOULD BE RED!", 100, 100 );
+        _font.Cache?.Tint( Color.Red );
     }
 
     private void CreateFreeTypeFont()
@@ -590,10 +562,8 @@ public class MainGame : Game
     private void CreateSprites()
     {
         _sprite = new Sprite( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
-        _sprite.SetPosition( 100, 100 );
         _sprite.SetBounds();
         _sprite.SetOriginCenter();
-        _sprite.DebugVertices();
     }
 
     private void CreateMap()
