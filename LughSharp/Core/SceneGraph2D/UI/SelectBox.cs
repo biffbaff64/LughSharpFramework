@@ -57,6 +57,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class SelectBox< T > : Widget, IDisableable
     where T : notnull
 {

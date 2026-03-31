@@ -43,6 +43,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// patches define the image.
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class ImageButton : Button
 {
     public Scene2DImage Scene2DImage { get; }

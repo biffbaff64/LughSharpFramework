@@ -353,7 +353,7 @@ public class SpriteBatch : IBatch
 
             // Restore to the "Standard" engine default
             // (usually true for 3D, false for 2D).
-            Engine.GL.DepthMask( true );
+            Engine.GL.DepthMask( false );
 
             // Restore the EnableCap.DepthTest state we saved in Begin()
             if ( _originalDepthTestEnabled )
@@ -924,7 +924,7 @@ public class SpriteBatch : IBatch
         _vbo = Engine.GL.GenBuffer();
         Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
-        Vertices = new float[ size * VerticesPerSprite * Sprite.VertexSize ];
+        Vertices = new float[ size * VerticesPerSprite * Sprite2D.VertexSize ];
 
         Engine.GL.BufferData( BufferTarget.ArrayBuffer,
                               Vertices.Length * sizeof( float ),

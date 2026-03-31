@@ -584,7 +584,7 @@ public class ParticleEmitter
 
     private void ActivateParticle( int index )
     {
-        Sprite? sprite = SpriteMode switch
+        Sprite2D? sprite = SpriteMode switch
                          {
                              ParticleSpriteMode.Single   => Sprites.First(),
                              ParticleSpriteMode.Animated => Sprites.First(),
@@ -992,7 +992,7 @@ public class ParticleEmitter
 
             if ( particle.Frame != frame )
             {
-                Sprite sprite           = Sprites[ frame ];
+                Sprite2D sprite           = Sprites[ frame ];
                 float  prevSpriteWidth  = particle.Width;
                 float  prevSpriteHeight = particle.Height;
 
@@ -1050,7 +1050,7 @@ public class ParticleEmitter
         Y = y;
     }
 
-    public void SetSprites( List< Sprite > sprites )
+    public void SetSprites( List< Sprite2D > sprites )
     {
         Sprites = sprites;
 
@@ -1066,7 +1066,7 @@ public class ParticleEmitter
                 break;
             }
 
-            Sprite? sprite = null;
+            Sprite2D? sprite = null;
 
             switch ( SpriteMode )
             {
@@ -1553,9 +1553,9 @@ public class ParticleEmitter
     // ========================================================================
 
     [PublicAPI]
-    public class Particle : Sprite
+    public class Particle : Sprite2D
     {
-        public Particle( Sprite sprite ) : base( sprite )
+        public Particle( Sprite2D sprite ) : base( sprite )
         {
         }
 
@@ -2197,7 +2197,7 @@ public class ParticleEmitter
     /// </summary>
     public bool CleansUpBlendFunction { get; set; } = true;
 
-    public List< Sprite >                Sprites           { get; set; } = [ ];
+    public List< Sprite2D >                Sprites           { get; set; } = [ ];
     public ParticleSpriteMode            SpriteMode        { get; set; } = ParticleSpriteMode.Single;
     public List< string >                ImagePaths        { get; set; } = [ ];
     public ScaledNumericValue            XScaleValue       { get; set; } = new();

@@ -37,7 +37,7 @@ namespace LughSharp.Core.SceneGraph2D.Utils;
 [PublicAPI]
 public class SpriteDrawable : BaseDrawable, ITransformDrawable
 {
-    private Sprite? _sprite;
+    private Sprite2D? _sprite;
 
     // ========================================================================
     
@@ -48,7 +48,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     {
     }
 
-    public SpriteDrawable( Sprite sprite )
+    public SpriteDrawable( Sprite2D sprite )
     {
         Sprite = sprite;
     }
@@ -61,7 +61,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     /// <summary>
     /// The <see cref="Sprite"/> component of this <see cref="ISceneDrawable"/>.
     /// </summary>
-    public Sprite? Sprite
+    public Sprite2D? Sprite
     {
         get => _sprite;
         set
@@ -127,7 +127,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     /// </summary>
     public SpriteDrawable Tint( Color tint )
     {
-        Sprite newSprite;
+        Sprite2D newSprite;
 
         if ( _sprite is AtlasSprite sprite )
         {
@@ -135,7 +135,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
         }
         else
         {
-            newSprite = new Sprite( _sprite! );
+            newSprite = new Sprite2D( _sprite! );
         }
 
         newSprite.SetColor( tint );

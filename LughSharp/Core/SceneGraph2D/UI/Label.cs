@@ -47,6 +47,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class Label : Widget, IDisposable
 {
     public Align       LabelAlign  { get; set; } = Align.Left;

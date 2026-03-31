@@ -31,6 +31,7 @@ using LughSharp.Core.Main;
 using LughSharp.Core.SceneGraph2D.Listeners;
 using LughSharp.Core.SceneGraph2D.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
@@ -57,6 +58,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class Button : Table, IDisableable
 {
     public ButtonClickListener?   ClickListener { get; set; }
@@ -65,7 +67,7 @@ public class Button : Table, IDisableable
     public ButtonGroup< Button >? ButtonGroup   { get; set; }
 
     // ========================================================================
-    
+
     private bool        _programmaticChangeEvents = true;
     private ButtonStyle _style                    = new();
 
@@ -90,7 +92,7 @@ public class Button : Table, IDisableable
     {
         SetStyle( skin.Get< ButtonStyle >() );
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
-        
+
         SetClickListener();
     }
 
@@ -101,12 +103,12 @@ public class Button : Table, IDisableable
     public Button( Skin skin, string styleName ) : base( skin )
     {
         var style = skin.Get< ButtonStyle >( styleName );
-        
+
         Guard.Against.Null( style, $"Skin does not contain a ButtonStyle named {styleName}" );
-        
+
         SetStyle( style );
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
-        
+
         SetClickListener();
     }
 
@@ -131,7 +133,7 @@ public class Button : Table, IDisableable
     {
         SetStyle( style );
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
-        
+
         SetClickListener();
         Add( child );
     }
@@ -144,7 +146,7 @@ public class Button : Table, IDisableable
     {
         _style = style;
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
-        
+
         SetClickListener();
     }
 
@@ -219,9 +221,9 @@ public class Button : Table, IDisableable
         {
             return;
         }
-        
+
         _style.Set< TStyle >( style );
-        
+
         SetBackground( GetBackgroundDrawable() );
     }
 

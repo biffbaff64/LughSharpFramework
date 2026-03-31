@@ -31,7 +31,7 @@ namespace Extensions.Source;
 [PublicAPI]
 public class GameSprite
 {
-    public required Sprite Sprite { get; set; }
+    public required Sprite2D Sprite { get; set; }
 
     //TODO: Add more functionality here later.
 }

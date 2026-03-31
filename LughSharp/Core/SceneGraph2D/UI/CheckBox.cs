@@ -33,6 +33,7 @@ using LughSharp.Core.Utils;
 namespace LughSharp.Core.SceneGraph2D.UI;
 
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class CheckBox : TextButton
 {
     public Scene2DImage? Image     { get; set; }

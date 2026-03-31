@@ -40,7 +40,7 @@ namespace LughSharp.Tests.Source;
 [SupportedOSPlatform( "windows" )]
 public class TextureAtlasTest : ILughTest
 {
-    private Sprite? _sprite;
+    private Sprite2D? _sprite;
 
     [SetUp]
     public void Setup()

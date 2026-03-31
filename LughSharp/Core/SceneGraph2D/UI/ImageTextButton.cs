@@ -34,6 +34,7 @@ using LughSharp.Core.Utils;
 namespace LughSharp.Core.SceneGraph2D.UI;
 
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class ImageTextButton : Button
 {
     private readonly Scene2DImage?         _image;

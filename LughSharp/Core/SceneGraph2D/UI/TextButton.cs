@@ -37,6 +37,7 @@ using LughSharp.Core.Utils.Logging;
 namespace LughSharp.Core.SceneGraph2D.UI;
 
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class TextButton : Button
 {
     private Label? _label;

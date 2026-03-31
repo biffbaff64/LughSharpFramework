@@ -48,8 +48,8 @@ public class MainGame : Game
     private Stage?                      _stage;
     private Scene2DImage?               _hudActor;
     private BitmapFont?                 _font;
-    private Sprite?                     _sprite;
-    private Sprite?                     _sprite2;
+    private Sprite2D?                     _sprite;
+    private Sprite2D?                     _sprite2;
     private bool                        _disposed;
     private ILughTest?                  _test;
     private TmxMapLoader?               _tmxMapLoader;
@@ -80,12 +80,12 @@ public class MainGame : Game
         _assetManager = new AssetManager();
 
         CreateCameras();
-        CreateAssets();
-        CreateStage();          // 
-        CreateFont();           // Done
-        CreateFreeTypeFont();   // 
-        CreateSprites();        // Done
-        CreateMap();            // 
+//        CreateAssets();
+        CreateStage(); 
+//        CreateFont();
+//        CreateFreeTypeFont(); 
+//        CreateSprites();
+//        CreateMap(); 
 
         if ( _inputMultiplexer.Processors.Size > 0 )
         {
@@ -313,10 +313,10 @@ public class MainGame : Game
 
     private void CreateSkinActors()
     {
-        const bool HudActor             = true;
+        const bool HudActor             = false;
         const bool WindowActor          = false;
         const bool ButtonActor          = false;
-        const bool TextButtonActor      = false;
+        const bool TextButtonActor      = true;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
         const bool CheckBoxActor        = false;
@@ -375,18 +375,18 @@ public class MainGame : Game
 
         if ( TextButtonActor )
         {
-//            var tbStyle = new TextButtonStyle
-//            {
-//                Up                = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
-//                Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down" ) ),
-//                Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
-//                Font              = _font ?? new BitmapFont(),
-//                FontColor         = Color.White,
-//                DisabledFontColor = Color.Gray,
-//            };
+            var tbStyle = new TextButtonStyle
+            {
+                Up                = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
+                Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down" ) ),
+                Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
+                Font              = _font ?? new BitmapFont(),
+                FontColor         = Color.Yellow,
+                DisabledFontColor = Color.Gray,
+            };
 
-//            var textButton = new TextButton( "Text Button", tbStyle )
-            var textButton = new TextButton( "Text Button", skin )
+            var textButton = new TextButton( "Text Button", tbStyle )
+//            var textButton = new TextButton( "Text Button", skin )
             {
                 IsVisible = true,
             };
@@ -561,7 +561,7 @@ public class MainGame : Game
 
     private void CreateSprites()
     {
-        _sprite = new Sprite( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
+        _sprite = new Sprite2D( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
         _sprite.SetBounds();
         _sprite.SetOriginCenter();
     }

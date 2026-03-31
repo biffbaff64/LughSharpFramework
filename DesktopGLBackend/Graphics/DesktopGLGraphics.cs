@@ -506,6 +506,12 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Renders, and updates, the specified window with the given dimensions.
+    /// </summary>
+    /// <param name="windowHandle"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     public override void RenderWindow( DotGLFW.Window? windowHandle, int width, int height )
     {
         UpdateFramebufferInfo();

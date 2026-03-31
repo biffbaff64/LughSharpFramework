@@ -111,7 +111,6 @@ public static class Colors
             }
         }
 
-        // Should never get here so, hopefully, this is never called.
         throw new RuntimeException( $"Color not found in ColorMap: {color}" );
     }
 }

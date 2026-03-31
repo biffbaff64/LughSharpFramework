@@ -43,6 +43,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// origin be used when drawing.
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class Scene2DImage : Widget
 {
     public float           ImageX      { get; set; }

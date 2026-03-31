@@ -34,6 +34,7 @@ using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Listeners;
 using LughSharp.Core.SceneGraph2D.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
 using Rectangle = LughSharp.Core.Maths.Rectangle;
@@ -41,6 +42,7 @@ using Rectangle = LughSharp.Core.Maths.Rectangle;
 namespace LughSharp.Core.SceneGraph2D.UI;
 
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class ScrollPane : WidgetGroup
 {
     public readonly Rectangle HKnobBounds   = new();

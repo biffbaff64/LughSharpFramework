@@ -36,34 +36,64 @@ using LughSharp.Core.Utils.Exceptions;
 namespace LughSharp.Core.Graphics;
 
 /// <summary>
-/// 
+/// Provides an abstraction for a graphics device, encompassing the configurations,
+/// capabilities, and operations required to manage rendering, display modes, and
+/// windowing in a graphical application.
 /// </summary>
 [PublicAPI]
 public abstract class GraphicsDevice : IGraphicsDevice
 {
     public FramebufferConfig BufferConfig          { get; set; } = null!;
-    public BackendData       BackendInfo           { get; set; }
-    public int               LogicalWidth          { get; set; }
-    public int               LogicalHeight         { get; set; }
-    public int               BackBufferWidth       { get; set; }
-    public int               BackBufferHeight      { get; set; }
     public Color             WindowBackgroundColor { get; set; } = Color.Blue;
+
+    /// <summary>
+    /// Represents detailed information about a graphics backend, including the
+    /// backend type and any subcategories associated with it.
+    /// </summary>
+    public BackendData BackendInfo { get; set; }
+
+    /// <summary>
+    /// The width of the resolution used to render content consistently,
+    /// independent of pixel density.
+    /// </summary>
+    public int LogicalWidth { get; set; }
+
+    /// <summary>
+    /// The height of the resolution used to render content consistently,
+    /// independent of pixel density.
+    /// </summary>
+    public int LogicalHeight { get; set; }
+
+    /// <summary>
+    /// The width of the backbuffer used to render content to when drawing
+    /// to the buffer instead of the screen.
+    /// </summary>
+    public int BackBufferWidth { get; set; }
+
+    /// <summary>
+    /// The height of the backbuffer used to render content to when drawing
+    /// to the buffer instead of the screen.
+    /// </summary>
+    public int BackBufferHeight { get; set; }
 
     // ========================================================================
 
-    public virtual int                  WindowWidth         { get; }
-    public virtual int                  WindowHeight        { get; }
-    public virtual float                DeltaTime           { get; set; }
-    public virtual bool                 ContinuousRendering { get; set; } = true;
-    public virtual bool                 IsFullscreen        { get; }
-    public virtual GraphicsCapabilities Capabilities        { get; set; } = null!;
-    public virtual GLFormatChooser      FormatChooser       { get; set; } = null!;
-    public virtual DotGLFW.Window       CurrentContext      { get; set; } = null!;
+    public virtual int   WindowWidth         { get; }
+    public virtual int   WindowHeight        { get; }
+    public virtual float DeltaTime           { get; set; }
+    public virtual bool  ContinuousRendering { get; set; } = true;
+    public virtual bool  IsFullscreen        { get; }
+
+    /// <summary>
+    /// The current OpenGL context.
+    /// </summary>
+    public virtual DotGLFW.Window CurrentContext { get; set; } = null!;
 
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Sets the target graphics backend for the application, based on the specified
+    /// <see cref="Platform.ApplicationType"/> and <see cref="DotGLFW.OpenGLProfile"/>.
     /// </summary>
     /// <param name="appType"></param>
     /// <param name="profile"></param>
@@ -98,11 +128,12 @@ public abstract class GraphicsDevice : IGraphicsDevice
     }
 
     /// <summary>
-    /// This is a scaling factor for the Density Independent Pixel unit, following the convention
-    /// where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen this
-    /// density value will be 1; on a 120 dpi screen it would be .75; etc.
+    /// This is a scaling factor for the Density Independent Pixel unit, following the
+    /// convention where one DIP is one pixel on an approximately 160 dpi screen. Thus
+    /// on a 160dpi screen this density value will be 1; on a 120 dpi screen it would
+    /// be .75; etc.
     /// </summary>
-    /// <returns>the Density Independent Pixel factor of the display.</returns>
+    /// <returns> The Density Independent Pixel factor of the display. </returns>
     public virtual float GetDensity()
     {
         return GetPpiXY().X / 160f;
@@ -112,6 +143,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// Updates the current graphics state by calculating the frame delta time,
     /// updating frames per second (FPS), and incrementing the frame identifier.
     /// This method is typically called on each render loop iteration.
+    /// The base method does nothing and should be overridden by subclasses.
     /// </summary>
     public virtual void Update()
     {
@@ -375,6 +407,8 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// <param name="systemCursor"> The system cursor to use. </param>
     public abstract void SetSystemCursor( ICursor.SystemCursor systemCursor );
 
+    // ========================================================================
+    
     /// <summary>
     /// The supported underlying graphics backends.
     /// </summary>
@@ -419,6 +453,8 @@ public abstract class GraphicsDevice : IGraphicsDevice
         IOSVulkan
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Sub-categories for OpenGL
     /// </summary>
@@ -431,6 +467,8 @@ public abstract class GraphicsDevice : IGraphicsDevice
         GL40
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Represents detailed information about a graphics backend, including the backend type
     /// and any subcategories associated with it.
@@ -446,3 +484,4 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
 // ========================================================================
 // ========================================================================
+

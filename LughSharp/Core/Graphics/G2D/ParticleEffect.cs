@@ -322,7 +322,7 @@ public class ParticleEffect : IDisposable
                 continue;
             }
 
-            var sprites = new List< Sprite >();
+            var sprites = new List< Sprite2D >();
 
             foreach ( string imagePath in emitter.ImagePaths )
             {
@@ -339,7 +339,7 @@ public class ParticleEffect : IDisposable
                     imageName = atlasPrefix + imageName;
                 }
 
-                Sprite? sprite = atlas.CreateSprite( imageName );
+                Sprite2D? sprite = atlas.CreateSprite( imageName );
 
                 if ( sprite == null )
                 {
@@ -375,7 +375,7 @@ public class ParticleEffect : IDisposable
     {
         _ownsTexture = true;
 
-        Dictionary< string, Sprite? > loadedSprites = new( _emitters.Count );
+        Dictionary< string, Sprite2D? > loadedSprites = new( _emitters.Count );
 
         for ( int i = 0, n = _emitters.Count; i < n; i++ )
         {
@@ -384,17 +384,17 @@ public class ParticleEffect : IDisposable
                 continue;
             }
 
-            var sprites = new List< Sprite >();
+            var sprites = new List< Sprite2D >();
 
             foreach ( string imagePath in _emitters[ i ].ImagePaths )
             {
                 string imageName = Path.GetFileName( imagePath.Replace( '\\', '/' ) );
 
-                Sprite? sprite = loadedSprites[ imageName ];
+                Sprite2D? sprite = loadedSprites[ imageName ];
 
                 if ( sprite == null )
                 {
-                    sprite = new Sprite( LoadTexture( new FileInfo( imagePath ) ) );
+                    sprite = new Sprite2D( LoadTexture( new FileInfo( imagePath ) ) );
 
                     loadedSprites[ imageName ] = sprite;
                 }
@@ -529,7 +529,7 @@ public class ParticleEffect : IDisposable
             {
                 ParticleEmitter emitter = _emitters[ i ];
 
-                foreach ( Sprite sprite in emitter.Sprites )
+                foreach ( Sprite2D sprite in emitter.Sprites )
                 {
                     sprite.Texture?.Dispose();
                 }

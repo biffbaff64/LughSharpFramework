@@ -44,6 +44,13 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public class GLTextureArray : GLTexture, IManaged
 {
+    public          int  Width     => _data.Width;
+    public          int  Height    => _data.Height;
+    public override int  Depth     => _data.Depth;
+    public          bool IsManaged => _data.Managed;
+
+    // ========================================================================
+
     private static readonly Dictionary< IApplication, List< GLTextureArray > > _managedTextureArrays = new();
 
     private ITextureArrayData _data;
@@ -130,15 +137,6 @@ public class GLTextureArray : GLTexture, IManaged
     /// Gets the number of managed TextureArrays currently loaded.
     /// </summary>
     public int NumManagedTextureArrays => _managedTextureArrays[ Engine.App ].Count;
-
-    // ========================================================================
-
-    public          int  Width     => _data.Width;
-    public          int  Height    => _data.Height;
-    public override int  Depth     => _data.Depth;
-    public          bool IsManaged => _data.Managed;
-
-    // ========================================================================
 
     /// <summary>
     /// </summary>

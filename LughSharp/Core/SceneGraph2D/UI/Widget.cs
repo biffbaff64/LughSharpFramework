@@ -26,6 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
@@ -43,6 +44,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// <see cref="InvalidateHierarchy"/> as needed.
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class Widget : Actor, ILayout
 {
     /// <summary>

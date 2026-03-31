@@ -48,32 +48,53 @@ namespace LughSharp.Core.SceneGraph2D;
 [PublicAPI]
 public class Event : IResetable
 {
-    // The Stage for the Actor the event was fired on.
+    /// <summary>
+    /// The Stage for the Actor the event was fired on.
+    /// </summary>
     public Stage? Stage { get; set; }
 
-    // The Actor this event originated from.
+    /// <summary>
+    /// The Actor this event originated from.
+    /// </summary>
     public Actor? TargetActor { get; set; }
 
-    // The Actor this listener is attached to.
+    /// <summary>
+    /// The Actor this listener is attached to.
+    /// </summary>
     public Actor? ListenerActor { get; set; }
 
-    // true means event occurred during the capture phase
+    /// <summary>
+    /// true means event occurred during the capture phase
+    /// </summary>
     public bool Capture { get; set; }
 
-    // If true, after the event is fired on the target actor, it will also
-    // be fired on each of the parent actors, all the way to the root.
+    /// <summary>
+    /// If true, after the event is fired on the target actor, it will also
+    /// be fired on each of the parent actors, all the way to the root.
+    /// </summary>
     public bool Bubbles { get; set; } = true;
 
-    // true means the event was handled (the stage will eat the input)
+    /// <summary>
+    /// true means the event was handled (the stage will eat the input)
+    /// </summary>
     public bool IsHandled { get; set; }
 
-    // true means event propagation was stopped
+    /// <summary>
+    /// true means event propagation was stopped
+    /// </summary>
     public bool IsStopped { get; set; }
 
-    // true means propagation was stopped and any action that this event
-    // would cause should not happen
+    /// <summary>
+    /// true means propagation was stopped and any action that this event
+    /// would cause should not happen
+    /// </summary>
     public bool IsCancelled { get; set; }
 
+    // ========================================================================
+    
+    /// <summary>
+    /// Resets this event.
+    /// </summary>
     public virtual void Reset()
     {
         Stage         = null;
@@ -106,7 +127,7 @@ public class Event : IResetable
     /// the event could uncheck the checkbox.
     /// </para>
     /// </summary>
-    public void Cancel()
+    public virtual void Cancel()
     {
         IsCancelled = true;
         IsStopped   = true;
@@ -118,8 +139,12 @@ public class Event : IResetable
     /// listeners on the <see cref="ListenerActor"/> are notified, but
     /// after that no other listeners are notified.
     /// </summary>
-    public void Stop()
+    public virtual void Stop()
     {
         IsStopped = true;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -33,7 +33,7 @@ namespace LughSharp.Core.Graphics.Atlases;
 /// is automatically positioned as if whitespace had not been stripped. */
 /// </summary>
 [PublicAPI]
-public class AtlasSprite : Sprite
+public class AtlasSprite : Sprite2D
 {
     public AtlasRegion Region          { get; set; }
     public float       OriginalOffsetX { get; set; }
@@ -97,7 +97,7 @@ public class AtlasSprite : Sprite
     /// Sets the position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
     /// after those operations. If both position and size are to be changed, it
-    /// is better to use <see cref="Sprite.SetBounds(float,float,float,float)"/>.
+    /// is better to use <see cref="Sprite2D.SetBounds(float,float,float,float)"/>.
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -110,7 +110,7 @@ public class AtlasSprite : Sprite
     /// Sets the x position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
     /// after those operations. If both position and size are to be changed, it
-    /// is better to use <see cref="Sprite.SetBounds(float,float,float,float)"/>.
+    /// is better to use <see cref="Sprite2D.SetBounds(float,float,float,float)"/>.
     /// </summary>
     public override void SetX( float x )
     {
@@ -121,7 +121,7 @@ public class AtlasSprite : Sprite
     /// Sets the y position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
     /// after those operations. If both position and size are to be changed, it
-    /// is better to use <see cref="Sprite.SetBounds(float,float,float,float)"/>.
+    /// is better to use <see cref="Sprite2D.SetBounds(float,float,float,float)"/>.
     /// </summary>
     public override void SetY( float y )
     {

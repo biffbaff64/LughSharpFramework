@@ -26,6 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.Utils;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
@@ -35,6 +36,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// bounding box is not limited to the size of this actor.
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class ParticleEffectActor : Actor, IDisposable
 {
     public          bool           IsRunning      { get; set; }

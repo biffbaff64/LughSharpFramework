@@ -130,9 +130,9 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
             throw new NullReferenceException();
         }
 
-        Sprite sprite = Region is AtlasRegion region
+        Sprite2D sprite = Region is AtlasRegion region
             ? new AtlasSprite( region )
-            : new Sprite( Region! );
+            : new Sprite2D( Region! );
 
         sprite.SetColor( tint );
         sprite.SetSize( MinWidth, MinHeight );

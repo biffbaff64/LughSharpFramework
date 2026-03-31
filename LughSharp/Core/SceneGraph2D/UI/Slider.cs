@@ -32,6 +32,7 @@ using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Listeners;
 using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
@@ -51,6 +52,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class Slider : ProgressBar
 {
     private int      _draggingPointer = -1;

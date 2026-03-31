@@ -230,7 +230,6 @@ public class Color : ICloneable, IEquatable< Color >
     /// </para>
     /// </summary>
     /// <returns> The resulting float. </returns>
-    /// <seealso cref="NumberUtils.UIntToFloatColor"/>
     public float ToFloatBitsRgba()
     {
         return ToFloatBitsRgba( R, G, B, A );
@@ -248,7 +247,8 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
-    /// <returns></returns>
+    /// <returns> The resulting float. </returns>
+    /// <seealso cref="NumberUtils.UIntToFloatColor(uint)"/>
     public static float ToFloatBitsRgba( float r, float g, float b, float a )
     {
         uint floatBits = ( ( uint )( 255f * r ) << 24 )
@@ -484,6 +484,14 @@ public class Color : ICloneable, IEquatable< Color >
         return new Color( r, g, b, a );
     }
 
+    /// <summary>
+    /// Creates a new Color instance from the provided RGB values. The alpha value
+    /// is set to 1.0f.
+    /// </summary>
+    /// <param name="r"> The RED component. </param>
+    /// <param name="g"> The GREEN component. </param>
+    /// <param name="b"> The BLUE component. </param>
+    /// <returns> A new Color instance. </returns>
     public static Color FromRgb( float r, float g, float b )
     {
         return new Color( r, g, b, 1.0f );
@@ -1252,6 +1260,11 @@ public class Color : ICloneable, IEquatable< Color >
         return ( ( uint )( luminance * 255.0f ) << 8 ) | ( uint )( alpha * 255 );
     }
 
+    /// <summary>
+    /// Converts the provided uint hexidecimal value to a Color object.
+    /// </summary>
+    /// <param name="hex"> The hex value to convert. </param>
+    /// <returns> A new Color instance. </returns>
     public static Color FromHex( uint hex )
     {
         return new Color( hex );
@@ -1293,7 +1306,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="other">An object to compare with this object.</param>
     /// <returns>
-    /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise false .
+    /// <c>true</c> if the current object is equal to the other object; otherwise <c>false</c> .
     /// </returns>
     public bool Equals( Color? other )
     {
@@ -1309,7 +1322,9 @@ public class Color : ICloneable, IEquatable< Color >
     /// Determines whether the specified object is equal to the current object.
     /// </summary>
     /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns> true if the specified object  is equal to the current object; otherwise false. </returns>
+    /// <returns>
+    /// <c>true</c> if the specified object is equal to the current object; otherwise <c>false</c>.
+    /// </returns>
     public override bool Equals( object? obj )
     {
         if ( ( obj == null ) || ( GetType() != obj.GetType() ) )
@@ -1327,7 +1342,7 @@ public class Color : ICloneable, IEquatable< Color >
         return PackedColorAbgr() == color.PackedColorAbgr();
     }
 
-    /// Not from IEquatable, but connected to it because of Equals()
+    // Not from IEquatable, but connected to it because of Equals()
     /// <inheritdoc />
     public override int GetHashCode()
     {

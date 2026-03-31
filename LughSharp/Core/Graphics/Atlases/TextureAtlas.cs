@@ -263,9 +263,9 @@ public class TextureAtlas : IDisposable
     /// sprite for each region, so the result should be stored rather than calling
     /// this method multiple times.
     /// </summary>
-    public List< Sprite > CreateSprites()
+    public List< Sprite2D > CreateSprites()
     {
-        var sprites = new List< Sprite >();
+        var sprites = new List< Sprite2D >();
 
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
@@ -282,7 +282,7 @@ public class TextureAtlas : IDisposable
     /// to find the region and constructs a new sprite, so the result should be cached rather
     /// than calling this method multiple times.
     /// </summary>
-    public Sprite? CreateSprite( string name )
+    public Sprite2D? CreateSprite( string name )
     {
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
@@ -300,7 +300,7 @@ public class TextureAtlas : IDisposable
     /// This method uses string comparison to find the region and constructs a new sprite,
     /// so the result should be cached rather than calling this method multiple times.
     /// </summary>
-    public Sprite? CreateSprite( string name, int index )
+    public Sprite2D? CreateSprite( string name, int index )
     {
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
@@ -326,9 +326,9 @@ public class TextureAtlas : IDisposable
     /// multiple times.
     /// </para>
     /// </summary>
-    public List< Sprite > CreateSprites( string name )
+    public List< Sprite2D > CreateSprites( string name )
     {
-        var matched = new List< Sprite >();
+        var matched = new List< Sprite2D >();
 
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
@@ -348,10 +348,10 @@ public class TextureAtlas : IDisposable
     /// </summary>
     /// <param name="region">The atlas region used to construct the sprite. Must not be null.</param>
     /// <returns>
-    /// A new <see cref="Sprite"/> instance if the atlas region has the same packed and
+    /// A new <see cref="Sprite2D"/> instance if the atlas region has the same packed and
     /// original dimensions; otherwise, an <see cref="AtlasSprite"/> is returned.
     /// </returns>
-    private static Sprite NewSprite( AtlasRegion? region )
+    private static Sprite2D NewSprite( AtlasRegion? region )
     {
         Guard.Against.Null( region );
 
@@ -360,7 +360,7 @@ public class TextureAtlas : IDisposable
         {
             if ( region.Rotate )
             {
-                var sprite = new Sprite( region );
+                var sprite = new Sprite2D( region );
 
                 sprite.SetBounds( 0, 0, region.GetRegionHeight(), region.GetRegionWidth() );
                 sprite.Rotate90( true );
@@ -368,7 +368,7 @@ public class TextureAtlas : IDisposable
                 return sprite;
             }
 
-            return new Sprite( region );
+            return new Sprite2D( region );
         }
 
         return new AtlasSprite( region );

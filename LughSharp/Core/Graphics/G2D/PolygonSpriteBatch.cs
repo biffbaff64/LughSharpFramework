@@ -177,7 +177,7 @@ public class PolygonSpriteBatch : IPolygonBatch
                                                2,
                                                ShaderConstants.ATexCoord0 ) );
 
-        _vertices  = new float[ maxVertices * Sprite.VertexSize ];
+        _vertices  = new float[ maxVertices * Sprite2D.VertexSize ];
         _triangles = new int[ maxTriangles * 3 ];
 
         if ( defaultShader == null )
@@ -302,14 +302,14 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-               || ( ( _vertexIndex + ( region.Vertices?.Length * Sprite.VertexSize / 2 ) ) > _vertices.Length ) )
+               || ( ( _vertexIndex + ( region.Vertices?.Length * Sprite2D.VertexSize / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
 
         foreach ( short t in region.Triangles )
         {
-            _triangles[ _triangleIndex++ ] = ( short )( t + ( _vertexIndex / Sprite.VertexSize ) );
+            _triangles[ _triangleIndex++ ] = ( short )( t + ( _vertexIndex / Sprite2D.VertexSize ) );
         }
 
         for ( var i = 0; i < region.Vertices?.Length; i += 2 )
@@ -341,12 +341,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-               || ( ( _vertexIndex + ( region.Vertices?.Length * Sprite.VertexSize / 2 ) ) > _vertices.Length ) )
+               || ( ( _vertexIndex + ( region.Vertices?.Length * Sprite2D.VertexSize / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         for ( int i = 0, n = region.Triangles.Length; i < n; i++ )
         {
@@ -394,12 +394,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-               || ( ( _vertexIndex + ( region.Vertices?.Length * Sprite.VertexSize / 2 ) ) > _vertices.Length ) )
+               || ( ( _vertexIndex + ( region.Vertices?.Length * Sprite2D.VertexSize / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         foreach ( short triangle in region.Triangles )
         {
@@ -449,7 +449,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         for ( int i = trianglesOffset, n = i + trianglesCount; i < n; i++ )
         {
@@ -479,12 +479,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
@@ -627,12 +627,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
@@ -695,12 +695,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
@@ -753,12 +753,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
@@ -813,12 +813,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
@@ -866,30 +866,30 @@ public class PolygonSpriteBatch : IPolygonBatch
             throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
-        int triangleCount = count / Sprite.SpriteSize * 6;
+        int triangleCount = count / Sprite2D.SpriteSize * 6;
         int batch;
 
         if ( texture != _lastTexture )
         {
             SwitchTexture( texture );
-            batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite.SpriteSize ) ),
-                              _triangles.Length / 6 * Sprite.SpriteSize );
-            triangleCount = batch / Sprite.SpriteSize * 6;
+            batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite2D.SpriteSize ) ),
+                              _triangles.Length / 6 * Sprite2D.SpriteSize );
+            triangleCount = batch / Sprite2D.SpriteSize * 6;
         }
         else if ( ( ( _triangleIndex + triangleCount ) > _triangles.Length )
                || ( ( _vertexIndex + count ) > _vertices.Length ) )
         {
             Flush();
-            batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite.SpriteSize ) ),
-                              _triangles.Length / 6 * Sprite.SpriteSize );
-            triangleCount = batch / Sprite.SpriteSize * 6;
+            batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite2D.SpriteSize ) ),
+                              _triangles.Length / 6 * Sprite2D.SpriteSize );
+            triangleCount = batch / Sprite2D.SpriteSize * 6;
         }
         else
         {
             batch = count;
         }
 
-        var vertex = ( short )( _vertexIndex / Sprite.VertexSize );
+        var vertex = ( short )( _vertexIndex / Sprite2D.VertexSize );
 
         for ( int n = _triangleIndex + triangleCount; _triangleIndex < n; _triangleIndex += 6, vertex += 4 )
         {
@@ -922,8 +922,8 @@ public class PolygonSpriteBatch : IPolygonBatch
 
             if ( batch > count )
             {
-                batch         = Math.Min( count, _triangles.Length / 6 * Sprite.SpriteSize );
-                triangleIndex = batch / Sprite.SpriteSize * 6;
+                batch         = Math.Min( count, _triangles.Length / 6 * Sprite2D.SpriteSize );
+                triangleIndex = batch / Sprite2D.SpriteSize * 6;
             }
         }
     }
@@ -952,12 +952,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) ) //
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) ) //
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
@@ -1021,12 +1021,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( textureRegion.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) ) //
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) ) //
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
@@ -1167,12 +1167,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( textureRegion.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
@@ -1328,12 +1328,12 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SpriteSize ) > _vertices.Length ) )
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
         {
             Flush();
         }
 
-        int startVertex = _vertexIndex / Sprite.VertexSize;
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
 
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );

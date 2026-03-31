@@ -46,7 +46,8 @@ using Rectangle = LughSharp.Core.Maths.Rectangle;
 namespace LughSharp.Core.SceneGraph2D;
 
 [PublicAPI]
-public class Actor : IActor, IComparable< Actor >
+[ActorDefinition( Role = "UI" )]
+public class Actor : IComparable< Actor >
 {
     public Stage? Stage  { get; set; }
     public Group? Parent { get; set; }
@@ -758,7 +759,7 @@ public class Actor : IActor, IComparable< Actor >
     {
         get;
         set => field.Set( value );
-    } = new( 1, 1, 1, 1 );
+    } = new( 1f, 1f, 1f, 1f );
 
     /// <summary>
     /// If true, <see cref="DrawDebug(ShapeRenderer)"/> will be called for this actor.
@@ -1118,7 +1119,7 @@ public class Actor : IActor, IComparable< Actor >
     public void SetScale( float scaleXY )
     {
         if ( MathUtils.IsNotEqual( ScaleX, scaleXY )
-            || MathUtils.IsNotEqual( ScaleY, scaleXY ) )
+          || MathUtils.IsNotEqual( ScaleY, scaleXY ) )
         {
             ScaleX = scaleXY;
             ScaleY = scaleXY;
@@ -1134,7 +1135,7 @@ public class Actor : IActor, IComparable< Actor >
     public void SetScale( float scaleX, float scaleY )
     {
         if ( Math.Abs( ScaleX - scaleX ) > NumberUtils.FloatTolerance
-            || Math.Abs( ScaleY - scaleY ) > NumberUtils.FloatTolerance )
+          || Math.Abs( ScaleY - scaleY ) > NumberUtils.FloatTolerance )
         {
             ScaleX = scaleX;
             ScaleY = scaleY;

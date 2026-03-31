@@ -318,7 +318,7 @@ public class Skin : IDisposable
             typeResources = new Dictionary< string, object >
                 ( ( type == typeof( TextureRegion ) )
                || ( type == typeof( ISceneDrawable ) )
-               || ( type == typeof( Sprite ) )
+               || ( type == typeof( Sprite2D ) )
                       ? 256
                       : 64 );
 
@@ -372,7 +372,7 @@ public class Skin : IDisposable
         if ( type == typeof( ISceneDrawable ) ) return GetDrawable( name );
         if ( type == typeof( TextureRegion ) ) return GetRegion( name );
         if ( type == typeof( NinePatch ) ) return GetPatch( name );
-        if ( type == typeof( Sprite ) ) return GetSprite( name );
+        if ( type == typeof( Sprite2D ) ) return GetSprite( name );
 
         // Use TryGetValue to avoid KeyNotFoundException
         if ( !Resources.TryGetValue( type, out Dictionary< string, object >? typeResources ) )
@@ -586,11 +586,11 @@ public class Skin : IDisposable
     /// If the region is an <see cref="AtlasRegion"/> then an <see cref="AtlasSprite"/>
     /// is used if the region has been whitespace stripped or packed rotated 90 degrees.
     /// </summary>
-    public Sprite GetSprite( string name )
+    public Sprite2D GetSprite( string name )
     {
-        Sprite? sprite;
+        Sprite2D? sprite;
 
-        if ( ( sprite = Optional< Sprite >( name ) ) != null )
+        if ( ( sprite = Optional< Sprite2D >( name ) ) != null )
         {
             return sprite;
         }
@@ -609,14 +609,14 @@ public class Skin : IDisposable
                 }
             }
 
-            sprite ??= new Sprite( textureRegion );
+            sprite ??= new Sprite2D( textureRegion );
 
             if ( Scale is not 1.0f )
             {
                 sprite.SetSize( sprite.Width * Scale, sprite.Height * Scale );
             }
 
-            Add< Sprite >( name, sprite );
+            Add< Sprite2D >( name, sprite );
 
             return sprite;
         }
@@ -686,7 +686,7 @@ public class Skin : IDisposable
             }
             else
             {
-                var sprite = Optional< Sprite >( name );
+                var sprite = Optional< Sprite2D >( name );
 
                 if ( sprite != null )
                 {

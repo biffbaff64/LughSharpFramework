@@ -55,6 +55,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class ListBox< T > : Widget where T : notnull
 {
     public Rectangle?          CullingArea  { get; set; }

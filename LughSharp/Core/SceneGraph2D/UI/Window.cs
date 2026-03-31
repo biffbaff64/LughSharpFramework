@@ -48,6 +48,7 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
+[ActorDefinition( Role = "UI" )]
 public class Window : Table
 {
     public int    ResizeBorder    { get; set; } = 8;

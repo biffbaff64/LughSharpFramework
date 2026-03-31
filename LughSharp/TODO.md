@@ -76,10 +76,18 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - STEP 4: Ensure code is fully documented.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - Methods like **Dispose(), ToString(), Equals(), GetHashCode() ( Essentially overridden system methods )** 
 - should be positioned at the END of source files.
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+- Make all thrown exceptions clearly explain what went wrong and what the user should do 
+  to fix the problem, where possible.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - Rename class Graphics.OpenGL.OpenGL
@@ -87,11 +95,13 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
   them into one class? Maybe rename GraphicsDevice to something like GLContext or GLInfo?
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - NO MAGIC NUMBERS!!!
 - SORT OUT VERSIONING!!!
 - PRIORITY is 2D classes first
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - There seems to be different namings for width/height etc. properties and methods.
@@ -406,12 +416,11 @@ GRAPHICS
     ----   ----   ------
     - DONE - DONE - DONE - CIM
     -      -      -      - Color 
-    -      -      -      - Color4                   - WIP to replace Color when finished 
-    -      -      -      - Colors
-    -      -      -      - Cubemap
-    -      -      -      - GLTextureArray
-    -      -      -      - GraphicsCapabilities     - Combine with GraphicsDevice to make
-    -      -      -      - GraphicsDevice             GLContext or GLInfo??
+    -      -      -      - ColorWIP                 - WIP to replace Color when finished 
+    - DONE - DONE - DONE - Colors
+    - IP   - IP   - DONE - Cubemap
+    - DONE - IP   - DONE - GLTextureArray
+    - DONE - IP   - DONE - GraphicsDevice
     - DONE - IP   - DONE - GStructs
     - DONE - DONE - DONE - ICubemapData
     - DONE - DONE - DONE - ICursor
@@ -485,7 +494,7 @@ GRAPHICS/G2D
     -      -      -      - PolygonSprite
     -      -      -      - PolygonSpriteBatch              Some methods have too many parameters
     -      -      -      - RepeatablePolygonSprite
-    -      -      -      - Sprite
+    -      -      -      - Sprite2D
     -      -      -      - SpriteBatch
     -      -      -      - SpriteCache
 
@@ -972,12 +981,12 @@ SCENEGRAPH2D
 
     CODE   DOCU   FOOTER
     ----   ----   ------
-    -      -      -      - Action
-    -      -      -      - Actor
-    -      -      -      - Event
-    -      -      -      - Group
-    -      -      -      - IAction
-    -      -      -      - IActor
+    - DONE - DONE - DONE - Action
+    - DONE - IP   - DONE - Actor
+    - DONE - DONE - DONE - Event
+    - DONE - IP   - DONE - Group
+    - DONE - DONE - DONE - IAction
+    -      -      -      - IActor       - Add members or remove
     -      -      -      - InputEvent
     -      -      -      - Stage
     -      -      -      - Touchable
@@ -1054,28 +1063,29 @@ AddListener( new ClickListener()
 SCENEGRAPH2D/STYLES
 -------------------
 
+- ( Styles to use with StyleRegistry / StyleFactory )
+
     CODE   DOCU   FOOTER
     ----   ----   ------
-    - IP   -      - DONE - ButtonStyle
-    -      -      - DONE - CheckBoxStyle
-    -      -      - DONE - ImageButtonStyle
-    -      -      - DONE - ImageTextButtonStyle
-    -      -      - DONE - IStyleable
-    -      -      - DONE - LabelStyle
-    -      -      - DONE - ListBoxStyle
-    -      -      - DONE - ProgressBarStyle
-    -      -      - DONE - ScrollPaneStyle
-    -      -      - DONE - SelectBoxStyle
-    -      -      - DONE - SliderStyle
-    -      -      - DONE - SplitPaneStyle
+    - IP   -      - DONE - ButtonStyleRecord
+    -      -      - DONE - CheckBoxStyleRecord
+    -      -      - DONE - ImageButtonStyleRecord
+    -      -      - DONE - ImageTextButtonStyleRecord
+    -      -      - DONE - LabelStyleRecord
+    -      -      - DONE - ListBoxStyleRecord
+    -      -      - DONE - ProgressBarStyleRecord
+    -      -      - DONE - ScrollPaneStyleRecord
+    -      -      - DONE - SelectBoxStyleRecord
+    -      -      - DONE - SliderStyleRecord
+    -      -      - DONE - SplitPaneStyleRecord
     - IP   -      - DONE - StyleFactory
     - IP   -      - DONE - StyleRegistry
-    -      -      - DONE - TextButtonStyle
-    -      -      - DONE - TextFieldStyle
-    -      -      - DONE - TextTooltipStyle
-    -      -      - DONE - TouchpadStyle
-    -      -      - DONE - TreeStyle
-    -      -      - DONE - WindowStyle
+    -      -      - DONE - TextButtonStyleRecord
+    -      -      - DONE - TextFieldStyleRecord
+    -      -      - DONE - TextTooltipStyleRecord
+    -      -      - DONE - TouchpadStyleRecord
+    -      -      - DONE - TreeStyleRecord
+    -      -      - DONE - WindowStyleRecord
 
 
 SCENEGRAPH2D/UI
@@ -1153,6 +1163,7 @@ UTILS
 
     CODE   DOCU   FOOTER
     ----   ----   ------
+    - DONE - DONE - DONE - ActorDefinitionAttribute
     - DONE - DONE - DONE - Align
     - DONE - IP   - DONE - AsyncExecutor
     - DONE - IP   - DONE - AsyncResult
@@ -1263,7 +1274,6 @@ UTILS/POOLING
     CODE   DOCU   FOOTER
     ----   ----   ------
     - DONE - DONE - DONE - FlushablePool
-    - DONE -      - DONE - IClearablePool
     - DONE - DONE - DONE - IPoolable
     - DONE - DONE - DONE - Pool
     - DONE - DONE - DONE - PooledLinkedList

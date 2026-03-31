@@ -37,7 +37,7 @@ using Rectangle = LughSharp.Core.Maths.Rectangle;
 namespace LughSharp.Core.Graphics.G2D;
 
 [PublicAPI]
-public class Sprite : TextureRegion
+public class Sprite2D : TextureRegion
 {
     public const int VertexSize = ( 2 + 1 + 2 );
     public const int SpriteSize = ( 4 * VertexSize );
@@ -87,7 +87,6 @@ public class Sprite : TextureRegion
 
     // ========================================================================
 
-    private bool       _isDirty = true;
     private bool       _flipX;
     private bool       _flipY;
     private float      _uScrollOffset;
@@ -95,27 +94,26 @@ public class Sprite : TextureRegion
     private Rectangle? _bounds;
     private float      _x;
     private float      _y;
+    private bool       _isDirty     = true;
     private Color      _color       = Color.White;
     private float      _packedColor = Color.WhiteFloatBits;
 
     // ========================================================================
 
     /// <summary>
-    /// Creates an uninitialized sprite.
-    /// <para>
-    /// The sprite will need a texture region and bounds set before it can be drawn.
-    /// </para>
+    /// Creates an uninitialized sprite. The sprite will need a texture region
+    /// and bounds set before it can be drawn.
     /// </summary>
-    public Sprite()
+    public Sprite2D()
     {
         SetColor( Color.White );
     }
 
     /// <summary>
-    /// Creates a sprite with width, height, and texture region
-    /// equal to the size of the texture.
+    /// Creates a sprite with width, height, and texture region equal to the
+    /// size of the texture.
     /// </summary>
-    public Sprite( Texture texture )
+    public Sprite2D( Texture texture )
         : this( texture, 0, 0, texture.Width, texture.Height )
     {
     }
@@ -124,16 +122,14 @@ public class Sprite : TextureRegion
     /// Creates a sprite with width, height, and texture region equal to the
     /// specified size. The texture region's upper left corner will be 0,0.
     /// </summary>
-    /// <param name="texture"></param>
+    /// <param name="texture"> The source texture. </param>
     /// <param name="srcWidth">
-    /// The width of the texture region.
-    /// May be negative to flip the sprite when drawn.
+    /// The width of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
     /// <param name="srcHeight">
-    /// The height of the texture region.
-    /// May be negative to flip the sprite when drawn.
+    /// The height of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
-    public Sprite( Texture texture, int srcWidth, int srcHeight )
+    public Sprite2D( Texture texture, int srcWidth, int srcHeight )
         : this( texture, 0, 0, srcWidth, srcHeight )
     {
     }
@@ -142,16 +138,16 @@ public class Sprite : TextureRegion
     /// Creates a sprite with width, height, and texture region equal to the
     /// specified size.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="srcX"></param>
-    /// <param name="srcY"></param>
+    /// <param name="texture"> The source texture. </param>
+    /// <param name="srcX"> X coordinate of the source region (bottom left corner). </param>
+    /// <param name="srcY"> Y coordinate of the source region (bottom left corner). </param>
     /// <param name="srcWidth">
     /// The width of the texture region, may be negative to flip the sprite when drawn.
     /// </param>
     /// <param name="srcHeight">
     /// The height of the texture region, may be negative to flip the sprite when drawn.
     /// </param>
-    public Sprite( Texture? texture, int srcX, int srcY, int srcWidth, int srcHeight )
+    public Sprite2D( Texture? texture, int srcX, int srcY, int srcWidth, int srcHeight )
     {
         Texture = texture ?? throw new ArgumentException( "texture cannot be null." );
 
@@ -162,11 +158,10 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Creates a sprite based on a specific TextureRegion.
-    /// The new sprite's region is a copy of the parameter region - altering one
-    /// does not affect the other.
+    /// Creates a sprite based on a specific TextureRegion. The new sprite's region
+    /// is a copy of the parameter region - altering one does not affect the other.
     /// </summary>
-    public Sprite( TextureRegion region )
+    public Sprite2D( TextureRegion region )
     {
         SetRegion( region, 0, 0, region.GetRegionWidth(), region.GetRegionHeight() );
         SetColor( Color.White );
@@ -182,14 +177,12 @@ public class Sprite : TextureRegion
     /// <param name="srcX"></param>
     /// <param name="srcY"></param>
     /// <param name="srcWidth">
-    /// The width of the texture region.
-    /// May be negative to flip the sprite when drawn.
+    /// The width of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
     /// <param name="srcHeight">
-    /// The height of the texture region.
-    /// May be negative to flip the sprite when drawn.
+    /// The height of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
-    public Sprite( TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight )
+    public Sprite2D( TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight )
     {
         SetRegion( region, srcX, srcY, srcWidth, srcHeight );
         SetColor( Color.White );
@@ -200,7 +193,7 @@ public class Sprite : TextureRegion
     /// <summary>
     /// Creates a sprite that is a copy in every way of the specified sprite.
     /// </summary>
-    public Sprite( Sprite sprite )
+    public Sprite2D( Sprite2D sprite )
     {
         Set( sprite );
     }
@@ -246,7 +239,7 @@ public class Sprite : TextureRegion
     /// </summary>
     /// <param name="sprite">The Sprite whose properties will be copied.</param>
     /// <exception cref="ArgumentNullException">Thrown if the provided sprite is null.</exception>
-    public void Set( Sprite sprite )
+    public void Set( Sprite2D sprite )
     {
         Guard.Against.Null( sprite );
 
@@ -282,11 +275,10 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Sets the position and size of the sprite when drawn, before scaling
-    /// and rotation are applied, using the current values for <c>X</c>,
-    /// <c>Y</c>, <c>Width</c>, and <c>Height</c>. If origin, rotation, or
-    /// scale are changed, it is slightly more efficient to set the bounds
-    /// after those operations.
+    /// Sets the position and size of the sprite when drawn, before scaling and
+    /// rotation are applied, using the current values for <c>X</c>, <c>Y</c>,
+    /// <c>Width</c>, and <c>Height</c>. If origin, rotation, or scale are changed,
+    /// it is slightly more efficient to set the bounds after those operations.
     /// </summary>
     public virtual void SetBounds()
     {
@@ -1096,7 +1088,7 @@ public class Sprite : TextureRegion
         foreach ( string verticesMsg in verticesMsgs )
         {
             font.Draw( batch, new GlyphLayout( font, verticesMsg ), x, y );
-            
+
             // move down the screen 1 line
             y -= 20;
         }

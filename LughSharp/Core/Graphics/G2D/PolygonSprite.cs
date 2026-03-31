@@ -177,7 +177,7 @@ public class PolygonSprite
             return;
         }
 
-        for ( var i = 0; i < _vertices?.Length; i += Sprite.VertexSize )
+        for ( var i = 0; i < _vertices?.Length; i += Sprite2D.VertexSize )
         {
             _vertices[ i ] += xAmount;
         }
@@ -197,7 +197,7 @@ public class PolygonSprite
             return;
         }
 
-        for ( var i = 1; i < _vertices?.Length; i += Sprite.VertexSize )
+        for ( var i = 1; i < _vertices?.Length; i += Sprite2D.VertexSize )
         {
             _vertices[ i ] += yAmount;
         }
@@ -218,7 +218,7 @@ public class PolygonSprite
             return;
         }
 
-        for ( var i = 0; i < _vertices?.Length; i += Sprite.VertexSize )
+        for ( var i = 0; i < _vertices?.Length; i += Sprite2D.VertexSize )
         {
             _vertices[ i ]     += xAmount;
             _vertices[ i + 1 ] += yAmount;
@@ -231,7 +231,7 @@ public class PolygonSprite
 
         float color = tint.ToFloatBitsRgba();
 
-        for ( var i = 2; i < _vertices?.Length; i += Sprite.VertexSize )
+        for ( var i = 2; i < _vertices?.Length; i += Sprite2D.VertexSize )
         {
             _vertices[ i ] = color;
         }
@@ -241,7 +241,7 @@ public class PolygonSprite
     {
         Color.Set( r, g, b, a );
 
-        for ( var i = 2; i < _vertices?.Length; i += Sprite.VertexSize )
+        for ( var i = 2; i < _vertices?.Length; i += Sprite2D.VertexSize )
         {
             _vertices[ i ] = Color.ToFloatBitsRgba();
         }

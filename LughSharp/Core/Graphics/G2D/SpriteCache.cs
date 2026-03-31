@@ -98,7 +98,7 @@ public class SpriteCache
 
     // ========================================================================
 
-    private static readonly float[] _tempVertices = new float[ Sprite.VertexSize * 6 ];
+    private static readonly float[] _tempVertices = new float[ Sprite2D.VertexSize * 6 ];
 
     private readonly List< Cache >   _caches         = new();
     private readonly Matrix4         _combinedMatrix = new();
@@ -377,7 +377,7 @@ public class SpriteCache
         }
 
         int verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
-        int count            = length / ( verticesPerImage * Sprite.VertexSize ) * 6;
+        int count            = length / ( verticesPerImage * Sprite2D.VertexSize ) * 6;
         int lastIndex        = _textures.Count - 1;
 
         if ( ( lastIndex < 0 ) || ( _textures[ lastIndex ] != texture ) )
@@ -1082,7 +1082,7 @@ public class SpriteCache
     /// <summary>
     /// Adds the specified region to the cache.
     /// </summary>
-    public void Add( Sprite sprite )
+    public void Add( Sprite2D sprite )
     {
         if ( sprite.Texture == null )
         {
@@ -1091,26 +1091,26 @@ public class SpriteCache
 
         if ( _mesh.NumIndices > 0 )
         {
-            Add( sprite.Texture, sprite.Vertices, 0, Sprite.SpriteSize );
+            Add( sprite.Texture, sprite.Vertices, 0, Sprite2D.SpriteSize );
 
             return;
         }
 
-        Array.Copy( sprite.Vertices, 0, _tempVertices, 0, 3 * Sprite.VertexSize ); // temp0,1,2=sprite0,1,2
+        Array.Copy( sprite.Vertices, 0, _tempVertices, 0, 3 * Sprite2D.VertexSize ); // temp0,1,2=sprite0,1,2
 
         Array.Copy( sprite.Vertices,
-                    2 * Sprite.VertexSize,
+                    2 * Sprite2D.VertexSize,
                     _tempVertices,
-                    3 * Sprite.VertexSize,
-                    Sprite.VertexSize ); // temp3=sprite2
+                    3 * Sprite2D.VertexSize,
+                    Sprite2D.VertexSize ); // temp3=sprite2
 
         Array.Copy( sprite.Vertices,
-                    3 * Sprite.VertexSize,
+                    3 * Sprite2D.VertexSize,
                     _tempVertices,
-                    4 * Sprite.VertexSize,
-                    Sprite.VertexSize ); // temp4=sprite3
+                    4 * Sprite2D.VertexSize,
+                    Sprite2D.VertexSize ); // temp4=sprite3
 
-        Array.Copy( sprite.Vertices, 0, _tempVertices, 5 * Sprite.VertexSize, Sprite.VertexSize ); // temp5=sprite0
+        Array.Copy( sprite.Vertices, 0, _tempVertices, 5 * Sprite2D.VertexSize, Sprite2D.VertexSize ); // temp5=sprite0
 
         Add( sprite.Texture, _tempVertices, 0, 30 );
     }
@@ -1189,7 +1189,7 @@ public class SpriteCache
         Cache cache = _caches[ cacheID ];
 
         int    verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
-        int    offset           = cache.Offset / ( verticesPerImage * Sprite.VertexSize ) * 6;
+        int    offset           = cache.Offset / ( verticesPerImage * Sprite2D.VertexSize ) * 6;
         int[]? counts           = cache.Counts;
         int    textureCount     = cache.TextureCount;
 
@@ -1225,7 +1225,7 @@ public class SpriteCache
 
         int verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
 
-        offset =  ( cache.Offset / ( verticesPerImage * Sprite.VertexSize ) * 6 ) + ( offset * 6 );
+        offset =  ( cache.Offset / ( verticesPerImage * Sprite2D.VertexSize ) * 6 ) + ( offset * 6 );
         length *= 6;
 
         Texture[]? textures = cache.Textures;
