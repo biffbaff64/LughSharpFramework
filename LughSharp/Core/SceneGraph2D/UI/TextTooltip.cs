@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.SceneGraph2D.Styles;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.SceneGraph2D.UI;

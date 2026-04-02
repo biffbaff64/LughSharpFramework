@@ -147,48 +147,46 @@ public abstract class AbstractInput : IInput
     // Abstract methods to be implemented by any inheriting classes.
     // ========================================================================
 
-    #region abstract methods
+    //@formatter:off
+    public virtual float GetAccelerometerX() => 0;
+    public virtual float GetAccelerometerY() => 0;
+    public virtual float GetAccelerometerZ() => 0;
+    public virtual float GetGyroscopeX() => 0;
+    public virtual float GetGyroscopeY() => 0;
+    public virtual float GetGyroscopeZ() => 0;
+    public virtual float GetAzimuth() => 0;
+    public virtual float GetPitch() => 0;
+    public virtual float GetRoll() => 0;
+    public virtual bool IsTouched( int pointer = 0 ) => false;
+    public virtual bool JustTouched() => false;
+    public virtual float GetPressure( int pointer = 0 ) => 0;
+    public virtual int GetRotation() => 0;
+    public virtual IInput.Orientation GetNativeOrientation() => 0;
+    public virtual int GetMaxPointers() => 0;
+    public virtual int GetX( int pointer = 0 ) => 0;
+    public virtual int GetY( int pointer = 0 ) => 0;
+    public virtual int GetDeltaX( int pointer = 0 ) => 0;
+    public virtual int GetDeltaY( int pointer = 0 ) => 0;
+    public virtual bool IsButtonPressed( int button ) => false;
+    public virtual bool IsButtonJustPressed( int button ) => false;
+    public virtual bool IsPeripheralAvailable( IInput.Peripheral peripheral ) => false;
+    public virtual long GetCurrentEventTime() => 0;
+    public virtual bool IsCursorOverridden() => false;
 
-    public abstract float GetAccelerometerX();
-    public abstract float GetAccelerometerY();
-    public abstract float GetAccelerometerZ();
-    public abstract float GetGyroscopeX();
-    public abstract float GetGyroscopeY();
-    public abstract float GetGyroscopeZ();
-    public abstract void Vibrate( int milliseconds );
-    public abstract void Vibrate( long[] pattern, int repeat );
-    public abstract void CancelVibrate();
-    public abstract float GetAzimuth();
-    public abstract float GetPitch();
-    public abstract float GetRoll();
-    public abstract void GetRotationMatrix( float[] matrix );
-    public abstract long GetCurrentEventTime();
-    public abstract bool IsTouched( int pointer = 0 );
-    public abstract bool JustTouched();
-    public abstract float GetPressure( int pointer = 0 );
-    public abstract int GetRotation();
-    public abstract IInput.Orientation GetNativeOrientation();
-    public abstract int GetMaxPointers();
-    public abstract int GetX( int pointer = 0 );
-    public abstract int GetY( int pointer = 0 );
-    public abstract int GetDeltaX( int pointer = 0 );
-    public abstract int GetDeltaY( int pointer = 0 );
-    public abstract bool IsButtonPressed( int button );
-    public abstract bool IsButtonJustPressed( int button );
-    public abstract bool IsPeripheralAvailable( IInput.Peripheral peripheral );
-    public abstract void SetCursorOverridden( bool caught );
-    public abstract bool IsCursorOverridden();
-    public abstract void SetCursorPosition( int x, int y );
-    public abstract void SetOnscreenKeyboardVisible( bool visible );
-    public abstract void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType? type );
-
-    public abstract void GetTextInput( IInput.ITextInputListener listener,
-                                       string title,
-                                       string text,
-                                       string hint,
-                                       IInput.OnscreenKeyboardType? type = IInput.OnscreenKeyboardType.Default );
-
-    #endregion abstract methods
+    public virtual void Vibrate( int milliseconds ) {}
+    public virtual void Vibrate( long[] pattern, int repeat ) {}
+    public virtual void CancelVibrate() {}
+    public virtual void GetRotationMatrix( float[] matrix ) {}
+    public virtual void SetCursorOverridden( bool caught ) {}
+    public virtual void SetCursorPosition( int x, int y ) {}
+    public virtual void SetOnscreenKeyboardVisible( bool visible ) {}
+    public virtual void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType? type ) {}
+    public virtual void GetTextInput( IInput.ITextInputListener listener,
+                                      string title,
+                                      string text,
+                                      string hint,
+                                      IInput.OnscreenKeyboardType? type = IInput.OnscreenKeyboardType.Default ) {}
+    //@formatter:on
 }
 
 // ============================================================================

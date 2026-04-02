@@ -151,14 +151,17 @@
   },
   "SliderStyle": {
     "default": {
-      "parent": "default-horizontal"
+      "background": "default-slider",
+      "knob": "default-slider-knob"
     },
     "default-vertical": {
-      "parent": "default-vertical"
+      "background": "default-slider",
+      "knob": "default-round-large"
     }
   },
   "LabelStyle": {
     "default": {
+      "background": "default-rect",
       "font": "default-font",
       "fontColor": "white"
     }

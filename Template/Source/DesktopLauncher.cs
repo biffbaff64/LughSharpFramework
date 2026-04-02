@@ -17,6 +17,14 @@ namespace Template.Source;
 [SupportedOSPlatform( "windows" )]
 public static class DesktopLauncher
 {
+    // Constants for use with the BuildTextureAtlases() method.
+    private const bool BuildAtlases          = false;
+    private const bool RemoveDuplicateImages = true;
+    private const bool KeepDuplicateImages   = false;
+    private const bool DrawDebugLines        = false;
+
+    // ========================================================================
+    
     /// <summary>
     /// Entry point for the desktop application. Initializes the application
     /// configuration information and launches the main game loop.
@@ -45,11 +53,6 @@ public static class DesktopLauncher
 
         game.Run();
     }
-
-    private const bool BuildAtlases           = false;
-    private const bool RemoveDuplicateImages = true;
-    private const bool KeepDuplicateImages   = false;
-    private const bool DrawDebugLines        = false;
 
     private static void BuildTextureAtlases()
     {

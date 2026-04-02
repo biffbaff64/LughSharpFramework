@@ -29,7 +29,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Main;
 using LughSharp.Core.SceneGraph2D.Listeners;
-using LughSharp.Core.SceneGraph2D.Styles;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
@@ -281,11 +281,19 @@ public class Button : Table, IDisableable
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override float GetPrefWidth()
     {
         return GetPrefWidthSafe();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     protected float GetPrefWidthSafe()
     {
         float width = base.GetPrefWidth();
@@ -308,11 +316,19 @@ public class Button : Table, IDisableable
         return width;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override float GetPrefHeight()
     {
         return GetPrefHeightSafe();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public float GetPrefHeightSafe()
     {
         float height = base.GetPrefHeight();
@@ -355,7 +371,7 @@ public class Button : Table, IDisableable
             return _style.Disabled;
         }
 
-        if ( IsPressed() )
+        if ( IsPressed )
         {
             if ( IsChecked && ( _style.CheckedDown != null ) )
             {
@@ -426,7 +442,7 @@ public class Button : Table, IDisableable
 
         Guard.Against.Null( _style );
 
-        if ( IsPressed() && !IsDisabled )
+        if ( IsPressed && !IsDisabled )
         {
             offsetX = _style.PressedOffsetX;
             offsetY = _style.PressedOffsetY;
@@ -463,7 +479,7 @@ public class Button : Table, IDisableable
         }
 
         if ( Stage is { ActionsRequestRendering: true }
-          && ( IsPressed() != ClickListener?.Pressed ) )
+          && ( IsPressed != ClickListener?.Pressed ) )
         {
             Engine.Graphics.RequestRendering();
         }
@@ -480,10 +496,7 @@ public class Button : Table, IDisableable
     /// <summary>
     /// Convenience method which returns <c>true</c> if the button is pressed.
     /// </summary>
-    public bool IsPressed()
-    {
-        return ClickListener?.VisualPressed ?? false;
-    }
+    public bool IsPressed => ClickListener?.VisualPressed ?? false;
 
     /// <summary>
     /// Convenience method which returns <c>true</c> if the mouse or touch is

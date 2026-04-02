@@ -30,6 +30,8 @@ using JetBrains.Annotations;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
+using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -40,10 +42,6 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [ActorDefinition( Role = "UI" )]
 public class TextButton : Button
 {
-    private Label? _label;
-
-    // ========================================================================
-
     /// <summary>
     /// Creates a new TextButton using the supplied <see cref="Skin"/>, and
     /// setting its text property to the supplied text.
@@ -74,11 +72,10 @@ public class TextButton : Button
     {
         Style = style;
 
-        _label = NewLabel( text, new LabelStyle( style.Font, style.FontColor ) );
-        _label.SetAlignment( Align.Center );
+        Label = NewLabel( text, new LabelStyle( style.Font, style.FontColor ) );
+        Label.SetAlignment( Align.Center );
 
-        Add( _label ).Expand().SetFill();
-
+        Add( Label ).Grow();
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
@@ -95,20 +92,16 @@ public class TextButton : Button
         {
             Guard.Against.Null( value );
 
-            if ( value is not { } textButtonStyle )
-            {
-                throw new ArgumentException( "style must be a TextButtonStyle." );
-            }
+            field = value;
 
-            field = textButtonStyle;
-            base.SetStyle< TextButtonStyle >( textButtonStyle );
+            SetStyle< TextButtonStyle >( value );
 
             if ( Label != null )
             {
                 LabelStyle labelStyle = Label.Style;
 
-                labelStyle.Font      = textButtonStyle.Font ?? new BitmapFont();
-                labelStyle.FontColor = textButtonStyle.FontColor ?? Color.White;
+                labelStyle.Font      = value.Font;
+                labelStyle.FontColor = value.FontColor ?? Color.White;
                 Label.Style          = labelStyle;
             }
         }
@@ -119,13 +112,13 @@ public class TextButton : Button
     /// </summary>
     public Label? Label
     {
-        get => _label;
+        get;
         set
         {
             Guard.Against.Null( value );
 
-            GetLabelCell()!.Actor = value;
-            _label                = value;
+            GetLabelCell()?.Actor = value;
+            field                 = value;
         }
     }
 
@@ -142,9 +135,10 @@ public class TextButton : Button
 
     /// <summary>
     /// Returns the appropriate label font color from the style based on
-    /// the current button state.
+    /// the current button state. If the color is not set in the style, this
+    /// method will return <see cref="Color.White"/>.
     /// </summary>
-    public Color? GetFontColor()
+    public Color GetFontColor()
     {
         if ( Style == null ) return Color.White;
 
@@ -153,7 +147,7 @@ public class TextButton : Button
             return Style.DisabledFontColor;
         }
 
-        if ( IsPressed() )
+        if ( IsPressed )
         {
             if ( IsChecked && ( Style.CheckedDownFontColor != null ) )
             {
@@ -209,7 +203,7 @@ public class TextButton : Button
             return Style.FocusedFontColor;
         }
 
-        return Style.FontColor;
+        return Style.FontColor ?? Color.White;
     }
 
     /// <inheritdoc />
@@ -217,7 +211,7 @@ public class TextButton : Button
     {
         if ( Label != null )
         {
-            Label.Style.FontColor = GetFontColor() ?? Color.White;
+            Label.Style.FontColor = GetFontColor();
             base.Draw( batch, parentAlpha );
         }
     }
@@ -228,7 +222,7 @@ public class TextButton : Button
     /// <returns> The requested Cell, or null if the button has no label. </returns>
     public Cell? GetLabelCell()
     {
-        return _label != null ? GetCell( _label ) : null;
+        return Label != null ? GetCell( Label ) : null;
     }
 
     /// <summary>
@@ -237,12 +231,12 @@ public class TextButton : Button
     /// <param name="text"> A string holding the Text. If <c>null</c> is passed,
     /// this will clear the Text Label.
     /// </param>
-    public void SetText( string? text ) => _label?.SetText( text );
+    public void SetText( string? text ) => Label?.SetText( text );
 
     /// <summary>
     /// Returns this buttons <see cref="Label"/> text.
     /// </summary>
-    public string? GetText() => _label?.GetText().ToString();
+    public string? GetText() => Label?.GetText().ToString();
 
     // ========================================================================
 
@@ -257,7 +251,7 @@ public class TextButton : Button
             className = className.Substring( dotIndex + 1 );
         }
 
-        return $"{( className.IndexOf( '$' ) != -1 ? "TextButton " : "" )}{className}: {_label?.GetText()}";
+        return $"{( className.IndexOf( '$' ) != -1 ? "TextButton " : "" )}{className}: {Label?.GetText()}";
     }
 }
 

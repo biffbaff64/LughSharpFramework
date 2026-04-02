@@ -29,6 +29,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Actions;
 using LughSharp.Core.SceneGraph2D.Listeners;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.UI;

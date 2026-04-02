@@ -266,12 +266,7 @@ public class Actor : IComparable< Actor >
             // Notify the target listeners.
             Notify( ev, false );
 
-            if ( !ev.Bubbles )
-            {
-                return ev.IsCancelled;
-            }
-
-            if ( ev.IsStopped )
+            if ( !ev.Bubbles || ev.IsStopped )
             {
                 return ev.IsCancelled;
             }
@@ -330,10 +325,9 @@ public class Actor : IComparable< Actor >
             return ev.IsCancelled;
         }
 
-        ev.ListenerActor = this;
-        ev.Capture       = capture;
-
-        ev.Stage ??= Stage;
+        ev.ListenerActor =   this;
+        ev.Capture       =   capture;
+        ev.Stage         ??= Stage;
 
         try
         {

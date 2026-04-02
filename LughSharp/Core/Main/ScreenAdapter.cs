@@ -39,7 +39,7 @@ public class ScreenAdapter : IScreen
 {
     /// <summary>
     /// Called when this screen becomes the current screen for
-    /// a <see cref="Game"/>.
+    /// a <see cref="LughGame"/>.
     /// </summary>
     public virtual void Show()
     {
@@ -86,7 +86,7 @@ public class ScreenAdapter : IScreen
     }
 
     /// <summary>
-    /// Called when this screen is no longer the current screen for a <see cref="Game"/>.
+    /// Called when this screen is no longer the current screen for a <see cref="LughGame"/>.
     /// </summary>
     public virtual void Hide()
     {

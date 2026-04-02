@@ -31,9 +31,11 @@ using LughSharp.Core.Input;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Listeners;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
@@ -58,43 +60,12 @@ public class Slider : ProgressBar
     private int      _draggingPointer = -1;
     private float[]? _snapValues;
     private float    _threshold;
+    
+    // ========================================================================
 
-    public Slider( float min, float max, float stepSize, bool vertical, Skin skin )
-        : this( min,
-                max,
-                stepSize,
-                vertical,
-                skin.Get< SliderStyle >( "default" + ( vertical ? "-vertical" : "" ) ) )
-    {
-    }
-
-    public Slider( float min, float max, float stepSize, bool vertical, Skin skin, string styleName )
-        : this( min, max, stepSize, vertical, skin.Get< SliderStyle >( styleName ) )
-    {
-    }
-
-    /// Creates a new slider. If horizontal, its width is determined by the prefWidth
-    /// parameter, its height is determined by the maximum of the height of either the
-    /// slider
-    /// <see cref="NinePatch"/>
-    /// or slider handle
-    /// <see cref="TextureRegion"/>
-    /// .
-    /// The min and max values determine the range the values of this slider can take on,
-    /// the stepSize parameter specifies the distance between individual values. E.g. min
-    /// could be 4, max could be 10 and stepSize could be 0.2, giving you a total of 30
-    /// values, 4.0 4.2, 4.4 and so on.
-    /// <param name="min"> the minimum value </param>
-    /// <param name="max"> the maximum value </param>
-    /// <param name="stepSize"> the step size between values </param>
-    /// <param name="vertical"></param>
-    /// <param name="style"> the <see cref="SliderStyle"/> </param>
-    public Slider( float min, float max, float stepSize, bool vertical, SliderStyle style )
-        : base( min, max, stepSize, vertical, style )
-    {
-        AddListener( new SliderInputListener( this ) );
-    }
-
+    /// <summary>
+    /// True if the mouse is currently over the slider.
+    /// </summary>
     public bool MouseOver { get; set; }
 
     /// <summary>
@@ -109,11 +80,67 @@ public class Slider : ProgressBar
     /// </summary>
     public Interpolator VisualInterpolationInverse { get; set; } = Interpolation.Linear;
 
-    public SliderStyle GetStyle()
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a new slider with the default style obtained from the supplied <see cref="Skin"/>.
+    /// </summary>
+    /// <param name="min"> the minimum value </param>
+    /// <param name="max"> the maximum value </param>
+    /// <param name="stepSize"> the step size between values </param>
+    /// <param name="vertical"> True if the slider is to be drawn vertically. otherwise false. </param>
+    /// <param name="skin"> The Skin holding the style. </param>
+    public Slider( float min, float max, float stepSize, bool vertical, Skin skin )
+        : this( min,
+                max,
+                stepSize,
+                vertical,
+                skin.Get< SliderStyle >( "default" + ( vertical ? "-vertical" : "" ) ) )
     {
-        return ( SliderStyle )Style;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="min"> the minimum value </param>
+    /// <param name="max"> the maximum value </param>
+    /// <param name="stepSize"> the step size between values </param>
+    /// <param name="vertical"> True if the slider is to be drawn vertically. otherwise false. </param>
+    /// <param name="skin"> The Skin holding the style. </param>
+    /// <param name="styleName">
+    /// The Style name from the style held in the Skin. Usuallly either <c>default</c>
+    /// or <c>default-vertical</c>, but can be any style name registered in the Skin.
+    /// </param>
+    public Slider( float min, float max, float stepSize, bool vertical, Skin skin, string styleName )
+        : this( min, max, stepSize, vertical, skin.Get< SliderStyle >( styleName ) )
+    {
+    }
+
+    /// Creates a new slider. If horizontal, its width is determined by the prefWidth
+    /// parameter, its height is determined by the maximum of the height of either the
+    /// slider <see cref="NinePatch"/> or slider handle <see cref="TextureRegion"/>.
+    /// The min and max values determine the range the values of this slider can take on,
+    /// the stepSize parameter specifies the distance between individual values. E.g. min
+    /// could be 4, max could be 10 and stepSize could be 0.2, giving you a total of 30
+    /// values, 4.0 4.2, 4.4 and so on.
+    /// <param name="min"> the minimum value </param>
+    /// <param name="max"> the maximum value </param>
+    /// <param name="stepSize"> the step size between values </param>
+    /// <param name="vertical"> True if the slider is to be drawn vertically. otherwise false. </param>
+    /// <param name="style"> the <see cref="SliderStyle"/> </param>
+    public Slider( float min, float max, float stepSize, bool vertical, SliderStyle style )
+        : base( min, max, stepSize, vertical, style )
+    {
+        if ( !AddListener( new SliderInputListener( this ) ) )
+        {
+            throw new ListenerFailureException( "Failed to add slider input listener" );
+        }
+    }
+
+    /// <summary>
+    /// Returns the appropriate <see cref="ISceneDrawable"/> for the slider background,
+    /// based on the current state of the slider.
+    /// </summary>
     protected ISceneDrawable? GetBackgroundDrawable()
     {
         var style = ( SliderStyle )Style;
@@ -136,6 +163,10 @@ public class Slider : ProgressBar
         return style.Background;
     }
 
+    /// <summary>
+    /// Returns the appropriate <see cref="ISceneDrawable"/> for the slider knob,
+    /// based on the current state of the slider.
+    /// </summary>
     protected ISceneDrawable? GetKnobDrawable()
     {
         var style = ( SliderStyle )Style;
@@ -158,6 +189,10 @@ public class Slider : ProgressBar
         return style.Knob;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     protected ISceneDrawable? GetKnobBeforeDrawable()
     {
         var style = ( SliderStyle )Style;
@@ -180,6 +215,10 @@ public class Slider : ProgressBar
         return style.KnobBefore;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     protected ISceneDrawable? GetKnobAfterDrawable()
     {
         var style = ( SliderStyle )Style;
@@ -202,9 +241,15 @@ public class Slider : ProgressBar
         return style.KnobAfter;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     private bool CalculatePositionAndValue( float x, float y )
     {
-        SliderStyle     style = GetStyle();
+        SliderStyle     style = ( SliderStyle )Style;
         ISceneDrawable? knob  = style.Knob;
         ISceneDrawable? bg    = GetBackgroundDrawable();
 
@@ -254,6 +299,11 @@ public class Slider : ProgressBar
         return valueSet;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     protected float GetSnapped( float value )
     {
         if ( _snapValues is { Length: 0 } )
@@ -307,9 +357,6 @@ public class Slider : ProgressBar
     {
         Value = MinValue + ( ( MaxValue - MinValue ) * VisualInterpolationInverse.Apply( percent ) );
     }
-
-    // ========================================================================
-    // ========================================================================
 
     // ========================================================================
     // ========================================================================

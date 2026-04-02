@@ -32,6 +32,7 @@ using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D;
 using LughSharp.Core.SceneGraph2D.UI;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 

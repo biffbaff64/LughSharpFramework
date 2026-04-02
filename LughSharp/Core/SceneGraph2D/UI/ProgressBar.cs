@@ -32,7 +32,7 @@ using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Listeners;
-using LughSharp.Core.SceneGraph2D.Styles;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
@@ -460,9 +460,8 @@ public class ProgressBar : Widget, IDisableable
 
         if ( _programmaticChangeEvents )
         {
-            var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
-
-            bool cancelled = Fire( changeEvent );
+            var  changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+            bool cancelled   = Fire( changeEvent );
 
             // It is safe to suppress nullability warnings for 'changeEvent'
             // here because Fire() will throw an exception is it is null.

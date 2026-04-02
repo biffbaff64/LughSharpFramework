@@ -459,7 +459,14 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
         return true;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Updates the viewport with the specified dimensions and coordinates.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the viewport.</param>
+    /// <param name="y">The y-coordinate of the viewport.</param>
+    /// <param name="width">The width of the viewport.</param>
+    /// <param name="height">The height of the viewport.</param>
+    /// <param name="source"></param>
     public override void UpdateViewport( int x, int y, int width, int height, int source = 0 )
     {
         if ( ( width == 0 ) || ( height == 0 ) )

@@ -71,7 +71,7 @@ public class Glyph
 
             if ( page != null )
             {
-                return page[ ch & ( BitmapFont.PageSize - 1 ) ];
+                return ( sbyte )page[ ch & ( BitmapFont.PageSize - 1 ) ];
             }
 
             // else drop through to return 0

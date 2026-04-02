@@ -28,6 +28,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 
@@ -119,7 +120,7 @@ public class ImageTextButton : Button
             return _style.ImageDisabled;
         }
 
-        if ( IsPressed() )
+        if ( IsPressed )
         {
             if ( IsChecked && ( _style?.ImageCheckedDown != null ) )
             {
@@ -185,7 +186,7 @@ public class ImageTextButton : Button
             return _style.DisabledFontColor;
         }
 
-        if ( IsPressed() )
+        if ( IsPressed )
         {
             if ( IsChecked && ( _style?.CheckedDownFontColor != null ) )
             {

@@ -30,6 +30,7 @@ using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Input;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace DesktopGLBackend.Input;
 
@@ -65,8 +66,8 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     }
 
     // ========================================================================
-
-    #region From IDesktopGLInput
+    // From IDesktopGLInput
+    // ========================================================================
 
     /// <inheritdoc />
     public void WindowHandleChanged( DotGLFW.Window? windowHandle )
@@ -83,7 +84,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     /// <inheritdoc />
     public void Update()
     {
-        _eventQueue.Drain( InputProcessor );
+        _eventQueue.ProcessInputEvents( InputProcessor );
     }
 
     /// <inheritdoc />
@@ -116,14 +117,12 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         Array.Fill( JustPressedKeys, false );
         Array.Fill( _justPressedButtons, false );
 
-        _eventQueue.Drain( null );
+        _eventQueue.ProcessInputEvents( null );
     }
 
-    #endregion From IDesktopGLInput
-
     // ========================================================================
-
-    #region From Abstract Input
+    // From Abstract Input
+    // ========================================================================
 
     /// <inheritdoc />
     public override int GetMaxPointers()
@@ -287,16 +286,16 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     {
         return key switch
                {
-                   IInput.Keys.Backspace    => ( char )8,
-                   IInput.Keys.Tab          => '\t',
+                   IInput.Keys.Backspace   => ( char )8,
+                   IInput.Keys.Tab         => '\t',
                    IInput.Keys.ForwardDel  => ( char )127,
                    IInput.Keys.NumpadEnter => '\n',
-                   IInput.Keys.Enter        => '\n',
-                   var _                    => ( char )0
+                   IInput.Keys.Enter       => '\n',
+                   var _                   => ( char )0
                };
     }
 
-    public static int GetGdxKeycode( DotGLFW.Key glKeycode )
+    public static int TranslateKeyCode( DotGLFW.Key glKeycode )
     {
         return glKeycode switch
                {
@@ -348,8 +347,6 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                    DotGLFW.Key.Backslash    => IInput.Keys.Backslash,
                    DotGLFW.Key.RightBracket => IInput.Keys.RightBracket,
                    DotGLFW.Key.GraveAccent  => IInput.Keys.Grave,
-
-//            DotGLFW.Key.Unknown      => IInput.Keys.UNKNOWN,
                    DotGLFW.Key.Escape       => IInput.Keys.Escape,
                    DotGLFW.Key.Enter        => IInput.Keys.Enter,
                    DotGLFW.Key.Tab          => IInput.Keys.Tab,
@@ -430,6 +427,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     public void Dispose()
     {
         Dispose( true );
+        GC.SuppressFinalize( this );
     }
 
     protected void Dispose( bool disposing )
@@ -452,7 +450,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         {
             case DotGLFW.InputState.Press:
             {
-                gdxKey = GetGdxKeycode( key );
+                gdxKey = TranslateKeyCode( key );
 
                 _eventQueue.OnKeyDown( gdxKey, TimeUtils.NanoTime() );
 
@@ -476,7 +474,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
             case DotGLFW.InputState.Release:
             {
-                gdxKey = GetGdxKeycode( key );
+                gdxKey = TranslateKeyCode( key );
 
                 PressedKeyCount--;
                 PressedKeys[ gdxKey ] = false;
@@ -507,6 +505,11 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="window"></param>
+    /// <param name="codepoint"></param>
     public void CharCallback( DotGLFW.Window window, uint codepoint )
     {
         if ( ( codepoint & 0xff00 ) == 0xf700 )
@@ -519,6 +522,13 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         _eventQueue.OnKeyTyped( ( char )codepoint, TimeUtils.NanoTime() );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="window"></param>
+    /// <param name="button"></param>
+    /// <param name="state"></param>
+    /// <param name="mods"></param>
     public void MouseCallback( DotGLFW.Window window, DotGLFW.MouseButton button, DotGLFW.InputState state,
                                DotGLFW.ModifierKey mods )
     {
@@ -560,12 +570,24 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="window"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     public void ScrollCallback( DotGLFW.Window window, double x, double y )
     {
         _window.Graphics.RequestRendering();
         _eventQueue.OnScrolled( -( float )x, -( float )y, TimeUtils.NanoTime() );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="window"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     public void CursorPosCallback( DotGLFW.Window window, double x, double y )
     {
         _deltaX = ( int )x - _logicalMouseX;
@@ -596,86 +618,6 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
             _eventQueue.OnMouseMoved( _mouseX, _mouseY, TimeUtils.NanoTime() );
         }
     }
-
-    // ========================================================================
-    // Stubs
-    // ========================================================================
-
-    public override float GetAccelerometerX()
-    {
-        return 0;
-    }
-
-    public override float GetAccelerometerY()
-    {
-        return 0;
-    }
-
-    public override float GetAccelerometerZ()
-    {
-        return 0;
-    }
-
-    public override int GetRotation()
-    {
-        return 0;
-    }
-
-    public override float GetAzimuth()
-    {
-        return 0;
-    }
-
-    public override float GetPitch()
-    {
-        return 0;
-    }
-
-    public override float GetRoll()
-    {
-        return 0;
-    }
-
-    public override float GetGyroscopeX()
-    {
-        return 0;
-    }
-
-    public override float GetGyroscopeY()
-    {
-        return 0;
-    }
-
-    public override float GetGyroscopeZ()
-    {
-        return 0;
-    }
-
-    public override void SetOnscreenKeyboardVisible( bool visible )
-    {
-    }
-
-    public override void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType? type )
-    {
-    }
-
-    public override void Vibrate( int milliseconds )
-    {
-    }
-
-    public override void Vibrate( long[] pattern, int repeat )
-    {
-    }
-
-    public override void CancelVibrate()
-    {
-    }
-
-    public override void GetRotationMatrix( float[] matrix )
-    {
-    }
-
-    #endregion From Abstract Input
 }
 
 // ============================================================================

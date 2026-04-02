@@ -19,8 +19,9 @@ using LughSharp.Core.Maps.Tiled.Loaders;
 using LughSharp.Core.Maps.Tiled.Renderers;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D;
-using LughSharp.Core.SceneGraph2D.Styles;
+using LughSharp.Core.SceneGraph2D.RegistryStyles;
 using LughSharp.Core.SceneGraph2D.UI;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
@@ -29,7 +30,7 @@ using LughSharp.Tests.Source;
 namespace Template.Source;
 
 [PublicAPI]
-public class MainGame : Game
+public class MainGame : LughGame
 {
     public bool IsDrawingStage { get; set; } = true;
 
@@ -48,8 +49,8 @@ public class MainGame : Game
     private Stage?                      _stage;
     private Scene2DImage?               _hudActor;
     private BitmapFont?                 _font;
-    private Sprite2D?                     _sprite;
-    private Sprite2D?                     _sprite2;
+    private Sprite2D?                   _sprite;
+    private Sprite2D?                   _sprite2;
     private bool                        _disposed;
     private ILughTest?                  _test;
     private TmxMapLoader?               _tmxMapLoader;
@@ -81,8 +82,8 @@ public class MainGame : Game
 
         CreateCameras();
 //        CreateAssets();
-        CreateStage(); 
-//        CreateFont();
+        CreateStage();
+        CreateFont();
 //        CreateFreeTypeFont(); 
 //        CreateSprites();
 //        CreateMap(); 
@@ -188,7 +189,7 @@ public class MainGame : Game
     /// <summary>
     /// Called when the <see cref="IApplication"/> is resized. This can happen at
     /// any point during a non-paused state but will never happen before a call
-    /// to <see cref="Game.Create"/>
+    /// to <see cref="LughGame.Create"/>
     /// </summary>
     /// <param name="width">The new width in pixels.</param>
     /// <param name="height">The new height in pixels.</param>
@@ -316,11 +317,12 @@ public class MainGame : Game
         const bool HudActor             = false;
         const bool WindowActor          = false;
         const bool ButtonActor          = false;
-        const bool TextButtonActor      = true;
+        const bool TextButtonActor      = false;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
-        const bool CheckBoxActor        = false;
-        const bool ProgressBarActor     = false;
+        const bool CheckBoxActor        = true;
+        const bool ProgressBarActor     = true;
+        const bool SliderActor          = true;
 
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
@@ -385,13 +387,12 @@ public class MainGame : Game
                 DisabledFontColor = Color.Gray,
             };
 
-            var textButton = new TextButton( "Text Button", tbStyle )
-//            var textButton = new TextButton( "Text Button", skin )
+//            var textButton = new TextButton( "Text Button", tbStyle )
+            var textButton = new TextButton( "Text Button", skin )
             {
                 IsVisible = true,
             };
             textButton.SetPosition( 200, 160 );
-            textButton.SetSize( 100, 100 );
             _stage?.AddActor( textButton );
         }
 
@@ -438,11 +439,11 @@ public class MainGame : Game
 
         if ( CheckBoxActor )
         {
-            var checkBox = new CheckBox( "default", skin )
+            var checkBox = new CheckBox( "checkbox", skin )
             {
                 IsVisible = true,
             };
-            checkBox.SetPosition( 20, 180 );
+            checkBox.SetPosition( 400, 400 );
             _stage?.AddActor( checkBox );
         }
 
@@ -458,6 +459,20 @@ public class MainGame : Game
             progressBar.Width  = 400;
             progressBar.Height = 100;
             _stage?.AddActor( progressBar );
+        }
+
+        // --------------------------------------
+
+        if ( SliderActor )
+        {
+            var slider = new Slider( 0f, 10f, 1f, false, skin )
+            {
+                IsVisible = true,
+            };
+            slider.SetPosition( 100, 200 );
+            slider.Width  = 400;
+            slider.Height = 100;
+            _stage?.AddActor( slider );
         }
     }
 

@@ -104,10 +104,10 @@ public class DesktopGLApplication : IApplication, IDisposable
     {
         // ====================================================================
         // ====================================================================
-        // Essential first actions. Do not move.
+        // ESSENTIAL FIRST ACTIONS. DO NOT MOVE.
         //
-        // This MUST be the first call, so that the Logger and Engine.App global are
-        // initialised correctly.
+        // This MUST be the first call, so that the Logger and Engine.App
+        // global are initialised correctly.
         Engine.Initialise( this );
 
         // ====================================================================
@@ -130,8 +130,8 @@ public class DesktopGLApplication : IApplication, IDisposable
         // INet respectively, and are used to access LughSharp members 'Audio', 'Files',
         // and 'Network' are instances of classes which extend the aforementioned classes,
         // and are used in backend code only.
-        // Note: Engine.Graphics is set later, during window creation as each window that
-        // is created will have its own IGraphics instance.
+        // Note: Engine.Graphics and Engine.Input are set later, during window creation as
+        // each window that is created will have its own instances.
         Engine.Audio = AudioManager.CreateAudio( AppConfig );
         Engine.Files = new Files();
         Engine.Net   = new DesktopGLNet( AppConfig );
@@ -160,14 +160,10 @@ public class DesktopGLApplication : IApplication, IDisposable
         try
         {
             Loop();
-            CleanupWindows();
         }
-//        catch ( Exception e )
-//        {
-//            throw e is SystemException ? e : new RuntimeException( e );
-//        }
         finally
         {
+            CleanupWindows();
             Cleanup();
         }
     }

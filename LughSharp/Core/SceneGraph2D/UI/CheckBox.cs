@@ -27,6 +27,7 @@ using System;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 

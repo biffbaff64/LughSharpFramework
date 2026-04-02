@@ -30,7 +30,7 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Listeners;
-using LughSharp.Core.SceneGraph2D.Styles;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 

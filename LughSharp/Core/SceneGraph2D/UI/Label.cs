@@ -32,7 +32,7 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
-using LughSharp.Core.SceneGraph2D.Styles;
+using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
@@ -60,14 +60,13 @@ public class Label : Widget, IDisposable
     private readonly GlyphLayout _prefSizeLayout = new();
     private readonly Vector2     _prefSize       = new();
 
-    private StringBuilder _text            = new();
-    private int           _intValue        = int.MinValue;
-    private bool          _prefSizeInvalid = true;
-
-    private BitmapFontCache _fontCache;
-    private float           _lastPrefHeight;
-    private string?         _ellipsis;
-    private bool            _fontScaleChanged;
+    private StringBuilder    _text            = new();
+    private int              _intValue        = int.MinValue;
+    private bool             _prefSizeInvalid = true;
+    private BitmapFontCache? _fontCache;
+    private float            _lastPrefHeight;
+    private string?          _ellipsis;
+    private bool             _fontScaleChanged;
 
     // ========================================================================
 
@@ -126,7 +125,7 @@ public class Label : Widget, IDisposable
             _text.Append( text );
         }
 
-        _fontCache = style.Font.NewFontCache();
+//        _fontCache = style.Font.NewFontCache();
 
         Style = style;
 
@@ -511,9 +510,12 @@ public class Label : Widget, IDisposable
             color.Mul( Style.FontColor );
         }
 
-        _fontCache.SetText( _text.ToString(), X, Y );
-        _fontCache.Tint( color );
-        _fontCache.Draw( batch );
+        if ( _fontCache != null )
+        {
+            _fontCache.SetText( _text.ToString(), X, Y );
+            _fontCache.Tint( color );
+            _fontCache.Draw( batch );
+        }
     }
 
     /// <summary>

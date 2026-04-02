@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Input;
 
@@ -34,31 +35,11 @@ namespace LughSharp.Core.Input;
 [PublicAPI]
 public class InputEventQueue
 {
-    // ========================================================================
-
-    private readonly List< int > _processingQueue = new();
-    private readonly List< int > _queue           = new();
-
-    // ========================================================================
-
     public long CurrentEventTime { get; set; }
 
     // ========================================================================
 
-//    private enum InputAction
-//    {
-//        Skip = -1,
-//        KeyDown = 0,
-//        KeyUp,
-//        KeyTyped,
-//        TouchDown,
-//        TouchUp,
-//        TouchDragged,
-//        MouseMoved,
-//        MouseScrolled,
-//    }
-    
-    private const int Skip           = -1;
+    private const int Skip          = -1;
     private const int KeyDown       = 0;
     private const int KeyUp         = 1;
     private const int KeyTyped      = 2;
@@ -70,6 +51,11 @@ public class InputEventQueue
 
     // ========================================================================
 
+    private readonly List< int > _processingQueue = new();
+    private readonly List< int > _queue           = new();
+
+    // ========================================================================
+
     /// <summary>
     /// Processes and drains the events in the queue using the specified input processor.
     /// </summary>
@@ -77,7 +63,7 @@ public class InputEventQueue
     /// The input processor to handle the events. If null, the queue will be cleared without processing.
     /// </param>
     /// <exception cref="SystemException"> Thrown if an unknown event type is encountered. </exception>
-    public void Drain( IInputProcessor? processor )
+    public void ProcessInputEvents( IInputProcessor? processor )
     {
         int[] processingArray;
 
@@ -108,26 +94,31 @@ public class InputEventQueue
             switch ( eventType )
             {
                 case Skip:
+                    Logger.Debug( "Skip" );
                     index += processingArray[ index ];
 
                     break;
 
                 case KeyDown:
+                    Logger.Debug( "KeyDown" );
                     processor.OnKeyDown( processingArray[ index++ ] );
 
                     break;
 
                 case KeyUp:
+                    Logger.Debug( "KeyUp" );
                     processor.OnKeyUp( processingArray[ index++ ] );
 
                     break;
 
                 case KeyTyped:
+                    Logger.Debug( "KeyTyped" );
                     processor.OnKeyTyped( ( char )processingArray[ index++ ] );
 
                     break;
 
                 case TouchDown:
+                    Logger.Debug( "TouchDown" );
                     processor.OnTouchDown( processingArray[ index++ ],
                                            processingArray[ index++ ],
                                            processingArray[ index++ ],
@@ -136,6 +127,7 @@ public class InputEventQueue
                     break;
 
                 case TouchUp:
+                    Logger.Debug( "TouchUp" );
                     processor.OnTouchUp( processingArray[ index++ ],
                                          processingArray[ index++ ],
                                          processingArray[ index++ ],
@@ -144,6 +136,7 @@ public class InputEventQueue
                     break;
 
                 case TouchDragged:
+                    Logger.Debug( "TouchDragged" );
                     processor.OnTouchDragged( processingArray[ index++ ],
                                               processingArray[ index++ ],
                                               processingArray[ index++ ] );
@@ -151,11 +144,13 @@ public class InputEventQueue
                     break;
 
                 case MouseMoved:
+                    Logger.Debug( "MouseMoved" );
                     processor.OnMouseMoved( processingArray[ index++ ], processingArray[ index++ ] );
 
                     break;
 
                 case MouseScrolled:
+                    Logger.Debug( "MouseScrolled" );
                     processor.OnScrolled( NumberUtils.IntBitsToFloat( processingArray[ index++ ] ),
                                           NumberUtils.IntBitsToFloat( processingArray[ index++ ] ) );
 
@@ -178,7 +173,7 @@ public class InputEventQueue
     /// The index of the next occurrence of the specified event type, or -1 if not found.
     /// </returns>
     /// <exception cref="SystemException"> Thrown if an unknown event type is encountered. </exception>
-    private int Next( int nextType, int i )
+    private int NextIndex( int nextType, int i )
     {
         lock ( this )
         {
@@ -375,7 +370,7 @@ public class InputEventQueue
         lock ( this )
         {
             // Skip any queued touch dragged events for the same pointer.
-            for ( int i = Next( TouchDragged, 0 ); i >= 0; i = Next( TouchDragged, i + 6 ) )
+            for ( int i = NextIndex( TouchDragged, 0 ); i >= 0; i = NextIndex( TouchDragged, i + 6 ) )
             {
                 if ( _queue[ i + 5 ] == pointer )
                 {
@@ -409,7 +404,7 @@ public class InputEventQueue
         lock ( this )
         {
             // Skip any queued mouse moved events.
-            for ( int i = Next( MouseMoved, 0 ); i >= 0; i = Next( MouseMoved, i + 5 ) )
+            for ( int i = NextIndex( MouseMoved, 0 ); i >= 0; i = NextIndex( MouseMoved, i + 5 ) )
             {
                 _queue[ i ]     = Skip;
                 _queue[ i + 3 ] = 2;

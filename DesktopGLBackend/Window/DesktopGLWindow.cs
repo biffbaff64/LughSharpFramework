@@ -208,10 +208,6 @@ public class DesktopGLWindow : IDisposable
         {
             Graphics.Update();
             Graphics.RenderWindow( GlfwWindow, Graphics.WindowWidth, Graphics.WindowHeight );
-
-//            ApplicationListener?.Update();
-//            ApplicationListener?.Render();
-//            DotGLFW.Glfw.SwapBuffers( GlfwWindow );
         }
 
         if ( !_iconified )
