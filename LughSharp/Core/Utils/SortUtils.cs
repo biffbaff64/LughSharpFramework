@@ -40,6 +40,8 @@ namespace LughSharp.Core.Utils;
 [PublicAPI]
 public static class SortUtils
 {
+    #region Methods calling ComparableTimSort
+    
     /// <summary>
     /// Sorts the elements of the specified list using the default comparer.
     /// </summary>
@@ -72,6 +74,26 @@ public static class SortUtils
         var comparableTimSort = new ComparableTimSort< object >();
         comparableTimSort.DoSort( a, fromIndex, toIndex );
     }
+
+    /// <summary>
+    /// Sorts the elements of the specified range in the array using the default comparer.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the array.</typeparam>
+    /// <param name="a">The array to sort.</param>
+    /// <param name="from">The index of the first element (inclusive) to be sorted.</param>
+    /// <param name="to">The index of the last element (exclusive) to be sorted.</param>
+    public static void Sort< T >( T[] a, int from, int to )
+    {
+        var comparableTimSort = new ComparableTimSort< T >();
+        comparableTimSort.DoSort( a, from, to );
+    }
+
+    #endregion Methods calling ComparableTimSort
+    
+    // ========================================================================
+    // ========================================================================
+    
+    #region Methods calling TimSort
 
     /// <summary>
     /// Sorts the elements of the specified list using the specified comparer.
@@ -112,19 +134,6 @@ public static class SortUtils
     }
 
     /// <summary>
-    /// Sorts the elements of the specified range in the array using the default comparer.
-    /// </summary>
-    /// <typeparam name="T">The type of the elements in the array.</typeparam>
-    /// <param name="a">The array to sort.</param>
-    /// <param name="from">The index of the first element (inclusive) to be sorted.</param>
-    /// <param name="to">The index of the last element (exclusive) to be sorted.</param>
-    public static void Sort< T >( T[] a, int from, int to )
-    {
-        var comparableTimSort = new ComparableTimSort< T >();
-        comparableTimSort.DoSort( a, from, to );
-    }
-
-    /// <summary>
     /// Sorts the elements of the specified list using the specified comparison.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the list.</typeparam>
@@ -153,6 +162,8 @@ public static class SortUtils
         list.Clear();
         list.AddRange( arrayToSort );
     }
+    
+    #endregion Methods calling TimSort
 }
 
 // ========================================================================

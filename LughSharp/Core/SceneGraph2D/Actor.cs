@@ -224,13 +224,7 @@ public class Actor : IComparable< Actor >
         // hierarchy changes.
         var    ascendants = Pools.Obtain< List< Group > >();
         Group? parent     = Parent;
-
-        if ( ascendants == null || ascendants.Count == 0 )
-        {
-            // No point in carrying on if there are no ascendants.
-            return ev.IsCancelled;
-        }
-
+        
         while ( parent != null )
         {
             ascendants.Add( parent );
@@ -251,6 +245,8 @@ public class Actor : IComparable< Actor >
 
                 if ( ev.IsStopped )
                 {
+                    Logger.Checkpoint();
+            
                     return ev.IsCancelled;
                 }
             }
@@ -260,6 +256,8 @@ public class Actor : IComparable< Actor >
 
             if ( ev.IsStopped )
             {
+                Logger.Checkpoint();
+            
                 return ev.IsCancelled;
             }
 
@@ -268,6 +266,8 @@ public class Actor : IComparable< Actor >
 
             if ( !ev.Bubbles || ev.IsStopped )
             {
+                Logger.Checkpoint();
+            
                 return ev.IsCancelled;
             }
 
@@ -279,14 +279,20 @@ public class Actor : IComparable< Actor >
 
                 if ( ev.IsStopped )
                 {
+                    Logger.Checkpoint();
+            
                     return ev.IsCancelled;
                 }
             }
 
+            Logger.Checkpoint();
+            
             return ev.IsCancelled;
         }
         finally
         {
+            Logger.Checkpoint();
+            
             ascendants.Clear();
 
             Pools.Free< List< Group > >( ascendants );

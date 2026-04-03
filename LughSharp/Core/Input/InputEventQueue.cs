@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Maths;
@@ -94,31 +97,26 @@ public class InputEventQueue
             switch ( eventType )
             {
                 case Skip:
-                    Logger.Debug( "Skip" );
                     index += processingArray[ index ];
 
                     break;
 
                 case KeyDown:
-                    Logger.Debug( "KeyDown" );
                     processor.OnKeyDown( processingArray[ index++ ] );
 
                     break;
 
                 case KeyUp:
-                    Logger.Debug( "KeyUp" );
                     processor.OnKeyUp( processingArray[ index++ ] );
 
                     break;
 
                 case KeyTyped:
-                    Logger.Debug( "KeyTyped" );
                     processor.OnKeyTyped( ( char )processingArray[ index++ ] );
 
                     break;
 
                 case TouchDown:
-                    Logger.Debug( "TouchDown" );
                     processor.OnTouchDown( processingArray[ index++ ],
                                            processingArray[ index++ ],
                                            processingArray[ index++ ],
@@ -127,7 +125,6 @@ public class InputEventQueue
                     break;
 
                 case TouchUp:
-                    Logger.Debug( "TouchUp" );
                     processor.OnTouchUp( processingArray[ index++ ],
                                          processingArray[ index++ ],
                                          processingArray[ index++ ],
@@ -136,7 +133,6 @@ public class InputEventQueue
                     break;
 
                 case TouchDragged:
-                    Logger.Debug( "TouchDragged" );
                     processor.OnTouchDragged( processingArray[ index++ ],
                                               processingArray[ index++ ],
                                               processingArray[ index++ ] );
@@ -144,13 +140,11 @@ public class InputEventQueue
                     break;
 
                 case MouseMoved:
-                    Logger.Debug( "MouseMoved" );
                     processor.OnMouseMoved( processingArray[ index++ ], processingArray[ index++ ] );
 
                     break;
 
                 case MouseScrolled:
-                    Logger.Debug( "MouseScrolled" );
                     processor.OnScrolled( NumberUtils.IntBitsToFloat( processingArray[ index++ ] ),
                                           NumberUtils.IntBitsToFloat( processingArray[ index++ ] ) );
 

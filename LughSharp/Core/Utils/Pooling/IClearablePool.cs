@@ -22,43 +22,20 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Utils;
+namespace LughSharp.Core.Utils.Pooling;
 
-/// <summary>
-/// To check if a single class has this attribute:
-/// <code>
-/// var myPlayer = new Player();
-/// bool isActor = Attribute.IsDefined(myPlayer.GetType(), typeof(ActorDefinitionAttribute));
-/// if (isActor) 
-/// {
-///     Console.WriteLine("This object is an Actor!");
-/// }
-/// </code>
-/// <br/>
-/// If you want to find all classes in your project marked as Actors (common for
-/// Dependency Injection or Plugin systems):
-/// <code>
-/// using System.Linq;
-/// using System.Reflection;
-/// 
-/// var actorTypes = Assembly.GetExecutingAssembly()
-///                          .GetTypes()
-///                          .Where(t => t.GetCustomAttribute&lt;ActorDefinitionAttribute&gt;() != null);
-/// foreach (var type in actorTypes)
-/// {
-///     Console.WriteLine($"Found Actor Type: {type.Name}");
-/// }
-/// </code>
-/// </summary>
 [PublicAPI]
-[AttributeUsage(AttributeTargets.Class)]
-public class ActorDefinitionAttribute : Attribute
+public interface IClearablePool
 {
-    public string Role { get; set; } = "Generic";
+    /// <summary>
+    /// Clears the pool.
+    /// </summary>
+    void Clear();
 }
+
 // ============================================================================
 // ============================================================================
+
+

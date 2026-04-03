@@ -34,15 +34,18 @@ using LughSharp.Core.Utils.Logging;
 namespace LughSharp.Core.Utils.Collections;
 
 /// <summary>
-/// An array that allows modification during iteration. Guarantees that array entries provided
-/// by begin() between indexes 0 and size at the time begin was called will not be modified
-/// until end() is called. If modification of the SnapshotArray occurs between begin/end, the
-/// backing array is copied prior to the modification, ensuring that the backing array that was
-/// returned by begin() is unaffected. To avoid allocation, an attempt is made to reuse any extra
-/// array created as a result of this copy on subsequent copies.
+/// An array that allows modification during iteration. Guarantees that array entries
+/// provided by <see cref="Begin()"/> between indexes 0 and size at the time begin was
+/// called will not be modified until <see cref="End()"/> is called. If modification
+/// of the SnapshotArray occurs between begin/end, the backing array is copied prior
+/// to the modification, ensuring that the backing array that was returned by Begin()
+/// is unaffected. To avoid allocation, an attempt is made to reuse any extra array
+/// created as a result of this copy on subsequent copies.
 /// <para>
+/// <b>
 /// Note that SnapshotArray is not for thread safety, only for modification
 /// during iteration.
+/// </b>
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -56,7 +59,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     private T[]  _items;
     private T[]? _recycled;
     private T[]? _snapshot;
-    private int  _snapshots;
+    private int  _snapshotCount;
 
     // ========================================================================
 
@@ -71,8 +74,11 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     }
 
     /// <summary>
-    /// Creates a new SnapshotArray from the supplied array.
+    /// Creates a new SnapshotArray from the supplied array. The created array
+    /// is ordered by default, unless specified otherwise.
     /// </summary>
+    /// <param name="array"> The array to copy from. </param>
+    /// <param name="ordered"> Whether this array is ordered or not. </param>
     public SnapshotArrayList( T[] array, bool ordered = true )
         : this( ordered, array, 0, array.Length )
     {
@@ -128,8 +134,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
         Modified();
 
         _snapshot = _items;
-
-        _snapshots++;
+        _snapshotCount++;
 
         return _items;
     }
@@ -140,14 +145,14 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     /// </summary>
     public void End()
     {
-        _snapshots = Math.Max( 0, _snapshots - 1 );
+        _snapshotCount = Math.Max( 0, _snapshotCount - 1 );
 
         if ( _snapshot == null )
         {
             return;
         }
 
-        if ( ( _snapshot != _items ) && ( _snapshots == 0 ) )
+        if ( ( _snapshot != _items ) && ( _snapshotCount == 0 ) )
         {
             // The backing array was copied, keep around the old array.
             _recycled = _snapshot;
@@ -248,7 +253,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     }
 
     /// <summary>
-    /// Copy <c>count</c> items from the supplied array to this array,
+    /// Copy <c>count</c> items from the supplied <c>array</c> to this array,
     /// starting from position <c>start</c>.
     /// </summary>
     /// <param name="array">The array of items to add.</param>

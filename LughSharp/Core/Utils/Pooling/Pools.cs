@@ -82,7 +82,7 @@ public static class Pools
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static T? Obtain< T >() where T : class, new()
+    public static T Obtain< T >() where T : class, new()
     {
         Pool< T > pool = GetRegisteredPool< T >();
 
@@ -206,9 +206,10 @@ public static class Pools
         // Validate pool exists before processing any objects
         Pool< T > pool = GetRegisteredPool< T >();
 
+        // null objects have been filtered out by this stage
         foreach ( T? obj in objectsList )
         {
-            pool.Free( obj );
+            pool.Free( obj! );
         }
     }
 
@@ -238,6 +239,12 @@ public static class Pools
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     private static Pool< T > GetRegisteredPool< T >() where T : class
     {
         return !TryGetRegisteredPool< T >( out Pool< T > pool )
@@ -245,6 +252,12 @@ public static class Pools
             : pool;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pool"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     private static bool TryGetRegisteredPool< T >( out Pool< T > pool ) where T : class
     {
         if ( _typePools.TryGetValue( typeof( T ), out object? poolObject ) )
@@ -263,11 +276,3 @@ public static class Pools
 // ============================================================================
 // ============================================================================
 
-[PublicAPI]
-public interface IClearablePool
-{
-    void Clear();
-}
-
-// ============================================================================
-// ============================================================================

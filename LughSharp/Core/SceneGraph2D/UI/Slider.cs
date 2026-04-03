@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
@@ -60,7 +62,7 @@ public class Slider : ProgressBar
     private int      _draggingPointer = -1;
     private float[]? _snapValues;
     private float    _threshold;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -135,6 +137,20 @@ public class Slider : ProgressBar
         {
             throw new ListenerFailureException( "Failed to add slider input listener" );
         }
+    }
+
+    public override bool Fire( Event? ev )
+    {
+        Logger.Checkpoint();
+
+        return base.Fire( ev );
+    }
+
+    public override bool Notify( Event ev, bool capture )
+    {
+        Logger.Checkpoint();
+
+        return base.Notify( ev, capture );
     }
 
     /// <summary>
@@ -306,20 +322,22 @@ public class Slider : ProgressBar
     /// <returns></returns>
     protected float GetSnapped( float value )
     {
-        if ( _snapValues is { Length: 0 } )
+        if ( _snapValues == null )
         {
             return value;
         }
 
-        float bestDiff = -1, bestValue = 0;
+        float bestDiff  = -1;
+        float bestValue = 0;
 
-        foreach ( float snapValue in _snapValues! )
+        foreach ( float snapValue in _snapValues )
         {
             float diff = Math.Abs( value - snapValue );
 
             if ( diff <= _threshold )
             {
-                if ( bestDiff.Equals( -1 ) || ( diff < bestDiff ) )
+                if ( ( Math.Abs( bestDiff - ( -1 ) ) < NumberUtils.FloatTolerance )
+                  || ( diff < bestDiff ) )
                 {
                     bestDiff  = diff;
                     bestValue = snapValue;
@@ -327,16 +345,17 @@ public class Slider : ProgressBar
             }
         }
 
-        return bestDiff.Equals( -1f ) ? value : bestValue;
+        return Math.Abs( bestDiff - ( -1f ) ) < NumberUtils.FloatTolerance
+            ? value
+            : bestValue;
     }
 
     /// <summary>
-    /// Will make this progress bar snap to the specified values, if the
-    /// knob is within the threshold.
+    /// Snaps the knob to the specified values, if the knob is within the threshold.
     /// </summary>
     /// <param name="values"> May be null. </param>
-    /// <param name="threshld"></param>
-    public void SetSnapToValues( float[] values, float threshld )
+    /// <param name="threshld"> The snap threshold. </param>
+    public void SetSnapToValues( float[]? values, float threshld )
     {
         _snapValues = values;
         _threshold  = threshld;
@@ -373,6 +392,8 @@ public class Slider : ProgressBar
 
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
+            Logger.Checkpoint();
+
             if ( _parent.IsDisabled )
             {
                 return false;

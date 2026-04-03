@@ -396,6 +396,8 @@ public class Stage : InputAdapter, IDisposable
 
         Actor? target = Hit( _tempCoords.X, _tempCoords.Y, true );
 
+        Logger.Debug( $"{target}" );
+        
         if ( target == null )
         {
             if ( RootGroup.Touchable == Touchable.Enabled )

@@ -115,20 +115,29 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - IP = Conversion In Progress.
 - DONE = Class finished but may not be fully 'CSHARP-ified'
 
+- CODE Self explanatory.
+- DOCU Mark done if all methods are documented correctly.
+- FOOTER Mark done if the end of the file is marked with two lines of '=' 80 chars long.
+
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      -
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ASSETS
 ------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - AssetDescriptor
     - DONE - DONE - DONE - AssetHelper
     - DONE - DONE - DONE - AssetLoaderParameters
@@ -141,8 +150,8 @@ ASSETS
 ASSETS/LOADERS
 --------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - AssetLoader
     - DONE - DONE - DONE - AsynchronousAssetLoader
     - DONE - DONE - DONE - BitmapFontLoader
@@ -161,8 +170,8 @@ ASSETS/LOADERS
 ASSETS/LOADERS/RESOLVERS
 ------------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - AbsoluteFileHandleResolver
     - DONE - DONE - DONE - ClasspathFileHandleResolver
     - DONE - DONE - DONE - ExternalFileHandleResolver
@@ -182,8 +191,8 @@ ASSETS/LOADERS/RESOLVERS
 AUDIO
 -----
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - IAudio
     -      -      -      - IAudioDevice
     -      -      -      - IAudioDeviceAsync
@@ -194,8 +203,8 @@ AUDIO
 AUDIO/MAPONUS ( MAPONUS is the God of Music )
 ---------------------------------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - Buffer16BitSterso
     -      -      -      - MP3SharpException
     -      -      -      - MP3Stream
@@ -204,8 +213,8 @@ AUDIO/MAPONUS ( MAPONUS is the God of Music )
 AUDIO/MAPONUS/DECODING
 -----------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - AudioBase
     -      -      -      - BitReserve
     -      -      -      - Bitstream
@@ -228,8 +237,8 @@ AUDIO/MAPONUS/DECODING
 AUDIO/MAPONUS/DECODING/DECODERS
 -----------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - ASubband
     -      -      -      - IFrameDecoder
     -      -      -      - LayerIDecoder
@@ -239,8 +248,8 @@ AUDIO/MAPONUS/DECODING/DECODERS
 AUDIO/MAPONUS/DECODING/DECODERS/LAYERI
 ---------------------------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - SubbandLayer1
     -      -      -      - SubbandLayer1IntensityStereo
     -      -      -      - SubbandLayer1Stereo
@@ -248,8 +257,8 @@ AUDIO/MAPONUS/DECODING/DECODERS/LAYERI
 AUDIO/MAPONUS/DECODING/DECODERS/LAYERII
 ----------------------------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - SubbandLayer2
     -      -      -      - SubbandLayer2IntensityStereo
     -      -      -      - SubbandLayer2Stereo
@@ -257,8 +266,8 @@ AUDIO/MAPONUS/DECODING/DECODERS/LAYERII
 AUDIO/MAPONUS/DECODING/DECODERS/LAYERIII
 -----------------------------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - ChannelData
     -      -      -      - GranuleInfo
     -      -      -      - Layer3SideInfo
@@ -269,8 +278,8 @@ AUDIO/MAPONUS/DECODING/DECODERS/LAYERIII
 AUDIO/MAPONUS/IO
 -----------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - RandomAccessFileStream
     -      -      -      - RiffFile
     -      -      -      - WaveFile
@@ -279,15 +288,15 @@ AUDIO/MAPONUS/IO
 AUDIO/MAPONUS/SUPPORT
 ----------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - SupportClass
 
 AUDIO/OPENAL
 ------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - AL
     -      -      -      - ALC
 
@@ -298,8 +307,8 @@ AUDIO/OPENAL
 FILES
 -----
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - FileHandle
     - DONE - DONE - DONE - Files
     - DONE - DONE - DONE - FileService
@@ -413,8 +422,8 @@ GRAPHICS
           much leaner.
 
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - CIM
     -      -      -      - Color 
     -      -      -      - ColorWIP                 - WIP to replace Color when finished 
@@ -439,8 +448,8 @@ GRAPHICS
 GRAPHICS/ATLASES
 ----------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - AtlasRegion
     - DONE -      - DONE - AtlasSprite
     - DONE - DONE - DONE - TextureAtlas
@@ -449,8 +458,8 @@ GRAPHICS/ATLASES
 GRAPHICS/CAMERAS
 ----------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - Camera
     -      -      -      - CameraData
     -      -      -      - IGameCamera
@@ -462,8 +471,8 @@ GRAPHICS/CAMERAS
 GRAPHICS/FRAMEBUFFERS
 ---------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - FloatFrameBuffer
     -      -      -      - FloatFrameBufferBuilder
     -      -      -      - FrameBuffer
@@ -479,8 +488,8 @@ GRAPHICS/FRAMEBUFFERS
 GRAPHICS/G2D
 ------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - Animation
     -      -      -      - CpuSpriteBatch                  Some methods have too many parameters
     -      -      -      - IBatch
@@ -507,8 +516,8 @@ GRAPHICS/G3D
 GRAPHICS/IMAGEDECODERS
 ----------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - BMPFormatStructs
     -      -      -      - BMPUtils
     -      -      -      - PNGDecoder
@@ -525,8 +534,8 @@ GRAPHICS/IMAGEDECODERS
 GRAPHICS/IMAGES
 ---------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - Gdx2DPixmap
     -      -      -      - GLTexture
     -      -      -      - NinePatch
@@ -542,8 +551,8 @@ GRAPHICS/IMAGES
 GRAPHICS/LOADERS
 ----------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - Etc1Loader
     -      -      -      - FileLoader
     -      -      -      - ITextureData
@@ -552,8 +561,8 @@ GRAPHICS/LOADERS
 GRAPHICS/OPENGL
 ---------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - DebugSeverity
     -      -      -      - GLData
     -      -      -      - GLDebugControl
@@ -570,8 +579,8 @@ GRAPHICS/OPENGL
 GRAPHICS/OPENGL/BINDINGS
 ------------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - BufferObjectBindings
     -      -      -      - DebugBindings
     -      -      -      - DrawBindings
@@ -605,8 +614,8 @@ GRAPHICS/OPENGL/BINDINGS
 GRAPHICS/OPENGL/ENUMS
 ---------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - BlendMode
     -      -      -      - BufferEnums
     -      -      -      - ClearBufferMask
@@ -645,8 +654,8 @@ GRAPHICS/OPENGL/ENUMS
 GRAPHICS/SHADERS
 ----------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - ShaderLoader
     -      -      -      - ShaderProgram
     - DONE - DONE - DONE - ShaderStrings
@@ -654,8 +663,8 @@ GRAPHICS/SHADERS
 GRAPHICS/TEXT
 -------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - BitmapFont
     -      -      -      - BitmapFontCache
     -      -      -      - BitmapFontData
@@ -670,8 +679,8 @@ GRAPHICS/TEXT
 GRAPHICS/UTILS
 --------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - AppVersion
     -      -      -      - ETC1
     -      -      -      - ETC1TextureData
@@ -708,8 +717,8 @@ GRAPHICS/UTILS
 GRAPHICS/VIEWPORTS
 ------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - ExtendedViewport
     -      -      -      - FillViewport
     -      -      -      - FitViewport
@@ -725,8 +734,8 @@ GRAPHICS/VIEWPORTS
 INPUT
 -----
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - AbstractInput
     -      -      -      - GestureDetector
     -      -      -      - IInput
@@ -745,8 +754,8 @@ INPUT
 MAIN
 ----
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - ApplicationAdapter
     - DONE - DONE - DONE - ApplicationConfiguration
     - DONE - DONE - DONE - Engine
@@ -766,8 +775,8 @@ MAIN
 MAPS
 ----
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - IImageResolver
     - DONE - DONE - DONE - IMapRenderer
     - DONE - DONE - DONE - Map
@@ -781,8 +790,8 @@ MAPS
 MAPS/OBJECTS
 ------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - CircleMapObject
     -      -      -      - EllipseMapObject
     -      -      -      - PolygonMapObject
@@ -793,8 +802,8 @@ MAPS/OBJECTS
 MAPS/TILED
 ----------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - ITiledMapTile
     -      -      -      - TiledMap
     -      -      -      - TiledMapImageLayer
@@ -805,8 +814,8 @@ MAPS/TILED
 MAPS/TILED/LOADERS
 ------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - AtlasTmxMapLoader
     -      -      -      - BaseTmxMapLoader
     -      -      -      - TmxMapLoader
@@ -814,8 +823,8 @@ MAPS/TILED/LOADERS
 MAPS/TILED/OBJECTS
 ------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - ImageDetails
     -      -      -      - TileContext
     -      -      -      - TiledMapTileMapObject
@@ -824,8 +833,8 @@ MAPS/TILED/OBJECTS
 MAPS/TILED/RENDERERS
 --------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - BatchTiledMapRenderer
     -      -      -      - HexagonalTiledMapRenderer
     -      -      -      - IsometricStaggeredTiledMapRenderer
@@ -837,8 +846,8 @@ MAPS/TILED/RENDERERS
 MAPS/TILED/TILES
 ----------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - AnimatedTileBuilder
     -      -      -      - AnimatedTileMapTile
     -      -      -      - StaticTileBuilder
@@ -851,8 +860,8 @@ MAPS/TILED/TILES
 MATHS
 -----
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - Affine2
     -      -      -      - Bezier
     -      -      -      - Bresenham2
@@ -895,8 +904,8 @@ MATHS
 MATH/COLLISION
 --------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - BoundingBox
     -      -      -      - Ray
     -      -      -      - Segment
@@ -909,8 +918,8 @@ MATH/COLLISION
 MOCK/AUDIO
 ----------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - IP   - IP   - DONE - MockAudio
     - IP   - IP   - DONE - MockAudioDevice
     - IP   - IP   - DONE - MockAudioRecorder
@@ -920,36 +929,36 @@ MOCK/AUDIO
 MOCK/FILES
 ----------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - IP   - IP   - DONE - MockFiles
 
 MOCK/GRAPHICS
 -------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - IP   - IP   - DONE - MockGraphics
 
 MOCK/INPUT
 ----------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - IP   - IP   - DONE - MockInput
 
 MOCK/MAIN
 ---------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - IP   - IP   - DONE - MockApplication
 
 MOCK/NET
 --------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - IP   - IP   - DONE - MockNet
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -959,8 +968,8 @@ MOCK/NET
 NETWORK
 -------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - HttpParameterUtils
     -      -      -      - HttpRequestBuilder
     -      -      -      - HttpStatus
@@ -980,8 +989,8 @@ NETWORK
 SCENEGRAPH2D
 ------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - Action
     - DONE - IP   - DONE - Actor
     - DONE - DONE - DONE - Event
@@ -995,8 +1004,8 @@ SCENEGRAPH2D
 SCENEGRAPH2D/ACTIONS
 --------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - Actions
     -      -      -      - AddAction
     -      -      -      - AddListenerAction
@@ -1034,8 +1043,8 @@ SCENEGRAPH2D/ACTIONS
 SCENEGRAPH2D/LISTENERS
 ----------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - ActorGestureListener
     -      -      -      - ChangeListener
     -      -      -      - ClickListener
@@ -1066,8 +1075,8 @@ SCENEGRAPH2D/STYLES
 
 ( Styles to use with StyleRegistry / StyleFactory )
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - IP   -      - DONE - ButtonStyleRecord
     -      -      - DONE - CheckBoxStyleRecord
     -      -      - DONE - ImageButtonStyleRecord
@@ -1094,8 +1103,8 @@ SCENEGRAPH2D/UI
     TODO: I don't like the way Cell and Value classes are implemented.
           They seem confusing and are candidates for a rewrite.
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - Button                   - Draws, but not clickable yet.
     -      -      -      - ButtonClickListener      - 
     -      -      -      - ButtonGroup              - 
@@ -1136,8 +1145,8 @@ SCENEGRAPH2D/UI
 SCENEGRAPH2D/UI/STYLES
 ----------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      - DONE - ButtonStyle
     -      -      - DONE - CheckBoxStyle
     -      -      - DONE - ImageButtonStyle
@@ -1160,8 +1169,8 @@ SCENEGRAPH2D/UI/STYLES
 SCENEGRAPH2D/UTILS
 ------------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     -      -      -      - ArraySelection
     -      -      -      - BaseDrawable
     -      -      -      - DragAndDrop
@@ -1186,8 +1195,8 @@ UTILS
 
     - Move Utils/Collections out of Utils and into somewhere more appropriate.
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - ActorDefinitionAttribute
     - DONE - DONE - DONE - Align
     - DONE - IP   - DONE - AsyncExecutor
@@ -1200,15 +1209,15 @@ UTILS
     - DONE - IP   - DONE - ByteOrder
     - DONE - IP   - DONE - BytePointerToString
     - DONE - IP   - DONE - CaseInsensitiveEnumArrayConverterFactory
-    -      -      -      - ComparableTimSort
+    -      -      -      - ComparableTimSort    Remove
     - DONE - DONE - DONE - DataOutput
     - DONE - DONE - DONE - DataUtils
-    -      -      -      - GCSuppressor
+    -      -      -      - GCSuppressor         Why do I have this?
     - DONE - DONE - DONE - HashHelpers
-    -      -      -      - IAsyncTask
-    -      -      -      - IClipboard
-    -      -      -      - ICloseable
-    -      -      -      - IDrawable            Conflicts with Scene2D.Utils.IDrawable
+    - DONE - IP   - DONE - IAsyncTask
+    - DONE - DONE - DONE - IClipboard
+    - DONE - IP   - DONE - ICloseable
+    -      -      -      - IDrawable
     -      -      -      - IManaged
     -      -      -      - IReadable
     -      -      -      - IResetable
@@ -1233,10 +1242,15 @@ UTILS
 UTILS/COLLECTIONS
 -----------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
-    - DONE - IP   - DONE - ArrayList
-    - DONE - IP   - DONE - ByteArray
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - IP   - DONE - ArrayList                Look into removing this.
+    - DONE - IP   - DONE - ByteArray                Look into removing this.
+    - IP   - IP   - DONE - ObjectMap                Look into removing this.
+    - IP   - IP   - DONE - OrderedMap               Look into removing this.
+    - IP   - IP   - DONE - PredicateIterable        Can be removed if ArrayList is removed.
+    - IP   - IP   - DONE - PredicateIterator        Can be removed if ArrayList is removed.
+
     - DONE - DONE - DONE - Collections
     - DONE - DONE - DONE - DelayedRemovalList
     - DONE - DONE - DONE - DictionaryExtensions
@@ -1244,18 +1258,14 @@ UTILS/COLLECTIONS
     - DONE - DONE - DONE - IPredicate
     - DONE - IP   - DONE - LinkedHashMap
     - DONE - DONE - DONE - ListExtensions
-    - IP   - IP   - DONE - ObjectMap                Look into removing this.
-    - IP   - IP   - DONE - OrderedMap               Look into removing this.
-    - IP   - IP   - DONE - PredicateIterable        Can be removed if ArrayList is removed.
-    - IP   - IP   - DONE - PredicateIterator        Can be removed if ArrayList is removed.
     - DONE - IP   - DONE - ResettableStack
     - DONE - DONE - DONE - SnapshotArrayList
 
 UTILS/EXCEPTIONS
 ----------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - AssetNotLoadedException
     - DONE - DONE - DONE - Guard
     - DONE - DONE - DONE - ListenerFailureException
@@ -1269,8 +1279,8 @@ UTILS/JSON
     ALL JSON CLASSES NEED FULLY TESTING!!!
     ///////////////////////////////////////////////
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - IP   - DONE - Json
     - DONE -      - DONE - JsonFieldAttribute
     - IP   -      - DONE - JsonMatcher          May not be needed / To Be Removed
@@ -1286,8 +1296,8 @@ UTILS/JSON
 UTILS/LOGGING
 -------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - FPSLogger
     - DONE - DONE - DONE - IPreferences
     - DONE - DONE - DONE - Logger
@@ -1297,9 +1307,10 @@ UTILS/LOGGING
 UTILS/POOLING
 -------------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - FlushablePool
+    - DONE - IP   - DONE - IClearablePool
     - DONE - DONE - DONE - IPoolable
     - DONE - DONE - DONE - Pool
     - DONE - DONE - DONE - PooledLinkedList
@@ -1308,8 +1319,8 @@ UTILS/POOLING
 UTILS/XML
 ---------
 
-    CODE   DOCU   FOOTER
-    ----   ----   ------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
     - DONE - DONE - DONE - XmlReader
     - DONE - DONE - DONE - XmlWriter
 

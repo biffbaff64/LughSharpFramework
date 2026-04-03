@@ -46,7 +46,7 @@ public class Pool< T > where T : class
 
     // ========================================================================
 
-    private readonly Stack< T? > _freeObjects;
+    private readonly Stack< T > _freeObjects;
 
     // ========================================================================
 
@@ -61,7 +61,7 @@ public class Pool< T > where T : class
     /// <typeparam name="T">The type of objects to be pooled. Must be a reference type.</typeparam>
     public Pool( int initialCapacity = DefaultInitialCapacity, int max = int.MaxValue )
     {
-        _freeObjects   = new Stack< T? >( initialCapacity );
+        _freeObjects   = new Stack< T >( initialCapacity );
         MaxFreeObjects = max;
     }
 
@@ -69,7 +69,7 @@ public class Pool< T > where T : class
     /// Returns an object from this pool. The object may be new (from <see cref="NewObjectFactory"/>)
     /// or reused from a previous call to <see cref="Free(T)"/>.
     /// </summary>
-    public virtual T? Obtain()
+    public virtual T Obtain()
     {
         return _freeObjects.Count == 0 ? NewObjectFactory() : _freeObjects.Pop();
     }
@@ -84,10 +84,8 @@ public class Pool< T > where T : class
     /// must not be freed multiple times.
     /// </para>
     /// </summary>
-    public virtual void Free( T? obj )
+    public virtual void Free( T obj )
     {
-        if ( obj == null ) return;
-        
         if ( _freeObjects.Count < MaxFreeObjects )
         {
             _freeObjects.Push( obj );
@@ -146,11 +144,11 @@ public class Pool< T > where T : class
     /// silently ignored. The pool does not check if an object is already freed, so
     /// the same object must not be freed multiple times.
     /// </summary>
-    public virtual void FreeAll( List< T? > objects )
+    public virtual void FreeAll( List< T > objects )
     {
         for ( int i = 0, n = objects.Count; i < n; i++ )
         {
-            T? obj = objects[ i ];
+            T obj = objects[ i ];
 
             if ( _freeObjects.Count < MaxFreeObjects )
             {
@@ -171,7 +169,7 @@ public class Pool< T > where T : class
     /// </summary>
     public void Clear()
     {
-        foreach ( T? obj in _freeObjects )
+        foreach ( T obj in _freeObjects )
         {
             Discard( obj );
         }

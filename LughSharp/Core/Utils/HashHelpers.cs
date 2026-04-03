@@ -45,7 +45,9 @@ public class HashHelpers
     /// <summary>
     /// A bitmask used to confine hashcodes to the size of the table. Must be all
     /// 1 bits in its low positions, ie a power of two minus 1.
+    /// <para>
     /// Example: for a table size of 16, Mask would be 15 (0b00001111).
+    /// </para>
     /// </summary>
     protected int Mask { get; set; } // Must be power of 2 minus 1
 
@@ -103,9 +105,11 @@ public class HashHelpers
             throw new ArgumentException( "Mask must be a power of two minus one (e.g., 7, 15, 31).", nameof( mask ) );
         }
 
-        // Calculate the number of leading zeros to find the most significant bit's position,
-        // then subtract from total bits (32 for int, assuming Mask is used with 32-bit hashes implicitly)
-        // Or, more simply, it's 32 - (log2(mask + 1)) which is 32 - table_size_power_of_2_exponent
+        // Calculate the number of leading zeros to find the most significant
+        // bit's position, then subtract from total bits (32 for int, assuming
+        // Mask is used with 32-bit hashes implicitly)
+        // Or, more simply:-
+        //       - it's 32 - (log2(mask + 1)) which is 32 - table_size_power_of_2_exponent
         // Example: Mask = 15 (0b1111). Table size = 16 (2^4). Shift = 32 - 4 = 28.
         // Example: Mask = 7 (0b111). Table size = 8 (2^3). Shift = 32 - 3 = 29.
         // This assumes the Mask determines the *lower* bits to keep.
