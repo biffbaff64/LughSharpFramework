@@ -9,7 +9,7 @@ using Extensions.Source.Tools.TexturePacker;
 using LughSharp.Core.Files;
 using LughSharp.Core.Main;
 
-namespace Template.Source;
+namespace TestProject.Source;
 
 /// <summary>
 /// Example DesktopLauncher class which is the entry point for the desktop application.
@@ -34,7 +34,7 @@ public static class DesktopLauncher
     {
         var config = new DesktopGLApplicationConfiguration
         {
-            Title              = "LughSharp Template",
+            Title              = "LughSharp TestProject",
             VSyncEnabled       = true,
             WindowWidth        = 960,
             WindowHeight       = 720,

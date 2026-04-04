@@ -45,7 +45,7 @@ public class FilepathTest
     {
         try
         {
-            Logger.Debug( $"Absolute : {Engine.Files.Absolute( "C:/Development/Projects/CSharp/Template/bin/Debug/net8.0/PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Absolute : {Engine.Files.Absolute( "C:/Development/Projects/CSharp/TestProject/bin/Debug/net8.0/PackedImages/objects/rover_wheel.png" ).FullName}" );
             Logger.Debug( $"Assembly : {Engine.Files.Assembly( "PackedImages/objects/rover_wheel.png" ).FullName}" );
             Logger.Debug( $"Classpath: {Engine.Files.Classpath( "PackedImages/objects/rover_wheel.png" ).FullName}" );
             Logger.Debug( $"External : {Engine.Files.External( "PackedImages/objects/rover_wheel.png" ).FullName}" );

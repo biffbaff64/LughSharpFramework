@@ -88,7 +88,7 @@ public class Files : IFiles
     /// This is not the root folder of this framework, it is the root folder of the
     /// application that is using this framework. An example Internal path would be:-
     /// <code>
-    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\
+    /// C:\Development\Projects\CSharp\TestProject\bin\Debug\net8.0\
     /// </code>
     /// </para>
     /// <para>
@@ -121,7 +121,7 @@ public class Files : IFiles
     /// The full path to the applicationsbase assets folder.
     /// a valid example path is:-
     /// <code>
-    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\Assets\
+    /// C:\Development\Projects\CSharp\TestProject\bin\Debug\net8.0\Assets\
     /// </code>
     /// </summary>
     public static string AssetsRoot => $"{AssemblyDirectory}{ContentRoot}\\";

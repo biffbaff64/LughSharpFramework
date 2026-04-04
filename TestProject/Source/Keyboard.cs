@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Input;
 
-namespace Template.Source;
+namespace TestProject.Source;
 
 public class Keyboard : InputAdapter
 {

@@ -24,7 +24,7 @@
 
 using LughSharp.Core.Files;
 
-namespace Template.Source;
+namespace TestProject.Source;
 
 public static class Assets
 {

@@ -56,7 +56,7 @@ public enum PathType
     /// This is not the root folder of this framework, it is the root folder of the
     /// application that is using this framework. An example Internal path would be:-
     /// <code>
-    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\
+    /// C:\Development\Projects\CSharp\TestProject\bin\Debug\net8.0\
     /// </code>
     /// </para>
     /// <para>
@@ -111,7 +111,7 @@ public enum PathType
     /// typically the "assets" folder in the application's root directory.
     /// An example Assets path would be:-
     /// <code>
-    /// C:\Development\Projects\CSharp\Template\bin\Debug\net8.0\assets\
+    /// C:\Development\Projects\CSharp\TestProject\bin\Debug\net8.0\assets\
     /// </code>
     /// </summary>
     Assets,
