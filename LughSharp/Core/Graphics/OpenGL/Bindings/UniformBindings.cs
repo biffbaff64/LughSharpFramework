@@ -28,7 +28,6 @@
 
 using System.Text;
 
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 

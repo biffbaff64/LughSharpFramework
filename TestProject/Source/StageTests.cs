@@ -24,13 +24,14 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
-using LughSharp.Core.Main;
 using LughSharp.Core.SceneGraph2D;
 using LughSharp.Core.SceneGraph2D.RegistryStyles;
 using LughSharp.Core.SceneGraph2D.UI;

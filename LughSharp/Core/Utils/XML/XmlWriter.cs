@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Utils.Collections;
+using LughSharp.Core.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.XML;

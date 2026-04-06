@@ -33,7 +33,6 @@ using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.UI;
 using LughSharp.Core.SceneGraph2D.Utils;

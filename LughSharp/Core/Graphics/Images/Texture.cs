@@ -31,15 +31,14 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
+using LughSharp.Core.Collections;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 

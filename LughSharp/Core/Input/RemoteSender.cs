@@ -26,8 +26,6 @@ using System.Diagnostics;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Main;
-
 using Exception = System.Exception;
 
 namespace LughSharp.Core.Input;

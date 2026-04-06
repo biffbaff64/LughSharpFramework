@@ -27,6 +27,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Assets.Loaders;
 using LughSharp.Core.Assets.Loaders.Resolvers;
+using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils.Exceptions;
 

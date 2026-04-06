@@ -6,8 +6,8 @@ using DesktopGLBackend;
 
 using Extensions.Source.Tools.TexturePacker;
 
+using LughSharp.Core;
 using LughSharp.Core.Files;
-using LughSharp.Core.Main;
 
 namespace TestProject.Source;
 

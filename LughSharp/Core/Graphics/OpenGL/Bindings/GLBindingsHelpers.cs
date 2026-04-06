@@ -23,7 +23,6 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics.OpenGL.Bindings;
 

@@ -14,21 +14,21 @@ WORKING:
 - TexturePacker support works.
 - OpenGL 2D Graphics works.
 - TiledMap support works.
+- BitmapFont support works.
+- Json handling to support Scene2D Skins works.
 
 IN PROGRESS:
 
 - TiledMap Animated Tiles needs testing and/or finishing
-- Bitmap Font generation works, although Markdown colour support is not working yet.
 - Scene2D UI is not yet complete.
 		- I'm currently working on adding StyleRegistry and StyleFactory classes to enable
 		- creation and use of Scene2D UI Actors without the need for Json Skin files,
 		- although support for Json Skins will still be included.
-- Input System needs testing and/or finishing.
+- Input System needs testing and/or finishing
 - Freetype Font generation needs testing and/or finishing
 - Audio needs testing and/or finishing
 - Ninepatch support for UI needs testing and/or finishing
 - ImagePacker class needs testing and/or finishing
-- Json handling to support Scene2D Skins
 - 
 
 TODO:

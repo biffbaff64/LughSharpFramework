@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 
 using Exception = System.Exception;

@@ -31,8 +31,8 @@ using System.Reflection;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Collections;
 using LughSharp.Core.Files;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Utils.Json;

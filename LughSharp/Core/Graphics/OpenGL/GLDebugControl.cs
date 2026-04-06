@@ -26,7 +26,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.OpenGL.Bindings;
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.OpenGL;
@@ -35,6 +34,8 @@ namespace LughSharp.Core.Graphics.OpenGL;
 public class GLDebugControl
 {
     private static GLBindings.GLDEBUGPROC? _debugCallback;
+    
+    // ========================================================================
 
     /// <summary>
     /// Sets up OpenGL's debug message callback and enables debug output. This helps

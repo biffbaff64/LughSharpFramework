@@ -30,7 +30,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Audio;
-using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Assets.Loaders;
 

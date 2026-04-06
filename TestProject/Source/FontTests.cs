@@ -24,9 +24,13 @@
 
 using System.IO;
 
+using Extensions.Source;
+using Extensions.Source.Freetype;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.Text;
 
 namespace TestProject.Source;
@@ -51,11 +55,13 @@ public class FontTests
 //        {
 //            Size = 40
 //        };
-//
-//        _font = generator.GenerateFont( parameter );
-//        _font.SetColor( Color.White );
 
-        return new BitmapFont( new FileInfo( Assets.ArialFont ) );
+//        BitmapFont font = generator.GenerateFont( parameter );
+//        font.SetColor( Color.White );
+        
+//        return font;
+
+        return new BitmapFont( new FileInfo( Assets.AmbleRegular26Font ) );
     }
 }
 

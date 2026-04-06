@@ -22,11 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Logging;
 
 using NUnit.Framework;

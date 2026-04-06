@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Main;
+using LughSharp.Core;
 using LughSharp.Core.Mock.Audio;
 using LughSharp.Core.Mock.Files;
 using LughSharp.Core.Mock.Graphics;

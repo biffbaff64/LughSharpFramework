@@ -26,8 +26,8 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Audio;
 using LughSharp.Core.Audio.OpenAL;
+using LughSharp.Core.Collections;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
 using Exception = System.Exception;

@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;

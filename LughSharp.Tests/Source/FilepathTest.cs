@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Main;
+using LughSharp.Core;
 using LughSharp.Core.Utils.Logging;
 
 using NUnit.Framework;

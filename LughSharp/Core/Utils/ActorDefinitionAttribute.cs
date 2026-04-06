@@ -58,7 +58,17 @@ namespace LughSharp.Core.Utils;
 [AttributeUsage(AttributeTargets.Class)]
 public class ActorDefinitionAttribute : Attribute
 {
+    /// <summary>
+    /// The role of the actor. This is used for identifying the actor in the,
+    /// and is a user-defined string.
+    /// <br/>
+    /// For instance:-
+    /// <code>
+    /// [ActorDefinition(Role = "UI")]
+    /// </code>
+    /// </summary>
     public string Role { get; set; } = "Generic";
 }
+
 // ============================================================================
 // ============================================================================

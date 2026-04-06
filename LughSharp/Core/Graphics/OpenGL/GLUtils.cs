@@ -27,7 +27,6 @@ using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.OpenGL.Enums;
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -66,14 +65,14 @@ public static class GLUtils
     {
         return errorCode switch
                {
-                   IGL.GLInvalidEnum                  => "Invalid Enum",
-                   IGL.GLInvalidOperation             => "Invalid Operation",
-                   IGL.GLInvalidValue                 => "Invalid Value",
+                   IGL.GLInvalidEnum                 => "Invalid Enum",
+                   IGL.GLInvalidOperation            => "Invalid Operation",
+                   IGL.GLInvalidValue                => "Invalid Value",
                    IGL.GLOutOfMemory                 => "Out of memory",
                    IGL.GLInvalidFramebufferOperation => "Invalid Framebuffer operation",
-                   IGL.GL_STACK_OVERFLOW                => "Stack Overflow",
-                   IGL.GL_STACK_UNDERFLOW               => "Stack Underflow",
-                   IGL.GL_CONTEXT_LOST                  => "Context Lost",
+                   IGL.GL_STACK_OVERFLOW             => "Stack Overflow",
+                   IGL.GL_STACK_UNDERFLOW            => "Stack Underflow",
+                   IGL.GL_CONTEXT_LOST               => "Context Lost",
 
                    // ----------------------------------
 

@@ -28,6 +28,7 @@ using ICSharpCode.SharpZipLib.Zip.Compression;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Images.Decoders;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.Images;

@@ -30,16 +30,16 @@ using DotGLFW;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 
 using Image = DotGLFW.Image;
-using Platform = LughSharp.Core.Main.Platform;
+using Platform = LughSharp.Core.Platform;
 
 namespace DesktopGLBackend.Window;
 

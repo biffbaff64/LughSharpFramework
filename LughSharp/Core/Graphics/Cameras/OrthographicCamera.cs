@@ -24,7 +24,6 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.Cameras;

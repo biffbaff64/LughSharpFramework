@@ -29,11 +29,10 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.OpenGL;
+using LughSharp.Core.Collections;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Maths.Collision;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 

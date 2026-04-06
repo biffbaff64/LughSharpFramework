@@ -27,6 +27,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
@@ -45,8 +46,7 @@ namespace Extensions.Source;
 public class Scene2DUtils
 {
     public required AssetManager AssetManager { get; set; }
-    public required AssetUtils  AssetUtils  { get; set; }
-    public required Stage        Stage        { get; set; }
+    public required AssetUtils   AssetUtils   { get; set; }
 
     // ========================================================================
 
@@ -58,7 +58,7 @@ public class Scene2DUtils
     /// <param name="height"> The table Height in pixels.</param>
     /// <param name="skin"> The <see cref="Skin"/> to use.</param>
     /// <returns> Tne Table. </returns>
-    public Table CreateTable( Vector2 pos, int width, int height, Skin skin )
+    public static Table CreateTable( Vector2 pos, int width, int height, Skin skin )
     {
         var table = new Table( skin );
 
@@ -74,7 +74,7 @@ public class Scene2DUtils
     /// <param name="imageName"> The name of the image to use. </param>
     /// <param name="atlasLoader"> The <see cref="TextureAtlas"/> loader to use. </param>
     /// <returns> The Image. </returns>
-    public Scene2DImage CreateScene2DImage( string imageName, TextureAtlas atlasLoader )
+    public static Scene2DImage CreateScene2DImage( string imageName, TextureAtlas atlasLoader )
     {
         AtlasRegion? region   = atlasLoader.FindRegion( imageName );
         var          drawable = new TextureRegionDrawable( region );
@@ -88,7 +88,7 @@ public class Scene2DUtils
     /// <param name="imageName"> The name of the image to use. </param>
     /// <param name="atlasLoader"> The <see cref="TextureAtlas"/> loader to use. </param>
     /// <returns> The ISceneDrawable. </returns>
-    public ISceneDrawable CreateDrawable( string imageName, TextureAtlas atlasLoader )
+    public static ISceneDrawable CreateDrawable( string imageName, TextureAtlas atlasLoader )
     {
         AtlasRegion? region = atlasLoader.FindRegion( imageName );
 
@@ -102,7 +102,7 @@ public class Scene2DUtils
     /// <param name="skin">  The <see cref="Skin"/> to use. </param>
     /// <param name="name">  The name of this pane. </param>
     /// <returns> The ScrollPane. </returns>
-    public ScrollPane CreateScrollPane( Table table, Skin skin, string name )
+    public static ScrollPane CreateScrollPane( Table table, Skin skin, string name )
     {
         var scrollPane = new ScrollPane( table, skin );
 
@@ -118,13 +118,11 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="fontName"> The <see cref="BitmapFont"/> to use. </param>
     /// <returns> The label. </returns>
-    public Label AddLabel( string labelText, Vector2 pos, int size, Color color, string fontName )
+    public static Label AddLabel( string labelText, Vector2 pos, int size, Color color, string fontName )
     {
-        var fontUtils = new FontUtils();
-
         var label1Style = new LabelStyle
         {
-            Font      = fontUtils.CreateFont( fontName, size, Color.White ),
+            Font      = FontUtils.CreateFont( fontName, size, Color.White ),
             FontColor = color
         };
 
@@ -145,12 +143,13 @@ public class Scene2DUtils
     /// <param name="pos"> X, Y Display coordinates. </param>
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
+    /// <param name="stage"> The <see cref="Stage"/>. </param>
     /// <returns> The label. </returns>
-    public Label AddLabel( string labelText, Vector2 pos, Color color, Skin skin )
+    public static Label AddLabel( string labelText, Vector2 pos, Color color, Skin skin, Stage stage )
     {
         Label label = MakeLabel( labelText, ( int )pos.X, ( int )pos.Y, color, skin );
 
-        Stage.AddActor( label );
+        stage.AddActor( label );
 
         return label;
     }
@@ -163,12 +162,14 @@ public class Scene2DUtils
     /// <param name="checkedButton"> The <see cref="Scene2DImage"/> to display when checked. </param>
     /// <param name="x"> X Display coordinate. </param>
     /// <param name="y"> Y Display coordinate. </param>
+    /// <param name="stage"> The <see cref="Stage"/>. </param>
     /// <returns> The ImageButton. </returns>
-    public ImageButton AddButton( Scene2DImage upButton,
+    public static ImageButton AddButton( Scene2DImage upButton,
                                   Scene2DImage downButton,
                                   Scene2DImage checkedButton,
                                   int x,
-                                  int y )
+                                  int y,
+                                  Stage stage )
     {
         var imageButton = new ImageButton( upButton.Drawable, downButton.Drawable, checkedButton.Drawable );
 
@@ -176,7 +177,7 @@ public class Scene2DUtils
         imageButton.IsVisible = true;
         imageButton.SetZIndex( 1 );
 
-        Stage.AddActor( imageButton );
+        stage.AddActor( imageButton );
 
         return imageButton;
     }
@@ -188,8 +189,9 @@ public class Scene2DUtils
     /// <param name="x"> X Display coordinate. </param>
     /// <param name="y"> Y Display coordinate. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
+    /// <param name="stage"> The <see cref="Stage"/>. </param>
     /// <returns> The TextButton. </returns>
-    public TextButton AddButton( string text, int x, int y, Skin skin )
+    public static TextButton AddButton( string text, int x, int y, Skin skin, Stage stage )
     {
         var button = new TextButton( text, skin );
 
@@ -197,7 +199,7 @@ public class Scene2DUtils
         button.IsVisible = true;
         button.SetZIndex( 1 );
 
-        Stage.AddActor( button );
+        stage.AddActor( button );
 
         return button;
     }
@@ -211,12 +213,19 @@ public class Scene2DUtils
     /// <param name="y"> Y Display coordinate. </param>
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
+    /// <param name="stage"> The <see cref="Stage"/>. </param>
     /// <returns> The Checkbox. </returns>
-    public CheckBox AddCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
+    public static CheckBox AddCheckBox( TextureRegion imageOn,
+                                        TextureRegion imageOff,
+                                        int x,
+                                        int y,
+                                        Color color,
+                                        Skin skin,
+                                        Stage stage )
     {
         CheckBox checkBox = MakeCheckBox( imageOn, imageOff, x, y, color, skin );
 
-        Stage.AddActor( checkBox );
+        stage.AddActor( checkBox );
 
         return checkBox;
     }
@@ -230,9 +239,9 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
     /// <returns> The label. </returns>
-    public Label MakeLabel( string str, int x, int y, Color color, Skin skin )
+    public static Label MakeLabel( string str, int x, int y, Color color, Skin skin )
     {
-        var              label = new Label( str, skin );
+        var        label = new Label( str, skin );
         LabelStyle style = label.Style;
 
         style.FontColor = color;
@@ -248,15 +257,28 @@ public class Scene2DUtils
     /// Make a <see cref="Slider"/> bar with a sliding indicator,
     /// without adding it to the stage.
     /// </summary>
+    /// <param name="min"> The minimum value. </param>
+    /// <param name="max"> The maximum value. </param>
+    /// <param name="stepSize"> The step size between values. </param>
+    /// <param name="vertical">
+    /// True if the slider should be vertical, false if it should be horizontal.
+    /// </param>
     /// <param name="pos"> X, Y Display coordinates. </param>
+    /// <param name="size"> The slider Width and Height in pixels. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
     /// <returns> The Slider. </returns>
-    public Slider MakeSlider( Vector2 pos, Skin skin )
+    public static Slider MakeSlider( float min,
+                                     float max,
+                                     float stepSize,
+                                     bool vertical,
+                                     Vector2 pos,
+                                     Vector2 size,
+                                     Skin skin )
     {
-        var slider = new Slider( 0, 10, 1, false, skin );
+        var slider = new Slider( min, max, stepSize, vertical, skin );
 
         slider.SetPosition( pos.X, pos.Y );
-        slider.SetSize( 280, 30 );
+        slider.SetSize( size.X, size.Y );
 
         return slider;
     }
@@ -271,7 +293,7 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
     /// <returns> The Checkbox. </returns>
-    public CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
+    public static CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
     {
         var            checkBox = new CheckBox( "", skin );
         CheckBoxStyle? style    = checkBox.Style;

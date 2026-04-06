@@ -27,7 +27,6 @@ using JetBrains.Annotations;
 using LughSharp.Core.Graphics.FrameBuffers;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics;
 

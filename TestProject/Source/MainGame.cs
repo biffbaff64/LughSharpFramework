@@ -4,16 +4,17 @@ using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
-using LughSharp.Core.Main;
 using LughSharp.Core.Maps.Tiled;
 using LughSharp.Core.Maps.Tiled.Loaders;
 using LughSharp.Core.Maps.Tiled.Renderers;
@@ -67,12 +68,12 @@ public class MainGame : LughGame
         _assetManager = new AssetManager();
 
         CreateCameras();
-//        CreateAssets();
-        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
-//        _font         = _fontTests.CreateBitmapFont();
-//        _freetypeFont = _fontTests.CreateFreeTypeFont();
-        _sprite = _spriteTests.CreateSprite( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
+        CreateAssets();
         _mapTests.CreateMap();
+        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
+        _font         = _fontTests.CreateBitmapFont();
+        _freetypeFont = _fontTests.CreateFreeTypeFont();
+        _sprite       = _spriteTests.CreateSprite( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
 
         if ( _inputMultiplexer.Processors.Size > 0 )
         {

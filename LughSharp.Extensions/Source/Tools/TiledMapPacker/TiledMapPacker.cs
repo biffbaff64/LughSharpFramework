@@ -40,7 +40,6 @@ using LughSharp.Core.Maps;
 using LughSharp.Core.Maps.Tiled;
 using LughSharp.Core.Maps.Tiled.Loaders;
 using LughSharp.Core.Maps.Tiled.Tiles;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 

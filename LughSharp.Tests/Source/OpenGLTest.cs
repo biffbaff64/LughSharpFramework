@@ -77,7 +77,7 @@ public unsafe class OpenGLTest : ILughTest
         _gl.BindVertexArray( _vao );
 
         _vbo = _gl.GenBuffer();
-        _gl.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        _gl.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
         fixed ( float* ptr = _vertices )
         {

@@ -82,6 +82,8 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
 - Methods like **Dispose(), ToString(), Equals(), GetHashCode() ( Essentially overridden system methods )**
 - should be positioned at the END of source files.
+- All source files should have a footer at the bottom of the file, consisting of 2 lines of '=' signs
+- 80 chars long.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -133,8 +135,25 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-ASSETS
-------
+LUGHSHARP/CORE
+--------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - ApplicationAdapter
+    - DONE - DONE - DONE - ApplicationConfiguration
+    - DONE - DONE - DONE - Engine
+    - DONE - DONE - DONE - Game
+    - DONE - DONE - DONE - IApplication
+    - DONE - DONE - DONE - IApplicationListener
+    - DONE - DONE - DONE - ILifecycleListener
+    - DONE - DONE - DONE - IScreen
+    - DONE - DONE - DONE - LibraryVersion
+    - DONE - DONE - DONE - Platform
+    - DONE - DONE - DONE - ScreenAdapter
+
+LUGHSHARP/CORE/ASSETS
+---------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -147,8 +166,8 @@ ASSETS
     - DONE - DONE - DONE - IAssetTask
     - DONE - DONE - DONE - RefCountedContainer
 
-ASSETS/LOADERS
---------------
+LUGHSHARP/CORE/ASSETS/LOADERS
+-----------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -167,8 +186,8 @@ ASSETS/LOADERS
     - DONE - DONE - DONE - TextureAtlasLoader
     - DONE - DONE - DONE - TextureLoader
 
-ASSETS/LOADERS/RESOLVERS
-------------------------
+LUGHSHARP/CORE/ASSETS/LOADERS/RESOLVERS
+---------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -185,11 +204,11 @@ ASSETS/LOADERS/RESOLVERS
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-- **I'm currently considering ditching Lugh.Audio in favour of NAudio.**
+- **I'm currently considering ditching Lugh.Audio in favour of NAudio or another library.**
 - **Decision to be made asap.**
 
-AUDIO
------
+LUGHSHARP/CORE/AUDIO
+--------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -200,8 +219,8 @@ AUDIO
     -      -      -      - IMusic
     -      -      -      - ISound
 
-AUDIO/MAPONUS ( MAPONUS is the God of Music )
----------------------------------------------
+LUGHSHARP/CORE/AUDIO/MAPONUS ( MAPONUS is the God of Music )
+------------------------------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -210,8 +229,8 @@ AUDIO/MAPONUS ( MAPONUS is the God of Music )
     -      -      -      - MP3Stream
     -      -      -      - SoundFormat
 
-AUDIO/MAPONUS/DECODING
------------------------
+LUGHSHARP/CORE/AUDIO/MAPONUS/DECODING
+--------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -234,8 +253,8 @@ AUDIO/MAPONUS/DECODING
     -      -      -      - SampleBuffer
     -      -      -      - SynthesisFilter
 
-AUDIO/MAPONUS/DECODING/DECODERS
------------------------
+LUGHSHARP/CORE/AUDIO/MAPONUS/DECODING/DECODERS
+--------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -245,8 +264,8 @@ AUDIO/MAPONUS/DECODING/DECODERS
     -      -      -      - LayerIIDecoder
     -      -      -      - LayerIIIDecoder
 
-AUDIO/MAPONUS/DECODING/DECODERS/LAYERI
----------------------------------------
+LUGHSHARP/CORE/AUDIO/MAPONUS/DECODING/DECODERS/LAYERI
+------------------------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -254,8 +273,8 @@ AUDIO/MAPONUS/DECODING/DECODERS/LAYERI
     -      -      -      - SubbandLayer1IntensityStereo
     -      -      -      - SubbandLayer1Stereo
 
-AUDIO/MAPONUS/DECODING/DECODERS/LAYERII
-----------------------------------------
+LUGHSHARP/CORE/AUDIO/MAPONUS/DECODING/DECODERS/LAYERII
+-------------------------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -263,8 +282,8 @@ AUDIO/MAPONUS/DECODING/DECODERS/LAYERII
     -      -      -      - SubbandLayer2IntensityStereo
     -      -      -      - SubbandLayer2Stereo
 
-AUDIO/MAPONUS/DECODING/DECODERS/LAYERIII
------------------------------------------
+LUGHSHARP/CORE/AUDIO/MAPONUS/DECODING/DECODERS/LAYERIII
+--------------------------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -275,8 +294,8 @@ AUDIO/MAPONUS/DECODING/DECODERS/LAYERIII
     -      -      -      - ScaleFactorData
     -      -      -      - ScaleFactorTable
 
-AUDIO/MAPONUS/IO
------------------
+LUGHSHARP/CORE/AUDIO/MAPONUS/IO
+--------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -285,15 +304,15 @@ AUDIO/MAPONUS/IO
     -      -      -      - WaveFile
     -      -      -      - WaveFileBuffer
 
-AUDIO/MAPONUS/SUPPORT
-----------------------
+LUGHSHARP/CORE/AUDIO/MAPONUS/SUPPORT
+-------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      -      - SupportClass
 
-AUDIO/OPENAL
-------------
+LUGHSHARP/CORE/AUDIO/OPENAL
+---------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -304,8 +323,34 @@ AUDIO/OPENAL
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-FILES
------
+LUGHSHARP/CORE/COLLECTIONS
+--------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - IP   - DONE - ArrayList                Look into removing this.
+    - DONE - IP   - DONE - ByteArray                Look into removing this.
+    - IP   - IP   - DONE - ObjectMap                Look into removing this.
+    - IP   - IP   - DONE - OrderedMap               Look into removing this.
+    - IP   - IP   - DONE - PredicateIterable        Can be removed if ArrayList is removed.
+    - IP   - IP   - DONE - PredicateIterator        Can be removed if ArrayList is removed.
+
+    - DONE - DONE - DONE - Collections
+    - DONE - DONE - DONE - DelayedRemovalList
+    - DONE - DONE - DONE - DictionaryExtensions
+    - DONE - DONE - DONE - DirectoryInfoComparer
+    - DONE - DONE - DONE - IPredicate
+    - DONE - IP   - DONE - LinkedHashMap
+    - DONE - DONE - DONE - ListExtensions
+    - DONE - IP   - DONE - ResettableStack
+    - DONE - DONE - DONE - SnapshotArrayList
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LUGHSHARP/CORE/FILES
+--------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -323,8 +368,8 @@ FILES
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-GRAPHICS
---------
+LUGHSHARP/CORE/GRAPHICS
+-----------------------
 
     Task: Streamline the image heirarchy and classes. Currently, we have:-
             - GLTexture
@@ -424,7 +469,6 @@ GRAPHICS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - DONE - DONE - CIM
     -      -      -      - Color 
     -      -      -      - ColorWIP                 - WIP to replace Color when finished 
     - DONE - DONE - DONE - Colors
@@ -438,15 +482,14 @@ GRAPHICS
     - DONE - DONE - DONE - ITextureArrayData
     - DONE - IP   - DONE - ITextureData
     - DONE - IP   - DONE - LughFormat               ( Needs a better name )
-    -      -      -      - Mesh
+    - DONE - DONE - DONE - Mesh
     - DONE - IP   - DONE - PixelFormat
-    - DONE - IP   - DONE - PNG
     -      -      -      - VertexAttribute
     -      -      -      - VertexAttributes
     - DONE - IP   - DONE - VertexDataType
 
-GRAPHICS/ATLASES
-----------------
+LUGHSHARP/CORE/GRAPHICS/ATLASES
+-------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -455,8 +498,19 @@ GRAPHICS/ATLASES
     - DONE - DONE - DONE - TextureAtlas
     - DONE -      - DONE - TextureAtlasData
 
-GRAPHICS/CAMERAS
-----------------
+LUGHSHARP/CORE/GRAPHICS/BITMAPFONTS
+-----------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      -      - BitmapFont
+    -      -      -      - BitmapFontCache
+    -      -      -      - BitmapFontData
+    -      -      -      - Glyph
+    -      -      -      - GlyphLayout
+
+LUGHSHARP/CORE/GRAPHICS/CAMERAS
+-------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -468,8 +522,8 @@ GRAPHICS/CAMERAS
     -      -      -      - PerspectiveCamera
     -      -      -      - Shake
 
-GRAPHICS/FRAMEBUFFERS
----------------------
+LUGHSHARP/CORE/GRAPHICS/FRAMEBUFFERS
+------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -485,8 +539,8 @@ GRAPHICS/FRAMEBUFFERS
     -      -      -      - GLFrameBuffer
     -      -      -      - GLFrameBufferBuilder
 
-GRAPHICS/G2D
-------------
+LUGHSHARP/CORE/GRAPHICS/G2D
+---------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -508,18 +562,20 @@ GRAPHICS/G2D
     -      -      -      - SpriteBatch
     -      -      -      - SpriteCache
 
-GRAPHICS/G3D
-------------
+LUGHSHARP/CORE/GRAPHICS/G3D
+---------------------------
 
     See Documents/TODO_G3D.MD
 
-GRAPHICS/IMAGEDECODERS
-----------------------
+LUGHSHARP/CORE/GRAPHICS/IMAGEDECODERS
+-------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      -      - BMPFormatStructs
     -      -      -      - BMPUtils
+    - DONE - DONE - DONE - CIM
+    - DONE - IP   - DONE - PNG
     -      -      -      - PNGDecoder
     -      -      -      - PNGFormatStructs
 
@@ -531,42 +587,43 @@ GRAPHICS/IMAGEDECODERS
     -      -      -      - ImageIO
     -      -      -      - ImageUtils
 
-GRAPHICS/IMAGES
----------------
+LUGHSHARP/CORE/GRAPHICS/IMAGES
+------------------------------
+
+    Default image coordinates are 0,0 at the top left, y-down, x-right
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      -      - Gdx2DPixmap
     -      -      -      - GLTexture
     -      -      -      - NinePatch
-    - DONE - IP   - DONE - Pixmap                   y=down, x=right
+    - DONE - IP   - DONE - Pixmap
     -      -      -      - PixmapData
     -      -      -      - PixmapDownloader
     -      -      -      - PixmapIO
-    -      -      -      - Texture                  y=down, x=right
+    -      -      -      - Texture
     -      -      -      - TextureArray
     -      -      -      - TextureDataFactory
-    -      -      -      - TextureRegion            y=down, x=right
+    -      -      -      - TextureRegion
 
-GRAPHICS/LOADERS
-----------------
+LUGHSHARP/CORE/GRAPHICS/LOADERS
+-------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      -      - Etc1Loader
     -      -      -      - FileLoader
-    -      -      -      - ITextureData
+    - DONE - IP   - DONE - ITextureData
     -      -      -      - KtxLoader
 
-GRAPHICS/OPENGL
----------------
+LUGHSHARP/CORE/GRAPHICS/OPENGL
+------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - DebugSeverity
+    - DONE -      - DONE - DebugSeverity
     -      -      -      - GLData
     -      -      -      - GLDebugControl
-    -      -      -      - GLFormatChooser
     -      -      -      - GLImage
     -      -      -      - GLUtils
     -      -      -      - IGL
@@ -576,8 +633,8 @@ GRAPHICS/OPENGL
     -      -      -      - IGL.GL32
     -      -      -      - OpenGLActions
 
-GRAPHICS/OPENGL/BINDINGS
-------------------------
+LUGHSHARP/CORE/GRAPHICS/OPENGL/BINDINGS
+---------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -611,8 +668,8 @@ GRAPHICS/OPENGL/BINDINGS
     -      -      -      - VertexArrayBindings
     -      -      -      - VertexAttribBindings
 
-GRAPHICS/OPENGL/ENUMS
----------------------
+LUGHSHARP/CORE/GRAPHICS/OPENGL/ENUMS
+------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -651,8 +708,8 @@ GRAPHICS/OPENGL/ENUMS
     -      -      -      - VertexAttribParameter
     -      -      -      - VertexAttribType
 
-GRAPHICS/SHADERS
-----------------
+LUGHSHARP/CORE/GRAPHICS/SHADERS
+-------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -660,24 +717,19 @@ GRAPHICS/SHADERS
     -      -      -      - ShaderProgram
     - DONE - DONE - DONE - ShaderStrings
 
-GRAPHICS/TEXT
--------------
+LUGHSHARP/CORE/GRAPHICS/TEXT
+----------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - BitmapFont
-    -      -      -      - BitmapFontCache
-    -      -      -      - BitmapFontData
     -      -      -      - CharacterUtils
     -      -      -      - DistanceFieldFont
-    -      -      -      - Glyph
-    -      -      -      - GlyphLayout
     -      -      -      - RegexUtils
     -      -      -      - Subset
     -      -      -      - UnicodeBlock
 
-GRAPHICS/UTILS
---------------
+LUGHSHARP/CORE/GRAPHICS/UTILS
+-----------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -714,8 +766,8 @@ GRAPHICS/UTILS
     -      -      -      - VertexBufferObjectWithVAO
     -      -      -      - VertexConstants
 
-GRAPHICS/VIEWPORTS
-------------------
+LUGHSHARP/CORE/GRAPHICS/VIEWPORTS
+---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -731,8 +783,8 @@ GRAPHICS/VIEWPORTS
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-INPUT
------
+LUGHSHARP/CORE/INPUT
+--------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -751,29 +803,8 @@ INPUT
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-MAIN
-----
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - DONE - DONE - ApplicationAdapter
-    - DONE - DONE - DONE - ApplicationConfiguration
-    - DONE - DONE - DONE - Engine
-    - DONE - DONE - DONE - Game
-    - DONE - DONE - DONE - IApplication
-    - DONE - DONE - DONE - IApplicationListener
-    - DONE - DONE - DONE - ILifecycleListener
-    - DONE - DONE - DONE - IScreen
-    - DONE - DONE - DONE - LibraryVersion
-    - DONE - DONE - DONE - Platform
-    - DONE - DONE - DONE - ScreenAdapter
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-MAPS
-----
+LUGHSHARP/CORE/MAPS
+-------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -787,8 +818,8 @@ MAPS
     - DONE - DONE - DONE - MapObjects
     - DONE - DONE - DONE - MapProperties
 
-MAPS/OBJECTS
-------------
+LUGHSHARP/CORE/MAPS/OBJECTS
+---------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -799,8 +830,8 @@ MAPS/OBJECTS
     -      -      -      - RectangleMapObject
     -      -      -      - TextureMapObject
 
-MAPS/TILED
-----------
+LUGHSHARP/CORE/MAPS/TILED
+-------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -811,8 +842,8 @@ MAPS/TILED
     -      -      -      - TiledMapTileSet
     -      -      -      - TiledMapTileSets
 
-MAPS/TILED/LOADERS
-------------------
+LUGHSHARP/CORE/MAPS/TILED/LOADERS
+---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -820,8 +851,8 @@ MAPS/TILED/LOADERS
     -      -      -      - BaseTmxMapLoader
     -      -      -      - TmxMapLoader
 
-MAPS/TILED/OBJECTS
-------------------
+LUGHSHARP/CORE/MAPS/TILED/OBJECTS
+---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -830,8 +861,8 @@ MAPS/TILED/OBJECTS
     -      -      -      - TiledMapTileMapObject
     -      -      -      - TileMetrics
 
-MAPS/TILED/RENDERERS
---------------------
+LUGHSHARP/CORE/MAPS/TILED/RENDERERS
+-----------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -843,8 +874,8 @@ MAPS/TILED/RENDERERS
     -      -      -      - OrthoCachedTiledMapRenderer
     -      -      -      - OrthogonalTiledMapRenderer
 
-MAPS/TILED/TILES
-----------------
+LUGHSHARP/CORE/MAPS/TILED/TILES
+-------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -857,8 +888,8 @@ MAPS/TILED/TILES
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-MATHS
------
+LUGHSHARP/CORE/MATHS
+--------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -901,8 +932,8 @@ MATHS
     -      -      -      - Vector4
     -      -      -      - WindowedMean
 
-MATH/COLLISION
---------------
+LUGHSHARP/CORE/MATH/COLLISION
+-----------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -915,8 +946,8 @@ MATH/COLLISION
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-MOCK/AUDIO
-----------
+LUGHSHARP/CORE/MOCK/AUDIO
+-------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -926,36 +957,36 @@ MOCK/AUDIO
     - IP   - IP   - DONE - MockMusic
     - IP   - IP   - DONE - MockSound
 
-MOCK/FILES
-----------
+LUGHSHARP/CORE/MOCK/FILES
+-------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - IP   - IP   - DONE - MockFiles
 
-MOCK/GRAPHICS
--------------
+LUGHSHARP/CORE/MOCK/GRAPHICS
+----------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - IP   - IP   - DONE - MockGraphics
 
-MOCK/INPUT
-----------
+LUGHSHARP/CORE/MOCK/INPUT
+-------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - IP   - IP   - DONE - MockInput
 
-MOCK/MAIN
----------
+LUGHSHARP/CORE/MOCK/MAIN
+------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - IP   - IP   - DONE - MockApplication
 
-MOCK/NET
---------
+LUGHSHARP/CORE/MOCK/NET
+-----------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -965,8 +996,8 @@ MOCK/NET
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-NETWORK
--------
+LUGHSHARP/CORE/NETWORK
+----------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -986,8 +1017,8 @@ NETWORK
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-SCENEGRAPH2D
-------------
+LUGHSHARP/CORE/SCENEGRAPH2D
+---------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1001,8 +1032,8 @@ SCENEGRAPH2D
     -      -      -      - Stage
     -      -      -      - Touchable
 
-SCENEGRAPH2D/ACTIONS
---------------------
+LUGHSHARP/CORE/SCENEGRAPH2D/ACTIONS
+-----------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1040,8 +1071,8 @@ SCENEGRAPH2D/ACTIONS
     -      -      -      - TouchableAction
     -      -      -      - VisibleAction
 
-SCENEGRAPH2D/LISTENERS
-----------------------
+LUGHSHARP/CORE/SCENEGRAPH2D/LISTENERS
+-------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1070,8 +1101,8 @@ AddListener( new ClickListener()
 } );
 ```
 
-SCENEGRAPH2D/STYLES
--------------------
+LUGHSHARP/CORE/SCENEGRAPH2D/STYLES
+----------------------------------
 
 ( Styles to use with StyleRegistry / StyleFactory )
 
@@ -1097,8 +1128,8 @@ SCENEGRAPH2D/STYLES
     -      -      - DONE - TreeStyleRecord
     -      -      - DONE - WindowStyleRecord
 
-SCENEGRAPH2D/UI
----------------
+LUGHSHARP/CORE/SCENEGRAPH2D/UI
+------------------------------
 
     TODO: I don't like the way Cell and Value classes are implemented.
           They seem confusing and are candidates for a rewrite.
@@ -1142,8 +1173,8 @@ SCENEGRAPH2D/UI
     -      -      -      - WidgetGroup              - 
     -      -      -      - Window                   - 
 
-SCENEGRAPH2D/UI/STYLES
-----------------------
+LUGHSHARP/CORE/SCENEGRAPH2D/UI/STYLES
+-------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1166,8 +1197,8 @@ SCENEGRAPH2D/UI/STYLES
     -      -      - DONE - TreeStyle
     -      -      - DONE - WindowStyle
 
-SCENEGRAPH2D/UTILS
-------------------
+LUGHSHARP/CORE/SCENEGRAPH2D/UTILS
+---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1190,8 +1221,8 @@ SCENEGRAPH2D/UTILS
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-UTILS
------
+LUGHSHARP/CORE/UTILS
+--------------------
 
     - Move Utils/Collections out of Utils and into somewhere more appropriate.
 
@@ -1239,30 +1270,8 @@ UTILS
     -      -      -      - TimeUtils
     -      -      -      - TimSort
 
-UTILS/COLLECTIONS
------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - IP   - DONE - ArrayList                Look into removing this.
-    - DONE - IP   - DONE - ByteArray                Look into removing this.
-    - IP   - IP   - DONE - ObjectMap                Look into removing this.
-    - IP   - IP   - DONE - OrderedMap               Look into removing this.
-    - IP   - IP   - DONE - PredicateIterable        Can be removed if ArrayList is removed.
-    - IP   - IP   - DONE - PredicateIterator        Can be removed if ArrayList is removed.
-
-    - DONE - DONE - DONE - Collections
-    - DONE - DONE - DONE - DelayedRemovalList
-    - DONE - DONE - DONE - DictionaryExtensions
-    - DONE - DONE - DONE - DirectoryInfoComparer
-    - DONE - DONE - DONE - IPredicate
-    - DONE - IP   - DONE - LinkedHashMap
-    - DONE - DONE - DONE - ListExtensions
-    - DONE - IP   - DONE - ResettableStack
-    - DONE - DONE - DONE - SnapshotArrayList
-
-UTILS/EXCEPTIONS
-----------------
+LUGHSHARP/CORE/UTILS/EXCEPTIONS
+-------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1272,8 +1281,8 @@ UTILS/EXCEPTIONS
     - DONE - DONE - DONE - RuntimeException
     - DONE - DONE - DONE - SerializationException
 
-UTILS/JSON
-----------
+LUGHSHARP/CORE/UTILS/JSON
+-------------------------
 
     ///////////////////////////////////////////////
     ALL JSON CLASSES NEED FULLY TESTING!!!
@@ -1293,8 +1302,8 @@ UTILS/JSON
     - DONE - IP   - DONE - JsonValue
     - DONE -      - DONE - JsonWriter
 
-UTILS/LOGGING
--------------
+LUGHSHARP/CORE/UTILS/LOGGING
+----------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1304,8 +1313,8 @@ UTILS/LOGGING
     - DONE - DONE - DONE - Preferences
     - DONE - DONE - DONE - Stats
 
-UTILS/POOLING
--------------
+LUGHSHARP/CORE/UTILS/POOLING
+----------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1316,13 +1325,108 @@ UTILS/POOLING
     - DONE - DONE - DONE - PooledLinkedList
     - DONE - DONE - DONE - Pools
 
-UTILS/XML
----------
+LUGHSHARP/CORE/UTILS/XML
+------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - XmlReader
     - DONE - DONE - DONE - XmlWriter
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+LUGHSHARP/EXTENSIONS
+--------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - FontUtils
+    -      -      - DONE - GameSprite2D
+    - DONE - DONE - DONE - Scene2DUtils
+
+LUGHSHARP/EXTENSIONS/BOX2D
+--------------------------
+
+    - It's most likely best to recommend the use of an already available C# port.
+    - ( It really depends on how much of a glutton for punishment I am!!!! )
+
+    eg:
+    - Box2DSharp
+    - Box2DX
+    - Box2D.Net
+    - Box2D.CSharp
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LUGHSHARP/EXTENSIONS/FONTS
+--------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      -      - FontManager
+    - IP   - IP   -      - FreeType
+    - IP   - IP   -      - FreeTypeFontGenerator
+    - IP   - IP   -      - FreeTypeFontGeneratorLoader
+    - IP   - IP   -      - FreeTypeFontLoader
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LUGHSHARP/EXTENSIONS/TOOLS
+--------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      -      - ImageValidator
+
+LUGHSHARP/EXTENSIONS/TOOLS/IMAGEPACKER
+--------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE -      - ImagePacker
+
+LUGHSHARP/EXTENSIONS/TOOLS/TEXTUREPACKER
+----------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      -      - ColorBleedEffect
+    -      -      -      - FileProcessor
+    -      -      -      - FreeRectChoiceHeuristic
+    -      -      -      - GridPacker
+    -      -      -      - IFileProcessor
+    -      -      -      - ImageProcessor
+    -      -      -      - IPacker
+    -      -      -      - MaxRectsPacker
+    -      -      -      - ResamplingExtensions
+    -      -      -      - TexturePacker
+    -      -      -      - TexturePackerAlias
+    -      -      -      - TexturePackerFileProcessor
+    -      -      -      - TexturePackerInputImage
+    -      -      -      - TexturePackerPage
+    -      -      -      - TexturePackerProgressListener
+    -      -      -      - TexturePackerRect
+    -      -      -      - TexturePackerSettings
+    -      -      -      - TexturePackerWriter
+    -      -      -      - TextureUnpacker
+
+
+LUGHSHARP/EXTENSIONS/TOOLS/TILEDMAPPACKER
+-----------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - IP   - IP   -      - TileMapPacker
+    -      -      -      - TiledMapPackerTest
+    -      -      -      - TiledMapPackerTestRender
+    -      -      -      - TileSetLayout
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

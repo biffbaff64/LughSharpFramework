@@ -26,7 +26,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.SceneGraph2D.Utils;

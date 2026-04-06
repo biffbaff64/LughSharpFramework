@@ -26,7 +26,6 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Maps.Tiled;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
 using SixLabors.ImageSharp;

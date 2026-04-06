@@ -26,9 +26,9 @@ using System.Text.RegularExpressions;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Collections;
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 

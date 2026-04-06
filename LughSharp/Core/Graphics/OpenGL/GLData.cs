@@ -36,7 +36,7 @@ public class GLData
     public const bool                  DefaultOpenglForwardcompat = true;
 
     public const int Texture2D     = 0x0DE1;
-    public const int Extensions     = 0x1F03;
+    public const int Extensions    = 0x1F03;
     public const int MajorVersion  = 0x821B;
     public const int MinorVersion  = 0x821C;
     public const int NumExtensions = 0x821D;

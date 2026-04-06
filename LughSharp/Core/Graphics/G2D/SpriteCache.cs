@@ -27,14 +27,13 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Collections;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.G2D;

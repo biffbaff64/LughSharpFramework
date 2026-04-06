@@ -29,9 +29,8 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.ImageDecoders;
+using LughSharp.Core.Graphics.Images.Decoders;
 using LughSharp.Core.Graphics.OpenGL;
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;

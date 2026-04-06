@@ -31,7 +31,6 @@ using JetBrains.Annotations;
 using LughSharp.Core.Graphics.OpenGL;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Maths.Collision;
 using LughSharp.Core.Utils;
@@ -1477,11 +1476,7 @@ public class Mesh : IDisposable
         var vertices      = new float[ count * stride ];
 
         GetVertices( start * stride, count * stride, vertices );
-
-        // GetVertices(0, vertices.length, vertices);
         Transform( matrix, vertices, stride, posOffset, numComponents, 0, count );
-
-        // SetVertices(vertices, 0, vertices.length);
         UpdateVertices( start * stride, vertices );
     }
 

@@ -29,6 +29,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
+using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;

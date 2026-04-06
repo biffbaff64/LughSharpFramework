@@ -26,8 +26,8 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Collections;
 using LughSharp.Core.Graphics.G3D.Env;
-using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Graphics.G3D.Attributes;
 

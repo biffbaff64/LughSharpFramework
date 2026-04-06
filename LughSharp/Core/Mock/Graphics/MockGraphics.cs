@@ -32,7 +32,7 @@ using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Utils;
 
 using Monitor = DotGLFW.Monitor;
-using Platform = LughSharp.Core.Main.Platform;
+using Platform = LughSharp.Core.Platform;
 
 namespace LughSharp.Core.Mock.Graphics;
 

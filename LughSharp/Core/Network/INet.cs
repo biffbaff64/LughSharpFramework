@@ -24,11 +24,10 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Main;
 using LughSharp.Core.Utils;
 
 using Exception = System.Exception;
-using Platform = LughSharp.Core.Main.Platform;
+using Platform = LughSharp.Core.Platform;
 
 namespace LughSharp.Core.Network;
 

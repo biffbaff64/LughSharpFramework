@@ -29,14 +29,13 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Input;
-using LughSharp.Core.Main;
 using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Listeners;
 using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
-using Platform = LughSharp.Core.Main.Platform;
+using Platform = LughSharp.Core.Platform;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 

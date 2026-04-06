@@ -52,14 +52,6 @@ public unsafe partial class GLBindings
         _glBindBuffer( ( GLenum )target, buffer );
     }
 
-    /// <inheritdoc />
-    public void BindBuffer( GLenum target, GLuint buffer )
-    {
-        GetDelegateForFunction< PFNGLBINDBUFFERPROC >( "glBindBuffer", out _glBindBuffer );
-
-        _glBindBuffer( target, buffer );
-    }
-
     // ========================================================================
 
     /// <inheritdoc />

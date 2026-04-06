@@ -26,9 +26,9 @@ using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Collections;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace Extensions.Source.Tools.TexturePacker;

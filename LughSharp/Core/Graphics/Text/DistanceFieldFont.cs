@@ -24,6 +24,7 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
@@ -49,6 +50,46 @@ public class DistanceFieldFont : BitmapFont
     private float _distanceFieldSmoothing;
 
     // ========================================================================
+
+    public DistanceFieldFont( BitmapFontData data, List< TextureRegion > pageRegions, bool integer )
+        : base( data, pageRegions, integer )
+    {
+    }
+
+    public DistanceFieldFont( BitmapFontData data, TextureRegion region, bool integer )
+        : base( data, region, integer )
+    {
+    }
+
+    public DistanceFieldFont( FileInfo fontFile, FileInfo imageFile, bool flip, bool integer )
+        : base( fontFile, imageFile, flip, integer )
+    {
+    }
+
+    public DistanceFieldFont( FileInfo fontFile, FileInfo imageFile, bool flip )
+        : base( fontFile, imageFile, flip )
+    {
+    }
+
+    public DistanceFieldFont( FileInfo fontFile, TextureRegion region, bool flip )
+        : base( fontFile, region, flip )
+    {
+    }
+
+    public DistanceFieldFont( FileInfo fontFile, TextureRegion region )
+        : base( fontFile, region )
+    {
+    }
+
+    public DistanceFieldFont( FileInfo fontFile, bool flip )
+        : base( fontFile, flip )
+    {
+    }
+
+    public DistanceFieldFont( FileInfo fontFile )
+        : base( fontFile )
+    {
+    }
 
     /// <summary>
     /// </summary>
@@ -199,48 +240,4 @@ public class DistanceFieldFont : BitmapFont
             SetSmoothingUniform( spriteBatch, 0 );
         }
     }
-
-    #region constructors
-
-    public DistanceFieldFont( BitmapFontData data, List< TextureRegion > pageRegions, bool integer )
-        : base( data, pageRegions, integer )
-    {
-    }
-
-    public DistanceFieldFont( BitmapFontData data, TextureRegion region, bool integer )
-        : base( data, region, integer )
-    {
-    }
-
-    public DistanceFieldFont( FileInfo fontFile, FileInfo imageFile, bool flip, bool integer )
-        : base( fontFile, imageFile, flip, integer )
-    {
-    }
-
-    public DistanceFieldFont( FileInfo fontFile, FileInfo imageFile, bool flip )
-        : base( fontFile, imageFile, flip )
-    {
-    }
-
-    public DistanceFieldFont( FileInfo fontFile, TextureRegion region, bool flip )
-        : base( fontFile, region, flip )
-    {
-    }
-
-    public DistanceFieldFont( FileInfo fontFile, TextureRegion region )
-        : base( fontFile, region )
-    {
-    }
-
-    public DistanceFieldFont( FileInfo fontFile, bool flip )
-        : base( fontFile, flip )
-    {
-    }
-
-    public DistanceFieldFont( FileInfo fontFile )
-        : base( fontFile )
-    {
-    }
-
-    #endregion constructors
 }

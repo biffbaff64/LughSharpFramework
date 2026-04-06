@@ -28,9 +28,9 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Collections;
 using LughSharp.Core.Input;
 using LughSharp.Core.SceneGraph2D.Listeners;
-using LughSharp.Core.Utils.Collections;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 

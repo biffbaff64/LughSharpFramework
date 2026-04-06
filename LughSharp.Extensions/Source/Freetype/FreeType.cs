@@ -30,72 +30,73 @@ using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace Extensions.Source.Freetype;
 
 [PublicAPI]
 public class FreeType
 {
-    public const int FtPixelModeNone                  = 0;
-    public const int FtPixelModeMono                  = 1;
-    public const int FtPixelModeGray                  = 2;
-    public const int FtPixelModeGray2                 = 3;
-    public const int FtPixelModeGray4                 = 4;
-    public const int FtPixelModeLcd                   = 5;
-    public const int FtPixelModeLcdV                 = 6;
-    public const int FtFaceFlagScalable               = 1 << 0;
-    public const int FtFaceFlagFixedSizes            = 1 << 1;
-    public const int FtFaceFlagFixedWidth            = 1 << 2;
-    public const int FtFaceFlagSfnt                   = 1 << 3;
-    public const int FtFaceFlagHorizontal             = 1 << 4;
-    public const int FtFaceFlagVertical               = 1 << 5;
-    public const int FtFaceFlagKerning                = 1 << 6;
-    public const int FtFaceFlagFastGlyphs            = 1 << 7;
-    public const int FtFaceFlagMultipleMasters       = 1 << 8;
-    public const int FtFaceFlagGlyphNames            = 1 << 9;
-    public const int FtFaceFlagExternalStream        = 1 << 10;
-    public const int FtFaceFlagHinter                 = 1 << 11;
-    public const int FtFaceFlagCidKeyed              = 1 << 12;
-    public const int FtFaceFlagTricky                 = 1 << 13;
-    public const int FtStyleFlagItalic                = 1 << 0;
-    public const int FtStyleFlagBold                  = 1 << 1;
-    public const int FtLoadDefault                     = 0x0;
-    public const int FtLoadNoScale                    = 0x1;
-    public const int FtLoadNoHinting                  = 0x2;
-    public const int FtLoadRender                      = 0x4;
-    public const int FtLoadNoBitmap                   = 0x8;
-    public const int FtLoadVerticalLayout             = 0x10;
-    public const int FtLoadForceAutohint              = 0x20;
-    public const int FtLoadCropBitmap                 = 0x40;
-    public const int FtLoadPedantic                    = 0x80;
+    public const int FtPixelModeNone                = 0;
+    public const int FtPixelModeMono                = 1;
+    public const int FtPixelModeGray                = 2;
+    public const int FtPixelModeGray2               = 3;
+    public const int FtPixelModeGray4               = 4;
+    public const int FtPixelModeLcd                 = 5;
+    public const int FtPixelModeLcdV                = 6;
+    public const int FtFaceFlagScalable             = 1 << 0;
+    public const int FtFaceFlagFixedSizes           = 1 << 1;
+    public const int FtFaceFlagFixedWidth           = 1 << 2;
+    public const int FtFaceFlagSfnt                 = 1 << 3;
+    public const int FtFaceFlagHorizontal           = 1 << 4;
+    public const int FtFaceFlagVertical             = 1 << 5;
+    public const int FtFaceFlagKerning              = 1 << 6;
+    public const int FtFaceFlagFastGlyphs           = 1 << 7;
+    public const int FtFaceFlagMultipleMasters      = 1 << 8;
+    public const int FtFaceFlagGlyphNames           = 1 << 9;
+    public const int FtFaceFlagExternalStream       = 1 << 10;
+    public const int FtFaceFlagHinter               = 1 << 11;
+    public const int FtFaceFlagCidKeyed             = 1 << 12;
+    public const int FtFaceFlagTricky               = 1 << 13;
+    public const int FtStyleFlagItalic              = 1 << 0;
+    public const int FtStyleFlagBold                = 1 << 1;
+    public const int FtLoadDefault                  = 0x0;
+    public const int FtLoadNoScale                  = 0x1;
+    public const int FtLoadNoHinting                = 0x2;
+    public const int FtLoadRender                   = 0x4;
+    public const int FtLoadNoBitmap                 = 0x8;
+    public const int FtLoadVerticalLayout           = 0x10;
+    public const int FtLoadForceAutohint            = 0x20;
+    public const int FtLoadCropBitmap               = 0x40;
+    public const int FtLoadPedantic                 = 0x80;
     public const int FtLoadIgnoreGlobalAdvanceWidth = 0x200;
-    public const int FtLoadNoRecurse                  = 0x400;
-    public const int FtLoadIgnoreTransform            = 0x800;
-    public const int FtLoadMonochrome                  = 0x1000;
-    public const int FtLoadLinearDesign               = 0x2000;
-    public const int FtLoadNoAutohint                 = 0x8000;
-    public const int FtLoadTargetNormal               = 0x0;
-    public const int FtLoadTargetLight                = 0x10000;
-    public const int FtLoadTargetMono                 = 0x20000;
-    public const int FtLoadTargetLcd                  = 0x30000;
-    public const int FtLoadTargetLcdV                = 0x40000;
-    public const int FtRenderModeNormal               = 0;
-    public const int FtRenderModeLight                = 1;
-    public const int FtRenderModeMono                 = 2;
-    public const int FtRenderModeLcd                  = 3;
-    public const int FtRenderModeLcdV                = 4;
-    public const int FtRenderModeMax                  = 5;
-    public const int FtKerningDefault                  = 0;
-    public const int FtKerningUnfitted                 = 1;
-    public const int FtKerningUnscaled                 = 2;
-    public const int FtStrokerLinecapButt             = 0;
-    public const int FtStrokerLinecapRound            = 1;
-    public const int FtStrokerLinecapSquare           = 2;
-    public const int FtStrokerLinejoinRound           = 0;
-    public const int FtStrokerLinejoinBevel           = 1;
-    public const int FtStrokerLinejoinMiterVariable  = 2;
-    public const int FtStrokerLinejoinMiter           = FtStrokerLinejoinMiterVariable;
-    public const int FtStrokerLinejoinMiterFixed     = 3;
+    public const int FtLoadNoRecurse                = 0x400;
+    public const int FtLoadIgnoreTransform          = 0x800;
+    public const int FtLoadMonochrome               = 0x1000;
+    public const int FtLoadLinearDesign             = 0x2000;
+    public const int FtLoadNoAutohint               = 0x8000;
+    public const int FtLoadTargetNormal             = 0x0;
+    public const int FtLoadTargetLight              = 0x10000;
+    public const int FtLoadTargetMono               = 0x20000;
+    public const int FtLoadTargetLcd                = 0x30000;
+    public const int FtLoadTargetLcdV               = 0x40000;
+    public const int FtRenderModeNormal             = 0;
+    public const int FtRenderModeLight              = 1;
+    public const int FtRenderModeMono               = 2;
+    public const int FtRenderModeLcd                = 3;
+    public const int FtRenderModeLcdV               = 4;
+    public const int FtRenderModeMax                = 5;
+    public const int FtKerningDefault               = 0;
+    public const int FtKerningUnfitted              = 1;
+    public const int FtKerningUnscaled              = 2;
+    public const int FtStrokerLinecapButt           = 0;
+    public const int FtStrokerLinecapRound          = 1;
+    public const int FtStrokerLinecapSquare         = 2;
+    public const int FtStrokerLinejoinRound         = 0;
+    public const int FtStrokerLinejoinBevel         = 1;
+    public const int FtStrokerLinejoinMiterVariable = 2;
+    public const int FtStrokerLinejoinMiter         = FtStrokerLinejoinMiterVariable;
+    public const int FtStrokerLinejoinMiterFixed    = 3;
 
     // ========================================================================
 
@@ -135,10 +136,6 @@ public class FreeType
 
     public static Library InitFreeType()
     {
-        // In C#, DllImport typically handles the loading of the shared library
-        // so SharedLibraryLoader().load("gdx-freetype"); is not directly translated.
-        // You ensure the DLL/SO/DYLIB is in a place where the .NET runtime can find it.
-
         IntPtr address = InitFreeTypeJniNative();
 
         if ( address == IntPtr.Zero )
@@ -147,11 +144,13 @@ public class FreeType
                                         GetLastErrorCode() );
         }
 
+        Logger.Debug( $"Freetype initialized successfully. Address: {address}" );
+            
         return new Library( address );
 
         // --------------------------------------
 
-        [DllImport( NativeLib, EntryPoint = "initFreeTypeJni", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Init_FreeType", CallingConvention = CallingConvention.Cdecl )]
         static extern IntPtr InitFreeTypeJniNative();
     }
 
@@ -173,6 +172,7 @@ public class FreeType
         }
     }
 
+    // ========================================================================
     // ========================================================================
 
     [PublicAPI]
@@ -197,10 +197,6 @@ public class FreeType
             try
             {
                 // Attempt to map the file, if supported and safe.
-                // This is a placeholder for your Arcus file mapping logic.
-                // In a real scenario, FileHandle.Map() might return a byte[] directly or an IntPtr.
-                // For now, let's assume it attempts to read into a byte array.
-                // If file mapping isn't truly supported or efficient, reading the stream is the fallback.
 
 //                using ( var stream = File.ReadAllBytes( fontFile.FullName ) )
 //                {

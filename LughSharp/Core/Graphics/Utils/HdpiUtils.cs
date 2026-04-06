@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.OpenGL.Bindings;
-using LughSharp.Core.Main;
 
 namespace LughSharp.Core.Graphics.Utils;
 

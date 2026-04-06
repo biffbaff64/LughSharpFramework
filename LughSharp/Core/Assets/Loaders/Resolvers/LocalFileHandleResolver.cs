@@ -26,8 +26,6 @@ using System.IO;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Main;
-
 namespace LughSharp.Core.Assets.Loaders.Resolvers;
 
 /// <summary>

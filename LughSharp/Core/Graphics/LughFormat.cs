@@ -26,21 +26,57 @@ using JetBrains.Annotations;
 
 namespace LughSharp.Core.Graphics;
 
+/// <summary>
+/// Pixel formats used in graphics rendering. These formats describe the
+/// arrangement and size of color channels in an image.
+/// </summary>
 [PublicAPI]
 public class LughFormat
 {
-    public const int Alpha          = 1; // Was GDX_2D_FORMAT_ALPHA
-    public const int LuminanceAlpha = 2; // Was GDX_2D_FORMAT_LUMINANCE_ALPHA
-    public const int RGB888         = 3; // Was GDX_2D_FORMAT_RGB888
-    public const int RGBA8888       = 4; // Was GDX_2D_FORMAT_RGBA8888
-    public const int RGB565         = 5; // Was GDX_2D_FORMAT_RGB565
-    public const int RGBA4444       = 6; // Was GDX_2D_FORMAT_RGBA4444
-    public const int IndexedColor   = 7; // Was GDX_2D_FORMAT_COLOR_INDEX
+    /// <summary>
+    /// 
+    /// </summary>
+    public const int Alpha = 1;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public const int LuminanceAlpha = 2;
+
+    /// <summary>
+    /// 8 bits each for Red, Green, and Blue, with no Alpha.
+    /// Stored as RRRR RRRR GGGG GGGG BBBB BBBB.
+    /// </summary>
+    public const int RGB888 = 3;
+
+    /// <summary>
+    /// The standard format, with 8 bits each for Red, Green, Blue, and Alpha.
+    /// Stored as RRRR RRRR GGGG GGGG BBBB AAAA.
+    /// </summary>
+    public const int RGBA8888 = 4;
+
+    /// <summary>
+    /// 5 bits for Red, 6 bits for Green, and 5 bits for Blue, with no Alpha.
+    /// Stored as RRRR RGGG GGGB BBBB.
+    /// </summary>
+    public const int RGB565 = 5;
+
+    /// <summary>
+    /// Similar to RGBA888 but with 4 bits each for Red, Green, Blue, and Alpha,
+    /// resulting in a lower color resolution.
+    /// Stored as RRRR GGGG BBBB AAAA.
+    /// </summary>
+    public const int RGBA4444 = 6;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public const int IndexedColor = 7;
 
     // ------------------------------------------
 
-    public const int Default   = RGBA8888; // Was GDX_2D_FORMAT_DEFAULT
-    public const int Invalid   = -1;       // Was GDX_2D_FORMAT_INVALID
+    public const int Default   = RGBA8888;
+    public const int Invalid   = -1;
     public const int Undefined = 0;
 }
 

@@ -30,8 +30,8 @@ using System.Text;
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Collections;
 using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Collections;
 
 namespace LughSharp.Core.Utils.Json;
 
