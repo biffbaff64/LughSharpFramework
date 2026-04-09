@@ -42,6 +42,9 @@ using GLuint = uint;
 
 namespace LughSharp.Core.Graphics.Shaders;
 
+// ============================================================================
+// ============================================================================
+
 [PublicAPI]
 public struct ShaderData
 {
@@ -49,6 +52,9 @@ public struct ShaderData
     public string VertexShaderSrc;
     public string FragmentShaderSrc;
 }
+
+// ============================================================================
+// ============================================================================
 
 [PublicAPI]
 public enum ShaderProgramID
@@ -58,20 +64,19 @@ public enum ShaderProgramID
     FragementShader = 2
 }
 
+// ============================================================================
+// ============================================================================
+
 /// <summary>
-/// A shader program encapsulates a vertex and fragment shader pair linked to form a shader program.
+/// A shader program encapsulates a vertex and fragment shader pair linked to form
+/// a shader program. After construction a ShaderProgram can be used to draw
+/// <see cref="Mesh"/>. To make the GPU use a specific ShaderProgram the programs
+/// <see cref="ShaderProgram.Bind()"/> method must be used which effectively binds
+/// the program. When a ShaderProgram is bound one can set uniforms, vertex attributes
+/// and attributes as needed via the appropriate methods.
 /// <para>
-/// After construction a ShaderProgram can be used to draw <see cref="Mesh"/>. To make the GPU use a
-/// specific ShaderProgram the programs <see cref="ShaderProgram.Bind()"/> method must be used which
-/// effectively binds the program.
-/// </para>
-/// <para>
-/// When a ShaderProgram is bound one can set uniforms, vertex attributes and attributes as needed via
-/// the appropriate methods.
-/// </para>
-/// <para>
-/// A ShaderProgram must be disposed via a call to <see cref="ShaderProgram.Dispose()"/> when it is no
-/// longer needed
+/// A ShaderProgram must be disposed via a call to <see cref="ShaderProgram.Dispose()"/>
+/// when it is no longer needed
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -183,6 +188,7 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
+    /// 
     /// </summary>
     /// <param name="shader"></param>
     /// <param name="shaderType"></param>
@@ -209,8 +215,6 @@ public class ShaderProgram : IDisposable
             throw new Exception( $"Failed to loader shader {shader}: {infoLog}" );
         }
     }
-
-    // ========================================================================
 
     /// <summary>
     /// </summary>
@@ -419,12 +423,18 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// Configures the vertex attribute parameters for a specified data location, enabling shader operations on vertex data.
+    /// Configures the vertex attribute parameters for a specified data location, enabling
+    /// shader operations on vertex data.
     /// </summary>
     /// <param name="location">The location of the vertex attribute within the shader program.</param>
-    /// <param name="size">The number of components in the vertex attribute (e.g., 1 for scalar, 2 for vectors, etc.).</param>
+    /// <param name="size">
+    /// The number of components in the vertex attribute (e.g., 1 for scalar, 2 for vectors, etc.).
+    /// </param>
     /// <param name="type">The data type of each component in the attribute (e.g., float, int).</param>
-    /// <param name="normalize">Indicates whether fixed-point data values should be normalized or converted directly as fixed-point values.</param>
+    /// <param name="normalize">
+    /// Indicates whether fixed-point data values should be normalized or converted directly
+    /// as fixed-point values.
+    /// </param>
     /// <param name="stride">The byte offset between consecutive vertex attributes.</param>
     /// <param name="offset">The offset of the first element within the vertex data structure.</param>
     public virtual void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, int offset )
@@ -523,36 +533,98 @@ public class ShaderProgram : IDisposable
         Engine.GL.UseProgram( 0 );
     }
 
-    // ========================================================================
-
+    /// <summary>
+    /// 
+    /// </summary>
     public void Use()
     {
         Engine.GL.UseProgram( ShaderProgramHandle );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
     public bool HasUniform( string name )
     {
         return _uniformLocations.ContainsKey( name );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
     public bool HasAttribute( string name )
     {
         return _attributeLocations.ContainsKey( name );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
     private void CacheUniform( string name )
     {
         int location = Engine.GL.GetUniformLocation( ShaderProgramHandle, name );
         _uniformLocations[ name ] = location;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
     private void CacheAttribute( string name )
     {
         int location = Engine.GL.GetAttribLocation( ShaderProgramHandle, name );
         _attributeLocations[ name ] = location;
     }
 
+    /// <summary>
+    /// Validates a 4x4 matrix, ensuring it has the correct length and no invalid
+    /// values such as NaN or Infinity.
+    /// </summary>
+    /// <param name="matrix">The matrix to validate, represented as a float array.</param>
+    /// <returns>True if the matrix is valid; otherwise, false.</returns>
+    private static bool IsMatrixValid( float[]? matrix )
+    {
+        if ( matrix is not { Length: 16 } )
+        {
+            return false;
+        }
+
+        foreach ( float t in matrix )
+        {
+            if ( float.IsNaN( t ) || float.IsInfinity( t ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // ========================================================================
+    
+    /// <summary>
+    /// The log info for the shader compilation and program linking stage.
+    /// The shader needs to be bound for this method to have an effect.
+    /// </summary>
+    public unsafe string ShaderLog
+    {
+        get
+        {
+            if ( IsCompiled )
+            {
+                int* length = stackalloc int[ 1 ];
+
+                Engine.GL.GetProgramiv( ShaderProgramHandle, IGL.GLInfoLogLength, length );
+
+                _shaderLog = Engine.GL.GetProgramInfoLog( ShaderProgramHandle, *length );
+            }
+
+            return _shaderLog;
+        }
+    }
 
     /// <summary>
     /// Logs details of an invalid matrix, including checks for null values, improper
@@ -594,52 +666,6 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// Validates a 4x4 matrix, ensuring it has the correct length and no invalid
-    /// values such as NaN or Infinity.
-    /// </summary>
-    /// <param name="matrix">The matrix to validate, represented as a float array.</param>
-    /// <returns>True if the matrix is valid; otherwise, false.</returns>
-    private static bool IsMatrixValid( float[]? matrix )
-    {
-        if ( matrix is not { Length: 16 } )
-        {
-            return false;
-        }
-
-        foreach ( float t in matrix )
-        {
-            if ( float.IsNaN( t ) || float.IsInfinity( t ) )
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    // ========================================================================
-    /// <summary>
-    /// The log info for the shader compilation and program linking stage.
-    /// The shader needs to be bound for this method to have an effect.
-    /// </summary>
-    public unsafe string ShaderLog
-    {
-        get
-        {
-            if ( IsCompiled )
-            {
-                int* length = stackalloc int[ 1 ];
-
-                Engine.GL.GetProgramiv( ShaderProgramHandle, IGL.GLInfoLogLength, length );
-
-                _shaderLog = Engine.GL.GetProgramInfoLog( ShaderProgramHandle, *length );
-            }
-
-            return _shaderLog;
-        }
-    }
-
-    /// <summary>
     /// Write the source for the vertex and fragment shaders to console.
     /// Will only work in DEBUG builds.
     /// </summary>
@@ -667,3 +693,7 @@ public class ShaderProgram : IDisposable
         GC.SuppressFinalize( this );
     }
 }
+
+// ============================================================================
+// ============================================================================
+

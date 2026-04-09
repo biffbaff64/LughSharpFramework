@@ -47,10 +47,6 @@ public class VertexAttribute
     /// </summary>
     public int Offset { get; set; }
 
-    // ========================================================================
-
-    private readonly int _usageIndex;
-
     /// <summary>
     /// The alias for the attribute used in a <see cref="ShaderProgram"/>
     /// </summary>
@@ -82,6 +78,10 @@ public class VertexAttribute
     /// The attribute <see cref="Usage"/>, used for identification.
     /// </summary>
     public readonly int Usage;
+
+    // ========================================================================
+
+    private readonly int _usageIndex;
 
     // ========================================================================
     // ========================================================================
@@ -166,6 +166,28 @@ public class VertexAttribute
                                     "a_position" );
     }
 
+    /// <summary>
+    /// Creates a vertex attribute definition for a position element in a vertex buffer.
+    /// </summary>
+    /// <param name="numComponents">
+    /// The number of components in the position attribute. Typically 2 for 2D positions
+    /// or 3 for 3D positions. Must be a positive integer.
+    /// </param>
+    /// <param name="type">
+    /// The data type of each component in the attribute. Defaults to IGL.GLFloat. Must 
+    /// be a valid OpenGL type constant.
+    /// </param>
+    /// <param name="normalized">
+    /// Indicates whether fixed-point data values should be normalized when accessed.
+    /// Set to <c>true</c> to normalize; otherwise, <c>false</c>.
+    /// </param>
+    /// <param name="alias">
+    /// The name to use for the attribute in shader programs. Defaults to "a_position".
+    /// </param>
+    /// <returns>
+    /// A <see cref="VertexAttribute"/> instance representing the position attribute 
+    /// with the specified configuration.
+    /// </returns>
     public static VertexAttribute Position( int numComponents,
                                             int type = IGL.GLFloat,
                                             bool normalized = false,
@@ -400,3 +422,7 @@ public class VertexAttribute
         Logger.Debug( $"Unit: {Unit}" );
     }
 }
+
+// ============================================================================
+// ============================================================================
+

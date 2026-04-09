@@ -210,7 +210,7 @@ public class Stage : InputAdapter, IDisposable
             {
                 // The pointer is gone, exit the over actor for the pointer, if any.
                 _pointerOverActors[ pointer ] = null;
-                
+
                 FireExit( overLast, _pointerScreenX[ pointer ], _pointerScreenY[ pointer ], pointer );
             }
         }
@@ -368,6 +368,8 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool OnTouchDown( int screenX, int screenY, int pointer, int button )
     {
+        Logger.Debug( $"X: {screenX}, Y: {screenY}, pointer: {pointer}, button: {button}  "  );
+        
         if ( !IsInsideViewport( screenX, screenY ) )
         {
             return false;
@@ -395,8 +397,6 @@ public class Stage : InputAdapter, IDisposable
 
         Actor? target = Hit( _tempCoords.X, _tempCoords.Y, true );
 
-        Logger.Debug( $"{target}" );
-        
         if ( target == null )
         {
             if ( RootGroup.Touchable == Touchable.Enabled )
@@ -515,6 +515,9 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.StageY  = _tempCoords.Y;
         inputEvent.Pointer = pointer;
         inputEvent.Button  = button;
+
+        Logger.Checkpoint();
+        Logger.Debug( $"pointer: {pointer}, button: {button}" );
 
         TouchFocus?[] focuses = TouchFocuses.Begin();
 
@@ -1452,10 +1455,20 @@ public class Stage : InputAdapter, IDisposable
     // ========================================================================
     // ========================================================================
 
-    //TODO: NEEDS Documentation!!
-
+    /// <summary>
+    /// Represents a focus management structure used to track touch input interactions
+    /// in a 2D scene graph. TouchFocus stores information about an input event, including
+    /// the target actor, the associated listener, and touch-specific attributes such as
+    /// pointer and button. This class is used by the Stage to manage and dispatch
+    /// touch-based input events to the appropriate listeners.
+    /// </summary>
+    /// <remarks>
+    /// This class is designed for use in a pooling system and implements the
+    /// <see cref="IPoolable"/> interface. The implemented <c>Reset</c> method clears
+    /// the internal state of the instance to prepare it for reuse.
+    /// </remarks>
     [PublicAPI]
-    public class TouchFocus //: IComparable< TouchFocus >
+    public class TouchFocus : IPoolable //IComparable< TouchFocus >
     {
         public IEventListener? Listener      { get; set; }
         public Actor?          ListenerActor { get; set; }
@@ -1463,6 +1476,9 @@ public class Stage : InputAdapter, IDisposable
         public int             Button        { get; set; }
         public int             Pointer       { get; set; }
 
+        /// <summary>
+        /// Resets the touch focus state to default values.
+        /// </summary>
         public void Reset()
         {
             ListenerActor = null;

@@ -22,36 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+
 using JetBrains.Annotations;
 
-using LughSharp.Core.SceneGraph2D.Listeners;
-using LughSharp.Core.Utils.Logging;
-
-namespace LughSharp.Core.SceneGraph2D.UI;
+namespace TestProject.Source;
 
 [PublicAPI]
-public class ButtonClickListener : ClickListener
+public class ImageTests
 {
-    private readonly Button _button;
-
-    // ========================================================================
-
-    public ButtonClickListener( Button button )
-    {
-        _button = button;
-    }
-
-    public override void OnClicked( InputEvent inputEvent, float x, float y )
-    {
-        Logger.Checkpoint();
-
-        if ( _button.IsDisabled )
-        {
-            return;
-        }
-
-        _button.ToggleChecked( true );
-    }
+    
 }
 
 // ============================================================================

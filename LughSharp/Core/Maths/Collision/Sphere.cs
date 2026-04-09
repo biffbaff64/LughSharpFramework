@@ -89,7 +89,7 @@ public class Sphere
 
         var s = ( Sphere )o;
 
-        return MathUtils.IsEqual( Radius, Radius ) && Center.Equals( s.Center );
+        return Compare.IsEqual( Radius, Radius ) && Center.Equals( s.Center );
     }
 
     /// <summary>

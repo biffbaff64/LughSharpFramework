@@ -42,20 +42,12 @@ namespace LughSharp.Core.Graphics;
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
-public struct GRect
+public struct GRect( int x, int y, int width, int height )
 {
-    public int X;
-    public int Y;
-    public int Width;
-    public int Height;
-
-    public GRect( int x, int y, int width, int height )
-    {
-        X      = x;
-        Y      = y;
-        Width  = width;
-        Height = height;
-    }
+    public int X      = x;
+    public int Y      = y;
+    public int Width  = width;
+    public int Height = height;
 }
 
 /// <summary>
@@ -73,16 +65,10 @@ public struct GRect
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
-public struct GPoint
+public struct GPoint( int x, int y )
 {
-    public int X;
-    public int Y;
-
-    public GPoint( int x, int y )
-    {
-        X = x;
-        Y = y;
-    }
+    public int X = x;
+    public int Y = y;
 }
 
 /// <summary>
@@ -100,16 +86,10 @@ public struct GPoint
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
-public struct GSize
+public struct GSize( int width, int height )
 {
-    public int Width;
-    public int Height;
-
-    public GSize( int width, int height )
-    {
-        Width  = width;
-        Height = height;
-    }
+    public int Width  = width;
+    public int Height = height;
 }
 
 // ============================================================================

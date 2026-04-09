@@ -67,17 +67,17 @@ public abstract class LughGame : IApplicationListener
     /// <summary>
     /// Update the currently active screen.
     /// </summary>
-    public virtual void Update()
+    public virtual void Update( float delta )
     {
-        Screen?.Update( Engine.DeltaTime );
+        Screen?.Update( delta );
     }
 
     /// <summary>
     /// Render the currently active screen.
     /// </summary>
-    public virtual void Render()
+    public virtual void Render( float delta )
     {
-        Screen?.Render( Engine.DeltaTime );
+        Screen?.Render( delta );
     }
 
     /// <summary>

@@ -22,35 +22,35 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+
 using JetBrains.Annotations;
 
-using LughSharp.Core.SceneGraph2D.Listeners;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Core.Graphics.G2D;
 
-namespace LughSharp.Core.SceneGraph2D.UI;
+using NUnit.Framework;
 
+namespace LughSharp.Tests.Source;
+
+[TestFixture]
 [PublicAPI]
-public class ButtonClickListener : ClickListener
+public class InputTest : ILughTest
 {
-    private readonly Button _button;
-
-    // ========================================================================
-
-    public ButtonClickListener( Button button )
+    [SetUp]
+    public void Setup()
     {
-        _button = button;
     }
 
-    public override void OnClicked( InputEvent inputEvent, float x, float y )
+    public void Run()
     {
-        Logger.Checkpoint();
+    }
 
-        if ( _button.IsDisabled )
-        {
-            return;
-        }
+    public void Render( SpriteBatch spriteBatch )
+    {
+    }
 
-        _button.ToggleChecked( true );
+    [TearDown]
+    public void TearDown()
+    {
     }
 }
 

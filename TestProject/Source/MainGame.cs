@@ -1,32 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Versioning;
+﻿using Extensions.Source;
 
 using JetBrains.Annotations;
 
 using LughSharp.Core;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Graphics.OpenGL.Enums;
-using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
-using LughSharp.Core.Maps.Tiled;
-using LughSharp.Core.Maps.Tiled.Loaders;
-using LughSharp.Core.Maps.Tiled.Renderers;
 using LughSharp.Core.Maths;
-using LughSharp.Core.SceneGraph2D;
-using LughSharp.Core.SceneGraph2D.RegistryStyles;
-using LughSharp.Core.SceneGraph2D.UI;
-using LughSharp.Core.SceneGraph2D.UI.Styles;
-using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
-using LughSharp.Tests.Source;
 
 namespace TestProject.Source;
 
@@ -44,17 +30,18 @@ public class MainGame : LughGame
     private OrthographicGameCamera? _hudCam;
     private Texture?                _texture;
     private TextureRegion?          _textureRegion;
+    private NinePatch?              _ninePatch;
     private BitmapFont?             _font;
     private BitmapFont?             _freetypeFont;
-    private Sprite2D?               _sprite;
     private InputMultiplexer        _inputMultiplexer = new();
-
-    private bool _disposed;
+    
+    private bool    _disposed;
 
     private readonly MapTests    _mapTests    = new();
     private readonly FontTests   _fontTests   = new();
     private readonly SpriteTests _spriteTests = new();
     private readonly StageTests  _stageTests  = new();
+    private readonly ImageTests  _imageTests  = new();
 
     // ========================================================================
     // ========================================================================
@@ -69,12 +56,14 @@ public class MainGame : LughGame
 
         CreateCameras();
         CreateAssets();
-        _mapTests.CreateMap();
+//        _mapTests.CreateMap();
         _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
-        _font         = _fontTests.CreateBitmapFont();
-        _freetypeFont = _fontTests.CreateFreeTypeFont();
-        _sprite       = _spriteTests.CreateSprite( new TextureRegion( new Texture( Assets.KeyCollected ) ) );
+//        _font         = _fontTests.CreateBitmapFont();
+//        _freetypeFont = _fontTests.CreateFreeTypeFont();
+//        _spriteTests.Create();
 
+        _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
+        
         if ( _inputMultiplexer.Processors.Size > 0 )
         {
             Engine.Input.InputProcessor = _inputMultiplexer;
@@ -86,14 +75,14 @@ public class MainGame : LughGame
     }
 
     /// <inheritdoc />
-    public override void Update()
+    public override void Update( float delta )
     {
-        _spriteTests.ScaleSprite( _sprite );
+        _spriteTests.Update( delta );
         _mapTests.ScrollMap( ref _tiledMapCam );
     }
 
     /// <inheritdoc />
-    public override void Render()
+    public override void Render( float delta )
     {
         // Clear and set viewport
         ScreenUtils.Clear( Color.Blue, true );
@@ -128,20 +117,22 @@ public class MainGame : LughGame
                 // Texture
                 if ( _texture != null )
                 {
-                    _spriteBatch.Draw( _texture, 300, 300 );
+                    _spriteBatch.Draw( _texture, 20, 20 );
                 }
 
                 // TextureRegion
-                if ( _textureRegion != null )
-                {
-                    _spriteBatch.Draw( _textureRegion, 400, 100 );
-                }
+//                if ( _textureRegion != null )
+//                {
+//                    _spriteBatch.Draw( _textureRegion, 400, 100 );
+//                }
 
-                if ( _sprite != null )
-                {
-                    _sprite.SetPosition( 100, 100 );
-                    _sprite.Draw( _spriteBatch );
-                }
+                // NinePatch
+//                if ( _ninePatch != null )
+//                {
+//                    _ninePatch.Draw( _spriteBatch, 500, 100, 100, 10 );
+//                }
+
+                _spriteTests.Draw( _spriteBatch );
 
                 _spriteBatch.End();
             }
@@ -161,14 +152,17 @@ public class MainGame : LughGame
                 _hudCam.Position.Z = 0;
                 _hudCam.Update();
 
-                _font?.Draw( _spriteBatch );
+                _font?.Draw( _spriteBatch, $"X:{Engine.Input.GetX()} Y:{Engine.Input.GetY()}", 10, 700 );
 
                 _spriteBatch.End();
             }
         }
 
         // ----- Draw the Stage, if enabled -----
-        _stageTests.Update( _isDrawingStage );
+        if ( _stageTests.Stage != null )
+        {
+            Scene2DUtils.Update( _stageTests.Stage, _isDrawingStage );
+        }
     }
 
     /// <inheritdoc />
@@ -179,44 +173,6 @@ public class MainGame : LughGame
 
         _stageTests.Stage?.Viewport.Update( width, height );
     }
-
-    /// <inheritdoc />
-    public override void Dispose()
-    {
-        Dispose( true );
-        GC.SuppressFinalize( this );
-    }
-
-    protected override void Dispose( bool disposing )
-    {
-        if ( !_disposed )
-        {
-            if ( disposing )
-            {
-                _assetManager?.Dispose();
-                _spriteBatch?.Dispose();
-                _tiledMapCam?.Dispose();
-                _spriteCam?.Dispose();
-                _texture?.Dispose();
-                _stageTests.Dispose();
-                _font?.Dispose();
-
-                // TODO:
-                // Should Sprite() implement IDisposable, or should I leave that up to
-                // any extending classes? Maybe implement IDisposable in Sprite() and
-                // allow ( and encourage ) extending classes to override it?
-                _sprite = null;
-            }
-
-            _disposed = true;
-        }
-    }
-
-    // ========================================================================
-    // ========================================================================
-    // ========================================================================
-    // ========================================================================
-    // ========================================================================
 
     private void CreateCameras()
     {
@@ -242,8 +198,6 @@ public class MainGame : LughGame
         _spriteCam.Camera.Far  = CameraData.DefaultFarPlane;
         _spriteCam.IsInUse     = true;
         _spriteCam.SetZoomDefault( 1f );
-
-        // Set initial camera position
         _spriteCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
         _spriteCam.Update();
 
@@ -257,16 +211,48 @@ public class MainGame : LughGame
         _hudCam.Camera.Far  = CameraData.DefaultFarPlane;
         _hudCam.IsInUse     = true;
         _hudCam.SetZoomDefault( 1f );
-
-        // Set initial camera position
         _hudCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
         _hudCam.Update();
     }
 
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected override void Dispose( bool disposing )
+    {
+        if ( !_disposed )
+        {
+            if ( disposing )
+            {
+                _assetManager?.Dispose();
+                _spriteBatch?.Dispose();
+                _tiledMapCam?.Dispose();
+                _spriteCam?.Dispose();
+                _texture?.Dispose();
+                _stageTests.Dispose();
+                _spriteTests.Dispose();
+                _font?.Dispose();
+            }
+
+            _disposed = true;
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
     private void CreateAssets()
     {
-        _texture       = new Texture( Assets.CompleteStar );
+        _texture       = new Texture( Assets.Solid112X112 );
         _textureRegion = new TextureRegion( new Texture( Assets.CompleteStar ) );
+        _ninePatch     = new NinePatch( new Texture( Assets.Bar9 ), 1, 1, 1, 1 );
     }
 }
 

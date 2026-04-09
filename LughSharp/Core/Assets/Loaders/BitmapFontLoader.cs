@@ -31,7 +31,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.BitmapFonts;
+using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Text;
@@ -220,7 +220,7 @@ public class BitmapFontParameter : AssetLoaderParameters
     public TextureFilterMode MagFilter { get; set; } = TextureFilterMode.Nearest;
 
     /// <summary>
-    /// optional <see cref="Graphics.BitmapFonts.BitmapFontData"/> to be used instead of
+    /// optional <see cref="Graphics.Fonts.BitmapFontData"/> to be used instead of
     /// loading the <see cref="Texture"/> directly. Use this if your font is
     /// embedded in a <see cref="Skin"/>.
     /// </summary>

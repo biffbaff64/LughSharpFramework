@@ -24,10 +24,11 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core;
 using LughSharp.Core.Assets;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.BitmapFonts;
+using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
@@ -45,11 +46,20 @@ namespace Extensions.Source;
 [PublicAPI]
 public class Scene2DUtils
 {
-    public required AssetManager AssetManager { get; set; }
-    public required AssetUtils   AssetUtils   { get; set; }
-
-    // ========================================================================
-
+    /// <summary>
+    /// Updates the stage, if it is not null, and isDrawingStage is true.
+    /// </summary>
+    /// <param name="stage"> The stage. </param>
+    /// <param name="isDrawingStage"> Indicates if the stage should be updated. </param>
+    public static void Update( Stage? stage, bool isDrawingStage )
+    {
+        if ( stage != null && isDrawingStage )
+        {
+            stage.Act( Math.Min( Engine.DeltaTime, 1.0f / 60.0f ) );
+            stage.Draw();
+        }
+    }
+    
     /// <summary>
     /// Creates a <see cref="Table"/>, without adding it to the stage.
     /// </summary>

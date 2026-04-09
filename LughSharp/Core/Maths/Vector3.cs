@@ -209,7 +209,7 @@ public class Vector3 : IVector< Vector3 >
     {
         float len2 = Len2();
 
-        if ( ( len2 == 0f ) || MathUtils.IsEqual( len2, 1f ) )
+        if ( ( len2 == 0f ) || Compare.IsEqual( len2, 1f ) )
         {
             return this;
         }
@@ -352,7 +352,7 @@ public class Vector3 : IVector< Vector3 >
     {
         float oldLen2 = Len2();
 
-        return ( oldLen2 == 0 ) || MathUtils.IsEqual( oldLen2, len2 )
+        return ( oldLen2 == 0 ) || Compare.IsEqual( oldLen2, len2 )
             ? this
             : Scale( ( float )Math.Sqrt( len2 / oldLen2 ) );
     }
@@ -488,9 +488,9 @@ public class Vector3 : IVector< Vector3 >
 
     public bool Idt( Vector3 vector )
     {
-        return MathUtils.IsEqual( X, vector.X )
-            && MathUtils.IsEqual( Y, vector.Y )
-            && MathUtils.IsEqual( Z, vector.Z );
+        return Compare.IsEqual( X, vector.X )
+            && Compare.IsEqual( Y, vector.Y )
+            && Compare.IsEqual( Z, vector.Z );
     }
 
     public static float Dst( float x1, float y1, float z1, float x2, float y2, float z2 )

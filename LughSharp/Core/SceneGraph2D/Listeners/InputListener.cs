@@ -59,8 +59,6 @@ public class InputListener : IEventListener
     /// </summary>
     public virtual bool Handle( Event e )
     {
-        Logger.Checkpoint();
-        
         if ( e is not InputEvent inputEvent )
         {
             return false;

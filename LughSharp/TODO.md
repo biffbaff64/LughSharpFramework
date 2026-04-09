@@ -3,65 +3,6 @@
 
 ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-<!-- TOC -->
-
-* [LUGHSHARP 2D GAME FRAMEWORK - ROUND 1](#lughsharp-2d-game-framework---round-1)
-* [ASSETS](#assets)
-* [ASSETS/LOADERS](#assetsloaders)
-* [ASSETS/LOADERS/RESOLVERS](#assetsloadersresolvers)
-* [AUDIO](#audio)
-* [AUDIO/MAPONUS ( MAPONUS is the God of Music )](#audiomaponus--maponus-is-the-god-of-music-)
-* [AUDIO/MAPONUS/DECODING](#audiomaponusdecoding)
-* [AUDIO/MAPONUS/DECODING/DECODERS](#audiomaponusdecodingdecoders)
-* [AUDIO/MAPONUS/DECODING/DECODERS/LAYERI](#audiomaponusdecodingdecoderslayeri)
-* [AUDIO/MAPONUS/DECODING/DECODERS/LAYERII](#audiomaponusdecodingdecoderslayerii)
-* [AUDIO/MAPONUS/DECODING/DECODERS/LAYERIII](#audiomaponusdecodingdecoderslayeriii)
-* [AUDIO/MAPONUS/IO](#audiomaponusio)
-* [AUDIO/MAPONUS/SUPPORT](#audiomaponussupport)
-* [AUDIO/OPENAL](#audioopenal)
-* [FILES](#files)
-* [GRAPHICS](#graphics)
-* [GRAPHICS/ATLASES](#graphicsatlases)
-* [GRAPHICS/CAMERAS](#graphicscameras)
-* [GRAPHICS/FRAMEBUFFERS](#graphicsframebuffers)
-* [GRAPHICS/G2D](#graphicsg2d)
-* [GRAPHICS/G3D](#graphicsg3d)
-* [GRAPHICS/IMAGEDECODERS](#graphicsimagedecoders)
-* [GRAPHICS/OPENGL](#graphicsopengl)
-* [GRAPHICS/OPENGL/BINDINGS](#graphicsopenglbindings)
-* [GRAPHICS/OPENGL/ENUMS](#graphicsopenglenums)
-* [GRAPHICS/SHADERS](#graphicsshaders)
-* [GRAPHICS/TEXT](#graphicstext)
-* [GRAPHICS/UTILS](#graphicsutils)
-* [GRAPHICS/VIEWPORTS](#graphicsviewports)
-* [INPUT](#input)
-* [MAIN](#main)
-* [MAPS](#maps)
-* [MAPS/OBJECTS](#mapsobjects)
-* [MAPS/TILED](#mapstiled)
-* [MAPS/TILED/LOADERS](#mapstiledloaders)
-* [MAPS/TILED/OBJECTS](#mapstiledobjects)
-* [MAPS/TILED/RENDERERS](#mapstiledrenderers)
-* [MAPS/TILED/TILES](#mapstiledtiles)
-* [MATHS](#maths)
-* [MATH/COLLISION](#mathcollision)
-* [NETWORK](#network)
-* [SCENEGRAPH2D](#scenesscene2d)
-* [SCENEGRAPH2D/ACTIONS](#scenesscene2dactions)
-* [SCENEGRAPH2D/LISTENERS](#scenesscene2dlisteners)
-* [SCENEGRAPH2D/STYLES](#scenesscene2dstyles)
-* [SCENEGRAPH2D/UI](#scenesscene2dui)
-* [SCENEGRAPH2D/UTILS](#scenesscene2dutils)
-* [UTILS](#utils)
-* [UTILS/COLLECTIONS](#utilscollections)
-* [UTILS/EXCEPTIONS](#utilsexceptions)
-* [UTILS/JSON](#utilsjson)
-* [UTILS/LOGGING](#utilslogging)
-* [UTILS/POOLING](#utilspooling)
-* [UTILS/XML](#utilsxml)
-
-<!-- TOC -->- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - STEP 1: Complete all conversions so that the code will build.
 - STEP 2: Refactor, where possible and necessary, to take advantage of C# language features.
@@ -340,9 +281,9 @@ LUGHSHARP/CORE/COLLECTIONS
     - DONE - DONE - DONE - DictionaryExtensions
     - DONE - DONE - DONE - DirectoryInfoComparer
     - DONE - DONE - DONE - IPredicate
-    - DONE - IP   - DONE - LinkedHashMap
+    - DONE - DONE - DONE - LinkedHashMap
     - DONE - DONE - DONE - ListExtensions
-    - DONE - IP   - DONE - ResettableStack
+    - DONE - DONE - DONE - ResettableStack
     - DONE - DONE - DONE - SnapshotArrayList
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -469,24 +410,22 @@ LUGHSHARP/CORE/GRAPHICS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - Color 
-    -      -      -      - ColorWIP                 - WIP to replace Color when finished 
+    - DONE - DONE - DONE - Color 
     - DONE - DONE - DONE - Colors
     - IP   - IP   - DONE - Cubemap
-    - DONE - IP   - DONE - GLTextureArray
-    - DONE - IP   - DONE - GraphicsDevice
-    - DONE - IP   - DONE - GStructs
+    - DONE - DONE - DONE - GLTextureArray
+    - DONE - DONE - DONE - GraphicsDevice
+    - DONE - DONE - DONE - GStructs
     - DONE - DONE - DONE - ICubemapData
     - DONE - DONE - DONE - ICursor
     - DONE - DONE - DONE - IGraphicsDevice
     - DONE - DONE - DONE - ITextureArrayData
-    - DONE - IP   - DONE - ITextureData
     - DONE - IP   - DONE - LughFormat               ( Needs a better name )
     - DONE - DONE - DONE - Mesh
-    - DONE - IP   - DONE - PixelFormat
-    -      -      -      - VertexAttribute
-    -      -      -      - VertexAttributes
-    - DONE - IP   - DONE - VertexDataType
+    - DONE - DONE - DONE - PixelFormat
+    - DONE - DONE - DONE - VertexAttribute
+    - DONE - DONE - DONE - VertexAttributes
+    - DONE - DONE - DONE - VertexDataType
 
 LUGHSHARP/CORE/GRAPHICS/ATLASES
 -------------------------------
@@ -497,17 +436,6 @@ LUGHSHARP/CORE/GRAPHICS/ATLASES
     - DONE -      - DONE - AtlasSprite
     - DONE - DONE - DONE - TextureAtlas
     - DONE -      - DONE - TextureAtlasData
-
-LUGHSHARP/CORE/GRAPHICS/BITMAPFONTS
------------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    -      -      -      - BitmapFont
-    -      -      -      - BitmapFontCache
-    -      -      -      - BitmapFontData
-    -      -      -      - Glyph
-    -      -      -      - GlyphLayout
 
 LUGHSHARP/CORE/GRAPHICS/CAMERAS
 -------------------------------
@@ -521,6 +449,19 @@ LUGHSHARP/CORE/GRAPHICS/CAMERAS
     -      -      -      - OrthographicGameCamera
     -      -      -      - PerspectiveCamera
     -      -      -      - Shake
+
+LUGHSHARP/CORE/GRAPHICS/FONTS
+-----------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - IP   - IP   - DONE - BitmapFont
+    - IP   - IP   - DONE - BitmapFontCache
+    - IP   - IP   - DONE - BitmapFontData
+    - IP   - IP   - DONE - DistanceFieldFont
+    - IP   - IP   - DONE - Glyph
+    - IP   - IP   - DONE - GlyphLayout
+    -      -      - DONE - SpriteFont
 
 LUGHSHARP/CORE/GRAPHICS/FRAMEBUFFERS
 ------------------------------------
@@ -565,27 +506,6 @@ LUGHSHARP/CORE/GRAPHICS/G2D
 LUGHSHARP/CORE/GRAPHICS/G3D
 ---------------------------
 
-    See Documents/TODO_G3D.MD
-
-LUGHSHARP/CORE/GRAPHICS/IMAGEDECODERS
--------------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    -      -      -      - BMPFormatStructs
-    -      -      -      - BMPUtils
-    - DONE - DONE - DONE - CIM
-    - DONE - IP   - DONE - PNG
-    -      -      -      - PNGDecoder
-    -      -      -      - PNGFormatStructs
-
-    ------------------------------------
-    ( Possible future additions )
-    -      -      -      - IImageDecoder
-    -      -      -      - ImageDecoder
-    -      -      -      - ImageFormat
-    -      -      -      - ImageIO
-    -      -      -      - ImageUtils
 
 LUGHSHARP/CORE/GRAPHICS/IMAGES
 ------------------------------
@@ -605,6 +525,26 @@ LUGHSHARP/CORE/GRAPHICS/IMAGES
     -      -      -      - TextureArray
     -      -      -      - TextureDataFactory
     -      -      -      - TextureRegion
+
+LUGHSHARP/CORE/GRAPHICS/IMAGES/DECODERS
+---------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      -      - BMPFormatStructs
+    -      -      -      - BMPUtils
+    - DONE - DONE - DONE - CIM
+    - DONE - IP   - DONE - PNG
+    -      -      -      - PNGDecoder
+    -      -      -      - PNGFormatStructs
+
+    ------------------------------------
+    ( Possible future additions )
+    -      -      -      - IImageDecoder
+    -      -      -      - ImageDecoder
+    -      -      -      - ImageFormat
+    -      -      -      - ImageIO
+    -      -      -      - ImageUtils
 
 LUGHSHARP/CORE/GRAPHICS/LOADERS
 -------------------------------
@@ -714,7 +654,7 @@ LUGHSHARP/CORE/GRAPHICS/SHADERS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - ShaderLoader
-    -      -      -      - ShaderProgram
+    - DONE - IP   - DONE - ShaderProgram
     - DONE - DONE - DONE - ShaderStrings
 
 LUGHSHARP/CORE/GRAPHICS/TEXT
@@ -722,8 +662,7 @@ LUGHSHARP/CORE/GRAPHICS/TEXT
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - CharacterUtils
-    -      -      -      - DistanceFieldFont
+    - DONE - DONE - DONE - CharacterUtils
     -      -      -      - RegexUtils
     -      -      -      - Subset
     -      -      -      - UnicodeBlock
@@ -899,6 +838,7 @@ LUGHSHARP/CORE/MATHS
     -      -      -      - BSpline
     -      -      -      - CatmullRomSpline
     -      -      -      - Circle
+    - DONE - DONE - DONE - Compare
     -      -      -      - ConvexHull
     -      -      -      - CumulativeDistribution
     -      -      -      - DelaunayTriangulator        Unsure about method ComputeTriangles()

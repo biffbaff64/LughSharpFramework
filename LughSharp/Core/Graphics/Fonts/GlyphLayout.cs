@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using JetBrains.Annotations;
@@ -31,7 +34,7 @@ using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
-namespace LughSharp.Core.Graphics.BitmapFonts;
+namespace LughSharp.Core.Graphics.Fonts;
 
 /// <summary>
 /// Stores <see cref="GlyphRun"/> runs of glyphs for a piece of text. The text may contain

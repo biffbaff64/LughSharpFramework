@@ -33,8 +33,16 @@ using LughSharp.Core.Utils.Exceptions;
 namespace LughSharp.Core.Graphics;
 
 /// <summary>
-/// 
+/// Provides utility methods for converting between various pixel format representations
+/// and OpenGL-specific formats. Includes helpers for determining format names, data types,
+/// buffer alignment, and conversions between custom and system pixel formats.
 /// </summary>
+/// <remarks>The methods in this class are primarily used to facilitate interoperability 
+/// between custom pixel format identifiers (such as LughFormat) and OpenGL or system-defined
+/// formats. This is useful when uploading textures, allocating buffers, or interpreting 
+/// image data in graphics applications. All methods are static and do not require instantiation
+/// of the class.
+/// </remarks>
 [PublicAPI]
 public class PixelFormat
 {
@@ -124,13 +132,14 @@ public class PixelFormat
     }
 
     /// <summary>
-    /// 
+    /// Calculates the memory alignment, in bytes, required for the specified pixmap.
     /// </summary>
-    /// <param name="pixmap"></param>
-    /// <returns></returns>
+    /// <param name="pixmap">
+    /// The pixmap for which to determine the required memory alignment. Cannot be null.
+    /// </param>
+    /// <returns>The number of bytes required to align the pixmap's data in memory.</returns>
     public static int GetAlignment( Pixmap pixmap )
     {
-        //TODO:
         return GetAlignment( pixmap.Width * BytesPerPixel( pixmap.GetColorFormat() ) );
     }
 

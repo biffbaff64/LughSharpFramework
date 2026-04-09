@@ -37,6 +37,7 @@ using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 using LughSharp.Core.Utils.Pooling;
 
 using Rectangle = LughSharp.Core.Maths.Rectangle;
@@ -207,7 +208,7 @@ public class Table : WidgetGroup
         }
         else
         {
-            DrawBackground( batch, parentAlpha, GetX( _alignment ), GetY( _alignment ) );
+            DrawBackground( batch, parentAlpha, X, Y );
             base.Draw( batch, parentAlpha );
         }
     }
@@ -1064,7 +1065,7 @@ public class Table : WidgetGroup
         return _padTop.Get( this ) + _padBottom.Get( this );
     }
 
-    public Align GetAlign()
+    public Align GetAlignment()
     {
         return _alignment;
     }

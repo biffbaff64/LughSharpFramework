@@ -476,61 +476,6 @@ public class CharacterUtils
                ( category == UnicodeCategory.ParagraphSeparator );
     }
 
-//    /// <summary>
-//    /// Returns the Unicode name of the specified character <c>codePoint</c>, or null if the
-//    /// code point is <see cref="UNASSIGNED"/>.
-//    /// <para>
-//    /// Note: if the specified character is not assigned a name by the <i>UnicodeData</i> file
-//    /// (part of the Unicode Character Database maintained by the Unicode Consortium), the returned
-//    /// name is the same as the result of expression.
-//    /// </para>
-//    /// <br/>
-//    /// <c>
-//    ///     Character.UnicodeBlock.of(codePoint).toString().replace('_', ' ')
-//    ///     + " " + codePoint.ToString( "X" ).ToUpper();
-//    /// </c>
-//    /// </summary>
-//    /// <param name="codePoint"> the character (Unicode code point). </param>
-//    /// <returns>
-//    /// the Unicode name of the specified character, or null if the code point is unassigned. </returns>
-//    /// <exception cref="ArgumentException">
-//    /// if the specified <c>codePoint</c> is not a valid Unicode code point.
-//    /// </exception>
-//    public static string GetName( int codePoint )
-//    {
-//        if ( !IsValidCodePoint( codePoint ) )
-//        {
-//            throw new ArgumentException( "Invalid codepoint submitted" );
-//        }
-//
-//        var name = CharacterName.Get( codePoint );
-//
-//        if ( name != null )
-//        {
-//            return name;
-//        }
-//
-//        if ( GetCharacterType( codePoint ) == UNASSIGNED )
-//        {
-//            return string.Empty;
-//        }
-//
-//        var block = UnicodeBlock.Of( codePoint );
-//
-//        if ( block != null )
-//        {
-//            return block.ToString().Replace( '_', ' ' ) + " " + StringUtils.ToHexString( codePoint );
-//        }
-//
-//        // should never come here
-//        return StringUtils.ToHexString( codePoint );
-//    }
-
-//    public static int GetCharacterType( int codePoint )
-//    {
-//        return CharacterData.of( codePoint ).getType( codePoint );
-//    }
-
     /// <summary>
     /// Determines whether the specified code point is a valid
     /// <a href="http://www.unicode.org/glossary/#code_point">
@@ -545,8 +490,6 @@ public class CharacterUtils
     /// </returns>
     public static bool IsValidCodePoint( int codePoint )
     {
-        // Optimized form of:
-        //     codePoint >= MIN_CODE_POINT && codePoint <= MAX_CODE_POINT
         int plane = codePoint >> 16;
 
         return plane < ( ( MaxCodePoint + 1 ) >> 16 );
@@ -559,38 +502,12 @@ public class CharacterUtils
     /// </summary>
     /// <param name="codePoint">The character (Unicode code point) to be tested.</param>
     /// <returns>
-    /// <c>true</c> if the specified code point is between
-    /// <see cref="MinValue"/> and <see cref="MaxValue"/> inclusive;
-    /// <c>false</c> otherwise.
+    /// <c>true</c> if the specified code point is between <see cref="MinValue"/>
+    /// and <see cref="MaxValue"/> inclusive; <c>false</c> otherwise.
     /// </returns>
     public static bool IsBmpCodePoint( int codePoint )
     {
-        // Optimized form of:
-        //     codePoint >= MIN_VALUE && codePoint <= MAX_VALUE
-        // We consistently use logical shift (>>) to facilitate
-        // additional runtime optimizations.
-        return ( codePoint >> 16 ) == 0; // C# uses >> for unsigned right shift for ints.
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    [PublicAPI]
-    public class CharacterCache
-    {
-        public static readonly CharacterUtils[] Cache = new CharacterUtils[ 127 + 1 ];
-
-        static CharacterCache()
-        {
-            for ( var i = 0; i < Cache.Length; i++ )
-            {
-                Cache[ i ] = new CharacterUtils( ( char )i );
-            }
-        }
-
-        private CharacterCache()
-        {
-        }
+        return ( codePoint >> 16 ) == 0;
     }
 }
 

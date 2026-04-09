@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-namespace LughSharp.Core.Graphics.BitmapFonts;
+namespace LughSharp.Core.Graphics.Fonts;
 
 /// <summary>
 /// Represents a single character in a font page.

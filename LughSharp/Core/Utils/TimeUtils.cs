@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core.Utils;
@@ -35,11 +37,12 @@ public static class TimeUtils
     // ========================================================================
 
     /// <summary>
-    /// The current value of the system timer, in nanoseconds.
+    /// The current value of a high-resolution timer, in nanoseconds.
+    /// Note: Limited to ~100ns resolution on Windows.
     /// </summary>
     public static long NanoTime()
     {
-        return DateTime.Now.Nanosecond;
+        return Stopwatch.GetTimestamp() * NanosecondsPerSecond / Stopwatch.Frequency;
     }
 
     /// <summary>
@@ -47,7 +50,7 @@ public static class TimeUtils
     /// </summary>
     public static long Millis()
     {
-        return DateTime.Now.Millisecond;
+        return Stopwatch.GetTimestamp() * NanosPerMilli / Stopwatch.Frequency;
     }
 
     /// <summary>

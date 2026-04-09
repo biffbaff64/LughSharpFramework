@@ -68,8 +68,6 @@ public class InputMultiplexer : IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnKeyDown( int keycode )
     {
-        Logger.Checkpoint();
-
         IInputProcessor[] items = Processors.Begin();
 
         try
@@ -97,8 +95,6 @@ public class InputMultiplexer : IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnKeyUp( int keycode )
     {
-        Logger.Checkpoint();
-        
         IInputProcessor[] items = Processors.Begin();
 
         try
@@ -126,8 +122,6 @@ public class InputMultiplexer : IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnKeyTyped( char character )
     {
-        Logger.Checkpoint();
-
         IInputProcessor[] items = Processors.Begin();
 
         try
@@ -158,11 +152,7 @@ public class InputMultiplexer : IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnTouchDown( int screenX, int screenY, int pointer, int button )
     {
-        Logger.Checkpoint();
-
         IInputProcessor[] items = Processors.Begin();
-
-        Logger.Debug( $"Processors: {Processors.Size}" );
 
         try
         {
@@ -192,8 +182,6 @@ public class InputMultiplexer : IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnTouchUp( int screenX, int screenY, int pointer, int button )
     {
-        Logger.Checkpoint();
-
         IInputProcessor[] items = Processors.Begin();
 
         try
@@ -223,8 +211,6 @@ public class InputMultiplexer : IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnTouchDragged( int screenX, int screenY, int pointer )
     {
-        Logger.Checkpoint();
-
         IInputProcessor[] items = Processors.Begin();
 
         try
@@ -253,8 +239,6 @@ public class InputMultiplexer : IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnMouseMoved( int screenX, int screenY )
     {
-        Logger.Checkpoint();
-
         IInputProcessor[] items = Processors.Begin();
 
         try
@@ -283,8 +267,6 @@ public class InputMultiplexer : IInputProcessor
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnScrolled( float amountX, float amountY )
     {
-        Logger.Checkpoint();
-
         IInputProcessor[] items = Processors.Begin();
 
         try

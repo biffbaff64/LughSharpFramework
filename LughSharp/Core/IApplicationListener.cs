@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+
 using JetBrains.Annotations;
 
 namespace LughSharp.Core;
@@ -50,12 +52,12 @@ public interface IApplicationListener : IDisposable
     /// <summary>
     /// Called when the <see cref="IApplication"/> should update itself.
     /// </summary>
-    void Update();
+    void Update( float delta );
 
     /// <summary>
     /// Called when the <see cref="IApplication"/> should draw itself.
     /// </summary>
-    void Render();
+    void Render( float delta );
 
     /// <summary>
     /// Called when the <see cref="IApplication"/> is paused, usually when

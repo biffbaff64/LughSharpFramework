@@ -2497,9 +2497,9 @@ public class Matrix4
     /// <returns>True if this matrix has any rotation or scaling, false otherwise </returns>
     public bool HasRotationOrScaling()
     {
-        return !( MathUtils.IsEqual( Val[ M000 ], 1 )
-               && MathUtils.IsEqual( Val[ M115 ], 1 )
-               && MathUtils.IsEqual( Val[ M2210 ], 1 )
+        return !( Compare.IsEqual( Val[ M000 ], 1 )
+               && Compare.IsEqual( Val[ M115 ], 1 )
+               && Compare.IsEqual( Val[ M2210 ], 1 )
                && MathUtils.IsZero( Val[ M014 ] )
                && MathUtils.IsZero( Val[ M028 ] )
                && MathUtils.IsZero( Val[ M101 ] )

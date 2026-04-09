@@ -27,8 +27,8 @@ using JetBrains.Annotations;
 using LughSharp.Core;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.Cameras;
+using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
@@ -47,7 +47,7 @@ public class StageTests : IDisposable
     public Stage? Stage { get; private set; }
 
     // ========================================================================
-    
+
     public void CreateStage( OrthographicGameCamera? hudCam, ref InputMultiplexer inputMultiplexer )
     {
         if ( hudCam == null )
@@ -55,16 +55,17 @@ public class StageTests : IDisposable
             throw new InvalidOperationException( "STAGE CAMERA must be created before creating the stage!" );
         }
 
-        Stage = new Stage( hudCam.Viewport );
-
-        CreateSkinActors();
-        CreateStyleRegistryActors();
+        Stage = new Stage( hudCam.Viewport )
+        {
+            DebugAll = true,
+        };
 
         if ( Stage != null )
         {
             inputMultiplexer.AddProcessor( Stage );
-            
-            Logger.Debug( "Stage created and added to input multiplexer!" );
+
+            CreateSkinActors();
+            CreateStyleRegistryActors();
         }
         else
         {
@@ -72,7 +73,7 @@ public class StageTests : IDisposable
         }
     }
 
-    public void Update( bool isDrawingStage )
+    public void Update( Stage stage, bool isDrawingStage )
     {
         if ( Stage != null && isDrawingStage )
         {
@@ -80,28 +81,28 @@ public class StageTests : IDisposable
             Stage.Draw();
         }
     }
-    
+
     public void CreateSkinActors()
     {
-        const bool HudActor             = true;
+        const bool ImageActor           = false;
         const bool WindowActor          = false;
         const bool ButtonActor          = false;
         const bool TextButtonActor      = false;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
-        const bool CheckBoxActor        = false;
+        const bool CheckBoxActor        = true;
         const bool ProgressBarActor     = false;
         const bool SliderActor          = false;
 
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
-        if ( HudActor )
+        if ( ImageActor )
         {
-            var scene2DImage = new Scene2DImage( new Texture( Assets.HudPanel ) )
+            var scene2DImage = new Scene2DImage( new Texture( Assets.ButtonRight ) )
             {
                 IsVisible = true
             };
-            scene2DImage.SetPosition( 0, 0 );
+            scene2DImage.SetPosition( 200, 200 );
             Stage?.AddActor( scene2DImage );
         }
 
@@ -120,7 +121,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            windowActor.SetPosition( 200, 180 );
+            windowActor.SetPosition( 200, 200 );
             Stage?.AddActor( windowActor );
         }
 
@@ -130,9 +131,10 @@ public class StageTests : IDisposable
         {
             var btStyle = new ButtonStyle
             {
-                Up       = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
-                Down     = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
-                Disabled = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
+                Up      = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
+                Down    = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
+                Over    = new TextureRegionDrawable( new Texture( Assets.ButtonBOver ) ),
+                Checked = new TextureRegionDrawable( new Texture( Assets.ButtonBChecked ) ),
             };
             var button = new Button( btStyle )
             {
@@ -151,7 +153,7 @@ public class StageTests : IDisposable
                 Up                = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
                 Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down" ) ),
                 Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
-                Font              = new BitmapFont( new FileInfo( Assets.ArialFont )),
+                Font              = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
                 FontColor         = Color.Yellow,
                 DisabledFontColor = Color.Gray,
             };
@@ -161,7 +163,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            textButton.SetPosition( 200, 160 );
+            textButton.SetPosition( 200, 200 );
             Stage?.AddActor( textButton );
         }
 
@@ -188,7 +190,7 @@ public class StageTests : IDisposable
 
             var imageButton2 = new ImageButton( skin, "default" );
             imageButton2.SetSize( 100, 100 );
-            imageButton2.SetPosition( 600, 200 );
+            imageButton2.SetPosition( 600, 20 );
             Stage.AddActor( imageButton2 );
         }
 
@@ -200,7 +202,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            imageTextButton.SetPosition( 20, 140 );
+            imageTextButton.SetPosition( 200, 200 );
             Stage?.AddActor( imageTextButton );
         }
 
@@ -212,7 +214,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            checkBox.SetPosition( 400, 400 );
+            checkBox.SetPosition( 200, 200 );
             Stage?.AddActor( checkBox );
         }
 
@@ -224,7 +226,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            progressBar.SetPosition( 100, 100 );
+            progressBar.SetPosition( 200, 200 );
             progressBar.Width  = 400;
             progressBar.Height = 100;
             Stage?.AddActor( progressBar );
@@ -238,7 +240,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            slider.SetPosition( 100, 200 );
+            slider.SetPosition( 200, 200 );
             slider.Width  = 400;
             slider.Height = 100;
             Stage?.AddActor( slider );
@@ -322,7 +324,7 @@ public class StageTests : IDisposable
             Stage?.AddActor( progressBar );
         }
     }
-    
+
     public void Dispose()
     {
         Stage?.Dispose();

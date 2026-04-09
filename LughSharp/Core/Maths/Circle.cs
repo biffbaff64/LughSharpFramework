@@ -269,9 +269,9 @@ public class Circle : IShape2D
 
         var c = ( Circle )o;
 
-        return MathUtils.IsEqual( X, c.X )
-            || MathUtils.IsEqual( Y, c.Y )
-            || MathUtils.IsEqual( Radius, c.Radius );
+        return Compare.IsEqual( X, c.X )
+            || Compare.IsEqual( Y, c.Y )
+            || Compare.IsEqual( Radius, c.Radius );
     }
 
     /// <inheritdoc />

@@ -34,7 +34,7 @@ namespace LughSharp.Core.Collections;
 /// <summary>
 /// A stack that can be reset to its initial state.
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T"> The type of elements stored in the stack. </typeparam>
 [PublicAPI]
 public class ResettableStack< T > : IDisposable
 {
@@ -62,7 +62,7 @@ public class ResettableStack< T > : IDisposable
     /// <summary>
     /// Pushes an item onto the stack.
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item"> The item to push. </param>
     public void Push( T item )
     {
         Guard.Against.Null( _buffer );
@@ -86,7 +86,7 @@ public class ResettableStack< T > : IDisposable
     /// <summary>
     /// Pops an item off the stack.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The popped item. </returns>
     public T? Pop()
     {
         Guard.Against.Null( _buffer );
@@ -96,18 +96,18 @@ public class ResettableStack< T > : IDisposable
             return default;
         }
 
+        // Clear the slot to avoid memory leaks
         T item = _buffer[ --Count ];
-        _buffer[ Count ] = default!; // Clear the slot to avoid memory leaks
+        _buffer[ Count ] = default!;
 
         return item;
     }
 
     /// <summary>
-    /// Clears the stack.
+    /// Clears the stack. Reset count without returning the buffer, allowing re-use
     /// </summary>
     public void Clear()
     {
-        // Reset count without returning the buffer, allowing reuse
         if ( RuntimeHelpers.IsReferenceOrContainsReferences< T >() )
         {
             if ( _buffer != null )

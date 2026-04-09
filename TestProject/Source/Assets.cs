@@ -34,9 +34,17 @@ public static class Assets
     public static string KeyCollected     => @$"{Files.ContentRoot}\key_collected.png";
     public static string WindowBackground => @$"{Files.ContentRoot}\title_background.png";
     public static string PauseExitButton  => @$"{Files.ContentRoot}\pause_exit_button.png";
-    public static string ButtonBUp        => @$"{Files.ContentRoot}\packedimages\input\button_b.png";
-    public static string ButtonBDown      => @$"{Files.ContentRoot}\packedimages\input\button_b_pressed.png";
-
+    public static string ButtonRight      => @$"{Files.ContentRoot}\packedimages\input\button_right.png";
+    public static string ButtonBUp        => @$"{Files.ContentRoot}\packedimages\input\button_a.png";
+    public static string ButtonBDown      => @$"{Files.ContentRoot}\packedimages\input\button_b.png";
+    public static string ButtonBOver      => @$"{Files.ContentRoot}\packedimages\input\button_x.png";
+    public static string ButtonBChecked   => @$"{Files.ContentRoot}\packedimages\input\button_y.png";
+    public static string Bar9             => @$"{Files.ContentRoot}\packedimages\objects\bar9.png";
+    public static string Boulder32X32     => @$"{Files.ContentRoot}\packedimages\animations\boulder32x32.png";
+    public static string Boulder48X48     => @$"{Files.ContentRoot}\packedimages\animations\boulder48x48.png";
+    public static string Boulder64X64     => @$"{Files.ContentRoot}\packedimages\animations\boulder64x64.png";
+    public static string Solid112X112     => @$"{Files.ContentRoot}\solid112x112.png";
+    
     // ========================================================================
     // UI Skins
     public static string UiSkin      => @$"{Files.ContentRoot}\Skins\uiskin.json";

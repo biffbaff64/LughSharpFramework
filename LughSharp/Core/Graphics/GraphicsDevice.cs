@@ -90,6 +90,10 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
     // ========================================================================
 
+    private const float ReferenceDpi = 160f;
+
+    // ========================================================================
+
     /// <summary>
     /// Sets the target graphics backend for the application, based on the specified
     /// <see cref="Platform.ApplicationType"/> and <see cref="DotGLFW.OpenGLProfile"/>.
@@ -99,22 +103,35 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// <exception cref="RuntimeException"></exception>
     public void SetBackend( Platform.ApplicationType appType, DotGLFW.OpenGLProfile profile )
     {
-        BackendInfo = new GraphicsDevice.BackendData
+        BackendInfo = new BackendData
         {
-            Type = appType switch
-                   {
-                       Platform.ApplicationType.Android     => GraphicsDevice.BackendType.AndroidGLES,
-                       Platform.ApplicationType.WindowsGles => GraphicsDevice.BackendType.OpenGLES,
-                       Platform.ApplicationType.WindowsGL   => GraphicsDevice.BackendType.OpenGL,
-                       Platform.ApplicationType.WebGL       => GraphicsDevice.BackendType.WebGL,
-                       Platform.ApplicationType.IOS         => GraphicsDevice.BackendType.IOSGLES,
-
-                       var _ => throw new RuntimeException( $"Unknown Platform ApplicationType: {appType}" )
-                   },
+            Type = MapApplicationTypeToBackend( appType )
         };
 
         Graphics.OpenGL.OpenGL.Initialisation.LoadVersion();
         OpenGL.OpenGL.Capabilities.OpenGLProfile = profile;
+    }
+
+    /// <summary>
+    /// Maps the application type to the corresponding graphics backend type.
+    /// </summary>
+    /// <param name="appType">The application type to map.</param>
+    /// <returns>The corresponding backend type.</returns>
+    /// <exception cref="RuntimeException">Thrown when an unknown application type is provided.</exception>
+    private static BackendType MapApplicationTypeToBackend( Platform.ApplicationType appType )
+    {
+        return appType switch
+               {
+                   Platform.ApplicationType.Android     => BackendType.AndroidGLES,
+                   Platform.ApplicationType.WindowsGles => BackendType.OpenGLES,
+                   Platform.ApplicationType.WindowsGL   => BackendType.OpenGL,
+                   Platform.ApplicationType.WebGL       => BackendType.WebGL,
+                   Platform.ApplicationType.IOS         => BackendType.IOSGLES,
+
+                   // ---------------------------
+
+                   _ => throw new RuntimeException( $"Unknown Platform ApplicationType: {appType}" )
+               };
     }
 
     /// <summary>
@@ -135,7 +152,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// <returns> The Density Independent Pixel factor of the display. </returns>
     public virtual float GetDensity()
     {
-        return GetPpiXY().X / 160f;
+        return GetPpiXY().X / ReferenceDpi;
     }
 
     /// <summary>
@@ -159,11 +176,14 @@ public abstract class GraphicsDevice : IGraphicsDevice
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Renders the content of a graphics window, using the specified window handle
+    /// and dimensions for rendering configuration.
     /// </summary>
-    /// <param name="windowHandle"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="windowHandle">
+    /// A reference to the <see cref="DotGLFW.Window"/> representing the target rendering window.
+    /// </param>
+    /// <param name="width">The width of the rendering area in pixels.</param>
+    /// <param name="height">The height of the rendering area in pixels.</param>
     public abstract void RenderWindow( DotGLFW.Window windowHandle, int width, int height );
 
     /// <summary>
@@ -407,7 +427,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public abstract void SetSystemCursor( ICursor.SystemCursor systemCursor );
 
     // ========================================================================
-    
+
     /// <summary>
     /// The supported underlying graphics backends.
     /// </summary>
@@ -453,7 +473,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Sub-categories for OpenGL
     /// </summary>
@@ -467,7 +487,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Represents detailed information about a graphics backend, including the backend type
     /// and any subcategories associated with it.
@@ -483,4 +503,3 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
 // ========================================================================
 // ========================================================================
-

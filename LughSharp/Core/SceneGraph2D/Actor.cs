@@ -29,7 +29,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Collections;
 using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.BitmapFonts;
+using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Graphics.Utils;
@@ -245,8 +245,6 @@ public class Actor : IComparable< Actor >
 
                 if ( ev.IsStopped )
                 {
-                    Logger.Checkpoint();
-            
                     return ev.IsCancelled;
                 }
             }
@@ -256,7 +254,6 @@ public class Actor : IComparable< Actor >
 
             if ( ev.IsStopped )
             {
-                Logger.Checkpoint();
             
                 return ev.IsCancelled;
             }
@@ -266,8 +263,6 @@ public class Actor : IComparable< Actor >
 
             if ( !ev.Bubbles || ev.IsStopped )
             {
-                Logger.Checkpoint();
-            
                 return ev.IsCancelled;
             }
 
@@ -279,20 +274,14 @@ public class Actor : IComparable< Actor >
 
                 if ( ev.IsStopped )
                 {
-                    Logger.Checkpoint();
-            
                     return ev.IsCancelled;
                 }
             }
 
-            Logger.Checkpoint();
-            
             return ev.IsCancelled;
         }
         finally
         {
-            Logger.Checkpoint();
-            
             ascendants.Clear();
 
             Pools.Free< List< Group > >( ascendants );
@@ -638,7 +627,7 @@ public class Actor : IComparable< Actor >
         get;
         set
         {
-            if ( MathUtils.IsNotEqual( field, value ) )
+            if ( Compare.IsNotEqual( field, value ) )
             {
                 field = value;
                 OnPositionChanged();
@@ -654,7 +643,7 @@ public class Actor : IComparable< Actor >
         get;
         set
         {
-            if ( MathUtils.IsNotEqual( field, value ) )
+            if ( Compare.IsNotEqual( field, value ) )
             {
                 field = value;
                 OnPositionChanged();
@@ -670,7 +659,7 @@ public class Actor : IComparable< Actor >
         get;
         set
         {
-            if ( MathUtils.IsNotEqual( field, value ) )
+            if ( Compare.IsNotEqual( field, value ) )
             {
                 field = value;
                 OnSizeChanged();
@@ -686,7 +675,7 @@ public class Actor : IComparable< Actor >
         get;
         set
         {
-            if ( MathUtils.IsNotEqual( field, value ) )
+            if ( Compare.IsNotEqual( field, value ) )
             {
                 field = value;
                 OnSizeChanged();
@@ -875,7 +864,7 @@ public class Actor : IComparable< Actor >
             x -= Width / 2;
         }
 
-        if ( MathUtils.IsNotEqual( X, x ) )
+        if ( Compare.IsNotEqual( X, x ) )
         {
             X = x;
             OnPositionChanged();
@@ -898,7 +887,7 @@ public class Actor : IComparable< Actor >
             y -= Height / 2;
         }
 
-        if ( MathUtils.IsNotEqual( Y, y ) )
+        if ( Compare.IsNotEqual( Y, y ) )
         {
             Y = y;
             OnPositionChanged();
@@ -929,7 +918,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SetPosition( float x, float y )
     {
-        if ( MathUtils.IsNotEqual( X, x ) || MathUtils.IsNotEqual( Y, y ) )
+        if ( Compare.IsNotEqual( X, x ) || Compare.IsNotEqual( Y, y ) )
         {
             X = x;
             Y = y;
@@ -961,7 +950,7 @@ public class Actor : IComparable< Actor >
             y -= Height / 2;
         }
 
-        if ( MathUtils.IsNotEqual( X, x ) || MathUtils.IsNotEqual( Y, y ) )
+        if ( Compare.IsNotEqual( X, x ) || Compare.IsNotEqual( Y, y ) )
         {
             X = x;
             Y = y;
@@ -1016,8 +1005,8 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SetSize( float width, float height )
     {
-        if ( MathUtils.IsNotEqual( Width, width )
-          || MathUtils.IsNotEqual( Height, height ) )
+        if ( Compare.IsNotEqual( Width, width )
+          || Compare.IsNotEqual( Height, height ) )
         {
             Width  = width;
             Height = height;
@@ -1056,14 +1045,14 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public virtual void SetBounds( float x, float y, float width, float height )
     {
-        if ( MathUtils.IsNotEqual( X, x ) || MathUtils.IsNotEqual( Y, y ) )
+        if ( Compare.IsNotEqual( X, x ) || Compare.IsNotEqual( Y, y ) )
         {
             X = x;
             Y = y;
             OnPositionChanged();
         }
 
-        if ( MathUtils.IsNotEqual( Width, width ) || MathUtils.IsNotEqual( Height, height ) )
+        if ( Compare.IsNotEqual( Width, width ) || Compare.IsNotEqual( Height, height ) )
         {
             Width  = width;
             Height = height;
@@ -1118,8 +1107,8 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SetScale( float scaleXY )
     {
-        if ( MathUtils.IsNotEqual( ScaleX, scaleXY )
-          || MathUtils.IsNotEqual( ScaleY, scaleXY ) )
+        if ( Compare.IsNotEqual( ScaleX, scaleXY )
+          || Compare.IsNotEqual( ScaleY, scaleXY ) )
         {
             ScaleX = scaleXY;
             ScaleY = scaleXY;
@@ -1355,19 +1344,15 @@ public class Actor : IComparable< Actor >
 
         if ( rotation == 0 )
         {
-            if ( ( Math.Abs( scaleX - 1f ) < 0.001f )
-              && ( Math.Abs( scaleY - 1f ) < 0.001f ) )
+            if ( Compare.IsEqual( scaleX, 1f ) && Compare.IsEqual( scaleY, 1f ) )
             {
                 parentCoords.X -= childX;
                 parentCoords.Y -= childY;
             }
             else
             {
-                float originX = OriginX;
-                float originY = OriginY;
-
-                parentCoords.X = ( ( parentCoords.X - childX - originX ) / scaleX ) + originX;
-                parentCoords.Y = ( ( parentCoords.Y - childY - originY ) / scaleY ) + originY;
+                parentCoords.X = ( ( parentCoords.X - childX - OriginX ) / scaleX ) + OriginX;
+                parentCoords.Y = ( ( parentCoords.Y - childY - OriginY ) / scaleY ) + OriginY;
             }
         }
         else
@@ -1375,13 +1360,11 @@ public class Actor : IComparable< Actor >
             var cos = ( float )Math.Cos( rotation * MathUtils.DegreesToRadians );
             var sin = ( float )Math.Sin( rotation * MathUtils.DegreesToRadians );
 
-            float originX = OriginX;
-            float originY = OriginY;
-            float tox     = parentCoords.X - childX - originX;
-            float toy     = parentCoords.Y - childY - originY;
+            float tox     = parentCoords.X - childX - OriginX;
+            float toy     = parentCoords.Y - childY - OriginY;
 
-            parentCoords.X = ( ( ( tox * cos ) + ( toy * sin ) ) / scaleX ) + originX;
-            parentCoords.Y = ( ( ( tox * -sin ) + ( toy * cos ) ) / scaleY ) + originY;
+            parentCoords.X = ( ( ( tox * cos ) + ( toy * sin ) ) / scaleX ) + OriginX;
+            parentCoords.Y = ( ( ( tox * -sin ) + ( toy * cos ) ) / scaleY ) + OriginY;
         }
 
         return parentCoords;

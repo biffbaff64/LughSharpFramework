@@ -24,24 +24,29 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.BitmapFonts;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
-using LughSharp.Core.Graphics.Utils;
 
-namespace LughSharp.Core.Graphics.Text;
+namespace LughSharp.Core.Graphics.Fonts;
 
 /// <summary>
-/// Renders bitmap fonts using distance field textures, see the
-/// <a href="https://github.com/libgdx/libgdx/wiki/Distance-field-fonts">
-/// Distance Field Fonts wiki article
-/// </a>
-/// for usage. Initialize
-/// the SpriteBatch with the <see cref="CreateDistanceFieldShader()"/> shader.
+/// Renders bitmap fonts using distance field textures. Initialize the SpriteBatch
+/// with the <see cref="CreateDistanceFieldShader()"/> shader.
 /// <para>
-/// Attention: The batch is flushed before and after each string is rendered.
+/// Traditional bitmap fonts work fine if the pixels in the font map 1:1 onto screen
+/// pixels. However, they look bad when rotated, and increasingly worse when scaled
+/// up. Either you end up seeing individual pixels, or you turn on linear interpolation
+/// and end up with a smudgy blur instead.
+/// </para>
+/// <para>
+/// Using a distance field font lets you render text that remains crisp even under
+/// rotations and other arbitrary transforms, even blown up to a large magnification,
+/// without notable extra run-time cost. 
+/// </para>
+/// <para>
+/// <br>Attention: The batch is flushed before and after each string is rendered.</br>
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -92,6 +97,7 @@ public class DistanceFieldFont : BitmapFont
     }
 
     /// <summary>
+    /// 
     /// </summary>
     /// <param name="data"></param>
     protected override void Load( BitmapFontData data )
@@ -108,6 +114,7 @@ public class DistanceFieldFont : BitmapFont
     }
 
     /// <summary>
+    /// 
     /// </summary>
     /// <returns></returns>
     public override BitmapFontCache NewFontCache()
@@ -133,35 +140,24 @@ public class DistanceFieldFont : BitmapFont
     }
 
     /// <summary>
-    /// Returns a new instance of the distance field shader, see
-    /// https://github.com/libgdx/libgdx/wiki/Distance-field-fonts if the u_smoothing
+    /// Returns a new instance of the distance field shader if the u_smoothing
     /// uniform > 0.0. Otherwise the same code as the default SpriteBatch shader is used.
     /// </summary>
     public ShaderProgram CreateDistanceFieldShader()
     {
-        const string VertexShader = "in vec4 "
-                                   + "a_position"
-                                   + ";\n" //
-                                   + "in vec4 "
-                                   + "a_color"
-                                   + ";\n" //
-                                   + "in vec2 "
-                                   + "u_texCoord" + "0;\n"
+        const string VertexShader = "in vec4 a_position;\n"
+                                   + "in vec4 a_color;\n"
+                                   + "in vec2 u_texCoord" + "0;\n"
                                    + "uniform mat4 u_projTrans;\n"
                                    + "out vec4 v_color;\n"
                                    + "out vec2 v_texCoords;\n"
                                    + "\n"
                                    + "void main() {\n"
-                                   + "	v_color = "
-                                   + "a_color"
+                                   + "	v_color = a_color"
                                    + ";\n"
                                    + "	v_color.a = v_color.a * (255.0/254.0);\n"
-                                   + "	v_texCoords = "
-                                   + "u_texCoord"
-                                   + "0;\n" //
-                                   + "	gl_Position =  u_projTrans * "
-                                   + "a_position"
-                                   + ";\n" //
+                                   + "	v_texCoords = u_texCoord0;\n"
+                                   + "	gl_Position =  u_projTrans * a_position;\n"
                                    + "}\n";
 
         const string FragmentShader = "#ifdef GL_ES\n"
@@ -196,6 +192,9 @@ public class DistanceFieldFont : BitmapFont
         return shader;
     }
 
+    // ========================================================================
+    // ========================================================================
+    
     /// <summary>
     /// Provides a font cache that uses distance field shader for rendering fonts.
     /// Attention: breaks batching because uniform is needed for smoothing factor,
@@ -213,19 +212,6 @@ public class DistanceFieldFont : BitmapFont
         {
         }
 
-        private float GetSmoothingFactor()
-        {
-            var font = ( DistanceFieldFont )Font;
-
-            return font.GetDistanceFieldSmoothing() * font.GetScaleX();
-        }
-
-        private void SetSmoothingUniform( IBatch spriteBatch, float smoothing )
-        {
-            spriteBatch.Flush();
-            spriteBatch.Shader?.SetUniformf( "u_smoothing", smoothing );
-        }
-
         public override void Draw( IBatch spriteBatch )
         {
             SetSmoothingUniform( spriteBatch, GetSmoothingFactor() );
@@ -239,5 +225,23 @@ public class DistanceFieldFont : BitmapFont
             base.Draw( spriteBatch, start, end );
             SetSmoothingUniform( spriteBatch, 0 );
         }
+
+        private void SetSmoothingUniform( IBatch spriteBatch, float smoothing )
+        {
+            spriteBatch.Flush();
+            spriteBatch.Shader?.SetUniformf( "u_smoothing", smoothing );
+        }
+
+        private float GetSmoothingFactor()
+        {
+            var font = ( DistanceFieldFont )Font;
+
+            return font.GetDistanceFieldSmoothing() * font.GetScaleX();
+        }
     }
 }
+
+// ============================================================================
+// ============================================================================
+
+

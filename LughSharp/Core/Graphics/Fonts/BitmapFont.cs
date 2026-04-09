@@ -22,16 +22,20 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 
-namespace LughSharp.Core.Graphics.BitmapFonts;
+namespace LughSharp.Core.Graphics.Fonts;
 
 /// <summary>
 /// Renders bitmap fonts. The font consists of 2 files: an image file or <see cref="TextureRegion"/>
@@ -248,8 +252,7 @@ public class BitmapFont
     // ========================================================================
 
     /// <summary>
-    /// Helper method, allowing a call to <see cref="Load(BitmapFontData)"/>,
-    /// which is a <b>virtual</b> method, from constructors.
+    /// 
     /// </summary>
     private void SafeLoad( BitmapFontData data )
     {

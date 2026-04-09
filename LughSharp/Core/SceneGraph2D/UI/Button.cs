@@ -227,15 +227,19 @@ public class Button : Table, IDisableable
     }
 
     /// <summary>
-    /// Returns the button's style.
+    /// Returns the buttons style.
     /// </summary>
-    /// <remarks>
-    /// This MAY become a property at some point, after I've finished the
-    /// restructuring i'm currently doing. 
-    /// </remarks>
     public ButtonStyle GetStyle()
     {
         return _style;
+    }
+
+    /// <summary>
+    /// Convenience method which toggles the button's checked state.
+    /// </summary>
+    public void ToggleChecked( bool fireEvent = false )
+    {
+        SetChecked( !IsChecked, fireEvent );
     }
 
     /// <summary>
@@ -441,6 +445,7 @@ public class Button : Table, IDisableable
 
         Guard.Against.Null( _style );
 
+        // Establish drawing offsets for any children of this button.
         if ( IsPressed && !IsDisabled )
         {
             offsetX = _style.PressedOffsetX;
@@ -482,14 +487,6 @@ public class Button : Table, IDisableable
         {
             Engine.Graphics.RequestRendering();
         }
-    }
-
-    /// <summary>
-    /// Convenience method which toggles the button's checked state.
-    /// </summary>
-    public void ToggleChecked()
-    {
-        SetChecked( !IsChecked );
     }
 
     /// <summary>

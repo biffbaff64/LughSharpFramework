@@ -26,7 +26,7 @@ using System;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.BitmapFonts;
+using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
@@ -368,6 +368,17 @@ public class Sprite2D : TextureRegion
         Vertices[ IBatch.Y4 ] = _y;
     }
 
+    /// <summary>
+    /// Sets the position where the sprite will be drawn. If origin, rotation,
+    /// or scale are changed, it is slightly more efficient to set the position
+    /// after those operations. If both position and size are to be changed,
+    /// it is better to use <see cref="SetBounds(float, float, float, float)"/>.
+    /// </summary>
+    public virtual void SetPosition( Vector2 position )
+    {
+        SetPosition( position.X, position.Y );
+    }
+    
     /// <summary>
     /// Sets the position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position

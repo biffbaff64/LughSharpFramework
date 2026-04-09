@@ -52,13 +52,13 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// <summary>
     /// Represents a dictionary-like data structure that maintains the order of elements
     /// according to their insertion sequence.
+    /// <para>
+    /// This class combines the properties of a dictionary and a linked list. It ensures
+    /// unique keys while preserving the order in which keys and values are added.
+    /// </para>
     /// </summary>
     /// <typeparam name="TK">The type of keys in the collection. Keys must be non-null.</typeparam>
     /// <typeparam name="TV">The type of values in the collection.</typeparam>
-    /// <remarks>
-    /// This class combines the properties of a dictionary and a linked list. It ensures unique keys
-    /// while preserving the order in which keys and values are added.
-    /// </remarks>
     public LinkedHashMap() : this( EqualityComparer< TK >.Default )
     {
     }
@@ -66,13 +66,14 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// <summary>
     /// Represents a dictionary-like data structure that maintains the order of its elements
     /// based on their insertion sequence.
+    /// <para>
+    /// Combines the functionality of a dictionary for key-value pair mapping and a linked
+    /// list for preserving the insertion order of elements. Ensures that each key is unique
+    /// in the collection.
+    /// </para>
     /// </summary>
     /// <typeparam name="TK">The type of the keys in the dictionary. Keys must be non-null.</typeparam>
     /// <typeparam name="TV">The type of the values in the dictionary.</typeparam>
-    /// <remarks>
-    /// Combines the functionality of a dictionary for key-value pair mapping and a linked list
-    /// for preserving the insertion order of elements. Ensures that each key is unique in the collection.
-    /// </remarks>
     public LinkedHashMap( IEqualityComparer< TK > comparer )
     {
         _items = [ ];
@@ -181,7 +182,9 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// Determines whether the dictionary contains the specified key.
     /// </summary>
     /// <param name="key">The key to locate in the dictionary.</param>
-    /// <returns>True if the dictionary contains an element with the specified key; otherwise, false.</returns>
+    /// <returns>
+    /// True if the dictionary contains an element with the specified key; otherwise, false.
+    /// </returns>
     public bool ContainsKey( TK key )
     {
         return _valueByKey.ContainsKey( key );
@@ -292,7 +295,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// <value>
     /// The collection of keys stored in the LinkedHashMap, preserving their insertion order.
     /// </value>
-    public ICollection< TK > Keys => _items; // LinkedList<TK> implements ICollection<TK>
+    public ICollection< TK > Keys => _items;
 
     /// <summary>
     /// Gets a collection containing the values in the LinkedHashMap, in the order they were inserted.
@@ -304,9 +307,8 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     {
         get
         {
-            return
-                new List< TV >( this.Select( kvp => kvp
-                                                 .Value ) ); // Creates a list/collection from the ordered enumerator
+            // Creates a list/collection from the ordered enumerator
+            return new List< TV >( this.Select( kvp => kvp.Value ) );
         }
     }
 
@@ -322,7 +324,8 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
     /// Indicates whether the LinkedHashMap is read-only.
     /// </summary>
     /// <value>
-    /// Always returns false as this implementation of LinkedHashMap does not support a read-only mode.
+    /// Always returns false as this implementation of LinkedHashMap does not support
+    /// a read-only mode.
     /// </value>
     public bool IsReadOnly => false;
 
@@ -335,6 +338,7 @@ public class LinkedHashMap< TK, TV > : IDictionary< TK, TV > where TK : notnull
         _valueByKey = [ ];
     }
 
+    // ========================================================================
     // ========================================================================
 
     /// <summary>

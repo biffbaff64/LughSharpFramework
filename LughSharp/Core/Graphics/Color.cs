@@ -42,8 +42,6 @@ namespace LughSharp.Core.Graphics;
 [PublicAPI]
 public class Color : ICloneable, IEquatable< Color >
 {
-    #region color definitions
-
     public static readonly Color Red        = new( 0xff, 0x00, 0x00, 0xff, "RED" );
     public static readonly Color Green      = new( 0x00, 0xff, 0x00, 0xff, "GREEN" );
     public static readonly Color Blue       = new( 0x00, 0x00, 0xff, 0x00, "BLUE" );
@@ -83,8 +81,6 @@ public class Color : ICloneable, IEquatable< Color >
     /// Convenience for frequently used <tt>White.ToFloatBits()</tt>
     /// </summary>
     public static float WhiteFloatBits => White.ToFloatBitsAbgr();
-
-    #endregion color definitions
 
     public string Name { get; set; }
 
@@ -139,6 +135,9 @@ public class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Default constructor, setting this color to black.
+    /// </summary>
     public Color() : this( 0, 0, 0, 0 )
     {
     }
@@ -146,6 +145,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <summary>
     /// Constructor, sets all the components to 0.
     /// </summary>
+    /// <param name="name"> The name of the color. </param>
     public Color( string name = "" ) : this( 0, 0, 0, 0, name )
     {
     }
@@ -155,7 +155,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// the format RGBA8888.
     /// </summary>
     /// <param name="rgba8888"> A uint color value in RGBA8888 format. </param>
-    /// <param name="name"></param>
+    /// <param name="name"> The name of the color. </param>
     public Color( uint rgba8888, string name = "" )
     {
         R = ( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
@@ -175,7 +175,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
-    /// <param name="name"></param>
+    /// <param name="name"> The name of the color. </param>
     public Color( float r, float g, float b, float a, string name = "" )
     {
         R = r;
@@ -195,7 +195,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="g"> Green component </param>
     /// <param name="b"> Blue component </param>
     /// <param name="a"> Alpha component </param>
-    /// <param name="name"></param>
+    /// <param name="name"> The name of the color. </param>
     public Color( int r, int g, int b, int a, string name = "" )
     {
         R = r / 255.0f;
@@ -474,11 +474,27 @@ public class Color : ICloneable, IEquatable< Color >
         color.B = ( value & 0x000000ff ) / 255f;
     }
 
+    /// <summary>
+    /// Converts ARGB8888 component values to a Color object.
+    /// </summary>
+    /// <param name="a"> Alpha component </param>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <returns></returns>
     public static Color FromArgb( float a, float r, float g, float b )
     {
         return new Color( r, g, b, a );
     }
 
+    /// <summary>
+    /// Converts ARGB8888 component values to a Color object.
+    /// </summary>
+    /// <param name="r"> Red component </param>
+    /// <param name="g"> Green component </param>
+    /// <param name="b"> Blue component </param>
+    /// <param name="a"> Alpha component </param>
+    /// <returns></returns>
     public static Color FromRgba( float r, float g, float b, float a )
     {
         return new Color( r, g, b, a );
@@ -880,19 +896,6 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Multiplies the components of this Color object by the components
-    /// of the supplied Color object and returns the result as a NEW Color
-    /// object.
-    /// </summary>
-    public Color MulNew( Color color )
-    {
-        return new Color( R * color.R,
-                          G * color.G,
-                          B * color.B,
-                          A * color.A ).Clamp();
-    }
-
-    /// <summary>
     /// Multiplies the colour components by the supplied value.
     /// </summary>
     /// <returns> This Color for chaining. </returns>
@@ -941,18 +944,6 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Adds the components of the supplied Color object to the components
-    /// of this Color object and returns the result as a NEW Color object.
-    /// </summary>
-    public Color AddNew( Color color )
-    {
-        return new Color( R + color.R,
-                          G + color.G,
-                          B + color.B,
-                          A + color.A ).Clamp();
-    }
-
-    /// <summary>
     /// Adds the supplied Color components to the corresponding components of this Color.
     /// </summary>
     /// <param name="r"> Red component </param>
@@ -984,19 +975,6 @@ public class Color : ICloneable, IEquatable< Color >
         A -= color.A;
 
         return Clamp();
-    }
-
-    /// <summary>
-    /// Subtracts the components of the supplied Color object from the
-    /// components of this Color object and returns the result as a NEW
-    /// Color object.
-    /// </summary>
-    public Color SubNew( Color color )
-    {
-        return new Color( R - color.R,
-                          G - color.G,
-                          B - color.B,
-                          A - color.A ).Clamp();
     }
 
     /// <summary>
@@ -1118,10 +1096,10 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// 
+    /// Parse a color code from a Scene2DGraph <see cref="StyleRegistry"/> into a Colot instan e.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="registry"></param>
+    /// <param name="value"> The string color code. </param>
+    /// <param name="registry"> The registry. </param>
     /// <returns></returns>
     public static Color ParseColor( string value, StyleRegistry registry )
     {
@@ -1130,13 +1108,13 @@ public class Color : ICloneable, IEquatable< Color >
             return White;
         }
 
-        // 1. Handle Hex Strings (e.g., "#FF0000" or "#FF0000FF")
+        // Handle Hex Strings (e.g., "#FF0000" or "#FF0000FF")
         if ( value.StartsWith( '#' ) )
         {
             return FromHexString( value );
         }
 
-        // 2. Handle RGBA/RGB component strings (e.g., "255, 0, 0, 255")
+        // Handle RGBA/RGB component strings (e.g., "255, 0, 0, 255")
         if ( value.Contains( ',' ) )
         {
             string[] parts = value.Split( ',' ).Select( p => p.Trim() ).ToArray();
@@ -1152,17 +1130,17 @@ public class Color : ICloneable, IEquatable< Color >
             }
         }
 
-        // 3. Handle Named Colors from the Registry
+        // Handle Named Colors from the Registry
         try
         {
             return registry.Get< Color >( value );
         }
         catch
         {
-            // 4. Final Fallback: Standard .NET/LughSharp named colors
-            // You could use reflection here to look up static properties of Color
+            // Standard .NET/LughSharp named colors
             PropertyInfo? prop = typeof( Color ).GetProperty( value,
-                                                              BindingFlags.Public | BindingFlags.Static
+                                                              BindingFlags.Public
+                                                            | BindingFlags.Static
                                                             | BindingFlags.IgnoreCase );
 
             if ( prop != null )
@@ -1173,7 +1151,7 @@ public class Color : ICloneable, IEquatable< Color >
 
         Logger.Error( $"Could not parse color: {value}. Defaulting to White." );
 
-        return Color.White;
+        return White;
     }
 
     /// <summary>
@@ -1234,7 +1212,9 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="hexComponent">The hex component to parse.</param>
     /// <returns>The parsed float value.</returns>
     /// <exception cref="FormatException">Thrown if the hex component is not a valid hex number.</exception>
-    /// <exception cref="OverflowException">Thrown if the hex component value is too large to fit in an Int32.</exception>
+    /// <exception cref="OverflowException">
+    /// Thrown if the hex component value is too large to fit in an Int32.
+    /// </exception>
     private static float ParseHexComponent( string hexComponent )
     {
         return Convert.ToInt32( hexComponent, 16 ) / 255f;
@@ -1251,10 +1231,18 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
+    /// Converts luminance and alpha values into a single packed 32-bit integer.
     /// </summary>
-    /// <param name="luminance"></param>
-    /// <param name="alpha"></param>
-    /// <returns></returns>
+    /// <param name="luminance">
+    /// The luminance value, represented as a floating-point number between 0.0 and 1.0.
+    /// </param>
+    /// <param name="alpha">
+    /// The alpha value, represented as a floating-point number between 0.0 and 1.0.
+    /// </param>
+    /// <returns>
+    /// A 32-bit unsigned integer where the high byte represents the luminance and the
+    /// low byte represents the alpha.
+    /// </returns>
     public static uint LuminanceAlpha( float luminance, float alpha )
     {
         return ( ( uint )( luminance * 255.0f ) << 8 ) | ( uint )( alpha * 255 );

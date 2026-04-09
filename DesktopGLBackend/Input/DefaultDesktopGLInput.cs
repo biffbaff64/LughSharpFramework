@@ -121,7 +121,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     }
 
     // ========================================================================
-    // From Abstract Input
+    // From AbstractInput
     // ========================================================================
 
     /// <inheritdoc />
@@ -532,7 +532,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     public void MouseCallback( DotGLFW.Window window, DotGLFW.MouseButton button, DotGLFW.InputState state,
                                DotGLFW.ModifierKey mods )
     {
-        int gdxButton = button switch
+        int mouseButton = button switch
                         {
                             DotGLFW.MouseButton.ButtonLeft   => IInput.Buttons.Left,
                             DotGLFW.MouseButton.ButtonRight  => IInput.Buttons.Right,
@@ -545,7 +545,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                             var _ => -1
                         };
 
-        if ( Enum.IsDefined( typeof( DotGLFW.MouseButton ), button ) && ( gdxButton == -1 ) )
+        if ( Enum.IsDefined( typeof( DotGLFW.MouseButton ), button ) && ( mouseButton == -1 ) )
         {
             return;
         }
@@ -555,18 +555,18 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         if ( state == DotGLFW.InputState.Press )
         {
             _mousePressed++;
-            _justTouched                     = true;
-            _justPressedButtons[ gdxButton ] = true;
+            _justTouched                       = true;
+            _justPressedButtons[ mouseButton ] = true;
 
             _window.Graphics.RequestRendering();
-            _eventQueue.OnTouchDown( _mouseX, _mouseY, 0, gdxButton, time );
+            _eventQueue.OnTouchDown( _mouseX, _mouseY, 0, mouseButton, time );
         }
         else
         {
             _mousePressed = Math.Max( 0, _mousePressed - 1 );
 
             _window.Graphics.RequestRendering();
-            _eventQueue.OnTouchUp( _mouseX, _mouseY, 0, gdxButton, time );
+            _eventQueue.OnTouchUp( _mouseX, _mouseY, 0, mouseButton, time );
         }
     }
 

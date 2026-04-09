@@ -142,15 +142,29 @@ public class Cubemap : GLTexture, IManaged
 
     // ========================================================================
 
-    public          int Width  => Data.Width;
-    public          int Height => Data.Height;
-    public override int Depth  => 0;
+    /// <summary>
+    /// Gets the width of the data in pixels.
+    /// </summary>
+    public int Width  => Data.Width;
+
+    /// <summary>
+    /// Gets the height of the data in pixels.
+    /// </summary>
+    public int Height => Data.Height;
+
+    /// <summary>
+    /// Gets the depth of the current node in the hierarchy.
+    /// </summary>
+    public override int Depth => 0;
 
     /// <summary>
     /// return the number of managed cubemaps currently loaded
     /// </summary>
     public static int NumManagedCubemaps => _managedCubemaps[ Engine.App ]?.Count ?? 0;
 
+    /// <summary>
+    /// Gets a value indicating whether the resource is managed by the system.
+    /// </summary>
     public bool IsManaged => Data.IsManaged;
 
     // ========================================================================
@@ -368,6 +382,14 @@ public class Cubemap : GLTexture, IManaged
     [PublicAPI]
     public class CubemapSide
     {
+        /// <summary>
+        /// Specifies the possible directions along the X, Y, and Z axes.
+        /// </summary>
+        /// <remarks>
+        /// Use this enumeration to represent orientation or movement along the principal axes in
+        /// three-dimensional space. Each value indicates a positive or negative direction along
+        /// a specific axis.
+        /// </remarks>
         public enum InnerEnum
         {
             PositiveX,
@@ -423,6 +445,23 @@ public class Cubemap : GLTexture, IManaged
             _valueList.Add( NegativeZ );
         }
 
+        /// <summary>
+        /// Initializes a new instance of the CubemapSide class with the specified name, orientation,
+        /// and OpenGL target
+        /// information.
+        /// </summary>
+        /// <param name="name">The unique name identifying the cubemap side.</param>
+        /// <param name="innerEnum">
+        /// An enumeration value representing the internal type or orientation of the cubemap side.
+        /// </param>
+        /// <param name="index">The zero-based index of the cubemap side within the cubemap.</param>
+        /// <param name="glTarget">The OpenGL target constant associated with this cubemap side.</param>
+        /// <param name="upX">The X component of the up vector for the cubemap side's orientation.</param>
+        /// <param name="upY">The Y component of the up vector for the cubemap side's orientation.</param>
+        /// <param name="upZ">The Z component of the up vector for the cubemap side's orientation.</param>
+        /// <param name="directionX">The X component of the direction vector for the cubemap side's orientation.</param>
+        /// <param name="directionY">The Y component of the direction vector for the cubemap side's orientation.</param>
+        /// <param name="directionZ">The Z component of the direction vector for the cubemap side's orientation.</param>
         public CubemapSide( string name,
                             InnerEnum innerEnum,
                             int index,

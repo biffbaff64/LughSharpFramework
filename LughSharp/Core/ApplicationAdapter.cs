@@ -43,14 +43,14 @@ public class ApplicationAdapter : IApplicationListener
     /// <summary>
     /// Called when the <see cref="IApplication"/> should update itself.
     /// </summary>
-    public virtual void Update()
+    public virtual void Update( float delta )
     {
     }
 
     /// <summary>
     /// Called when the <see cref="IApplication"/> should draw itself.
     /// </summary>
-    public virtual void Render()
+    public virtual void Render( float delta )
     {
     }
 

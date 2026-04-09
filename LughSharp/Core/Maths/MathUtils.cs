@@ -511,31 +511,6 @@ public class MathUtils
     }
 
     /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <param name="tolerance"></param>
-    /// <returns></returns>
-    public static bool IsNotEqual( float a, float b, float tolerance = NumberUtils.FloatTolerance )
-    {
-        return !IsEqual( a, b, tolerance );
-    }
-
-    /// <summary>
-    /// Returns true if a is nearly equal to b.
-    /// </summary>
-    /// <param name="a"> the first value. </param>
-    /// <param name="b"> the second value. </param>
-    /// <param name="tolerance">
-    /// represent an upper bound below which the two values are considered equal.
-    /// </param>
-    public static bool IsEqual( float a, float b, float tolerance = NumberUtils.FloatTolerance )
-    {
-        return Math.Abs( a - b ) <= tolerance;
-    }
-
-    /// <summary>
     /// Calculates the logarithm of a specified value with a specified base.
     /// </summary>
     /// <param name="a">The base of the logarithm.</param>

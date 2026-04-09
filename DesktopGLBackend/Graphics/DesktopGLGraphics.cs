@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
 
@@ -185,17 +187,17 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// </summary>
     public override void Update()
     {
-        long time = TimeUtils.NanoTime();
+        long time = Stopwatch.GetTimestamp() * 1_000_000_000 / Stopwatch.Frequency;
 
         if ( _lastFrameTime == -1 )
         {
             _lastFrameTime = time;
         }
 
-        DeltaTime      = ( time - _lastFrameTime ) / ( float )TimeUtils.NanosecondsPerSecond;
+        DeltaTime      = ( time - _lastFrameTime ) / ( float )1_000_000_000;
         _lastFrameTime = time;
 
-        if ( ( time - _frameCounterStart ) >= TimeUtils.NanosecondsPerSecond )
+        if ( ( time - _frameCounterStart ) >= ( float )1_000_000_000 )
         {
             _fps               = _frames;
             _frames            = 0;
@@ -533,8 +535,8 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
         UpdateViewport( 0, 0, BackBufferWidth, BackBufferHeight, 1 );
 
         GLWindow.ApplicationListener?.Resize( WindowWidth, WindowHeight );
-        GLWindow.ApplicationListener?.Update();
-        GLWindow.ApplicationListener?.Render();
+        GLWindow.ApplicationListener?.Update( DeltaTime );
+        GLWindow.ApplicationListener?.Render( DeltaTime );
 
         DotGLFW.Glfw.SwapBuffers( windowHandle );
     }
