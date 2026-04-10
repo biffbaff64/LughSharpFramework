@@ -490,7 +490,8 @@ public class Button : Table, IDisableable
     }
 
     /// <summary>
-    /// Convenience method which returns <c>true</c> if the button is pressed.
+    /// Convenience method which returns <c>true</c> if the button is pressed,
+    /// otherwise <c>false</c>.
     /// </summary>
     public bool IsPressed => ClickListener?.VisualPressed ?? false;
 

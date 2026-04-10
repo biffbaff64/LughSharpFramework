@@ -1010,6 +1010,7 @@ public class Actor : IComparable< Actor >
         {
             Width  = width;
             Height = height;
+            
             OnSizeChanged();
         }
     }
@@ -1023,6 +1024,7 @@ public class Actor : IComparable< Actor >
         {
             Width  += size;
             Height += size;
+            
             OnSizeChanged();
         }
     }
@@ -1036,6 +1038,7 @@ public class Actor : IComparable< Actor >
         {
             Width  += width;
             Height += height;
+            
             OnSizeChanged();
         }
     }

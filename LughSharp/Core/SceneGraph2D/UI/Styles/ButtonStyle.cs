@@ -108,7 +108,7 @@ public class ButtonStyle : ISceneStyle
     {
         Guard.Against.Null( style );
 
-//        if ( typeof( T ).IsSubclassOf( typeof( ButtonStyle ) ) )
+        if ( typeof( T ).IsSubclassOf( typeof( ButtonStyle ) ) )
         {
             Up               = style.Up;
             Down             = style.Down;

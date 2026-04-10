@@ -1,4 +1,7 @@
-﻿using Extensions.Source;
+﻿using System;
+using System.IO;
+
+using Extensions.Source;
 
 using JetBrains.Annotations;
 
@@ -117,7 +120,7 @@ public class MainGame : LughGame
                 // Texture
                 if ( _texture != null )
                 {
-                    _spriteBatch.Draw( _texture, 20, 20 );
+                    _spriteBatch.Draw( _texture, 200, 200 );
                 }
 
                 // TextureRegion
@@ -153,6 +156,8 @@ public class MainGame : LughGame
                 _hudCam.Update();
 
                 _font?.Draw( _spriteBatch, $"X:{Engine.Input.GetX()} Y:{Engine.Input.GetY()}", 10, 700 );
+
+                _font?.Draw( _spriteBatch, "AAAAAAAAAA", 200, 200 );
 
                 _spriteBatch.End();
             }

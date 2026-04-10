@@ -500,8 +500,6 @@ public class Label : Widget, IDisposable
 
         if ( Style.Background != null )
         {
-            Logger.Checkpoint();
-
             batch.SetColor( color.R, color.G, color.B, color.A );
             Style.Background?.Draw( batch, X, Y, Width, Height );
         }

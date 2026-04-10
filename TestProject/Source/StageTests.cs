@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.IO;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core;
@@ -90,9 +93,10 @@ public class StageTests : IDisposable
         const bool TextButtonActor      = false;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
-        const bool CheckBoxActor        = true;
+        const bool CheckBoxActor        = false;
         const bool ProgressBarActor     = false;
         const bool SliderActor          = false;
+        const bool LabelActor           = false;
 
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
@@ -214,6 +218,8 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
+
+            checkBox.Label?.Style.Background = new TextureRegionDrawable( new Texture( Assets.Bar9 ) );
             checkBox.SetPosition( 200, 200 );
             Stage?.AddActor( checkBox );
         }
@@ -244,6 +250,18 @@ public class StageTests : IDisposable
             slider.Width  = 400;
             slider.Height = 100;
             Stage?.AddActor( slider );
+        }
+        
+        // --------------------------------------
+
+        if ( LabelActor )
+        {
+            var label = new Label( "Hello, World!", skin )
+            {
+                IsVisible = true,
+            };
+            label.SetPosition( 200, 200 );
+            Stage?.AddActor( label );
         }
     }
 

@@ -30,6 +30,8 @@ using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
@@ -46,8 +48,8 @@ public class CheckBox : TextButton
     /// Creates a new CheckBox using the supplied <see cref="Skin"/>, and text for the
     /// associated <see cref="Label"/>.
     /// </summary>
-    /// <param name="text"></param>
-    /// <param name="skin"></param>
+    /// <param name="text"> The text to assign to the Label. </param>
+    /// <param name="skin"> The skin holding the CheckBoxStyle. </param>
     public CheckBox( string text, Skin skin )
         : this( text, skin.Get< CheckBoxStyle >() )
     {
@@ -77,17 +79,20 @@ public class CheckBox : TextButton
     /// </summary>
     private void SafeSetup( CheckBoxStyle style )
     {
-        ClearChildren();
-
+        Style = style;
+        
         Label? label = Label;
+
+        // Override the default label alignment, set in TextButton.
+        // Checkbox label text defaults to being left of the checkbox.
+        label?.SetAlignment( Align.Left );
 
         Image = new Scene2DImage( style.CheckboxOff, Scaling.None );
 
+        ClearChildren();
+
         ImageCell = Add( Image );
-
         Add( label );
-
-        label?.SetAlignment( Align.Left );
 
         SetSize( GetPrefWidth(), GetPrefHeight() );
     }
@@ -99,45 +104,52 @@ public class CheckBox : TextButton
     /// <param name="parentAlpha"></param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        ISceneDrawable? checkbox = null;
-
-        if ( IsDisabled )
-        {
-            if ( IsChecked && ( Style?.CheckboxOnDisabled != null ) )
-            {
-                checkbox = Style?.CheckboxOnDisabled;
-            }
-            else
-            {
-                checkbox = Style?.CheckboxOffDisabled;
-            }
-        }
-
-        if ( checkbox == null )
-        {
-            bool over = IsOver() && !IsDisabled;
-
-            if ( IsChecked && ( Style?.CheckboxOn != null ) )
-            {
-                checkbox = over && ( Style?.CheckboxOnOver != null )
-                    ? Style?.CheckboxOnOver
-                    : Style?.CheckboxOn;
-            }
-            else if ( over && ( Style?.CheckboxOver != null ) )
-            {
-                checkbox = Style?.CheckboxOver;
-            }
-            else
-            {
-                checkbox = Style?.CheckboxOff;
-            }
-        }
-
-        Image?.SetDrawable( checkbox );
+        Image?.SetDrawable( GetImageDrawable() );
 
         base.Draw( batch, parentAlpha );
     }
 
+    /// <summary>
+    /// Returns the drawable to use for the checkbox's image, depending on
+    /// the state of the checkbox.
+    /// </summary>
+    private ISceneDrawable? GetImageDrawable()
+    {
+        Guard.Against.Null( Style );
+
+        if ( IsDisabled )
+        {
+            if ( IsChecked && Style.CheckboxOnDisabled != null )
+            {
+                return Style.CheckboxOnDisabled;
+            }
+
+            return Style.CheckboxOffDisabled;
+        }
+
+        bool over = IsOver() && !IsDisabled;
+
+        if ( IsChecked && Style.CheckboxOn != null )
+        {
+            return over && Style.CheckboxOnOver != null
+                ? Style.CheckboxOnOver
+                : Style.CheckboxOn;
+        }
+
+        if ( over && Style.CheckboxOver != null )
+        {
+            return Style.CheckboxOver;
+        }
+
+        return Style.CheckboxOff;
+    }
+
+    /// <summary>
+    /// Returns the <see cref="CheckBoxStyle"/> for this CheckBox.
+    /// </summary>
+    /// <exception cref="ArgumentException">
+    /// Thrown if an attempt to set Style to null is made.
+    /// </exception>
     public new CheckBoxStyle? Style
     {
         get;
@@ -151,4 +163,3 @@ public class CheckBox : TextButton
 
 // ============================================================================
 // ============================================================================
-
