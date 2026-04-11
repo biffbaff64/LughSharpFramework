@@ -93,7 +93,7 @@ public class StageTests : IDisposable
         const bool TextButtonActor      = false;
         const bool ImageButtonActor     = false;
         const bool ImageTextButtonActor = false;
-        const bool CheckBoxActor        = false;
+        const bool CheckBoxActor        = true;
         const bool ProgressBarActor     = false;
         const bool SliderActor          = false;
         const bool LabelActor           = false;
@@ -260,7 +260,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            label.SetPosition( 200, 200 );
+            label.SetPosition( 200, 400 );
             Stage?.AddActor( label );
         }
     }

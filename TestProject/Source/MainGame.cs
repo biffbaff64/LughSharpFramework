@@ -58,7 +58,7 @@ public class MainGame : LughGame
         _assetManager = new AssetManager();
 
         CreateCameras();
-        CreateAssets();
+//        CreateAssets();
 //        _mapTests.CreateMap();
         _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
 //        _font         = _fontTests.CreateBitmapFont();
@@ -124,16 +124,16 @@ public class MainGame : LughGame
                 }
 
                 // TextureRegion
-//                if ( _textureRegion != null )
-//                {
-//                    _spriteBatch.Draw( _textureRegion, 400, 100 );
-//                }
+                if ( _textureRegion != null )
+                {
+                    _spriteBatch.Draw( _textureRegion, 400, 100 );
+                }
 
                 // NinePatch
-//                if ( _ninePatch != null )
-//                {
-//                    _ninePatch.Draw( _spriteBatch, 500, 100, 100, 10 );
-//                }
+                if ( _ninePatch != null )
+                {
+                    _ninePatch.Draw( _spriteBatch, 500, 100, 100, 10 );
+                }
 
                 _spriteTests.Draw( _spriteBatch );
 
@@ -156,8 +156,6 @@ public class MainGame : LughGame
                 _hudCam.Update();
 
                 _font?.Draw( _spriteBatch, $"X:{Engine.Input.GetX()} Y:{Engine.Input.GetY()}", 10, 700 );
-
-                _font?.Draw( _spriteBatch, "AAAAAAAAAA", 200, 200 );
 
                 _spriteBatch.End();
             }
