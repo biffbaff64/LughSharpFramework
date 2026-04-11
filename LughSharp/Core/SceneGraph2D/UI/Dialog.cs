@@ -240,7 +240,7 @@ public class Dialog : Window
     /// </summary>
     /// <param name="stage"></param>
     /// <param name="action"> May be null. </param>
-    public Dialog Show( Stage stage, Action? action )
+    public Dialog Show( Stage stage, SceneAction? action )
     {
         ClearActions();
 
@@ -277,7 +277,7 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Centers the dialog in the stage and calls <see cref="Show(Stage, Action)"/>
+    /// Centers the dialog in the stage and calls <see cref="Show(Stage, SceneAction)"/>
     /// with a <see cref="SceneActions.FadeIn(float,IInterpolation)"/> action.
     /// </summary>
     public Dialog Show( Stage stage )
@@ -300,7 +300,7 @@ public class Dialog : Window
     /// If null, the dialog is removed immediately. Otherwise, the dialog is removed when the
     /// action completes. The dialog will not respond to touch down events during the action.
     /// </param>
-    public void Hide( Action? action )
+    public void Hide( SceneAction? action )
     {
         Stage? stage = Stage;
 

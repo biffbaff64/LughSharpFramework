@@ -31,6 +31,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Assets.Loaders.Resolvers;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Images;
+using LughSharp.Core.Graphics.Images.TextureData;
 using LughSharp.Core.Graphics.Loaders;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Utils.Exceptions;

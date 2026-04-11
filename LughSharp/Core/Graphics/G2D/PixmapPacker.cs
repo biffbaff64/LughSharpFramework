@@ -31,6 +31,7 @@ using JetBrains.Annotations;
 using LughSharp.Core.Collections;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Images;
+using LughSharp.Core.Graphics.Images.TextureData;
 using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;

@@ -589,11 +589,11 @@ public class SelectBox< T > : Widget, IDisableable
     {
         selectBox.ActorColor.A = 1f;
 
-        AlphaAction       action1  = SceneActions.FadeOut( 0.15f, Interpolation.Fade );
-        RemoveActorAction action2  = SceneActions.RemoveActor();
-        SequenceAction    sequence = SceneActions.Sequence( action1, action2 );
+        AlphaSceneAction       action1  = SceneActions.FadeOut( 0.15f, Interpolation.Fade );
+        RemoveActorSceneAction action2  = SceneActions.RemoveActor();
+        SequenceSceneAction    sequenceScene = SceneActions.Sequence( action1, action2 );
 
-        selectBox.AddAction( sequence );
+        selectBox.AddAction( sequenceScene );
     }
 
     protected string? ToString( T? item )

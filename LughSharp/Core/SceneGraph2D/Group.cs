@@ -643,7 +643,7 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Removes an actor from this group. If the actor will not be used again and
     /// has actions, they should be cleared using <see cref="Actor.ClearActions()"/>
-    /// so the actions will be returned to their <see cref="Action.Pool"/>, if
+    /// so the actions will be returned to their <see cref="SceneAction.Pool"/>, if
     /// any. This is not done automatically.
     /// </summary>
     /// <param name="index"> The group index of the actor to remove. </param>

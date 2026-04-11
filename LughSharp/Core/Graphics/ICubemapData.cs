@@ -24,6 +24,7 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Core.Graphics.Images.TextureData;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Utils;
 

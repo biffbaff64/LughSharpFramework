@@ -413,7 +413,6 @@ LUGHSHARP/CORE/GRAPHICS
     - DONE - DONE - DONE - Color 
     - DONE - DONE - DONE - Colors
     - IP   - IP   - DONE - Cubemap
-    - DONE - DONE - DONE - GLTextureArray
     - DONE - DONE - DONE - GraphicsDevice
     - DONE - DONE - DONE - GStructs
     - DONE - DONE - DONE - ICubemapData
@@ -515,15 +514,14 @@ LUGHSHARP/CORE/GRAPHICS/IMAGES
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      -      - Gdx2DPixmap
-    -      -      -      - GLTexture
+    -      -      -      - GLTexture            Combine with Texture
+    - DONE - DONE - DONE - GLTextureArray
     -      -      -      - NinePatch
     - DONE - IP   - DONE - Pixmap
     -      -      -      - PixmapData
     -      -      -      - PixmapDownloader
     -      -      -      - PixmapIO
-    -      -      -      - Texture
-    -      -      -      - TextureArray
-    -      -      -      - TextureDataFactory
+    -      -      -      - Texture              Combine with GLTexture
     -      -      -      - TextureRegion
 
 LUGHSHARP/CORE/GRAPHICS/IMAGES/DECODERS
@@ -546,6 +544,23 @@ LUGHSHARP/CORE/GRAPHICS/IMAGES/DECODERS
     -      -      -      - ImageIO
     -      -      -      - ImageUtils
 
+LUGHSHARP/CORE/GRAPHICS/IMAGES/TEXTUREDATA
+------------------------------------------
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      -      - ETC1TextureData
+    -      -      -      - FacedCubemapData
+    -      -      -      - FileTextureArrayData
+    -      -      -      - FileTextureData
+    -      -      -      - FloatTextureData
+    -      -      -      - GLOnlyTextureData
+    - DONE - IP   - DONE - ITextureData
+    -      -      -      - KTXTTextureData
+    -      -      -      - MipMapTextureData
+    -      -      -      - PixmapTextureData
+    -      -      -      - TextureData
+    -      -      -      - TextureDataFactory
+
 LUGHSHARP/CORE/GRAPHICS/LOADERS
 -------------------------------
 
@@ -553,7 +568,6 @@ LUGHSHARP/CORE/GRAPHICS/LOADERS
       ----   ----   ------
     -      -      -      - Etc1Loader
     -      -      -      - FileLoader
-    - DONE - IP   - DONE - ITextureData
     -      -      -      - KtxLoader
 
 LUGHSHARP/CORE/GRAPHICS/OPENGL
@@ -674,12 +688,6 @@ LUGHSHARP/CORE/GRAPHICS/UTILS
       ----   ----   ------
     -      -      -      - AppVersion
     -      -      -      - ETC1
-    -      -      -      - ETC1TextureData
-    -      -      -      - FacedCubemapData
-    -      -      -      - FileTextureArrayData
-    -      -      -      - FileTextureData
-    -      -      -      - FloatTextureData
-    -      -      -      - GLOnlyTextureData
     -      -      -      - HdpiUtils
     -      -      -      - IImmediateModeRenderer
     -      -      -      - IIndexData
@@ -692,10 +700,7 @@ LUGHSHARP/CORE/GRAPHICS/UTILS
     -      -      -      - InstanceBufferObject
     -      -      -      - InstanceBufferObjectSubData
     -      -      -      - IVertexData
-    -      -      -      - KTXTTextureData
     -      -      -      - MipMapGenerator
-    -      -      -      - MipMapTextureData
-    -      -      -      - PixmapTextureData
     -      -      -      - ShapeRenderer
     -      -      -      - TextureUtils
     -      -      -      - Vertex
@@ -962,13 +967,13 @@ LUGHSHARP/CORE/SCENEGRAPH2D
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - DONE - DONE - Action
     - DONE - IP   - DONE - Actor
     - DONE - DONE - DONE - Event
     - DONE - IP   - DONE - Group
     - DONE - DONE - DONE - IAction
     -      -      -      - IActor       - Add members or remove
     -      -      -      - InputEvent
+    - DONE - DONE - DONE - SceneAction
     -      -      -      - Stage
     -      -      -      - Touchable
 
@@ -977,7 +982,6 @@ LUGHSHARP/CORE/SCENEGRAPH2D/ACTIONS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - Actions
     -      -      -      - AddAction
     -      -      -      - AddListenerAction
     -      -      -      - AfterAction
@@ -1003,6 +1007,7 @@ LUGHSHARP/CORE/SCENEGRAPH2D/ACTIONS
     -      -      -      - RunnableAction
     -      -      -      - ScaleByAction
     -      -      -      - ScaleToAction
+    -      -      -      - SceneActions
     -      -      -      - SequenceAction
     -      -      -      - SizeByAction
     -      -      -      - SizeToAction

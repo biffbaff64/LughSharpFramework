@@ -54,7 +54,7 @@ public class Actor : IComparable< Actor >
 
     public DelayedRemovalList< IEventListener > Listeners        { get; }      = [ ];
     public DelayedRemovalList< IEventListener > CaptureListeners { get; }      = [ ];
-    public List< Action >                       Actions          { get; set; } = [ ];
+    public List< SceneAction >                       Actions          { get; set; } = [ ];
 
     public Touchable Touchable  { get; set; } = Touchable.Enabled;
     public bool      IsVisible  { get; set; } = true;
@@ -168,7 +168,7 @@ public class Actor : IComparable< Actor >
             {
                 if ( Actions[ i ].Act( delta ) && ( i < Actions.Count ) )
                 {
-                    Action current     = Actions[ i ];
+                    SceneAction current     = Actions[ i ];
                     int    actionIndex = current == Actions[ i ] ? i : Actions.IndexOf( Actions[ i ] );
 
                     if ( actionIndex != -1 )
@@ -446,7 +446,7 @@ public class Actor : IComparable< Actor >
     /// <summary>
     /// </summary>
     /// <param name="action"></param>
-    public void AddAction( Action? action )
+    public void AddAction( SceneAction? action )
     {
         if ( action != null )
         {
@@ -465,7 +465,7 @@ public class Actor : IComparable< Actor >
     /// Represents an operation to remove a specified action from the target actor.
     /// </summary>
     /// <param name="action">The action to remove from the associated actor.</param>
-    public void RemoveAction( Action? action )
+    public void RemoveAction( SceneAction? action )
     {
         if ( ( action != null ) && Actions.Remove( action ) )
         {

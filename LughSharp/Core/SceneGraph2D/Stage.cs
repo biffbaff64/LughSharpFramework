@@ -270,10 +270,10 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Adds an action to the root of the stage.
     /// </summary>
-    /// <see cref="Group.AddAction(Action) "/>
-    public void AddAction( Action action )
+    /// <see cref="Group.AddAction(SceneAction) "/>
+    public void AddAction( SceneAction sceneAction )
     {
-        RootGroup.AddAction( action );
+        RootGroup.AddAction( sceneAction );
     }
 
     /// <summary>
