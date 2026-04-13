@@ -71,7 +71,7 @@ public class AssetManagerTest
             Engine.Files.Assets( "title_background.png" )
         };
 
-        _assetManager.Load< Texture >( files );
+        _assetManager.Load< Texture2D >( files );
         _assetManager.FinishLoading();
 
         Logger.Debug( "Checking loaded assets...", true );
@@ -127,7 +127,7 @@ public class AssetManagerTest
         {
             Logger.Debug( $"AssetManager contains {asset.Name}" );
 
-            var texture = _assetManager.Get< Texture >( asset.FullName );
+            var texture = _assetManager.Get< Texture2D >( asset.FullName );
 
             Logger.Debug( texture != null
                               ? $"Texture loaded and retrieved: {asset.Name}"

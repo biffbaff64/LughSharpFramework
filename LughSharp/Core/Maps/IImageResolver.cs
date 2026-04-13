@@ -56,14 +56,14 @@ public interface IImageResolver
     public class DirectImageResolver : IImageResolver
     {
         // A dictionary that maps image names to Texture objects.
-        private readonly Dictionary< string, Texture > _images;
+        private readonly Dictionary< string, Texture2D > _images;
 
         /// <summary>
         /// Initializes a new instance of the DirectImageResolver class with the
         /// specified dictionary of images.
         /// </summary>
         /// <param name="images">A dictionary mapping image names to Texture objects.</param>
-        public DirectImageResolver( Dictionary< string, Texture > images )
+        public DirectImageResolver( Dictionary< string, Texture2D > images )
         {
             _images = images ?? throw new ArgumentNullException( nameof( images ), "Images dictionary cannot be null" );
         }
@@ -85,7 +85,7 @@ public interface IImageResolver
                 throw new ArgumentException( "Image name cannot be null or whitespace", nameof( name ) );
             }
 
-            if ( !_images.TryGetValue( name, out Texture? texture ) )
+            if ( !_images.TryGetValue( name, out Texture2D? texture ) )
             {
                 throw new KeyNotFoundException( $"The image with name '{name}' was "
                                               + $"not found in the images dictionary." );
@@ -136,12 +136,12 @@ public interface IImageResolver
                 throw new ArgumentNullException( nameof( name ), "Image name cannot be null or whitespace" );
             }
 
-            if ( !_assetManager.IsLoaded( name, typeof( Texture ) ) )
+            if ( !_assetManager.IsLoaded( name, typeof( Texture2D ) ) )
             {
                 throw new AssetNotLoadedException( $"The asset '{name}' is not loaded." );
             }
 
-            var texture = _assetManager.Get< Texture >( name );
+            var texture = _assetManager.Get< Texture2D >( name );
 
             return new TextureRegion( texture! );
         }

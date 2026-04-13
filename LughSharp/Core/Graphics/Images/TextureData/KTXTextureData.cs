@@ -40,7 +40,7 @@ namespace LughSharp.Core.Graphics.Images.TextureData;
 /// OpenGL texture capabilities like texture compression, cubemapping, mipmapping,
 /// etc.
 /// <para>
-/// For example, KTXTextureData can be used for <see cref="Texture"/> or
+/// For example, KTXTextureData can be used for <see cref="Texture2D"/> or
 /// <see cref="Cubemap"/>.
 /// </para>
 /// </summary>

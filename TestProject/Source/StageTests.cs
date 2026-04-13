@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024, 2025, 2026 Circa64 Software Projects / Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,7 @@ using LughSharp.Core.SceneGraph2D.RegistryStyles;
 using LughSharp.Core.SceneGraph2D.UI;
 using LughSharp.Core.SceneGraph2D.UI.Styles;
 using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 
 namespace TestProject.Source;
@@ -87,58 +88,70 @@ public class StageTests : IDisposable
 
     public void CreateSkinActors()
     {
-        const bool ImageActor           = false;
-        const bool WindowActor          = false;
-        const bool ButtonActor          = false;
-        const bool TextButtonActor      = false;
-        const bool ImageButtonActor     = false;
-        const bool ImageTextButtonActor = false;
-        const bool CheckBoxActor        = true;
-        const bool ProgressBarActor     = false;
-        const bool SliderActor          = false;
-        const bool LabelActor           = false;
+        var imageActor           = false;
+        var windowActor          = false;
+        var buttonActor          = false;
+        var textButtonActor      = false;
+        var imageButtonActor     = false;
+        var imageTextButtonActor = false;
+        var checkBoxActor        = false;
+        var progressBarActor     = false;
+        var sliderActor          = false;
+        var labelActor           = true;
+        var tableActor           = false;
 
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
-        if ( ImageActor )
+        if ( imageActor )
         {
-            var scene2DImage = new Scene2DImage( new Texture( Assets.ButtonRight ) )
+            // Working
+            // Draws an image correctly.
+            
+            var scene2DImage = new Scene2DImage( new Texture2D( Assets.HudPanel ) )
             {
                 IsVisible = true
             };
-            scene2DImage.SetPosition( 200, 200 );
+            scene2DImage.SetPosition( 0, 0 );
             Stage?.AddActor( scene2DImage );
         }
 
         // --------------------------------------
 
-        if ( WindowActor )
+        if ( windowActor )
         {
-//            var windowStyle = new WindowStyle
-//            {
-//                TitleFont      = _font,
-//                TitleFontColor = Color.White,
-//                Background     = new TextureRegionDrawable( new Texture( Assets.WindowBackground ) )
-//            };
-//            var windowActor = new Window( "Window Title", windowStyle )
-            var windowActor = new Window( "Window Title", skin, "default" )
+            // Draws a window correctly. Displays title, background.
+            // Window content needs testing.
+            
+            var windowStyle = new WindowStyle
+            {
+                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
+                TitleFontColor = Color.Red,
+                Background     = new TextureRegionDrawable( new Texture2D( Assets.WindowBackground ) )
+            };
+            var window = new Window( "Window Title", windowStyle )
+//            var window = new Window( "Window Title", skin, "default" )
             {
                 IsVisible = true,
             };
-            windowActor.SetPosition( 200, 200 );
-            Stage?.AddActor( windowActor );
+            window.SetPosition( 200, 200 );
+            window.AddActor( new Label( "Window Content", skin ) );
+            Stage?.AddActor( window );
         }
 
         // --------------------------------------
 
-        if ( ButtonActor )
+        if ( buttonActor )
         {
+            // Working
+            // Button actor draws, detects click, release, hover. Can be drawn with custom styles,
+            // or default styles from skins.
+            
             var btStyle = new ButtonStyle
             {
-                Up      = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
-                Down    = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
-                Over    = new TextureRegionDrawable( new Texture( Assets.ButtonBOver ) ),
-                Checked = new TextureRegionDrawable( new Texture( Assets.ButtonBChecked ) ),
+                Up      = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
+                Down    = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) ),
+                Over    = new TextureRegionDrawable( new Texture2D( Assets.ButtonBOver ) ),
+                Checked = new TextureRegionDrawable( new Texture2D( Assets.ButtonBChecked ) ),
             };
             var button = new Button( btStyle )
             {
@@ -150,36 +163,43 @@ public class StageTests : IDisposable
 
         // --------------------------------------
 
-        if ( TextButtonActor )
+        if ( textButtonActor )
         {
+            // Button actor draws, detects click, release, hover. Can be drawn with custom styles,
+            // or default styles from skins.
+            // Label text is not being aligned correctly, need to fix. Text is being drawn at the
+            // TextButton 0,0 position.
+            
             var tbStyle = new TextButtonStyle
             {
-                Up                = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
-                Down              = new TextureRegionDrawable( skin.GetRegion( "default-round-down" ) ),
-                Disabled          = new TextureRegionDrawable( skin.GetRegion( "default-round" ) ),
+                Up                = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
+                Down              = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) ),
+                Disabled          = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDisabled ) ),
+                Over              = new TextureRegionDrawable( new Texture2D( Assets.ButtonBOver ) ),
+                Checked           = new TextureRegionDrawable( new Texture2D( Assets.ButtonBChecked ) ),
                 Font              = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
                 FontColor         = Color.Yellow,
                 DisabledFontColor = Color.Gray,
             };
 
-//            var textButton = new TextButton( "Text Button", tbStyle )
-            var textButton = new TextButton( "Text Button", skin )
+            var textButton = new TextButton( "Text Button", tbStyle )
+//            var textButton = new TextButton( "Text Button", skin )
             {
                 IsVisible = true,
             };
-            textButton.SetPosition( 200, 200 );
+            textButton.SetPosition( 350, 200 );
             Stage?.AddActor( textButton );
         }
 
         // --------------------------------------
 
-        if ( ImageButtonActor )
+        if ( imageButtonActor )
         {
             var imageButtonStyle = new ImageButtonStyle
             {
-                ImageUp       = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) ),
-                ImageDown     = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
-                ImageDisabled = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) ),
+                ImageUp       = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
+                ImageDown     = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) ),
+                ImageDisabled = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) ),
             };
 
             var imageButton = new ImageButton( imageButtonStyle )
@@ -195,12 +215,12 @@ public class StageTests : IDisposable
             var imageButton2 = new ImageButton( skin, "default" );
             imageButton2.SetSize( 100, 100 );
             imageButton2.SetPosition( 600, 20 );
-            Stage.AddActor( imageButton2 );
+            Stage?.AddActor( imageButton2 );
         }
 
         // --------------------------------------
 
-        if ( ImageTextButtonActor )
+        if ( imageTextButtonActor )
         {
             var imageTextButton = new ImageTextButton( "Image Text Button", skin, "default" )
             {
@@ -212,21 +232,21 @@ public class StageTests : IDisposable
 
         // --------------------------------------
 
-        if ( CheckBoxActor )
+        if ( checkBoxActor )
         {
             var checkBox = new CheckBox( "checkbox", skin )
             {
                 IsVisible = true,
             };
 
-            checkBox.Label?.Style.Background = new TextureRegionDrawable( new Texture( Assets.Bar9 ) );
+            checkBox.Label?.Style.Background = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) );
             checkBox.SetPosition( 200, 200 );
             Stage?.AddActor( checkBox );
         }
 
         // --------------------------------------
 
-        if ( ProgressBarActor )
+        if ( progressBarActor )
         {
             var progressBar = new ProgressBar( 0f, 10f, 1f, false, skin )
             {
@@ -240,7 +260,7 @@ public class StageTests : IDisposable
 
         // --------------------------------------
 
-        if ( SliderActor )
+        if ( sliderActor )
         {
             var slider = new Slider( 0f, 10f, 1f, false, skin )
             {
@@ -254,14 +274,21 @@ public class StageTests : IDisposable
         
         // --------------------------------------
 
-        if ( LabelActor )
+        if ( labelActor )
         {
             var label = new Label( "Hello, World!", skin )
             {
                 IsVisible = true,
             };
             label.SetPosition( 200, 400 );
+            label.SetAlignment( Align.Top | Align.Left );
             Stage?.AddActor( label );
+        }
+
+        // --------------------------------------
+        
+        if ( tableActor )
+        {
         }
     }
 
@@ -313,9 +340,9 @@ public class StageTests : IDisposable
         {
             var imageButtonStyle = styleRegistry.Get< ImageButtonStyle >( "default" );
 
-            imageButtonStyle.ImageUp       = new TextureRegionDrawable( new Texture( Assets.ButtonBUp ) );
-            imageButtonStyle.ImageDown     = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) );
-            imageButtonStyle.ImageDisabled = new TextureRegionDrawable( new Texture( Assets.ButtonBDown ) );
+            imageButtonStyle.ImageUp       = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) );
+            imageButtonStyle.ImageDown     = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) );
+            imageButtonStyle.ImageDisabled = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) );
 
             var imageButton = new ImageButton( imageButtonStyle )
             {

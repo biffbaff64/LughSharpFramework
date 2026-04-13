@@ -55,7 +55,7 @@ namespace LughSharp.Core.Maps.Tiled.Loaders;
 public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledMapLoaderParameters >( resolver )
 {
-    protected readonly List< Texture > TrackedTextures = [ ];
+    protected readonly List< Texture2D > TrackedTextures = [ ];
     protected          IAtlasResolver? AtlasResolver;
 
     // ========================================================================
@@ -153,7 +153,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     {
         TextureAtlas? atlas = AtlasResolver?.GetAtlas();
 
-        foreach ( Texture texture in atlas!.Textures )
+        foreach ( Texture2D texture in atlas!.Textures )
         {
             TrackedTextures.Add( texture );
         }
@@ -274,7 +274,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
     protected void SetTextureFilters( TextureFilterMode min, TextureFilterMode mag )
     {
-        foreach ( Texture texture in TrackedTextures )
+        foreach ( Texture2D texture in TrackedTextures )
         {
             texture.SetFilter( min, mag );
         }

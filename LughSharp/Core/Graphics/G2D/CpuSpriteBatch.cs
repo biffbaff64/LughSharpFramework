@@ -200,7 +200,7 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <inheritdoc />
-    public override void Draw( Texture? texture,
+    public override void Draw( Texture2D? texture,
                                GRect region,
                                Point2D origin,
                                Point2D scale,
@@ -237,7 +237,7 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <inheritdoc />
-    public override void Draw( Texture? texture,
+    public override void Draw( Texture2D? texture,
                                GRect region,
                                GRect src,
                                bool flipX = false,
@@ -271,7 +271,7 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <inheritdoc />
-    public override void Draw( Texture? texture, float x, float y, GRect src )
+    public override void Draw( Texture2D? texture, float x, float y, GRect src )
     {
         Guard.Against.Null( texture );
 
@@ -301,7 +301,7 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <inheritdoc />
-    public override void Draw( Texture? texture,
+    public override void Draw( Texture2D? texture,
                                GRect region,
                                float u,
                                float v,
@@ -336,7 +336,7 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <inheritdoc />
-    public override void Draw( Texture? texture, float x, float y )
+    public override void Draw( Texture2D? texture, float x, float y )
     {
         Guard.Against.Null( texture );
 
@@ -351,7 +351,7 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <inheritdoc />
-    public override void Draw( Texture? texture, float posX, float posY, float width, float height )
+    public override void Draw( Texture2D? texture, float posX, float posY, float width, float height )
     {
         Guard.Against.Null( texture );
 
@@ -454,7 +454,7 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <inheritdoc />
-    public override void Draw( Texture? texture, float[] spriteVertices, int offset, int count )
+    public override void Draw( Texture2D? texture, float[] spriteVertices, int offset, int count )
     {
         Guard.Against.Null( texture );
 
@@ -520,7 +520,7 @@ public class CpuSpriteBatch : SpriteBatch
                         false );
     }
 
-    private void DrawAdjusted( Texture? texture,
+    private void DrawAdjusted( Texture2D? texture,
                                float x,
                                float y,
                                float originX,
@@ -565,7 +565,7 @@ public class CpuSpriteBatch : SpriteBatch
                         flipY );
     }
 
-    private void DrawAdjustedUV( Texture? texture,
+    private void DrawAdjustedUV( Texture2D? texture,
                                  float x,
                                  float y,
                                  float originX,
@@ -933,7 +933,7 @@ public class CpuSpriteBatch : SpriteBatch
         Idx += Sprite2D.SpriteSize;
     }
 
-    private void DrawAdjusted( Texture? texture, float[] spriteVertices, int offset, int count )
+    private void DrawAdjusted( Texture2D? texture, float[] spriteVertices, int offset, int count )
     {
         if ( !IsDrawing )
         {

@@ -54,7 +54,7 @@ namespace LughSharp.Core.Graphics.Images;
 /// automatically.
 /// </para>
 /// <para>
-/// A Texture has to be bound via the <see cref="Texture.Bind()"/> method in order
+/// A Texture has to be bound via the <see cref="Texture2D.Bind()"/> method in order
 /// for it to be applied to geometry. The texture will be bound to the currently
 /// active texture unit specified via <see cref="GLBindings.ActiveTexture(int)"/>,
 /// or <see cref="GLBindings.ActiveTexture(LughSharp.Core.Graphics.OpenGL.Enums.TextureUnit)"/>.
@@ -69,23 +69,13 @@ namespace LughSharp.Core.Graphics.Images;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Texture : GLTexture, IManaged
+public class Texture2D : GLTexture, IManaged
 {
     public ITextureData TextureData { get; set; }
 
     // ========================================================================
 
-    public int  Width              => TextureData.Width;
-    public int  Height             => TextureData.Height;
-    public int  ColorFormat        => TextureData.GetPixelFormat();
-    public int  BitDepth           => TextureData.BitDepth;
-    public int  NumManagedTextures => _managedTextures.Count;
-    public uint TextureID          => GLTextureHandle;
-    public bool IsManaged          => TextureData is { IsManaged: true };
-
-    // ========================================================================
-
-    private readonly Dictionary< IApplication, List< Texture > > _managedTextures = [ ];
+    private readonly Dictionary< IApplication, List< Texture2D > > _managedTextures = [ ];
 
     private AssetManager? _assetManager;
     private bool          _isUploaded;
@@ -100,7 +90,7 @@ public class Texture : GLTexture, IManaged
     /// The internal path to the file. For an explanation of internal paths see
     /// <see cref="PathType.Internal"/>.
     /// </param>
-    public Texture( string internalPath )
+    public Texture2D( string internalPath )
         : this( Engine.Files.Internal( internalPath ), false )
     {
     }
@@ -110,7 +100,7 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="file"> The file to load. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
-    public Texture( FileInfo file, bool useMipMaps )
+    public Texture2D( FileInfo file, bool useMipMaps )
         : this( file, LughFormat.RGBA8888, useMipMaps )
     {
     }
@@ -123,7 +113,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="file"></param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
-    public Texture( FileInfo file,
+    public Texture2D( FileInfo file,
                     int format = LughFormat.RGBA8888,
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
@@ -135,7 +125,7 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
-    public Texture( Pixmap pixmap, bool useMipMaps = false )
+    public Texture2D( Pixmap pixmap, bool useMipMaps = false )
         : this( new PixmapTextureData( pixmap, 0, useMipMaps, false ) )
     {
     }
@@ -146,7 +136,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
-    public Texture( Pixmap pixmap, int format, bool useMipMaps = false )
+    public Texture2D( Pixmap pixmap, int format, bool useMipMaps = false )
         : this( new PixmapTextureData( pixmap, format, useMipMaps, false ) )
     {
     }
@@ -158,7 +148,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="height"> The Height in pixels. </param>
     /// <param name="format"> The pixmap <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> </param>
     /// <param name="managed"></param>
-    public Texture( int width, int height, int format, bool managed = false )
+    public Texture2D( int width, int height, int format, bool managed = false )
         : this( new PixmapTextureData( new Pixmap( width, height, format ),
                                        0,
                                        false,
@@ -170,7 +160,7 @@ public class Texture : GLTexture, IManaged
     /// <summary>
     /// Creates a new Texture using the supplied <see cref="ITextureData"/>.
     /// </summary>
-    public Texture( ITextureData data )
+    public Texture2D( ITextureData data )
         : this( IGL.GLTexture2D, Engine.GL.CreateTexture( TextureTarget.Texture2D ), data )
     {
     }
@@ -182,7 +172,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="glTarget"></param>
     /// <param name="glTextureHandle"></param>
     /// <param name="data"></param>
-    protected Texture( int glTarget, uint glTextureHandle, ITextureData data )
+    protected Texture2D( int glTarget, uint glTextureHandle, ITextureData data )
         : base( glTarget, glTextureHandle )
     {
         Guard.Against.Null( data );
@@ -292,9 +282,9 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="app"></param>
     /// <param name="texture"></param>
-    private void AddManagedTexture( IApplication app, Texture texture )
+    private void AddManagedTexture( IApplication app, Texture2D texture )
     {
-        List< Texture > managedTextureArray = _managedTextures.TryGetValue( app, out List< Texture >? managedTexture )
+        List< Texture2D > managedTextureArray = _managedTextures.TryGetValue( app, out List< Texture2D >? managedTexture )
             ? managedTexture
             : [ ];
 
@@ -310,7 +300,7 @@ public class Texture : GLTexture, IManaged
     {
         if ( _assetManager == null )
         {
-            foreach ( Texture t in _managedTextures[ app ] )
+            foreach ( Texture2D t in _managedTextures[ app ] )
             {
                 t.Reload();
             }
@@ -324,9 +314,9 @@ public class Texture : GLTexture, IManaged
 
             // next we go through each texture and reload either directly or via the
             // asset manager.
-            var textures = new List< Texture >( _managedTextures[ app ] );
+            var textures = new List< Texture2D >( _managedTextures[ app ] );
 
-            foreach ( Texture texture in textures )
+            foreach ( Texture2D texture in textures )
             {
                 string? filename = _assetManager.GetAssetFileName( texture );
 
@@ -362,7 +352,7 @@ public class Texture : GLTexture, IManaged
                     // unload the texture, create a new gl handle then reload it.
                     _assetManager.Unload( filename );
                     texture.GLTextureHandle = Engine.GL.GenTexture();
-                    _assetManager.Load< Texture >( filename, parameters );
+                    _assetManager.Load< Texture2D >( filename, parameters );
                 }
             }
 
@@ -440,6 +430,15 @@ public class Texture : GLTexture, IManaged
         }
         set;
     }
+
+
+    public int  Width              => TextureData.Width;
+    public int  Height             => TextureData.Height;
+    public int  ColorFormat        => TextureData.GetPixelFormat();
+    public int  BitDepth           => TextureData.BitDepth;
+    public int  NumManagedTextures => _managedTextures.Count;
+    public uint TextureID          => GLTextureHandle;
+    public bool IsManaged          => TextureData is { IsManaged: true };
 
     // ========================================================================
 

@@ -1,18 +1,18 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
-// 
-// Copyright (c) 2024, 2025, 2026 Circa64 Software Projects / Richard Ikin.
-// 
+//
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,37 +22,37 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+global using System;
+global using System.Collections.Generic;
+global using System.Diagnostics.CodeAnalysis;
+global using System.IO;
+global using System.Linq;
+global using System.Reflection;
+global using System.Runtime.InteropServices;
+global using System.Text;
+global using System.Text.RegularExpressions;
+global using System.Threading.Tasks;
 
-using JetBrains.Annotations;
+// ============================================================================
+// ============================================================================
 
-using LughSharp.Core.Graphics.G2D;
+global using JetBrains.Annotations;
 
-using NUnit.Framework;
+// ============================================================================
+// ============================================================================
 
-namespace LughSharp.Tests.Source;
-
-[TestFixture]
-[PublicAPI]
-public class InputTest : ILughTest
-{
-    [SetUp]
-    public void Setup()
-    {
-    }
-
-    public void Run()
-    {
-    }
-
-    public void Render( SpriteBatch spriteBatch )
-    {
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-    }
-}
+global using LughSharp.Core.Assets;
+global using LughSharp.Core.Audio;
+global using LughSharp.Core.Graphics;
+global using LughSharp.Core.Input;
+global using LughSharp.Core.Maps;
+global using LughSharp.Core.Maths;
+global using LughSharp.Core.Mock;
+global using LughSharp.Core.Network;
+global using LughSharp.Core.SceneGraph2D;
+global using LughSharp.Core.Utils;
+global using LughSharp.Core.Utils.Exceptions;
+global using LughSharp.Core.Utils.Logging;
 
 // ============================================================================
 // ============================================================================

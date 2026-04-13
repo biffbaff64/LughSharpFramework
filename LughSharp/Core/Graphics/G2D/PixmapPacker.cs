@@ -654,7 +654,7 @@ public class PixmapPacker : IDisposable
 
         while ( regions.Count < Pages.Count )
         {
-            Texture? texture = Pages[ regions.Count ].Texture;
+            Texture2D? texture = Pages[ regions.Count ].Texture;
 
             if ( texture != null )
             {
@@ -862,7 +862,7 @@ public class PixmapPacker : IDisposable
     public class Page
     {
         public Pixmap         Image      { get; set; }
-        public Texture?       Texture    { get; set; }
+        public Texture2D?       Texture    { get; set; }
         public List< string > AddedRects { get; set; } = [ ];
         public bool           IsDirty    { get; set; }
 
@@ -902,7 +902,7 @@ public class PixmapPacker : IDisposable
             }
             else
             {
-                Texture = new Texture( new PixmapTextureData( Image,
+                Texture = new Texture2D( new PixmapTextureData( Image,
                                                               Image.GetColorFormat(),
                                                               useMipMaps,
                                                               false,

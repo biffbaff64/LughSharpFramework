@@ -276,7 +276,7 @@ public class TexturePackerSettings
         MaxHeight             = 1024;
         Fast                  = false;
         Rotation              = false;
-        PowerOfTwo            = true;
+        PowerOfTwo            = false;
         MultipleOfFour        = false;
         PaddingX              = 2;
         PaddingY              = 2;

@@ -100,10 +100,10 @@ public class Scene2DImage : Widget
     }
 
     /// <summary>
-    /// Creates a new Image instance with the specified <see cref="Texture"/>.
+    /// Creates a new Image instance with the specified <see cref="Texture2D"/>.
     /// </summary>
     /// <param name="texture"></param>
-    public Scene2DImage( Texture texture )
+    public Scene2DImage( Texture2D texture )
         : this( new TextureRegionDrawable( new TextureRegion( texture ) ) )
     {
     }

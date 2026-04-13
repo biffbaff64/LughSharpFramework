@@ -76,7 +76,7 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    protected Texture?     LastTexture        { get; set; }
+    protected Texture2D?     LastTexture        { get; set; }
     protected int          Idx                { get; set; }
     protected BatchState?  CurrentBatchState  { get; set; }
     protected RenderState? CurrentRenderState { get; set; }
@@ -98,7 +98,7 @@ public class SpriteBatch : IBatch
     private static readonly Vector2 _defaultOrigin = Vector2.Zero;
     private static readonly Vector2 _defaultScale  = Vector2.One;
 
-    private Texture?       _lastSuccessfulTexture;
+    private Texture2D?       _lastSuccessfulTexture;
     private ShaderProgram? _shader;
     private Mesh?          _mesh;
 
@@ -699,7 +699,7 @@ public class SpriteBatch : IBatch
     /// batched render operations.
     /// </summary>
     /// <param name="texture">The new texture to switch to. If null, no action is taken.</param>
-    protected void SwitchTexture( Texture? texture )
+    protected void SwitchTexture( Texture2D? texture )
     {
         Guard.Against.Null( _shader );
 
@@ -750,7 +750,7 @@ public class SpriteBatch : IBatch
 
         var textureList = new List< object? >
         {
-            typeof( Texture ),
+            typeof( Texture2D ),
             typeof( TextureRegion ),
             typeof( ISceneDrawable ),
             typeof( Scene2DImage ),
@@ -978,7 +978,7 @@ public class SpriteBatch : IBatch
     /// <param name="posY"> Y coordinate in pixels. </param>
     /// <param name="width"> Width of Texture in pixels. </param>
     /// <param name="height"> Height of Texture in pixerls. </param>
-    public virtual void Draw( Texture texture, float posX, float posY, float width, float height )
+    public virtual void Draw( Texture2D texture, float posX, float posY, float width, float height )
     {
         lock ( _lockObject )
         {
@@ -1041,7 +1041,7 @@ public class SpriteBatch : IBatch
     /// <param name="src">The source rectangle of the texture to be drawn.</param>
     /// <param name="flipX">Indicates whether the texture should be flipped horizontally.</param>
     /// <param name="flipY">Indicates whether the texture should be flipped vertically.</param>
-    public virtual void Draw( Texture texture,
+    public virtual void Draw( Texture2D texture,
                               GRect destination,
                               Point2D origin,
                               Point2D scale,
@@ -1183,7 +1183,7 @@ public class SpriteBatch : IBatch
     /// <param name="src">The source rectangle in the texture to be drawn.</param>
     /// <param name="flipX">Indicates whether to flip the texture horizontally.</param>
     /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
-    public virtual void Draw( Texture texture, GRect destination, GRect src, bool flipX = false, bool flipY = false )
+    public virtual void Draw( Texture2D texture, GRect destination, GRect src, bool flipX = false, bool flipY = false )
     {
         lock ( _lockObject )
         {
@@ -1248,7 +1248,7 @@ public class SpriteBatch : IBatch
     /// <param name="x">The x-coordinate where the texture should be drawn.</param>
     /// <param name="y">The y-coordinate where the texture should be drawn.</param>
     /// <param name="src">The source rectangle portion of the texture to be drawn.</param>
-    public virtual void Draw( Texture texture, float x, float y, GRect src )
+    public virtual void Draw( Texture2D texture, float x, float y, GRect src )
     {
         lock ( _lockObject )
         {
@@ -1305,7 +1305,7 @@ public class SpriteBatch : IBatch
     /// <param name="v">The V coordinate of the texture's top-left corner.</param>
     /// <param name="u2">The U coordinate of the texture's bottom-right corner.</param>
     /// <param name="v2">The V coordinate of the texture's bottom-right corner.</param>
-    public virtual void Draw( Texture texture, GRect destination, float u, float v, float u2, float v2 )
+    public virtual void Draw( Texture2D texture, GRect destination, float u, float v, float u2, float v2 )
     {
         lock ( _lockObject )
         {
@@ -1350,12 +1350,12 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Draw the given <see cref="Texture"/> at the given X and Y coordinates.
+    /// Draw the given <see cref="Texture2D"/> at the given X and Y coordinates.
     /// </summary>
     /// <param name="texture"> The texture. </param>
     /// <param name="x"> X coordinate in pixels. </param>
     /// <param name="y"> Y coordinate in pixels. </param>
-    public virtual void Draw( Texture texture, float x, float y )
+    public virtual void Draw( Texture2D texture, float x, float y )
     {
         Draw( texture, x, y, texture.Width, texture.Height );
     }
@@ -1367,7 +1367,7 @@ public class SpriteBatch : IBatch
     /// <param name="spriteVertices">An array of vertex data describing the sprites to be rendered.</param>
     /// <param name="offset">The starting index in the vertex array from which to begin processing.</param>
     /// <param name="count">The number of vertices to process starting from the specified offset.</param>
-    public virtual void Draw( Texture texture, float[] spriteVertices, int offset, int count )
+    public virtual void Draw( Texture2D texture, float[] spriteVertices, int offset, int count )
     {
         lock ( _lockObject )
         {
@@ -1446,7 +1446,7 @@ public class SpriteBatch : IBatch
         {
             Validate( region );
 
-            Texture? texture = region.Texture;
+            Texture2D? texture = region.Texture;
 
             if ( texture != LastTexture )
             {
@@ -1506,7 +1506,7 @@ public class SpriteBatch : IBatch
         {
             Validate( textureRegion );
 
-            Texture? texture = textureRegion.Texture;
+            Texture2D? texture = textureRegion.Texture;
 
             if ( texture != LastTexture )
             {
@@ -1638,7 +1638,7 @@ public class SpriteBatch : IBatch
         {
             Validate( textureRegion );
 
-            Texture? texture = textureRegion.Texture;
+            Texture2D? texture = textureRegion.Texture;
 
             if ( texture != LastTexture )
             {
@@ -2071,7 +2071,7 @@ public class SpriteBatch : IBatch
     [PublicAPI]
     public record struct RenderState
     {
-        public Texture? CurrentTexture  { get; set; }
+        public Texture2D? CurrentTexture  { get; set; }
         public int      VertexCount     { get; set; }
         public Matrix4  TransformMatrix { get; set; }
 
@@ -2079,14 +2079,14 @@ public class SpriteBatch : IBatch
         /// Represents the rendering state within a sprite batch, including texture information,
         /// vertex data, and transformation details.
         /// </summary>
-        public RenderState( Texture? currentTexture, int vertexCount, Matrix4 transformMatrix )
+        public RenderState( Texture2D? currentTexture, int vertexCount, Matrix4 transformMatrix )
         {
             CurrentTexture  = currentTexture;
             VertexCount     = vertexCount;
             TransformMatrix = transformMatrix;
         }
 
-        private void Deconstruct( out Texture? texture, out int vertexCount, out Matrix4 transformMatrix )
+        private void Deconstruct( out Texture2D? texture, out int vertexCount, out Matrix4 transformMatrix )
         {
             texture         = CurrentTexture;
             vertexCount     = VertexCount;

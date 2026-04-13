@@ -126,8 +126,6 @@ public class Label : Widget, IDisposable
             _text.Append( text );
         }
 
-//        _fontCache = style.Font.NewFontCache();
-
         Style = style;
 
         if ( text is { Length: > 0 } )

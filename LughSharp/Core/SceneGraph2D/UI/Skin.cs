@@ -458,7 +458,7 @@ public class Skin : IDisposable
             return region;
         }
 
-        var texture = Optional< Texture >( name );
+        var texture = Optional< Texture2D >( name );
 
         if ( texture == null )
         {

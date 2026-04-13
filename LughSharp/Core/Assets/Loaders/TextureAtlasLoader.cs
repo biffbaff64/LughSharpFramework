@@ -72,7 +72,7 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
         {
             if ( page.TextureFile != null )
             {
-                var texture = assetManager.Get< Texture >( page.TextureFile.FullName );
+                var texture = assetManager.Get< Texture2D >( page.TextureFile.FullName );
                 page.Texture = texture;
             }
             else
@@ -118,7 +118,7 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
 
             if ( page.TextureFile != null )
             {
-                dependencies.Add( new AssetDescriptor( page.TextureFile, typeof( Texture ), tparams ) );
+                dependencies.Add( new AssetDescriptor( page.TextureFile, typeof( Texture2D ), tparams ) );
             }
         }
 

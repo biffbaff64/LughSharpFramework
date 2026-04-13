@@ -73,7 +73,7 @@ public class AssetManager : IDisposable
         typeof( PolygonRegion ),
         typeof( ShaderProgram ),
         typeof( Skin ),
-        typeof( Texture ),
+        typeof( Texture2D ),
         typeof( TextureAtlas )
     ];
 
@@ -157,7 +157,7 @@ public class AssetManager : IDisposable
             SetLoader( typeof( Pixmap ),            new PixmapLoader( resolver ) );
             SetLoader( typeof( ISound ),            new SoundLoader( resolver ) );
             SetLoader( typeof( TextureAtlas ),      new TextureAtlasLoader( resolver ) );
-            SetLoader( typeof( Texture ),           new TextureLoader( resolver ) );
+            SetLoader( typeof( Texture2D ),         new TextureLoader( resolver ) );
             SetLoader( typeof( Skin ),              new SkinLoader( resolver ) );
             SetLoader( typeof( ParticleEffect ),    new ParticleEffectLoader( resolver ) );
             SetLoader( typeof( PolygonRegion ),     new PolygonRegionLoader( resolver ) );
@@ -171,6 +171,10 @@ public class AssetManager : IDisposable
             // .obj loader here...
             // I18NBundle loader here...
             //@formatter:on
+
+            #if DEBUG
+            Logger.Debug( "Done." );
+            #endif
         }
 
         _executor          = new AsyncExecutor( 1, "AssetManager" );
@@ -411,7 +415,15 @@ public class AssetManager : IDisposable
                     }
                 }
 
-                Update();
+                bool done = Update();
+
+                // If all loading is complete but the asset was never registered,
+                // it was either cancelled or failed (with a listener swallowing
+                // the exception). Avoid spinning forever.
+                if ( done && ( _assetTypes.Get( filename ) == null ) )
+                {
+                    throw new RuntimeException( $"Asset '{filename}' failed to load or was cancelled." );
+                }
             }
 
             Thread.Yield();
@@ -492,14 +504,16 @@ public class AssetManager : IDisposable
         lock ( this )
         {
             _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetsByType );
-            assetsByType!.TryGetValue( name, out IRefCountedContainer? assetContainer );
 
-            if ( required && ( assetContainer == null ) )
+            if ( assetsByType != null )
             {
-                throw new RuntimeException( $"Asset not loaded: {name}" );
+                if ( assetsByType.TryGetValue( name, out IRefCountedContainer? assetContainer ) )
+                {
+                    return assetContainer.Asset as T;
+                }
             }
 
-            return assetContainer?.Asset as T;
+            return required ? throw new RuntimeException( $"Asset not loaded: {name}" ) : null;
         }
     }
 
@@ -507,34 +521,25 @@ public class AssetManager : IDisposable
     /// Retrieves all assets of the specified type and adds them to the provided list.
     /// </summary>
     /// <typeparam name="T">The type of assets to retrieve.</typeparam>
-    /// <param name="type">The type of the assets to retrieve.</param>
-    /// <param name="outArray">The list to which the retrieved assets will be added.</param>
     /// <returns>The list containing all assets of the specified type.</returns>
-    /// <exception cref="ArgumentNullException">
-    /// Thrown if the <paramref name="type"/> or <paramref name="outArray"/> is null.
-    /// </exception>
     /// <exception cref="RuntimeException">Thrown if no assets of the specified type are found.</exception>
-    public List< T > GetAll< T >( Type? type, List< T > outArray )
+    public List< T > GetAssetsOfType< T >()
     {
-        Guard.Against.Null( type );
-        Guard.Against.Null( outArray );
-
         lock ( this )
         {
-            lock ( this )
+            var outArray = new List< T >();
+            
+            if ( !_assets.TryGetValue( typeof( T ), out Dictionary< string, IRefCountedContainer >? assetsByType )
+              || ( assetsByType == null ) )
             {
-                if ( !_assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetsByType )
-                  || ( assetsByType == null ) )
-                {
-                    throw new RuntimeException( $"No assets loaded for type {type.FullName}" );
-                }
+                throw new RuntimeException( $"No assets loaded for type {typeof( T ).FullName}" );
+            }
 
-                foreach ( IRefCountedContainer assetContainer in assetsByType.Values )
+            foreach ( IRefCountedContainer assetContainer in assetsByType.Values )
+            {
+                if ( assetContainer.Asset is T asset )
                 {
-                    if ( assetContainer.Asset is T asset )
-                    {
-                        outArray.Add( asset );
-                    }
+                    outArray.Add( asset );
                 }
             }
 
@@ -1606,7 +1611,8 @@ public class AssetManager : IDisposable
                 }
             }
 
-            Logger.Debug( $"_assets Count       : {_assets.Count}" );
+            Logger.Debug( $"_assets Type Count  : {_assets.Count}" );
+            Logger.Debug( $"_assets Count       : {_assetTypes.Count}" );
             Logger.Debug( $"_loaders Count      : {_loaders.Count}" );
             Logger.Debug( $"_loaded             : {_loaded}" );
             Logger.Debug( $"_toLoad             : {_toLoad}" );
@@ -1645,8 +1651,8 @@ public class AssetManager : IDisposable
             Guard.Against.Null( _loaders );
             Guard.Against.Null( _assetTypes );
 
-            Logger.Debug( $"Number of Assets: {_assets.Count}" );
-            Logger.Debug( $"Number of Types: {_assetTypes.Count}" );
+            Logger.Debug( $"Number of Types : {_assets.Count}" );
+            Logger.Debug( $"Number of Assets: {_assetTypes.Count}" );
 
             Logger.Debug( $"\n--- Asset Loader Debug Dump ({_loaders.Count} Asset Types Registered) ---" );
 
@@ -1677,6 +1683,8 @@ public class AssetManager : IDisposable
                     Logger.Debug( $"    [Loader Class]: {concreteType.Name}" );
                 }
             }
+
+            DisplayMetrics();
 
             Logger.Debug( "\n--- End of Debug Dump ---" );
         }

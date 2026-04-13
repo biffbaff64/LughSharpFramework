@@ -69,7 +69,7 @@ public interface IPolygonBatch : IBatch
     /// Draws the polygon using the given vertices and triangles. Each vertices must be
     /// made up of 5 elements in this order: x, y, color, u, v.
     /// </summary>
-    void Draw( Texture texture,
+    void Draw( Texture2D texture,
                float[] polygonVertices,
                int verticesOffset,
                int verticesCount,

@@ -162,7 +162,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
                 foreach ( ModelTexture modelTexture in modelMaterial.Textures )
                 {
                     deps.Add( new AssetDescriptor( modelTexture.FileName,
-                                                   typeof( Texture ),
+                                                   typeof( Texture2D ),
                                                    textureLoaderParameters ) );
                 }
             }
@@ -208,7 +208,7 @@ public abstract class ModelLoader : AsynchronousAssetLoader
         {
             IDisposable disposable = disposables.Current;
 
-            if ( disposable is Texture )
+            if ( disposable is Texture2D )
             {
                 disposables.Dispose();
             }

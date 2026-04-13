@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024, 2025, 2026 Circa64 Software Projects / Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ public class DrawableUtils
         var pixmap = new Pixmap( width, height, LughFormat.RGBA8888 );
         pixmap.FillWithColor( color );
 
-        var drawable = new TextureRegionDrawable( new TextureRegion( new Texture( pixmap ) ) );
+        var drawable = new TextureRegionDrawable( new TextureRegion( new Texture2D( pixmap ) ) );
 
         pixmap.Dispose();
 

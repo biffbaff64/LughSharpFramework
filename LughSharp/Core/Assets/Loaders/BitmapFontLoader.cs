@@ -45,7 +45,7 @@ namespace LughSharp.Core.Assets.Loaders;
 
 /// <summary>
 /// <see cref="AssetLoader"/> for <see cref="BitmapFont"/> instances. Loads the font
-/// description file (.fnt) asynchronously, loads the <see cref="Texture"/> containing
+/// description file (.fnt) asynchronously, loads the <see cref="Texture2D"/> containing
 /// the glyphs as a dependency. The <see cref="BitmapFontParameter"/> allows you to
 /// set things like texture filters or whether to flip the glyphs vertically.
 /// </summary>
@@ -108,7 +108,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
                     textureParams.MagFilter  = p.MagFilter;
                 }
 
-                deps.Add( new AssetDescriptor( resolved, typeof( Texture ), textureParams ) );
+                deps.Add( new AssetDescriptor( resolved, typeof( Texture2D ), textureParams ) );
             }
         }
 
@@ -162,7 +162,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 
         for ( var i = 0; i < capacity; i++ )
         {
-            var texture = manager.Get< Texture >( _data.ImagePaths[ i ] );
+            var texture = manager.Get< Texture2D >( _data.ImagePaths[ i ] );
             regs.Add( new TextureRegion( texture! ) );
         }
 
@@ -221,7 +221,7 @@ public class BitmapFontParameter : AssetLoaderParameters
 
     /// <summary>
     /// optional <see cref="Graphics.Fonts.BitmapFontData"/> to be used instead of
-    /// loading the <see cref="Texture"/> directly. Use this if your font is
+    /// loading the <see cref="Texture2D"/> directly. Use this if your font is
     /// embedded in a <see cref="Skin"/>.
     /// </summary>
     public BitmapFontData? BitmapFontData { get; set; }

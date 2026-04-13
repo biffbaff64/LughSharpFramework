@@ -62,6 +62,11 @@ public class ImageProcessor
         set
         {
             field = value;
+            
+            // TODO: Fix this
+            // This line clamps Scale to [0, 1], which prevents generating 2× retina atlases.
+            // The Math.Min( 1.0f, field ) cap should be removed — it should only guard against
+            // zero/negative values.
             field = Math.Max( 0.0f, Math.Min( 1.0f, field ) );
         }
     } = 1.0f;
@@ -186,9 +191,14 @@ public class ImageProcessor
 
         if ( image.PixelFormat != PixelFormat.Format32bppArgb )
         {
-            image = new Bitmap( width, height, PixelFormat.Format32bppArgb );
+            var convertedImage = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-            Graphics.FromImage( image ).DrawImage( image, 0, 0, width, height );
+            using ( Graphics g = Graphics.FromImage( convertedImage ) )
+            {
+                g.DrawImage( image, 0, 0, width, height );
+            }
+
+            image = convertedImage;
         }
 
         bool   isPatch = name.EndsWith( ".9" );
@@ -244,20 +254,20 @@ public class ImageProcessor
             if ( Scale < 1 )
             {
                 // Scaling down: Use HighQualityBicubic for good quality downscaling
-                Graphics g = Graphics.FromImage( newImage );
+                using Graphics g = Graphics.FromImage( newImage );
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.DrawImage( image, 0, 0, width, height );
-                g.Dispose();
             }
             else
             {
-                // Scaling up or no scaling: Apply rendering hints
-                Graphics g = Graphics.FromImage( newImage );
-                g.CompositingQuality = CompositingQuality.HighQuality;   // VALUE_RENDER_QUALITY
-                g.InterpolationMode  = Resampling.ToInterpolationMode(); // Map resampling value
+                // Scaling up: Apply rendering hints
+                using Graphics g = Graphics.FromImage( newImage );
+                g.CompositingQuality = CompositingQuality.HighQuality;
+                g.InterpolationMode  = Resampling.ToInterpolationMode();
                 g.DrawImage( image, 0, 0, width, height );
-                g.Dispose();
             }
+
+            image = newImage;
         }
 
         // Strip digits, if any, from the end of name and use as index.
@@ -485,7 +495,11 @@ public class ImageProcessor
                                  GraphicsUnit.Pixel );
                 }
 
-                return new TexturePackerRect( strippedImage, 0, 0, newWidth, newHeight, false );
+                var rect = new TexturePackerRect( strippedImage, left, top, newWidth, newHeight, false );
+                rect.OriginalWidth  = width;
+                rect.OriginalHeight = height;
+
+                return rect;
             }
         }
         finally

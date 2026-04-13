@@ -718,8 +718,8 @@ public class BitmapFontCache
         float scaleX = Font.FontData.ScaleX;
         float scaleY = Font.FontData.ScaleY;
 
-//        x += glyph.Xoffset * scaleX;
-//        y += glyph.Yoffset * scaleY;
+        x += glyph.Xoffset * scaleX;
+        y += glyph.Yoffset * scaleY;
 
         float width  = glyph.Width * scaleX;
         float height = glyph.Height * scaleY;

@@ -49,25 +49,25 @@ namespace LughSharp.Core.Graphics.Images;
 [PublicAPI]
 public class NinePatch
 {
-    public float[]  Vertices     { get; set; } = new float[ 9 * 4 * 5 ];
-    public Color    Color        { get; set; } = new( ( Color )Color.White );
-    public Texture? Texture      { get; set; }
-    public int      Idx          { get; set; }
-    public int      BottomLeft   { get; set; }
-    public int      BottomCenter { get; set; }
-    public int      BottomRight  { get; set; }
-    public int      MiddleLeft   { get; set; }
-    public int      MiddleCenter { get; set; }
-    public int      MiddleRight  { get; set; }
-    public int      TopLeft      { get; set; }
-    public int      TopCenter    { get; set; }
-    public int      TopRight     { get; set; }
-    public float    LeftWidth    { get; set; }
-    public float    RightWidth   { get; set; }
-    public float    MiddleWidth  { get; set; }
-    public float    MiddleHeight { get; set; }
-    public float    TopHeight    { get; set; }
-    public float    BottomHeight { get; set; }
+    public float[]    Vertices     { get; set; } = new float[ 9 * 4 * 5 ];
+    public Color      Color        { get; set; } = new( ( Color )Color.White );
+    public Texture2D? Texture      { get; set; }
+    public int        Idx          { get; set; }
+    public int        BottomLeft   { get; set; }
+    public int        BottomCenter { get; set; }
+    public int        BottomRight  { get; set; }
+    public int        MiddleLeft   { get; set; }
+    public int        MiddleCenter { get; set; }
+    public int        MiddleRight  { get; set; }
+    public int        TopLeft      { get; set; }
+    public int        TopCenter    { get; set; }
+    public int        TopRight     { get; set; }
+    public float      LeftWidth    { get; set; }
+    public float      RightWidth   { get; set; }
+    public float      MiddleWidth  { get; set; }
+    public float      MiddleHeight { get; set; }
+    public float      TopHeight    { get; set; }
+    public float      BottomHeight { get; set; }
 
     public float TotalWidth => LeftWidth + MiddleWidth + RightWidth;
 
@@ -109,8 +109,8 @@ public class NinePatch
     public const int PosBottomCenter = 7;
     public const int PosBottomRight  = 8;
 
-    private const float Tolerance = 0.1f;
-
+    // ========================================================================
+    
     private static readonly Color _tmpDrawColor = new();
 
     private float _padBottom = -1;
@@ -130,7 +130,7 @@ public class NinePatch
     /// <param name="right">Pixels from right edge.</param>
     /// <param name="top">Pixels from top edge.</param>
     /// <param name="bottom">Pixels from bottom edge.</param>
-    public NinePatch( Texture texture, int left, int right, int top, int bottom )
+    public NinePatch( Texture2D texture, int left, int right, int top, int bottom )
         : this( new TextureRegion( texture ), left, right, top, bottom )
     {
     }
@@ -204,10 +204,10 @@ public class NinePatch
             if ( right > 0 )
             {
                 patches[ PosBottomRight ] = new TextureRegion( region,
-                                                             left + middleWidth,
-                                                             top + middleHeight,
-                                                             right,
-                                                             bottom );
+                                                               left + middleWidth,
+                                                               top + middleHeight,
+                                                               right,
+                                                               bottom );
             }
         }
 
@@ -239,14 +239,14 @@ public class NinePatch
     /// <summary>
     /// Construct a degenerate "nine" patch with only a center component.
     /// </summary>
-    public NinePatch( Texture texture, Color color )
+    public NinePatch( Texture2D texture, Color color )
         : this( texture )
     {
         Color = color;
     }
 
     /// Construct a degenerate "nine" patch with only a center component.
-    public NinePatch( Texture texture )
+    public NinePatch( Texture2D texture )
         : this( new TextureRegion( texture ) )
     {
     }
@@ -289,41 +289,41 @@ public class NinePatch
         Load( patches );
 
         if ( ( ( patches[ PosTopLeft ] != null )
-            && ( Math.Abs( patches[ PosTopLeft ]!.GetRegionWidth() - LeftWidth ) > Tolerance ) )
+            && ( Math.Abs( patches[ PosTopLeft ]!.GetRegionWidth() - LeftWidth ) > NumberUtils.FloatTolerance ) )
           || ( ( patches[ PosMiddleLeft ] != null )
-            && ( Math.Abs( patches[ PosMiddleLeft ]!.GetRegionWidth() - LeftWidth ) > Tolerance ) )
+            && ( Math.Abs( patches[ PosMiddleLeft ]!.GetRegionWidth() - LeftWidth ) > NumberUtils.FloatTolerance ) )
           || ( ( patches[ PosBottomLeft ] != null )
-            && ( Math.Abs( patches[ PosBottomLeft ]!.GetRegionWidth() - LeftWidth ) > Tolerance ) ) )
+            && ( Math.Abs( patches[ PosBottomLeft ]!.GetRegionWidth() - LeftWidth ) > NumberUtils.FloatTolerance ) ) )
         {
             throw new RuntimeException( "Left side patches must have the same width" );
         }
 
         if ( ( ( patches[ PosTopRight ] != null )
-            && ( Math.Abs( patches[ PosTopRight ]!.GetRegionWidth() - RightWidth ) > Tolerance ) )
+            && ( Math.Abs( patches[ PosTopRight ]!.GetRegionWidth() - RightWidth ) > NumberUtils.FloatTolerance ) )
           || ( ( patches[ PosMiddleRight ] != null )
-            && ( Math.Abs( patches[ PosMiddleRight ]!.GetRegionWidth() - RightWidth ) > Tolerance ) )
+            && ( Math.Abs( patches[ PosMiddleRight ]!.GetRegionWidth() - RightWidth ) > NumberUtils.FloatTolerance ) )
           || ( ( patches[ PosBottomRight ] != null )
-            && ( Math.Abs( patches[ PosBottomRight ]!.GetRegionWidth() - RightWidth ) > Tolerance ) ) )
+            && ( Math.Abs( patches[ PosBottomRight ]!.GetRegionWidth() - RightWidth ) > NumberUtils.FloatTolerance ) ) )
         {
             throw new RuntimeException( "Right side patches must have the same width" );
         }
 
         if ( ( ( patches[ PosBottomLeft ] != null )
-            && ( Math.Abs( patches[ PosBottomLeft ]!.GetRegionHeight() - BottomHeight ) > Tolerance ) )
+            && ( Math.Abs( patches[ PosBottomLeft ]!.GetRegionHeight() - BottomHeight ) > NumberUtils.FloatTolerance ) )
           || ( ( patches[ PosBottomCenter ] != null )
-            && ( Math.Abs( patches[ PosBottomCenter ]!.GetRegionHeight() - BottomHeight ) > Tolerance ) )
+            && ( Math.Abs( patches[ PosBottomCenter ]!.GetRegionHeight() - BottomHeight ) > NumberUtils.FloatTolerance ) )
           || ( ( patches[ PosBottomRight ] != null )
-            && ( Math.Abs( patches[ PosBottomRight ]!.GetRegionHeight() - BottomHeight ) > Tolerance ) ) )
+            && ( Math.Abs( patches[ PosBottomRight ]!.GetRegionHeight() - BottomHeight ) > NumberUtils.FloatTolerance ) ) )
         {
             throw new RuntimeException( "Bottom side patches must have the same height" );
         }
 
         if ( ( ( patches[ PosTopLeft ] != null )
-            && ( Math.Abs( patches[ PosTopLeft ]!.GetRegionHeight() - TopHeight ) > Tolerance ) )
+            && ( Math.Abs( patches[ PosTopLeft ]!.GetRegionHeight() - TopHeight ) > NumberUtils.FloatTolerance ) )
           || ( ( patches[ PosTopCenter ] != null )
-            && ( Math.Abs( patches[ PosTopCenter ]!.GetRegionHeight() - TopHeight ) > Tolerance ) )
+            && ( Math.Abs( patches[ PosTopCenter ]!.GetRegionHeight() - TopHeight ) > NumberUtils.FloatTolerance ) )
           || ( ( patches[ PosTopRight ] != null )
-            && ( Math.Abs( patches[ PosTopRight ]!.GetRegionHeight() - TopHeight ) > Tolerance ) ) )
+            && ( Math.Abs( patches[ PosTopRight ]!.GetRegionHeight() - TopHeight ) > NumberUtils.FloatTolerance ) ) )
         {
             throw new RuntimeException( "Top side patches must have the same height" );
         }
@@ -516,6 +516,14 @@ public class NinePatch
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="region"></param>
+    /// <param name="isStretchW"></param>
+    /// <param name="isStretchH"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     private int Add( TextureRegion? region, bool isStretchW, bool isStretchH )
     {
         Guard.Against.Null( region );
@@ -695,7 +703,7 @@ public class NinePatch
                 vertices[ i + 1 ] = ( sin * vx ) + ( cos * vy ) + worldOriginY;
             }
         }
-        else if ( ( Math.Abs( scaleX - 1 ) > Tolerance ) || ( Math.Abs( scaleY - 1 ) > Tolerance ) )
+        else if ( ( Math.Abs( scaleX - 1 ) > NumberUtils.FloatTolerance ) || ( Math.Abs( scaleY - 1 ) > NumberUtils.FloatTolerance ) )
         {
             for ( var i = 0; i < n; i += 5 )
             {
@@ -755,6 +763,8 @@ public class NinePatch
             PadBottom *= scaleY;
         }
     }
-
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -115,7 +115,7 @@ public class PNGDecoder
     // ========================================================================
 
     /// <summary>
-    /// Analyzes the specified <see cref="Texture"/> image to extract metadata, including
+    /// Analyzes the specified <see cref="Texture2D"/> image to extract metadata, including
     /// details such as dimensions, bit depth, color type, and interlace method, while
     /// optionally displaying the results.
     /// The extracted details are logged for debugging purposes if '<paramref name="verbose"/>'
@@ -123,9 +123,9 @@ public class PNGDecoder
     /// This method will return, after logging a warning, if the provided texture is null
     /// or if the texture has no image data.
     /// </summary>
-    /// <param name="texture">The <see cref="Texture"/> image to analyze.</param>
+    /// <param name="texture">The <see cref="Texture2D"/> image to analyze.</param>
     /// <param name="verbose">Specifies whether to display the analysis results in the output.</param>
-    public static void AnalysePNG( Texture? texture, bool verbose = false )
+    public static void AnalysePNG( Texture2D? texture, bool verbose = false )
     {
         if ( texture == null )
         {
@@ -712,7 +712,7 @@ public class PNGDecoder
             BitConverter.ToInt32( heightbytes, 0 ) );
     }
 
-    public static byte[] CreatePNGFromTexture( Texture texture )
+    public static byte[] CreatePNGFromTexture( Texture2D texture )
     {
         Logger.Checkpoint();
 

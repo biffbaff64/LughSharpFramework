@@ -44,7 +44,7 @@ public class SpriteBatchTests
     private const int TestHeight = 64;
 
     private SpriteBatch? _spriteBatch;
-    private Texture?     _testTexture;
+    private Texture2D?     _testTexture;
 
     // ========================================================================
 
@@ -70,7 +70,7 @@ public class SpriteBatchTests
 
         Assert.That( textureData, Is.Not.Null, "TextureData creation failed" );
 
-        _testTexture = new Texture( textureData );
+        _testTexture = new Texture2D( textureData );
 
         Assert.That( _testTexture, Is.Not.Null, "Texture creation failed" );
 

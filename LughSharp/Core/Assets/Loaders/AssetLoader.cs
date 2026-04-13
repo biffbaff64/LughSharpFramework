@@ -96,6 +96,17 @@ public abstract class AssetLoader
     public abstract List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? p ) where TP : AssetLoaderParameters;
+
+    /// <summary>
+    /// Loads the asset and returns it as an untyped object. Synchronous loaders
+    /// must override this to invoke their typed <c>Load</c> method.
+    /// </summary>
+    public virtual object? LoadAsset( AssetManager assetManager,
+                                      FileInfo file,
+                                      AssetLoaderParameters? parameter )
+    {
+        throw new NotSupportedException( $"{GetType().Name} does not support LoadAsset." );
+    }
 }
 
 // ============================================================================

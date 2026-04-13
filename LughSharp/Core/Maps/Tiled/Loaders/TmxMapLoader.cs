@@ -84,12 +84,12 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
         // ----------------------------------------
 
-        var              textures     = new Dictionary< string, Texture >();
+        var              textures     = new Dictionary< string, Texture2D >();
         List< FileInfo > textureFiles = GetDependencyFileHandles( tmxFile );
 
         foreach ( FileInfo textureFile in textureFiles )
         {
-            var texture = new Texture( textureFile, parameter.GenerateMipMaps );
+            var texture = new Texture2D( textureFile, parameter.GenerateMipMaps );
 
             texture.SetFilter( parameter.TextureMinFilter, parameter.TextureMagFilter );
             textures.Put( Path.GetFullPath( textureFile.Name ), texture );
@@ -164,7 +164,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
         foreach ( FileInfo handle in fileHandles )
         {
-            descriptors.Add( new AssetDescriptor( handle, typeof( Texture ), textureParameter ) );
+            descriptors.Add( new AssetDescriptor( handle, typeof( Texture2D ), textureParameter ) );
         }
 
         return descriptors;

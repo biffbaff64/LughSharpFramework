@@ -114,7 +114,7 @@ public class Sprite2D : TextureRegion
     /// Creates a sprite with width, height, and texture region equal to the
     /// size of the texture.
     /// </summary>
-    public Sprite2D( Texture texture )
+    public Sprite2D( Texture2D texture )
         : this( texture, 0, 0, texture.Width, texture.Height )
     {
     }
@@ -130,7 +130,7 @@ public class Sprite2D : TextureRegion
     /// <param name="srcHeight">
     /// The height of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
-    public Sprite2D( Texture texture, int srcWidth, int srcHeight )
+    public Sprite2D( Texture2D texture, int srcWidth, int srcHeight )
         : this( texture, 0, 0, srcWidth, srcHeight )
     {
     }
@@ -148,7 +148,7 @@ public class Sprite2D : TextureRegion
     /// <param name="srcHeight">
     /// The height of the texture region, may be negative to flip the sprite when drawn.
     /// </param>
-    public Sprite2D( Texture? texture, int srcX, int srcY, int srcWidth, int srcHeight )
+    public Sprite2D( Texture2D? texture, int srcX, int srcY, int srcWidth, int srcHeight )
     {
         Texture = texture ?? throw new ArgumentException( "texture cannot be null." );
 

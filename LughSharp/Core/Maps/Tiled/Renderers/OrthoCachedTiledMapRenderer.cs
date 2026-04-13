@@ -335,7 +335,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
                 int  rotations = cell.GetRotation();
 
                 TextureRegion region  = tile.TextureRegion;
-                Texture?      texture = region.Texture;
+                Texture2D?      texture = region.Texture;
 
                 if ( texture == null )
                 {

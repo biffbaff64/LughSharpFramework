@@ -418,9 +418,9 @@ public class ParticleEffect : IDisposable
         return new ParticleEmitter( emitter );
     }
 
-    protected Texture LoadTexture( FileInfo file )
+    protected Texture2D LoadTexture( FileInfo file )
     {
-        return new Texture( file, false );
+        return new Texture2D( file, false );
     }
 
     // ========================================================================

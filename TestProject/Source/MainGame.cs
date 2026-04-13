@@ -7,7 +7,9 @@ using JetBrains.Annotations;
 
 using LughSharp.Core;
 using LughSharp.Core.Assets;
+using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
+using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.G2D;
@@ -31,20 +33,21 @@ public class MainGame : LughGame
     private OrthographicGameCamera? _tiledMapCam;
     private OrthographicGameCamera? _spriteCam;
     private OrthographicGameCamera? _hudCam;
-    private Texture?                _texture;
+    private Texture2D?              _texture;
     private TextureRegion?          _textureRegion;
     private NinePatch?              _ninePatch;
     private BitmapFont?             _font;
     private BitmapFont?             _freetypeFont;
     private InputMultiplexer        _inputMultiplexer = new();
-    
-    private bool    _disposed;
+    private AtlasLoader?            _atlasLoader;
 
-    private readonly MapTests    _mapTests    = new();
-    private readonly FontTests   _fontTests   = new();
-    private readonly SpriteTests _spriteTests = new();
-    private readonly StageTests  _stageTests  = new();
-    private readonly ImageTests  _imageTests  = new();
+    private bool _disposed;
+
+    private readonly MapTests     _mapTests   = new();
+    private readonly FontTests    _fontTests  = new();
+    private readonly StageTests   _stageTests = new();
+    private readonly ImageTests   _imageTests = new();
+    private          SpriteTests? _spriteTests;
 
     // ========================================================================
     // ========================================================================
@@ -56,17 +59,25 @@ public class MainGame : LughGame
         // as OpenGL will not be ready.
         _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
+        _atlasLoader  = new AtlasLoader( _assetManager );
+        _spriteTests  = new SpriteTests( _assetManager );
+
+        _atlasLoader.RegisterAtlas( Assets.AnimationsAtlas )
+                    .RegisterAtlas( Assets.ObjectsAtlas )
+                    .RegisterAtlas( Assets.InputAtlas )
+                    .RegisterAtlas( Assets.TextAtlas )
+                    .Load();
 
         CreateCameras();
 //        CreateAssets();
 //        _mapTests.CreateMap();
-        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
+//        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
 //        _font         = _fontTests.CreateBitmapFont();
 //        _freetypeFont = _fontTests.CreateFreeTypeFont();
-//        _spriteTests.Create();
+        _spriteTests.Create();
 
         _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
-        
+
         if ( _inputMultiplexer.Processors.Size > 0 )
         {
             Engine.Input.InputProcessor = _inputMultiplexer;
@@ -80,7 +91,7 @@ public class MainGame : LughGame
     /// <inheritdoc />
     public override void Update( float delta )
     {
-        _spriteTests.Update( delta );
+        _spriteTests?.Update( delta );
         _mapTests.ScrollMap( ref _tiledMapCam );
     }
 
@@ -135,7 +146,7 @@ public class MainGame : LughGame
                     _ninePatch.Draw( _spriteBatch, 500, 100, 100, 10 );
                 }
 
-                _spriteTests.Draw( _spriteBatch );
+                _spriteTests?.Draw( _spriteBatch );
 
                 _spriteBatch.End();
             }
@@ -253,9 +264,9 @@ public class MainGame : LughGame
 
     private void CreateAssets()
     {
-        _texture       = new Texture( Assets.Solid112X112 );
-        _textureRegion = new TextureRegion( new Texture( Assets.CompleteStar ) );
-        _ninePatch     = new NinePatch( new Texture( Assets.Bar9 ), 1, 1, 1, 1 );
+        _texture       = new Texture2D( Assets.Solid112X112 );
+        _textureRegion = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
+        _ninePatch     = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
     }
 }
 

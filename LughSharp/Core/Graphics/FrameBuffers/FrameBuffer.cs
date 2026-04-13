@@ -48,7 +48,7 @@ namespace LughSharp.Core.Graphics.FrameBuffers;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class FrameBuffer : GLFrameBuffer< Texture >
+public class FrameBuffer : GLFrameBuffer< Texture2D >
 {
     public FrameBuffer()
     {
@@ -98,7 +98,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     }
 
     /// <inheritdoc />
-    protected override Texture CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
+    protected override Texture2D CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
     {
         var data = new GLOnlyTextureData( BufferBuilder.Width,
                                           BufferBuilder.Height,
@@ -107,7 +107,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
                                           attachmentSpec.Format,
                                           attachmentSpec.Type );
 
-        var result = new Texture( data );
+        var result = new Texture2D( data );
 
         result.SetFilter( TextureFilterMode.Linear, TextureFilterMode.Linear );
         result.SetWrap( TextureWrapMode.ClampToEdge, TextureWrapMode.ClampToEdge );
@@ -119,7 +119,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     /// Override this method in a derived class to dispose the
     /// backing texture as you like.
     /// </summary>
-    protected override void DisposeColorTexture( Texture colorTexture )
+    protected override void DisposeColorTexture( Texture2D colorTexture )
     {
         colorTexture.Dispose();
     }
@@ -128,7 +128,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     /// Override this method in a derived class to attach the backing
     /// texture to the GL framebuffer object.
     /// </summary>
-    protected override void AttachFrameBufferColorTexture( Texture texture )
+    protected override void AttachFrameBufferColorTexture( Texture2D texture )
     {
         Engine.GL.FramebufferTexture2D( IGL.GLFramebuffer,
                                         IGL.GLColorAttachment0,

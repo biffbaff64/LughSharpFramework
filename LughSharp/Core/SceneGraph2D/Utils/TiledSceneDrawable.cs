@@ -92,7 +92,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
                 x += regionWidth;
             }
 
-            Texture? texture = region.Texture;
+            Texture2D? texture = region.Texture;
 
             if ( texture == null )
             {

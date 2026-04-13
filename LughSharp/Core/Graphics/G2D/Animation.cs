@@ -28,24 +28,26 @@ using LughSharp.Core.Maths;
 
 namespace LughSharp.Core.Graphics.G2D;
 
+/// <summary>
+/// Defines possible playback modes for an <see cref="Animation{T}"/>.
+/// </summary>
+[PublicAPI]
+public enum AnimationMode
+{
+    Normal,
+    Reversed,
+    Loop,
+    LoopReversed,
+    LoopPingpong,
+    LoopRandom
+}
+
+// ============================================================================
+// ============================================================================
+
 [PublicAPI]
 public class Animation< T >
 {
-    /// <summary>
-    /// Defines possible playback modes for an <see cref="Animation{T}"/>.
-    /// </summary>
-    public enum AnimMode
-    {
-        Normal,
-        Reversed,
-        Loop,
-        LoopReversed,
-        LoopPingpong,
-        LoopRandom
-    }
-
-    // ========================================================================
-
     private float _animationDuration;
     private float _frameDuration;
     private int   _lastFrameNumber;
@@ -79,7 +81,7 @@ public class Animation< T >
     /// Otherwise, it returns an object[].
     /// </param>
     /// <param name="playMode"> The required animation playback mode. </param>
-    public Animation( float frameDuration, List< T > keyFrames, AnimMode playMode )
+    public Animation( float frameDuration, List< T > keyFrames, AnimationMode playMode )
         : this( frameDuration, keyFrames )
     {
         PlayMode = playMode;
@@ -99,7 +101,7 @@ public class Animation< T >
     /// <summary>
     /// The animation play mode.
     /// </summary>
-    public AnimMode PlayMode { get; set; } = AnimMode.Normal;
+    public AnimationMode PlayMode { get; set; } = AnimationMode.Normal;
 
     /// <summary>
     /// The keyframes[] array where all the frames of the
@@ -107,7 +109,7 @@ public class Animation< T >
     /// </summary>
     public T[] KeyFrames
     {
-        get => field;
+        get;
         set
         {
             field              = value;
@@ -128,21 +130,19 @@ public class Animation< T >
     {
         // we set the play mode by overriding the previous mode
         // based on looping parameter value
-        AnimMode oldPlayMode = PlayMode;
+        AnimationMode oldPlayMode = PlayMode;
 
-        if ( looping
-          && ( ( PlayMode == AnimMode.Normal )
-            || ( PlayMode == AnimMode.Reversed ) ) )
+        if ( looping && ( PlayMode is AnimationMode.Normal or AnimationMode.Reversed ) )
         {
-            PlayMode = PlayMode == AnimMode.Normal ? AnimMode.Loop : AnimMode.LoopReversed;
+            PlayMode = PlayMode == AnimationMode.Normal
+                ? AnimationMode.Loop
+                : AnimationMode.LoopReversed;
         }
-        else if ( !looping
-               && !( ( PlayMode == AnimMode.Normal )
-                  || ( PlayMode == AnimMode.Reversed ) ) )
+        else if ( !looping && !(PlayMode is AnimationMode.Normal or AnimationMode.Reversed) )
         {
-            PlayMode = PlayMode == AnimMode.LoopReversed
-                ? AnimMode.Reversed
-                : AnimMode.Loop;
+            PlayMode = PlayMode == AnimationMode.LoopReversed
+                ? AnimationMode.Reversed
+                : AnimationMode.Loop;
         }
 
         T frame = GetKeyFrame( stateTime );
@@ -152,12 +152,12 @@ public class Animation< T >
     }
 
     /// <summary>
-    /// Returns a frame based on the so called state time. This is the amount
-    /// of seconds an object has spent in the state this Animation instance
-    /// represents, e.g. running, jumping and so on using the mode specified by
-    /// <see cref="PlayMode"/> property.
+    /// Returns a frame based on the state time.
+    /// This is the amount of seconds an object has spent in the state this
+    /// Animation instance represents, e.g. running, jumping and so on using
+    /// the mode specified by <see cref="PlayMode"/> property.
     /// </summary>
-    /// <param name="stateTime"> </param>
+    /// <param name="stateTime">the time spent in the state represented by this animation.</param>
     /// <returns> the frame of animation for the given state time.</returns>
     public T GetKeyFrame( float stateTime )
     {
@@ -180,21 +180,21 @@ public class Animation< T >
 
         switch ( PlayMode )
         {
-            case AnimMode.Normal:
+            case AnimationMode.Normal:
             {
                 frameNumber = Math.Min( KeyFrames.Length - 1, frameNumber );
 
                 break;
             }
 
-            case AnimMode.Loop:
+            case AnimationMode.Loop:
             {
                 frameNumber %= KeyFrames.Length;
 
                 break;
             }
 
-            case AnimMode.LoopPingpong:
+            case AnimationMode.LoopPingpong:
             {
                 frameNumber %= ( KeyFrames.Length * 2 ) - 2;
 
@@ -206,7 +206,7 @@ public class Animation< T >
                 break;
             }
 
-            case AnimMode.LoopRandom:
+            case AnimationMode.LoopRandom:
             {
                 var lastFrameNumber = ( int )( _lastStateTime / _frameDuration );
 
@@ -217,14 +217,14 @@ public class Animation< T >
                 break;
             }
 
-            case AnimMode.Reversed:
+            case AnimationMode.Reversed:
             {
                 frameNumber = Math.Max( KeyFrames.Length - frameNumber - 1, 0 );
 
                 break;
             }
 
-            case AnimMode.LoopReversed:
+            case AnimationMode.LoopReversed:
             {
                 frameNumber %= KeyFrames.Length;
                 frameNumber =  KeyFrames.Length - frameNumber - 1;
@@ -279,3 +279,7 @@ public class Animation< T >
         return _animationDuration;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -96,7 +96,7 @@ public class TextureAtlasData
                 page.Width  = int.Parse( entry[ 1 ] );
                 page.Height = int.Parse( entry[ 2 ] );
             },
-            [ "format" ] = page => { page.Format = ParseFormat( entry[ 1 ] ); },
+            [ "format" ] = page => { page.Format = int.Parse( entry[ 1 ] ); },
             [ "filter" ] = page =>
             {
                 page.MinFilter = Enum.Parse< TextureFilterMode >( entry[ 1 ] );
@@ -443,7 +443,7 @@ public class TextureAtlasData
         /// <summary>
         /// May be null if the texture is not yet loaded.
         /// </summary>
-        public Texture? Texture { get; set; }
+        public Texture2D? Texture { get; set; }
 
         /// <summary>
         /// May be null if this page isn't associated with a file. In that

@@ -1065,7 +1065,7 @@ public class BitmapFontData
         {
             foreach ( string path in ImagePaths )
             {
-                pageRegions.Add( new TextureRegion( new Texture( path ) ) );
+                pageRegions.Add( new TextureRegion( new Texture2D( path ) ) );
             }
         }
 

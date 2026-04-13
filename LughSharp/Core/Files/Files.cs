@@ -22,14 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using LughSharp.Core.Utils.Exceptions;
-
 namespace LughSharp.Core.Files;
 
 /// <summary>
@@ -63,7 +55,7 @@ public class Files : IFiles
             {
                 value = value.TrimEnd( Path.DirectorySeparatorChar );
             }
-            
+
             field = value;
         }
     } = "Assets";

@@ -56,7 +56,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
     {
         Guard.Against.Null( file?.Name );
 
-        var texture = manager.Get< Texture >( manager.GetDependencies( file.Name )!.First() );
+        var texture = manager.Get< Texture2D >( manager.GetDependencies( file.Name )!.First() );
 
         return Load( new TextureRegion( texture! ), file );
     }
@@ -119,7 +119,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
 
         if ( image != null )
         {
-            List< AssetDescriptor > deps = [ new( new FileInfo( siblingFilePath ), typeof( Texture ) ) ];
+            List< AssetDescriptor > deps = [ new( new FileInfo( siblingFilePath ), typeof( Texture2D ) ) ];
 
             return deps;
         }

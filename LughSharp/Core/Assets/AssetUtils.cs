@@ -86,13 +86,14 @@ public class AssetUtils
     /// Loads a texture atlas from the specified atlas name.
     /// </summary>
     /// <param name="atlasName"> The full name of the specified atlas </param>
-    /// <returns>A <see cref="TextureAtlas"/> object representing the loaded atlas.</returns>
-    public TextureAtlas LoadAtlas( string atlasName )
+    public void LoadAtlas( string atlasName )
     {
-        // Ensure that the path contains the path to the assets folder.
-        atlasName = IOUtils.AssetPath( atlasName );
+//        // Ensure that the path contains the path to the assets folder.
+//        atlasName = IOUtils.AssetPath( atlasName );
+//
+//        return new TextureAtlas( atlasName );
 
-        return new TextureAtlas( atlasName );
+        LoadSingleAsset< TextureAtlas >( atlasName );
     }
 
     /// <summary>

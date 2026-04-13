@@ -35,7 +35,7 @@ namespace LughSharp.Core.Assets.Loaders;
 /// </summary>
 /// <typeparam name="TA">The type of the asset to load.</typeparam>
 [PublicAPI]
-public abstract class SynchronousAssetLoader< TA > : AssetLoader
+public abstract class SynchronousAssetLoader< TA > : AssetLoader where TA : class
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="SynchronousAssetLoader{TAssetType}"/>
@@ -55,6 +55,14 @@ public abstract class SynchronousAssetLoader< TA > : AssetLoader
     /// <param name="parameter">The parameters for loading the asset.</param>
     /// <returns>The loaded asset of type <typeparamref name="TA"/>.</returns>
     public abstract TA Load( AssetManager assetManager, FileInfo file, AssetLoaderParameters parameter );
+
+    /// <inheritdoc/>
+    public override object? LoadAsset( AssetManager assetManager,
+                                       FileInfo file,
+                                       AssetLoaderParameters? parameter )
+    {
+        return Load( assetManager, file, parameter! );
+    }
 }
 
 // ============================================================================

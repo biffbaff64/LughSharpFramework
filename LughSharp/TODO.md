@@ -431,6 +431,7 @@ LUGHSHARP/CORE/GRAPHICS/ATLASES
 
       CODE   DOCU   FOOTER
       ----   ----   ------
+    - IP   - IP   - DONE - AtlasLoader
     - DONE - DONE - DONE - AtlasRegion
     - DONE -      - DONE - AtlasSprite
     - DONE - DONE - DONE - TextureAtlas
@@ -514,14 +515,14 @@ LUGHSHARP/CORE/GRAPHICS/IMAGES
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      -      - Gdx2DPixmap
-    -      -      -      - GLTexture            Combine with Texture
+    - DONE - DONE - DONE - GLTexture
     - DONE - DONE - DONE - GLTextureArray
-    -      -      -      - NinePatch
+    - DONE - IP   - DONE - NinePatch
     - DONE - IP   - DONE - Pixmap
     -      -      -      - PixmapData
     -      -      -      - PixmapDownloader
     -      -      -      - PixmapIO
-    -      -      -      - Texture              Combine with GLTexture
+    - DONE - DONE - DONE - Texture2D
     -      -      -      - TextureRegion
 
 LUGHSHARP/CORE/GRAPHICS/IMAGES/DECODERS

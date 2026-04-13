@@ -42,7 +42,7 @@ public class TextureRegion
     /// <summary>
     /// Represents the texture associated with a texture region.
     /// </summary>
-    public Texture? Texture { get; set; }
+    public Texture2D? Texture { get; set; }
 
     // ========================================================================
 
@@ -68,7 +68,7 @@ public class TextureRegion
     /// width, and height. Used for rendering only a subsection of the
     /// original texture.
     /// </summary>
-    public TextureRegion( Texture? texture )
+    public TextureRegion( Texture2D? texture )
     {
         Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
 
@@ -87,7 +87,7 @@ public class TextureRegion
     /// <param name="height">
     /// The height of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
-    public TextureRegion( Texture? texture, int width, int height )
+    public TextureRegion( Texture2D? texture, int width, int height )
     {
         Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
         SetRegion( 0, 0, width, height );
@@ -106,7 +106,7 @@ public class TextureRegion
     /// <param name="height">
     /// The height of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
-    public TextureRegion( Texture? texture, int x, int y, int width, int height )
+    public TextureRegion( Texture2D? texture, int x, int y, int width, int height )
     {
         Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
         SetRegion( x, y, width, height );
@@ -122,7 +122,7 @@ public class TextureRegion
     /// <param name="u2"></param>
     /// <param name="v2"></param>
     /// <exception cref="RuntimeException"></exception>
-    public TextureRegion( Texture? texture, float u, float v, float u2, float v2 )
+    public TextureRegion( Texture2D? texture, float u, float v, float u2, float v2 )
     {
         Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
         SetRegionSafe( u, v, u2, v2 );
@@ -171,7 +171,7 @@ public class TextureRegion
     /// <summary>
     /// </summary>
     /// <param name="texture"></param>
-    public void SetRegion( Texture texture )
+    public void SetRegion( Texture2D texture )
     {
         Texture = texture;
         SetRegion( 0, 0, texture.Width, texture.Height );
@@ -345,6 +345,41 @@ public class TextureRegion
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tileWidth"></param>
+    /// <param name="tileHeight"></param>
+    /// <returns></returns>
+    public TextureRegion[] SplitInto( int tileWidth, int tileHeight )
+    {
+        int x      = RegionX;
+        int y      = RegionY;
+        int width  = _regionWidth;
+        int height = _regionHeight;
+
+        int rows = height / tileHeight;
+        int cols = width / tileWidth;
+
+        int targetTiles = rows * cols;
+        
+        int startX  = x;
+        var tiles   = new TextureRegion[ targetTiles ];
+        var tileNum = 0;
+        
+        for ( var row = 0; row < rows; row++, y += tileHeight )
+        {
+            x = startX;
+
+            for ( var col = 0; col < cols; col++, x += tileWidth )
+            {
+                tiles[ tileNum++ ] = new TextureRegion( Texture, x, y, tileWidth, tileHeight );
+            }
+        }
+
+        return tiles;
+    }
+
+    /// <summary>
     /// Helper function to create tiles out of this TextureRegion starting from the
     /// top left corner going to the right and ending at the bottom right corner.
     /// Only complete tiles will be returned so if the region's width or height are
@@ -391,7 +426,7 @@ public class TextureRegion
     /// <param name="tileWidth">Required tile's width in pixels.</param>
     /// <param name="tileHeight">Required tile's height in pixels.</param>
     /// <returns>A 2D array of TextureRegions index by [row, column].</returns>
-    public static TextureRegion[ , ] Split( Texture texture, int tileWidth, int tileHeight )
+    public static TextureRegion[ , ] Split( Texture2D texture, int tileWidth, int tileHeight )
     {
         var region = new TextureRegion( texture );
 

@@ -45,7 +45,7 @@ public static class ScreenUtils
     /// Returns the current framebuffer contents as a <see cref="TextureRegion"/> with
     /// a width and height equal to the current screen size.
     /// <para>
-    /// The base <see cref="Texture"/> always has <see cref="MathUtils.NextPowerOfTwo"/>
+    /// The base <see cref="Texture2D"/> always has <see cref="MathUtils.NextPowerOfTwo"/>
     /// dimensions and RGBA8888 <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>. It can be
     /// accessed via <see cref="TextureRegion.Texture"/>. The texture is not managed and
     /// has to be reloaded manually on a context loss.
@@ -106,7 +106,7 @@ public static class ScreenUtils
     /// Returns a portion of the current framebuffer contents specified by x, y,
     /// width and height as a <see cref="TextureRegion"/> with the same dimensions.
     /// <para>
-    /// The base <see cref="Texture"/> always has <see cref="MathUtils.NextPowerOfTwo"/>
+    /// The base <see cref="Texture2D"/> always has <see cref="MathUtils.NextPowerOfTwo"/>
     /// dimensions and RGBA8888 <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>. It can be
     /// accessed via <see cref="TextureRegion.Texture"/>.
     /// </para>
@@ -133,7 +133,7 @@ public static class ScreenUtils
         potPixmap.Blending = Pixmap.BlendType.None;
         potPixmap.DrawPixmap( pixmap, 0, 0 );
 
-        var texture       = new Texture( potPixmap );
+        var texture       = new Texture2D( potPixmap );
         var textureRegion = new TextureRegion( texture, 0, h, w, -h );
 
         potPixmap.Dispose();

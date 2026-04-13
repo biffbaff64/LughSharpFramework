@@ -17,6 +17,7 @@ WORKING:
 - BitmapFont support.
 - Json handling to support Scene2D Skins.
 - Ninepatch support
+- Sprite2D animations.
 
 IN PROGRESS:
 

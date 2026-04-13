@@ -172,7 +172,7 @@ public interface IBatch : IDisposable
     /// and height, from region.Width and region.Height, in pixels. The rectangle is offset by origin.X,
     /// origin.Y relative to the origin. Scale specifies the scaling factor by which the rectangle
     /// should be scaled around originX, originY. Rotation specifies the angle of counter clockwise
-    /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture"/>
+    /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture2D"/>
     /// given by srcX, srcY and srcWidth, srcHeight is used.
     /// <para>
     /// These coordinates and sizes are given in texels. FlipX and FlipY specify whether the texture
@@ -195,7 +195,7 @@ public interface IBatch : IDisposable
     /// </param>
     /// <param name="flipX"> whether to flip the sprite horizontally </param>
     /// <param name="flipY"> whether to flip the sprite vertically </param>
-    void Draw( Texture texture,
+    void Draw( Texture2D texture,
                GRect region,
                Point2D origin,
                Point2D scale,
@@ -206,7 +206,7 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
-    /// in pixels. The portion of the <see cref="Texture"/> given by srcX, srcY and srcWidth,
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
     /// srcHeight is used. These coordinates and sizes are given in texels. FlipX and flipY
     /// specify whether the texture portion should be flipped horizontally or vertically.
     /// </summary>
@@ -219,7 +219,7 @@ public interface IBatch : IDisposable
     /// </param>
     /// <param name="flipX"> whether to flip the sprite horizontally </param>
     /// <param name="flipY"> whether to flip the sprite vertically </param>
-    void Draw( Texture texture,
+    void Draw( Texture2D texture,
                GRect region,
                GRect src,
                bool flipX,
@@ -227,7 +227,7 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
-    /// in pixels. The portion of the <see cref="Texture"/> given by srcX, srcY and srcWidth,
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
     /// srcHeight are used. These coordinates and sizes are given in texels.
     /// </summary>
     /// <param name="texture"></param>
@@ -236,11 +236,11 @@ public interface IBatch : IDisposable
     /// <param name="src">
     /// the x &amp; y coordinates in texel space, and source width &amp; height in texels.
     /// </param>
-    void Draw( Texture texture, float x, float y, GRect src );
+    void Draw( Texture2D texture, float x, float y, GRect src );
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
-    /// in pixels. The portion of the <see cref="Texture"/> given by u, v and u2, v2 are used.
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by u, v and u2, v2 are used.
     /// These coordinates and sizes are given in texture size percentage. The rectangle will
     /// have the given tint <see cref="Color"/>.
     /// </summary>
@@ -252,7 +252,7 @@ public interface IBatch : IDisposable
     /// <param name="v"></param>
     /// <param name="u2"></param>
     /// <param name="v2"></param>
-    void Draw( Texture texture, GRect region, float u, float v, float u2, float v2 );
+    void Draw( Texture2D texture, GRect region, float u, float v, float u2, float v2 );
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the width and
@@ -261,13 +261,13 @@ public interface IBatch : IDisposable
     /// <param name="texture"></param>
     /// <param name="x"> the x-coordinate in screen space </param>
     /// <param name="y"> the y-coordinate in screen space  </param>
-    void Draw( Texture texture, float x, float y );
+    void Draw( Texture2D texture, float x, float y );
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y and stretching the region
     /// to cover the given width and height.
     /// </summary>
-    void Draw( Texture texture, float posX, float posY, float width, float height );
+    void Draw( Texture2D texture, float posX, float posY, float width, float height );
 
     /// <summary>
     /// Renders a set of sprite vertices using the specified texture.
@@ -276,7 +276,7 @@ public interface IBatch : IDisposable
     /// <param name="spriteVertices">An array of vertex data describing the sprites to be rendered.</param>
     /// <param name="offset">The starting index in the vertex array from which to begin processing.</param>
     /// <param name="count">The number of vertices to process starting from the specified offset.</param>
-    void Draw( Texture texture, float[] spriteVertices, int offset, int count );
+    void Draw( Texture2D texture, float[] spriteVertices, int offset, int count );
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the width and

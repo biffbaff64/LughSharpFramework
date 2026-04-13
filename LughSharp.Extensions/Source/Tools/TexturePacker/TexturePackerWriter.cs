@@ -304,10 +304,13 @@ public class TexturePackerWriter
                         }
                     }
 
-                    // Update progress, abort if requested
-                    if ( _progressListener!.Update( r + 1, page.OutputRects.Count ) )
+                    if ( _progressListener != null )
                     {
-                        return;
+                        // Update progress, abort if requested
+                        if ( _progressListener.Update( r + 1, page.OutputRects.Count ) )
+                        {
+                            return;
+                        }
                     }
                 }
             }
@@ -348,8 +351,8 @@ public class TexturePackerWriter
                         ImageCodecInfo jpgEncoder          = GetEncoder( ImageFormat.Jpeg );
                         Encoder        myEncoder           = Encoder.Quality;
                         var            myEncoderParameters = new EncoderParameters( 1 );
-                        var myEncoderParameter =
-                            new EncoderParameter( myEncoder, ( long )( _settings.JpegQuality * 100 ) );
+                        var myEncoderParameter = new EncoderParameter( myEncoder,
+                                                                       ( long )( _settings.JpegQuality * 100 ) );
 
                         myEncoderParameters.Param[ 0 ] = myEncoderParameter;
                         newImage.Save( outputFile, jpgEncoder, myEncoderParameters );
@@ -424,13 +427,16 @@ public class TexturePackerWriter
                 throw new Exception( "Error writing file: " + outputFile, ex );
             }
 
-            // Update progress, abort if requested
-            if ( _progressListener!.Update( p + 1, pages.Count ) )
+            if ( _progressListener != null )
             {
-                return;
-            }
+                // Update progress, abort if requested
+                if ( _progressListener!.Update( p + 1, pages.Count ) )
+                {
+                    return;
+                }
 
-            _progressListener.Count++;
+                _progressListener.Count++;
+            }
         }
     }
 
@@ -649,7 +655,7 @@ public class TexturePackerWriter
             writer.WriteLine( $"{tab}index{colon}{rect.Index}" );
         }
 
-        int atlasY = page.ImageHeight - rect.Y - rect.RegionHeight;
+        int atlasY = page.Y + page.Height - rect.Y - rect.RegionHeight;
         writer.WriteLine( $"{tab}bounds{colon}{page.X + rect.X}{comma}{atlasY}{comma}{rect.RegionWidth}{comma}{rect.RegionHeight}" );
 
         int offsetY = rect.OriginalHeight - rect.RegionHeight - rect.OffsetY;
@@ -704,7 +710,7 @@ public class TexturePackerWriter
         writer.WriteLine( TexturePackerRect.GetAtlasName( name, _settings.FlattenPaths ) );
         writer.WriteLine( $"  rotate: {rect.Rotated}" );
 
-        int atlasY = page.ImageHeight - rect.Y - rect.RegionHeight;
+        int atlasY = page.Y + page.Height - rect.Y - rect.RegionHeight;
         writer.WriteLine( $"  xy: {page.X + rect.X}, {atlasY}" );
 
         writer.WriteLine( $"  size: {rect.RegionWidth}, {rect.RegionHeight}" );

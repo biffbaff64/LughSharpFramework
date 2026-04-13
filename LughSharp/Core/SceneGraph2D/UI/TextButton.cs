@@ -72,7 +72,7 @@ public class TextButton : Button
     {
         Style = style;
 
-        Label = NewLabel( text, new LabelStyle( style.Font, style.FontColor ) );
+        Label = new Label( text, new LabelStyle( style.Font, style.FontColor ) );
         Label.SetAlignment( Align.Center );
 
         Add( Label ).Grow();
@@ -94,7 +94,8 @@ public class TextButton : Button
 
             field = value;
 
-            SetStyle< TextButtonStyle >( value );
+            this.SetStyle< TextButtonStyle >( value );
+            base.SetStyle( value );
 
             if ( Label != null )
             {
@@ -120,17 +121,6 @@ public class TextButton : Button
             GetLabelCell()?.Actor = value;
             field                 = value;
         }
-    }
-
-    /// <summary>
-    /// Creates a new Label with the supplied text and style.
-    /// </summary>
-    /// <param name="text"></param>
-    /// <param name="style"></param>
-    /// <returns></returns>
-    protected Label NewLabel( string? text, LabelStyle style )
-    {
-        return new Label( text, style );
     }
 
     /// <summary>

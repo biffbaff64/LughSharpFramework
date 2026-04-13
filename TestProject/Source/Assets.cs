@@ -28,6 +28,15 @@ namespace TestProject.Source;
 
 public static class Assets
 {
+    // ========================================================================
+    // TextureAtlases
+    public static string AnimationsAtlas => @$"\packedimages\output\animations.atlas";
+    public static string ObjectsAtlas    => @$"\packedimages\output\objects.atlas";
+    public static string InputAtlas      => @$"\packedimages\output\input.atlas";
+    public static string TextAtlas       => @$"\packedimages\output\text.atlas";
+    
+    // ========================================================================
+    // Miscellaneous
     public static string BackgroundImage  => @$"{Files.ContentRoot}\title_background.png";
     public static string HudPanel         => @$"{Files.ContentRoot}\hud_panel.png";
     public static string CompleteStar     => @$"{Files.ContentRoot}\complete_star.png";
@@ -39,6 +48,7 @@ public static class Assets
     public static string ButtonBDown      => @$"{Files.ContentRoot}\packedimages\input\button_b.png";
     public static string ButtonBOver      => @$"{Files.ContentRoot}\packedimages\input\button_x.png";
     public static string ButtonBChecked   => @$"{Files.ContentRoot}\packedimages\input\button_y.png";
+    public static string ButtonBDisabled  => @$"{Files.ContentRoot}\packedimages\input\button_y_pressed.png";
     public static string Bar9             => @$"{Files.ContentRoot}\packedimages\objects\bar9.png";
     public static string Boulder32X32     => @$"{Files.ContentRoot}\packedimages\animations\boulder32x32.png";
     public static string Boulder48X48     => @$"{Files.ContentRoot}\packedimages\animations\boulder48x48.png";

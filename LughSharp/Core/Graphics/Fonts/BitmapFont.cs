@@ -79,7 +79,7 @@ public class BitmapFont
     /// </summary>
     public BitmapFontData FontData { get; private set; }
 
-    public bool Flipped     { get; private set; }
+    public bool Flipped     { get; set; }
     public bool OwnsTexture { get; set; }
 
     // ========================================================================
@@ -164,7 +164,7 @@ public class BitmapFont
     /// <param name="integer"></param>
     public BitmapFont( FileInfo fontFile, FileInfo imageFile, bool flip, bool integer = true )
         : this( new BitmapFontData( fontFile, flip ),
-                new TextureRegion( new Texture( imageFile, false ) ),
+                new TextureRegion( new Texture2D( imageFile, false ) ),
                 integer )
     {
         OwnsTexture = true;
@@ -233,7 +233,7 @@ public class BitmapFont
                     ? Engine.Files.Internal( data.ImagePaths[ i ] )
                     : Engine.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
 
-                _regions.Add( new TextureRegion( new Texture( file, false ) ) );
+                _regions.Add( new TextureRegion( new Texture2D( file, false ) ) );
             }
 
             OwnsTexture = true;

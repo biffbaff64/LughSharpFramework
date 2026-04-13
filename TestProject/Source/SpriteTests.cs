@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024, 2025, 2026 Circa64 Software Projects / Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,94 +22,72 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using Extensions.Source;
+
 using JetBrains.Annotations;
 
 using LughSharp.Core;
+using LughSharp.Core.Assets;
+using LughSharp.Core.Files;
+using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maths;
+using LughSharp.Core.Utils.Logging;
 
 namespace TestProject.Source;
 
 [PublicAPI]
 public class SpriteTests : IDisposable
 {
-    private const int MaxSprites = 250;
-
-    private Vector2[]   _spritePosition = null!;
-    private Sprite2D[]? _sprite         = null!;
-    private int[]       _xdirection     = null!;
-    private int[]       _ydirection     = null!;
-    private float[]     _xspeed         = null!;
-    private float[]     _yspeed         = null!;
+    private AssetManager                _assetManager;
+    private Vector2                     _spritePosition = Vector2.Zero;
+    private Sprite2D?                   _sprite;
+    private int                         _xdirection;
+    private int                         _ydirection;
+    private float                       _xspeed;
+    private float                       _yspeed;
+    private TextureRegion[]?            _animFrames;
+    private Animation< TextureRegion >? _animation;
+    private float                       _elapsedAnimTime;
 
     // ========================================================================
 
+    public SpriteTests( AssetManager assetManager )
+    {
+        _assetManager = assetManager;
+    }
+
     public void Create()
     {
-        _sprite         = new Sprite2D[ MaxSprites ];
-        _spritePosition = new Vector2[ MaxSprites ];
-        _xdirection     = new int[ MaxSprites ];
-        _ydirection     = new int[ MaxSprites ];
-        _xspeed         = new float[ MaxSprites ];
-        _yspeed         = new float[ MaxSprites ];
+        Logger.Debug( "Creating Sprite Tests" );
 
-        for ( var i = 0; i < MaxSprites; i++ )
-        {
-            var rand = MathUtils.Random( 100 );
+        var path = @$"{Files.ContentRoot}\packedimages\output\animations.atlas";
 
-            TextureRegion region;
+        var animator = new Animator( _assetManager );
 
-            if ( rand < 50 )
-            {
-                region = new TextureRegion( new Texture( Assets.Boulder32X32 ) );
-            }
-            else if ( rand < 75 )
-            {
-                region = new TextureRegion( new Texture( Assets.Boulder48X48 ) );
-            }
-            else
-            {
-                region = new TextureRegion( new Texture( Assets.Boulder64X64 ) );
-            }
+        _animation = animator.CreateAnimation( path, "coin", 24, 24 );
 
-            _sprite[ i ] = new Sprite2D( region );
-            _sprite[ i ].SetBounds();
-            _sprite[ i ].SetOriginCenter();
+        _sprite = new Sprite2D( new Texture2D( Assets.Boulder48X48 ) );
+        _sprite.SetBounds();
+        _sprite.SetOriginCenter();
+        _sprite.SetPosition( 200, 200 );
 
-            _spritePosition[ i ] = new Vector2( MathUtils.Random( Engine.Graphics.WindowWidth ),
-                                                MathUtils.Random( Engine.Graphics.WindowHeight ) );
-            _xdirection[ i ] = MathUtils.RandomBool() ? -1 : 1;
-            _ydirection[ i ] = MathUtils.RandomBool() ? -1 : 1;
-            _xspeed[ i ]     = 1f + ( MathUtils.Random( 100 ) / 100f );
-            _yspeed[ i ]     = 1f + ( MathUtils.Random( 100 ) / 100f );
-
-            _sprite[ i ].SetPosition( _spritePosition[ i ] );
-        }
+        Logger.Debug( "Finished." );
     }
 
     public void Update( float delta )
     {
-        if ( _sprite != null )
+        if ( _sprite != null && _animation != null )
         {
-            for ( var i = 0; i < MaxSprites; i++ )
-            {
-                Bounce( i );
-
-                _sprite[ i ].Rotate( 4f * ( _xdirection[ i ] * -1 ) );
-            }
+            _sprite.SetRegion( _animation.GetKeyFrame( _elapsedAnimTime, true ) );
+            _elapsedAnimTime += delta;
         }
     }
 
-    public void Draw( IBatch batch )
+    public void Draw( SpriteBatch batch )
     {
-        if ( _sprite != null )
-        {
-            for ( var i = 0; i < MaxSprites; i++ )
-            {
-                _sprite[ i ].Draw( batch );
-            }
-        }
+        _sprite?.Draw( batch );
     }
 
     private void Bounce( int index )
@@ -118,30 +96,27 @@ public class SpriteTests : IDisposable
         {
             return;
         }
-        
-        for ( var i = 0; i < MaxSprites; i++ )
+
+        if ( _sprite.GetX() <= -_sprite.Width )
         {
-            if ( _sprite[ i ].GetX() <= -_sprite[ i ].Width )
-            {
-                _xdirection[ i ] = 1;
-            }
-            else if ( _sprite[ i ].GetX() >= Engine.Graphics.WindowWidth )
-            {
-                _xdirection[ i ] = -1;
-            }
-
-            if ( _sprite[ i ].GetY() <= -_sprite[ i ].Height )
-            {
-                _ydirection[ i ] = 1;
-            }
-            else if ( _sprite[ i ].GetY() >= Engine.Graphics.WindowHeight )
-            {
-                _ydirection[ i ] = -1;
-            }
-
-            _sprite[ i ].TranslateX( _xspeed[ i ] * _xdirection[ i ] * Engine.DeltaTime );
-            _sprite[ i ].TranslateY( _yspeed[ i ] * _ydirection[ i ] * Engine.DeltaTime );
+            _xdirection = 1;
         }
+        else if ( _sprite.GetX() >= Engine.Graphics.WindowWidth )
+        {
+            _xdirection = -1;
+        }
+
+        if ( _sprite.GetY() <= -_sprite.Height )
+        {
+            _ydirection = 1;
+        }
+        else if ( _sprite.GetY() >= Engine.Graphics.WindowHeight )
+        {
+            _ydirection = -1;
+        }
+
+        _sprite.TranslateX( _xspeed * _xdirection * Engine.DeltaTime );
+        _sprite.TranslateY( _yspeed * _ydirection * Engine.DeltaTime );
     }
 
     public void Dispose()

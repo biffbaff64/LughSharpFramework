@@ -79,8 +79,6 @@ public class AssetLoadingTask : IAssetTask
                              AssetLoader loader,
                              AsyncExecutor threadPool )
     {
-        Logger.Checkpoint();
-
         AssetDesc = assetDesc;
         Manager   = manager;
         Loader    = loader;
@@ -250,18 +248,16 @@ public class AssetLoadingTask : IAssetTask
     /// </remarks>
     private void HandleSyncLoader()
     {
-        var syncLoader = Loader as SynchronousAssetLoader< Type >;
-
         if ( !DependenciesLoaded )
         {
             DependenciesLoaded = true;
-            Dependencies = syncLoader?.GetDependencies( AssetDesc.AssetName,
-                                                        Resolve( Loader, AssetDesc )!,
-                                                        AssetDesc.Parameters );
+            Dependencies = Loader.GetDependencies( AssetDesc.AssetName,
+                                                   Resolve( Loader, AssetDesc )!,
+                                                   AssetDesc.Parameters );
 
             if ( Dependencies == null )
             {
-                Asset = syncLoader?.Load( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters! );
+                Asset = Loader.LoadAsset( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters );
 
                 return;
             }
@@ -271,7 +267,7 @@ public class AssetLoadingTask : IAssetTask
         }
         else
         {
-            Asset = syncLoader?.Load( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters! );
+            Asset = Loader.LoadAsset( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters );
         }
     }
 

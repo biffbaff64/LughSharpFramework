@@ -51,9 +51,9 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
 
     /// <summary>
     /// Creates a new TextureRegionDrawable, initialised with a new <see cref="TextureRegion"/>
-    /// from the supplied <see cref="Texture"/>
+    /// from the supplied <see cref="Texture2D"/>
     /// </summary>
-    public TextureRegionDrawable( Texture? texture )
+    public TextureRegionDrawable( Texture2D? texture )
         : this( new TextureRegion( texture ) )
     {
     }

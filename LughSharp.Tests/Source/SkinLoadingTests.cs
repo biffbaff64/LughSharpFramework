@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Richard Ikin.
+// Copyright (c) 2024, 2025, 2026 Circa64 Software Projects / Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -72,7 +72,7 @@ public class SkinLoadingTests
         using var skin = new Skin();
 
         // Add a base region so the TintedDrawable has something to reference
-        var mockRegion = new TextureRegion( new Texture( @"Assets\complete_star.png" ) );
+        var mockRegion = new TextureRegion( new Texture2D( @"Assets\complete_star.png" ) );
         skin.Add( "complete_star", mockRegion );
 
         // Load the JSON

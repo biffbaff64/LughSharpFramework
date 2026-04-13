@@ -18,13 +18,12 @@ namespace TestProject.Source;
 public static class DesktopLauncher
 {
     // Constants for use with the BuildTextureAtlases() method.
-    private const bool BuildAtlases          = false;
-    private const bool RemoveDuplicateImages = true;
-    private const bool KeepDuplicateImages   = false;
+    private const bool BuildAtlases          = true;
+    private const bool RemoveDuplicateImages = false;
     private const bool DrawDebugLines        = false;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Entry point for the desktop application. Initializes the application
     /// configuration information and launches the main game loop.
@@ -58,24 +57,18 @@ public static class DesktopLauncher
     {
         if ( !BuildAtlases )
         {
-            return;
+//            return;
         }
 
         var settings = new TexturePackerSettings
         {
             MaxWidth         = 2048,                  // Maximum Width of final atlas image
             MaxHeight        = 2048,                  // Maximum Height of final atlas image
-            PowerOfTwo       = true,                  // 
-            Debug            = DrawDebugLines,      // 
-            IsAlias          = KeepDuplicateImages, // 
-            Silent           = false,                 // 
-            PaddingX         = 0,                     // Increase padding
-            PaddingY         = 0,                     // Increase padding
-            EdgePadding      = true,                  // Disable edge padding initially
-            DuplicatePadding = false,                 // Disable duplicate padding
-            MinWidth         = 16,                    // 
-            MinHeight        = 16,                    // 
-            Grid             = false                  // Use GridPacker over MaxRectsPacker
+            PowerOfTwo       = false,                  // 
+            Debug            = DrawDebugLines,        // 
+            IsAlias          = RemoveDuplicateImages, // 
+            StripWhitespaceX = false,                 //
+            StripWhitespaceY = false,                 //
         };
 
         // Build the Atlases from the specified parameters :-

@@ -22,25 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-using JetBrains.Annotations;
-
 using LughSharp.Core.Files;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Graphics.Atlases;
 
 [PublicAPI]
 public class TextureAtlas : IDisposable
 {
-    public List< AtlasRegion? > Regions  { get; set; } = [ ];
-    public List< Texture >      Textures { get; set; } = new( 4 );
+    public List< AtlasRegion? > Regions   { get; set; } = [ ];
+    public List< Texture2D >    Textures  { get; set; } = new( 4 );
+    public string               AtlasName { get; set; } = string.Empty;
 
     // ========================================================================
 
@@ -120,7 +113,7 @@ public class TextureAtlas : IDisposable
 
         foreach ( TextureAtlasData.Page page in data.Pages )
         {
-            page.Texture ??= new Texture( page.TextureFile!, page.Format, page.UseMipMaps );
+            page.Texture ??= new Texture2D( page.TextureFile!, page.Format, page.UseMipMaps );
             page.Texture.SetFilter( page.MinFilter, page.MagFilter );
             page.Texture.SetWrap( page.UWrap, page.VWrap );
 
@@ -161,7 +154,7 @@ public class TextureAtlas : IDisposable
     /// Adds a region to the atlas. The specified texture will be disposed
     /// when the atlas is disposed.
     /// </summary>
-    public AtlasRegion AddRegion( string name, Texture texture, int x, int y, int width, int height )
+    public AtlasRegion AddRegion( string name, Texture2D texture, int x, int y, int width, int height )
     {
         Textures.Add( texture );
 
@@ -430,7 +423,7 @@ public class TextureAtlas : IDisposable
     {
         if ( disposing )
         {
-            foreach ( Texture texture in Textures )
+            foreach ( Texture2D texture in Textures )
             {
                 texture.Dispose();
             }

@@ -35,6 +35,10 @@ namespace LughSharp.Core.Graphics.Images;
 /// its state like the TextureFilter and TextureWrap. Also provides some methods to
 /// create TextureData and upload image data.
 /// </summary>
+/// <remarks>
+/// Currently inherited by <see cref="Texture2D"/>, <see cref="Cubemap"/>.
+/// <see cref="MipMapTextureData.DerivedGLTexture"/>, and <see cref="GLTextureArray"/>.
+/// </remarks>
 [PublicAPI]
 public abstract class GLTexture : IDisposable
 {
@@ -180,7 +184,7 @@ public abstract class GLTexture : IDisposable
 
     /// <summary>
     /// Used internally to reload after context loss. Creates a new GL handle then
-    /// calls <see cref="Texture.Load"/>.
+    /// calls <see cref="Texture2D.Load"/>.
     /// </summary>
     public abstract void Reload();
 

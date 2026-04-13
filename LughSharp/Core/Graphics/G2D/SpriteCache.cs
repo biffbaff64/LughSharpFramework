@@ -104,7 +104,7 @@ public class SpriteCache
     private readonly List< int >     _counts         = new( 8 );
     private readonly Mesh            _mesh;
     private readonly ShaderProgram?  _shader;
-    private readonly List< Texture > _textures = new( 8 );
+    private readonly List< Texture2D > _textures = new( 8 );
 
     private Cache? _currentCache;
 
@@ -318,7 +318,7 @@ public class SpriteCache
 
             if ( cache.Textures.Length < cache.TextureCount )
             {
-                cache.Textures = new Texture[ cache.TextureCount ];
+                cache.Textures = new Texture2D[ cache.TextureCount ];
             }
 
             for ( int i = 0, n = cache.TextureCount; i < n; i++ )
@@ -368,7 +368,7 @@ public class SpriteCache
     /// indexed geometry is used, each image should be specified as 4 vertices,
     /// otherwise each image should be specified as 6 vertices.
     /// </summary>
-    public void Add( Texture texture, float[] vertices, int offset, int length )
+    public void Add( Texture2D texture, float[] vertices, int offset, int length )
     {
         if ( _currentCache == null )
         {
@@ -398,7 +398,7 @@ public class SpriteCache
     /// <summary>
     /// Adds the specified texture to the cache.
     /// </summary>
-    public void Add( Texture texture, float x, float y )
+    public void Add( Texture2D texture, float x, float y )
     {
         float fx2 = x + texture.Width;
         float fy2 = y + texture.Height;
@@ -458,7 +458,7 @@ public class SpriteCache
     /// <summary>
     /// Adds the specified texture to the cache.
     /// </summary>
-    public void Add( Texture texture,
+    public void Add( Texture2D texture,
                      float x,
                      float y,
                      int srcWidth,
@@ -527,7 +527,7 @@ public class SpriteCache
     /// <summary>
     /// Adds the specified texture to the cache.
     /// </summary>
-    public void Add( Texture texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight )
+    public void Add( Texture2D texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight )
     {
         float invTexWidth  = 1.0f / texture.Width;
         float invTexHeight = 1.0f / texture.Height;
@@ -594,7 +594,7 @@ public class SpriteCache
     /// <summary>
     /// Adds the specified texture to the cache.
     /// </summary>
-    public void Add( Texture texture,
+    public void Add( Texture2D texture,
                      float x,
                      float y,
                      float width,
@@ -681,7 +681,7 @@ public class SpriteCache
     /// <summary>
     /// Adds the specified texture to the cache.
     /// </summary>
-    public void Add( Texture texture,
+    public void Add( Texture2D texture,
                      float x,
                      float y,
                      float originX,
@@ -1192,7 +1192,7 @@ public class SpriteCache
         int[]? counts           = cache.Counts;
         int    textureCount     = cache.TextureCount;
 
-        Texture[]? textures = cache.Textures;
+        Texture2D[]? textures = cache.Textures;
 
         for ( var i = 0; i < textureCount; i++ )
         {
@@ -1227,7 +1227,7 @@ public class SpriteCache
         offset =  ( cache.Offset / ( verticesPerImage * Sprite2D.VertexSize ) * 6 ) + ( offset * 6 );
         length *= 6;
 
-        Texture[]? textures = cache.Textures;
+        Texture2D[]? textures = cache.Textures;
 
         int[]? counts       = cache.Counts;
         int    textureCount = cache.TextureCount;
@@ -1294,7 +1294,7 @@ public class SpriteCache
 
         internal int        MaxCount;
         internal int        TextureCount;
-        internal Texture[]? Textures;
+        internal Texture2D[]? Textures;
 
         internal Cache( int id, int offset )
         {

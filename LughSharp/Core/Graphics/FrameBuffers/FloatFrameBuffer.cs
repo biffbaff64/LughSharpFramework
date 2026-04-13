@@ -83,12 +83,12 @@ public class FloatFrameBuffer : FrameBuffer
     }
 
     /// <summary>
-    /// Creates the backing <see cref="Texture"/> for this buffer, using the provided
+    /// Creates the backing <see cref="Texture2D"/> for this buffer, using the provided
     /// <see cref="FrameBufferTextureAttachmentSpec"/> which contains config
     /// data for said texture.
     /// </summary>
     /// <returns> The texture</returns>
-    protected override Texture CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
+    protected override Texture2D CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
     {
         var data = new FloatTextureData( BufferBuilder.Width,
                                          BufferBuilder.Height,
@@ -97,7 +97,7 @@ public class FloatFrameBuffer : FrameBuffer
                                          attachmentSpec.Type,
                                          attachmentSpec.IsGpuOnly );
 
-        var result = new Texture( data );
+        var result = new Texture2D( data );
 
         if ( Engine.App.AppType == Platform.ApplicationType.WindowsGL )
         {

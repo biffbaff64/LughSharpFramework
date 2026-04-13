@@ -39,7 +39,7 @@ using LughSharp.Core.Utils.Exceptions;
 namespace LughSharp.Core.Assets.Loaders;
 
 /// <summary>
-/// <see cref="AssetLoader"/> for <see cref="Texture"/> instances. The pixel data
+/// <see cref="AssetLoader"/> for <see cref="Texture2D"/> instances. The pixel data
 /// is loaded asynchronously. The texture is then created on the rendering thread,
 /// synchronously.
 /// Passing a <see cref="TextureLoaderParameters"/> to <see cref="AssetManager"/>.Load()
@@ -140,12 +140,12 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     /// <param name="manager"></param>
     /// <param name="file"> the resolved file to load </param>
     /// <param name="parameter"></param>
-    public override Texture LoadSync< TP >( AssetManager manager,
+    public override Texture2D LoadSync< TP >( AssetManager manager,
                                             FileInfo file,
                                             TP? parameter ) where TP : class
     {
         var      p       = parameter as TextureLoaderParameters;
-        Texture? texture = _loaderInfo.Texture;
+        Texture2D? texture = _loaderInfo.Texture;
 
         if ( texture != null )
         {
@@ -153,7 +153,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         }
         else
         {
-            texture = new Texture( _loaderInfo.Data! );
+            texture = new Texture2D( _loaderInfo.Data! );
         }
 
         if ( parameter != null )
@@ -213,7 +213,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets the loaded texture object.
         /// </summary>
-        public Texture? Texture { get; set; }
+        public Texture2D? Texture { get; set; }
 
         // ====================================================================
 
@@ -285,7 +285,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets the texture object to put the <see cref="TextureData"/> in (optional).
         /// </summary>
-        public Texture? Texture { get; set; }
+        public Texture2D? Texture { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ITextureData"/> for textures created on the fly

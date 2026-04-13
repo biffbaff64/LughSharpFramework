@@ -108,7 +108,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     private ShaderProgram? _customShader;
     private float          _invTexHeight;
     private float          _invTexWidth;
-    private Texture?       _lastTexture;
+    private Texture2D?       _lastTexture;
     private int            _triangleIndex;
     private int            _vertexIndex;
     private bool           _originalDepthMask;
@@ -425,7 +425,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
-    public void Draw( Texture texture,
+    public void Draw( Texture2D texture,
                       float[] polygonVertices,
                       int verticesOffset,
                       int verticesCount,
@@ -459,7 +459,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertexIndex += verticesCount;
     }
 
-    public void Draw( Texture texture,
+    public void Draw( Texture2D texture,
                       GRect region,
                       Point2D origin,
                       Point2D scale,
@@ -610,7 +610,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
-    public void Draw( Texture texture,
+    public void Draw( Texture2D texture,
                       GRect region,
                       GRect src,
                       bool flipX,
@@ -682,7 +682,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
-    public void Draw( Texture texture, float x, float y, GRect src )
+    public void Draw( Texture2D texture, float x, float y, GRect src )
     {
         if ( !IsDrawing )
         {
@@ -740,7 +740,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
-    public void Draw( Texture texture, GRect region, float u, float v, float u2, float v2 )
+    public void Draw( Texture2D texture, GRect region, float u, float v, float u2, float v2 )
     {
         if ( !IsDrawing )
         {
@@ -794,13 +794,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
-    public void Draw( Texture texture, float x, float y )
+    public void Draw( Texture2D texture, float x, float y )
     {
         Draw( texture, x, y, texture.Width, texture.Height );
     }
 
     /// <inheritdoc />
-    public void Draw( Texture texture, float posX, float posY, float width, float height )
+    public void Draw( Texture2D texture, float posX, float posY, float width, float height )
     {
         if ( !IsDrawing )
         {
@@ -858,7 +858,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
-    public void Draw( Texture texture, float[] spriteVertices, int offset, int count )
+    public void Draw( Texture2D texture, float[] spriteVertices, int offset, int count )
     {
         if ( !IsDrawing )
         {
@@ -1542,7 +1542,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
-    private void SwitchTexture( Texture texture )
+    private void SwitchTexture( Texture2D texture )
     {
         Flush();
         _lastTexture  = texture;

@@ -115,7 +115,7 @@ public class AtlasRegion : TextureRegion, IDisposable
     /// <param name="y"> The Y coord of the region. </param>
     /// <param name="width"> The region width. </param>
     /// <param name="height"> The region height. </param>
-    public AtlasRegion( Texture? texture, int x, int y, int width, int height )
+    public AtlasRegion( Texture2D? texture, int x, int y, int width, int height )
         : base( texture!, x, y, width, height )
     {
         OriginalWidth  = width;
