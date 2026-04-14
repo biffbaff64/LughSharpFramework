@@ -18,6 +18,7 @@ WORKING:
 - Json handling to support Scene2D Skins.
 - Ninepatch support
 - Sprite2D animations.
+- ImagePacker
 
 IN PROGRESS:
 
@@ -28,7 +29,7 @@ IN PROGRESS:
       although support for Json Skins will still be included.
 - Input System needs testing and/or finishing
 - Audio needs testing and/or finishing
-- ImagePacker class needs testing and/or finishing
+- TiledMapPacker support
 - 
 
 TODO:
@@ -36,7 +37,6 @@ TODO:
 - Sprite Scrolling
 - GameSprite helpers
 - Network / HTTP etc.
-- TiledMapPacker support
 - Box2D Physics support
 - 3D Graphics needs testing and/or finishing
 - 2D Particle System needs testing and/or finishing

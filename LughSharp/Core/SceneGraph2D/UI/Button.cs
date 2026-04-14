@@ -143,7 +143,7 @@ public class Button : Table, IDisableable
     /// <param name="style"></param>
     public Button( ButtonStyle style )
     {
-        _style = style;
+        SetStyle( style );
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
 
         SetClickListener();
@@ -191,6 +191,7 @@ public class Button : Table, IDisableable
     public Button( Actor child, Skin skin )
         : this( child, skin.Get< ButtonStyle >() )
     {
+        Skin = skin;
     }
 
     /// <summary>

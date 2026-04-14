@@ -86,7 +86,7 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </summary>
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class ImagePacker
+public class ImagePacker : IDisposable
 {
     public Bitmap                          Image { get; }
     public Dictionary< string, Rectangle > Rects { get; } = new();
@@ -96,6 +96,7 @@ public class ImagePacker
     private readonly bool _duplicateBorder;
     private readonly int  _padding;
     private readonly Node _root;
+    private          bool _disposed;
 
     // ========================================================================
 
@@ -144,13 +145,13 @@ public class ImagePacker
             throw new Exception( "Image didn't fit" );
         }
 
-        node.LeaveName =   name;
-        rect           =   new Rectangle( node.Rect.X, node.Rect.Y, node.Rect.Width, node.Rect.Height );
-        rect.Width     -=  borderPixels;
-        rect.Height    -=  borderPixels;
-        borderPixels   >>= 1;
-        rect.X         +=  borderPixels;
-        rect.Y         +=  borderPixels;
+        node.LeafName =   name;
+        rect          =   new Rectangle( node.Rect.X, node.Rect.Y, node.Rect.Width, node.Rect.Height );
+        rect.Width    -=  borderPixels;
+        rect.Height   -=  borderPixels;
+        borderPixels  >>= 1;
+        rect.X        +=  borderPixels;
+        rect.Y        +=  borderPixels;
 
         Rects.Add( name, rect );
 
@@ -236,7 +237,7 @@ public class ImagePacker
         {
             Node node = stack.Pop();
 
-            if ( ( node.LeaveName == null )
+            if ( ( node.LeafName == null )
               && node is { LeftChild: not null, RightChild: not null } )
             {
                 stack.Push( node.RightChild );
@@ -245,7 +246,7 @@ public class ImagePacker
                 continue;
             }
 
-            if ( ( node.LeaveName != null )
+            if ( ( node.LeafName != null )
               || ( node.Rect.Width < rect.Width )
               || ( node.Rect.Height < rect.Height ) )
             {
@@ -286,6 +287,26 @@ public class ImagePacker
         return bitmap;
     }
 
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( !_disposed )
+        {
+            if ( disposing )
+            {
+                Image.Dispose();
+            }
+
+            _disposed = true;
+        }
+    }
+
     // ========================================================================
     // ========================================================================
 
@@ -303,7 +324,7 @@ public class ImagePacker
         public Rectangle Rect       { get; } = new( x, y, width, height );
         public Node?     LeftChild  { get; private set; }
         public Node?     RightChild { get; private set; }
-        public string?   LeaveName  { get; set; }
+        public string?   LeafName   { get; set; }
 
         // ====================================================================
 
@@ -324,3 +345,6 @@ public class ImagePacker
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

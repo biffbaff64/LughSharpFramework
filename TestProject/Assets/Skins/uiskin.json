@@ -51,18 +51,8 @@
     "default": {
       "down": "default-round-down",
       "up": "default-round",
-      "disabled": "default-round"
-    },
-    "toggle": {
-      "parent": "default",
-      "checked": "default-round-down"
-    }
-  },
-  "ImageButtonStyle": {
-    "default": {
-      "down": "default-round-down",
-      "up": "default-round",
-      "disabled": "default-round"
+      "disabled": "default-round",
+      "over": "default-round-down"
     },
     "toggle": {
       "parent": "default",
@@ -74,6 +64,7 @@
       "down": "default-round-down",
       "up": "default-round",
       "disabled": "default-round",
+      "over": "default-round-down",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "gray"
@@ -84,14 +75,27 @@
       "downFontColor": "red"
     }
   },
+  "ImageButtonStyle": {
+    "default": {
+      "down": "default-round-down",
+      "up": "default-round",
+      "disabled": "default-round",
+      "over": "default-round-down"
+    },
+    "toggle": {
+      "parent": "default",
+      "checked": "default-round-down"
+    }
+  },
   "ImageTextButtonStyle": {
     "default": {
-      "parent": "default",
       "font": "default-font",
       "fontColor": "white",
       "down": "default-round-down",
       "up": "default-round",
-      "disabled": "default-round"
+      "disabled": "default-round",
+      "over": "default-round-down",
+      "disabledFontColor": "gray"
     },
     "toggle": {
       "parent": "toggle",

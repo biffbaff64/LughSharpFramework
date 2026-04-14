@@ -81,16 +81,17 @@ public class ImageButton : Button
     /// Creates a new ImageButton using the supplied <see cref="ImageButtonStyle"/>.
     /// It does so by creating a new <see cref="Scene2DImage"/> drawable instance, and
     /// adding that to this button. This drawable will be updated, according to
-    /// the button's state, with the correct image.
+    /// the button's state, with the correct image in the call to <see cref="SetStyle"/>.
     /// </summary>
     /// <param name="style"></param>
     public ImageButton( ImageButtonStyle style ) : base( style )
     {
-        // Create and store the image drawable which will be updated by the style.
         Scene2DImage = new Scene2DImage();
         Scene2DImage.SetScaling( Scaling.Fit );
+
         Add( Scene2DImage );
 
+        // The Scene2DImage drawable will be updated by the style.
         SetStyle( style );
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }

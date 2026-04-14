@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Core.SceneGraph2D.Listeners;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 

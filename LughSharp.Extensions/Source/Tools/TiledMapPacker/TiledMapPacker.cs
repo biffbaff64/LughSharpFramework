@@ -149,7 +149,7 @@ public class TiledMapPacker
         {
             DirectoryInfo currentDir = stack.Pop();
 
-            // 1. Process .tmx files in the current directory
+            // Process .tmx files in the current directory
             FileInfo[] mapFiles = currentDir.GetFiles( "*.tmx" );
 
             foreach ( FileInfo mapFile in mapFiles )
@@ -157,7 +157,7 @@ public class TiledMapPacker
                 ProcessSingleMap( mapFile, currentDir, texturePackerSettings );
             }
 
-            // 2. Add all subdirectories to the stack to be processed in next iterations
+            // Add all subdirectories to the stack to be processed in next iterations
             try
             {
                 foreach ( DirectoryInfo subDir in currentDir.GetDirectories() )
@@ -537,11 +537,24 @@ public class TiledMapPacker
         return null!;
     }
 
-//	/** Processes a directory of Tile Maps, compressing each tile set contained in any map once.
-//	 * 
-//	 * @param args args[0]: the input directory containing the tmx files (and tile sets, relative to the path listed in the tmx
-//	 *           file). args[1]: The output directory for the tmx files, should be empty before running. args[2-4] options */
-//	public static void main (string[] args) {
+    /// <summary>
+    /// Processes a directory of Tile Maps, compressing each tile set contained in any map once.
+    /// </summary>
+    /// <param name="args">
+    /// <li>
+    /// args[0]: the input directory containing the tmx files (and tile sets, relative to the
+    /// path listed in the tmx file).
+    /// </li>
+    /// <li>
+    /// args[1]: The output directory for the tmx files, should be empty before running. If it
+    /// is not empty, an exception will be thrown.
+    /// </li>
+    /// <li>
+    /// args[2-4] options
+    /// </li>
+    /// </param>
+    public static void Run( string[] args )
+    {
 //		final Settings texturePackerSettings = new Settings();
 //		texturePackerSettings.paddingX = 2;
 //		texturePackerSettings.paddingY = 2;
@@ -614,7 +627,7 @@ public class TiledMapPacker
 //				Gdx.app.exit();
 //			}
 //		}, config);
-//	}
+    }
 
 //	private static void processExtraArgs (string[] args, TiledMapPackerSettings packerSettings) {
 //		string stripUnused = "--strip-unused";

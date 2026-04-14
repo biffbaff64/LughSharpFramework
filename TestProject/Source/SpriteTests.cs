@@ -71,7 +71,7 @@ public class SpriteTests : IDisposable
         _sprite = new Sprite2D( new Texture2D( Assets.Boulder48X48 ) );
         _sprite.SetBounds();
         _sprite.SetOriginCenter();
-        _sprite.SetPosition( 200, 200 );
+        _sprite.SetPosition( 200, 600 );
 
         Logger.Debug( "Finished." );
     }

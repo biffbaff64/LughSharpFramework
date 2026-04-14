@@ -18,6 +18,7 @@ using LughSharp.Core.Input;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
+using LughSharp.Tests.Source;
 
 namespace TestProject.Source;
 
@@ -71,7 +72,7 @@ public class MainGame : LughGame
         CreateCameras();
 //        CreateAssets();
 //        _mapTests.CreateMap();
-//        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
+        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
 //        _font         = _fontTests.CreateBitmapFont();
 //        _freetypeFont = _fontTests.CreateFreeTypeFont();
         _spriteTests.Create();

@@ -35,6 +35,8 @@ namespace LughSharp.Core.SceneGraph2D.UI.Styles;
 [PublicAPI]
 public class ButtonStyle : ISceneStyle
 {
+    public string Name { get; set; } = string.Empty;
+
     public ISceneDrawable? Up             { get; set; }
     public ISceneDrawable? Down           { get; set; }
     public ISceneDrawable? Over           { get; set; }
@@ -81,6 +83,19 @@ public class ButtonStyle : ISceneStyle
     /// </summary>
     public ButtonStyle( ButtonStyle style )
     {
+        Set( style );
+    }
+
+    /// <summary>
+    /// Sets the properties of this ButtonStyle to the properties from the given
+    /// style, which must be a subclass of ButtonStyle.
+    /// </summary>
+    /// <param name="style"></param>
+    /// <typeparam name="T"></typeparam>
+    public void Set< T >( T style ) where T : ButtonStyle
+    {
+        Guard.Against.Null( style );
+
         Up               = style.Up;
         Down             = style.Down;
         Over             = style.Over;
@@ -97,38 +112,7 @@ public class ButtonStyle : ISceneStyle
         CheckedOffsetX   = style.CheckedOffsetX;
         CheckedOffsetY   = style.CheckedOffsetY;
     }
-
-    /// <summary>
-    /// Sets the properties of this ButtonStyle to the properties from the given
-    /// style, which must be a subclass of ButtonStyle.
-    /// </summary>
-    /// <param name="style"></param>
-    /// <typeparam name="T"></typeparam>
-    public void Set< T >( T style ) where T : ButtonStyle
-    {
-        Guard.Against.Null( style );
-
-        if ( typeof( T ).IsSubclassOf( typeof( ButtonStyle ) ) )
-        {
-            Up               = style.Up;
-            Down             = style.Down;
-            Over             = style.Over;
-            Focused          = style.Focused;
-            Disabled         = style.Disabled;
-            Checked          = style.Checked;
-            CheckedOver      = style.CheckedOver;
-            CheckedDown      = style.CheckedDown;
-            CheckedFocused   = style.CheckedFocused;
-            PressedOffsetX   = style.PressedOffsetX;
-            PressedOffsetY   = style.PressedOffsetY;
-            UnpressedOffsetX = style.UnpressedOffsetX;
-            UnpressedOffsetY = style.UnpressedOffsetY;
-            CheckedOffsetX   = style.CheckedOffsetX;
-            CheckedOffsetY   = style.CheckedOffsetY;
-        }
-    }
 }
 
 // ============================================================================
 // ============================================================================
-

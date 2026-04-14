@@ -1080,6 +1080,9 @@ LUGHSHARP/CORE/SCENEGRAPH2D/UI
     TODO: I don't like the way Cell and Value classes are implemented.
           They seem confusing and are candidates for a rewrite.
 
+    TODO: Streamline the Button classes. Currently there is Button,
+          TextButton, ImageTextButton, ImageButton. Are all of them needed?
+
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - Button                   - Draws, but not clickable yet.
@@ -1334,9 +1337,11 @@ LUGHSHARP/EXTENSIONS/TOOLS
 LUGHSHARP/EXTENSIONS/TOOLS/IMAGEPACKER
 --------------------------------------
 
+Q: Do I actually need this class if I already have TexturePacker?
+
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - DONE -      - ImagePacker
+    - DONE - DONE - DONE - ImagePacker
 
 LUGHSHARP/EXTENSIONS/TOOLS/TEXTUREPACKER
 ----------------------------------------
