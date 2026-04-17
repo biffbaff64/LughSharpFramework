@@ -395,7 +395,15 @@ public class Actor : IComparable< Actor >
 
     /// <summary>
     /// Add a listener to receive events that hit this actor.
+    /// For example:-
+    /// <code>
+    ///     Button.AddListener( new ChangeListener( ( ev, actor ) =>
+    ///     {
+    ///         // Handle the event.
+    ///     } ) );
+    /// </code>
     /// </summary>
+    /// <returns> <c>true</c> if the listener was added succesfully. </returns>
     public bool AddListener( IEventListener listener )
     {
         if ( !Listeners.Contains( listener ) )

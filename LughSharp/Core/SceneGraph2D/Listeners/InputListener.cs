@@ -22,11 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Logging;
-
 namespace LughSharp.Core.SceneGraph2D.Listeners;
 
 /// <summary>
@@ -181,11 +176,11 @@ public class InputListener : IEventListener
     /// On the desktop, this event occurs even when no mouse buttons are pressed
     /// (pointer will be -1).
     /// </summary>
-    /// <param name="ev"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="ptr"></param>
-    /// <param name="fromActor"> May be null. </param>
+    /// <param name="ev"> The input event. </param>
+    /// <param name="x"> The x coordinate of the mouse cursor or touch. </param>
+    /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
+    /// <param name="ptr"> The pointer index of the mouse cursor or touch. </param>
+    /// <param name="fromActor"> The actor that the mouse cursor or touch is entering. </param>
     public virtual void Enter( InputEvent? ev, float x, float y, int ptr, Actor? fromActor )
     {
     }
@@ -195,13 +190,12 @@ public class InputListener : IEventListener
     /// On the desktop, this event occurs even when no mouse buttons are pressed
     /// (pointer will be -1).
     /// </summary>
-    /// <param name="inputEvent"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="pointer"></param>
-    /// <param name="toActor"> May be null. </param>
-    /// <see cref="InputEvent "/>
-    public virtual void Exit( InputEvent? inputEvent, float x, float y, int pointer, Actor? toActor )
+    /// <param name="ev"> The input event. </param>
+    /// <param name="x"> The x coordinate of the mouse cursor or touch. </param>
+    /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
+    /// <param name="pointer"> The pointer index of the mouse cursor or touch. </param>
+    /// <param name="toActor"> The actor that the mouse cursor or touch is exiting. </param>
+    public virtual void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
     {
     }
 
@@ -209,7 +203,7 @@ public class InputListener : IEventListener
     /// Called when the mouse wheel has been scrolled. When true is returned,
     /// the event is handled in <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual bool OnScrolled( InputEvent? inputEvent, float x, float y, float amountX, float amountY )
+    public virtual bool OnScrolled( InputEvent? ev , float x, float y, float amountX, float amountY )
     {
         return false;
     }
@@ -218,7 +212,7 @@ public class InputListener : IEventListener
     /// Called when a key goes down. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual bool OnKeyDown( InputEvent? inputEvent, int keycode )
+    public virtual bool OnKeyDown( InputEvent? ev, int keycode )
     {
         return false;
     }
@@ -227,7 +221,7 @@ public class InputListener : IEventListener
     /// Called when a key goes up. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public virtual bool OnKeyUp( InputEvent? inputEvent, int keycode )
+    public virtual bool OnKeyUp( InputEvent? ev, int keycode )
     {
         return false;
     }
@@ -236,11 +230,11 @@ public class InputListener : IEventListener
     /// Called when a key is typed. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    /// <param name="inputEvent"></param>
+    /// <param name="ev"> The input event. </param>
     /// <param name="character">
     /// May be 0 for key typed events that don't map to a character (ctrl, shift, etc).
     /// </param>
-    public virtual bool OnKeyTyped( InputEvent? inputEvent, char character )
+    public virtual bool OnKeyTyped( InputEvent? ev, char character )
     {
         return false;
     }

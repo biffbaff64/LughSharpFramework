@@ -22,18 +22,24 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
 using LughSharp.Core.SceneGraph2D.UI;
-using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.SceneGraph2D.Listeners;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="parent"></param>
 public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListener
 {
     private readonly ScrollPane? _parent = parent;
+    
+    // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when the mouse wheel has been scrolled. When true is returned,
+    /// the event is handled in <see cref="Event.SetHandled"/>.
+    /// </summary>
     public override bool OnScrolled( InputEvent? inputEvent, float x, float y, float scrollAmountX, float scrollAmountY )
     {
         Guard.Against.Null( _parent );
@@ -69,17 +75,29 @@ public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListene
     }
 }
 
+// ============================================================================
+// ============================================================================
+
 public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
 {
     private readonly ScrollPane? _parent = parent;
     private          float       _handlePosition;
 
-    /// <inheritdoc />
+    // ========================================================================
+    
+    /// <summary>
+    /// Called when a mouse button or a finger touch goes down on the actor.
+    /// If true is returned, this listener will have
+    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>,
+    /// so it will receive all touchDragged and touchUp events, even those not
+    /// over this actor, until touchUp is received. Also when true is returned,
+    /// the event is handled by <see cref="Event.SetHandled"/>.
+    /// </summary>
     public override bool OnTouchDown( InputEvent? inputEvent, float x, float y, int pointer, int button )
     {
         Guard.Against.Null( _parent );
 
-        if ( _parent!.DraggingPointer != -1 )
+        if ( _parent.DraggingPointer != -1 )
         {
             return false;
         }
@@ -89,61 +107,61 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
             return false;
         }
 
-        if ( _parent!.Stage != null )
+        if ( _parent.Stage != null )
         {
-            _parent!.Stage.ScrollFocus = _parent;
+            _parent.Stage.ScrollFocus = _parent;
         }
 
-        if ( !_parent!.FlickScroll )
+        if ( !_parent.FlickScroll )
         {
-            _parent!.SetScrollbarsVisible( true );
+            _parent.SetScrollbarsVisible( true );
         }
 
-        if ( _parent!.FadeAlpha == 0 )
+        if ( _parent.FadeAlpha == 0 )
         {
             return false;
         }
 
-        if ( _parent!.ScrollBarTouch
-          && _parent!.IsScrollX
-          && _parent!.HScrollBounds.Contains( x, y ) )
+        if ( _parent.ScrollBarTouch
+          && _parent.IsScrollX
+          && _parent.HScrollBounds.Contains( x, y ) )
         {
             inputEvent?.Stop();
-            _parent!.SetScrollbarsVisible( true );
+            _parent.SetScrollbarsVisible( true );
 
-            if ( _parent!.HKnobBounds.Contains( x, y ) )
+            if ( _parent.HKnobBounds.Contains( x, y ) )
             {
-                _parent!.LastPoint.Set( x, y );
-                _handlePosition          = _parent!.HKnobBounds.X;
-                _parent!.TouchScrollH    = true;
-                _parent!.DraggingPointer = pointer;
+                _parent.LastPoint.Set( x, y );
+                _handlePosition          = _parent.HKnobBounds.X;
+                _parent.TouchScrollH    = true;
+                _parent.DraggingPointer = pointer;
 
                 return true;
             }
 
-            _parent!.AmountX += _parent!.WidgetArea.Width * ( x < _parent!.HKnobBounds.X ? -1 : 1 );
+            _parent.AmountX += _parent.WidgetArea.Width * ( x < _parent.HKnobBounds.X ? -1 : 1 );
 
             return true;
         }
 
-        if ( _parent!.ScrollBarTouch
-          && _parent!.IsScrollY
-          && _parent!.VScrollBounds.Contains( x, y ) )
+        if ( _parent.ScrollBarTouch
+          && _parent.IsScrollY
+          && _parent.VScrollBounds.Contains( x, y ) )
         {
             inputEvent?.Stop();
-            _parent!.SetScrollbarsVisible( true );
+            _parent.SetScrollbarsVisible( true );
 
-            if ( _parent!.VKnobBounds.Contains( x, y ) )
+            if ( _parent.VKnobBounds.Contains( x, y ) )
             {
-                _parent!.LastPoint.Set( x, y );
-                _handlePosition          = _parent!.VKnobBounds.Y;
-                _parent!.TouchScrollV    = true;
-                _parent!.DraggingPointer = pointer;
+                _parent.LastPoint.Set( x, y );
+                _handlePosition          = _parent.VKnobBounds.Y;
+                _parent.TouchScrollV    = true;
+                _parent.DraggingPointer = pointer;
 
                 return true;
             }
 
-            _parent!.AmountY += _parent!.WidgetArea.Height * ( y < _parent!.VKnobBounds.Y ? 1 : -1 );
+            _parent.AmountY += _parent.WidgetArea.Height * ( y < _parent.VKnobBounds.Y ? 1 : -1 );
 
             return true;
         }
@@ -151,7 +169,11 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when a mouse button or a finger touch goes up anywhere, but only
+    /// if touchDown previously returned true for the mouse button or touch.
+    /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
+    /// </summary>
     public override void OnTouchUp( InputEvent? inputEvent, float x, float y, int pointer, int button )
     {
         Guard.Against.Null( _parent );
@@ -164,7 +186,11 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
         _parent!.Cancel();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when a mouse button or a finger touch is moved anywhere, but only
+    /// if touchDown previously returned true for the mouse button or touch.
+    /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
+    /// </summary>
     public override void OnTouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
     {
         Guard.Against.Null( _parent );
@@ -218,7 +244,11 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called any time the mouse is moved when a button is not down. This event
+    /// only occurs on the desktop. When true is returned, the event is handled
+    /// by <see cref="Event.SetHandled"/>.
+    /// </summary>
     public override bool OnMouseMoved( InputEvent? inputEvent, float x, float y )
     {
         Guard.Against.Null( _parent );
@@ -233,6 +263,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
 }
 
 // ============================================================================
+// ============================================================================
 
 public sealed class ScrollPaneGestureListener : ActorGestureListener
 {
@@ -244,7 +275,7 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
     }
 
     /// <inheritdoc />
-    public override void Pan( InputEvent inputEvent, float x, float y, float deltaX, float deltaY )
+    public override void OnPan( InputEvent inputEvent, float x, float y, float deltaX, float deltaY )
     {
         Guard.Against.Null( _parent );
 
@@ -263,7 +294,7 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
     }
 
     /// <inheritdoc />
-    public override void Fling( InputEvent inputEvent, float x, float y, int button )
+    public override void OnFling( InputEvent inputEvent, float x, float y, int button )
     {
         Guard.Against.Null( _parent );
 

@@ -22,21 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Diagnostics;
-using System.Text;
-
-using JetBrains.Annotations;
-
-using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.UI.Styles;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
@@ -239,7 +227,7 @@ public class Label : Widget, IDisposable
     }
 
     /// <summary>
-    /// Sets the Label's text to the specified float value. If the text is already
+    /// Sets the Label's text to the provided string. If the text is already
     /// equivalent to the specified value, a string is not allocated. If <c>null</c>
     /// is passed, the label's text will be cleared.'
     /// </summary>
@@ -278,10 +266,8 @@ public class Label : Widget, IDisposable
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool TextEquals( string? other )
+    public bool TextEquals( string other )
     {
-        if ( other == null ) return false;
-
         if ( _text.Length != other.Length )
         {
             return false;
@@ -325,7 +311,7 @@ public class Label : Widget, IDisposable
             font.FontData.SetScale( FontScaleX, FontScaleY );
         }
 
-        ComputePrefSize();
+        ComputePrefSize( _prefSizeLayout );
 
         if ( _fontScaleChanged )
         {
@@ -336,7 +322,7 @@ public class Label : Widget, IDisposable
     /// <summary>
     /// 
     /// </summary>
-    private void ComputePrefSize()
+    private void ComputePrefSize( GlyphLayout layout )
     {
         Guard.Against.Null( _fontCache );
 
@@ -353,20 +339,20 @@ public class Label : Widget, IDisposable
                       - Style.Background.RightWidth;
             }
 
-            _prefSizeLayout.SetText( _fontCache.Font, _text.ToString(), Color.White, width, Align.Left, true );
+            layout.SetText( _fontCache.Font, _text.ToString(), Color.White, width, Align.Left, true );
         }
         else
         {
-            _prefSizeLayout.SetText( _fontCache.Font, _text.ToString() );
+            layout.SetText( _fontCache.Font, _text.ToString() );
         }
-
-        _prefSize.Set( _prefSizeLayout.Width, _prefSizeLayout.Height );
+        
+        _prefSize.Set( layout.Width, layout.Height );
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public void Layout()
+    public override void SetLayout()
     {
         Guard.Against.Null( _fontCache );
 
@@ -386,7 +372,7 @@ public class Label : Widget, IDisposable
         {
             float prefHeight = GetPrefHeight();
 
-            if ( !prefHeight.Equals( _lastPrefHeight ) )
+            if ( Math.Abs( prefHeight - _lastPrefHeight ) > NumberUtils.FloatTolerance )
             {
                 _lastPrefHeight = prefHeight;
                 InvalidateHierarchy();
@@ -406,8 +392,9 @@ public class Label : Widget, IDisposable
             height -= Style.Background.BottomHeight + Style.Background.TopHeight;
         }
 
-        GlyphLayout layout = GlyphLayout;
-        float       textWidth, textHeight;
+        GlyphLayout layout = this.GlyphLayout;
+        float       textWidth;
+        float       textHeight;
 
         if ( wrap || ( _text.ToString().Contains( '\n' ) ) )
         {
@@ -509,8 +496,8 @@ public class Label : Widget, IDisposable
 
         if ( _fontCache != null )
         {
-            _fontCache.SetText( _text.ToString(), X, Y );
             _fontCache.Tint( color );
+            _fontCache.SetPosition( X, Y );
             _fontCache.Draw( batch );
         }
     }

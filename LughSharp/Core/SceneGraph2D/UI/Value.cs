@@ -24,79 +24,109 @@
 
 using System.Globalization;
 
-using JetBrains.Annotations;
-
-using LughSharp.Core.Maths;
 using LughSharp.Core.SceneGraph2D.Utils;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
+/// <summary>
+/// Value placeholder, allowing the value to be computed on request. Values can be
+/// provided an actor for context to reduce the number of value instances that need
+/// to be created and reduce verbosity in code that specifies values.
+/// </summary>
 [PublicAPI]
 public abstract class Value
 {
-    public abstract float Get( Actor? context = null );
-
+    /// <summary>
+    /// A value that is always zero.
+    /// </summary>
     public static readonly Fixed Zero = new( 0 );
 
-    private class LambdaValue : Value
-    {
-        private readonly Func< Actor?, float > _getter;
-
-        public LambdaValue( Func< Actor?, float > getter )
-        {
-            _getter = getter;
-        }
-
-        public override float Get( Actor? context = null )
-        {
-            return _getter( context );
-        }
-    }
-
+    /// <summary>
+    /// Value that is the minWidth of the actor in the cell.
+    /// </summary>
     public static readonly Value MinWidth = new LambdaValue( ctx => ctx is ILayout layout
                                                                  ? layout.GetMinWidth()
                                                                  : ( ctx?.Width ?? 0 ) );
 
+    /// <summary>
+    /// Value that is the minHeight of the actor in the cell.
+    /// </summary>
     public static readonly Value MinHeight = new LambdaValue( ctx => ctx is ILayout layout
                                                                   ? layout.GetMinHeight()
                                                                   : ( ctx?.Height ?? 0 ) );
 
+    /// <summary>
+    /// Value that is the preferred width of the actor in the cell.
+    /// </summary>
     public static readonly Value PrefWidth = new LambdaValue( ctx => ctx is ILayout layout
                                                                   ? layout.GetPrefWidth()
                                                                   : ( ctx?.Width ?? 0 ) );
 
+    /// <summary>
+    /// Value that is the preferred height of the actor in the cell.
+    /// </summary>
     public static readonly Value PrefHeight = new LambdaValue( ctx => ctx is ILayout layout
                                                                    ? layout.GetPrefHeight()
                                                                    : ( ctx?.Height ?? 0 ) );
 
+    /// <summary>
+    /// Value that is the maxWidth of the actor in the cell.
+    /// </summary>
     public static readonly Value MaxWidth = new LambdaValue( ctx => ctx is ILayout layout
                                                                  ? layout.GetMaxWidth()
                                                                  : ( ctx?.Width ?? 0 ) );
 
+    /// <summary>
+    /// Value that is the maxHeight of the actor in the cell.
+    /// </summary>
     public static readonly Value MaxHeight = new LambdaValue( ctx => ctx is ILayout layout
                                                                   ? layout.GetMaxHeight()
                                                                   : ( ctx?.Height ?? 0 ) );
 
+    /// <summary>
+    /// Returns a value that is the specified percent of the width of the actor.
+    /// </summary>
     public static Value PercentWidth( float percent )
     {
         return new LambdaValue( ctx => ( ctx?.Width ?? 0 ) * percent );
     }
 
+    /// <summary>
+    /// Returns a value that is the specified percent of the height of the actor.
+    /// </summary>
     public static Value PercentHeight( float percent )
     {
         return new LambdaValue( ctx => ( ctx?.Height ?? 0 ) * percent );
     }
 
+    /// <summary>
+    /// Returns a value that is the specified percent of the width of the specified actor.
+    /// </summary>
     public static Value PercentWidth( float percent, Actor actor )
     {
-        if ( actor == null )
-        {
-            throw new ArgumentNullException( nameof( actor ) );
-        }
+        Guard.Against.Null( actor );
 
         return new LambdaValue( _ => actor.Width * percent );
     }
 
+    /// <summary>
+    /// Returns a value that is the specified percent of the height of the specified actor.
+    /// </summary>
+    public static Value PercentHeight( float percent, Actor actor )
+    {
+        Guard.Against.Null( actor );
+        
+        return new LambdaValue( _ => actor.Height * percent );
+    }
+
+    public abstract float Get( Actor? context = null );
+    
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// A fixed value that is not computed each time it is used.
+    /// </summary>
     [PublicAPI]
     public class Fixed : Value
     {
@@ -111,11 +141,6 @@ public abstract class Value
         public override float Get( Actor? context = null )
         {
             return _value;
-        }
-
-        public override string ToString()
-        {
-            return _value.ToString( CultureInfo.InvariantCulture );
         }
 
         public static Fixed ValueOf( float value )
@@ -140,6 +165,29 @@ public abstract class Value
         public static implicit operator Fixed( float v )
         {
             return ValueOf( v );
+        }
+
+        public override string ToString()
+        {
+            return _value.ToString( CultureInfo.InvariantCulture );
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    private class LambdaValue : Value
+    {
+        private readonly Func< Actor?, float > _getter;
+
+        public LambdaValue( Func< Actor?, float > getter )
+        {
+            _getter = getter;
+        }
+
+        public override float Get( Actor? context = null )
+        {
+            return _getter( context );
         }
     }
 }

@@ -152,14 +152,38 @@ public class ActorGestureListener : IEventListener
         return false;
     }
 
+    /// <summary>
+    /// Called when a touch down event is detected.
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="pointer"></param>
+    /// <param name="button"></param>
     public virtual void OnTouchDown( InputEvent ev, float x, float y, int pointer, int button )
     {
     }
 
+    /// <summary>
+    /// Called when a touch up event is detected.
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="pointer"></param>
+    /// <param name="button"></param>
     public virtual void OnTouchUp( InputEvent ev, float x, float y, int pointer, int button )
     {
     }
 
+    /// <summary>
+    /// Called when a touch dragged event is detected.
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="count"></param>
+    /// <param name="button"></param>
     public virtual void OnTap( InputEvent ev, float x, float y, int count, int button )
     {
     }
@@ -168,7 +192,7 @@ public class ActorGestureListener : IEventListener
     /// If true is returned, additional gestures will not be triggered. No ev is
     /// provided because this ev is triggered by time passing, not by an InputEvent.
     /// </summary>
-    public virtual bool LongPress( Actor actor, float x, float y )
+    public virtual bool OnLongPress( Actor actor, float x, float y )
     {
         return false;
     }
@@ -179,26 +203,48 @@ public class ActorGestureListener : IEventListener
     /// <param name="velocityX"></param>
     /// <param name="velocityY"></param>
     /// <param name="button"></param>
-    public virtual void Fling( InputEvent ev, float velocityX, float velocityY, int button )
+    public virtual void OnFling( InputEvent ev, float velocityX, float velocityY, int button )
     {
     }
 
     /// <summary>
     /// The delta is the difference in stage coordinates since the last pan.
     /// </summary>
-    public virtual void Pan( InputEvent ev, float x, float y, float deltaX, float deltaY )
+    public virtual void OnPan( InputEvent ev, float x, float y, float deltaX, float deltaY )
     {
     }
 
-    public virtual void PanStop( InputEvent ev, float x, float y, int pointer, int button )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="pointer"></param>
+    /// <param name="button"></param>
+    public virtual void OnPanStop( InputEvent ev, float x, float y, int pointer, int button )
     {
     }
 
-    public virtual void Zoom( InputEvent ev, float initialDistance, float distance )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="initialDistance"></param>
+    /// <param name="distance"></param>
+    public virtual void OnZoom( InputEvent ev, float initialDistance, float distance )
     {
     }
 
-    public virtual void Pinch( InputEvent ev,
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="initialPointer1"></param>
+    /// <param name="initialPointer2"></param>
+    /// <param name="pointer1"></param>
+    /// <param name="pointer2"></param>
+    public virtual void OnPinch( InputEvent ev,
                                Vector2 initialPointer1,
                                Vector2 initialPointer2,
                                Vector2 pointer1,
@@ -244,13 +290,13 @@ public class ActorGestureListener : IEventListener
         {
             _parent._actor?.StageToLocalCoordinates( _tmpCoords.Set( stageX, stageY ) );
 
-            return _parent.LongPress( _parent._actor!, _tmpCoords.X, _tmpCoords.Y );
+            return _parent.OnLongPress( _parent._actor!, _tmpCoords.X, _tmpCoords.Y );
         }
 
         public bool OnFling( float velocityX, float velocityY, int button )
         {
             StageToLocalAmount( _tmpCoords.Set( velocityX, velocityY ) );
-            _parent.Fling( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, button );
+            _parent.OnFling( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, button );
 
             return true;
         }
@@ -263,7 +309,7 @@ public class ActorGestureListener : IEventListener
             deltaY = _tmpCoords.Y;
 
             _parent._actor!.StageToLocalCoordinates( _tmpCoords.Set( stageX, stageY ) );
-            _parent.Pan( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, deltaX, deltaY );
+            _parent.OnPan( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, deltaX, deltaY );
 
             return true;
         }
@@ -271,14 +317,14 @@ public class ActorGestureListener : IEventListener
         public bool PanStop( float stageX, float stageY, int pointer, int button )
         {
             _parent._actor!.StageToLocalCoordinates( _tmpCoords.Set( stageX, stageY ) );
-            _parent.PanStop( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, pointer, button );
+            _parent.OnPanStop( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, pointer, button );
 
             return true;
         }
 
         public bool OnZoom( float initialDistance, float distance )
         {
-            _parent.Zoom( _parent._inputEvent!, initialDistance, distance );
+            _parent.OnZoom( _parent._inputEvent!, initialDistance, distance );
 
             return true;
         }
@@ -293,7 +339,7 @@ public class ActorGestureListener : IEventListener
             _parent._actor!.StageToLocalCoordinates( _pointer1.Set( stagePointer1 ) );
             _parent._actor!.StageToLocalCoordinates( _pointer2.Set( stagePointer2 ) );
 
-            _parent.Pinch( _parent._inputEvent!, _initialPointer1, _initialPointer2, _pointer1, _pointer2 );
+            _parent.OnPinch( _parent._inputEvent!, _initialPointer1, _initialPointer2, _pointer1, _pointer2 );
 
             return true;
         }
@@ -305,3 +351,7 @@ public class ActorGestureListener : IEventListener
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

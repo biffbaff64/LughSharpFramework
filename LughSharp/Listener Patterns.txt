@@ -1,0 +1,1231 @@
+﻿In Java, the listener pattern is often implemented using abstract classes or interfaces
+and anonymous inner classes. In C#, while you can do that, the language provides a first-class
+citizen for this exact scenario:
+
+Delegates and Events.
+=====================
+
+The C# equivalent is more concise and idiomatic. Here is how you translate your logic and
+how the system processes it.
+
+1. The C# Equivalent: Events and Delegates
+------------------------------------------
+
+   In C#, you don't need to manually check instanceof or create a wrapper class for a simple
+   change notification. You use an EventHandler.
+
+    The Implementation:
+
+        // 1. Define your custom Event Argument (Equivalent to ChangeEvent)
+        public class ChangeEventArgs : EventArgs
+        {
+            public object Target { get; set; }
+        }
+        
+        // 2. The Button class
+        public class FlickButton
+        {
+            // Define the event using the built-in EventHandler delegate
+            public event EventHandler< ChangeEventArgs > Changed;
+        
+            public bool IsChecked { get; set; }
+        
+            // This method triggers the event
+            protected virtual void OnChanged( ChangeEventArgs e ) 
+            {
+                Changed?.Invoke( this, e );
+            }
+        }
+        
+        // 3. Usage (The "Listener" part)
+        flickButton.Changed += ( sender, e ) =>
+        {
+            scroll.SetFlickScroll( flickButton.IsChecked );
+        };
+
+2. How C# Processes This
+------------------------
+
+   The transition from Java's "Listener Object" to C#'s "Delegate" changes the underlying mechanics:
+
+    The Delegate Chain
+    In Java, addListener adds an object to a List<EventListener>. In C#, the += operator adds a
+    function pointer (delegate) to an invocation list.
+
+    Multicast: C# events are "multicast" by default. When Invoke() is called, the runtime loops
+    through every subscribed method and executes them in order.
+
+    The sender Pattern: By convention, C# events pass the object that raised the event as the 
+    first argument (sender). This replaces the need for event.getTarget() in most cases.
+
+    Anonymous Methods vs. Lambdas
+    Your Java code uses an anonymous inner class. The C# code above uses a Lambda Expression
+    (sender, e) => { ... }.
+
+    Behind the scenes: The C# compiler actually generates a hidden method for that lambda and
+    passes its address to the event.
+
+    Memory Management: Just like Java, if flickButton lives longer than the class containing the
+    listener, you can create a memory leak. In C#, you would use -= to unsubscribe if you need 
+    to clean up.
+
+3. Direct Translation (The "Java Style")
+----------------------------------------
+
+   If you are working with a framework that requires the strict "Listener Object" pattern (like
+   some ports of LibGDX or Unity plugins), you can use Interfaces:
+
+    public interface IChangeListener
+    {
+        void Changed(ChangeEventArgs e, object actor);
+    }
+
+    // Usage
+    public class MyListener : IChangeListener
+    {
+        public void Changed(ChangeEventArgs e, object actor)
+        {
+            // Logic here
+        }
+    }
+
+    flickButton.AddListener(new MyListener());
+
+    Why C# prefers Events:
+    Less Boilerplate: You don't need to define a class just to handle a click.
+
+    Type Safety: You don't need to cast (ChangeEvent)event because the delegate is already
+    typed to ChangeEventArgs.
+
+    Language Integration: Events are a core part of the C# metadata, making them easier for 
+    IDEs and designers to "see" and hook into.
+
+    Since you are building your own framework influenced by LibGDX, you are likely looking for that
+    specific balance between high-performance event handling and the flexible "Actor" model found 
+    in Scene2D.In a custom framework, you have two main architectural paths: the Idiomatic C# approach
+    (Events) or the LibGDX-style approach (Polymorphism).
+    
+    1. The "LibGDX-Style" (Polymorphic) Approach
+    --------------------------------------------
+    
+    If you want to keep the exact logic of "adding a listener object" (useful for complex listeners
+    that maintain their own state), you use an Interface or Abstract Class.In C#, we replace instanceof
+    with the 'is' keyword and use Pattern Matching to handle the casting automatically.
+    
+    public abstract class ChangeListener : IEventListener
+    {
+        public bool Handle( Event e )
+        {
+            if ( e is ChangeEvent changeEvent )
+            {
+                Changed( changeEvent, e.Target );
+                return true;
+            }
+
+            return false;
+        }
+
+        public abstract void Changed( ChangeEvent e, Actor actor );
+    }
+
+    // Usage with an anonymous method (via a delegate wrapper)
+    button.AddListener( new AnonymousChangeListener( ( e, a ) =>
+    {
+        scroll.SetFlickScroll( button.IsChecked );
+    } ) );
+    
+    
+    How the system processes this:
+    
+    The Registry: Your Actor class likely maintains a List< IEventListener >.
+    
+    The Dispatch: When an event occurs, the Actor iterates through the list and calls Handle( e ).
+    
+    Short-Circuiting: If Handle returns true, the event is considered "handled" (equivalent to 
+    event.handle() in LibGDX), stopping it from bubbling up to parent actors.
+    
+    2. The "C# Native" Approach (Recommended)
+    -----------------------------------------
+    
+    C# was designed to bake this pattern directly into the language via Multicast Delegates.
+    This is significantly faster to write and often more performant because it avoids the 
+    overhead of managing interface lists manually.
+    
+    Implementation in your framework:
+    
+        Instead of a Listener class, your Actor exposes an event:
+    
+            public class Actor
+            {
+                // A delegate defines the "shape" of the function
+                public event Action<ChangeEvent, Actor> Changed;
+    
+                protected void FireChange()
+                {
+                    // The '?' ensures it only fires if someone is listening
+                    Changed?.Invoke(new ChangeEvent(), this);
+                }
+            }
+        
+        
+    Why this is better for a C# Framework:
+    
+    Memory: You don't need to instantiate a new ChangeListener object for every button. You
+    can just point to an existing method.
+    
+    Syntax: Users of your framework use the += operator, which is the standard "C# way."
+    
+    Performance: Invoking a delegate is highly optimized in the CLR, often faster than iterating
+    a manual List<> of interfaces.
+    
+    3. Comparison of Patterns
+    -------------------------
+    
+    Feature             Java/LibGDX Style                       Native C# Style
+    -------             -----------------                       ---------------
+    Logic Container     An Object (ChangeListener)              A Method (Action<>)
+    
+    Subscription        addListener(new Listener())             Changed += MyMethod;
+    
+    Multiple Events     One listener can handle many types      Usually one event per action
+    
+    Cleanup             removeListener(listener)                Changed -= MyMethod;
+    
+
+    Pro-Tip for your Framework:
+    
+    If you want the best of both worlds (LibGDX flexibility with C# speed), implement an
+    Event Dispatcher that accepts both delegates and listener objects. In C#, you can use
+    Generics to make this type-safe:
+    
+        public void SendEvent< T >( T eventDetails ) where T : Event
+        {
+            // Logic to notify listeners specifically interested in type T
+        }
+
+
+Event Bubbling
+==============
+
+Since you're implementing event bubbling ( propagating events from a child up through the
+hierarchy to the parent ), the "LibGDX-style" approach is actually more robust than simple
+C# events.
+
+In a bubbling system, the event needs to carry state (like a Handled flag) as it travels.
+While C# events are great for "fire and forget," a manual listener pattern gives you more
+control over the traversal.
+
+    1. The Core Implementation
+    --------------------------
+    
+    Here is how you can structure your Actor and Listener system to support bubbling while
+    staying idiomatic to C#.
+
+        public abstract class Event
+        {
+            public Actor Target { get; set; }
+            public Actor BubbledTo { get; set; }
+            public bool Handled { get; set; } // If true, stop bubbling
+        }
+        
+        public interface IEventListener
+        {
+            bool Handle(Event e);
+        }
+        
+        public class Actor
+        {
+            private List<IEventListener> _listeners = new();
+            public Actor Parent { get; set; }
+        
+            public void AddListener( IEventListener listener ) => _listeners.Add( listener );
+        
+            public void Fire( Event e )
+            {
+                e.Target = this;
+                
+                // Bubbling logic: walk up the visual tree
+                Actor current = this;
+                
+                while ( current != null && !e.Handled )
+                {
+                    e.BubbledTo = current;
+                    current.NotifyListeners(e);
+                    current = current.Parent; 
+                }
+            }
+        
+            private void NotifyListeners( Event e )
+            {
+                for ( int i = 0; i < _listeners.Count; i++ )
+                {
+                    if ( _listeners[i].Handle( e ) )
+                    {
+                        e.Handled = true;
+                    }
+                }
+            }
+        }
+
+    2. Handling the "Anonymous" Problem
+    -----------------------------------
+
+    Java allows anonymous inner classes, which C# doesn't support for classes/interfaces. To
+    keep your API clean for the user, you should provide a concrete implementation that takes
+    a Delegate as a parameter.
+
+        public class ChangeListener : IEventListener
+        {
+            private readonly Action< ChangeEvent, Actor > _callback;
+        
+            public ChangeListener( Action< ChangeEvent, Actor > callback )
+            {
+                _callback = callback;
+            }
+        
+            public bool Handle( Event e )
+            {
+                if ( e is ChangeEvent changeEvent )
+                {
+                    _callback( changeEvent, e.Target );
+                    return true; // Mark as handled
+                }
+
+                return false;
+            }
+        }
+        
+        // Custom Event
+        public class ChangeEvent : Event { }
+
+
+    3. Usage in your Framework
+    --------------------------
+    
+    Now, the usage looks almost identical to your Java code, but utilizes C#'s lambda syntax:
+
+        flickButton.AddListener( new ChangeListener( ( e, actor ) =>
+        {
+            scroll.SetFlickScroll( flickButton.IsChecked );
+        } ) );
+
+
+    Key Processing Differences for your Framework:
+    ----------------------------------------------
+    
+    Iteration Safety:
+    In C#, if a listener removes itself during the NotifyListeners loop, you'll get an exception
+    in a foreach. Use a standard for loop (as shown above) or iterate backwards to avoid the 
+    "collection modified" error.
+    
+    Pattern Matching:
+    Use the is keyword. It's significantly faster than the old (Type)obj casting style because it
+    performs the type check and the assignment in one atomic step.
+    
+    The "Handled" Return:
+    In LibGDX, handle() returning true usually stops the event from propagating further. In C#,
+    ensure your Fire method respects this boolean to prevent parent actors from receiving an 
+    event that was already "consumed" by a child button.
+    
+    Optimization Tip: Pooling
+    In a high-performance framework, creating a new ChangeEvent() every time a user moves a mouse
+    or clicks a button creates massive Garbage Collector (GC) pressure.
+    
+    Recommendation: Implement a simple Object Pool for your Event classes. Before firing, grab an
+    event from the pool; after the bubble is complete, reset its properties and return it to the
+    pool.
+    
+    If you are building a UI framework, the choice between "Strictly Bubbling" and "Capture + Bubble"
+    is basically the choice between simplicity and absolute control.
+    
+    Here is a breakdown to help you decide which fits your framework's philosophy:
+    
+        1. Strictly Bubbling (The LibGDX Way)
+        -------------------------------------
+        The event starts at the Target (the button you clicked) and travels up to the Stage.
+        
+        Pros: Very easy to debug and implement. Most UI logic only cares about the target anyway.
+        
+        Cons: Parents cannot "veto" or intercept an event before the child sees it.
+        
+        Processing:
+        
+            Call NotifyListeners on the leaf node.
+            
+            Move to parent.
+            
+            Repeat until Handled == true or you hit the Root.
+        
+        2. Capture + Bubble (The WPF/Web Way)
+        -------------------------------------
+        
+        The event travels down from the Root to the Target (Capture), then up from the Target back
+        to the Root (Bubble).
+        
+        Pros: Extremely powerful. A "ScrollPanel" can capture a scroll event and stop it from reaching
+        a "Slider" inside it if it needs to.
+        
+        Cons: More complex code. Every event essentially travels the hierarchy twice.
+        
+        Processing:
+        
+            Build a "Path" (a List or Stack of Actors) from the Root to the Target.
+            
+            Capture Phase: Iterate the Path from top to bottom.
+            
+            Bubble Phase: Iterate the Path from bottom to top.
+    
+    
+    Implementation Tip: Using Span<T> for Performance
+    -------------------------------------------------
+    
+    Since you are in C#, if you choose to implement a "Path" for bubbling, you can avoid heap 
+    allocations (saving your frame rate) by using a Span or a pooled array.
+    
+    // Simple way to handle the hierarchy without allocating a new list every click
+    public void Fire(Event e)
+    {
+        // 1. Trace the path to root
+        var path   = Pool< List< Actor > >.Obtain();
+        Actor curr = this;
+
+        while ( curr != null )
+        {
+            path.Add( curr );
+            curr = curr.Parent;
+        }
+    
+        // 2. Optional: Capture Phase (Top-Down)
+        for ( int i = path.Count - 1; i >= 0; i-- )
+        {
+            path[ i ].NotifyCaptureListeners( e );
+            if ( e.Handled ) break;
+        }
+    
+        // 3. Bubble Phase (Bottom-Up)
+        if (!e.Handled)
+        {
+            for ( int i = 0; i < path.Count; i++ )
+            {
+                path[ i ].NotifyListeners( e );
+                if ( e.Handled ) break;
+            }
+        }
+    
+        path.Clear();
+        Pool<List<Actor>>.Free(path);
+    }
+
+
+    My Recommendation
+    -----------------
+    If this is your first C# framework: Stick to strictly bubbling first.
+    
+    It is much easier to reason about when you are debugging layout issues. You can always add a Capture
+    phase later by adding a second list of listeners (captureListeners) to your Actor class and running
+    the loop in reverse.
+    
+    
+    Actor / Parent Access
+    ---------------------
+
+    Since your Actor already has a Parent reference, you have everything you need to implement a robust
+    bubbling system.
+    
+    In C#, the "processing" of this pattern usually relies on Type Checking and Delegate Invocation. In
+    your Java example, you had a hardcoded 'instanceof' check inside the listener. In C#, we can make this
+    cleaner using Generics, which allows your framework to handle many different event types without
+    constant manual casting.
+    
+    The "Smart" Listener Implementation
+    -----------------------------------
+    To make your framework feel modern, you can create a base EventListener that uses C# Generics. This
+    removes the need for the user to manually cast the event inside their implementation.
+    
+    public interface IEventListener {
+    bool Handle(Event e);
+    }
+    
+    // A generic wrapper that does the type-checking for the user
+    public class InputListener< T > : IEventListener where T : Event
+    {
+        private readonly Action< T, Actor > _action;
+    
+        public InputListener( Action< T, Actor > action )
+        {
+            _action = action;
+        }
+    
+        public bool Handle( Event e )
+        {
+            // C# Pattern Matching: Checks type and casts in one go
+            if ( e is T typedEvent )
+            {
+                _action( typedEvent, e.Target );
+                return true; // Usually returns true to consume the event
+            }
+
+            return false;
+        }
+    }
+
+    How the Actor Processes the Bubble
+    ----------------------------------
+    Because the Actor knows its Parent, the "Processing" is a simple recursive or iterative loop.
+    In C#, we prefer the iterative approach (using a while loop) to avoid stack overflow issues 
+    in extremely deep UI hierarchies.
+    
+    The Internal Fire Logic:
+    When you call flickButton.Fire (new ChangeEvent() ), here is what happens inside your framework:
+    
+    public void Fire(Event e)
+    {
+        e.Target = this;
+        Actor current = this;
+    
+        while (current != null)
+        {
+            // 1. Notify all listeners on the current Actor
+            current.NotifyListeners(e);
+    
+            // 2. Check if a listener called e.StopPropagation() or returned true
+            if (e.Handled) break;
+    
+            // 3. Move up the tree
+            current = current.Parent;
+        }
+    }
+
+    Usage Comparison:
+    Here is how the final code looks in your framework compared to the Java version. You’ll notice
+    the C# version is much flatter and easier to read thanks to Lambda Expressions.
+    
+    Java
+        flickButton.addListener(new ChangeListener() {
+
+            public void changed (ChangeEvent event, Actor actor) {
+    
+                scroll.setFlickScroll(flickButton.isChecked());
+            }
+        } );
+    
+    C#
+        flickButton.AddListener( new InputListener< ChangeEvent>( ( e, actor ) =>
+        {
+            scroll.SetFlickScroll( flickButton.IsChecked );
+        } ) );
+
+
+    Performance Considerations for your Framework
+    ---------------------------------------------
+    Since you are building your own framework, keep these three C# specific "gotchas" in mind regarding
+    event processing:
+    
+        Avoid foreach on Listeners:
+        If a listener reacts to an event by removing itself (e.g., a "One-Time" listener), a foreach
+        loop will throw an InvalidOperationException. Always use a standard for() loop.
+        
+        The "Null" Parent:
+        Ensure your Fire method handles the case where an Actor is not yet attached to a Stage (where
+        Parent is null).
+        
+        Event Pooling:
+        To avoid the Garbage Collector stuttering during gameplay, don't create a new ChangeEvent every
+        time.
+        Use a static pool:
+    
+            var e = EventPool.Obtain<ChangeEvent>();
+            
+            Fire(e);
+            
+            EventPool.Free(e);
+    
+The Central 'Stage'
+===================
+    
+    In a system with a central Stage, the Stage usually acts as the "Event Master." While actors handle
+    their own local logic, the Stage is responsible for capturing raw input (from the mouse, keyboard,
+    or touch) and determining which Actor should start the bubbling process.
+    
+    Here is how you structure that relationship in C#.
+    
+    1. The Stage as the Dispatcher
+    ------------------------------
+    The Stage is the bridge between the OS/Input system and your UI hierarchy. It typically performs
+    a Hit Test to find the deepest child actor at a specific coordinate.
+    
+        public class Stage
+        {
+            public Actor Root { get; set; }
+        
+            // This is called by your main game loop
+            public void HandleInput( Vector2 screenCoords )
+            {
+                // 1. Find the target (Hit Testing)
+                Actor hit = Root.Hit( screenCoords.X, screenCoords.Y );
+        
+                if ( hit != null )
+                {
+                    // 2. Create the event
+                    var inputEvent = new InputEvent
+                    { 
+                        Stage = this, 
+                        Target = hit 
+                    };
+                    
+                    // 3. Start the bubble!
+                    hit.Fire( inputEvent );
+                }
+            }
+        }
+    
+    2. Implementing the Hit Test
+    ----------------------------
+    For bubbling to work, your Actor needs a way to tell the Stage, "Yes, the user clicked me."
+    This is usually a recursive search from the Root down to the leaves.
+    
+        public virtual Actor Hit(float x, float y)
+        {
+            // Basic bounds check (simplified)
+            if ( x < 0 || x > Width || y < 0 || y > Height ) return null;
+        
+            // Check children first (top-most child first)
+            for ( int i = Children.Count - 1; i >= 0; i-- )
+            {
+                var child = Children[ i ];
+                
+                // Convert coordinates to child's local space
+                var hit = child.Hit( x - child.X, y - child.Y );
+      
+                if ( hit != null ) return hit;
+            }
+        
+            // No child was hit, but I was!
+            return IsTouchable ? this : null;
+        }
+    
+    3. C# "Action" Shortcut (The Hybrid Approach)
+    ---------------------------------------------
+    Since you're building a framework, you can provide the LibGDX-style AddListener for complex
+    behaviors, but also provide a shortcut using C# delegates for simple tasks. This is a very
+    "C#" way to improve Developer Experience (DX).
+    
+        public class Button : Actor
+        {
+            // Native C# Event for quick access
+            public event Action OnClicked;
+        
+            public Button()
+            {
+                // Internally add a ChangeListener that triggers the native event
+                this.AddListener(new ChangeListener( ( e, a ) =>
+                {
+                    OnClicked?.Invoke();
+                } ) );
+            }
+        }
+    
+        // User usage is now incredibly clean:
+        flickButton.OnClicked += () => scroll.SetFlickScroll( true );
+    
+    4. Processing flow in your framework
+    ------------------------------------
+    When a user clicks a button, the sequence in your C# code looks like this:
+    
+            Stage receives raw coordinates from the engine.
+            
+            Stage calls Root.Hit(), which returns the FlickButton.
+            
+            FlickButton calls Fire(event).
+            
+            Fire starts a while loop:
+            
+            It checks FlickButton's _listeners list.
+            
+            It calls Handle(e) on your ChangeListener.
+            
+            If Handle returns true, the loop breaks.
+            
+            If not, it sets current = current.Parent and repeats.
+    
+    Summary of the C# "Listener" Pattern
+    ------------------------------------
+    The Actor: Holds a List<IEventListener> and a Parent reference.
+    
+    The Listener: A class or interface (like IEventListener) that has a Handle(Event e) method.
+    
+    The Processing: An iterative while loop inside Fire() that moves up the hierarchy until the
+    event is marked as Handled.
+    
+    The Advantage: By using C#'s 'is' pattern matching and generic InputListener< T >, you avoid
+    the messy casting and boilerplate found in older Java versions.
+
+
+Event Pooling
+=============
+
+In a high-performance C# framework, the Garbage Collector (GC) is your biggest enemy. If a user
+moves their mouse and your Stage creates a new MouseEvent() every frame, you’ll see "micro-stutters"
+when the GC kicks in to clean up those thousands of short-lived objects.
+
+An Event Pool allows you to reuse event objects instead of allocating new ones.
+
+    1. The Event Pool Implementation
+    --------------------------------
+    The most efficient way to do this in C# is using a Stack<T> or a Queue<T>.
+
+        public static class EventPool<T> where T : Event, new()
+        {
+            private static readonly Stack<T> _pool = new Stack<T>();
+        
+            public static T Obtain() 
+            {
+                // If the pool is empty, create a new one; otherwise, pop one out
+                return _pool.Count > 0 ? _pool.Pop() : new T();
+            }
+        
+            public static void Free( T e ) 
+            {
+                e.Reset(); // Crucial: Clear old data so it doesn't leak to the next use
+                _pool.Push(e);
+            }
+        }
+
+    2. Updated Event Base Class
+    ---------------------------
+    For pooling to work, your events must be "resettable."
+
+    public abstract class Event
+    {
+        public Actor Target { get; set; }
+        public bool Handled { get; set; }
+    
+        // Clear all references so the GC can eventually 
+        // collect the Actors if the event stays in the pool
+        public virtual void Reset() 
+        {
+            Target = null;
+            Handled = false;
+        }
+    }
+
+    3. How the Stage Processes Pooled Events
+    ----------------------------------------
+    Now, your Stage doesn't use the new keyword. It "borrows" an event, fires it, and "returns" it.
+
+        public void OnMouseMove(float x, float y)
+        {
+            // 1. Obtain from pool
+            var e = EventPool<InputEvent>.Obtain();
+            
+            // 2. Setup
+            e.Type = InputType.Moved;
+            Actor hit = Root.Hit(x, y);
+            
+            // 3. Fire (The bubbling logic we discussed)
+            hit?.Fire(e);
+            
+            // 4. Return to pool for reuse
+            EventPool<InputEvent>.Free(e);
+        }
+    
+    4. Why this matters for your Framework
+    In Java/LibGDX, pooling is common but often requires more boilerplate. In C#, because of how Generics work (
+    EventPool<T>), the compiler creates a specific pool for every type of event automatically.
+
+    Processing Summary:
+    -------------------
+    Stage obtains an event from the EventPool.
+    
+    Stage populates it with data (coordinates, target).
+    
+    Actor.Fire() processes the bubble (iterating Parent references).
+    
+    Listeners execute logic; one eventually returns true or sets e.Handled = true.
+    
+    Stage resets the event and puts it back in the EventPool.
+    
+
+    Pro-Tip: The "Snapshot" Problem
+    -------------------------------
+    One thing to watch out for in C#: if a user saves a reference to an event inside a listener
+    (e.g., lastEvent = e;), that reference will eventually point to "garbage" or data from a 
+    different event because the object is being reused.
+    Documentation is key here: Always warn your framework users that Event objects are only valid
+    during the Handle() method. If they want to keep the data, they must copy the values out!
+
+
+Input System
+============
+
+Since you're juggling Mouse, Keyboard, and eventually Touch, the "Unified Input" approach from LibGDX
+(using InputEvent) is definitely the way to go. In C#, you can make this very elegant using an enum 
+and some clever pooling.
+
+Here is how you can consolidate these into your Stage-based bubbling system.
+
+    1. The Unified Input Event
+    --------------------------
+    Instead of separate classes for every tiny movement, use one InputEvent class for all physical
+    interactions. This keeps your pool management simple.
+
+    public enum InputType { TouchDown, TouchUp, Moved, KeyDown, KeyUp, Scrolled }
+    
+    public class InputEvent : Event
+    {
+        public InputType Type   { get; set; }
+        public float StageX     { get; set; }
+        public float StageY     { get; set; }
+        public int KeyCode      { get; set; }
+        public char Character   { get; set; }
+        public int Pointer      { get; set; } // For Multi-touch
+    
+        public override void Reset()
+        {
+            base.Reset();
+
+            Type        = default;
+            StageX      = 0;
+            StageY      = 0;
+            KeyCode     = 0;
+            Character   = '\0';
+            Pointer     = 0;
+        }
+    }
+
+    2. Processing Mouse vs. Touch
+    -----------------------------
+    In C#, you can treat Mouse and Touch almost identically by assigning the Mouse a "Pointer ID" of
+    0. When you move to mobile testing, you just pass 1, 2, or 3 for multi-finger gestures.
+
+        Stage Dispatcher:
+
+        public void TouchDown( float x, float y, int pointer, int button )
+        {
+            var e = EventPool< InputEvent >.Obtain();
+
+            e.Type      = InputType.TouchDown;
+            e.StageX    = x;
+            e.StageY    = y;
+            e.Pointer   = pointer;
+        
+            // Hit test to find where the touch started
+            Actor hit = Root.Hit( x, y );
+            
+            // If we hit something, start the bubble!
+            hit?.Fire( e );
+        
+            EventPool< InputEvent >.Free( e );
+        }
+
+    3. The Keyboard "Focus" Problem
+    -------------------------------
+    Keyboards are tricky because they don't have coordinates. In LibGDX/C# frameworks, you typically
+    implement a Keyboard Focus property on the Stage.
+
+        public class Stage
+        {
+            public Actor KeyboardFocus { get; set; }
+        
+            public void KeyDown( int keyCode )
+            {
+                if (KeyboardFocus == null) return;
+        
+                var e = EventPool< InputEvent >.Obtain();
+                e.Type = InputType.KeyDown;
+                e.KeyCode = keyCode;
+        
+                // Keyboard events bubble up from the focused actor
+                KeyboardFocus.Fire( e );
+        
+                EventPool< InputEvent >.Free( e );
+            }
+        }
+
+    4. Why C# is Great for This (Pattern Matching)
+    ----------------------------------------------
+    When your ChangeListener (or an InputListener) receives the event, C# makes it very easy to
+    branch logic based on the InputType.
+
+        public class MyListener : IEventListener
+        {
+            public bool Handle( Event e )
+            {
+                if ( e is InputEvent ie )
+                {
+                    switch ( ie.Type )
+                    {
+                        case InputType.TouchDown:
+                            Console.WriteLine( "Touched at " + ie.StageX );
+                            return true;
+
+                        case InputType.KeyDown:
+                            if ( ie.KeyCode == 13 ) Submit(); // Enter key
+                            return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+    5. Performance Checklist for Your Framework
+    -------------------------------------------
+
+        Pointer IDs:
+        In your Stage, keep a dictionary or array mapping PointerID to the Actor currently
+        being touched. This allows you to "lock" onto a button when a finger drags outside
+        its bounds (the "Touch Focus").
+    
+        Coordinate Conversion:
+        Ensure that as the event bubbles, you provide a way to convert StageX/Y to LocalX/Y.
+        Actors usually want to know where they were clicked relative to their own (0,0), not
+        the screen's (0,0).
+        
+        The "Exit" Event:
+        When testing touch, remember that if a finger slides off the screen, you need to 
+        manually fire a " TouchUp" or "Exit" event to clean up the state of your buttons.
+
+
+Providing support for future multi-touch gestures
+=================================================
+
+Building a single-touch system that uses Pointer IDs (as we discussed) effectively future-proofs
+your framework. When you eventually add multi-touch, you won't have to rewrite your bubbling logic;
+you'll just be firing events with Pointer = 1 or Pointer = 2 instead of always 0.
+
+To round out the "C# Listener" pattern for your framework, there is one final piece of the puzzle:
+
+    Event Handlers vs. Input Processors.
+    ------------------------------------
+
+    1. The "InputListener" Helper
+    In LibGDX, InputListener is a massive class with many methods (touchDown, keyTyped, etc.). In
+    C#, you can make this much more modular. I recommend creating a specific helper that users can
+    inherit from so they don't have to write switch( e.Type ) every time.
+
+        public class InputListener : IEventListener
+        {
+            public virtual bool Handle(Event e)
+            {
+                if (e is not InputEvent ie) return false;
+
+                return ie.Type switch
+                {
+                    InputType.TouchDown => TouchDown(ie, ie.StageX, ie.StageY, ie.Pointer),
+                    InputType.TouchUp   => TouchUp(ie, ie.StageX, ie.StageY, ie.Pointer),
+                    InputType.KeyDown   => KeyDown(ie, ie.KeyCode),
+                    _ => false
+                };
+            }
+
+            // Users override only what they need
+            public virtual bool TouchDown(InputEvent e, float x, float y, int pointer) => false;
+            public virtual bool TouchUp(InputEvent e, float x, float y, int pointer) => false;
+            public virtual bool KeyDown(InputEvent e, int keycode) => false;
+        }
+
+    2. Managing "Touch Focus"
+    -------------------------
+    The biggest challenge with multi-touch (and even single-touch) is what happens when a user
+    clicks a button and then drags their finger/mouse off the button.
+
+    In a standard bubbling system, the "Moved" event would stop hitting the button. To fix this,
+    your Stage needs to track who "owns" each pointer.
+    
+        How to process Focus in C#:
+        ---------------------------
+        
+        TouchDown: Stage performs a Hit test. If an Actor is hit, the Stage stores a reference:
+        
+            _pointerOwners[ pointerId ] = hitActor.
+        
+        TouchDragged: The Stage doesn't hit test anymore. It just looks at the _pointerOwners and
+        fires the event directly at that Actor.
+        
+        TouchUp: The Stage fires the event at the owner, then clears the reference:
+        
+            _pointerOwners[ pointerId ] = null.
+
+
+    3. The Final Architecture
+    -------------------------
+    For your framework, the "processing" flow looks like this:
+
+        Low Level:
+        The Engine (Unity/Monogame/SDL) sends a raw OS event.
+        
+        Stage Level:
+        The Stage "Obtains" an InputEvent from the EventPool, populates the PointerID, and
+        determines the Target.
+        
+        Actor Level:
+        The Target.Fire(e) method runs the while(parent != null) loop.
+        
+        Listener Level: Each IEventListener on the path checks the Event type. If it matches, it executes the user's logic.
+        
+        Clean Up: Once the bubble is finished, the Stage "Frees" the event back to the pool.
+        
+        
+    Why this is better than the Java version:
+    -----------------------------------------
+    
+    The switch expression:
+    C#'s switch (used in the InputListener above) is significantly more readable and faster than
+    nested if/else blocks.
+        
+    Explicit Interfaces:
+    By using IEventListener, your framework can support both the "Object-based" listeners (LibGDX
+    style) and "Delegate-based" events (Standard C# style) simultaneously.
+    
+    No Type-Casting Pain:
+    Using is InputEvent ie (Pattern Matching) handles the null check and the cast in a single CPU
+    instruction.
+    
+    A final tip for the "Future" Multi-touch:
+    When you start testing touch, use an Array for your pointer owners, not a Dictionary.
+
+        private Actor[] _touchFocus = new Actor[10];
+
+    Since most mobile devices support up to 10 fingers, an array is faster and creates zero garbage
+    during lookups.
+
+
+    ClickListeners
+    --------------
+    
+    Since you want to distinguish between a Tap and a Long Press, you are moving into the realm of
+    Gesture Detection.In C#, the most efficient way to handle this is to have your ClickListener 
+    (which is a specific kind of InputListener) manage a small "State Machine" and a timer. Because
+    C# has a very robust System.Diagnostics.Stopwatch, tracking the duration of a press is extremely
+    lightweight.
+    
+    1. The ClickListener State Machine
+    ----------------------------------
+    
+    A "Click" isn't just a TouchDown. It’s a sequence:
+    
+        Down -> Wait -> Up.A "Long Press" is: Down -> Timer Threshold Exceeded.
+    
+        Implementation Strategy:
+
+            public class ClickListener : InputListener
+            {
+                private long _pressStartTime;
+                private bool _isPressed;
+                private const long LongPressThreshold = 500; // Milliseconds
+            
+                public override bool TouchDown( InputEvent e, float x, float y, int pointer )
+                {
+                    if ( pointer != 0 ) return false; // Only handle first finger for now
+                    
+                    _isPressed = true;
+                    _pressStartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                
+                    return true;
+                }
+            
+                public override bool TouchUp( InputEvent e, float x, float y, int pointer )
+                {
+                    if (!_isPressed || pointer != 0) return false;
+            
+                    long duration = DateTimeOffset.Now.ToUnixTimeMilliseconds() - _pressStartTime;
+            
+                    if ( duration > LongPressThreshold )
+                    {
+                        OnLongPress();
+                    }
+                    else
+                    {
+                        OnClicked();
+                    }
+            
+                    _isPressed = false;
+                    return true;
+                }
+            
+                protected virtual void OnClicked() { /* User logic */ }
+                protected virtual void OnLongPress() { /* User logic */ }
+            }
+    
+    2. Processing "Long Press" via the Stage
+    ----------------------------------------
+    
+    The code above only detects a long press after the finger is lifted. If you want the 
+    "Long Press" to trigger while the finger is still down (like a context menu popping up),
+    your Stage needs to participate. 
+    
+        The "Tick" Update
+        -----------------
+        
+        Since you're building a framework, your Stage likely has an Update(float delta) method
+        called every frame.
+        
+            Down: The ClickListener starts a timer.
+            
+            Update: The Stage updates the ClickListener.
+            
+            Trigger: If the timer hits 500ms and the finger hasn't moved too far (the "Tap Square"),
+            the listener fires the LongPress event.
+            
+    3. The "Tap Square" (Visual Tolerance)
+    --------------------------------------
+    The "Tap Square" is a small area around the touch point that the user must touch to register
+    a click. In mobile touch, users' fingers jitter. If you move your finger 1 pixel, it should
+    still count as a tap. If you move 50 pixels, it's a drag.
+    
+        Processing Tip:
+        Store the InitialX and InitialY during TouchDown. In Update or TouchUp, check the distance:
+        
+            distance = (float)Math.Sqrt( Math.Pow( e.StageX - InitialX, 2 ) + Math.Pow( e.StageY - InitialY, 2 ) );
+            
+            if ( distance < TapSquare )
+            {
+                // Tap!
+            }
+            else
+            {
+                // Drag!
+            }
+    
+        If the distance is less than a small threshold (e.g., 10-20 pixels), it's a valid tap/long press.
+        
+    4. Why this fits the C# Listener Pattern
+    ----------------------------------------
+    
+    By encapsulating this logic in a ClickListener class, your users don't have to worry about math or
+    timers. They just do this:
+    
+        button.AddListener( new ClickListener
+        {
+            Clicked = () => Console.WriteLine( "Tap!" ),
+            LongPressed = () => Console.WriteLine( "Context Menu!" )
+        } );
+        
+        Framework Processing Summary
+        ----------------------------
+
+            InputEvent Pool: Keeps memory low.
+            
+            Stage Dispatching: Correctly identifies the Target using hit-testing.
+            
+            Bubbling: Allows a ScrollPanel to cancel a button's tap if the user starts scrolling.
+            
+            Specialised Listeners: Abstract away the complex math of timing and distance.
+    
+    
+    Stage Access from Input Loop
+    ----------------------------
+    
+    Since your Update loop has access to the Stage, you can implement "Active" long presses (the
+    kind that trigger before the user lifts their finger) much more effectively than a pure 
+    listener-based approach.
+    In C#, the cleanest way to process this is by having the Stage maintain a list of Active Timers.
+    
+        1. The "Active" Listener Pattern
+        
+        To make this work, your ClickListener needs to be "Updateable." You can add a Tick method
+        to your listener interface or a specialized list in your Stage.
+        
+        The Listener Logic
+        
+        public class ClickListener : InputListener
+        {
+            private float _pressTime = 0;
+            private bool _longPressTriggered = false;
+            public float LongPressDuration { get; set; } = 0.5f; // 500ms default
+        
+            public override bool TouchDown( InputEvent e, float x, float y, int pointer ) 
+            {
+                if (pointer != 0) return false;
+                
+                _pressTime = 0;
+                _longPressTriggered = false;
+                
+                return true;
+            }
+        
+            // Called by the Stage every frame
+            public void Update( float delta )
+            {
+                if ( _isPressed && !_longPressTriggered ) 
+                {
+                    _pressTime += delta;
+                    
+                    if ( _pressTime >= LongPressDuration ) 
+                    {
+                        _longPressTriggered = true;
+                        TriggerLongPress();
+                    }
+                }
+            }
+        }
+    
+        2. Processing in the Stage Loop
+        -------------------------------
+        
+        Instead of every single listener updating (which is slow), the Stage should only track
+        listeners that are currently being "pressed."
+        
+            public class Stage
+            {
+               // Track listeners that need a frame-by-frame update
+               private readonly List< ClickListener > _activeClickListeners = new();
+            
+               public void Update( float delta )
+               {
+                   // Use a reverse loop so listeners can remove themselves if needed
+                   for ( int i = _activeClickListeners.Count - 1; i >= 0; i-- )
+                   {
+                       _activeClickListeners[ i ].Update( delta );
+            
+                        // If the finger was lifted, remove it from the update list
+                        if ( !_activeClickListeners[ i ].IsPressed ) 
+                        {
+                            _activeClickListeners.RemoveAt( i );
+                        }
+                    }
+               }
+           }
+
+        3. The "Visual State" Processing
+        --------------------------------
+
+        Since this is a UI framework, you likely want the button to change color (a "Pressed"
+        state) while the user is holding it. Because your ClickListener is already being processed
+        in the Update loop, you can handle visual changes there too. This is a big advantage over
+        the Java/LibGDX version, where the visual "Down" state and the "Long Press" logic are often
+        disconnected.
+        
+            TouchDown: Set button.VisualState = Pressed.
+            
+            LongPress Triggered: Set button.VisualState = SpecialHighlight.
+            
+            TouchUp: Reset to button.VisualState = Normal.
+            
+        4. Summary of the C# Framework Flow
+        
+            Input Arrival:          Raw OS input → Stage.OnTouchDown.
+            
+            Object Retrieval:       EventPool<InputEvent>.Obtain().
+            
+            Targeting:              Root.Hit(x, y) finds the Actor.
+            
+            Bubbling:               Actor.Fire(e) walks up the Parent chain.
+            
+            Listener Registration:  If a ClickListener handles the event, it adds itself
+                                    to the Stage._activeClickListeners.
+            
+            Frame Update:           Stage.Update ticks the timer on that specific listener.
+            
+            Final Cleanup:          Once the touch ends, the listener is removed from the update
+                                    list and the event is returned to the EventPool.
+        
+        
+        Performance Note: C# List vs HashSet
+        ------------------------------------
+        
+        If you expect a lot of simultaneous touches (multi-touch), using a List for 
+        activeClickListeners is fine for up to 10-20 items. If your framework gets very
+        complex, a HashSet provides "Constant Time Complexity" removal, which prevents
+        performance hits when many buttons are being interacted with at once.

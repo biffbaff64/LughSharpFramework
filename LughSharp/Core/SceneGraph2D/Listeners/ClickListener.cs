@@ -59,6 +59,8 @@ public class ClickListener : InputListener
     /// </summary>
     public const float VisualPressedDuration = 0.1f;
 
+    private readonly Action< InputEvent, float, float >? _action;
+    
     private bool _cancelled;
     private long _lastTapTime;
     private bool _over;
@@ -74,6 +76,217 @@ public class ClickListener : InputListener
     public ClickListener( int button = IInput.Buttons.Left )
     {
         Button = button;
+    }
+
+    public ClickListener( Action< InputEvent, float, float > ev ) : this()
+    {
+        _action = ev;
+    }
+    
+    /// <summary>
+    /// Called when a mouse button or a finger touch goes down on the actor.
+    /// If true is returned, this listener will have
+    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>,
+    /// so it will receive all touchDragged and touchUp events, even those not
+    /// over this actor, until touchUp is received. Also when true is returned,
+    /// the event is handled by <see cref="Event.SetHandled"/>.
+    /// </summary>
+    public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+    {
+        if ( Pressed )
+        {
+            return false;
+        }
+
+        if ( ( pointer == 0 ) && ( Button != -1 ) && ( button != Button ) )
+        {
+            return false;
+        }
+
+        Pressed        = true;
+        PressedPointer = pointer;
+        PressedButton  = button;
+        TouchDownX     = x;
+        TouchDownY     = y;
+        VisualPressed  = true;
+
+        return true;
+    }
+
+    /// <summary>
+    /// Called when a mouse button or a finger touch is moved anywhere, but only
+    /// if touchDown previously returned true for the mouse button or touch.
+    /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
+    /// </summary>
+    public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
+    {
+        if ( ( pointer != PressedPointer ) || _cancelled )
+        {
+            return;
+        }
+
+        Pressed = IsOver( ev?.ListenerActor, x, y );
+
+        if ( !Pressed )
+        {
+            // Once outside the tap square, don't use the tap square anymore.
+            InvalidateTapSquare();
+        }
+    }
+
+    /// <summary>
+    /// Called when a mouse button or a finger touch goes up anywhere, but only
+    /// if touchDown previously returned true for the mouse button or touch.
+    /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
+    /// </summary>
+    public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+    {
+        if ( pointer == PressedPointer )
+        {
+            // If the stage cancels the touch focus (e.g. scrolling started), flag it!
+            if ( ev is { TouchFocusCancel: true } ) _cancelled = true;
+            
+            if ( !_cancelled )
+            {
+                bool touchUpOver = IsOver( ev?.ListenerActor, x, y );
+
+                // Ignore touch up if the wrong mouse button.
+                if ( touchUpOver && ( pointer == 0 ) && ( Button != -1 ) && ( button != Button ) )
+                {
+                    touchUpOver = false;
+                }
+
+                if ( touchUpOver )
+                {
+                    long time = TimeUtils.NanoTime();
+
+                    if ( ( time - _lastTapTime ) > TapCountInterval )
+                    {
+                        TapCount = 0;
+                    }
+
+                    TapCount++;
+                    _lastTapTime = time;
+
+                    OnClicked( ev!, x, y );
+                }
+            }
+
+            Pressed        = false;
+            PressedPointer = -1;
+            PressedButton  = -1;
+            _cancelled     = false;
+        }
+    }
+
+    /// <summary>
+    /// Called any time the mouse cursor or a finger touch is moved over an actor.
+    /// On the desktop, this event occurs even when no mouse buttons are pressed
+    /// (pointer will be -1).
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="pointer"></param>
+    /// <param name="fromActor"> May be null. </param>
+    public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
+    {
+        if ( ( pointer == -1 ) && !_cancelled )
+        {
+            _over = true;
+        }
+    }
+
+    /// <summary>
+    /// Called any time the mouse cursor or a finger touch is moved out of an actor.
+    /// On the desktop, this event occurs even when no mouse buttons are pressed
+    /// (pointer will be -1).
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="pointer"></param>
+    /// <param name="toActor"> May be null. </param>
+    /// <see cref="InputEvent "/>
+    public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
+    {
+        if ( ( pointer == -1 ) && !_cancelled )
+        {
+            _over = false;
+        }
+    }
+
+    /// <summary>
+    /// If a touch down is being monitored, the drag and touch up events are
+    /// ignored until the next touch up.
+    /// </summary>
+    public virtual void Cancel()
+    {
+        if ( PressedPointer == -1 )
+        {
+            return;
+        }
+
+        _cancelled = true;
+        Pressed    = false;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    public virtual void OnClicked( InputEvent ev, float x, float y )
+    {
+        _action?.Invoke( ev, x, y );
+    }
+
+    /// <summary>
+    /// Returns true if the specified position is over the specified
+    /// actor or within the tap square.
+    /// </summary>
+    public bool IsOver( Actor? actor, float x, float y )
+    {
+        Actor? hit = actor?.Hit( x, y, true );
+
+        if ( ( hit == null ) || !hit.IsDescendantOf( actor ) )
+        {
+            return InTapSquare( x, y );
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Returns true if the supplied x and y coordinates are within the tap square.
+    /// </summary>
+    public bool InTapSquare( float x, float y )
+    {
+        if ( Math.Abs( TouchDownX - ( -1f ) ) < NumberUtils.FloatTolerance
+          && Math.Abs( TouchDownY - ( -1f ) ) < NumberUtils.FloatTolerance )
+        {
+            return false;
+        }
+
+        return ( Math.Abs( x - TouchDownX ) < TapSquareSize )
+            && ( Math.Abs( y - TouchDownY ) < TapSquareSize );
+    }
+
+    /// <summary>
+    /// Returns true if a touch is within the tap square.
+    /// </summary>
+    public bool InTapSquare()
+    {
+        return !TouchDownX.Equals( -1 );
+    }
+
+    /// <summary>
+    /// The tap square will no longer be used for the current touch.
+    /// </summary>
+    public void InvalidateTapSquare()
+    {
+        TouchDownX = -1;
+        TouchDownY = -1;
     }
 
     /// <summary>
@@ -133,177 +346,6 @@ public class ClickListener : InputListener
         get;
         set;
     } = ( long )( 0.4f * 1000000000L );
-
-    /// <inheritdoc />
-    public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
-    {
-        if ( Pressed )
-        {
-            return false;
-        }
-
-        if ( ( pointer == 0 ) && ( Button != -1 ) && ( button != Button ) )
-        {
-            return false;
-        }
-
-        Pressed        = true;
-        PressedPointer = pointer;
-        PressedButton  = button;
-        TouchDownX     = x;
-        TouchDownY     = y;
-        VisualPressed  = true;
-
-        return true;
-    }
-
-    /// <inheritdoc />
-    public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
-    {
-        if ( ( pointer != PressedPointer ) || _cancelled )
-        {
-            return;
-        }
-
-        Pressed = IsOver( ev?.ListenerActor, x, y );
-
-        if ( !Pressed )
-        {
-            // Once outside the tap square, don't use the tap square anymore.
-            InvalidateTapSquare();
-        }
-    }
-
-    /// <inheritdoc />
-    public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
-    {
-        if ( pointer == PressedPointer )
-        {
-            // If the stage cancels the touch focus (e.g. scrolling started), flag it!
-            if ( ev is { TouchFocusCancel: true } ) _cancelled = true;
-            
-            if ( !_cancelled )
-            {
-                bool touchUpOver = IsOver( ev?.ListenerActor, x, y );
-
-                // Ignore touch up if the wrong mouse button.
-                if ( touchUpOver && ( pointer == 0 ) && ( Button != -1 ) && ( button != Button ) )
-                {
-                    touchUpOver = false;
-                }
-
-                if ( touchUpOver )
-                {
-                    long time = TimeUtils.NanoTime();
-
-                    if ( ( time - _lastTapTime ) > TapCountInterval )
-                    {
-                        TapCount = 0;
-                    }
-
-                    TapCount++;
-                    _lastTapTime = time;
-
-                    OnClicked( ev!, x, y );
-                }
-            }
-
-            Pressed        = false;
-            PressedPointer = -1;
-            PressedButton  = -1;
-            _cancelled     = false;
-        }
-    }
-
-    /// <inheritdoc />
-    public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
-    {
-        if ( ( pointer == -1 ) && !_cancelled )
-        {
-            _over = true;
-        }
-    }
-
-    /// <inheritdoc />
-    public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
-    {
-        if ( ( pointer == -1 ) && !_cancelled )
-        {
-            _over = false;
-        }
-    }
-
-    /// <summary>
-    /// If a touch down is being monitored, the drag and touch up events are
-    /// ignored until the next touch up.
-    /// </summary>
-    public virtual void Cancel()
-    {
-        if ( PressedPointer == -1 )
-        {
-            return;
-        }
-
-        _cancelled = true;
-        Pressed    = false;
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="ev"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    public virtual void OnClicked( InputEvent ev, float x, float y )
-    {
-    }
-
-    /// <summary>
-    /// Returns true if the specified position is over the specified
-    /// actor or within the tap square.
-    /// </summary>
-    public bool IsOver( Actor? actor, float x, float y )
-    {
-        Actor? hit = actor?.Hit( x, y, true );
-
-        if ( ( hit == null ) || !hit.IsDescendantOf( actor ) )
-        {
-            return InTapSquare( x, y );
-        }
-
-        return true;
-    }
-
-    /// <summary>
-    /// Returns true if the supplied x and y coordinates are within the tap square.
-    /// </summary>
-    public bool InTapSquare( float x, float y )
-    {
-        if ( Math.Abs( TouchDownX - ( -1f ) ) < NumberUtils.FloatTolerance
-          && Math.Abs( TouchDownY - ( -1f ) ) < NumberUtils.FloatTolerance )
-        {
-            return false;
-        }
-
-        return ( Math.Abs( x - TouchDownX ) < TapSquareSize )
-            && ( Math.Abs( y - TouchDownY ) < TapSquareSize );
-    }
-
-    /// <summary>
-    /// Returns true if a touch is within the tap square.
-    /// </summary>
-    public bool InTapSquare()
-    {
-        return !TouchDownX.Equals( -1 );
-    }
-
-    /// <summary>
-    /// The tap square will no longer be used for the current touch.
-    /// </summary>
-    public void InvalidateTapSquare()
-    {
-        TouchDownX = -1;
-        TouchDownY = -1;
-    }
 }
 
 // ============================================================================

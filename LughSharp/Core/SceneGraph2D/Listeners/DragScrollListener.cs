@@ -53,21 +53,20 @@ namespace LughSharp.Core.SceneGraph2D.Listeners;
 [PublicAPI]
 public class DragScrollListener : DragListener
 {
-    private static readonly Vector2             _tmpCoords      = new();
+    private static readonly Vector2             _tmpCoords     = new();
     private readonly        Interpolation.ExpIn _interpolation = Interpolation.Exp5In;
     private readonly        ScrollPane          _scrollPane;
 
     private float      _maxSpeed = 75;
     private float      _minSpeed = 15;
-    private float      _padBottom;
-    private float      _padTop;
     private long       _rampTime = 1750;
+    private float      _tickSecs = 0.05f;
     private ScrollDown _scrollDown;
     private ScrollUp   _scrollUp;
     private long       _startTime;
-    private float      _tickSecs = 0.05f;
+    private float      _padBottom;
+    private float      _padTop;
 
-    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -214,6 +213,5 @@ public class DragScrollListener : DragListener
     }
 }
 
-// ====================================================================--------
-// ====================================================================--------
-// ====================================================================--------
+// ============================================================================
+// ============================================================================

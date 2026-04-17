@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 namespace LughSharp.Core.SceneGraph2D.Listeners;
 
 /// <summary>
@@ -58,6 +56,9 @@ public class FocusListener : IEventListener
         return false;
     }
 
+    /// <summary>
+    /// Called when the actor gains or loses keyboard focus.
+    /// </summary>
     /// <param name="ev"></param>
     /// <param name="actor">
     /// The event target, which is the actor that emitted the focus event.
@@ -67,6 +68,9 @@ public class FocusListener : IEventListener
     {
     }
 
+    /// <summary>
+    /// Called when the actor gains or loses scroll focus.
+    /// </summary>
     /// <param name="ev"></param>
     /// <param name="actor">
     /// The event target, which is the actor that emitted the focus event.
@@ -109,3 +113,7 @@ public class FocusListener : IEventListener
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

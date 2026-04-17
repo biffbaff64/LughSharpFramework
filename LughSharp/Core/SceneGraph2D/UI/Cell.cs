@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
@@ -36,26 +32,26 @@ namespace LughSharp.Core.SceneGraph2D.UI;
 [PublicAPI]
 public class Cell : IPoolable, IResetable
 {
-    public Value? MinWidth    { get; set; }
-    public Value? MinHeight   { get; set; }
-    public Value? PrefWidth   { get; set; }
-    public Value? PrefHeight  { get; set; }
-    public Value? MaxWidth    { get; set; }
-    public Value? MaxHeight   { get; set; }
-    public Value? SpaceTop    { get; set; }
-    public Value? SpaceLeft   { get; set; }
-    public Value? SpaceBottom { get; set; }
-    public Value? SpaceRight  { get; set; }
-    public Value? PadTop      { get; set; }
-    public Value? PadLeft     { get; set; }
-    public Value? PadBottom   { get; set; }
-    public Value? PadRight    { get; set; }
-    public Align  Alignment   { get; set; } = Align.None;
-    public int    ExpandX     { get; set; }
-    public int    ExpandY     { get; set; }
-    public int    Colspan     { get; set; }
-    public bool   UniformX    { get; set; }
-    public bool   UniformY    { get; set; }
+    public Value MinWidth    { get; set; } = Value.Zero;
+    public Value MinHeight   { get; set; } = Value.Zero;
+    public Value PrefWidth   { get; set; } = Value.Zero;
+    public Value PrefHeight  { get; set; } = Value.Zero;
+    public Value MaxWidth    { get; set; } = Value.Zero;
+    public Value MaxHeight   { get; set; } = Value.Zero;
+    public Value SpaceTop    { get; set; } = Value.Zero;
+    public Value SpaceLeft   { get; set; } = Value.Zero;
+    public Value SpaceBottom { get; set; } = Value.Zero;
+    public Value SpaceRight  { get; set; } = Value.Zero;
+    public Value PadTop      { get; set; } = Value.Zero;
+    public Value PadLeft     { get; set; } = Value.Zero;
+    public Value PadBottom   { get; set; } = Value.Zero;
+    public Value PadRight    { get; set; } = Value.Zero;
+    public Align Alignment   { get; set; } = Align.None;
+    public int   ExpandX     { get; set; }
+    public int   ExpandY     { get; set; }
+    public int   Colspan     { get; set; }
+    public bool  UniformX    { get; set; }
+    public bool  UniformY    { get; set; }
 
     // ========================================================================
 
@@ -154,7 +150,7 @@ public class Cell : IPoolable, IResetable
     /// If null, removes any current actor.
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
-    public Cell SetActor< T >( T? newActor ) where T : Actor
+    public Cell SetActor< TA >( TA? newActor ) where TA : Actor
     {
         if ( Actor != newActor )
         {
@@ -900,7 +896,7 @@ public class Cell : IPoolable, IResetable
     /// Sets <see cref="FillX"/> and <see cref="FillY"/> to <see cref="Onef"/>
     /// </summary>
     /// <returns> This Cell for chaining </returns>
-    public Cell SetFill( float fx = Onef, float fy = Onef )
+    public Cell Fill( float fx = Onef, float fy = Onef )
     {
         FillX = fx;
         FillY = fy;
@@ -908,7 +904,13 @@ public class Cell : IPoolable, IResetable
         return this;
     }
 
-    public Cell SetFillConditional( bool x, bool y )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public Cell Fill( bool x, bool y )
     {
         FillX = x ? Onef : Zerof;
         FillY = y ? Onef : Zerof;
@@ -1117,7 +1119,7 @@ public class Cell : IPoolable, IResetable
     /// <param name="expandX"> True to expand in X. </param>
     /// <param name="expandY"> True to expand in Y. </param>
     /// <returns> This Cell for chaining. </returns>
-    public Cell ExpandConditional( bool expandX, bool expandY )
+    public Cell Expand( bool expandX, bool expandY )
     {
         ExpandX = expandX ? Onei : Zeroi;
         ExpandY = expandY ? Onei : Zeroi;
@@ -1172,75 +1174,51 @@ public class Cell : IPoolable, IResetable
 
     // ========================================================================
 
-    public float GetMinWidth()
-    {
-        return MinWidth!.Get( Actor );
-    }
+    /// <summary>
+    /// Gets the preferred width of the actor.
+    /// </summary>
+    public virtual float GetPrefWidth() => PrefWidth.Get( Actor );
 
-    public float GetMinHeight()
-    {
-        return MinHeight!.Get( Actor );
-    }
+    /// <summary>
+    /// Gets the preferred height of the actor.
+    /// </summary>
+    public virtual float GetPrefHeight() => PrefHeight.Get( Actor );
 
-    public virtual float GetPrefWidth()
-    {
-        return PrefWidth!.Get( Actor );
-    }
+    /// <summary>
+    /// Gets the minimum width of the actor.
+    /// </summary>
+    public float GetMinWidth() => MinWidth.Get( Actor );
 
-    public virtual float GetPrefHeight()
-    {
-        return PrefHeight!.Get( Actor );
-    }
+    /// <summary>
+    /// Gets the minimum height of the actor.
+    /// </summary>
+    public float GetMinHeight() => MinHeight.Get( Actor );
 
-    public float GetMaxWidth()
-    {
-        return MaxWidth!.Get( Actor );
-    }
+    /// <summary>
+    /// Gets the maximum width of the actor.
+    /// </summary>
+    public float GetMaxWidth() => MaxWidth.Get( Actor );
 
-    public float GetMaxHeight()
-    {
-        return MaxHeight!.Get( Actor );
-    }
+    /// <summary>
+    /// Gets the maximum height of the actor. 
+    /// </summary>
+    public float GetMaxHeight() => MaxHeight.Get( Actor );
 
-    public float GetSpaceTop()
-    {
-        return SpaceTop!.Get( Actor );
-    }
+    public float GetSpaceTop() => SpaceTop.Get( Actor );
 
-    public float GetSpaceLeft()
-    {
-        return SpaceLeft!.Get( Actor );
-    }
+    public float GetSpaceLeft() => SpaceLeft.Get( Actor );
 
-    public float GetSpaceBottom()
-    {
-        return SpaceBottom!.Get( Actor );
-    }
+    public float GetSpaceBottom() => SpaceBottom.Get( Actor );
 
-    public float GetSpaceRight()
-    {
-        return SpaceRight!.Get( Actor );
-    }
+    public float GetSpaceRight() => SpaceRight.Get( Actor );
 
-    public float GetPadTop()
-    {
-        return PadTop!.Get( Actor );
-    }
+    public float GetPadTop() => PadTop.Get( Actor );
 
-    public float GetPadLeft()
-    {
-        return PadLeft!.Get( Actor );
-    }
+    public float GetPadLeft() => PadLeft.Get( Actor );
 
-    public float GetPadBottom()
-    {
-        return PadBottom!.Get( Actor );
-    }
+    public float GetPadBottom() => PadBottom.Get( Actor );
 
-    public float GetPadRight()
-    {
-        return PadRight!.Get( Actor );
-    }
+    public float GetPadRight() => PadRight.Get( Actor );
 
     // ========================================================================
 
@@ -1281,24 +1259,24 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets all constraint fields to null. */
+    /// Resets constraint fields.
     /// </summary>
     public void Clear()
     {
-        MinWidth    = null;
-        MinHeight   = null;
-        PrefWidth   = null;
-        PrefHeight  = null;
-        MaxWidth    = null;
-        MaxHeight   = null;
-        SpaceTop    = null;
-        SpaceLeft   = null;
-        SpaceBottom = null;
-        SpaceRight  = null;
-        PadTop      = null;
-        PadLeft     = null;
-        PadBottom   = null;
-        PadRight    = null;
+        MinWidth    = null!;
+        MinHeight   = null!;
+        PrefWidth   = null!;
+        PrefHeight  = null!;
+        MaxWidth    = null!;
+        MaxHeight   = null!;
+        SpaceTop    = null!;
+        SpaceLeft   = null!;
+        SpaceBottom = null!;
+        SpaceRight  = null!;
+        PadTop      = null!;
+        PadLeft     = null!;
+        PadBottom   = null!;
+        PadRight    = null!;
         FillX       = 0f;
         FillY       = 0f;
         Alignment   = Align.None;
@@ -1356,20 +1334,20 @@ public class Cell : IPoolable, IResetable
             return;
         }
 
-        MinWidth    = cell.MinWidth ?? MinWidth;
-        MinHeight   = cell.MinHeight ?? MinHeight;
-        PrefWidth   = cell.PrefWidth ?? PrefWidth;
-        PrefHeight  = cell.PrefHeight ?? PrefHeight;
-        MaxWidth    = cell.MaxWidth ?? MaxWidth;
-        MaxHeight   = cell.MaxHeight ?? MaxHeight;
-        SpaceTop    = cell.SpaceTop ?? SpaceTop;
-        SpaceLeft   = cell.SpaceLeft ?? SpaceLeft;
-        SpaceBottom = cell.SpaceBottom ?? SpaceBottom;
-        SpaceRight  = cell.SpaceRight ?? SpaceRight;
-        PadTop      = cell.PadTop ?? PadTop;
-        PadLeft     = cell.PadLeft ?? PadLeft;
-        PadBottom   = cell.PadBottom ?? PadBottom;
-        PadRight    = cell.PadRight ?? PadRight;
+        MinWidth    = cell.MinWidth;
+        MinHeight   = cell.MinHeight;
+        PrefWidth   = cell.PrefWidth;
+        PrefHeight  = cell.PrefHeight;
+        MaxWidth    = cell.MaxWidth;
+        MaxHeight   = cell.MaxHeight;
+        SpaceTop    = cell.SpaceTop;
+        SpaceLeft   = cell.SpaceLeft;
+        SpaceBottom = cell.SpaceBottom;
+        SpaceRight  = cell.SpaceRight;
+        PadTop      = cell.PadTop;
+        PadLeft     = cell.PadLeft;
+        PadBottom   = cell.PadBottom;
+        PadRight    = cell.PadRight;
 
         if ( cell.Alignment != 0 )
         {

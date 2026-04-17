@@ -32,14 +32,31 @@ namespace LughSharp.Core.SceneGraph2D.Listeners;
 [PublicAPI]
 public class ChangeListener : IEventListener
 {
-//    public ChangeListener()
-//    {
-//    }
+    private readonly Action< ChangeEvent, Actor? >? _action;
 
-//    public ChangeListener( Action< object > action )
-//    {
-//    }
+    // ========================================================================
+    
+    /// <summary>
+    /// Creates a new ChangeListener.
+    /// </summary>
+    public ChangeListener()
+    {
+    }
 
+    /// <summary>
+    /// Creates a new ChangeListener.
+    /// </summary>
+    /// <param name="action"></param>
+    public ChangeListener( Action< ChangeEvent, Actor? > action )
+    {
+        _action = action;
+    }
+
+    /// <summary>
+    /// Handles any <see cref="ChangeEvent"/>s generated.
+    /// </summary>
+    /// <param name="ev"></param>
+    /// <returns></returns>
     public virtual bool Handle( Event ev )
     {
         if ( ev is ChangeEvent changeEvent )
@@ -59,13 +76,18 @@ public class ChangeListener : IEventListener
     /// </param>
     public virtual void Changed( ChangeEvent ev, Actor? actor )
     {
+        _action?.Invoke( ev, actor );
     }
 
+    // ========================================================================
+    
     /// <summary>
-    /// Fired when something in an actor has changed. This is a generic event, exactly
-    /// what changed in an actor will vary.
+    /// Fired when something in an actor has changed. This is a generic event,#
+    /// exactly what changed in an actor will vary.
     /// </summary>
-    public class ChangeEvent : Event
-    {
-    }
+    public class ChangeEvent : Event;
 }
+
+// ============================================================================
+// ============================================================================
+

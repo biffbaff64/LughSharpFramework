@@ -113,7 +113,7 @@ public class Dialog : Window
         ContentTable = new Table( _skin );
         ButtonTable  = new Table( _skin );
 
-        Add( ContentTable ).Expand().SetFill();
+        Add( ContentTable ).Expand().Fill();
         AddRow();
         Add( ButtonTable ).SetFillX();
 

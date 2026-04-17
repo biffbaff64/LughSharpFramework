@@ -44,6 +44,8 @@ using LughSharp.Core.SceneGraph2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 
+using TestProject.Source;
+
 namespace TestProject.Source;
 
 [PublicAPI]
@@ -174,8 +176,24 @@ public class StageTests : IDisposable
             Button.SetPosition( 100, 250 );
             Stage?.AddActor( Button );
 
-            Button.AddListener( new ChangeListener() );
-            
+            Button.AddListener( new ChangeListener( ( ev, actor ) =>
+            {
+//                var source  = ev.TargetActor; // Actor that fired the event
+//                var stage   = ev.Stage;       // The Stage it belongs to
+//                var capture = ev.Capture;     // true if in capture phase
+
+                if ( actor is Button { IsChecked: true } )
+                {
+                    Logger.Debug( "Button is checked!" );
+                }
+
+                if ( actor is Button { IsPressed: true } )
+                {
+                    Logger.Debug( "Button is pressed!" );
+                }
+                
+                ev.SetHandled();
+            } ) );
             
             Button2 = new Button( skin, "default" )
             {
@@ -184,6 +202,11 @@ public class StageTests : IDisposable
             Button2.SetPosition( 100, 70 );
             Button2.SetSize( Button.Width, Button.Height );
             Stage?.AddActor( Button2 );
+            
+            Button2.AddListener( new ClickListener( ( ev, x, y ) =>
+            {
+                
+            } ) );
         }
 
         // --------------------------------------

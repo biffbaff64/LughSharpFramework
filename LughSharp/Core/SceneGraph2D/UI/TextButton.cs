@@ -22,19 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Diagnostics;
-
-using JetBrains.Annotations;
-
-using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.SceneGraph2D.UI.Styles;
-using LughSharp.Core.SceneGraph2D.Utils;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.SceneGraph2D.UI;
 
@@ -75,7 +64,7 @@ public class TextButton : Button
         Label = new Label( text, new LabelStyle( style.Font, style.FontColor ) );
         Label.SetAlignment( Align.Center );
 
-        Add( Label ).Grow();
+        Add( Label ).Expand().Fill();
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
@@ -85,7 +74,7 @@ public class TextButton : Button
     /// <exception cref="ArgumentException">
     /// Thrown if an attempt to set Style to null is made.
     /// </exception>
-    public TextButtonStyle? Style
+    public TextButtonStyle Style
     {
         get;
         set
@@ -97,14 +86,11 @@ public class TextButton : Button
             this.SetStyle< TextButtonStyle >( value );
             base.SetStyle( value );
 
-            if ( Label != null )
+            Label?.Style = new LabelStyle( Label.Style )
             {
-                LabelStyle labelStyle = Label.Style;
-
-                labelStyle.Font      = value.Font;
-                labelStyle.FontColor = value.FontColor ?? Color.White;
-                Label.Style          = labelStyle;
-            }
+                Font      = value.Font,
+                FontColor = value.FontColor ?? Color.White,
+            };
         }
     }
 
@@ -130,8 +116,6 @@ public class TextButton : Button
     /// </summary>
     public Color GetFontColor()
     {
-        if ( Style == null ) return Color.White;
-
         if ( IsDisabled && ( Style.DisabledFontColor != null ) )
         {
             return Style.DisabledFontColor;
@@ -209,7 +193,6 @@ public class TextButton : Button
     /// <summary>
     /// Returns the <see cref="Cell"/> for this button's <see cref="Label"/>.
     /// </summary>
-    /// <returns> The requested Cell, or null if the button has no label. </returns>
     public Cell? GetLabelCell()
     {
         return Label != null ? GetCell( Label ) : null;
