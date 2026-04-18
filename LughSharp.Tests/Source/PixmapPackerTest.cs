@@ -41,6 +41,10 @@ public class PixmapPackerTest : ILughTest
     {
     }
 
+    public void Update()
+    {
+    }
+    
     public void Render( SpriteBatch spriteBatch )
     {
     }

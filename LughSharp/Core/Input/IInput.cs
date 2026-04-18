@@ -348,24 +348,17 @@ public interface IInput
         public const int Unknown    = 0;
         public const int MaxKeycode = 255;
 
-        private static readonly List< string > _keyNames = new();
-
         // ====================================================================
 
-        static Keys()
-        {
-            for ( var i = 0; i <= MaxKeycode; i++ )
-            {
-                string? name = ToString( i );
-
-                if ( ( name != null ) && ( _keyNames != null ) )
-                {
-                    _keyNames[ i ] = name;
-                }
-            }
-        }
-
-        public static string? ToString( int keycode )
+        /// <summary>
+        /// Returns the keycode as a string.
+        /// </summary>
+        /// <param name="keycode"> The keycode. </param>
+        /// <param name="verbose"> True for a more verbose output, e.g. 'Minus' instead of '-'. </param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if the <c>keycode</c> is &lt; 0 or &gt; <see cref="MaxKeycode"/>. </exception>
+        public static string? NameOf( int keycode, bool verbose = false )
         {
             if ( keycode < 0 )
             {
@@ -396,8 +389,8 @@ public interface IInput
                               Num7             => "7",
                               Num8             => "8",
                               Num9             => "9",
-                              Star             => "*",
-                              Pound            => "#",
+                              Star             => verbose ? "Star" : "*",
+                              Pound            => verbose ? "Pound" : "#",
                               Up               => "Up",
                               Down             => "Down",
                               Left             => "Left",
@@ -434,8 +427,8 @@ public interface IInput
                               X                => "X",
                               Y                => "Y",
                               Z                => "Z",
-                              Comma            => ",",
-                              Period           => ".",
+                              Comma            => verbose ? "Comma" : ",",
+                              Period           => verbose ? "Period" : ".",
                               AltLeft          => "L-Alt",
                               AltRight         => "R-Alt",
                               ShiftLeft        => "L-Shift",
@@ -447,16 +440,16 @@ public interface IInput
                               Envelope         => "Envelope",
                               Enter            => "Enter",
                               Del              => "Delete", // also BACKSPACE
-                              Grave            => "`",
-                              Minus            => "-",
-                              EqualsSign       => "=",
-                              LeftBracket      => "[",
-                              RightBracket     => "]",
-                              Backslash        => "\\",
-                              Semicolon        => ";",
-                              Apostrophe       => "'",
-                              Slash            => "/",
-                              At               => "@",
+                              Grave            => verbose ? "Grave" : "`",
+                              Minus            => verbose ? "Minus" : "-",
+                              EqualsSign       => verbose ? "Equals" : "=",
+                              LeftBracket      => verbose ? "Left Bracket" : "[",
+                              RightBracket     => verbose ? "Right Bracket" : "]",
+                              Backslash        => verbose ? "Backslash" : "\\",
+                              Semicolon        => verbose ? "Semicolon" : ";",
+                              Apostrophe       => verbose ? "Apostrophe" : "'",
+                              Slash            => verbose ? "Slash" : "/",
+                              At               => verbose ? "At" : "@",
                               Num              => "Num",
                               Headsethook      => "Headset Hook",
                               Focus            => "Focus",
@@ -473,8 +466,8 @@ public interface IInput
                               Mute             => "Mute",
                               PageUp           => "Page Up",
                               PageDown         => "Page Down",
-                              Pictsymbols      => "PICTSYMBOLS",
-                              SwitchCharset    => "SWITCH_CHARSET",
+                              Pictsymbols      => "Pictsymbols",
+                              SwitchCharset    => "SwitchCharset",
                               ButtonA          => "A Button",
                               ButtonB          => "B Button",
                               ButtonC          => "C Button",
@@ -506,7 +499,7 @@ public interface IInput
                               Numpad7          => "Numpad 7",
                               Numpad8          => "Numpad 8",
                               Numpad9          => "Numpad 9",
-                              Colon            => ":",
+                              Colon            => verbose ? "Colon" : ":",
                               F1               => "F1",
                               F2               => "F2",
                               F3               => "F3",
@@ -531,30 +524,25 @@ public interface IInput
                               F22              => "F22",
                               F23              => "F23",
                               F24              => "F24",
-                              NumpadDivide     => "Num /",
-                              NumpadMultiply   => "Num *",
-                              NumpadSubtract   => "Num -",
-                              NumpadAdd        => "Num +",
-                              NumpadDot        => "Num .",
-                              NumpadComma      => "Num ,",
-                              NumpadEnter      => "Num Enter",
-                              NumpadEquals     => "Num =",
-                              NumpadLeftParen  => "Num (",
-                              NumpadRightParen => "Num )",
+                              NumpadDivide     => verbose ? "Numpad Divide" : "Num /",
+                              NumpadMultiply   => verbose ? "Numpad Multiply" : "Num *",
+                              NumpadSubtract   => verbose ? "Numpad Subtract" : "Num -",
+                              NumpadAdd        => verbose ? "Numpad Add" : "Num +",
+                              NumpadDot        => verbose ? "Numpad Dot" : "Num .",
+                              NumpadComma      => verbose ? "Numpad Comma" : "Num ,",
+                              NumpadEnter      => verbose ? "Numpad Enter" : "Num Enter",
+                              NumpadEquals     => verbose ? "Numpad Equals" : "Num =",
+                              NumpadLeftParen  => verbose ? "Numpad Left Paren" : "Num (",
+                              NumpadRightParen => verbose ? "Numpad Right Paren" : "Num )",
                               NumLock          => "Num Lock",
                               CapsLock         => "Caps Lock",
                               ScrollLock       => "Scroll Lock",
                               Pause            => "Pause",
-                              PrintScreen      => "Print",
+                              PrintScreen      => verbose ? "Print Screen": "PrtSc",
                               var _            => null
                           };
 
             return str;
-        }
-
-        public static int ValueOf( string keyname )
-        {
-            return _keyNames.IndexOf( keyname );
         }
     }
 
@@ -621,9 +609,11 @@ public interface IInput
     void SetCursorOverridden( bool caught );
     void SetCursorPosition( int x, int y );
 
+    // Mobile device Back Key
     bool IsOverrideBackKey();
     void SetOverrideBackKey( bool catchBack );
 
+    // Mobile device Menu Key
     bool IsOverrideMenuKey();
     void SetOverrideMenuKey( bool catchMenu );
 

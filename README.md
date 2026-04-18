@@ -1,10 +1,5 @@
-﻿- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-![alt text](http://github.com/biffbaff64/LughSharpFramework/blob/master/LughSharp/Assets/Circa64_Main_Logo.png)
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-![alt text](http://github.com/biffbaff64/LughSharpFramework/blob/master/LughSharp/Assets/lughlogo.png)
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-C# 2D Game Framework project heavily inspired by the Java LibGDX Game Framework.
+﻿
+C# 2D Game Framework project inspired by the Java LibGDX Game Framework.
 
 ( Heavily Work In Progress )
 
@@ -19,26 +14,31 @@ WORKING:
 - Ninepatch support
 - Sprite2D animations.
 - ImagePacker
+- Input System works.
+- TiledMap Animated Tiles work.
 
 IN PROGRESS:
 
-- TiledMap Animated Tiles needs testing and/or finishing
 - Scene2D UI is not yet complete.
       I'm currently working on adding StyleRegistry and StyleFactory classes to enable
       creation and use of Scene2D UI Actors without the need for Json Skin files,
-      although support for Json Skins will still be included.
-- Input System needs testing and/or finishing
-- Audio needs testing and/or finishing
-- TiledMapPacker support
+      although support for Json Skins will still be retained.
+- Audio needs testing and/or finishing.
+- TiledMapPacker support.
 - 
 
 TODO:
 
-- Sprite Scrolling
-- GameSprite helpers
+- Sprite Scrolling.
+- GameSprite helpers.
 - Network / HTTP etc.
-- Box2D Physics support
-- 3D Graphics needs testing and/or finishing
-- 2D Particle System needs testing and/or finishing
-- Freetype Font generation
-- SpriteFont support
+- Box2D Physics support.
+- 3D Graphics needs testing and/or finishing.
+- 2D Particle System needs testing and/or finishing.
+- Freetype Font generation.
+- SpriteFont support.
+- Use NUnit for testing properly.
+
+FUTURE UPDATES:
+- Migrate to EventHandler based event system for Scene2D. This is a BIG task and will require a lot of work.
+- 

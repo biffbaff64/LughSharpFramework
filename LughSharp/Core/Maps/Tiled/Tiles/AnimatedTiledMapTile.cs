@@ -95,7 +95,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
 
     // ========================================================================
 
-    private static readonly long _initialTimeOffset = DateTime.Now.Millisecond;
+    private static readonly long _initialTimeOffset = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
     private static   long                 _lastTiledMapRenderTime;
     private readonly int[]                _animationIntervals;
@@ -176,7 +176,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     /// </summary>
     public static void UpdateAnimationBaseTime()
     {
-        _lastTiledMapRenderTime = DateTime.Now.Millisecond - _initialTimeOffset;
+        _lastTiledMapRenderTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - _initialTimeOffset;
     }
 
     public StaticTiledMapTile[] GetFrameTiles()

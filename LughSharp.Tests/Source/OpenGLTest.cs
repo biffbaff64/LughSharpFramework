@@ -116,6 +116,10 @@ public unsafe class OpenGLTest : ILughTest
     {
     }
 
+    public void Update()
+    {
+    }
+    
     public void Render( SpriteBatch spriteBatch )
     {
         _gl.UseProgram( ( int )_shaderProgram );

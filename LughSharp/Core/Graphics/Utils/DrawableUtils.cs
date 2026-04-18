@@ -26,7 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.OpenGL;
-using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Scene2D.Utils;
 
 namespace LughSharp.Core.Graphics.Utils;
 

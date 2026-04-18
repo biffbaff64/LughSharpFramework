@@ -22,17 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
-using JetBrains.Annotations;
-
-using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Maps.Tiled.Tiles;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Logging;
 
 using Rectangle = LughSharp.Core.Maths.Rectangle;
 
@@ -47,24 +40,25 @@ public class BatchTileMapRenderer : ITiledMapRenderer
 
     // ========================================================================
 
+    protected const int   NumVertices      = 20;
+    protected const float DefaultUnitScale = 1.0f;
+
     protected IBatch    Batch      { get; set; }
     protected Rectangle ViewBounds { get; set; }
     protected float     UnitScale  { get; set; }
     protected float[]   Vertices   { get; set; } = new float[ NumVertices ];
 
-    protected const int   NumVertices       = 20;
-    protected const float DefaultUnitScale = 1.0f;
-
     // ========================================================================
 
-    public BatchTileMapRenderer()
-        : this( new TiledMap() )
+    /// <summary>
+    /// Creates a new Renderer using a default <see cref="TiledMap"/>
+    /// </summary>
+    public BatchTileMapRenderer() : this( new TiledMap() )
     {
     }
 
     /// <summary>
-    /// Creates a new Renderer using the supplied <see cref="TiledMap"/>
-    /// and <see cref="IBatch"/>
+    /// Creates a new Renderer using the supplied <see cref="TiledMap"/> and <see cref="IBatch"/>
     /// </summary>
     protected BatchTileMapRenderer( TiledMap map, IBatch batch )
         : this( map, DefaultUnitScale, batch )
@@ -72,6 +66,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
+    /// 
     /// </summary>
     /// <param name="map"></param>
     /// <param name="unitScale"></param>

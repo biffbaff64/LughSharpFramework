@@ -1,13 +1,9 @@
-﻿using System;
-using System.IO;
-
-using Extensions.Source;
+﻿using Extensions.Source;
 
 using JetBrains.Annotations;
 
 using LughSharp.Core;
 using LughSharp.Core.Assets;
-using LughSharp.Core.Files;
 using LughSharp.Core.Graphics;
 using LughSharp.Core.Graphics.Atlases;
 using LughSharp.Core.Graphics.Cameras;
@@ -15,6 +11,7 @@ using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.G2D;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Input;
+using LughSharp.Core.Maps.Tiled.Tiles;
 using LughSharp.Core.Maths;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
@@ -31,9 +28,11 @@ public class MainGame : LughGame
 
     private SpriteBatch?            _spriteBatch;
     private AssetManager?           _assetManager;
+    private OrthographicGameCamera? _backgroundCam;
     private OrthographicGameCamera? _tiledMapCam;
     private OrthographicGameCamera? _spriteCam;
     private OrthographicGameCamera? _hudCam;
+    private Texture2D?              _backgroundTexture;
     private Texture2D?              _texture;
     private TextureRegion?          _textureRegion;
     private NinePatch?              _ninePatch;
@@ -44,11 +43,13 @@ public class MainGame : LughGame
 
     private bool _disposed;
 
-    private readonly MapTests     _mapTests   = new();
-    private readonly FontTests    _fontTests  = new();
-    private readonly StageTests   _stageTests = new();
-    private readonly ImageTests   _imageTests = new();
-    private          SpriteTests? _spriteTests;
+    private readonly FontTests  _fontTests  = new();
+    private readonly StageTests _stageTests = new();
+    private readonly ImageTests _imageTests = new();
+
+    private MapTests?    _mapTests;
+    private SpriteTests? _spriteTests;
+    private InputTest?   _inputTest;
 
     // ========================================================================
     // ========================================================================
@@ -61,7 +62,9 @@ public class MainGame : LughGame
         _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
         _atlasLoader  = new AtlasLoader( _assetManager );
-        _spriteTests  = new SpriteTests( _assetManager );
+
+//        _inputTest = new InputTest( ref _inputMultiplexer );
+//        _inputTest.Setup();
 
         _atlasLoader.RegisterAtlas( Assets.AnimationsAtlas )
                     .RegisterAtlas( Assets.ObjectsAtlas )
@@ -70,11 +73,13 @@ public class MainGame : LughGame
                     .Load();
 
         CreateCameras();
-//        CreateAssets();
+        CreateAssets();
+//        _mapTests = new MapTests();
 //        _mapTests.CreateMap();
-        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
+//        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
 //        _font         = _fontTests.CreateBitmapFont();
 //        _freetypeFont = _fontTests.CreateFreeTypeFont();
+        _spriteTests = new SpriteTests( _assetManager );
         _spriteTests.Create();
 
         _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
@@ -82,8 +87,6 @@ public class MainGame : LughGame
         if ( _inputMultiplexer.Processors.Size > 0 )
         {
             Engine.Input.InputProcessor = _inputMultiplexer;
-
-            Logger.Debug( "InputProcessor set." );
         }
 
         Logger.Debug( "Done" );
@@ -92,8 +95,12 @@ public class MainGame : LughGame
     /// <inheritdoc />
     public override void Update( float delta )
     {
+        // --------------------------------------
+        _inputTest?.Update();
         _spriteTests?.Update( delta );
-        _mapTests.ScrollMap( ref _tiledMapCam );
+        // --------------------------------------
+
+        _mapTests?.ScrollMap( ref _tiledMapCam );
     }
 
     /// <inheritdoc />
@@ -104,7 +111,28 @@ public class MainGame : LughGame
 
         // --------------------------------------
 
-        if ( _mapTests.MapRenderer != null && _tiledMapCam is { IsInUse: true } )
+//        if ( _spriteBatch != null )
+//        {
+//            _spriteBatch.EnableBlending();
+//
+//            if ( _backgroundCam is { IsInUse: true } )
+//            {
+//                _backgroundCam.Viewport?.Apply( true );
+//                _spriteBatch.SetProjectionMatrix( _backgroundCam.Camera.Combined );
+//                _spriteBatch.Begin();
+//
+//                if ( _backgroundTexture != null )
+//                {
+//                    _spriteBatch.Draw( _backgroundTexture, 0, 0 );
+//                }
+//
+//                _spriteBatch.End();
+//            }
+//        }
+
+        // --------------------------------------
+
+        if ( _mapTests?.MapRenderer != null && _tiledMapCam is { IsInUse: true } )
         {
             _tiledMapCam.Update();
 
@@ -169,6 +197,17 @@ public class MainGame : LughGame
 
                 _font?.Draw( _spriteBatch, $"X:{Engine.Input.GetX()} Y:{Engine.Input.GetY()}", 10, 700 );
 
+                if ( _tiledMapCam is { IsInUse: true } )
+                {
+                    _font?.Draw( _spriteBatch,
+                                 $"Map X:{_tiledMapCam.Camera.Position.X} "
+                               + $"Y:{_tiledMapCam.Camera.Position.Y}",
+                                 10,
+                                 670 );
+                }
+
+                _inputTest?.Render( _spriteBatch );
+
                 _spriteBatch.End();
             }
         }
@@ -191,6 +230,18 @@ public class MainGame : LughGame
 
     private void CreateCameras()
     {
+        _backgroundCam = new OrthographicGameCamera( 480, 270, name: "BACKGROUNDCamera" );
+
+        _backgroundCam.Camera.Near = CameraData.DefaultNearPlane;
+        _backgroundCam.Camera.Far  = CameraData.DefaultFarPlane;
+        _backgroundCam.IsInUse     = true;
+        _backgroundCam.SetZoomDefault( 1f );
+        _backgroundCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
+        _backgroundCam.Update();
+
+
+        // --------------------------------------
+
         _tiledMapCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
                                                    Engine.Graphics.WindowHeight,
                                                    name: "TILEDCamera" );
@@ -249,7 +300,7 @@ public class MainGame : LughGame
                 _spriteCam?.Dispose();
                 _texture?.Dispose();
                 _stageTests.Dispose();
-                _spriteTests.Dispose();
+                _spriteTests?.Dispose();
                 _font?.Dispose();
             }
 
@@ -265,9 +316,10 @@ public class MainGame : LughGame
 
     private void CreateAssets()
     {
-        _texture       = new Texture2D( Assets.Solid112X112 );
-        _textureRegion = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
-        _ninePatch     = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
+//        _texture           = new Texture2D( Assets.Solid112X112 );
+//        _textureRegion     = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
+//        _ninePatch         = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
+        _backgroundTexture = new Texture2D( Assets.Background );
     }
 }
 

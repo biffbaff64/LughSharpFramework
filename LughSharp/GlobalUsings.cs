@@ -49,7 +49,6 @@ global using LughSharp.Core.Maps;
 global using LughSharp.Core.Maths;
 global using LughSharp.Core.Mock;
 global using LughSharp.Core.Network;
-global using LughSharp.Core.SceneGraph2D;
 global using LughSharp.Core.Utils;
 global using LughSharp.Core.Utils.Exceptions;
 global using LughSharp.Core.Utils.Logging;

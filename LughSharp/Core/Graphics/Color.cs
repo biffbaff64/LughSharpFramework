@@ -29,7 +29,7 @@ using System.Reflection;
 using JetBrains.Annotations;
 
 using LughSharp.Core.Maths;
-using LughSharp.Core.SceneGraph2D.RegistryStyles;
+using LughSharp.Core.Scene2D.RegistryStyles;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
@@ -1096,7 +1096,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Parse a color code from a Scene2DGraph <see cref="StyleRegistry"/> into a Colot instan e.
+    /// Parse a color code from a Scene2D <see cref="StyleRegistry"/> into a Colot instan e.
     /// </summary>
     /// <param name="value"> The string color code. </param>
     /// <param name="registry"> The registry. </param>

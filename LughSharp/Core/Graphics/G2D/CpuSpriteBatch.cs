@@ -30,6 +30,7 @@ using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
+using LughSharp.Core.Scene2D;
 using LughSharp.Core.Utils.Exceptions;
 
 namespace LughSharp.Core.Graphics.G2D;
@@ -41,7 +42,7 @@ namespace LughSharp.Core.Graphics.G2D;
 /// through longer batches, for example when drawing Groups with transform enabled.
 /// </summary>
 /// <see cref="SpriteBatch.RenderCalls"/>
-/// <see cref="SceneGraph2D.Group.Transform"/>
+/// <see cref="Scene2D.Group.Transform"/>
 [PublicAPI]
 public class CpuSpriteBatch : SpriteBatch
 {

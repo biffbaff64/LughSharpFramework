@@ -34,8 +34,8 @@ using LughSharp.Core.Graphics.OpenGL.Enums;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Utils;
 using LughSharp.Core.Maths;
-using LughSharp.Core.SceneGraph2D.UI;
-using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Scene2D.UI;
+using LughSharp.Core.Scene2D.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 

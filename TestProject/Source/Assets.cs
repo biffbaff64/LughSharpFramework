@@ -34,10 +34,11 @@ public static class Assets
     public static string ObjectsAtlas    => @$"\packedimages\output\objects.atlas";
     public static string InputAtlas      => @$"\packedimages\output\input.atlas";
     public static string TextAtlas       => @$"\packedimages\output\text.atlas";
-    
+
     // ========================================================================
     // Miscellaneous
-    public static string BackgroundImage  => @$"{Files.ContentRoot}\title_background.png";
+    public static string Background       => @$"{Files.ContentRoot}\background.png";
+    public static string TitleBackground  => @$"{Files.ContentRoot}\title_background.png";
     public static string HudPanel         => @$"{Files.ContentRoot}\hud_panel.png";
     public static string CompleteStar     => @$"{Files.ContentRoot}\complete_star.png";
     public static string KeyCollected     => @$"{Files.ContentRoot}\key_collected.png";
@@ -54,7 +55,8 @@ public static class Assets
     public static string Boulder48X48     => @$"{Files.ContentRoot}\packedimages\animations\boulder48x48.png";
     public static string Boulder64X64     => @$"{Files.ContentRoot}\packedimages\animations\boulder64x64.png";
     public static string Solid112X112     => @$"{Files.ContentRoot}\solid112x112.png";
-    
+    public static string Icon11112X112    => @$"{Files.ContentRoot}\ic_icon11_112x112.png";
+
     // ========================================================================
     // UI Skins
     public static string UiSkin      => @$"{Files.ContentRoot}\Skins\uiskin.json";

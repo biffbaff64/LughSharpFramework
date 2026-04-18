@@ -28,6 +28,7 @@ using LughSharp.Core.Graphics.Cameras;
 using LughSharp.Core.Maps.Tiled;
 using LughSharp.Core.Maps.Tiled.Loaders;
 using LughSharp.Core.Maps.Tiled.Renderers;
+using LughSharp.Core.Maths;
 using LughSharp.Core.Utils.Logging;
 
 namespace TestProject.Source;
@@ -77,29 +78,31 @@ public class MapTests
     {
         if ( tiledMapCam != null && TiledMap != null )
         {
-            _mapPosX += _mapDirX;
+//            _mapPosX += _mapDirX;
+//
+//            if ( _mapPosX > _mapWidth && _mapDirX == 1 )
+//            {
+//                _mapDirX = -1;
+//            }
+//            else if ( _mapPosX <= 0 && _mapDirX == -1 )
+//            {
+//                _mapDirX = 1;
+//            }
+//
+//            _mapPosY += _mapDirY;
+//
+//            if ( _mapPosY >= _mapHeight && _mapDirY == 1 )
+//            {
+//                _mapDirY = -1;
+//            }
+//            else if ( _mapPosY <= 0 && _mapDirY == -1 )
+//            {
+//                _mapDirY = 1;
+//            }
+//
+//            tiledMapCam.Camera.Translate( _mapDirX, _mapDirY );
 
-            if ( _mapPosX > _mapWidth && _mapDirX == 1 )
-            {
-                _mapDirX = -1;
-            }
-            else if ( _mapPosX <= 0 && _mapDirX == -1 )
-            {
-                _mapDirX = 1;
-            }
-
-            _mapPosY += _mapDirY;
-
-            if ( _mapPosY >= _mapHeight && _mapDirY == 1 )
-            {
-                _mapDirY = -1;
-            }
-            else if ( _mapPosY <= 0 && _mapDirY == -1 )
-            {
-                _mapDirY = 1;
-            }
-
-            tiledMapCam.Camera.Translate( _mapDirX, _mapDirY );
+            tiledMapCam.SetPosition( new Vector3( 4012, 680, 0 ) );
         }
     }
 }

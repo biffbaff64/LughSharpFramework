@@ -45,7 +45,7 @@ using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Shaders;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.SceneGraph2D.UI;
+using LughSharp.Core.Scene2D.UI;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;

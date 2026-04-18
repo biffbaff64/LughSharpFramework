@@ -63,6 +63,10 @@ public class TextureAtlasTest : ILughTest
         _sprite?.SetFlip( false, false );
     }
 
+    public void Update()
+    {
+    }
+    
     public void Render( SpriteBatch spriteBatch )
     {
         _sprite?.Draw( spriteBatch );

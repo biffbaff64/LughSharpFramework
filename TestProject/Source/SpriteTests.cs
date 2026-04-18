@@ -43,6 +43,7 @@ public class SpriteTests : IDisposable
     private AssetManager                _assetManager;
     private Vector2                     _spritePosition = Vector2.Zero;
     private Sprite2D?                   _sprite;
+    private Sprite2D?                   _sprite2;
     private int                         _xdirection;
     private int                         _ydirection;
     private float                       _xspeed;
@@ -68,10 +69,15 @@ public class SpriteTests : IDisposable
 
         _animation = animator.CreateAnimation( path, "coin", 24, 24 );
 
-        _sprite = new Sprite2D( new Texture2D( Assets.Boulder48X48 ) );
+        _sprite = new Sprite2D( _animation!.GetKeyFrame( 0 , false) );
         _sprite.SetBounds();
         _sprite.SetOriginCenter();
         _sprite.SetPosition( 200, 600 );
+
+        _sprite2 = new Sprite2D( new Texture2D( Assets.Boulder48X48 ) );
+        _sprite2.SetBounds();
+        _sprite2.SetOriginCenter();
+        _sprite2.SetPosition( 400, 300 );
 
         Logger.Debug( "Finished." );
     }
@@ -88,6 +94,7 @@ public class SpriteTests : IDisposable
     public void Draw( SpriteBatch batch )
     {
         _sprite?.Draw( batch );
+        _sprite2?.Draw( batch );
     }
 
     private void Bounce( int index )

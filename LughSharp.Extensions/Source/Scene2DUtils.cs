@@ -32,10 +32,10 @@ using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Maths;
-using LughSharp.Core.SceneGraph2D;
-using LughSharp.Core.SceneGraph2D.UI;
-using LughSharp.Core.SceneGraph2D.UI.Styles;
-using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Scene2D;
+using LughSharp.Core.Scene2D.UI;
+using LughSharp.Core.Scene2D.UI.Styles;
+using LughSharp.Core.Scene2D.Utils;
 using LughSharp.Core.Utils;
 
 namespace Extensions.Source;

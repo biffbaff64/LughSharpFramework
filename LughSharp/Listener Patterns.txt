@@ -1,6 +1,6 @@
 ﻿In Java, the listener pattern is often implemented using abstract classes or interfaces
 and anonymous inner classes. In C#, while you can do that, the language provides a first-class
-citizen for this exact scenario:
+alternative for this exact scenario:
 
 Delegates and Events.
 =====================
@@ -49,6 +49,8 @@ how the system processes it.
    The transition from Java's "Listener Object" to C#'s "Delegate" changes the underlying mechanics:
 
     The Delegate Chain
+    ------------------
+    
     In Java, addListener adds an object to a List<EventListener>. In C#, the += operator adds a
     function pointer (delegate) to an invocation list.
 
@@ -1229,3 +1231,106 @@ To round out the "C# Listener" pattern for your framework, there is one final pi
         activeClickListeners is fine for up to 10-20 items. If your framework gets very
         complex, a HashSet provides "Constant Time Complexity" removal, which prevents
         performance hits when many buttons are being interacted with at once.
+
+
+Integrating Actions with the Listener Pattern
+=============================================
+
+
+The intersection of Actions and Listeners is where C# really shines, especially with Events. In
+many frameworks, users want to know exactly when an animation finishes so they can trigger a 
+"Changed" event or start the next part of a sequence.
+
+In C#, you can bridge your Action system and your EventListener system by using Completion 
+Callbacks. This allows your Stage to process a "Sequence" of events.
+
+    The "OnComplete" Pattern
+    ------------------------
+    
+    Since your Action class likely has an Update method, you can add a C# Action (the delegate)
+    to it:
+
+        public class MoveToAction : ActorAction 
+        {
+            public event Action OnComplete; // Native C# event
+        
+            public override bool Update( float delta ) 
+            {
+                // ... move logic ...
+                if (IsDone) 
+                {
+                    OnComplete?.Invoke();
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+
+    Triggering Events from Actions
+    ------------------------------
+    
+    A powerful feature in LibGDX-style frameworks is when an Action itself fires a ChangeEvent.
+    This is how you handle things like a "Value Change" during a slider animation.
+
+    In your Actor.Update logic, you can do this:
+
+        // Inside your Action's update logic
+        if (valueHasChanged) 
+        {
+            var e = EventPool<ChangeEvent>.Obtain();
+            Target.Fire(e); // This bubbles up the hierarchy normally
+            EventPool<ChangeEvent>.Free(e);
+        }
+
+
+    The "Stage" Synchronization
+    ---------------------------
+    
+    Since your Stage manages both Input Bubbling and Action Updates, you need to be careful
+    about Execution Order.
+    
+        The Recommended Stage Loop:
+        ---------------------------
+
+        To ensure your listeners see the most "up-to-date" version of the world, follow this
+        order in your Stage.Update:
+    
+            Process Input: Handle raw OS events (TouchDown, MouseMove). This populates the "Targets."
+    
+            Update Actions: Run Actor.Act(delta). This moves sprites, fades UI, etc.
+    
+            Late Update / Physics: If you have layout logic (like a Table or WrapBox), run it here so it responds to the new positions from the Actions.
+    
+            Bubbling Dispatch: If any Actions triggered a deferred event, fire them now.
+    
+            Draw: Render everything.
+
+
+    Performance Tip: Struct-based Actions?
+    --------------------------------------
+    
+    In C#, if you are worried about the memory impact of having thousands of MoveToAction objects,
+    you can use Structs for simple animations. However, since you already have the basics implemented
+    as classes (likely inheriting from an Action base class), stick with Object Pooling for them just
+    like you did with your Events.
+
+        The Pattern:
+        
+            button.AddAction( ActionPool< MoveToAction >.Obtain().SetTarget( 100, 100 ) );
+
+
+
+Final Architecture Check
+========================
+
+    You now have a complete event-driven ecosystem:
+    
+    Listeners: Handle high-level logic (Clicks, Long Press).
+    
+    Bubbling: Passes events from leaf Actors up to the Stage.
+    
+    Pooling: Keeps the GC silent by reusing Events and Actions.
+    
+    Stage Update: Coordinates timers for Long Presses and progress for Actions.

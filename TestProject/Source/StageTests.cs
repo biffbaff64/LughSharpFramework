@@ -35,12 +35,12 @@ using LughSharp.Core.Graphics.Fonts;
 using LughSharp.Core.Graphics.Images;
 using LughSharp.Core.Graphics.Text;
 using LughSharp.Core.Input;
-using LughSharp.Core.SceneGraph2D;
-using LughSharp.Core.SceneGraph2D.Listeners;
-using LughSharp.Core.SceneGraph2D.RegistryStyles;
-using LughSharp.Core.SceneGraph2D.UI;
-using LughSharp.Core.SceneGraph2D.UI.Styles;
-using LughSharp.Core.SceneGraph2D.Utils;
+using LughSharp.Core.Scene2D;
+using LughSharp.Core.Scene2D.Listeners;
+using LughSharp.Core.Scene2D.RegistryStyles;
+using LughSharp.Core.Scene2D.UI;
+using LughSharp.Core.Scene2D.UI.Styles;
+using LughSharp.Core.Scene2D.Utils;
 using LughSharp.Core.Utils;
 using LughSharp.Core.Utils.Logging;
 
@@ -202,10 +202,12 @@ public class StageTests : IDisposable
             Button2.SetPosition( 100, 70 );
             Button2.SetSize( Button.Width, Button.Height );
             Stage?.AddActor( Button2 );
-            
+
             Button2.AddListener( new ClickListener( ( ev, x, y ) =>
             {
+                Logger.Debug( "Button2 clicked!" );
                 
+                ev.SetHandled();
             } ) );
         }
 
@@ -255,7 +257,7 @@ public class StageTests : IDisposable
 
             var imageButtonStyle = new ImageButtonStyle
             {
-                Up       = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
+                Up       = new TextureRegionDrawable( new Texture2D( Assets.Icon11112X112 ) ),
                 Down     = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) ),
                 Disabled = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDisabled ) ),
                 Over     = new TextureRegionDrawable( new Texture2D( Assets.ButtonBOver ) ),
