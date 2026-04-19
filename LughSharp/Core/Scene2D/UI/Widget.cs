@@ -81,7 +81,7 @@ public class Widget : Actor, ILayout
     /// </summary>
     public virtual void Validate()
     {
-        if ( !EnableLayout )
+        if ( !LayoutEnabled )
         {
             return;
         }
@@ -136,7 +136,7 @@ public class Widget : Actor, ILayout
     /// </summary>
     public virtual void InvalidateHierarchy()
     {
-        if ( !EnableLayout )
+        if ( !LayoutEnabled )
         {
             return;
         }
@@ -171,7 +171,7 @@ public class Widget : Actor, ILayout
     /// When false, <see cref="ILayout.Validate"/> will not cause a layout to occur. This can be useful
     /// when an actor will be manipulated externally, such as with actions. Default is true.
     /// </summary>
-    public bool EnableLayout
+    public bool LayoutEnabled
     {
         get;
         set

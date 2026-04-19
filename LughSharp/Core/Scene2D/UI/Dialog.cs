@@ -39,6 +39,16 @@ namespace LughSharp.Core.Scene2D.UI;
 [PublicAPI]
 public class Dialog : Window
 {
+    public Actor? PreviousKeyboardFocus { get; set; }
+    public Actor? PreviousScrollFocus   { get; set; }
+    public Table? ContentTable          { get; private set; }
+    public Table? ButtonTable           { get; private set; }
+    public bool   CancelHide            { get; set; }
+
+    public Dictionary< Actor, object >? Values { get; set; } = new();
+
+    // ========================================================================
+    
     private readonly IgnoreTouchDown _ignoreTouchDown = null!;
 
     private ChangeListener _dialogChangeListener = null!;
@@ -54,8 +64,7 @@ public class Dialog : Window
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="skin"></param>
-    public Dialog( string title, Skin skin )
-        : base( title, skin.Get< WindowStyle >() )
+    public Dialog( string title, Skin skin ) : base( title, skin.Get< WindowStyle >() )
     {
         Skin  = skin;
         _skin = skin;
@@ -82,23 +91,13 @@ public class Dialog : Window
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="windowStyle"> The <see cref="WindowStyle"/> to use. </param>
-    public Dialog( string title, WindowStyle windowStyle )
-        : base( title, windowStyle )
+    public Dialog( string title, WindowStyle windowStyle ) : base( title, windowStyle )
     {
         Initialise();
     }
 
-    public Actor? PreviousKeyboardFocus { get; set; }
-    public Actor? PreviousScrollFocus   { get; set; }
-    public Table? ContentTable          { get; private set; }
-    public Table? ButtonTable           { get; private set; }
-    public bool   CancelHide            { get; set; }
-
-    public Dictionary< Actor, object >? Values { get; set; } = new();
-
     /// <summary>
-    /// Initialises the basic elements of this dialog, including the
-    /// necessary listeners.
+    /// Initialises the basic elements of this dialog, including the necessary listeners.
     /// </summary>
     private void Initialise()
     {
@@ -109,7 +108,7 @@ public class Dialog : Window
         ContentTable = new Table( _skin );
         ButtonTable  = new Table( _skin );
 
-        Add( ContentTable ).Expand().Fill();
+        Add( ContentTable ).Grow();
         AddRow();
         Add( ButtonTable ).SetFillX();
 
@@ -153,9 +152,8 @@ public class Dialog : Window
     {
         if ( _skin == null )
         {
-            _skin = new Skin();
-
-            DefaultSkinProvided();
+            throw new RuntimeException( "This method may only be used if the dialog was constructed "
+                                      + "with a Skin, a default Skin has been provided." );
         }
 
         return Text( text, _skin.Get< LabelStyle >() );
@@ -188,9 +186,8 @@ public class Dialog : Window
     {
         if ( _skin == null )
         {
-            _skin = new Skin();
-
-            DefaultSkinProvided();
+            throw new RuntimeException( "This method may only be used if the dialog was constructed "
+                                      + "with a Skin, a default Skin has been provided." );
         }
 
         return Button( text, obj, _skin.Get< TextButtonStyle >() );
@@ -239,16 +236,20 @@ public class Dialog : Window
     public Dialog Show( Stage stage, SceneAction? action )
     {
         ClearActions();
-
         RemoveCaptureListener( _ignoreTouchDown );
 
         PreviousKeyboardFocus = null;
 
-        if ( ( stage.GetKeyboardFocus() != null ) && !stage.GetKeyboardFocus().IsDescendantOf( this ) )
+        Actor? previousFocus = stage.GetKeyboardFocus();
+        
+        if ( previousFocus != null )
         {
-            PreviousKeyboardFocus = stage.GetKeyboardFocus();
+            if ( !previousFocus.IsDescendantOf( this ) )
+            {
+                PreviousKeyboardFocus = previousFocus;
+            }
         }
-
+        
         PreviousScrollFocus = null;
 
         if ( ( stage.ScrollFocus != null ) && !stage.ScrollFocus.IsDescendantOf( this ) )
@@ -257,9 +258,7 @@ public class Dialog : Window
         }
 
         stage.AddActor( this );
-
         Pack();
-
         stage.CancelTouchFocus();
         stage.SetKeyboardFocus( this );
         stage.ScrollFocus   = this;
@@ -309,7 +308,9 @@ public class Dialog : Window
                 PreviousKeyboardFocus = null;
             }
 
-            if ( ( stage.GetKeyboardFocus() == null ) || stage.GetKeyboardFocus().IsDescendantOf( this ) )
+            Actor? focus = stage.GetKeyboardFocus();
+
+            if ( ( focus == null ) || focus.IsDescendantOf( this ) )
             {
                 stage.SetKeyboardFocus( PreviousKeyboardFocus );
             }
@@ -350,9 +351,7 @@ public class Dialog : Window
 
     public void SetObject( Actor actor, object obj )
     {
-        Debug.Assert( Values != null, nameof( Values ) + " != null" );
-
-        Values[ actor ] = obj;
+        Values?[ actor ] = obj;
     }
 
     /// <summary>
@@ -361,6 +360,7 @@ public class Dialog : Window
     /// </summary>
     public Dialog Key( int keycode, object obj )
     {
+        //TODO:
         //        AddListener
         //            ( new InputListener
         //                  (
@@ -402,12 +402,6 @@ public class Dialog : Window
     /// <param name="obj"> The object specified when the button was added. </param>
     public virtual void Result( object? obj )
     {
-    }
-
-    private void DefaultSkinProvided()
-    {
-        Logger.Debug( "This method may only be used if the dialog was constructed "
-                    + "with a Skin, a default Skin has been provided." );
     }
 
     // ========================================================================
@@ -460,3 +454,7 @@ public class Dialog : Window
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

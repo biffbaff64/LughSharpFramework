@@ -44,6 +44,7 @@ public class SpriteTests : IDisposable
     private Vector2                     _spritePosition = Vector2.Zero;
     private Sprite2D?                   _sprite;
     private Sprite2D?                   _sprite2;
+    private Sprite2D?                   _sprite3;
     private int                         _xdirection;
     private int                         _ydirection;
     private float                       _xspeed;
@@ -74,10 +75,17 @@ public class SpriteTests : IDisposable
         _sprite.SetOriginCenter();
         _sprite.SetPosition( 200, 600 );
 
-        _sprite2 = new Sprite2D( new Texture2D( Assets.Boulder48X48 ) );
+        _sprite2 = new Sprite2D( new Texture2D( Assets.Icon11112X112 ) );
         _sprite2.SetBounds();
         _sprite2.SetOriginCenter();
         _sprite2.SetPosition( 400, 300 );
+        _sprite2.Flip( true, true );
+
+        _sprite3 = new Sprite2D( new Texture2D( Assets.Icon11112X112 ) );
+        _sprite3.SetBounds();
+        _sprite3.SetOriginCenter();
+        _sprite3.SetPosition( 700, 300 );
+        _sprite3.Flip( false, false );
 
         Logger.Debug( "Finished." );
     }
@@ -89,12 +97,15 @@ public class SpriteTests : IDisposable
             _sprite.SetRegion( _animation.GetKeyFrame( _elapsedAnimTime, true ) );
             _elapsedAnimTime += delta;
         }
+
+//        _sprite2?.Scroll( 0.01f, 0 );
     }
 
     public void Draw( SpriteBatch batch )
     {
         _sprite?.Draw( batch );
         _sprite2?.Draw( batch );
+        _sprite3?.Draw( batch );
     }
 
     private void Bounce( int index )

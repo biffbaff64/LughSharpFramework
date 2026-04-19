@@ -74,13 +74,18 @@ public class MainGame : LughGame
 
         CreateCameras();
         CreateAssets();
+        // --------------------------------------
 //        _mapTests = new MapTests();
 //        _mapTests.CreateMap();
-//        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
+        // --------------------------------------
+        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
+        // --------------------------------------
 //        _font         = _fontTests.CreateBitmapFont();
 //        _freetypeFont = _fontTests.CreateFreeTypeFont();
-        _spriteTests = new SpriteTests( _assetManager );
-        _spriteTests.Create();
+        // --------------------------------------
+//        _spriteTests = new SpriteTests( _assetManager );
+//        _spriteTests.Create();
+        // --------------------------------------
 
         _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
 

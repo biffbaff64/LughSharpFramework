@@ -107,15 +107,16 @@ public class StageTests : IDisposable
     {
         var imageActor           = false;
         var windowActor          = false;
-        var buttonActor          = true;
-        var textButtonActor      = true;
-        var imageButtonActor     = true;
-        var imageTextButtonActor = true;
+        var buttonActor          = false;
+        var textButtonActor      = false;
+        var imageButtonActor     = false;
+        var imageTextButtonActor = false;
         var checkBoxActor        = false;
         var progressBarActor     = false;
         var sliderActor          = false;
         var labelActor           = false;
         var tableActor           = false;
+        var dialogActor          = true;
 
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
@@ -372,6 +373,22 @@ public class StageTests : IDisposable
 
         if ( tableActor )
         {
+        }
+
+        // --------------------------------------
+
+        if ( dialogActor )
+        {
+            var dialog = new Dialog( "Dialog Title", skin )
+            {
+                IsVisible = true,
+            };
+            dialog.Text( "This is a dialog box with a custom title and text." );
+            dialog.Button( "OK", true ).Button( "Cancel", false );
+            dialog.Key( IInput.Keys.Enter, true ).Key( IInput.Keys.Escape, false );
+            dialog.SetPosition( 200, 200 );
+            dialog.SetSize( 400, 240 );
+            Stage?.AddActor( dialog );
         }
     }
 

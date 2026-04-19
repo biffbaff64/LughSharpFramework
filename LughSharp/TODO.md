@@ -1074,18 +1074,14 @@ LUGHSHARP/CORE/SCENE2D/STYLES
 LUGHSHARP/CORE/SCENE2D/UI
 -------------------------
 
-    TODO: I don't like the way Cell and Value classes are implemented.
-          They seem confusing and are candidates for a rewrite.
-
     TODO: Streamline the Button classes. Currently there is Button,
           TextButton, ImageTextButton, ImageButton. Are all of them needed?
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - Button               - Draws. Detects click, release, hover.
-    -      -      -      - ButtonClickListener  - 
-    -      -      -      - ButtonGroup          - 
-    -      -      -      - Cell                 - 
+    - DONE - IP   - DONE - ButtonGroup          - 
+    - IP   - IP   - DONE - Cell                 - 
     - IP   - IP   - DONE - CheckBox             - 
     -      -      -      - Container            - 
     -      -      -      - Dialog               - 
@@ -1148,13 +1144,13 @@ LUGHSHARP/CORE/SCENE2D/UTILS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - ArraySelection
-    -      -      -      - BaseDrawable
+    - DONE - DONE - DONE - ArraySelection
+    - DONE - DONE - DONE - BaseDrawable
     -      -      -      - DragAndDrop
-    -      -      -      - ICullable
-    -      -      -      - IDisableable
-    -      -      -      - ILayout
-    -      -      -      - ISceneDrawable
+    - DONE - DONE - DONE - ICullable
+    - DONE - DONE - DONE - IDisableable
+    - DONE - DONE - DONE - ILayout
+    - DONE - DONE - DONE - ISceneDrawable
     -      -      -      - ITransformDrawable
     -      -      -      - NinePatchDrawable
     -      -      -      - ScissorStack

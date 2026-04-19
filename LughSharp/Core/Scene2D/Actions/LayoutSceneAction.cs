@@ -56,7 +56,7 @@ public class LayoutSceneAction : SceneAction
             return false;
         }
 
-        ( ( ILayout )base.Target ).EnableLayout = Enabled;
+        ( ( ILayout )base.Target ).LayoutEnabled = Enabled;
 
         return true;
     }

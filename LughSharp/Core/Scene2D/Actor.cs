@@ -38,9 +38,6 @@ namespace LughSharp.Core.Scene2D;
 [ActorDefinition( Role = "UI" )]
 public class Actor : IComparable< Actor >
 {
-    public Stage? Stage  { get; set; }
-    public Group? Parent { get; set; }
-
     public DelayedRemovalList< IEventListener > Listeners        { get; }      = [ ];
     public DelayedRemovalList< IEventListener > CaptureListeners { get; }      = [ ];
     public List< SceneAction >                  Actions          { get; set; } = [ ];
@@ -48,6 +45,8 @@ public class Actor : IComparable< Actor >
     public Touchable Touchable  { get; set; } = Touchable.Enabled;
     public bool      IsVisible  { get; set; } = true;
     public object?   UserObject { get; set; }
+    public Stage?    Stage      { get; set; }
+    public Group?    Parent     { get; set; }
 
     // ========================================================================
 
@@ -122,13 +121,13 @@ public class Actor : IComparable< Actor >
     /// the method returns.
     /// </para>
     /// <para>
-    /// <b>The default implementation does nothing. Child classes should override and implement.</b>
+    /// <b><c>The default implementation does nothing. Child classes should override and implement.</c></b>
     /// </para>
     /// </summary>
     /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
     /// <param name="parentAlpha">
-    /// The parent alpha, to be multiplied with this actor's alpha,
-    /// allowing the parent's alpha to affect all children.
+    /// The parent alpha, to be multiplied with this actor's alpha, allowing the parent's alpha to
+    /// affect all children.
     /// </param>
     public virtual void Draw( IBatch batch, float parentAlpha )
     {
@@ -1001,8 +1000,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SetSize( float width, float height )
     {
-        if ( Compare.IsNotEqual( Width, width )
-          || Compare.IsNotEqual( Height, height ) )
+        if ( Compare.IsNotEqual( Width, width ) || Compare.IsNotEqual( Height, height ) )
         {
             Width  = width;
             Height = height;
@@ -1030,7 +1028,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SizeBy( float width, float height )
     {
-        if ( ( width != 0 ) || ( height != 0 ) )
+        if ( ( width != 0f ) || ( height != 0f ) )
         {
             Width  += width;
             Height += height;
@@ -1106,8 +1104,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SetScale( float scaleXY )
     {
-        if ( Compare.IsNotEqual( ScaleX, scaleXY )
-          || Compare.IsNotEqual( ScaleY, scaleXY ) )
+        if ( Compare.IsNotEqual( ScaleX, scaleXY ) || Compare.IsNotEqual( ScaleY, scaleXY ) )
         {
             ScaleX = scaleXY;
             ScaleY = scaleXY;
@@ -1381,8 +1378,8 @@ public class Actor : IComparable< Actor >
     }
 
     /// <system>
-    /// Transforms the specified point in the actor's coordinates
-    /// to be in the stage's coordinates.
+    /// Transforms the specified point in the actor's coordinates to be in the stage's
+    /// coordinates.
     /// </system>
     public virtual Vector2 LocalToStageCoordinates( Vector2 localCoords )
     {
@@ -1390,8 +1387,8 @@ public class Actor : IComparable< Actor >
     }
 
     /// <system>
-    /// Transforms the specified point in the actor's coordinates
-    /// to be in the parent's coordinates.
+    /// Transforms the specified point in the actor's coordinates to be in the parent's
+    /// coordinates.
     /// </system>
     public virtual Vector2 LocalToParentCoordinates( Vector2 localCoords )
     {
@@ -1436,8 +1433,8 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
-    /// Converts coordinates for this actor to those of an ascendant.
-    /// The ascendant is not required to be the immediate parent.
+    /// Converts coordinates for this actor to those of an ascendant. The ascendant is not
+    /// required to be the immediate parent.
     /// </summary>
     /// <param name="ascendant"></param>
     /// <param name="localCoords"></param>

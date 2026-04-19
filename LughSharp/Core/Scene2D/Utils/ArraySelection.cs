@@ -25,33 +25,41 @@
 namespace LughSharp.Core.Scene2D.Utils;
 
 /// <summary>
-/// A selection that supports range selection by knowing about the
-/// array of items being selected.
+/// A selection that supports range selection by knowing about the array of items
+/// being selected.
 /// </summary>
 [PublicAPI]
 public class ArraySelection< T > : Selection< T >
 {
-    private readonly List< T >? _array;
-    private          T?         _rangeStart;
+    public bool RangeSelect { get; set; } = true;
 
     // ========================================================================
 
-    public ArraySelection( List< T >? array )
+    private readonly List< T > _array = [];
+    private          T?        _rangeStart;
+
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a new ArraySelection object using the given <c>List&lt;T&gt;</c>
+    /// </summary>
+    public ArraySelection( List< T > array )
     {
         _array      = array;
         _rangeStart = default( T? );
     }
 
-    protected ArraySelection()
-    {
-    }
-
-    public bool RangeSelect { get; set; } = true;
-
-    /// <inheritdoc />
+    /// <summary>
+    /// Selects or deselects the specified item based on how the selection configured, whether
+    /// ctrl is currently pressed, etc.
+    /// <para>
+    /// This is typically invoked by user interaction.
+    /// </para>
+    /// </summary>
     public override void Choose( T item )
     {
         Guard.Against.Null( item );
+        Guard.Against.Null( _array );
 
         if ( IsDisabled )
         {
@@ -67,16 +75,17 @@ public class ArraySelection< T > : Selection< T >
 
         if ( ( Selected.Count > 0 ) && InputUtils.ShiftKey() )
         {
-            int rangeStartIndex = _rangeStart == null ? -1 : _array!.IndexOf( _rangeStart, 0 );
+            int rangeStartIndex = _rangeStart == null ? -1 : _array.IndexOf( _rangeStart, 0 );
 
             if ( rangeStartIndex != -1 )
             {
                 T? oldRangeStart = _rangeStart;
+
                 Snapshot();
 
                 // Select new range.
                 int start = rangeStartIndex;
-                int end   = _array!.IndexOf( item, 0 );
+                int end   = _array.IndexOf( item, 0 );
 
                 if ( start > end )
                 {
@@ -130,7 +139,7 @@ public class ArraySelection< T > : Selection< T >
     /// </summary>
     public virtual void Validate()
     {
-        if ( _array?.Count == 0 )
+        if ( _array.Count == 0 )
         {
             Clear();
 
@@ -141,7 +150,7 @@ public class ArraySelection< T > : Selection< T >
 
         foreach ( T item in Items() )
         {
-            if ( !_array!.Contains( item ) )
+            if ( !_array.Contains( item ) )
             {
                 Items().Remove( item );
                 changed = true;
@@ -150,7 +159,7 @@ public class ArraySelection< T > : Selection< T >
 
         if ( Required && ( Selected.Count == 0 ) )
         {
-            Set( _array!.First() );
+            Set( _array.First() );
         }
         else if ( changed )
         {

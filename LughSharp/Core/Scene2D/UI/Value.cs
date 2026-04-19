@@ -44,44 +44,32 @@ public abstract class Value
     /// <summary>
     /// Value that is the minWidth of the actor in the cell.
     /// </summary>
-    public static readonly Value MinWidth = new LambdaValue( ctx => ctx is ILayout layout
-                                                                 ? layout.GetMinWidth()
-                                                                 : ( ctx?.Width ?? 0 ) );
+    public static readonly Value MinWidth = FromLayout( l => l.GetMinWidth(), ctx => ctx?.Width ?? 0 );
 
     /// <summary>
     /// Value that is the minHeight of the actor in the cell.
     /// </summary>
-    public static readonly Value MinHeight = new LambdaValue( ctx => ctx is ILayout layout
-                                                                  ? layout.GetMinHeight()
-                                                                  : ( ctx?.Height ?? 0 ) );
+    public static readonly Value MinHeight = FromLayout( l => l.GetMinHeight(), ctx => ctx?.Height ?? 0 );
 
     /// <summary>
     /// Value that is the preferred width of the actor in the cell.
     /// </summary>
-    public static readonly Value PrefWidth = new LambdaValue( ctx => ctx is ILayout layout
-                                                                  ? layout.GetPrefWidth()
-                                                                  : ( ctx?.Width ?? 0 ) );
+    public static readonly Value PrefWidth = FromLayout( l => l.GetPrefWidth(), ctx => ctx?.Width ?? 0 );
 
     /// <summary>
     /// Value that is the preferred height of the actor in the cell.
     /// </summary>
-    public static readonly Value PrefHeight = new LambdaValue( ctx => ctx is ILayout layout
-                                                                   ? layout.GetPrefHeight()
-                                                                   : ( ctx?.Height ?? 0 ) );
+    public static readonly Value PrefHeight = FromLayout( l => l.GetPrefHeight(), ctx => ctx?.Height ?? 0 );
 
     /// <summary>
     /// Value that is the maxWidth of the actor in the cell.
     /// </summary>
-    public static readonly Value MaxWidth = new LambdaValue( ctx => ctx is ILayout layout
-                                                                 ? layout.GetMaxWidth()
-                                                                 : ( ctx?.Width ?? 0 ) );
+    public static readonly Value MaxWidth = FromLayout( l => l.GetMaxWidth(), ctx => ctx?.Width ?? 0 );
 
     /// <summary>
     /// Value that is the maxHeight of the actor in the cell.
     /// </summary>
-    public static readonly Value MaxHeight = new LambdaValue( ctx => ctx is ILayout layout
-                                                                  ? layout.GetMaxHeight()
-                                                                  : ( ctx?.Height ?? 0 ) );
+    public static readonly Value MaxHeight = FromLayout( l => l.GetMaxHeight(), ctx => ctx?.Height ?? 0 );
 
     /// <summary>
     /// Returns a value that is the specified percent of the width of the actor.
@@ -115,12 +103,21 @@ public abstract class Value
     public static Value PercentHeight( float percent, Actor actor )
     {
         Guard.Against.Null( actor );
-        
+
         return new LambdaValue( _ => actor.Height * percent );
     }
 
+    /// <summary>
+    /// Creates a <see cref="Value"/> that delegates to <paramref name="fromLayout"/> when the
+    /// context actor implements <see cref="ILayout"/>, and to <paramref name="fallback"/> otherwise.
+    /// </summary>
+    /// <param name="fromLayout">Invoked with the context cast to <see cref="ILayout"/>.</param>
+    /// <param name="fallback">Invoked with the raw context actor when it is not an <see cref="ILayout"/>.</param>
+    private static Value FromLayout( Func< ILayout, float > fromLayout, Func< Actor?, float > fallback )
+        => new LambdaValue( ctx => ctx is ILayout layout ? fromLayout( layout ) : fallback( ctx ) );
+
     public abstract float Get( Actor? context = null );
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -133,6 +130,11 @@ public abstract class Value
         private static readonly Fixed?[] _cache = new Fixed[ 111 ];
         private readonly        float    _value;
 
+        // ====================================================================
+
+        /// <summary>
+        /// Creates a new fixed value from the supplied float.
+        /// </summary>
         public Fixed( float value )
         {
             _value = value;
@@ -150,7 +152,7 @@ public abstract class Value
                 return Zero;
             }
 
-            if ( value is >= -10 and <= 100
+            if ( ( value is >= -10 and <= 100 )
               && Math.Abs( value - ( int )value ) < NumberUtils.FloatTolerance )
             {
                 int index = ( int )value + 10;
@@ -161,12 +163,15 @@ public abstract class Value
             return new Fixed( value );
         }
 
-        /// Allow code like "cell.Width(10)" instead of "cell.Width(Value.Fixed.ValueOf(10))"
+        /// <summary>
+        /// Allows code like <c>Cell.Width(10)</c> instead of <c>Cell.Width(Value.Fixed.ValueOf(10))</c>
+        /// </summary>
         public static implicit operator Fixed( float v )
         {
             return ValueOf( v );
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return _value.ToString( CultureInfo.InvariantCulture );
@@ -176,9 +181,14 @@ public abstract class Value
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// A value computed on demand via a delegate, used for all built-in layout-relative values.
+    /// </summary>
     private class LambdaValue : Value
     {
         private readonly Func< Actor?, float > _getter;
+
+        // ====================================================================
 
         public LambdaValue( Func< Actor?, float > getter )
         {

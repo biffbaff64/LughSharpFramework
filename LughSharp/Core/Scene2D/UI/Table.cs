@@ -75,14 +75,17 @@ public class Table : WidgetGroup
     /// </summary>
     public bool Round { get; set; } = true;
 
-    public int  Rows         { get; private set; }
-    public int  Columns      { get; set; }
-    public Cell CellDefaults { get; set; }
+    public int          Rows         { get; private set; }
+    public int          Columns      { get; set; }
+    public Cell         CellDefaults { get; set; }
+    public List< Cell > Cells        { get; private set; } = new( 4 );
 
     public Pool< Cell > CellPool { get; } = new()
     {
         NewObjectFactory = GetNewObject
     };
+
+    public Align Alignment { get; private set; } = Align.Center;
 
     // ========================================================================
 
@@ -95,12 +98,9 @@ public class Table : WidgetGroup
     private static float[]? _columnWeightedWidth;
     private static float[]? _rowWeightedHeight;
 
-    private readonly List< Cell > _cells          = new( 4 );
     private readonly List< Cell > _columnDefaults = new( 2 );
     private readonly float[]      _columnWidth;
     private readonly float[]      _rowHeight;
-
-    private Align _alignment = Align.Center;
 
     private ISceneDrawable?    _background;
     private bool               _clip;
@@ -150,8 +150,6 @@ public class Table : WidgetGroup
         Transform    = false;
         Touchable    = Touchable.ChildrenOnly;
     }
-
-    // ========================================================================
 
     public Cell ObtainCell()
     {
@@ -256,7 +254,7 @@ public class Table : WidgetGroup
         float padRightNew  = GetPadRight();
 
         if ( Math.Abs( ( padTopOld + padBottomOld ) - ( padTopNew + padBottomNew ) ) > NumberUtils.FloatTolerance
-            || Math.Abs( ( padLeftOld + padRightOld ) - ( padLeftNew + padRightNew ) ) > NumberUtils.FloatTolerance )
+          || Math.Abs( ( padLeftOld + padRightOld ) - ( padLeftNew + padRightNew ) ) > NumberUtils.FloatTolerance )
         {
             InvalidateHierarchy();
         }
@@ -318,6 +316,13 @@ public class Table : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Invalidates this actor's layout, causing <see cref="ILayout.SetLayout"/> to happen the
+    /// next time <see cref="ILayout.Validate"/> is called. This method should be called when
+    /// state changes in the actor that requires a layout but does not change the minimum,
+    /// preferred, maximum, or actual size of the actor (meaning it does not affect the
+    /// parent actor's layout).
+    /// </summary>
     public override void Invalidate()
     {
         _sizeInvalid = true;
@@ -345,15 +350,15 @@ public class Table : WidgetGroup
         {
             _implicitEndRow = false;
             Rows--;
-            _cells.Peek().EndRow = false;
+            Cells.Peek().EndRow = false;
         }
 
-        int cellCount = _cells.Count;
+        int cellCount = Cells.Count;
 
         if ( cellCount > 0 )
         {
             // Set cell column and row.
-            Cell lastCell = _cells.Peek();
+            Cell lastCell = Cells.Peek();
 
             if ( !lastCell.EndRow )
             {
@@ -371,7 +376,7 @@ public class Table : WidgetGroup
             {
                 for ( int i = cellCount - 1; i >= 0; i-- )
                 {
-                    Cell other = _cells[ i ];
+                    Cell other = Cells[ i ];
 
                     for ( int column = other.Column, nn = column + other.Colspan; column < nn; column++ )
                     {
@@ -393,8 +398,6 @@ public class Table : WidgetGroup
             cell.Row    = 0;
         }
 
-        _cells.Add( cell );
-
         cell.Set( CellDefaults );
 
         if ( cell.Column < _columnDefaults.Count )
@@ -403,6 +406,8 @@ public class Table : WidgetGroup
         }
 
         cell.Merge( _rowDefaults );
+
+        Cells.Add( cell );
 
         if ( actor != null )
         {
@@ -430,12 +435,9 @@ public class Table : WidgetGroup
     {
         Guard.Against.Null( text );
 
-        if ( Skin == null )
-        {
-            throw new RuntimeException( "Table must have a skin set to use this method." );
-        }
-
-        return Add( new Label( text, Skin ) );
+        return Skin == null
+            ? throw new RuntimeException( "Table must have a skin set to use this method." )
+            : Add( new Label( text, Skin ) );
     }
 
     /// <summary>
@@ -444,12 +446,9 @@ public class Table : WidgetGroup
     /// </summary>
     public Cell Add( string text, string labelStyleName )
     {
-        if ( Skin == null )
-        {
-            throw new RuntimeException( "Table must have a skin set to use this method." );
-        }
-
-        return Add( new Label( text, Skin.Get< LabelStyle >( labelStyleName ) ) );
+        return Skin == null
+            ? throw new RuntimeException( "Table must have a skin set to use this method." )
+            : Add( new Label( text, Skin.Get< LabelStyle >( labelStyleName ) ) );
     }
 
     /// <summary>
@@ -458,12 +457,9 @@ public class Table : WidgetGroup
     /// </summary>
     public Cell Add( string? text, string fontName, Color color )
     {
-        if ( Skin == null )
-        {
-            throw new RuntimeException( "Table must have a skin set to use this method." );
-        }
-
-        return Add( new Label( text, new LabelStyle( Skin.GetFont( fontName ), color ) ) );
+        return Skin == null
+            ? throw new RuntimeException( "Table must have a skin set to use this method." )
+            : Add( new Label( text, new LabelStyle( Skin.GetFont( fontName ), color ) ) );
     }
 
     /// <summary>
@@ -472,12 +468,9 @@ public class Table : WidgetGroup
     /// </summary>
     public Cell Add( string? text, string fontName, string colorName )
     {
-        if ( Skin == null )
-        {
-            throw new RuntimeException( "Table must have a skin set to use this method." );
-        }
-
-        return Add( new Label( text, new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
+        return Skin == null
+            ? throw new RuntimeException( "Table must have a skin set to use this method." )
+            : Add( new Label( text, new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
     }
 
     /// <summary>
@@ -528,16 +521,16 @@ public class Table : WidgetGroup
     /// </summary>
     public override void ClearChildren()
     {
-        Cell[] cells = _cells.ToArray();
+        Cell[] cells = Cells.ToArray();
 
-        for ( int i = _cells.Count - 1; i >= 0; i-- )
+        for ( int i = Cells.Count - 1; i >= 0; i-- )
         {
             cells[ i ].Actor?.Remove();
         }
 
-        CellPool.FreeAll( _cells );
+        CellPool.FreeAll( Cells );
 
-        _cells.Clear();
+        Cells.Clear();
 
         Rows    = 0;
         Columns = 0;
@@ -566,7 +559,7 @@ public class Table : WidgetGroup
         _padBottom = BackgroundBottom;
         _padRight  = BackgroundRight;
 
-        _alignment = Align.Center;
+        Alignment = Align.Center;
 
         DebugLines( DebugType.None );
 
@@ -589,11 +582,11 @@ public class Table : WidgetGroup
     /// </summary>
     public Cell? AddRow()
     {
-        if ( _cells.Count > 0 )
+        if ( Cells.Count > 0 )
         {
             if ( !_implicitEndRow )
             {
-                if ( _cells.Peek().EndRow )
+                if ( Cells.Peek().EndRow )
                 {
                     // Row was already ended.
                     return _rowDefaults;
@@ -620,10 +613,10 @@ public class Table : WidgetGroup
 
     private void EndRow()
     {
-        Cell[] cells      = _cells.ToArray();
+        Cell[] cells      = Cells.ToArray();
         var    rowColumns = 0;
 
-        for ( int i = _cells.Count - 1; i >= 0; i-- )
+        for ( int i = Cells.Count - 1; i >= 0; i-- )
         {
             Cell cell = cells[ i ];
 
@@ -639,7 +632,7 @@ public class Table : WidgetGroup
 
         Rows++;
 
-        _cells.Peek().EndRow = true;
+        Cells.Peek().EndRow = true;
     }
 
     /// <summary>
@@ -684,9 +677,9 @@ public class Table : WidgetGroup
             throw new ArgumentException( "actor cannot be null." );
         }
 
-        Cell[] cells = _cells.ToArray();
+        Cell[] cells = Cells.ToArray();
 
-        for ( int i = 0, n = _cells.Count; i < n; i++ )
+        for ( int i = 0, n = Cells.Count; i < n; i++ )
         {
             Cell c = cells[ i ];
 
@@ -697,14 +690,6 @@ public class Table : WidgetGroup
         }
 
         return null;
-    }
-
-    /// <summary>
-    /// Returns the cells for this table.
-    /// </summary>
-    public List< Cell > GetCells()
-    {
-        return _cells;
     }
 
     public override float GetPrefWidth()
@@ -782,7 +767,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Padding at the top edge of the table. */
+    /// Padding at the top edge of the table.
     /// </summary>
     /// <param name="padTop"></param>
     /// <returns></returns>
@@ -797,7 +782,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Padding at the left edge of the table. */
+    /// Padding at the left edge of the table.
     /// </summary>
     /// <param name="padLeft"></param>
     /// <returns></returns>
@@ -812,7 +797,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Padding at the bottom edge of the table. */
+    /// Padding at the bottom edge of the table.
     /// </summary>
     /// <param name="padBottom"></param>
     /// <returns></returns>
@@ -827,7 +812,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Padding at the right edge of the table. */
+    /// Padding at the right edge of the table.
     /// </summary>
     /// <param name="padRight"></param>
     /// <returns></returns>
@@ -865,7 +850,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Padding at the top edge of the table. */
+    /// Padding at the top edge of the table.
     /// </summary>
     /// <param name="padTop"></param>
     /// <returns></returns>
@@ -879,7 +864,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Padding at the left edge of the table. */
+    /// Padding at the left edge of the table.
     /// </summary>
     /// <param name="padLeft"></param>
     /// <returns></returns>
@@ -893,7 +878,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Padding at the bottom edge of the table. */
+    /// Padding at the bottom edge of the table.
     /// </summary>
     /// <param name="padBottom"></param>
     /// <returns></returns>
@@ -907,7 +892,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Padding at the right edge of the table. */
+    /// Padding at the right edge of the table.
     /// </summary>
     /// <param name="padRight"></param>
     /// <returns></returns>
@@ -929,7 +914,7 @@ public class Table : WidgetGroup
     /// <returns></returns>
     public Table SetAlignment( Align align )
     {
-        _alignment = align;
+        Alignment = align;
 
         return this;
     }
@@ -941,7 +926,7 @@ public class Table : WidgetGroup
     /// <returns></returns>
     public Table Center()
     {
-        _alignment = Align.Center;
+        Alignment = Align.Center;
 
         return this;
     }
@@ -953,8 +938,8 @@ public class Table : WidgetGroup
     /// <returns></returns>
     public Table AddTopAlignment()
     {
-        _alignment |= Align.Top;
-        _alignment &= ~Align.Bottom;
+        Alignment |= Align.Top;
+        Alignment &= ~Align.Bottom;
 
         return this;
     }
@@ -966,8 +951,8 @@ public class Table : WidgetGroup
     /// <returns></returns>
     public Table AddLeftAlignment()
     {
-        _alignment |= Align.Left;
-        _alignment &= ~Align.Right;
+        Alignment |= Align.Left;
+        Alignment &= ~Align.Right;
 
         return this;
     }
@@ -978,8 +963,8 @@ public class Table : WidgetGroup
     /// </summary>
     public Table AddBottomAlignment()
     {
-        _alignment |= Align.Bottom;
-        _alignment &= ~Align.Top;
+        Alignment |= Align.Bottom;
+        Alignment &= ~Align.Top;
 
         return this;
     }
@@ -990,8 +975,8 @@ public class Table : WidgetGroup
     /// </summary>
     public Table AddRightAlignment()
     {
-        _alignment |= Align.Right;
-        _alignment &= ~Align.Left;
+        Alignment |= Align.Right;
+        Alignment &= ~Align.Left;
 
         return this;
     }
@@ -1054,18 +1039,13 @@ public class Table : WidgetGroup
         return _padTop.Get( this ) + _padBottom.Get( this );
     }
 
-    public Align GetAlignment()
-    {
-        return _alignment;
-    }
-
     /// <summary>
     /// Returns the row index for the y coordinate, or -1 if not over a row.
     /// </summary>
     /// <param name="y"> The y coordinate, where 0 is the top of the table. </param>
     public int GetRow( float y )
     {
-        int n = _cells.Count;
+        int n = Cells.Count;
 
         if ( n == 0 )
         {
@@ -1074,7 +1054,7 @@ public class Table : WidgetGroup
 
         y += GetPadTop();
 
-        Cell[] cells = _cells.ToArray();
+        Cell[] cells = Cells.ToArray();
 
         for ( int i = 0, row = 0; i < n; )
         {
@@ -1184,8 +1164,8 @@ public class Table : WidgetGroup
     {
         _sizeInvalid = false;
 
-        Cell[] cells     = _cells.ToArray();
-        int    cellCount = _cells.Count;
+        Cell[] cells     = Cells.ToArray();
+        int    cellCount = Cells.Count;
 
         // Implicitly end the row for layout purposes.
         if ( ( cellCount > 0 ) && !cells[ cellCount - 1 ].EndRow )
@@ -1480,8 +1460,8 @@ public class Table : WidgetGroup
         float   layoutHeight = Height;
         int     columns      = Columns;
         int     rows         = Rows;
-        float[] columnWidth  = _columnWidth;
-        float[] rowHeight    = _rowHeight;
+        float[] columnWidth  = _columnWidth.ToArray();
+        float[] rowHeight    = _rowHeight.ToArray();
         float   padLeft      = _padLeft.Get( this );
         float   hpadding     = padLeft + _padRight.Get( this );
         float   padTop       = _padTop.Get( this );
@@ -1492,9 +1472,9 @@ public class Table : WidgetGroup
         float[] columnWeightedWidth;
         float   totalGrowWidth = _tablePrefWidth - _tableMinWidth;
 
-        if ( totalGrowWidth == 0 )
+        if ( totalGrowWidth <= 0 )
         {
-            columnWeightedWidth = _columnMinWidth;
+            columnWeightedWidth = _columnMinWidth.ToArray();
         }
         else
         {
@@ -1502,13 +1482,14 @@ public class Table : WidgetGroup
 
             columnWeightedWidth = _columnWeightedWidth = EnsureSize( _columnWeightedWidth, columns );
 
-            float[] columnMinWidth  = _columnMinWidth;
-            float[] columnPrefWidth = _columnPrefWidth;
+            float[] columnMinWidth  = _columnMinWidth.ToArray();
+            float[] columnPrefWidth = _columnPrefWidth.ToArray();
 
             for ( var i = 0; i < columns; i++ )
             {
                 float growWidth = columnPrefWidth[ i ] - columnMinWidth[ i ];
                 float growRatio = growWidth / totalGrowWidth;
+
                 columnWeightedWidth[ i ] = columnMinWidth[ i ] + ( extraWidth * growRatio );
             }
         }
@@ -1516,36 +1497,38 @@ public class Table : WidgetGroup
         float[] rowWeightedHeight;
         float   totalGrowHeight = _tablePrefHeight - _tableMinHeight;
 
-        if ( totalGrowHeight == 0 )
+        if ( totalGrowHeight <= 0 )
         {
-            rowWeightedHeight = _rowMinHeight;
+            rowWeightedHeight = _rowMinHeight.ToArray();
         }
         else
         {
             rowWeightedHeight = _rowWeightedHeight = EnsureSize( _rowWeightedHeight, rows );
 
             float   extraHeight   = Math.Min( totalGrowHeight, Math.Max( 0, layoutHeight - _tableMinHeight ) );
-            float[] rowMinHeight  = _rowMinHeight;
-            float[] rowPrefHeight = _rowPrefHeight;
+            float[] rowMinHeight  = _rowMinHeight.ToArray();
+            float[] rowPrefHeight = _rowPrefHeight.ToArray();
 
             for ( var i = 0; i < rows; i++ )
             {
                 float growHeight = rowPrefHeight[ i ] - rowMinHeight[ i ];
                 float growRatio  = growHeight / totalGrowHeight;
+
                 rowWeightedHeight[ i ] = rowMinHeight[ i ] + ( extraHeight * growRatio );
             }
         }
 
-        // Determine actor and cell sizes (before expand or fill).
-        Cell[] cells     = _cells.ToArray();
-        int    cellCount = _cells.Count;
+        // --------------------------------------------------------------------
+        // 1. Determine actor and cell sizes (before expand or fill).
+        Cell[] cells     = Cells.ToArray();
+        int    cellCount = cells.Length;
 
         for ( var i = 0; i < cellCount; i++ )
         {
-            Cell  c      = cells[ i ];
-            int   column = c.Column;
-            int   row    = c.Row;
-            Actor a      = c.Actor!;
+            Cell   c      = cells[ i ];
+            int    column = c.Column;
+            int    row    = c.Row;
+            Actor? a      = c.Actor;
 
             float spannedWeightedWidth = 0;
             int   colspan              = c.Colspan;
@@ -1557,12 +1540,12 @@ public class Table : WidgetGroup
 
             float weightedHeight = rowWeightedHeight[ row ];
 
-            float? prefWidth  = c.PrefWidth?.Get( a );
-            float? prefHeight = c.PrefHeight?.Get( a );
-            float? minWidth   = c.MinWidth?.Get( a );
-            float? minHeight  = c.MinHeight?.Get( a );
-            float? maxWidth   = c.MaxWidth?.Get( a );
-            float? maxHeight  = c.MaxHeight?.Get( a );
+            float prefWidth  = c.PrefWidth.Get( a );
+            float prefHeight = c.PrefHeight.Get( a );
+            float minWidth   = c.MinWidth.Get( a );
+            float minHeight  = c.MinHeight.Get( a );
+            float maxWidth   = c.MaxWidth.Get( a );
+            float maxHeight  = c.MaxHeight.Get( a );
 
             if ( prefWidth < minWidth )
             {
@@ -1584,22 +1567,23 @@ public class Table : WidgetGroup
                 prefHeight = maxHeight;
             }
 
-            c.ActorWidth = Math.Min( spannedWeightedWidth - c.ComputedPadLeft - c.ComputedPadRight,
-                                     ( float )prefWidth! );
-
-            c.ActorHeight = Math.Min( weightedHeight - c.ComputedPadTop - c.ComputedPadBottom, ( float )prefHeight! );
+            c.ActorWidth = Math.Min( Math.Max( 0, spannedWeightedWidth - c.ComputedPadLeft - c.ComputedPadRight ),
+                                     prefWidth );
+            c.ActorHeight = Math.Min( Math.Max( 0, weightedHeight - c.ComputedPadTop - c.ComputedPadBottom ),
+                                      prefHeight );
 
             if ( colspan == 1 )
             {
-                _columnWidth[ column ] = Math.Max( _columnWidth[ column ], spannedWeightedWidth );
+                columnWidth[ column ] = Math.Max( columnWidth[ column ], spannedWeightedWidth );
             }
 
             rowHeight[ row ] = Math.Max( rowHeight[ row ], weightedHeight );
         }
 
-        // Distribute remaining space to any expanding columns/rows.
-        float[] expandWidth  = _expandWidth;
-        float[] expandHeight = _expandHeight;
+        // --------------------------------------------------------------------
+        // 2. Distribute remaining space to any expanding columns/rows.
+        float[] expandWidth  = _expandWidth.ToArray();
+        float[] expandHeight = _expandHeight.ToArray();
         float   totalExpand  = 0;
 
         for ( var i = 0; i < columns; i++ )
@@ -1613,31 +1597,33 @@ public class Table : WidgetGroup
 
             for ( var i = 0; i < columns; i++ )
             {
-                extra -= _columnWidth[ i ];
+                extra -= columnWidth[ i ];
             }
 
             if ( extra > 0 )
             {
-                // layoutWidth < tableMinWidth.
                 var used      = 0.0f;
                 var lastIndex = 0;
 
                 for ( var i = 0; i < columns; i++ )
                 {
-                    if ( expandWidth[ i ] == 0 )
+                    if ( expandWidth[ i ] <= 0f )
                     {
                         continue;
                     }
 
                     float amount = extra * expandWidth[ i ] / totalExpand;
 
-                    _columnWidth[ i ] += amount;
+                    columnWidth[ i ] += amount;
 
                     used      += amount;
                     lastIndex =  i;
                 }
 
-                _columnWidth[ lastIndex ] += extra - used;
+                if ( lastIndex >= 0 )
+                {
+                    columnWidth[ lastIndex ] += extra - used;
+                }
             }
         }
 
@@ -1659,13 +1645,12 @@ public class Table : WidgetGroup
 
             if ( extra > 0 )
             {
-                // layoutHeight < tableMinHeight.
-                float used      = 0;
-                var   lastIndex = 0;
+                var used      = 0f;
+                var lastIndex = 0;
 
                 for ( var i = 0; i < rows; i++ )
                 {
-                    if ( expandHeight[ i ] == 0 )
+                    if ( expandHeight[ i ] <= 0f )
                     {
                         continue;
                     }
@@ -1676,17 +1661,21 @@ public class Table : WidgetGroup
                     lastIndex      =  i;
                 }
 
-                rowHeight[ lastIndex ] += extra - used;
+                if ( lastIndex >= 0 )
+                {
+                    rowHeight[ lastIndex ] += extra - used;
+                }
             }
         }
 
-        // Distribute any additional width added by colspanned cells to the columns spanned.
+        // --------------------------------------------------------------------
+        // 3. Distribute any additional width added by colspanned cells to the columns spanned.
         for ( var i = 0; i < cellCount; i++ )
         {
             Cell c       = cells[ i ];
             int  colspan = c.Colspan;
 
-            if ( colspan == 1 )
+            if ( colspan <= 1 )
             {
                 continue;
             }
@@ -1711,7 +1700,8 @@ public class Table : WidgetGroup
             }
         }
 
-        // Determine table size.
+        // --------------------------------------------------------------------
+        // 4. Determine table size.
         float tableWidth  = hpadding;
         float tableHeight = vpadding;
 
@@ -1728,22 +1718,22 @@ public class Table : WidgetGroup
         // Position table within the container.
         float x = padLeft;
 
-        if ( ( _alignment & Align.Right ) != 0 )
+        if ( ( Alignment & Align.Right ) != 0 )
         {
             x += layoutWidth - tableWidth;
         }
-        else if ( ( _alignment & Align.Left ) == 0 ) // Center
+        else if ( ( Alignment & Align.Left ) == 0 )
         {
             x += ( layoutWidth - tableWidth ) / 2;
         }
 
         float y = padTop;
 
-        if ( ( _alignment & Align.Bottom ) != 0 )
+        if ( ( Alignment & Align.Bottom ) != 0 )
         {
             y += layoutHeight - tableHeight;
         }
-        else if ( ( _alignment & Align.Top ) == 0 ) // Center
+        else if ( ( Alignment & Align.Top ) == 0 )
         {
             y += ( layoutHeight - tableHeight ) / 2;
         }
@@ -1757,7 +1747,7 @@ public class Table : WidgetGroup
 
             float spannedCellWidth = 0;
 
-            for ( int column = c.Column, nn = ( column + c.Colspan )!; column < nn; column++ )
+            for ( int column = c.Column, nn = ( column + c.Colspan ); column < nn; column++ )
             {
                 spannedCellWidth += columnWidth[ column ];
             }
@@ -1771,38 +1761,36 @@ public class Table : WidgetGroup
 
             if ( fillX > 0 )
             {
-                c.ActorWidth = Math.Max( spannedCellWidth * fillX, c.MinWidth!.Get( c.Actor ) );
+                c.ActorWidth = Math.Max( spannedCellWidth * fillX, c.MinWidth.Get( c.Actor ) );
 
-                float? maxWidth = c.MaxWidth?.Get( c.Actor );
+                float maxWidth = c.MaxWidth.Get( c.Actor );
 
                 if ( maxWidth > 0 )
                 {
-                    c.ActorWidth = Math.Min( c.ActorWidth, ( float )maxWidth );
+                    c.ActorWidth = Math.Min( c.ActorWidth, maxWidth );
                 }
             }
 
             if ( fillY > 0 )
             {
-                c.ActorHeight = Math.Max(
-                                         ( rowHeight[ c.Row ] * fillY ) - c.ComputedPadTop - c.ComputedPadBottom,
-                                         c.MinHeight!.Get( c.Actor )
-                                        );
+                c.ActorHeight = Math.Max( ( rowHeight[ c.Row ] * fillY ) - c.ComputedPadTop - c.ComputedPadBottom,
+                                          c.MinHeight.Get( c.Actor ) );
 
-                float? maxHeight = c.MaxHeight?.Get( c.Actor );
+                float maxHeight = c.MaxHeight.Get( c.Actor );
 
                 if ( maxHeight > 0 )
                 {
-                    c.ActorHeight = Math.Min( c.ActorHeight, ( float )maxHeight );
+                    c.ActorHeight = Math.Min( c.ActorHeight, maxHeight );
                 }
             }
 
-            _alignment = c.Alignment;
+            Align cellAlign = c.Alignment;
 
-            if ( ( _alignment & Align.Left ) != 0 )
+            if ( ( cellAlign & Align.Left ) != 0 )
             {
                 c.ActorX = currentX;
             }
-            else if ( ( _alignment & Align.Right ) != 0 )
+            else if ( ( cellAlign & Align.Right ) != 0 )
             {
                 c.ActorX = currentX + spannedCellWidth - c.ActorWidth;
             }
@@ -1811,11 +1799,11 @@ public class Table : WidgetGroup
                 c.ActorX = currentX + ( ( spannedCellWidth - c.ActorWidth ) / 2 );
             }
 
-            if ( ( _alignment & Align.Top ) != 0 )
+            if ( ( cellAlign & Align.Top ) != 0 )
             {
                 c.ActorY = c.ComputedPadTop;
             }
-            else if ( ( _alignment & Align.Bottom ) != 0 )
+            else if ( ( cellAlign & Align.Bottom ) != 0 )
             {
                 c.ActorY = rowHeight[ c.Row ] - c.ActorHeight - c.ComputedPadBottom;
             }
@@ -1850,11 +1838,9 @@ public class Table : WidgetGroup
         // Validate all children (some may not be in cells).
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            if ( Children.GetAt( i ) is ILayout )
+            if ( Children.GetAt( i ) is ILayout child )
             {
-                var child = Children.GetAt( i ) as ILayout;
-
-                child?.Validate();
+                child.Validate();
             }
         }
 
@@ -1865,6 +1851,11 @@ public class Table : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Creates and returns a new <see cref="Cell"/> object. This method is primarily
+    /// intended for use by the Pooling system to efficiently manage <see cref="Cell"/>
+    /// instances.
+    /// </summary>
     public static Cell GetNewObject()
     {
         return new Cell();
@@ -2022,9 +2013,9 @@ public class Table : WidgetGroup
 
         float x = currentX;
 
-        for ( int i = 0, n = _cells.Count; i < n; i++ )
+        for ( int i = 0, n = Cells.Count; i < n; i++ )
         {
-            Cell c = _cells[ i ];
+            Cell c = Cells[ i ];
 
             // Actor bounds.
             if ( TableDebug is DebugType.Actor or DebugType.All )

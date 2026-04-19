@@ -27,5 +27,12 @@ namespace LughSharp.Core.Scene2D.Utils;
 [PublicAPI]
 public interface IDisableable
 {
+    /// <summary>
+    /// Whether the actor is disabled.
+    /// </summary>
     bool IsDisabled { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

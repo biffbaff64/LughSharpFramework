@@ -59,7 +59,7 @@ public class Button : Table, IDisableable
 
     public bool                   IsDisabled    { get; set; }
     public ButtonGroup< Button >? ButtonGroup   { get; set; }
-    public ButtonClickListener?   ClickListener { get; set; }
+    public ClickListener   ClickListener { get; set; }
 
     // ========================================================================
 
@@ -197,13 +197,19 @@ public class Button : Table, IDisableable
 
     /// <summary>
     /// Enables the button to be clicked, setting the touchable to <see cref="Touchable.Enabled"/>,
-    /// and adding a <see cref="ButtonClickListener"/> to the button.
+    /// and adding a <see cref="ClickListener"/> to the button.
     /// </summary>
     private void SetClickListener()
     {
         Touchable = Touchable.Enabled;
 
-        ClickListener = new ButtonClickListener( this );
+        ClickListener = new ClickListener( ( ev, x, y ) =>
+        {
+            if ( !IsDisabled )
+            {
+                SetChecked( !IsChecked, _programmaticChangeEvents );
+            }
+        } );
 
         AddListener( ClickListener! );
     }
@@ -212,10 +218,9 @@ public class Button : Table, IDisableable
     /// Sets the button's style.
     /// </summary>
     /// <param name="style">
-    /// The style, which could be <see cref="ButtonStyle"/>, or any style that
-    /// inherits from ButtonStyle.
+    /// The style, which could be <see cref="ButtonStyle"/>, or any style that inherits from ButtonStyle.
     /// </param>
-    /// <typeparam name="TStyle"></typeparam>
+    /// <typeparam name="TStyle"> The Type of the Style. </typeparam>
     public virtual void SetStyle< TStyle >( TStyle? style ) where TStyle : ButtonStyle
     {
         if ( style == null )

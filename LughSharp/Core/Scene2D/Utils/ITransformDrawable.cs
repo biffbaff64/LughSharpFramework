@@ -32,6 +32,14 @@ namespace LughSharp.Core.Scene2D.Utils;
 [PublicAPI]
 public interface ITransformDrawable : ISceneDrawable
 {
+    /// <summary>
+    /// Draws the drawable.
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="region"></param>
+    /// <param name="origin"></param>
+    /// <param name="scale"></param>
+    /// <param name="rotation"></param>
     void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation );
 }
 

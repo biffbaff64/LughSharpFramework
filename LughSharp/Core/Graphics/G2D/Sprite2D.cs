@@ -378,7 +378,7 @@ public class Sprite2D : TextureRegion
     {
         SetPosition( position.X, position.Y );
     }
-    
+
     /// <summary>
     /// Sets the position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
@@ -786,45 +786,95 @@ public class Sprite2D : TextureRegion
     /// <param name="flipy"> perform vertical flip  </param>
     public override void Flip( bool flipx, bool flipy )
     {
+        base.Flip( flipx, flipy );
+
         if ( flipx )
         {
-            _flipX = !_flipX;
+            float temp = Vertices[ IBatch.U1 ];
+
+            Vertices[ IBatch.U1 ] = Vertices[ IBatch.U3 ];
+            Vertices[ IBatch.U3 ] = temp;
+
+            temp = Vertices[ IBatch.U2 ];
+
+            Vertices[ IBatch.U2 ] = Vertices[ IBatch.U4 ];
+            Vertices[ IBatch.U4 ] = temp;
         }
 
         if ( flipy )
         {
-            _flipY = !_flipY;
-        }
+            float temp = Vertices[ IBatch.V1 ];
 
-        _isDirty = true; // Ensure GetVertices runs to apply the new UVs
+            Vertices[ IBatch.V1 ] = Vertices[ IBatch.V3 ];
+            Vertices[ IBatch.V3 ] = temp;
+
+            temp = Vertices[ IBatch.V2 ];
+
+            Vertices[ IBatch.V2 ] = Vertices[ IBatch.V4 ];
+            Vertices[ IBatch.V4 ] = temp;
+        }
     }
 
     /// <summary>
+    /// Offsets the region relative to the current region. Generally the regions size should be
+    /// the entire size of the texture in the direction(s) it is scrolled.
     /// </summary>
-    /// <param name="xAmount"></param>
-    /// <param name="yAmount"></param>
+    /// <param name="xAmount">The percentage to offset horizontally.</param>
+    /// <param name="yAmount">
+    /// The percentage to offset vertically. This is done in texture space, so up is negative.
+    /// </param>
     public override void Scroll( float xAmount, float yAmount )
     {
-        if ( xAmount == 0 && yAmount == 0 )
+        Guard.Against.Null( Texture );
+
+        if ( xAmount != 0 )
         {
-            return;
+            float u  = ( Vertices[ IBatch.U1 ] + xAmount ) % 1f;
+            float u2 = u + ( Width / Texture.Width );
+
+            this.U  = u;
+            this.U2 = u2;
+
+            Vertices[ IBatch.U1 ] = u;
+            Vertices[ IBatch.U2 ] = u;
+            Vertices[ IBatch.U3 ] = u2;
+            Vertices[ IBatch.U4 ] = u2;
         }
 
-        _uScrollOffset = ( _uScrollOffset + xAmount ) % 1.0f;
-        _vScrollOffset = ( _vScrollOffset + yAmount ) % 1.0f;
-
-        // Handle negative scrolling (ensure offset is always positive)
-        if ( _uScrollOffset < 0 )
+        if ( yAmount != 0 )
         {
-            _uScrollOffset += 1.0f;
+            float v  = ( Vertices[ IBatch.V2 ] + yAmount ) % 1f;
+            float v2 = v + ( Height / Texture.Height );
+
+            this.V  = v;
+            this.V2 = v2;
+
+            Vertices[ IBatch.V1 ] = v2;
+            Vertices[ IBatch.V2 ] = v;
+            Vertices[ IBatch.V3 ] = v;
+            Vertices[ IBatch.V4 ] = v2;
         }
 
-        if ( _vScrollOffset < 0 )
-        {
-            _vScrollOffset += 1.0f;
-        }
-
-        _isDirty = true;
+//        if ( xAmount == 0 && yAmount == 0 )
+//        {
+//            return;
+//        }
+//
+//        _uScrollOffset = ( _uScrollOffset + xAmount ) % 1.0f;
+//        _vScrollOffset = ( _vScrollOffset + yAmount ) % 1.0f;
+//
+//        // Handle negative scrolling (ensure offset is always positive)
+//        if ( _uScrollOffset < 0 )
+//        {
+//            _uScrollOffset += 1.0f;
+//        }
+//
+//        if ( _vScrollOffset < 0 )
+//        {
+//            _vScrollOffset += 1.0f;
+//        }
+//
+//        _isDirty = true;
     }
 
     // ========================================================================
@@ -862,10 +912,9 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Returns the bounding axis aligned <see cref="Rectangle"/> that bounds this
-    /// sprite. The rectangles x and y coordinates describe its bottom left corner.
-    /// If you change the position or size of the sprite, you have to fetch the
-    /// triangle again for it to be recomputed.
+    /// Returns the bounding axis aligned <see cref="Rectangle"/> that bounds this sprite. The
+    /// rectangles x and y coordinates describe its bottom left corner. If you change the position
+    /// or size of the sprite, you have to fetch the triangle again for it to be recomputed.
     /// </summary>
     /// <returns> the bounding Rectangle </returns>
     public Rectangle GetBoundingRectangle()
@@ -923,8 +972,8 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Sets the rotation of the sprite in degrees. Rotation is centered on the
-    /// origin set in <see cref="SetOrigin(float, float)"/>
+    /// Sets the rotation of the sprite in degrees. Rotation is centered on the origin set
+    /// in <see cref="SetOrigin(float, float)"/>
     /// </summary>
     public float Rotation
     {
@@ -946,8 +995,7 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Sets the color used to tint this sprite.
-    /// Default is <see cref="Color.White"/>.
+    /// Sets the color used to tint this sprite. Default is <see cref="Color.White"/>.
     /// </summary>
     public void SetColor( Color tint )
     {
@@ -1014,10 +1062,9 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Sets the x position where the sprite will be drawn. If origin, rotation,
-    /// or scale are changed, it is slightly more efficient to set the position
-    /// after those operations. If both position and size are to be changed, it
-    /// is better to use <see cref="SetBounds(float, float, float, float)"/>.
+    /// Sets the x position where the sprite will be drawn. If origin, rotation, or scale are changed,
+    /// it is slightly more efficient to set the position after those operations. If both position and
+    /// size are to be changed, it is better to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
     public virtual void SetX( float x )
     {
@@ -1042,10 +1089,9 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Sets the y position where the sprite will be drawn. If origin, rotation,
-    /// or scale are changed, it is slightly more efficient to set the position
-    /// after those operations. If both position and size are to be changed, it
-    /// is better to use <see cref="SetBounds(float, float, float, float)"/>.
+    /// Sets the y position where the sprite will be drawn. If origin, rotation, or scale are changed,
+    /// it is slightly more efficient to set the position after those operations. If both position and
+    /// size are to be changed, it is better to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
     public virtual void SetY( float y )
     {

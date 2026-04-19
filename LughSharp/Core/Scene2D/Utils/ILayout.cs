@@ -52,7 +52,7 @@ public interface ILayout
     /// When false, <see cref="Validate()"/> will not cause a layout to occur. This can be useful
     /// when an actor will be manipulated externally, such as with actions. Default is true.
     /// </summary>
-    bool EnableLayout { get; set; }
+    bool LayoutEnabled { get; set; }
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor

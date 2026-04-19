@@ -51,7 +51,7 @@ public class WidgetGroup : Group, ILayout
     // </summary>
     public bool NeedsLayout { get; private set; } = true;
 
-    public bool EnableLayout { get; set; } = true;
+    public bool LayoutEnabled { get; set; } = true;
 
     public bool FillParent { get; set; }
 
@@ -71,6 +71,9 @@ public class WidgetGroup : Group, ILayout
 
     public virtual void Pack()
     {
+        //TODO: Establish why this is done twice. The original LibGDX code does this, and that
+        // is why it'sa done here too. I need to understand why this is done twice.
+        
         SetSize( GetPrefWidth(), GetPrefHeight() );
 
         Validate();
@@ -90,7 +93,7 @@ public class WidgetGroup : Group, ILayout
     /// <inheritdoc />
     public virtual void Validate()
     {
-        if ( !EnableLayout )
+        if ( !LayoutEnabled )
         {
             return;
         }
@@ -99,13 +102,13 @@ public class WidgetGroup : Group, ILayout
 
         if ( FillParent && ( parent != null ) )
         {
-            float  parentWidth, parentHeight;
-            Stage? stage = Stage;
+            float  parentWidth;
+            float  parentHeight;
 
-            if ( ( stage != null ) && ( parent == stage.RootGroup ) )
+            if ( ( Stage != null ) && ( parent == Stage.RootGroup ) )
             {
-                parentWidth  = stage.Width;
-                parentHeight = stage.Height;
+                parentWidth  = Stage.Width;
+                parentHeight = Stage.Height;
             }
             else
             {
@@ -113,18 +116,10 @@ public class WidgetGroup : Group, ILayout
                 parentHeight = parent.Height;
             }
 
-            if ( !Width.Equals( parentWidth ) || !Height.Equals( parentHeight ) )
-            {
-                Width  = parentWidth;
-                Height = parentHeight;
-                Invalidate();
-            }
+            SetSize( parentWidth, parentHeight );
         }
 
-        if ( !NeedsLayout )
-        {
-            return;
-        }
+        if ( !NeedsLayout ) return;
 
         NeedsLayout = false;
 
@@ -178,7 +173,7 @@ public class WidgetGroup : Group, ILayout
 
     public void SetLayoutEnabled( bool enabled )
     {
-        EnableLayout = enabled;
+        LayoutEnabled = enabled;
         SetLayoutEnabled( this, enabled );
     }
 
@@ -192,7 +187,7 @@ public class WidgetGroup : Group, ILayout
 
             if ( actor is ILayout layout )
             {
-                layout.EnableLayout = enabled;
+                layout.LayoutEnabled = enabled;
             }
             else if ( actor is Group group )
             {

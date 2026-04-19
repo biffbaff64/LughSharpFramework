@@ -314,14 +314,12 @@ public class TextureRegion
     }
 
     /// <summary>
-    /// Offsets the region relative to the current region. Generally the region's
-    /// size should be the entire size of the texture in the direction(s) it is
-    /// scrolled.
+    /// Offsets the region relative to the current region. Generally the regions size should be
+    /// the entire size of the texture in the direction(s) it is scrolled.
     /// </summary>
     /// <param name="xAmount">The percentage to offset horizontally.</param>
     /// <param name="yAmount">
-    /// The percentage to offset vertically.
-    /// This is done in texture space, so up is negative.
+    /// The percentage to offset vertically. This is done in texture space, so up is negative.
     /// </param>
     public virtual void Scroll( float xAmount, float yAmount )
     {
@@ -331,7 +329,7 @@ public class TextureRegion
         {
             float width = ( U2 - U ) * Texture.Width;
 
-            U  = ( U + xAmount ) % 1;
+            U  = ( U + xAmount ) % 1f;
             U2 = U + ( width / Texture.Width );
         }
 
@@ -339,7 +337,7 @@ public class TextureRegion
         {
             float height = ( V2 - V ) * Texture.Height;
 
-            V  = ( V + yAmount ) % 1;
+            V  = ( V + yAmount ) % 1f;
             V2 = V + ( height / Texture.Height );
         }
     }

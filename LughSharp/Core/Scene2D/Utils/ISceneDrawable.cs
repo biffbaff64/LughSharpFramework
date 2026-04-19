@@ -27,9 +27,8 @@ using LughSharp.Core.Graphics.G2D;
 namespace LughSharp.Core.Scene2D.Utils;
 
 /// <summary>
-/// A drawable knows how to draw itself at a given rectangular size. It provides
-/// padding sizes and a minimum size so that other code can determine how to size
-/// and position content.
+/// A drawable knows how to draw itself at a given rectangular size. It provides padding
+/// sizes and a minimum size so that other code can determine how to size and position content.
 /// </summary>
 [PublicAPI]
 public interface ISceneDrawable
@@ -40,6 +39,8 @@ public interface ISceneDrawable
     float BottomHeight { get; set; }
     float MinWidth     { get; set; }
     float MinHeight    { get; set; }
+    
+    // ========================================================================
 
     /// <summary>
     /// Draws this drawable at the specified bounds. The drawable should be tinted

@@ -46,6 +46,9 @@ public class Cell : IPoolable, IResetable
     public Value PadLeft     { get; set; } = Value.Zero;
     public Value PadBottom   { get; set; } = Value.Zero;
     public Value PadRight    { get; set; } = Value.Zero;
+
+    // ========================================================================
+    
     public Align Alignment   { get; set; } = Align.None;
     public int   ExpandX     { get; set; }
     public int   ExpandY     { get; set; }
@@ -77,15 +80,10 @@ public class Cell : IPoolable, IResetable
 
     // ========================================================================
 
-    private const float Zerof   = 0f;
-    private const float Onef    = 1f;
-    private const int   Zeroi   = 0;
-    private const int   Onei    = 1;
-    private const Align Centeri = Align.Center;
-    private const Align Topi    = Align.Top;
-    private const Align Bottomi = Align.Bottom;
-    private const Align Lefti   = Align.Left;
-    private const Align Righti  = Align.Right;
+    private const float Zerof = 0f;
+    private const float Onef  = 1f;
+    private const int   Zeroi = 0;
+    private const int   Onei  = 1;
 
     // ========================================================================
     // ========================================================================
@@ -137,7 +135,7 @@ public class Cell : IPoolable, IResetable
         PadRight    = Value.Zero;
         FillX       = Zerof;
         FillY       = Zerof;
-        Alignment   = Centeri;
+        Alignment   = Align.Center;
         ExpandX     = Zeroi;
         ExpandY     = Zeroi;
         Colspan     = Onei;
@@ -190,8 +188,8 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets the MinWidth, PrefWidth, MaxWidth, MinHeight, PrefHeight,
-    /// and MaxHeight to the specified value.
+    /// Sets the MinWidth, PrefWidth, MaxWidth, MinHeight, PrefHeight, and MaxHeight to
+    /// the specified value.
     /// </summary>
     /// <param name="size">The <see cref="Value"/> to use.</param>
     /// <returns> This Cell for chaining. </returns>
@@ -209,8 +207,8 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets the MinWidth, PrefWidth, MaxWidth, MinHeight, PrefHeight,
-    /// and MaxHeight to the specified values.
+    /// Sets the MinWidth, PrefWidth, MaxWidth, MinHeight, PrefHeight, and MaxHeight to
+    /// the specified values.
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     public Cell Size( Value width, Value height )
@@ -226,8 +224,8 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets the MinWidth, PrefWidth, MaxWidth, MinHeight, PrefHeight,
-    /// and MaxHeight to the specified value.
+    /// Sets the MinWidth, PrefWidth, MaxWidth, MinHeight, PrefHeight, and MaxHeight to
+    /// the specified value.
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     public Cell Size( float size )
@@ -266,7 +264,7 @@ public class Cell : IPoolable, IResetable
     /// <summary>
     /// Sets the minWidth, prefWidth, and maxWidth to the specified value.
     /// </summary>
-    /// <param name="width"></param>
+    /// <param name="width"> The width to set. </param>
     /// <returns> This Cell for chaining. </returns>
     public Cell Width( float width )
     {
@@ -347,12 +345,10 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Convenience method which sets the <see cref="MinWidth"/> property
-    /// and then returns this Cell for chaining.
+    /// Convenience method which sets the <see cref="MinWidth"/> property and then
+    /// returns this Cell for chaining.
     /// </summary>
-    /// <param name="minWidth">
-    /// The new value for MinWidth, passed as a <see cref="Value"/>
-    /// </param>
+    /// <param name="minWidth"> The new value for MinWidth, passed as a <see cref="Value"/> </param>
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinWidth( Value minWidth )
     {
@@ -362,12 +358,10 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Convenience method which sets the <see cref="MinHeight"/> property
-    /// and then returns this Cell for chaining.
+    /// Convenience method which sets the <see cref="MinHeight"/> property and then returns
+    /// this Cell for chaining.
     /// </summary>
-    /// <param name="minHeight">
-    /// The new value for MinHeight, passed as a <see cref="Value"/>
-    /// </param>
+    /// <param name="minHeight"> The new value for MinHeight, passed as a <see cref="Value"/> </param>
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinHeight( Value minHeight )
     {
@@ -377,12 +371,10 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Convenience method which sets the <see cref="MinWidth"/> property
-    /// and then returns this Cell for chaining.
+    /// Convenience method which sets the <see cref="MinWidth"/> property and then returns
+    /// this Cell for chaining.
     /// </summary>
-    /// <param name="minWidth">
-    /// The new value for MinWidth, passed as a float.
-    /// </param>
+    /// <param name="minWidth"> The new value for MinWidth, passed as a float. </param>
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinWidth( float minWidth )
     {
@@ -392,12 +384,10 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Convenience method which sets the <see cref="MinHeight"/> property
-    /// and then returns this Cell for chaining.
+    /// Convenience method which sets the <see cref="MinHeight"/> property and then returns
+    /// this Cell for chaining.
     /// </summary>
-    /// <param name="minHeight">
-    /// The new value for MinHeight, passed as a float
-    /// </param>
+    /// <param name="minHeight"> The new value for MinHeight, passed as a float </param>
     /// <returns> This Cell for chaining. </returns>
     public Cell SetMinHeight( float minHeight )
     {
@@ -411,9 +401,8 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
-    /// and <see cref="PrefHeight"/> properties directly, as this Cell is returned
-    /// for chaining purposes.
+    /// This method is provided for chaining purposes, which cannot be acheived by accessing the
+    /// <see cref="PrefWidth"/> and <see cref="PrefHeight"/> properties directly.
     /// </remarks>
     public Cell SetPrefSize( Value size )
     {
@@ -428,9 +417,8 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
-    /// and <see cref="PrefHeight"/> properties directly, as this Cell is returned
-    /// for chaining purposes.
+    /// This method is provided for chaining purposes, which cannot be acheived by accessing the
+    /// <see cref="PrefWidth"/> and <see cref="PrefHeight"/> properties directly.
     /// </remarks>
     public Cell SetPrefSize( Value width, Value height )
     {
@@ -445,8 +433,8 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
-    /// property directly, as this Cell is returned for chaining purposes.
+    /// This method is provided for chaining purposes, which cannot be acheived by accessing the
+    /// <see cref="PrefWidth"/> property directly.
     /// </remarks>
     public Cell SetPrefWidth( Value prefWidth )
     {
@@ -456,16 +444,46 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
+    /// Sets the <see cref="PrefWidth"/> for this Cell.
+    /// </summary>
+    /// <returns> This Cell for chaining. </returns>
+    /// <remarks>
+    /// This method is provided for chaining purposes, which cannot be acheived by accessing the
+    /// <see cref="PrefWidth"/> property directly.
+    /// </remarks>
+    public Cell SetPrefWidth( float prefWidth )
+    {
+        PrefWidth = Value.Fixed.ValueOf( prefWidth );
+
+        return this;
+    }
+
+    /// <summary>
     /// Sets the <see cref="PrefHeight"/> for this Cell.
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefHeight"/>
-    /// property directly, as this Cell is returned for chaining purposes.
+    /// This method is provided for chaining purposes, which cannot be acheived by accessing the
+    /// <see cref="PrefHeight"/> property directly.
     /// </remarks>
     public Cell SetPrefHeight( Value prefHeight )
     {
         PrefHeight = prefHeight;
+
+        return this;
+    }
+
+    /// <summary>
+    /// Sets the <see cref="PrefHeight"/> for this Cell.
+    /// </summary>
+    /// <returns> This Cell for chaining. </returns>
+    /// <remarks>
+    /// This method is provided for chaining purposes, which cannot be acheived by accessing the
+    /// <see cref="PrefHeight"/> property directly.
+    /// </remarks>
+    public Cell SetPrefHeight( float prefHeight )
+    {
+        PrefHeight = Value.Fixed.ValueOf( prefHeight );
 
         return this;
     }
@@ -477,9 +495,8 @@ public class Cell : IPoolable, IResetable
     /// <param name="height"> The new height. </param>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
-    /// and <see cref="PrefHeight"/> properties directly, as this Cell is returned
-    /// for chaining purposes.
+    /// This method is provided for chaining purposes, which cannot be acheived by accessing the
+    /// <see cref="PrefWidth"/> and <see cref="PrefHeight"/> properties directly.
     /// </remarks>
     public Cell SetPrefSize( float width, float height )
     {
@@ -494,37 +511,12 @@ public class Cell : IPoolable, IResetable
     /// <param name="size"> The new size, which applies to both width and height. </param>
     /// <returns> This Cell for chaining. </returns>
     /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
-    /// and <see cref="PrefHeight"/> properties directly, as this Cell is returned
-    /// for chaining purposes.
+    /// This method is provided for chaining purposes, which cannot be acheived by accessing the
+    /// <see cref="PrefWidth"/> and <see cref="PrefHeight"/> properties directly.
     /// </remarks>
     public Cell SetPrefSize( float size )
     {
         SetPrefSize( Value.Fixed.ValueOf( size ) );
-
-        return this;
-    }
-
-    /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefWidth"/>
-    /// property directly, as this Cell is returned for chaining purposes.
-    /// </remarks>
-    /// <returns> This Cell for chaining. </returns>
-    public Cell SetPrefWidth( float prefWidth )
-    {
-        PrefWidth = Value.Fixed.ValueOf( prefWidth );
-
-        return this;
-    }
-
-    /// <remarks>
-    /// A method is required for this, instead of accessing the <see cref="PrefHeight"/>
-    /// property directly, as this Cell is returned for chaining purposes.
-    /// </remarks>
-    /// <returns> This Cell for chaining. </returns>
-    public Cell SetPrefHeight( float prefHeight )
-    {
-        PrefHeight = Value.Fixed.ValueOf( prefHeight );
 
         return this;
     }
@@ -654,12 +646,13 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
+    /// Sets the space values for the top, left, bottom, and right sides of this Cell.
     /// </summary>
-    /// <param name="top"></param>
-    /// <param name="left"></param>
-    /// <param name="bottom"></param>
-    /// <param name="right"></param>
-    /// <returns> This Cell for chaining. </returns>
+    /// <param name="top">The space value to be applied to the top side.</param>
+    /// <param name="left">The space value to be applied to the left side.</param>
+    /// <param name="bottom">The space value to be applied to the bottom side.</param>
+    /// <param name="right">The space value to be applied to the right side.</param>
+    /// <returns>This Cell for chaining.</returns>
     public Cell Space( Value top, Value left, Value bottom, Value right )
     {
         SpaceTop    = top;
@@ -671,6 +664,7 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
+    /// Sets the space value for the top side of this Cell.
     /// </summary>
     /// <param name="spaceTop"></param>
     /// <returns> This Cell for chaining. </returns>
@@ -682,6 +676,7 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
+    /// Sets the space value for the left side of this Cell.
     /// </summary>
     /// <param name="spaceLeft"></param>
     /// <returns> This Cell for chaining. </returns>
@@ -692,6 +687,11 @@ public class Cell : IPoolable, IResetable
         return this;
     }
 
+    /// <summary>
+    /// Sets the space value for the bottom side of this Cell.
+    /// </summary>
+    /// <param name="spaceBottom"></param>
+    /// <returns></returns>
     public Cell SetSpaceBottom( Value spaceBottom )
     {
         SpaceBottom = spaceBottom;
@@ -699,6 +699,11 @@ public class Cell : IPoolable, IResetable
         return this;
     }
 
+    /// <summary>
+    /// Sets the space value for the right side of this Cell.
+    /// </summary>
+    /// <param name="spaceRight"></param>
+    /// <returns></returns>
     public Cell SetSpaceRight( Value spaceRight )
     {
         SpaceRight = spaceRight;
@@ -810,6 +815,14 @@ public class Cell : IPoolable, IResetable
         return this;
     }
 
+    /// <summary>
+    /// Sets the pad values for the top, left, bottom, and right sides of this Cell.
+    /// </summary>
+    /// <param name="top"> The top padding value. </param>
+    /// <param name="left"> The left padding value. </param>
+    /// <param name="bottom"> The bottom padding value. </param>
+    /// <param name="right"> The right padding value. </param>
+    /// <returns> This Cell for chaining. </returns>
     public Cell Pad( Value top, Value left, Value bottom, Value right )
     {
         PadTop    = top;
@@ -822,17 +835,20 @@ public class Cell : IPoolable, IResetable
 
     public Cell SetPadTop( Value padTop )
     {
-        Guard.Against.Null( padTop );
-
         PadTop = padTop;
+
+        return this;
+    }
+
+    public Cell SetPadLeft( Value padLeft )
+    {
+        PadLeft = padLeft;
 
         return this;
     }
 
     public Cell SetPadBottom( Value padBottom )
     {
-        Guard.Against.Null( padBottom );
-
         PadBottom = padBottom;
 
         return this;
@@ -840,8 +856,6 @@ public class Cell : IPoolable, IResetable
 
     public Cell SetPadRight( Value padRight )
     {
-        Guard.Against.Null( padRight );
-
         PadRight = padRight;
 
         return this;
@@ -919,8 +933,7 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets <see cref="FillX"/> to <see cref="Onef"/>.
-    /// Leaves <see cref="FillY"/> unchanged.
+    /// Sets <see cref="FillX"/> to <see cref="Onef"/>. Leaves <see cref="FillY"/> unchanged.
     /// </summary>
     /// <returns> This Cell for chaining </returns>
     public Cell SetFillX( float fx = Onef )
@@ -931,8 +944,7 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets <see cref="FillY"/> to <see cref="Onef"/>.
-    /// Leaves <see cref="FillX"/> unchanged.
+    /// Sets <see cref="FillY"/> to <see cref="Onef"/>. Leaves <see cref="FillX"/> unchanged.
     /// </summary>
     /// <returns> This Cell for chaining </returns>
     public Cell SetFillY( float fy = Onef )
@@ -961,7 +973,7 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public Cell Center()
     {
-        Alignment = Centeri;
+        Alignment = Align.Center;
 
         return this;
     }
@@ -974,7 +986,7 @@ public class Cell : IPoolable, IResetable
     {
         if ( Alignment == Align.None )
         {
-            Alignment = Topi;
+            Alignment = Align.Top;
         }
         else
         {
@@ -992,7 +1004,7 @@ public class Cell : IPoolable, IResetable
     {
         if ( Alignment == Align.None )
         {
-            Alignment = Lefti;
+            Alignment = Align.Left;
         }
         else
         {
@@ -1010,7 +1022,7 @@ public class Cell : IPoolable, IResetable
     {
         if ( Alignment == Align.None )
         {
-            Alignment = Bottomi;
+            Alignment = Align.Bottom;
         }
         else
         {
@@ -1028,7 +1040,7 @@ public class Cell : IPoolable, IResetable
     {
         if ( Alignment == Align.None )
         {
-            Alignment = Righti;
+            Alignment = Align.Right;
         }
         else
         {
@@ -1204,20 +1216,44 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetMaxHeight() => MaxHeight.Get( Actor );
 
+    /// <summary>
+    /// Gets the space between the top of the cell and the top of the actor.
+    /// </summary>
     public float GetSpaceTop() => SpaceTop.Get( Actor );
 
+    /// <summary>
+    /// Gets the space between the left of the cell and the left of the actor.
+    /// </summary>
     public float GetSpaceLeft() => SpaceLeft.Get( Actor );
 
+    /// <summary>
+    /// Gets the space between the bottom of the cell and the bottom of the actor.
+    /// </summary>
     public float GetSpaceBottom() => SpaceBottom.Get( Actor );
 
+    /// <summary>
+    /// Gets the space between the right of the cell and the right of the actor.
+    /// </summary>
     public float GetSpaceRight() => SpaceRight.Get( Actor );
 
+    /// <summary>
+    /// Gets the pad between the top of the cell and the top of the actor.
+    /// </summary>
     public float GetPadTop() => PadTop.Get( Actor );
 
+    /// <summary>
+    /// Gets the pad between the left of the cell and the left of the actor.
+    /// </summary>
     public float GetPadLeft() => PadLeft.Get( Actor );
 
+    /// <summary>
+    /// Gets the pad between the bottom of the cell and the bottom of the actor
+    /// </summary>
     public float GetPadBottom() => PadBottom.Get( Actor );
 
+    /// <summary>
+    /// Gets the pad between the right of the cell and the right of the actor.
+    /// </summary>
     public float GetPadRight() => PadRight.Get( Actor );
 
     // ========================================================================
@@ -1226,37 +1262,13 @@ public class Cell : IPoolable, IResetable
     /// Gets the X-padding for this Cell, by adding together <see cref="PadLeft"/>
     /// and <see cref="PadRight"/>.
     /// </summary>
-    /// <returns> The X-padding value. </returns>
-    /// <exception cref="RuntimeException">
-    /// If either <see cref="PadLeft"/> or <see cref="PadRight"/> is null.
-    /// </exception>
-    public float GetPadX()
-    {
-        if ( ( PadLeft == null ) || ( PadRight == null ) )
-        {
-            throw new RuntimeException( "PadLeft / PadRight cannot be null!" );
-        }
-
-        return PadLeft.Get( Actor ) + PadRight.Get( Actor );
-    }
+    public float GetPadX() => PadLeft.Get( Actor ) + PadRight.Get( Actor );
 
     /// <summary>
     /// Gets the Y-padding for this Cell, by adding together <see cref="PadTop"/>
     /// and <see cref="PadBottom"/>.
     /// </summary>
-    /// <returns> The Y-padding value. </returns>
-    /// <exception cref="RuntimeException">
-    /// If either <see cref="PadTop"/> or <see cref="PadBottom"/> is null.
-    /// </exception>
-    public float GetPadY()
-    {
-        if ( ( PadTop == null ) || ( PadBottom == null ) )
-        {
-            throw new RuntimeException( "PadTop / PadBottom cannot be null!" );
-        }
-
-        return PadTop.Get( Actor ) + PadBottom.Get( Actor );
-    }
+    public float GetPadY() => PadTop.Get( Actor ) + PadBottom.Get( Actor );
 
     /// <summary>
     /// Resets constraint fields.
@@ -1299,28 +1311,16 @@ public class Cell : IPoolable, IResetable
             return;
         }
 
-        MinWidth    = cell.MinWidth;
-        MinHeight   = cell.MinHeight;
-        PrefWidth   = cell.PrefWidth;
-        PrefHeight  = cell.PrefHeight;
-        MaxWidth    = cell.MaxWidth;
-        MaxHeight   = cell.MaxHeight;
-        SpaceTop    = cell.SpaceTop;
-        SpaceLeft   = cell.SpaceLeft;
-        SpaceBottom = cell.SpaceBottom;
-        SpaceRight  = cell.SpaceRight;
-        PadTop      = cell.PadTop;
-        PadLeft     = cell.PadLeft;
-        PadBottom   = cell.PadBottom;
-        PadRight    = cell.PadRight;
-        Alignment   = cell.Alignment;
-        ExpandX     = cell.ExpandX;
-        ExpandY     = cell.ExpandY;
-        Colspan     = cell.Colspan;
-        UniformX    = cell.UniformX;
-        UniformY    = cell.UniformY;
-        FillX       = cell.FillX;
-        FillY       = cell.FillY;
+        CopyConstraintsFrom( cell );
+        
+        Alignment = cell.Alignment;
+        ExpandX   = cell.ExpandX;
+        ExpandY   = cell.ExpandY;
+        Colspan   = cell.Colspan;
+        UniformX  = cell.UniformX;
+        UniformY  = cell.UniformY;
+        FillX     = cell.FillX;
+        FillY     = cell.FillY;
     }
 
     /// <summary>
@@ -1334,6 +1334,26 @@ public class Cell : IPoolable, IResetable
             return;
         }
 
+        CopyConstraintsFrom( cell );
+
+        //@formatter:off
+        if ( cell.Alignment != 0 ) Alignment = cell.Alignment;
+        if ( cell.ExpandX != 0 )   ExpandX   = cell.ExpandX;
+        if ( cell.ExpandY != 0 )   ExpandY   = cell.ExpandY;
+        if ( cell.Colspan != 0 )   Colspan   = cell.Colspan;
+        if ( cell.UniformX )       UniformX  = cell.UniformX;
+        if ( cell.UniformY )       UniformY  = cell.UniformY;
+        //@formatter:on
+        
+        FillX = cell.FillX;
+        FillY = cell.FillY;
+    }
+
+    /// <summary>
+    /// Copies the constraints from the given Cell to this Cell.
+    /// </summary>
+    private void CopyConstraintsFrom( Cell cell )
+    {
         MinWidth    = cell.MinWidth;
         MinHeight   = cell.MinHeight;
         PrefWidth   = cell.PrefWidth;
@@ -1348,39 +1368,6 @@ public class Cell : IPoolable, IResetable
         PadLeft     = cell.PadLeft;
         PadBottom   = cell.PadBottom;
         PadRight    = cell.PadRight;
-
-        if ( cell.Alignment != 0 )
-        {
-            Alignment = cell.Alignment;
-        }
-
-        if ( cell.ExpandX != 0 )
-        {
-            ExpandX = cell.ExpandX;
-        }
-
-        if ( cell.ExpandY != 0 )
-        {
-            ExpandY = cell.ExpandY;
-        }
-
-        if ( cell.Colspan != 0 )
-        {
-            Colspan = cell.Colspan;
-        }
-
-        if ( cell.UniformX )
-        {
-            UniformX = cell.UniformX;
-        }
-
-        if ( cell.UniformY )
-        {
-            UniformY = cell.UniformY;
-        }
-
-        FillX = cell.FillX;
-        FillY = cell.FillY;
     }
 
     /// <inheritdoc />
