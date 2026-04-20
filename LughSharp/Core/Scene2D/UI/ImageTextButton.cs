@@ -92,11 +92,11 @@ public class ImageTextButton : Button
 
         Image = new Scene2DImage();
         Image.SetScaling( Scaling.Fit );
-        Add( Image );
+        AddCell( Image );
 
         _label = new Label( text, new LabelStyle( style.Font!, style.FontColor! ) );
         _label.SetAlignment( Align.Center );
-        Add( _label );
+        AddCell( _label );
 
         SetStyleAndSize( style );
     }

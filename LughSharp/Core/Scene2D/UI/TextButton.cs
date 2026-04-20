@@ -60,11 +60,11 @@ public class TextButton : Button
     public TextButton( string? text, TextButtonStyle style )
     {
         Style = style;
-
+        
         Label = new Label( text, new LabelStyle( style.Font, style.FontColor ) );
         Label.SetAlignment( Align.Center );
 
-        Add( Label ).Expand().Fill();
+        AddCell( Label ).Grow();
         SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 

@@ -1275,20 +1275,20 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public void Clear()
     {
-        MinWidth    = null!;
-        MinHeight   = null!;
-        PrefWidth   = null!;
-        PrefHeight  = null!;
-        MaxWidth    = null!;
-        MaxHeight   = null!;
-        SpaceTop    = null!;
-        SpaceLeft   = null!;
-        SpaceBottom = null!;
-        SpaceRight  = null!;
-        PadTop      = null!;
-        PadLeft     = null!;
-        PadBottom   = null!;
-        PadRight    = null!;
+        MinWidth    = Value.Zero;
+        MinHeight   = Value.Zero;
+        PrefWidth   = Value.Zero;
+        PrefHeight  = Value.Zero;
+        MaxWidth    = Value.Zero;
+        MaxHeight   = Value.Zero;
+        SpaceTop    = Value.Zero;
+        SpaceLeft   = Value.Zero;
+        SpaceBottom = Value.Zero;
+        SpaceRight  = Value.Zero;
+        PadTop      = Value.Zero;
+        PadLeft     = Value.Zero;
+        PadBottom   = Value.Zero;
+        PadRight    = Value.Zero;
         FillX       = 0f;
         FillY       = 0f;
         Alignment   = Align.None;

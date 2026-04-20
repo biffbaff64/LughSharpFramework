@@ -82,7 +82,7 @@ public class ImageButton : Button
         Scene2DImage = new Scene2DImage();
         Scene2DImage.SetScaling( Scaling.Fit );
 
-        Add( Scene2DImage );
+        AddCell( Scene2DImage );
 
         // The Scene2DImage drawable will be updated by the style.
         SetStyle( style );

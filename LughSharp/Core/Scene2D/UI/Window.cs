@@ -117,7 +117,7 @@ public class Window : Table
         TitleLabel.SetEllipsis( true );
 
         _titleTable = new TitleTable( this );
-        _titleTable.Add( TitleLabel )
+        _titleTable.AddCell( TitleLabel )
                    .SetExpandX()
                    .SetFillX()
                    .SetMinWidth( 0 );

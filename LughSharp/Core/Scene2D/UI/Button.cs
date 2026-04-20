@@ -167,7 +167,7 @@ public class Button : Table, IDisableable
     {
         SetStyleAndSize( style );
         SetClickListener();
-        Add( child );
+        AddCell( child );
     }
 
     /// <summary>

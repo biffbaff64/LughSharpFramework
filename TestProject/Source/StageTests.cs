@@ -42,6 +42,7 @@ using LughSharp.Core.Scene2D.UI;
 using LughSharp.Core.Scene2D.UI.Styles;
 using LughSharp.Core.Scene2D.Utils;
 using LughSharp.Core.Utils;
+using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Logging;
 
 using TestProject.Source;
@@ -105,6 +106,8 @@ public class StageTests : IDisposable
 
     public void CreateSkinActors()
     {
+        Guard.Against.Null( Stage );
+        
         var imageActor           = false;
         var windowActor          = false;
         var buttonActor          = false;
@@ -130,7 +133,7 @@ public class StageTests : IDisposable
                 IsVisible = true
             };
             scene2DImage.SetPosition( 0, 0 );
-            Stage?.AddActor( scene2DImage );
+            Stage.AddActor( scene2DImage );
         }
 
         // --------------------------------------
@@ -152,7 +155,7 @@ public class StageTests : IDisposable
             };
             window.SetPosition( 200, 200 );
             window.AddActor( new Label( "Window Content", skin ) );
-            Stage?.AddActor( window );
+            Stage.AddActor( window );
         }
 
         // --------------------------------------
@@ -175,7 +178,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             Button.SetPosition( 100, 250 );
-            Stage?.AddActor( Button );
+            Stage.AddActor( Button );
 
             Button.AddListener( new ChangeListener( ( ev, actor ) =>
             {
@@ -202,7 +205,7 @@ public class StageTests : IDisposable
             };
             Button2.SetPosition( 100, 70 );
             Button2.SetSize( Button.Width, Button.Height );
-            Stage?.AddActor( Button2 );
+            Stage.AddActor( Button2 );
 
             Button2.AddListener( new ClickListener( ( ev, x, y ) =>
             {
@@ -238,7 +241,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             textButton.SetPosition( 300, 250 );
-            Stage?.AddActor( textButton );
+            Stage.AddActor( textButton );
 
             var textButton2 = new TextButton( "Text Button", skin )
             {
@@ -246,7 +249,7 @@ public class StageTests : IDisposable
             };
             textButton2.SetPosition( 300, 70 );
             textButton2.SetSize( textButton.Width, textButton.Height );
-            Stage?.AddActor( textButton2 );
+            Stage.AddActor( textButton2 );
         }
 
         // --------------------------------------
@@ -271,7 +274,7 @@ public class StageTests : IDisposable
                 IsDisabled = false,
             };
             imageButton.SetPosition( 500, 250 );
-            Stage?.AddActor( imageButton );
+            Stage.AddActor( imageButton );
 
             var imageButton2 = new ImageButton( skin, "default" )
             {
@@ -279,7 +282,7 @@ public class StageTests : IDisposable
             };
             imageButton2.SetPosition( 500, 70 );
             imageButton2.SetSize( imageButton.Width, imageButton.Height );
-            Stage?.AddActor( imageButton2 );
+            Stage.AddActor( imageButton2 );
         }
 
         // --------------------------------------
@@ -303,7 +306,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             imageTextButton.SetPosition( 700, 250 );
-            Stage?.AddActor( imageTextButton );
+            Stage.AddActor( imageTextButton );
 
             var imageTextButton2 = new ImageTextButton( "Image Text Button", skin, "default" )
             {
@@ -311,7 +314,7 @@ public class StageTests : IDisposable
             };
             imageTextButton2.SetPosition( 700, 70 );
             imageTextButton2.SetSize( imageTextButton.Width, imageTextButton.Height );
-            Stage?.AddActor( imageTextButton2 );
+            Stage.AddActor( imageTextButton2 );
         }
 
         // --------------------------------------
@@ -325,7 +328,7 @@ public class StageTests : IDisposable
 
             checkBox.Label?.Style.Background = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) );
             checkBox.SetPosition( 200, 200 );
-            Stage?.AddActor( checkBox );
+            Stage.AddActor( checkBox );
         }
 
         // --------------------------------------
@@ -339,7 +342,7 @@ public class StageTests : IDisposable
             progressBar.SetPosition( 200, 200 );
             progressBar.Width  = 400;
             progressBar.Height = 100;
-            Stage?.AddActor( progressBar );
+            Stage.AddActor( progressBar );
         }
 
         // --------------------------------------
@@ -353,7 +356,7 @@ public class StageTests : IDisposable
             slider.SetPosition( 200, 200 );
             slider.Width  = 400;
             slider.Height = 100;
-            Stage?.AddActor( slider );
+            Stage.AddActor( slider );
         }
 
         // --------------------------------------
@@ -366,30 +369,52 @@ public class StageTests : IDisposable
             };
             label.SetPosition( 200, 400 );
             label.SetAlignment( Align.Top | Align.Left );
-            Stage?.AddActor( label );
+            Stage.AddActor( label );
         }
 
         // --------------------------------------
 
         if ( tableActor )
         {
+            var table = new Table( skin )
+            {
+                IsVisible = true,
+            };
+
+            table.EnableDebug();
+            table.SetColor( 1, 1, 1, 1 );
+            table.SetPosition( 200, 300 );
+            table.SetSize( 400, 200 );
+            Stage.AddActor( table );
         }
 
         // --------------------------------------
 
         if ( dialogActor )
         {
-            var dialog = new Dialog( "Dialog Title", skin )
+            var dialogStyle = new DialogStyle()
+            {
+                Background = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
+                TitleFont = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
+                TitleFontColor = Color.Red,
+            };
+            
+            var dialog = new Dialog( "Dialog Title", dialogStyle )
             {
                 IsVisible = true,
             };
             
-            dialog.SetPosition( 200, 200 );
-            dialog.Text( "This is a dialog box with a custom title and text." );
-            dialog.Button( "OK", true ).Button( "Cancel", false );
-            dialog.Key( IInput.Keys.Enter, true ).Key( IInput.Keys.Escape, false );
+            dialog.Text( "This is a dialog box with a custom title and text.",
+                         skin.Get< LabelStyle >( "default") );
             
-            Stage?.AddActor( dialog );
+            dialog.Button( "OK", true, skin.Get< TextButtonStyle >( "default" ) )
+                  .Button( "Cancel", false, skin.Get< TextButtonStyle >( "default" ) );
+            
+            dialog.Key( IInput.Keys.Enter, true ).Key( IInput.Keys.Escape, false );
+
+            dialog.Show( Stage );
+            
+//            Stage.AddActor( dialog );
         }
     }
 
@@ -424,7 +449,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             button.SetPosition( 300, 300 );
-            Stage?.AddActor( button );
+            Stage.AddActor( button );
         }
 
         if ( TextButtonActor )
@@ -434,7 +459,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            Stage?.AddActor( textButton );
+            Stage.AddActor( textButton );
         }
 
         if ( ImageButtonActor )
@@ -449,7 +474,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            Stage?.AddActor( imageButton );
+            Stage.AddActor( imageButton );
         }
 
         if ( ImageTextButtonActor )
@@ -467,13 +492,13 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            Stage?.AddActor( progressBar );
+            Stage.AddActor( progressBar );
         }
     }
 
     public void Dispose()
     {
-        Stage?.Dispose();
+        Stage.Dispose();
         GC.SuppressFinalize( this );
     }
 }

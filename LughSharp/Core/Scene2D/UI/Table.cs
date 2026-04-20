@@ -315,17 +315,9 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Adds a cell without an actor.
-    /// </summary>
-    public Cell AddWithoutActor()
-    {
-        return Add< Actor >( null! );
-    }
-
-    /// <summary>
     /// Adds a new cell to the table with the specified actor.
     /// </summary>
-    public Cell Add< T >( T? actor ) where T : Actor
+    public Cell AddCell< T >( T? actor ) where T : Actor
     {
         Cell cell = ObtainCell();
         cell.Actor = actor;
@@ -402,11 +394,11 @@ public class Table : WidgetGroup
         return cell;
     }
 
-    public Table Add( Actor[] actors )
+    public Table AddCell( Actor[] actors )
     {
         for ( int i = 0, n = actors.Length; i < n; i++ )
         {
-            Add< Actor >( actors[ i ] );
+            AddCell< Actor >( actors[ i ] );
         }
 
         return this;
@@ -416,46 +408,46 @@ public class Table : WidgetGroup
     /// Adds a new cell with a label. This may only be called if a skin
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>
     /// </summary>
-    public Cell Add( string? text )
+    public Cell AddCell( string? text )
     {
         Guard.Against.Null( text );
 
         return Skin == null
             ? throw new RuntimeException( "Table must have a skin set to use this method." )
-            : Add( new Label( text, Skin ) );
+            : AddCell( new Label( text, Skin ) );
     }
 
     /// <summary>
     /// Adds a new cell with a label. This may only be called if a skin
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>
     /// </summary>
-    public Cell Add( string text, string labelStyleName )
+    public Cell AddCell( string text, string labelStyleName )
     {
         return Skin == null
             ? throw new RuntimeException( "Table must have a skin set to use this method." )
-            : Add( new Label( text, Skin.Get< LabelStyle >( labelStyleName ) ) );
+            : AddCell( new Label( text, Skin.Get< LabelStyle >( labelStyleName ) ) );
     }
 
     /// <summary>
     /// Adds a new cell with a label. This may only be called if a skin
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
-    public Cell Add( string? text, string fontName, Color color )
+    public Cell AddCell( string? text, string fontName, Color color )
     {
         return Skin == null
             ? throw new RuntimeException( "Table must have a skin set to use this method." )
-            : Add( new Label( text, new LabelStyle( Skin.GetFont( fontName ), color ) ) );
+            : AddCell( new Label( text, new LabelStyle( Skin.GetFont( fontName ), color ) ) );
     }
 
     /// <summary>
     /// Adds a new cell with a label. This may only be called if a skin
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
-    public Cell Add( string? text, string fontName, string colorName )
+    public Cell AddCell( string? text, string fontName, string colorName )
     {
         return Skin == null
             ? throw new RuntimeException( "Table must have a skin set to use this method." )
-            : Add( new Label( text, new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
+            : AddCell( new Label( text, new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
     }
 
     /// <summary>
@@ -474,7 +466,7 @@ public class Table : WidgetGroup
             }
         }
 
-        return Add( stack );
+        return AddCell( stack );
     }
 
     public override bool RemoveActor( Actor actor, bool unfocus )
@@ -1194,43 +1186,49 @@ public class Table : WidgetGroup
                 expandWidth[ c.Column ] = c.ExpandX;
             }
 
-            // Compute combined padding/spacing for cells.
-            // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
-            c.ComputedPadLeft = ( float )( c.PadLeft?.Get( c.Actor )
-                                         + ( c.Column == 0
-                                               ? 0
-                                               : Math.Max( 0f,
-                                                           ( float )( c.SpaceLeft?.Get( c.Actor )
-                                                                    - spaceRightLast )! ) ) )!;
+            Logger.Debug( $"c.PadLeft     : {c.PadLeft}" );
+            Logger.Debug( $"c.Actor       : {c.Actor}" );
+            Logger.Debug( $"c.Column      : {c.Column}" );
+            Logger.Debug( $"c.SpaceLeft   : {c.SpaceLeft}" );
+            Logger.Debug( $"spaceRightLast: {spaceRightLast}" );
+            
+            // Compute combined padding/spacing for cells. Spacing between actors
+            // isn't additive, the larger is used. Also, no spacing around edges.
+            c.ComputedPadLeft = ( c.PadLeft.Get( c.Actor )
+                                + ( c.Column == 0
+                                      ? 0
+                                      : Math.Max( 0f,
+                                                  ( float )( c.SpaceLeft.Get( c.Actor )
+                                                           - spaceRightLast ) ) ) )!;
 
-            c.ComputedPadTop = c.PadTop!.Get( c.Actor );
+            c.ComputedPadTop = c.PadTop.Get( c.Actor );
 
             if ( c.CellAboveIndex != -1 )
             {
                 Cell above = cells[ c.CellAboveIndex ];
 
                 c.ComputedPadTop += Math.Max( 0,
-                                              ( float )( c.SpaceTop?.Get( c.Actor )
-                                                       - above.SpaceBottom?.Get( c.Actor ) )! );
+                                              ( c.SpaceTop.Get( c.Actor )
+                                              - above.SpaceBottom.Get( c.Actor ) )! );
             }
 
-            float? spaceRight = c.SpaceRight?.Get( c.Actor );
+            float? spaceRight = c.SpaceRight.Get( c.Actor );
 
-            c.ComputedPadRight = ( float )( c.PadRight?.Get( c.Actor )
-                                          + ( ( c.Column + c.Colspan ) == columns ? 0f : spaceRight ) )!;
+            c.ComputedPadRight = ( float )( c.PadRight.Get( c.Actor )
+                                          + ( ( c.Column + c.Colspan ) == columns ? 0f : spaceRight ) );
 
-            c.ComputedPadBottom = ( float )( c.PadBottom?.Get( c.Actor )
-                                           + ( c.Row == ( rows - 1 ) ? 0 : c.SpaceBottom?.Get( c.Actor ) ) )!;
+            c.ComputedPadBottom = ( c.PadBottom.Get( c.Actor )
+                                  + ( c.Row == ( rows - 1 ) ? 0 : c.SpaceBottom.Get( c.Actor ) ) )!;
 
-            spaceRightLast = spaceRight ?? 0f;
+            spaceRightLast = spaceRight;
 
             // Determine minimum and preferred cell sizes.
-            float? prefWidth  = c.PrefWidth?.Get( c.Actor );
-            float? prefHeight = c.PrefHeight?.Get( c.Actor );
-            float? minWidth   = c.MinWidth?.Get( c.Actor );
-            float? minHeight  = c.MinHeight?.Get( c.Actor );
-            float? maxWidth   = c.MaxWidth?.Get( c.Actor );
-            float? maxHeight  = c.MaxHeight?.Get( c.Actor );
+            float prefWidth  = c.PrefWidth.Get( c.Actor );
+            float prefHeight = c.PrefHeight.Get( c.Actor );
+            float minWidth   = c.MinWidth.Get( c.Actor );
+            float minHeight  = c.MinHeight.Get( c.Actor );
+            float maxWidth   = c.MaxWidth.Get( c.Actor );
+            float maxHeight  = c.MaxHeight.Get( c.Actor );
 
             if ( prefWidth < minWidth )
             {
@@ -1254,10 +1252,10 @@ public class Table : WidgetGroup
 
             if ( Round )
             {
-                minWidth   = ( float )Math.Ceiling( ( float )minWidth! );
-                minHeight  = ( float )Math.Ceiling( ( float )minHeight! );
-                prefWidth  = ( float )Math.Ceiling( ( float )prefWidth! );
-                prefHeight = ( float )Math.Ceiling( ( float )prefHeight! );
+                minWidth   = ( float )Math.Ceiling( minWidth );
+                minHeight  = ( float )Math.Ceiling( minHeight );
+                prefWidth  = ( float )Math.Ceiling( prefWidth );
+                prefHeight = ( float )Math.Ceiling( prefHeight );
             }
 
             if ( c.Colspan == 1 )
@@ -1265,21 +1263,17 @@ public class Table : WidgetGroup
                 // Spanned column min and pref width is added later.
                 float hpadding = c.ComputedPadLeft + c.ComputedPadRight;
 
-                columnPrefWidth[ c.Column ] = Math.Max(
-                                                       columnPrefWidth[ c.Column ],
-                                                       ( float )( prefWidth + hpadding )!
-                                                      );
+                columnPrefWidth[ c.Column ] = Math.Max( columnPrefWidth[ c.Column ],
+                                                        ( prefWidth + hpadding )! );
 
-                columnMinWidth[ c.Column ] = Math.Max(
-                                                      columnMinWidth[ c.Column ],
-                                                      ( float )( minWidth + hpadding )!
-                                                     );
+                columnMinWidth[ c.Column ] = Math.Max( columnMinWidth[ c.Column ],
+                                                       ( minWidth + hpadding )! );
             }
 
             float vpadding = c.ComputedPadTop + c.ComputedPadBottom;
 
-            rowPrefHeight[ c.Row ] = Math.Max( rowPrefHeight[ c.Row ], ( float )( prefHeight + vpadding )! );
-            rowMinHeight[ c.Row ]  = Math.Max( rowMinHeight[ c.Row ], ( float )( minHeight + vpadding )! );
+            rowPrefHeight[ c.Row ] = Math.Max( rowPrefHeight[ c.Row ], ( prefHeight + vpadding )! );
+            rowMinHeight[ c.Row ]  = Math.Max( rowMinHeight[ c.Row ], ( minHeight + vpadding )! );
         }
 
         float uniformMinWidth  = 0, uniformMinHeight  = 0;
@@ -1361,15 +1355,15 @@ public class Table : WidgetGroup
             Cell c       = cells[ i ];
             int  colspan = c.Colspan;
 
-            if ( colspan == 1 )
+            if ( colspan <= 1 )
             {
                 continue;
             }
 
-            int    column    = c.Column;
-            float? minWidth  = c.MinWidth?.Get( c.Actor );
-            float? prefWidth = c.PrefWidth?.Get( c.Actor );
-            float? maxWidth  = c.MaxWidth?.Get( c.Actor );
+            int   column    = c.Column;
+            float minWidth  = c.MinWidth.Get( c.Actor );
+            float prefWidth = c.PrefWidth.Get( c.Actor );
+            float maxWidth  = c.MaxWidth.Get( c.Actor );
 
             if ( prefWidth < minWidth )
             {
@@ -1383,12 +1377,14 @@ public class Table : WidgetGroup
 
             if ( Round )
             {
-                minWidth  = ( float )Math.Ceiling( ( float )minWidth! );
-                prefWidth = ( float )Math.Ceiling( ( float )prefWidth! );
+                minWidth  = ( float )Math.Ceiling( minWidth );
+                prefWidth = ( float )Math.Ceiling( prefWidth );
             }
 
-            float spannedMinWidth  = -( c.ComputedPadLeft + c.ComputedPadRight ), spannedPrefWidth = spannedMinWidth;
+            float spannedMinWidth  = -( c.ComputedPadLeft + c.ComputedPadRight );
+            float spannedPrefWidth = spannedMinWidth;
             float totalExpandWidth = 0;
+
 
             for ( int ii = column, nn = ii + colspan; ii < nn; ii++ )
             {
@@ -1399,12 +1395,14 @@ public class Table : WidgetGroup
                 totalExpandWidth += expandWidth[ ii ];
             }
 
-            float extraMinWidth  = Math.Max( 0, ( float )( minWidth - spannedMinWidth )! );
-            float extraPrefWidth = Math.Max( 0, ( float )( prefWidth - spannedPrefWidth )! );
+            float extraMinWidth  = Math.Max( 0, ( minWidth - spannedMinWidth )! );
+            float extraPrefWidth = Math.Max( 0, ( prefWidth - spannedPrefWidth )! );
 
             for ( int ii = column, nn = ii + colspan; ii < nn; ii++ )
             {
-                float ratio = totalExpandWidth == 0 ? 1f / colspan : expandWidth[ ii ] / totalExpandWidth;
+                float ratio = totalExpandWidth == 0
+                    ? ( 1f / colspan )
+                    : ( expandWidth[ ii ] / totalExpandWidth );
 
                 columnMinWidth[ ii ]  += extraMinWidth * ratio;
                 columnPrefWidth[ ii ] += extraPrefWidth * ratio;
@@ -1412,6 +1410,7 @@ public class Table : WidgetGroup
         }
 
         // Determine table min and pref size.
+        // Horizontal and Vertical padding.
         float hpad = _padLeft.Get( this ) + _padRight.Get( this );
         float vpad = _padTop.Get( this ) + _padBottom.Get( this );
 

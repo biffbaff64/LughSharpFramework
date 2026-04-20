@@ -84,8 +84,8 @@ public class CheckBox : TextButton
 
         ClearChildren();
 
-        ImageCell = Add( Image );
-        Add( label );
+        ImageCell = AddCell( Image );
+        AddCell( label );
 
         SetSize( GetPrefWidth(), GetPrefHeight() );
     }

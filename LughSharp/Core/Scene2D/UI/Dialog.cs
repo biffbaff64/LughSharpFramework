@@ -48,7 +48,7 @@ public class Dialog : Window
     public Dictionary< Actor, object >? Values { get; set; } = new();
 
     // ========================================================================
-    
+
     private readonly IgnoreTouchDown _ignoreTouchDown = null!;
 
     private ChangeListener _dialogChangeListener = null!;
@@ -108,9 +108,9 @@ public class Dialog : Window
         ContentTable = new Table( _skin );
         ButtonTable  = new Table( _skin );
 
-        Add( ContentTable ).Grow();
+        AddCell( ContentTable ).Grow();
         AddRow();
-        Add( ButtonTable ).SetFillX();
+        AddCell( ButtonTable ).SetFillX();
 
         ContentTable.CellDefaults.Space( 6 );
         ButtonTable.CellDefaults.Space( 6 );
@@ -145,15 +145,14 @@ public class Dialog : Window
 
     /// <summary>
     /// Adds a label to the content table. The dialog needs to have been constructed
-    /// with a <see cref="Skin"/> to use this method. If it hasn't, a default Skin
-    /// will be created which may need further adjustments.
+    /// with a <see cref="Skin"/> to use this method. If it hasn't, an exception will
+    /// be throw.
     /// </summary>
     public Dialog Text( string? text )
     {
         if ( _skin == null )
         {
-            throw new RuntimeException( "This method may only be used if the dialog was constructed "
-                                      + "with a Skin, a default Skin has been provided." );
+            throw new RuntimeException( "This method may only be used if the dialog was constructed." );
         }
 
         return Text( text, _skin.Get< LabelStyle >() );
@@ -172,7 +171,7 @@ public class Dialog : Window
     /// </summary>
     public Dialog Text( Label label )
     {
-        ContentTable?.Add( label );
+        ContentTable?.AddCell( label );
 
         return this;
     }
@@ -217,7 +216,7 @@ public class Dialog : Window
     /// </param>
     public Dialog Button( Button button, object? obj = null )
     {
-        ButtonTable?.Add( button );
+        ButtonTable?.AddCell( button );
 
         SetObject( button, obj! );
 
@@ -225,13 +224,12 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// <see cref="WidgetGroup.Pack()"/> the dialog (but doesn't set the position),
-    /// adds it to the stage, sets it as the keyboard and scroll focus, clears any
-    /// actions on the dialog, and adds the specified action to it. The previous
-    /// keyboard and scroll focus are remembered so they can be restored when the
-    /// dialog is hidden.
+    /// <see cref="WidgetGroup.Pack()"/> the dialog (but doesn't set the position), adds
+    /// it to the stage, sets it as the keyboard and scroll focus, clears any actions on
+    /// the dialog, and adds the specified action to it. The previous keyboard and scroll
+    /// focus are remembered so they can be restored when the dialog is hidden.
     /// </summary>
-    /// <param name="stage"></param>
+    /// <param name="stage"> The Stage to act on. </param>
     /// <param name="action"> May be null. </param>
     public Dialog Show( Stage stage, SceneAction? action )
     {
@@ -241,7 +239,7 @@ public class Dialog : Window
         PreviousKeyboardFocus = null;
 
         Actor? previousFocus = stage.GetKeyboardFocus();
-        
+
         if ( previousFocus != null )
         {
             if ( !previousFocus.IsDescendantOf( this ) )
@@ -249,7 +247,7 @@ public class Dialog : Window
                 PreviousKeyboardFocus = previousFocus;
             }
         }
-        
+
         PreviousScrollFocus = null;
 
         if ( ( stage.ScrollFocus != null ) && !stage.ScrollFocus.IsDescendantOf( this ) )
@@ -258,10 +256,13 @@ public class Dialog : Window
         }
 
         stage.AddActor( this );
+
         Pack();
+
         stage.CancelTouchFocus();
         stage.SetKeyboardFocus( this );
-        stage.ScrollFocus   = this;
+
+        stage.ScrollFocus = this;
 
         if ( action != null )
         {
@@ -457,4 +458,3 @@ public class Dialog : Window
 
 // ============================================================================
 // ============================================================================
-
