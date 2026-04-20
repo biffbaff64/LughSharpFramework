@@ -383,11 +383,12 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
+            
+            dialog.SetPosition( 200, 200 );
             dialog.Text( "This is a dialog box with a custom title and text." );
             dialog.Button( "OK", true ).Button( "Cancel", false );
             dialog.Key( IInput.Keys.Enter, true ).Key( IInput.Keys.Escape, false );
-            dialog.SetPosition( 200, 200 );
-            dialog.SetSize( 400, 240 );
+            
             Stage?.AddActor( dialog );
         }
     }

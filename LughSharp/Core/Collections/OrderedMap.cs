@@ -149,8 +149,8 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     {
         EnsureCapacity( map.Size );
 
-        TK?[] keys   = map.KeyTable ?? throw new NullReferenceException();
-        TV?[] values = map.ValueTable ?? throw new NullReferenceException();
+        TK?[] keys   = map.KeyTable.ToArray() ?? throw new NullReferenceException();
+        TV?[] values = map.ValueTable.ToArray() ?? throw new NullReferenceException();
 
         for ( int i = 0, n = keys.Length; i < n; i++ )
         {

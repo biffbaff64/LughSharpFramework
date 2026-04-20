@@ -41,7 +41,7 @@ namespace LughSharp.Core.Graphics.Fonts;
 /// static text. This saves needing to compute the glyph geometry each frame.
 /// </summary>
 [PublicAPI]
-public class BitmapFontCache
+public class BitmapFontCache : IDisposable
 {
     /// <summary>
     /// Returns the x position of the cached string, relative to the
@@ -84,7 +84,7 @@ public class BitmapFontCache
     private const int   AlphaBitShift        = 24;
     private const float AlphaScale           = 254f;
 
-    private readonly FlushablePool< GlyphLayout > _pooledLayouts = new()
+    private FlushablePool< GlyphLayout > _pooledLayouts = new()
     {
         NewObjectFactory = () => new GlyphLayout()
     };
@@ -92,6 +92,7 @@ public class BitmapFontCache
     private Color _tempColor = new( 1f, 1f, 1f, 1f );
     private uint  _currentTint;
     private int   _glyphCount;
+    private bool  _isDisposed;
 
     /// <summary>
     /// Number of vertex data entries per page.
@@ -882,6 +883,36 @@ public class BitmapFontCache
         if ( layout != null )
         {
             AddToCache( layout, x, y + Font.FontData.Ascent );
+        }
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( !_isDisposed )
+        {
+            _isDisposed = true;
+
+            if ( disposing )
+            {
+                //TODO: Dispose managed resources.
+//                _pooledLayouts?.Dispose();
+//                _pooledLayouts = null;
+
+//                _pageVertices = null;
+//                _idx          = null;
+            }
         }
     }
 

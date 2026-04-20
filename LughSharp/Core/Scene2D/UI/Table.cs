@@ -151,6 +151,10 @@ public class Table : WidgetGroup
         Touchable    = Touchable.ChildrenOnly;
     }
 
+    /// <summary>
+    /// Obtains a <see cref="Cell"/> from the <see cref="CellPool"/>. Also sets the table
+    /// for that cell to this table.
+    /// </summary>
     public Cell ObtainCell()
     {
         Cell cell = CellPool.Obtain();
@@ -265,25 +269,6 @@ public class Table : WidgetGroup
         {
             Invalidate();
         }
-    }
-
-    /// <summary>
-    /// Sets the table background to the supplied ISceneDrawable.
-    /// </summary>
-    /// <param name="background"></param>
-    /// <returns></returns>
-    public Table Background( ISceneDrawable? background )
-    {
-        SetBackground( background );
-
-        return this;
-    }
-
-    public Table Background( string drawableName )
-    {
-        SetBackground( drawableName );
-
-        return this;
     }
 
     public ISceneDrawable? GetBackground()
@@ -1175,14 +1160,22 @@ public class Table : WidgetGroup
             _implicitEndRow = true;
         }
 
-        int     columns         = Columns;
-        int     rows            = Rows;
-        float[] columnMinWidth  = _columnMinWidth = EnsureSize( _columnMinWidth, columns );
-        float[] rowMinHeight    = _rowMinHeight = EnsureSize( _rowMinHeight, rows );
-        float[] columnPrefWidth = _columnPrefWidth = EnsureSize( _columnPrefWidth, columns );
-        float[] rowPrefHeight   = _rowPrefHeight = EnsureSize( _rowPrefHeight, rows );
-        float[] expandWidth     = _expandWidth = EnsureSize( _expandWidth, columns );
-        float[] expandHeight    = _expandHeight = EnsureSize( _expandHeight, rows );
+        int columns = Columns;
+        int rows    = Rows;
+
+        _columnMinWidth  = EnsureSize( _columnMinWidth, columns );
+        _rowMinHeight    = EnsureSize( _rowMinHeight, rows );
+        _columnPrefWidth = EnsureSize( _columnPrefWidth, columns );
+        _rowPrefHeight   = EnsureSize( _rowPrefHeight, rows );
+        _expandWidth     = EnsureSize( _expandWidth, columns );
+        _expandHeight    = EnsureSize( _expandHeight, rows );
+
+        float[] columnMinWidth  = _columnMinWidth.ToArray();
+        float[] rowMinHeight    = _rowMinHeight.ToArray();
+        float[] columnPrefWidth = _columnPrefWidth.ToArray();
+        float[] rowPrefHeight   = _rowPrefHeight.ToArray();
+        float[] expandWidth     = _expandWidth.ToArray();
+        float[] expandHeight    = _expandHeight.ToArray();
 
         float? spaceRightLast = 0;
 

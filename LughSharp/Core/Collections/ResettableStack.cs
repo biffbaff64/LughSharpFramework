@@ -77,7 +77,7 @@ public class ResettableStack< T > : IDisposable
 
             // Return old, rent new
             ArrayPool< T >.Shared.Return( _buffer );
-            _buffer = newBuffer;
+            _buffer = newBuffer.ToArray();
         }
 
         _buffer[ Count++ ] = item;

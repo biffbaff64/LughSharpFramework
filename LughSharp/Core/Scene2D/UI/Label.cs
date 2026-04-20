@@ -45,12 +45,11 @@ public class Label : Widget, IDisposable
 
     // ========================================================================
 
-    private readonly Color       _tempColor      = new();
     private readonly GlyphLayout _prefSizeLayout = new();
     private readonly Vector2     _prefSize       = new();
 
     private StringBuilder    _text            = new();
-    private int              _intValue        = int.MinValue;
+    private int?             _intValue        = null;
     private bool             _prefSizeInvalid = true;
     private BitmapFontCache? _fontCache;
     private float            _lastPrefHeight;
@@ -262,10 +261,10 @@ public class Label : Widget, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Compares the text of the label to the specified string.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
+    /// <param name="other"> The other string to compare with. </param>
+    /// <returns> <c>True</c> if the text is equal, otherwise <c>false</c>. </returns>
     public bool TextEquals( string other )
     {
         if ( _text.Length != other.Length )
@@ -345,7 +344,7 @@ public class Label : Widget, IDisposable
         {
             layout.SetText( _fontCache.Font, _text.ToString() );
         }
-        
+
         _prefSize.Set( layout.Width, layout.Height );
     }
 
@@ -356,9 +355,10 @@ public class Label : Widget, IDisposable
     {
         Guard.Against.Null( _fontCache );
 
-        BitmapFont font      = _fontCache.Font;
-        float      oldScaleX = font.GetScaleX();
-        float      oldScaleY = font.GetScaleY();
+        BitmapFont font       = _fontCache.Font;
+        float      oldScaleX  = font.GetScaleX();
+        float      oldScaleY  = font.GetScaleY();
+        var        textString = _text.ToString();
 
         if ( _fontScaleChanged )
         {
@@ -396,12 +396,12 @@ public class Label : Widget, IDisposable
         float       textWidth;
         float       textHeight;
 
-        if ( wrap || ( _text.ToString().Contains( '\n' ) ) )
+        if ( wrap || ( textString.Contains( '\n' ) ) )
         {
             // If the text can span multiple lines, determine the text's actual
             // size so it can be aligned within the label.
             layout.SetText( font,
-                            _text.ToString(),
+                            textString,
                             0,
                             _text.Length,
                             Color.White,
@@ -454,7 +454,7 @@ public class Label : Widget, IDisposable
         }
 
         layout.SetText( font,
-                        _text.ToString(),
+                        textString,
                         0,
                         _text.Length,
                         Color.White,
@@ -480,7 +480,7 @@ public class Label : Widget, IDisposable
     {
         Validate();
 
-        Color color = _tempColor.Set( ActorColor );
+        Color color = ActorColor;
         color.A *= parentAlpha;
 
         if ( Style.Background != null )
@@ -636,7 +636,8 @@ public class Label : Widget, IDisposable
         FontScaleX = fontScaleX;
         FontScaleY = fontScaleY;
 
-        InvalidateHierarchy();
+        // A call to InvalidateHierarchy() is not needed here as it is called
+        // in the setters for FontScaleX and FontScaleY.
     }
 
     /// <summary>
@@ -670,7 +671,7 @@ public class Label : Widget, IDisposable
             className = className.Substring( dotIndex + 1 );
         }
 
-        return ( className.IndexOf( '$' ) != -1 ? "Label " : "" ) + className + ": " + _text;
+        return $"{className}: {_text}";
     }
 
     /// <summary>
@@ -687,6 +688,8 @@ public class Label : Widget, IDisposable
     {
         if ( disposing )
         {
+            _fontCache?.Dispose();
+            _fontCache = null;
         }
     }
 }

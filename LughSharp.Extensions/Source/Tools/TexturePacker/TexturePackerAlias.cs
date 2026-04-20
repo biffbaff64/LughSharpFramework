@@ -49,16 +49,16 @@ public class TexturePackerAlias : IComparable< TexturePackerAlias >
         OffsetY        = rect.OffsetY;
         OriginalHeight = rect.OriginalHeight;
         OriginalWidth  = rect.OriginalWidth;
-        Pads           = rect.Pads;
-        Splits         = rect.Splits;
+        Pads           = rect.Pads?.ToArray();
+        Splits         = rect.Splits?.ToArray();
     }
 
     public void Apply( TexturePackerRect rect )
     {
         rect.Name           = Name;
         rect.Index          = Index;
-        rect.Splits         = Splits;
-        rect.Pads           = Pads;
+        rect.Splits         = Splits?.ToArray();
+        rect.Pads           = Pads?.ToArray();
         rect.OffsetX        = OffsetX;
         rect.OffsetY        = OffsetY;
         rect.OriginalWidth  = OriginalWidth;
