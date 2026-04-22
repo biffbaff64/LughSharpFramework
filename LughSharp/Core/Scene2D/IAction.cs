@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Scene2D.Utils;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scene2D;
@@ -32,7 +33,7 @@ public interface IAction
     /// <summary>
     /// The pool of actions.
     /// </summary>
-    Pool< SceneAction >? Pool { get; set; }
+    IScenePool? Pool { get; set; }
 
     /// <summary>
     /// The actor this action targets, or null if a target has not been set.

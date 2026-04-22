@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Scene2D.Utils;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scene2D.Actions;
@@ -34,7 +35,7 @@ public class ParallelSceneAction : SceneAction
 
     // ========================================================================
 
-    protected ParallelSceneAction()
+    public ParallelSceneAction()
     {
     }
 
@@ -82,7 +83,7 @@ public class ParallelSceneAction : SceneAction
 
         _complete = true;
 
-        Pool< SceneAction >? pool = Pool;
+        IScenePool? pool = Pool;
 
         // Ensure this action can't be returned to the pool while executing.
         Pool = null;

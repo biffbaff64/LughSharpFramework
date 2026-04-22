@@ -52,6 +52,10 @@ public class RotateToSceneAction : TemporalSceneAction
         UseShortestDirection = useShortestDirection;
     }
 
+    public RotateToSceneAction()
+    {
+    }
+
     public float Start                { get; set; }
     public float Rotation             { get; set; }
     public bool  UseShortestDirection { get; set; }

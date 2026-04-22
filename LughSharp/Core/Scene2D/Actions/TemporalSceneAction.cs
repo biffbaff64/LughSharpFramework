@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Utils.Pooling;
+using LughSharp.Core.Scene2D.Utils;
 
 namespace LughSharp.Core.Scene2D.Actions;
 
@@ -71,7 +71,7 @@ public abstract class TemporalSceneAction : SceneAction
             return true;
         }
 
-        Pool< SceneAction >? pool = Pool;
+        IScenePool? pool = Pool;
 
         // Ensure this action can't be returned to the pool while executing.
         Pool = null;

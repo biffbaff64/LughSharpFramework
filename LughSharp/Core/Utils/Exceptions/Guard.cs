@@ -38,7 +38,8 @@ public class Guard
     /// does not exist.
     /// </summary>
     public static void ThrowIfFileNullOrNotExist(
-        [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
+        [System.Diagnostics.CodeAnalysis.NotNull]
+        FileSystemInfo? argumentValue,
         [CallerArgumentExpression( nameof( argumentValue ) )]
         string argumentName = "" )
     {
@@ -183,6 +184,25 @@ public class Guard
             {
                 throw new ArgumentOutOfRangeException( argumentName,
                                                        $"Value {argumentValue} must be less than maximum {maximum}" );
+            }
+        }
+
+        /// <summary>
+        /// Performs a validity check on the specified enum value.
+        /// Throws ArgumentOutOfRangeException if argumentValue is not a valid enum value.
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <param name="argumentValue"></param>
+        /// <param name="argumentName"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void EnumOutOfRange( Type enumType, Enum argumentValue,
+                                           [CallerArgumentExpression( nameof( argumentValue ) )]
+                                           string argumentName = "" )
+        {
+            if ( !Enum.IsDefined( enumType, argumentValue ) )
+
+            {
+                throw new ArgumentOutOfRangeException( argumentName, "Enum value is out of range." );
             }
         }
     }

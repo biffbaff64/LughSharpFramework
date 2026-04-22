@@ -99,8 +99,8 @@ public class Table : WidgetGroup
     private static float[]? _rowWeightedHeight;
 
     private readonly List< Cell > _columnDefaults = new( 2 );
-    private readonly float[]      _columnWidth;
-    private readonly float[]      _rowHeight;
+    private float[] _columnWidth;
+    private float[] _rowHeight;
 
     private ISceneDrawable?    _background;
     private bool               _clip;
@@ -124,6 +124,9 @@ public class Table : WidgetGroup
     private float   _tableMinWidth;
     private float   _tablePrefHeight;
     private float   _tablePrefWidth;
+
+    private readonly float[] _test1 = null!;
+    private readonly float[] _test2 = null!;
 
     // ========================================================================
 
@@ -200,7 +203,7 @@ public class Table : WidgetGroup
         else
         {
             DrawBackground( batch, parentAlpha, X, Y );
-            base.Draw( batch, parentAlpha );
+            DrawChildren( batch, parentAlpha );
         }
     }
 
@@ -1132,7 +1135,7 @@ public class Table : WidgetGroup
             return new float[ size ];
         }
 
-        Array.Fill( array, 0, size, 0 );
+        Array.Fill( array, 0f, 0, size );
 
         return array;
     }
@@ -1186,12 +1189,6 @@ public class Table : WidgetGroup
                 expandWidth[ c.Column ] = c.ExpandX;
             }
 
-            Logger.Debug( $"c.PadLeft     : {c.PadLeft}" );
-            Logger.Debug( $"c.Actor       : {c.Actor}" );
-            Logger.Debug( $"c.Column      : {c.Column}" );
-            Logger.Debug( $"c.SpaceLeft   : {c.SpaceLeft}" );
-            Logger.Debug( $"spaceRightLast: {spaceRightLast}" );
-            
             // Compute combined padding/spacing for cells. Spacing between actors
             // isn't additive, the larger is used. Also, no spacing around edges.
             c.ComputedPadLeft = ( c.PadLeft.Get( c.Actor )
@@ -1437,6 +1434,18 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
+    /// Computes and caches any information needed for drawing and, if this actor has children,
+    /// positions and sizes each child, calls <see cref="ILayout.Invalidate">Invalidate()</see>
+    /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate">Validate()</see>
+    /// on each child. This method should almost never be called directly, instead
+    /// <see cref="ILayout.Validate">Validate()</see> should be used.
+    /// </summary>
+    public override void SetLayout()
+    {
+        Layout();
+    }
+
+    /// <summary>
     /// Positions and sizes children of the table using the cell associated
     /// with each child. The values given are the position within the parent
     /// and size of the table.
@@ -1452,6 +1461,10 @@ public class Table : WidgetGroup
         float   layoutHeight = Height;
         int     columns      = Columns;
         int     rows         = Rows;
+        
+        _columnWidth = EnsureSize( _columnWidth, columns );
+        _rowHeight   = EnsureSize( _rowHeight, rows );
+        
         float[] columnWidth  = _columnWidth.ToArray();
         float[] rowHeight    = _rowHeight.ToArray();
         float   padLeft      = _padLeft.Get( this );
@@ -1826,6 +1839,10 @@ public class Table : WidgetGroup
                 currentX += spannedCellWidth + c.ComputedPadRight;
             }
         }
+
+        // Store final computed widths/heights back to fields for external access.
+        Array.Copy( columnWidth, _columnWidth, columns );
+        Array.Copy( rowHeight, _rowHeight, rows );
 
         // Validate all children (some may not be in cells).
         for ( int i = 0, n = Children.Size; i < n; i++ )

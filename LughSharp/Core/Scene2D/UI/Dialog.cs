@@ -63,7 +63,7 @@ public class Dialog : Window
     /// Creates a new Dialog, using the supplied title and <see cref="Skin"/>
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="skin"></param>
+    /// <param name="skin"> The Skin holding the WindowStyle.</param>
     public Dialog( string title, Skin skin ) : base( title, skin.Get< WindowStyle >() )
     {
         Skin  = skin;
@@ -75,7 +75,7 @@ public class Dialog : Window
     /// <summary>
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="skin"></param>
+    /// <param name="skin"> The Skin holding the WindowStyle.</param>
     /// <param name="windowStyle"> The <see cref="WindowStyle"/> to use. </param>
     public Dialog( string title, Skin skin, string windowStyle )
         : base( title, skin.Get< WindowStyle >( windowStyle ) )
@@ -274,8 +274,9 @@ public class Dialog : Window
 
     /// <summary>
     /// Centers the dialog in the stage and calls <see cref="Show(Stage, SceneAction)"/>
-    /// with a <see cref="SceneActions.FadeIn(float,LughSharp.Core.Maths.IInterpolation)"/> action.
+    /// with a <see cref="SceneActions.FadeIn(float, IInterpolation)"/> action.
     /// </summary>
+    /// <param name="stage"> The Stage to act on. </param>
     public Dialog Show( Stage stage )
     {
         Show( stage,

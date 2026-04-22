@@ -107,7 +107,7 @@ public class StageTests : IDisposable
     public void CreateSkinActors()
     {
         Guard.Against.Null( Stage );
-        
+
         var imageActor           = false;
         var windowActor          = false;
         var buttonActor          = false;
@@ -195,10 +195,10 @@ public class StageTests : IDisposable
                 {
                     Logger.Debug( "Button is pressed!" );
                 }
-                
+
                 ev.SetHandled();
             } ) );
-            
+
             Button2 = new Button( skin, "default" )
             {
                 IsVisible = true,
@@ -210,7 +210,7 @@ public class StageTests : IDisposable
             Button2.AddListener( new ClickListener( ( ev, x, y ) =>
             {
                 Logger.Debug( "Button2 clicked!" );
-                
+
                 ev.SetHandled();
             } ) );
         }
@@ -394,27 +394,27 @@ public class StageTests : IDisposable
         {
             var dialogStyle = new DialogStyle()
             {
-                Background = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
-                TitleFont = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
+                Background     = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
+                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
                 TitleFontColor = Color.Red,
             };
-            
+
             var dialog = new Dialog( "Dialog Title", dialogStyle )
             {
                 IsVisible = true,
             };
-            
+
             dialog.Text( "This is a dialog box with a custom title and text.",
-                         skin.Get< LabelStyle >( "default") );
-            
+                         skin.Get< LabelStyle >( "default" ) );
+
             dialog.Button( "OK", true, skin.Get< TextButtonStyle >( "default" ) )
                   .Button( "Cancel", false, skin.Get< TextButtonStyle >( "default" ) );
-            
-            dialog.Key( IInput.Keys.Enter, true ).Key( IInput.Keys.Escape, false );
 
-            dialog.Show( Stage );
-            
-//            Stage.AddActor( dialog );
+            dialog.Key( IInput.Keys.Enter, true )
+                  .Key( IInput.Keys.Escape, false );
+
+//            dialog.Show( Stage );
+            Stage.AddActor( dialog );
         }
     }
 
@@ -498,7 +498,7 @@ public class StageTests : IDisposable
 
     public void Dispose()
     {
-        Stage.Dispose();
+        Stage?.Dispose();
         GC.SuppressFinalize( this );
     }
 }

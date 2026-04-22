@@ -22,15 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
 
 namespace LughSharp.Core.Utils.Pooling;
 

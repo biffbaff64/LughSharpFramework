@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Concurrent;
+
 using LughSharp.Core.Scene2D.Listeners;
-using LughSharp.Core.Utils.Pooling;
+using LughSharp.Core.Scene2D.Utils;
 
 namespace LughSharp.Core.Scene2D.Actions;
 
@@ -31,51 +33,98 @@ namespace LughSharp.Core.Scene2D.Actions;
 public class SceneActions
 {
     /// <summary>
-    /// Returns a new or pooled action of the specified type.
+    /// The default pool for scene actions.
     /// </summary>
-    public static SceneAction Action( Type a )
+    private static readonly ConcurrentDictionary< Type, IScenePool > _pools = new();
+
+    private static IScenePool GetPool< T >() where T : SceneAction, new()
     {
-        Pool< SceneAction > actionPool = new()
-        {
-            NewObjectFactory = ( ) => Activator.CreateInstance( a ) as SceneAction
-                                   ?? throw new ArgumentException( $"Unable to create action type: {a}" ),
-        };
-
-        SceneAction sceneAction = actionPool.Obtain();
-
-        sceneAction!.Pool = actionPool;
-
-        return sceneAction;
+        return _pools.GetOrAdd( typeof( T ), _ => new ScenePoolAdapter< T >() );
     }
 
+    /// <summary>
+    /// Returns a new or pooled action of the specified type.
+    /// </summary>
+    public static T ObtainAction< T >() where T : SceneAction, new()
+    {
+        var pool   = GetPool< T >();
+        var action = pool.Obtain() as T;
+
+        Guard.Against.Null( action );
+
+        action.Pool = pool;
+
+        return action;
+    }
+
+    /// <summary>
+    /// Obtains a new or pooled action of the type <see cref="AddSceneAction"/>, and sets
+    /// its Action property to the provided SceneAction.
+    /// </summary>
+    /// <param name="sceneAction"> The action to set. </param>
+    /// <returns> The new or pooled action. </returns>
+    /// <exception cref="ArgumentException"></exception>
     public static AddSceneAction AddAction( SceneAction sceneAction )
     {
-        var addAction = ( AddSceneAction )Action( typeof( AddSceneAction ) );
+        Guard.Against.Null( sceneAction );
+
+        AddSceneAction addAction = ObtainAction< AddSceneAction >();
+
         addAction.Action = sceneAction;
 
         return addAction;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sceneAction"></param>
+    /// <param name="targetActor"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static AddSceneAction AddAction( SceneAction sceneAction, Actor targetActor )
     {
-        var addAction = ( AddSceneAction )Action( typeof( AddSceneAction ) );
+        Guard.Against.Null( sceneAction );
+        Guard.Against.Null( targetActor );
+
+        AddSceneAction addAction = ObtainAction< AddSceneAction >();
+
         addAction.Target = targetActor;
         addAction.Action = sceneAction;
 
         return addAction;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sceneAction"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RemoveSceneAction RemoveAction( SceneAction sceneAction )
     {
-        var removeAction = ( RemoveSceneAction )Action( typeof( RemoveSceneAction ) );
+        Guard.Against.Null( sceneAction );
+
+        RemoveSceneAction removeAction = ObtainAction< RemoveSceneAction >();
+
         removeAction.Action = sceneAction;
 
         return removeAction;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sceneAction"></param>
+    /// <param name="targetActor"></param>
+    /// <returns></returns>
     public static RemoveSceneAction RemoveAction( SceneAction sceneAction, Actor targetActor )
     {
-        var removeAction = ( RemoveSceneAction )Action( typeof( RemoveSceneAction ) );
+        Guard.Against.Null( sceneAction );
+        Guard.Against.Null( targetActor );
+
+        RemoveSceneAction removeAction = ObtainAction< RemoveSceneAction >();
+
         removeAction.Target = targetActor;
         removeAction.Action = sceneAction;
 
@@ -83,14 +132,21 @@ public class SceneActions
     }
 
     /// <summary>
-    /// Moves the actor instantly.
+    /// 
     /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static MoveToSceneAction MoveTo( float x,
-                                       float y,
-                                       float duration = 0,
-                                       IInterpolation? interpolation = null )
+                                            float y,
+                                            float duration = 0,
+                                            IInterpolation? interpolation = null )
     {
-        var action = ( MoveToSceneAction )Action( typeof( MoveToSceneAction ) );
+        MoveToSceneAction action = ObtainAction< MoveToSceneAction >();
+
         action.SetPosition( x, y );
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -98,13 +154,24 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="alignment"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static MoveToSceneAction MoveToAligned( float x,
-                                              float y,
-                                              Align alignment,
-                                              float duration = 0,
-                                              IInterpolation? interpolation = null )
+                                                   float y,
+                                                   Align alignment,
+                                                   float duration = 0,
+                                                   IInterpolation? interpolation = null )
     {
-        var action = ( MoveToSceneAction )Action( typeof( MoveToSceneAction ) );
+        MoveToSceneAction action = ObtainAction< MoveToSceneAction >();
+
         action.SetPosition( x, y, alignment );
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -112,12 +179,22 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="amountX"></param>
+    /// <param name="amountY"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static MoveBySceneAction MoveBy( float amountX,
-                                       float amountY,
-                                       float duration = 0,
-                                       IInterpolation? interpolation = null )
+                                            float amountY,
+                                            float duration = 0,
+                                            IInterpolation? interpolation = null )
     {
-        var action = ( MoveBySceneAction )Action( typeof( MoveBySceneAction ) );
+        MoveBySceneAction action = ObtainAction< MoveBySceneAction >();
+
         action.SetAmount( amountX, amountY );
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -125,12 +202,22 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static SizeToSceneAction SizeTo( float x,
-                                       float y,
-                                       float duration = 0,
-                                       IInterpolation? interpolation = null )
+                                            float y,
+                                            float duration = 0,
+                                            IInterpolation? interpolation = null )
     {
-        var action = ( SizeToSceneAction )Action( typeof( SizeToSceneAction ) );
+        SizeToSceneAction action = ObtainAction< SizeToSceneAction >();
+
         action.SetSize( x, y );
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -138,12 +225,22 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="amountX"></param>
+    /// <param name="amountY"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static SizeBySceneAction SizeBy( float amountX,
-                                       float amountY,
-                                       float duration = 0,
-                                       IInterpolation? interpolation = null )
+                                            float amountY,
+                                            float duration = 0,
+                                            IInterpolation? interpolation = null )
     {
-        var action = ( SizeBySceneAction )Action( typeof( SizeBySceneAction ) );
+        SizeBySceneAction action = ObtainAction< SizeBySceneAction >();
+
         action.SetAmount( amountX, amountY );
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -151,12 +248,22 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static ScaleToSceneAction ScaleTo( float x,
-                                         float y,
-                                         float duration = 0,
-                                         IInterpolation? interpolation = null )
+                                              float y,
+                                              float duration = 0,
+                                              IInterpolation? interpolation = null )
     {
-        var action = ( ScaleToSceneAction )Action( typeof( ScaleToSceneAction ) );
+        ScaleToSceneAction action = ObtainAction< ScaleToSceneAction >();
+
         action.SetScale( x, y );
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -164,12 +271,22 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="amountX"></param>
+    /// <param name="amountY"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static ScaleBySceneAction ScaleBy( float amountX,
-                                         float amountY,
-                                         float duration = 0,
-                                         IInterpolation? interpolation = null )
+                                              float amountY,
+                                              float duration = 0,
+                                              IInterpolation? interpolation = null )
     {
-        var action = ( ScaleBySceneAction )Action( typeof( ScaleBySceneAction ) );
+        ScaleBySceneAction action = ObtainAction< ScaleBySceneAction >();
+
         action.SetAmount( amountX, amountY );
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -177,11 +294,20 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rotation"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RotateToSceneAction RotateTo( float rotation,
-                                           float duration = 0,
-                                           IInterpolation? interpolation = null )
+                                                float duration = 0,
+                                                IInterpolation? interpolation = null )
     {
-        var action = ( RotateToSceneAction )Action( typeof( RotateToSceneAction ) );
+        RotateToSceneAction action = ObtainAction< RotateToSceneAction >();
+
         action.Rotation      = rotation;
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -189,11 +315,20 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rotationAmount"></param>
+    /// <param name="duration"></param>
+    /// <param name="interpolation"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RotateBySceneAction RotateBy( float rotationAmount,
-                                           float duration = 0,
-                                           IInterpolation? interpolation = null )
+                                                float duration = 0,
+                                                IInterpolation? interpolation = null )
     {
-        var action = ( RotateBySceneAction )Action( typeof( RotateBySceneAction ) );
+        RotateBySceneAction action = ObtainAction< RotateBySceneAction >();
+
         action.Amount        = rotationAmount;
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -206,7 +341,8 @@ public class SceneActions
     /// </summary>
     public static ColorSceneAction Color( Color color, float duration = 0, IInterpolation? interpolation = null )
     {
-        var action = ( ColorSceneAction )Action( typeof( ColorSceneAction ) );
+        ColorSceneAction action = ObtainAction< ColorSceneAction >();
+
         action.EndColor      = color;
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -217,12 +353,11 @@ public class SceneActions
     /// <summary>
     /// Transitions from the alpha at the time this action starts to the specified alpha.
     /// </summary>
-    public static AlphaSceneAction Alpha( float a,
-                                     float duration = 0,
-                                     IInterpolation? interpolation = null )
+    public static AlphaSceneAction Alpha( float alpha, float duration = 0, IInterpolation? interpolation = null )
     {
-        var action = ( AlphaSceneAction )Action( typeof( AlphaSceneAction ) );
-        action.Alpha         = a;
+        AlphaSceneAction action = ObtainAction< AlphaSceneAction >();
+
+        action.Alpha         = alpha;
         action.Duration      = duration;
         action.Interpolation = interpolation;
 
@@ -242,7 +377,10 @@ public class SceneActions
     /// </summary>
     public static AlphaSceneAction FadeOut( float duration, IInterpolation interpolation )
     {
-        var action = ( AlphaSceneAction )Action( typeof( AlphaSceneAction ) );
+        Guard.Against.Null( interpolation );
+
+        AlphaSceneAction action = ObtainAction< AlphaSceneAction >();
+
         action.Alpha         = 0;
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -263,7 +401,10 @@ public class SceneActions
     /// </summary>
     public static AlphaSceneAction FadeIn( float duration, IInterpolation interpolation )
     {
-        var action = ( AlphaSceneAction )Action( typeof( AlphaSceneAction ) );
+        Guard.Against.Null( interpolation );
+
+        AlphaSceneAction action = ObtainAction< AlphaSceneAction >();
+
         action.Alpha         = 1;
         action.Duration      = duration;
         action.Interpolation = interpolation;
@@ -271,125 +412,154 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static VisibleSceneAction Show()
     {
         return Visible( true );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static VisibleSceneAction Hide()
     {
         return Visible( false );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="visible"></param>
+    /// <returns></returns>
     public static VisibleSceneAction Visible( bool visible )
     {
-        var action = ( VisibleSceneAction )Action( typeof( VisibleSceneAction ) );
+        VisibleSceneAction action = ObtainAction< VisibleSceneAction >();
+
         action.Visible = visible;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="touchable"> A value from the <see cref="Touchable"/> enum. </param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static TouchableSceneAction Touchable( Touchable touchable )
     {
-        var action = ( TouchableSceneAction )Action( typeof( TouchableSceneAction ) );
+        Guard.Against.EnumOutOfRange( typeof( Touchable ), touchable );
+
+        TouchableSceneAction action = ObtainAction< TouchableSceneAction >();
+
         action.Touchable = touchable;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RemoveActorSceneAction RemoveActor()
     {
-        return ( RemoveActorSceneAction )Action( typeof( RemoveActorSceneAction ) );
+        return ObtainAction< RemoveActorSceneAction >();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="removeActor"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RemoveActorSceneAction RemoveActor( Actor removeActor )
     {
-        var action = ( RemoveActorSceneAction )Action( typeof( RemoveActorSceneAction ) );
+        Guard.Against.Null( removeActor );
+
+        RemoveActorSceneAction action = ObtainAction< RemoveActorSceneAction >();
+
         action.Target = removeActor;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static DelaySceneAction Delay( float duration )
     {
-        var action = ( DelaySceneAction )Action( typeof( DelaySceneAction ) );
+        DelaySceneAction action = ObtainAction< DelaySceneAction >();
+
         action.Duration = duration;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <param name="delayedSceneAction"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static DelaySceneAction Delay( float duration, SceneAction delayedSceneAction )
     {
-        var action = ( DelaySceneAction )Action( typeof( DelaySceneAction ) );
+        Guard.Against.Null( delayedSceneAction );
+
+        DelaySceneAction action = ObtainAction< DelaySceneAction >();
+
         action.Duration = duration;
         action.Action   = delayedSceneAction;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="scale"></param>
+    /// <param name="scaledSceneAction"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static TimeScaleSceneAction TimeScale( float scale, SceneAction scaledSceneAction )
     {
-        var action = ( TimeScaleSceneAction )Action( typeof( TimeScaleSceneAction ) );
+        Guard.Against.Null( scaledSceneAction );
+
+        TimeScaleSceneAction action = ObtainAction< TimeScaleSceneAction >();
+
         action.Scale  = scale;
         action.Action = scaledSceneAction;
 
         return action;
     }
 
-    public static SequenceSceneAction Sequence( SceneAction action1 )
-    {
-        var action = ( SequenceSceneAction )Action( typeof( SequenceSceneAction ) );
-        action.AddAction( action1 );
-
-        return action;
-    }
-
-    public static SequenceSceneAction Sequence( SceneAction action1, SceneAction action2 )
-    {
-        var action = ( SequenceSceneAction )Action( typeof( SequenceSceneAction ) );
-        action.AddAction( action1 );
-        action.AddAction( action2 );
-
-        return action;
-    }
-
-    public static SequenceSceneAction Sequence( SceneAction action1, SceneAction action2, SceneAction action3 )
-    {
-        var action = ( SequenceSceneAction )Action( typeof( SequenceSceneAction ) );
-        action.AddAction( action1 );
-        action.AddAction( action2 );
-        action.AddAction( action3 );
-
-        return action;
-    }
-
-    public static SequenceSceneAction Sequence( SceneAction action1, SceneAction action2, SceneAction action3, SceneAction action4 )
-    {
-        var action = ( SequenceSceneAction )Action( typeof( SequenceSceneAction ) );
-        action.AddAction( action1 );
-        action.AddAction( action2 );
-        action.AddAction( action3 );
-        action.AddAction( action4 );
-
-        return action;
-    }
-
-    public static SequenceSceneAction Sequence( SceneAction action1, SceneAction action2, SceneAction action3, SceneAction action4,
-                                           SceneAction action5 )
-    {
-        var action = ( SequenceSceneAction )Action( typeof( SequenceSceneAction ) );
-        action.AddAction( action1 );
-        action.AddAction( action2 );
-        action.AddAction( action3 );
-        action.AddAction( action4 );
-        action.AddAction( action5 );
-
-        return action;
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="actions"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static SequenceSceneAction Sequence( params SceneAction[] actions )
     {
-        var action = ( SequenceSceneAction )Action( typeof( SequenceSceneAction ) );
+        if ( actions.Length == 0 )
+        {
+            throw new ArgumentException( "No SceneActions provided for sequencing." );
+        }
+
+        if ( actions.Contains( null ) )
+        {
+            throw new ArgumentException( "Actions list contains null. This is not allowed." );
+        }
+
+        SequenceSceneAction action = ObtainAction< SequenceSceneAction >();
 
         for ( int i = 0, n = actions.Length; i < n; i++ )
         {
@@ -399,65 +569,36 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static SequenceSceneAction Sequence()
     {
-        return ( SequenceSceneAction )Action( typeof( SequenceSceneAction ) );
+        return ObtainAction< SequenceSceneAction >();
     }
 
-    public static ParallelSceneAction Parallel( SceneAction action1 )
-    {
-        var action = ( ParallelSceneAction )Action( typeof( ParallelSceneAction ) );
-        action.AddAction( action1 );
-
-        return action;
-    }
-
-    public static ParallelSceneAction Parallel( SceneAction action1, SceneAction action2 )
-    {
-        var action = ( ParallelSceneAction )Action( typeof( ParallelSceneAction ) );
-        action.AddAction( action1 );
-        action.AddAction( action2 );
-
-        return action;
-    }
-
-    public static ParallelSceneAction Parallel( SceneAction action1, SceneAction action2, SceneAction action3 )
-    {
-        var action = ( ParallelSceneAction )Action( typeof( ParallelSceneAction ) );
-        action.AddAction( action1 );
-        action.AddAction( action2 );
-        action.AddAction( action3 );
-
-        return action;
-    }
-
-    public static ParallelSceneAction Parallel( SceneAction action1, SceneAction action2, SceneAction action3, SceneAction action4 )
-    {
-        var action = ( ParallelSceneAction )Action( typeof( ParallelSceneAction ) );
-        action.AddAction( action1 );
-        action.AddAction( action2 );
-        action.AddAction( action3 );
-        action.AddAction( action4 );
-
-        return action;
-    }
-
-    public static ParallelSceneAction Parallel( SceneAction action1, SceneAction action2, SceneAction action3, SceneAction action4,
-                                           SceneAction action5 )
-    {
-        var action = ( ParallelSceneAction )Action( typeof( ParallelSceneAction ) );
-        action.AddAction( action1 );
-        action.AddAction( action2 );
-        action.AddAction( action3 );
-        action.AddAction( action4 );
-        action.AddAction( action5 );
-
-        return action;
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="actions"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static ParallelSceneAction Parallel( params SceneAction[] actions )
     {
-        var action = ( ParallelSceneAction )Action( typeof( ParallelSceneAction ) );
+        if ( actions.Length == 0 )
+        {
+            throw new ArgumentException( "No SceneActions provided. At least "
+                                       + "one is required for ParallelSceneAction." );
+        }
+
+        if ( actions.Contains( null ) )
+        {
+            throw new ArgumentException( "Actions list contains null. This is not allowed." );
+        }
+
+        ParallelSceneAction action = ObtainAction< ParallelSceneAction >();
 
         for ( int i = 0, n = actions.Length; i < n; i++ )
         {
@@ -467,89 +608,182 @@ public class SceneActions
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static ParallelSceneAction Parallel()
     {
-        return ( ParallelSceneAction )Action( typeof( ParallelSceneAction ) );
+        return ObtainAction< ParallelSceneAction >();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="count"></param>
+    /// <param name="repeatedSceneAction"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RepeatSceneAction Repeat( int count, SceneAction repeatedSceneAction )
     {
-        var action = ( RepeatSceneAction )Action( typeof( RepeatSceneAction ) );
+        Guard.Against.Null( repeatedSceneAction );
+
+        RepeatSceneAction action = ObtainAction< RepeatSceneAction >();
+
         action.RepeatCount = count;
         action.Action      = repeatedSceneAction;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="repeatedSceneAction"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RepeatSceneAction Forever( SceneAction repeatedSceneAction )
     {
-        var action = ( RepeatSceneAction )Action( typeof( RepeatSceneAction ) );
+        Guard.Against.Null( repeatedSceneAction );
+
+        RepeatSceneAction action = ObtainAction< RepeatSceneAction >();
+
         action.RepeatCount = RepeatSceneAction.Forever;
         action.Action      = repeatedSceneAction;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="runnable"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RunnableSceneAction Run( IRunnable.Runnable runnable )
     {
-        var action = ( RunnableSceneAction )Action( typeof( RunnableSceneAction ) );
+        Guard.Against.Null( runnable );
+
+        RunnableSceneAction action = ObtainAction< RunnableSceneAction >();
+
         action.RunnableTask = runnable;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="enabled"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static LayoutSceneAction Layout( bool enabled )
     {
-        var action = ( LayoutSceneAction )Action( typeof( LayoutSceneAction ) );
+        LayoutSceneAction action = ObtainAction< LayoutSceneAction >();
+
         action.Enabled = enabled;
 
         return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sceneAction"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static AfterSceneAction After( SceneAction sceneAction )
     {
-        var afterAction = ( AfterSceneAction )Action( typeof( AfterSceneAction ) );
-        afterAction.Action = sceneAction;
+        Guard.Against.Null( sceneAction );
 
-        return afterAction;
+        AfterSceneAction action = ObtainAction< AfterSceneAction >();
+
+        action.Action = sceneAction;
+
+        return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="listener"></param>
+    /// <param name="capture"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static AddListenerSceneAction AddListener( IEventListener listener, bool capture )
     {
-        var addAction = ( AddListenerSceneAction )Action( typeof( AddListenerSceneAction ) );
-        addAction.Listener  = listener;
-        addAction.IsCapture = capture;
+        Guard.Against.Null( listener );
 
-        return addAction;
+        AddListenerSceneAction action = ObtainAction< AddListenerSceneAction >();
+
+        action.Listener  = listener;
+        action.IsCapture = capture;
+
+        return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="listener"></param>
+    /// <param name="capture"></param>
+    /// <param name="targetActor"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static AddListenerSceneAction AddListener( IEventListener listener, bool capture, Actor targetActor )
     {
-        var addAction = ( AddListenerSceneAction )Action( typeof( AddListenerSceneAction ) );
-        addAction.Target    = targetActor;
-        addAction.Listener  = listener;
-        addAction.IsCapture = capture;
+        Guard.Against.Null( listener );
+        Guard.Against.Null( targetActor );
 
-        return addAction;
+        AddListenerSceneAction action = ObtainAction< AddListenerSceneAction >();
+
+        action.Target    = targetActor;
+        action.Listener  = listener;
+        action.IsCapture = capture;
+
+        return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="listener"></param>
+    /// <param name="capture"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RemoveListenerSceneAction RemoveListener( IEventListener listener, bool capture )
     {
-        var addAction = ( RemoveListenerSceneAction )Action( typeof( RemoveListenerSceneAction ) );
-        addAction.Listener = listener;
-        addAction.Capture  = capture;
+        Guard.Against.Null( listener );
 
-        return addAction;
+        RemoveListenerSceneAction action = ObtainAction< RemoveListenerSceneAction >();
+
+        action.Listener = listener;
+        action.Capture  = capture;
+
+        return action;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="listener"></param>
+    /// <param name="capture"></param>
+    /// <param name="targetActor"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static RemoveListenerSceneAction RemoveListener( IEventListener listener, bool capture, Actor targetActor )
     {
-        var addAction = ( RemoveListenerSceneAction )Action( typeof( RemoveListenerSceneAction ) );
-        addAction.Target   = targetActor;
-        addAction.Listener = listener;
-        addAction.Capture  = capture;
+        Guard.Against.Null( listener );
+        Guard.Against.Null( targetActor );
 
-        return addAction;
+        RemoveListenerSceneAction action = ObtainAction< RemoveListenerSceneAction >();
+
+        action.Target   = targetActor;
+        action.Listener = listener;
+        action.Capture  = capture;
+
+        return action;
     }
 
     /// <summary>
@@ -560,8 +794,14 @@ public class SceneActions
     /// <returns> the action with its target set </returns>
     public static SceneAction Targeting( Actor target, SceneAction sceneAction )
     {
+        Guard.Against.Null( target );
+        Guard.Against.Null( sceneAction );
+
         sceneAction.Target = target;
 
         return sceneAction;
     }
 }
+
+// ============================================================================
+// ============================================================================

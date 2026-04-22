@@ -22,16 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using JetBrains.Annotations;
-
 using LughSharp.Core.Collections;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Graphics.Fonts;

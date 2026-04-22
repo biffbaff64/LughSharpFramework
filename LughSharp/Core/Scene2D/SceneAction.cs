@@ -22,18 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Scene2D.Utils;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scene2D;
 
 [PublicAPI]
-public abstract class SceneAction : IAction, IResetable
+public  class SceneAction : IAction, IResetable
 {
     /// <inheritdoc />
-    public Pool< SceneAction >? Pool { get; set; }
+    public IScenePool? Pool { get; set; }
 
     /// <inheritdoc />
     public virtual Actor? Target { get; set; }
+
+    // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// The actor this action is attached to, or null if it is not attached.
@@ -69,8 +73,16 @@ public abstract class SceneAction : IAction, IResetable
         }
     }
 
-    // ========================================================================
-    // ========================================================================
+    /// <inheritdoc />
+    public virtual bool Act( float delta )
+    {
+        return false;
+    }
+
+    /// <inheritdoc />
+    public virtual void Restart()
+    {
+    }
 
     /// <inheritdoc cref="IAction.Reset()"/>
     public virtual void Reset()
@@ -80,14 +92,6 @@ public abstract class SceneAction : IAction, IResetable
         Pool   = null;
 
         Restart();
-    }
-
-    /// <inheritdoc />
-    public abstract bool Act( float delta );
-
-    /// <inheritdoc />
-    public virtual void Restart()
-    {
     }
 
     /// <inheritdoc />

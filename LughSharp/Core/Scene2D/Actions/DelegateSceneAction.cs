@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Core.Scene2D.Utils;
 using LughSharp.Core.Utils.Pooling;
 
 namespace LughSharp.Core.Scene2D.Actions;
@@ -72,7 +73,7 @@ public abstract class DelegateSceneAction : SceneAction
     /// </returns>
     public override bool Act( float delta )
     {
-        Pool< SceneAction >? pool = Pool;
+        IScenePool? pool = Pool;
 
         // Ensure this action can't be returned to the pool inside the delegate action.
         Pool = null;
