@@ -32,6 +32,9 @@ namespace LughSharp.Core.Utils;
 [PublicAPI]
 public interface IManaged
 {
+    /// <summary>
+    /// Gets a value indicating whether the object is managed.
+    /// </summary>
     bool IsManaged { get; }
 }
 

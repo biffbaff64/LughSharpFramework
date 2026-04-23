@@ -24,8 +24,6 @@
 
 using System.Diagnostics;
 
-using JetBrains.Annotations;
-
 namespace LughSharp.Core.Utils;
 
 [PublicAPI]

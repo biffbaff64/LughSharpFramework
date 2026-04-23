@@ -116,6 +116,13 @@ public class VerticalGroup : WidgetGroup
         Touchable = Touchable.ChildrenOnly;
     }
 
+    /// <summary>
+    /// Invalidates this actor's layout, causing <see cref="ILayout.Layout"/> to happen the
+    /// next time <see cref="ILayout.Validate"/> is called. This method should be called when
+    /// state changes in the actor that requires a layout but does not change the minimum,
+    /// preferred, maximum, or actual size of the actor (meaning it does not affect the
+    /// parent actor's layout).
+    /// </summary>
     public override void Invalidate()
     {
         base.Invalidate();
@@ -264,7 +271,14 @@ public class VerticalGroup : WidgetGroup
         }
     }
 
-    public void Layout()
+    /// <summary>
+    /// Computes and caches any information needed for drawing and, if this actor
+    /// has children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
+    /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
+    /// on each child. This method should almost never be called directly, instead
+    /// <see cref="ILayout.Validate"/> should be used.
+    /// </summary>
+    public override void Layout() 
     {
         if ( _sizeInvalid )
         {

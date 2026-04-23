@@ -25,6 +25,8 @@
 using LughSharp.Core.Scene2D.UI;
 using LughSharp.Core.Scene2D.Utils;
 
+using Timer = System.Timers.Timer;
+
 namespace LughSharp.Core.Scene2D.Listeners;
 
 /// <summary>
@@ -117,6 +119,8 @@ public class DragScrollListener : DragListener
             {
                 _startTime = TimeUtils.Millis();
                 Core.Utils.Timer.Schedule( _scrollDown, _tickSecs, _tickSecs );
+                
+                Timer timer = new();
             }
 
             return;

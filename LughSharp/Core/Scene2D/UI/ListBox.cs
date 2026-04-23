@@ -150,7 +150,7 @@ public class ListBox< T > : Widget where T : notnull
         InvalidateHierarchy();
     }
 
-    public override void SetLayout()
+    public override void Layout()
     {
         BitmapFont?     font             = Style.Font;
         ISceneDrawable? selectedDrawable = Style.Selection;

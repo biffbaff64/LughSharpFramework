@@ -65,14 +65,14 @@ public class Widget : Actor, ILayout
     /// on each child. This method should almost never be called directly, instead
     /// <see cref="ILayout.Validate"/> should be used.
     /// </summary>
-    public virtual void SetLayout()
+    public virtual void Layout()
     {
     }
 
     /// <summary>
     /// Ensures the actor has been laid out.
     /// <para>
-    /// Calls <see cref="ILayout.SetLayout"/> if <see cref="ILayout.Invalidate"/> has
+    /// Calls <see cref="ILayout.Layout"/> if <see cref="ILayout.Invalidate"/> has
     /// been called since the last time <see cref="ILayout.Validate"/> was called, or
     /// if the actor otherwise needs to be laid out. This method is usually called in
     /// <see cref="Actor.Draw(IBatch, float)"/> by the actor itself before drawing is
@@ -113,11 +113,11 @@ public class Widget : Actor, ILayout
 
         NeedsLayout = false;
 
-        SetLayout();
+        Layout();
     }
 
     /// <summary>
-    /// Invalidates this actor's layout, causing <see cref="ILayout.SetLayout"/> to happen the
+    /// Invalidates this actor's layout, causing <see cref="ILayout.Layout"/> to happen the
     /// next time <see cref="ILayout.Validate"/> is called. This method should be called when
     /// state changes in the actor that requires a layout but does not change the minimum,
     /// preferred, maximum, or actual size of the actor (meaning it does not affect the
@@ -153,7 +153,7 @@ public class Widget : Actor, ILayout
     /// Sizes this actor to its preferred width and height, then calls <see cref="ILayout.Validate"/>.
     /// <para>
     /// Generally this method should not be called in an actor's constructor because it calls
-    /// <see cref="ILayout.SetLayout"/>, which means a subclass would have Layout() called before the
+    /// <see cref="ILayout.Layout"/>, which means a subclass would have Layout() called before the
     /// subclass' constructor. Instead, in constructors simply set the actor's size
     /// to <see cref="ILayout.GetPrefWidth"/> and <see cref="ILayout.GetPrefHeight"/>. This allows
     /// the actor to have a size at construction time for more convenient use with groups that do

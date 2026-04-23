@@ -229,7 +229,7 @@ public class Touchpad : Widget
         return _touchBounds.Contains( x, y ) ? this : null;
     }
 
-    public void Layout()
+    public override void Layout()
     {
         // Recalc pad and deadzone bounds
         float halfWidth  = Width / 2;

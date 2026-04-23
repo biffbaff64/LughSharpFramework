@@ -251,7 +251,7 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <inheritdoc />
-    public override void SetLayout()
+    public override void Layout()
     {
         if ( _sizeInvalid )
         {

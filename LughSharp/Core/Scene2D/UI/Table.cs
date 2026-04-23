@@ -98,35 +98,33 @@ public class Table : WidgetGroup
     private static float[]? _columnWeightedWidth;
     private static float[]? _rowWeightedHeight;
 
-    private readonly List< Cell > _columnDefaults = new( 2 );
-    private float[] _columnWidth;
-    private float[] _rowHeight;
-
-    private ISceneDrawable?    _background;
-    private bool               _clip;
-    private float[]            _columnMinWidth;
-    private float[]            _columnPrefWidth;
     private List< DebugRect >? _debugRects;
-    private float[]            _expandHeight;
-    private float[]            _expandWidth;
-    private bool               _implicitEndRow;
+    private ISceneDrawable?    _background;
 
-    private Value _padBottom = BackgroundBottom;
-    private Value _padLeft   = BackgroundLeft;
-    private Value _padRight  = BackgroundRight;
-    private Value _padTop    = BackgroundTop;
+    private bool _clip;
+    private bool _implicitEndRow;
+    private bool _sizeInvalid = true;
 
-    private Cell?   _rowDefaults;
-    private float[] _rowMinHeight;
-    private float[] _rowPrefHeight;
-    private bool    _sizeInvalid = true;
+    private readonly List< Cell > _columnDefaults = new( 2 );
+    private          Cell?        _rowDefaults;
+
+    private float[] _columnWidth     = null!;
+    private float[] _rowHeight       = null!;
+    private float[] _rowMinHeight    = null!;
+    private float[] _rowPrefHeight   = null!;
+    private float[] _columnMinWidth  = null!;
+    private float[] _columnPrefWidth = null!;
+    private float[] _expandHeight    = null!;
+    private float[] _expandWidth     = null!;
     private float   _tableMinHeight;
     private float   _tableMinWidth;
     private float   _tablePrefHeight;
     private float   _tablePrefWidth;
 
-    private readonly float[] _test1 = null!;
-    private readonly float[] _test2 = null!;
+    private Value _padBottom = BackgroundBottom;
+    private Value _padLeft   = BackgroundLeft;
+    private Value _padRight  = BackgroundRight;
+    private Value _padTop    = BackgroundTop;
 
     // ========================================================================
 
@@ -139,15 +137,6 @@ public class Table : WidgetGroup
     /// </summary>
     public Table( Skin? skin )
     {
-        _columnWidth     = null!;
-        _columnMinWidth  = null!;
-        _columnPrefWidth = null!;
-        _rowHeight       = null!;
-        _rowMinHeight    = null!;
-        _rowPrefHeight   = null!;
-        _expandWidth     = null!;
-        _expandHeight    = null!;
-
         Skin         = skin;
         CellDefaults = ObtainCell();
         Transform    = false;
@@ -167,6 +156,11 @@ public class Table : WidgetGroup
         return cell;
     }
 
+    /// <summary>
+    /// Draws the table and all its children.
+    /// </summary>
+    /// <param name="batch"></param>
+    /// <param name="parentAlpha"></param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -305,7 +299,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Invalidates this actor's layout, causing <see cref="ILayout.SetLayout"/> to happen the
+    /// Invalidates this actor's layout, causing <see cref="ILayout.Layout"/> to happen the
     /// next time <see cref="ILayout.Validate"/> is called. This method should be called when
     /// state changes in the actor that requires a layout but does not change the minimum,
     /// preferred, maximum, or actual size of the actor (meaning it does not affect the
@@ -1434,43 +1428,31 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Computes and caches any information needed for drawing and, if this actor has children,
-    /// positions and sizes each child, calls <see cref="ILayout.Invalidate">Invalidate()</see>
-    /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate">Validate()</see>
-    /// on each child. This method should almost never be called directly, instead
-    /// <see cref="ILayout.Validate">Validate()</see> should be used.
-    /// </summary>
-    public override void SetLayout()
-    {
-        Layout();
-    }
-
-    /// <summary>
     /// Positions and sizes children of the table using the cell associated
     /// with each child. The values given are the position within the parent
     /// and size of the table.
     /// </summary>
-    public void Layout()
+    public override void Layout()
     {
         if ( _sizeInvalid )
         {
             ComputeSize();
         }
 
-        float   layoutWidth  = Width;
-        float   layoutHeight = Height;
-        int     columns      = Columns;
-        int     rows         = Rows;
-        
+        float layoutWidth  = Width;
+        float layoutHeight = Height;
+        int   columns      = Columns;
+        int   rows         = Rows;
+
         _columnWidth = EnsureSize( _columnWidth, columns );
         _rowHeight   = EnsureSize( _rowHeight, rows );
-        
-        float[] columnWidth  = _columnWidth.ToArray();
-        float[] rowHeight    = _rowHeight.ToArray();
-        float   padLeft      = _padLeft.Get( this );
-        float   hpadding     = padLeft + _padRight.Get( this );
-        float   padTop       = _padTop.Get( this );
-        float   vpadding     = padTop + _padBottom.Get( this );
+
+        float[] columnWidth = _columnWidth.ToArray();
+        float[] rowHeight   = _rowHeight.ToArray();
+        float   padLeft     = _padLeft.Get( this );
+        float   hpadding    = padLeft + _padRight.Get( this );
+        float   padTop      = _padTop.Get( this );
+        float   vpadding    = padTop + _padBottom.Get( this );
 
         // Size columns and rows between min and pref size using (preferred - min)
         // size to weight distribution of extra space.

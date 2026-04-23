@@ -61,10 +61,10 @@ public interface ILayout
     /// on each child. This method should almost never be called directly, instead
     /// <see cref="Validate()"/> should be used.
     /// </summary>
-    void SetLayout();
+    void Layout();
 
     /// <summary>
-    /// Invalidates this actor's layout, causing <see cref="SetLayout"/> to happen the
+    /// Invalidates this actor's layout, causing <see cref="Layout"/> to happen the
     /// next time <see cref="Validate()"/> is called. This method should be called when
     /// state changes in the actor that requires a layout but does not change the minimum,
     /// preferred, maximum, or actual size of the actor (meaning it does not affect the

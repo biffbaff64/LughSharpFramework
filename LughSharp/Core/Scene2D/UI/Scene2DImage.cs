@@ -176,11 +176,11 @@ public class Scene2DImage : Widget
     /// should be used.
     /// </para>
     /// </summary>
-    public override void SetLayout()
+    public override void Layout()
     {
         if ( Drawable is null )
         {
-            throw new InvalidOperationException( "Drawable cannot be null" );
+            return;
         }
 
         float regionWidth  = Drawable.MinWidth;

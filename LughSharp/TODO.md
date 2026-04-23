@@ -1185,13 +1185,12 @@ LUGHSHARP/CORE/UTILS
     -      -      -      - ComparableTimSort    Remove
     - DONE - DONE - DONE - DataOutput
     - DONE - DONE - DONE - DataUtils
-    -      -      -      - GCSuppressor         Why do I have this?
     - DONE - DONE - DONE - HashHelpers
     - DONE - IP   - DONE - IAsyncTask
     - DONE - DONE - DONE - IClipboard
     - DONE - IP   - DONE - ICloseable
-    -      -      -      - IDrawable
-    -      -      -      - IManaged
+    - DONE - DONE - DONE - IDrawable
+    - DONE - DONE - DONE - IManaged
     -      -      -      - IReadable
     -      -      -      - IResetable
     -      -      -      - IRunnable
@@ -1206,10 +1205,9 @@ LUGHSHARP/CORE/UTILS
     -      -      -      - Selector
     -      -      -      - SortUtils
     -      -      -      - StreamUtils
-    -      -      -      - StringUtils
-    -      -      -      - SystemArrayUtils
-    -      -      -      - Timer
-    -      -      -      - TimeUtils
+    -      -      - DONE - SystemArrayUtils
+    -      -      - DONE - Timer
+    - DONE - DONE - DONE - TimeUtils
     -      -      -      - TimSort
 
 LUGHSHARP/CORE/UTILS/EXCEPTIONS
@@ -1263,6 +1261,7 @@ LUGHSHARP/CORE/UTILS/POOLING
     - DONE - DONE - DONE - FlushablePool
     - DONE - IP   - DONE - IClearablePool
     - DONE - DONE - DONE - IPoolable
+    - DONE - IP   - DONE - IPoolSupplier
     - DONE - DONE - DONE - Pool
     - DONE - DONE - DONE - PooledLinkedList
     - DONE - DONE - DONE - Pools
@@ -1282,17 +1281,18 @@ LUGHSHARP/CORE/UTILS/XML
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-LUGHSHARP/EXTENSIONS
---------------------
+LUGHSHARP/EXTENSIONS/SOURCE
+---------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
+    - DONE - DONE - DONE - Animator
     - DONE - DONE - DONE - FontUtils
     -      -      - DONE - GameSprite2D
     - DONE - DONE - DONE - Scene2DUtils
 
-LUGHSHARP/EXTENSIONS/BOX2D
---------------------------
+LUGHSHARP/EXTENSIONS/SOURCE/BOX2D
+---------------------------------
 
     - It's most likely best to recommend the use of an already available C# port.
     - ( It really depends on how much of a glutton for punishment I am!!!! )
@@ -1306,8 +1306,8 @@ LUGHSHARP/EXTENSIONS/BOX2D
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/EXTENSIONS/FONTS
---------------------------
+LUGHSHARP/EXTENSIONS/SOURCE/FONTS
+---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1320,15 +1320,15 @@ LUGHSHARP/EXTENSIONS/FONTS
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/EXTENSIONS/TOOLS
---------------------------
+LUGHSHARP/EXTENSIONS/SOURCE/TOOLS
+---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      -      - ImageValidator
 
-LUGHSHARP/EXTENSIONS/TOOLS/IMAGEPACKER
---------------------------------------
+LUGHSHARP/EXTENSIONS/SOURCE/TOOLS/IMAGEPACKER
+---------------------------------------------
 
 Q: Do I actually need this class if I already have TexturePacker?
 
@@ -1336,8 +1336,8 @@ Q: Do I actually need this class if I already have TexturePacker?
       ----   ----   ------
     - DONE - DONE - DONE - ImagePacker
 
-LUGHSHARP/EXTENSIONS/TOOLS/TEXTUREPACKER
-----------------------------------------
+LUGHSHARP/EXTENSIONS/SOURCE/TOOLS/TEXTUREPACKER
+-----------------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1362,8 +1362,8 @@ LUGHSHARP/EXTENSIONS/TOOLS/TEXTUREPACKER
     -      -      -      - TextureUnpacker
 
 
-LUGHSHARP/EXTENSIONS/TOOLS/TILEDMAPPACKER
------------------------------------------
+LUGHSHARP/EXTENSIONS/SOURCE/TOOLS/TILEDMAPPACKER
+------------------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------

@@ -340,7 +340,7 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// <summary>
     /// 
     /// </summary>
-    public override void SetLayout()
+    public override void Layout()
     {
         if ( _sizeInvalid )
         {

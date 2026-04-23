@@ -192,7 +192,7 @@ public class Stack : WidgetGroup
         }
     }
 
-    public void Layout()
+    public override void Layout()
     {
         if ( _sizeInvalid )
         {

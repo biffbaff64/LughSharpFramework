@@ -18,7 +18,7 @@ namespace TestProject.Source;
 public static class DesktopLauncher
 {
     // Constants for use with the BuildTextureAtlases() method.
-    private const bool BuildAtlases          = true;
+    private const bool BuildAtlases          = false;
     private const bool RemoveDuplicateImages = false;
     private const bool DrawDebugLines        = false;
 
@@ -57,7 +57,7 @@ public static class DesktopLauncher
     {
         if ( !BuildAtlases )
         {
-//            return;
+            return;
         }
 
         var settings = new TexturePackerSettings

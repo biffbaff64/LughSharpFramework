@@ -1,5 +1,5 @@
 ﻿
-C# 2D Game Framework project inspired by the Java LibGDX Game Framework.
+C# 2D Game Framework project inspired by, but not a direct copy of, the Java LibGDX Game Framework.
 
 ( Heavily Work In Progress )
 

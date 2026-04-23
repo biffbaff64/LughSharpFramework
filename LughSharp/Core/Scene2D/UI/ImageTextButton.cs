@@ -101,19 +101,9 @@ public class ImageTextButton : Button
         SetStyleAndSize( style );
     }
 
-//    /// <summary>
-//    /// Sets the style and size of this button, according to the preferred width and height as
-//    /// defined in the provided style.
-//    /// </summary>
-//    /// <param name="style"></param>
-//    protected void SetStyleAndSize( ImageTextButtonStyle style )
-//    {
-//        SetStyle( style );
-//        SetSize( GetPrefWidth(), GetPrefHeight() );
-//    }
-
     /// <summary>
-    /// Sets the style of this button.
+    /// Sets the style and size of this button, according to the preferred width and height as
+    /// defined in the provided style.
     /// </summary>
     /// <param name="style"> The style to use, which must be <see cref="ImageTextButtonStyle"/> </param>
     /// <exception cref="ArgumentException">

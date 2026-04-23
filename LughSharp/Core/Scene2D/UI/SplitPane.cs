@@ -180,7 +180,7 @@ public class SplitPane : WidgetGroup
         }
     }
 
-    public void Layout()
+    public override void Layout()
     {
         ClampSplitAmount();
 

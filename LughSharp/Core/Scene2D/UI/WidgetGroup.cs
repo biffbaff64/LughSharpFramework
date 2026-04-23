@@ -86,7 +86,7 @@ public class WidgetGroup : Group, ILayout
         Validate();
     }
 
-    public virtual void SetLayout()
+    public virtual void Layout()
     {
     }
 
@@ -123,7 +123,7 @@ public class WidgetGroup : Group, ILayout
 
         NeedsLayout = false;
 
-        SetLayout();
+        Layout();
 
         // Widgets may call invalidateHierarchy during layout (eg, a wrapped label).
         // The root-most widget group retries layout a reasonable number of times.
@@ -138,7 +138,7 @@ public class WidgetGroup : Group, ILayout
             {
                 NeedsLayout = false;
 
-                SetLayout();
+                Layout();
 
                 if ( !NeedsLayout )
                 {

@@ -351,7 +351,7 @@ public class Label : Widget, IDisposable
     /// <summary>
     /// 
     /// </summary>
-    public override void SetLayout()
+    public override void Layout()
     {
         Guard.Against.Null( _fontCache );
 

@@ -120,7 +120,7 @@ public class Container< T > : WidgetGroup where T : Actor
         return _background;
     }
 
-    public void Layout()
+    public override void Layout()
     {
         if ( _actor == null )
         {

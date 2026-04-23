@@ -212,7 +212,7 @@ public class SelectBox< T > : Widget, IDisableable
         InvalidateHierarchy();
     }
 
-    public void Layout()
+    public override void Layout()
     {
         if ( Style == null )
         {

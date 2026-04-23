@@ -110,16 +110,16 @@ public class StageTests : IDisposable
 
         var imageActor           = false;
         var windowActor          = false;
-        var buttonActor          = false;
-        var textButtonActor      = false;
-        var imageButtonActor     = false;
-        var imageTextButtonActor = false;
+        var buttonActor          = true;
+        var textButtonActor      = true;
+        var imageButtonActor     = true;
+        var imageTextButtonActor = true;
         var checkBoxActor        = false;
         var progressBarActor     = false;
         var sliderActor          = false;
         var labelActor           = false;
         var tableActor           = false;
-        var dialogActor          = true;
+        var dialogActor          = false;
 
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
@@ -195,8 +195,6 @@ public class StageTests : IDisposable
                 {
                     Logger.Debug( "Button is pressed!" );
                 }
-
-                ev.SetHandled();
             } ) );
 
             Button2 = new Button( skin, "default" )
@@ -210,8 +208,6 @@ public class StageTests : IDisposable
             Button2.AddListener( new ClickListener( ( ev, x, y ) =>
             {
                 Logger.Debug( "Button2 clicked!" );
-
-                ev.SetHandled();
             } ) );
         }
 
@@ -234,6 +230,7 @@ public class StageTests : IDisposable
                 Font              = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
                 FontColor         = Color.Yellow,
                 DisabledFontColor = Color.Gray,
+                OverFontColor     = Color.Red,
             };
 
             var textButton = new TextButton( "Text Button", tbStyle )
@@ -431,7 +428,6 @@ public class StageTests : IDisposable
 
         var styleRegistry = new StyleRegistry();
         styleRegistry.CreateStyleDefaults( new TextureAtlas( new FileInfo( Assets.UiskinAtlas ) ) );
-        styleRegistry.DebugRegistry();
 
         if ( HudActor )
         {
