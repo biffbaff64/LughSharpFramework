@@ -120,7 +120,7 @@ public class CheckBox : TextButton
             return Style.CheckboxOffDisabled;
         }
 
-        bool over = IsOver() && !IsDisabled;
+        bool over = IsOver && !IsDisabled;
 
         if ( IsChecked && Style.CheckboxOn != null )
         {

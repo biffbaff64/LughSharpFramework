@@ -152,7 +152,7 @@ public class ImageButton : Button
             }
         }
 
-        if ( IsOver() )
+        if ( IsOver )
         {
             if ( IsChecked )
             {
@@ -177,7 +177,7 @@ public class ImageButton : Button
                 return _style.ImageChecked;
             }
 
-            if ( IsOver() && ( _style.ImageOver != null ) )
+            if ( IsOver && ( _style.ImageOver != null ) )
             {
                 return _style.ImageOver;
             }

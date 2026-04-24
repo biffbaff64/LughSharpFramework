@@ -1084,7 +1084,7 @@ LUGHSHARP/CORE/SCENE2D/UI
     - IP   - IP   - DONE - Cell                 - 
     - IP   - IP   - DONE - CheckBox             - 
     -      -      -      - Container            - 
-    -      -      -      - Dialog               - 
+    - IP   - IP   - DONE - Dialog               - 
     -      -      -      - HorizontalGroup      - 
     - IP   - IP   - DONE - ImageButton          - Draws. Detects click, release, hover.
     - IP   - IP   - DONE - ImageTextButton      - Draws. Detects click, release, hover. Text drawing at wrong coords
@@ -1092,12 +1092,12 @@ LUGHSHARP/CORE/SCENE2D/UI
     -      -      -      - Label                - 
     -      -      -      - ListBox              - 
     -      -      -      - ParticleEffectActor  - 
-    -      -      -      - ProgressBar          - 
+    - IP   - IP   - DONE - ProgressBar          - 
     -      -      -      - Scene2DImage         - 
     -      -      -      - ScrollPane           - 
     -      -      -      - SelectBox            - 
     -      -      -      - Skin                 - 
-    -      -      -      - Slider               - 
+    - DONE - DONE - DONE - Slider               - 
     -      -      -      - SplitPane            - 
     -      -      -      - Stack                - 
     -      -      -      - Table                - 

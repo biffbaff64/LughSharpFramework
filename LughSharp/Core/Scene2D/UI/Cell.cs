@@ -1051,7 +1051,10 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Grow this Cell in X and Y.
+    /// Grow this Cell in X and Y. Using this method is the equivalent of calling:-
+    /// <code>
+    /// Expand().Fill();
+    /// </code>
     /// </summary>
     /// <returns> This Cell for chaining. </returns>
     public Cell Grow()

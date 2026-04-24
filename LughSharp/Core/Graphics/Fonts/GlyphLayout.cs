@@ -221,6 +221,9 @@ public class GlyphLayout : IResetable, IPoolable
     public void SetText( BitmapFont font, string str, int start, int end, Color color,
                          float targetWidth, Align halign, bool wrap, string? truncate )
     {
+        //TODO: Refactor this method. It's too long and hard to understand,
+        //      and uses 'goto' several times.
+        
         Reset();
 
         BitmapFontData fontData = font.FontData;
@@ -228,7 +231,6 @@ public class GlyphLayout : IResetable, IPoolable
         if ( start == end )
         {
             // Empty string
-            Width  = 0;
             Height = fontData.CapHeight;
 
             return;
@@ -528,8 +530,17 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// 
+    /// Finalizes the processing of the current glyph run by calculating its height,
+    /// determining run widths, aligning the runs as per the specified alignment,
+    /// and clearing the color stack if markup is enabled.
     /// </summary>
+    /// <param name="fontData">The font data associated with the current glyph run.</param>
+    /// <param name="y">The vertical position of the glyph run relative to the baseline.</param>
+    /// <param name="targetWidth">The width within which the glyph runs should be aligned.</param>
+    /// <param name="halign">The horizontal alignment to apply to the glyph runs.</param>
+    /// <param name="markupEnabled">
+    /// Determines whether markup processing is enabled, which affects color stack handling.
+    /// </param>
     private void FinalizeRun( BitmapFontData fontData,
                               float y,
                               float targetWidth,
@@ -553,7 +564,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// </summary>
     private void CalculateRunWidths( BitmapFontData fontData )
     {
-        var        width     = 0f;
+        float      width     = 0;
         GlyphRun[] runsItems = Runs.ToArray();
 
         for ( int i = 0, n = Runs.Count; i < n; i++ )
@@ -564,10 +575,10 @@ public class GlyphLayout : IResetable, IPoolable
             // run.x is needed to ensure floats are rounded same as above.
             float runWidth = run.X + xAdvances[ 0 ];
 
-            var     max    = 0f;
+            float   max    = 0;
             Glyph[] glyphs = run.Glyphs.ToArray();
 
-            for ( int ii = 0, nn = glyphs.Length; ii < nn; )
+            for ( int ii = 0, nn = run.Glyphs.Count; ii < nn; )
             {
                 Glyph glyph      = glyphs[ ii ];
                 float glyphWidth = GetGlyphWidth( glyph, fontData );
@@ -637,7 +648,7 @@ public class GlyphLayout : IResetable, IPoolable
         fontData.GetGlyphs( truncateRun, truncate, 0, truncate.Length, null );
 
         // Calculate the width of the truncate string.
-        var truncateWidth = 0f;
+        float truncateWidth = 0;
 
         if ( truncateRun.XAdvances.Count > 0 )
         {
@@ -1010,8 +1021,8 @@ public class GlyphLayout : IResetable, IPoolable
         Height     = 0;
     }
 
-// ========================================================================
-// ========================================================================
+    // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// Stores glyphs and positions for a piece of text which is a single color and

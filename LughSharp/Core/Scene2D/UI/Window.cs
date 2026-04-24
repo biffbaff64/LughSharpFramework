@@ -44,18 +44,19 @@ namespace LughSharp.Core.Scene2D.UI;
 [ActorDefinition( Role = "UI" )]
 public class Window : Table
 {
-    public int    ResizeBorder    { get; set; } = 8;
-    public bool   KeepWithinStage { get; set; } = true;
-    public bool   IsMovable       { get; set; } = true;
-    public bool   DrawTitleTable  { get; set; }
-    public Label? TitleLabel      { get; set; }
-    public bool   IsModal         { get; set; }
-    public bool   IsResizable     { get; set; }
-    public bool   Dragging        { get; set; }
+    public int    ResizeBorder   { get; set; } = 8;
+    public bool   IsMovable      { get; set; } = true;
+    public bool   DrawTitleTable { get; set; }
+    public Label? TitleLabel     { get; set; }
+    public Table? TitleTable     { get; set; }
+    public bool   IsModal        { get; set; }
+    public bool   IsResizable    { get; set; }
+    public bool   Dragging       { get; set; }
 
     // ========================================================================
 
-    protected Align Edge { get; set; }
+    protected bool  KeepWithinStage { get; set; } = true;
+    protected Align Edge            { get; set; }
 
     // ========================================================================
 
@@ -65,8 +66,6 @@ public class Window : Table
 
     private static readonly Vector2 _tmpPosition = new();
     private static readonly Vector2 _tmpSize     = new();
-
-    private Table? _titleTable;
 
     // ========================================================================
     // ========================================================================
@@ -112,17 +111,14 @@ public class Window : Table
 
         style.TitleFont      ??= new BitmapFont();
         style.TitleFontColor ??= Color.White;
-        
+
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
 
-        _titleTable = new TitleTable( this );
-        _titleTable.AddCell( TitleLabel )
-                   .SetExpandX()
-                   .SetFillX()
-                   .SetMinWidth( 0 );
+        TitleTable = new WindowTitle( this );
+        TitleTable.AddCell( TitleLabel ).Grow().SetMinWidth( 0 );
 
-        AddActor( _titleTable );
+        AddActor( TitleTable );
 
         Style = style;
         SetSize( DefaultWidth, DefaultHeight );
@@ -208,9 +204,13 @@ public class Window : Table
     }
 
     /// <summary>
-    /// 
+    /// Ensures this window is within the bounds of the stage by adjusting its position
+    /// if necessary. The check accounts for the stage dimensions, camera position,
+    /// and zoom level, as well as whether the window is a direct child of the stage's
+    /// root group.
+    /// The Window, and any children, will then be drawn.
     /// </summary>
-    /// <param name="batch"></param>
+    /// <param name="batch"> The </param>
     /// <param name="parentAlpha"></param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
@@ -237,6 +237,15 @@ public class Window : Table
         base.Draw( batch, parentAlpha );
     }
 
+    /// <summary>
+    /// Draws the stage background.
+    /// </summary>
+    /// <param name="batch"></param>
+    /// <param name="parentAlpha"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     protected void DrawStageBackground( IBatch batch, float parentAlpha, float x, float y, float width, float height )
     {
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
@@ -244,26 +253,33 @@ public class Window : Table
         Style.StageBackground?.Draw( batch, x, y, width, height );
     }
 
+    /// <summary>
+    /// Draws the background of the window.
+    /// </summary>
+    /// <param name="batch"></param>
+    /// <param name="parentAlpha"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     protected override void DrawBackground( IBatch batch, float parentAlpha, float x, float y )
     {
         base.DrawBackground( batch, parentAlpha, x, y );
 
         // Manually draw the title table before clipping is done.
 
-        if ( _titleTable?.ActorColor != null )
+        if ( TitleTable?.ActorColor != null )
         {
-            _titleTable.ActorColor.A = ActorColor.A;
+            TitleTable.ActorColor.A = ActorColor.A;
         }
 
         float padTop  = GetPadTop();
         float padLeft = GetPadLeft();
 
-        _titleTable?.SetSize( Width - padLeft - GetPadRight(), padTop );
-        _titleTable?.SetPosition( padLeft, Height - padTop );
+        TitleTable?.SetSize( Width - padLeft - GetPadRight(), padTop );
+        TitleTable?.SetPosition( padLeft, Height - padTop );
 
         DrawTitleTable = true;
 
-        _titleTable?.Draw( batch, parentAlpha );
+        TitleTable?.Draw( batch, parentAlpha );
 
         // Avoid drawing the title table again in drawChildren.
         DrawTitleTable = false;
@@ -309,9 +325,9 @@ public class Window : Table
 
     public override float GetPrefWidth()
     {
-        return _titleTable == null
+        return TitleTable == null
             ? base.GetPrefWidth()
-            : Math.Max( base.GetPrefWidth(), _titleTable.GetPrefWidth() + GetPadLeft() + GetPadRight() );
+            : Math.Max( base.GetPrefWidth(), TitleTable.GetPrefWidth() + GetPadLeft() + GetPadRight() );
     }
 
     /// <summary>
@@ -342,11 +358,11 @@ public class Window : Table
     // ========================================================================
 
     [PublicAPI]
-    public class TitleTable : Table
+    public class WindowTitle : Table
     {
         private readonly Window _window;
 
-        public TitleTable( Window window )
+        public WindowTitle( Window window )
         {
             _window = window;
         }

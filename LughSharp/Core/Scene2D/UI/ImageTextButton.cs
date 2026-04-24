@@ -161,7 +161,7 @@ public class ImageTextButton : Button
         }
 
         // The button is being hovered over.
-        if ( IsOver() )
+        if ( IsOver )
         {
             if ( IsChecked )
             {
@@ -187,7 +187,7 @@ public class ImageTextButton : Button
                 return _style.ImageChecked;
             }
 
-            if ( IsOver() && ( _style?.ImageOver != null ) )
+            if ( IsOver && ( _style?.ImageOver != null ) )
             {
                 return _style.ImageOver;
             }
@@ -228,7 +228,7 @@ public class ImageTextButton : Button
             }
         }
 
-        if ( IsOver() )
+        if ( IsOver )
         {
             if ( IsChecked )
             {
@@ -260,7 +260,7 @@ public class ImageTextButton : Button
                 return _style.CheckedFontColor;
             }
 
-            if ( IsOver() && ( _style?.OverFontColor != null ) )
+            if ( IsOver && ( _style?.OverFontColor != null ) )
             {
                 return _style.OverFontColor;
             }

@@ -230,9 +230,9 @@ public class ScrollPane : WidgetGroup
     }
 
     /// <summary>
-    /// Cancels the stage's touch focus for all listeners except this scroll
-    /// pane's flick scroll listener. This causes any widgets inside the
-    /// scrollpane that have received touchDown to receive touchUp.
+    /// Cancels the stage's touch focus for all listeners except this scroll pane's
+    /// flick scroll listener. This causes any widgets inside the scrollpane that
+    /// have received touchDown to receive touchUp.
     /// </summary>
     public void TouchFocusCancel()
     {

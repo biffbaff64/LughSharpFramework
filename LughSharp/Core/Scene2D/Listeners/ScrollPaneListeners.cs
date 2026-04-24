@@ -97,22 +97,17 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
     {
         Guard.Against.Null( _parent );
 
-        if ( _parent.DraggingPointer != -1 )
+        Logger.Checkpoint();
+        
+        if ( ( _parent.DraggingPointer != -1 )
+            || ( ( pointer == 0 ) && ( button != 0 ) ) )
         {
             return false;
         }
 
-        if ( ( pointer == 0 ) && ( button != 0 ) )
-        {
-            return false;
-        }
+        _parent.Stage?.ScrollFocus = _parent;
 
-        if ( _parent.Stage != null )
-        {
-            _parent.Stage.ScrollFocus = _parent;
-        }
-
-        if ( !_parent.FlickScroll )
+//        if ( !_parent.FlickScroll )
         {
             _parent.SetScrollbarsVisible( true );
         }
@@ -274,7 +269,14 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
         _parent = parent;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputEvent"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="deltaX"></param>
+    /// <param name="deltaY"></param>
     public override void OnPan( InputEvent inputEvent, float x, float y, float deltaX, float deltaY )
     {
         Guard.Against.Null( _parent );
@@ -293,7 +295,13 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputEvent"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="button"></param>
     public override void OnFling( InputEvent inputEvent, float x, float y, int button )
     {
         Guard.Against.Null( _parent );
@@ -321,7 +329,11 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputEvent"></param>
+    /// <returns></returns>
     public override bool Handle( Event inputEvent )
     {
         Guard.Against.Null( _parent );
@@ -347,3 +359,4 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
 
 // ============================================================================
 // ============================================================================
+

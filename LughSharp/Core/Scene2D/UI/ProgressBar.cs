@@ -38,8 +38,8 @@ namespace LughSharp.Core.Scene2D.UI;
 /// starts out as an empty progress bar and gradually becomes filled in as the task
 /// or variable value progresses.
 /// <para>
-/// A <see cref="ChangeListener.ChangeEvent"/> is fired when the progress bar knob is moved. Cancelling
-/// the event will move the knob to where it was previously.
+/// A <see cref="ChangeListener.ChangeEvent"/> is fired when the progress bar knob is
+/// moved. Cancelling the event will move the knob to where it was previously.
 /// </para>
 /// <para>
 /// For a horizontal progress bar, its preferred height is determined by the larger of
@@ -47,6 +47,11 @@ namespace LughSharp.Core.Scene2D.UI;
 /// These parameters are reversed for a vertical progress bar.
 /// </para>
 /// </summary>
+/// <remarks>
+/// A ProgressBar does not contain any support for user interaction. The Knob Position
+/// can only be set programmatically and cannot be interacted with by the user. For
+/// a progress bar that can be interacted with, see <see cref="Slider"/>.
+/// </remarks>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
 public class ProgressBar : Widget, IDisableable
@@ -129,6 +134,11 @@ public class ProgressBar : Widget, IDisableable
         if ( min > max )
         {
             throw new ArgumentException( $"max must be > min. min,max: {min}, {max}" );
+        }
+
+        if ( stepSize <= 0 )
+        {
+            throw new ArgumentException( $"stepSize must be > 0. stepSize: {stepSize}" );
         }
 
         Style = style;
@@ -219,208 +229,158 @@ public class ProgressBar : Widget, IDisableable
 
         if ( IsVertical )
         {
-            float positionHeight = height;
+            DrawVerticalBar();
+        }
+        else
+        {
+            DrawHorizontalBar();
+        }
+
+        return;
+
+        // --------------------------------------
+
+        void DrawVerticalBar()
+        {
             float bgTopHeight    = 0;
             float bgBottomHeight = 0;
 
             if ( bg != null )
             {
-                if ( IsRound )
-                {
-                    bg.Draw( batch,
-                             ( float )Math.Round( x + ( ( width - bg.MinWidth ) * 0.5f ) ),
-                             y,
-                             ( float )Math.Round( bg.MinWidth ),
-                             height );
-                }
-                else
-                {
-                    bg.Draw( batch, x + ( ( width - bg.MinWidth ) * 0.5f ), y, bg.MinWidth, height );
-                }
+                DrawRound( batch,
+                           bg,
+                           x + ( ( width - bg.MinWidth ) * 0.5f ),
+                           y,
+                           bg.MinWidth,
+                           height );
 
                 bgTopHeight    =  bg.TopHeight;
                 bgBottomHeight =  bg.BottomHeight;
-                positionHeight -= bgTopHeight + bgBottomHeight;
+                height         -= bgTopHeight + bgBottomHeight;
             }
 
-            float knobHeightHalf;
+            float total          = height - knobHeight;
+            float beforeHeight   = MathUtils.Clamp( ( total * percent ), 0, total );
+            float knobHeightHalf = knobHeight * 0.5f;
 
-            if ( knob == null )
-            {
-                knobHeightHalf = knobBefore == null ? 0 : knobBefore.MinHeight * 0.5f;
-                KnobPosition   = ( positionHeight - knobHeightHalf ) * percent;
-                KnobPosition   = Math.Min( positionHeight - knobHeightHalf, KnobPosition );
-            }
-            else
-            {
-                knobHeightHalf = knobHeight * 0.5f;
-                KnobPosition   = ( positionHeight - knobHeight ) * percent;
-                KnobPosition   = Math.Min( positionHeight - knobHeight, KnobPosition ) + bgBottomHeight;
-            }
-
-            KnobPosition = Math.Max( bgBottomHeight, KnobPosition );
+            KnobPosition = bgBottomHeight + beforeHeight;
 
             if ( knobBefore != null )
             {
-                if ( IsRound )
-                {
-                    knobBefore.Draw( batch,
-                                     ( float )Math.Round( x + ( ( width - knobBefore.MinWidth ) * 0.5f ) ),
-                                     ( float )Math.Round( y + bgTopHeight ),
-                                     ( float )Math.Round( knobBefore.MinWidth ),
-                                     ( float )Math.Round( KnobPosition + knobHeightHalf ) );
-                }
-                else
-                {
-                    knobBefore.Draw( batch,
-                                     x + ( ( width - knobBefore.MinWidth ) * 0.5f ),
-                                     y + bgTopHeight,
-                                     knobBefore.MinWidth,
-                                     KnobPosition + knobHeightHalf );
-                }
+                DrawRound( batch,
+                           knobBefore,
+                           x + ( ( width - knobBefore.MinWidth ) * 0.5f ),
+                           y + bgBottomHeight,
+                           knobBefore.MinWidth,
+                           beforeHeight + knobHeightHalf );
             }
 
             if ( knobAfter != null )
             {
-                if ( IsRound )
-                {
-                    knobAfter.Draw( batch,
-                                    ( float )Math.Round( x + ( ( width - knobAfter.MinWidth ) * 0.5f ) ),
-                                    ( float )Math.Round( y + KnobPosition + knobHeightHalf ),
-                                    ( float )Math.Round( knobAfter.MinWidth ),
-                                    ( float )Math.Round( height - KnobPosition - knobHeightHalf - bgBottomHeight ) );
-                }
-                else
-                {
-                    knobAfter.Draw( batch,
-                                    x + ( ( width - knobAfter.MinWidth ) * 0.5f ),
-                                    y + KnobPosition + knobHeightHalf,
-                                    knobAfter.MinWidth,
-                                    height - KnobPosition - knobHeightHalf - bgBottomHeight );
-                }
+                DrawRound( batch,
+                           knobAfter,
+                           x + ( ( width - knobAfter.MinWidth ) * 0.5f ),
+                           y + KnobPosition + knobHeightHalf,
+                           knobAfter.MinWidth,
+                           total - ( IsRound
+                               ? ( float )Math.Ceiling( beforeHeight - knobHeightHalf )
+                               : beforeHeight - knobHeightHalf ) );
             }
 
             if ( currentKnob != null )
             {
-                float w = currentKnob.MinWidth;
-                float h = currentKnob.MinHeight;
-
-                x += ( width - w ) * 0.5f;
-                y += ( ( knobHeight - h ) * 0.5f ) + KnobPosition;
-
-                if ( IsRound )
-                {
-                    x = ( float )Math.Round( x );
-                    y = ( float )Math.Round( y );
-                    w = ( float )Math.Round( w );
-                    h = ( float )Math.Round( h );
-                }
-
-                currentKnob.Draw( batch, x, y, w, h );
+                float w = currentKnob.MinWidth, h = currentKnob.MinHeight;
+                DrawRound( batch,
+                           currentKnob,
+                           x + ( ( width - w ) * 0.5f ),
+                           y + KnobPosition + ( ( knobHeight - h ) * 0.5f ),
+                           w,
+                           h );
             }
         }
-        else
+
+        // --------------------------------------
+
+        void DrawHorizontalBar()
         {
-            float positionWidth = width;
-            var   bgLeftWidth   = 0f;
-            var   bgRightWidth  = 0f;
+            float bgLeftWidth  = 0;
+            float bgRightWidth = 0;
 
             if ( bg != null )
             {
-                if ( IsRound )
-                {
-                    bg.Draw( batch,
-                             x,
-                             ( float )Math.Round( y + ( ( height - bg.MinHeight ) * 0.5f ) ),
-                             width,
-                             ( float )Math.Round( bg.MinHeight ) );
-                }
-                else
-                {
-                    bg.Draw( batch, x, y + ( ( height - bg.MinHeight ) * 0.5f ), width, bg.MinHeight );
-                }
-
-                bgLeftWidth   =  bg.LeftWidth;
-                bgRightWidth  =  bg.RightWidth;
-                positionWidth -= bgLeftWidth + bgRightWidth;
+                DrawRound( batch,
+                           bg,
+                           x,
+                           ( float )Math.Round( y + ( ( height - bg.MinHeight ) * 0.5f ) ),
+                           width,
+                           ( float )Math.Round( bg.MinHeight ) );
+                bgLeftWidth  =  bg.LeftWidth;
+                bgRightWidth =  bg.RightWidth;
+                width        -= bgLeftWidth + bgRightWidth;
             }
 
-            float knobWidthHalf;
+            float total       = width - knobWidth;
+            float beforeWidth = MathUtils.Clamp( total * percent, 0, total );
 
-            if ( knob == null )
-            {
-                knobWidthHalf = knobBefore == null ? 0 : knobBefore.MinWidth * 0.5f;
-                KnobPosition  = ( positionWidth - knobWidthHalf ) * percent;
-                KnobPosition  = Math.Min( positionWidth - knobWidthHalf, KnobPosition );
-            }
-            else
-            {
-                knobWidthHalf = knobWidth * 0.5f;
-                KnobPosition  = ( positionWidth - knobWidth ) * percent;
-                KnobPosition  = Math.Min( positionWidth - knobWidth, KnobPosition ) + bgLeftWidth;
-            }
+            KnobPosition = bgLeftWidth + beforeWidth;
 
-            KnobPosition = Math.Max( bgLeftWidth, KnobPosition );
+            float knobWidthHalf = knobWidth * 0.5f;
 
             if ( knobBefore != null )
             {
-                if ( IsRound )
-                {
-                    knobBefore.Draw( batch,
-                                     ( float )Math.Round( x + bgLeftWidth ),
-                                     ( float )Math.Round( y + ( ( height - knobBefore.MinHeight ) * 0.5f ) ),
-                                     ( float )Math.Round( KnobPosition + knobWidthHalf ),
-                                     ( float )Math.Round( knobBefore.MinHeight ) );
-                }
-                else
-                {
-                    knobBefore.Draw( batch,
-                                     x + bgLeftWidth,
-                                     y + ( ( height - knobBefore.MinHeight ) * 0.5f ),
-                                     KnobPosition + knobWidthHalf,
-                                     knobBefore.MinHeight );
-                }
+                DrawRound( batch,
+                           knobBefore,
+                           x + bgLeftWidth,
+                           y + ( ( height - knobBefore.MinHeight ) * 0.5f ),
+                           beforeWidth + knobWidthHalf,
+                           knobBefore.MinHeight );
             }
 
             if ( knobAfter != null )
             {
-                if ( IsRound )
-                {
-                    knobAfter.Draw( batch,
-                                    ( float )Math.Round( x + KnobPosition + knobWidthHalf ),
-                                    ( float )Math.Round( y + ( ( height - knobAfter.MinHeight ) * 0.5f ) ),
-                                    ( float )Math.Round( width - KnobPosition - knobWidthHalf - bgRightWidth ),
-                                    ( float )Math.Round( knobAfter.MinHeight ) );
-                }
-                else
-                {
-                    knobAfter.Draw( batch,
-                                    x + KnobPosition + knobWidthHalf,
-                                    y + ( ( height - knobAfter.MinHeight ) * 0.5f ),
-                                    width - KnobPosition - knobWidthHalf - bgRightWidth,
-                                    knobAfter.MinHeight );
-                }
+                DrawRound( batch,
+                           knobAfter,
+                           x + KnobPosition + knobWidthHalf,
+                           y + ( ( height - knobAfter.MinHeight ) * 0.5f ),
+                           total - ( IsRound
+                               ? ( float )Math.Ceiling( beforeWidth - knobWidthHalf )
+                               : beforeWidth - knobWidthHalf ),
+                           knobAfter.MinHeight );
             }
 
             if ( currentKnob != null )
             {
-                float w = currentKnob.MinWidth;
-                float h = currentKnob.MinHeight;
-
-                x += ( ( knobWidth - w ) * 0.5f ) + KnobPosition;
-                y += ( height - h ) * 0.5f;
-
-                if ( IsRound )
-                {
-                    x = ( float )Math.Round( x );
-                    y = ( float )Math.Round( y );
-                    w = ( float )Math.Round( w );
-                    h = ( float )Math.Round( h );
-                }
-
-                currentKnob.Draw( batch, x, y, w, h );
+                float w = currentKnob.MinWidth, h = currentKnob.MinHeight;
+                DrawRound( batch,
+                           currentKnob,
+                           x + KnobPosition + ( ( knobWidth - w ) * 0.5f ),
+                           y + ( ( height - h ) * 0.5f ),
+                           w,
+                           h );
             }
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="batch"></param>
+    /// <param name="drawable"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="w"></param>
+    /// <param name="h"></param>
+    private void DrawRound( IBatch batch, ISceneDrawable drawable, float x, float y, float w, float h )
+    {
+        if ( IsRound )
+        {
+            x = ( float )Math.Floor( x );
+            y = ( float )Math.Floor( y );
+            w = ( float )Math.Ceiling( w );
+            h = ( float )Math.Ceiling( h );
+        }
+
+        drawable.Draw( batch, x, y, w, h );
     }
 
     /// <summary>
@@ -455,7 +415,50 @@ public class ProgressBar : Widget, IDisableable
 
             // It is safe to suppress nullability warnings for 'changeEvent'
             // here because Fire() will throw an exception is it is null.
-            Pools.Free< ChangeListener.ChangeEvent >( changeEvent! );
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
+
+            if ( cancelled )
+            {
+                Value = oldValue;
+
+                return false;
+            }
+        }
+
+        if ( _animateDuration > 0 )
+        {
+            _animateFromValue = oldVisualValue;
+            _animateTime      = _animateDuration;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Sets the progress bar position, rounded to the nearest step size and clamped to the
+    /// minimum and maximum values. <see cref="Clamp(float)"/> can be overridden to allow
+    /// values outside of the progress bar's min/max range.
+    /// </summary>
+    /// <returns>
+    /// <c>false</c> if the value was not changed because the progress bar already had the
+    /// value or it was canceled by a listener.
+    /// </returns>
+    public bool SetValue( float value )
+    {
+        value = Clamp( Round( value ) );
+        float oldValue = Value;
+
+        if ( Math.Abs( Value - oldValue ) < NumberUtils.FloatTolerance ) return false;
+
+        float oldVisualValue = GetVisualValue();
+        Value = value;
+
+        if ( _programmaticChangeEvents )
+        {
+            ChangeListener.ChangeEvent changeEvent = Pools.Obtain< ChangeListener.ChangeEvent > ();
+            bool     cancelled   = Fire( changeEvent );
+
+            Pools.Free( changeEvent );
 
             if ( cancelled )
             {
@@ -507,11 +510,11 @@ public class ProgressBar : Widget, IDisableable
 
         if ( Value < min )
         {
-            Value = min;
+            SetValue( min );
         }
         else if ( Value > max )
         {
-            Value = max;
+            SetValue( max );
         }
     }
 
@@ -579,25 +582,28 @@ public class ProgressBar : Widget, IDisableable
     {
         if ( _animateTime > 0 )
         {
-            return AnimateInterpolation.Apply( _animateFromValue, Value, 1 - ( _animateTime / _animateDuration ) );
+            return AnimateInterpolation.Apply( _animateFromValue,
+                                               Value,
+                                               1 - ( _animateTime / _animateDuration ) );
         }
 
         return Value;
     }
 
     /// <summary>
-    /// Sets the visual value equal to the actual value. This can be used
-    /// to set the value without animating.
+    /// Sets the visual value equal to the actual value. This can be used to set the
+    /// value without animating.
     /// </summary>
     public virtual void UpdateVisualValue()
     {
+        //TODO:
         _animateTime = 0;
     }
 
     /// <summary>
-    /// Calculates the progress of the <see cref="ProgressBar"/> as a percentage.
-    /// The percentage is determined by the current value relative to the minimum
-    /// and maximum values of the progress bar.
+    /// Calculates the progress of the <see cref="ProgressBar"/> as a percentage. The
+    /// percentage is determined by the current value relative to the minimum and
+    /// maximum values of the progress bar.
     /// </summary>
     /// <returns>The progress represented as a float value between 0 and 1.</returns>
     public float GetPercent()
@@ -611,14 +617,12 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    /// Calculates the visual percentage position of the progress bar's value
-    /// relative to its minimum and maximum values, using the configured
-    /// interpolation method.
+    /// Calculates the visual percentage position of the progress bar's value relative to
+    /// its minimum and maximum values, using the configured interpolation method.
     /// </summary>
     /// <returns>
-    /// A value between 0 and 1 representing the visual position of the progress
-    /// bar's value as a percentage. Returns 0 if the minimum and maximum
-    /// values are the same.
+    /// A value between 0 and 1 representing the visual position of the progress bar's
+    /// value as a percentage. Returns 0 if the minimum and maximum values are the same.
     /// </returns>
     public float GetVisualPercent()
     {
@@ -645,9 +649,15 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the drawable used for the knob of the progress bar. If the progress bar
+    /// is disabled and a specific disabled knob drawable is defined in the style, it
+    /// returns the disabled knob drawable. Otherwise, it returns the default knob drawable
+    /// defined in the style.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The <see cref="ISceneDrawable"/> instance representing the knob drawable, or null
+    /// if no drawable is defined.
+    /// </returns>
     private ISceneDrawable? GetKnobDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnob != null ) )
@@ -659,9 +669,15 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the drawable representation of the area before the progress bar knob. If
+    /// the progress bar is disabled and a specific drawable for the disabled state is set,
+    /// it will return the disabled drawable. Otherwise, it will return the default drawable
+    /// for the knob-before region, as specified in the <see cref="ProgressBarStyle"/>.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The <see cref="ISceneDrawable"/> representing the drawable before the knob
+    /// or null if no drawable is set.
+    /// </returns>
     private ISceneDrawable? GetKnobBeforeDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnobBefore != null ) )
@@ -673,9 +689,15 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the drawable used to represent the portion of the progress bar
+    /// after the knob. If the progress bar is disabled and a specific drawable for
+    /// the disabled state is defined, it will return the drawable for the disabled
+    /// state; otherwise, it returns the default drawable for the portion after the knob.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The drawable for the portion of the progress bar after the knob, or the disabled
+    /// version of it if the progress bar is disabled and a disabled drawable is defined.
+    /// </returns>
     private ISceneDrawable? GetKnobAfterDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnobAfter != null ) )
@@ -685,9 +707,6 @@ public class ProgressBar : Widget, IDisableable
 
         return Style.KnobAfter;
     }
-
-    // ========================================================================
-    // ========================================================================
 }
 
 // ============================================================================

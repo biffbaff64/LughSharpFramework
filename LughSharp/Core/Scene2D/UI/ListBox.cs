@@ -83,7 +83,7 @@ public class ListBox< T > : Widget where T : notnull
 
     /// <summary>
     /// Creates a new ListBox, using the supplied <see cref="Skin"/>. The
-    /// <see cref="ListBoxStyle{T}"/> to use will be extracted from the supplied
+    /// <see cref="ListBoxStyle"/> to use will be extracted from the supplied
     /// skin using the name provided.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
@@ -431,9 +431,10 @@ public class ListBox< T > : Widget where T : notnull
     }
 
     /// <summary>
-    /// Sets the items visible in the list, clearing the selection if it is no longer valid. If a
-    /// selection is <see cref="ArraySelection{T}.Required()"/>, the first item is selected. This
-    /// can safely be called with a (modified) array returned from <see cref="Items"/>
+    /// Sets the items visible in the list, clearing the selection if it is no longer
+    /// valid. If a selection is <see cref="ArraySelection{T}.Required()"/>, the first
+    /// item is selected. This can safely be called with a (modified) array returned
+    /// from <see cref="Items"/>
     /// </summary>
     public void SetItems( List< T > newItems )
     {

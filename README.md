@@ -19,13 +19,13 @@ WORKING:
 
 IN PROGRESS:
 
-- Scene2D UI is not yet complete.
-      I'm currently working on adding StyleRegistry and StyleFactory classes to enable
-      creation and use of Scene2D UI Actors without the need for Json Skin files,
-      although support for Json Skins will still be retained.
 - Audio needs testing and/or finishing.
 - TiledMapPacker support.
-- 
+- Scene2D UI is not yet complete.
+      1. I'm currently testing the UI Actors and their functionality.
+      2. I'm currently working on adding StyleRegistry and StyleFactory classes to enable
+         creation and use of Scene2D UI Actors without the need for Json Skin files,
+         although support for Json Skins will still be retained.
 
 TODO:
 

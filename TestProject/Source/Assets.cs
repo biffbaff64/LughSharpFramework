@@ -56,6 +56,8 @@ public static class Assets
     public static string Boulder64X64     => @$"{Files.ContentRoot}\packedimages\animations\boulder64x64.png";
     public static string Solid112X112     => @$"{Files.ContentRoot}\solid112x112.png";
     public static string Icon11112X112    => @$"{Files.ContentRoot}\ic_icon11_112x112.png";
+    public static string ToggleOn         => @$"{Files.ContentRoot}\packedimages\input\toggle_on.png";
+    public static string ToggleOff        => @$"{Files.ContentRoot}\packedimages\input\toggle_off.png";
 
     // ========================================================================
     // UI Skins

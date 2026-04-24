@@ -34,8 +34,8 @@ namespace LughSharp.Core.Scene2D.UI;
 /// A slider is a horizontal indicator that allows a user to set a value. The slider has
 /// a range (min, max) and a stepping between each value the slider represents.
 /// <para>
-/// <see cref="ChangeListener.ChangeEvent"/> is fired when the
-/// slider knob is moved. Canceling the event will move the knob to where it was previously.
+/// <see cref="ChangeListener.ChangeEvent"/> is fired when the slider knob is moved.
+/// Canceling the event will move the knob to where it was previously.
 /// </para>
 /// <para>
 /// For a horizontal progress bar, its preferred height is determined by the larger of the
@@ -43,6 +43,10 @@ namespace LughSharp.Core.Scene2D.UI;
 /// parameters are reversed for a vertical progress bar.
 /// </para>
 /// </summary>
+/// <remarks>
+/// A Slider is the interactive equivalent of a <see cref="ProgressBar"/>. Use this over a
+/// ProgressBar if you want to allow the user to set a value.
+/// </remarks>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
 public class Slider : ProgressBar
@@ -90,7 +94,7 @@ public class Slider : ProgressBar
     }
 
     /// <summary>
-    /// 
+    /// Creates a new slider with the named style obtained from the supplied <see cref="Skin"/>.
     /// </summary>
     /// <param name="min"> the minimum value </param>
     /// <param name="max"> the maximum value </param>
@@ -106,6 +110,7 @@ public class Slider : ProgressBar
     {
     }
 
+    /// <summary>
     /// Creates a new slider. If horizontal, its width is determined by the prefWidth
     /// parameter, its height is determined by the maximum of the height of either the
     /// slider <see cref="NinePatch"/> or slider handle <see cref="TextureRegion"/>.
@@ -113,6 +118,7 @@ public class Slider : ProgressBar
     /// the stepSize parameter specifies the distance between individual values. E.g. min
     /// could be 4, max could be 10 and stepSize could be 0.2, giving you a total of 30
     /// values, 4.0 4.2, 4.4 and so on.
+    /// </summary>
     /// <param name="min"> the minimum value </param>
     /// <param name="max"> the maximum value </param>
     /// <param name="stepSize"> the step size between values </param>
@@ -127,6 +133,27 @@ public class Slider : ProgressBar
         }
     }
 
+    /// <summary>
+    /// Sets this actor as the event target and propagates the event to this actor and
+    /// ascendants as necessary. If this actor is not in the stage, the stage must be
+    /// set before calling this method.
+    /// <para>
+    /// Events are fired in 2 phases:
+    /// <li>
+    /// The first phase (the "capture" phase) notifies listeners on each actor starting
+    /// at the root and propagating down the hierarchy to (and including) this actor.
+    /// </li>
+    /// <li>
+    /// The second phase notifies listeners on each actor starting at this actor and, if
+    /// <see cref="Event.Bubbles()"/> is true, propagating upward to the root.
+    /// </li>
+    /// </para>
+    /// <para>
+    /// If the event is stopped at any time, it will not propagate to the next actor.
+    /// </para>
+    /// </summary>
+    /// <param name="ev"> The <see cref="Event"/> to fire. </param>
+    /// <returns> True if the event was cancelled. </returns>
     public override bool Fire( Event? ev )
     {
         Logger.Checkpoint();
@@ -134,6 +161,24 @@ public class Slider : ProgressBar
         return base.Fire( ev );
     }
 
+    /// <summary>
+    /// Responsible for notifying event listeners of an event.
+    /// <para>
+    /// This method first verifies that the event has a valid target actor. Depending on
+    /// whether the event is in the capture phase, it selects the appropriate listener list.
+    /// It then iterates through these listeners and notifies them of the event. If any
+    /// listener handles the event, the event is marked as handled.
+    /// </para>
+    /// <para>
+    /// If an exception occurs during this process, a new exception is thrown with additional
+    /// context.
+    /// </para>
+    /// </summary>
+    /// <param name="ev"> The event. </param>
+    /// <param name="capture">
+    /// true for <see cref="Actor.CaptureListeners"/>, false for <see cref="Actor.Listeners"/>.
+    /// </param>
+    /// <returns></returns>
     public override bool Notify( Event ev, bool capture )
     {
         Logger.Checkpoint();
@@ -194,9 +239,14 @@ public class Slider : ProgressBar
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the drawable for the section of the slider before the knob, based
+    /// on the current state of the slider.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The <see cref="ISceneDrawable"/> representing the knob-before drawable. Returns
+    /// a disabled, down, hovered, or default drawable, depending on the slider's state
+    /// and the presence of corresponding assets in the style.
+    /// </returns>
     protected ISceneDrawable? GetKnobBeforeDrawable()
     {
         var style = ( SliderStyle )Style;
@@ -220,9 +270,16 @@ public class Slider : ProgressBar
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the drawable associated with the slider's "knob after" visual representation
+    /// based on the current state of the slider, such as being disabled, dragged, or hovered over.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The appropriate <see cref="ISceneDrawable"/> for the "knob after" based on the slider's state.
+    /// Returns <c>DisabledKnobAfter</c> if the slider is disabled and it is available,
+    /// <c>KnobAfterDown</c> if the slider is being dragged and it is available,
+    /// <c>KnobAfterOver</c> if the mouse is over the slider and it is available,
+    /// or <c>KnobAfter</c> otherwise.
+    /// </returns>
     protected ISceneDrawable? GetKnobAfterDrawable()
     {
         var style = ( SliderStyle )Style;
@@ -246,11 +303,11 @@ public class Slider : ProgressBar
     }
 
     /// <summary>
-    /// 
+    /// Calculates the slider's position and value based on the given input coordinates.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
+    /// <param name="x">The x-coordinate of the input event.</param>
+    /// <param name="y">The y-coordinate of the input event.</param>
+    /// <returns>True if the value was successfully set, otherwise false.</returns>
     private bool CalculatePositionAndValue( float x, float y )
     {
         SliderStyle     style = ( SliderStyle )Style;
@@ -304,10 +361,14 @@ public class Slider : ProgressBar
     }
 
     /// <summary>
-    /// 
+    /// Adjusts the provided value to the nearest snap value based on the defined threshold,
+    /// or returns the original value if no snap values are set or within range.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="value">The value to modify based on snap values.</param>
+    /// <returns>
+    /// The value adjusted to the nearest snap value or the original value if snapping does
+    /// not apply.
+    /// </returns>
     protected float GetSnapped( float value )
     {
         if ( _snapValues == null )
@@ -368,6 +429,19 @@ public class Slider : ProgressBar
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Handles input events for the <see cref="Slider"/> widget and allows interaction
+    /// via touch gestures to adjust the slider's value. This listener is responsible for
+    /// processing user inputs such as touch down, touch up, and touch drag, which directly
+    /// manipulate the slider's knob position and value.
+    /// </summary>
+    /// <remarks>
+    /// The <see cref="SliderInputListener"/> is attached to a <see cref="Slider"/> to provide
+    /// interactive functionality. It tracks pointer events, validates interactions based on
+    /// the slider's properties (e.g., disabled state, specific mouse buttons), and delegates
+    /// actions to the slider for calculating changes in value. This enables responsive and
+    /// intuitive control for the end user.
+    /// </remarks>
     [PublicAPI]
     public class SliderInputListener : InputListener
     {
@@ -378,6 +452,14 @@ public class Slider : ProgressBar
             _parent = parent;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch goes down on the actor.
+        /// If true is returned, this listener will have
+        /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>,
+        /// so it will receive all touchDragged and touchUp events, even those not
+        /// over this actor, until touchUp is received. Also when true is returned,
+        /// the event is handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             Logger.Checkpoint();
@@ -403,6 +485,11 @@ public class Slider : ProgressBar
             return true;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch goes up anywhere, but only
+        /// if touchDown previously returned true for the mouse button or touch.
+        /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( pointer != _parent._draggingPointer )
@@ -424,11 +511,26 @@ public class Slider : ProgressBar
             }
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch is moved anywhere, but only
+        /// if touchDown previously returned true for the mouse button or touch.
+        /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             _parent.CalculatePositionAndValue( x, y );
         }
 
+        /// <summary>
+        /// Called any time the mouse cursor or a finger touch is moved over an actor.
+        /// On the desktop, this event occurs even when no mouse buttons are pressed
+        /// (pointer will be -1).
+        /// </summary>
+        /// <param name="ev"> The input event. </param>
+        /// <param name="x"> The x coordinate of the mouse cursor or touch. </param>
+        /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
+        /// <param name="pointer"> The pointer index of the mouse cursor or touch. </param>
+        /// <param name="from"> The actor that the mouse cursor or touch is entering. </param>
         public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? from )
         {
             if ( pointer == -1 )
@@ -437,6 +539,16 @@ public class Slider : ProgressBar
             }
         }
 
+        /// <summary>
+        /// Called any time the mouse cursor or a finger touch is moved out of an actor.
+        /// On the desktop, this event occurs even when no mouse buttons are pressed
+        /// (pointer will be -1).
+        /// </summary>
+        /// <param name="ev"> The input event. </param>
+        /// <param name="x"> The x coordinate of the mouse cursor or touch. </param>
+        /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
+        /// <param name="pointer"> The pointer index of the mouse cursor or touch. </param>
+        /// <param name="to"> The actor that the mouse cursor or touch is exiting. </param>
         public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? to )
         {
             if ( pointer == -1 )

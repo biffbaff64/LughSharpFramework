@@ -57,7 +57,7 @@ public class TextButton : Button
     /// Creates a new TextButton, setting its text property to the supplied text.
     /// The supplied <see cref="TextButtonStyle"/> will be used.
     /// </summary>
-    public TextButton( string? text, TextButtonStyle style )
+    public TextButton( string? text, TextButtonStyle style ) : base( style )
     {
         Style = style;
         
@@ -134,7 +134,7 @@ public class TextButton : Button
             }
         }
 
-        if ( IsOver() )
+        if ( IsOver )
         {
             if ( IsChecked )
             {
@@ -166,7 +166,7 @@ public class TextButton : Button
                 return Style.CheckedFontColor;
             }
 
-            if ( IsOver() && ( Style.OverFontColor != null ) )
+            if ( IsOver && ( Style.OverFontColor != null ) )
             {
                 return Style.OverFontColor;
             }

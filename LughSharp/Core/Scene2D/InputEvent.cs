@@ -144,9 +144,8 @@ public class InputEvent : Event
     /// <summary>
     /// Returns true if this event is a touchUp triggered by <see cref="Stage.CancelTouchFocus()"/>.
     /// </summary>
-    public bool TouchFocusCancel
-        => Compare.IsEqual( StageX, int.MinValue )
-        || Compare.IsEqual( StageY, int.MinValue );
+    public bool TouchFocusCancel => Compare.IsEqual( StageX, int.MinValue )
+                                 || Compare.IsEqual( StageY, int.MinValue );
 
     /// <summary>
     /// If false, <see cref="Event.SetHandled"/> will not add the listener
@@ -155,6 +154,8 @@ public class InputEvent : Event
     /// </summary>
     public bool TouchFocus { get; set; } = true;
 
+    // ========================================================================
+    
     /// <summary>
     /// Resets this event.
     /// </summary>
@@ -169,7 +170,7 @@ public class InputEvent : Event
     /// <summary>
     /// Sets actorCoords to this event's coordinates relative to the specified actor.
     /// </summary>
-    /// <param name="actor"></param>
+    /// <param name="actor"> The actor. </param>
     /// <param name="actorCoords"> Output for resulting coordinates.</param>
     public Vector2 ToCoordinates( Actor? actor, Vector2 actorCoords )
     {
@@ -185,3 +186,7 @@ public class InputEvent : Event
         return Type != null ? Type.ToString() : string.Empty;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

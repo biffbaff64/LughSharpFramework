@@ -366,8 +366,6 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public override bool OnTouchDown( int screenX, int screenY, int pointer, int button )
     {
-        Logger.Debug( $"X: {screenX}, Y: {screenY}, pointer: {pointer}, button: {button}  "  );
-        
         if ( !IsInsideViewport( screenX, screenY ) )
         {
             return false;
@@ -513,9 +511,6 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.StageY  = _tempCoords.Y;
         inputEvent.Pointer = pointer;
         inputEvent.Button  = button;
-
-        Logger.Checkpoint();
-        Logger.Debug( $"pointer: {pointer}, button: {button}" );
 
         TouchFocus?[] focuses = TouchFocuses.Begin();
 

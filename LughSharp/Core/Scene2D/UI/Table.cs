@@ -222,7 +222,7 @@ public class Table : WidgetGroup
     /// to match the background. This may only be called if a skin has been set
     /// with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
-    protected void SetBackground( string drawableName )
+    public void SetBackground( string drawableName )
     {
         if ( Skin == null )
         {
@@ -235,7 +235,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// <param name="background"> May be null to clear the background. </param>
     /// </summary>
-    protected void SetBackground( ISceneDrawable? background )
+    public void SetBackground( ISceneDrawable? background )
     {
         if ( _background == background )
         {
