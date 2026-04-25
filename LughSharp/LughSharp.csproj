@@ -83,6 +83,15 @@
         <Content Include="lib\net8.0\freetype.dll" Pack="true" PackagePath="lib\net8.0\">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Update="Assets\Skins\uiskin.atlas">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="Assets\Skins\uiskin.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="Assets\Skins\uiskin.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

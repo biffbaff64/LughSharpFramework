@@ -65,7 +65,7 @@ public class TextTooltip : Tooltip< Label >
             Wrap = true
         };
 
-        Container.SetActor( label );
+        Container.SetContainerActor( label );
         Container.SetWidths( Math.Min( manager.MaxWidth, label.GlyphLayout.Width ) );
 
         Style = style;
@@ -83,7 +83,7 @@ public class TextTooltip : Tooltip< Label >
                 throw new NullReferenceException( "Container cannot be null" );
             }
 
-            Container.GetActor()!.Style = value.Label;
+            Container.GetContainerActor()!.Style = value.Label;
             Container.SetBackground( value.Background );
             Container.SetMaxWidth( value.WrapWidth );
         }

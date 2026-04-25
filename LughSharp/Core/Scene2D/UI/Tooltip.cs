@@ -57,8 +57,8 @@ public class Tooltip< T > : InputListener where T : Actor
 
     public Actor? Actor
     {
-        get => Container.GetActor();
-        set => Container.SetActor( value as T );
+        get => Container.GetContainerActor();
+        set => Container.SetContainerActor( value as T );
     }
 
     public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )

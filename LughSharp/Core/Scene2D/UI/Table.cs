@@ -106,7 +106,7 @@ public class Table : WidgetGroup
     private bool _sizeInvalid = true;
 
     private readonly List< Cell > _columnDefaults = new( 2 );
-    private          Cell?        _rowDefaults;
+    private          Cell         _rowDefaults    = new();
 
     private float[] _columnWidth     = null!;
     private float[] _rowHeight       = null!;
@@ -554,7 +554,7 @@ public class Table : WidgetGroup
     /// Indicates that subsequent cells should be added to a new row and returns the
     /// cell values that will be used as the defaults for all cells in the new row.
     /// </summary>
-    public Cell? AddRow()
+    public Cell AddRow()
     {
         if ( Cells.Count > 0 )
         {

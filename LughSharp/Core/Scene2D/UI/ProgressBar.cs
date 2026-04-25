@@ -94,7 +94,7 @@ public class ProgressBar : Widget, IDisableable
                 max,
                 stepSize,
                 vertical,
-                skin.Get< ProgressBarStyle >( $"default{( vertical ? "-vertical" : "" )}" ) )
+                skin.Get< ProgressBarStyle >( $"default{( vertical ? "-vertical" : "-horizontal" )}" ) )
     {
     }
 

@@ -64,10 +64,10 @@ public class ListBox< T > : Widget where T : notnull
 
     // ========================================================================
 
-    private int   _overIndex = -1;
+    private int   _overIndex    = -1;
+    private int   _pressedIndex = -1;
     private float _prefHeight;
     private float _prefWidth;
-    private int   _pressedIndex = -1;
 
     // ========================================================================
 
@@ -150,6 +150,13 @@ public class ListBox< T > : Widget where T : notnull
         InvalidateHierarchy();
     }
 
+    /// <summary>
+    /// Computes and caches any information needed for drawing and, if this actor has
+    /// children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
+    /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
+    /// on each child. This method should almost never be called directly, instead
+    /// <see cref="ILayout.Validate"/> should be used.
+    /// </summary>
     public override void Layout()
     {
         BitmapFont?     font             = Style.Font;
@@ -193,6 +200,7 @@ public class ListBox< T > : Widget where T : notnull
         }
     }
 
+    /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -498,6 +506,10 @@ public class ListBox< T > : Widget where T : notnull
             _parent = lb;
         }
 
+        /// <summary>
+        /// Called when a key goes down. When true is returned, the event is
+        /// handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             if ( _parent.Items.Count == 0 )
@@ -566,6 +578,14 @@ public class ListBox< T > : Widget where T : notnull
             return false;
         }
 
+        /// <summary>
+        /// Called when a key is typed. When true is returned, the event is
+        /// handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
+        /// <param name="ev"> The input event. </param>
+        /// <param name="character">
+        /// May be 0 for key typed events that don't map to a character (ctrl, shift, etc).
+        /// </param>
         public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             if ( !_parent.TypeToSelect )
@@ -609,6 +629,14 @@ public class ListBox< T > : Widget where T : notnull
             _parent = lb;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch goes down on the actor.
+        /// If true is returned, this listener will have
+        /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>,
+        /// so it will receive all touchDragged and touchUp events, even those not
+        /// over this actor, until touchUp is received. Also when true is returned,
+        /// the event is handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( ( pointer != 0 ) || ( button != 0 ) )
@@ -644,6 +672,11 @@ public class ListBox< T > : Widget where T : notnull
             return true;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch goes up anywhere, but only
+        /// if touchDown previously returned true for the mouse button or touch.
+        /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( ( pointer != 0 ) || ( button != 0 ) )
@@ -654,11 +687,21 @@ public class ListBox< T > : Widget where T : notnull
             _parent._pressedIndex = -1;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch is moved anywhere, but only
+        /// if touchDown previously returned true for the mouse button or touch.
+        /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             _parent._overIndex = _parent.GetItemIndexAt( y );
         }
 
+        /// <summary>
+        /// Called any time the mouse is moved when a button is not down. This event
+        /// only occurs on the desktop. When true is returned, the event is handled
+        /// by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             _parent._overIndex = _parent.GetItemIndexAt( y );
@@ -666,6 +709,16 @@ public class ListBox< T > : Widget where T : notnull
             return false;
         }
 
+        /// <summary>
+        /// Called any time the mouse cursor or a finger touch is moved out of an actor.
+        /// On the desktop, this event occurs even when no mouse buttons are pressed
+        /// (pointer will be -1).
+        /// </summary>
+        /// <param name="ev"> The input event. </param>
+        /// <param name="x"> The x coordinate of the mouse cursor or touch. </param>
+        /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
+        /// <param name="pointer"> The pointer index of the mouse cursor or touch. </param>
+        /// <param name="toActor"> The actor that the mouse cursor or touch is exiting. </param>
         public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
         {
             if ( pointer == 0 )
@@ -679,11 +732,7 @@ public class ListBox< T > : Widget where T : notnull
             }
         }
     }
-
-    // ========================================================================
-    // ========================================================================
 }
 
 // ============================================================================
 // ============================================================================
-

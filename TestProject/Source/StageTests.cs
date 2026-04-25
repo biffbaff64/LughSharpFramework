@@ -111,19 +111,19 @@ public class StageTests : IDisposable
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
 //        ImageActor();
-//        ButtonActor();
+        ButtonActor();
 //        TextButtonActor();
 //        ImageButtonActor();
 //        ImageTextButtonActor();
 //        CheckBoxActor();
 //        ProgressBarActor();
 //        SliderActor();
-        // ----------------------------
+//        ScrollPaneActor(); // Also tests ListBox<>
 //        WindowActor();
+        // ----------------------------
 //        LabelActor();
 //        TableActor();
 //        DialogActor();
-        ScrollPaneActor();
 //        TextFieldActor();
 //        TextAreaActor();
 //        SplitPaneActor();
@@ -132,6 +132,34 @@ public class StageTests : IDisposable
         return;
 
         // ====================================================================
+
+        void WindowActor()
+        {
+            var windowStyle = new WindowStyle
+            {
+                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
+                TitleFontColor = Color.Red,
+                Background     = new TextureRegionDrawable( new Texture2D( Assets.WindowBackground ) )
+            };
+            var window = new Window( "Window Title", skin )
+            {
+                IsVisible = true,
+            };
+//            window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
+            window.SetPosition( 200, 200 );
+            window.CellDefaults.SetSpaceBottom( 10 );
+            window.AddRow().Fill().Expand();
+            window.AddCell( new Label( "Window Content", skin ) );
+            window.AddRow();
+            window.AddCell( new Button( skin.Get< ButtonStyle >( "default" ) ) );
+            window.AddRow();
+            window.AddCell( new Scene2DImage( new Texture2D( Assets.Boulder32X32 ) ) );
+//            window.Pack();
+
+            Stage?.AddActor( window );
+        }
+
+        // --------------------------------------
 
         void ScrollPaneActor()
         {
@@ -165,21 +193,29 @@ public class StageTests : IDisposable
                 "Z z Z z Z z Z z Z z",
             };
 
-            var list = new ListBox< string >( skin );
+            var list = new ListBox< string >( skin )
+            {
+                Selection =
+                {
+                    Multiple = true,
+                    Required = false
+                },
+                TypeToSelect = true,
+                Alignment = Align.Center
+            };
             list.SetItems( new List< string >( listEntries ) );
-            list.Selection.Multiple = true;
-            list.Selection.Required = false;
 
             var scrollPane = new ScrollPane( list, skin )
             {
                 IsVisible = true,
             };
-            
+
             scrollPane.SetPosition( 200, 200 );
             scrollPane.SetScrollingDisabled( false, false );
             scrollPane.SetFadeScrollBars( false );
-            
+
             Stage?.AddActor( scrollPane );
+            Stage.SetKeyboardFocus( list );
         }
 
         // --------------------------------------
@@ -204,34 +240,6 @@ public class StageTests : IDisposable
 
         void SelectBoxActor()
         {
-        }
-
-        // --------------------------------------
-
-        void WindowActor()
-        {
-            var windowStyle = new WindowStyle
-            {
-                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
-                TitleFontColor = Color.Red,
-                Background     = new TextureRegionDrawable( new Texture2D( Assets.WindowBackground ) )
-            };
-            var window = new Window( "Window Title", windowStyle )
-            {
-                IsVisible = true,
-            };
-//            window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
-            window.SetPosition( 200, 200 );
-            window.SetSize( 400, 200 );
-//            window.CellDefaults.SetSpaceBottom( 10 );
-//            window.AddRow()?.Fill().Expand();
-//            window.AddActor( new Label( "Window Content", skin ) );
-//            window.AddRow();
-//            window.AddActor( new Button( skin.Get< ButtonStyle >( "default" ) ) );
-//            window.AddRow();
-//            window.AddActor( new Scene2DImage( new Texture2D( Assets.Boulder32X32 ) ) );
-
-            Stage?.AddActor( window );
         }
 
         // --------------------------------------
@@ -384,19 +392,19 @@ public class StageTests : IDisposable
 
             Button.AddListener( new TextTooltip( "This is a tool tip!", skin ) );
 
-            Table tooltipTable = new Table( skin );
-            tooltipTable.Pad( 10 ).SetBackground( "default-round" );
-            tooltipTable.AddActor( new TextButton( "Fancy Tooltip!", skin ) );
+//            var tooltipTable = new Table( skin );
+//            tooltipTable.Pad( 10 ).SetBackground( "default-pane" );
+//            tooltipTable.AddActor( new TextButton( "Fancy Tooltip!", skin ) );
 
-            Button2 = new Button( skin, "default" )
-            {
-                IsVisible = true,
-            };
-            Button2.SetPosition( 100, 70 );
-            Button2.SetSize( Button.Width, Button.Height );
-            Stage?.AddActor( Button2 );
-
-            Button2.AddListener( new ClickListener( ( ev, x, y ) => { Logger.Debug( "Button2 clicked!" ); } ) );
+//            Button2 = new Button( skin )
+//            {
+//                IsVisible = true,
+//            };
+//            Button2.SetPosition( 100, 70 );
+//            Button2.SetSize( Button.Width, Button.Height );
+//            Stage?.AddActor( Button2 );
+//
+//            Button2.AddListener( new ClickListener( ( ev, x, y ) => { Logger.Debug( "Button2 clicked!" ); } ) );
         }
 
         // --------------------------------------

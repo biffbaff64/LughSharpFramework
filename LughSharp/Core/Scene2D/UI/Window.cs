@@ -106,6 +106,11 @@ public class Window : Table
     /// <param name="style"> The WindowStyle to use. </param>
     public Window( string title, WindowStyle style )
     {
+        if ( string.IsNullOrEmpty( title ) )
+        {
+            throw new ArgumentException( "Title cannot be null or empty!" );
+        }
+
         Touchable = Touchable.Enabled;
         Clip      = true;
 
@@ -115,10 +120,9 @@ public class Window : Table
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
 
-        TitleTable = new WindowTitle( this );
-        TitleTable.AddCell( TitleLabel ).Grow().SetMinWidth( 0 );
-
-        AddActor( TitleTable );
+//        TitleTable = new Table();
+//        TitleTable.AddCell( TitleLabel ).GrowX().SetMinWidth( 0 );
+//        AddActor( TitleTable );
 
         Style = style;
         SetSize( DefaultWidth, DefaultHeight );
@@ -140,47 +144,45 @@ public class Window : Table
             return;
         }
 
-        if ( Stage.Camera is OrthographicCamera orthographicCamera )
-        {
-            float parentWidth  = Stage.Width;
-            float parentHeight = Stage.Height;
+        Stage stage        = Stage;
+        float parentWidth  = stage.Width;
+        float parentHeight = stage.Height;
 
-            if ( ( GetX( Align.Right ) - Stage.Camera.Position.X )
+        if ( stage.Camera is OrthographicCamera orthographicCamera )
+        {
+            if ( ( GetX( Align.Right ) - stage.Camera.Position.X )
                > ( parentWidth / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( Stage.Camera.Position.X + ( parentWidth / 2 / orthographicCamera.Zoom ),
+                SetPosition( stage.Camera.Position.X + ( parentWidth / 2 / orthographicCamera.Zoom ),
                              GetY( Align.Right ),
                              Align.Right );
             }
 
-            if ( ( GetX( Align.Left ) - Stage.Camera.Position.X )
+            if ( ( GetX( Align.Left ) - stage.Camera.Position.X )
                < ( -parentWidth / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( Stage.Camera.Position.X - ( parentWidth / 2 / orthographicCamera.Zoom ),
+                SetPosition( stage.Camera.Position.X - ( parentWidth / 2 / orthographicCamera.Zoom ),
                              GetY( Align.Left ),
                              Align.Left );
             }
 
-            if ( ( GetY( Align.Top ) - Stage.Camera.Position.Y ) > ( parentHeight / 2 / orthographicCamera.Zoom ) )
+            if ( ( GetY( Align.Top ) - stage.Camera.Position.Y ) > ( parentHeight / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( GetX( Align.Top ),
-                             Stage.Camera.Position.Y + ( parentHeight / 2 / orthographicCamera.Zoom ),
+                             stage.Camera.Position.Y + ( parentHeight / 2 / orthographicCamera.Zoom ),
                              Align.Top );
             }
 
-            if ( ( GetY( Align.Bottom ) - Stage.Camera.Position.Y )
+            if ( ( GetY( Align.Bottom ) - stage.Camera.Position.Y )
                < ( -parentHeight / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( GetX( Align.Bottom ),
-                             Stage.Camera.Position.Y - ( parentHeight / 2 / orthographicCamera.Zoom ),
+                             stage.Camera.Position.Y - ( parentHeight / 2 / orthographicCamera.Zoom ),
                              Align.Bottom );
             }
         }
-        else if ( Parent == Stage.RootGroup )
+        else if ( Parent == stage.RootGroup )
         {
-            float parentWidth  = Stage.Width;
-            float parentHeight = Stage.Height;
-
             if ( X < 0 )
             {
                 X = 0;
@@ -216,7 +218,12 @@ public class Window : Table
     {
         if ( Stage != null )
         {
-            Stage.SetKeyboardFocus( Stage.GetKeyboardFocus() ?? this );
+            Stage stage = Stage;
+
+            if ( stage.GetKeyboardFocus() == null )
+            {
+                Stage.SetKeyboardFocus( this );
+            }
 
             EnsureWithinStage();
 
@@ -264,33 +271,30 @@ public class Window : Table
     {
         base.DrawBackground( batch, parentAlpha, x, y );
 
-        // Manually draw the title table before clipping is done.
-
-        if ( TitleTable?.ActorColor != null )
+        if ( TitleTable != null )
         {
+            // Manually draw the title table before clipping is done.
             TitleTable.ActorColor.A = ActorColor.A;
+
+            float padTop  = GetPadTop();
+            float padLeft = GetPadLeft();
+
+            TitleTable.SetSize( Width - padLeft - GetPadRight(), padTop );
+            TitleTable.SetPosition( padLeft, Height - padTop );
+
+            DrawTitleTable = true;
+
+            TitleTable.Draw( batch, parentAlpha );
+
+            // Avoid drawing the title table again in drawChildren.
+            DrawTitleTable = false;
         }
-
-        float padTop  = GetPadTop();
-        float padLeft = GetPadLeft();
-
-        TitleTable?.SetSize( Width - padLeft - GetPadRight(), padTop );
-        TitleTable?.SetPosition( padLeft, Height - padTop );
-
-        DrawTitleTable = true;
-
-        TitleTable?.Draw( batch, parentAlpha );
-
-        // Avoid drawing the title table again in drawChildren.
-        DrawTitleTable = false;
     }
 
+    /// <inheritdoc />
     public override Actor? Hit( float x, float y, bool touchable )
     {
-        if ( !IsVisible )
-        {
-            return null;
-        }
+        if ( !IsVisible ) return null;
 
         Actor? hit = base.Hit( x, y, touchable );
 
@@ -304,7 +308,8 @@ public class Window : Table
             return hit;
         }
 
-        if ( ( y <= Height ) && ( y >= ( Height - GetPadTop() ) ) && ( x >= 0 ) && ( x <= Width ) )
+        if ( ( y <= Height ) && ( y >= ( Height - GetPadTop() ) )
+                             && ( x >= 0 ) && ( x <= Width ) )
         {
             // Hit the title bar, don't use the hit child if it is in the Window's table.
             Actor? current = hit;
@@ -351,28 +356,6 @@ public class Window : Table
             }
 
             InvalidateHierarchy();
-        }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    [PublicAPI]
-    public class WindowTitle : Table
-    {
-        private readonly Window _window;
-
-        public WindowTitle( Window window )
-        {
-            _window = window;
-        }
-
-        public override void Draw( IBatch batch, float parentAlpha )
-        {
-            if ( _window.DrawTitleTable )
-            {
-                base.Draw( batch, parentAlpha );
-            }
         }
     }
 
@@ -645,9 +628,28 @@ public class Window : Table
             }
         }
     }
+}
 
-    // ========================================================================
-    // ========================================================================
+// ============================================================================
+// ============================================================================
+
+[PublicAPI]
+public class WindowTitle : Table
+{
+    private readonly Window _window;
+
+    public WindowTitle( Window window )
+    {
+        _window = window;
+    }
+
+    public override void Draw( IBatch batch, float parentAlpha )
+    {
+        if ( _window.DrawTitleTable )
+        {
+            base.Draw( batch, parentAlpha );
+        }
+    }
 }
 
 // ========================================================================

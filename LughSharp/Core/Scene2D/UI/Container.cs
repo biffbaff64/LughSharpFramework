@@ -40,6 +40,8 @@ public class Container< T > : WidgetGroup where T : Actor
 {
     public bool Rounding { get; set; } = true;
 
+    // ========================================================================
+    
     private T?              _actor;
     private Align           _align;
     private ISceneDrawable? _background;
@@ -69,9 +71,12 @@ public class Container< T > : WidgetGroup where T : Actor
         Transform = false;
     }
 
+    /// <summary>
+    /// Creates a container with the specified actor.
+    /// </summary>
     public Container( T? actor ) : this()
     {
-        SetActor( actor );
+        SetContainerActor( actor );
     }
 
     /// <summary>
@@ -108,6 +113,13 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
+    /// <summary>
+    /// Sets the background drawable and, if adjustPadding is true, sets the container's
+    /// padding to <see cref="ISceneDrawable.BottomHeight"/> , <see cref="ISceneDrawable.TopHeight"/>,
+    /// <see cref="ISceneDrawable.LeftWidth"/>, and <see cref="ISceneDrawable.RightWidth"/>.
+    /// </summary>
+    /// <param name="background"> If null, the background will be cleared and padding removed. </param>
+    /// <returns></returns>
     public Container< T > Background( ISceneDrawable background )
     {
         SetBackground( background );
@@ -228,7 +240,12 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
-    public void SetActor( T? actor )
+    public T? GetContainerActor()
+    {
+        return _actor;
+    }
+
+    public void SetContainerActor( T? actor )
     {
         if ( actor == this )
         {
@@ -253,11 +270,6 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
-    public T? GetActor()
-    {
-        return _actor;
-    }
-
     // ========================================================================
     // ========================================================================
 
@@ -270,7 +282,7 @@ public class Container< T > : WidgetGroup where T : Actor
             return false;
         }
 
-        SetActor( null );
+        SetContainerActor( null );
 
         return true;
     }

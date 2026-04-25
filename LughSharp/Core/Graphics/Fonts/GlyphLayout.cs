@@ -588,7 +588,10 @@ public class GlyphLayout : IResetable, IPoolable
 
                 ii++;
 
-                runWidth += xAdvances[ ii ];
+                if ( ii < xAdvances.Length )
+                {
+                    runWidth += xAdvances[ ii ];
+                }
             }
 
             run.Width = Math.Max( runWidth, max ) - run.X;

@@ -89,7 +89,7 @@ public class Slider : ProgressBar
                 max,
                 stepSize,
                 vertical,
-                skin.Get< SliderStyle >( "default" + ( vertical ? "-vertical" : "" ) ) )
+                skin.Get< SliderStyle >( "default" + ( vertical ? "-vertical" : "-horizontal" ) ) )
     {
     }
 
