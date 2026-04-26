@@ -1,0 +1,437 @@
+﻿// ///////////////////////////////////////////////////////////////////////////////
+// MIT License
+//
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+// ///////////////////////////////////////////////////////////////////////////////
+
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.IO;
+
+namespace LughSharp.Source.Graphics.Atlases;
+
+[PublicAPI]
+public class TextureAtlas : IDisposable
+{
+    public List< AtlasRegion? > Regions   { get; set; } = [ ];
+    public List< Texture2D >    Textures  { get; set; } = new( 4 );
+    public string               AtlasName { get; set; } = string.Empty;
+
+    // ========================================================================
+
+    /// <summary>
+    /// Creates an empty atlas to which regions can be added.
+    /// </summary>
+    public TextureAtlas()
+    {
+    }
+
+    /// <summary>
+    /// Creates a new TextureAtlas.
+    /// Loads the specified pack file using <see cref="PathType.Internal"/>,
+    /// using the parent directory of the pack file to find the page images.
+    /// </summary>
+    public TextureAtlas( string internalPackFile )
+        : this( new FileInfo( internalPackFile ) )
+    {
+    }
+
+    /// <summary>
+    /// Creates a new TextureAtlas.
+    /// Loads the specified pack file, using the parent directory of the
+    /// pack file to find the page images.
+    /// </summary>
+    public TextureAtlas( FileInfo packFile )
+        : this( packFile, packFile.Directory )
+    {
+    }
+
+    /// <summary>
+    /// Creates a new TextureAtlas.
+    /// </summary>
+    /// <param name="packFile"></param>
+    /// <param name="flip">
+    /// If true, all regions loaded will be flipped for use with a perspective
+    /// where 0,0 is the upper left corner.
+    /// </param>
+    public TextureAtlas( FileInfo packFile, bool flip = false )
+        : this( packFile, packFile.Directory, flip )
+    {
+    }
+
+    /// <summary>
+    /// Creates a new TextureAtlas.
+    /// </summary>
+    /// <param name="packFile"></param>
+    /// <param name="imagesDir"></param>
+    /// <param name="flip">
+    /// If true, all regions loaded will be flipped for use with a perspective
+    /// where 0,0 is the upper left corner.
+    /// </param>
+    public TextureAtlas( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
+    {
+        Guard.Against.Null( imagesDir );
+
+        var atlasData = new TextureAtlasData( packFile, imagesDir, flip );
+
+        Load( atlasData );
+    }
+
+    /// <summary>
+    /// Creates a new TextureAtlas.
+    /// </summary>
+    /// <param name="data"></param>
+    public TextureAtlas( TextureAtlasData data )
+    {
+        Load( data );
+    }
+
+    /// <summary>
+    /// Adds the textures and regions from the specified <see cref="TextureAtlasData"/>
+    /// </summary>
+    public void Load( TextureAtlasData data )
+    {
+        Textures.EnsureCapacity( data.Pages.Count );
+
+        foreach ( TextureAtlasData.Page page in data.Pages )
+        {
+            page.Texture ??= new Texture2D( page.TextureFile!, page.Format, page.UseMipMaps );
+            page.Texture.SetFilter( page.MinFilter, page.MagFilter );
+            page.Texture.SetWrap( page.UWrap, page.VWrap );
+
+            Textures.Add( page.Texture );
+        }
+
+        Regions.EnsureCapacity( data.Regions.Count );
+
+        foreach ( TextureAtlasData.Region region in data.Regions )
+        {
+            var atlasRegion = new AtlasRegion( region.Page?.Texture,
+                                               region.Left,
+                                               region.Top,
+                                               region.Rotate ? region.Height : region.Width,
+                                               region.Rotate ? region.Width : region.Height )
+            {
+                Index          = region.Index,
+                Name           = region.Name,
+                OffsetX        = region.OffsetX,
+                OffsetY        = region.OffsetY,
+                OriginalHeight = region.OriginalHeight,
+                OriginalWidth  = region.OriginalWidth,
+                Rotate         = region.Rotate,
+                Degrees        = region.Degrees,
+                NameValuePairs = new Dictionary< string, int[]? >(),
+            };
+
+            if ( region.Flip )
+            {
+                atlasRegion.Flip( false, true );
+            }
+
+            Regions.Add( atlasRegion );
+        }
+    }
+
+    /// <summary>
+    /// Adds a region to the atlas. The specified texture will be disposed
+    /// when the atlas is disposed.
+    /// </summary>
+    public AtlasRegion AddRegion( string name, Texture2D texture, int x, int y, int width, int height )
+    {
+        Textures.Add( texture );
+
+        var region = new AtlasRegion( texture, x, y, width, height )
+        {
+            Name = name
+        };
+
+        Regions.Add( region );
+
+        return region;
+    }
+
+    /// <summary>
+    /// Adds a region to the atlas. The texture for the specified region will
+    /// be disposed when the atlas is disposed.
+    /// </summary>
+    public AtlasRegion AddRegion( string name, TextureRegion textureRegion )
+    {
+        Guard.Against.Null( textureRegion.Texture );
+
+        Textures.Add( textureRegion.Texture );
+
+        var region = new AtlasRegion( textureRegion )
+        {
+            Name = name
+        };
+
+        Regions.Add( region );
+
+        return region;
+    }
+
+    /// <summary>
+    /// Returns the first region found with the specified name. This method uses
+    /// string comparison to find the region, so the result should be cached
+    /// rather than calling this method multiple times.
+    /// </summary>
+    public AtlasRegion? FindRegion( string? name )
+    {
+        for ( int i = 0, n = Regions.Count; i < n; i++ )
+        {
+            if ( Regions[ i ]?.Name == name )
+            {
+                return Regions[ i ];
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Returns the first region found with the specified name and index. This method
+    /// uses string comparison to find the region, so the result should be cached
+    /// rather than calling this method multiple times.
+    /// </summary>
+    public AtlasRegion? FindRegion( string name, int index )
+    {
+        for ( int i = 0, n = Regions.Count; i < n; i++ )
+        {
+            AtlasRegion? region = Regions[ i ];
+
+            if ( ( region?.Name != name ) || ( region.Index != index ) )
+            {
+                continue;
+            }
+
+            return region;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Returns all regions with the specified name, ordered by smallest to
+    /// largest index. This method uses string comparison to find the regions,
+    /// so the result should be cached rather than calling this method multiple
+    /// times.
+    /// </summary>
+    public List< AtlasRegion? > FindRegions( string name )
+    {
+        var matched = new List< AtlasRegion? >();
+
+        for ( int i = 0, n = Regions.Count; i < n; i++ )
+        {
+            AtlasRegion? region = Regions[ i ];
+
+            if ( region?.Name == name )
+            {
+                matched.Add( new AtlasRegion( region ) );
+            }
+        }
+
+        return matched;
+    }
+
+    /// <summary>
+    /// Returns all regions in the atlas as sprites. This method creates a new
+    /// sprite for each region, so the result should be stored rather than calling
+    /// this method multiple times.
+    /// </summary>
+    public List< Sprite2D > CreateSprites()
+    {
+        var sprites = new List< Sprite2D >();
+
+        for ( int i = 0, n = Regions.Count; i < n; i++ )
+        {
+            sprites.Add( NewSprite( Regions[ i ] ) );
+        }
+
+        return sprites;
+    }
+
+    /// <summary>
+    /// Returns the first region found with the specified name as a sprite. If whitespace
+    /// was stripped from the region when it was packed, the sprite is automatically
+    /// positioned as if whitespace had not been stripped. This method uses string comparison
+    /// to find the region and constructs a new sprite, so the result should be cached rather
+    /// than calling this method multiple times.
+    /// </summary>
+    public Sprite2D? CreateSprite( string name )
+    {
+        for ( int i = 0, n = Regions.Count; i < n; i++ )
+        {
+            if ( Regions[ i ]?.Name == name )
+            {
+                return NewSprite( Regions[ i ] );
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Returns the first region found with the specified name and index as a sprite.
+    /// This method uses string comparison to find the region and constructs a new sprite,
+    /// so the result should be cached rather than calling this method multiple times.
+    /// </summary>
+    public Sprite2D? CreateSprite( string name, int index )
+    {
+        for ( int i = 0, n = Regions.Count; i < n; i++ )
+        {
+            AtlasRegion? region = Regions[ i ];
+
+            if ( ( region?.Index != index ) || ( region.Name != name ) )
+            {
+                continue;
+            }
+
+            return NewSprite( Regions[ i ] );
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Returns all regions with the specified name as sprites, ordered by smallest
+    /// to largest index.
+    /// <para>
+    /// This method uses string comparison to find the regions and constructs new
+    /// sprites, so the result should be cached rather than calling this method
+    /// multiple times.
+    /// </para>
+    /// </summary>
+    public List< Sprite2D > CreateSprites( string name )
+    {
+        var matched = new List< Sprite2D >();
+
+        for ( int i = 0, n = Regions.Count; i < n; i++ )
+        {
+            AtlasRegion? region = Regions[ i ];
+
+            if ( region?.Name == name )
+            {
+                matched.Add( NewSprite( region ) );
+            }
+        }
+
+        return matched;
+    }
+
+    /// <summary>
+    /// Creates a new sprite based on the specified atlas region.
+    /// </summary>
+    /// <param name="region">The atlas region used to construct the sprite. Must not be null.</param>
+    /// <returns>
+    /// A new <see cref="Sprite2D"/> instance if the atlas region has the same packed and
+    /// original dimensions; otherwise, an <see cref="AtlasSprite"/> is returned.
+    /// </returns>
+    private static Sprite2D NewSprite( AtlasRegion? region )
+    {
+        Guard.Against.Null( region );
+
+        if ( ( region.PackedWidth == region.OriginalWidth )
+          && ( region.PackedHeight == region.OriginalHeight ) )
+        {
+            if ( region.Rotate )
+            {
+                var sprite = new Sprite2D( region );
+
+                sprite.SetBounds( 0, 0, region.GetRegionHeight(), region.GetRegionWidth() );
+                sprite.Rotate90( true );
+
+                return sprite;
+            }
+
+            return new Sprite2D( region );
+        }
+
+        return new AtlasSprite( region );
+    }
+
+    /// <summary>
+    /// Returns the first region found with the specified name as a <see cref="NinePatch"/>.
+    /// The region must have been packed with ninepatch splits. This method uses string
+    /// comparison to find the region and constructs a new ninepatch, so the result should
+    /// be cached rather than calling this method multiple times.
+    /// </summary>
+    public NinePatch? CreateNinePatch( string name )
+    {
+        for ( int i = 0, n = Regions.Count; i < n; i++ )
+        {
+            AtlasRegion? region = Regions[ i ];
+
+            if ( region?.Name == name )
+            {
+                int[]? splits = region.FindValue( "split" );
+
+                if ( splits == null )
+                {
+                    throw new ArgumentException( "Region does not have ninepatch splits: " + name );
+                }
+
+                var    patch = new NinePatch( region, splits[ 0 ], splits[ 1 ], splits[ 2 ], splits[ 3 ] );
+                int[]? pads  = region.FindValue( "pad" );
+
+                if ( pads != null )
+                {
+                    patch.SetPadding( pads[ 0 ], pads[ 1 ], pads[ 2 ], pads[ 3 ] );
+                }
+
+                return patch;
+            }
+        }
+
+        return null;
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    /// <summary>
+    /// Releases all resources used by the AssetManager.
+    /// </summary>
+    /// <param name="disposing">
+    /// Indicates whether the method call comes from a Dispose method (true) or
+    /// from a finalizer (false).
+    /// </param>
+    protected void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            foreach ( Texture2D texture in Textures )
+            {
+                texture.Dispose();
+            }
+
+            Textures.Clear();
+        }
+    }
+}
+
+// ============================================================================
+// ============================================================================

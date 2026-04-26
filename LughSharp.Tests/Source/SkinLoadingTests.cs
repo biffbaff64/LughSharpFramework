@@ -22,21 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
-
 using JetBrains.Annotations;
 
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Scene2D.UI;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Scene2D.UI;
+using LughSharp.Source.Utils.Logging;
 
 using NUnit.Framework;
 
-using Color = LughSharp.Core.Graphics.Color;
+using Color = LughSharp.Source.Graphics.Color;
 
 namespace LughSharp.Tests.Source;
 
@@ -50,7 +44,7 @@ public class SkinLoadingTests
         const string JsonContent =
             """
                     {
-                        "LughSharp.Core.Graphics.Color": {
+                        "LughSharp.Source.Graphics.Color": {
                             "green": { "r": 0, "g": 1, "b": 0, "a": 1 },
                             "custom_hex": { "hex": "ff00ff" }
                         },

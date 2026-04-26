@@ -33,15 +33,14 @@ using Extensions.Source.Tools.TexturePacker;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Assets.Loaders.Resolvers;
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Maps;
-using LughSharp.Core.Maps.Tiled;
-using LughSharp.Core.Maps.Tiled.Loaders;
-using LughSharp.Core.Maps.Tiled.Tiles;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Assets.Loaders.Resolvers;
+using LughSharp.Source.Graphics.Atlases;
+using LughSharp.Source.Maps;
+using LughSharp.Source.Maps.Tiled;
+using LughSharp.Source.Maps.Tiled.Loaders;
+using LughSharp.Source.Maps.Tiled.Tiles;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 namespace Extensions.Source.Tools.TiledMapPacker;
 

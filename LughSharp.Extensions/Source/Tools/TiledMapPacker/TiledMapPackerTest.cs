@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Files;
+using LughSharp.Source.IO;
 
 namespace Extensions.Source.Tools.TiledMapPacker;
 

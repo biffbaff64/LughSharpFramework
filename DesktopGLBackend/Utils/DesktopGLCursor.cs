@@ -28,9 +28,9 @@ using DotGLFW;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Utils.Exceptions;
 
 namespace DesktopGLBackend.Utils;
 

@@ -24,12 +24,12 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Cameras;
-using LughSharp.Core.Maps.Tiled;
-using LughSharp.Core.Maps.Tiled.Loaders;
-using LughSharp.Core.Maps.Tiled.Renderers;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Graphics.Cameras;
+using LughSharp.Source.Maps.Tiled;
+using LughSharp.Source.Maps.Tiled.Loaders;
+using LughSharp.Source.Maps.Tiled.Renderers;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils.Logging;
 
 namespace TestProject.Source;
 

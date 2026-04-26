@@ -26,7 +26,7 @@ using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

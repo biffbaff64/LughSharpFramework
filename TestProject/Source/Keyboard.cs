@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Input;
+using LughSharp.Source.Input;
 
 namespace TestProject.Source;
 

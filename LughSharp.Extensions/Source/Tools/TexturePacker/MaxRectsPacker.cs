@@ -26,10 +26,10 @@ using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Collections;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Source.Collections;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils;
+using LughSharp.Source.Utils.Exceptions;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

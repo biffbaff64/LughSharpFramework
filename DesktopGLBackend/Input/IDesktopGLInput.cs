@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Input;
+using LughSharp.Source.Input;
 
 namespace DesktopGLBackend.Input;
 

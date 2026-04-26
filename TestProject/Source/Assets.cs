@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Files;
+using LughSharp.Source.IO;
 
 namespace TestProject.Source;
 
@@ -74,6 +74,8 @@ public static class Assets
     public static string ArialLatinFont     => @$"{Files.ContentRoot}\Fonts\arial-latin.fnt";
     public static string Arial15Font        => @$"{Files.ContentRoot}\Fonts\arial-15.fnt";
     public static string AmbleRegular26Font => @$"{Files.ContentRoot}\Fonts\Amble-Regular-26.fnt";
+    public static string Isans15Font        => @$"{Files.ContentRoot}\Fonts\Isans-15.fnt";
+    public static string DefaultSkinFont    => @$"{Files.ContentRoot}\Skins\default.fnt";
 }
 
 // ============================================================================

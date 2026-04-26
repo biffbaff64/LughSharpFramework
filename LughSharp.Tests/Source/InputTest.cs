@@ -24,15 +24,14 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics.Fonts;
-using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Input;
+using LughSharp.Source;
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Input;
 
 using NUnit.Framework;
 
-using Logger = LughSharp.Core.Utils.Logging.Logger;
+using Logger = LughSharp.Source.Utils.Logging.Logger;
 
 namespace LughSharp.Tests.Source;
 
@@ -40,6 +39,10 @@ namespace LughSharp.Tests.Source;
 [PublicAPI]
 public class InputTest : InputAdapter, ILughTest
 {
+    public InputTest()
+    {
+    }
+    
     public InputTest( ref InputMultiplexer inputMultiplexer )
     {
         inputMultiplexer.AddProcessor( this );

@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Source.Utils.Exceptions;
 
 namespace DesktopGLBackend.Audio;
 

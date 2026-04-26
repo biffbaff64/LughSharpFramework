@@ -5,9 +5,8 @@ using System.Text.Json.Serialization;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.OpenGL.Enums;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

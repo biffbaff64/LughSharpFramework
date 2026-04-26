@@ -22,18 +22,18 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Graphics.Images.TextureData;
-using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Graphics.Images.TextureData;
+using LughSharp.Source.Graphics.Utils;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 using NUnit.Framework;
 
-using Color = LughSharp.Core.Graphics.Color;
+using Color = LughSharp.Source.Graphics.Color;
 
 namespace LughSharp.Tests.Source;
 
@@ -134,7 +134,7 @@ public class SpriteBatchTests
             Assert.That( _spriteBatch, Is.Not.Null );
             Assert.That( _testTexture, Is.Not.Null );
 
-            Assert.Throws< RuntimeException >( () => _spriteBatch?.Draw( _testTexture, 0, 0 ) );
+            Assert.Throws< RuntimeException >( () => _spriteBatch?.Draw( _testTexture!, 0, 0 ) );
         } );
 
         Logger.Debug( "Done." );

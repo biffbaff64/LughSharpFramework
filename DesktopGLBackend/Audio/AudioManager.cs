@@ -24,9 +24,9 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Audio;
-using LughSharp.Core.Mock.Audio;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Audio;
+using LughSharp.Source.Mock.Audio;
+using LughSharp.Source.Utils.Logging;
 
 namespace DesktopGLBackend.Audio;
 

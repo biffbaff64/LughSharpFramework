@@ -24,8 +24,8 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Scene2D;
-using LughSharp.Core.Scene2D.Listeners;
+using LughSharp.Source.Scene2D;
+using LughSharp.Source.Scene2D.Listeners;
 
 using NSubstitute;
 

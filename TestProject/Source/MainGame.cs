@@ -2,19 +2,19 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Assets;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.Cameras;
-using LughSharp.Core.Graphics.Fonts;
-using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Input;
-using LughSharp.Core.Maps.Tiled.Tiles;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source;
+using LughSharp.Source.Assets;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.Atlases;
+using LughSharp.Source.Graphics.Cameras;
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Input;
+using LughSharp.Source.Maps.Tiled.Tiles;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils;
+using LughSharp.Source.Utils.Logging;
 using LughSharp.Tests.Source;
 
 namespace TestProject.Source;
@@ -49,7 +49,7 @@ public class MainGame : LughGame
 
     private MapTests?    _mapTests;
     private SpriteTests? _spriteTests;
-    private InputTest?   _inputTest;
+    private InputTest?   _inputTest = new();
 
     // ========================================================================
     // ========================================================================
@@ -78,16 +78,16 @@ public class MainGame : LughGame
 //        _mapTests = new MapTests();
 //        _mapTests.CreateMap();
         // --------------------------------------
-        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
+//        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
         // --------------------------------------
 //        _font         = _fontTests.CreateBitmapFont();
 //        _freetypeFont = _fontTests.CreateFreeTypeFont();
         // --------------------------------------
-//        _spriteTests = new SpriteTests( _assetManager );
-//        _spriteTests.Create();
+        _spriteTests = new SpriteTests( _assetManager );
+        _spriteTests.Create();
         // --------------------------------------
 
-        _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
+        _font = new BitmapFont( new FileInfo( Assets.DefaultSkinFont ) );
 
         if ( _inputMultiplexer.Processors.Size > 0 )
         {
@@ -116,24 +116,24 @@ public class MainGame : LughGame
 
         // --------------------------------------
 
-//        if ( _spriteBatch != null )
-//        {
-//            _spriteBatch.EnableBlending();
-//
-//            if ( _backgroundCam is { IsInUse: true } )
-//            {
-//                _backgroundCam.Viewport?.Apply( true );
-//                _spriteBatch.SetProjectionMatrix( _backgroundCam.Camera.Combined );
-//                _spriteBatch.Begin();
-//
-//                if ( _backgroundTexture != null )
-//                {
+        if ( _spriteBatch != null )
+        {
+            _spriteBatch.EnableBlending();
+
+            if ( _backgroundCam is { IsInUse: true } )
+            {
+                _backgroundCam.Viewport?.Apply( true );
+                _spriteBatch.SetProjectionMatrix( _backgroundCam.Camera.Combined );
+                _spriteBatch.Begin();
+
+                if ( _backgroundTexture != null )
+                {
 //                    _spriteBatch.Draw( _backgroundTexture, 0, 0 );
-//                }
-//
-//                _spriteBatch.End();
-//            }
-//        }
+                }
+
+                _spriteBatch.End();
+            }
+        }
 
         // --------------------------------------
 
@@ -199,17 +199,6 @@ public class MainGame : LughGame
                 _hudCam.Position.Y = 0;
                 _hudCam.Position.Z = 0;
                 _hudCam.Update();
-
-                _font?.Draw( _spriteBatch, $"X:{Engine.Input.GetX()} Y:{Engine.Input.GetY()}", 10, 700 );
-
-                if ( _tiledMapCam is { IsInUse: true } )
-                {
-                    _font?.Draw( _spriteBatch,
-                                 $"Map X:{_tiledMapCam.Camera.Position.X} "
-                               + $"Y:{_tiledMapCam.Camera.Position.Y}",
-                                 10,
-                                 670 );
-                }
 
                 _inputTest?.Render( _spriteBatch );
 

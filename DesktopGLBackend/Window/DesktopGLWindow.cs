@@ -30,16 +30,16 @@ using DotGLFW;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils;
+using LughSharp.Source;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.IO;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils;
 
 using Image = DotGLFW.Image;
-using Platform = LughSharp.Core.Platform;
+using Platform = LughSharp.Source.Platform;
 
 namespace DesktopGLBackend.Window;
 
@@ -110,8 +110,8 @@ public class DesktopGLWindow : IDisposable
 
     // ========================================================================
 
-    private List< IRunnable.Runnable > _executedRunnables = [ ];
-    private List< IRunnable.Runnable > _runnables         = [ ];
+    private List< Action > _executedRunnables = [ ];
+    private List< Action > _runnables         = [ ];
 
     private Vector2 _tmpV2 = new();
     private bool    _focused;
@@ -176,7 +176,7 @@ public class DesktopGLWindow : IDisposable
 
         lock ( _runnables )
         {
-            foreach ( IRunnable.Runnable runnable in _runnables )
+            foreach ( Action runnable in _runnables )
             {
                 _executedRunnables.Add( runnable );
             }
@@ -184,7 +184,7 @@ public class DesktopGLWindow : IDisposable
             _runnables.Clear();
         }
 
-        foreach ( IRunnable.Runnable runnable in _executedRunnables )
+        foreach ( Action runnable in _executedRunnables )
         {
             runnable();
         }
@@ -219,11 +219,11 @@ public class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Post a <see cref="IRunnable.Runnable"/> to this window's event queue. Use this if
+    /// Post a <see cref="Action"/> to this window's event queue. Use this if
     /// you access statics like <see cref="Engine.Graphics"/> in your runnable instead
     /// of <see cref="DesktopGLApplication.PostRunnable(Action)"/>.
     /// </summary>
-    public void PostRunnable( IRunnable.Runnable runnable )
+    public void PostRunnable( Action runnable )
     {
         lock ( _runnables )
         {

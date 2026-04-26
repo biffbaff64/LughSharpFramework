@@ -24,11 +24,11 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Assets;
-using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Maths;
+using LughSharp.Source.Assets;
+using LughSharp.Source.Graphics.Atlases;
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Maths;
 
 namespace Extensions.Source;
 

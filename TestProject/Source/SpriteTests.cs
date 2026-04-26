@@ -26,14 +26,14 @@ using Extensions.Source;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Assets;
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source;
+using LughSharp.Source.Assets;
+using LughSharp.Source.Graphics.Atlases;
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.IO;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils.Logging;
 
 namespace TestProject.Source;
 
@@ -98,7 +98,7 @@ public class SpriteTests : IDisposable
             _elapsedAnimTime += delta;
         }
 
-//        _sprite2?.Scroll( 0.01f, 0 );
+        _sprite2?.Scroll( 0.01f, 0 );
     }
 
     public void Draw( SpriteBatch batch )

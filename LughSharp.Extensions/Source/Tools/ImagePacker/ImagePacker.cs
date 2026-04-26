@@ -28,7 +28,7 @@ using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Source.Utils.Exceptions;
 
 using Rectangle = System.Drawing.Rectangle;
 

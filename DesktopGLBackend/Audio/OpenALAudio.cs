@@ -24,11 +24,11 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Audio;
-using LughSharp.Core.Audio.OpenAL;
-using LughSharp.Core.Collections;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Source.Audio;
+using LughSharp.Source.Audio.OpenAL;
+using LughSharp.Source.Collections;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils.Exceptions;
 
 using Exception = System.Exception;
 

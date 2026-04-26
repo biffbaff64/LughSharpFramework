@@ -24,19 +24,17 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Assets;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.Fonts;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Scene2D;
-using LughSharp.Core.Scene2D.UI;
-using LughSharp.Core.Scene2D.UI.Styles;
-using LughSharp.Core.Scene2D.Utils;
-using LughSharp.Core.Utils;
+using LughSharp.Source;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.Atlases;
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Scene2D;
+using LughSharp.Source.Scene2D.UI;
+using LughSharp.Source.Scene2D.UI.Styles;
+using LughSharp.Source.Scene2D.Utils;
+using LughSharp.Source.Utils;
 
 namespace Extensions.Source;
 
@@ -93,7 +91,7 @@ public class Scene2DUtils
     }
 
     /// <summary>
-    /// Convenience method for creating a <see cref="LughSharp.Core.Utils.IDrawable"/>.
+    /// Convenience method for creating a <see cref="LughSharp.Source.Utils.IDrawable"/>.
     /// </summary>
     /// <param name="imageName"> The name of the image to use. </param>
     /// <param name="atlasLoader"> The <see cref="TextureAtlas"/> loader to use. </param>

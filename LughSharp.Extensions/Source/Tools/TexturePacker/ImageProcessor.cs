@@ -33,11 +33,10 @@ using System.Text.RegularExpressions;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Graphics.Utils;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;

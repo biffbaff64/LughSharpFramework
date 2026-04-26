@@ -1,0 +1,141 @@
+﻿// ///////////////////////////////////////////////////////////////////////////////
+// MIT License
+//
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+// ///////////////////////////////////////////////////////////////////////////////
+
+using JetBrains.Annotations;
+
+using Keys = LughSharp.Source.Input.IInput.Keys;
+
+namespace LughSharp.Source.Input;
+
+[PublicAPI]
+public static class InputUtils
+{
+    /// <summary>
+    /// Returns true if the left mouse button is pressed.
+    /// </summary>
+    public static bool MouseLeft()
+    {
+        return Engine.Input.IsButtonPressed( IInput.Buttons.Left );
+    }
+
+    /// <summary>
+    /// Returns true if the given keycode is the left mouse button.
+    /// </summary>
+    public static bool MouseLeft( int button )
+    {
+        return button == IInput.Buttons.Left;
+    }
+
+    /// <summary>
+    /// Returns true if the right mouse button is pressed.
+    /// </summary>
+    public static bool MouseRight()
+    {
+        return Engine.Input.IsButtonPressed( IInput.Buttons.Right );
+    }
+
+    /// <summary>
+    /// Returns true if the given keycode is the left mouse button.
+    /// </summary>
+    public static bool MouseRight( int button )
+    {
+        return button == IInput.Buttons.Right;
+    }
+
+    /// <summary>
+    /// Returns true if the middle mouse button is pressed.
+    /// </summary>
+    public static bool MouseMiddle()
+    {
+        return Engine.Input.IsButtonPressed( IInput.Buttons.Middle );
+    }
+
+    /// <summary>
+    /// Returns true if the given keycode is the middle mouse button.
+    /// </summary>
+    public static bool MouseMiddle( int button )
+    {
+        return button == IInput.Buttons.Middle;
+    }
+
+    /// <summary>
+    /// Returns true if either of the SHIFT keys are pressed.
+    /// </summary>
+    public static bool ShiftKey()
+    {
+        return Engine.Input.IsKeyPressed( Keys.ShiftLeft ) || Engine.Input.IsKeyPressed( Keys.ShiftRight );
+    }
+
+    /// <summary>
+    /// Returns true if the given keycode is a SHIFT key.
+    /// </summary>
+    public static bool ShiftKey( int keycode )
+    {
+        return keycode is Keys.ShiftLeft or Keys.ShiftRight;
+    }
+
+    /// <summary>
+    /// Returns true if either of the CTRL keys are pressed, or SYM key on MacOS.
+    /// </summary>
+    public static bool CtrlKey()
+    {
+        #if MACOS
+        return Engine.Input.isKeyPressed( Keys.SYM );
+        #else
+        return Engine.Input.IsKeyPressed( Keys.ControlLeft )
+            || Engine.Input.IsKeyPressed( Keys.ControlRight );
+        #endif
+    }
+
+    /// <summary>
+    /// Returns true if the given keycode is a CTRL key, or SYM key on MacOS.
+    /// </summary>
+    public static bool CtrlKey( int keycode )
+    {
+        #if MACOS
+        return keycode == Keys.SYM;
+        #else
+        return keycode is Keys.ControlLeft or Keys.ControlRight;
+        #endif
+    }
+
+    /// <summary>
+    /// Returns true if either of the ALT keys are pressed.
+    /// </summary>
+    public static bool AltKey()
+    {
+        return Engine.Input.IsKeyPressed( Keys.AltLeft ) || Engine.Input.IsKeyPressed( Keys.AltRight );
+    }
+
+    /// <summary>
+    /// Returns true if the given keycode is an ALT key.
+    /// </summary>
+    public static bool AltKey( int keycode )
+    {
+        return keycode is Keys.AltLeft or Keys.AltRight;
+    }
+}
+
+// ============================================================================
+// ============================================================================

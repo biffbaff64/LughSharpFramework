@@ -26,8 +26,8 @@ using DesktopGLBackend.Graphics;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Utils;
+using LughSharp.Source;
+using LughSharp.Source.Utils;
 
 namespace DesktopGLBackend.Utils;
 

@@ -29,16 +29,16 @@ using DesktopGLBackend.Window;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.FrameBuffers;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Graphics.OpenGL;
-using LughSharp.Core.Graphics.OpenGL.Enums;
-using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.FrameBuffers;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Graphics.OpenGL;
+using LughSharp.Source.Graphics.OpenGL.Enums;
+using LughSharp.Source.Graphics.Utils;
+using LughSharp.Source.Utils;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 using Monitor = DotGLFW.Monitor;
 

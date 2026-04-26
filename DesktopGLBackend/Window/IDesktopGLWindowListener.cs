@@ -26,7 +26,7 @@ using DesktopGLBackend.Graphics;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
+using LughSharp.Source;
 
 namespace DesktopGLBackend.Window;
 

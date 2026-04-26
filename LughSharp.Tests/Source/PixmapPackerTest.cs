@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Core.Graphics.G2D;
+using LughSharp.Source.Graphics.G2D;
 
 using NUnit.Framework;
 

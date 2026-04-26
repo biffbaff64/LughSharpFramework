@@ -6,8 +6,8 @@ using DesktopGLBackend;
 
 using Extensions.Source.Tools.TexturePacker;
 
-using LughSharp.Core;
-using LughSharp.Core.Files;
+using LughSharp.Source;
+using LughSharp.Source.IO;
 
 namespace TestProject.Source;
 
@@ -18,7 +18,7 @@ namespace TestProject.Source;
 public static class DesktopLauncher
 {
     // Constants for use with the BuildTextureAtlases() method.
-    private const bool BuildAtlases          = false;
+    private const bool BuildAtlases          = true;
     private const bool RemoveDuplicateImages = false;
     private const bool DrawDebugLines        = false;
 
@@ -77,21 +77,30 @@ public static class DesktopLauncher
         // 3. name of atlas, without extension (the extension '.atlas' will be added
         //    automatically). If an extension is specified, it will be removed.
         // 4. configuration settings
-        string inputFolder  = IOUtils.AssetPath( @"Assets\PackedImages\objects" );
-        string outputFolder = IOUtils.AssetPath( @"Assets\PackedImages\output" );
+        string inputFolder  = Files.AssetPath( @"Assets\PackedImages\objects" );
+        string outputFolder = Files.AssetPath( @"Assets\PackedImages\output" );
 
         // Make sure we have a settings file to use. Comment out if not needed,
         // or to test with default settings.
         string settingsFilePath = Path.Combine( inputFolder, "pack.json" );
         settings.WriteToJsonFile( settingsFilePath );
 
-        TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\animations" ),
+        TexturePacker.Process( Files.AssetPath( @"Assets\PackedImages\animations" ),
                                outputFolder,
                                "animations",
                                settings );
-        TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\input" ), outputFolder, "input", settings );
-        TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\objects" ), outputFolder, "objects", settings );
-        TexturePacker.Process( IOUtils.AssetPath( @"Assets\PackedImages\text" ), outputFolder, "text", settings );
+        TexturePacker.Process( Files.AssetPath( @"Assets\PackedImages\input" ),
+                               outputFolder,
+                               "input",
+                               settings );
+        TexturePacker.Process( Files.AssetPath( @"Assets\PackedImages\objects" ),
+                               outputFolder,
+                               "objects",
+                               settings );
+        TexturePacker.Process( Files.AssetPath( @"Assets\PackedImages\text" ),
+                               outputFolder,
+                               "text",
+                               settings );
     }
 }
 

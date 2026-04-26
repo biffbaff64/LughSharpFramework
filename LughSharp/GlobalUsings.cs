@@ -41,17 +41,17 @@ global using JetBrains.Annotations;
 // ============================================================================
 // ============================================================================
 
-global using LughSharp.Core.Assets;
-global using LughSharp.Core.Audio;
-global using LughSharp.Core.Graphics;
-global using LughSharp.Core.Input;
-global using LughSharp.Core.Maps;
-global using LughSharp.Core.Maths;
-global using LughSharp.Core.Mock;
-global using LughSharp.Core.Network;
-global using LughSharp.Core.Utils;
-global using LughSharp.Core.Utils.Exceptions;
-global using LughSharp.Core.Utils.Logging;
+global using LughSharp.Source.Assets;
+global using LughSharp.Source.Audio;
+global using LughSharp.Source.Graphics;
+global using LughSharp.Source.Input;
+global using LughSharp.Source.Maps;
+global using LughSharp.Source.Maths;
+global using LughSharp.Source.Mock;
+global using LughSharp.Source.Network;
+global using LughSharp.Source.Utils;
+global using LughSharp.Source.Utils.Exceptions;
+global using LughSharp.Source.Utils.Logging;
 
 // ============================================================================
 // ============================================================================

@@ -24,7 +24,7 @@
 
 using NUnit.Framework;
 
-using Color = LughSharp.Core.Graphics.Color;
+using Color = LughSharp.Source.Graphics.Color;
 
 namespace LughSharp.Tests.Source;
 

@@ -27,8 +27,8 @@ using System.Xml.Linq;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 namespace DesktopGLBackend.Utils;
 

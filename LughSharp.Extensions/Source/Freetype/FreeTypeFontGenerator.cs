@@ -24,16 +24,15 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Fonts;
-using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Graphics.OpenGL.Enums;
-using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Graphics.OpenGL.Enums;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 namespace Extensions.Source.Freetype;
 

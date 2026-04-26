@@ -1,0 +1,699 @@
+﻿// ///////////////////////////////////////////////////////////////////////////////
+// MIT License
+//
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+// ///////////////////////////////////////////////////////////////////////////////
+
+#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+
+using JetBrains.Annotations;
+
+using LughSharp.Source.Graphics.OpenGL;
+using LughSharp.Source.Graphics.OpenGL.Enums;
+using LughSharp.Source.Graphics.Utils;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
+
+using GLuint = uint;
+
+namespace LughSharp.Source.Graphics.Shaders;
+
+// ============================================================================
+// ============================================================================
+
+[PublicAPI]
+public struct ShaderData
+{
+    public int    ProgHandle;
+    public string VertexShaderSrc;
+    public string FragmentShaderSrc;
+}
+
+// ============================================================================
+// ============================================================================
+
+[PublicAPI]
+public enum ShaderProgramID
+{
+    None            = -1,
+    VertexShader    = 1,
+    FragementShader = 2
+}
+
+// ============================================================================
+// ============================================================================
+
+/// <summary>
+/// A shader program encapsulates a vertex and fragment shader pair linked to form
+/// a shader program. After construction a ShaderProgram can be used to draw
+/// <see cref="Mesh"/>. To make the GPU use a specific ShaderProgram the programs
+/// <see cref="ShaderProgram.Bind()"/> method must be used which effectively binds
+/// the program. When a ShaderProgram is bound one can set uniforms, vertex attributes
+/// and attributes as needed via the appropriate methods.
+/// <para>
+/// A ShaderProgram must be disposed via a call to <see cref="ShaderProgram.Dispose()"/>
+/// when it is no longer needed
+/// </para>
+/// </summary>
+[PublicAPI]
+public class ShaderProgram : IDisposable
+{
+    public bool       IsCompiled             { get; set; }
+    public string     VertexShaderSource     { get; }
+    public string     FragmentShaderSource   { get; }
+    public int        ShaderProgramHandle    { get; private set; }
+    public bool       Invalidated            { get; protected set; }
+    public int        CombinedMatrixLocation { get; set; }
+    public ShaderData ShaderData             { get; private set; }
+
+    // ========================================================================
+
+    private Dictionary< string, int > _attributeLocations = [ ];
+    private Dictionary< string, int > _uniformLocations   = [ ];
+
+    /// <summary>
+    /// Flag indicating whether attributes & uniforms must be present at all times.
+    /// </summary>
+    public static readonly bool Pedantic = true;
+
+    private string _shaderLog = "";
+    private int    _fragmentShaderHandle;
+    private int    _vertexShaderHandle;
+
+    // ========================================================================
+
+    internal const int CachedNotFound = -1;
+    internal const int NotCached      = -2;
+    internal const int Invalid        = -1;
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// </summary>
+    /// <param name="vertexShader"></param>
+    /// <param name="fragmentShader"></param>
+    public ShaderProgram( string vertexShader, string fragmentShader )
+    {
+        VertexShaderSource   = vertexShader;
+        FragmentShaderSource = fragmentShader;
+
+        CompileShaders( VertexShaderSource, FragmentShaderSource );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="vertexShader"> the vertex shader </param>
+    /// <param name="fragmentShader"> the fragment shader </param>
+    public ShaderProgram( FileSystemInfo vertexShader, FileSystemInfo fragmentShader )
+        : this( File.ReadAllText( vertexShader.Name ), File.ReadAllText( fragmentShader.Name ) )
+    {
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Loads and compiles the shaders, creates a new program and links the shaders.
+    /// </summary>
+    /// <param name="vertexShaderSource"> the vertex shader </param>
+    /// <param name="fragmentShaderSource"> the fragment shader </param>
+    public void CompileShaders( string vertexShaderSource, string fragmentShaderSource )
+    {
+        // Vertex Shader
+        _vertexShaderHandle = ( int )Engine.GL.CreateShader( ( int )ShaderType.VertexShader );
+        Engine.GL.ShaderSource( _vertexShaderHandle, vertexShaderSource );
+        Engine.GL.CompileShader( _vertexShaderHandle );
+        CheckShaderLoadError( _vertexShaderHandle, ( int )ShaderType.VertexShader );
+
+        // Fragment Shader
+        _fragmentShaderHandle = ( int )Engine.GL.CreateShader( ( int )ShaderType.FragmentShader );
+        Engine.GL.ShaderSource( _fragmentShaderHandle, fragmentShaderSource );
+        Engine.GL.CompileShader( _fragmentShaderHandle );
+        CheckShaderLoadError( _fragmentShaderHandle, ( int )ShaderType.FragmentShader );
+
+        // Create the shader program and link the shaders
+        ShaderProgramHandle = ( int )Engine.GL.CreateProgram();
+        Engine.GL.AttachShader( ShaderProgramHandle, _vertexShaderHandle );
+        Engine.GL.AttachShader( ShaderProgramHandle, _fragmentShaderHandle );
+        Engine.GL.LinkProgram( ShaderProgramHandle );
+
+        IsCompiled = ShaderProgramHandle != -1;
+
+        if ( !IsCompiled )
+        {
+            Logger.Debug( $"Shader program {vertexShaderSource} has not been compiled." );
+        }
+
+        // Store the program handle and shader sources.
+        ShaderData = new ShaderData
+        {
+            ProgHandle        = ShaderProgramHandle,
+            VertexShaderSrc   = vertexShaderSource,
+            FragmentShaderSrc = fragmentShaderSource
+        };
+
+        Engine.GL.DeleteShader( _vertexShaderHandle );
+        Engine.GL.DeleteShader( _fragmentShaderHandle );
+
+        CacheAttribute( "a_position" );
+        CacheAttribute( ShaderConstants.AColor );
+        CacheAttribute( "a_texCoord0" );
+
+        CacheUniform( "u_combinedMatrix" );
+        CacheUniform( "u_texture" );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="shader"></param>
+    /// <param name="shaderType"></param>
+    /// <exception cref="Exception"></exception>
+    private unsafe void CheckShaderLoadError( int shader, int shaderType )
+    {
+        int* status = stackalloc int[ 1 ];
+
+        Engine.GL.GetShaderiv( shader, IGL.GLCompileStatus, status );
+
+        if ( *status == IGL.GLFalse )
+        {
+            int* length = stackalloc int[ 1 ];
+
+            Engine.GL.GetShaderiv( shader, IGL.GLInfoLogLength, length );
+
+            string infoLog = Engine.GL.GetShaderInfoLog( shader, *length );
+
+            Engine.GL.DeleteShader( shader );
+
+            _shaderLog += shaderType == IGL.GLVertexShader ? "Vertex shader\n" : "Fragment shader:\n";
+            _shaderLog += infoLog;
+
+            throw new Exception( $"Failed to loader shader {shader}: {infoLog}" );
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="matrix"></param>
+    /// <param name="transpose"></param>
+    /// <typeparam name="T"></typeparam>
+    public virtual void SetUniformMatrix< T >( string name, ref T matrix, bool transpose = false )
+        where T : unmanaged
+    {
+        if ( _uniformLocations.TryGetValue( name, out int location ) )
+        {
+            SetUniformMatrix( location, ref matrix, transpose );
+        }
+        else
+        {
+            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
+        }
+    }
+
+    /// <summary>
+    /// Sets the values of a matrix uniform variable in a shader program.
+    /// </summary>
+    /// <param name="name">The name of the uniform variable in the shader program.</param>
+    /// <param name="matrix">A reference to the matrix data to set.</param>
+    /// <param name="transpose">
+    /// Indicates whether the matrix should be transposed before being sent to the shader.
+    /// </param>
+    /// <typeparam name="T">The type of the matrix, which must be an unmanaged type.</typeparam>
+    public virtual unsafe void SetUniformMatrix< T >( int name, ref T matrix, bool transpose = false )
+        where T : unmanaged
+    {
+        const int Mat44 = 16;
+        const int Mat33 = 9;
+        const int Mat22 = 4;
+
+        if ( !_uniformLocations.ContainsValue( name ) )
+        {
+            return;
+        }
+
+        int matrixSize = Marshal.SizeOf< T >() / sizeof( float );
+
+        fixed ( T* ptr = &matrix )
+        {
+            switch ( matrixSize )
+            {
+                case Mat44:
+                    Engine.GL.UniformMatrix4Fv( name, 1, transpose, ( float* )ptr );
+
+                    break;
+
+                case Mat33:
+                    Engine.GL.UniformMatrix3Fv( name, 1, transpose, ( float* )ptr );
+
+                    break;
+
+                case Mat22:
+                    Engine.GL.UniformMatrix2Fv( name, 1, transpose, ( float* )ptr );
+
+                    break;
+
+                default:
+                    throw new ArgumentException( "Matrix must be 2x2, 3x3 or 4x4" );
+            }
+        }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public virtual int GetAttributeLocation( string name )
+    {
+        int location = Engine.GL.GetAttribLocation( ShaderProgramHandle, name );
+
+        return location;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public virtual int GetUniformLocation( string name )
+    {
+        int location = Engine.GL.GetUniformLocation( ShaderProgramHandle, name );
+
+        return location;
+    }
+
+    /// <summary>
+    /// Sets an integer uniform variable in the shader program by its name.
+    /// </summary>
+    /// <param name="name">The name of the uniform variable in the shader program.</param>
+    /// <param name="value">The integer value to set for the specified uniform variable.</param>
+    public virtual void SetUniformi( string name, int value )
+    {
+        int location = GetUniformLocation( name );
+
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        Engine.GL.Uniform1I( location, value );
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    public virtual void SetUniformf( string name, float value )
+    {
+        int location = GetUniformLocation( name );
+
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        Engine.GL.Uniform1F( location, value );
+    }
+
+    /// <summary>
+    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
+    /// must be bound for this to work.
+    /// </summary>
+    /// <param name="name"> the name of the uniform </param>
+    /// <param name="matrix"> the matrix  </param>
+    public virtual void SetUniformMatrix( string name, Matrix4 matrix )
+    {
+        SetUniformMatrix( name, matrix, false );
+    }
+
+    /// <summary>
+    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
+    /// must be bound for this to work.
+    /// </summary>
+    /// <param name="name"> the name of the uniform </param>
+    /// <param name="matrix"> the matrix </param>
+    /// <param name="transpose"> whether the matrix should be transposed  </param>
+    public virtual void SetUniformMatrix( string name, Matrix4 matrix, bool transpose )
+    {
+        LogInvalidMatrix( matrix.Values );
+
+        int location = GetUniformLocation( name );
+
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        SetUniformMatrix( location, matrix, transpose );
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="location"></param>
+    /// <param name="matrix"></param>
+    public virtual void SetUniformMatrix( int location, Matrix4 matrix )
+    {
+        LogInvalidMatrix( matrix.Values );
+
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        SetUniformMatrix( location, matrix, false );
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="location"></param>
+    /// <param name="matrix"></param>
+    /// <param name="transpose"></param>
+    public virtual void SetUniformMatrix( int location, Matrix4 matrix, bool transpose )
+    {
+        LogInvalidMatrix( matrix.Values );
+
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        Engine.GL.UniformMatrix4Fv( location, transpose, matrix.Val );
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="location"></param>
+    public virtual void EnableVertexAttribute( int location )
+    {
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        Engine.GL.EnableVertexAttribArray( ( GLuint )location );
+    }
+
+    /// <summary>
+    /// Configures the vertex attribute parameters for a specified data location, enabling
+    /// shader operations on vertex data.
+    /// </summary>
+    /// <param name="location">The location of the vertex attribute within the shader program.</param>
+    /// <param name="size">
+    /// The number of components in the vertex attribute (e.g., 1 for scalar, 2 for vectors, etc.).
+    /// </param>
+    /// <param name="type">The data type of each component in the attribute (e.g., float, int).</param>
+    /// <param name="normalize">
+    /// Indicates whether fixed-point data values should be normalized or converted directly
+    /// as fixed-point values.
+    /// </param>
+    /// <param name="stride">The byte offset between consecutive vertex attributes.</param>
+    /// <param name="offset">The offset of the first element within the vertex data structure.</param>
+    public virtual void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, int offset )
+    {
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        if ( size == 0 )
+        {
+            throw new RuntimeException( "Size cannot be 0." );
+        }
+
+        Engine.GL.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="values"></param>
+    public virtual void SetUniformMatrix4Fv( string name, params float[] values )
+    {
+        int location = GetUniformLocation( name );
+
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        SetUniformMatrix4Fv( location, values );
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="location"></param>
+    /// <param name="values"></param>
+    public virtual void SetUniformMatrix4Fv( int location, params float[] values )
+    {
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        Engine.GL.UniformMatrix4Fv( location, false, values );
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="location"></param>
+    public virtual void DisableVertexAttribute( int location )
+    {
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        Engine.GL.DisableVertexAttribArray( ( GLuint )location );
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
+    public virtual void DisableVertexAttribute( string name )
+    {
+        int location = GetAttributeLocation( name );
+
+        if ( location == Invalid )
+        {
+            return;
+        }
+
+        Engine.GL.DisableVertexAttribArray( ( GLuint )location );
+    }
+
+    /// <summary>
+    /// Bind this shader to the renderer.
+    /// </summary>
+    public virtual void Bind()
+    {
+        if ( Engine.GL.IsProgram( ShaderProgramHandle ) )
+        {
+            Engine.GL.UseProgram( ShaderProgramHandle );
+        }
+    }
+
+    /// <summary>
+    /// Unbind this shader from the renderer.
+    /// </summary>
+    public virtual void Unbind()
+    {
+        Engine.GL.UseProgram( 0 );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Use()
+    {
+        Engine.GL.UseProgram( ShaderProgramHandle );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    public bool HasUniform( string name )
+    {
+        return _uniformLocations.ContainsKey( name );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    public bool HasAttribute( string name )
+    {
+        return _attributeLocations.ContainsKey( name );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    private void CacheUniform( string name )
+    {
+        int location = Engine.GL.GetUniformLocation( ShaderProgramHandle, name );
+        _uniformLocations[ name ] = location;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    private void CacheAttribute( string name )
+    {
+        int location = Engine.GL.GetAttribLocation( ShaderProgramHandle, name );
+        _attributeLocations[ name ] = location;
+    }
+
+    /// <summary>
+    /// Validates a 4x4 matrix, ensuring it has the correct length and no invalid
+    /// values such as NaN or Infinity.
+    /// </summary>
+    /// <param name="matrix">The matrix to validate, represented as a float array.</param>
+    /// <returns>True if the matrix is valid; otherwise, false.</returns>
+    private static bool IsMatrixValid( float[]? matrix )
+    {
+        if ( matrix is not { Length: 16 } )
+        {
+            return false;
+        }
+
+        foreach ( float t in matrix )
+        {
+            if ( float.IsNaN( t ) || float.IsInfinity( t ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // ========================================================================
+    
+    /// <summary>
+    /// The log info for the shader compilation and program linking stage.
+    /// The shader needs to be bound for this method to have an effect.
+    /// </summary>
+    public unsafe string ShaderLog
+    {
+        get
+        {
+            if ( IsCompiled )
+            {
+                int* length = stackalloc int[ 1 ];
+
+                Engine.GL.GetProgramiv( ShaderProgramHandle, IGL.GLInfoLogLength, length );
+
+                _shaderLog = Engine.GL.GetProgramInfoLog( ShaderProgramHandle, *length );
+            }
+
+            return _shaderLog;
+        }
+    }
+
+    /// <summary>
+    /// Logs details of an invalid matrix, including checks for null values, improper
+    /// lengths, and invalid elements such as NaN or Infinity.
+    /// </summary>
+    /// <param name="matrix">The matrix to validate and log. Can be null.</param>
+    public static void LogInvalidMatrix( float[]? matrix )
+    {
+        if ( !IsMatrixValid( matrix ) )
+        {
+            Logger.Debug( "Invalid Matrix Detected:" );
+
+            if ( matrix == null )
+            {
+                Logger.Debug( "Matrix is null." );
+            }
+
+            if ( matrix?.Length != 16 )
+            {
+                Logger.Debug( $"Matrix length is {matrix?.Length}, expected 16." );
+            }
+
+            for ( var i = 0; i < matrix?.Length; i++ )
+            {
+                Logger.Debug( $"{i}: [{matrix[ i ]}]" );
+
+                if ( float.IsNaN( matrix[ i ] ) )
+                {
+                    Logger.Debug( $"Element [{i}] is NaN." );
+                }
+                else if ( float.IsInfinity( matrix[ i ] ) )
+                {
+                    Logger.Debug( $"Element [{i}] is Infinity." );
+                }
+            }
+
+            throw new RuntimeException( "LogInvalidMatrix found Invalid Matrix." );
+        }
+    }
+
+    /// <summary>
+    /// Write the source for the vertex and fragment shaders to console.
+    /// Will only work in DEBUG builds.
+    /// </summary>
+    #if DEBUG
+    internal void DebugShaderSources()
+    {
+        Logger.Debug( $"vertex shader: {ShaderData.VertexShaderSrc}" );
+        Logger.Debug( $"fragment shader: {ShaderData.FragmentShaderSrc}" );
+    }
+    #endif
+
+    // ========================================================================
+
+    /// <summary>
+    /// Disposes all resources associated with this shader.
+    /// Must be called when the shader is no longer used.
+    /// </summary>
+    public void Dispose()
+    {
+        Unbind();
+        Engine.GL.DeleteShader( _vertexShaderHandle );
+        Engine.GL.DeleteShader( _fragmentShaderHandle );
+        Engine.GL.DeleteProgram( ShaderProgramHandle );
+
+        GC.SuppressFinalize( this );
+    }
+}
+
+// ============================================================================
+// ============================================================================
+

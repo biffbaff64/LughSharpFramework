@@ -24,13 +24,13 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.G2D;
-using LughSharp.Core.Graphics.OpenGL;
-using LughSharp.Core.Graphics.OpenGL.Enums;
+using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Graphics.OpenGL;
+using LughSharp.Source.Graphics.OpenGL.Enums;
 
 using NUnit.Framework;
 
-using GLBindings = LughSharp.Core.Graphics.OpenGL.Bindings.GLBindings;
+using GLBindings = LughSharp.Source.Graphics.OpenGL.Bindings.GLBindings;
 
 namespace LughSharp.Tests.Source;
 

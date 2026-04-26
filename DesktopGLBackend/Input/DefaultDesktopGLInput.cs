@@ -26,11 +26,11 @@ using DesktopGLBackend.Window;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics.Utils;
-using LughSharp.Core.Input;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source.Graphics.Utils;
+using LughSharp.Source.Input;
+using LughSharp.Source.Utils;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 namespace DesktopGLBackend.Input;
 

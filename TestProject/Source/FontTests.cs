@@ -22,16 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.IO;
-
-using Extensions.Source;
-using Extensions.Source.Freetype;
-
 using JetBrains.Annotations;
 
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Fonts;
-using LughSharp.Core.Graphics.Text;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.Fonts;
 
 namespace TestProject.Source;
 

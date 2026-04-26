@@ -24,13 +24,13 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Mock.Audio;
-using LughSharp.Core.Mock.Files;
-using LughSharp.Core.Mock.Graphics;
-using LughSharp.Core.Mock.Input;
-using LughSharp.Core.Mock.Main;
-using LughSharp.Core.Mock.Net;
+using LughSharp.Source;
+using LughSharp.Source.Mock.Audio;
+using LughSharp.Source.Mock.Files;
+using LughSharp.Source.Mock.Graphics;
+using LughSharp.Source.Mock.Input;
+using LughSharp.Source.Mock.Main;
+using LughSharp.Source.Mock.Net;
 
 namespace LughSharp.Tests.Source;
 

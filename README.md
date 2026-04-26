@@ -16,6 +16,7 @@ WORKING:
 - ImagePacker
 - Input System works.
 - TiledMap Animated Tiles work.
+- Sprite Scrolling.
 
 IN PROGRESS:
 
@@ -29,7 +30,6 @@ IN PROGRESS:
 
 TODO:
 
-- Sprite Scrolling.
 - GameSprite helpers.
 - Network / HTTP etc.
 - Box2D Physics support.

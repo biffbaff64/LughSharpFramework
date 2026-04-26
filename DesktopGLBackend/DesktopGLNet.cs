@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Network;
+using LughSharp.Source.Network;
 
 namespace DesktopGLBackend;
 

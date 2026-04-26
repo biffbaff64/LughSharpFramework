@@ -22,30 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
-
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Graphics;
-using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Graphics.Cameras;
-using LughSharp.Core.Graphics.Fonts;
-using LughSharp.Core.Graphics.Images;
-using LughSharp.Core.Graphics.Text;
-using LughSharp.Core.Input;
-using LughSharp.Core.Scene2D;
-using LughSharp.Core.Scene2D.Listeners;
-using LughSharp.Core.Scene2D.RegistryStyles;
-using LughSharp.Core.Scene2D.UI;
-using LughSharp.Core.Scene2D.UI.Styles;
-using LughSharp.Core.Scene2D.Utils;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
-
-using TestProject.Source;
+using LughSharp.Source;
+using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.Cameras;
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Input;
+using LughSharp.Source.Scene2D;
+using LughSharp.Source.Scene2D.Listeners;
+using LughSharp.Source.Scene2D.UI;
+using LughSharp.Source.Scene2D.UI.Styles;
+using LughSharp.Source.Scene2D.Utils;
+using LughSharp.Source.Utils;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 namespace TestProject.Source;
 
@@ -215,7 +207,7 @@ public class StageTests : IDisposable
             scrollPane.SetFadeScrollBars( false );
 
             Stage?.AddActor( scrollPane );
-            Stage.SetKeyboardFocus( list );
+            Stage?.SetKeyboardFocus( list );
         }
 
         // --------------------------------------
@@ -540,79 +532,79 @@ public class StageTests : IDisposable
 
     public void CreateStyleRegistryActors()
     {
-        const bool HudActor             = false;
-        const bool WindowActor          = false;
-        const bool ButtonActor          = false;
-        const bool TextButtonActor      = false;
-        const bool ImageButtonActor     = false;
-        const bool ImageTextButtonActor = false;
-        const bool CheckBoxActor        = false;
-        const bool ProgressBarActor     = false;
-
-        var styleRegistry = new StyleRegistry();
-        styleRegistry.CreateStyleDefaults( new TextureAtlas( new FileInfo( Assets.UiskinAtlas ) ) );
-
-        if ( HudActor )
-        {
-        }
-
-        if ( WindowActor )
-        {
-        }
-
-        if ( ButtonActor )
-        {
-            var buttonStyle = styleRegistry.Get< ButtonStyle >( "default" );
-            var button = new Button( buttonStyle )
-            {
-                IsVisible = true,
-            };
-            button.SetPosition( 300, 300 );
-            Stage.AddActor( button );
-        }
-
-        if ( TextButtonActor )
-        {
-            var textButtonStyle = styleRegistry.Get< TextButtonStyle >( "default" );
-            var textButton = new TextButton( "Text Button", textButtonStyle )
-            {
-                IsVisible = true,
-            };
-            Stage.AddActor( textButton );
-        }
-
-        if ( ImageButtonActor )
-        {
-            var imageButtonStyle = styleRegistry.Get< ImageButtonStyle >( "default" );
-
-            imageButtonStyle.ImageUp       = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) );
-            imageButtonStyle.ImageDown     = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) );
-            imageButtonStyle.ImageDisabled = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) );
-
-            var imageButton = new ImageButton( imageButtonStyle )
-            {
-                IsVisible = true,
-            };
-            Stage.AddActor( imageButton );
-        }
-
-        if ( ImageTextButtonActor )
-        {
-        }
-
-        if ( CheckBoxActor )
-        {
-        }
-
-        if ( ProgressBarActor )
-        {
-            ProgressBarStyle progressBarStyle = styleRegistry.Get< ProgressBarStyle >( "default" );
-            var progressBar = new ProgressBar( 0f, 10f, 1f, false, progressBarStyle )
-            {
-                IsVisible = true,
-            };
-            Stage.AddActor( progressBar );
-        }
+//        const bool HudActor             = false;
+//        const bool WindowActor          = false;
+//        const bool ButtonActor          = false;
+//        const bool TextButtonActor      = false;
+//        const bool ImageButtonActor     = false;
+//        const bool ImageTextButtonActor = false;
+//        const bool CheckBoxActor        = false;
+//        const bool ProgressBarActor     = false;
+//
+//        var styleRegistry = new StyleRegistry();
+//        styleRegistry.CreateStyleDefaults( new TextureAtlas( new FileInfo( Assets.UiskinAtlas ) ) );
+//
+//        if ( HudActor )
+//        {
+//        }
+//
+//        if ( WindowActor )
+//        {
+//        }
+//
+//        if ( ButtonActor )
+//        {
+//            var buttonStyle = styleRegistry.Get< ButtonStyle >( "default" );
+//            var button = new Button( buttonStyle )
+//            {
+//                IsVisible = true,
+//            };
+//            button.SetPosition( 300, 300 );
+//            Stage.AddActor( button );
+//        }
+//
+//        if ( TextButtonActor )
+//        {
+//            var textButtonStyle = styleRegistry.Get< TextButtonStyle >( "default" );
+//            var textButton = new TextButton( "Text Button", textButtonStyle )
+//            {
+//                IsVisible = true,
+//            };
+//            Stage.AddActor( textButton );
+//        }
+//
+//        if ( ImageButtonActor )
+//        {
+//            var imageButtonStyle = styleRegistry.Get< ImageButtonStyle >( "default" );
+//
+//            imageButtonStyle.ImageUp       = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) );
+//            imageButtonStyle.ImageDown     = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) );
+//            imageButtonStyle.ImageDisabled = new TextureRegionDrawable( new Texture2D( Assets.ButtonBDown ) );
+//
+//            var imageButton = new ImageButton( imageButtonStyle )
+//            {
+//                IsVisible = true,
+//            };
+//            Stage.AddActor( imageButton );
+//        }
+//
+//        if ( ImageTextButtonActor )
+//        {
+//        }
+//
+//        if ( CheckBoxActor )
+//        {
+//        }
+//
+//        if ( ProgressBarActor )
+//        {
+//            ProgressBarStyle progressBarStyle = styleRegistry.Get< ProgressBarStyle >( "default" );
+//            var progressBar = new ProgressBar( 0f, 10f, 1f, false, progressBarStyle )
+//            {
+//                IsVisible = true,
+//            };
+//            Stage.AddActor( progressBar );
+//        }
     }
 
     public void Dispose()

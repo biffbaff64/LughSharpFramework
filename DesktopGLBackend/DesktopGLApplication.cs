@@ -29,16 +29,16 @@ using DesktopGLBackend.Window;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core;
-using LughSharp.Core.Collections;
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics.OpenGL;
-using LughSharp.Core.Utils;
-using LughSharp.Core.Utils.Exceptions;
-using LughSharp.Core.Utils.Logging;
+using LughSharp.Source;
+using LughSharp.Source.Collections;
+using LughSharp.Source.Graphics.OpenGL;
+using LughSharp.Source.IO;
+using LughSharp.Source.Utils;
+using LughSharp.Source.Utils.Exceptions;
+using LughSharp.Source.Utils.Logging;
 
 using Monitor = DotGLFW.Monitor;
-using Platform = LughSharp.Core.Platform;
+using Platform = LughSharp.Source.Platform;
 
 namespace DesktopGLBackend;
 

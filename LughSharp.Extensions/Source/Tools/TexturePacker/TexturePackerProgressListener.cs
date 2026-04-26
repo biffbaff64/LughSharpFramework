@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Collections;
+using LughSharp.Source.Collections;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

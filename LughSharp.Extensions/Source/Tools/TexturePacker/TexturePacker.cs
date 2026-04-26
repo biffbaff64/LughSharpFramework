@@ -26,10 +26,10 @@ using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
 
-using LughSharp.Core.Files;
-using LughSharp.Core.Graphics.Atlases;
-using LughSharp.Core.Maths;
-using LughSharp.Core.Utils.Exceptions;
+using LughSharp.Source.Graphics.Atlases;
+using LughSharp.Source.IO;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Utils.Exceptions;
 
 using Bitmap = System.Drawing.Bitmap;
 
@@ -272,8 +272,8 @@ public class TexturePacker
         // All other Process() methods call this one, so this is the best place to do the
         // conversion of the input and output paths ao that they are guaranteed to be
         // pointing to the correct assets folder.
-        inputFolder  = IOUtils.AssetPath( inputFolder );
-        outputFolder = IOUtils.AssetPath( outputFolder );
+        inputFolder  = Files.AssetPath( inputFolder );
+        outputFolder = Files.AssetPath( outputFolder );
 
         try
         {
