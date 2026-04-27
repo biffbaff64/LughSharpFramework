@@ -22,14 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Viewports;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics.Cameras;
 
@@ -184,11 +177,11 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     }
 
     /// <summary>
-    /// Sets the position and configuration of the camera in the scene.
-    /// Updates the camera's position and zoom settings. Optionally applies a
-    /// shake effect to simulate camera movement or vibration, if specified.
-    /// This does not call <see cref="Camera.Update"/>, which should be called
-    /// after setting the position to ensure the camera is updated.
+    /// Sets the position and configuration of the camera in the scene. Updates the
+    /// camera's position and zoom settings. Optionally applies a shake effect to
+    /// simulate camera movement or vibration, if specified. This does not call
+    /// <see cref="Camera.Update"/>, which should be called after setting the position
+    /// to ensure the camera is updated.
     /// </summary>
     /// <param name="position">The new position of the camera in 3D space.</param>
     /// <param name="zoom">

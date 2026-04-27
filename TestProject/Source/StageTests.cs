@@ -103,7 +103,7 @@ public class StageTests : IDisposable
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
 //        ImageActor();
-        ButtonActor();
+//        ButtonActor();
 //        TextButtonActor();
 //        ImageButtonActor();
 //        ImageTextButtonActor();
@@ -111,10 +111,10 @@ public class StageTests : IDisposable
 //        ProgressBarActor();
 //        SliderActor();
 //        ScrollPaneActor(); // Also tests ListBox<>
-//        WindowActor();
         // ----------------------------
 //        LabelActor();
-//        TableActor();
+        TableActor();
+//        WindowActor();
 //        DialogActor();
 //        TextFieldActor();
 //        TextAreaActor();
@@ -127,12 +127,12 @@ public class StageTests : IDisposable
 
         void WindowActor()
         {
-            var windowStyle = new WindowStyle
-            {
-                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
-                TitleFontColor = Color.Red,
-                Background     = new TextureRegionDrawable( new Texture2D( Assets.WindowBackground ) )
-            };
+//            var windowStyle = new WindowStyle
+//            {
+//                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
+//                TitleFontColor = Color.Red,
+//                Background     = new TextureRegionDrawable( new Texture2D( Assets.WindowBackground ) )
+//            };
             var window = new Window( "Window Title", skin )
             {
                 IsVisible = true,
@@ -146,7 +146,7 @@ public class StageTests : IDisposable
             window.AddCell( new Button( skin.Get< ButtonStyle >( "default" ) ) );
             window.AddRow();
             window.AddCell( new Scene2DImage( new Texture2D( Assets.Boulder32X32 ) ) );
-//            window.Pack();
+            window.Pack();
 
             Stage?.AddActor( window );
         }
@@ -193,7 +193,7 @@ public class StageTests : IDisposable
                     Required = false
                 },
                 TypeToSelect = true,
-                Alignment = Align.Center
+                Alignment    = Align.Center
             };
             list.SetItems( new List< string >( listEntries ) );
 
@@ -241,16 +241,20 @@ public class StageTests : IDisposable
             var label = new Label( "AbCdEfGhIjKlMnOpQrStUvWxYz", skin )
             {
                 IsVisible = true,
+                Wrap      = true,
             };
-            label.SetPosition( 200, 400 );
-            label.SetSize( 80, 80 );
+
+//            label.SetPosition( 200, 400 );
+//            label.SetSize( 80, 80 );
             label.SetAlignment( Align.Top | Align.Left );
-            label.Wrap = true;
 
             Table t = new Table( skin );
+            t.SetPosition( 200, 400 );
             t.AddRow();
             t.AddActor( label );
             t.Layout();
+
+            Stage?.AddActor( t );
         }
 
         // --------------------------------------
@@ -263,9 +267,16 @@ public class StageTests : IDisposable
             };
 
             table.EnableDebug();
+            table.SetBackground( "default-pane" );
             table.SetColor( 1, 1, 1, 1 );
             table.SetPosition( 200, 300 );
             table.SetSize( 400, 200 );
+
+            table.AddCell( new Label( "IIIIIIIII", skin ) );
+            table.AddRow();
+            table.AddCell( new Label( "---------", skin ) );
+            table.AddRow();
+            
             Stage?.AddActor( table );
         }
 

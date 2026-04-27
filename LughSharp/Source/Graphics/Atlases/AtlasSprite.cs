@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.G2D;
 
 namespace LughSharp.Source.Graphics.Atlases;
@@ -61,20 +59,10 @@ public class AtlasSprite : Sprite2D
     {
         Region = new AtlasRegion( region );
 
-        Init( region );
-    }
-
-    /// <summary>
-    /// Setup method designed to be called from <tt>AtlasSprite(AtlasRegion)</tt>
-    /// to get around the issue of calling virtual methods from a constructor.
-    /// </summary>
-    private void Init( AtlasRegion region )
-    {
         OriginalOffsetX = region.OffsetX;
         OriginalOffsetY = region.OffsetY;
 
         SetRegion( region );
-
         SetOrigin( region.OriginalWidth / 2f, region.OriginalHeight / 2f );
 
         int width  = region.GetRegionWidth();
@@ -128,7 +116,11 @@ public class AtlasSprite : Sprite2D
         base.SetY( y + Region.OffsetY );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets the position and size of the sprite when drawn, before scaling
+    /// and rotation are applied. If origin, rotation, or scale are changed,
+    /// it is slightly more efficient to set the bounds after those operations.
+    /// </summary>
     public override void SetBounds( float x, float y, float width, float height )
     {
         float widthRatio  = width / Region.OriginalWidth;
@@ -146,35 +138,62 @@ public class AtlasSprite : Sprite2D
                         packedHeight * heightRatio );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets the size of the sprite when drawn, before scaling and rotation are
+    /// applied. If origin, rotation, or scale are changed, it is slightly more
+    /// efficient to set the size after those operations.
+    /// <para>
+    /// If both position and size are to be changed, it is better to use
+    /// <see cref="Sprite2D.SetBounds(float,float,float,float)"/>.
+    /// </para>
+    /// </summary>
     public override void SetSize( float width, float height )
     {
         SetBounds( GetX(), GetY(), width, height );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets the origin in relation to the sprite's position for scaling and rotation.
+    /// This method is safe to call from a constructor.
+    /// </summary>
+    /// <param name="originX"></param>
+    /// <param name="originY"></param>
+    protected void SetOriginSafe( float originX, float originY )
+    {
+        SetOrigin( originX, originY );
+    }
+
+    /// <summary>
+    /// Sets the origin in relation to the sprite's position for scaling and rotation.
+    /// </summary>
     public override void SetOrigin( float originX, float originY )
     {
         base.SetOrigin( originX - Region.OffsetX, originY - Region.OffsetY );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Place origin in the center of the sprite
+    /// </summary>
     public override void SetOriginCenter()
     {
         base.SetOrigin( ( Width / 2 ) - Region.OffsetX, ( Height / 2 ) - Region.OffsetY );
     }
 
-    /// <inheritdoc />
-    public override void Flip( bool x, bool y )
+    /// <summary>
+    /// Flips the sprite textureregion horizontally and/or vertically.
+    /// </summary>
+    /// <param name="flipx"> perform horizontal flip </param>
+    /// <param name="flipy"> perform vertical flip  </param>
+    public override void Flip( bool flipx, bool flipy )
     {
         // Flip texture.
         if ( Region.Rotate )
         {
-            base.Flip( y, x );
+            base.Flip( flipy, flipx );
         }
         else
         {
-            base.Flip( x, y );
+            base.Flip( flipx, flipy );
         }
 
         float oldOriginX = GetOriginX();
@@ -188,7 +207,7 @@ public class AtlasSprite : Sprite2D
         Region.OffsetX = OriginalOffsetX;
         Region.OffsetY = OriginalOffsetY;
 
-        Region.Flip( x, y ); // Updates x and y offsets.
+        Region.Flip( flipx, flipy ); // Updates x and y offsets.
 
         OriginalOffsetX =  Region.OffsetX;
         OriginalOffsetY =  Region.OffsetY;
@@ -200,7 +219,11 @@ public class AtlasSprite : Sprite2D
         SetOrigin( oldOriginX, oldOriginY );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Rotates this sprite 90 degrees in-place by rotating the texture coordinates.
+    /// This rotation is unaffected by <see cref="Sprite2D.Rotation"/> and
+    /// <see cref="Sprite2D.Rotate"/>.
+    /// </summary>
     public override void Rotate90( bool clockwise )
     {
         // Rotate texture.
@@ -236,11 +259,17 @@ public class AtlasSprite : Sprite2D
         SetOrigin( oldOriginX, oldOriginY );
     }
 
+    /// <summary>
+    /// The X co-ordinate of the bottom left corner of the sprite.
+    /// </summary>
     public override float GetX()
     {
         return base.GetX() - Region.OffsetX;
     }
 
+    /// <summary>
+    /// The Y co-ordinate of the bottom left corner of the sprite.
+    /// </summary>
     public override float GetY()
     {
         return base.GetY() - Region.OffsetY;

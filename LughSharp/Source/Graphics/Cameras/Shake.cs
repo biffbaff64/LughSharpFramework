@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-
 namespace LughSharp.Source.Graphics.Cameras;
 
 /// <summary>
@@ -37,7 +33,7 @@ namespace LughSharp.Source.Graphics.Cameras;
 [PublicAPI]
 public class Shake
 {
-    public bool ScreenShakeEnabled { get; set; }
+    public bool ScreenShakeRunning { get; set; }
     public bool ScreenShakeAllowed { get; set; }
 
     // ========================================================================
@@ -68,7 +64,7 @@ public class Shake
     {
         if ( ScreenShakeAllowed )
         {
-            if ( !ScreenShakeEnabled )
+            if ( !ScreenShakeRunning )
             {
                 _shakeDuration  = duration / 1000f;
                 _shakeRadius    = radius;
@@ -76,7 +72,7 @@ public class Shake
 
                 _elapsedTime       = 0;
                 _randomAngle       = MathUtils.Random() % 360f;
-                ScreenShakeEnabled = true;
+                ScreenShakeRunning = true;
             }
         }
     }
@@ -99,7 +95,7 @@ public class Shake
         }
         else
         {
-            if ( ScreenShakeEnabled )
+            if ( ScreenShakeRunning )
             {
                 // Only shake when required.
                 if ( _elapsedTime < _shakeDuration )
@@ -131,7 +127,7 @@ public class Shake
     /// </summary>
     public void Reset()
     {
-        ScreenShakeEnabled = false;
+        ScreenShakeRunning = false;
     }
 }
 

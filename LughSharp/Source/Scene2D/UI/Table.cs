@@ -153,7 +153,6 @@ public class Table : WidgetGroup
     public Cell ObtainCell()
     {
         Cell cell = CellPool.Obtain();
-
         cell.Table = this;
 
         return cell;
@@ -394,6 +393,11 @@ public class Table : WidgetGroup
         return cell;
     }
 
+    /// <summary>
+    /// Adds new cells to the table with the specified actors.
+    /// </summary>
+    /// <param name="actors"></param>
+    /// <returns></returns>
     public Table AddCell( Actor[] actors )
     {
         for ( int i = 0, n = actors.Length; i < n; i++ )
@@ -577,10 +581,7 @@ public class Table : WidgetGroup
 
         _implicitEndRow = false;
 
-        if ( _rowDefaults != null )
-        {
-            CellPool.Free( _rowDefaults );
-        }
+        CellPool.Free( _rowDefaults );
 
         _rowDefaults = ObtainCell();
         _rowDefaults.Clear();

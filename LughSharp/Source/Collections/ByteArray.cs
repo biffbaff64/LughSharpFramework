@@ -22,19 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
-
 namespace LughSharp.Source.Collections;
 
 /// <summary>
-/// A resizable, ordered or unordered byte array. If unordered, this class
-/// avoids a memory copy when removing elements (the last element is moved
-/// to the removed element's position).
+/// A resizable, ordered or unordered byte array. If unordered, this class avoids a
+/// memory copy when removing elements (the last element is moved to the removed
+/// element's position).
 /// </summary>
 [PublicAPI]
 public class ByteArray
@@ -720,8 +713,13 @@ public class ByteArray
     }
 
     /// <summary>
-    /// Returns false if either array is unordered.
+    /// Determines whether the specified object is equal to the current ByteArray instance.
     /// </summary>
+    /// <param name="obj">The object to compare with the current ByteArray instance.</param>
+    /// <returns>
+    /// True if the specified object is a ByteArray, has the same order, and contains the
+    /// same elements in the same sequence; otherwise, false.
+    /// </returns>
     public override bool Equals( object? obj )
     {
         if ( obj == this )
@@ -791,9 +789,14 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Converts the contents of the byte array to a single string with elements
+    /// separated by a specified separator.
     /// </summary>
-    /// <param name="separator"></param>
-    /// <returns></returns>
+    /// <param name="separator">The string used to separate elements in the resulting string.</param>
+    /// <returns>
+    /// A string representation of the byte array, with elements separated by the
+    /// specified separator.
+    /// </returns>
     public string ToString( string separator )
     {
         if ( Size == 0 )

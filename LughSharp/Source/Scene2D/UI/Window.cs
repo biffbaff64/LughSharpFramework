@@ -119,11 +119,7 @@ public class Window : Table
 
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
-
-//        TitleTable = new Table();
-//        TitleTable.AddCell( TitleLabel ).GrowX().SetMinWidth( 0 );
-//        AddActor( TitleTable );
-
+        
         Style = style;
         SetSize( DefaultWidth, DefaultHeight );
 
@@ -131,6 +127,13 @@ public class Window : Table
         AddListener( new WindowInputListener( this ) );
     }
 
+    public void AddTitleTable( Skin skin )
+    {
+        TitleTable = new Table( skin );
+        TitleTable.AddCell( TitleLabel ).GrowX().SetMinWidth( 0 );
+        AddActor( TitleTable );
+    }
+    
     /// <summary>
     /// Ensures that the window remains within the bounds of the stage by adjusting
     /// its position if necessary. The check accounts for the stage dimensions, camera

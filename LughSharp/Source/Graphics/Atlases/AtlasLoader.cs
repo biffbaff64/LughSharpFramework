@@ -35,6 +35,10 @@ public class AtlasLoader
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new AtlasLoader.
+    /// </summary>
+    /// <param name="assetManager"> The <see cref="AssetManager"/> to use. </param>
     public AtlasLoader( AssetManager assetManager )
     {
         _assetManager = assetManager;

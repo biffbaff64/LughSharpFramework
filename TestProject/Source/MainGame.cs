@@ -83,8 +83,8 @@ public class MainGame : LughGame
 //        _font         = _fontTests.CreateBitmapFont();
 //        _freetypeFont = _fontTests.CreateFreeTypeFont();
         // --------------------------------------
-        _spriteTests = new SpriteTests( _assetManager );
-        _spriteTests.Create();
+//        _spriteTests = new SpriteTests( _assetManager );
+//        _spriteTests.Create();
         // --------------------------------------
 
         _font = new BitmapFont( new FileInfo( Assets.DefaultSkinFont ) );

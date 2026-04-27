@@ -22,13 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.OpenGL.Bindings;
-using LughSharp.Source.Maths;
 using LughSharp.Source.Maths.Collision;
-using LughSharp.Source.Utils.Logging;
 
 using Quaternion = LughSharp.Source.Maths.Quaternion;
 

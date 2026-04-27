@@ -22,24 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Assets;
 using LughSharp.Source.Assets.Loaders;
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Images.TextureData;
-using LughSharp.Source.Graphics.Loaders;
 using LughSharp.Source.Graphics.OpenGL;
-using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics;
 
@@ -324,31 +311,6 @@ public class Cubemap : GLTexture, IManaged
         return builder.ToString();
     }
 
-    // ========================================================================
-
-    public void ClearWithColor( Color color )
-    {
-        //TODO:
-    }
-
-    public int GetPixel( int x, int y )
-    {
-        //TODO:
-        return 0;
-    }
-
-    public void SetPixel( int x, int y, Color color )
-    {
-        //TODO:
-    }
-
-    public void SetPixel( int x, int y, int color )
-    {
-        //TODO:
-    }
-
-    // ========================================================================
-
     /// <inheritdoc />
     protected override void Dispose( bool disposing )
     {
@@ -375,6 +337,7 @@ public class Cubemap : GLTexture, IManaged
         }
     }
 
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -460,9 +423,15 @@ public class Cubemap : GLTexture, IManaged
         /// <param name="upX">The X component of the up vector for the cubemap side's orientation.</param>
         /// <param name="upY">The Y component of the up vector for the cubemap side's orientation.</param>
         /// <param name="upZ">The Z component of the up vector for the cubemap side's orientation.</param>
-        /// <param name="directionX">The X component of the direction vector for the cubemap side's orientation.</param>
-        /// <param name="directionY">The Y component of the direction vector for the cubemap side's orientation.</param>
-        /// <param name="directionZ">The Z component of the direction vector for the cubemap side's orientation.</param>
+        /// <param name="directionX">
+        /// The X component of the direction vector for the cubemap side's orientation.
+        /// </param>
+        /// <param name="directionY">
+        /// The Y component of the direction vector for the cubemap side's orientation.
+        /// </param>
+        /// <param name="directionZ">
+        /// The Z component of the direction vector for the cubemap side's orientation.
+        /// </param>
         public CubemapSide( string name,
                             InnerEnum innerEnum,
                             int index,

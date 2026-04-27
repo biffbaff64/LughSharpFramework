@@ -269,12 +269,9 @@ LUGHSHARP/SOURCE/COLLECTIONS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - IP   - DONE - ArrayList                Look into removing this.
     - DONE - IP   - DONE - ByteArray                Look into removing this.
     - IP   - IP   - DONE - ObjectMap                Look into removing this.
     - IP   - IP   - DONE - OrderedMap               Look into removing this.
-    - IP   - IP   - DONE - PredicateIterable        Can be removed if ArrayList is removed.
-    - IP   - IP   - DONE - PredicateIterator        Can be removed if ArrayList is removed.
 
     - DONE - DONE - DONE - Collections
     - DONE - DONE - DONE - DelayedRemovalList
@@ -297,14 +294,14 @@ LUGHSHARP/SOURCE/GRAPHICS
       ----   ----   ------
     - DONE - DONE - DONE - Color 
     - DONE - DONE - DONE - Colors
-    - IP   - IP   - DONE - Cubemap
+    - DONE - DONE - DONE - Cubemap
     - DONE - DONE - DONE - GraphicsDevice
     - DONE - DONE - DONE - GStructs
     - DONE - DONE - DONE - ICubemapData
     - DONE - DONE - DONE - ICursor
     - DONE - DONE - DONE - IGraphicsDevice
     - DONE - DONE - DONE - ITextureArrayData
-    - DONE - IP   - DONE - LughFormat               ( Needs a better name )
+    - DONE - DONE - DONE - LughFormat               ( Needs a better name )
     - DONE - DONE - DONE - Mesh
     - DONE - DONE - DONE - PixelFormat
     - DONE - DONE - DONE - VertexAttribute
@@ -316,24 +313,24 @@ LUGHSHARP/SOURCE/GRAPHICS/ATLASES
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   - IP   - DONE - AtlasLoader
+    - DONE - DONE - DONE - AtlasLoader
     - DONE - DONE - DONE - AtlasRegion
-    - DONE -      - DONE - AtlasSprite
+    - DONE - DONE - DONE - AtlasSprite
     - DONE - DONE - DONE - TextureAtlas
-    - DONE -      - DONE - TextureAtlasData
+    - DONE - IP   - DONE - TextureAtlasData
 
 LUGHSHARP/SOURCE/GRAPHICS/CAMERAS
 ---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - Camera
-    -      -      -      - CameraData
-    -      -      -      - IGameCamera
-    -      -      -      - OrthographicCamera
+    - DONE - DONE - DONE - Camera
+    - DONE = IP   - DONE - CameraData
+    - DONE - DONE - DONE - IGameCamera
+    - DONE - DONE - DONE - OrthographicCamera
     -      -      -      - OrthographicGameCamera
-    -      -      -      - PerspectiveCamera
-    -      -      -      - Shake
+    - DONE - DONE - DONE - PerspectiveCamera
+    - DONE - DONE - DONE - Shake
 
 LUGHSHARP/SOURCE/GRAPHICS/FONTS
 -------------------------------

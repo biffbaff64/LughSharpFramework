@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-
 namespace LughSharp.Source.Graphics.Cameras;
 
 /// <summary>
@@ -41,6 +37,9 @@ public class PerspectiveCamera : Camera
 
     // ========================================================================
 
+    /// <summary>
+    /// Constructs a new <see cref="PerspectiveCamera"/>.
+    /// </summary>
     public PerspectiveCamera()
     {
     }
@@ -64,19 +63,15 @@ public class PerspectiveCamera : Camera
     }
 
     /// <summary>
-    /// Updates the camera.
-    /// Also updates the frustrum if <paramref name="updateFrustrum"/> is true.
+    /// Updates the camera. Also updates the frustrum if <paramref name="updateFrustrum"/> is true.
     /// </summary>
     public override void Update( bool updateFrustrum = true )
     {
         float aspect = ViewportWidth / ViewportHeight;
 
         ProjectionMatrix.SetToProjection( Math.Abs( Near ), Math.Abs( Far ), FieldOfView, aspect );
-
         ViewMatrix.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
-
         Combined.Set( ProjectionMatrix );
-
         Matrix4.Mul( Combined.Val, ViewMatrix.Val );
 
         if ( updateFrustrum )
@@ -87,3 +82,7 @@ public class PerspectiveCamera : Camera
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

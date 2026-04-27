@@ -22,11 +22,36 @@ IN PROGRESS:
 
 - Audio needs testing and/or finishing.
 - TiledMapPacker support.
-- Scene2D UI is not yet complete.
-      1. I'm currently testing the UI Actors and their functionality.
-      2. I'm currently working on adding StyleRegistry and StyleFactory classes to enable
-         creation and use of Scene2D UI Actors without the need for Json Skin files,
-         although support for Json Skins will still be retained.
+  - Scene2D UI is not yet complete.
+        1. I'm currently testing the UI Actors and their functionality.
+        2. I'm currently working on adding StyleRegistry and StyleFactory classes to enable
+           creation and use of Scene2D UI Actors without the need for Json Skin files,
+           although support for Json Skins will still be retained.
+
+          - Scene2DImage        - Done
+          - Button              - Done
+          - TextButton          - Done
+          - ImageButton         - Done
+          - ImageTextButton     - Done
+          - CheckBox            - Done
+          - ProgressBar         - Done
+          - Slider              - Done
+          - ScrollPane          - Done
+          - ListBox             - Done
+          - Window              - 
+          - Label               - 
+          - Table               - 
+          - Dialog              - 
+          - TextField           - 
+          - TextArea            - 
+          - SplitPane           - 
+          - SelectBox           - 
+
+        
+
+
+
+
 
 TODO:
 
