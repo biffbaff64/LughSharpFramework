@@ -23,14 +23,8 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.IO.Compression;
-using System.Text;
-
-using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Utils;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 namespace LughSharp.Source.Graphics.Images.Decoders;
 
@@ -363,11 +357,16 @@ public class PNGDecoder
     }
 
     /// <summary>
-    /// 
+    /// Finds the offset in the PNG data where the first IDAT (Image Data) chunk begins.
+    /// The method skips the PNG signature, the IHDR chunk, and ancillary chunks until
+    /// the IDAT chunk is located. If no IDAT chunk is found, an exception is thrown
+    /// indicating an invalid PNG file structure.
     /// </summary>
-    /// <param name="data"></param>
-    /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
+    /// <param name="data">The byte array containing the raw PNG data to be analyzed.</param>
+    /// <returns>The offset (in bytes) of the first IDAT chunk within the PNG data.</returns>
+    /// <exception cref="RuntimeException">
+    /// Thrown when no IDAT chunk is found, indicating an invalid PNG file structure.
+    /// </exception>
     private static int FindFirstIDATDataOffset( byte[] data )
     {
         // 1. Initial Position: Skip the PNG Signature (8 bytes)
@@ -452,11 +451,19 @@ public class PNGDecoder
     }
 
     /// <summary>
-    /// 
+    /// Reads a 4-byte string from the specified byte array starting at the given
+    /// index. The extracted string is returned in hexadecimal format without hyphens.
+    /// Logs an error message and returns an empty string if the specified index is
+    /// out of bounds.
     /// </summary>
-    /// <param name="bytes"></param>
-    /// <param name="startIndex"></param>
-    /// <returns></returns>
+    /// <param name="bytes">The byte array from which the string will be read.</param>
+    /// <param name="startIndex">
+    /// The starting index in the byte array to read the 4-byte string.
+    /// </param>
+    /// <returns>
+    /// A string representation of the 4 bytes in hexadecimal format, or an empty string
+    /// if the index is invalid.
+    /// </returns>
     public static string ReadStringFromBytes( byte[] bytes, int startIndex )
     {
         if ( ( startIndex < 0 ) || ( ( startIndex + 3 ) >= bytes.Length ) )
@@ -712,6 +719,11 @@ public class PNGDecoder
             BitConverter.ToInt32( heightbytes, 0 ) );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <returns></returns>
     public static byte[] CreatePNGFromTexture( Texture2D texture )
     {
         Logger.Checkpoint();
@@ -844,6 +856,12 @@ public class PNGDecoder
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pngData"></param>
+    /// <param name="filename"></param>
+    /// <exception cref="ArgumentException"></exception>
     public static void WritePNGToFile( byte[] pngData, string filename )
     {
         if ( ( pngData == null ) || ( pngData.Length == 0 ) )
@@ -1033,6 +1051,10 @@ public class PNGDecoder
         Logger.Debug( "-----------------------------" );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pngData"></param>
     private static void DebugDumpPngData( byte[] pngData )
     {
         var offset    = 0;

@@ -82,6 +82,7 @@
   &lt;Assembly Path="C:\Users\richi\.nuget\packages\dotglfw\1.2.0\lib\net8.0\DotGLFW.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Development\Projects\CSharp\LughSharpFramework\LughSharp\lib\net8.0\gdx2d.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\richi\.nuget\packages\stbisharp\1.2.1\lib\netcoreapp3.0\StbiSharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Development\Projects\CSharp\LughSharpFramework\LughSharp\bin\Debug\net8.0\LughSharp.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/BuildTool/CustomBuildToolPath/@EntryValue">C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe</s:String>
 	<s:Int64 x:Key="/Default/Environment/Hierarchy/Build/BuildTool/MsbuildVersion/@EntryValue">1114112</s:Int64>

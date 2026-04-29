@@ -44,8 +44,6 @@ namespace TestProject.Source;
 [PublicAPI]
 public class StageTests : IDisposable
 {
-    public Stage? Stage { get; private set; }
-
     public Button?          Button           { get; private set; }
     public Button?          Button2          { get; private set; }
     public TextButton?      TextButton       { get; private set; }
@@ -62,43 +60,46 @@ public class StageTests : IDisposable
 
     // ========================================================================
 
-    public void CreateStage( OrthographicGameCamera? hudCam, ref InputMultiplexer inputMultiplexer )
+    private Stage? _stage;
+    
+    // ========================================================================
+
+    public void CreateStage( OrthographicGameCamera? hudCam,
+                             ref Stage? stage,
+                             ref InputMultiplexer inputMultiplexer )
     {
         if ( hudCam == null )
         {
             throw new InvalidOperationException( "STAGE CAMERA must be created before creating the stage!" );
         }
 
-        Stage = new Stage( hudCam.Viewport )
+        _stage = stage;
+        
+        if ( _stage != null )
         {
-            DebugAll = true,
-        };
-
-        if ( Stage != null )
-        {
-            inputMultiplexer.AddProcessor( Stage );
+            inputMultiplexer.AddProcessor( _stage );
 
             CreateSkinActors();
             CreateStyleRegistryActors();
         }
         else
         {
-            Logger.Debug( "Stage is null!" );
+            Logger.Debug( "_stage is null!" );
         }
     }
 
-    public void Update( Stage stage, bool isDrawingStage )
+    public void Update( bool isDrawingStage )
     {
-        if ( Stage != null && isDrawingStage )
+        if ( _stage != null && isDrawingStage )
         {
-            Stage.Act( Math.Min( Engine.DeltaTime, 1.0f / 60.0f ) );
-            Stage.Draw();
+            _stage.Act( Math.Min( Engine.DeltaTime, 1.0f / 60.0f ) );
+            _stage.Draw();
         }
     }
 
     public void CreateSkinActors()
     {
-        Guard.Against.Null( Stage );
+        Guard.Against.Null( _stage );
 
         var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
@@ -113,7 +114,7 @@ public class StageTests : IDisposable
 //        ScrollPaneActor(); // Also tests ListBox<>
         // ----------------------------
 //        LabelActor();
-        TableActor();
+//        TableActor();
 //        WindowActor();
 //        DialogActor();
 //        TextFieldActor();
@@ -148,7 +149,7 @@ public class StageTests : IDisposable
             window.AddCell( new Scene2DImage( new Texture2D( Assets.Boulder32X32 ) ) );
             window.Pack();
 
-            Stage?.AddActor( window );
+            _stage?.AddActor( window );
         }
 
         // --------------------------------------
@@ -206,8 +207,8 @@ public class StageTests : IDisposable
             scrollPane.SetScrollingDisabled( false, false );
             scrollPane.SetFadeScrollBars( false );
 
-            Stage?.AddActor( scrollPane );
-            Stage?.SetKeyboardFocus( list );
+            _stage?.AddActor( scrollPane );
+            _stage?.SetKeyboardFocus( list );
         }
 
         // --------------------------------------
@@ -254,7 +255,7 @@ public class StageTests : IDisposable
             t.AddActor( label );
             t.Layout();
 
-            Stage?.AddActor( t );
+            _stage?.AddActor( t );
         }
 
         // --------------------------------------
@@ -277,7 +278,7 @@ public class StageTests : IDisposable
             table.AddCell( new Label( "---------", skin ) );
             table.AddRow();
             
-            Stage?.AddActor( table );
+            _stage?.AddActor( table );
         }
 
         // --------------------------------------
@@ -305,8 +306,8 @@ public class StageTests : IDisposable
             dialog.Key( IInput.Keys.Enter, true )
                   .Key( IInput.Keys.Escape, false );
 
-//            dialog.Show( Stage );
-            Stage?.AddActor( dialog );
+//            dialog.Show( _stage );
+            _stage?.AddActor( dialog );
         }
 
         //@formatter:off
@@ -323,7 +324,7 @@ public class StageTests : IDisposable
             progressBar.SetPosition( 200, 200 );
             progressBar.Width  = 400;
             progressBar.Height = 100;
-            Stage?.AddActor( progressBar );
+            _stage?.AddActor( progressBar );
         }
 
         // --------------------------------------
@@ -339,7 +340,7 @@ public class StageTests : IDisposable
             slider.SetPosition( 200, 400 );
             slider.Width  = 400;
             slider.Height = 100;
-            Stage?.AddActor( slider );
+            _stage?.AddActor( slider );
         }
 
         // --------------------------------------
@@ -353,7 +354,7 @@ public class StageTests : IDisposable
                 IsVisible = true
             };
             scene2DImage.SetPosition( 0, 0 );
-            Stage?.AddActor( scene2DImage );
+            _stage?.AddActor( scene2DImage );
         }
 
         // --------------------------------------
@@ -374,12 +375,12 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             Button.SetPosition( 100, 250 );
-            Stage?.AddActor( Button );
+            _stage?.AddActor( Button );
 
             Button.AddListener( new ChangeListener( ( ev, actor ) =>
             {
 //                var source  = ev.TargetActor; // Actor that fired the event
-//                var stage   = ev.Stage;       // The Stage it belongs to
+//                var stage   = ev._stage;       // The _stage it belongs to
 //                var capture = ev.Capture;     // true if in capture phase
 
                 if ( actor is Button { IsChecked: true } )
@@ -405,7 +406,7 @@ public class StageTests : IDisposable
 //            };
 //            Button2.SetPosition( 100, 70 );
 //            Button2.SetSize( Button.Width, Button.Height );
-//            Stage?.AddActor( Button2 );
+//            _stage?.AddActor( Button2 );
 //
 //            Button2.AddListener( new ClickListener( ( ev, x, y ) => { Logger.Debug( "Button2 clicked!" ); } ) );
         }
@@ -437,7 +438,7 @@ public class StageTests : IDisposable
                 IsDisabled = false,
             };
             textButton.SetPosition( 300, 250 );
-            Stage?.AddActor( textButton );
+            _stage?.AddActor( textButton );
 
             var textButton2 = new TextButton( "Text Button", skin )
             {
@@ -445,7 +446,7 @@ public class StageTests : IDisposable
             };
             textButton2.SetPosition( 300, 70 );
             textButton2.SetSize( textButton.Width, textButton.Height );
-            Stage?.AddActor( textButton2 );
+            _stage?.AddActor( textButton2 );
         }
 
         // --------------------------------------
@@ -470,7 +471,7 @@ public class StageTests : IDisposable
                 IsDisabled = false,
             };
             imageButton.SetPosition( 500, 250 );
-            Stage?.AddActor( imageButton );
+            _stage?.AddActor( imageButton );
 
             var imageButton2 = new ImageButton( skin, "default" )
             {
@@ -478,7 +479,7 @@ public class StageTests : IDisposable
             };
             imageButton2.SetPosition( 500, 70 );
             imageButton2.SetSize( imageButton.Width, imageButton.Height );
-            Stage?.AddActor( imageButton2 );
+            _stage?.AddActor( imageButton2 );
         }
 
         // --------------------------------------
@@ -502,7 +503,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             imageTextButton.SetPosition( 700, 250 );
-            Stage?.AddActor( imageTextButton );
+            _stage?.AddActor( imageTextButton );
 
             var imageTextButton2 = new ImageTextButton( "Image Text Button", skin, "default" )
             {
@@ -510,7 +511,7 @@ public class StageTests : IDisposable
             };
             imageTextButton2.SetPosition( 700, 70 );
             imageTextButton2.SetSize( imageTextButton.Width, imageTextButton.Height );
-            Stage?.AddActor( imageTextButton2 );
+            _stage?.AddActor( imageTextButton2 );
         }
 
         // --------------------------------------
@@ -534,7 +535,7 @@ public class StageTests : IDisposable
 
             checkBox.Label?.Style.Background = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) );
             checkBox.SetPosition( 200, 200 );
-            Stage?.AddActor( checkBox );
+            _stage?.AddActor( checkBox );
         }
 
         // --------------------------------------
@@ -571,7 +572,7 @@ public class StageTests : IDisposable
 //                IsVisible = true,
 //            };
 //            button.SetPosition( 300, 300 );
-//            Stage.AddActor( button );
+//            _stage.AddActor( button );
 //        }
 //
 //        if ( TextButtonActor )
@@ -581,7 +582,7 @@ public class StageTests : IDisposable
 //            {
 //                IsVisible = true,
 //            };
-//            Stage.AddActor( textButton );
+//            _stage.AddActor( textButton );
 //        }
 //
 //        if ( ImageButtonActor )
@@ -596,7 +597,7 @@ public class StageTests : IDisposable
 //            {
 //                IsVisible = true,
 //            };
-//            Stage.AddActor( imageButton );
+//            _stage.AddActor( imageButton );
 //        }
 //
 //        if ( ImageTextButtonActor )
@@ -614,13 +615,13 @@ public class StageTests : IDisposable
 //            {
 //                IsVisible = true,
 //            };
-//            Stage.AddActor( progressBar );
+//            _stage.AddActor( progressBar );
 //        }
     }
 
     public void Dispose()
     {
-        Stage?.Dispose();
+        _stage?.Dispose();
         GC.SuppressFinalize( this );
     }
 }

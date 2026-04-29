@@ -328,7 +328,7 @@ LUGHSHARP/SOURCE/GRAPHICS/CAMERAS
     - DONE = IP   - DONE - CameraData
     - DONE - DONE - DONE - IGameCamera
     - DONE - DONE - DONE - OrthographicCamera
-    -      -      -      - OrthographicGameCamera
+    - DONE - DONE - DONE - OrthographicGameCamera
     - DONE - DONE - DONE - PerspectiveCamera
     - DONE - DONE - DONE - Shake
 

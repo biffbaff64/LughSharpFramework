@@ -25,55 +25,67 @@
 namespace LughSharp.Source.Graphics.Cameras;
 
 /// <summary>
-/// Represents a screen shake effect for use with cameras. Provides methods
-/// to start, update, and reset the shake effect, allowing randomized movements
-/// to simulate a dynamic shaking motion. Includes properties to enable or
-/// restrict the use of screen shake.
+/// Represents a screen shake effect for use with cameras. Provides methods to start,
+/// update, and reset the shake effect, allowing randomized movements to simulate a
+/// dynamic shaking motion. Includes properties to enable or restrict the use of
+/// screen shake.
 /// </summary>
 [PublicAPI]
-public class Shake
+public static class Shake
 {
-    public bool ScreenShakeRunning { get; set; }
-    public bool ScreenShakeAllowed { get; set; }
+    /// <summary>
+    /// Determines whether screen shake is allowed. Set externally to control
+    /// whether shake effects are applied. The Shake effect will not be applied
+    /// until this property is set to true and <see cref="Start"/> is called.
+    /// </summary>
+    public static bool ScreenShakeAllowed { get; set; }
 
     // ========================================================================
 
-    private float _shakeRadius;
-    private float _randomAngle;
-    private float _elapsedTime;
-    private float _shakeDuration;
-    private float _shakeIntensity;
+    private const float DefaultShakeDuration  = 450f;
+    private const float DefaultShakeIntensity = 10f;
+
+    private static float               _elapsedTime;
+    private static float               _shakeDuration;
+    private static float               _shakeIntensity;
+    private static Vector3             _positionSave = Vector3.Zero;
+    private static OrthographicCamera? _camera;
 
     // ========================================================================
 
     /// <summary>
     /// Initiates the screen shake effect with predefined settings, such as
-    /// default duration, radius, and intensity, if screen shake is permitted
-    /// and not currently in progress.
+    /// default duration, radius, and intensity, if screen shake is permitted.
+    /// Any currently running shake effects are overridden.
     /// </summary>
-    public void Start()
+    public static void Start( OrthographicCamera? camera )
     {
-        Start( 30, 450, 10 );
+        Start( TimeSpan.FromMilliseconds( DefaultShakeDuration ), DefaultShakeIntensity, camera );
     }
 
     /// <summary>
-    /// Starts the screen shake effect with default parameters if screen shake is allowed
-    /// and not already active. Initializes the shake duration, radius, and intensity.
+    /// Starts the screen shake effect with custom parameters if screen shake is allowed.
+    /// Initializes the shake duration, radius, and intensity, and any currently running
+    /// shake effects are overridden.
     /// </summary>
-    public void Start( float radius, float duration, float intensity )
+    /// <param name="duration"> The duration of the shake effect, in <b>seconds.</b> </param>
+    /// <param name="intensity">
+    /// The intensity of the shake effect, in world units, affecting the radius.
+    /// </param>
+    /// <param name="camera">
+    /// The <see cref="OrthographicCamera"/> to which the shake effect will be applied.
+    /// </param>
+    public static void Start( TimeSpan duration, float intensity, OrthographicCamera? camera )
     {
         if ( ScreenShakeAllowed )
         {
-            if ( !ScreenShakeRunning )
-            {
-                _shakeDuration  = duration / 1000f;
-                _shakeRadius    = radius;
-                _shakeIntensity = intensity;
+            _shakeDuration  = ( float )duration.TotalSeconds;
+            _shakeIntensity = intensity;
+            _elapsedTime    = 0f;
+            _positionSave   = camera?.Position ?? Vector3.Zero;
+            _camera         = camera;
 
-                _elapsedTime       = 0;
-                _randomAngle       = MathUtils.Random() % 360f;
-                ScreenShakeRunning = true;
-            }
+            Logger.Debug( "Camera Shake Started!" );
         }
     }
 
@@ -86,48 +98,31 @@ public class Shake
     /// <param name="delta">
     /// The elapsed time since the last frame, used to update shake progression.
     /// </param>
-    /// <param name="camera">The camera to which the shake effect will be applied.</param>
-    public void Update( float delta, OrthographicCamera camera )
+    public static void Update( float delta )
     {
-        if ( !ScreenShakeAllowed )
+        if ( _camera == null )
         {
-            Reset();
+            return;
         }
-        else
+
+        if ( ScreenShakeAllowed )
         {
-            if ( ScreenShakeRunning )
+            // Only shake when required.
+            if ( _elapsedTime < _shakeDuration )
             {
-                // Only shake when required.
-                if ( _elapsedTime < _shakeDuration )
-                {
-                    // Calculate the amount of shake based on how long it has been shaking already
-                    float currentPower = _shakeIntensity * camera.Zoom
-                                                         * ( ( _shakeDuration - _elapsedTime ) / _shakeDuration );
+                // Calculate the amount of shake based on how long it has been shaking already
+                float currentPower = _shakeIntensity * _camera.Zoom
+                                                     * ( ( _shakeDuration - _elapsedTime ) / _shakeDuration );
 
-                    float x = ( MathUtils.Random() - 0.5f ) * currentPower;
-                    float y = ( MathUtils.Random() - 0.5f ) * currentPower;
+                float x = ( MathUtils.Random() - 0.5f ) * currentPower;
+                float y = ( MathUtils.Random() - 0.5f ) * currentPower;
 
-                    camera.Translate( -x, -y );
+                _camera.Translate( -x, -y );
 
-                    // Increase the elapsedTime time by the delta provided.
-                    _elapsedTime += delta;
-                }
-                else
-                {
-                    Reset();
-                }
+                // Increase the elapsedTime time by the delta provided.
+                _elapsedTime += delta;
             }
         }
-    }
-
-    /// <summary>
-    /// Resets the screen shake effect, disabling any ongoing shake.
-    /// This method ensures that the ScreenShakeEnabled property is set to false,
-    /// stopping any active shaking effects and marking the shake as complete.
-    /// </summary>
-    public void Reset()
-    {
-        ScreenShakeRunning = false;
     }
 }
 

@@ -30,16 +30,43 @@ namespace LughSharp.Source.Graphics.Cameras;
 [PublicAPI]
 public interface IGameCamera
 {
-    Viewport?             Viewport         { get; set; }
-    OrthographicCamera    Camera           { get; set; }
-    string                Name             { get; set; }
-    Vector3?              LerpVector       { get; set; }
-    bool                  IsInUse          { get; set; }
-    bool                  IsLerpingEnabled { get; set; }
-    Vector3               Position         { get; }
-    float                 PPM              { get; set; }
-    float                 CameraZoom       { get; set; }
-    Viewport.ViewportType ViewportType     { get; set; }
+    /// <summary>
+    /// The current viewport associated with the GameCamera.
+    /// </summary>
+    Viewport? Viewport { get; set; }
+
+    /// <summary>
+    /// The underlying <see cref="OrthographicCamera"/> instance used by the GameCamera.
+    /// </summary>
+    OrthographicCamera Camera { get; set; }
+
+    /// <summary>
+    /// A vector used to define the target position for linear interpolation (lerp) of
+    /// the camera's position and zoom.
+    /// </summary>
+    Vector3? LerpVector { get; set; }
+
+    /// <summary>
+    /// Pixels-per-meter (PPM) value used for scaling the camera's view.
+    /// </summary>
+    float PPM { get; set; }
+
+    /// <summary>
+    /// The type of viewport to use for rendering. This determines the size and aspect
+    /// ratio of the camera's view.
+    /// <para>
+    /// Default is <see cref="Viewport.ViewportType.Stretch"/>. Other valid options include:
+    /// <see cref="Viewport.ViewportType.Fit"/>, <see cref="Viewport.ViewportType.Extended"/>,
+    /// <see cref="Viewport.ViewportType.Fill"/>, <see cref="Viewport.ViewportType.Screen"/>,
+    /// and <see cref="Viewport.ViewportType.Scaling"/>.
+    /// </para>
+    /// </summary>
+    Viewport.ViewportType ViewportType { get; set; }
+
+    string  Name             { get; set; }
+    bool    IsInUse          { get; set; }
+    bool    IsLerpingEnabled { get; set; }
+    Vector3 Position         { get; set; }
 
     // ========================================================================
 
@@ -151,3 +178,4 @@ public interface IGameCamera
 
 // ========================================================================
 // ========================================================================
+

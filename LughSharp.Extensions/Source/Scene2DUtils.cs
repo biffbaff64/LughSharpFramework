@@ -35,6 +35,7 @@ using LughSharp.Source.Scene2D.UI;
 using LughSharp.Source.Scene2D.UI.Styles;
 using LughSharp.Source.Scene2D.Utils;
 using LughSharp.Source.Utils;
+using LughSharp.Source.Utils.Logging;
 
 namespace Extensions.Source;
 

@@ -456,9 +456,9 @@ public class Vector3 : IVector< Vector3 >
         return Set( X + x, Y + y, Z + z );
     }
 
-    public Vector3 Add( float values )
+    public Vector3 Add( float value )
     {
-        return Set( X + values, Y + values, Z + values );
+        return Set( X + value, Y + value, Z + value );
     }
 
     public Vector3 Sub( float x, float y, float z )
@@ -690,8 +690,8 @@ public class Vector3 : IVector< Vector3 >
         float[] lMat = matrix.Val;
 
         X -= lMat[ Matrix4.M0312 ];
-        Y -= lMat[ Matrix4.M0312 ];
-        Z -= lMat[ Matrix4.M0312 ];
+        Y -= lMat[ Matrix4.M1313 ];
+        Z -= lMat[ Matrix4.M2314 ];
 
         return Set(
                    ( X * lMat[ Matrix4.M000 ] ) + ( Y * lMat[ Matrix4.M101 ] ) + ( Z * lMat[ Matrix4.M202 ] ),
@@ -760,9 +760,9 @@ public class Vector3 : IVector< Vector3 >
     {
         const int Prime = 31;
 
-        int result = Prime + NumberUtils.FloatToIntBits( 10f );
-        result = ( Prime * result ) + NumberUtils.FloatToIntBits( 15f );
-        result = ( Prime * result ) + NumberUtils.FloatToIntBits( 20f );
+        int result = Prime + NumberUtils.FloatToIntBits( X );
+        result = ( Prime * result ) + NumberUtils.FloatToIntBits( Y );
+        result = ( Prime * result ) + NumberUtils.FloatToIntBits( Z );
 
         return result;
     }

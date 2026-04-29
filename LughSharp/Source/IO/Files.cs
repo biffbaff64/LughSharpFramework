@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Graphics.Images.Decoders;
+
 namespace LughSharp.Source.IO;
 
 /// <summary>
@@ -575,7 +578,61 @@ public class Files : IFiles
             return false;
         }
     }
-    
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Before this method can see the file, the compiler needs to bake it into
+    /// the framework .dll.
+    ///
+    /// <li>Select the file in the framework project.</li>
+    /// <li>Open the Properties window (F4).</li>
+    /// <li>Change Build Action to Embedded Resource.</li>
+    /// <li>Set Copy to Output Directory to Do Not Copy.</li>
+    /// 
+    /// </summary>
+    /// <param name="filename"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T? LoadFrameworkAsset< T >( string filename ) where T : class
+    {
+        // Get the assembly where THIS code is defined, not any
+        // application using this framework.
+        var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+        // Resource names are: <DefaultNamespace>.<Folder>.<FileName>
+        // Example: MyFramework.Data.config.json
+        var resourceName = $"LughSharp.Assets.Embedded.{filename}";
+
+        Logger.Debug( $"Loading framework asset: {resourceName}" );
+        
+        if ( typeof( T ) == typeof( Texture2D ) )
+        {
+            using ( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
+            {
+                if ( stream == null )
+                {
+                    return null;
+                }
+                
+                using ( MemoryStream memoryStream = new MemoryStream() )
+                {
+                    stream.CopyTo( memoryStream );
+                    byte[] bytes = memoryStream.ToArray();
+                    
+                    PNGDecoder.AnalysePNG( bytes, true );
+                
+//                    var texture = new Texture2D( new Pixmap( bytes, 0, bytes.Length ) );
+                
+//                    return texture as T;
+                }
+            }
+        }
+
+        return null;
+    }
+
     // ========================================================================
     // ========================================================================
     // General Utility Methods
@@ -743,7 +800,7 @@ public class Files : IFiles
             }
         }
     }
-    
+
     // ========================================================================
 
     #if DEBUG

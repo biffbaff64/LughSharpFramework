@@ -11,8 +11,9 @@ using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Input;
-using LughSharp.Source.Maps.Tiled.Tiles;
 using LughSharp.Source.Maths;
+using LughSharp.Source.Scene2D;
+using LughSharp.Source.Scene2D.UI;
 using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Logging;
 using LughSharp.Tests.Source;
@@ -32,6 +33,7 @@ public class MainGame : LughGame
     private OrthographicGameCamera? _tiledMapCam;
     private OrthographicGameCamera? _spriteCam;
     private OrthographicGameCamera? _hudCam;
+    private Vector3                 _cameraPos = Vector3.Zero;
     private Texture2D?              _backgroundTexture;
     private Texture2D?              _texture;
     private TextureRegion?          _textureRegion;
@@ -40,6 +42,7 @@ public class MainGame : LughGame
     private BitmapFont?             _freetypeFont;
     private InputMultiplexer        _inputMultiplexer = new();
     private AtlasLoader?            _atlasLoader;
+    private Stage?                  _stage;
 
     private bool _disposed;
 
@@ -49,7 +52,7 @@ public class MainGame : LughGame
 
     private MapTests?    _mapTests;
     private SpriteTests? _spriteTests;
-    private InputTest?   _inputTest = new();
+    private InputTest?   _inputTest;
 
     // ========================================================================
     // ========================================================================
@@ -63,9 +66,6 @@ public class MainGame : LughGame
         _assetManager = new AssetManager();
         _atlasLoader  = new AtlasLoader( _assetManager );
 
-//        _inputTest = new InputTest( ref _inputMultiplexer );
-//        _inputTest.Setup();
-
         _atlasLoader.RegisterAtlas( Assets.AnimationsAtlas )
                     .RegisterAtlas( Assets.ObjectsAtlas )
                     .RegisterAtlas( Assets.InputAtlas )
@@ -73,12 +73,24 @@ public class MainGame : LughGame
                     .Load();
 
         CreateCameras();
+
+        // --------------------------------------
+        if ( _hudCam != null )
+        {
+            _stage = new Stage( _hudCam.Viewport );
+        }
+        // --------------------------------------
+        
         CreateAssets();
+        
+        // --------------------------------------
+//        _inputTest = new InputTest( ref _inputMultiplexer );
+//        _inputTest.Setup();
         // --------------------------------------
 //        _mapTests = new MapTests();
 //        _mapTests.CreateMap();
         // --------------------------------------
-//        _stageTests.CreateStage( _hudCam, ref _inputMultiplexer );
+//        _stageTests.CreateStage( _hudCam, ref _stage, ref _inputMultiplexer );
         // --------------------------------------
 //        _font         = _fontTests.CreateBitmapFont();
 //        _freetypeFont = _fontTests.CreateFreeTypeFont();
@@ -94,18 +106,25 @@ public class MainGame : LughGame
             Engine.Input.InputProcessor = _inputMultiplexer;
         }
 
+        Engine.LoadCirca64Logo();
+        
         Logger.Debug( "Done" );
     }
 
     /// <inheritdoc />
     public override void Update( float delta )
     {
-        // --------------------------------------
         _inputTest?.Update();
         _spriteTests?.Update( delta );
         // --------------------------------------
 
         _mapTests?.ScrollMap( ref _tiledMapCam );
+
+        if ( Engine.Input.IsKeyJustPressed( IInput.Keys.Enter ) )
+        {
+            Shake.ScreenShakeAllowed = true;
+            Shake.Start( _backgroundCam?.Camera );
+        }
     }
 
     /// <inheritdoc />
@@ -126,9 +145,17 @@ public class MainGame : LughGame
                 _spriteBatch.SetProjectionMatrix( _backgroundCam.Camera.Combined );
                 _spriteBatch.Begin();
 
+                _cameraPos.X = ( _backgroundCam.Camera.ViewportWidth / 2 );
+                _cameraPos.Y = ( _backgroundCam.Camera.ViewportHeight / 2 );
+                _cameraPos.Z = 0;
+
+                _backgroundCam.SetPosition( _cameraPos, CameraData.NoZoom, true );
+                
                 if ( _backgroundTexture != null )
                 {
-//                    _spriteBatch.Draw( _backgroundTexture, 0, 0 );
+                    _spriteBatch.Draw( _backgroundTexture,
+                                       _backgroundCam.Camera.Position.X - ( _backgroundTexture.Width / 2f ),
+                                       _backgroundCam.Camera.Position.Y - ( _backgroundTexture.Height / 2f ) );
                 }
 
                 _spriteBatch.End();
@@ -195,9 +222,7 @@ public class MainGame : LughGame
                 _spriteBatch.SetProjectionMatrix( _hudCam.Camera.Combined );
                 _spriteBatch.Begin();
 
-                _hudCam.Position.X = 0;
-                _hudCam.Position.Y = 0;
-                _hudCam.Position.Z = 0;
+                _hudCam.SetPosition( Vector3.Zero, CameraData.NoZoom, false );
                 _hudCam.Update();
 
                 _inputTest?.Render( _spriteBatch );
@@ -207,9 +232,10 @@ public class MainGame : LughGame
         }
 
         // ----- Draw the Stage, if enabled -----
-        if ( _stageTests.Stage != null )
+        if ( _stage != null && _isDrawingStage )
         {
-            Scene2DUtils.Update( _stageTests.Stage, _isDrawingStage );
+            _stage.Act( Math.Min( Engine.DeltaTime, 1.0f / 60.0f ) );
+            _stage.Draw();
         }
     }
 
@@ -219,59 +245,50 @@ public class MainGame : LughGame
         _tiledMapCam?.ResizeViewport( width, height );
         _spriteCam?.ResizeViewport( width, height );
 
-        _stageTests.Stage?.Viewport.Update( width, height );
+        _stage?.Viewport.Update( width, height );
     }
 
     private void CreateCameras()
     {
-        _backgroundCam = new OrthographicGameCamera( 480, 270, name: "BACKGROUNDCamera" );
-
-        _backgroundCam.Camera.Near = CameraData.DefaultNearPlane;
-        _backgroundCam.Camera.Far  = CameraData.DefaultFarPlane;
-        _backgroundCam.IsInUse     = true;
-        _backgroundCam.SetZoomDefault( 1f );
-        _backgroundCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
+        _backgroundCam = new OrthographicGameCamera( 480, 270 )
+        {
+            Name    = "BackgroundCamera",
+            IsInUse = true,
+            Position = new Vector3( 0, 0, CameraData.DefaultZ )
+        };
         _backgroundCam.Update();
-
 
         // --------------------------------------
 
         _tiledMapCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
-                                                   Engine.Graphics.WindowHeight,
-                                                   name: "TILEDCamera" );
-
-        _tiledMapCam.Camera.Near = CameraData.DefaultNearPlane;
-        _tiledMapCam.Camera.Far  = CameraData.DefaultFarPlane;
-        _tiledMapCam.IsInUse     = true;
-        _tiledMapCam.SetZoomDefault( 1f );
-        _tiledMapCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
+                                                   Engine.Graphics.WindowHeight )
+        {
+            Name    = "TiledMapCamera",
+            IsInUse = true,
+            Position = new Vector3( 0, 0, CameraData.DefaultZ )
+        };
         _tiledMapCam.Update();
-
 
         // --------------------------------------
 
         _spriteCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
-                                                 Engine.Graphics.WindowHeight,
-                                                 name: "SPRITECamera" );
-
-        _spriteCam.Camera.Near = CameraData.DefaultNearPlane;
-        _spriteCam.Camera.Far  = CameraData.DefaultFarPlane;
-        _spriteCam.IsInUse     = true;
-        _spriteCam.SetZoomDefault( 1f );
-        _spriteCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
+                                                 Engine.Graphics.WindowHeight )
+        {
+            Name     = "SpriteCamera",
+            IsInUse  = true,
+            Position = new Vector3( 0, 0, CameraData.DefaultZ )
+        };
         _spriteCam.Update();
 
         // --------------------------------------
 
         _hudCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
-                                              Engine.Graphics.WindowHeight,
-                                              name: "HUDCamera" );
-
-        _hudCam.Camera.Near = CameraData.DefaultNearPlane;
-        _hudCam.Camera.Far  = CameraData.DefaultFarPlane;
-        _hudCam.IsInUse     = true;
-        _hudCam.SetZoomDefault( 1f );
-        _hudCam.SetPosition( new Vector3( 0, 0, CameraData.DefaultZ ) );
+                                              Engine.Graphics.WindowHeight )
+        {
+            Name     = "HudCamera",
+            IsInUse  = true,
+            Position = new Vector3( 0, 0, CameraData.DefaultZ )
+        };
         _hudCam.Update();
     }
 
@@ -314,6 +331,14 @@ public class MainGame : LughGame
 //        _textureRegion     = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
 //        _ninePatch         = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
         _backgroundTexture = new Texture2D( Assets.Background );
+        
+        var scene2DImage = new Scene2DImage( new Texture2D( Assets.HudPanel ) )
+        {
+            IsVisible = true
+        };
+
+        scene2DImage.SetPosition( 0, 0 );
+        _stage?.AddActor( scene2DImage );
     }
 }
 

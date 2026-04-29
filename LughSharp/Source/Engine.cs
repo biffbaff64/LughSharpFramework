@@ -28,6 +28,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Source.Audio;
 using LughSharp.Source.Graphics;
+using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Bindings;
 using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.Input;
@@ -196,6 +197,14 @@ public static class Engine
         Logger.Debug( $"GodMode: {( GodMode ? "Enabled" : "Disabled" )}" );
     }
 
+    // ========================================================================
+    // ========================================================================
+
+    public static Texture2D? LoadCirca64Logo()
+    {
+        return LughSharp.Source.IO.Files.LoadFrameworkAsset< Texture2D >( "Circa64_Main_Logo.png" );
+    }
+    
     // ========================================================================
     // ========================================================================
 

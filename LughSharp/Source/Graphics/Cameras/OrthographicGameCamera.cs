@@ -27,28 +27,74 @@ using LughSharp.Source.Graphics.Viewports;
 namespace LughSharp.Source.Graphics.Cameras;
 
 /// <summary>
-/// Represents a 2D orthographic game camera that handles camera configuration,
-/// movement, zoom levels, and viewport settings. This class integrates functionalities
-/// for camera animations such as lerp and shake effects. Implements <see cref="IGameCamera"/>
-/// for standard camera functionality and <see cref="IDisposable"/> for resource management.
+/// Represents an orthographic game camera designed for 2D game applications.
+/// This class provides a range of features for managing the game camera's position, zoom level,
+/// viewport configurations, and animations such as camera lerp and shake effects. The camera
+/// operates within an orthographic projection suitable for 2D rendering.
 /// </summary>
+/// <remarks>
+/// This class ensures flexibility in camera management by supporting multiple viewport types,
+/// configurable PPM (Pixels Per Meter) for scaling, and utility methods for smooth transitions
+/// and animations. It leverages the <see cref="IGameCamera"/> interface for standard camera functionality
+/// and implements <see cref="IDisposable"/> for clean resource management.
+/// </remarks>
+/// <example>
+/// <code>
+///     var camera = new OrthographicGameCamera( 480, 270 )
+///     {
+///         Name     = "BackgroundCamera",
+///         IsInUse  = true,
+///         Position = new Vector3( 0, 0, CameraData.DefaultZ )
+///     };
+///     camera.Update();
+/// </code>
+/// </example>
+/// <seealso cref="IGameCamera"/>
+/// <seealso cref="IDisposable"/>
 [PublicAPI]
 public class OrthographicGameCamera : IGameCamera, IDisposable
 {
-    public Viewport?             Viewport         { get; set; }
-    public OrthographicCamera    Camera           { get; set; }
-    public string                Name             { get; set; }
-    public Vector3?              LerpVector       { get; set; }
-    public bool                  IsInUse          { get; set; }
-    public bool                  IsLerpingEnabled { get; set; }
-    public float                 PPM              { get; set; }
-    public Vector3               Position         { get; set; }
-    public Viewport.ViewportType ViewportType     { get; set; } = Viewport.ViewportType.Stretch;
+    /// <summary>
+    /// The current viewport associated with the GameCamera.
+    /// </summary>
+    public Viewport? Viewport { get; set; }
+
+    /// <summary>
+    /// The underlying <see cref="OrthographicCamera"/> instance used by the GameCamera.
+    /// </summary>
+    public OrthographicCamera Camera { get; set; }
+
+    /// <summary>
+    /// A vector used to define the target position for linear interpolation (lerp) of
+    /// the camera's position and zoom.
+    /// </summary>
+    public Vector3? LerpVector { get; set; }
+
+    /// <summary>
+    /// Pixels-per-meter (PPM) value used for scaling the camera's view.
+    /// </summary>
+    public float PPM { get; set; }
+
+    /// <summary>
+    /// The type of viewport to use for rendering. This determines the size and aspect
+    /// ratio of the camera's view.
+    /// <para>
+    /// Default is <see cref="Viewport.ViewportType.Stretch"/>. Other valid options include:
+    /// <see cref="Viewport.ViewportType.Fit"/>, <see cref="Viewport.ViewportType.Extended"/>,
+    /// <see cref="Viewport.ViewportType.Fill"/>, <see cref="Viewport.ViewportType.Screen"/>,
+    /// and <see cref="Viewport.ViewportType.Scaling"/>.
+    /// </para>
+    /// </summary>
+    public Viewport.ViewportType ViewportType { get; set; } = Viewport.ViewportType.Stretch;
+
+    public string  Name             { get; set; }
+    public bool    IsInUse          { get; set; }
+    public bool    IsLerpingEnabled { get; set; }
+    public Vector3 Position         { get; set; }
 
     // ========================================================================
 
     private float _defaultZoom;
-    private Shake _shake = new();
     private bool  _disposed;
 
     // ========================================================================
@@ -205,8 +251,10 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
             if ( shake )
             {
-                _shake.Update( Engine.DeltaTime, Camera );
+                Shake.Update( Engine.DeltaTime );
             }
+            
+            Camera.Update();
         }
     }
 
@@ -296,7 +344,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
             if ( shake )
             {
-                _shake.Update( Engine.DeltaTime, Camera );
+                Shake.Update( Engine.DeltaTime );
             }
 
             Camera.Update();
@@ -372,7 +420,12 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Configures the camera to use an extended viewport, ensuring that the entire virtual
+    /// area is visible while maintaining aspect ratio. This viewport type dynamically adjusts
+    /// the rendered content to fit the screen dimensions, potentially adding black bars if
+    /// needed to preserve the aspect ratio. The extended viewport is created using the
+    /// camera's dimensions and pixels-per-meter (PPM) value to define the virtual canvas size.
+    /// Modifies the screen bounds and applies the configuration changes to the viewport.
     /// </summary>
     public void SetExtendedViewport()
     {
@@ -387,7 +440,14 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Configures the camera to use a fill viewport, which scales the game world to completely
+    /// fill the available screen space. This may distort the aspect ratio of the game world
+    /// if the screen dimensions differ from the game world's aspect ratio.
+    /// <para>
+    /// Creates an instance of <see cref="FillViewport"/> for the camera and sets its screen
+    /// bounds to match the camera's viewport dimensions, scaled by the pixels-per-meter (PPM) value.
+    /// Applies the viewport to update the camera's display configuration.
+    /// </para>
     /// </summary>
     public void SetFillViewport()
     {
@@ -402,7 +462,11 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Configures the current camera instance to use a screen-based viewport, ensuring the viewport
+    /// dimensions match the screen resolution. This method initializes a new <see cref="ScreenViewport"/>
+    /// and assigns it to the <see cref="Viewport"/> property of the camera. The screen bounds are set
+    /// based on the pixel-per-meter (PPM) scaling factor and the camera's viewport dimensions. The
+    /// viewport settings are then applied using the configured bounds.
     /// </summary>
     public void SetScreenViewport()
     {
@@ -417,8 +481,14 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Configures and applies a scaling viewport for the camera, which adjusts the display
+    /// based on a specified scaling strategy. This method updates the viewport dimensions
+    /// and applies the changes to synchronize the viewport with the camera and screen bounds.
     /// </summary>
+    /// <param name="scaling">
+    /// The scaling strategy to be used for the viewport. Determines how the content is scaled
+    /// and sized relative to the display area.
+    /// </param>
     public void SetScalingViewport( Scaling scaling )
     {
         Viewport = new ScalingViewport( scaling, Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );

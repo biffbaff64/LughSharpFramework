@@ -18,7 +18,7 @@ namespace TestProject.Source;
 public static class DesktopLauncher
 {
     // Constants for use with the BuildTextureAtlases() method.
-    private const bool BuildAtlases          = true;
+    private const bool BuildAtlases          = false;
     private const bool RemoveDuplicateImages = false;
     private const bool DrawDebugLines        = false;
 
@@ -53,6 +53,11 @@ public static class DesktopLauncher
         game.Run();
     }
 
+    /// <summary>
+    /// Note: This method can only be used on the desktop platform. It should NOT
+    /// be called in a Release Build, and should only be enabled if you want to
+    /// rebuild the texture atlases as it is quite slow.
+    /// </summary>
     private static void BuildTextureAtlases()
     {
         if ( !BuildAtlases )
