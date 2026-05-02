@@ -31,13 +31,12 @@ namespace LughSharp.Source.Utils.Exceptions;
 public class Guard
 {
     /// <summary>
-    /// Throws an ArgumentNullException if the specified FileInfo object is null.
+    /// Throws an ArgumentNullException if the specified FileSystemInfo object is null.
     /// Throws an ArgumentException if the file specified by the provided FileInfo object
     /// does not exist.
     /// </summary>
     public static void ThrowIfFileNullOrNotExist(
-        [System.Diagnostics.CodeAnalysis.NotNull]
-        FileSystemInfo? argumentValue,
+        [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
         [CallerArgumentExpression( nameof( argumentValue ) )]
         string argumentName = "" )
     {

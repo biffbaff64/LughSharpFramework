@@ -61,7 +61,7 @@ public class StageTests : IDisposable
     // ========================================================================
 
     private Stage? _stage;
-    
+
     // ========================================================================
 
     public void CreateStage( OrthographicGameCamera? hudCam,
@@ -74,7 +74,7 @@ public class StageTests : IDisposable
         }
 
         _stage = stage;
-        
+
         if ( _stage != null )
         {
             inputMultiplexer.AddProcessor( _stage );
@@ -101,8 +101,6 @@ public class StageTests : IDisposable
     {
         Guard.Against.Null( _stage );
 
-        var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
 //        ImageActor();
 //        ButtonActor();
 //        TextButtonActor();
@@ -112,13 +110,13 @@ public class StageTests : IDisposable
 //        ProgressBarActor();
 //        SliderActor();
 //        ScrollPaneActor(); // Also tests ListBox<>
-        // ----------------------------
-//        LabelActor();
-//        TableActor();
-//        WindowActor();
-//        DialogActor();
 //        TextFieldActor();
 //        TextAreaActor();
+//        LabelActor();
+        WindowActor();
+        // ----------------------------
+//        TableActor();
+//        DialogActor();
 //        SplitPaneActor();
 //        SelectBoxActor();
 
@@ -128,6 +126,8 @@ public class StageTests : IDisposable
 
         void WindowActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
 //            var windowStyle = new WindowStyle
 //            {
 //                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
@@ -138,7 +138,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-//            window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
+            window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
             window.SetPosition( 200, 200 );
             window.CellDefaults.SetSpaceBottom( 10 );
             window.AddRow().Fill().Expand();
@@ -186,6 +186,8 @@ public class StageTests : IDisposable
                 "Z z Z z Z z Z z Z z",
             };
 
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var list = new ListBox< string >( skin )
             {
                 Selection =
@@ -215,12 +217,45 @@ public class StageTests : IDisposable
 
         void TextFieldActor()
         {
+            TextAreaActor();
+
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
+            skin.GetFont( "default-font" ).SetFixedWidthGlyphs( "0123456789" );
+
+            var textField = new TextField( "", skin, "default" )
+            {
+                IsVisible = true,
+            };
+            textField.SetPosition( 200, 200 );
+            textField.Width  = 100;
+            textField.Height = 30;
+
+            _stage?.AddActor( textField );
+            
+            Engine.Input.SetOverrideKey( IInput.Keys.Tab, true );
         }
 
         // --------------------------------------
 
         void TextAreaActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
+            var textArea = new TextArea( "Text Area\n1111111111\n0123456789\nEssentially, "
+                                       + "a text field\nwith\nmultiple\nlines.\n"
+                                       + "It can even handle very looooooooooooooooooooooo"
+                                       + "oooooooooooooooooooooooooooooooooooooooooooooooo"
+                                       + "ooooooooooooooooooooong lines.",
+                                         skin )
+            {
+                IsVisible = true,
+                Width     = 200,
+                Height    = 200,
+            };
+            textArea.SetPosition( 200, 200 );
+
+            _stage?.AddActor( textArea );
         }
 
         // --------------------------------------
@@ -239,15 +274,16 @@ public class StageTests : IDisposable
 
         void LabelActor()
         {
-            var label = new Label( "AbCdEfGhIjKlMnOpQrStUvWxYz", skin )
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+            
+            var label = new Label( "AbCdEfGhIjKlMnOpQrStUvWxYz", skin, "default-bg" )
             {
                 IsVisible = true,
                 Wrap      = true,
             };
 
-//            label.SetPosition( 200, 400 );
-//            label.SetSize( 80, 80 );
-            label.SetAlignment( Align.Top | Align.Left );
+            label.SetSize( 400, 80 );
+            label.SetAlignment( Align.Top | Align.Right );
 
             Table t = new Table( skin );
             t.SetPosition( 200, 400 );
@@ -262,6 +298,8 @@ public class StageTests : IDisposable
 
         void TableActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var table = new Table( skin )
             {
                 IsVisible = true,
@@ -277,7 +315,7 @@ public class StageTests : IDisposable
             table.AddRow();
             table.AddCell( new Label( "---------", skin ) );
             table.AddRow();
-            
+
             _stage?.AddActor( table );
         }
 
@@ -285,6 +323,8 @@ public class StageTests : IDisposable
 
         void DialogActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var dialogStyle = new DialogStyle()
             {
                 Background     = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
@@ -317,6 +357,8 @@ public class StageTests : IDisposable
         // moveable as expected.
         void ProgressBarActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var progressBar = new ProgressBar( 0f, 10f, 1f, false, skin )
             {
                 IsVisible = true,
@@ -333,6 +375,8 @@ public class StageTests : IDisposable
         // and move it up and down the slider bar.
         void SliderActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var slider = new Slider( 0f, 10f, 1f, false, skin )
             {
                 IsVisible = true,
@@ -349,6 +393,8 @@ public class StageTests : IDisposable
         // Draws an image correctly.
         void ImageActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var scene2DImage = new Scene2DImage( new Texture2D( Assets.HudPanel ) )
             {
                 IsVisible = true
@@ -363,6 +409,8 @@ public class StageTests : IDisposable
         // custom styles, or default styles from skins.
         void ButtonActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var btStyle = new ButtonStyle
             {
                 Up      = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
@@ -418,6 +466,8 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void TextButtonActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var tbStyle = new TextButtonStyle
             {
                 Up                = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
@@ -456,6 +506,8 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void ImageButtonActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var imageButtonStyle = new ImageButtonStyle
             {
                 Up       = new TextureRegionDrawable( new Texture2D( Assets.Icon11112X112 ) ),
@@ -489,6 +541,8 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void ImageTextButtonActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var imageTextButtonStyle = new ImageTextButtonStyle
             {
                 Up       = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
@@ -520,6 +574,8 @@ public class StageTests : IDisposable
         // Text is displayed correctly.
         void CheckBoxActor()
         {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
             var checkBoxStyle = new CheckBoxStyle()
             {
                 CheckboxOn  = new TextureRegionDrawable( new Texture2D( Assets.ToggleOn ) ),

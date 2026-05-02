@@ -54,14 +54,16 @@ public class BitmapFontCache : IDisposable
     public bool UseIntegerPositions { get; set; }
 
     /// <summary>
-    /// Represents the collection of <see cref="GlyphLayout"/> instances cached by the font.
-    /// This property holds all the individual text layouts associated with the font cache,
-    /// allowing text to be efficiently rendered or manipulated.
+    /// Represents the collection of <see cref="GlyphLayout"/> instances cached by the
+    /// font. This property holds all the individual text layouts associated with the
+    /// font cache, allowing text to be efficiently rendered or manipulated.
     /// </summary>
     public List< GlyphLayout > Layouts { get; set; } = [ ];
 
     /// <summary>
-    /// 
+    /// Gets the instance of the <see cref="BitmapFont"/> used by this cache.
+    /// Represents the font that provides glyph and texture region information
+    /// for rendering text.
     /// </summary>
     public BitmapFont Font { get; }
 
@@ -110,20 +112,18 @@ public class BitmapFontCache : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Represents a cache for handling bitmap fonts, allowing for text rendering
+    /// with support for positioning, tinting, alpha manipulation, and customized layouts.
     /// </summary>
-    /// <param name="font"></param>
     public BitmapFontCache( BitmapFont font ) : this( font, font.GetUseIntegerPositions() )
     {
     }
 
     /// <summary>
+    /// Manages caching for a bitmap font, enabling efficient text rendering with features
+    /// such as position handling, layout customization, and glyph management.
+    /// Designed to reduce rendering overhead by reusing cached data for repeated glyphs.
     /// </summary>
-    /// <param name="font"></param>
-    /// <param name="integer">
-    /// If true, rendering positions will be at integer values to avoid filtering artifacts.
-    /// </param>
-    /// <exception cref="ArgumentException"></exception>
     public BitmapFontCache( BitmapFont font, bool integer = true )
     {
         Font                = font;
@@ -417,10 +417,13 @@ public class BitmapFontCache : IDisposable
     }
 
     /// <summary>
+    /// Renders a range of glyphs from the bitmap font cache to the specified batch.
     /// </summary>
-    /// <param name="spriteBatch"></param>
-    /// <param name="start"></param>
-    /// <param name="end"></param>
+    /// <param name="spriteBatch">
+    /// The batch used for rendering glyphs to the screen or another surface.
+    /// </param>
+    /// <param name="start">The starting index of the glyphs to be rendered.</param>
+    /// <param name="end">The ending index of the glyphs to be rendered.</param>
     protected virtual void Draw( IBatch spriteBatch, int start, int end )
     {
         if ( Font.GetRegion().Texture == null )
@@ -489,9 +492,14 @@ public class BitmapFontCache : IDisposable
     }
 
     /// <summary>
+    /// Renders the cached bitmap font content onto the specified rendering batch
+    /// with optional alpha modulation.
     /// </summary>
-    /// <param name="spriteBatch"></param>
-    /// <param name="alphaModulation"></param>
+    /// <param name="spriteBatch">The batch used for drawing the font content.</param>
+    /// <param name="alphaModulation">
+    /// A multiplier for the alpha component of the font's color. Values less than
+    /// 1 will reduce opacity.
+    /// </param>
     public void Draw( IBatch spriteBatch, float alphaModulation )
     {
         if ( alphaModulation.Equals( 1 ) )
@@ -533,8 +541,14 @@ public class BitmapFontCache : IDisposable
     }
 
     /// <summary>
+    /// Ensures that the necessary glyphs for the specified <see cref="GlyphLayout"/>
+    /// are allocated for rendering, based on the layout's runs and their associated
+    /// font pages.
     /// </summary>
-    /// <param name="layout"></param>
+    /// <param name="layout">
+    /// The layout containing the glyphs to be processed, specifying their positions
+    /// and font pages.
+    /// </param>
     private void RequireGlyphs( GlyphLayout layout )
     {
         if ( _pageVertices.Length == 1 )
@@ -578,9 +592,11 @@ public class BitmapFontCache : IDisposable
     }
 
     /// <summary>
+    /// Ensures that the specified page has sufficient space allocated for a given number of glyphs,
+    /// resizing the underlying data structures if necessary.
     /// </summary>
-    /// <param name="page"></param>
-    /// <param name="glyphCount"></param>
+    /// <param name="page">The index of the page for which glyphs need to be allocated.</param>
+    /// <param name="glyphCount">The number of glyphs required for the specified page.</param>
     private void RequirePageGlyphs( int page, int glyphCount )
     {
         Guard.Against.Null( _pageVertices );
@@ -605,9 +621,13 @@ public class BitmapFontCache : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Adjusts the internal data structures to accommodate the specified number of
+    /// font texture pages. Updates the page vertices, indices, glyph indices, and
+    /// temporary glyph counts.
     /// </summary>
-    /// <param name="pageCount"></param>
+    /// <param name="pageCount">
+    /// The new number of texture pages required for font rendering.
+    /// </param>
     private void SetPageCount( int pageCount )
     {
         var newPageVertices = new float[ pageCount ][];
@@ -640,7 +660,9 @@ public class BitmapFontCache : IDisposable
     /// <summary>
     /// Adds the specified <see cref="GlyphLayout"/> to the font cache at the specified position.
     /// </summary>
-    /// <param name="layout">The <see cref="GlyphLayout"/> object representing the glyphs to be cached.</param>
+    /// <param name="layout">
+    /// The <see cref="GlyphLayout"/> object representing the glyphs to be cached.
+    /// </param>
     /// <param name="x">The x coordinate where the glyphs should be positioned.</param>
     /// <param name="y">The y coordinate where the glyphs should be positioned.</param>
     private void AddToCache( GlyphLayout layout, float x, float y )
@@ -701,11 +723,14 @@ public class BitmapFontCache : IDisposable
     // ========================================================================
 
     /// <summary>
+    /// Adds a glyph to the font cache, calculating its scaled position, size,
+    /// texture coordinates, and storing its rendered data into the appropriate
+    /// page buffer for rendering.
     /// </summary>
-    /// <param name="glyph"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="color"></param>
+    /// <param name="glyph">The glyph to be added, representing a character's font representation.</param>
+    /// <param name="x">The x-coordinate of the glyph's position in the rendering space.</param>
+    /// <param name="y">The y-coordinate of the glyph's position in the rendering space.</param>
+    /// <param name="color">The color value to be applied to the glyph during rendering.</param>
     private void AddGlyph( Glyph glyph, float x, float y, float color )
     {
         float scaleX = Font.FontData.ScaleX;

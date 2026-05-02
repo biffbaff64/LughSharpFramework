@@ -34,17 +34,20 @@ public class Stack : WidgetGroup
 
     // ========================================================================
 
-    public Stack( Actor[] actors ) : this()
-    {
-        LoadActors( actors );
-    }
-
     public Stack()
     {
         Transform = false;
         Width     = 150;
         Height    = 150;
         Touchable = Touchable.ChildrenOnly;
+    }
+
+    public Stack( params Actor[] actors ) : this()
+    {
+        foreach ( Actor actor in actors )
+        {
+            AddActor( actor );
+        }
     }
 
     public float PrefWidth
@@ -215,6 +218,13 @@ public class Stack : WidgetGroup
             }
         }
     }
+
+    public override float GetMinWidth() => MinWidth;
+    public override float GetMinHeight() => MinHeight;
+    public override float GetPrefWidth() => PrefWidth;
+    public override float GetPrefHeight() => PrefHeight;
+    public override float GetMaxWidth() => MaxWidth;
+    public override float GetMaxHeight() => MaxHeight;
 }
 
 // ============================================================================

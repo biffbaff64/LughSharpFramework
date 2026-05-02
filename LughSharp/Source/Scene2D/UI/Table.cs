@@ -105,21 +105,22 @@ public class Table : WidgetGroup
     private bool _implicitEndRow;
     private bool _sizeInvalid = true;
 
-    private readonly List< Cell > _columnDefaults = new( 2 );
-    private          Cell         _rowDefaults    = new();
+    private readonly List< Cell? > _columnDefaults = [ ];
+    private          Cell?         _rowDefaults    = new();
 
-    private float[] _columnWidth     = null!;
-    private float[] _rowHeight       = null!;
-    private float[] _rowMinHeight    = null!;
-    private float[] _rowPrefHeight   = null!;
-    private float[] _columnMinWidth  = null!;
-    private float[] _columnPrefWidth = null!;
-    private float[] _expandHeight    = null!;
-    private float[] _expandWidth     = null!;
-    private float   _tableMinHeight;
-    private float   _tableMinWidth;
-    private float   _tablePrefHeight;
-    private float   _tablePrefWidth;
+    private float[]? _columnWidth;
+    private float[]? _columnMinWidth;
+    private float[]? _columnPrefWidth;
+    private float[]? _rowHeight;
+    private float[]? _rowMinHeight;
+    private float[]? _rowPrefHeight;
+    private float[]? _expandHeight;
+    private float[]? _expandWidth;
+
+    private float _tableMinHeight;
+    private float _tableMinWidth;
+    private float _tablePrefHeight;
+    private float _tablePrefWidth;
 
     private Value _padBottom = BackgroundBottom;
     private Value _padLeft   = BackgroundLeft;
@@ -350,9 +351,11 @@ public class Table : WidgetGroup
             // Set the index of the cell above.
             if ( cell.Row > 0 )
             {
+                Cell[] cells = Cells.ToArray();
+
                 for ( int i = cellCount - 1; i >= 0; i-- )
                 {
-                    Cell other = Cells[ i ];
+                    Cell other = cells[ i ];
 
                     for ( int column = other.Column, nn = column + other.Colspan; column < nn; column++ )
                     {
@@ -398,7 +401,7 @@ public class Table : WidgetGroup
     /// </summary>
     /// <param name="actors"></param>
     /// <returns></returns>
-    public Table AddCell( Actor[] actors )
+    public Table AddCell( params Actor[] actors )
     {
         for ( int i = 0, n = actors.Length; i < n; i++ )
         {
@@ -500,31 +503,33 @@ public class Table : WidgetGroup
     /// <summary>
     /// Removes all actors and cells from the table.
     /// </summary>
-    public override void ClearChildren()
+    public override void ClearChildren( bool unfocus = true )
     {
         Cell[] cells = Cells.ToArray();
 
         for ( int i = Cells.Count - 1; i >= 0; i-- )
         {
-            cells[ i ].Actor?.Remove();
+            Cell   cell  = cells[ i ];
+            Actor? actor = cell.Actor;
+
+            if ( actor != null )
+            {
+                actor.Remove();
+            }
         }
 
         CellPool.FreeAll( Cells );
-
         Cells.Clear();
 
         Rows    = 0;
         Columns = 0;
 
-        if ( _rowDefaults != null )
-        {
-            CellPool.Free( _rowDefaults );
-        }
+        CellPool.Free( _rowDefaults );
 
         _rowDefaults    = null;
         _implicitEndRow = false;
 
-        base.ClearChildren();
+        base.ClearChildren( unfocus );
     }
 
     /// <summary>
@@ -548,20 +553,22 @@ public class Table : WidgetGroup
 
         for ( int i = 0, n = _columnDefaults.Count; i < n; i++ )
         {
-            if ( _columnDefaults?[ i ] != null )
+            Cell? columnCell = _columnDefaults[ i ];
+
+            if ( columnCell != null )
             {
-                CellPool.Free( _columnDefaults[ i ] );
+                CellPool.Free( columnCell );
             }
         }
 
-        _columnDefaults?.Clear();
+        _columnDefaults.Clear();
     }
 
     /// <summary>
     /// Indicates that subsequent cells should be added to a new row and returns the
     /// cell values that will be used as the defaults for all cells in the new row.
     /// </summary>
-    public Cell AddRow()
+    public Cell? AddRow()
     {
         if ( Cells.Count > 0 )
         {
@@ -1057,6 +1064,8 @@ public class Table : WidgetGroup
     /// </summary>
     public float GetRowHeight( int rowIndex )
     {
+        if ( _rowHeight == null ) return 0;
+
         return _rowHeight[ rowIndex ];
     }
 
@@ -1071,7 +1080,12 @@ public class Table : WidgetGroup
             ComputeSize();
         }
 
-        return _rowMinHeight[ rowIndex ];
+        if ( _rowMinHeight != null )
+        {
+            return _rowMinHeight[ rowIndex ];
+        }
+
+        return 0;
     }
 
     /// <summary>
@@ -1085,7 +1099,12 @@ public class Table : WidgetGroup
             ComputeSize();
         }
 
-        return _rowPrefHeight[ rowIndex ];
+        if ( _rowPrefHeight != null )
+        {
+            return _rowPrefHeight[ rowIndex ];
+        }
+
+        return 0;
     }
 
     /// <summary>
@@ -1095,6 +1114,8 @@ public class Table : WidgetGroup
     /// <param name="columnIndex">The column number</param>
     public float GetColumnWidth( int columnIndex )
     {
+        if ( _columnWidth == null ) return 0;
+
         return _columnWidth[ columnIndex ];
     }
 
@@ -1109,7 +1130,12 @@ public class Table : WidgetGroup
             ComputeSize();
         }
 
-        return _columnMinWidth[ columnIndex ];
+        if ( _columnMinWidth != null )
+        {
+            return _columnMinWidth[ columnIndex ];
+        }
+
+        return 0;
     }
 
     /// <summary>
@@ -1123,9 +1149,20 @@ public class Table : WidgetGroup
             ComputeSize();
         }
 
-        return _columnPrefWidth[ columnIndex ];
+        if ( _columnPrefWidth != null )
+        {
+            return _columnPrefWidth[ columnIndex ];
+        }
+
+        return 0;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="size"></param>
+    /// <returns></returns>
     private float[] EnsureSize( float[]? array, int size )
     {
         if ( ( array == null ) || ( array.Length < size ) )
@@ -1463,6 +1500,11 @@ public class Table : WidgetGroup
         float[] columnWeightedWidth;
         float   totalGrowWidth = _tablePrefWidth - _tableMinWidth;
 
+        if ( _columnMinWidth == null || _columnPrefWidth == null )
+        {
+            throw new InvalidOperationException( "Table layout invalid: min/pref width not computed." );
+        }
+        
         if ( totalGrowWidth <= 0 )
         {
             columnWeightedWidth = _columnMinWidth.ToArray();
@@ -1487,6 +1529,11 @@ public class Table : WidgetGroup
 
         float[] rowWeightedHeight;
         float   totalGrowHeight = _tablePrefHeight - _tableMinHeight;
+
+        if ( _rowMinHeight == null || _rowPrefHeight == null )
+        {
+            throw new InvalidOperationException( "Table layout invalid: min/pref height not computed." );
+        }
 
         if ( totalGrowHeight <= 0 )
         {
@@ -1569,6 +1616,11 @@ public class Table : WidgetGroup
             }
 
             rowHeight[ row ] = Math.Max( rowHeight[ row ], weightedHeight );
+        }
+
+        if ( _expandWidth == null || _expandHeight == null )
+        {
+            throw new InvalidOperationException( "Table layout invalid: expand width/height not computed." );
         }
 
         // --------------------------------------------------------------------
@@ -1998,6 +2050,9 @@ public class Table : WidgetGroup
 
     private void AddDebugRects( float currentX, float currentY, float width, float height )
     {
+        Guard.Against.Null( _columnWidth );
+        Guard.Against.Null( _rowHeight );
+        
         ClearDebugRects();
 
         if ( TableDebug is DebugType.Table or DebugType.All )

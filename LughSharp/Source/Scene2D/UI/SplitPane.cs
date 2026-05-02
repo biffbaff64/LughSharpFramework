@@ -224,15 +224,13 @@ public class SplitPane : WidgetGroup
         }
     }
 
-    public override float GetPrefWidth()
-    {
-        return PrefWidth;
-    }
+    public override float GetMinWidth() => MinWidth;
 
-    public override float GetPrefHeight()
-    {
-        return PrefHeight;
-    }
+    public override float GetMinHeight() => MinHeight;
+
+    public override float GetPrefWidth() => PrefWidth;
+
+    public override float GetPrefHeight() => PrefHeight;
 
     public void SetVertical( bool vertical )
     {

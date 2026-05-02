@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Images;
 
 namespace LughSharp.Source.Graphics.FrameBuffers;
@@ -31,13 +29,26 @@ namespace LughSharp.Source.Graphics.FrameBuffers;
 [PublicAPI]
 public class FloatFrameBufferBuilder : GLFrameBufferBuilder< GLFrameBuffer< GLTexture > >
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     public FloatFrameBufferBuilder( int width, int height )
         : base( width, height )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override FloatFrameBuffer Build()
     {
         return new FloatFrameBuffer( this );
     }
 }
+
+// ============================================================================
+// ============================================================================
+

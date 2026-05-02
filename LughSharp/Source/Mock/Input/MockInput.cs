@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using JetBrains.Annotations;
 
 using LughSharp.Source.Input;
@@ -32,180 +31,172 @@ namespace LughSharp.Source.Mock.Input;
 [PublicAPI]
 public class MockInput : IInput
 {
-    /// <summary>
-    /// The currently set <see cref="IInputProcessor"/>.
-    /// </summary>
     public IInputProcessor? InputProcessor { get; set; }
-    
+
     public int GetMaxPointers()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public int GetX( int pointer = 0 )
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public int GetDeltaX( int pointer = 0 )
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public int GetY( int pointer = 0 )
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public int GetDeltaY( int pointer = 0 )
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public int GetRotation()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public bool IsButtonPressed( int button )
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public bool IsButtonJustPressed( int button )
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public bool IsKeyPressed( int key )
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public bool IsKeyJustPressed( int key )
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public bool IsPeripheralAvailable( IInput.Peripheral peripheral )
     {
-        throw new NotImplementedException();
+        return false;
     }
 
-    public void GetTextInput( IInput.ITextInputListener listener, string title, string text, string hint, IInput.OnscreenKeyboardType? type )
+    public void GetTextInput( IInput.ITextInputListener listener, string title, string text, string hint,
+                              IInput.OnscreenKeyboardType? type )
     {
-        throw new NotImplementedException();
     }
 
     public long GetCurrentEventTime()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public IInput.Orientation GetNativeOrientation()
     {
-        throw new NotImplementedException();
+        return IInput.Orientation.Landscape;
     }
 
     public float GetAccelerometerX()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetAccelerometerY()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetAccelerometerZ()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetGyroscopeX()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetGyroscopeY()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetGyroscopeZ()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetPressure( int pointer = 0 )
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetAzimuth()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetPitch()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public float GetRoll()
     {
-        throw new NotImplementedException();
+        return 0f;
     }
 
     public void SetOnscreenKeyboardVisible( bool visible )
     {
-        throw new NotImplementedException();
     }
 
     public void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType? type )
     {
-        throw new NotImplementedException();
     }
 
     public void Vibrate( int milliseconds )
     {
-        throw new NotImplementedException();
     }
 
     public void Vibrate( long[] pattern, int repeat )
     {
-        throw new NotImplementedException();
     }
 
     public void CancelVibrate()
     {
-        throw new NotImplementedException();
     }
 
     public void GetRotationMatrix( float[] matrix )
     {
-        throw new NotImplementedException();
     }
 
     public bool IsTouched( int pointer = 0 )
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public bool JustTouched()
     {
-        throw new NotImplementedException();
+        return false;
     }
 
-    /// <summary>
-    /// "Override key" refers to a mechanism for overriding the default system actions of specific
-    /// keys (like BACK and MENU), allowing the application to handle them instead. It's used to
-    /// prevent unwanted system behaviors and provide custom input handling for these special keys
-    /// within games and applications.
-    /// </summary>
     public void SetOverrideKey( int keycode, bool addKey )
     {
-        throw new NotImplementedException();
+    }
+
+    public void AddOverrideKey( int keycode )
+    {
+    }
+
+    public void RemoveOverrideKey( int keycode )
+    {
     }
 
     /// <summary>
@@ -216,42 +207,38 @@ public class MockInput : IInput
     /// <returns> True if the key is an Override Key, otherwise false. </returns>
     public bool IsOverrideKey( int keycode )
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public bool IsCursorOverridden()
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public void SetCursorOverridden( bool caught )
     {
-        throw new NotImplementedException();
     }
 
     public void SetCursorPosition( int x, int y )
     {
-        throw new NotImplementedException();
     }
 
     public bool IsOverrideBackKey()
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public void SetOverrideBackKey( bool catchBack )
     {
-        throw new NotImplementedException();
     }
 
     public bool IsOverrideMenuKey()
     {
-        throw new NotImplementedException();
+        return false;
     }
 
     public void SetOverrideMenuKey( bool catchMenu )
     {
-        throw new NotImplementedException();
     }
 }
 

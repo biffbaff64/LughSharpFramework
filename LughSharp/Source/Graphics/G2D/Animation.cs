@@ -34,11 +34,36 @@ namespace LughSharp.Source.Graphics.G2D;
 [PublicAPI]
 public enum AnimationMode
 {
+    /// <summary>
+    /// Runs through the animation from frame 0 to the last frame, then stops.
+    /// </summary>
     Normal,
+
+    /// <summary>
+    /// Runs through the animation from the last frame to frame 0, then stops.
+    /// </summary>
     Reversed,
+
+    /// <summary>
+    /// As <see cref="Normal"/> but looped.
+    /// </summary>
     Loop,
+
+    /// <summary>
+    /// As <see cref="Reversed"/> but looped.
+    /// </summary>
     LoopReversed,
+
+    /// <summary>
+    /// Looped animation sequence that runs from frame 0 to the last frame, and then
+    /// back down the frames to frame 0 again.
+    /// </summary>
     LoopPingpong,
+
+    /// <summary>
+    /// Looped animation sequence that displays random frames from the animation#
+    /// sequence.
+    /// </summary>
     LoopRandom
 }
 
@@ -48,27 +73,59 @@ public enum AnimationMode
 [PublicAPI]
 public class Animation< T >
 {
-    private float _animationDuration;
-    private float _frameDuration;
+    /// <summary>
+    /// The animation play mode.
+    /// </summary>
+    public AnimationMode PlayMode { get; set; } = AnimationMode.Normal;
+
+    /// <summary>
+    /// The duration of a frame in seconds.
+    /// </summary>
+    public float FrameDuration
+    {
+        get;
+        set
+        {
+            field             = value;
+            AnimationDuration = KeyFrames.Length * value;
+        }
+    }
+
+    /// <summary>
+    /// the duration of the entire animation, (number of frames x frame duration),
+    /// in seconds.
+    /// </summary>
+    public float AnimationDuration { get; private set; }
+
+    /// <summary>
+    /// The keyframes[] array where all the frames of the animation are stored.
+    /// </summary>
+    public T[] KeyFrames
+    {
+        get;
+        set
+        {
+            field             = value;
+            AnimationDuration = field.Length * FrameDuration;
+        }
+    }
+
+    // ========================================================================
+
     private int   _lastFrameNumber;
     private float _lastStateTime;
 
     // ========================================================================
 
     /// <summary>
-    /// Constructor, storing the frame duration and key frames.
+    /// Constructor, storing the frame duration and animation frames.
     /// </summary>
-    /// <param name="frameDuration">the time between frames in seconds.</param>
-    /// <param name="keyFrames">
-    /// The objects representing the frames.
-    /// If this Array is type-aware, <see cref="KeyFrames"/> can return the
-    /// correct type of array. Otherwise, it returns an object[].
-    /// </param>
+    /// <param name="frameDuration"> The desired time between frames in seconds. </param>
+    /// <param name="keyFrames"> A List holding the animation frames. </param>
     public Animation( float frameDuration, List< T > keyFrames )
     {
-        _frameDuration = frameDuration;
-
-        KeyFrames = keyFrames.ToArray();
+        FrameDuration = frameDuration;
+        KeyFrames     = keyFrames.ToArray();
     }
 
     /// <summary>
@@ -94,27 +151,8 @@ public class Animation< T >
     /// <param name="keyFrames"> the objects representing the frames.</param>
     public Animation( float frameDuration, T[] keyFrames )
     {
-        _frameDuration = frameDuration;
-        KeyFrames      = keyFrames;
-    }
-
-    /// <summary>
-    /// The animation play mode.
-    /// </summary>
-    public AnimationMode PlayMode { get; set; } = AnimationMode.Normal;
-
-    /// <summary>
-    /// The keyframes[] array where all the frames of the
-    /// animation are stored.
-    /// </summary>
-    public T[] KeyFrames
-    {
-        get;
-        set
-        {
-            field              = value;
-            _animationDuration = field.Length * _frameDuration;
-        }
+        FrameDuration = frameDuration;
+        KeyFrames     = keyFrames;
     }
 
     /// <summary>
@@ -138,7 +176,7 @@ public class Animation< T >
                 ? AnimationMode.Loop
                 : AnimationMode.LoopReversed;
         }
-        else if ( !looping && !(PlayMode is AnimationMode.Normal or AnimationMode.Reversed) )
+        else if ( !looping && !( PlayMode is AnimationMode.Normal or AnimationMode.Reversed ) )
         {
             PlayMode = PlayMode == AnimationMode.LoopReversed
                 ? AnimationMode.Reversed
@@ -176,7 +214,7 @@ public class Animation< T >
             return 0;
         }
 
-        var frameNumber = ( int )( stateTime / _frameDuration );
+        var frameNumber = ( int )( stateTime / FrameDuration );
 
         switch ( PlayMode )
         {
@@ -208,7 +246,7 @@ public class Animation< T >
 
             case AnimationMode.LoopRandom:
             {
-                var lastFrameNumber = ( int )( _lastStateTime / _frameDuration );
+                var lastFrameNumber = ( int )( _lastStateTime / FrameDuration );
 
                 frameNumber = lastFrameNumber != frameNumber
                     ? MathUtils.Random( KeyFrames.Length - 1 )
@@ -240,46 +278,18 @@ public class Animation< T >
     }
 
     /// <summary>
-    /// Whether the animation would be finished if played without looping
-    /// (PlayMode#NORMAL), given the state time.
+    /// Whether the animation would be finished if played without looping (PlayMode#NORMAL),
+    /// given the state time.
     /// </summary>
     /// <param name="stateTime"> </param>
     /// <returns> whether the animation is finished.</returns>
     public bool IsAnimationFinished( float stateTime )
     {
-        var frameNumber = ( int )( stateTime / _frameDuration );
+        var frameNumber = ( int )( stateTime / FrameDuration );
 
         return ( KeyFrames.Length - 1 ) < frameNumber;
-    }
-
-    /// <summary>
-    /// Sets duration a frame will be displayed.
-    /// </summary>
-    /// <param name="frameDuration">The animation frame duration in seconds</param>
-    public void SetFrameDuration( float frameDuration )
-    {
-        _frameDuration     = frameDuration;
-        _animationDuration = KeyFrames.Length * frameDuration;
-    }
-
-    /// <summary>
-    /// the duration of a frame in seconds.
-    /// </summary>
-    public float FrameDuration()
-    {
-        return _frameDuration;
-    }
-
-    /// <summary>
-    /// the duration of the entire animation, (number of frames x frame duration),
-    /// in seconds.
-    /// </summary>
-    public float GetAnimationDuration()
-    {
-        return _animationDuration;
     }
 }
 
 // ============================================================================
 // ============================================================================
-

@@ -33,8 +33,8 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class TextFieldStyle : ISceneStyle
 {
-    public BitmapFont?     Font               { get; set; }
-    public Color?          FontColor          { get; set; }
+    public BitmapFont      Font               { get; set; }
+    public Color           FontColor          { get; set; }
     public Color?          FocusedFontColor   { get; set; }
     public Color?          DisabledFontColor  { get; set; }
     public ISceneDrawable? Background         { get; set; }
@@ -49,6 +49,8 @@ public class TextFieldStyle : ISceneStyle
 
     public TextFieldStyle()
     {
+        Font      = new BitmapFont();
+        FontColor = Color.White;
     }
 
     public TextFieldStyle( BitmapFont font,
@@ -68,10 +70,13 @@ public class TextFieldStyle : ISceneStyle
     {
         Font = style.Font;
 
-        if ( style.FontColor != null )
-        {
-            FontColor = new Color( style.FontColor );
-        }
+        Background         = style.Background;
+        FocusedBackground  = style.FocusedBackground;
+        DisabledBackground = style.DisabledBackground;
+        Cursor             = style.Cursor;
+        Selection          = style.Selection;
+        MessageFont        = style.MessageFont;
+        FontColor          = new Color( style.FontColor );
 
         if ( style.FocusedFontColor != null )
         {
@@ -83,14 +88,6 @@ public class TextFieldStyle : ISceneStyle
             DisabledFontColor = new Color( style.DisabledFontColor );
         }
 
-        Background         = style.Background;
-        FocusedBackground  = style.FocusedBackground;
-        DisabledBackground = style.DisabledBackground;
-        Cursor             = style.Cursor;
-        Selection          = style.Selection;
-
-        MessageFont = style.MessageFont;
-
         if ( style.MessageFontColor != null )
         {
             MessageFontColor = new Color( style.MessageFontColor );
@@ -100,4 +97,3 @@ public class TextFieldStyle : ISceneStyle
 
 // ============================================================================
 // ============================================================================
-

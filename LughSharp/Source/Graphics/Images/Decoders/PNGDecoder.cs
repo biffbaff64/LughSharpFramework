@@ -274,7 +274,7 @@ public class PNGDecoder
 
                 break;
             }
-
+            
             totalIDATSize += chunkSize;
             idatIndex += fullChunkSize - 1; //Correctly increment the index. -1 to account for the +1 in the while loop.
         }

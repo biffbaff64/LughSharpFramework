@@ -293,6 +293,16 @@ public class Button : Table, IDisableable
         }
     }
 
+    public override float GetMinWidth()
+    {
+        return base.GetPrefWidth();
+    }
+    
+    public override float GetMinHeight()
+    {
+        return base.GetPrefHeight();
+    }
+
     /// <summary>
     /// Gets this button's preferred width.
     /// </summary>

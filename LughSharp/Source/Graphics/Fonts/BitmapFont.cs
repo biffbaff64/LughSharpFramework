@@ -243,7 +243,8 @@ public class BitmapFont
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Wrapper method for <see cref="Load(BitmapFontData)"/> that is safe to call
+    /// from a constructor.
     /// </summary>
     private void SafeLoad( BitmapFontData data )
     {
@@ -334,7 +335,7 @@ public class BitmapFont
     }
 
     /// <summary>
-    /// A covenience method for setting the font alpha.
+    /// A convenience method for setting the font alpha.
     /// </summary>
     public void SetAlpha( float a )
     {

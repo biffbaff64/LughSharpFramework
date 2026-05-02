@@ -258,6 +258,11 @@
       "font": "default-font",
       "fontColor": "white"
     },
+    "default-bg": {
+      "font": "default-font",
+      "fontColor": "white",
+      "background": "window-bg"
+    },
     "link-label": {
       "fontColor": "link-label",
       "font": "default-font"

@@ -57,6 +57,9 @@ public class WidgetGroup : Group, ILayout
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new, empty, widget group.
+    /// </summary>
     protected WidgetGroup()
     {
     }
@@ -66,9 +69,23 @@ public class WidgetGroup : Group, ILayout
     /// </summary>
     public WidgetGroup( params Actor[] actors )
     {
-        LoadActors( actors );
+        foreach ( Actor actor in actors )
+        {
+            AddActor( actor );
+        }
     }
 
+    /// <summary>
+    /// Sizes this actor to its preferred width and height, then calls <see cref="ILayout.Validate"/>.
+    /// <para>
+    /// Generally this method should not be called in an actor's constructor because it calls
+    /// <see cref="ILayout.Layout"/>, which means a subclass would have Layout() called before the
+    /// subclass' constructor. Instead, in constructors simply set the actor's size
+    /// to <see cref="ILayout.GetPrefWidth"/> and <see cref="ILayout.GetPrefHeight"/>. This allows
+    /// the actor to have a size at construction time for more convenient use with groups that do
+    /// not layout their children.
+    /// </para>
+    /// </summary>
     public virtual void Pack()
     {
         //TODO: Establish why this is done twice. The original LibGDX code does this, and that
@@ -86,11 +103,23 @@ public class WidgetGroup : Group, ILayout
         Validate();
     }
 
+    /// <summary>
+    /// Positions and sizes children of the table using the cell associated with each child.
+    /// The values given are the position within the parent and size of the table.
+    /// </summary>
     public virtual void Layout()
     {
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Ensures the actor has been laid out.
+    /// <para>
+    /// Calls <see cref="ILayout.Layout"/> if <see cref="ILayout.Invalidate"/> has been
+    /// called since the last time <see cref="ILayout.Validate"/> was called, or if the
+    /// actor otherwise needs to be laid out. This method is usually called in
+    /// <see cref="Actor.Draw"/> by the actor itself before drawing is performed.
+    /// </para>
+    /// </summary>
     public virtual void Validate()
     {
         if ( !LayoutEnabled )
@@ -148,11 +177,24 @@ public class WidgetGroup : Group, ILayout
         }
     }
 
+    /// <summary>
+    /// Invalidates this actor's layout, causing <see cref="ILayout.Layout"/> to happen the
+    /// next time <see cref="ILayout.Validate"/> is called. This method should be called when
+    /// state changes in the actor that requires a layout but does not change the minimum,
+    /// preferred, maximum, or actual size of the actor (meaning it does not affect the
+    /// parent actor's layout).
+    /// </summary>
     public virtual void Invalidate()
     {
         NeedsLayout = true;
     }
 
+    /// <summary>
+    /// Invalidates this actor and its ascendants, calling <see cref="ILayout.Invalidate"/> on each.
+    /// This method should be called when state changes in the actor that affects the minimum,
+    /// preferred, maximum, or actual size of the actor (meaning it potentially affects the
+    /// parent actor's layout).
+    /// </summary>
     public virtual void InvalidateHierarchy()
     {
         Invalidate();
@@ -163,23 +205,24 @@ public class WidgetGroup : Group, ILayout
         }
     }
 
-    protected void LoadActors( params Actor[] actors )
-    {
-        foreach ( Actor actor in actors )
-        {
-            AddActor( actor );
-        }
-    }
-
+    /// <summary>
+    /// Sets the layout enabled flag on this group and all its children.
+    /// </summary>
+    /// <param name="enabled"> The value to set. </param>
     public void SetLayoutEnabled( bool enabled )
     {
         LayoutEnabled = enabled;
         SetLayoutEnabled( this, enabled );
     }
 
+    /// <summary>
+    /// Sets the layout enabled flag on the children of the specified parent group.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="enabled"></param>
     private static void SetLayoutEnabled( Group parent, bool enabled )
     {
-        SnapshotArrayList< Actor? > children = parent.Children;
+        var children = new SnapshotArrayList< Actor? >( parent.Children.ToArray() );
 
         for ( int i = 0, n = children.Size; i < n; i++ )
         {
@@ -226,19 +269,31 @@ public class WidgetGroup : Group, ILayout
         return 0;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when actors are added to or removed from the group.
+    /// </summary>
     protected override void ChildrenChanged()
     {
         InvalidateHierarchy();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when the actor's size has been changed.
+    /// </summary>
     public override void OnSizeChanged()
     {
         Invalidate();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws the group and its children.
+    /// <para>
+    /// This method overrides the default implementation to call <see cref="Validate"/>
+    /// before drawing.
+    /// </para>
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="parentAlpha"> </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();

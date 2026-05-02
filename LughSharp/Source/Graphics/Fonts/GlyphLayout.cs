@@ -218,9 +218,11 @@ public class GlyphLayout : IResetable, IPoolable
     /// be used with text that contains multiple lines. Wrap is ignored if truncate is
     /// not null.
     /// </param>
-    public void SetText( BitmapFont font, string str, int start, int end, Color color,
+    public void SetText( BitmapFont? font, string str, int start, int end, Color color,
                          float targetWidth, Align halign, bool wrap, string? truncate )
     {
+        Guard.Against.Null( font );
+        
         //TODO: Refactor this method. It's too long and hard to understand,
         //      and uses 'goto' several times.
         

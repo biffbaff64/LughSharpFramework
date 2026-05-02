@@ -60,9 +60,9 @@ public class TextField : Widget
     public int                 SelectionStart           { get; set; }
     public bool                HasSelection             { get; set; }
     public bool                WriteEnters              { get; set; }
-    public GlyphLayout         Layout                   { get; set; } = new();
+    public GlyphLayout         GlyphLayout              { get; set; } = new();
     public List< float >       GlyphPositions           { get; set; } = [ ];
-    public string?             DisplayText              { get; set; }
+    public string              DisplayText              { get; set; } = string.Empty;
     public float               FontOffset               { get; set; }
     public float               TextHeight               { get; set; }
     public float               TextOffset               { get; set; }
@@ -72,18 +72,17 @@ public class TextField : Widget
     public ITextFieldFilter?   Filter                   { get; set; }
     public ITextFieldListener? Listener                 { get; set; }
     public int                 MaxLength                { get; set; }
-
-    public float KeyRepeatInitialTime = 0.4f;
-    public float KeyRepeatTime        = 0.1f;
+    public float               KeyRepeatInitialTime     { get; private set; } = 0.4f;
+    public float               KeyRepeatTime            { get; private set; } = 0.1f;
 
     // ========================================================================
 
     protected const char CarriageReturn = '\r';
-    protected const char Newline         = '\n';
-    protected const char Tab             = '\t';
-    protected const char Backspace       = '\u0008';
-    protected const char DeleteKey       = '\u007f';
-    protected const char Bullet          = '\u0095';
+    protected const char Newline        = '\n';
+    protected const char Tab            = '\t';
+    protected const char Backspace      = '\u0008';
+    protected const char DeleteKey      = '\u007f';
+    protected const char Bullet         = '\u0095';
 
     // ========================================================================
 
@@ -93,7 +92,7 @@ public class TextField : Widget
     private readonly Vector2              _tmp2          = new();
     private readonly Vector2              _tmp3          = new();
     private readonly BlinkTaskManager     _blink;
-    private readonly IClipboard           _clipboard;
+    private readonly IClipboard?          _clipboard;
     private readonly KeyRepeatTaskManager _keyRepeat;
 
     private CancellationToken        _blinkCancellationToken;
@@ -119,34 +118,46 @@ public class TextField : Widget
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new TextField object with the supplied text and <see cref="Skin"/>.
+    /// </summary>
+    /// <param name="text"> The text to display on the TextField. </param>
+    /// <param name="skin"> The Skin holding the <see cref="TextFieldStyle"/>. </param>
     public TextField( string? text, Skin skin )
         : this( text, skin.Get< TextFieldStyle >() )
     {
     }
 
+    /// <summary>
+    /// Creates a new TextField object with the supplied text and <see cref="Skin"/>
+    /// containing the names <see cref="TextFieldStyle"/>.
+    /// </summary>
+    /// <param name="text"> The text to display on the TextField. </param>
+    /// <param name="skin"> The Skin holding the <see cref="TextFieldStyle"/>. </param>
+    /// <param name="styleName"> The name of the TextFieldStyle to use. </param>
     public TextField( string? text, Skin skin, string styleName )
         : this( text, skin.Get< TextFieldStyle >( styleName ) )
     {
     }
 
+    /// <summary>
+    /// Creates a new TextField object with the supplied text and <see cref="TextFieldStyle"/>.
+    /// </summary>
+    /// <param name="text"> The text to display on the TextField. </param>
+    /// <param name="style"> The <see cref="TextFieldStyle"/> to use. </param>
     public TextField( string? text, TextFieldStyle style )
     {
-        _clipboard = Engine.App.Clipboard!;
-        _blink     = new BlinkTaskManager( this );
-        _keyRepeat = new KeyRepeatTaskManager( this );
-
-        SetStyleSafe( style );
-        Initialise();
-        SetText( text );
-        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
-    }
-
-    private void Initialise()
-    {
-        _inputListener = CreateInputListener();
+        _clipboard     = Engine.App.Clipboard;
+        _blink         = new BlinkTaskManager( this );
+        _keyRepeat     = new KeyRepeatTaskManager( this );
+        _inputListener = new TextFieldClickListener( this );
 
         _blink.Create();
         _keyRepeat.Create();
+
+        SetStyleSafe( style );
+        SetText( text );
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
     }
 
     /// <summary>
@@ -195,11 +206,12 @@ public class TextField : Widget
     protected float GetPrefHeightSafe()
     {
         float topAndBottom = 0;
-        float minHeight = 0;
+        float minHeight    = 0;
 
-        if ( Style.Background != null )
+        if ( Style?.Background != null )
         {
-            topAndBottom = Math.Max( topAndBottom, Style.Background.BottomHeight + Style.Background.TopHeight );
+            topAndBottom = Math.Max( topAndBottom,
+                                     Style.Background.BottomHeight + Style.Background.TopHeight );
             minHeight    = Math.Max( minHeight, Style.Background.MinHeight );
         }
 
@@ -207,7 +219,6 @@ public class TextField : Widget
         {
             topAndBottom = Math.Max( topAndBottom,
                                      Style.FocusedBackground.BottomHeight + Style.FocusedBackground.TopHeight );
-
             minHeight = Math.Max( minHeight, Style.FocusedBackground.MinHeight );
         }
 
@@ -215,16 +226,10 @@ public class TextField : Widget
         {
             topAndBottom = Math.Max( topAndBottom,
                                      Style.DisabledBackground.BottomHeight + Style.DisabledBackground.TopHeight );
-
             minHeight = Math.Max( minHeight, Style.DisabledBackground.MinHeight );
         }
 
         return Math.Max( topAndBottom + TextHeight, minHeight );
-    }
-
-    protected virtual InputListener CreateInputListener()
-    {
-        return new TextFieldClickListener( this );
     }
 
     public virtual void SetStyle( TextFieldStyle style )
@@ -323,7 +328,7 @@ public class TextField : Widget
         int   end  = _visibleTextStart + 1;
         float endX = visibleWidth - _renderOffset;
 
-        for ( int n = Math.Min( DisplayText!.Length, glyphCount ); end <= n; end++ )
+        for ( int n = Math.Min( DisplayText.Length, glyphCount ); end <= n; end++ )
         {
             if ( glyphPositions[ end ] > endX )
             {
@@ -357,7 +362,7 @@ public class TextField : Widget
                                    visibleWidth - TextOffset );
 
             _selectionX     = minX;
-            _selectionWidth = maxX - minX - Style!.Font!.FontData.CursorX;
+            _selectionWidth = maxX - minX - Style.Font.FontData.CursorX;
         }
     }
 
@@ -368,13 +373,13 @@ public class TextField : Widget
             return GlyphPositions.Count - 1;
         }
 
-        x -= TextOffset + FontOffset - Style.Font!.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
+        x -= TextOffset + FontOffset - Style.Font.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
 
         ISceneDrawable? background = GetBackgroundDrawable();
 
         if ( background != null )
         {
-            x -= Style.Background!.LeftWidth;
+            x -= Style.Background.LeftWidth;
         }
 
         int     n              = GlyphPositions.Count;
@@ -404,7 +409,7 @@ public class TextField : Widget
     protected virtual int[] WordUnderCursor( int at )
     {
         string? text  = Text;
-        int     right = Text!.Length;
+        int     right = Text.Length;
         var     left  = 0;
         int     index = at;
 
@@ -496,7 +501,7 @@ public class TextField : Widget
             _cursorOn = false;
         }
 
-        BitmapFont font = Style.Font!;
+        BitmapFont font = Style.Font;
 
         //@formatter:off
         Color? fontColor = Disabled && ( Style.DisabledFontColor != null )
@@ -564,7 +569,7 @@ public class TextField : Widget
         }
         else
         {
-            font.SetColor( fontColor!.R, fontColor.G, fontColor.B, fontColor.A * ActorColor.A * parentAlpha );
+            font.SetColor( fontColor.R, fontColor.G, fontColor.B, fontColor.A * ActorColor.A * parentAlpha );
             DrawText( batch, font, x + bgLeftWidth, y + textY + yOffset );
         }
 
@@ -682,14 +687,14 @@ public class TextField : Widget
             DisplayText = newDisplayText;
         }
 
-        Layout.SetText( font, DisplayText?.Replace( '\r', ' ' ).Replace( '\n', ' ' )! );
+        GlyphLayout.SetText( font, DisplayText?.Replace( '\r', ' ' ).Replace( '\n', ' ' ) );
         GlyphPositions.Clear();
 
         float x = 0;
 
-        if ( Layout.Runs.Count > 0 )
+        if ( GlyphLayout.Runs.Count > 0 )
         {
-            GlyphLayout.GlyphRun run       = Layout.Runs.First();
+            GlyphLayout.GlyphRun run       = GlyphLayout.Runs.First();
             List< float >        xAdvances = run.XAdvances;
 
             FontOffset = xAdvances.First();
@@ -720,10 +725,7 @@ public class TextField : Widget
     {
         str ??= string.Empty;
 
-        if ( str.Equals( Text ) )
-        {
-            return;
-        }
+        if ( str.Equals( Text ) ) return;
 
         ClearSelection();
 
@@ -734,7 +736,7 @@ public class TextField : Widget
 
         if ( ProgrammaticChangeEvents )
         {
-            ChangeText( oldText!, Text );
+            ChangeText( oldText, Text );
         }
 
         Cursor = 0;
@@ -748,8 +750,8 @@ public class TextField : Widget
     {
         if ( HasSelection && !PasswordMode && ( Text != null ) )
         {
-            _clipboard.Contents = Text.Substring( Math.Min( Cursor, SelectionStart ),
-                                                  Math.Max( Cursor, SelectionStart ) );
+            _clipboard?.Contents = Text.Substring( Math.Min( Cursor, SelectionStart ),
+                                                   Math.Max( Cursor, SelectionStart ) );
         }
     }
 
@@ -789,7 +791,7 @@ public class TextField : Widget
             textLength -= Math.Abs( Cursor - SelectionStart );
         }
 
-        BitmapFontData data = Style!.Font!.FontData;
+        BitmapFontData data = Style.Font.FontData;
 
         for ( int i = 0, n = content.Length; i < n; i++ )
         {
@@ -897,7 +899,7 @@ public class TextField : Widget
         }
 
         TextField current       = this;
-        Vector2   currentCoords = current.Parent!.LocalToStageCoordinates( _tmp2.Set( current.X, current.Y ) );
+        Vector2   currentCoords = current.Parent.LocalToStageCoordinates( _tmp2.Set( current.X, current.Y ) );
 
         while ( true )
         {
@@ -1014,7 +1016,7 @@ public class TextField : Widget
             return false;
         }
 
-        if ( newText.Equals( oldText ) )
+        if ( string.Compare( oldText, newText, StringComparison.CurrentCulture ) == 0 )
         {
             return false;
         }
@@ -1022,11 +1024,6 @@ public class TextField : Widget
         Text = newText;
 
         var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
-
-        if ( changeEvent == null )
-        {
-            return false;
-        }
 
         bool cancelled = Fire( changeEvent );
 
@@ -1122,7 +1119,7 @@ public class TextField : Widget
 
         ClearSelection();
 
-        Cursor = Math.Min( cursorPosition, Text!.Length );
+        Cursor = Math.Min( cursorPosition, Text.Length );
     }
 
     // ========================================================================
@@ -1489,7 +1486,7 @@ public class TextField : Widget
                 }
             }
 
-            _tf.Cursor = MathUtils.Clamp( _tf.Cursor, 0, _tf.Text!.Length );
+            _tf.Cursor = MathUtils.Clamp( _tf.Cursor, 0, _tf.Text.Length );
 
             if ( repeat )
             {
@@ -1575,7 +1572,7 @@ public class TextField : Widget
 
                 bool add = enter
                     ? _tf.WriteEnters
-                    : !_tf._onlyFontChars || _tf.Style!.Font!.FontData.HasGlyph( character );
+                    : !_tf._onlyFontChars || _tf.Style.Font.FontData.HasGlyph( character );
 
                 bool remove = backspace || delete;
 
@@ -1615,7 +1612,7 @@ public class TextField : Widget
                             return true;
                         }
 
-                        if ( !_tf.WithinMaxLength( _tf.Text!.Length
+                        if ( !_tf.WithinMaxLength( _tf.Text.Length
                                                  - ( _tf.HasSelection
                                                        ? Math.Abs( _tf.Cursor - _tf.SelectionStart )
                                                        : 0 ) ) )
@@ -1717,7 +1714,7 @@ public class TextField : Widget
 
     /// <summary>
     /// An interface for onscreen keyboards.
-    /// Can invoke the default keyboard or render your own keyboard!
+    /// Can invoke the default keyboard or render your own keyboard
     /// </summary>
     [PublicAPI]
     public interface IOnscreenKeyboard

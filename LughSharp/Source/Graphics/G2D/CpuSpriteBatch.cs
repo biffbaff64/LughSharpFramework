@@ -41,8 +41,8 @@ namespace LughSharp.Source.Graphics.G2D;
 /// on subsequent draws to match the running batch. This can improve performance
 /// through longer batches, for example when drawing Groups with transform enabled.
 /// </summary>
-/// <see cref="SpriteBatch.RenderCalls"/>
-/// <see cref="Scene2D.Group.Transform"/>
+/// <seealso cref="SpriteBatch.RenderCalls"/>
+/// <seealso cref="Scene2D.Group.Transform"/>
 [PublicAPI]
 public class CpuSpriteBatch : SpriteBatch
 {
@@ -58,7 +58,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// <summary>
     /// Constructs a CpuSpriteBatch with a size of 1000 and the default shader.
     /// </summary>
-    /// <para>See also: <see cref="SpriteBatch"/></para>
+    /// <seealso cref="SpriteBatch"/>
     public CpuSpriteBatch() : this( 1000 )
     {
     }
@@ -66,21 +66,21 @@ public class CpuSpriteBatch : SpriteBatch
     /// <summary>
     /// Constructs a CpuSpriteBatch with a custom shader.
     /// </summary>
-    /// <para>See also: <see cref="SpriteBatch"/></para>
-    public CpuSpriteBatch( int size, ShaderProgram defaultShader = null! )
+    /// <seealso cref="SpriteBatch"/>
+    public CpuSpriteBatch( int size, ShaderProgram? defaultShader = null )
         : base( size, defaultShader )
     {
     }
 
     /// <summary>
     /// <para>
-    /// Flushes the batch and realigns the real matrix on the GPU. Subsequent
-    /// draws won't need adjustment and will be slightly faster as long as the
-    /// transform matrix is not changed by <see cref="SetTransformMatrix(Matrix4)"/>.
+    /// Flushes the batch and realigns the real matrix on the GPU. Subsequent draws won't
+    /// need adjustment and will be slightly faster as long as the transform matrix is not
+    /// changed by <see cref="SetTransformMatrix(Matrix4)"/>.
     /// </para>
     /// <para>
-    /// Note: The real transform matrix <em>must</em> be invertible. If a singular
-    /// matrix is detected, RuntimeException will be thrown.
+    /// Note: The real transform matrix <em>must</em> be invertible. If a singular matrix
+    /// is detected, RuntimeException will be thrown.
     /// </para>
     /// </summary>
     public virtual void FlushAndSyncTransformMatrix()
@@ -112,13 +112,12 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <summary>
-    /// Sets the transform matrix to be used by this Batch. Even if this is called
-    /// inside a <see cref="SpriteBatch.Begin"/>/<see cref="SpriteBatch.End"/> block,
-    /// the current batch is <em>not</em> flushed to the GPU. Instead, for every
-    /// subsequent draw() the vertices will be transformed on the CPU to match the
-    /// original batch matrix. This adjustment must be performed until the matrices
-    /// are realigned by restoring the original matrix, or by calling
-    /// <see cref="FlushAndSyncTransformMatrix()"/>.
+    /// Sets the transform matrix to be used by this Batch. Even if this is called inside
+    /// a <see cref="SpriteBatch.Begin"/>/<see cref="SpriteBatch.End"/> block, the current
+    /// batch is <em>not</em> flushed to the GPU. Instead, for every subsequent draw() the
+    /// vertices will be transformed on the CPU to match the original batch matrix. This
+    /// adjustment must be performed until the matrices are realigned by restoring the
+    /// original matrix, or by calling <see cref="FlushAndSyncTransformMatrix()"/>.
     /// </summary>
     public override void SetTransformMatrix( Matrix4 transform )
     {
@@ -200,7 +199,20 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws a textured region with specified transformations such as position, scale,
+    /// rotation, and flipping options.
+    /// </summary>
+    /// <param name="texture">The texture to be drawn.</param>
+    /// <param name="region">The region where the texture will be drawn on the target.</param>
+    /// <param name="origin">
+    /// The origin point of the region for transformations like rotation and scaling.
+    /// </param>
+    /// <param name="scale">The scaling factor for the texture in the X and Y axes.</param>
+    /// <param name="rotation">The rotation angle of the texture in radians.</param>
+    /// <param name="src">The source rectangle of the texture to be drawn.</param>
+    /// <param name="flipX">Indicates whether the texture should be flipped horizontally.</param>
+    /// <param name="flipY">Indicates whether the texture should be flipped vertically.</param>
     public override void Draw( Texture2D? texture,
                                GRect region,
                                Point2D origin,
@@ -237,7 +249,14 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws a specified texture within a defined region, with optional flipping along both axes.
+    /// </summary>
+    /// <param name="texture">The texture to be drawn.</param>
+    /// <param name="region">The destination rectangle on the target surface.</param>
+    /// <param name="src">The source rectangle in the texture to be drawn.</param>
+    /// <param name="flipX">Indicates whether to flip the texture horizontally.</param>
+    /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
     public override void Draw( Texture2D? texture,
                                GRect region,
                                GRect src,
@@ -271,7 +290,13 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws a specified texture at the given position using the defined source rectangle.
+    /// </summary>
+    /// <param name="texture">The texture to be drawn.</param>
+    /// <param name="x">The x-coordinate where the texture should be drawn.</param>
+    /// <param name="y">The y-coordinate where the texture should be drawn.</param>
+    /// <param name="src">The source rectangle portion of the texture to be drawn.</param>
     public override void Draw( Texture2D? texture, float x, float y, GRect src )
     {
         Guard.Against.Null( texture );
@@ -301,7 +326,15 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws a textured rectangle on the screen using specified texture coordinates.
+    /// </summary>
+    /// <param name="texture">The texture to use for rendering.</param>
+    /// <param name="region">The rectangular region where the texture will be drawn.</param>
+    /// <param name="u">The U coordinate of the texture's top-left corner.</param>
+    /// <param name="v">The V coordinate of the texture's top-left corner.</param>
+    /// <param name="u2">The U coordinate of the texture's bottom-right corner.</param>
+    /// <param name="v2">The V coordinate of the texture's bottom-right corner.</param>
     public override void Draw( Texture2D? texture,
                                GRect region,
                                float u,
@@ -336,7 +369,12 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draw the given <see cref="Texture2D"/> at the given X and Y coordinates.
+    /// </summary>
+    /// <param name="texture"> The texture. </param>
+    /// <param name="x"> X coordinate in pixels. </param>
+    /// <param name="y"> Y coordinate in pixels. </param>
     public override void Draw( Texture2D? texture, float x, float y )
     {
         Guard.Against.Null( texture );
@@ -347,11 +385,34 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( texture, x, y, 0, 0, texture.Width, texture.Height, 1, 1, 0, 0, 1, 1, 0, false, false );
+            DrawAdjusted( texture,
+                          x,
+                          y,
+                          0,
+                          0,
+                          texture.Width,
+                          texture.Height,
+                          1,
+                          1,
+                          0,
+                          0,
+                          1,
+                          1,
+                          0,
+                          false,
+                          false );
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draw the supplied Texture at the given coordinates. The texture will be
+    /// of the specified width and height.
+    /// </summary>
+    /// <param name="texture"> The texture. </param>
+    /// <param name="posX"> X coordinaste in pixels. </param>
+    /// <param name="posY"> Y coordinate in pixels. </param>
+    /// <param name="width"> Width of Texture in pixels. </param>
+    /// <param name="height"> Height of Texture in pixerls. </param>
     public override void Draw( Texture2D? texture, float posX, float posY, float width, float height )
     {
         Guard.Against.Null( texture );
@@ -362,11 +423,31 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( texture, posX, posY, 0, 0, width, height, 1, 1, 0, 0, 1, 1, 0, false, false );
+            DrawAdjusted( texture,
+                          posX,
+                          posY,
+                          0,
+                          0,
+                          width,
+                          height,
+                          1,
+                          1,
+                          0,
+                          0,
+                          1,
+                          1,
+                          0,
+                          false,
+                          false );
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws the specified texture region at the given position.
+    /// </summary>
+    /// <param name="region">The texture region to be drawn. Can be null.</param>
+    /// <param name="x">The x-coordinate of the position to draw the texture.</param>
+    /// <param name="y">The y-coordinate of the position to draw the texture.</param>
     public override void Draw( TextureRegion? region, float x, float y )
     {
         Guard.Against.Null( region );
@@ -377,12 +458,32 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( region, x, y, 0, 0, region.GetRegionWidth(), region.GetRegionHeight(), 1, 1, 0 );
+            DrawAdjusted( region,
+                          x,
+                          y,
+                          0,
+                          0,
+                          region.GetRegionWidth(),
+                          region.GetRegionHeight(),
+                          1,
+                          1,
+                          0 );
         }
     }
 
-    /// <inheritdoc />
-    public override void Draw( TextureRegion? region, float x, float y, float width, float height )
+    /// <summary>
+    /// Draws a texture region onto the batch with specified position and dimensions.
+    /// </summary>
+    /// <param name="region">The texture region to be drawn, which includes the texture and UV coordinates.</param>
+    /// <param name="x">The X-coordinate of the bottom-left corner where the texture will be drawn.</param>
+    /// <param name="y">The Y-coordinate of the bottom-left corner where the texture will be drawn.</param>
+    /// <param name="width">The width of the texture region to be drawn.</param>
+    /// <param name="height">The height of the texture region to be drawn.</param>
+    public override void Draw( TextureRegion? region,
+                               float x,
+                               float y,
+                               float width,
+                               float height )
     {
         Guard.Against.Null( region );
 
@@ -396,7 +497,15 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws a texture region onto a specified region with transformations such as origin offset,
+    /// scaling, and rotation.
+    /// </summary>
+    /// <param name="textureRegion">The texture region to be drawn.</param>
+    /// <param name="region">The rectangular region where the texture will be drawn.</param>
+    /// <param name="origin">The origin point for transformations such as scaling and rotation.</param>
+    /// <param name="scale">The scale factor to be applied to the texture region.</param>
+    /// <param name="rotation">The rotation angle in radians to be applied to the texture region.</param>
     public override void Draw( TextureRegion? textureRegion,
                                GRect region,
                                Point2D origin,
@@ -424,7 +533,14 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// </summary>
+    /// <param name="textureRegion"></param>
+    /// <param name="region"></param>
+    /// <param name="origin"></param>
+    /// <param name="scale"></param>
+    /// <param name="rotation"></param>
+    /// <param name="clockwise"></param>
     public override void Draw( TextureRegion? textureRegion,
                                GRect region,
                                Point2D origin,
@@ -474,7 +590,13 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws a texture using a specified region, dimensions, and transformation parameters.
+    /// </summary>
+    /// <param name="region">The specific texture region to be drawn.</param>
+    /// <param name="width">The width of the drawn texture.</param>
+    /// <param name="height">The height of the drawn texture.</param>
+    /// <param name="transform">The transformation to be applied to the texture.</param>
     public override void Draw( TextureRegion? region, float width, float height, Affine2 transform )
     {
         Guard.Against.Null( region );
@@ -1021,3 +1143,7 @@ public class CpuSpriteBatch : SpriteBatch
             && val[ Matrix4.M1313 ] is 0;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

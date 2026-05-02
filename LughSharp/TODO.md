@@ -337,11 +337,11 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   - IP   - DONE - BitmapFont
-    - IP   - IP   - DONE - BitmapFontCache
+    - DONE - DONE - DONE - BitmapFont
+    - IP   - DONE - DONE - BitmapFontCache      Dispose() needs completing
     - IP   - IP   - DONE - BitmapFontData
     - IP   - IP   - DONE - DistanceFieldFont
-    - IP   - IP   - DONE - Glyph
+    - DONE - DONE - DONE - Glyph
     - IP   - IP   - DONE - GlyphLayout
     -      -      - DONE - SpriteFont
 
@@ -350,7 +350,7 @@ LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - FloatFrameBuffer
+    - DONE - DONE - DONE - FloatFrameBuffer
     -      -      -      - FloatFrameBufferBuilder
     -      -      -      - FrameBuffer
     -      -      -      - FrameBufferBuilder
@@ -367,9 +367,9 @@ LUGHSHARP/SOURCE/GRAPHICS/G2D
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - Animation
-    -      -      -      - CpuSpriteBatch                  Some methods have too many parameters
-    -      -      -      - IBatch
+    - DONE - DONE - DONE - Animation
+    - IP   - IP   - DONE - CpuSpriteBatch                  Some methods have too many parameters
+    - DONE - DONE - DONE - IBatch
     -      -      -      - IPolygonBatch                   Some methods have too many parameters
     -      -      -      - ParticleEffect
     -      -      -      - ParticleEffectPool
@@ -388,6 +388,12 @@ LUGHSHARP/SOURCE/GRAPHICS/G2D
 LUGHSHARP/SOURCE/GRAPHICS/G3D
 -----------------------------
 
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      -      - 
+    -      -      -      - 
+    -      -      -      - 
+    -      -      -      - 
 
 LUGHSHARP/SOURCE/GRAPHICS/IMAGES
 --------------------------------

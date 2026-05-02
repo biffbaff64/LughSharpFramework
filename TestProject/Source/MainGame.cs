@@ -11,6 +11,7 @@ using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Input;
+using LughSharp.Source.IO;
 using LughSharp.Source.Maths;
 using LughSharp.Source.Scene2D;
 using LughSharp.Source.Scene2D.UI;
@@ -53,6 +54,7 @@ public class MainGame : LughGame
     private MapTests?    _mapTests;
     private SpriteTests? _spriteTests;
     private InputTest?   _inputTest;
+    private TableTest?   _tableTest;
 
     // ========================================================================
     // ========================================================================
@@ -98,6 +100,12 @@ public class MainGame : LughGame
 //        _spriteTests = new SpriteTests( _assetManager );
 //        _spriteTests.Create();
         // --------------------------------------
+        if ( _stage != null )
+        {
+            _tableTest = new TableTest( ref _stage );
+            _tableTest.Setup();
+        }
+        // --------------------------------------
 
         _font = new BitmapFont( new FileInfo( Assets.DefaultSkinFont ) );
 
@@ -106,8 +114,6 @@ public class MainGame : LughGame
             Engine.Input.InputProcessor = _inputMultiplexer;
         }
 
-        Engine.LoadCirca64Logo();
-        
         Logger.Debug( "Done" );
     }
 

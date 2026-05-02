@@ -97,12 +97,22 @@ public abstract class AbstractInput : IInput
     {
         if ( addKey )
         {
-            _keysToOverride.Add( keycode );
+            AddOverrideKey( keycode );
         }
         else
         {
-            _keysToOverride.Remove( keycode );
+            RemoveOverrideKey( keycode );
         }
+    }
+
+    public virtual void AddOverrideKey( int keycode )
+    {
+        _keysToOverride.Add( keycode );
+    }
+
+    public virtual void RemoveOverrideKey( int keycode )
+    {
+        _keysToOverride.Remove( keycode );
     }
 
     /// <inheritdoc />

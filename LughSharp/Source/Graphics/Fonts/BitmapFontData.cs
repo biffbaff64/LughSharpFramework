@@ -174,7 +174,7 @@ public class BitmapFontData
 
         try
         {
-            string? line = reader.ReadLine(); // info
+            string? line = reader.ReadLine();
 
             if ( line == null )
             {

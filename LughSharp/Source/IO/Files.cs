@@ -22,9 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.Images;
-using LughSharp.Source.Graphics.Images.Decoders;
-
 namespace LughSharp.Source.IO;
 
 /// <summary>
@@ -122,49 +119,8 @@ public class Files : IFiles
     public static string AssetsRoot => $"{AssemblyDirectory}{ContentRoot}\\";
 
     // ========================================================================
-
-    /// <summary>
-    /// Retrieves a file handle based on the specified path and path type.
-    /// </summary>
-    /// <param name="path">The file path to be used for creating the file handle.</param>
-    /// <param name="type">
-    /// The type of the path, indicating how the file should be resolved (e.g.,
-    /// Classpath, Internal, Absolute, External, or Local).
-    /// </param>
-    /// <returns>
-    /// A <see cref="FileInfo"/> object that represents the file handle for the
-    /// specified path and path type.
-    /// </returns>
-    public virtual FileInfo GetFileHandle( string path, PathType type )
-    {
-        if ( string.IsNullOrEmpty( path ) )
-        {
-            throw new ArgumentNullException( nameof( path ),
-                                             "Path cannot be null or empty.\n" +
-                                             "Example: 'Assets/Textures/sprite.png'" );
-        }
-
-        return type switch
-               {
-                   PathType.Classpath => Classpath( path ),
-                   PathType.Internal  => Internal( path ),
-                   PathType.Absolute  => Absolute( path ),
-                   PathType.Assembly  => Assembly( path ),
-                   PathType.External  => External( path ),
-                   PathType.Local     => Local( path ),
-                   PathType.Assets    => Assets( path ),
-
-                   // ----------------------------------
-
-                   var _ => throw new RuntimeException( $"Invalid path type: {type}\nValid types are: " +
-                                                        $"Classpath, Internal, Absolute, " +
-                                                        $"Assembly, External, Local" )
-               };
-    }
-
     // ========================================================================
-    // ========================================================================
-    // Class path
+    #region Class path
 
     /// <summary>
     /// Convenience method that returns a <see cref="PathType.Classpath"/> file handle.
@@ -230,9 +186,11 @@ public class Files : IFiles
         }
     }
 
+    #endregion Class path
+    
     // ========================================================================
     // ========================================================================
-    // Internal storage
+    #region Internal storage
 
     /// <summary>
     /// Convenience method that returns a <see cref="PathType.Internal"/> file handle.
@@ -298,10 +256,12 @@ public class Files : IFiles
             return false;
         }
     }
+    
+    #endregion Internal storage
 
     // ========================================================================
     // ========================================================================
-    // Absolute path
+    #region Absolute path
 
     /// <summary>
     /// Convenience method that returns a <see cref="PathType.Absolute"/> file handle.
@@ -327,9 +287,11 @@ public class Files : IFiles
         return new FileInfo( path );
     }
 
+    #endregion Absolute path
+    
     // ========================================================================
     // ========================================================================
-    // External storage
+    #region External storage
 
     /// <summary>
     /// Convenience method that returns a <see cref="PathType.External"/> file handle.
@@ -450,9 +412,11 @@ public class Files : IFiles
             : path;
     }
 
+    #endregion External storage
+    
     // ========================================================================
     // ========================================================================
-    // Assembly path
+    #region Assembly path
 
     /// <summary>
     /// Convenience method that returns a <see cref="PathType.Assembly"/> file handle.
@@ -511,9 +475,11 @@ public class Files : IFiles
         }
     }
 
+    #endregion Assembly path
+    
     // ========================================================================
     // ========================================================================
-    // Local storage
+    #region Local storage
 
     /// <summary>
     /// Convenience method that returns a <see cref="PathType.Local"/> file handle.
@@ -579,63 +545,50 @@ public class Files : IFiles
         }
     }
 
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Before this method can see the file, the compiler needs to bake it into
-    /// the framework .dll.
-    ///
-    /// <li>Select the file in the framework project.</li>
-    /// <li>Open the Properties window (F4).</li>
-    /// <li>Change Build Action to Embedded Resource.</li>
-    /// <li>Set Copy to Output Directory to Do Not Copy.</li>
-    /// 
-    /// </summary>
-    /// <param name="filename"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static T? LoadFrameworkAsset< T >( string filename ) where T : class
-    {
-        // Get the assembly where THIS code is defined, not any
-        // application using this framework.
-        var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-
-        // Resource names are: <DefaultNamespace>.<Folder>.<FileName>
-        // Example: MyFramework.Data.config.json
-        var resourceName = $"LughSharp.Assets.Embedded.{filename}";
-
-        Logger.Debug( $"Loading framework asset: {resourceName}" );
-        
-        if ( typeof( T ) == typeof( Texture2D ) )
-        {
-            using ( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
-            {
-                if ( stream == null )
-                {
-                    return null;
-                }
-                
-                using ( MemoryStream memoryStream = new MemoryStream() )
-                {
-                    stream.CopyTo( memoryStream );
-                    byte[] bytes = memoryStream.ToArray();
-                    
-                    PNGDecoder.AnalysePNG( bytes, true );
-                
-//                    var texture = new Texture2D( new Pixmap( bytes, 0, bytes.Length ) );
-                
-//                    return texture as T;
-                }
-            }
-        }
-
-        return null;
-    }
-
+    #endregion Local storage
+    
     // ========================================================================
     // ========================================================================
     // General Utility Methods
+
+    /// <summary>
+    /// Retrieves a file handle based on the specified path and path type.
+    /// </summary>
+    /// <param name="path">The file path to be used for creating the file handle.</param>
+    /// <param name="type">
+    /// The type of the path, indicating how the file should be resolved (e.g.,
+    /// Classpath, Internal, Absolute, External, or Local).
+    /// </param>
+    /// <returns>
+    /// A <see cref="FileInfo"/> object that represents the file handle for the
+    /// specified path and path type.
+    /// </returns>
+    public virtual FileInfo GetFileHandle( string path, PathType type )
+    {
+        if ( string.IsNullOrEmpty( path ) )
+        {
+            throw new ArgumentNullException( nameof( path ),
+                                             "Path cannot be null or empty.\n" +
+                                             "Example: 'Assets/Textures/sprite.png'" );
+        }
+
+        return type switch
+               {
+                   PathType.Classpath => Classpath( path ),
+                   PathType.Internal  => Internal( path ),
+                   PathType.Absolute  => Absolute( path ),
+                   PathType.Assembly  => Assembly( path ),
+                   PathType.External  => External( path ),
+                   PathType.Local     => Local( path ),
+                   PathType.Assets    => Assets( path ),
+
+                   // ----------------------------------
+
+                   var _ => throw new RuntimeException( $"Invalid path type: {type}\nValid types are: " +
+                                                        $"Classpath, Internal, Absolute, " +
+                                                        $"Assembly, External, Local" )
+               };
+    }
 
     /// <summary>
     /// Determines whether the specified <see cref="FileSystemInfo"/> represents a directory.
@@ -697,7 +650,7 @@ public class Files : IFiles
     /// </returns>
     public static string StripAssetsPath( string path )
     {
-        int position = path.IndexOf( Files.ContentRoot, StringComparison.Ordinal );
+        int position = path.IndexOf( ContentRoot, StringComparison.Ordinal );
 
         return path.Substring( position, path.Length - position );
     }
@@ -751,9 +704,9 @@ public class Files : IFiles
     /// <returns>The validated asset path.</returns>
     public static string AssetPath( string path )
     {
-        if ( !path.Contains( Files.AssemblyDirectory ) )
+        if ( !path.Contains( AssemblyDirectory ) )
         {
-            return Files.AssemblyDirectory + path;
+            return AssemblyDirectory + path;
         }
 
         return path;
@@ -822,15 +775,15 @@ public class Files : IFiles
     /// </summary>
     public static void DebugPaths()
     {
-        Logger.Debug( $"ExternalPath        : {Files.ExternalPath}" );
-        Logger.Debug( $"InternalPath        : {Files.InternalPath}" );
-        Logger.Debug( $"LocalPath           : {Files.LocalPath}" );
+        Logger.Debug( $"ExternalPath        : {ExternalPath}" );
+        Logger.Debug( $"InternalPath        : {InternalPath}" );
+        Logger.Debug( $"LocalPath           : {LocalPath}" );
         // --------------------------------------------------------------------
-        Logger.Debug( $"ContentRoot         : {Files.ContentRoot}" );
+        Logger.Debug( $"ContentRoot         : {ContentRoot}" );
         // --------------------------------------------------------------------
-        Logger.Debug( $"AssemblyPath        : {Files.AssemblyPath}" );
-        Logger.Debug( $"AssemblyDirectory   : {Files.AssemblyDirectory}" );
-        Logger.Debug( $"AssetsPath          : {Files.AssetsRoot}" );
+        Logger.Debug( $"AssemblyPath        : {AssemblyPath}" );
+        Logger.Debug( $"AssemblyDirectory   : {AssemblyDirectory}" );
+        Logger.Debug( $"AssetsPath          : {AssetsRoot}" );
     }
     #endif
 }

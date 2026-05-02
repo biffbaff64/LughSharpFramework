@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Graphics.Fonts;
 
 /// <summary>
@@ -32,20 +30,44 @@ namespace LughSharp.Source.Graphics.Fonts;
 [PublicAPI]
 public class Glyph
 {
-    public bool       FixedWidth { get; set; }
-    public int        Height     { get; set; }
-    public int        ID         { get; set; }
-    public byte[]?[]? Kerning    { get; set; }
-    public int        SrcX       { get; set; }
-    public int        SrcY       { get; set; }
-    public float      U          { get; set; }
-    public float      U2         { get; set; }
-    public float      V          { get; set; }
-    public float      V2         { get; set; }
-    public int        Width      { get; set; }
-    public int        Xadvance   { get; set; }
-    public int        Xoffset    { get; set; }
-    public int        Yoffset    { get; set; }
+    /// <summary>
+    /// Indicates whether the glyph has a fixed width, overriding variable width settings.
+    /// When set to true, the glyph is treated as having a uniform advance regardless of
+    /// its inherent dimensions or metric adjustments.
+    /// </summary>
+    public bool FixedWidth { get; set; }
+
+    /// <summary>
+    /// Represents the unique identifier of the glyph, typically corresponding to a
+    /// character's Unicode or ASCII value.
+    /// </summary>
+    public int ID { get; set; }
+
+    /// <summary>
+    /// Stores kerning information for character pairs, allowing fine-tuned adjustments
+    /// to glyph spacing in the font. This property holds an array representing the kerning
+    /// data for characters, enabling precise control over the horizontal spacing between
+    /// glyphs during text rendering.
+    /// </summary>
+    public byte[]?[]? Kerning { get; set; }
+
+    public int   SrcX     { get; set; }
+    public int   SrcY     { get; set; }
+    public float U        { get; set; }
+    public float U2       { get; set; }
+    public float V        { get; set; }
+    public float V2       { get; set; }
+    public int   Width    { get; set; }
+    public int   Height   { get; set; }
+
+    /// <summary>
+    /// Specifies the horizontal distance to advance the cursor after rendering the glyph.
+    /// This value defines the spacing for the next glyph and is derived from the glyph's
+    /// metrics, typically including adjustments for kerning or other layout factors.
+    /// </summary>
+    public int Xadvance { get; set; }
+    public int Xoffset { get;  set; }
+    public int Yoffset { get;  set; }
 
     /// <summary>
     /// The index to the texture page that holds this glyph.

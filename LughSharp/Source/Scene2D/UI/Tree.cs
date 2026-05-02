@@ -225,9 +225,9 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// <summary>
     /// Removes all nodes from the tree.
     /// </summary>
-    public override void ClearChildren()
+    public override void ClearChildren( bool unfocus = true )
     {
-        base.ClearChildren();
+        base.ClearChildren( unfocus );
 
         OverNode = null;
         RootNodes.Clear();

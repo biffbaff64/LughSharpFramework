@@ -521,6 +521,8 @@ public class TexturePackerFileProcessor : FileProcessor
 
             if ( dotIndex != -1 )
             {
+                // The length of the prefix is the length from position 0 to
+                // the position of the last period ('.') in the string.
                 prefix = prefix.Substring( 0, dotIndex );
             }
 

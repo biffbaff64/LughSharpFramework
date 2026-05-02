@@ -175,20 +175,16 @@ public class Skin : IDisposable
     /// </summary>
     public Skin( FileInfo? skinFile, TextureAtlas? atlas )
     {
+        Guard.Against.Null( atlas );
+        Guard.Against.Null( skinFile );
+
         InitialiseJsonClassTags();
 
-        _skinHome = skinFile?.DirectoryName ?? Files.ContentRoot;
+        _skinHome = skinFile.DirectoryName ?? Files.ContentRoot;
+        Atlas     = atlas;
 
-        if ( atlas != null )
-        {
-            Atlas = atlas;
-            AddRegions( atlas );
-        }
-
-        if ( skinFile != null )
-        {
-            Load( skinFile );
-        }
+        AddRegions( atlas );
+        Load( skinFile );
     }
 
     /// <summary>
@@ -197,6 +193,9 @@ public class Skin : IDisposable
     /// </summary>
     private void InitialiseJsonClassTags()
     {
+        // Start afresh
+        JsonClassTags.Clear();
+        
         foreach ( Tag tag in DefaultTagClasses )
         {
             JsonClassTags.Add( tag.Name, tag.Type );
@@ -396,17 +395,13 @@ public class Skin : IDisposable
     /// <returns></returns>
     public bool Has( string name, Type type )
     {
-        if ( !Resources.TryGetValue( type, out Dictionary< string, object >? resource ) )
-        {
-            return false;
-        }
-
-        return resource.ContainsKey( name );
+        return Resources.TryGetValue( type, out Dictionary< string, object >? resource )
+            && resource.ContainsKey( name );
     }
 
     /// <summary>
-    /// Returns the name to resource mapping for the specified type, or
-    /// null if no resources of that type exist.
+    /// Returns the name to resource mapping for the specified type, or null if no
+    /// resources of that type exist.
     /// </summary>
     public Dictionary< string, object >? GetAll( Type type )
     {

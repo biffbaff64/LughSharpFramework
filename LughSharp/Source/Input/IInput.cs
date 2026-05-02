@@ -595,8 +595,13 @@ public interface IInput
     /// prevent unwanted system behaviors and provide custom input handling for these special keys
     /// within games and applications.
     /// </summary>
+    /// <param name="keycode"> The <see cref="Keys"/> code. </param>
+    /// <param name="addKey"> True to add the key to the Override Key group, false to remove it. </param>
     void SetOverrideKey( int keycode, bool addKey );
 
+    void AddOverrideKey( int keycode );
+    void RemoveOverrideKey( int keycode );
+    
     /// <summary>
     /// Checks to see if the provided keycode applies to a key that is a member of the
     /// 'Override Key' group of keys.

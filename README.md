@@ -42,8 +42,8 @@ IN PROGRESS:
           - Label               - 
           - Table               - 
           - Dialog              - 
-          - TextField           - 
-          - TextArea            - 
+          - TextField           - Done
+          - TextArea            - Done
           - SplitPane           - 
           - SelectBox           - 
 

@@ -58,7 +58,7 @@ namespace LughSharp.Source.Graphics.G2D;
 /// A Batch is a pretty heavy object so you should only ever have one in your program.
 /// </para>
 /// <para>
-/// A Batch works with OpenGL ES 2.0. It will use its own custom shader to draw all provided
+/// A Batch works with OpenGL. It will use its own custom shader to draw all provided
 /// sprites. You can set your own custom shader via the <see cref="Shader"/> property.
 /// </para>
 /// <para>
@@ -114,13 +114,13 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Returns the current projection matrix.
-    /// Changing this within <see cref="Begin"/> / <see cref="End()"/> results in undefined behaviour.
+    /// Changing this within <see cref="Begin(bool)"/> / <see cref="End()"/> results in undefined behaviour.
     /// </summary>
     Matrix4 ProjectionMatrix { get; }
 
     /// <summary>
     /// Returns the current transform matrix.
-    /// Changing this within <see cref="Begin"/> / <see cref="End()"/> results in undefined behaviour.
+    /// Changing this within <see cref="Begin(bool)"/> / <see cref="End()"/> results in undefined behaviour.
     /// </summary>
     Matrix4 TransformMatrix { get; }
 
@@ -129,21 +129,21 @@ public interface IBatch : IDisposable
     /// called "a_position", the texture coordinates attribute is called "a_texCoord", the
     /// color attribute is called "a_color".
     /// <para>
-    /// The combined transform and projection matrx is uploaded via a mat4 uniform called "u_projTrans".
-    /// The texture sampler is passed via a uniform called "u_texture".
+    /// The combined transform and projection matrx is uploaded via a mat4 uniform called
+    /// "u_combinedMatrix". The texture sampler is passed via a uniform called "u_texture".
     /// </para>
     /// <para>
     /// Call this method with a null argument to use the default shader.
     /// </para>
     /// <para>
     /// This method will flush the batch before setting the new shader.
-    /// It can be called inbetween <see cref="Begin"/> and <see cref="End()"/>.
+    /// It can be called inbetween <see cref="Begin(bool)"/> and <see cref="End()"/>.
     /// </para>
     /// </summary>
     ShaderProgram? Shader { get; set; }
 
     /// <summary>
-    /// Returns true if currently between begin and end.
+    /// Returns true if currently between <see cref="Begin(bool)"/> and <see cref="End()"/>.
     /// </summary>
     bool IsDrawing { get; }
 
@@ -161,7 +161,7 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Finishes off rendering. Enables depth writes, disables blending and texturing.
-    /// Must always be called after a call to <see cref="Begin"/>
+    /// Must always be called after a call to <see cref="Begin(bool)"/>
     /// </summary>
     void End();
 
@@ -340,14 +340,14 @@ public interface IBatch : IDisposable
     void Flush();
 
     /// <summary>
-    /// Disables blending for drawing sprites. Calling this within <see cref="Begin"/>
+    /// Disables blending for drawing sprites. Calling this within <see cref="Begin(bool)"/>
     /// or <see cref="End()"/> will flush the batch.
     /// </summary>
     void DisableBlending();
 
     /// <summary>
     /// Enables blending for drawing sprites.
-    /// Calling this within <see cref="Begin"/> / <see cref="End()"/> will flush the batch.
+    /// Calling this within <see cref="Begin(bool)"/> / <see cref="End()"/> will flush the batch.
     /// </summary>
     void EnableBlending();
 
@@ -380,7 +380,7 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Sets the projection matrix to be used by this Batch.
-    /// If this is called inside a <see cref="Begin"/> / <see cref="End()"/> block,
+    /// If this is called inside a <see cref="Begin(bool)"/> / <see cref="End()"/> block,
     /// the current batch is flushed to the gpu.
     /// </summary>
     void SetProjectionMatrix( Matrix4 projection );
@@ -390,3 +390,7 @@ public interface IBatch : IDisposable
     /// </summary>
     void SetTransformMatrix( Matrix4 transform );
 }
+
+// ============================================================================
+// ============================================================================
+

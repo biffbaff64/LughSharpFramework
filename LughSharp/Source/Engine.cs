@@ -200,14 +200,6 @@ public static class Engine
     // ========================================================================
     // ========================================================================
 
-    public static Texture2D? LoadCirca64Logo()
-    {
-        return LughSharp.Source.IO.Files.LoadFrameworkAsset< Texture2D >( "Circa64_Main_Logo.png" );
-    }
-    
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
     /// Checks if the specified environment variable a) exists, and b) is set to
     /// the specified value.
@@ -236,7 +228,7 @@ public static class Engine
     // ========================================================================
     // ========================================================================
 
-    private const string APrayerToTheGoddess =
+    public const string APrayerToTheGoddess =
         "Oh Blessed Goddess, enlighten what is dark in me. "
       + "Strengthen what is weak in me. "
       + "Mend what is broken in me. "

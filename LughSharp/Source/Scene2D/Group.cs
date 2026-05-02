@@ -665,14 +665,24 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Removes all actors from this group.
     /// </summary>
-    public virtual void ClearChildren()
+    public virtual void ClearChildren( bool unfocus = true )
     {
         Actor?[] actors = Children.Begin();
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            actors[ i ]!.Stage  = null;
-            actors[ i ]!.Parent = null;
+            Actor? child = actors[ i ];
+
+            if ( child != null )
+            {
+                if ( unfocus )
+                {
+                    Stage?.Unfocus( child );
+                }
+
+                child.Stage  = null;
+                child.Parent = null;
+            }
         }
 
         Children.End();

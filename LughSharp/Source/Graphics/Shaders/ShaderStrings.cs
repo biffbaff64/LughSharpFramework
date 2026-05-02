@@ -54,7 +54,7 @@ public class ShaderStrings
         "{\n" +
         "    v_texCoords = a_texCoord0;\n" +
         "    // --- COLOR UNPACKING ---\n" +
-        "    // We treat the float bits as an integer, then extract the 4 bytes.\n" +
+        "    // Treat the float bits as an integer, then extract the 4 bytes.\n" +
         "    uint rgba = floatBitsToUint(a_color);\n" +
         "    v_color = vec4(\n" +
         "        float((rgba & uint(0x000000FF))) / 255.0,         // Red\n" +
